@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:interface-contract",
+  "title": "USF Interface Contract Schema",
+  "description": "Draft JSON Schema for interface contracts (API routes, commands, queries, event handlers, service boundaries, CLI interfaces, provider ports, adapter interfaces, internal/external contracts). Each declares its kind (interface-kinds), purpose, boundary, an input/output (request/response) contract, optional permission/security notes, and a reference to the semantic contract it realises. Interfaces are contract-first or contract-reconciled and MUST NOT be inferred from handlers when a contract exists. USF claims no full OpenAPI compliance until concrete OpenAPI artefacts exist. Governs the ontology concepts Interface, Service, and Port. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "interfaceKind", "purpose", "semanticContractRef"],
+  "$defs": {
+    "interfaceKind": {"type": "string", "enum": ["api-route", "command", "query", "event-handler", "service-boundary", "cli-interface", "provider-port", "adapter-interface", "internal-contract", "external-contract"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "interfaceKind": {"$ref": "#/$defs/interfaceKind"},
+    "title": {"type": "string"},
+    "purpose": {"type": "string", "minLength": 1},
+    "boundary": {"type": "string"},
+    "inputContract": {"type": "object"},
+    "outputContract": {"type": "object"},
+    "requestContract": {"type": "object"},
+    "responseContract": {"type": "object"},
+    "permissions": {"type": "array", "items": {"type": "string"}},
+    "security": {"type": "string"},
+    "semanticContractRef": {"type": "string", "minLength": 1},
+    "driftDetectable": {"type": "boolean", "$comment": "Whether runtime-vs-contract drift can be detected for this interface."},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+  }
+}

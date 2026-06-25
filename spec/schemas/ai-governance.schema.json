@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:ai-governance",
+  "title": "USF AI Governance Schema",
+  "description": "Draft JSON Schema for AI-agent-relevant artefacts and actions (AI instructions, AI-generated/reviewed artefacts, AI alignment rules, forbidden inferences, authority conflicts, drift risks, required stop conditions). Each declares its kind (ai-governance-kinds), a rationale, references, authority-order acknowledgement, and explicit stop conditions. An AI agent holds no authority; its output is not authoritative without validation, and it MUST stop or fail on an unresolved authority conflict. AGENTS.md, CLAUDE.md, and CODEX.md guide agent behaviour but do not override the constitutional layer. Governs the ontology concept AI Agent. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "aiKind", "rationale", "stopConditions", "authorityOrderAcknowledged"],
+  "$defs": {
+    "aiKind": {"type": "string", "enum": ["ai-instruction", "ai-generated-artefact", "ai-reviewed-artefact", "ai-alignment-rule", "forbidden-inference", "authority-conflict", "drift-risk", "required-stop-condition"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "aiKind": {"$ref": "#/$defs/aiKind"},
+    "title": {"type": "string"},
+    "rationale": {"type": "string", "minLength": 1},
+    "references": {"type": "array", "items": {"type": "string"}},
+    "authorityOrderAcknowledged": {"type": "boolean", "const": true, "$comment": "An AI agent is bound by the USF authority order and holds no authority of its own."},
+    "stopConditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "driftRisks": {"type": "array", "items": {"type": "string"}},
+    "treatedAsAuthoritative": {"type": "boolean", "const": false, "$comment": "AI output is never authoritative without validation."}
+  },
+  "allOf": [
+    {
+      "$comment": "An AI-generated artefact must carry rationale and at least one reference.",
+      "if": {"properties": {"aiKind": {"const": "ai-generated-artefact"}}, "required": ["aiKind"]},
+      "then": {"required": ["references"], "properties": {"references": {"minItems": 1}}}
+    }
+  ]
+}

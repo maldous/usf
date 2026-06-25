@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:evidence-envelope",
+  "title": "USF Evidence Envelope Schema",
+  "description": "Draft JSON Schema for the common evidence envelope across evidence kinds (rank-4 runtime-proof-evidence). Each envelope declares its evidence kind (evidence-kinds), source reference, freshness (commit-pinned), and — where the evidence depends on them — provider mode (provider-modes) and environment (environment-classes). A generated-report envelope MUST reference the evidence it summarises and MUST NOT be treated as raw evidence. Governs the ontology concepts Evidence and Generated Report. Overclaim and missing-evidence fail-closed checks are validator-deferred per schema-authoring-standard §24. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "evidenceKind"],
+  "$defs": {
+    "providerMode": {"type": "string", "enum": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"]},
+    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "evidenceKind": {"type": "string", "enum": ["raw-source-evidence", "semantic-evidence", "runtime-proof-evidence", "normalised-evidence", "generated-report", "attestation", "import-evidence", "validation-evidence", "operational-evidence", "audit-evidence"]},
+    "title": {"type": "string"},
+    "description": {"type": "string"},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}},
+    "providerMode": {"$ref": "#/$defs/providerMode"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commit": {"type": "string"},
+        "stale": {"type": "boolean"}
+      }
+    },
+    "reportStatus": {"type": "string", "enum": ["pass", "fail", "partial", "stale", "not-run", "advisory", "unknown"]},
+    "evidenceRefs": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "$comment": "A generated-report envelope must reference the underlying evidence it summarises (Authority Model §2.7).",
+      "if": {"properties": {"evidenceKind": {"const": "generated-report"}}, "required": ["evidenceKind"]},
+      "then": {"required": ["evidenceRefs"], "properties": {"evidenceRefs": {"minItems": 1}}}
+    },
+    {
+      "$comment": "Normalised evidence must retain a reference to the raw evidence it reshapes.",
+      "if": {"properties": {"evidenceKind": {"const": "normalised-evidence"}}, "required": ["evidenceKind"]},
+      "then": {"required": ["sourceRefs"], "properties": {"sourceRefs": {"minItems": 1}}}
+    }
+  ]
+}

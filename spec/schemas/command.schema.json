@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:command",
+  "title": "USF Command Schema",
+  "description": "Draft JSON Schema for command artefacts (Make targets, package scripts, CLI, validation/proof/import/build/runtime/report-generation commands) as governed semantic assets. Each command declares its kind (command-kinds), purpose, inputs, outputs, environment scope (environment-classes), side effects, and failure semantics; commands derived from ../react carry source lineage and may not be deleted/renamed without a disposition (disposition-values). Governs the ontology concept Command. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "commandKind", "purpose", "failureSemantics"],
+  "$defs": {
+    "commandKind": {"type": "string", "enum": ["make-target", "package-script", "cli-command", "validation-command", "proof-command", "import-command", "build-command", "runtime-command", "report-generation-command"]},
+    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]},
+    "disposition": {"type": "string", "enum": ["preserve", "rename", "refactor", "merge", "split", "replace", "retire", "defer", "reject"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "commandKind": {"$ref": "#/$defs/commandKind"},
+    "title": {"type": "string"},
+    "purpose": {"type": "string", "minLength": 1},
+    "invocation": {"type": "string"},
+    "inputs": {"type": "array", "items": {"type": "string"}},
+    "outputs": {"type": "array", "items": {"type": "string"}},
+    "environmentScope": {"type": "array", "items": {"$ref": "#/$defs/environment"}},
+    "sideEffects": {"type": "array", "items": {"type": "string"}},
+    "failureSemantics": {"type": "string", "minLength": 1},
+    "emitsEvidence": {"type": "boolean"},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}},
+    "disposition": {"$ref": "#/$defs/disposition"}
+  }
+}
