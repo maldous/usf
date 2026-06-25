@@ -243,6 +243,15 @@ def load_json(path, F):
     return None
 
 
+def load_text(path, F):
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return fh.read()
+    except OSError as e:
+        F.add("USF-PARSE-001", path, str(e))
+        return None
+
+
 def resolve_pointer(node, pointer):
     if not pointer:
         return node
@@ -281,6 +290,10 @@ def check_shape(voc, tax, reg, F):
     field the validator later indexes. Emits USF-SHAPE-001 and returns True if anything is wrong,
     so callers fail closed instead of throwing. Called by build_ctx (load time) and run_all_checks
     (so planted-defect selftests exercise it)."""
+    for name, obj in (("vocabulary", voc), ("taxonomy", tax), ("registry", reg)):
+        if not isinstance(obj, dict):
+            F.add("USF-SHAPE-001", name, "catalogue root must be an object")
+            return True
     fatal = False
     for name, obj, keys in (("vocabulary", voc, CATALOGUE_KEYS["vocabulary"]),
                             ("taxonomy", tax, CATALOGUE_KEYS["taxonomy"]),
@@ -336,8 +349,12 @@ def build_ctx(F):
     sd = {}
     for f in files:
         d = load_json(f, F)
-        if d is not None:
-            sd[os.path.basename(f).replace(".schema.json", "")] = d
+        if d is None:
+            continue
+        if not isinstance(d, dict):
+            F.add("USF-SHAPE-001", f, "schema root must be an object")
+            continue
+        sd[os.path.basename(f).replace(".schema.json", "")] = d
     voc = load_json("spec/vocabularies/vocabulary-catalog.json", F)
     tax = load_json("spec/taxonomies/taxonomy-catalog.json", F)
     reg = load_json("spec/registries/schema-registry.json", F)
@@ -349,8 +366,12 @@ def build_ctx(F):
     recog["valueSetLifecycleStates"] = set(x["id"] for x in voc["valueSetLifecycleStates"])
     recog["valueLifecycleStates"] = set(x["id"] for x in voc["valueLifecycleStates"])
     recog["valueItemLifecycle"] = recog["valueLifecycleStates"] - {"alias"}
-    onto = set(re.findall(r'^#+\s*5\.\d+\s+(.+?)\s*$', open("docs/architecture/ontology.md").read(), re.M))
-    forbidden = {fv.get("token") for fv in voc.get("forbiddenValues", []) if isinstance(fv, dict)}
+    onto_doc = load_text("docs/architecture/ontology.md", F)
+    if onto_doc is None:
+        return None
+    onto = set(re.findall(r'^#+\s*5\.\d+\s+(.+?)\s*$', onto_doc, re.M))
+    fvs = voc.get("forbiddenValues", [])
+    forbidden = {fv.get("token") for fv in fvs if isinstance(fv, dict)} if isinstance(fvs, list) else set()
     return dict(files=files, sd=sd, voc=voc, tax=tax, reg=reg, canon=canon, aliass=aliass, recog=recog,
                 onto=onto, forbidden=forbidden, vocab_ids=set(canon),
                 tax_ids=set(t["id"] for t in tax["taxonomies"]),
@@ -360,6 +381,9 @@ def build_ctx(F):
 def check_schemas(ctx, F):
     ids_seen = {}
     for name, d in ctx["sd"].items():
+        if not isinstance(d, dict):
+            F.add("USF-SHAPE-001", name, "schema root must be an object")
+            continue
         try:
             Draft202012Validator.check_schema(d)
         except Exception as e:
@@ -495,7 +519,7 @@ def check_registry(ctx, F):
             F.add("USF-REG-002", p)
     for name, d in sd.items():
         e = reg_by_path.get(f"spec/schemas/{name}.schema.json")
-        if not e:
+        if not e or not isinstance(d, dict):
             continue
         al = d.get("properties", {}).get("authorityLevel", {})
         if al.get("const") and al["const"] != e["authorityRole"]:
@@ -660,6 +684,12 @@ PATCH_ROOTS = {"registry": "reg", "vocabulary": "voc", "taxonomy": "tax"}
 def apply_patch(ctx, patch):
     if patch["target"] == "new-schema":
         ctx["sd"][patch["value"]["name"]] = copy.deepcopy(ctx["sd"][patch["value"]["from"]])
+        return
+    if patch.get("op") == "replace-root":   # replace a whole schema/catalogue root (e.g. with a non-object)
+        if patch["target"] == "schema":
+            ctx["sd"][patch["schema"]] = patch["value"]
+        else:
+            ctx[PATCH_ROOTS[patch["target"]]] = patch["value"]
         return
     root = ctx["sd"][patch["schema"]] if patch["target"] == "schema" else ctx[PATCH_ROOTS[patch["target"]]]
     pointer = patch.get("pointer", "")

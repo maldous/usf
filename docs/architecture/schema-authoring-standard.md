@@ -155,7 +155,7 @@ https://json-schema.org/draft/2020-12/schema
 
 5.5 Scope of this decision:
 
-- **The exact validator package is not chosen here.** The historical readiness validator (`../react/tools/v2-readiness/`) is a custom, fail-closed `.mjs` rule engine (rules `rNN-*.mjs`, exit codes `0/1/2`, "fails closed", "normalises no aliases"), **not** a JSON-Schema/`ajv`-based validator; JSON Schema was used historically to *define* artefact shape (`ui-definition.schema.json`), while a custom validator *enforced* rules. USF preserves that separation: JSON Schema 2020-12 defines shape; the validator package is **deferred** to validator implementation (§24, §26).
+- **The exact validator package is not chosen here.** The historical readiness validator (`../react/tools/v2-readiness/`) is a custom, fail-closed `.mjs` rule engine (rules `rNN-*.mjs`, exit codes `0/1/2`, "fails closed", "normalises no aliases"), **not** a JSON-Schema/`ajv`-based validator; JSON Schema was used historically to *define* artefact shape (`ui-definition.schema.json`), while a custom validator *enforced* rules. USF preserves that separation: JSON Schema 2020-12 defines shape; the validator package was **deferred** to validator implementation — now partially resolved by directive (a draft/advisory validator; see §26 Amendment A).
 - **Tooling selection** *(since resolved for this phase by directive — see §26 Amendment A; `jsonschema==4.10.3`)*, but **the dialect choice constrains future schemas immediately** (§23, §24).
 
 ---
@@ -329,7 +329,7 @@ Every USF schema file MUST include, at minimum (grounded in the Schema Registry 
 
 ## 9. Common Envelope Authoring Rules
 
-The Schema Registry defines a common conceptual envelope (`commonEnvelope`) for governed artefacts. This document defines how schemas apply it. **It does not define the envelope schema** (that is the deferred `evidence-envelope.schema.json` and the per-artefact schemas).
+The Schema Registry defines a common conceptual envelope (`commonEnvelope`) for governed artefacts. This document defines how schemas apply it. **This document does not define the envelope schema** (that is `evidence-envelope.schema.json` and the per-artefact schemas — which now exist at `draft`; see §26 Amendment A).
 
 9.1 Schemas for governed artefacts SHOULD require the common envelope fields where applicable: `id`, `kind`, `title`, `description`, `status`, `version`, `authorityLevel`, `lifecycleState`, `ontologyConcepts`, and the conditional reference/lineage/safety fields below.
 
