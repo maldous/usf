@@ -55,7 +55,8 @@
         "participants": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "extensions": {
@@ -125,7 +126,8 @@
     "participants": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "steps": {

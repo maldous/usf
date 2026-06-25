@@ -82,7 +82,8 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "purpose": {
@@ -93,25 +94,31 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/kebab"
-          }
+          },
+          "minItems": 1
         },
         "expectedFutureVocabularyDependencies": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/kebab"
-          }
+          },
+          "minItems": 1
         },
         "expectedFutureSchemaDependencies": {
           "type": "array",
           "items": {
-            "type": "string"
-          }
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
         },
         "reactSourceInputs": {
           "type": "array",
           "items": {
-            "type": "string"
-          }
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
         },
         "aiGuidance": {
           "type": "string",
@@ -158,7 +165,8 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "purpose": {
@@ -176,37 +184,45 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "futureVocabularyDependencies": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/kebab"
-          }
+          },
+          "minItems": 1
         },
         "futureSchemaDependencies": {
           "type": "array",
           "items": {
-            "type": "string"
-          }
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
         },
         "reactSourceInputs": {
           "type": "array",
           "items": {
-            "type": "string"
-          }
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
         },
         "validationExpectations": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "driftRisks": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "aiGuidance": {
@@ -216,7 +232,8 @@
         "deferredDetails": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       }
@@ -267,13 +284,15 @@
     "createdAfter": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "consistentWith": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "normativeLanguage": {
@@ -293,13 +312,15 @@
     "taxonomyDesignPrinciples": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "taxonomyRules": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "taxonomyFamilies": {
@@ -335,13 +356,15 @@
     "validationExpectations": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "aiAgentRules": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "deferredWork": {

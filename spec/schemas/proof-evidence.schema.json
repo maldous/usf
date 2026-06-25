@@ -147,14 +147,16 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "$comment": "May be empty only at discovery level; the allOf ladder requires non-empty above discovery."
     },
     "collectedEvidence": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "$comment": "May be empty only at discovery level; the allOf ladder requires non-empty above discovery."
     },
     "freshness": {
       "type": "object",

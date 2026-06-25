@@ -149,7 +149,8 @@
         "sourceInputs": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "taxonomyRefs": {
@@ -169,14 +170,16 @@
         "expectedConsumers": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "minItems": 1
         },
         "validationResponsibilities": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "minItems": 1
         },
@@ -186,7 +189,8 @@
         "driftRisks": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "minItems": 1
         },
@@ -197,7 +201,8 @@
         "deferredDetails": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       }
@@ -252,13 +257,15 @@
     "createdAfter": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "consistentWith": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "foundationalSequencePosition": {
@@ -316,7 +323,8 @@
           "expectedConsumers": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "minItems": 1
           },
@@ -416,41 +424,48 @@
           "relatedOntologyConcepts": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "minItems": 1
           },
           "relatedTaxonomyFamilies": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "minItems": 1
           },
           "relatedTaxonomies": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "minItems": 1
           },
           "relatedVocabularyValueSets": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "minItems": 1
           },
           "expectedSchemas": {
             "type": "array",
             "items": {
-              "type": "string"
-            }
+              "type": "string",
+              "minLength": 1
+            },
+            "$comment": "May be empty: a family may have no expected schemas yet (e.g. foundation-governance). Items must be non-empty."
           },
           "reactSourceLearnings": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             }
           },
           "futureValidatorExpectations": {
@@ -485,7 +500,8 @@
             "$ref": "#/$defs/kebabName"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "affectsSchemas": {
             "type": "string"
@@ -509,14 +525,18 @@
     "validationExpectations": {
       "type": "array",
       "items": {
-        "type": "string"
-      }
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
     },
     "aiAgentRules": {
       "type": "array",
       "items": {
-        "type": "string"
-      }
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
     },
     "deferredWork": {
       "type": "array",

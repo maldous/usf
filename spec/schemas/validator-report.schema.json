@@ -91,7 +91,8 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/finding"
-      }
+      },
+      "$comment": "May be empty for a pass report; the fail/partial branch requires at least one finding."
     },
     "evidenceRefs": {
       "type": "array",

@@ -85,25 +85,31 @@
     "inputs": {
       "type": "array",
       "items": {
-        "type": "string"
-      }
+        "type": "string",
+        "minLength": 1
+      },
+      "$comment": "May be empty: a command may legitimately take no inputs. Items must be non-empty."
     },
     "outputs": {
       "type": "array",
       "items": {
-        "type": "string"
-      }
+        "type": "string",
+        "minLength": 1
+      },
+      "$comment": "May be empty: a command may legitimately produce no declared outputs. Items must be non-empty."
     },
     "environmentScope": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/environment"
-      }
+      },
+      "$comment": "May be empty: an environment-agnostic command. Items are environment-classes values."
     },
     "sideEffects": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "failureSemantics": {
