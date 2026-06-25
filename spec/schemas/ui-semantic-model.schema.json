@@ -2,29 +2,172 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:ui-semantic-model",
   "title": "USF UI Semantic Model Schema",
-  "description": "Draft JSON Schema for UI semantic models (surfaces, pages, journeys, states, validation, errors, permissions, accessibility concerns, user actions, command/query mappings, e2e proof mappings) — the meaning of a user-facing interaction independent of visual design. Each declares its kind (ui-semantic-kinds) and maps to capabilities and proofs. Historical ../react JSX is semantic evidence, not final design authority; visual redesign is not semantic deletion (removing a journey/state/permission/accessibility requirement is a behaviour change). Governs the ontology concepts UI Semantic Model and Capability. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for UI semantic models (surfaces, pages, journeys, states, validation, errors, permissions, accessibility concerns, user actions, command/query mappings, e2e proof mappings) — the meaning of a user-facing interaction independent of visual design. Each declares its kind (ui-semantic-kinds) and maps to capabilities and proofs. Historical ../react JSX is semantic evidence, not final design authority; visual redesign is not semantic deletion (removing a journey/state/permission/accessibility requirement is a behaviour change). Governs the ontology concepts UI Semantic Model and Capability. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "uiKind"],
+  "required": [
+    "id",
+    "uiKind",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "uiKind": {"type": "string", "enum": ["ui-surface", "page", "journey", "state", "validation", "error", "permission", "accessibility-concern", "user-action", "command-query-mapping", "e2e-proof-mapping"]}
+    "uiKind": {
+      "type": "string",
+      "enum": [
+        "ui-surface",
+        "page",
+        "journey",
+        "state",
+        "validation",
+        "error",
+        "permission",
+        "accessibility-concern",
+        "user-action",
+        "command-query-mapping",
+        "e2e-proof-mapping"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "uiKind": {"$ref": "#/$defs/uiKind"},
-    "title": {"type": "string"},
-    "surface": {"type": "string"},
-    "route": {"type": "string"},
-    "journeys": {"type": "array", "items": {"type": "object"}},
-    "states": {"type": "array", "items": {"type": "string"}},
-    "validations": {"type": "array", "items": {"type": "string"}},
-    "errors": {"type": "array", "items": {"type": "string"}},
-    "permissions": {"type": "array", "items": {"type": "string"}},
-    "accessibility": {"type": "array", "items": {"type": "string"}},
-    "userActions": {"type": "array", "items": {"type": "string"}},
-    "commandQueryMappings": {"type": "array", "items": {"type": "string"}},
-    "capabilityRefs": {"type": "array", "items": {"type": "string"}},
-    "proofRefs": {"type": "array", "items": {"type": "string"}},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uiKind": {
+      "$ref": "#/$defs/uiKind"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "surface": {
+      "type": "string"
+    },
+    "route": {
+      "type": "string"
+    },
+    "journeys": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "accessibility": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "userActions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "commandQueryMappings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "capabilityRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "proofRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   }
 }

@@ -2,13 +2,10 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:schema-registry",
   "title": "USF Schema Registry Schema",
-  "description": "Draft JSON Schema for the USF Schema Registry (spec/registries/schema-registry.json). Validates the registry's identity envelope and its governed collections: schema entries, schema classes, schema lifecycle states, schema families, and external standards. Enforces that schema classes come from the schema-classes vocabulary, lifecycle states from schema-lifecycle-states, and authority roles from authority-levels. Governs the ontology concepts Registry and Validator. CLOSURE POLICY: the governed collections (schemas, schemaClasses, schemaLifecycleStates, schemaFamilies, externalStandards) and the top-level object are closed (additionalProperties:false); the descriptive metadata blocks (identityNotes, currentRepositoryState, governance, namingConventions, commonRequirements, commonEnvelope, reactSourceLearnings, deferredWork, acceptanceCriteria) are intentionally typed permissively (object/array) in this draft pending full registry self-validation, so they are deliberately-open extension points rather than accidentally open. ENFORCEMENT SCOPE: this schema enforces shape and enum constraints only; cross-record checks (unique schema ids/paths, no schema 'active' without an existing validator-checkable file, forbidden-token scanning, schema/registry lifecycle-vs-file-existence consistency) are NOT expressible in plain JSON Schema and are documented validator responsibilities deferred to validator implementation per docs/architecture/schema-authoring-standard.md section 24. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for the USF Schema Registry (spec/registries/schema-registry.json). Validates the registry's identity envelope and its governed collections: schema entries, schema classes, schema lifecycle states, schema families, and external standards. As the singleton registry's self-validation target, the identity fields id, title, authorityLevel, and foundationalSequencePosition are pinned with const. Each schema entry must record taxonomyRefs and vocabularyRefs (its taxonomy/vocabulary dependencies). Enforces schema classes from schema-classes, lifecycle states from schema-lifecycle-states, and authority roles from authority-levels. Governs the ontology concepts Registry and Validator. CLOSURE POLICY: the governed collections (schemas, schemaClasses, schemaLifecycleStates, schemaFamilies, externalStandards) and the top-level object are closed; descriptive metadata blocks (identityNotes, currentRepositoryState, governance, namingConventions, commonRequirements, commonEnvelope, reactSourceLearnings, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. ENFORCEMENT SCOPE: shape and enum constraints only; cross-record checks (unique schema ids/paths, no schema 'active' without an existing validator-checkable file, forbidden-token scanning, schema/registry lifecycle-vs-file-existence consistency) are NOT expressible in plain JSON Schema and are documented validator responsibilities deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
   "type": "object",
   "$defs": {
-    "kebabName": {
-      "type": "string",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-    },
+    "kebabName": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
     "noForbiddenToken": {
       "$comment": "Forbidden canonical tokens per docs/architecture/directory-and-file-naming-standard.md section 18.",
       "not": {"pattern": "(^|[-./])(v2|legacy|old|new|temp|transitional)([-./]|$)"}
@@ -43,7 +40,7 @@
       "additionalProperties": false,
       "required": [
         "id", "title", "path", "class", "family", "lifecycleState", "status",
-        "governsOntologyConcepts", "authorityRole"
+        "governsOntologyConcepts", "taxonomyRefs", "vocabularyRefs", "authorityRole"
       ],
       "properties": {
         "id": {
@@ -67,8 +64,8 @@
         "purpose": {"type": "string"},
         "requiredBecause": {"type": "string"},
         "sourceInputs": {"type": "array", "items": {"type": "string"}},
-        "taxonomyRefs": {"type": "array", "items": {"$ref": "#/$defs/kebabName"}},
-        "vocabularyRefs": {"type": "array", "items": {"$ref": "#/$defs/kebabName"}},
+        "taxonomyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebabName"}},
+        "vocabularyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebabName"}},
         "expectedConsumers": {"type": "array", "items": {"type": "string"}},
         "validationResponsibilities": {"type": "array", "items": {"type": "string"}},
         "authorityRole": {"$ref": "#/$defs/authorityLevel"},
@@ -86,15 +83,15 @@
   "additionalProperties": false,
   "properties": {
     "$schema": {"type": ["string", "null"]},
-    "id": {"type": "string", "pattern": "^usf\\.[a-z0-9-]+$"},
-    "title": {"type": "string", "minLength": 1},
+    "id": {"const": "usf.schema-registry"},
+    "title": {"const": "USF Schema Registry"},
     "status": {"type": "string", "minLength": 1},
     "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
-    "authorityLevel": {"$ref": "#/$defs/authorityLevel"},
+    "authorityLevel": {"const": "semantic-definition"},
     "purpose": {"type": "string", "minLength": 1},
     "createdAfter": {"type": "array", "items": {"type": "string"}},
     "consistentWith": {"type": "array", "items": {"type": "string"}},
-    "foundationalSequencePosition": {"type": "integer"},
+    "foundationalSequencePosition": {"const": 7},
     "normativeLanguage": {"type": "string"},
     "identityNotes": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
     "currentRepositoryState": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},

@@ -2,33 +2,168 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:environment",
   "title": "USF Environment Schema",
-  "description": "Draft JSON Schema for environment class declarations. Records the execution context (environment-classes) and the provider modes (provider-modes) it permits, keeping environment distinct from provider mode. Enforces that production-shaped MUST NOT satisfy a production-live claim and that an environment name is not itself a readiness claim. Governs the ontology concepts Environment and Provider Mode. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for environment class declarations. Records the execution context (environment-classes) and the provider modes (provider-modes) it permits, keeping environment distinct from provider mode. Enforces that production-shaped MUST NOT satisfy a production-live claim and that an environment name is not itself a readiness claim. Governs the ontology concepts Environment and Provider Mode. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "environment"],
+  "required": [
+    "id",
+    "environment",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]},
-    "providerMode": {"type": "string", "enum": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"]}
+    "environment": {
+      "type": "string",
+      "enum": [
+        "local",
+        "hermetic",
+        "integration",
+        "staging",
+        "production-shaped",
+        "production-live"
+      ]
+    },
+    "providerMode": {
+      "type": "string",
+      "enum": [
+        "hermetic-mock",
+        "local-composed-real-service",
+        "external-sandbox",
+        "live-external-provider"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "title": {"type": "string"},
-    "environment": {"$ref": "#/$defs/environment"},
-    "permittedProviderModes": {"type": "array", "items": {"$ref": "#/$defs/providerMode"}},
-    "productionLiveClaim": {"type": "boolean", "default": false},
-    "readinessGateRefs": {"type": "array", "items": {"type": "string"}},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    },
+    "permittedProviderModes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/providerMode"
+      }
+    },
+    "productionLiveClaim": {
+      "type": "boolean",
+      "default": false
+    },
+    "readinessGateRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   },
   "allOf": [
     {
       "$comment": "production-shaped MUST NOT satisfy a production-live claim.",
-      "if": {"properties": {"environment": {"const": "production-shaped"}}, "required": ["environment"]},
-      "then": {"properties": {"productionLiveClaim": {"const": false}}}
+      "if": {
+        "properties": {
+          "environment": {
+            "const": "production-shaped"
+          }
+        },
+        "required": [
+          "environment"
+        ]
+      },
+      "then": {
+        "properties": {
+          "productionLiveClaim": {
+            "const": false
+          }
+        }
+      }
     },
     {
       "$comment": "A production-live claim requires the environment to actually be production-live; environment does not upgrade by implication.",
-      "if": {"properties": {"productionLiveClaim": {"const": true}}, "required": ["productionLiveClaim"]},
-      "then": {"properties": {"environment": {"const": "production-live"}}}
+      "if": {
+        "properties": {
+          "productionLiveClaim": {
+            "const": true
+          }
+        },
+        "required": [
+          "productionLiveClaim"
+        ]
+      },
+      "then": {
+        "properties": {
+          "environment": {
+            "const": "production-live"
+          }
+        }
+      }
     }
   ]
 }

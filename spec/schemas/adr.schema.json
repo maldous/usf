@@ -2,33 +2,195 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:adr",
   "title": "USF ADR Schema",
-  "description": "Draft JSON Schema for USF Architecture Decision Records (rank-2 authority). Enforces that an ADR is a traceable normative decision, not generic prose: it carries semantic/source/proof/validator references, invariants, permitted changes, forbidden drift, consequences, and explicit AI-alignment rules. Governs the ontology concepts ADR and Semantic Contract. Reference resolution (every ref resolves to a real artefact/decision) is a validator responsibility deferred per schema-authoring-standard §24. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for USF Architecture Decision Records (rank-2 authority). Enforces that an ADR is a traceable normative decision, not generic prose: it carries semantic/source/proof/validator references, invariants, permitted changes, forbidden drift, consequences, and explicit AI-alignment rules. Governs the ontology concepts ADR and Semantic Contract. Reference resolution (every ref resolves to a real artefact/decision) is a validator responsibility deferred per schema-authoring-standard §24. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "kind", "title", "authorityLevel", "decisionStatus", "context", "decision", "consequences", "invariants", "permittedChanges", "forbiddenDrift", "aiAlignmentRules", "semanticRefs"],
+  "required": [
+    "id",
+    "kind",
+    "title",
+    "authorityLevel",
+    "decisionStatus",
+    "context",
+    "decision",
+    "consequences",
+    "invariants",
+    "permittedChanges",
+    "forbiddenDrift",
+    "aiAlignmentRules",
+    "semanticRefs",
+    "description",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "ref": {"type": "string", "minLength": 1}
+    "ref": {
+      "type": "string",
+      "minLength": 1
+    }
   },
   "properties": {
-    "id": {"type": "string", "pattern": "^[0-9]{4}-[a-z0-9]+(-[a-z0-9]+)*$", "$comment": "Zero-padded numeric prefix plus kebab title, per directory-and-file-naming-standard §13."},
-    "kind": {"type": "string", "const": "adr", "$comment": "artefact-kinds value 'adr'."},
-    "title": {"type": "string", "minLength": 1},
-    "authorityLevel": {"type": "string", "const": "adr", "$comment": "authority-levels value 'adr' (rank 2)."},
-    "decisionStatus": {"type": "string", "enum": ["proposed", "accepted", "superseded", "rejected", "deprecated"], "$comment": "An ADR is binding only when accepted; superseded/rejected/deprecated are non-binding lineage."},
-    "date": {"type": "string"},
-    "context": {"type": "string", "minLength": 1},
-    "decision": {"type": "string", "minLength": 1},
-    "consequences": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-    "invariants": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-    "permittedChanges": {"type": "array", "items": {"type": "string"}},
-    "forbiddenDrift": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-    "aiAlignmentRules": {"type": "array", "minItems": 1, "items": {"type": "string"}, "$comment": "ai-governance-kinds: ai-alignment-rule, forbidden-inference, required-stop-condition."},
-    "semanticRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/ref"}, "$comment": "Untraced decisions are not binding: at least one semantic reference is required."},
-    "sourceRefs": {"type": "array", "items": {"$ref": "#/$defs/ref"}},
-    "proofRefs": {"type": "array", "items": {"$ref": "#/$defs/ref"}},
-    "validatorRefs": {"type": "array", "items": {"$ref": "#/$defs/ref"}},
-    "supersedes": {"type": "array", "items": {"$ref": "#/$defs/ref"}},
-    "supersededBy": {"$ref": "#/$defs/ref"},
-    "rationale": {"type": "string"}
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[a-z0-9]+(-[a-z0-9]+)*$",
+      "$comment": "Zero-padded numeric prefix plus kebab title, per directory-and-file-naming-standard §13."
+    },
+    "kind": {
+      "type": "string",
+      "const": "adr",
+      "$comment": "artefact-kinds value 'adr'."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "adr",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "decisionStatus": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "accepted",
+        "superseded",
+        "rejected",
+        "deprecated"
+      ],
+      "$comment": "An ADR is binding only when accepted; superseded/rejected/deprecated are non-binding lineage."
+    },
+    "date": {
+      "type": "string"
+    },
+    "context": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "consequences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "permittedChanges": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbiddenDrift": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "aiAlignmentRules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "$comment": "ai-governance-kinds: ai-alignment-rule, forbidden-inference, required-stop-condition."
+    },
+    "semanticRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ref"
+      },
+      "$comment": "Untraced decisions are not binding: at least one semantic reference is required."
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ref"
+      }
+    },
+    "proofRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ref"
+      }
+    },
+    "validatorRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ref"
+      }
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ref"
+      }
+    },
+    "supersededBy": {
+      "$ref": "#/$defs/ref"
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   }
 }

@@ -2,25 +2,132 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:audit-event",
   "title": "USF Audit Event Schema",
-  "description": "Draft JSON Schema for audit event definitions (audit events, security-sensitive audits, state-changing audits, accountability records). Each declares its kind (audit-event-kinds), actor, action, subject, timestamp semantics, and security-sensitivity / state-change classification, mapped to the interface/workflow/semantic contract it accompanies. Every mutating or privileged action MUST have a defined audit semantic; audit coverage MUST NOT be removed as an incidental refactor. Governs the ontology concept Audit Event. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for audit event definitions (audit events, security-sensitive audits, state-changing audits, accountability records). Each declares its kind (audit-event-kinds), actor, action, subject, timestamp semantics, and security-sensitivity / state-change classification, mapped to the interface/workflow/semantic contract it accompanies. Every mutating or privileged action MUST have a defined audit semantic; audit coverage MUST NOT be removed as an incidental refactor. Governs the ontology concept Audit Event. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "auditKind", "actor", "action", "subject"],
+  "required": [
+    "id",
+    "auditKind",
+    "actor",
+    "action",
+    "subject",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "auditKind": {"type": "string", "enum": ["audit-event", "security-sensitive-audit", "state-changing-audit", "accountability-record"]}
+    "auditKind": {
+      "type": "string",
+      "enum": [
+        "audit-event",
+        "security-sensitive-audit",
+        "state-changing-audit",
+        "accountability-record"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "auditKind": {"$ref": "#/$defs/auditKind"},
-    "actor": {"type": "string", "minLength": 1},
-    "action": {"type": "string", "minLength": 1},
-    "subject": {"type": "string", "minLength": 1},
-    "timestampSemantics": {"type": "string"},
-    "securitySensitive": {"type": "boolean"},
-    "stateChanging": {"type": "boolean"},
-    "relatedInterface": {"type": "string"},
-    "relatedWorkflow": {"type": "string"},
-    "semanticContractRef": {"type": "string"},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "auditKind": {
+      "$ref": "#/$defs/auditKind"
+    },
+    "actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestampSemantics": {
+      "type": "string"
+    },
+    "securitySensitive": {
+      "type": "boolean"
+    },
+    "stateChanging": {
+      "type": "boolean"
+    },
+    "relatedInterface": {
+      "type": "string"
+    },
+    "relatedWorkflow": {
+      "type": "string"
+    },
+    "semanticContractRef": {
+      "type": "string"
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   }
 }

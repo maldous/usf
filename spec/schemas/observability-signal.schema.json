@@ -2,24 +2,137 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:observability-signal",
   "title": "USF Observability Signal Schema",
-  "description": "Draft JSON Schema for observability signal definitions (logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, correlation identifiers). Each declares its kind (observability-signal-kinds), name, source, and purpose, mapped to a semantic contract and to proof/evidence where applicable. Observability is a semantic asset: removing or renaming a signal requires semantic review, not an incidental refactor. USF claims no full OpenTelemetry compliance until concrete attribute schemas exist. Governs the ontology concept Observability Signal. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for observability signal definitions (logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, correlation identifiers). Each declares its kind (observability-signal-kinds), name, source, and purpose, mapped to a semantic contract and to proof/evidence where applicable. Observability is a semantic asset: removing or renaming a signal requires semantic review, not an incidental refactor. USF claims no full OpenTelemetry compliance until concrete attribute schemas exist. Governs the ontology concept Observability Signal. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "signalKind", "name", "source"],
+  "required": [
+    "id",
+    "signalKind",
+    "name",
+    "source",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "signalKind": {"type": "string", "enum": ["log", "metric", "trace", "span", "runtime-event", "runtime-proof-output", "service-resource-attribute", "correlation-identifier"]}
+    "signalKind": {
+      "type": "string",
+      "enum": [
+        "log",
+        "metric",
+        "trace",
+        "span",
+        "runtime-event",
+        "runtime-proof-output",
+        "service-resource-attribute",
+        "correlation-identifier"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "signalKind": {"$ref": "#/$defs/signalKind"},
-    "name": {"type": "string", "minLength": 1},
-    "source": {"type": "string", "minLength": 1},
-    "purpose": {"type": "string"},
-    "semanticContractRef": {"type": "string"},
-    "evidenceRefs": {"type": "array", "items": {"type": "string"}},
-    "proofRefs": {"type": "array", "items": {"type": "string"}},
-    "retention": {"type": "string"},
-    "correlation": {"type": "string"},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signalKind": {
+      "$ref": "#/$defs/signalKind"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "semanticContractRef": {
+      "type": "string"
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "proofRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "retention": {
+      "type": "string"
+    },
+    "correlation": {
+      "type": "string"
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   }
 }

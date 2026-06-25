@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:vocabulary",
   "title": "USF Vocabulary Schema",
-  "description": "Draft JSON Schema for the USF vocabulary catalogue (spec/vocabularies/vocabulary-catalog.json) and future vocabulary artefacts. Validates value sets and their values: each value set declares a lifecycle status, governed taxonomies and ontology concepts, values, aliases, and forbidden values; each value declares a value-lifecycle (canonical/provisional/alias/deprecated/forbidden/deferred). Aliases carry a canonical target. Grounds the rank-1 semantic-definition corpus via the ontology concepts Semantic Contract (normative allowed values) and Registry (controlled-value index). Cross-record checks (unique value-set/value ids, aliases resolve to canonical, forbidden never canonical) are validator responsibilities deferred per schema-authoring-standard §24. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for the USF vocabulary catalogue (spec/vocabularies/vocabulary-catalog.json) and future vocabulary artefacts. Validates value sets and their values per the catalogue's vocabularyRules: each value set declares status, governed taxonomies and ontology concepts, expected schema consumers, AI guidance, and values; each value declares a value-lifecycle and AI guidance. Per the catalogue's alias convention, aliases live ONLY in each set's aliases array and are not listed in values; therefore values[].lifecycle does NOT permit 'alias'. Active and draft value sets require at least one value; a deferred value set (e.g. capability-domains) may be empty. CLOSURE POLICY: value sets, values, aliases, lifecycle-state definitions, and forbidden-value entries are closed; descriptive blocks (currentRepositoryState, governance, reactSourceLearnings, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. Cross-record checks (unique ids, aliases resolve to canonical, forbidden never canonical) are validator-deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
   "type": "object",
   "$defs": {
     "kebab": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
@@ -11,23 +11,46 @@
       "type": "string",
       "enum": ["proposed", "draft", "active", "deprecated", "retired", "deferred"]
     },
-    "valueLifecycle": {
-      "$comment": "From the catalogue's valueLifecycleStates.",
+    "valueItemLifecycle": {
+      "$comment": "Lifecycle of a values[] entry. 'alias' is intentionally excluded: aliases live only in the set's aliases array per the catalogue alias convention.",
       "type": "string",
-      "enum": ["canonical", "provisional", "alias", "deprecated", "forbidden", "deferred"]
+      "enum": ["canonical", "provisional", "deprecated", "forbidden", "deferred"]
+    },
+    "lifecycleStateDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "meaning"],
+      "properties": {
+        "id": {"$ref": "#/$defs/kebab"},
+        "meaning": {"type": "string"},
+        "allowedUse": {"type": "string"},
+        "validatorExpectation": {"type": "string"},
+        "aiGuidance": {"type": "string"}
+      }
+    },
+    "forbiddenValueItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["token", "rationale"],
+      "properties": {
+        "token": {"type": "string"},
+        "rationale": {"type": "string"},
+        "allowedException": {"type": "string"},
+        "aiGuidance": {"type": "string"}
+      }
     },
     "value": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "label", "description", "lifecycle"],
+      "required": ["id", "label", "description", "lifecycle", "aiGuidance"],
       "properties": {
         "id": {"$ref": "#/$defs/kebab"},
         "label": {"type": "string"},
         "description": {"type": "string"},
-        "lifecycle": {"$ref": "#/$defs/valueLifecycle"},
+        "lifecycle": {"$ref": "#/$defs/valueItemLifecycle"},
         "canonical": {"type": "boolean"},
         "sourceNotes": {"type": "string"},
-        "aiGuidance": {"type": "string"},
+        "aiGuidance": {"type": "string", "minLength": 1},
         "precedence": {"type": "integer"},
         "order": {"type": "integer"},
         "strongerThan": {"type": "array", "items": {"$ref": "#/$defs/kebab"}},
@@ -49,7 +72,7 @@
     "valueSet": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "status", "description", "governedOntologyConcepts", "values"],
+      "required": ["id", "title", "status", "description", "governedTaxonomies", "governedOntologyConcepts", "expectedSchemaConsumers", "values", "aiGuidance"],
       "properties": {
         "id": {"$ref": "#/$defs/kebab"},
         "title": {"type": "string"},
@@ -62,51 +85,44 @@
         "sourceInputs": {"type": "array", "items": {"type": "string"}},
         "values": {"type": "array", "items": {"$ref": "#/$defs/value"}},
         "aliases": {"type": "array", "items": {"$ref": "#/$defs/alias"}},
-        "forbiddenValues": {"type": "array", "items": {"type": "object"}},
+        "forbiddenValues": {"type": "array", "items": {"$ref": "#/$defs/forbiddenValueItem"}},
         "driftRisks": {"type": "array", "items": {"type": "string"}},
         "aiGuidance": {"type": "array", "items": {"type": "string"}},
         "deferredDetails": {"type": "array", "items": {"type": "string"}}
-      }
+      },
+      "allOf": [
+        {"$comment": "Active and draft value sets must enumerate at least one value; deferred (and proposed) sets may be empty.",
+         "if": {"properties": {"status": {"enum": ["active", "draft"]}}, "required": ["status"]},
+         "then": {"properties": {"values": {"minItems": 1}}}}
+      ]
     }
   },
   "required": ["id", "title", "status", "version", "authorityLevel", "purpose", "valueSets"],
   "additionalProperties": false,
   "properties": {
     "$schema": {"type": ["string", "null"]},
-    "id": {"type": "string", "pattern": "^usf\\.[a-z0-9-]+$"},
+    "id": {"const": "usf.vocabulary-catalog"},
     "title": {"type": "string"},
     "status": {"type": "string"},
     "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
-    "authorityLevel": {"type": "string", "enum": ["semantic-definition", "adr", "validator-rule", "runtime-proof-evidence", "source-implementation", "historical-source-evidence", "generated-report"]},
+    "authorityLevel": {"type": "string", "const": "semantic-definition"},
     "purpose": {"type": "string"},
     "createdAfter": {"type": "array", "items": {"type": "string"}},
     "consistentWith": {"type": "array", "items": {"type": "string"}},
     "normativeLanguage": {"type": "string"},
     "scopeNote": {"type": "string"},
-    "currentRepositoryState": {"type": "object"},
-    "governance": {"type": "object"},
+    "currentRepositoryState": {"type": "object", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
+    "governance": {"type": "object", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
     "vocabularyDesignPrinciples": {"type": "array", "items": {"type": "string"}},
     "vocabularyRules": {"type": "array", "items": {"type": "string"}},
-    "valueSetLifecycleStates": {"type": "array", "items": {"type": "object"}},
-    "valueLifecycleStates": {"type": "array", "items": {"type": "object"}},
+    "valueSetLifecycleStates": {"type": "array", "items": {"$ref": "#/$defs/lifecycleStateDef"}},
+    "valueLifecycleStates": {"type": "array", "items": {"$ref": "#/$defs/lifecycleStateDef"}},
     "valueSets": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/valueSet"}},
-    "forbiddenValues": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["token", "rationale"],
-        "properties": {
-          "token": {"type": "string"},
-          "rationale": {"type": "string"},
-          "allowedException": {"type": "string"},
-          "aiGuidance": {"type": "string"}
-        }
-      }
-    },
-    "reactSourceLearnings": {"type": "array"},
+    "forbiddenValues": {"type": "array", "items": {"$ref": "#/$defs/forbiddenValueItem"}},
+    "reactSourceLearnings": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
     "validationExpectations": {"type": "array", "items": {"type": "string"}},
     "aiAgentRules": {"type": "array", "items": {"type": "string"}},
-    "deferredWork": {"type": "array"},
-    "acceptanceCriteria": {"type": "array"}
+    "deferredWork": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
+    "acceptanceCriteria": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."}
   }
 }
