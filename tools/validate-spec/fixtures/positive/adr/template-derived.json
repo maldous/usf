@@ -1,0 +1,59 @@
+{
+  "id": "0000-template-derived-adr-instance",
+  "kind": "adr",
+  "title": "Template-derived ADR instance",
+  "authorityLevel": "adr",
+  "decisionStatus": "proposed",
+  "date": "2026-06-26",
+  "context": "USF needs a reviewable ADR JSON instance shape corresponding to docs/adr/template.md before numbered decision ADRs are authored.",
+  "decision": "Template-derived ADR instances use the zero-padded numeric prefix plus kebab-case semantic title required by adr.schema.json and the directory naming standard.",
+  "consequences": [
+    "Future ADRs can be checked against adr.schema.json before acceptance.",
+    "The Markdown template remains human-readable while JSON instances provide schema validation evidence."
+  ],
+  "invariants": [
+    "ADRs remain rank-2 decision records and do not define product behaviour without semantic references.",
+    "A template-derived fixture is not itself an accepted numbered decision ADR."
+  ],
+  "permittedChanges": [
+    "A future ADR registry may define the canonical home for machine-readable ADR instances."
+  ],
+  "forbiddenDrift": [
+    "Do not create generic prose decisions without semantic references, invariants, forbidden drift, consequences, and AI-alignment rules.",
+    "Do not treat this template fixture as an accepted ADR."
+  ],
+  "aiAlignmentRules": [
+    "Read the relevant USF semantic definitions and accepted ADRs before authoring a new ADR.",
+    "Stop if the proposed ADR would contradict the Charter or Authority Model."
+  ],
+  "semanticRefs": [
+    "docs/architecture/standards-profile.md#19-adr-standard",
+    "docs/architecture/directory-and-file-naming-standard.md#13-adr-file-naming-rules"
+  ],
+  "sourceRefs": [
+    "../react/docs/v2-foundation/v2-decision-catalog.json",
+    "../react/docs/v2-foundation/v2-decision-lineage.json"
+  ],
+  "proofRefs": [],
+  "validatorRefs": [
+    "spec/schemas/adr.schema.json",
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "The fixture proves that the template field set can be represented as an adr.schema.json instance without creating an accepted numbered decision.",
+  "description": "Positive validator fixture derived from docs/adr/template.md for the ADR template and numbering convention.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "ADR",
+    "Semantic Contract"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "ai-governance-kinds"
+  ],
+  "aiGuidance": "Use this record only as validator evidence for the template shape; it does not authorise any numbered decision."
+}
