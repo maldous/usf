@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "command",
+  "op": "removeItem",
+  "pointer": "/required",
+  "value": "sideEffects",
+  "expectedRule": "USF-REQ-002",
+  "note": "description promises sideEffects"
+}

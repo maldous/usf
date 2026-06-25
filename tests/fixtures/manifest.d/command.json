@@ -1,0 +1,10 @@
+[
+  {"path":"negative/command/empty-string-input.json","schema":"command","keyword":"minLength","pointer":"/inputs/0"},
+  {"path":"negative/command/empty-string-output.json","schema":"command","keyword":"minLength","pointer":"/outputs/0"},
+  {"path":"negative/command/empty-string-side-effect.json","schema":"command","keyword":"minLength","pointer":"/sideEffects/0"},
+  {"path":"negative/command/missing-environment-scope.json","schema":"command","keyword":"required","pointer":"/"},
+  {"path":"negative/command/missing-inputs.json","schema":"command","keyword":"required","pointer":"/"},
+  {"path":"negative/command/missing-outputs.json","schema":"command","keyword":"required","pointer":"/"},
+  {"path":"negative/command/missing-side-effects.json","schema":"command","keyword":"required","pointer":"/"},
+  {"path":"negative/command/non-canonical-command-kind.json","schema":"command","keyword":"enum","pointer":"/commandKind"}
+]

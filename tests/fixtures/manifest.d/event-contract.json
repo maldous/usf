@@ -1,0 +1,10 @@
+[
+  {"path":"negative/event-contract/event-fields-empty-strings.json", "schema":"event-contract", "keyword":"minLength", "pointer":"/payloadSchemaRef"},
+  {"path":"negative/event-contract/message-missing-ordering.json", "schema":"event-contract", "keyword":"required", "pointer":"/"},
+  {"path":"negative/event-contract/missing-canonical.json", "schema":"event-contract", "keyword":"required", "pointer":"/"},
+  {"path":"negative/event-contract/missing-dlq-policy.json", "schema":"event-contract", "keyword":"required", "pointer":"/"},
+  {"path":"negative/event-contract/missing-idempotency-key.json", "schema":"event-contract", "keyword":"required", "pointer":"/"},
+  {"path":"negative/event-contract/missing-payload-schema-ref.json", "schema":"event-contract", "keyword":"required", "pointer":"/"},
+  {"path":"negative/event-contract/missing-producer.json", "schema":"event-contract", "keyword":"required", "pointer":"/"},
+  {"path":"negative/event-contract/missing-retention.json", "schema":"event-contract", "keyword":"required", "pointer":"/"}
+]

@@ -1,0 +1,8 @@
+{
+  "target": "vocabulary",
+  "op": "dup",
+  "pointer": "/valueSets/0/values",
+  "index": 0,
+  "expectedRule": "USF-VOCAB-002",
+  "note": "duplicate value id within a value set"
+}

@@ -1,0 +1,8 @@
+{
+  "target": "registry",
+  "op": "dup",
+  "pointer": "/schemas",
+  "index": 0,
+  "expectedRule": "USF-REG-006",
+  "note": "duplicate registry schema id"
+}

@@ -15,11 +15,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - run: pip install jsonschema
-      - name: Validate spec corpus
-        run: python tools/validate-spec.py all
+      - run: pip install -r requirements-dev.txt
+      - name: Validate spec corpus (also exercises report emission + self-validation)
+        run: python tools/validate-spec.py all --report /tmp/usf-validator-report.json
       - name: PR governance gate
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        run: python tools/validate-spec.py pr --base "origin/$BASE_REF" --head HEAD
+        run: python tools/validate-spec.py pr --base "origin/$BASE_REF" --head HEAD --report /tmp/usf-pr-validator-report.json

@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "environment",
+  "op": "append",
+  "pointer": "/$defs/environment/enum",
+  "value": "bogus",
+  "expectedRule": "USF-ENUM-001",
+  "note": "canonical set plus a bogus value (the superset case)"
+}

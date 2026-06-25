@@ -1,0 +1,12 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "set",
+  "pointer": "/$defs/__orphan",
+  "value": {
+    "type": "string",
+    "minLength": 1
+  },
+  "expectedRule": "USF-REF-002",
+  "note": "defined but never referenced"
+}

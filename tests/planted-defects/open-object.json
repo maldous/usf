@@ -1,0 +1,8 @@
+{
+  "target": "schema",
+  "schema": "command",
+  "op": "remove",
+  "pointer": "/additionalProperties",
+  "expectedRule": "USF-CLOSE-001",
+  "note": "open the top-level object"
+}

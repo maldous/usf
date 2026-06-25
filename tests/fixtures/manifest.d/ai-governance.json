@@ -1,0 +1,9 @@
+[
+  {"path":"negative/ai-governance/authority-order-not-acknowledged.json","schema":"ai-governance","keyword":"const","pointer":"/authorityOrderAcknowledged"},
+  {"path":"negative/ai-governance/empty-stop-conditions.json","schema":"ai-governance","keyword":"minItems","pointer":"/stopConditions"},
+  {"path":"negative/ai-governance/empty-string-stop-condition.json","schema":"ai-governance","keyword":"minLength","pointer":"/stopConditions/0"},
+  {"path":"negative/ai-governance/generated-artefact-empty-references.json","schema":"ai-governance","keyword":"minItems","pointer":"/references"},
+  {"path":"negative/ai-governance/generated-artefact-empty-string-reference.json","schema":"ai-governance","keyword":"minLength","pointer":"/references/0"},
+  {"path":"negative/ai-governance/generated-artefact-missing-references.json","schema":"ai-governance","keyword":"required","pointer":"/"},
+  {"path":"negative/ai-governance/treated-as-authoritative-true.json","schema":"ai-governance","keyword":"const","pointer":"/treatedAsAuthoritative"}
+]

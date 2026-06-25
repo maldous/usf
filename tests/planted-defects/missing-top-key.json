@@ -1,0 +1,8 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "remove",
+  "pointer": "/type",
+  "expectedRule": "USF-REQ-001",
+  "note": "drop a required schema-file key"
+}

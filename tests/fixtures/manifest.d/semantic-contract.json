@@ -1,0 +1,32 @@
+[
+  {
+    "path": "negative/semantic-contract/complete-facet-without-backing.json",
+    "schema": "semantic-contract",
+    "keyword": "anyOf",
+    "pointer": "/facets/lifecycle"
+  },
+  {
+    "path": "negative/semantic-contract/facet-empty-string-evidence-ref.json",
+    "schema": "semantic-contract",
+    "keyword": "minLength",
+    "pointer": "/facets/lifecycle/evidenceRefs/0"
+  },
+  {
+    "path": "negative/semantic-contract/facet-empty-string-source-ref.json",
+    "schema": "semantic-contract",
+    "keyword": "minLength",
+    "pointer": "/facets/proof/sourceRefs/0"
+  },
+  {
+    "path": "negative/semantic-contract/invented-facet-key.json",
+    "schema": "semantic-contract",
+    "keyword": "additionalProperties",
+    "pointer": "/facets"
+  },
+  {
+    "path": "negative/semantic-contract/missing-one-facet.json",
+    "schema": "semantic-contract",
+    "keyword": "required",
+    "pointer": "/facets"
+  }
+]

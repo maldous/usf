@@ -1,0 +1,7 @@
+[
+  {"path":"negative/ui-semantic-model/journey-extra-property.json", "schema":"ui-semantic-model", "keyword":"additionalProperties", "pointer":"/journeys/0"},
+  {"path":"negative/ui-semantic-model/journey-id-empty.json", "schema":"ui-semantic-model", "keyword":"minLength", "pointer":"/journeys/0/id"},
+  {"path":"negative/ui-semantic-model/journey-missing-id.json", "schema":"ui-semantic-model", "keyword":"required", "pointer":"/journeys/0"},
+  {"path":"negative/ui-semantic-model/journey-name-empty.json", "schema":"ui-semantic-model", "keyword":"minLength", "pointer":"/journeys/0/name"},
+  {"path":"negative/ui-semantic-model/permissions-empty-string-item.json", "schema":"ui-semantic-model", "keyword":"minLength", "pointer":"/permissions/0"}
+]

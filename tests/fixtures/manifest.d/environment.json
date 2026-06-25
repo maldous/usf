@@ -1,0 +1,14 @@
+[
+  {
+    "path": "negative/environment/non-production-live-claim-true.json",
+    "schema": "environment",
+    "keyword": "const",
+    "pointer": "/environment"
+  },
+  {
+    "path": "negative/environment/production-shaped-claim-true.json",
+    "schema": "environment",
+    "keyword": "const",
+    "pointer": "/productionLiveClaim"
+  }
+]

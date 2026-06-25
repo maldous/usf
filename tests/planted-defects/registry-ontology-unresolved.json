@@ -1,0 +1,8 @@
+{
+  "target": "registry",
+  "op": "append",
+  "pointer": "/schemas/0/governsOntologyConcepts",
+  "value": "Nope Not Real",
+  "expectedRule": "USF-ONT-001",
+  "note": "unresolved ontology concept"
+}

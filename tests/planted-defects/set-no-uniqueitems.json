@@ -1,0 +1,8 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "remove",
+  "pointer": "/properties/consequences/uniqueItems",
+  "expectedRule": "USF-SET-001",
+  "note": "set-like array missing uniqueItems"
+}

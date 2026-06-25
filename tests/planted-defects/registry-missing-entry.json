@@ -1,0 +1,7 @@
+{
+  "target": "registry",
+  "op": "remove",
+  "pointer": "/schemas/0",
+  "expectedRule": "USF-REG-001",
+  "note": "a schema file now has no registry entry"
+}

@@ -1,0 +1,9 @@
+{
+  "target": "new-schema",
+  "value": {
+    "name": "usf-thing",
+    "from": "adr"
+  },
+  "expectedRule": "USF-NAME-001",
+  "note": "filename with redundant usf segment"
+}

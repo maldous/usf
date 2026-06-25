@@ -1,0 +1,8 @@
+{
+  "target": "registry",
+  "op": "append",
+  "pointer": "/schemas/0/vocabularyRefs",
+  "value": "nope-not-real",
+  "expectedRule": "USF-VOCAB-001",
+  "note": "unresolved vocabularyRef"
+}

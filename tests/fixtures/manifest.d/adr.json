@@ -1,0 +1,10 @@
+[
+  {"path":"negative/adr/ai-alignment-rules-empty.json","schema":"adr","keyword":"minItems","pointer":"/aiAlignmentRules"},
+  {"path":"negative/adr/authority-level-not-adr.json","schema":"adr","keyword":"const","pointer":"/authorityLevel"},
+  {"path":"negative/adr/forbidden-drift-empty.json","schema":"adr","keyword":"minItems","pointer":"/forbiddenDrift"},
+  {"path":"negative/adr/id-bad-pattern.json","schema":"adr","keyword":"pattern","pointer":"/id"},
+  {"path":"negative/adr/kind-missing.json","schema":"adr","keyword":"required","pointer":"/"},
+  {"path":"negative/adr/kind-not-adr.json","schema":"adr","keyword":"const","pointer":"/kind"},
+  {"path":"negative/adr/semantic-refs-empty.json","schema":"adr","keyword":"minItems","pointer":"/semanticRefs"},
+  {"path":"negative/adr/semantic-refs-empty-string.json","schema":"adr","keyword":"minLength","pointer":"/semanticRefs/0"}
+]

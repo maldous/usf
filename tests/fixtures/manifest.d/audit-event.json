@@ -1,0 +1,9 @@
+[
+  {"path":"negative/audit-event/empty-action.json","schema":"audit-event","keyword":"minLength","pointer":"/action"},
+  {"path":"negative/audit-event/empty-actor.json","schema":"audit-event","keyword":"minLength","pointer":"/actor"},
+  {"path":"negative/audit-event/empty-subject.json","schema":"audit-event","keyword":"minLength","pointer":"/subject"},
+  {"path":"negative/audit-event/empty-timestamp-semantics.json","schema":"audit-event","keyword":"minLength","pointer":"/timestampSemantics"},
+  {"path":"negative/audit-event/missing-security-sensitive.json","schema":"audit-event","keyword":"required","pointer":"/"},
+  {"path":"negative/audit-event/missing-state-changing.json","schema":"audit-event","keyword":"required","pointer":"/"},
+  {"path":"negative/audit-event/missing-timestamp-semantics.json","schema":"audit-event","keyword":"required","pointer":"/"}
+]

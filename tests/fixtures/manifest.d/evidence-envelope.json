@@ -1,0 +1,56 @@
+[
+  {
+    "path": "negative/evidence-envelope/generated-report-missing-evidence-refs.json",
+    "schema": "evidence-envelope",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/evidence-envelope/generated-report-missing-freshness.json",
+    "schema": "evidence-envelope",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/evidence-envelope/normalised-evidence-empty-source-ref.json",
+    "schema": "evidence-envelope",
+    "keyword": "minLength",
+    "pointer": "/sourceRefs/0"
+  },
+  {
+    "path": "negative/evidence-envelope/normalised-evidence-missing-source-refs.json",
+    "schema": "evidence-envelope",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/evidence-envelope/runtime-proof-empty-freshness-commit.json",
+    "schema": "evidence-envelope",
+    "keyword": "minLength",
+    "pointer": "/freshness/commit"
+  },
+  {
+    "path": "negative/evidence-envelope/runtime-proof-missing-environment.json",
+    "schema": "evidence-envelope",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/evidence-envelope/runtime-proof-missing-freshness.json",
+    "schema": "evidence-envelope",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/evidence-envelope/runtime-proof-missing-provider-mode.json",
+    "schema": "evidence-envelope",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/evidence-envelope/validation-evidence-missing-refs.json",
+    "schema": "evidence-envelope",
+    "keyword": "anyOf",
+    "pointer": "/"
+  }
+]

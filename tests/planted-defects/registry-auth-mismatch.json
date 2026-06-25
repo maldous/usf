@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "set",
+  "pointer": "/properties/authorityLevel/const",
+  "value": "generated-report",
+  "expectedRule": "USF-REG-005",
+  "note": "schema authority const != registry authorityRole"
+}

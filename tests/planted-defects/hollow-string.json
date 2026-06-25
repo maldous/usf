@@ -1,0 +1,8 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "remove",
+  "pointer": "/properties/title/minLength",
+  "expectedRule": "USF-HOLLOW-001",
+  "note": "required string accepts empty"
+}

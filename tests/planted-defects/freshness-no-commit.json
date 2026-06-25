@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "proof-evidence",
+  "op": "removeItem",
+  "pointer": "/properties/freshness/required",
+  "value": "commit",
+  "expectedRule": "USF-FRESH-001",
+  "note": "freshness no longer pins commit"
+}

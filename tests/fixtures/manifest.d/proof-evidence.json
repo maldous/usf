@@ -1,0 +1,11 @@
+[
+  {"path":"negative/proof-evidence/above-discovery-empty-collected.json", "schema":"proof-evidence", "keyword":"minItems", "pointer":"/collectedEvidence"},
+  {"path":"negative/proof-evidence/above-discovery-empty-emitted.json", "schema":"proof-evidence", "keyword":"minItems", "pointer":"/emittedEvidence"},
+  {"path":"negative/proof-evidence/claimed-above-observed.json", "schema":"proof-evidence", "keyword":"enum", "pointer":"/proofLevelClaimed"},
+  {"path":"negative/proof-evidence/emitted-empty-string.json", "schema":"proof-evidence", "keyword":"minLength", "pointer":"/emittedEvidence/0"},
+  {"path":"negative/proof-evidence/freshness-empty-commit.json", "schema":"proof-evidence", "keyword":"minLength", "pointer":"/freshness/commit"},
+  {"path":"negative/proof-evidence/live-claim-below-substrate.json", "schema":"proof-evidence", "keyword":"enum", "pointer":"/proofLevelObserved"},
+  {"path":"negative/proof-evidence/live-claim-external-sandbox.json", "schema":"proof-evidence", "keyword":"const", "pointer":"/providerMode"},
+  {"path":"negative/proof-evidence/live-claim-hermetic-mock.json", "schema":"proof-evidence", "keyword":"const", "pointer":"/liveExternalProviderClaim"},
+  {"path":"negative/proof-evidence/live-claim-local-composed.json", "schema":"proof-evidence", "keyword":"const", "pointer":"/providerMode"}
+]

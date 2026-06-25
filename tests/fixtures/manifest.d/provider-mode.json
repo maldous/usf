@@ -1,0 +1,5 @@
+[
+  {"path":"negative/provider-mode/external-sandbox-claim-true.json", "schema":"provider-mode", "keyword":"const", "pointer":"/providerMode"},
+  {"path":"negative/provider-mode/hermetic-mock-claim-true.json", "schema":"provider-mode", "keyword":"const", "pointer":"/liveExternalProviderClaim"},
+  {"path":"negative/provider-mode/local-composed-claim-true.json", "schema":"provider-mode", "keyword":"const", "pointer":"/providerMode"}
+]
