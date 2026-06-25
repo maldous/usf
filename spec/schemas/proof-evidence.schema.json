@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:proof-evidence",
+  "title": "USF Proof Evidence Schema",
+  "description": "Draft JSON Schema for proof evidence records (rank-4 runtime-proof-evidence). Enforces honest proof: a claimed proof level (proof-levels) that does not exceed the observed level, mandatory provider mode (provider-modes) and environment (environment-classes), preserved emitted and collected evidence, fail-closed evidence presence for levels above discovery, and the rule that hermetic-mock evidence MUST NOT satisfy a live-external-provider claim. Governs the ontology concepts Proof, Proof Level, and Evidence. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "proofLevelClaimed", "proofLevelObserved", "providerMode", "environment", "emittedEvidence", "collectedEvidence"],
+  "$defs": {
+    "proofLevel": {"type": "string", "enum": ["discovery-proven", "executable-proven", "contract-proven", "behaviour-proven", "substrate-proven", "resilience-proven", "foundation-proven"]},
+    "providerMode": {"type": "string", "enum": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"]},
+    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "kind": {"type": "string", "const": "proof", "$comment": "artefact-kinds value 'proof'."},
+    "title": {"type": "string"},
+    "claimExercised": {"type": "string", "$comment": "The semantic claim/capability this proof exercises."},
+    "proofLevelClaimed": {"$ref": "#/$defs/proofLevel"},
+    "proofLevelObserved": {"$ref": "#/$defs/proofLevel"},
+    "providerMode": {"$ref": "#/$defs/providerMode"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "liveExternalProviderClaim": {"type": "boolean", "default": false},
+    "emittedEvidence": {"type": "array", "items": {"type": "string"}},
+    "collectedEvidence": {"type": "array", "items": {"type": "string"}},
+    "freshness": {"type": "object", "properties": {"commit": {"type": "string"}, "stale": {"type": "boolean"}}, "additionalProperties": false},
+    "failureSemantics": {"type": "string"}
+  },
+  "allOf": [
+    {"$comment": "claimed <= observed (proof-levels order). One if/then per observed level.",
+     "if": {"properties": {"proofLevelObserved": {"const": "discovery-proven"}}, "required": ["proofLevelObserved"]},
+     "then": {"properties": {"proofLevelClaimed": {"enum": ["discovery-proven"]}}}},
+    {"if": {"properties": {"proofLevelObserved": {"const": "executable-proven"}}, "required": ["proofLevelObserved"]},
+     "then": {"properties": {"proofLevelClaimed": {"enum": ["discovery-proven", "executable-proven"]}}}},
+    {"if": {"properties": {"proofLevelObserved": {"const": "contract-proven"}}, "required": ["proofLevelObserved"]},
+     "then": {"properties": {"proofLevelClaimed": {"enum": ["discovery-proven", "executable-proven", "contract-proven"]}}}},
+    {"if": {"properties": {"proofLevelObserved": {"const": "behaviour-proven"}}, "required": ["proofLevelObserved"]},
+     "then": {"properties": {"proofLevelClaimed": {"enum": ["discovery-proven", "executable-proven", "contract-proven", "behaviour-proven"]}}}},
+    {"if": {"properties": {"proofLevelObserved": {"const": "substrate-proven"}}, "required": ["proofLevelObserved"]},
+     "then": {"properties": {"proofLevelClaimed": {"enum": ["discovery-proven", "executable-proven", "contract-proven", "behaviour-proven", "substrate-proven"]}}}},
+    {"if": {"properties": {"proofLevelObserved": {"const": "resilience-proven"}}, "required": ["proofLevelObserved"]},
+     "then": {"properties": {"proofLevelClaimed": {"enum": ["discovery-proven", "executable-proven", "contract-proven", "behaviour-proven", "substrate-proven", "resilience-proven"]}}}},
+    {"$comment": "Fail closed: any level above discovery requires at least one collected evidence item.",
+     "if": {"not": {"properties": {"proofLevelObserved": {"const": "discovery-proven"}}}},
+     "then": {"properties": {"collectedEvidence": {"minItems": 1}}}},
+    {"$comment": "hermetic-mock MUST NOT satisfy a live-external-provider claim (Charter §6).",
+     "if": {"properties": {"providerMode": {"const": "hermetic-mock"}}, "required": ["providerMode"]},
+     "then": {"properties": {"liveExternalProviderClaim": {"const": false}}}},
+    {"$comment": "A live-external-provider claim requires substrate-proven or above (live-provider floor).",
+     "if": {"properties": {"liveExternalProviderClaim": {"const": true}}, "required": ["liveExternalProviderClaim"]},
+     "then": {"properties": {"proofLevelObserved": {"enum": ["substrate-proven", "resilience-proven", "foundation-proven"]}}}}
+  ]
+}
