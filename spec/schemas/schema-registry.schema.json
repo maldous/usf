@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:schema-registry",
+  "title": "USF Schema Registry Schema",
+  "description": "Draft JSON Schema for the USF Schema Registry (spec/registries/schema-registry.json). Validates the registry's identity envelope and its governed structures: schema entries, schema classes, schema lifecycle states, and schema families. Enforces that schema classes come from the schema-classes vocabulary, lifecycle states from schema-lifecycle-states, and authority roles from authority-levels. Governs the ontology concepts Registry and Validator. Cross-record checks (unique ids/paths, no schema 'active' without an existing validator-checkable file, forbidden-token scanning) are validator responsibilities deferred to validator implementation per docs/architecture/schema-authoring-standard.md section 24; this schema is lifecycleState draft and is not active.",
+  "type": "object",
+  "$defs": {
+    "kebabName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "noForbiddenToken": {
+      "$comment": "Forbidden canonical tokens per docs/architecture/directory-and-file-naming-standard.md section 18.",
+      "not": {"pattern": "(^|[-./])(v2|legacy|old|new|temp|transitional)([-./]|$)"}
+    },
+    "schemaClass": {
+      "$comment": "Canonical values from the vocabulary catalogue value set 'schema-classes'.",
+      "type": "string",
+      "enum": [
+        "governance-schema", "semantic-schema", "evidence-schema", "source-reference-schema",
+        "registry-schema", "taxonomy-schema", "vocabulary-schema", "adr-schema",
+        "validator-report-schema", "proof-schema", "provider-schema", "environment-schema",
+        "command-schema", "configuration-schema", "interface-schema", "event-schema",
+        "workflow-schema", "observability-schema", "audit-schema", "ui-semantic-schema",
+        "import-manifest-schema"
+      ]
+    },
+    "schemaLifecycleState": {
+      "$comment": "Canonical values from the vocabulary catalogue value set 'schema-lifecycle-states'.",
+      "type": "string",
+      "enum": ["proposed", "planned", "draft", "active", "deprecated", "retired", "replaced", "deferred"]
+    },
+    "authorityLevel": {
+      "$comment": "Canonical values from the vocabulary catalogue value set 'authority-levels'.",
+      "type": "string",
+      "enum": [
+        "semantic-definition", "adr", "validator-rule", "runtime-proof-evidence",
+        "source-implementation", "historical-source-evidence", "generated-report"
+      ]
+    },
+    "schemaEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "title", "path", "class", "family", "lifecycleState", "status",
+        "governsOntologyConcepts", "authorityRole"
+      ],
+      "properties": {
+        "id": {
+          "allOf": [
+            {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*\\.schema\\.json$"},
+            {"$ref": "#/$defs/noForbiddenToken"}
+          ]
+        },
+        "title": {"type": "string", "minLength": 1},
+        "path": {
+          "allOf": [
+            {"type": "string", "pattern": "^spec/schemas/[a-z0-9]+(-[a-z0-9]+)*\\.schema\\.json$"},
+            {"$ref": "#/$defs/noForbiddenToken"}
+          ]
+        },
+        "class": {"$ref": "#/$defs/schemaClass"},
+        "family": {"$ref": "#/$defs/kebabName"},
+        "lifecycleState": {"$ref": "#/$defs/schemaLifecycleState"},
+        "status": {"$ref": "#/$defs/schemaLifecycleState"},
+        "governsOntologyConcepts": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "purpose": {"type": "string"},
+        "requiredBecause": {"type": "string"},
+        "sourceInputs": {"type": "array", "items": {"type": "string"}},
+        "taxonomyRefs": {"type": "array", "items": {"$ref": "#/$defs/kebabName"}},
+        "vocabularyRefs": {"type": "array", "items": {"$ref": "#/$defs/kebabName"}},
+        "expectedConsumers": {"type": "array", "items": {"type": "string"}},
+        "validationResponsibilities": {"type": "array", "items": {"type": "string"}},
+        "authorityRole": {"$ref": "#/$defs/authorityLevel"},
+        "driftRisks": {"type": "array", "items": {"type": "string"}},
+        "aiGuidance": {"type": "string"},
+        "deferredDetails": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "required": [
+    "id", "title", "status", "version", "authorityLevel", "purpose",
+    "schemaClasses", "schemaLifecycleStates", "commonRequirements", "commonEnvelope",
+    "schemaFamilies", "schemas", "validationExpectations", "aiAgentRules"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {"type": ["string", "null"]},
+    "id": {"type": "string", "pattern": "^usf\\.[a-z0-9-]+$"},
+    "title": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "authorityLevel": {"$ref": "#/$defs/authorityLevel"},
+    "purpose": {"type": "string", "minLength": 1},
+    "createdAfter": {"type": "array", "items": {"type": "string"}},
+    "consistentWith": {"type": "array", "items": {"type": "string"}},
+    "foundationalSequencePosition": {"type": "integer"},
+    "normativeLanguage": {"type": "string"},
+    "identityNotes": {"type": "object"},
+    "currentRepositoryState": {"type": "object"},
+    "governance": {"type": "object"},
+    "namingConventions": {"type": "object"},
+    "schemaClasses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "authorityRole"],
+        "properties": {
+          "id": {"$ref": "#/$defs/schemaClass"},
+          "authorityRole": {"$ref": "#/$defs/authorityLevel"}
+        }
+      }
+    },
+    "schemaLifecycleStates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {"id": {"$ref": "#/$defs/schemaLifecycleState"}}
+      }
+    },
+    "commonRequirements": {"type": "object"},
+    "commonEnvelope": {"type": "object"},
+    "schemaFamilies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "purpose"],
+        "properties": {"id": {"$ref": "#/$defs/kebabName"}, "purpose": {"type": "string"}}
+      }
+    },
+    "schemas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/schemaEntry"}
+    },
+    "externalStandards": {"type": "array", "items": {"type": "object"}},
+    "reactSourceLearnings": {"type": "array"},
+    "validationExpectations": {"type": "array", "items": {"type": "string"}},
+    "aiAgentRules": {"type": "array", "items": {"type": "string"}},
+    "deferredWork": {"type": "array"},
+    "acceptanceCriteria": {"type": "array"}
+  }
+}
