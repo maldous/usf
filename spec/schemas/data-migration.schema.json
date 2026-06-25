@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:data-migration",
+  "title": "USF Data and Migration Schema",
+  "description": "Draft JSON Schema for data models, persistence contracts, identifiers, relationships, migrations, seed data, fixtures, backup/restore evidence, and retention/deletion concerns. Each declares its kind (data-migration-kinds). Migrations are forward-only and checksum-immutable (a committed migration is never edited); tenancy isolation is preserved; backup/restore emitted and collected evidence (evidence-kinds) is preserved. Governs the ontology concepts Data Model, Migration, and Backup / Restore. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "dataKind"],
+  "$defs": {
+    "dataKind": {"type": "string", "enum": ["data-model", "persistence-contract", "identifier", "relationship", "migration", "seed-data", "fixture", "backup-evidence", "restore-evidence", "retention-deletion-concern"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "dataKind": {"$ref": "#/$defs/dataKind"},
+    "title": {"type": "string"},
+    "description": {"type": "string"},
+    "tenancyIsolation": {"type": "string", "$comment": "e.g. schema-per-tenant with RLS; a contract-level invariant."},
+    "migrationOrder": {"type": "integer", "minimum": 1},
+    "checksum": {"type": "string"},
+    "immutable": {"type": "boolean"},
+    "emittedEvidence": {"type": "array", "items": {"type": "string"}},
+    "collectedEvidence": {"type": "array", "items": {"type": "string"}},
+    "retention": {"type": "string"},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "$comment": "A migration is forward-only and checksum-immutable: it declares its order, a checksum, and immutable=true. A committed migration is never edited.",
+      "if": {"properties": {"dataKind": {"const": "migration"}}, "required": ["dataKind"]},
+      "then": {"required": ["migrationOrder", "checksum", "immutable"], "properties": {"immutable": {"const": true}}}
+    },
+    {
+      "$comment": "Backup/restore evidence must preserve emitted and collected evidence (fail closed on missing collected evidence).",
+      "if": {"properties": {"dataKind": {"enum": ["backup-evidence", "restore-evidence"]}}, "required": ["dataKind"]},
+      "then": {"required": ["emittedEvidence", "collectedEvidence"], "properties": {"collectedEvidence": {"minItems": 1}}}
+    }
+  ]
+}
