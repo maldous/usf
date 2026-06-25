@@ -17,7 +17,7 @@ Exit codes:  0 = clean   1 = validation findings   2 = tool/internal error (incl
 Dependency:  jsonschema (Draft 2020-12). Pinned for CI in requirements-dev.txt.
 
 Usage:
-    python tools/validate-spec.py [MODE] [options]
+    python tools/validate-spec/validate-spec.py [MODE] [options]
 
 Modes (default: all):
     schemas      meta-schema, identity, shape, closure, required, hollow, $ref
@@ -45,7 +45,20 @@ except Exception:
     print("ERROR: this tool requires the 'jsonschema' package (Draft 2020-12).", file=sys.stderr)
     sys.exit(2)
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+def _find_root(start):
+    """Ascend until a directory contains both spec/ and docs/ (the repo root)."""
+    d = os.path.abspath(start)
+    while True:
+        if os.path.isdir(os.path.join(d, "spec")) and os.path.isdir(os.path.join(d, "docs")):
+            return d
+        parent = os.path.dirname(d)
+        if parent == d:
+            return os.path.abspath(start)
+        d = parent
+
+
+ROOT = _find_root(os.path.dirname(os.path.abspath(__file__)))
+CORPUS = "tools/validate-spec"   # validator assets: fixtures/, manifests/, planted-defects/
 os.chdir(ROOT)
 
 DRAFT = "https://json-schema.org/draft/2020-12/schema"
@@ -56,7 +69,7 @@ ENVELOPE = ["id", "title", "description", "authorityLevel", "lifecycleState",
             "ontologyConcepts", "taxonomyRefs", "vocabularyRefs", "aiGuidance"]
 SCHEMA_TOP_KEYS = ["$schema", "$id", "title", "description", "type", "required", "properties"]
 CATALOGUE_SCHEMAS = {"schema-registry", "taxonomy", "vocabulary"}
-DIRTY_PATHS = ["spec", "tools", "tests", ".github", "docs"]
+DIRTY_PATHS = ["spec", "tools", "docs", ".github"]
 REQUIRED_FIELD_GUARDS = {
     "command": ["inputs", "outputs", "environmentScope", "sideEffects"],
     "observability-signal": ["purpose"],
@@ -506,7 +519,7 @@ def check_safety(ctx, F):
 
 def load_manifest():
     entries = {}
-    for mf in sorted(glob.glob("tests/fixtures/manifest.d/*.json")) + glob.glob("tests/fixtures/manifest.json"):
+    for mf in sorted(glob.glob(f"{CORPUS}/manifests/*.json")):
         try:
             data = json.load(open(mf))
         except Exception:
@@ -520,8 +533,8 @@ def check_fixtures(ctx, F):
     """Positive fixtures must validate; negative fixtures must be rejected FOR THE INTENDED REASON
     declared in tests/fixtures/manifest.d/*.json (item 3a)."""
     sd = ctx["sd"]
-    pos = sorted(glob.glob("tests/fixtures/positive/**/*.json", recursive=True))
-    neg = sorted(glob.glob("tests/fixtures/negative/**/*.json", recursive=True))
+    pos = sorted(glob.glob(f"{CORPUS}/fixtures/positive/**/*.json", recursive=True))
+    neg = sorted(glob.glob(f"{CORPUS}/fixtures/negative/**/*.json", recursive=True))
     if not pos and not neg:
         return "not-run"
     manifest = load_manifest()
@@ -546,7 +559,7 @@ def check_fixtures(ctx, F):
         if not errs:
             F.add("USF-FIXTURE-001", p, "expected rejection, schema accepted it")
             continue
-        rel = p.split("tests/fixtures/", 1)[1]
+        rel = p.split("/fixtures/", 1)[1]
         spec = manifest.get(rel)
         if not spec:
             F.add("USF-FIXTURE-003", p, "no expected-reason manifest entry")
@@ -603,7 +616,7 @@ def run_all_checks(ctx, F):
 
 def check_selftest(ctx, F):
     """Apply each planted defect to an isolated copy of the corpus and assert the exact rule fires."""
-    defects = sorted(glob.glob("tests/planted-defects/*.json"))
+    defects = sorted(glob.glob(f"{CORPUS}/planted-defects/*.json"))
     if not defects:
         return "not-run"
     for df in defects:
@@ -648,8 +661,8 @@ def check_pr(ctx, F, base, head):
         if status.startswith("A"):
             if re.search(r"(^|/)(src|app|packages)/", path) or re.search(r"\.(ts|tsx|jsx)$", path):
                 F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
-            if path.startswith("tools/") or path.startswith(".github/workflows/"):
-                F.add("USF-PR-TOOL", path, "tool/CI added; ensure authorised")
+            if re.match(r"tools/.*\.(py|mjs|js|sh)$", path) or path.startswith(".github/workflows/"):
+                F.add("USF-PR-TOOL", path, "tool/CI code added; ensure authorised")
         if status.startswith("D") and re.match(r"spec/schemas/.*\.schema\.json$", path) and path in reg_paths:
             F.add("USF-PR-DELETE", path, "deleted schema still in registry")
     for e in ctx["reg"]["schemas"]:
