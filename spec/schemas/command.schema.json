@@ -90,7 +90,8 @@
         "type": "string",
         "minLength": 1
       },
-      "$comment": "May be empty: a command may legitimately take no inputs. Items must be non-empty."
+      "$comment": "May be empty: a command may legitimately take no inputs. Items must be non-empty.",
+      "uniqueItems": true
     },
     "outputs": {
       "type": "array",
@@ -98,14 +99,16 @@
         "type": "string",
         "minLength": 1
       },
-      "$comment": "May be empty: a command may legitimately produce no declared outputs. Items must be non-empty."
+      "$comment": "May be empty: a command may legitimately produce no declared outputs. Items must be non-empty.",
+      "uniqueItems": true
     },
     "environmentScope": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/environment"
       },
-      "$comment": "May be empty: an environment-agnostic command. Items are environment-classes values."
+      "$comment": "May be empty: an environment-agnostic command. Items are environment-classes values.",
+      "uniqueItems": true
     },
     "sideEffects": {
       "type": "array",
@@ -113,7 +116,8 @@
         "type": "string",
         "minLength": 1
       },
-      "$comment": "Required; may be empty only when the command has no side effects (absence is not allowed)."
+      "$comment": "Required; may be empty only when the command has no side effects (absence is not allowed).",
+      "uniqueItems": true
     },
     "failureSemantics": {
       "type": "string",
@@ -127,7 +131,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "disposition": {
       "$ref": "#/$defs/disposition"
@@ -161,7 +166,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRefs": {
       "type": "array",
@@ -169,7 +175,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "vocabularyRefs": {
       "type": "array",
@@ -177,7 +184,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "aiGuidance": {
       "type": "string",

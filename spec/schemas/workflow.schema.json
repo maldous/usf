@@ -62,7 +62,8 @@
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         },
         "extensions": {
           "type": "object",
@@ -135,14 +136,16 @@
         "type": "string",
         "minLength": 1
       },
-      "$comment": "Required; may be empty for a workflow with a single implicit participant."
+      "$comment": "Required; may be empty for a workflow with a single implicit participant.",
+      "uniqueItems": true
     },
     "steps": {
       "type": "array",
       "minItems": 1,
       "items": {
         "$ref": "#/$defs/workflowStep"
-      }
+      },
+      "uniqueItems": true
     },
     "ordering": {
       "type": "string",
@@ -153,7 +156,8 @@
       "items": {
         "$ref": "#/$defs/stateTransition"
       },
-      "$comment": "Required; may be empty for a workflow with no explicit state machine."
+      "$comment": "Required; may be empty for a workflow with no explicit state machine.",
+      "uniqueItems": true
     },
     "failurePaths": {
       "type": "array",
@@ -162,7 +166,8 @@
         "type": "string",
         "minLength": 1
       },
-      "$comment": "At least one explicit failure path is required."
+      "$comment": "At least one explicit failure path is required.",
+      "uniqueItems": true
     },
     "compensationPaths": {
       "type": "array",
@@ -171,28 +176,32 @@
         "type": "string",
         "minLength": 1
       },
-      "$comment": "At least one explicit compensation path is required; a workflow with no compensating action states that explicitly."
+      "$comment": "At least one explicit compensation path is required; a workflow with no compensating action states that explicitly.",
+      "uniqueItems": true
     },
     "relatedEvents": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "relatedInterfaces": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "sourceRefs": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "description": {
       "type": "string",
@@ -223,7 +232,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRefs": {
       "type": "array",
@@ -231,7 +241,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "vocabularyRefs": {
       "type": "array",
@@ -239,7 +250,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "aiGuidance": {
       "type": "string",

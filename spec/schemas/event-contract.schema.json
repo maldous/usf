@@ -74,21 +74,24 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRefs": {
       "type": "array",
       "minItems": 1,
       "items": {
         "$ref": "#/$defs/kebab"
-      }
+      },
+      "uniqueItems": true
     },
     "vocabularyRefs": {
       "type": "array",
       "minItems": 1,
       "items": {
         "$ref": "#/$defs/kebab"
-      }
+      },
+      "uniqueItems": true
     },
     "aiGuidance": {
       "type": "string",
@@ -114,7 +117,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "ordering": {
       "type": "string",
@@ -149,7 +153,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     }
   },
   "allOf": [

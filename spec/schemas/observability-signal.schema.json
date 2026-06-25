@@ -64,14 +64,16 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "proofRefs": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "retention": {
       "type": "string",
@@ -86,7 +88,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "title": {
       "type": "string",
@@ -121,7 +124,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRefs": {
       "type": "array",
@@ -129,7 +133,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "vocabularyRefs": {
       "type": "array",
@@ -137,7 +142,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "aiGuidance": {
       "type": "string",

@@ -84,7 +84,8 @@
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         },
         "purpose": {
           "type": "string",
@@ -95,14 +96,16 @@
           "items": {
             "$ref": "#/$defs/kebab"
           },
-          "minItems": 1
+          "minItems": 1,
+          "uniqueItems": true
         },
         "expectedFutureVocabularyDependencies": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/kebab"
           },
-          "minItems": 1
+          "minItems": 1,
+          "uniqueItems": true
         },
         "expectedFutureSchemaDependencies": {
           "type": "array",
@@ -110,7 +113,8 @@
             "type": "string",
             "minLength": 1
           },
-          "minItems": 1
+          "minItems": 1,
+          "uniqueItems": true
         },
         "reactSourceInputs": {
           "type": "array",
@@ -118,7 +122,8 @@
             "type": "string",
             "minLength": 1
           },
-          "minItems": 1
+          "minItems": 1,
+          "uniqueItems": true
         },
         "aiGuidance": {
           "type": "string",
@@ -167,7 +172,8 @@
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         },
         "purpose": {
           "type": "string",
@@ -178,7 +184,8 @@
           "minItems": 1,
           "items": {
             "$ref": "#/$defs/category"
-          }
+          },
+          "uniqueItems": true
         },
         "categoryRules": {
           "type": "array",
@@ -186,14 +193,16 @@
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         },
         "futureVocabularyDependencies": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/kebab"
           },
-          "minItems": 1
+          "minItems": 1,
+          "uniqueItems": true
         },
         "futureSchemaDependencies": {
           "type": "array",
@@ -201,7 +210,8 @@
             "type": "string",
             "minLength": 1
           },
-          "minItems": 1
+          "minItems": 1,
+          "uniqueItems": true
         },
         "reactSourceInputs": {
           "type": "array",
@@ -209,21 +219,24 @@
             "type": "string",
             "minLength": 1
           },
-          "minItems": 1
+          "minItems": 1,
+          "uniqueItems": true
         },
         "validationExpectations": {
           "type": "array",
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         },
         "driftRisks": {
           "type": "array",
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         },
         "aiGuidance": {
           "type": "string",
@@ -234,7 +247,8 @@
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         }
       }
     }
@@ -286,14 +300,16 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "consistentWith": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "normativeLanguage": {
       "type": "string",
@@ -316,28 +332,32 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRules": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyFamilies": {
       "type": "array",
       "minItems": 1,
       "items": {
         "$ref": "#/$defs/taxonomyFamily"
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomies": {
       "type": "array",
       "minItems": 1,
       "items": {
         "$ref": "#/$defs/taxonomy"
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRelationships": {
       "type": "array",
@@ -360,14 +380,16 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "aiAgentRules": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "deferredWork": {
       "type": "array",

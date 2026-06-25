@@ -70,7 +70,8 @@
           "items": {
             "type": "string",
             "minLength": 1
-          }
+          },
+          "uniqueItems": true
         }
       }
     }
@@ -93,14 +94,16 @@
       "items": {
         "$ref": "#/$defs/finding"
       },
-      "$comment": "May be empty for a pass report; the fail/partial branch requires at least one finding."
+      "$comment": "May be empty for a pass report; the fail/partial branch requires at least one finding.",
+      "uniqueItems": true
     },
     "evidenceRefs": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "freshness": {
       "type": "object",
@@ -147,7 +150,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRefs": {
       "type": "array",
@@ -155,7 +159,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "vocabularyRefs": {
       "type": "array",
@@ -163,7 +168,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "aiGuidance": {
       "type": "string",

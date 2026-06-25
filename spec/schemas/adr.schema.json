@@ -82,7 +82,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "invariants": {
       "type": "array",
@@ -90,14 +91,16 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "permittedChanges": {
       "type": "array",
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "forbiddenDrift": {
       "type": "array",
@@ -105,7 +108,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "aiAlignmentRules": {
       "type": "array",
@@ -114,7 +118,8 @@
         "type": "string",
         "minLength": 1
       },
-      "$comment": "ai-governance-kinds: ai-alignment-rule, forbidden-inference, required-stop-condition."
+      "$comment": "ai-governance-kinds: ai-alignment-rule, forbidden-inference, required-stop-condition.",
+      "uniqueItems": true
     },
     "semanticRefs": {
       "type": "array",
@@ -122,31 +127,36 @@
       "items": {
         "$ref": "#/$defs/ref"
       },
-      "$comment": "Untraced decisions are not binding: at least one semantic reference is required."
+      "$comment": "Untraced decisions are not binding: at least one semantic reference is required.",
+      "uniqueItems": true
     },
     "sourceRefs": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/ref"
-      }
+      },
+      "uniqueItems": true
     },
     "proofRefs": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/ref"
-      }
+      },
+      "uniqueItems": true
     },
     "validatorRefs": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/ref"
-      }
+      },
+      "uniqueItems": true
     },
     "supersedes": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/ref"
-      }
+      },
+      "uniqueItems": true
     },
     "supersededBy": {
       "$ref": "#/$defs/ref"
@@ -179,7 +189,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "uniqueItems": true
     },
     "taxonomyRefs": {
       "type": "array",
@@ -187,7 +198,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "vocabularyRefs": {
       "type": "array",
@@ -195,7 +207,8 @@
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-      }
+      },
+      "uniqueItems": true
     },
     "aiGuidance": {
       "type": "string",
