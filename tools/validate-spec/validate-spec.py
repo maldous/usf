@@ -14,7 +14,7 @@ implementation step forward; schema-authoring-standard section 24, standards-pro
 instance only when asked, validated against validator-report.schema.json before write.
 
 Exit codes:  0 = clean   1 = validation findings   2 = tool/internal error (incl. unreadable input).
-Dependency:  jsonschema (Draft 2020-12). Pinned for CI in requirements-dev.txt.
+Dependency:  jsonschema (Draft 2020-12). Pinned for CI in tools/validate-spec/requirements.txt.
 
 Usage:
     python tools/validate-spec/validate-spec.py [MODE] [options]
@@ -24,8 +24,8 @@ Modes (default: all):
     enums        enum-vs-vocabulary fidelity via explicit bindings (+ forbidden + backstop)
     catalogues   validate the 3 catalogue instances + catalogue data integrity
     registry     repository inventory (bijection) + registry synchronisation
-    fixtures     tests/fixtures positive/negative corpus + expected-reason manifest
-    selftest     plant defects from tests/planted-defects/ and assert the exact rule id fires
+    fixtures     tools/validate-spec/fixtures positive/negative corpus + expected-reason manifest
+    selftest     plant defects from tools/validate-spec/planted-defects/ and assert the exact rule id fires
     pr           base/head diff gate (--base, --head); fails closed if git fails
     all          schemas + enums + catalogues + registry + safety + fixtures + selftest
                  (+ pr when --base/--head is given)
@@ -78,7 +78,34 @@ REQUIRED_FIELD_GUARDS = {
 }
 # (item 5) Closure: every object with `properties` MUST be closed UNLESS its (schema, pointer)
 # is an explicitly-declared, documented extension point. No $comment bypass.
-OPEN_EXTENSION_POINTS = set()   # currently none; add ("schema","/pointer") with review when needed.
+# (item 5 review) Closure: every object (type:object or with properties) MUST be closed
+# (additionalProperties/unevaluatedProperties false) UNLESS its (schema, pointer) is a DELIBERATE,
+# documented extension point listed here with a reason. No $comment / properties-presence bypass.
+_TYPED_EXT = "typed-value extension map: keys open by design, values constrained to scalars"
+_DRAFT_META = "draft descriptive-metadata block; intentionally permissive in this draft per its $comment"
+OPEN_EXTENSION_POINTS = {
+    ("interface-contract", "/$defs/contractBody/properties/extensions"): _TYPED_EXT,
+    ("workflow", "/$defs/workflowStep/properties/extensions"): _TYPED_EXT,
+    ("workflow", "/$defs/stateTransition/properties/extensions"): _TYPED_EXT,
+    ("ui-semantic-model", "/$defs/uiJourney/properties/extensions"): _TYPED_EXT,
+    ("schema-registry", "/properties/identityNotes"): _DRAFT_META,
+    ("schema-registry", "/properties/currentRepositoryState"): _DRAFT_META,
+    ("schema-registry", "/properties/governance"): _DRAFT_META,
+    ("schema-registry", "/properties/namingConventions"): _DRAFT_META,
+    ("schema-registry", "/properties/commonRequirements"): _DRAFT_META,
+    ("schema-registry", "/properties/commonEnvelope"): _DRAFT_META,
+    ("taxonomy", "/properties/currentRepositoryState"): _DRAFT_META,
+    ("taxonomy", "/properties/governance"): _DRAFT_META,
+    ("taxonomy", "/properties/vocabularyDependencies"): _DRAFT_META,
+    ("vocabulary", "/properties/currentRepositoryState"): _DRAFT_META,
+    ("vocabulary", "/properties/governance"): _DRAFT_META,
+}
+# (item 5 review) tool/CI additions are blocking unless explicitly authorised here.
+AUTHORIZED_TOOLING = {
+    ".github/workflows/validate-spec.yml",
+    "tools/validate-spec/validate-spec.py",
+    "tools/validate-spec/requirements.txt",
+}
 # (item 4) Explicit enum -> vocabulary value-set bindings by (schema, JSON pointer). No guessing.
 # Every "/properties/lifecycleState" enum binds to lifecycle-states (handled in resolve below).
 ENUM_BINDINGS = {
@@ -184,7 +211,7 @@ RULES = {
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
     "USF-PR-DELETE":    ("blocking", "PR deletes a schema file still referenced by the registry"),
-    "USF-PR-TOOL":      ("warning",  "PR adds tool/CI; ensure it is authorised"),
+    "USF-PR-TOOL":      ("blocking", "PR adds unauthorised tool/CI (not in AUTHORIZED_TOOLING)"),
 }
 
 
@@ -273,6 +300,9 @@ def build_ctx(F):
             if k not in obj:
                 F.add("USF-SHAPE-001", name, f"missing top-level key '{k}'")
                 fatal = True
+            elif not isinstance(obj[k], list) or not all(isinstance(x, dict) for x in obj[k]):
+                F.add("USF-SHAPE-001", name, f"'{k}' must be an array of objects")
+                fatal = True
     if fatal or not sd:
         return None
     canon = {vs["id"]: set(v.get("id") for v in vs.get("values", [])) for vs in voc["valueSets"]}
@@ -332,9 +362,9 @@ def check_schemas(ctx, F):
             if not isinstance(n, dict):
                 return
             cond = any(s in p for s in ("/if", "/then", "/else", "/not"))
-            if "properties" in n and n.get("additionalProperties") is not False \
-                    and n.get("unevaluatedProperties") is not False and not cond \
-                    and (name, p) not in OPEN_EXTENSION_POINTS:
+            objlike = n.get("type") == "object" or "properties" in n
+            closed = n.get("additionalProperties") is False or n.get("unevaluatedProperties") is False
+            if objlike and not closed and not cond and (name, p) not in OPEN_EXTENSION_POINTS:
                 F.add("USF-CLOSE-001", name, p)
             if n.get("additionalProperties") is False and isinstance(n.get("required"), list) and "properties" in n:
                 for r in [r for r in n["required"] if r not in n["properties"]]:
@@ -517,15 +547,21 @@ def check_safety(ctx, F):
             F.add(rule_id, schema, "degenerate record was NOT rejected (safety regression)")
 
 
-def load_manifest():
+def load_manifest(F):
+    """Parse-safe (item 4): a malformed manifest yields USF-PARSE-001, never a silent skip."""
     entries = {}
     for mf in sorted(glob.glob(f"{CORPUS}/manifests/*.json")):
-        try:
-            data = json.load(open(mf))
-        except Exception:
+        data = load_json(mf, F)
+        if data is None:
+            continue
+        if not isinstance(data, list):
+            F.add("USF-PARSE-001", mf, "manifest must be a JSON array of entries")
             continue
         for e in data:
-            entries[e["path"]] = e
+            if isinstance(e, dict) and "path" in e:
+                entries[e["path"]] = e
+            else:
+                F.add("USF-PARSE-001", mf, f"malformed manifest entry: {str(e)[:60]}")
     return entries
 
 
@@ -537,7 +573,7 @@ def check_fixtures(ctx, F):
     neg = sorted(glob.glob(f"{CORPUS}/fixtures/negative/**/*.json", recursive=True))
     if not pos and not neg:
         return "not-run"
-    manifest = load_manifest()
+    manifest = load_manifest(F)
 
     def schema_for(path):
         return os.path.basename(os.path.dirname(path))
@@ -620,7 +656,12 @@ def check_selftest(ctx, F):
     if not defects:
         return "not-run"
     for df in defects:
-        patch = json.load(open(df))
+        patch = load_json(df, F)                      # parse-safe (item 4): bad JSON -> USF-PARSE-001
+        if patch is None:
+            continue
+        if not isinstance(patch, dict) or "expectedRule" not in patch or "target" not in patch:
+            F.add("USF-SELFTEST-001", df, "planted-defect missing target/expectedRule")
+            continue
         sandbox = copy.deepcopy(ctx)
         try:
             apply_patch(sandbox, patch)
@@ -661,8 +702,11 @@ def check_pr(ctx, F, base, head):
         if status.startswith("A"):
             if re.search(r"(^|/)(src|app|packages)/", path) or re.search(r"\.(ts|tsx|jsx)$", path):
                 F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
-            if re.match(r"tools/.*\.(py|mjs|js|sh)$", path) or path.startswith(".github/workflows/"):
-                F.add("USF-PR-TOOL", path, "tool/CI code added; ensure authorised")
+            is_tooling = (re.match(r"tools/.*\.(py|mjs|js|sh)$", path)
+                          or path.startswith(".github/workflows/")
+                          or re.search(r"(^|/)requirements[^/]*\.txt$", path))
+            if is_tooling and path not in AUTHORIZED_TOOLING:
+                F.add("USF-PR-TOOL", path, "tool/CI added but not in AUTHORIZED_TOOLING (explicit authorisation required)")
         if status.startswith("D") and re.match(r"spec/schemas/.*\.schema\.json$", path) and path in reg_paths:
             F.add("USF-PR-DELETE", path, "deleted schema still in registry")
     for e in ctx["reg"]["schemas"]:
