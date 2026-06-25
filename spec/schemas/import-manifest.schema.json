@@ -96,24 +96,46 @@
             },
             {
               "type": "object",
+              "additionalProperties": false,
               "required": [
                 "repository"
               ],
-              "additionalProperties": false,
               "properties": {
                 "repository": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1
                 },
                 "path": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1
                 },
                 "commit": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1
                 },
                 "tag": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1
                 }
-              }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "path"
+                  ]
+                },
+                {
+                  "required": [
+                    "commit"
+                  ]
+                },
+                {
+                  "required": [
+                    "tag"
+                  ]
+                }
+              ],
+              "$comment": "Inline source reference: at least one non-empty locator (path/commit/tag) is required so the reference is resolvable."
             }
           ]
         },

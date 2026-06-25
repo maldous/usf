@@ -299,6 +299,26 @@
           }
         }
       }
+    },
+    {
+      "$comment": "non-secret-setting asserts the opposite of the secret dimension; secretBearing must be false.",
+      "if": {
+        "properties": {
+          "configurationKind": {
+            "const": "non-secret-setting"
+          }
+        },
+        "required": [
+          "configurationKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "secretBearing": {
+            "const": false
+          }
+        }
+      }
     }
   ]
 }
