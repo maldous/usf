@@ -276,6 +276,57 @@ CATALOGUE_KEYS = {"vocabulary": ("valueSets", "valueSetLifecycleStates", "valueL
                   "registry": ("schemas",)}
 
 
+def check_shape(voc, tax, reg, F):
+    """Catalogue shape gate (review items 2/3): top-level arrays-of-objects PLUS every nested
+    field the validator later indexes. Emits USF-SHAPE-001 and returns True if anything is wrong,
+    so callers fail closed instead of throwing. Called by build_ctx (load time) and run_all_checks
+    (so planted-defect selftests exercise it)."""
+    fatal = False
+    for name, obj, keys in (("vocabulary", voc, CATALOGUE_KEYS["vocabulary"]),
+                            ("taxonomy", tax, CATALOGUE_KEYS["taxonomy"]),
+                            ("registry", reg, CATALOGUE_KEYS["registry"])):
+        for k in keys:
+            if k not in obj:
+                F.add("USF-SHAPE-001", name, f"missing top-level key '{k}'"); fatal = True
+            elif not isinstance(obj[k], list) or not all(isinstance(x, dict) for x in obj[k]):
+                F.add("USF-SHAPE-001", name, f"'{k}' must be an array of objects"); fatal = True
+    if fatal:
+        return True   # top-level shape broken; do not dig into nested members
+    for i, vs in enumerate(voc["valueSets"]):
+        if not isinstance(vs.get("id"), str):
+            F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].id must be a string"); fatal = True
+        if not isinstance(vs.get("values"), list):
+            F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].values must be an array"); fatal = True
+        else:
+            for j, v in enumerate(vs["values"]):
+                if not (isinstance(v, dict) and isinstance(v.get("id"), str)):
+                    F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].values[{j}].id must be a string"); fatal = True
+        aliases = vs.get("aliases", [])
+        if "aliases" in vs and not isinstance(aliases, list):
+            F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].aliases must be an array"); fatal = True
+        elif isinstance(aliases, list):
+            for j, a in enumerate(aliases):
+                if not isinstance(a, dict):
+                    F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].aliases[{j}] must be an object"); fatal = True
+                elif not (isinstance(a.get("id"), str) and isinstance(a.get("canonical"), str)):
+                    F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].aliases[{j}] needs string id/canonical"); fatal = True
+    for key in ("valueSetLifecycleStates", "valueLifecycleStates"):
+        for i, x in enumerate(voc[key]):
+            if not isinstance(x.get("id"), str):
+                F.add("USF-SHAPE-001", "vocabulary", f"{key}[{i}].id must be a string"); fatal = True
+    for i, t in enumerate(tax["taxonomies"]):
+        if not (isinstance(t.get("id"), str) and isinstance(t.get("family"), str)):
+            F.add("USF-SHAPE-001", "taxonomy", f"taxonomies[{i}] needs string id and family"); fatal = True
+    for i, fa in enumerate(tax["taxonomyFamilies"]):
+        if not isinstance(fa.get("id"), str):
+            F.add("USF-SHAPE-001", "taxonomy", f"taxonomyFamilies[{i}].id must be a string"); fatal = True
+    for i, e in enumerate(reg["schemas"]):
+        for k in ("id", "path", "class", "lifecycleState", "authorityRole"):
+            if not isinstance(e.get(k), str):
+                F.add("USF-SHAPE-001", "registry", f"schemas[{i}].{k} must be a string"); fatal = True
+    return fatal
+
+
 def build_ctx(F):
     """Parse-safe load. Returns ctx, or None if the corpus cannot be loaded (findings added)."""
     files = sorted(glob.glob("spec/schemas/*.schema.json"))
@@ -290,50 +341,7 @@ def build_ctx(F):
     voc = load_json("spec/vocabularies/vocabulary-catalog.json", F)
     tax = load_json("spec/taxonomies/taxonomy-catalog.json", F)
     reg = load_json("spec/registries/schema-registry.json", F)
-    fatal = False
-    for name, obj, keys in (("vocabulary", voc, CATALOGUE_KEYS["vocabulary"]),
-                            ("taxonomy", tax, CATALOGUE_KEYS["taxonomy"]),
-                            ("registry", reg, CATALOGUE_KEYS["registry"])):
-        if obj is None:
-            fatal = True
-            continue
-        for k in keys:
-            if k not in obj:
-                F.add("USF-SHAPE-001", name, f"missing top-level key '{k}'")
-                fatal = True
-            elif not isinstance(obj[k], list) or not all(isinstance(x, dict) for x in obj[k]):
-                F.add("USF-SHAPE-001", name, f"'{k}' must be an array of objects")
-                fatal = True
-    # Nested shape: the fields indexed below MUST be present and well-typed, else USF-SHAPE-001
-    # (item 2 review): a parseable-but-malformed catalogue must not throw a traceback.
-    if not fatal:
-        for i, vs in enumerate(voc["valueSets"]):
-            if not isinstance(vs.get("id"), str):
-                F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].id must be a string"); fatal = True
-            if not isinstance(vs.get("values"), list):
-                F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].values must be an array"); fatal = True
-            else:
-                for j, v in enumerate(vs["values"]):
-                    if not (isinstance(v, dict) and isinstance(v.get("id"), str)):
-                        F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].values[{j}].id must be a string"); fatal = True
-            for j, a in enumerate(vs.get("aliases", []) if isinstance(vs.get("aliases"), list) else []):
-                if not isinstance(a, dict):
-                    F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].aliases[{j}] must be an object"); fatal = True
-        for key in ("valueSetLifecycleStates", "valueLifecycleStates"):
-            for i, x in enumerate(voc[key]):
-                if not isinstance(x.get("id"), str):
-                    F.add("USF-SHAPE-001", "vocabulary", f"{key}[{i}].id must be a string"); fatal = True
-        for i, t in enumerate(tax["taxonomies"]):
-            if not (isinstance(t.get("id"), str) and isinstance(t.get("family"), str)):
-                F.add("USF-SHAPE-001", "taxonomy", f"taxonomies[{i}] needs string id and family"); fatal = True
-        for i, fa in enumerate(tax["taxonomyFamilies"]):
-            if not isinstance(fa.get("id"), str):
-                F.add("USF-SHAPE-001", "taxonomy", f"taxonomyFamilies[{i}].id must be a string"); fatal = True
-        for i, e in enumerate(reg["schemas"]):
-            for k in ("id", "path", "class", "lifecycleState", "authorityRole"):
-                if not isinstance(e.get(k), str):
-                    F.add("USF-SHAPE-001", "registry", f"schemas[{i}].{k} must be a string"); fatal = True
-    if fatal or not sd:
+    if voc is None or tax is None or reg is None or check_shape(voc, tax, reg, F) or not sd:
         return None
     canon = {vs["id"]: set(v.get("id") for v in vs.get("values", [])) for vs in voc["valueSets"]}
     aliass = {vs["id"]: set(a.get("id") for a in vs.get("aliases", [])) for vs in voc["valueSets"]}
@@ -679,6 +687,8 @@ def apply_patch(ctx, patch):
 
 
 def run_all_checks(ctx, F):
+    if check_shape(ctx["voc"], ctx["tax"], ctx["reg"], F):
+        return   # shape gate failed: downstream checks assume well-formed catalogues
     check_schemas(ctx, F)
     check_enums(ctx, F)
     check_registry(ctx, F)

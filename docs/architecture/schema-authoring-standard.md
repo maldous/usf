@@ -26,7 +26,7 @@
 
 1.4 **It creates no schema files.** No JSON Schema file is authored by this document.
 
-1.5 **It promotes no planned schema to `draft` or `active`.** All 23 Schema Registry entries remain `planned` (`spec/schemas/` holds only a `.gitkeep` placeholder; no schema file exists). A schema becomes `active` only under §20.
+1.5 **This document promotes no planned schema to `draft` or `active`.** *(At initial authoring, all 23 Schema Registry entries were `planned` and `spec/schemas/` held only a `.gitkeep` placeholder. Superseded — see §26 Amendment A: the 23 schema files now exist at lifecycle `draft`; none are `active`.)* A schema becomes `active` only under §20.
 
 1.6 **It becomes the standard that governs later schema creation**, before any schema file, ADR schema/template, evidence-envelope schema, validator, source-import map, or implementation is created.
 
@@ -184,7 +184,7 @@ https://json-schema.org/draft/2020-12/schema
 
 6.10 No schema files are created by this task.
 
-The planned schema files (from [`schema-registry.json`](../../spec/registries/schema-registry.json) `schemas[]`, all `lifecycleState: planned`, none active):
+The schema files (from [`schema-registry.json`](../../spec/registries/schema-registry.json) `schemas[]`; at initial authoring all `planned`, now authored at `lifecycleState: draft` per §26 Amendment A, none `active`):
 
 ```text
 spec/schemas/schema-registry.schema.json
@@ -752,7 +752,7 @@ Future AI agents (and humans) MUST:
 
 Deferred, not blockers. Each MUST be resolved by a future ADR, schema, or validator before it is enforced:
 
-- actual schema file creation (all 23 planned schemas);
+- actual schema file creation (all 23 planned schemas); *(resolved at draft level — see Amendment A)*
 - `schema-registry.schema.json`;
 - `taxonomy.schema.json`;
 - `vocabulary.schema.json`;

@@ -197,7 +197,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** The declared class of provider evidence used by a capability or proof.
 **Authority role.** Rank 1 as a semantic dimension; recorded on rank-4 proof evidence.
 **Source evidence role.** Historically the closed class set `hermetic` / `compose-local` / `sandbox-external` / `live-external` / `none`, selected by a single `USF_PROVIDER_MODE`, with per-environment modes (`semantic-dev`, `compose-real-local`, `prod-shaped-sandbox`, `live-readiness-only`).
-**Future artefacts.** Provider-mode vocabulary + validator (deferred).
+**Future artefacts.** Provider-mode vocabulary + validator. *(Superseded — see schema-authoring-standard §26 Amendment A: the provider-mode value set and a draft `provider-mode.schema.json` now exist, enforced by the draft/advisory validator; selector wiring + active maturity remain deferred.)*
 **Relationships.** Provider Mode **classifies** a Provider's use; **is constrained by** Environment; **is recorded on** Proof and Evidence.
 **AI guidance.** First-class and proof-relevant. Never infer a stronger provider mode than the substrate actually used (§14).
 
@@ -659,8 +659,8 @@ This ontology document is acceptable when **all** hold:
 
 Deferred, not blockers. Later foundational artefacts in this sequence have now resolved the taxonomy catalogue, vocabulary catalogue, and schema registry as governance artefacts. The remaining deferred items MUST be resolved by a future ADR, schema, validator, or import artefact before they are enforced:
 
-- **Actual JSON Schema files, validator tooling, and schema self-validation** remain deferred; dialect selection is resolved by `schema-authoring-standard.md` as Draft 2020-12.
-- **Actual JSON Schema files** for taxonomy, vocabulary, schema registry, evidence, proof, ADR, validator report, import manifest, and semantic contracts.
+- **Actual JSON Schema files, validator tooling, and schema self-validation** *(partially resolved by directive — see schema-authoring-standard §26 Amendment A: 23 schema files at `draft`, a draft/advisory validator at `tools/validate-spec/`, and self-validation of the registry/taxonomy/vocabulary catalogues; active maturity + real-instance validation remain deferred)*; dialect selection is resolved by `schema-authoring-standard.md` as Draft 2020-12.
+- **Actual JSON Schema files** for taxonomy, vocabulary, schema registry, evidence, proof, ADR, validator report, import manifest, and semantic contracts *(now exist at `draft` — see §26 Amendment A)*.
 - **Exact source registry shape** (the fields of §5.4 / §8 made machine-readable).
 - **Exact evidence envelope schema** (the kinds of §5.6 / §10).
 - **Exact capability-domain vocabulary values** (the value set exists as deferred; canonical values are not yet authored).

@@ -90,9 +90,9 @@ This document operationalises specific Charter principles:
 
 ### 3.6 Relationship to the Schema Registry
 
-- **The Schema Registry defines the planned schemas and their paths.** [`schema-registry.json`](../../spec/registries/schema-registry.json) lists 23 planned schema entries, each with an `id`, a `path` under `spec/schemas/`, a `class`, a `family`, and `lifecycleState: planned` — and its own `namingConventions` block.
+- **The Schema Registry defines the schemas and their paths.** [`schema-registry.json`](../../spec/registries/schema-registry.json) lists 23 schema entries, each with an `id`, a `path` under `spec/schemas/`, a `class`, a `family`, and a `lifecycleState` — and its own `namingConventions` block. *(At initial authoring all were `planned`; the schema files now exist at `draft` — see schema-authoring-standard §26 Amendment A.)*
 - **This document constrains the path and filename rules for those schemas** (§12). It is consistent with, and does not weaken, the Registry's `namingConventions` (schema dir `spec/schemas/`, filenames end `.schema.json`, lowercase semantic names, no lifecycle in path, no forbidden canonical terms, `usf.` permitted only on global IDs not paths).
-- **This document MUST NOT rename planned schemas unless a conflict is found.** No planned schema is renamed here; the 23 planned filenames are reproduced verbatim in §12. (None were found to conflict with this standard.)
+- **This document MUST NOT rename registered schemas unless a conflict is found.** No schema is renamed here; the 23 registry filenames are reproduced verbatim in §12. (None were found to conflict with this standard.)
 - **Schema file paths in the Registry remain `planned` until files are created.** A schema is `active` only when its file exists, parses as valid JSON Schema, and is validator-checkable (AGENTS `Schema Rules`; Vocabulary `schema-lifecycle-states`). This document creates no schema file and promotes nothing to `active`.
 
 ---
@@ -195,7 +195,7 @@ Rules:
 - `spec/taxonomies/` contains taxonomy catalogues and future taxonomy artefacts (currently `taxonomy-catalog.json`).
 - `spec/vocabularies/` contains vocabulary catalogues and future controlled value sets (currently `vocabulary-catalog.json`).
 - `spec/registries/` contains registries and cross-reference/resolution maps (currently `schema-registry.json`).
-- `spec/schemas/` contains JSON Schema files **only when** schema creation is explicitly authorised (AGENTS `Schema Rules`). It currently holds only a `.gitkeep` placeholder; no schema file exists, so no schema is `active`.
+- `spec/schemas/` contains JSON Schema files **only when** schema creation is explicitly authorised (AGENTS `Schema Rules`). *(Superseded — see schema-authoring-standard §26 Amendment A: it now holds the 23 schema files at lifecycle `draft`; none are `active`.)*
 - `spec/` MUST NOT contain implementation source code, human-readable prose governance (which belongs under `docs/`), or generated reports (which belong under `evidence/`, §15).
 
 ### `evidence/`
@@ -214,7 +214,7 @@ Executable validators, generators, import tools, and maintenance utilities.
 
 Rules:
 
-- Tool subdirectories MUST NOT be created until there are enough files to justify them; start flat (§16). `tools/` currently holds only a `.gitkeep` placeholder.
+- Tool subdirectories MUST NOT be created until there are enough files to justify them; start flat (§16). *(Superseded — see schema-authoring-standard §26 Amendment A and §6.E.1: `tools/` now holds the draft/advisory validator and its corpus under `tools/validate-spec/`, a subdir justified by that volume.)*
 - Tools MUST be executable enforcement or generation, not prose policy (prose belongs under `docs/`).
 - Tools MUST NOT define product semantics by themselves (Authority Model §2.3; a validator enforces, it does not invent meaning).
 - Validators MUST fail closed once implemented (Charter §5.10; Standards Profile §18.2; AGENTS `Validator Rules`).
@@ -266,7 +266,7 @@ Explanation:
 
 8.8 Generated-output directories MUST NOT be pre-created before the generators and validators that define them exist (§14, §15, §16).
 
-8.9 Schema subdirectories MUST NOT be pre-created before the Schema Registry and this standard require them; all 23 planned schemas currently live directly under `spec/schemas/` (§12).
+8.9 Schema subdirectories MUST NOT be pre-created before the Schema Registry and this standard require them; all 23 schemas currently live directly under `spec/schemas/` (§12).
 
 8.10 Prefer a flat directory until multiple governed artefacts justify subdivision (§16). Subdivision is a response to real volume, not a speculative scaffold.
 
@@ -613,29 +613,29 @@ For each artefact kind: its canonical directory, filename convention, current cr
 | Artefact kind | Canonical directory | Filename convention | Creation status | Pre-create now? | Authority level | Controlling schema/registry |
 |---|---|---|---|---|---|---|
 | Architecture document | `docs/architecture/` | `kebab-name.md` | exists (5 docs) | yes (authorised) | semantic-definition | — (markdown-governed) |
-| ADR | `docs/adr/` | `0001-kebab-title.md` | not yet | no | adr | `adr.schema.json` (planned) |
-| ADR template | `docs/adr/` | `template.md` | not yet | no | adr | `adr.schema.json` (planned) |
+| ADR | `docs/adr/` | `0001-kebab-title.md` | not yet | no | adr | `adr.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| ADR template | `docs/adr/` | `template.md` | not yet | no | adr | `adr.schema.json` (draft, per schema-authoring §26 Amendment A) |
 | Runbook | `docs/runbooks/` | `kebab-name.md` | not yet | no | semantic-definition | — |
-| Taxonomy catalogue | `spec/taxonomies/` | `kebab-name.json` (singular catalogue) | exists | n/a (exists) | semantic-definition | `taxonomy.schema.json` (planned) |
-| Vocabulary catalogue | `spec/vocabularies/` | `kebab-name.json` (singular catalogue) | exists | n/a (exists) | semantic-definition | `vocabulary.schema.json` (planned) |
-| Registry | `spec/registries/` | `kebab-name.json` | exists (`schema-registry.json`) | n/a (exists) | semantic-definition | `schema-registry.schema.json` (planned) |
-| JSON Schema | `spec/schemas/` | `concept.schema.json` | not yet (23 planned) | no | semantic-definition | Schema Registry `schemas[]` |
-| Source reference | `spec/` and/or `evidence/` (deferred) | `kebab-name.json` | not yet | no | historical-source-evidence | `source-reference.schema.json` (planned) |
-| Source disposition | `spec/` and/or `evidence/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `source-disposition.schema.json` (planned) |
-| Evidence envelope | `evidence/` | `subject-kind.json` | not yet | no | runtime-proof-evidence | `evidence-envelope.schema.json` (planned) |
-| Proof evidence | `evidence/` (subdir deferred) | `subject[-mode][-env].json` | not yet | no | runtime-proof-evidence | `proof-evidence.schema.json` (planned) |
-| Validator report | `evidence/` (subdir deferred) | `subject-report.json` | not yet | no | generated-report | `validator-report.schema.json` (planned) |
-| Generated report | `evidence/` (subdir deferred) | `subject-report.json` | not yet | no | generated-report | `validator-report.schema.json` (planned) |
-| Command catalogue | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `command.schema.json` (planned) |
-| Configuration catalogue | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `configuration.schema.json` (planned) |
-| Import manifest | `spec/` and/or `evidence/` (deferred) | `kebab-name.json` | not yet | no | historical-source-evidence | `import-manifest.schema.json` (planned) |
-| Validator / tool | `tools/` (flat first) | `verb-object.<ext>` | not yet | no | validator-rule | — (tool/validator directive) |
+| Taxonomy catalogue | `spec/taxonomies/` | `kebab-name.json` (singular catalogue) | exists | n/a (exists) | semantic-definition | `taxonomy.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Vocabulary catalogue | `spec/vocabularies/` | `kebab-name.json` (singular catalogue) | exists | n/a (exists) | semantic-definition | `vocabulary.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Registry | `spec/registries/` | `kebab-name.json` | exists (`schema-registry.json`) | n/a (exists) | semantic-definition | `schema-registry.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| JSON Schema | `spec/schemas/` | `concept.schema.json` | exists (23 at `draft`) | no | semantic-definition | Schema Registry `schemas[]` |
+| Source reference | `spec/` and/or `evidence/` (deferred) | `kebab-name.json` | not yet | no | historical-source-evidence | `source-reference.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Source disposition | `spec/` and/or `evidence/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `source-disposition.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Evidence envelope | `evidence/` | `subject-kind.json` | not yet | no | runtime-proof-evidence | `evidence-envelope.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Proof evidence | `evidence/` (subdir deferred) | `subject[-mode][-env].json` | not yet | no | runtime-proof-evidence | `proof-evidence.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Validator report | `evidence/` (subdir deferred) | `subject-report.json` | not yet | no | generated-report | `validator-report.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Generated report | `evidence/` (subdir deferred) | `subject-report.json` | not yet | no | generated-report | `validator-report.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Command catalogue | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `command.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Configuration catalogue | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `configuration.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Import manifest | `spec/` and/or `evidence/` (deferred) | `kebab-name.json` | not yet | no | historical-source-evidence | `import-manifest.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Validator / tool | `tools/` (subdir when justified, §16.3) | `verb-object.<ext>` | exists (`tools/validate-spec/`) | no | validator-rule | draft/advisory, §26 Amendment A |
 | Implementation source | `apps/`,`packages/`,`services/`,`src/` (NOT approved, §7) | per implementation-extraction directive | not yet | no | source-implementation | semantic contracts + import map |
-| UI semantic model | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `ui-semantic-model.schema.json` (planned) |
-| Event contract | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `event-contract.schema.json` (planned) |
-| Workflow contract | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `workflow.schema.json` (planned) |
-| Observability signal | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `observability-signal.schema.json` (planned) |
-| Audit event | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `audit-event.schema.json` (planned) |
+| UI semantic model | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `ui-semantic-model.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Event contract | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `event-contract.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Workflow contract | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `workflow.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Observability signal | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `observability-signal.schema.json` (draft, per schema-authoring §26 Amendment A) |
+| Audit event | `spec/` (deferred) | `kebab-name.json` | not yet | no | semantic-definition | `audit-event.schema.json` (draft, per schema-authoring §26 Amendment A) |
 
 Notes: "deferred" home means the canonical directory under `spec/` or `evidence/` is confirmed by the relevant later schema/import directive; until then, no such file or subdirectory is created (§8, §14, §25). The exact `spec/` sub-home for contract/catalogue artefacts (for example a future `spec/contracts/` or `spec/catalogues/`) is itself deferred and MUST be set by an explicit directive before such files are created — this standard does not pre-approve it.
 
@@ -785,8 +785,8 @@ Future AI agents (and humans) working on USF MUST:
 
 The following are deferred, not blockers. Each MUST be resolved by a future ADR, schema, validator, or import directive before it is enforced.
 
-- Actual schema files and schema validators remain deferred; schema authoring and dialect policy are resolved by `schema-authoring-standard.md` (Draft 2020-12; `$id` `urn:usf:schema:<schema-name>`).
-- Actual schema file creation (the 23 planned schemas; §12).
+- Actual schema files and schema validators *(partially resolved by directive — see schema-authoring-standard §26 Amendment A: 23 schema files at `draft` + a draft/advisory validator under `tools/validate-spec/`)*; schema authoring and dialect policy are resolved by `schema-authoring-standard.md` (Draft 2020-12; `$id` `urn:usf:schema:<schema-name>`).
+- Actual schema file creation (the 23 planned schemas; §12) *(resolved at draft level — see schema-authoring-standard §26 Amendment A)*.
 - The ADR schema and ADR template, and ADR numbering finalisation (§13).
 - The evidence-envelope schema (§14).
 - The evidence subdirectory strategy (whether/which of `evidence/source|proofs|reports|imports|validation` become approved; §14.9).
