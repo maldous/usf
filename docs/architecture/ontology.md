@@ -23,7 +23,7 @@
 
 1.3 It defines the **conceptual model** that later machine-readable artefacts will formalise: taxonomy, vocabulary, schemas, registries, ADRs, validators, evidence envelopes, source-import maps, and implementation extraction.
 
-1.4 It **does not create those artefacts**. It defines the nouns, relationships, constraints, and authority roles those artefacts must follow. Exact shapes are deferred (§18).
+1.4 This document **does not itself create those artefacts**. It defines the nouns, relationships, constraints, and authority roles those artefacts must follow. Initial exact shapes were deferred to §18; later, under directive, the 23 draft schema files and an advisory validator were authored and are recorded in §18 (see schema-authoring §26 Amendment A), while active maturity and real-instance validation remain deferred.
 
 ---
 
@@ -149,7 +149,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** A reference to historical or current source evidence that grounds a USF concept.
 **Authority role.** Rank 6 (lineage/evidence). Grounds concepts; never defines authority.
 **Source evidence role.** Historically the `sourceFileRefs`/`evidence` fields throughout the corpus; the bijective file inventory (`v1-file-inventory.json`, ~1673 tracked files) and path map (`v1-to-v2-path-map.json`).
-**Future artefacts.** A source registry under `spec/`/`evidence/` (schema deferred, §18).
+**Future artefacts.** A source registry under `spec/`/`evidence/` (the `source-reference`/`source-disposition` draft schemas now exist — see schema-authoring §26 Amendment A; the registry artefact deferred).
 **Relationships.** A Source Reference **points at** a source element; **carries** a Disposition; **maps to** a related USF artefact; **may carry** a Proof reference.
 **AI guidance.** A Source Reference MUST be able to express: **repository**, **commit/tag**, **path**, **source kind**, **semantic role**, **evidence role**, **disposition**, **rationale**, **related USF artefact**, and **proof reference (if applicable)**. Citing a source is not adopting it.
 
@@ -165,7 +165,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** Information used to support a semantic, proof, source, or operational claim.
 **Authority role.** Rank 4 (proof evidence) down to rank 7 (reports), depending on kind.
 **Source evidence role.** Historically `../react/docs/evidence/` (267 files across 31 domains, each typically machine `.json` + human `.md`) and `usf-audit/proof-evidence/` (per-proof runtime JSON) indexed by `proof-evidence-index.json`.
-**Future artefacts.** An evidence envelope schema under `evidence/` (deferred, §18).
+**Future artefacts.** An evidence envelope schema under `evidence/` (draft `evidence-envelope.schema.json` now exists — see §26 Amendment A; evidence instances deferred).
 **Relationships.** Evidence **supports** Semantic Contracts and Capabilities; **references** Source and Environment; **declares** Provider Mode; **is summarised by** Generated Reports.
 **AI guidance.** Distinguish kinds and never conflate them: **raw source evidence**, **semantic evidence**, **runtime proof evidence**, **normalised evidence**, **generated report**, **attestation**, **source import evidence**. Absence of evidence is not evidence of absence (§14).
 
@@ -189,7 +189,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** A service or dependency fulfilling a platform contract (a port).
 **Authority role.** Spans: the *requirement* for a provider is rank 1 (semantic); a concrete provider Adapter is rank 5 (implementation).
 **Source evidence role.** Historically `runtime-provider-inventory.json` (~69 providers) split into in-memory (16, e.g. `in-memory-event-bus`), real-local (`postgres-*`, `redis-*`, `s3-*`, `keycloak-*`, `clamav`, `temporal`, `windmill`, `lago`), and external/probe classes; plus `services/mock-oidc`.
-**Future artefacts.** Provider registry + provider-mode vocabulary (deferred).
+**Future artefacts.** Provider registry + provider-mode vocabulary (vocabulary + draft `provider-mode.schema.json` now exist — see §26 Amendment A; provider registry deferred).
 **Relationships.** A Provider **fulfils** a Port through an Adapter; **runs in** a Provider Mode; **is permitted by** Environment policy.
 **AI guidance.** Mock/hermetic providers are **valid for internal proof**; a **mock IdP is valid** for hermetic platform validation; hermetic proof **MUST NOT** be mislabelled as live external proof (§9; Charter §6).
 
@@ -197,7 +197,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** The declared class of provider evidence used by a capability or proof.
 **Authority role.** Rank 1 as a semantic dimension; recorded on rank-4 proof evidence.
 **Source evidence role.** Historically the closed class set `hermetic` / `compose-local` / `sandbox-external` / `live-external` / `none`, selected by a single `USF_PROVIDER_MODE`, with per-environment modes (`semantic-dev`, `compose-real-local`, `prod-shaped-sandbox`, `live-readiness-only`).
-**Future artefacts.** Provider-mode vocabulary + validator (deferred).
+**Future artefacts.** Provider-mode vocabulary + validator. *(Superseded — see schema-authoring-standard §26 Amendment A: the provider-mode value set and a draft `provider-mode.schema.json` now exist, enforced by the draft/advisory validator; selector wiring + active maturity remain deferred.)*
 **Relationships.** Provider Mode **classifies** a Provider's use; **is constrained by** Environment; **is recorded on** Proof and Evidence.
 **AI guidance.** First-class and proof-relevant. Never infer a stronger provider mode than the substrate actually used (§14).
 
@@ -205,7 +205,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** The execution context in which behaviour or proof occurs.
 **Authority role.** Rank 1 as a semantic dimension; recorded on rank-4 evidence.
 **Source evidence role.** Historically the four-stage ladder (dev/test/staging/prod) with `environment-readiness-gates.json` (4 gates), `environment-capability-matrix.json` (70 capabilities × 4 environments), and the e2e profile split (internal/build/identity = hermetic; discovery/external/prod = live).
-**Future artefacts.** Environment vocabulary + capability-environment matrix (deferred).
+**Future artefacts.** Environment vocabulary + capability-environment matrix (vocabulary + draft `environment.schema.json` now exist — see §26 Amendment A; the matrix deferred).
 **Relationships.** Environment **constrains** Provider Modes and **scopes** evidence/readiness claims.
 **AI guidance.** Conceptual classes: **local, hermetic, integration, staging, production-shaped, production/live**. **Production-shaped is not automatically production-live.** Environment MUST be explicit in every evidence and proof claim (§9).
 
@@ -253,7 +253,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** A callable contract — an API route, command, query, event handler, CLI, or internal service boundary.
 **Authority role.** Rank 1 as a contract; rank 5 as an implementation endpoint.
 **Source evidence role.** Historically `api-runtime`/`graphql-api-runtime`, the runtime route inventory (~235 routes), `operational-semantics.json` `runtimeCommandLinks`, and the OpenAPI drift hard gate.
-**Future artefacts.** Interface contracts (OpenAPI-adapted, deferred, §18).
+**Future artefacts.** Interface contracts (draft `interface-contract.schema.json` now exists — see §26 Amendment A; OpenAPI format deferred).
 **Relationships.** An Interface **is exposed by** a Service/Application; **is defined by** a Semantic Contract; **may be** API/command/query/event/CLI/internal; **is exercised by** Proofs.
 **AI guidance.** Where a semantic interface contract exists, code conforms to it; interfaces MUST NOT be inferred from handlers when a contract exists (Standards Profile §15).
 
@@ -261,7 +261,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** A semantic occurrence that can trigger, record, or communicate state.
 **Authority role.** Rank 1 as an event contract; rank 4 as an emitted runtime occurrence (evidence).
 **Source evidence role.** Historically `event-semantics.json` (10 events; fields `eventName`, `schema`, `schemaVersion`, `idempotencyKey`, `orderingExpectation`, `retryPolicy`, `dlqPolicy`, `retention`, `privacyClassification`, `tenantIsolation`), distinguishing **canonical** from **test-only** events; plus `cross-capability-interactions.json` (the `event` interaction type) and the `audit-events` package.
-**Future artefacts.** Event contracts (AsyncAPI-adapted, deferred).
+**Future artefacts.** Event contracts (draft `event-contract.schema.json` now exists — see §26 Amendment A; AsyncAPI format deferred).
 **Relationships.** An Event **connects** capabilities (cross-capability interactions); **participates in** Workflows; **is recorded as** Evidence; **may produce** Audit Events.
 **AI guidance.** Define the event contract (schema, ordering, idempotency, DLQ, retention) before emitting; never invent an event in code (Standards Profile §15).
 
@@ -341,7 +341,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 **Definition.** A normative decision record connected to semantics, evidence, source references, proof evidence, validators, and AI-alignment rules.
 **Authority role.** Rank 2.
 **Source evidence role.** Historically `v2-decision-catalog.json` (74 accepted decisions) + `v2-decision-lineage.json` (74 evidence-backed lineage records), with untraced decisions rejected (rule R13).
-**Future artefacts.** `docs/adr/` ADRs + ADR schema (deferred).
+**Future artefacts.** `docs/adr/` ADRs + ADR schema (draft `adr.schema.json` now exists — see §26 Amendment A; ADR canon deferred).
 **Relationships.** An ADR **decides/constrains** Semantic Contracts, Source Dispositions, provider strategy, environment policy, naming policy, and validator rules.
 **AI guidance.** ADRs are binding (Authority Model §2.2); must carry references, invariants, permitted-change, forbidden-drift, consequences, and AI-alignment rules; never generic prose (Standards Profile §19).
 
@@ -458,7 +458,7 @@ Conceptual and precise (not JSON Schema). "Authoritative" below means "treated a
 
 ## 8. Source Import Meta Model
 
-8.1 Source elements from `../react` become USF concepts through a recorded mapping with these conceptual fields (schema deferred, §18):
+8.1 Source elements from `../react` become USF concepts through a recorded mapping with these conceptual fields (the `source-reference`/`source-disposition`/`import-manifest` draft schemas now exist — see §26 Amendment A; the import map deferred):
 
 - **Source element** — the concrete historical thing.
 - **Source reference** — repository, commit/tag, path (§5.4).
@@ -657,17 +657,17 @@ This ontology document is acceptable when **all** hold:
 
 ## 18. Open Questions / Deferred Work
 
-Deferred, not blockers. Later foundational artefacts in this sequence have now resolved the taxonomy catalogue, vocabulary catalogue, and schema registry as governance artefacts. The remaining deferred items MUST be resolved by a future ADR, schema, validator, or import artefact before they are enforced:
+Deferred, not blockers. Later foundational artefacts in this sequence have now resolved the taxonomy catalogue, vocabulary catalogue, and schema registry as governance artefacts. The remaining deferred items MUST be resolved by a future ADR, schema, validator, or import artefact before they are enforced. *(Global note, 2026-06: the 23 schema files exist at `draft` and a draft/advisory validator exists — schema-authoring §26 Amendment A. Wherever this ontology's per-concept "Future artefacts" notes call one of those schema files or the validator "deferred", read it as resolved at draft level; the genuine deferrals are catalogue/registry/ADR-canon instances, selector/gate wiring, OpenAPI/AsyncAPI/OTel format decisions, active maturity, and implementation layout.)*
 
-- **Actual JSON Schema files, validator tooling, and schema self-validation** remain deferred; dialect selection is resolved by `schema-authoring-standard.md` as Draft 2020-12.
-- **Actual JSON Schema files** for taxonomy, vocabulary, schema registry, evidence, proof, ADR, validator report, import manifest, and semantic contracts.
-- **Exact source registry shape** (the fields of §5.4 / §8 made machine-readable).
-- **Exact evidence envelope schema** (the kinds of §5.6 / §10).
+- **Actual JSON Schema files, validator tooling, and schema self-validation** *(partially resolved by directive — see schema-authoring-standard §26 Amendment A: 23 schema files at `draft`, a draft/advisory validator at `tools/validate-spec/`, and self-validation of the registry/taxonomy/vocabulary catalogues; active maturity + real-instance validation remain deferred)*; dialect selection is resolved by `schema-authoring-standard.md` as Draft 2020-12.
+- **Actual JSON Schema files** for taxonomy, vocabulary, schema registry, evidence, proof, ADR, validator report, import manifest, and semantic contracts *(now exist at `draft` — see §26 Amendment A)*.
+- **Exact source registry shape** (the fields of §5.4 / §8 made machine-readable) *(the `source-reference`/`source-disposition` draft schemas now exist — see schema-authoring §26 Amendment A; the registry artefact + maturity remain deferred)*.
+- **Exact evidence envelope schema** (the kinds of §5.6 / §10) *(draft `evidence-envelope.schema.json` now exists — see §26 Amendment A; maturity deferred)*.
 - **Exact capability-domain vocabulary values** (the value set exists as deferred; canonical values are not yet authored).
-- **Exact provider-mode and environment schema wiring** (§5.10, §5.11).
-- **Exact ADR schema** (§5.28).
-- **Exact validator report schema** (§5.29, §5.31).
-- **Exact import manifest schema** (§8).
+- **Exact provider-mode and environment schema wiring** (§5.10, §5.11) *(draft `provider-mode.schema.json` + `environment.schema.json` now exist — see §26 Amendment A; selector/gate wiring remains deferred)*.
+- **Exact ADR schema** (§5.28) *(draft `adr.schema.json` now exists — see §26 Amendment A; ADR canon deferred)*.
+- **Exact validator report schema** (§5.29, §5.31) *(draft `validator-report.schema.json` now exists — see §26 Amendment A)*.
+- **Exact import manifest schema** (§8) *(draft `import-manifest.schema.json` now exists — see §26 Amendment A; the import map remains deferred)*.
 - **Exact implementation package layout** (§5.12–§5.16).
 
 ---

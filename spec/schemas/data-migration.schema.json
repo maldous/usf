@@ -2,37 +2,204 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:data-migration",
   "title": "USF Data and Migration Schema",
-  "description": "Draft JSON Schema for data models, persistence contracts, identifiers, relationships, migrations, seed data, fixtures, backup/restore evidence, and retention/deletion concerns. Each declares its kind (data-migration-kinds). Migrations are forward-only and checksum-immutable (a committed migration is never edited); tenancy isolation is preserved; backup/restore emitted and collected evidence (evidence-kinds) is preserved. Governs the ontology concepts Data Model, Migration, and Backup / Restore. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for data models, persistence contracts, identifiers, relationships, migrations, seed data, fixtures, backup/restore evidence, and retention/deletion concerns. Each declares its kind (data-migration-kinds). Migrations are forward-only and checksum-immutable (a committed migration is never edited); tenancy isolation is preserved; backup/restore emitted and collected evidence (evidence-kinds) is preserved. Governs the ontology concepts Data Model, Migration, and Backup / Restore. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "dataKind"],
+  "required": [
+    "id",
+    "dataKind",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "dataKind": {"type": "string", "enum": ["data-model", "persistence-contract", "identifier", "relationship", "migration", "seed-data", "fixture", "backup-evidence", "restore-evidence", "retention-deletion-concern"]}
+    "dataKind": {
+      "type": "string",
+      "enum": [
+        "data-model",
+        "persistence-contract",
+        "identifier",
+        "relationship",
+        "migration",
+        "seed-data",
+        "fixture",
+        "backup-evidence",
+        "restore-evidence",
+        "retention-deletion-concern"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "dataKind": {"$ref": "#/$defs/dataKind"},
-    "title": {"type": "string"},
-    "description": {"type": "string"},
-    "tenancyIsolation": {"type": "string", "$comment": "e.g. schema-per-tenant with RLS; a contract-level invariant."},
-    "migrationOrder": {"type": "integer", "minimum": 1},
-    "checksum": {"type": "string"},
-    "immutable": {"type": "boolean"},
-    "emittedEvidence": {"type": "array", "items": {"type": "string"}},
-    "collectedEvidence": {"type": "array", "items": {"type": "string"}},
-    "retention": {"type": "string"},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataKind": {
+      "$ref": "#/$defs/dataKind"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tenancyIsolation": {
+      "type": "string",
+      "$comment": "e.g. schema-per-tenant with RLS; a contract-level invariant.",
+      "minLength": 1
+    },
+    "migrationOrder": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "checksum": {
+      "type": "string",
+      "minLength": 1
+    },
+    "immutable": {
+      "type": "boolean"
+    },
+    "emittedEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "collectedEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "retention": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   },
   "allOf": [
     {
       "$comment": "A migration is forward-only and checksum-immutable: it declares its order, a checksum, and immutable=true. A committed migration is never edited.",
-      "if": {"properties": {"dataKind": {"const": "migration"}}, "required": ["dataKind"]},
-      "then": {"required": ["migrationOrder", "checksum", "immutable"], "properties": {"immutable": {"const": true}}}
+      "if": {
+        "properties": {
+          "dataKind": {
+            "const": "migration"
+          }
+        },
+        "required": [
+          "dataKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "migrationOrder",
+          "checksum",
+          "immutable"
+        ],
+        "properties": {
+          "immutable": {
+            "const": true
+          }
+        }
+      }
     },
     {
       "$comment": "Backup/restore evidence must preserve emitted and collected evidence (fail closed on missing collected evidence).",
-      "if": {"properties": {"dataKind": {"enum": ["backup-evidence", "restore-evidence"]}}, "required": ["dataKind"]},
-      "then": {"required": ["emittedEvidence", "collectedEvidence"], "properties": {"collectedEvidence": {"minItems": 1}}}
+      "if": {
+        "properties": {
+          "dataKind": {
+            "enum": [
+              "backup-evidence",
+              "restore-evidence"
+            ]
+          }
+        },
+        "required": [
+          "dataKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "emittedEvidence",
+          "collectedEvidence"
+        ],
+        "properties": {
+          "collectedEvidence": {
+            "minItems": 1
+          },
+          "emittedEvidence": {
+            "minItems": 1
+          }
+        }
+      }
     }
   ]
 }

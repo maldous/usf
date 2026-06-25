@@ -1,0 +1,22 @@
+{
+  "id": "import-manifest-entry-unknown-property",
+  "title": "Import manifest: entry with unknown property",
+  "sourceRepository": "../react",
+  "entries": [
+    {
+      "sourceRef": "src-ref-auth-service-path",
+      "sourceKind": "source-file",
+      "sourceRole": "semantic-source",
+      "disposition": "preserve",
+      "rationale": "Entry carries an unknown property.",
+      "priority": "high"
+    }
+  ],
+  "description": "Defect: an entry carries an unknown property 'priority', violating additionalProperties false.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Disposition"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because an entry has an unknown property."
+}

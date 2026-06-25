@@ -1,0 +1,16 @@
+{
+  "id": "src-ref-missing-source-role",
+  "repository": "../react",
+  "path": "src/services/auth/loginController.ts",
+  "sourceKind": "source-file",
+  "disposition": "preserve",
+  "rationale": "Required sourceRole is absent.",
+  "title": "Source reference missing sourceRole",
+  "description": "Defect: required property sourceRole is missing.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because sourceRole is missing."
+}

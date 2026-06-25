@@ -2,28 +2,194 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:command",
   "title": "USF Command Schema",
-  "description": "Draft JSON Schema for command artefacts (Make targets, package scripts, CLI, validation/proof/import/build/runtime/report-generation commands) as governed semantic assets. Each command declares its kind (command-kinds), purpose, inputs, outputs, environment scope (environment-classes), side effects, and failure semantics; commands derived from ../react carry source lineage and may not be deleted/renamed without a disposition (disposition-values). Governs the ontology concept Command. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for command artefacts (Make targets, package scripts, CLI, validation/proof/import/build/runtime/report-generation commands) as governed semantic assets. Each command declares its kind (command-kinds), purpose, inputs, outputs, environment scope (environment-classes), side effects, and failure semantics; commands derived from ../react carry source lineage and may not be deleted/renamed without a disposition (disposition-values). Governs the ontology concept Command. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "commandKind", "purpose", "failureSemantics"],
+  "required": [
+    "id",
+    "commandKind",
+    "purpose",
+    "failureSemantics",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "inputs",
+    "outputs",
+    "environmentScope",
+    "sideEffects"
+  ],
   "$defs": {
-    "commandKind": {"type": "string", "enum": ["make-target", "package-script", "cli-command", "validation-command", "proof-command", "import-command", "build-command", "runtime-command", "report-generation-command"]},
-    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]},
-    "disposition": {"type": "string", "enum": ["preserve", "rename", "refactor", "merge", "split", "replace", "retire", "defer", "reject"]}
+    "commandKind": {
+      "type": "string",
+      "enum": [
+        "make-target",
+        "package-script",
+        "cli-command",
+        "validation-command",
+        "proof-command",
+        "import-command",
+        "build-command",
+        "runtime-command",
+        "report-generation-command"
+      ]
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "local",
+        "hermetic",
+        "integration",
+        "staging",
+        "production-shaped",
+        "production-live"
+      ]
+    },
+    "disposition": {
+      "type": "string",
+      "enum": [
+        "preserve",
+        "rename",
+        "refactor",
+        "merge",
+        "split",
+        "replace",
+        "retire",
+        "defer",
+        "reject"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "commandKind": {"$ref": "#/$defs/commandKind"},
-    "title": {"type": "string"},
-    "purpose": {"type": "string", "minLength": 1},
-    "invocation": {"type": "string"},
-    "inputs": {"type": "array", "items": {"type": "string"}},
-    "outputs": {"type": "array", "items": {"type": "string"}},
-    "environmentScope": {"type": "array", "items": {"$ref": "#/$defs/environment"}},
-    "sideEffects": {"type": "array", "items": {"type": "string"}},
-    "failureSemantics": {"type": "string", "minLength": 1},
-    "emitsEvidence": {"type": "boolean"},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}},
-    "disposition": {"$ref": "#/$defs/disposition"}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "commandKind": {
+      "$ref": "#/$defs/commandKind"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "invocation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "$comment": "May be empty: a command may legitimately take no inputs. Items must be non-empty.",
+      "uniqueItems": true
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "$comment": "May be empty: a command may legitimately produce no declared outputs. Items must be non-empty.",
+      "uniqueItems": true
+    },
+    "environmentScope": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/environment"
+      },
+      "$comment": "May be empty: an environment-agnostic command. Items are environment-classes values.",
+      "uniqueItems": true
+    },
+    "sideEffects": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "$comment": "Required; may be empty only when the command has no side effects (absence is not allowed).",
+      "uniqueItems": true
+    },
+    "failureSemantics": {
+      "type": "string",
+      "minLength": 1
+    },
+    "emitsEvidence": {
+      "type": "boolean"
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "disposition": {
+      "$ref": "#/$defs/disposition"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   }
 }

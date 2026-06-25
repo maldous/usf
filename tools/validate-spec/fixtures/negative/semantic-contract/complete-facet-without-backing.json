@@ -1,0 +1,23 @@
+{
+  "id": "contract.neg-complete-no-backing",
+  "title": "Semantic contract with a complete facet lacking backing",
+  "description": "DEFECT: the lifecycle facet is complete but cites no evidenceRefs or sourceRefs.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["authority-levels"],
+  "aiGuidance": "A complete facet must cite authoritative backing.",
+  "facets": {
+    "lifecycle": { "status": "complete" },
+    "stateModel": { "status": "gap" },
+    "permissions": { "status": "gap" },
+    "contracts": { "status": "gap" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "gap" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "gap" },
+    "uiSemanticDefinition": { "status": "gap" }
+  }
+}

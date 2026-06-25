@@ -1,0 +1,18 @@
+{
+  "id": "usf.command.negative.empty-string-input",
+  "commandKind": "make-target",
+  "purpose": "Command whose inputs array contains an empty string item.",
+  "failureSemantics": "Fails closed on any non-zero subcommand exit.",
+  "title": "Command with an empty-string inputs item",
+  "description": "Invalid command artefact: inputs contains an empty string, violating the minLength on input items.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds"],
+  "aiGuidance": "Defect fixture: empty-string input item.",
+  "inputs": [""],
+  "outputs": [],
+  "environmentScope": [],
+  "sideEffects": []
+}

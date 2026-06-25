@@ -1,0 +1,41 @@
+{
+  "id": "0007-authentication-contract-authority",
+  "kind": "adr",
+  "title": "Authentication contract is the sole authority for login semantics",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-25",
+  "context": "Historical login semantics in ../react are scattered across controllers and middleware, with no single normative source.",
+  "decision": "The USF authentication contract is the sole normative source for login semantics; historical implementations are evidence only.",
+  "consequences": [
+    "Login behaviour must be derived from the authentication contract, not from historical controllers.",
+    "Historical ../react login code is retained as evidence and lineage, never as live authority."
+  ],
+  "invariants": [
+    "Login semantics are defined exclusively by the authentication contract."
+  ],
+  "permittedChanges": [
+    "The authentication contract may be extended by a recorded decision that preserves existing invariants."
+  ],
+  "forbiddenDrift": [
+    "Implementations must not reintroduce login semantics that contradict the authentication contract.",
+    "Historical source behaviour must not be promoted to live authority."
+  ],
+  "aiAlignmentRules": [
+    "Do not infer login semantics from historical implementation structure.",
+    "Stop and report if a requested change would contradict the authentication contract."
+  ],
+  "semanticRefs": [
+    "authentication-contract"
+  ],
+  "sourceRefs": [
+    "src-ref-auth-service-path"
+  ],
+  "rationale": "A single normative authority prevents semantic drift across implementations.",
+  "description": "Architecture decision establishing the authentication contract as the sole authority for login semantics, with historical source treated as evidence.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This ADR is binding only while accepted; treat its invariants and forbidden drift as authoritative."
+}

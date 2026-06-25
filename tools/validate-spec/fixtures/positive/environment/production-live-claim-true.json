@@ -1,0 +1,15 @@
+{
+  "id": "usf.environment.example.production-live",
+  "title": "Production live environment with production-live claim",
+  "description": "Valid environment declaration where the environment is production-live and the production-live claim is true, which is the only honest pairing for a production-live claim.",
+  "environment": "production-live",
+  "permittedProviderModes": ["live-external-provider"],
+  "productionLiveClaim": true,
+  "readinessGateRefs": ["production-readiness-gate"],
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Environment", "Provider Mode"],
+  "taxonomyRefs": ["environment-classification"],
+  "vocabularyRefs": ["environment-classes", "provider-modes"],
+  "aiGuidance": "A production-live claim is honest only when the environment is actually production-live."
+}

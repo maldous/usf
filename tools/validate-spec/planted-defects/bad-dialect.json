@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "set",
+  "pointer": "/$schema",
+  "value": "http://json-schema.org/draft-07/schema#",
+  "expectedRule": "USF-META-002",
+  "note": "wrong dialect"
+}

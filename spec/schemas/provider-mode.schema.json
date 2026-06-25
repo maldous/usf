@@ -2,34 +2,176 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:provider-mode",
   "title": "USF Provider Mode Schema",
-  "description": "Draft JSON Schema for provider mode declarations. Records the declared provider class (provider-modes) for a provider/adapter fulfilling a port, keeping provider mode distinct from environment (environment-classes). Enforces that hermetic-mock MUST NOT satisfy a live-external-provider claim (Charter §6); a mock IdP is valid hermetic proof only. Governs the ontology concepts Provider, Provider Mode, Adapter, and Port. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for provider mode declarations. Records the declared provider class (provider-modes) for a provider/adapter fulfilling a port, keeping provider mode distinct from environment (environment-classes). Enforces that hermetic-mock MUST NOT satisfy a live-external-provider claim (Charter §6); a mock IdP is valid hermetic proof only. Governs the ontology concepts Provider, Provider Mode, Adapter, and Port. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "providerMode"],
+  "required": [
+    "id",
+    "providerMode",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "providerMode": {"type": "string", "enum": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"]},
-    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]}
+    "providerMode": {
+      "type": "string",
+      "enum": [
+        "hermetic-mock",
+        "local-composed-real-service",
+        "external-sandbox",
+        "live-external-provider"
+      ]
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "local",
+        "hermetic",
+        "integration",
+        "staging",
+        "production-shaped",
+        "production-live"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "title": {"type": "string"},
-    "providerMode": {"$ref": "#/$defs/providerMode"},
-    "port": {"type": "string", "$comment": "The port (semantic boundary) this provider fulfils."},
-    "adapter": {"type": "string", "$comment": "The adapter binding the provider to the port."},
-    "environment": {"$ref": "#/$defs/environment", "$comment": "Separate dimension; environment MUST NOT upgrade provider mode by implication."},
-    "liveExternalProviderClaim": {"type": "boolean", "default": false},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "providerMode": {
+      "$ref": "#/$defs/providerMode"
+    },
+    "port": {
+      "type": "string",
+      "$comment": "The port (semantic boundary) this provider fulfils.",
+      "minLength": 1
+    },
+    "adapter": {
+      "type": "string",
+      "$comment": "The adapter binding the provider to the port.",
+      "minLength": 1
+    },
+    "environment": {
+      "$ref": "#/$defs/environment",
+      "$comment": "Separate dimension; environment MUST NOT upgrade provider mode by implication."
+    },
+    "liveExternalProviderClaim": {
+      "type": "boolean",
+      "default": false
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   },
   "allOf": [
     {
       "$comment": "hermetic-mock MUST NOT satisfy a live-external-provider claim.",
-      "if": {"properties": {"providerMode": {"const": "hermetic-mock"}}, "required": ["providerMode"]},
-      "then": {"properties": {"liveExternalProviderClaim": {"const": false}}}
+      "if": {
+        "properties": {
+          "providerMode": {
+            "const": "hermetic-mock"
+          }
+        },
+        "required": [
+          "providerMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "liveExternalProviderClaim": {
+            "const": false
+          }
+        }
+      }
     },
     {
       "$comment": "A live-external-provider claim is only honest when the declared mode is live-external-provider.",
-      "if": {"properties": {"liveExternalProviderClaim": {"const": true}}, "required": ["liveExternalProviderClaim"]},
-      "then": {"properties": {"providerMode": {"const": "live-external-provider"}}}
+      "if": {
+        "properties": {
+          "liveExternalProviderClaim": {
+            "const": true
+          }
+        },
+        "required": [
+          "liveExternalProviderClaim"
+        ]
+      },
+      "then": {
+        "properties": {
+          "providerMode": {
+            "const": "live-external-provider"
+          }
+        }
+      }
     }
   ]
 }

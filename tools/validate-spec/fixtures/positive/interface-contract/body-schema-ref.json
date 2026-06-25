@@ -1,0 +1,25 @@
+{
+  "id": "iface-create-tenant-api",
+  "title": "Create tenant API route contract",
+  "description": "Synchronous API route that creates a tenant; its request body is described by a referenced schema.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Conform implementation to this contract; do not infer the request shape from handler code.",
+  "interfaceKind": "api-route",
+  "purpose": "Create a new tenant in the platform.",
+  "boundary": "platform-api inbound HTTP boundary",
+  "semanticContractRef": "semantic-contract:tenant-provisioning",
+  "requestContract": {
+    "schemaRef": "urn:usf:schema:semantic-contract#create-tenant-request"
+  }
+}

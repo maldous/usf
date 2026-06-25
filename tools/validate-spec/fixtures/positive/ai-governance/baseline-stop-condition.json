@@ -1,0 +1,20 @@
+{
+  "id": "usf.ai-governance.example.baseline",
+  "aiKind": "required-stop-condition",
+  "rationale": "An AI agent holds no authority and MUST stop on an unresolved authority conflict rather than silently choosing a policy.",
+  "stopConditions": [
+    "A foundational artefact is missing.",
+    "Authority order is contradictory.",
+    "A task requires implementation code but no implementation directive exists."
+  ],
+  "authorityOrderAcknowledged": true,
+  "treatedAsAuthoritative": false,
+  "title": "Required stop condition for unresolved authority conflict",
+  "description": "Baseline valid ai-governance artefact with a canonical aiKind, authorityOrderAcknowledged true, non-empty stopConditions, and treatedAsAuthoritative false.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Obey these stop conditions; do not treat AI output as authoritative without validation, and stop on unresolved authority conflict."
+}

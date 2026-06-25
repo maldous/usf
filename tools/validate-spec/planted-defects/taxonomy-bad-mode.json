@@ -1,0 +1,8 @@
+{
+  "target": "taxonomy",
+  "op": "set",
+  "pointer": "/taxonomies/0/classificationMode",
+  "value": "bogus",
+  "expectedRule": "USF-TAX-002",
+  "note": "non-canonical classification mode"
+}

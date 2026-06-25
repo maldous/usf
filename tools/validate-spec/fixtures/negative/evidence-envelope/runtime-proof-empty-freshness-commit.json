@@ -1,0 +1,15 @@
+{
+  "id": "evidence.neg-runtime-empty-commit",
+  "title": "Runtime proof evidence with empty freshness commit",
+  "description": "DEFECT: freshness.commit is an empty string.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["evidence-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "The freshness commit pin must be a non-empty string.",
+  "evidenceKind": "runtime-proof-evidence",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "freshness": { "commit": "" }
+}

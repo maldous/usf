@@ -1,0 +1,14 @@
+{
+  "id": "data.restore-evidence-drill",
+  "dataKind": "restore-evidence",
+  "title": "Restore evidence with preserved emitted and collected evidence",
+  "description": "Restore-drill evidence that preserves both emitted and collected evidence non-empty.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Backup / Restore"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Preserve emitted restore evidence through collection; a restore claim depends on collected evidence being present.",
+  "emittedEvidence": ["restore-log.json"],
+  "collectedEvidence": ["collected/restore-log.json", "collected/restore-verify.json"]
+}

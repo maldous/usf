@@ -1,0 +1,16 @@
+{
+  "id": "src-ref-missing-disposition",
+  "repository": "../react",
+  "path": "src/services/auth/loginController.ts",
+  "sourceKind": "source-file",
+  "sourceRole": "semantic-source",
+  "rationale": "Required disposition is absent.",
+  "title": "Source reference missing disposition",
+  "description": "Defect: required property disposition is missing.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because disposition is missing."
+}

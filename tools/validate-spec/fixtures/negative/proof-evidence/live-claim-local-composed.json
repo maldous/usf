@@ -1,0 +1,19 @@
+{
+  "id": "usf.proof-evidence.bad.live-claim-local-composed",
+  "kind": "proof",
+  "title": "Invalid live-external-provider claim on local-composed-real-service",
+  "description": "Rejected: a live-external-provider claim is asserted while the provider mode is local-composed-real-service; a live claim requires provider mode live-external-provider.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Provider Mode"],
+  "taxonomyRefs": ["proof-classification", "provider-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: composed-local cannot back a live-provider claim.",
+  "proofLevelClaimed": "substrate-proven",
+  "proofLevelObserved": "substrate-proven",
+  "providerMode": "local-composed-real-service",
+  "environment": "integration",
+  "liveExternalProviderClaim": true,
+  "emittedEvidence": ["trace.json"],
+  "collectedEvidence": ["trace.collected.json"]
+}

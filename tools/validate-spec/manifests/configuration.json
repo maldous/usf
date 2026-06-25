@@ -1,0 +1,50 @@
+[
+  {
+    "path": "negative/configuration/environment-configuration-missing-environment.json",
+    "schema": "configuration",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/configuration/generated-empty-source-manifest.json",
+    "schema": "configuration",
+    "keyword": "minLength",
+    "pointer": "/sourceManifest"
+  },
+  {
+    "path": "negative/configuration/generated-without-source-manifest.json",
+    "schema": "configuration",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/configuration/non-secret-setting-secretbearing-true.json",
+    "schema": "configuration",
+    "keyword": "const",
+    "pointer": "/secretBearing"
+  },
+  {
+    "path": "negative/configuration/proof-configuration-proof-relevant-false.json",
+    "schema": "configuration",
+    "keyword": "const",
+    "pointer": "/proofRelevant"
+  },
+  {
+    "path": "negative/configuration/provider-configuration-missing-provider-mode.json",
+    "schema": "configuration",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/configuration/secret-bearing-setting-secretbearing-false.json",
+    "schema": "configuration",
+    "keyword": "const",
+    "pointer": "/secretBearing"
+  },
+  {
+    "path": "negative/configuration/secret-bearing-true-with-value.json",
+    "schema": "configuration",
+    "keyword": "not",
+    "pointer": "/"
+  }
+]

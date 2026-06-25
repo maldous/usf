@@ -1,0 +1,14 @@
+{
+  "id": "data.neg-backup-empty-emitted",
+  "dataKind": "backup-evidence",
+  "title": "Backup evidence with empty emitted-evidence array",
+  "description": "DEFECT: backup evidence with emittedEvidence as an empty array (minItems 1 required for backup/restore).",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Backup / Restore"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Backup evidence emitted evidence must be non-empty.",
+  "emittedEvidence": [],
+  "collectedEvidence": ["collected/backup-manifest.json"]
+}

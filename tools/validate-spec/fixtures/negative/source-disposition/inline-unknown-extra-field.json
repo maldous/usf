@@ -1,0 +1,18 @@
+{
+  "id": "disp-inline-unknown-field",
+  "title": "Disposition: inline sourceRef with unknown extra field",
+  "description": "Defect: inline sourceRef object carries an unknown property, violating additionalProperties false.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "This instance must be rejected because the inline source reference has an unknown extra field.",
+  "sourceRef": {
+    "repository": "../react",
+    "path": "src/services/auth/loginController.ts",
+    "branch": "main"
+  },
+  "disposition": "preserve",
+  "rationale": "Inline reference carries an unknown 'branch' property."
+}

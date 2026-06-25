@@ -1,0 +1,35 @@
+{
+  "id": "wf-step-without-id",
+  "workflowKind": "workflow",
+  "title": "Workflow with a step missing id",
+  "description": "DEFECT: a step object omits the required id.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because every step must carry an id.",
+  "participants": [
+    "platform-api"
+  ],
+  "ordering": "sequential",
+  "steps": [
+    {
+      "description": "A step that forgot its id.",
+      "operation": "tenant.create"
+    }
+  ],
+  "stateTransitions": [],
+  "failurePaths": [
+    "abort"
+  ],
+  "compensationPaths": [
+    "rollback"
+  ]
+}

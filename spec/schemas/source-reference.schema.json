@@ -2,32 +2,220 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:source-reference",
   "title": "USF Source Reference Schema",
-  "description": "Draft JSON Schema for references to historical (../react) and current source evidence (rank-6 historical-source-evidence). Each reference declares the repository, a resolvable path and/or commit/tag, a source kind (source-kinds), a source role (source-roles), and a disposition (disposition-values), so lineage is traceable and source paths never become USF target architecture. Governs the ontology concepts Source Reference and Evidence. Historical forbidden tokens (v2, legacy, ...) are permitted inside the path field because it is quoted historical evidence. Reference resolution is validator-deferred per schema-authoring-standard §24. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for references to historical (../react) and current source evidence (rank-6 historical-source-evidence). Each reference declares the repository, a resolvable path and/or commit/tag, a source kind (source-kinds), a source role (source-roles), and a disposition (disposition-values), so lineage is traceable and source paths never become USF target architecture. Governs the ontology concepts Source Reference and Evidence. Historical forbidden tokens (v2, legacy, ...) are permitted inside the path field because it is quoted historical evidence. Reference resolution is validator-deferred per schema-authoring-standard §24. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "repository", "sourceKind", "sourceRole", "disposition", "rationale"],
+  "required": [
+    "id",
+    "repository",
+    "sourceKind",
+    "sourceRole",
+    "disposition",
+    "rationale",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "sourceKind": {"type": "string", "enum": ["source-file", "semantic-artefact", "documentation", "make-target", "package-script", "environment-variable", "configuration-file", "configuration-key", "compose-service", "application", "package", "module", "test", "e2e-journey", "proof-script", "generated-report", "readiness-gate", "operational-semantic", "event-semantic", "ui-semantic", "data-migration-artefact", "observability-audit-artefact"]},
-    "sourceRole": {"type": "string", "enum": ["semantic-source", "behavioural-evidence", "proof-evidence", "operational-evidence", "configuration-evidence", "command-evidence", "ui-evidence", "interface-evidence", "event-workflow-evidence", "data-evidence", "observability-audit-evidence", "generated-summary-evidence", "historical-lineage"]},
-    "disposition": {"type": "string", "enum": ["preserve", "rename", "refactor", "merge", "split", "replace", "retire", "defer", "reject"]}
+    "sourceKind": {
+      "type": "string",
+      "enum": [
+        "source-file",
+        "semantic-artefact",
+        "documentation",
+        "make-target",
+        "package-script",
+        "environment-variable",
+        "configuration-file",
+        "configuration-key",
+        "compose-service",
+        "application",
+        "package",
+        "module",
+        "test",
+        "e2e-journey",
+        "proof-script",
+        "generated-report",
+        "readiness-gate",
+        "operational-semantic",
+        "event-semantic",
+        "ui-semantic",
+        "data-migration-artefact",
+        "observability-audit-artefact"
+      ]
+    },
+    "sourceRole": {
+      "type": "string",
+      "enum": [
+        "semantic-source",
+        "behavioural-evidence",
+        "proof-evidence",
+        "operational-evidence",
+        "configuration-evidence",
+        "command-evidence",
+        "ui-evidence",
+        "interface-evidence",
+        "event-workflow-evidence",
+        "data-evidence",
+        "observability-audit-evidence",
+        "generated-summary-evidence",
+        "historical-lineage"
+      ]
+    },
+    "disposition": {
+      "type": "string",
+      "enum": [
+        "preserve",
+        "rename",
+        "refactor",
+        "merge",
+        "split",
+        "replace",
+        "retire",
+        "defer",
+        "reject"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
-    "repository": {"type": "string", "minLength": 1, "$comment": "Originating repository, e.g. '../react' / 'maldous/react'. Marked external so historical paths are not mistaken for USF targets."},
-    "path": {"type": "string", "$comment": "Verbatim historical path; MAY contain historical forbidden tokens because it is quoted evidence, never a USF target path."},
-    "commit": {"type": "string"},
-    "tag": {"type": "string"},
-    "sourceKind": {"$ref": "#/$defs/sourceKind"},
-    "sourceRole": {"$ref": "#/$defs/sourceRole"},
-    "evidenceRole": {"type": "string", "enum": ["raw-source-evidence", "semantic-evidence", "runtime-proof-evidence", "normalised-evidence", "generated-report", "attestation", "import-evidence", "validation-evidence", "operational-evidence", "audit-evidence"]},
-    "disposition": {"$ref": "#/$defs/disposition"},
-    "rationale": {"type": "string", "minLength": 1},
-    "relatedUsfArtefact": {"type": "string"},
-    "proofRef": {"type": "string"}
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Originating repository, e.g. '../react' / 'maldous/react'. Marked external so historical paths are not mistaken for USF targets."
+    },
+    "path": {
+      "type": "string",
+      "$comment": "Verbatim historical path; MAY contain historical forbidden tokens because it is quoted evidence, never a USF target path.",
+      "minLength": 1
+    },
+    "commit": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tag": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceKind": {
+      "$ref": "#/$defs/sourceKind"
+    },
+    "sourceRole": {
+      "$ref": "#/$defs/sourceRole"
+    },
+    "evidenceRole": {
+      "type": "string",
+      "enum": [
+        "raw-source-evidence",
+        "semantic-evidence",
+        "runtime-proof-evidence",
+        "normalised-evidence",
+        "generated-report",
+        "attestation",
+        "import-evidence",
+        "validation-evidence",
+        "operational-evidence",
+        "audit-evidence"
+      ]
+    },
+    "disposition": {
+      "$ref": "#/$defs/disposition"
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relatedUsfArtefact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proofRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "historical-source-evidence",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   },
   "anyOf": [
-    {"required": ["path"]},
-    {"required": ["commit"]},
-    {"required": ["tag"]}
+    {
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "required": [
+        "commit"
+      ]
+    },
+    {
+      "required": [
+        "tag"
+      ]
+    }
   ]
 }

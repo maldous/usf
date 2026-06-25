@@ -1,0 +1,32 @@
+{
+  "id": "wf-nightly-reconciliation",
+  "workflowKind": "asynchronous-operation",
+  "title": "Nightly reconciliation workflow",
+  "description": "Boundary case: a single-implicit-participant workflow with empty participants and no explicit state machine, still declaring a step plus failure and compensation paths.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Empty participants and state transitions are permitted; failure and compensation paths are still mandatory.",
+  "participants": [],
+  "ordering": "single-pass",
+  "steps": [
+    {
+      "id": "reconcile-ledger"
+    }
+  ],
+  "stateTransitions": [],
+  "failurePaths": [
+    "reconciliation-aborted-alert"
+  ],
+  "compensationPaths": [
+    "no-compensation-required-idempotent-rerun"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "usf.proof-evidence.bad.claimed-above-observed",
+  "kind": "proof",
+  "title": "Invalid proof overclaiming the proof level",
+  "description": "Rejected: the claimed proof level exceeds the observed proof level, which is overclaim and MUST fail closed.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Proof Level"],
+  "taxonomyRefs": ["proof-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: claimed exceeds observed.",
+  "proofLevelClaimed": "substrate-proven",
+  "proofLevelObserved": "contract-proven",
+  "providerMode": "local-composed-real-service",
+  "environment": "integration",
+  "emittedEvidence": ["trace.json"],
+  "collectedEvidence": ["trace.collected.json"]
+}

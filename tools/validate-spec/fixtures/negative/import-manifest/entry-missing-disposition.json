@@ -1,0 +1,20 @@
+{
+  "id": "import-manifest-entry-missing-disposition",
+  "title": "Import manifest: entry missing disposition",
+  "sourceRepository": "../react",
+  "entries": [
+    {
+      "sourceRef": "src-ref-auth-service-path",
+      "sourceKind": "source-file",
+      "sourceRole": "semantic-source",
+      "rationale": "Entry omits the required disposition."
+    }
+  ],
+  "description": "Defect: an entry is missing the required disposition property.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Disposition"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because an entry lacks a disposition."
+}

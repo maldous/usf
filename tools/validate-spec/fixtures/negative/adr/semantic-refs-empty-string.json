@@ -1,0 +1,21 @@
+{
+  "id": "0012-semantic-refs-empty-string",
+  "kind": "adr",
+  "title": "ADR with empty-string semantic reference",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "context": "An ADR whose only semantic reference is an empty string.",
+  "decision": "Test that an empty-string semanticRefs item is rejected.",
+  "consequences": ["An empty reference is not resolvable."],
+  "invariants": ["Each semantic reference must be a non-empty string."],
+  "forbiddenDrift": ["Do not record an empty reference."],
+  "aiAlignmentRules": ["Stop if a reference is empty."],
+  "permittedChanges": ["A reference may be replaced with a non-empty value by a recorded decision."],
+  "semanticRefs": [""],
+  "description": "Defect: semanticRefs contains an empty string, violating item minLength 1.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because a semantic reference is empty."
+}

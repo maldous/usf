@@ -1,0 +1,14 @@
+{
+  "id": "usf.environment.bad.staging-claim-true",
+  "title": "Invalid production-live claim on a non-production-live environment",
+  "description": "Rejected: a production-live claim is asserted while the environment is staging; a production-live claim requires the environment to actually be production-live.",
+  "environment": "staging",
+  "permittedProviderModes": ["external-sandbox"],
+  "productionLiveClaim": true,
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Environment"],
+  "taxonomyRefs": ["environment-classification"],
+  "vocabularyRefs": ["environment-classes", "provider-modes"],
+  "aiGuidance": "This record is intentionally invalid: staging cannot carry a production-live claim."
+}

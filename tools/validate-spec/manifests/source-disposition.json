@@ -1,0 +1,8 @@
+[
+  {"path":"negative/source-disposition/implies-acceptance-true.json","schema":"source-disposition","keyword":"const","pointer":"/impliesImplementationAcceptance"},
+  {"path":"negative/source-disposition/inline-empty-path.json","schema":"source-disposition","keyword":"oneOf","pointer":"/sourceRef"},
+  {"path":"negative/source-disposition/inline-no-locator.json","schema":"source-disposition","keyword":"oneOf","pointer":"/sourceRef"},
+  {"path":"negative/source-disposition/inline-unknown-extra-field.json","schema":"source-disposition","keyword":"oneOf","pointer":"/sourceRef"},
+  {"path":"negative/source-disposition/missing-disposition.json","schema":"source-disposition","keyword":"required","pointer":"/"},
+  {"path":"negative/source-disposition/missing-rationale.json","schema":"source-disposition","keyword":"required","pointer":"/"}
+]

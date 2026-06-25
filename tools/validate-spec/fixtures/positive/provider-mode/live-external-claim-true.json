@@ -1,0 +1,16 @@
+{
+  "id": "usf.provider-mode.example.live-external",
+  "title": "Live external provider mode with live claim",
+  "description": "Valid provider-mode declaration where the declared mode is live-external-provider and the live-external-provider claim is true, which is the only honest pairing for a live claim.",
+  "providerMode": "live-external-provider",
+  "port": "identity-provider-port",
+  "adapter": "external-oidc-adapter",
+  "environment": "staging",
+  "liveExternalProviderClaim": true,
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Provider", "Provider Mode", "Adapter", "Port"],
+  "taxonomyRefs": ["provider-classification"],
+  "vocabularyRefs": ["provider-modes", "environment-classes"],
+  "aiGuidance": "A live-external-provider claim is honest only when the declared mode is live-external-provider."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "data.neg-restore-no-emitted",
+  "dataKind": "restore-evidence",
+  "title": "Restore evidence missing emitted evidence",
+  "description": "DEFECT: restore evidence with collected evidence but no emittedEvidence.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Backup / Restore"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Restore evidence must preserve emitted evidence.",
+  "collectedEvidence": ["collected/restore-log.json"]
+}

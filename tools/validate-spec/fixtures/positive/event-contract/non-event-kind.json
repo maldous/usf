@@ -1,0 +1,20 @@
+{
+  "id": "evt-tenant-onboarding-workflow",
+  "title": "Tenant onboarding workflow interaction contract",
+  "description": "A workflow-kind contract that legitimately omits the event-only fields, since the event-kind conditional does not apply.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Event",
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Workflow-kind contracts need not declare event payload/producer/ordering fields.",
+  "eventKind": "workflow",
+  "failureSemantics": "Workflow failure triggers the documented compensation path."
+}

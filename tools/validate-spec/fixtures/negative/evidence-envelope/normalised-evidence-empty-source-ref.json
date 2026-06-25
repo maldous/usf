@@ -1,0 +1,13 @@
+{
+  "id": "evidence.neg-normalised-empty-source-ref",
+  "title": "Normalised evidence with empty-string source ref",
+  "description": "DEFECT: normalised-evidence sourceRefs contains an empty string.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["evidence-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "Source references must be non-empty strings.",
+  "evidenceKind": "normalised-evidence",
+  "sourceRefs": [""]
+}

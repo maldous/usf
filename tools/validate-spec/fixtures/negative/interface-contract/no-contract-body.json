@@ -1,0 +1,21 @@
+{
+  "id": "iface-no-body",
+  "title": "Interface with no contract body",
+  "description": "DEFECT: declares no input/output/request/response contract body at all, violating the top-level anyOf.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Should be rejected because at least one contract body is required.",
+  "interfaceKind": "api-route",
+  "purpose": "An interface missing every contract body.",
+  "boundary": "platform-api inbound HTTP boundary",
+  "semanticContractRef": "semantic-contract:tenant-provisioning"
+}

@@ -2,51 +2,240 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:semantic-contract",
   "title": "USF Semantic Contract Schema",
-  "description": "Draft JSON Schema for rank-1 semantic contracts (capability facets and related contracts). Carries an authority level (authority-levels) and lifecycle state (lifecycle-states), governed ontology concepts, and a facet set; a facet asserted complete MUST cite authoritative evidence, otherwise it is a gap. Governs the ontology concepts Semantic Contract, Capability, Port, Interface, Configuration, and Data Model. NOTE: the capability-domains vocabulary value set is DEFERRED (no canonical values authored yet); therefore capabilityDomain is modelled as an open string and is NOT enum-constrained here, recorded as deferred per schema-authoring-standard and the vocabulary catalogue. Validators MUST NOT accept historical capability labels as canonical until that value set is populated. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for rank-1 semantic contracts (capability facets and related contracts). Carries an authority level (authority-levels) and lifecycle state (lifecycle-states), governed ontology concepts, and a facet set; a facet asserted complete MUST cite authoritative evidence, otherwise it is a gap. Governs the ontology concepts Semantic Contract, Capability, Port, Interface, Configuration, and Data Model. NOTE: the capability-domains vocabulary value set is DEFERRED (no canonical values authored yet); therefore capabilityDomain is modelled as an open string and is NOT enum-constrained here, recorded as deferred per schema-authoring-standard and the vocabulary catalogue. Validators MUST NOT accept historical capability labels as canonical until that value set is populated. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "title", "authorityLevel", "lifecycleState", "facets"],
+  "required": [
+    "id",
+    "title",
+    "authorityLevel",
+    "lifecycleState",
+    "facets",
+    "description",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "authorityLevel": {"type": "string", "enum": ["semantic-definition", "adr", "validator-rule", "runtime-proof-evidence", "source-implementation", "historical-source-evidence", "generated-report"]},
-    "lifecycleState": {"type": "string", "enum": ["proposed", "planned", "draft", "active", "deprecated", "retired", "replaced", "deferred"]},
     "facet": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status"],
+      "required": [
+        "status"
+      ],
       "properties": {
-        "status": {"type": "string", "enum": ["complete", "gap", "not-applicable"], "$comment": "A facet is 'complete' only with authoritative backing; otherwise 'gap'."},
-        "description": {"type": "string"},
-        "evidenceRefs": {"type": "array", "items": {"type": "string"}},
-        "sourceRefs": {"type": "array", "items": {"type": "string"}}
+        "status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "gap",
+            "not-applicable"
+          ],
+          "$comment": "A facet is 'complete' only with authoritative backing; otherwise 'gap'."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
       },
       "allOf": [
         {
           "$comment": "Drop to gap if backing is missing: a complete facet must cite at least one evidence or source reference.",
-          "if": {"properties": {"status": {"const": "complete"}}, "required": ["status"]},
-          "then": {"anyOf": [
-            {"required": ["evidenceRefs"], "properties": {"evidenceRefs": {"minItems": 1}}},
-            {"required": ["sourceRefs"], "properties": {"sourceRefs": {"minItems": 1}}}
-          ]}
+          "if": {
+            "properties": {
+              "status": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "evidenceRefs"
+                ],
+                "properties": {
+                  "evidenceRefs": {
+                    "minItems": 1
+                  }
+                }
+              },
+              {
+                "required": [
+                  "sourceRefs"
+                ],
+                "properties": {
+                  "sourceRefs": {
+                    "minItems": 1
+                  }
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "kind": {"type": "string"},
-    "title": {"type": "string", "minLength": 1},
-    "description": {"type": "string"},
-    "authorityLevel": {"$ref": "#/$defs/authorityLevel"},
-    "lifecycleState": {"$ref": "#/$defs/lifecycleState"},
-    "capability": {"type": "string"},
-    "capabilityDomain": {"type": "string", "$comment": "DEFERRED value set capability-domains: open string until canonical values are authored; do not treat historical ../react labels as canonical."},
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capabilityDomain": {
+      "type": "string",
+      "$comment": "DEFERRED value set capability-domains: open string until canonical values are authored; do not treat historical ../react labels as canonical.",
+      "minLength": 1
+    },
     "facets": {
       "type": "object",
-      "minProperties": 1,
-      "additionalProperties": {"$ref": "#/$defs/facet"},
-      "$comment": "Historical facet set: lifecycle, stateModel, permissions, contracts, validation, errorModel, auditModel, readinessModel, proof, uiSemanticDefinition."
+      "additionalProperties": false,
+      "required": [
+        "lifecycle",
+        "stateModel",
+        "permissions",
+        "contracts",
+        "validation",
+        "errorModel",
+        "auditModel",
+        "readinessModel",
+        "proof",
+        "uiSemanticDefinition"
+      ],
+      "properties": {
+        "lifecycle": {
+          "$ref": "#/$defs/facet"
+        },
+        "stateModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "permissions": {
+          "$ref": "#/$defs/facet"
+        },
+        "contracts": {
+          "$ref": "#/$defs/facet"
+        },
+        "validation": {
+          "$ref": "#/$defs/facet"
+        },
+        "errorModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "auditModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "readinessModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "proof": {
+          "$ref": "#/$defs/facet"
+        },
+        "uiSemanticDefinition": {
+          "$ref": "#/$defs/facet"
+        }
+      },
+      "$comment": "The ten capability facets (../react v1-capability-closure). All ten are required; each facet marked complete must cite evidence (see $defs/facet)."
     },
-    "sourceRefs": {"type": "array", "items": {"type": "string"}},
-    "adrRefs": {"type": "array", "items": {"type": "string"}}
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "adrRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    }
   }
 }

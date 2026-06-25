@@ -1,0 +1,16 @@
+{
+  "id": "src-ref-missing-source-kind",
+  "repository": "../react",
+  "path": "src/services/auth/loginController.ts",
+  "sourceRole": "semantic-source",
+  "disposition": "preserve",
+  "rationale": "Required sourceKind is absent.",
+  "title": "Source reference missing sourceKind",
+  "description": "Defect: required property sourceKind is missing.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because sourceKind is missing."
+}

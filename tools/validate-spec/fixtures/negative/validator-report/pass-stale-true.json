@@ -1,0 +1,18 @@
+{
+  "id": "usf.validator-report.bad.pass-stale-true",
+  "authorityLevel": "generated-report",
+  "status": "pass",
+  "findings": [],
+  "evidenceRefs": ["evidence/foundation-consistency.collected.json"],
+  "freshness": {
+    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "stale": true
+  },
+  "title": "Invalid pass report on stale evidence",
+  "description": "Rejected: a pass status while the evidence is stale; a stale report MUST NOT satisfy pass.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Validator", "Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["report-statuses", "validation-severities"],
+  "aiGuidance": "This record is intentionally invalid: stale evidence cannot back a pass."
+}

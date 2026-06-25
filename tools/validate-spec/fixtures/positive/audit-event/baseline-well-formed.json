@@ -1,0 +1,22 @@
+{
+  "id": "usf.audit-event.example.baseline",
+  "auditKind": "security-sensitive-audit",
+  "actor": "authenticated-user",
+  "action": "update-permission-grant",
+  "subject": "tenant-role-binding",
+  "timestampSemantics": "Server-assigned UTC timestamp recorded at the moment the privileged action is committed.",
+  "securitySensitive": true,
+  "stateChanging": true,
+  "title": "Permission grant update audit event",
+  "description": "Baseline valid audit-event artefact with all required fields present and well-formed, covering a security-sensitive, state-changing privileged action.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Audit Event"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["audit-event-kinds"],
+  "aiGuidance": "Treat this audit semantic as mandatory coverage for the privileged action; do not remove or downgrade audit coverage as an incidental refactor.",
+  "relatedInterface": "permission-grant-api",
+  "relatedWorkflow": "permission-management-workflow",
+  "semanticContractRef": "urn:usf:contract:permission-management",
+  "sourceRefs": ["../react/docs/v2-foundation/audit-model.json#permission-grant"]
+}

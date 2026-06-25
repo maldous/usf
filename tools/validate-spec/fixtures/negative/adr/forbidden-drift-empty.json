@@ -1,0 +1,21 @@
+{
+  "id": "0013-forbidden-drift-empty",
+  "kind": "adr",
+  "title": "ADR with empty forbiddenDrift array",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "context": "An ADR that records no forbidden drift.",
+  "decision": "Test that an empty forbiddenDrift array is rejected.",
+  "consequences": ["Drift cannot be constrained without recorded prohibitions."],
+  "invariants": ["forbiddenDrift must contain at least one rule."],
+  "forbiddenDrift": [],
+  "aiAlignmentRules": ["Stop if no forbidden drift is recorded."],
+  "permittedChanges": ["Forbidden drift rules may be added by a recorded decision."],
+  "semanticRefs": ["authentication-contract"],
+  "description": "Defect: forbiddenDrift is empty, violating minItems 1.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because forbiddenDrift is empty."
+}

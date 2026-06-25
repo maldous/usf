@@ -1,0 +1,17 @@
+{
+  "id": "disp-auth-controller-inline-path",
+  "title": "Disposition: refactor auth controller (inline sourceRef path)",
+  "description": "Records a refactor disposition with an inline source reference located by repository and verbatim path.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "The inline path is quoted historical evidence and must not become a USF target path.",
+  "sourceRef": {
+    "repository": "../react",
+    "path": "src/services/auth/loginController.ts"
+  },
+  "disposition": "refactor",
+  "rationale": "The historical login controller will be refactored into the USF authentication contract while preserving lineage."
+}

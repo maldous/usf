@@ -1,0 +1,8 @@
+{
+  "target": "registry",
+  "op": "set",
+  "pointer": "/schemas/0/path",
+  "value": "spec/schemas/ghost.schema.json",
+  "expectedRule": "USF-REG-002",
+  "note": "registry entry points at a missing file"
+}

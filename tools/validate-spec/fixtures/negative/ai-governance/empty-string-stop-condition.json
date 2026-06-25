@@ -1,0 +1,15 @@
+{
+  "id": "usf.ai-governance.negative.empty-string-stop-condition",
+  "aiKind": "ai-instruction",
+  "rationale": "Artefact whose stopConditions array contains an empty string item.",
+  "stopConditions": [""],
+  "authorityOrderAcknowledged": true,
+  "title": "AI governance artefact with an empty-string stopConditions item",
+  "description": "Invalid ai-governance artefact: stopConditions contains an empty string, violating the minLength on stop-condition items.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Defect fixture: empty-string stop condition item."
+}

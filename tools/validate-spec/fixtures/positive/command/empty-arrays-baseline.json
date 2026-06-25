@@ -1,0 +1,18 @@
+{
+  "id": "usf.command.example.empty-arrays-baseline",
+  "commandKind": "make-target",
+  "purpose": "Run the full hermetic proof and validation pipeline as the authoritative full-confidence command.",
+  "failureSemantics": "Fails closed on any non-zero subcommand exit; does not substitute mock success for unavailable providers.",
+  "title": "Baseline command with empty inputs, outputs, environmentScope and sideEffects",
+  "description": "Baseline valid command artefact whose inputs, outputs, environmentScope and sideEffects arrays are all empty, which the schema permits, exercising the required-but-may-be-empty array boundary.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds", "environment-classes"],
+  "aiGuidance": "Treat empty inputs/outputs/environmentScope/sideEffects as a deliberate declaration of an environment-agnostic, effect-free command, not as missing data to be inferred.",
+  "inputs": [],
+  "outputs": [],
+  "environmentScope": [],
+  "sideEffects": []
+}

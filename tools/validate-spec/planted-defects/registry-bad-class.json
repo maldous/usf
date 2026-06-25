@@ -1,0 +1,8 @@
+{
+  "target": "registry",
+  "op": "set",
+  "pointer": "/schemas/0/class",
+  "value": "not-a-class",
+  "expectedRule": "USF-REG-008",
+  "note": "non-canonical class"
+}

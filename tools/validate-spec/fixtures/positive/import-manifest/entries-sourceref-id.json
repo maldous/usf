@@ -1,0 +1,29 @@
+{
+  "id": "import-manifest-auth-id-refs",
+  "title": "Import manifest: auth entries referencing source references by id",
+  "sourceRepository": "../react",
+  "entries": [
+    {
+      "sourceRef": "src-ref-auth-service-path",
+      "sourceKind": "source-file",
+      "sourceRole": "semantic-source",
+      "disposition": "preserve",
+      "rationale": "Login controller preserved as semantic source for the authentication contract.",
+      "targetUsfConcept": "Authentication Contract"
+    },
+    {
+      "sourceRef": "src-ref-auth-service-tag",
+      "sourceKind": "package",
+      "sourceRole": "historical-lineage",
+      "disposition": "reject",
+      "rationale": "Tagged package recorded as lineage but rejected from the USF target architecture."
+    }
+  ],
+  "description": "Controlled import manifest with every entry complete and source references given as ids.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Disposition"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "Each entry records a disposition so no source element disappears without a decision."
+}

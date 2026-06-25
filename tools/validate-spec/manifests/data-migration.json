@@ -1,0 +1,56 @@
+[
+  {
+    "path": "negative/data-migration/backup-empty-emitted-evidence.json",
+    "schema": "data-migration",
+    "keyword": "minItems",
+    "pointer": "/emittedEvidence"
+  },
+  {
+    "path": "negative/data-migration/backup-empty-string-evidence-item.json",
+    "schema": "data-migration",
+    "keyword": "minLength",
+    "pointer": "/emittedEvidence/0"
+  },
+  {
+    "path": "negative/data-migration/backup-missing-collected-evidence.json",
+    "schema": "data-migration",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/data-migration/migration-empty-checksum.json",
+    "schema": "data-migration",
+    "keyword": "minLength",
+    "pointer": "/checksum"
+  },
+  {
+    "path": "negative/data-migration/migration-immutable-false.json",
+    "schema": "data-migration",
+    "keyword": "const",
+    "pointer": "/immutable"
+  },
+  {
+    "path": "negative/data-migration/migration-missing-checksum.json",
+    "schema": "data-migration",
+    "keyword": "required",
+    "pointer": "/"
+  },
+  {
+    "path": "negative/data-migration/migration-order-below-one.json",
+    "schema": "data-migration",
+    "keyword": "minimum",
+    "pointer": "/migrationOrder"
+  },
+  {
+    "path": "negative/data-migration/restore-empty-collected-evidence.json",
+    "schema": "data-migration",
+    "keyword": "minItems",
+    "pointer": "/collectedEvidence"
+  },
+  {
+    "path": "negative/data-migration/restore-missing-emitted-evidence.json",
+    "schema": "data-migration",
+    "keyword": "required",
+    "pointer": "/"
+  }
+]

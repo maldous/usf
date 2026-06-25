@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "configuration",
+  "op": "append",
+  "pointer": "/$defs/providerMode/enum",
+  "value": "hermetic",
+  "expectedRule": "USF-ENUM-002",
+  "note": "alias of provider-modes used as canonical"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "usf.proof-evidence.example.discovery",
+  "kind": "proof",
+  "title": "Discovery-level proof with empty emitted and collected evidence",
+  "description": "Valid discovery-level proof-evidence record. At discovery level the fail-closed evidence requirement does not apply, so emitted and collected evidence arrays may be empty.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Proof Level"],
+  "taxonomyRefs": ["proof-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "Discovery level is the floor; it asserts only that a behaviour was identified, not exercised.",
+  "claimExercised": "Capability surface discovered but not yet exercised.",
+  "proofLevelClaimed": "discovery-proven",
+  "proofLevelObserved": "discovery-proven",
+  "providerMode": "hermetic-mock",
+  "environment": "local",
+  "liveExternalProviderClaim": false,
+  "emittedEvidence": [],
+  "collectedEvidence": []
+}

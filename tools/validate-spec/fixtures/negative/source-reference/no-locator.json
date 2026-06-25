@@ -1,0 +1,16 @@
+{
+  "id": "src-ref-no-locator",
+  "repository": "../react",
+  "sourceKind": "source-file",
+  "sourceRole": "semantic-source",
+  "disposition": "preserve",
+  "rationale": "Repository present but no path, commit, or tag, so the reference is not resolvable.",
+  "title": "Source reference missing any locator",
+  "description": "Defect: repository only, with no path/commit/tag, violating the anyOf locator requirement.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because no locator is present."
+}

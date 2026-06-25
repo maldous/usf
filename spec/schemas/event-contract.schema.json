@@ -2,35 +2,188 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:event-contract",
   "title": "USF Event Contract Schema",
-  "description": "Draft JSON Schema for event and message contracts. Each declares its kind (event-workflow-kinds), a payload schema reference, producer and consumers, ordering expectation, idempotency key, retry and dead-letter policy, retention, and whether it is canonical or test-only. Events MUST have a contract before emission and MUST NOT be invented in implementation code. USF claims no full AsyncAPI compliance until concrete artefacts exist. Governs the ontology concept Event. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for event and message contracts. Each declares its kind (event-workflow-kinds); event and message kinds additionally require a payload schema reference, producer, ordering, idempotency key, dead-letter policy, retention, and the canonical-vs-test-only flag before emission. Events MUST NOT be invented in implementation code. USF claims no full AsyncAPI compliance until concrete artefacts exist. Governs the ontology concept Event. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11); kind (artefact-kinds) and version are deviated/deferred (recorded per section 9.3). lifecycleState draft; not active.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "eventKind"],
+  "required": [
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "eventKind"
+  ],
   "$defs": {
-    "eventWorkflowKind": {"type": "string", "enum": ["event", "message", "workflow", "cross-capability-interaction", "state-transition", "asynchronous-operation", "synchronous-operation", "failure-path", "compensation-path"]}
+    "kebab": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "eventWorkflowKind": {
+      "type": "string",
+      "enum": [
+        "event",
+        "message",
+        "workflow",
+        "cross-capability-interaction",
+        "state-transition",
+        "asynchronous-operation",
+        "synchronous-operation",
+        "failure-path",
+        "compensation-path"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "eventKind": {"$ref": "#/$defs/eventWorkflowKind"},
-    "title": {"type": "string"},
-    "payloadSchemaRef": {"type": "string"},
-    "schemaVersion": {"type": "string"},
-    "producer": {"type": "string"},
-    "consumers": {"type": "array", "items": {"type": "string"}},
-    "ordering": {"type": "string"},
-    "idempotencyKey": {"type": "string"},
-    "retryPolicy": {"type": "string"},
-    "dlqPolicy": {"type": "string"},
-    "retention": {"type": "string"},
-    "canonical": {"type": "boolean", "$comment": "true = canonical event; false = test-only event."},
-    "failureSemantics": {"type": "string"},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels value pinned to the registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eventKind": {
+      "$ref": "#/$defs/eventWorkflowKind"
+    },
+    "payloadSchemaRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemaVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "consumers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "ordering": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "retryPolicy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dlqPolicy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "retention": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonical": {
+      "type": "boolean",
+      "$comment": "true = canonical event; false = test-only event."
+    },
+    "failureSemantics": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
   },
   "allOf": [
     {
-      "$comment": "An event/message contract must carry payload, ordering, idempotency, DLQ, and retention semantics before emission.",
-      "if": {"properties": {"eventKind": {"enum": ["event", "message"]}}, "required": ["eventKind"]},
-      "then": {"required": ["payloadSchemaRef", "ordering", "idempotencyKey", "dlqPolicy", "retention"]}
+      "$comment": "An event/message contract must carry payload, producer, ordering, idempotency, DLQ, retention, and the canonical flag before emission.",
+      "if": {
+        "properties": {
+          "eventKind": {
+            "enum": [
+              "event",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "eventKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "payloadSchemaRef",
+          "producer",
+          "ordering",
+          "idempotencyKey",
+          "dlqPolicy",
+          "retention",
+          "canonical"
+        ]
+      }
     }
   ]
 }

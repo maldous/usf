@@ -1,0 +1,3 @@
+# Dev/CI dependencies for the USF spec validator (tools/validate-spec/validate-spec.py).
+# Pinned for reproducible CI; this is the normative validator runtime dependency.
+jsonschema==4.10.3

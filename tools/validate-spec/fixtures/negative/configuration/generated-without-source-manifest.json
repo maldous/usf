@@ -1,0 +1,15 @@
+{
+  "id": "config.neg-generated-no-manifest",
+  "configurationKind": "configuration-file",
+  "title": "Generated configuration missing source manifest",
+  "description": "DEFECT: generated true but no sourceManifest declared.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds"],
+  "aiGuidance": "Generated configuration must declare the source manifest it is regenerated from.",
+  "purpose": "Project a manifest into a runtime file.",
+  "secretBearing": false,
+  "generated": true
+}

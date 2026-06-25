@@ -1,0 +1,19 @@
+{
+  "id": "usf.proof-evidence.bad.live-claim-below-substrate",
+  "kind": "proof",
+  "title": "Invalid live-external-provider claim below the substrate floor",
+  "description": "Rejected: a live-external-provider claim is asserted with provider mode live-external-provider but the observed level is behaviour-proven, below the substrate floor; the live-provider floor is not met.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Proof Level", "Provider Mode"],
+  "taxonomyRefs": ["proof-classification", "provider-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: a live claim below the substrate floor is overclaim.",
+  "proofLevelClaimed": "behaviour-proven",
+  "proofLevelObserved": "behaviour-proven",
+  "providerMode": "live-external-provider",
+  "environment": "staging",
+  "liveExternalProviderClaim": true,
+  "emittedEvidence": ["trace.json"],
+  "collectedEvidence": ["trace.collected.json"]
+}

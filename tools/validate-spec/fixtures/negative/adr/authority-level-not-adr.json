@@ -1,0 +1,21 @@
+{
+  "id": "0010-authority-level-not-adr",
+  "kind": "adr",
+  "title": "ADR with wrong authorityLevel value",
+  "authorityLevel": "semantic-definition",
+  "decisionStatus": "accepted",
+  "context": "An ADR whose authorityLevel is not the const value adr.",
+  "decision": "Test that a non-adr authorityLevel is rejected.",
+  "consequences": ["The artefact would claim the wrong authority rank."],
+  "invariants": ["authorityLevel must equal adr."],
+  "forbiddenDrift": ["Do not set authorityLevel to any value other than adr."],
+  "aiAlignmentRules": ["Stop if authorityLevel disagrees with the schema const."],
+  "permittedChanges": ["The authorityLevel value may be corrected by a recorded decision."],
+  "semanticRefs": ["authentication-contract"],
+  "description": "Defect: authorityLevel is 'semantic-definition', not the const 'adr'.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because authorityLevel is not adr."
+}

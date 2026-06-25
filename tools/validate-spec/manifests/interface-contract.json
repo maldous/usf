@@ -1,0 +1,8 @@
+[
+  {"path":"negative/interface-contract/contract-body-extra-property.json", "schema":"interface-contract", "keyword":"additionalProperties", "pointer":"/requestContract"},
+  {"path":"negative/interface-contract/empty-contract-body.json", "schema":"interface-contract", "keyword":"anyOf", "pointer":"/requestContract"},
+  {"path":"negative/interface-contract/extensions-empty-object.json", "schema":"interface-contract", "keyword":"minProperties", "pointer":"/responseContract/extensions"},
+  {"path":"negative/interface-contract/fields-empty-array.json", "schema":"interface-contract", "keyword":"minItems", "pointer":"/outputContract/fields"},
+  {"path":"negative/interface-contract/no-contract-body.json", "schema":"interface-contract", "keyword":"anyOf", "pointer":"/"},
+  {"path":"negative/interface-contract/schema-ref-empty-string.json", "schema":"interface-contract", "keyword":"minLength", "pointer":"/requestContract/schemaRef"}
+]

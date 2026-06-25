@@ -1,0 +1,11 @@
+[
+  {"path":"negative/source-reference/disposition-not-in-vocabulary.json","schema":"source-reference","keyword":"enum","pointer":"/disposition"},
+  {"path":"negative/source-reference/empty-commit.json","schema":"source-reference","keyword":"minLength","pointer":"/commit"},
+  {"path":"negative/source-reference/empty-path.json","schema":"source-reference","keyword":"minLength","pointer":"/path"},
+  {"path":"negative/source-reference/empty-tag.json","schema":"source-reference","keyword":"minLength","pointer":"/tag"},
+  {"path":"negative/source-reference/missing-disposition.json","schema":"source-reference","keyword":"required","pointer":"/"},
+  {"path":"negative/source-reference/missing-rationale.json","schema":"source-reference","keyword":"required","pointer":"/"},
+  {"path":"negative/source-reference/missing-source-kind.json","schema":"source-reference","keyword":"required","pointer":"/"},
+  {"path":"negative/source-reference/missing-source-role.json","schema":"source-reference","keyword":"required","pointer":"/"},
+  {"path":"negative/source-reference/no-locator.json","schema":"source-reference","keyword":"anyOf","pointer":"/"}
+]

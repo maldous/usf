@@ -1,0 +1,25 @@
+{
+  "id": "evt-empty-string-fields",
+  "title": "Event with empty-string required fields",
+  "description": "DEFECT: an event-kind contract supplies empty strings for required string fields, violating minLength 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because required event string fields must be non-empty.",
+  "eventKind": "event",
+  "payloadSchemaRef": "",
+  "producer": "",
+  "ordering": "",
+  "idempotencyKey": "",
+  "dlqPolicy": "",
+  "retention": "",
+  "canonical": true
+}

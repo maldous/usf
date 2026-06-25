@@ -1,0 +1,19 @@
+{
+  "id": "usf.proof-evidence.bad.live-claim-external-sandbox",
+  "kind": "proof",
+  "title": "Invalid live-external-provider claim on external-sandbox",
+  "description": "Rejected: a live-external-provider claim is asserted while the provider mode is external-sandbox; a live claim requires provider mode live-external-provider.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Provider Mode"],
+  "taxonomyRefs": ["proof-classification", "provider-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: an external sandbox cannot back a live-provider claim.",
+  "proofLevelClaimed": "substrate-proven",
+  "proofLevelObserved": "substrate-proven",
+  "providerMode": "external-sandbox",
+  "environment": "staging",
+  "liveExternalProviderClaim": true,
+  "emittedEvidence": ["trace.json"],
+  "collectedEvidence": ["trace.collected.json"]
+}

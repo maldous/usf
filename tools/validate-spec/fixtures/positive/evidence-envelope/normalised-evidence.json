@@ -1,0 +1,13 @@
+{
+  "id": "evidence.normalised-proof-index",
+  "title": "Normalised evidence reshaped for indexing",
+  "description": "Normalised evidence that retains a reference to the raw evidence it reshapes.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["evidence-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "Normalised evidence must retain the raw evidence it reshapes; the raw evidence is preserved.",
+  "evidenceKind": "normalised-evidence",
+  "sourceRefs": ["evidence.runtime-proof-login-hermetic"]
+}

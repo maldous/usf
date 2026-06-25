@@ -1,0 +1,17 @@
+{
+  "id": "usf.command.negative.missing-outputs",
+  "commandKind": "make-target",
+  "purpose": "Command that omits the required outputs array.",
+  "failureSemantics": "Fails closed on any non-zero subcommand exit.",
+  "title": "Command missing required outputs array",
+  "description": "Invalid command artefact: the required outputs property is absent.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds"],
+  "aiGuidance": "Defect fixture: outputs omitted.",
+  "inputs": [],
+  "environmentScope": [],
+  "sideEffects": []
+}

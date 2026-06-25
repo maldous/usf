@@ -1,0 +1,22 @@
+{
+  "id": "usf.proof-evidence.bad.empty-commit",
+  "kind": "proof",
+  "title": "Invalid proof with empty freshness commit",
+  "description": "Rejected: the freshness commit is an empty string, violating the minLength on the commit pin.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Evidence"],
+  "taxonomyRefs": ["proof-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: the freshness commit is empty.",
+  "proofLevelClaimed": "behaviour-proven",
+  "proofLevelObserved": "behaviour-proven",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "emittedEvidence": ["trace.json"],
+  "collectedEvidence": ["trace.collected.json"],
+  "freshness": {
+    "commit": "",
+    "stale": false
+  }
+}

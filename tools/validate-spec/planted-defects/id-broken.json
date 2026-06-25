@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "set",
+  "pointer": "/$id",
+  "value": "urn:usf:schema:WRONG",
+  "expectedRule": "USF-ID-001",
+  "note": "corrupt $id"
+}

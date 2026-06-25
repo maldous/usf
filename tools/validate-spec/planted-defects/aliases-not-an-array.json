@@ -1,0 +1,8 @@
+{
+  "target": "vocabulary",
+  "op": "set",
+  "pointer": "/valueSets/0/aliases",
+  "value": "not an array",
+  "expectedRule": "USF-SHAPE-001",
+  "note": "aliases present but not a list must fail closed, not crash"
+}

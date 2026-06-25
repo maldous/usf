@@ -1,0 +1,15 @@
+{
+  "id": "usf.observability-signal.negative.empty-purpose",
+  "signalKind": "metric",
+  "name": "auth_login_duration_seconds",
+  "source": "authentication-service",
+  "purpose": "",
+  "title": "Observability signal with empty purpose",
+  "description": "Invalid observability-signal artefact: purpose is an empty string, violating its minLength.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Observability Signal"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["observability-signal-kinds"],
+  "aiGuidance": "Defect fixture: empty purpose."
+}

@@ -1,0 +1,12 @@
+{
+  "id": "evidence.neg-normalised-no-source-refs",
+  "title": "Normalised evidence missing source refs",
+  "description": "DEFECT: normalised-evidence without a reference to the raw evidence it reshapes.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["evidence-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "Normalised evidence must retain a reference to the raw evidence it reshapes.",
+  "evidenceKind": "normalised-evidence"
+}

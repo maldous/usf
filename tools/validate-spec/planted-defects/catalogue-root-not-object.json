@@ -1,0 +1,7 @@
+{
+  "target": "vocabulary",
+  "op": "replace-root",
+  "value": "not an object",
+  "expectedRule": "USF-SHAPE-001",
+  "note": "a catalogue that parses to a non-object must fail closed, not crash"
+}

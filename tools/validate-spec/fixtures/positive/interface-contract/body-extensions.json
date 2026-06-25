@@ -1,0 +1,28 @@
+{
+  "id": "iface-emit-audit-event-handler",
+  "title": "Audit event handler interface contract",
+  "description": "Event handler interface whose response contract is captured through a typed scalar extensions map during the deferred full shape.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Use only the typed extension values present; do not promote them to invented fields.",
+  "interfaceKind": "event-handler",
+  "purpose": "Handle an inbound audit event and acknowledge it.",
+  "boundary": "platform-api event ingestion boundary",
+  "semanticContractRef": "semantic-contract:audit-ingestion",
+  "responseContract": {
+    "extensions": {
+      "ackMode": "synchronous",
+      "maxRetries": 3,
+      "idempotent": true
+    }
+  }
+}

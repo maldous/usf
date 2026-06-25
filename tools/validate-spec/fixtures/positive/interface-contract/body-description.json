@@ -1,0 +1,25 @@
+{
+  "id": "iface-reset-cli",
+  "title": "Reset command CLI contract",
+  "description": "CLI interface whose input contract is described in prose only.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat the prose description as the binding interim contract until a typed schema is authored.",
+  "interfaceKind": "cli-interface",
+  "purpose": "Reset the local hermetic database to a known baseline.",
+  "boundary": "local developer CLI boundary",
+  "semanticContractRef": "semantic-contract:local-reset",
+  "inputContract": {
+    "description": "Accepts an optional confirmation flag; otherwise takes no arguments."
+  }
+}

@@ -2,43 +2,280 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:evidence-envelope",
   "title": "USF Evidence Envelope Schema",
-  "description": "Draft JSON Schema for the common evidence envelope across evidence kinds (rank-4 runtime-proof-evidence). Each envelope declares its evidence kind (evidence-kinds), source reference, freshness (commit-pinned), and — where the evidence depends on them — provider mode (provider-modes) and environment (environment-classes). A generated-report envelope MUST reference the evidence it summarises and MUST NOT be treated as raw evidence. Governs the ontology concepts Evidence and Generated Report. Overclaim and missing-evidence fail-closed checks are validator-deferred per schema-authoring-standard §24. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for the common evidence envelope across evidence kinds (rank-4 runtime-proof-evidence). Each envelope declares its evidence kind (evidence-kinds) and, conditionally: runtime-proof-evidence requires providerMode, environment, and freshness; validation-evidence requires freshness and at least one of sourceRefs/evidenceRefs; a generated-report requires evidenceRefs and freshness and may not be treated as raw evidence; normalised-evidence requires sourceRefs to the raw evidence it reshapes. Governs the ontology concepts Evidence and Generated Report. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11); kind (artefact-kinds) and version are deviated/deferred (recorded per section 9.3). Overclaim and missing-evidence fail-closed cross-record checks remain validator-deferred. lifecycleState draft; not active.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "evidenceKind"],
+  "required": [
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "evidenceKind"
+  ],
   "$defs": {
-    "providerMode": {"type": "string", "enum": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"]},
-    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]}
+    "kebab": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "providerMode": {
+      "type": "string",
+      "enum": [
+        "hermetic-mock",
+        "local-composed-real-service",
+        "external-sandbox",
+        "live-external-provider"
+      ]
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "local",
+        "hermetic",
+        "integration",
+        "staging",
+        "production-shaped",
+        "production-live"
+      ]
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "evidenceKind": {"type": "string", "enum": ["raw-source-evidence", "semantic-evidence", "runtime-proof-evidence", "normalised-evidence", "generated-report", "attestation", "import-evidence", "validation-evidence", "operational-evidence", "audit-evidence"]},
-    "title": {"type": "string"},
-    "description": {"type": "string"},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}},
-    "providerMode": {"$ref": "#/$defs/providerMode"},
-    "environment": {"$ref": "#/$defs/environment"},
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "runtime-proof-evidence",
+      "$comment": "authority-levels value pinned to the registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidenceKind": {
+      "type": "string",
+      "enum": [
+        "raw-source-evidence",
+        "semantic-evidence",
+        "runtime-proof-evidence",
+        "normalised-evidence",
+        "generated-report",
+        "attestation",
+        "import-evidence",
+        "validation-evidence",
+        "operational-evidence",
+        "audit-evidence"
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "providerMode": {
+      "$ref": "#/$defs/providerMode"
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    },
     "freshness": {
       "type": "object",
       "additionalProperties": false,
+      "required": [
+        "commit"
+      ],
       "properties": {
-        "commit": {"type": "string"},
-        "stale": {"type": "boolean"}
+        "commit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stale": {
+          "type": "boolean"
+        }
       }
     },
-    "reportStatus": {"type": "string", "enum": ["pass", "fail", "partial", "stale", "not-run", "advisory", "unknown"]},
-    "evidenceRefs": {"type": "array", "items": {"type": "string"}}
+    "reportStatus": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "stale",
+        "not-run",
+        "advisory",
+        "unknown"
+      ]
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
   },
   "allOf": [
     {
-      "$comment": "A generated-report envelope must reference the underlying evidence it summarises (Authority Model §2.7).",
-      "if": {"properties": {"evidenceKind": {"const": "generated-report"}}, "required": ["evidenceKind"]},
-      "then": {"required": ["evidenceRefs"], "properties": {"evidenceRefs": {"minItems": 1}}}
+      "$comment": "Runtime proof evidence is provider- and environment-dependent and must be freshness-pinned.",
+      "if": {
+        "properties": {
+          "evidenceKind": {
+            "const": "runtime-proof-evidence"
+          }
+        },
+        "required": [
+          "evidenceKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "providerMode",
+          "environment",
+          "freshness"
+        ]
+      }
+    },
+    {
+      "$comment": "Validation evidence must be freshness-pinned and reference what it summarises.",
+      "if": {
+        "properties": {
+          "evidenceKind": {
+            "const": "validation-evidence"
+          }
+        },
+        "required": [
+          "evidenceKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "freshness"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "sourceRefs"
+            ],
+            "properties": {
+              "sourceRefs": {
+                "minItems": 1
+              }
+            }
+          },
+          {
+            "required": [
+              "evidenceRefs"
+            ],
+            "properties": {
+              "evidenceRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$comment": "A generated-report envelope must reference the underlying evidence and be freshness-pinned (Authority Model section 2.7).",
+      "if": {
+        "properties": {
+          "evidenceKind": {
+            "const": "generated-report"
+          }
+        },
+        "required": [
+          "evidenceKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "evidenceRefs",
+          "freshness"
+        ],
+        "properties": {
+          "evidenceRefs": {
+            "minItems": 1
+          }
+        }
+      }
     },
     {
       "$comment": "Normalised evidence must retain a reference to the raw evidence it reshapes.",
-      "if": {"properties": {"evidenceKind": {"const": "normalised-evidence"}}, "required": ["evidenceKind"]},
-      "then": {"required": ["sourceRefs"], "properties": {"sourceRefs": {"minItems": 1}}}
+      "if": {
+        "properties": {
+          "evidenceKind": {
+            "const": "normalised-evidence"
+          }
+        },
+        "required": [
+          "evidenceKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "sourceRefs"
+        ],
+        "properties": {
+          "sourceRefs": {
+            "minItems": 1
+          }
+        }
+      }
     }
   ]
 }

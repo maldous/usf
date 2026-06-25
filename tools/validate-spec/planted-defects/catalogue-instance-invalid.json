@@ -1,0 +1,7 @@
+{
+  "target": "registry",
+  "op": "remove",
+  "pointer": "/id",
+  "expectedRule": "USF-INSTANCE-001",
+  "note": "registry instance missing required id"
+}

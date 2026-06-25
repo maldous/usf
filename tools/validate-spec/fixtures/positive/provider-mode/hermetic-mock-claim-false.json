@@ -1,0 +1,16 @@
+{
+  "id": "usf.provider-mode.example.hermetic-mock",
+  "title": "Hermetic mock provider mode without live claim",
+  "description": "Valid provider-mode declaration where the declared mode is hermetic-mock and no live-external-provider claim is made; a mock identity provider is valid hermetic proof only.",
+  "providerMode": "hermetic-mock",
+  "port": "identity-provider-port",
+  "adapter": "mock-oidc-adapter",
+  "environment": "hermetic",
+  "liveExternalProviderClaim": false,
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Provider", "Provider Mode", "Adapter", "Port"],
+  "taxonomyRefs": ["provider-classification"],
+  "vocabularyRefs": ["provider-modes", "environment-classes"],
+  "aiGuidance": "Hermetic mock is valid hermetic proof; it never satisfies a live-external-provider claim."
+}

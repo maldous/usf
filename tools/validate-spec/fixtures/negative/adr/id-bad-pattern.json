@@ -1,0 +1,21 @@
+{
+  "id": "adr-authentication-contract-authority",
+  "kind": "adr",
+  "title": "ADR whose id does not match the required pattern",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "context": "An ADR whose id lacks the zero-padded numeric prefix.",
+  "decision": "Test that an id without the numeric prefix is rejected.",
+  "consequences": ["The id would not sort or resolve as an ADR id."],
+  "invariants": ["The id must match the ADR id pattern."],
+  "forbiddenDrift": ["Do not use a non-conforming ADR id."],
+  "aiAlignmentRules": ["Stop if the ADR id does not match the required pattern."],
+  "permittedChanges": ["The id may be corrected to match the pattern by a recorded decision."],
+  "semanticRefs": ["authentication-contract"],
+  "description": "Defect: id does not match ^[0-9]{4}-[a-z0-9]+(-[a-z0-9]+)*$ because it lacks the four-digit prefix.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because the id does not match the ADR id pattern."
+}

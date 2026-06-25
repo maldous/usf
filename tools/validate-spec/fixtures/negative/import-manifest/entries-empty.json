@@ -1,0 +1,13 @@
+{
+  "id": "import-manifest-entries-empty",
+  "title": "Import manifest: empty entries array",
+  "sourceRepository": "../react",
+  "entries": [],
+  "description": "Defect: entries is empty, violating minItems 1.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Disposition"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because entries is empty."
+}

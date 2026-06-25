@@ -1,0 +1,25 @@
+name: validate-spec
+# Runs the formal USF spec validator (tools/validate-spec/validate-spec.py) as a fail-closed gate.
+# JSON Schema defines shape; this enforces the cross-file governance rules.
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pip install -r tools/validate-spec/requirements.txt
+      - name: Validate spec corpus (also exercises report emission + self-validation)
+        run: python tools/validate-spec/validate-spec.py all --report /tmp/usf-validator-report.json
+      - name: PR governance gate
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: python tools/validate-spec/validate-spec.py pr --base "origin/$BASE_REF" --head HEAD --report /tmp/usf-pr-validator-report.json

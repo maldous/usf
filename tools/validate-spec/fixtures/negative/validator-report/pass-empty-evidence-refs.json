@@ -1,0 +1,18 @@
+{
+  "id": "usf.validator-report.bad.pass-empty-evidence-refs",
+  "authorityLevel": "generated-report",
+  "status": "pass",
+  "findings": [],
+  "evidenceRefs": [],
+  "freshness": {
+    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "stale": false
+  },
+  "title": "Invalid pass report with no evidence references",
+  "description": "Rejected: a pass status with an empty evidenceRefs array; a pass must reference the evidence it summarises.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Validator", "Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["report-statuses", "validation-severities"],
+  "aiGuidance": "This record is intentionally invalid: a pass report references no evidence."
+}

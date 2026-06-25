@@ -1,0 +1,32 @@
+{
+  "id": "evt-tenant-provisioned",
+  "title": "Tenant provisioned event contract",
+  "description": "Canonical event emitted when a tenant is provisioned, with all required event fields present.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Define this contract before emitting the event; never invent the payload shape in code.",
+  "eventKind": "event",
+  "payloadSchemaRef": "urn:usf:schema:semantic-contract#tenant-provisioned-payload",
+  "schemaVersion": "0.1.0",
+  "producer": "platform-api",
+  "consumers": [
+    "billing-service",
+    "audit-service"
+  ],
+  "ordering": "per-tenant ordered",
+  "idempotencyKey": "tenantId",
+  "retryPolicy": "exponential-backoff up to 5 attempts",
+  "dlqPolicy": "route to tenant-provisioned-dlq after exhaustion",
+  "retention": "7 days",
+  "canonical": true,
+  "failureSemantics": "On consumer failure the event is retried then dead-lettered; never silently dropped."
+}

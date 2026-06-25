@@ -1,0 +1,21 @@
+{
+  "id": "usf.observability-signal.example.baseline",
+  "signalKind": "metric",
+  "name": "auth_login_duration_seconds",
+  "source": "authentication-service",
+  "purpose": "Measure authentication login latency to support readiness and resilience proof.",
+  "title": "Authentication login duration metric",
+  "description": "Baseline valid observability-signal artefact with non-empty signalKind, name, source and purpose, and non-empty evidence and proof reference arrays.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Observability Signal"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["observability-signal-kinds"],
+  "aiGuidance": "Treat this signal as a semantic asset; removing or renaming it requires semantic review, not an incidental refactor.",
+  "semanticContractRef": "urn:usf:contract:authentication",
+  "evidenceRefs": ["login-latency.collected.json"],
+  "proofRefs": ["usf.proof-evidence.example.baseline"],
+  "retention": "Retained for the lifetime of the proof evidence corpus.",
+  "correlation": "trace-id",
+  "sourceRefs": ["../react/docs/v2-foundation/observability-semantics.json#auth-login-duration"]
+}

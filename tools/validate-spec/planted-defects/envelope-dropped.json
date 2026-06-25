@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "workflow",
+  "op": "removeItem",
+  "pointer": "/required",
+  "value": "aiGuidance",
+  "expectedRule": "USF-REQ-003",
+  "note": "drop a governance-envelope field"
+}

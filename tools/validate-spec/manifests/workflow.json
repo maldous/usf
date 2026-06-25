@@ -1,0 +1,9 @@
+[
+  {"path":"negative/workflow/compensation-paths-empty.json", "schema":"workflow", "keyword":"minItems", "pointer":"/compensationPaths"},
+  {"path":"negative/workflow/failure-paths-empty.json", "schema":"workflow", "keyword":"minItems", "pointer":"/failurePaths"},
+  {"path":"negative/workflow/failure-paths-empty-string-item.json", "schema":"workflow", "keyword":"minLength", "pointer":"/failurePaths/0"},
+  {"path":"negative/workflow/state-transition-from-empty.json", "schema":"workflow", "keyword":"minLength", "pointer":"/stateTransitions/0/from"},
+  {"path":"negative/workflow/state-transition-missing-to.json", "schema":"workflow", "keyword":"required", "pointer":"/stateTransitions/0"},
+  {"path":"negative/workflow/step-without-id.json", "schema":"workflow", "keyword":"required", "pointer":"/steps/0"},
+  {"path":"negative/workflow/steps-empty.json", "schema":"workflow", "keyword":"minItems", "pointer":"/steps"}
+]

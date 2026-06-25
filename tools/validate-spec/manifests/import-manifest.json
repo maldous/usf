@@ -1,0 +1,7 @@
+[
+  {"path":"negative/import-manifest/entries-empty.json","schema":"import-manifest","keyword":"minItems","pointer":"/entries"},
+  {"path":"negative/import-manifest/entry-empty-target-concept.json","schema":"import-manifest","keyword":"minLength","pointer":"/entries/0/targetUsfConcept"},
+  {"path":"negative/import-manifest/entry-inline-no-locator.json","schema":"import-manifest","keyword":"oneOf","pointer":"/entries/0/sourceRef"},
+  {"path":"negative/import-manifest/entry-missing-disposition.json","schema":"import-manifest","keyword":"required","pointer":"/entries/0"},
+  {"path":"negative/import-manifest/entry-unknown-property.json","schema":"import-manifest","keyword":"additionalProperties","pointer":"/entries/0"}
+]

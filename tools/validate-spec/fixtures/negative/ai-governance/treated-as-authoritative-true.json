@@ -1,0 +1,16 @@
+{
+  "id": "usf.ai-governance.negative.treated-as-authoritative-true",
+  "aiKind": "ai-instruction",
+  "rationale": "Artefact that incorrectly asserts AI output is authoritative.",
+  "stopConditions": ["AI output is treated as authoritative without validation."],
+  "authorityOrderAcknowledged": true,
+  "treatedAsAuthoritative": true,
+  "title": "AI governance artefact treated as authoritative",
+  "description": "Invalid ai-governance artefact: treatedAsAuthoritative is true, violating the const false constraint.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Defect fixture: treatedAsAuthoritative true."
+}

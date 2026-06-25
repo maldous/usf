@@ -1,0 +1,21 @@
+{
+  "id": "0014-ai-alignment-rules-empty",
+  "kind": "adr",
+  "title": "ADR with empty aiAlignmentRules array",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "context": "An ADR that records no AI alignment rules.",
+  "decision": "Test that an empty aiAlignmentRules array is rejected.",
+  "consequences": ["AI drift cannot be constrained without alignment rules."],
+  "invariants": ["aiAlignmentRules must contain at least one rule."],
+  "forbiddenDrift": ["Do not record an ADR without AI alignment rules."],
+  "aiAlignmentRules": [],
+  "permittedChanges": ["AI alignment rules may be added by a recorded decision."],
+  "semanticRefs": ["authentication-contract"],
+  "description": "Defect: aiAlignmentRules is empty, violating minItems 1.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because aiAlignmentRules is empty."
+}

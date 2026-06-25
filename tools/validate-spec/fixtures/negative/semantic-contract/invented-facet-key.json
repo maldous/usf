@@ -1,0 +1,24 @@
+{
+  "id": "contract.neg-invented-facet",
+  "title": "Semantic contract with an invented facet key",
+  "description": "DEFECT: an extra facet key 'observability' is present; the facets object is closed to the ten defined facets.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["authority-levels"],
+  "aiGuidance": "Do not invent facet keys; the facet set is fixed at ten.",
+  "facets": {
+    "lifecycle": { "status": "gap" },
+    "stateModel": { "status": "gap" },
+    "permissions": { "status": "gap" },
+    "contracts": { "status": "gap" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "gap" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "gap" },
+    "uiSemanticDefinition": { "status": "gap" },
+    "observability": { "status": "gap" }
+  }
+}

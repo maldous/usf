@@ -1,0 +1,39 @@
+{
+  "id": "wf-transition-missing-to",
+  "workflowKind": "workflow",
+  "title": "Workflow with a state transition missing to",
+  "description": "DEFECT: a stateTransition omits the required to.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because every state transition requires both from and to.",
+  "participants": [
+    "platform-api"
+  ],
+  "ordering": "sequential",
+  "steps": [
+    {
+      "id": "create-tenant"
+    }
+  ],
+  "stateTransitions": [
+    {
+      "from": "pending",
+      "trigger": "billing-opened"
+    }
+  ],
+  "failurePaths": [
+    "abort"
+  ],
+  "compensationPaths": [
+    "rollback"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "data.neg-backup-no-collected",
+  "dataKind": "backup-evidence",
+  "title": "Backup evidence missing collected evidence",
+  "description": "DEFECT: backup evidence with emitted evidence but no collectedEvidence; missing collected evidence fails closed.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Backup / Restore"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Backup evidence must preserve collected evidence.",
+  "emittedEvidence": ["backup-manifest.json"]
+}

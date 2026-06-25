@@ -1,0 +1,8 @@
+{
+  "target": "registry",
+  "op": "append",
+  "pointer": "/schemas/0/taxonomyRefs",
+  "value": "nope-not-real",
+  "expectedRule": "USF-TAX-001",
+  "note": "unresolved taxonomyRef"
+}

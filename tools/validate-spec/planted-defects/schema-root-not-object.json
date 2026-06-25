@@ -1,0 +1,8 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "replace-root",
+  "value": 42,
+  "expectedRule": "USF-SHAPE-001",
+  "note": "a schema file that parses to a non-object must fail closed, not crash"
+}

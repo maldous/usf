@@ -1,0 +1,13 @@
+{
+  "id": "evidence.neg-validation-no-refs",
+  "title": "Validation evidence missing both ref kinds",
+  "description": "DEFECT: validation-evidence is freshness-pinned but carries neither sourceRefs nor evidenceRefs.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "Validation evidence must reference what it validated.",
+  "evidenceKind": "validation-evidence",
+  "freshness": { "commit": "abc1230000000000000000000000000000000000" }
+}

@@ -1,0 +1,7 @@
+[
+  {"path":"negative/validator-report/fail-empty-findings.json", "schema":"validator-report", "keyword":"minItems", "pointer":"/findings"},
+  {"path":"negative/validator-report/pass-empty-evidence-refs.json", "schema":"validator-report", "keyword":"minItems", "pointer":"/evidenceRefs"},
+  {"path":"negative/validator-report/pass-missing-freshness.json", "schema":"validator-report", "keyword":"required", "pointer":"/"},
+  {"path":"negative/validator-report/pass-stale-true.json", "schema":"validator-report", "keyword":"const", "pointer":"/freshness/stale"},
+  {"path":"negative/validator-report/pass-with-blocking-finding.json", "schema":"validator-report", "keyword":"not", "pointer":"/findings/0"}
+]

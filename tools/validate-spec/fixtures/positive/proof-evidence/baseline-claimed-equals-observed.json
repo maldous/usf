@@ -1,0 +1,25 @@
+{
+  "id": "usf.proof-evidence.example.baseline",
+  "kind": "proof",
+  "title": "Baseline behaviour proof with claimed equal to observed",
+  "description": "Baseline valid proof-evidence record exercising a defined behaviour on a hermetic substrate where the claimed proof level equals the observed proof level.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Proof Level", "Evidence"],
+  "taxonomyRefs": ["proof-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "Treat this as hermetic behaviour evidence only; do not relabel its level or provider class upward.",
+  "claimExercised": "Authentication login succeeds against the hermetic identity fixture.",
+  "proofLevelClaimed": "behaviour-proven",
+  "proofLevelObserved": "behaviour-proven",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "liveExternalProviderClaim": false,
+  "emittedEvidence": ["login-response.json"],
+  "collectedEvidence": ["login-response.collected.json"],
+  "freshness": {
+    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "stale": false
+  },
+  "failureSemantics": "On unavailable provider the proof fails closed rather than substituting a mock success."
+}

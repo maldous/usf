@@ -2,54 +2,266 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:validator-report",
   "title": "USF Validator Report Schema",
-  "description": "Draft JSON Schema for validator report output (rank-7 generated-report). Findings carry a severity (validation-severities); the report carries a status (report-statuses). Enforces that a pass status requires fresh, non-stale evidence (stale and unknown MUST NOT satisfy pass) and that pass/fail/partial statuses reference the evidence they summarise. Preserves the blocking-vs-advisory distinction. Governs the ontology concepts Validator and Generated Report; a valid report remains lowest authority and never overrides evidence or semantics. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for validator report output (rank-7 generated-report). Findings carry a severity (validation-severities); the report carries a status (report-statuses). Enforces that a pass status requires fresh, non-stale evidence (stale and unknown MUST NOT satisfy pass) and that pass/fail/partial statuses reference the evidence they summarise. Preserves the blocking-vs-advisory distinction. Governs the ontology concepts Validator and Generated Report; a valid report remains lowest authority and never overrides evidence or semantics. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "authorityLevel", "status", "findings"],
+  "required": [
+    "id",
+    "authorityLevel",
+    "status",
+    "findings",
+    "title",
+    "description",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance"
+  ],
   "$defs": {
-    "severity": {"type": "string", "enum": ["blocking", "error", "warning", "advisory", "info"]},
-    "status": {"type": "string", "enum": ["pass", "fail", "partial", "stale", "not-run", "advisory", "unknown"]},
+    "severity": {
+      "type": "string",
+      "enum": [
+        "blocking",
+        "error",
+        "warning",
+        "advisory",
+        "info"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "stale",
+        "not-run",
+        "advisory",
+        "unknown"
+      ]
+    },
     "finding": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["severity", "subject", "message"],
+      "required": [
+        "severity",
+        "subject",
+        "message"
+      ],
       "properties": {
-        "ruleId": {"type": "string"},
-        "severity": {"$ref": "#/$defs/severity"},
-        "subject": {"type": "string"},
-        "message": {"type": "string"},
-        "evidenceRefs": {"type": "array", "items": {"type": "string"}}
+        "ruleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "$ref": "#/$defs/severity"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
       }
     }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "authorityLevel": {"type": "string", "const": "generated-report", "$comment": "authority-levels value 'generated-report' (rank 7)."},
-    "status": {"$ref": "#/$defs/status"},
-    "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
-    "evidenceRefs": {"type": "array", "items": {"type": "string"}},
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "generated-report",
+      "$comment": "authority-levels canonical value pinned to this schema's registry authorityRole."
+    },
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      },
+      "$comment": "May be empty for a pass report; the fail/partial branch requires at least one finding.",
+      "uniqueItems": true
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
     "freshness": {
       "type": "object",
       "additionalProperties": false,
-      "properties": {"commit": {"type": "string"}, "stale": {"type": "boolean"}}
+      "required": [
+        "commit",
+        "stale"
+      ],
+      "properties": {
+        "commit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stale": {
+          "type": "boolean"
+        }
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ],
+      "$comment": "lifecycle-states canonical values."
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "allOf": [
     {
       "$comment": "A pass status requires fresh evidence: freshness present and not stale (stale/unknown MUST NOT satisfy pass).",
-      "if": {"properties": {"status": {"const": "pass"}}, "required": ["status"]},
-      "then": {
-        "required": ["freshness", "evidenceRefs"],
+      "if": {
         "properties": {
-          "freshness": {"required": ["stale"], "properties": {"stale": {"const": false}}},
-          "evidenceRefs": {"minItems": 1}
+          "status": {
+            "const": "pass"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "freshness",
+          "evidenceRefs"
+        ],
+        "properties": {
+          "freshness": {
+            "required": [
+              "commit",
+              "stale"
+            ],
+            "properties": {
+              "commit": {
+                "type": "string",
+                "minLength": 1
+              },
+              "stale": {
+                "const": false
+              }
+            }
+          },
+          "evidenceRefs": {
+            "minItems": 1
+          },
+          "findings": {
+            "items": {
+              "not": {
+                "required": [
+                  "severity"
+                ],
+                "properties": {
+                  "severity": {
+                    "enum": [
+                      "blocking",
+                      "error"
+                    ]
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
     {
-      "$comment": "Partial and fail statuses must still reference the evidence they summarise.",
-      "if": {"properties": {"status": {"enum": ["fail", "partial"]}}, "required": ["status"]},
-      "then": {"required": ["evidenceRefs"], "properties": {"evidenceRefs": {"minItems": 1}}}
+      "$comment": "A fail or partial report must reference evidence and carry at least one finding.",
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "fail",
+              "partial"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "evidenceRefs",
+          "findings"
+        ],
+        "properties": {
+          "evidenceRefs": {
+            "minItems": 1
+          },
+          "findings": {
+            "minItems": 1
+          }
+        }
+      }
     }
   ]
 }

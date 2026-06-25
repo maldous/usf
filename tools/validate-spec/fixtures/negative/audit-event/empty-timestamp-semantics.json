@@ -1,0 +1,18 @@
+{
+  "id": "usf.audit-event.negative.empty-timestamp-semantics",
+  "auditKind": "audit-event",
+  "actor": "authenticated-user",
+  "action": "view-record",
+  "subject": "tenant-record",
+  "timestampSemantics": "",
+  "securitySensitive": false,
+  "stateChanging": false,
+  "title": "Audit event with empty timestampSemantics",
+  "description": "Invalid audit-event artefact: timestampSemantics is an empty string, violating its minLength.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Audit Event"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["audit-event-kinds"],
+  "aiGuidance": "Defect fixture: empty timestampSemantics."
+}

@@ -1,0 +1,34 @@
+{
+  "id": "ui-billing-page-model",
+  "uiKind": "page",
+  "title": "Billing page UI semantic model",
+  "description": "UI semantic model whose journey item carries a typed scalar extensions map (the deferred full-shape extension point).",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "UI Semantic Model"
+  ],
+  "taxonomyRefs": [
+    "ui-semantic-classification"
+  ],
+  "vocabularyRefs": [
+    "ui-semantic-kinds"
+  ],
+  "aiGuidance": "Use only the typed extension values present; do not invent journey fields.",
+  "surface": "billing",
+  "route": "/billing",
+  "journeys": [
+    {
+      "id": "view-invoices",
+      "name": "View invoices",
+      "extensions": {
+        "paginated": true,
+        "pageSize": 25,
+        "defaultSort": "issued-desc"
+      }
+    }
+  ],
+  "accessibility": [
+    "invoices-table-has-caption"
+  ]
+}

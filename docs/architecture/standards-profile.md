@@ -29,7 +29,7 @@ This document defines how USF chooses, adapts, defines, and enforces standards. 
 
 2.3 **It governs later work.** This profile is the standards reference for the later USF ontology, taxonomy, vocabulary, schemas, registries, ADR canon, evidence envelope, validators, import/disposition maps, and implementation extraction, and for future AI-guided development.
 
-2.4 **It does not yet create those artefacts.** This profile defines *what they must look like and how they will be enforced*. It creates no schema, taxonomy, vocabulary, registry, ADR, evidence file, validator, tool, or implementation directory. Exact shapes are deferred explicitly (§23).
+2.4 **This profile does not itself create those artefacts.** It defines *what they must look like and how they will be enforced*. Initial exact shapes were deferred to §23; later, under directive, the 23 draft schema files and an advisory validator were authored and are recorded in §23 Amendment, while active maturity and real-instance validation remain deferred.
 
 ---
 
@@ -144,7 +144,7 @@ USF does **not** claim full compliance with any external standard unless it crea
 *USF status:* **Adopted** (in force now, §6). *Scope:* requirement words in all USF normative documents. *Use for:* expressing obligations, prohibitions, defaults, options. *Will not use for:* implying obligation via lowercase prose. *Future artefacts:* none required; a linter MAY check uppercase usage. *Validator expectation:* OPTIONAL keyword-usage lint. *AI relevance:* agents MUST read uppercase keywords as binding (§20).
 
 **JSON Schema — JSON artefact shape validation.**
-*USF status:* **Adopted as the mechanism**; the **dialect is resolved** by `docs/architecture/schema-authoring-standard.md` as **JSON Schema Draft 2020-12** (`$schema`: `https://json-schema.org/draft/2020-12/schema`); validator package/tooling and meta-schema wiring remain **deferred** (§23). *Scope:* every USF JSON artefact (semantics, registries, evidence envelope, validator reports). *Use for:* explicit, versioned, identifiable shape validation that a validator can execute. *Will not use for:* schemas that merely *document* structure without enforcing it — such schemas are forbidden (a schema MUST be validator-testable). *Future artefacts:* `spec/schemas/` schema files; per-artefact `$id` and `version`. *Validator expectation:* validators MUST run schema validation and fail closed on invalidity. *AI relevance:* agents MUST validate generated JSON against its schema before claiming completion.
+*USF status:* **Adopted as the mechanism**; the **dialect is resolved** by `docs/architecture/schema-authoring-standard.md` as **JSON Schema Draft 2020-12** (`$schema`: `https://json-schema.org/draft/2020-12/schema`); validator package/tooling is **partially resolved by directive** (a draft/advisory validator with `jsonschema==4.10.3` — see §23 Amendment and schema-authoring-standard §26 Amendment A); meta-schema wiring and active maturity remain **deferred** (§23). *Scope:* every USF JSON artefact (semantics, registries, evidence envelope, validator reports). *Use for:* explicit, versioned, identifiable shape validation that a validator can execute. *Will not use for:* schemas that merely *document* structure without enforcing it — such schemas are forbidden (a schema MUST be validator-testable). *Future artefacts:* `spec/schemas/` schema files; per-artefact `$id` and `version`. *Validator expectation:* validators MUST run schema validation and fail closed on invalidity. *AI relevance:* agents MUST validate generated JSON against its schema before claiming completion.
 
 **OpenAPI-style — synchronous HTTP/API contracts.**
 *USF status:* **Adapted principle; artefact not yet adopted.** *Scope:* HTTP/API route and contract semantics. *Use for:* the principle that API interfaces are **contract-first or contract-reconciled**, not implementation-guessed (§15). *Will not use for:* claiming OpenAPI compliance or requiring OpenAPI files now; that decision is deferred (§23). *Future artefacts:* possibly OpenAPI documents or a USF interface contract artefact; an API contract-drift check (the historical repository runs an OpenAPI drift hard gate — `../react/docs/evidence/api/openapi-drift-hard-gate.md`). *Validator expectation:* once adopted, contract-vs-runtime drift MUST be checkable. *AI relevance:* agents MUST NOT infer API contracts from handlers when a semantic interface contract exists.
@@ -156,7 +156,7 @@ USF does **not** claim full compliance with any external standard unless it crea
 *USF status:* **Adapted (principles only).** USF does **not** claim OpenTelemetry compliance. *Scope:* naming and shape of logs, metrics, traces, spans, attributes, events, and service/resource identity. *Use for:* informing a USF-defined, controlled, validator-checkable observability vocabulary (§16). *Will not use for:* asserting OTel conformance, or treating arbitrary OTel attributes as automatically valid. *Future artefacts:* a USF observability vocabulary/registry; an observability-correlation evidence form (the historical repository correlates Loki/Tempo/Sentry — `../react/docs/evidence/e2e/prod-observability-correlation-latest.json`). *Validator expectation:* observability names MUST be drawn from the controlled vocabulary once defined. *AI relevance:* agents MUST NOT rename or remove observability/audit semantics as an incidental refactor (§16).
 
 **ADR practice — decision records.**
-*USF status:* **Adapted.** *Scope:* all architectural decisions. *Use for:* an adapted, stronger ADR form (§19) that adds semantic/source/proof/validator references, invariants, forbidden-drift, and AI-alignment rules beyond a generic ADR. *Will not use for:* informal notes or generic prose decisions — forbidden (Charter §4). *Future artefacts:* `docs/adr/` ADRs and an ADR schema (deferred, §23). The historical repository splits decision (`v2-decision-catalog.json`) from lineage (`v2-decision-lineage.json`); USF will define its unified ADR form. *Validator expectation:* every ADR's references MUST resolve; untraced decisions fail (historical rule R13). *AI relevance:* agents MUST record decisions as ADRs and obey them as rank-2 authority.
+*USF status:* **Adapted.** *Scope:* all architectural decisions. *Use for:* an adapted, stronger ADR form (§19) that adds semantic/source/proof/validator references, invariants, forbidden-drift, and AI-alignment rules beyond a generic ADR. *Will not use for:* informal notes or generic prose decisions — forbidden (Charter §4). *Future artefacts:* `docs/adr/` ADRs and an ADR schema (draft `adr.schema.json` now exists — see §23 Amendment; ADR canon deferred). The historical repository splits decision (`v2-decision-catalog.json`) from lineage (`v2-decision-lineage.json`); USF will define its unified ADR form. *Validator expectation:* every ADR's references MUST resolve; untraced decisions fail (historical rule R13). *AI relevance:* agents MUST record decisions as ADRs and obey them as rank-2 authority.
 
 **C4-style — architecture views.**
 *USF status:* **Inspired-by.** *Scope:* architecture description. *Use for:* eventually supporting distinct view kinds — **context, container, component, code, deployment, and dynamic/runtime** views — because USF spans system context, deployable apps, packages/components, and runtime behaviour. *Will not use for:* requiring diagrams or C4 notation now; no diagrams are required by this profile. *Future artefacts:* optional architecture views under `docs/architecture/`, preferably generated from semantics rather than hand-drawn. *Validator expectation:* if generated, a view MUST be reconcilable with the semantic corpus. *AI relevance:* agents MAY use view thinking to organize understanding; views are explanatory, not normative.
@@ -169,15 +169,15 @@ These standards are **USF-defined** (§7) unless noted. Each lists *purpose*, *s
 
 **Semantic definition standard.** *Purpose:* define platform behaviour as a typed, identifiable, versioned semantic corpus. *Source inputs:* `v1-capability-closure.json` (75 capabilities), the `capability-*.json` facet templates (ten facets: lifecycle, stateModel, permissions, contracts, validation, errorModel, auditModel, readinessModel, proof, uiSemanticDefinition), `operational-semantics.json`, `event-semantics.json`, `cross-capability-interactions.json`, `ui-capability-model.json`, `authentication-authorisation-matrix.json`. *Future artefacts:* `spec/schemas/` + `spec/registries/` semantic corpus. *Enforcement:* JSON Schema validation + completeness validator; a capability MUST drop from "proven" to "gap" if any facet lacks authoritative backing. *Drift risk:* behaviour defined only in code; AI guessing intent. *AI rule:* read semantics first; never invent a facet.
 
-**Source reference standard.** *Purpose:* bind every USF artefact to the source evidence that justifies it. *Source inputs:* `sourceFileRefs`/`evidence` fields throughout the corpus; `v1-file-inventory.json` (~1673 tracked files); `v1-to-v2-path-map.json`. *Future artefacts:* a source registry (fields in §10; schema deferred, §23). *Enforcement:* reference-resolution validator (every reference resolves to a real path/commit). *Drift risk:* untraceable artefacts; lost lineage. *AI rule:* preserve and cite lineage (§20).
+**Source reference standard.** *Purpose:* bind every USF artefact to the source evidence that justifies it. *Source inputs:* `sourceFileRefs`/`evidence` fields throughout the corpus; `v1-file-inventory.json` (~1673 tracked files); `v1-to-v2-path-map.json`. *Future artefacts:* a source registry (fields in §10; the `source-reference` draft schema now exists — see §23 Amendment; the registry artefact remains deferred). *Enforcement:* reference-resolution validator (every reference resolves to a real path/commit). *Drift risk:* untraceable artefacts; lost lineage. *AI rule:* preserve and cite lineage (§20).
 
-**Evidence standard.** *Purpose:* make evidence typed, honest, and freshness-checkable (§11). *Source inputs:* `docs/evidence/` (267 files across 31 domains, machine `.json` + human `.md`); `usf-audit/proof-evidence/` (per-proof runtime JSON); `usf-audit/proof-evidence-index.json`. *Future artefacts:* an evidence envelope schema (deferred, §23) under `evidence/`. *Enforcement:* schema + freshness (commit-pin) + claim-vs-observed validators. *Drift risk:* overclaimed or stale readiness. *AI rule:* never claim readiness beyond observed evidence.
+**Evidence standard.** *Purpose:* make evidence typed, honest, and freshness-checkable (§11). *Source inputs:* `docs/evidence/` (267 files across 31 domains, machine `.json` + human `.md`); `usf-audit/proof-evidence/` (per-proof runtime JSON); `usf-audit/proof-evidence-index.json`. *Future artefacts:* an evidence envelope schema (draft `evidence-envelope.schema.json` now exists — see §23 Amendment) under `evidence/`. *Enforcement:* schema + freshness (commit-pin) + claim-vs-observed validators. *Drift risk:* overclaimed or stale readiness. *AI rule:* never claim readiness beyond observed evidence.
 
 **Proof level standard.** *Purpose:* grade proof on an explicit ladder. *Source inputs:* `capability-proof-definition.json` (L0 Discovery → L6 Foundation), `proof-strength-matrix.json`, `deliveredAndProvenMinimumLevel: 3`, `liveProviderMinimumLevel: 4`, negative-control reports. *Future artefacts:* a USF proof-level vocabulary + per-proof level field. *Enforcement:* validator checks level ordering, claimed≤observed, and negative controls (proofs that must be able to fail). *Drift risk:* "green" that proves nothing. *AI rule:* never relabel a proof upward (§12).
 
-**Provider mode standard.** *Purpose:* govern provider classes and honesty (§12). *Source inputs:* provider classes `hermetic`/`compose-local`/`sandbox-external`/`live-external`/`none`; `USF_PROVIDER_MODE` selector; in-memory↔real parity reports; `runtime-provider-inventory.json` (~69 providers); `services/mock-oidc`. *Future artefacts:* a provider-mode vocabulary (deferred, §23). *Enforcement:* validator rejects mislabelled provider class and hermetic-as-live. *Drift risk:* mock proof sold as live readiness. *AI rule:* record, never infer, provider mode.
+**Provider mode standard.** *Purpose:* govern provider classes and honesty (§12). *Source inputs:* provider classes `hermetic`/`compose-local`/`sandbox-external`/`live-external`/`none`; `USF_PROVIDER_MODE` selector; in-memory↔real parity reports; `runtime-provider-inventory.json` (~69 providers); `services/mock-oidc`. *Future artefacts:* a provider-mode vocabulary (now exists; draft `provider-mode.schema.json` also exists — see §23 Amendment; selector wiring deferred). *Enforcement:* validator rejects mislabelled provider class and hermetic-as-live. *Drift risk:* mock proof sold as live readiness. *AI rule:* record, never infer, provider mode.
 
-**ADR standard.** *Purpose:* normative, traceable decisions (§19). *Source inputs:* `v2-decision-catalog.json` (74 accepted), `v2-decision-lineage.json` (74 evidence-backed), historical rule R13. *Future artefacts:* `docs/adr/` + ADR schema (deferred). *Enforcement:* every reference resolves; untraced/non-accepted decisions fail. *Drift risk:* decisions as vibes; unenforceable prose. *AI rule:* obey ADRs as rank-2; record new decisions as ADRs.
+**ADR standard.** *Purpose:* normative, traceable decisions (§19). *Source inputs:* `v2-decision-catalog.json` (74 accepted), `v2-decision-lineage.json` (74 evidence-backed), historical rule R13. *Future artefacts:* `docs/adr/` + ADR schema (draft `adr.schema.json` now exists — see §23 Amendment; ADR canon deferred). *Enforcement:* every reference resolves; untraced/non-accepted decisions fail. *Drift risk:* decisions as vibes; unenforceable prose. *AI rule:* obey ADRs as rank-2; record new decisions as ADRs.
 
 **Validator standard.** *Purpose:* executable enforcement that fails closed (§18). *Source inputs:* `tools/v2-readiness/` (~60 rules R1–R62; "fails closed", "normalises no aliases", "writes no runtime file"); `tools/architecture/`; golden + negative-control tests. *Future artefacts:* `tools/` validators + machine-readable reports. *Enforcement:* the validators are the enforcement; they are themselves test-covered and falsifiable. *Drift risk:* standards that are advisory only. *AI rule:* never weaken a rule to pass; add rules for new semantics.
 
@@ -189,9 +189,9 @@ These standards are **USF-defined** (§7) unless noted. Each lists *purpose*, *s
 
 **Environment/configuration standard.** *Purpose:* environments and config as governed assets (§13, §14). *Source inputs:* `environment-readiness-gates.json` (4 gates), `environment-capability-matrix.json` (70 caps × 4 envs), `environment-and-config-catalog.json` (39 assets), `v1-config-contract-catalogue.json` (64 typed keys); `.env` generated from `config/environments/*.json` manifests (historical ADR-0072). *Future artefacts:* USF environment + config contracts. *Enforcement:* env/config audit validator; generated-vs-manifest check. *Drift risk:* hand-edited config; environment dishonesty. *AI rule:* regenerate config from manifests; never hand-edit generated env.
 
-**Interface contract standard.** *Purpose:* contract-first/contract-reconciled interfaces (§15). *Source inputs:* `operational-semantics.json` `runtimeCommandLinks`; runtime route inventories; `validate-openapi-drift`; `contracts-*` packages. *Future artefacts:* USF interface contracts (OpenAPI-adapted, deferred). *Enforcement:* contract-vs-runtime drift validator. *Drift risk:* interfaces inferred from handlers. *AI rule:* do not infer interfaces from code when a contract exists.
+**Interface contract standard.** *Purpose:* contract-first/contract-reconciled interfaces (§15). *Source inputs:* `operational-semantics.json` `runtimeCommandLinks`; runtime route inventories; `validate-openapi-drift`; `contracts-*` packages. *Future artefacts:* USF interface contracts (draft `interface-contract.schema.json` now exists — see §23 Amendment; OpenAPI format adoption deferred). *Enforcement:* contract-vs-runtime drift validator. *Drift risk:* interfaces inferred from handlers. *AI rule:* do not infer interfaces from code when a contract exists.
 
-**Event contract standard.** *Purpose:* explicit event/message contracts (§15). *Source inputs:* `event-semantics.json` (eventName, schema, schemaVersion, idempotencyKey, orderingExpectation, retryPolicy, dlqPolicy, retention, privacyClassification, tenantIsolation; canonical vs test-only events); historical rule R26. *Future artefacts:* USF event contracts (AsyncAPI-adapted, deferred). *Enforcement:* event-payload-vs-contract validator. *Drift risk:* undocumented events; lost DLQ/ordering semantics. *AI rule:* define the event contract before emitting an event.
+**Event contract standard.** *Purpose:* explicit event/message contracts (§15). *Source inputs:* `event-semantics.json` (eventName, schema, schemaVersion, idempotencyKey, orderingExpectation, retryPolicy, dlqPolicy, retention, privacyClassification, tenantIsolation; canonical vs test-only events); historical rule R26. *Future artefacts:* USF event contracts (draft `event-contract.schema.json` now exists — see §23 Amendment; AsyncAPI format adoption deferred). *Enforcement:* event-payload-vs-contract validator. *Drift risk:* undocumented events; lost DLQ/ordering semantics. *AI rule:* define the event contract before emitting an event.
 
 **Observability standard.** *Purpose:* observability/audit as semantic assets (§16). *Source inputs:* `operational-semantics.json` observabilitySignals/metrics/logs/traces/alertConditions; `docs/evidence/observability/`; e2e observability-correlation (Loki/Tempo/Sentry); historical assurance "0 routes without tracing/logging/metrics". *Future artefacts:* USF observability vocabulary (OTel-adapted). *Enforcement:* controlled-vocabulary + coverage validator. *Drift risk:* unobservable, unauditable behaviour. *AI rule:* never strip observability/audit as a refactor.
 
@@ -240,13 +240,13 @@ This section is critical. It defines how `../react` is used.
 - **related USF artefact** — the USF semantic/ADR/evidence artefact it maps to.
 - **proof reference** — the proof that backs it, if applicable.
 
-The exact schema for these fields is deferred (§23).
+The `source-reference` draft schema now exists (see §23 Amendment); active maturity and real-instance validation remain deferred.
 
 ---
 
 ## 11. Evidence Standard
 
-11.1 Evidence **MUST** be **typed** — every evidence record declares what kind it is and conforms to a schema (deferred, §23).
+11.1 Evidence **MUST** be **typed** — every evidence record declares what kind it is and conforms to a schema (the draft `evidence-envelope.schema.json` now exists — see §23 Amendment).
 
 11.2 Evidence **MUST** carry **source references** (§10) so it is traceable to what it exercises.
 
@@ -279,7 +279,7 @@ The historical repository shows this layering concretely: per-domain `docs/evide
 
 ## 12. Provider Mode Standard
 
-12.1 USF defines provider modes conceptually (the exact vocabulary is deferred, §23). At minimum:
+12.1 USF defines provider modes conceptually (the `provider-modes` value set now exists; the draft schema exists per §23 Amendment; selector wiring deferred). At minimum:
 
 - **hermetic mock** — in-memory or fixture providers (e.g. a mock IdP), fully local and deterministic.
 - **local composed real service** — a real provider run locally via the composed substrate.
@@ -304,7 +304,7 @@ These map to the historical provider classes `hermetic` / `compose-local` / `san
 
 ## 13. Environment Standard
 
-13.1 USF defines environment classes conceptually (exact vocabulary deferred, §23):
+13.1 USF defines environment classes conceptually (the `environment-classes` value set now exists; the draft schema exists per §23 Amendment; gate wiring deferred):
 
 - **local** — a developer machine; fast iteration; hermetic or composed providers.
 - **hermetic** — fully isolated, deterministic, offline; the default proof substrate.
@@ -454,7 +454,7 @@ These align with the historical four-stage ladder (dev/test/staging/prod) and it
 
 19.6 **ADRs MUST record external-standard adoption/adaptation decisions** (§7, §8). When USF adopts, adapts, deprecates, or forbids a standard, an ADR records the decision, scope, and enforcement.
 
-19.7 The historical split of decision (`v2-decision-catalog.json`) and lineage (`v2-decision-lineage.json`) is the *evidence* for this standard; USF will define its own unified ADR form and schema (deferred, §23). The historical untraced-decision failure (rule R13) is the enforcement floor.
+19.7 The historical split of decision (`v2-decision-catalog.json`) and lineage (`v2-decision-lineage.json`) is the *evidence* for this standard; USF will define its own unified ADR form; the draft `adr.schema.json` now exists (see §23 Amendment); the unified ADR canon + active maturity remain deferred. The historical untraced-decision failure (rule R13) is the enforcement floor.
 
 ---
 
@@ -517,7 +517,7 @@ This profile is acceptable when **all** hold:
 - **Source-evidence role defined** — §10, including minimum source-reference fields without creating a schema.
 - **Provider and environment standards defined** — §12, §13.
 - **AI alignment rules defined** — §20 (and woven through §9–§19).
-- **Future artefacts identified without creating them** — schemas, registries, vocabularies, ADRs, validators, and evidence envelopes are named and located, not authored (§9, §23).
+- **Future artefacts identified without creating them** — schemas, registries, vocabularies, ADRs, validators, and evidence envelopes are named and located; the 23 schema files + a draft/advisory validator have since been authored at draft level (§23 Amendment), while ADR canon and evidence instances remain unauthored.
 
 ---
 
@@ -525,12 +525,14 @@ This profile is acceptable when **all** hold:
 
 The following are **deferred, not blockers** after the later taxonomy, vocabulary, and schema-registry artefacts in this foundational sequence. Resolved successors are governed by those later artefacts; the remaining items below MUST be resolved by a future ADR or schema/validator artefact before they are enforced.
 
-- **JSON Schema validator tooling and schema self-validation** remain deferred; the dialect is resolved by `schema-authoring-standard.md` as Draft 2020-12, and the schema `$id` convention is resolved there as `urn:usf:schema:<schema-name>` (any `$id` versioning convention remains deferred).
-- **Exact ADR schema** (the unified USF ADR form, superseding the historical catalog/lineage split).
-- **Exact evidence envelope schema** (fields for raw/normalised/proof/report/attestation, provider mode, environment, freshness).
-- **Exact provider-mode schema and selector enforcement** (the value set now exists; schema and selector wiring remain deferred).
-- **Exact environment schema and readiness-gate enforcement** (the value set now exists; schema and gate wiring remain deferred).
-- **Exact validator report schema** (machine-readable finding shape, severity, subject).
+> **Amendment (2026-06 — partially resolved by directive).** Under an explicit directive, the 23 JSON Schema files now exist under `spec/schemas/` at lifecycle `draft`, and a draft/advisory validator (`tools/validate-spec/validate-spec.py`, `jsonschema==4.10.3`) is CI-enforced for the `spec/` corpus (see schema-authoring-standard §26 Amendment A; Naming Standard §6.E.1). This partially resolves the bullets below at **draft schema level / advisory validator level only** — not active semantic finality. Specifically resolved-to-draft: JSON Schema validator tooling; schema self-validation of the registry/taxonomy/vocabulary catalogues; and the evidence-envelope, provider-mode, environment, validator-report, source-reference, source-disposition, ADR, interface-contract, event-contract, import-manifest, and all remaining schema *files* (the full set of 23). Wherever this profile elsewhere calls one of the 23 schema files a *future artefact* or *deferred*, read it as resolved at draft-schema level per this Amendment. **Still deferred:** ADR formalisation of this lift, real (non-synthetic) instance validation, promotion to active maturity, OpenAPI/AsyncAPI decisions, the observability attribute vocabulary, and implementation extraction.
+
+- **JSON Schema validator tooling and schema self-validation** *(partially resolved — see Amendment above; validator is advisory)*; the dialect is resolved by `schema-authoring-standard.md` as Draft 2020-12, and the schema `$id` convention is resolved there as `urn:usf:schema:<schema-name>` (any `$id` versioning convention remains deferred).
+- **Exact ADR schema** (the unified USF ADR form, superseding the historical catalog/lineage split) *(schema file exists at draft — see Amendment; ADR canon + active maturity still deferred)*.
+- **Exact evidence envelope schema** (fields for raw/normalised/proof/report/attestation, provider mode, environment, freshness) *(draft schema exists — see Amendment)*.
+- **Exact provider-mode schema and selector enforcement** (the value set now exists; draft schema exists — see Amendment; selector wiring remains deferred).
+- **Exact environment schema and readiness-gate enforcement** (the value set now exists; draft schema exists — see Amendment; gate wiring remains deferred).
+- **Exact validator report schema** (machine-readable finding shape, severity, subject) *(draft schema exists — see Amendment)*.
 - **Exact OpenAPI/AsyncAPI artefact decisions** (whether to adopt the file formats or a USF-defined interface/event contract form).
 - **Exact observability attribute vocabulary** (the controlled set of names for logs/metrics/traces/spans/attributes/events).
 - **Exact source registry fields** (the schema for the minimum source-reference fields named in §10.6).

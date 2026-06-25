@@ -1,0 +1,34 @@
+{
+  "id": "wf-failure-paths-empty-string",
+  "workflowKind": "workflow",
+  "title": "Workflow with an empty-string failure path item",
+  "description": "DEFECT: failurePaths contains an empty string, violating the item minLength 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because a failure path entry must be a non-empty string.",
+  "participants": [
+    "platform-api"
+  ],
+  "ordering": "sequential",
+  "steps": [
+    {
+      "id": "create-tenant"
+    }
+  ],
+  "stateTransitions": [],
+  "failurePaths": [
+    ""
+  ],
+  "compensationPaths": [
+    "rollback"
+  ]
+}

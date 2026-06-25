@@ -1,0 +1,16 @@
+{
+  "id": "usf.ai-governance.negative.generated-artefact-empty-references",
+  "aiKind": "ai-generated-artefact",
+  "rationale": "An ai-generated-artefact whose references array is empty.",
+  "references": [],
+  "stopConditions": ["The generated artefact conflicts with a higher-authority artefact."],
+  "authorityOrderAcknowledged": true,
+  "title": "AI-generated artefact with empty references",
+  "description": "Invalid ai-governance artefact: aiKind is ai-generated-artefact and references is empty, violating the conditional minItems of 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Defect fixture: ai-generated-artefact with empty references."
+}

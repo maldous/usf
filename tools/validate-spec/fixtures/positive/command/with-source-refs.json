@@ -1,0 +1,22 @@
+{
+  "id": "usf.command.example.with-source-refs",
+  "commandKind": "proof-command",
+  "purpose": "Execute the authentication behaviour proof against the hermetic identity fixture and emit collected evidence.",
+  "failureSemantics": "Fails closed when the hermetic fixture is unavailable; the proof MUST NOT report a real-provider success from mock fixtures.",
+  "title": "Proof command with populated source references and arrays",
+  "description": "Valid command artefact carrying non-empty sourceRefs items together with populated inputs, outputs, environmentScope and sideEffects, preserving source lineage to the historical proof script.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command", "Evidence"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds", "environment-classes"],
+  "aiGuidance": "Treat the sourceRefs as quoted historical lineage; do not adopt the historical paths as USF target paths or delete the command without a recorded disposition.",
+  "invocation": "make proof-auth",
+  "inputs": ["auth-fixture-config"],
+  "outputs": ["login-response.collected.json"],
+  "environmentScope": ["hermetic", "local"],
+  "sideEffects": ["writes collected evidence under evidence/"],
+  "emitsEvidence": true,
+  "sourceRefs": ["../react/Makefile#proof-auth", "../react/tools/v2-readiness/proof-runner.ts"],
+  "disposition": "preserve"
+}

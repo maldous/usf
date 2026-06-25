@@ -1,0 +1,22 @@
+{
+  "id": "contract.neg-missing-facet",
+  "title": "Semantic contract missing one required facet",
+  "description": "DEFECT: the uiSemanticDefinition facet is absent; all ten facets are required.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["authority-levels"],
+  "aiGuidance": "All ten capability facets are required.",
+  "facets": {
+    "lifecycle": { "status": "gap" },
+    "stateModel": { "status": "gap" },
+    "permissions": { "status": "gap" },
+    "contracts": { "status": "gap" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "gap" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "gap" }
+  }
+}

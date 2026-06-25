@@ -1,0 +1,25 @@
+{
+  "id": "ui-journey-name-empty",
+  "uiKind": "journey",
+  "title": "UI model with an empty journey name",
+  "description": "DEFECT: a journey name is an empty string, violating minLength 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "UI Semantic Model"
+  ],
+  "taxonomyRefs": [
+    "ui-semantic-classification"
+  ],
+  "vocabularyRefs": [
+    "ui-semantic-kinds"
+  ],
+  "aiGuidance": "Should be rejected because a journey name, when present, must be a non-empty string.",
+  "surface": "tenant-admin",
+  "journeys": [
+    {
+      "id": "start-onboarding",
+      "name": ""
+    }
+  ]
+}

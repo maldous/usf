@@ -1,0 +1,23 @@
+{
+  "id": "contract.baseline-all-facets",
+  "title": "Semantic contract with all ten facets present",
+  "description": "Baseline semantic contract carrying all ten required facets; each facet is a gap with no backing evidence yet.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract", "Capability"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["authority-levels", "lifecycle-states"],
+  "aiGuidance": "Read this contract before changing behaviour; a facet is complete only when it cites authoritative backing.",
+  "facets": {
+    "lifecycle": { "status": "gap" },
+    "stateModel": { "status": "gap" },
+    "permissions": { "status": "gap" },
+    "contracts": { "status": "gap" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "gap" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "gap" },
+    "uiSemanticDefinition": { "status": "gap" }
+  }
+}

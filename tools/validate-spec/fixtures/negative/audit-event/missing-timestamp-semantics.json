@@ -1,0 +1,17 @@
+{
+  "id": "usf.audit-event.negative.missing-timestamp-semantics",
+  "auditKind": "audit-event",
+  "actor": "authenticated-user",
+  "action": "view-record",
+  "subject": "tenant-record",
+  "securitySensitive": false,
+  "stateChanging": false,
+  "title": "Audit event missing timestampSemantics",
+  "description": "Invalid audit-event artefact: the required timestampSemantics property is absent.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Audit Event"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["audit-event-kinds"],
+  "aiGuidance": "Defect fixture: timestampSemantics omitted."
+}

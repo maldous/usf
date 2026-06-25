@@ -1,0 +1,18 @@
+{
+  "id": "usf.command.negative.non-canonical-command-kind",
+  "commandKind": "shell-command",
+  "purpose": "Command using a commandKind that is not a canonical command-kinds value.",
+  "failureSemantics": "Fails closed on any non-zero subcommand exit.",
+  "title": "Command with a non-canonical commandKind",
+  "description": "Invalid command artefact: commandKind is shell-command, which is not in the canonical command-kinds enum.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds"],
+  "aiGuidance": "Defect fixture: non-canonical commandKind value.",
+  "inputs": [],
+  "outputs": [],
+  "environmentScope": [],
+  "sideEffects": []
+}

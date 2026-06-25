@@ -1,0 +1,11 @@
+{
+  "target": "schema",
+  "schema": "adr",
+  "op": "set",
+  "pointer": "/properties/__brokenref",
+  "value": {
+    "$ref": "#/$defs/nope"
+  },
+  "expectedRule": "USF-REF-001",
+  "note": "dangling local $ref"
+}

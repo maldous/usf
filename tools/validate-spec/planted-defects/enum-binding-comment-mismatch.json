@@ -1,0 +1,9 @@
+{
+  "target": "schema",
+  "schema": "taxonomy",
+  "op": "set",
+  "pointer": "/$defs/lifecycleState/$comment",
+  "value": "Canonical values from the vocabulary value set 'schema-classes'.",
+  "expectedRule": "USF-ENUM-006",
+  "note": "binding (lifecycle-states) must disagree with a $comment naming a different set"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "data.neg-migration-no-checksum",
+  "dataKind": "migration",
+  "title": "Migration missing checksum",
+  "description": "DEFECT: a migration without a checksum.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Migration"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "A migration must declare its checksum.",
+  "migrationOrder": 2,
+  "immutable": true
+}

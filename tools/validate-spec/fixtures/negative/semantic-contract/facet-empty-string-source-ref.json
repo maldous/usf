@@ -1,0 +1,23 @@
+{
+  "id": "contract.neg-empty-source-ref",
+  "title": "Semantic contract facet with an empty-string source ref",
+  "description": "DEFECT: the proof facet is complete and cites sourceRefs containing an empty string.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["authority-levels"],
+  "aiGuidance": "Source references must be non-empty strings.",
+  "facets": {
+    "lifecycle": { "status": "gap" },
+    "stateModel": { "status": "gap" },
+    "permissions": { "status": "gap" },
+    "contracts": { "status": "gap" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "gap" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "complete", "sourceRefs": [""] },
+    "uiSemanticDefinition": { "status": "gap" }
+  }
+}

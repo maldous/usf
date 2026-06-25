@@ -1,0 +1,23 @@
+{
+  "id": "contract.neg-empty-evidence-ref",
+  "title": "Semantic contract facet with an empty-string evidence ref",
+  "description": "DEFECT: the lifecycle facet is complete and cites evidenceRefs containing an empty string.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["authority-levels"],
+  "aiGuidance": "Evidence references must be non-empty strings.",
+  "facets": {
+    "lifecycle": { "status": "complete", "evidenceRefs": [""] },
+    "stateModel": { "status": "gap" },
+    "permissions": { "status": "gap" },
+    "contracts": { "status": "gap" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "gap" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "gap" },
+    "uiSemanticDefinition": { "status": "gap" }
+  }
+}

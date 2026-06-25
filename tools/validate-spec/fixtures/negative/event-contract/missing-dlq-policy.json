@@ -1,0 +1,24 @@
+{
+  "id": "evt-missing-dlq-policy",
+  "title": "Event missing dlqPolicy",
+  "description": "DEFECT: an event-kind contract omits the required dlqPolicy.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because event kinds require a dead-letter policy.",
+  "eventKind": "event",
+  "payloadSchemaRef": "urn:usf:schema:semantic-contract#payload",
+  "producer": "platform-api",
+  "ordering": "per-tenant ordered",
+  "idempotencyKey": "tenantId",
+  "retention": "7 days",
+  "canonical": true
+}

@@ -2,24 +2,213 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:source-disposition",
   "title": "USF Source Disposition Schema",
-  "description": "Draft JSON Schema for the declared treatment of a source element mapped into (or excluded from) USF. Enforces the no-knowledge-loss rule: every dispositioned element links to a source reference, carries a disposition value (disposition-values), and a rationale. Governs the ontology concepts Disposition and Source Reference. A disposition is a recorded decision, not silence, and does not by itself imply implementation acceptance. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for the declared treatment of a source element mapped into (or excluded from) USF. Enforces the no-knowledge-loss rule: every dispositioned element links to a source reference (id or a closed inline reference object), carries a disposition value (disposition-values), and a rationale. A disposition is a recorded decision, not silence, and does not by itself imply implementation acceptance. Governs the ontology concepts Disposition and Source Reference. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11); kind (artefact-kinds) and version are deviated/deferred (recorded per section 9.3). lifecycleState draft; not active.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "sourceRef", "disposition", "rationale"],
+  "required": [
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "sourceRef",
+    "disposition",
+    "rationale"
+  ],
+  "$defs": {
+    "kebab": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    }
+  },
   "properties": {
-    "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
-    "sourceRef": {
-      "$comment": "Link to a source reference: either an id string or an inline reference object.",
-      "oneOf": [
-        {"type": "string", "minLength": 1},
-        {"type": "object", "required": ["repository"], "properties": {"repository": {"type": "string"}, "path": {"type": "string"}, "commit": {"type": "string"}, "tag": {"type": "string"}}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels value pinned to the registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
       ]
     },
-    "disposition": {"type": "string", "enum": ["preserve", "rename", "refactor", "merge", "split", "replace", "retire", "defer", "reject"]},
-    "rationale": {"type": "string", "minLength": 1},
-    "sourceKind": {"type": "string", "enum": ["source-file", "semantic-artefact", "documentation", "make-target", "package-script", "environment-variable", "configuration-file", "configuration-key", "compose-service", "application", "package", "module", "test", "e2e-journey", "proof-script", "generated-report", "readiness-gate", "operational-semantic", "event-semantic", "ui-semantic", "data-migration-artefact", "observability-audit-artefact"]},
-    "sourceRole": {"type": "string", "enum": ["semantic-source", "behavioural-evidence", "proof-evidence", "operational-evidence", "configuration-evidence", "command-evidence", "ui-evidence", "interface-evidence", "event-workflow-evidence", "data-evidence", "observability-audit-evidence", "generated-summary-evidence", "historical-lineage"]},
-    "targetUsfConcept": {"type": "string", "$comment": "The USF concept/artefact the element maps to, or an explicit exclusion. Source path MUST NOT dictate target path."},
-    "impliesImplementationAcceptance": {"type": "boolean", "const": false, "$comment": "Disposition never confers implementation acceptance by itself."}
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceRef": {
+      "$comment": "A source reference: either an id string or a closed inline reference object.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "commit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "path"
+              ]
+            },
+            {
+              "required": [
+                "commit"
+              ]
+            },
+            {
+              "required": [
+                "tag"
+              ]
+            }
+          ],
+          "$comment": "Inline source reference: at least one non-empty locator (path/commit/tag) is required so the reference is resolvable."
+        }
+      ]
+    },
+    "disposition": {
+      "type": "string",
+      "enum": [
+        "preserve",
+        "rename",
+        "refactor",
+        "merge",
+        "split",
+        "replace",
+        "retire",
+        "defer",
+        "reject"
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceKind": {
+      "type": "string",
+      "enum": [
+        "source-file",
+        "semantic-artefact",
+        "documentation",
+        "make-target",
+        "package-script",
+        "environment-variable",
+        "configuration-file",
+        "configuration-key",
+        "compose-service",
+        "application",
+        "package",
+        "module",
+        "test",
+        "e2e-journey",
+        "proof-script",
+        "generated-report",
+        "readiness-gate",
+        "operational-semantic",
+        "event-semantic",
+        "ui-semantic",
+        "data-migration-artefact",
+        "observability-audit-artefact"
+      ]
+    },
+    "sourceRole": {
+      "type": "string",
+      "enum": [
+        "semantic-source",
+        "behavioural-evidence",
+        "proof-evidence",
+        "operational-evidence",
+        "configuration-evidence",
+        "command-evidence",
+        "ui-evidence",
+        "interface-evidence",
+        "event-workflow-evidence",
+        "data-evidence",
+        "observability-audit-evidence",
+        "generated-summary-evidence",
+        "historical-lineage"
+      ]
+    },
+    "targetUsfConcept": {
+      "type": "string",
+      "$comment": "Source path MUST NOT dictate target path.",
+      "minLength": 1
+    },
+    "impliesImplementationAcceptance": {
+      "type": "boolean",
+      "const": false,
+      "$comment": "Disposition never confers implementation acceptance by itself."
+    }
   }
 }

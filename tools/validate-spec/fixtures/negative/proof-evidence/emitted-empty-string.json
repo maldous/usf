@@ -1,0 +1,18 @@
+{
+  "id": "usf.proof-evidence.bad.emitted-empty-string",
+  "kind": "proof",
+  "title": "Invalid proof with an empty-string emitted evidence item",
+  "description": "Rejected: an emitted evidence item is an empty string, which violates the minLength on evidence items.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Evidence"],
+  "taxonomyRefs": ["proof-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: an emitted evidence item is empty.",
+  "proofLevelClaimed": "behaviour-proven",
+  "proofLevelObserved": "behaviour-proven",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "emittedEvidence": [""],
+  "collectedEvidence": ["trace.collected.json"]
+}

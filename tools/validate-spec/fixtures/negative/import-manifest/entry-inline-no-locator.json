@@ -1,0 +1,23 @@
+{
+  "id": "import-manifest-entry-inline-no-locator",
+  "title": "Import manifest: entry inline sourceRef with no locator",
+  "sourceRepository": "../react",
+  "entries": [
+    {
+      "sourceRef": {
+        "repository": "../react"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "semantic-source",
+      "disposition": "preserve",
+      "rationale": "Inline reference has repository only, with no locator."
+    }
+  ],
+  "description": "Defect: an entry inline sourceRef has repository only, with no path/commit/tag.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Disposition"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because an entry inline reference has no locator."
+}

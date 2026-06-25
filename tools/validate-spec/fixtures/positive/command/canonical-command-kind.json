@@ -1,0 +1,18 @@
+{
+  "id": "usf.command.example.canonical-command-kind",
+  "commandKind": "validation-command",
+  "purpose": "Run the USF validator suite to check mutual consistency of semantics, references and controlled values.",
+  "failureSemantics": "Fails closed on contradiction, ambiguity, unknown controlled values, or unresolved references.",
+  "title": "Command using a canonical commandKind value",
+  "description": "Valid command artefact whose commandKind is a canonical command-kinds value, with non-empty inputs and outputs and empty environmentScope and sideEffects.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command", "Validator"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds"],
+  "aiGuidance": "Treat this as a governed validation command; do not weaken its failure semantics to make a run appear to pass.",
+  "inputs": ["spec/"],
+  "outputs": ["validator-findings.json"],
+  "environmentScope": [],
+  "sideEffects": []
+}

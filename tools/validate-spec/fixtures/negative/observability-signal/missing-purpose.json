@@ -1,0 +1,14 @@
+{
+  "id": "usf.observability-signal.negative.missing-purpose",
+  "signalKind": "metric",
+  "name": "auth_login_duration_seconds",
+  "source": "authentication-service",
+  "title": "Observability signal missing purpose",
+  "description": "Invalid observability-signal artefact: the required purpose property is absent.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Observability Signal"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["observability-signal-kinds"],
+  "aiGuidance": "Defect fixture: purpose omitted."
+}

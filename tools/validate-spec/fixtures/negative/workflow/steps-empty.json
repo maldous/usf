@@ -1,0 +1,30 @@
+{
+  "id": "wf-steps-empty",
+  "workflowKind": "workflow",
+  "title": "Workflow with empty steps",
+  "description": "DEFECT: steps is an empty array, violating minItems 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because a workflow requires at least one step.",
+  "participants": [
+    "platform-api"
+  ],
+  "ordering": "sequential",
+  "steps": [],
+  "stateTransitions": [],
+  "failurePaths": [
+    "abort"
+  ],
+  "compensationPaths": [
+    "rollback"
+  ]
+}

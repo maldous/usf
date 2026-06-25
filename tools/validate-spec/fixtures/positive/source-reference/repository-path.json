@@ -1,0 +1,17 @@
+{
+  "id": "src-ref-auth-service-path",
+  "repository": "../react",
+  "path": "src/services/auth/loginController.ts",
+  "sourceKind": "source-file",
+  "sourceRole": "semantic-source",
+  "disposition": "preserve",
+  "rationale": "Historical login controller is preserved as semantic source for the USF authentication contract.",
+  "title": "Auth login controller source reference (path locator)",
+  "description": "Reference to the historical login controller file in ../react, located by verbatim path, as semantic source for the USF authentication contract.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "Treat this path as quoted historical evidence; do not adopt the source path as a USF target path."
+}
