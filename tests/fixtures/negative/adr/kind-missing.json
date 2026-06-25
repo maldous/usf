@@ -1,0 +1,20 @@
+{
+  "id": "0008-kind-missing",
+  "title": "ADR missing the kind discriminator",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "context": "An ADR that omits the required kind field.",
+  "decision": "Test that a missing kind is rejected.",
+  "consequences": ["The artefact cannot be recognised as an ADR."],
+  "invariants": ["kind must be present and equal to adr."],
+  "forbiddenDrift": ["Do not omit the kind discriminator."],
+  "aiAlignmentRules": ["Stop if the artefact kind is unknown."],
+  "permittedChanges": ["The kind discriminator may be corrected by a recorded decision."],
+  "semanticRefs": ["authentication-contract"],
+  "description": "Defect: required property kind is missing.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because kind is missing."
+}

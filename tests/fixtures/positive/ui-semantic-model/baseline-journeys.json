@@ -1,0 +1,45 @@
+{
+  "id": "ui-tenant-onboarding-journey",
+  "uiKind": "journey",
+  "title": "Tenant onboarding UI journey model",
+  "description": "Baseline UI semantic model with a canonical uiKind and journey items each carrying a non-empty id.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "UI Semantic Model",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "ui-semantic-classification"
+  ],
+  "vocabularyRefs": [
+    "ui-semantic-kinds"
+  ],
+  "aiGuidance": "Regenerate the visual layer from these semantics; never invent journeys, states, or permissions in code.",
+  "surface": "tenant-admin",
+  "route": "/tenants/onboard",
+  "journeys": [
+    {
+      "id": "start-onboarding",
+      "name": "Start onboarding",
+      "steps": [
+        "enter-tenant-name",
+        "confirm-billing-plan"
+      ]
+    },
+    {
+      "id": "complete-onboarding",
+      "name": "Complete onboarding"
+    }
+  ],
+  "states": [
+    "draft",
+    "submitted"
+  ],
+  "permissions": [
+    "tenant:create"
+  ],
+  "capabilityRefs": [
+    "tenant-provisioning"
+  ]
+}

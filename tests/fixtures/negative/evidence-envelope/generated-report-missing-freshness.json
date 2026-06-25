@@ -1,0 +1,13 @@
+{
+  "id": "evidence.neg-report-no-freshness",
+  "title": "Generated report missing freshness",
+  "description": "DEFECT: generated-report references evidence but is not freshness-pinned.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "A generated report must be freshness-pinned.",
+  "evidenceKind": "generated-report",
+  "evidenceRefs": ["evidence.runtime-proof-login-hermetic"]
+}

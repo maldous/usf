@@ -1,0 +1,14 @@
+{
+  "id": "data.neg-restore-empty-collected",
+  "dataKind": "restore-evidence",
+  "title": "Restore evidence with empty collected-evidence array",
+  "description": "DEFECT: restore evidence with collectedEvidence as an empty array (minItems 1 required for backup/restore).",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Backup / Restore"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Restore evidence collected evidence must be non-empty.",
+  "emittedEvidence": ["restore-log.json"],
+  "collectedEvidence": []
+}

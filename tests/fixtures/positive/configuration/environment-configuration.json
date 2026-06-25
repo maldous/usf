@@ -1,0 +1,15 @@
+{
+  "id": "config.environment-scope",
+  "configurationKind": "environment-configuration",
+  "title": "Environment-scoped configuration",
+  "description": "An environment configuration that declares the environment class it scopes to.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds", "environment-classes"],
+  "aiGuidance": "Record the environment class explicitly; never let an environment claim exceed its evidence.",
+  "purpose": "Scope configuration to a specific environment class.",
+  "secretBearing": false,
+  "environment": "staging"
+}

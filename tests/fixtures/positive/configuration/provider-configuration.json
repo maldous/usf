@@ -1,0 +1,15 @@
+{
+  "id": "config.provider-mode-selector",
+  "configurationKind": "provider-configuration",
+  "title": "Provider mode selector configuration",
+  "description": "A provider configuration that declares the provider mode it selects for the platform.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds", "provider-modes"],
+  "aiGuidance": "Record the provider mode explicitly; never infer or upgrade a provider claim from a hermetic mode to a live one.",
+  "purpose": "Select the provider mode used by the platform substrate.",
+  "secretBearing": false,
+  "providerMode": "hermetic-mock"
+}

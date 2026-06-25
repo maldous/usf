@@ -1,0 +1,16 @@
+{
+  "id": "usf.ai-governance.negative.generated-artefact-empty-string-reference",
+  "aiKind": "ai-generated-artefact",
+  "rationale": "An ai-generated-artefact whose references array contains an empty string item.",
+  "references": [""],
+  "stopConditions": ["The generated artefact conflicts with a higher-authority artefact."],
+  "authorityOrderAcknowledged": true,
+  "title": "AI-generated artefact with an empty-string references item",
+  "description": "Invalid ai-governance artefact: references contains an empty string, violating the minLength on reference items.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Defect fixture: empty-string reference item."
+}

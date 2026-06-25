@@ -1,0 +1,25 @@
+{
+  "id": "usf.validator-report.bad.pass-with-blocking-finding",
+  "authorityLevel": "generated-report",
+  "status": "pass",
+  "findings": [
+    {
+      "ruleId": "envelope-required-fields",
+      "severity": "blocking",
+      "subject": "spec/schemas/example.schema.json",
+      "message": "A blocking finding is present, which contradicts a pass status."
+    }
+  ],
+  "evidenceRefs": ["evidence/envelope-check.collected.json"],
+  "freshness": {
+    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "stale": false
+  },
+  "title": "Invalid pass report carrying a blocking finding",
+  "description": "Rejected: a pass status that carries a blocking-severity finding; a pass report MUST NOT contain blocking or error findings.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Validator", "Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["report-statuses", "validation-severities"],
+  "aiGuidance": "This record is intentionally invalid: a blocking finding cannot coexist with pass."
+}

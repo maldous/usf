@@ -1,0 +1,15 @@
+{
+  "id": "config.proof-relevant-flag",
+  "configurationKind": "proof-configuration",
+  "title": "Proof-relevant configuration",
+  "description": "A proof configuration that declares proof relevance true because a proof depends on it.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds"],
+  "aiGuidance": "Mark proof-relevant configuration so proof collection knows the configuration it depends on.",
+  "purpose": "Configure the substrate a proof depends on.",
+  "secretBearing": false,
+  "proofRelevant": true
+}

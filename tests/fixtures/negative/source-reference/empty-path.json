@@ -1,0 +1,17 @@
+{
+  "id": "src-ref-empty-path",
+  "repository": "../react",
+  "path": "",
+  "sourceKind": "source-file",
+  "sourceRole": "semantic-source",
+  "disposition": "preserve",
+  "rationale": "Path provided but empty, which fails the minLength constraint.",
+  "title": "Source reference with empty path",
+  "description": "Defect: path is an empty string, violating minLength 1.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because path is empty."
+}

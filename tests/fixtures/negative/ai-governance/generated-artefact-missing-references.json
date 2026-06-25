@@ -1,0 +1,15 @@
+{
+  "id": "usf.ai-governance.negative.generated-artefact-missing-references",
+  "aiKind": "ai-generated-artefact",
+  "rationale": "An ai-generated-artefact that omits the conditionally required references array.",
+  "stopConditions": ["The generated artefact conflicts with a higher-authority artefact."],
+  "authorityOrderAcknowledged": true,
+  "title": "AI-generated artefact missing references",
+  "description": "Invalid ai-governance artefact: aiKind is ai-generated-artefact but the conditionally required references property is absent.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Defect fixture: ai-generated-artefact with references omitted."
+}

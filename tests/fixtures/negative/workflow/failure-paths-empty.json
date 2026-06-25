@@ -1,0 +1,32 @@
+{
+  "id": "wf-failure-paths-empty",
+  "workflowKind": "workflow",
+  "title": "Workflow with empty failurePaths",
+  "description": "DEFECT: failurePaths is an empty array, violating minItems 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because at least one explicit failure path is required.",
+  "participants": [
+    "platform-api"
+  ],
+  "ordering": "sequential",
+  "steps": [
+    {
+      "id": "create-tenant"
+    }
+  ],
+  "stateTransitions": [],
+  "failurePaths": [],
+  "compensationPaths": [
+    "rollback"
+  ]
+}

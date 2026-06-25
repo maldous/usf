@@ -1,0 +1,25 @@
+{
+  "id": "iface-body-extra-prop",
+  "title": "Interface with an arbitrary extra property inside a contract body",
+  "description": "DEFECT: requestContract carries an undeclared property, violating the closed contractBody (additionalProperties false).",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Should be rejected because contract bodies are closed objects.",
+  "interfaceKind": "api-route",
+  "purpose": "An interface whose request contract smuggles an unreviewed field.",
+  "boundary": "platform-api inbound HTTP boundary",
+  "semanticContractRef": "semantic-contract:tenant-provisioning",
+  "requestContract": {
+    "schemaRef": "urn:usf:schema:semantic-contract#create-tenant-request",
+    "unreviewedField": "not allowed"
+  }
+}

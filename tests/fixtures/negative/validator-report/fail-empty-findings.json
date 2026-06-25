@@ -1,0 +1,18 @@
+{
+  "id": "usf.validator-report.bad.fail-empty-findings",
+  "authorityLevel": "generated-report",
+  "status": "fail",
+  "findings": [],
+  "evidenceRefs": ["evidence/envelope-check.collected.json"],
+  "freshness": {
+    "commit": "abcdef0123456789abcdef0123456789abcdef01",
+    "stale": false
+  },
+  "title": "Invalid fail report with no findings",
+  "description": "Rejected: a fail status with an empty findings array; a fail report must carry at least one finding describing the contradiction.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Validator", "Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["report-statuses", "validation-severities"],
+  "aiGuidance": "This record is intentionally invalid: a fail report carries no findings."
+}

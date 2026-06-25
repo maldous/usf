@@ -1,0 +1,15 @@
+{
+  "id": "disp-implies-acceptance-true",
+  "title": "Disposition: implies-acceptance set true",
+  "description": "Defect: impliesImplementationAcceptance is true, violating the const false constraint.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "This instance must be rejected because a disposition may never confer implementation acceptance.",
+  "sourceRef": "src-ref-auth-service-path",
+  "disposition": "preserve",
+  "rationale": "Attempts to assert implementation acceptance via the disposition itself.",
+  "impliesImplementationAcceptance": true
+}

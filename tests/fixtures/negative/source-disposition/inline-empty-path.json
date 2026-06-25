@@ -1,0 +1,17 @@
+{
+  "id": "disp-inline-empty-path",
+  "title": "Disposition: inline sourceRef with empty path",
+  "description": "Defect: inline sourceRef path is an empty string, violating minLength 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "This instance must be rejected because the inline source reference path is empty.",
+  "sourceRef": {
+    "repository": "../react",
+    "path": ""
+  },
+  "disposition": "preserve",
+  "rationale": "Inline reference path is empty."
+}

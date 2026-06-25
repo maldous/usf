@@ -1,0 +1,24 @@
+{
+  "id": "iface-fields-empty",
+  "title": "Interface with an empty fields array",
+  "description": "DEFECT: outputContract.fields is an empty array, violating minItems 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Should be rejected because fields must be non-empty.",
+  "interfaceKind": "query",
+  "purpose": "An interface whose output field list is empty.",
+  "boundary": "platform-api query boundary",
+  "semanticContractRef": "semantic-contract:tenant-read",
+  "outputContract": {
+    "fields": []
+  }
+}

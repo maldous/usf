@@ -1,0 +1,35 @@
+{
+  "id": "import-manifest-auth-inline-refs",
+  "title": "Import manifest: auth entries with inline source references",
+  "sourceRepository": "../react",
+  "entries": [
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "src/services/auth/loginController.ts"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "semantic-source",
+      "disposition": "refactor",
+      "rationale": "Login controller refactored into the authentication contract with lineage preserved.",
+      "targetUsfConcept": "Authentication Contract"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "commit": "9f2c1ab7d4e0f6b8c3a51029d7e4f8b0c1a2d3e4"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "defer",
+      "rationale": "Behavioural test retained as evidence pending a later disposition decision."
+    }
+  ],
+  "description": "Controlled import manifest where each entry uses an inline source reference object.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Disposition"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "Inline locators are quoted historical evidence and must not become USF target paths."
+}

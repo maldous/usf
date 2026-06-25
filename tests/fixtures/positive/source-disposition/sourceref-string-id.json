@@ -1,0 +1,14 @@
+{
+  "id": "disp-auth-controller-preserve",
+  "title": "Disposition: preserve auth controller (sourceRef as id)",
+  "description": "Records a preserve disposition for the historical auth controller, referencing a source reference by its id.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "A disposition is a recorded decision; preserve does not by itself confer implementation acceptance.",
+  "sourceRef": "src-ref-auth-service-path",
+  "disposition": "preserve",
+  "rationale": "The historical auth controller is preserved as semantic source for the USF authentication contract."
+}

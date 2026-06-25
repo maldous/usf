@@ -1,0 +1,24 @@
+{
+  "id": "usf.proof-evidence.example.live-external",
+  "kind": "proof",
+  "title": "Live external provider proof at the substrate floor",
+  "description": "Valid proof-evidence record asserting a live-external-provider claim: the provider mode is live-external-provider and the observed level is at the substrate floor, satisfying the live-provider floor.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Proof Level", "Evidence", "Provider Mode"],
+  "taxonomyRefs": ["proof-classification", "provider-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "A live-external-provider claim is only honest at the substrate floor or above; never derive it from hermetic evidence.",
+  "claimExercised": "Authentication login succeeds against a real external identity provider.",
+  "proofLevelClaimed": "substrate-proven",
+  "proofLevelObserved": "substrate-proven",
+  "providerMode": "live-external-provider",
+  "environment": "staging",
+  "liveExternalProviderClaim": true,
+  "emittedEvidence": ["live-login-response.json"],
+  "collectedEvidence": ["live-login-response.collected.json"],
+  "freshness": {
+    "commit": "fedcba9876543210fedcba9876543210fedcba98",
+    "stale": false
+  }
+}

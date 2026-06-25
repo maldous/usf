@@ -1,0 +1,15 @@
+{
+  "id": "data.migration-0001-create-tenants",
+  "dataKind": "migration",
+  "title": "Forward-only checksum-immutable migration",
+  "description": "A committed migration declaring its order, a checksum, and immutable true; it is never edited once committed.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Migration"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Never edit a committed migration; add a new forward-only migration instead.",
+  "migrationOrder": 1,
+  "checksum": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+  "immutable": true
+}

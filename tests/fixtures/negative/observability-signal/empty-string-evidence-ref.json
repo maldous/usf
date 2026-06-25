@@ -1,0 +1,16 @@
+{
+  "id": "usf.observability-signal.negative.empty-string-evidence-ref",
+  "signalKind": "metric",
+  "name": "auth_login_duration_seconds",
+  "source": "authentication-service",
+  "purpose": "Measure authentication login latency.",
+  "title": "Observability signal with an empty-string evidenceRefs item",
+  "description": "Invalid observability-signal artefact: evidenceRefs contains an empty string, violating the minLength on reference items.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Observability Signal"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["observability-signal-kinds"],
+  "aiGuidance": "Defect fixture: empty-string evidence reference item.",
+  "evidenceRefs": [""]
+}

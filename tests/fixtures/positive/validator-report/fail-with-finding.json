@@ -1,0 +1,26 @@
+{
+  "id": "usf.validator-report.example.fail",
+  "authorityLevel": "generated-report",
+  "status": "fail",
+  "findings": [
+    {
+      "ruleId": "envelope-required-fields",
+      "severity": "blocking",
+      "subject": "spec/schemas/example.schema.json",
+      "message": "Instance is missing a required governance envelope field.",
+      "evidenceRefs": ["evidence/envelope-check.collected.json"]
+    }
+  ],
+  "evidenceRefs": ["evidence/envelope-check.collected.json"],
+  "freshness": {
+    "commit": "abcdef0123456789abcdef0123456789abcdef01",
+    "stale": false
+  },
+  "title": "Envelope validator report (fail)",
+  "description": "Valid fail report: it references the evidence it summarises and carries at least one finding describing the contradiction that caused the failure.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Validator", "Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["report-statuses", "validation-severities"],
+  "aiGuidance": "A fail report must reference evidence and carry a finding; it records a contradiction to reconcile."
+}

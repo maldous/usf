@@ -1,0 +1,15 @@
+{
+  "id": "config.neg-proof-relevant-false",
+  "configurationKind": "proof-configuration",
+  "title": "Proof configuration with proofRelevant false",
+  "description": "DEFECT: proof-configuration kind requires proofRelevant true, but this declares false.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds"],
+  "aiGuidance": "A proof configuration must declare proof relevance true.",
+  "purpose": "Configure a proof substrate.",
+  "secretBearing": false,
+  "proofRelevant": false
+}

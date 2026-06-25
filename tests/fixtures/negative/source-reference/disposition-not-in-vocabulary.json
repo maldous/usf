@@ -1,0 +1,17 @@
+{
+  "id": "src-ref-disposition-off-vocab",
+  "repository": "../react",
+  "path": "src/services/auth/loginController.ts",
+  "sourceKind": "source-file",
+  "sourceRole": "semantic-source",
+  "disposition": "archive",
+  "rationale": "Disposition value is not a canonical disposition-values id.",
+  "title": "Source reference with off-vocabulary disposition",
+  "description": "Defect: disposition value 'archive' is not in the disposition vocabulary enum.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because disposition is not a controlled value."
+}

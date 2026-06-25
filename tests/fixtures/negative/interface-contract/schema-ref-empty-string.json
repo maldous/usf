@@ -1,0 +1,24 @@
+{
+  "id": "iface-schema-ref-empty",
+  "title": "Interface with an empty schemaRef string",
+  "description": "DEFECT: requestContract.schemaRef is an empty string, violating minLength 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Should be rejected because schemaRef must be a non-empty string.",
+  "interfaceKind": "api-route",
+  "purpose": "An interface whose request schema reference is blank.",
+  "boundary": "platform-api inbound HTTP boundary",
+  "semanticContractRef": "semantic-contract:tenant-provisioning",
+  "requestContract": {
+    "schemaRef": ""
+  }
+}

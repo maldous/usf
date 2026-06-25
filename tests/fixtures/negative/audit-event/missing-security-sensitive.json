@@ -1,0 +1,17 @@
+{
+  "id": "usf.audit-event.negative.missing-security-sensitive",
+  "auditKind": "audit-event",
+  "actor": "authenticated-user",
+  "action": "view-record",
+  "subject": "tenant-record",
+  "timestampSemantics": "Server-assigned UTC timestamp recorded when the action is committed.",
+  "stateChanging": false,
+  "title": "Audit event missing securitySensitive",
+  "description": "Invalid audit-event artefact: the required securitySensitive boolean property is absent.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Audit Event"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["audit-event-kinds"],
+  "aiGuidance": "Defect fixture: securitySensitive omitted."
+}

@@ -1,0 +1,16 @@
+{
+  "id": "disp-inline-no-locator",
+  "title": "Disposition: inline sourceRef with no locator",
+  "description": "Defect: inline sourceRef has repository only, with no path/commit/tag locator.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "This instance must be rejected because the inline source reference has no locator.",
+  "sourceRef": {
+    "repository": "../react"
+  },
+  "disposition": "preserve",
+  "rationale": "Inline reference lacks any resolvable locator."
+}

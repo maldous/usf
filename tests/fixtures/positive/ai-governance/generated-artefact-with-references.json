@@ -1,0 +1,22 @@
+{
+  "id": "usf.ai-governance.example.generated-artefact",
+  "aiKind": "ai-generated-artefact",
+  "rationale": "An AI-generated artefact MUST carry rationale and at least one reference so its provenance and authority basis are traceable.",
+  "references": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md"
+  ],
+  "stopConditions": [
+    "The generated artefact conflicts with a higher-authority semantic definition or ADR."
+  ],
+  "authorityOrderAcknowledged": true,
+  "treatedAsAuthoritative": false,
+  "title": "AI-generated artefact with required references",
+  "description": "Valid ai-governance artefact of kind ai-generated-artefact carrying a non-empty references array as required by the conditional rule.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent", "Evidence"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Treat this generated artefact as non-authoritative until validated; preserve its references as provenance."
+}

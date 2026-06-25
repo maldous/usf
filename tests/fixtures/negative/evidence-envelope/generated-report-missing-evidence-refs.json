@@ -1,0 +1,13 @@
+{
+  "id": "evidence.neg-report-no-evidence-refs",
+  "title": "Generated report missing evidence refs",
+  "description": "DEFECT: generated-report is freshness-pinned but does not reference the underlying evidence.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "A generated report must reference the evidence it summarises.",
+  "evidenceKind": "generated-report",
+  "freshness": { "commit": "def4560000000000000000000000000000000000" }
+}

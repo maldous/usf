@@ -1,0 +1,21 @@
+{
+  "id": "0011-semantic-refs-empty",
+  "kind": "adr",
+  "title": "ADR with empty semanticRefs array",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "context": "An ADR with no semantic references.",
+  "decision": "Test that an empty semanticRefs array is rejected.",
+  "consequences": ["An untraced decision is not binding."],
+  "invariants": ["semanticRefs must contain at least one reference."],
+  "forbiddenDrift": ["Do not record a decision with no semantic reference."],
+  "aiAlignmentRules": ["Stop if a decision has no traceable semantic reference."],
+  "permittedChanges": ["Semantic references may be added by a recorded decision."],
+  "semanticRefs": [],
+  "description": "Defect: semanticRefs is empty, violating minItems 1.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because semanticRefs is empty."
+}

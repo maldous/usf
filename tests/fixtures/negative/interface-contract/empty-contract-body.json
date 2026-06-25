@@ -1,0 +1,22 @@
+{
+  "id": "iface-empty-body",
+  "title": "Interface with an empty contract body object",
+  "description": "DEFECT: requestContract is an empty object, which the contractBody anyOf rejects.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Should be rejected because a contract body must define at least one of schemaRef, fields, description, or extensions.",
+  "interfaceKind": "api-route",
+  "purpose": "An interface whose request contract is empty.",
+  "boundary": "platform-api inbound HTTP boundary",
+  "semanticContractRef": "semantic-contract:tenant-provisioning",
+  "requestContract": {}
+}

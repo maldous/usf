@@ -1,0 +1,23 @@
+{
+  "id": "contract.gap-and-not-applicable",
+  "title": "Semantic contract with gap and not-applicable facets",
+  "description": "A semantic contract where facets are gap or not-applicable and therefore correctly omit backing evidence.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["lifecycle-states"],
+  "aiGuidance": "A gap or not-applicable facet does not require backing evidence; only a complete facet must cite it.",
+  "facets": {
+    "lifecycle": { "status": "gap" },
+    "stateModel": { "status": "not-applicable" },
+    "permissions": { "status": "gap" },
+    "contracts": { "status": "not-applicable" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "not-applicable" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "gap" },
+    "uiSemanticDefinition": { "status": "not-applicable" }
+  }
+}

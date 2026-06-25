@@ -1,0 +1,15 @@
+{
+  "id": "data.neg-migration-immutable-false",
+  "dataKind": "migration",
+  "title": "Migration with immutable false",
+  "description": "DEFECT: a migration declaring immutable false; committed migrations are checksum-immutable.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Migration"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "A committed migration must be immutable.",
+  "migrationOrder": 4,
+  "checksum": "sha256:abc123",
+  "immutable": false
+}

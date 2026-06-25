@@ -1,0 +1,14 @@
+{
+  "id": "evidence.neg-runtime-no-provider-mode",
+  "title": "Runtime proof evidence missing provider mode",
+  "description": "DEFECT: runtime-proof-evidence without providerMode.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["evidence-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "Runtime proof evidence must record its provider mode.",
+  "evidenceKind": "runtime-proof-evidence",
+  "environment": "hermetic",
+  "freshness": { "commit": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2" }
+}

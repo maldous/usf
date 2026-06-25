@@ -1,0 +1,26 @@
+{
+  "id": "ui-journey-extra-prop",
+  "uiKind": "journey",
+  "title": "UI model with an arbitrary extra property on a journey",
+  "description": "DEFECT: a journey carries an undeclared top-level property, violating the closed journey object (additionalProperties false).",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "UI Semantic Model"
+  ],
+  "taxonomyRefs": [
+    "ui-semantic-classification"
+  ],
+  "vocabularyRefs": [
+    "ui-semantic-kinds"
+  ],
+  "aiGuidance": "Should be rejected because journey objects are closed; extra data goes through the typed extensions map.",
+  "surface": "tenant-admin",
+  "journeys": [
+    {
+      "id": "start-onboarding",
+      "name": "Start onboarding",
+      "unreviewedField": "not allowed at journey top level"
+    }
+  ]
+}

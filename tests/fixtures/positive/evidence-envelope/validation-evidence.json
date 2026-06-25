@@ -1,0 +1,14 @@
+{
+  "id": "evidence.validation-foundation-check",
+  "title": "Validation evidence for a foundation check",
+  "description": "Validation evidence that is freshness-pinned and references the source artefacts it summarises.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "Validation evidence must reference what it validated and be freshness-pinned.",
+  "evidenceKind": "validation-evidence",
+  "sourceRefs": ["spec/registries/schema-registry.json"],
+  "freshness": { "commit": "abc1230000000000000000000000000000000000" }
+}

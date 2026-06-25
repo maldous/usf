@@ -1,0 +1,15 @@
+{
+  "id": "evidence.runtime-proof-login-hermetic",
+  "title": "Runtime proof evidence for hermetic login",
+  "description": "Runtime proof evidence declaring its provider mode, environment, and freshness commit pin.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["evidence-classification"],
+  "vocabularyRefs": ["evidence-kinds", "provider-modes", "environment-classes"],
+  "aiGuidance": "Classify provider mode and environment honestly; never relabel hermetic evidence as live.",
+  "evidenceKind": "runtime-proof-evidence",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "freshness": { "commit": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2", "stale": false }
+}

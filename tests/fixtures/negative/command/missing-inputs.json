@@ -1,0 +1,17 @@
+{
+  "id": "usf.command.negative.missing-inputs",
+  "commandKind": "make-target",
+  "purpose": "Command that omits the required inputs array.",
+  "failureSemantics": "Fails closed on any non-zero subcommand exit.",
+  "title": "Command missing required inputs array",
+  "description": "Invalid command artefact: the required inputs property is absent (absence is not allowed even though an empty array would be permitted).",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds"],
+  "aiGuidance": "Defect fixture: inputs omitted.",
+  "outputs": [],
+  "environmentScope": [],
+  "sideEffects": []
+}

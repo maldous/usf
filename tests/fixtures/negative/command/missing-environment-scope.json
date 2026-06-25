@@ -1,0 +1,17 @@
+{
+  "id": "usf.command.negative.missing-environment-scope",
+  "commandKind": "make-target",
+  "purpose": "Command that omits the required environmentScope array.",
+  "failureSemantics": "Fails closed on any non-zero subcommand exit.",
+  "title": "Command missing required environmentScope array",
+  "description": "Invalid command artefact: the required environmentScope property is absent.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Command"],
+  "taxonomyRefs": ["command-classification"],
+  "vocabularyRefs": ["command-kinds"],
+  "aiGuidance": "Defect fixture: environmentScope omitted.",
+  "inputs": [],
+  "outputs": [],
+  "sideEffects": []
+}

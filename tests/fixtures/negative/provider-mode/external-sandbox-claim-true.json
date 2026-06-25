@@ -1,0 +1,16 @@
+{
+  "id": "usf.provider-mode.bad.external-sandbox-claim-true",
+  "title": "Invalid live claim on external sandbox provider mode",
+  "description": "Rejected: a live-external-provider claim is asserted while the declared mode is external-sandbox; a live claim requires the declared mode to be live-external-provider.",
+  "providerMode": "external-sandbox",
+  "port": "identity-provider-port",
+  "adapter": "sandbox-oidc-adapter",
+  "environment": "staging",
+  "liveExternalProviderClaim": true,
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Provider", "Provider Mode"],
+  "taxonomyRefs": ["provider-classification"],
+  "vocabularyRefs": ["provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: external sandbox with a live claim."
+}

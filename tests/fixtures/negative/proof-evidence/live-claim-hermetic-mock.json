@@ -1,0 +1,19 @@
+{
+  "id": "usf.proof-evidence.bad.live-claim-hermetic",
+  "kind": "proof",
+  "title": "Invalid live-external-provider claim on hermetic-mock",
+  "description": "Rejected: a live-external-provider claim is asserted while the provider mode is hermetic-mock; hermetic-mock MUST NOT satisfy a live-external-provider claim.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Provider Mode"],
+  "taxonomyRefs": ["proof-classification", "provider-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: hermetic-mock cannot back a live-provider claim.",
+  "proofLevelClaimed": "substrate-proven",
+  "proofLevelObserved": "substrate-proven",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "liveExternalProviderClaim": true,
+  "emittedEvidence": ["trace.json"],
+  "collectedEvidence": ["trace.collected.json"]
+}

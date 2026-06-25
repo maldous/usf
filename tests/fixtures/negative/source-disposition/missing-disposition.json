@@ -1,0 +1,13 @@
+{
+  "id": "disp-missing-disposition",
+  "title": "Disposition: missing disposition value",
+  "description": "Defect: required property disposition is missing.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "This instance must be rejected because disposition is missing.",
+  "sourceRef": "src-ref-auth-service-path",
+  "rationale": "No disposition value is recorded."
+}

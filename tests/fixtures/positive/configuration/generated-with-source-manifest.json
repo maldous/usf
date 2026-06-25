@@ -1,0 +1,16 @@
+{
+  "id": "config.generated-env-file",
+  "configurationKind": "configuration-file",
+  "title": "Generated environment configuration file",
+  "description": "A generated configuration file that declares the source manifest it is regenerated from; it is never hand-edited.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds"],
+  "aiGuidance": "Regenerate generated configuration from its source manifest; never hand-edit the generated artefact.",
+  "purpose": "Project the environment manifest into a runtime configuration file.",
+  "secretBearing": false,
+  "generated": true,
+  "sourceManifest": "config/environments/integration.json"
+}

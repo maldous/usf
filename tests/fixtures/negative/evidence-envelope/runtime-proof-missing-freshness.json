@@ -1,0 +1,14 @@
+{
+  "id": "evidence.neg-runtime-no-freshness",
+  "title": "Runtime proof evidence missing freshness",
+  "description": "DEFECT: runtime-proof-evidence without freshness pin.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Evidence"],
+  "taxonomyRefs": ["evidence-classification"],
+  "vocabularyRefs": ["evidence-kinds"],
+  "aiGuidance": "Runtime proof evidence must be freshness-pinned.",
+  "evidenceKind": "runtime-proof-evidence",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic"
+}

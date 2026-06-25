@@ -1,0 +1,17 @@
+{
+  "id": "src-ref-empty-tag",
+  "repository": "../react",
+  "tag": "",
+  "sourceKind": "package",
+  "sourceRole": "historical-lineage",
+  "disposition": "reject",
+  "rationale": "Tag provided but empty, which fails the minLength constraint.",
+  "title": "Source reference with empty tag",
+  "description": "Defect: tag is an empty string, violating minLength 1.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because tag is empty."
+}

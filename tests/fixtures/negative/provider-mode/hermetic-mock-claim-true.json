@@ -1,0 +1,16 @@
+{
+  "id": "usf.provider-mode.bad.hermetic-mock-claim-true",
+  "title": "Invalid live claim on hermetic mock provider mode",
+  "description": "Rejected: a live-external-provider claim is asserted while the declared mode is hermetic-mock; hermetic-mock MUST NOT satisfy a live-external-provider claim.",
+  "providerMode": "hermetic-mock",
+  "port": "identity-provider-port",
+  "adapter": "mock-oidc-adapter",
+  "environment": "hermetic",
+  "liveExternalProviderClaim": true,
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Provider", "Provider Mode"],
+  "taxonomyRefs": ["provider-classification"],
+  "vocabularyRefs": ["provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: hermetic-mock with a live claim."
+}

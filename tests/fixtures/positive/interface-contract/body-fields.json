@@ -1,0 +1,28 @@
+{
+  "id": "iface-get-tenant-query",
+  "title": "Get tenant query contract",
+  "description": "Query interface returning a tenant; its output is described by an explicit non-empty field list.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "The field list is the contract; do not add output fields not declared here.",
+  "interfaceKind": "query",
+  "purpose": "Return a tenant by identifier.",
+  "boundary": "platform-api query boundary",
+  "semanticContractRef": "semantic-contract:tenant-read",
+  "outputContract": {
+    "fields": [
+      "tenantId",
+      "displayName",
+      "lifecycleState"
+    ]
+  }
+}

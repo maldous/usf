@@ -1,0 +1,39 @@
+{
+  "id": "wf-transition-from-empty",
+  "workflowKind": "workflow",
+  "title": "Workflow with a state transition whose from is empty",
+  "description": "DEFECT: a stateTransition has an empty-string from, violating minLength 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because a state transition from must be a non-empty string.",
+  "participants": [
+    "platform-api"
+  ],
+  "ordering": "sequential",
+  "steps": [
+    {
+      "id": "create-tenant"
+    }
+  ],
+  "stateTransitions": [
+    {
+      "from": "",
+      "to": "provisioned"
+    }
+  ],
+  "failurePaths": [
+    "abort"
+  ],
+  "compensationPaths": [
+    "rollback"
+  ]
+}

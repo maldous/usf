@@ -1,0 +1,14 @@
+{
+  "id": "data.backup-evidence-nightly",
+  "dataKind": "backup-evidence",
+  "title": "Backup evidence with preserved emitted and collected evidence",
+  "description": "Backup evidence that preserves both the emitted and collected evidence so collection cannot silently drop emitted fields.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Backup / Restore"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Preserve emitted backup evidence through collection; missing collected evidence fails closed.",
+  "emittedEvidence": ["backup-manifest.json", "backup-checksum.txt"],
+  "collectedEvidence": ["collected/backup-manifest.json"]
+}

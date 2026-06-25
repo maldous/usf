@@ -1,0 +1,16 @@
+{
+  "id": "src-ref-missing-rationale",
+  "repository": "../react",
+  "path": "src/services/auth/loginController.ts",
+  "sourceKind": "source-file",
+  "sourceRole": "semantic-source",
+  "disposition": "preserve",
+  "title": "Source reference missing rationale",
+  "description": "Defect: required property rationale is missing.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Evidence"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because rationale is missing."
+}

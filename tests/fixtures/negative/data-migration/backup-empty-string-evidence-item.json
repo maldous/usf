@@ -1,0 +1,14 @@
+{
+  "id": "data.neg-backup-empty-string-item",
+  "dataKind": "backup-evidence",
+  "title": "Backup evidence with an empty-string evidence item",
+  "description": "DEFECT: emittedEvidence contains an empty string, which violates the non-empty item constraint.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Backup / Restore"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Evidence references must be non-empty strings.",
+  "emittedEvidence": [""],
+  "collectedEvidence": ["collected/backup-manifest.json"]
+}

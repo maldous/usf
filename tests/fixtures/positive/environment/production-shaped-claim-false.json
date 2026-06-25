@@ -1,0 +1,14 @@
+{
+  "id": "usf.environment.example.production-shaped",
+  "title": "Production shaped environment without production-live claim",
+  "description": "Valid environment declaration where the environment is production-shaped and no production-live claim is made; production-shaped resembles production but is not production-live.",
+  "environment": "production-shaped",
+  "permittedProviderModes": ["local-composed-real-service", "external-sandbox"],
+  "productionLiveClaim": false,
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Environment", "Provider Mode"],
+  "taxonomyRefs": ["environment-classification"],
+  "vocabularyRefs": ["environment-classes", "provider-modes"],
+  "aiGuidance": "Production-shaped never satisfies a production-live claim; the environment name is not a readiness claim."
+}

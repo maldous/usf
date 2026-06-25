@@ -1,0 +1,14 @@
+{
+  "id": "usf.validator-report.bad.pass-missing-freshness",
+  "authorityLevel": "generated-report",
+  "status": "pass",
+  "findings": [],
+  "evidenceRefs": ["evidence/foundation-consistency.collected.json"],
+  "title": "Invalid pass report missing freshness",
+  "description": "Rejected: a pass status without a freshness block; a pass requires fresh, commit-pinned evidence so staleness is detectable.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Validator", "Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["report-statuses", "validation-severities"],
+  "aiGuidance": "This record is intentionally invalid: a pass report omits freshness."
+}

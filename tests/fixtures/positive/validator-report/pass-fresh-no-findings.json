@@ -1,0 +1,18 @@
+{
+  "id": "usf.validator-report.example.pass",
+  "authorityLevel": "generated-report",
+  "status": "pass",
+  "findings": [],
+  "evidenceRefs": ["evidence/foundation-consistency.collected.json"],
+  "freshness": {
+    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "stale": false
+  },
+  "title": "Foundation consistency validator report (pass)",
+  "description": "Valid pass report: it references fresh, non-stale evidence and carries no findings. A pass report remains lowest authority and never overrides evidence or semantics.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Validator", "Generated Report"],
+  "taxonomyRefs": ["validation-reporting-classification"],
+  "vocabularyRefs": ["report-statuses", "validation-severities"],
+  "aiGuidance": "A pass status is admissible only with fresh, non-stale, referenced evidence; never treat this report as canonical."
+}

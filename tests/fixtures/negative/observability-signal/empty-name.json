@@ -1,0 +1,15 @@
+{
+  "id": "usf.observability-signal.negative.empty-name",
+  "signalKind": "metric",
+  "name": "",
+  "source": "authentication-service",
+  "purpose": "Measure authentication login latency.",
+  "title": "Observability signal with empty name",
+  "description": "Invalid observability-signal artefact: name is an empty string, violating its minLength.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Observability Signal"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["observability-signal-kinds"],
+  "aiGuidance": "Defect fixture: empty name."
+}

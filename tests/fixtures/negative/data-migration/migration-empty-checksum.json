@@ -1,0 +1,15 @@
+{
+  "id": "data.neg-migration-empty-checksum",
+  "dataKind": "migration",
+  "title": "Migration with empty checksum",
+  "description": "DEFECT: a migration whose checksum is an empty string.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Migration"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "A migration checksum must be non-empty.",
+  "migrationOrder": 3,
+  "checksum": "",
+  "immutable": true
+}

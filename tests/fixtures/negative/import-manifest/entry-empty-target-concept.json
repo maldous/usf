@@ -1,0 +1,22 @@
+{
+  "id": "import-manifest-entry-empty-target",
+  "title": "Import manifest: entry with empty targetUsfConcept",
+  "sourceRepository": "../react",
+  "entries": [
+    {
+      "sourceRef": "src-ref-auth-service-path",
+      "sourceKind": "source-file",
+      "sourceRole": "semantic-source",
+      "disposition": "preserve",
+      "rationale": "Entry carries an empty targetUsfConcept.",
+      "targetUsfConcept": ""
+    }
+  ],
+  "description": "Defect: an entry targetUsfConcept is an empty string, violating minLength 1.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Source Reference", "Disposition"],
+  "taxonomyRefs": ["source-kinds"],
+  "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"],
+  "aiGuidance": "This instance must be rejected because targetUsfConcept is empty."
+}

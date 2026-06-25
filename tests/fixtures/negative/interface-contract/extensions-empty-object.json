@@ -1,0 +1,24 @@
+{
+  "id": "iface-extensions-empty",
+  "title": "Interface with an empty extensions map",
+  "description": "DEFECT: responseContract.extensions is an empty object, violating minProperties 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Should be rejected because the typed extensions map must have at least one property.",
+  "interfaceKind": "event-handler",
+  "purpose": "An interface whose typed extension map is empty.",
+  "boundary": "platform-api event ingestion boundary",
+  "semanticContractRef": "semantic-contract:audit-ingestion",
+  "responseContract": {
+    "extensions": {}
+  }
+}

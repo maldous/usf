@@ -1,0 +1,21 @@
+{
+  "id": "0009-kind-not-adr",
+  "kind": "schema",
+  "title": "ADR with wrong kind value",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "context": "An ADR whose kind is not the const value adr.",
+  "decision": "Test that a non-adr kind is rejected.",
+  "consequences": ["The artefact would be mis-classified."],
+  "invariants": ["kind must equal adr."],
+  "forbiddenDrift": ["Do not set kind to any value other than adr."],
+  "aiAlignmentRules": ["Stop if kind disagrees with the schema const."],
+  "permittedChanges": ["The kind value may be corrected by a recorded decision."],
+  "semanticRefs": ["authentication-contract"],
+  "description": "Defect: kind is 'schema', not the const 'adr'.",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["ADR", "Semantic Contract"],
+  "taxonomyRefs": ["artefact-kinds"],
+  "vocabularyRefs": ["artefact-kinds", "authority-levels", "ai-governance-kinds"],
+  "aiGuidance": "This instance must be rejected because kind is not adr."
+}

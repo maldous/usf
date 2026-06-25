@@ -1,0 +1,24 @@
+{
+  "id": "evt-missing-canonical",
+  "title": "Event missing canonical flag",
+  "description": "DEFECT: an event-kind contract omits the required canonical-vs-test-only flag.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because event kinds require the canonical flag.",
+  "eventKind": "event",
+  "payloadSchemaRef": "urn:usf:schema:semantic-contract#payload",
+  "producer": "platform-api",
+  "ordering": "per-tenant ordered",
+  "idempotencyKey": "tenantId",
+  "dlqPolicy": "route to dlq after exhaustion",
+  "retention": "7 days"
+}

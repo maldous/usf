@@ -1,0 +1,16 @@
+{
+  "id": "config.neg-generated-empty-manifest",
+  "configurationKind": "configuration-file",
+  "title": "Generated configuration with empty source manifest",
+  "description": "DEFECT: generated true and sourceManifest present but empty string.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds"],
+  "aiGuidance": "Generated configuration must declare a non-empty source manifest.",
+  "purpose": "Project a manifest into a runtime file.",
+  "secretBearing": false,
+  "generated": true,
+  "sourceManifest": ""
+}

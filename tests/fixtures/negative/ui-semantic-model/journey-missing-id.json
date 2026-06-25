@@ -1,0 +1,24 @@
+{
+  "id": "ui-journey-missing-id",
+  "uiKind": "journey",
+  "title": "UI model with a journey missing id",
+  "description": "DEFECT: a journey item omits the required id.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "UI Semantic Model"
+  ],
+  "taxonomyRefs": [
+    "ui-semantic-classification"
+  ],
+  "vocabularyRefs": [
+    "ui-semantic-kinds"
+  ],
+  "aiGuidance": "Should be rejected because every journey must carry an id.",
+  "surface": "tenant-admin",
+  "journeys": [
+    {
+      "name": "A journey that forgot its id"
+    }
+  ]
+}

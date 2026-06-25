@@ -1,0 +1,58 @@
+{
+  "id": "wf-tenant-onboarding",
+  "workflowKind": "workflow",
+  "title": "Tenant onboarding workflow",
+  "description": "Baseline workflow with non-empty steps, failure paths, compensation paths, participants, ordering, and a state transition with non-empty from/to.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow",
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Preserve ordering, failure, and compensation semantics during implementation extraction.",
+  "participants": [
+    "platform-api",
+    "billing-service"
+  ],
+  "ordering": "sequential",
+  "steps": [
+    {
+      "id": "create-tenant",
+      "description": "Create the tenant record.",
+      "operation": "tenant.create",
+      "participants": [
+        "platform-api"
+      ]
+    },
+    {
+      "id": "provision-billing",
+      "description": "Open a billing account for the tenant.",
+      "operation": "billing.open"
+    }
+  ],
+  "stateTransitions": [
+    {
+      "from": "pending",
+      "to": "provisioned",
+      "trigger": "billing-opened"
+    }
+  ],
+  "failurePaths": [
+    "billing-open-failed-rollback-tenant"
+  ],
+  "compensationPaths": [
+    "retire-tenant-on-billing-failure"
+  ],
+  "relatedEvents": [
+    "evt-tenant-provisioned"
+  ],
+  "relatedInterfaces": [
+    "iface-create-tenant-api"
+  ]
+}

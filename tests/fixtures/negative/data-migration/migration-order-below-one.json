@@ -1,0 +1,15 @@
+{
+  "id": "data.neg-migration-order-zero",
+  "dataKind": "migration",
+  "title": "Migration with order below one",
+  "description": "DEFECT: a migration whose migrationOrder is 0, below the minimum of 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Migration"],
+  "taxonomyRefs": ["data-migration-classification"],
+  "vocabularyRefs": ["data-migration-kinds"],
+  "aiGuidance": "Migration order starts at 1.",
+  "migrationOrder": 0,
+  "checksum": "sha256:def456",
+  "immutable": true
+}

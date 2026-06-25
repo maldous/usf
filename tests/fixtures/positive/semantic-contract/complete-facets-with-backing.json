@@ -1,0 +1,25 @@
+{
+  "id": "contract.complete-facets-backed",
+  "title": "Semantic contract with complete facets citing backing",
+  "description": "A semantic contract whose complete facets cite non-empty evidenceRefs or sourceRefs; remaining facets are gaps.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Semantic Contract", "Capability"],
+  "taxonomyRefs": ["semantic-architecture-classification"],
+  "vocabularyRefs": ["authority-levels"],
+  "aiGuidance": "A complete facet must cite at least one evidence or source reference; otherwise drop it to a gap.",
+  "capability": "authentication-login",
+  "capabilityDomain": "identity",
+  "facets": {
+    "lifecycle": { "status": "complete", "evidenceRefs": ["evidence/lifecycle-proof.json"] },
+    "stateModel": { "status": "complete", "sourceRefs": ["../react/docs/v2-foundation/state-model.json"] },
+    "permissions": { "status": "complete", "evidenceRefs": ["evidence/permissions-proof.json"], "sourceRefs": ["../react/docs/v2-foundation/authentication-authorisation-matrix.json"] },
+    "contracts": { "status": "gap" },
+    "validation": { "status": "gap" },
+    "errorModel": { "status": "gap" },
+    "auditModel": { "status": "gap" },
+    "readinessModel": { "status": "gap" },
+    "proof": { "status": "complete", "description": "Behaviour proof exercised on the hermetic substrate.", "evidenceRefs": ["evidence/proofs/authentication-login-hermetic.json"] },
+    "uiSemanticDefinition": { "status": "gap" }
+  }
+}

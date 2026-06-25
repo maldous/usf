@@ -1,0 +1,14 @@
+{
+  "id": "config.neg-provider-no-mode",
+  "configurationKind": "provider-configuration",
+  "title": "Provider configuration missing provider mode",
+  "description": "DEFECT: provider-configuration kind but no providerMode declared.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds"],
+  "aiGuidance": "A provider configuration must declare the provider mode it selects.",
+  "purpose": "Select the provider mode for the substrate.",
+  "secretBearing": false
+}

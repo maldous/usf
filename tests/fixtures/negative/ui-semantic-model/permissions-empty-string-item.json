@@ -1,0 +1,27 @@
+{
+  "id": "ui-permissions-empty-string",
+  "uiKind": "journey",
+  "title": "UI model with an empty-string permission ref",
+  "description": "DEFECT: the permissions ref array contains an empty string, violating the item minLength 1.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "UI Semantic Model"
+  ],
+  "taxonomyRefs": [
+    "ui-semantic-classification"
+  ],
+  "vocabularyRefs": [
+    "ui-semantic-kinds"
+  ],
+  "aiGuidance": "Should be rejected because a reference array item must be a non-empty string.",
+  "surface": "tenant-admin",
+  "journeys": [
+    {
+      "id": "start-onboarding"
+    }
+  ],
+  "permissions": [
+    ""
+  ]
+}

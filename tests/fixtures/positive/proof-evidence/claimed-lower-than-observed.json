@@ -1,0 +1,23 @@
+{
+  "id": "usf.proof-evidence.example.claimed-lower",
+  "kind": "proof",
+  "title": "Proof with claimed level lower than observed",
+  "description": "Valid proof-evidence record where the claimed proof level is deliberately conservative and lower than the observed proof level; under-claiming is honest and permitted.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Proof Level", "Evidence"],
+  "taxonomyRefs": ["proof-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "Under-claiming is acceptable; never raise the claimed level above the observed level.",
+  "claimExercised": "Contract conformance exercised on a composed local substrate.",
+  "proofLevelClaimed": "contract-proven",
+  "proofLevelObserved": "substrate-proven",
+  "providerMode": "local-composed-real-service",
+  "environment": "integration",
+  "liveExternalProviderClaim": false,
+  "emittedEvidence": ["contract-trace.json", "substrate-probe.json"],
+  "collectedEvidence": ["contract-trace.collected.json", "substrate-probe.collected.json"],
+  "freshness": {
+    "commit": "abcdef0123456789abcdef0123456789abcdef01"
+  }
+}

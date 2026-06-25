@@ -1,0 +1,13 @@
+{
+  "id": "disp-missing-rationale",
+  "title": "Disposition: missing rationale",
+  "description": "Defect: required property rationale is missing.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "This instance must be rejected because rationale is missing.",
+  "sourceRef": "src-ref-auth-service-path",
+  "disposition": "preserve"
+}

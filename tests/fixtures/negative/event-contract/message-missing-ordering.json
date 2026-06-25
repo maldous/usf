@@ -1,0 +1,24 @@
+{
+  "id": "evt-message-missing-ordering",
+  "title": "Message missing ordering",
+  "description": "DEFECT: a message-kind contract omits the required ordering.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Should be rejected because message kinds require an ordering expectation.",
+  "eventKind": "message",
+  "payloadSchemaRef": "urn:usf:schema:semantic-contract#payload",
+  "producer": "platform-api",
+  "idempotencyKey": "messageId",
+  "dlqPolicy": "route to dlq after exhaustion",
+  "retention": "7 days",
+  "canonical": true
+}

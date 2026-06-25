@@ -1,0 +1,15 @@
+{
+  "id": "disp-auth-controller-implies-false",
+  "title": "Disposition: defer with explicit implies-acceptance false",
+  "description": "Records a defer disposition that explicitly states it does not imply implementation acceptance.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Disposition", "Source Reference"],
+  "taxonomyRefs": ["disposition-values"],
+  "vocabularyRefs": ["disposition-values"],
+  "aiGuidance": "impliesImplementationAcceptance is fixed false; a disposition never confers acceptance by itself.",
+  "sourceRef": "src-ref-auth-service-commit",
+  "disposition": "defer",
+  "rationale": "The behaviour is retained as evidence pending a later disposition decision and is not yet accepted for implementation.",
+  "impliesImplementationAcceptance": false
+}

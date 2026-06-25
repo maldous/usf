@@ -1,0 +1,18 @@
+{
+  "id": "usf.audit-event.negative.empty-subject",
+  "auditKind": "audit-event",
+  "actor": "authenticated-user",
+  "action": "view-record",
+  "subject": "",
+  "timestampSemantics": "Server-assigned UTC timestamp recorded when the action is committed.",
+  "securitySensitive": false,
+  "stateChanging": false,
+  "title": "Audit event with empty subject",
+  "description": "Invalid audit-event artefact: subject is an empty string, violating its minLength.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Audit Event"],
+  "taxonomyRefs": ["observability-audit-classification"],
+  "vocabularyRefs": ["audit-event-kinds"],
+  "aiGuidance": "Defect fixture: empty subject."
+}

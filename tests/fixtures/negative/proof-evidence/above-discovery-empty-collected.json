@@ -1,0 +1,18 @@
+{
+  "id": "usf.proof-evidence.bad.empty-collected",
+  "kind": "proof",
+  "title": "Invalid proof above discovery with empty collected evidence",
+  "description": "Rejected: observed level is above discovery yet collected evidence is empty; missing collected evidence MUST fail closed.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Proof", "Evidence"],
+  "taxonomyRefs": ["proof-classification"],
+  "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes"],
+  "aiGuidance": "This record is intentionally invalid: collected evidence is empty above discovery.",
+  "proofLevelClaimed": "contract-proven",
+  "proofLevelObserved": "contract-proven",
+  "providerMode": "local-composed-real-service",
+  "environment": "integration",
+  "emittedEvidence": ["trace.json"],
+  "collectedEvidence": []
+}

@@ -1,0 +1,15 @@
+{
+  "id": "usf.ai-governance.negative.authority-order-not-acknowledged",
+  "aiKind": "ai-instruction",
+  "rationale": "Artefact that fails to acknowledge the binding USF authority order.",
+  "stopConditions": ["Authority order is contradictory."],
+  "authorityOrderAcknowledged": false,
+  "title": "AI governance artefact not acknowledging authority order",
+  "description": "Invalid ai-governance artefact: authorityOrderAcknowledged is false, violating the const true constraint.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["AI Agent"],
+  "taxonomyRefs": ["ai-governance-classification"],
+  "vocabularyRefs": ["ai-governance-kinds"],
+  "aiGuidance": "Defect fixture: authorityOrderAcknowledged false."
+}

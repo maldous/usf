@@ -1,0 +1,14 @@
+{
+  "id": "config.neg-environment-no-env",
+  "configurationKind": "environment-configuration",
+  "title": "Environment configuration missing environment",
+  "description": "DEFECT: environment-configuration kind but no environment declared.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": ["Configuration"],
+  "taxonomyRefs": ["configuration-classification"],
+  "vocabularyRefs": ["configuration-kinds"],
+  "aiGuidance": "An environment configuration must declare the environment class it scopes to.",
+  "purpose": "Scope configuration to an environment class.",
+  "secretBearing": false
+}
