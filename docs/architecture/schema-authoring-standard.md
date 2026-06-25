@@ -753,21 +753,21 @@ Future AI agents (and humans) MUST:
 Deferred, not blockers. Each MUST be resolved by a future ADR, schema, or validator before it is enforced:
 
 - actual schema file creation (all 23 planned schemas); *(resolved at draft level — see Amendment A)*
-- `schema-registry.schema.json`;
-- `taxonomy.schema.json`;
-- `vocabulary.schema.json`;
-- the ADR schema and ADR template (`adr.schema.json`);
-- the evidence-envelope schema (`evidence-envelope.schema.json`);
-- the proof-evidence schema (`proof-evidence.schema.json`);
-- the validator-report schema (`validator-report.schema.json`);
-- the provider-mode and environment schemas;
+- `schema-registry.schema.json`; *(resolved at draft level — see Amendment A)*
+- `taxonomy.schema.json`; *(resolved at draft level — see Amendment A)*
+- `vocabulary.schema.json`; *(resolved at draft level — see Amendment A)*
+- the ADR schema and ADR template (`adr.schema.json`); *(schema resolved at draft level — see Amendment A; ADR template/canon deferred)*
+- the evidence-envelope schema (`evidence-envelope.schema.json`); *(resolved at draft level — see Amendment A)*
+- the proof-evidence schema (`proof-evidence.schema.json`); *(resolved at draft level — see Amendment A)*
+- the validator-report schema (`validator-report.schema.json`); *(resolved at draft level — see Amendment A)*
+- the provider-mode and environment schemas; *(resolved at draft level — see Amendment A; selector/gate wiring deferred)*
 - validator implementation; *(partially resolved — see Amendment A)*
 - schema-validation tool/package selection (the exact 2020-12 validator); *(resolved for this phase: `jsonschema==4.10.3` — see Amendment A)*
-- schema self-validation (the registry validating itself);
-- schema-to-registry, schema-to-taxonomy, schema-to-vocabulary, and schema-to-ontology validators;
+- schema self-validation (the registry validating itself); *(resolved at draft level — the registry/taxonomy/vocabulary catalogues validate against their schemas; see Amendment A)*
+- schema-to-registry, schema-to-taxonomy, schema-to-vocabulary, and schema-to-ontology validators; *(resolved at advisory level — implemented in `tools/validate-spec/`; see Amendment A)*
 - OpenAPI / AsyncAPI concrete artefact decisions;
 - OpenTelemetry attribute vocabulary decisions;
-- source import mapping (`import-manifest.schema.json` and the map);
+- source import mapping (`import-manifest.schema.json` *(schema resolved at draft — see Amendment A)* and the map);
 - implementation extraction;
 - the schema-versioning (semver) policy detail (§20.5).
 

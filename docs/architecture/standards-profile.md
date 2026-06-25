@@ -29,7 +29,7 @@ This document defines how USF chooses, adapts, defines, and enforces standards. 
 
 2.3 **It governs later work.** This profile is the standards reference for the later USF ontology, taxonomy, vocabulary, schemas, registries, ADR canon, evidence envelope, validators, import/disposition maps, and implementation extraction, and for future AI-guided development.
 
-2.4 **It does not yet create those artefacts.** This profile defines *what they must look like and how they will be enforced*. It creates no schema, taxonomy, vocabulary, registry, ADR, evidence file, validator, tool, or implementation directory. Exact shapes are deferred explicitly (§23).
+2.4 **This profile does not itself create those artefacts.** It defines *what they must look like and how they will be enforced*. Initial exact shapes were deferred to §23; later, under directive, the 23 draft schema files and an advisory validator were authored and are recorded in §23 Amendment, while active maturity and real-instance validation remain deferred.
 
 ---
 
