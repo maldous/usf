@@ -25,9 +25,10 @@ Modes (default: all):
     catalogues   validate the 3 catalogue instances + catalogue data integrity
     registry     repository inventory (bijection) + registry synchronisation
     fixtures     tools/validate-spec/fixtures positive/negative corpus + expected-reason manifest
+    imports      source-import manifest schema + internal no-loss checks
     selftest     plant defects from tools/validate-spec/planted-defects/ and assert the exact rule id fires
     pr           base/head diff gate (--base, --head); fails closed if git fails
-    all          schemas + enums + catalogues + registry + safety + fixtures + selftest
+    all          schemas + enums + catalogues + registry + safety + fixtures + imports + selftest
                  (+ pr when --base/--head is given)
 
 Options:
@@ -208,6 +209,13 @@ RULES = {
     "USF-FIXTURE-002":  ("blocking", "Positive fixture unexpectedly rejected"),
     "USF-FIXTURE-003":  ("blocking", "Negative fixture has no expected-reason manifest entry"),
     "USF-FIXTURE-004":  ("blocking", "Negative fixture rejected for the wrong reason"),
+    "USF-IMPORT-001":   ("blocking", "Source import manifest invalid against import-manifest schema"),
+    "USF-IMPORT-002":   ("blocking", "Source import manifest entry count mismatch"),
+    "USF-IMPORT-003":   ("blocking", "Source import manifest sourceRef.path values are missing or duplicated"),
+    "USF-IMPORT-004":   ("blocking", "Source import manifest contains a non-canonical controlled value"),
+    "USF-IMPORT-005":   ("blocking", "Source import manifest targetUsfConcept reuses a source path"),
+    "USF-IMPORT-006":   ("blocking", "Package metadata is not classified as a package unit"),
+    "USF-IMPORT-007":   ("blocking", "Runtime proof script is not classified as proof evidence"),
     "USF-SELFTEST-001": ("blocking", "Planted defect did NOT raise its expected rule id"),
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
@@ -678,6 +686,77 @@ def check_fixtures(ctx, F):
     return "ran"
 
 
+def check_imports(ctx, F):
+    """Validate committed source-import instances in the repeatable validator path.
+
+    This deliberately performs repository-owned checks only: schema validity, fixed
+    manifest size, internal uniqueness/no-loss shape, canonical value preservation,
+    path-safety, and known source-kind classification rules. External reconciliation
+    against ../react remains documented evidence until a source-evidence harness is
+    authorised.
+    """
+    path = "spec/registries/source-import-manifest.json"
+    if not os.path.exists(path):
+        return "not-run"
+    data = load_json(path, F)
+    if data is None:
+        return "ran"
+    errors = list(Draft202012Validator(ctx["sd"]["import-manifest"]).iter_errors(data))
+    for err in errors:
+        F.add("USF-IMPORT-001", path, err.message[:160])
+    if errors or not isinstance(data, dict):
+        return "ran"
+
+    entries = data.get("entries")
+    if not isinstance(entries, list):
+        F.add("USF-IMPORT-001", path, "entries must be an array")
+        return "ran"
+    expected_count = 1673
+    if len(entries) != expected_count:
+        F.add("USF-IMPORT-002", path, f"{len(entries)} entries != expected {expected_count}")
+
+    seen_paths = set()
+    duplicate_paths = set()
+    source_kinds = ctx["canon"].get("source-kinds", set())
+    source_roles = ctx["canon"].get("source-roles", set())
+    dispositions = ctx["canon"].get("disposition-values", set())
+    for i, entry in enumerate(entries):
+        subject = f"{path}:entries[{i}]"
+        source_ref = entry.get("sourceRef") if isinstance(entry, dict) else None
+        source_path = source_ref.get("path") if isinstance(source_ref, dict) else None
+        if not source_path:
+            F.add("USF-IMPORT-003", subject, "sourceRef.path is required for baseline no-loss validation")
+        elif source_path in seen_paths:
+            duplicate_paths.add(source_path)
+        else:
+            seen_paths.add(source_path)
+
+        for field, allowed in (("sourceKind", source_kinds), ("sourceRole", source_roles), ("disposition", dispositions)):
+            value = entry.get(field) if isinstance(entry, dict) else None
+            if value not in allowed:
+                F.add("USF-IMPORT-004", subject, f"{field}={value!r}")
+
+        target = entry.get("targetUsfConcept") if isinstance(entry, dict) else None
+        if isinstance(target, str) and (
+            target == source_path
+            or target.startswith("../")
+            or re.match(r"^(apps|packages|docs|spec|tools|evidence|config|infra|scripts|services|src)/", target)
+        ):
+            F.add("USF-IMPORT-005", subject, target)
+
+        if source_path and (source_path == "package.json" or source_path.endswith("/package.json")):
+            if entry.get("sourceKind") != "package" or entry.get("sourceRole") != "behavioural-evidence":
+                F.add("USF-IMPORT-006", source_path, f"{entry.get('sourceKind')}/{entry.get('sourceRole')}")
+
+        if source_path and source_path.endswith("-runtime-proof.ts"):
+            if entry.get("sourceKind") != "proof-script" or entry.get("sourceRole") != "proof-evidence":
+                F.add("USF-IMPORT-007", source_path, f"{entry.get('sourceKind')}/{entry.get('sourceRole')}")
+
+    if duplicate_paths:
+        F.add("USF-IMPORT-003", path, f"duplicate sourceRef.path values: {sorted(duplicate_paths)[:10]}")
+    return "ran"
+
+
 PATCH_ROOTS = {"registry": "reg", "vocabulary": "voc", "taxonomy": "tax"}
 
 
@@ -820,7 +899,7 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "selftest", "pr", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "imports", "selftest", "pr", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
@@ -839,8 +918,8 @@ def main():
     pr_requested = a.base is not None or a.head is not None
     run = {
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
-        "fixtures": ["fixtures"], "selftest": ["selftest"], "pr": ["pr"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "selftest"]
+        "fixtures": ["fixtures"], "imports": ["imports"], "selftest": ["selftest"], "pr": ["pr"],
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "imports", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -855,6 +934,8 @@ def main():
         check_safety(ctx, F)
     if "fixtures" in run:
         fixtures_state = check_fixtures(ctx, F)
+    if "imports" in run:
+        check_imports(ctx, F)
     if "selftest" in run:
         selftest_state = check_selftest(ctx, F)
     if "pr" in run:

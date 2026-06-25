@@ -105,11 +105,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
       "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: npm-scripts:proof:*, npm-scripts:test:platform-api, @platform/platform-api. Protecting tests: npm run test:platform-api.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -131,8 +131,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:alerting. Protecting tests: apps/platform-api/scripts/alerting-runtime-proof.ts. Historical decision refs: ADR-ACT-0284.",
       "targetUsfConcept": "Proof"
@@ -144,8 +144,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:alert-notification-bridge. Protecting tests: apps/platform-api/scripts/alert-notification-bridge-runtime-proof.ts. Historical decision refs: ADR-ACT-0284.",
       "targetUsfConcept": "Proof"
@@ -157,8 +157,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:api-key-routes. Protecting tests: apps/platform-api/scripts/api-key-routes-runtime-proof.ts. Historical decision refs: ADR-0065, ADR-ACT-0250.",
       "targetUsfConcept": "Proof"
@@ -170,8 +170,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:api-keys. Protecting tests: apps/platform-api/scripts/api-keys-runtime-proof.ts. Historical decision refs: ADR-0065, ADR-ACT-0250.",
       "targetUsfConcept": "Proof"
@@ -183,8 +183,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:auth-settings. Protecting tests: apps/platform-api/scripts/auth-settings-runtime-proof.ts. Historical decision refs: ADR-ACT-0157.",
       "targetUsfConcept": "Proof"
@@ -196,8 +196,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:backup-local. Protecting tests: apps/platform-api/scripts/backup-local-runtime-proof.ts. Historical decision refs: ADR-ACT-0228.",
       "targetUsfConcept": "Proof"
@@ -209,8 +209,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:clickthrough-services. Protecting tests: apps/platform-api/scripts/clickthrough-services-runtime-proof.ts. Historical decision refs: ADR-ACT-0233.",
       "targetUsfConcept": "Proof"
@@ -222,8 +222,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:composed-provider-readiness. Protecting tests: apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -235,8 +235,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:credential-lifecycle. Protecting tests: apps/platform-api/scripts/credential-lifecycle-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -248,8 +248,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:domain-identity-matrix. Protecting tests: apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts. Historical decision refs: ADR-ACT-0230, ADR-ACT-0234.",
       "targetUsfConcept": "Proof"
@@ -261,8 +261,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:email-sender. Protecting tests: apps/platform-api/scripts/email-sender-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -274,8 +274,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:entitlement-policy-chain. Protecting tests: apps/platform-api/scripts/entitlement-policy-chain-runtime-proof.ts. Historical decision refs: ADR-0057, ADR-0058.",
       "targetUsfConcept": "Proof"
@@ -287,8 +287,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:entitlements-postgres. Protecting tests: apps/platform-api/scripts/entitlements-postgres-runtime-proof.ts. Historical decision refs: ADR-0057, ADR-0058, ADR-ACT-0254.",
       "targetUsfConcept": "Proof"
@@ -300,8 +300,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:entitlements-routes. Protecting tests: apps/platform-api/scripts/entitlements-routes-runtime-proof.ts. Historical decision refs: ADR-0057, ADR-0058, ADR-ACT-0254.",
       "targetUsfConcept": "Proof"
@@ -313,8 +313,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:entitlements. Protecting tests: apps/platform-api/scripts/entitlements-runtime-proof.ts. Historical decision refs: ADR-0057, ADR-0058, ADR-ACT-0254.",
       "targetUsfConcept": "Proof"
@@ -326,8 +326,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:environment-admin-bootstrap. Protecting tests: apps/platform-api/scripts/environment-admin-bootstrap-runtime-proof.ts. Historical decision refs: ADR-0072.",
       "targetUsfConcept": "Proof"
@@ -339,8 +339,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:environment-operations. Protecting tests: apps/platform-api/scripts/environment-operations-runtime-proof.ts. Historical decision refs: ADR-0072.",
       "targetUsfConcept": "Proof"
@@ -352,8 +352,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:environment-registry. Protecting tests: apps/platform-api/scripts/environment-registry-runtime-proof.ts. Historical decision refs: ADR-0072.",
       "targetUsfConcept": "Proof"
@@ -365,8 +365,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:event-bus. Protecting tests: apps/platform-api/scripts/event-bus-runtime-proof.ts. Historical decision refs: ADR-0068.",
       "targetUsfConcept": "Proof"
@@ -378,8 +378,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:event-redrive. Protecting tests: apps/platform-api/scripts/event-redrive-runtime-proof.ts. Historical decision refs: ADR-0068.",
       "targetUsfConcept": "Proof"
@@ -391,8 +391,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:event-worker. Protecting tests: apps/platform-api/scripts/event-worker-runtime-proof.ts. Historical decision refs: ADR-0068.",
       "targetUsfConcept": "Proof"
@@ -404,8 +404,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:history. Protecting tests: apps/platform-api/scripts/history-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -417,8 +417,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:idp. Protecting tests: apps/platform-api/scripts/idp-runtime-proof.ts. Historical decision refs: ADR-ACT-0157.",
       "targetUsfConcept": "Proof"
@@ -430,8 +430,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:incident-foundation. Protecting tests: apps/platform-api/scripts/incident-foundation-runtime-proof.ts. Historical decision refs: ADR-ACT-0284.",
       "targetUsfConcept": "Proof"
@@ -456,8 +456,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:metering-quota-routes. Protecting tests: apps/platform-api/scripts/metering-quota-routes-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -469,8 +469,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:metering. Protecting tests: apps/platform-api/scripts/metering-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -482,8 +482,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:notification-dispatch. Protecting tests: apps/platform-api/scripts/notification-dispatch-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -495,8 +495,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:notification-email-transport. Protecting tests: apps/platform-api/scripts/notification-email-transport-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -508,8 +508,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:notification-preferences. Protecting tests: apps/platform-api/scripts/notification-preferences-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -521,8 +521,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:notification-transport-routes. Protecting tests: apps/platform-api/scripts/notification-transport-routes-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -534,8 +534,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:notification-webhook-transport. Protecting tests: apps/platform-api/scripts/notification-webhook-transport-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -547,8 +547,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:observability-signals. Protecting tests: apps/platform-api/scripts/observability-signals-runtime-proof.ts. Historical decision refs: ADR-ACT-0284.",
       "targetUsfConcept": "Proof"
@@ -560,8 +560,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:oidc-enterprise. Protecting tests: apps/platform-api/scripts/oidc-enterprise-runtime-proof.ts. Historical decision refs: ADR-ACT-0220.",
       "targetUsfConcept": "Proof"
@@ -573,8 +573,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:platform-services. Protecting tests: apps/platform-api/scripts/platform-services-runtime-proof.ts. Historical decision refs: ADR-ACT-0227.",
       "targetUsfConcept": "Proof"
@@ -586,8 +586,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:profile-self-service. Protecting tests: apps/platform-api/scripts/profile-self-service-runtime-proof.ts. Historical decision refs: ADR-0068.",
       "targetUsfConcept": "Proof"
@@ -599,8 +599,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:provider-config. Protecting tests: apps/platform-api/scripts/provider-config-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -612,8 +612,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:provider-environment-classification. Protecting tests: apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -625,8 +625,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:provider-readiness-contract. Protecting tests: apps/platform-api/scripts/provider-readiness-contract-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -638,8 +638,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:provider-secrets-readiness. Protecting tests: apps/platform-api/scripts/provider-secrets-readiness-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -651,8 +651,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:quota-enforcement. Protecting tests: apps/platform-api/scripts/quota-enforcement-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -664,8 +664,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:rate-limits-redis. Protecting tests: apps/platform-api/scripts/rate-limits-redis-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -677,8 +677,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:rate-limits. Protecting tests: apps/platform-api/scripts/rate-limits-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -690,8 +690,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:scheduled-job-routes. Protecting tests: apps/platform-api/scripts/scheduled-job-routes-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -703,8 +703,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:scheduled-jobs. Protecting tests: apps/platform-api/scripts/scheduled-jobs-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -716,8 +716,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:search-isolation. Protecting tests: apps/platform-api/scripts/search-isolation-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -729,8 +729,8 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:search-routes. Protecting tests: apps/platform-api/scripts/search-routes-runtime-proof.ts.",
       "targetUsfConcept": "Proof"
@@ -4187,11 +4187,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
       "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: n/a \u2014 dependency set updated for V2 UI; package identity and export contract preserved. Retained interfaces: @platform/react-enterprise-app package id, exports ./src/index.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13274,11 +13274,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
       "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: root npm scripts (test:*, lint, format, tsc:check); workspace globs.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13300,11 +13300,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "retire",
       "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: Package is lifecycle=deprecated; archive once consumers migrated to active access policy package. Retained interfaces: @platform/access-control package metadata. Protecting tests: packages/access-control/tests/access-control.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13365,11 +13365,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-brevo package metadata. Protecting tests: packages/adapters-brevo/tests/adapters-brevo.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13443,11 +13443,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-clickhouse package metadata. Protecting tests: packages/adapters-clickhouse/tests/adapters-clickhouse.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13521,11 +13521,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-graphql package metadata. Protecting tests: packages/adapters-graphql/tests/adapters-graphql.test.ts. Historical decision refs: ADR-0013.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13599,11 +13599,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-ingestion package metadata.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13677,11 +13677,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-keycloak. Historical decision refs: ADR-ACT-0157, ADR-ACT-0282.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13755,11 +13755,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-loki. Historical decision refs: ADR-ACT-0284.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13820,11 +13820,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-object-storage.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13898,11 +13898,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-opentelemetry. Historical decision refs: ADR-ACT-0284.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -13976,11 +13976,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-postgres. Historical decision refs: ADR-ACT-0282.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14106,11 +14106,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-redis.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14184,11 +14184,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-sentry. Historical decision refs: ADR-ACT-0284.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14262,11 +14262,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/api-runtime.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14340,11 +14340,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
       "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: @platform/audit-events. Protecting tests: packages/audit-events/tests/audit-events.test.ts. Historical decision refs: ADR-0001, ADR-0002, ADR-0003, ADR-0005.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14405,11 +14405,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
       "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: @platform/authorisation-runtime. Protecting tests: packages/authorisation-runtime/tests/authorisation-runtime.test.ts. Historical decision refs: ADR-0001, ADR-0005.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14470,11 +14470,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
       "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: @platform/config-runtime. Protecting tests: packages/config-runtime/tests/config-runtime.test.ts. Historical decision refs: ADR-0001, ADR-0005.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14548,11 +14548,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/contracts-admin. Historical decision refs: ADR-0001, ADR-0005, ADR-0008.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14613,11 +14613,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/contracts-analytics. Protecting tests: packages/contracts-analytics/tests/contracts-analytics.test.ts. Historical decision refs: ADR-0001, ADR-0005, ADR-0008.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14678,11 +14678,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/contracts-auth. Protecting tests: packages/contracts-auth/tests/contracts-auth.test.ts. Historical decision refs: ADR-0001, ADR-0005, ADR-0008.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14743,11 +14743,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/contracts-graphql. Protecting tests: packages/contracts-graphql/tests/contracts-graphql.test.ts. Historical decision refs: ADR-0001, ADR-0008, ADR-0013.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14834,11 +14834,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/contracts-ingestion. Protecting tests: packages/contracts-ingestion/tests/contracts-ingestion.test.ts. Historical decision refs: ADR-0001, ADR-0005, ADR-0008.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14899,11 +14899,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/contracts-organisation. Historical decision refs: ADR-0001, ADR-0005, ADR-0008.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -14951,11 +14951,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/dev-services. Historical decision refs: ADR-0001, ADR-0005.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15003,11 +15003,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "retire",
       "rationale": "Historical inventory disposition delete-after-proof normalized to retire. Historical deletion condition: Deprecated package (ADR-0006/ADR-ACT-0288); remove after V2 proves no consumers remain (removal review 2026-12-18); replace usage with node:crypto randomUUID + Date.toISOString. Historical decision refs: ADR-0006, ADR-ACT-0288.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15068,11 +15068,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/domain-identity. Protecting tests: packages/domain-identity/tests/domain-identity.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15133,11 +15133,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/email-runtime. Protecting tests: packages/email-runtime/tests/email-runtime.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15211,11 +15211,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/feature-workflow. Protecting tests: packages/feature-workflow/tests/feature-workflow.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15276,11 +15276,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/graphql-api-runtime. Protecting tests: packages/graphql-api-runtime/tests/graphql-api-runtime.test.ts. Historical decision refs: ADR-0013.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15354,11 +15354,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/graphql-browser-client. Protecting tests: packages/graphql-browser-client/tests/client.test.ts. Historical decision refs: ADR-0013, ADR-0019, ADR-0022.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15432,11 +15432,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/i18n-runtime, @platform/i18n-runtime/react. Protecting tests: packages/i18n-runtime/tests/i18n-runtime.test.ts. Historical decision refs: ADR-0026.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15510,11 +15510,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/infra-aws.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15562,11 +15562,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/infra-cloudflare.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15614,11 +15614,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/notification-runtime. Protecting tests: packages/notification-runtime/tests/notification-runtime.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15692,11 +15692,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/observability. Protecting tests: packages/observability/tests/observability.test.ts.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15757,11 +15757,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/platform-errors. Protecting tests: packages/platform-errors/tests/platform-errors.test.ts, packages/platform-errors/tests/platform-errors-auth.test.ts. Historical decision refs: ADR-0001, ADR-0002, ADR-0003, ADR-0005, ADR-0020.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15835,11 +15835,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/platform-logging. Protecting tests: packages/platform-logging/tests/platform-logging.test.ts. Historical decision refs: ADR-0020, ADR-ACT-0284.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15913,11 +15913,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/platform-observability. Protecting tests: packages/platform-observability/tests/platform-observability.test.ts. Historical decision refs: ADR-0020, ADR-ACT-0284.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -15978,11 +15978,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/platform-runtime-context. Protecting tests: packages/platform-runtime-context/tests/platform-runtime-context.test.ts. Historical decision refs: ADR-0020.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16043,11 +16043,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/profile-configuration. Protecting tests: packages/profile-configuration/tests/profile-configuration.test.ts. Historical decision refs: ADR-0068.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16108,11 +16108,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/queue-runtime. Protecting tests: packages/queue-runtime/tests/queue-runtime.test.ts. Historical decision refs: ADR-0068.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16186,11 +16186,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/search-runtime. Protecting tests: packages/search-runtime/tests/search-runtime.test.ts. Historical decision refs: ADR-0068.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16264,11 +16264,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/security-auth. Protecting tests: packages/security-auth/tests/security-auth.test.ts. Historical decision refs: ADR-ACT-0157.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16329,11 +16329,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/session-runtime. Protecting tests: packages/session-runtime/tests/session-runtime.test.ts. Historical decision refs: ADR-ACT-0278.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16407,11 +16407,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/storage-runtime. Protecting tests: packages/storage-runtime/tests/storage-runtime.test.ts. Historical decision refs: ADR-0068.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16485,11 +16485,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/test-support. Historical decision refs: ADR-0001, ADR-0002, ADR-0003.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16537,11 +16537,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/tooling-ci. Historical decision refs: ADR-0001, ADR-0002, ADR-0003, ADR-0005.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16589,11 +16589,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/tooling-codegen. Historical decision refs: ADR-0001, ADR-0002, ADR-0003.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16641,11 +16641,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/tooling-docker. Historical decision refs: ADR-0001, ADR-0002, ADR-0003.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16693,11 +16693,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/tooling-terraform. Historical decision refs: ADR-0001, ADR-0002, ADR-0003.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -16758,11 +16758,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/ui-design-system, design-system-components. Historical decision refs: ADR-0001, ADR-0002, ADR-0003, ADR-0005, ADR-0007, ADR-0008.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -17213,11 +17213,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "retire",
       "rationale": "Historical inventory disposition delete-after-proof normalized to retire. Historical deletion condition: delete once no consumer imports @platform/worker-runtime and replacement worker substrate is proven (lifecycle stage=deprecated). Protecting tests: packages/worker-runtime/tests/worker-runtime.test.ts. Historical decision refs: ADR-0001, ADR-0002, ADR-0003, ADR-0005, ADR-0006.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -17980,11 +17980,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/mock-oidc. Protecting tests: services/mock-oidc/src/server.test.ts. Historical decision refs: ADR-ACT-0220.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18188,11 +18188,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-lifecycle-reports/tests/generate-lifecycle-reports.test.mjs.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18253,11 +18253,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-lifecycle-reports/tests/generate-lifecycle-reports.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18279,11 +18279,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-lifecycle-reports/tests/generate-lifecycle-reports.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18292,11 +18292,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-lifecycle-reports/tests/generate-lifecycle-reports.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18305,11 +18305,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-lifecycle-reports/tests/generate-lifecycle-reports.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18318,11 +18318,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-lifecycle-reports/tests/generate-lifecycle-reports.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18331,11 +18331,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-lifecycle-reports/tests/generate-lifecycle-reports.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18357,11 +18357,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18448,11 +18448,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18474,11 +18474,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18487,11 +18487,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18500,11 +18500,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18513,11 +18513,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18526,11 +18526,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18539,11 +18539,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18552,11 +18552,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18565,11 +18565,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-inventory/tests/generate-package-inventory.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18591,11 +18591,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: make readmes.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18643,11 +18643,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18773,11 +18773,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18786,11 +18786,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18799,11 +18799,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18812,11 +18812,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18825,11 +18825,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18838,11 +18838,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18851,11 +18851,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18864,11 +18864,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18877,11 +18877,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/generate-package-readmes/tests/generate-package-readmes.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -18916,11 +18916,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/orchestrator. Protecting tests: tools/architecture/orchestrator/tests/orchestrator-unit.test.mjs. Historical decision refs: ADR-0011, ADR-0012.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19150,11 +19150,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-frontend-conventions. Protecting tests: tools/architecture/validate-frontend-conventions/tests/validate-frontend-conventions.test.mjs. Historical decision refs: ADR-0011, ADR-0012.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19202,11 +19202,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-i18n. Protecting tests: tools/architecture/validate-i18n/tests/validate-i18n.test.mjs. Historical decision refs: ADR-0011, ADR-0012, ADR-0026.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19254,11 +19254,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-lifecycle-evidence. Historical decision refs: ADR-0007, ADR-0011, ADR-0012.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19761,11 +19761,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-lifecycle-evidence/tests/validate-lifecycle-evidence.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19826,11 +19826,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-openapi-drift. Protecting tests: tools/architecture/validate-openapi-drift/tests/validate-openapi-drift.test.mjs. Historical decision refs: ADR-ACT-0286, ADR-ACT-0287, ADR-0013, ADR-0065.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19904,11 +19904,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-package-metadata. Protecting tests: tools/architecture/validate-package-metadata/tests/validate-package-metadata.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19956,11 +19956,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-package-metadata/tests/validate-package-metadata.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19969,11 +19969,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-package-metadata/tests/validate-package-metadata.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19982,11 +19982,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-package-metadata/tests/validate-package-metadata.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -19995,11 +19995,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-package-metadata/tests/validate-package-metadata.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20008,11 +20008,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-package-metadata/tests/validate-package-metadata.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20021,11 +20021,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-package-metadata/tests/validate-package-metadata.test.mjs. Historical decision refs: ADR-0007.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20060,11 +20060,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-pipeline-composition. Historical decision refs: ADR-0034.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20099,11 +20099,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-slice-readiness. Protecting tests: tools/architecture/validate-slice-readiness/tests/validate-slice-readiness.test.mjs.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20151,11 +20151,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @architecture/validate-source-imports. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20281,11 +20281,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20307,11 +20307,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20333,11 +20333,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20359,11 +20359,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20385,11 +20385,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20411,11 +20411,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20437,11 +20437,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20463,11 +20463,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20489,11 +20489,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20515,11 +20515,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20541,11 +20541,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20567,11 +20567,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20593,11 +20593,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20619,11 +20619,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20645,11 +20645,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20671,11 +20671,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20697,11 +20697,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20723,11 +20723,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20749,11 +20749,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "test",
+      "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: tools/architecture/validate-source-imports/tests/*.test.mjs.",
-      "targetUsfConcept": "Proof"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20775,11 +20775,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20801,11 +20801,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20827,11 +20827,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20853,11 +20853,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20879,11 +20879,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20905,11 +20905,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20944,11 +20944,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -20970,11 +20970,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21009,11 +21009,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21035,11 +21035,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21061,11 +21061,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21087,11 +21087,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21113,11 +21113,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21139,11 +21139,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21165,11 +21165,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21191,11 +21191,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21217,11 +21217,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21243,11 +21243,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21269,11 +21269,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21308,11 +21308,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
@@ -21659,11 +21659,11 @@
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
         "tag": "v1-final"
       },
-      "sourceKind": "configuration-file",
-      "sourceRole": "configuration-evidence",
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
       "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/mcp-platform-governor, bin: platform-governor-mcp. Protecting tests: tools/mcp/platform-governor/tests/handshake.test.mjs. Historical decision refs: ADR-ACT-0214.",
-      "targetUsfConcept": "Configuration"
+      "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {

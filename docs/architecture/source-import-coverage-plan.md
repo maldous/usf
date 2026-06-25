@@ -8,7 +8,7 @@
 | **Issue scope** | USF-47; supports USF-33 |
 | **Historical evidence basis** | `../react` at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767`, tags `v1-final` and `v2-l6-foundation-proven` |
 
-This document defines the coverage boundary for source-evidence records before detailed import-manifest records are authored. It is planning only. It creates no source import map, imports no runtime/application code, and does not treat `../react` as live authority.
+This document defines the coverage boundary for source-evidence records before detailed per-domain import-manifest records are authored. This planning document alone creates no source import map; the baseline manifest is authored separately at `spec/registries/source-import-manifest.json`. The plan imports no runtime/application code and does not treat `../react` as live authority.
 
 ## Purpose
 
@@ -117,7 +117,8 @@ The USF-33 import map should be decomposed in this order:
 - A no-loss check proving every covered source unit has exactly one disposition and rationale.
 - A canonical-value check proving no historical disposition alias is emitted as a canonical value.
 - A path-safety check proving source paths appear only as source references and are not used as target USF paths.
-- The existing spec validator remains required, but USF-33 will need an additional instance/no-loss check because `tools/validate-spec/validate-spec.py` currently validates schemas, catalogues, fixtures, and selftests rather than all future import-map instances.
+- `tools/validate-spec/validate-spec.py imports` validates the committed baseline manifest as a repeatable repository-owned check, including schema validity, entry count, unique source paths, canonical controlled values, path safety, package metadata classification, and runtime proof script classification.
+- External reconciliation against `../react` remains a documented manual evidence step until a later source-evidence harness is authorised.
 
 ## Non-Goals
 
