@@ -182,7 +182,8 @@
     "permissions": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "security": {
@@ -198,7 +199,8 @@
     "sourceRefs": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     }
   },

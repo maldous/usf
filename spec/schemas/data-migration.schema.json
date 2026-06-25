@@ -67,13 +67,15 @@
     "emittedEvidence": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "collectedEvidence": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "retention": {
@@ -82,7 +84,8 @@
     "sourceRefs": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "authorityLevel": {
