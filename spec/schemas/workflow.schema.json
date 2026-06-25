@@ -18,7 +18,10 @@
     "ontologyConcepts",
     "taxonomyRefs",
     "vocabularyRefs",
-    "aiGuidance"
+    "aiGuidance",
+    "participants",
+    "ordering",
+    "stateTransitions"
   ],
   "$defs": {
     "eventWorkflowKind": {
@@ -131,7 +134,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "$comment": "Required; may be empty for a workflow with a single implicit participant."
     },
     "steps": {
       "type": "array",
@@ -148,7 +152,8 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/stateTransition"
-      }
+      },
+      "$comment": "Required; may be empty for a workflow with no explicit state machine."
     },
     "failurePaths": {
       "type": "array",

@@ -18,7 +18,10 @@
     "ontologyConcepts",
     "taxonomyRefs",
     "vocabularyRefs",
-    "aiGuidance"
+    "aiGuidance",
+    "timestampSemantics",
+    "securitySensitive",
+    "stateChanging"
   ],
   "$defs": {
     "auditKind": {

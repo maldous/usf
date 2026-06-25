@@ -20,7 +20,8 @@
     "aiGuidance",
     "inputs",
     "outputs",
-    "environmentScope"
+    "environmentScope",
+    "sideEffects"
   ],
   "$defs": {
     "commandKind": {
@@ -111,7 +112,8 @@
       "items": {
         "type": "string",
         "minLength": 1
-      }
+      },
+      "$comment": "Required; may be empty only when the command has no side effects (absence is not allowed)."
     },
     "failureSemantics": {
       "type": "string",

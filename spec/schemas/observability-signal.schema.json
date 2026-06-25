@@ -17,7 +17,8 @@
     "ontologyConcepts",
     "taxonomyRefs",
     "vocabularyRefs",
-    "aiGuidance"
+    "aiGuidance",
+    "purpose"
   ],
   "$defs": {
     "signalKind": {
