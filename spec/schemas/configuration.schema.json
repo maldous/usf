@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:configuration",
+  "title": "USF Configuration Schema",
+  "description": "Draft JSON Schema for configuration artefacts (env vars, files, keys, secret-bearing settings, provider/environment/proof/runtime/compose configuration). Each declares its kind (configuration-kinds), secret classification, and provider mode (provider-modes) / environment (environment-classes) / proof relevance. A secret-bearing setting MUST NOT carry its literal value (never leak secrets); generated configuration declares its source manifest (generated config is regenerated, not hand-edited). Governs the ontology concept Configuration. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "configurationKind"],
+  "$defs": {
+    "configurationKind": {"type": "string", "enum": ["environment-variable", "configuration-file", "configuration-key", "secret-bearing-setting", "non-secret-setting", "provider-configuration", "environment-configuration", "proof-configuration", "runtime-configuration", "compose-configuration"]},
+    "providerMode": {"type": "string", "enum": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"]},
+    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "configurationKind": {"$ref": "#/$defs/configurationKind"},
+    "key": {"type": "string"},
+    "purpose": {"type": "string"},
+    "secretBearing": {"type": "boolean"},
+    "value": {"type": "string", "$comment": "Only permitted for non-secret settings; never the literal value of a secret."},
+    "providerMode": {"$ref": "#/$defs/providerMode"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "proofRelevant": {"type": "boolean"},
+    "generated": {"type": "boolean"},
+    "sourceManifest": {"type": "string"},
+    "reloadOrRestart": {"type": "string", "enum": ["reload", "restart"]},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "$comment": "Never leak a secret value: a secret-bearing setting MUST NOT carry a literal value.",
+      "if": {"properties": {"configurationKind": {"const": "secret-bearing-setting"}}, "required": ["configurationKind"]},
+      "then": {"not": {"required": ["value"]}}
+    },
+    {
+      "$comment": "If flagged secretBearing, the literal value MUST NOT be present.",
+      "if": {"properties": {"secretBearing": {"const": true}}, "required": ["secretBearing"]},
+      "then": {"not": {"required": ["value"]}}
+    },
+    {
+      "$comment": "Generated configuration declares its source manifest (regenerated, not hand-edited).",
+      "if": {"properties": {"generated": {"const": true}}, "required": ["generated"]},
+      "then": {"required": ["sourceManifest"]}
+    }
+  ]
+}
