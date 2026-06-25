@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:environment",
+  "title": "USF Environment Schema",
+  "description": "Draft JSON Schema for environment class declarations. Records the execution context (environment-classes) and the provider modes (provider-modes) it permits, keeping environment distinct from provider mode. Enforces that production-shaped MUST NOT satisfy a production-live claim and that an environment name is not itself a readiness claim. Governs the ontology concepts Environment and Provider Mode. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "environment"],
+  "$defs": {
+    "environment": {"type": "string", "enum": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"]},
+    "providerMode": {"type": "string", "enum": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "title": {"type": "string"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "permittedProviderModes": {"type": "array", "items": {"$ref": "#/$defs/providerMode"}},
+    "productionLiveClaim": {"type": "boolean", "default": false},
+    "readinessGateRefs": {"type": "array", "items": {"type": "string"}},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "$comment": "production-shaped MUST NOT satisfy a production-live claim.",
+      "if": {"properties": {"environment": {"const": "production-shaped"}}, "required": ["environment"]},
+      "then": {"properties": {"productionLiveClaim": {"const": false}}}
+    },
+    {
+      "$comment": "A production-live claim requires the environment to actually be production-live; environment does not upgrade by implication.",
+      "if": {"properties": {"productionLiveClaim": {"const": true}}, "required": ["productionLiveClaim"]},
+      "then": {"properties": {"environment": {"const": "production-live"}}}
+    }
+  ]
+}
