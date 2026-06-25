@@ -53,11 +53,13 @@
     },
     "port": {
       "type": "string",
-      "$comment": "The port (semantic boundary) this provider fulfils."
+      "$comment": "The port (semantic boundary) this provider fulfils.",
+      "minLength": 1
     },
     "adapter": {
       "type": "string",
-      "$comment": "The adapter binding the provider to the port."
+      "$comment": "The adapter binding the provider to the port.",
+      "minLength": 1
     },
     "environment": {
       "$ref": "#/$defs/environment",

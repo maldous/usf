@@ -272,7 +272,8 @@
       "const": 7
     },
     "normativeLanguage": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "identityNotes": {
       "type": "object",
@@ -504,16 +505,20 @@
             "minLength": 1
           },
           "affectsSchemas": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "willNotClaimYet": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "validatorImplications": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "aiGuidance": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       }

@@ -35,7 +35,8 @@
           "$comment": "A facet is 'complete' only with authoritative backing; otherwise 'gap'."
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "evidenceRefs": {
           "type": "array",
@@ -99,7 +100,8 @@
       "minLength": 1
     },
     "kind": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "title": {
       "type": "string",
@@ -129,11 +131,13 @@
       "$comment": "lifecycle-states canonical values."
     },
     "capability": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "capabilityDomain": {
       "type": "string",
-      "$comment": "DEFERRED value set capability-domains: open string until canonical values are authored; do not treat historical ../react labels as canonical."
+      "$comment": "DEFERRED value set capability-domains: open string until canonical values are authored; do not treat historical ../react labels as canonical.",
+      "minLength": 1
     },
     "facets": {
       "type": "object",

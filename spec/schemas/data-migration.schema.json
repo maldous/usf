@@ -52,14 +52,16 @@
     },
     "tenancyIsolation": {
       "type": "string",
-      "$comment": "e.g. schema-per-tenant with RLS; a contract-level invariant."
+      "$comment": "e.g. schema-per-tenant with RLS; a contract-level invariant.",
+      "minLength": 1
     },
     "migrationOrder": {
       "type": "integer",
       "minimum": 1
     },
     "checksum": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "immutable": {
       "type": "boolean"
@@ -79,7 +81,8 @@
       }
     },
     "retention": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "sourceRefs": {
       "type": "array",

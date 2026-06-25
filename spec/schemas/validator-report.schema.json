@@ -51,7 +51,8 @@
       ],
       "properties": {
         "ruleId": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "severity": {
           "$ref": "#/$defs/severity"

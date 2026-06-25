@@ -124,7 +124,8 @@
       "minLength": 1
     },
     "claimExercised": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "proofLevelClaimed": {
       "$ref": "#/$defs/proofLevel"
@@ -163,7 +164,8 @@
       "additionalProperties": false,
       "properties": {
         "commit": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "stale": {
           "type": "boolean"
@@ -171,7 +173,8 @@
       }
     },
     "failureSemantics": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     }
   },
   "allOf": [

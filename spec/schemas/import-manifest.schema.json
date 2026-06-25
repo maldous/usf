@@ -154,7 +154,8 @@
         },
         "targetUsfConcept": {
           "type": "string",
-          "$comment": "Source path MUST NOT dictate target path."
+          "$comment": "Source path MUST NOT dictate target path.",
+          "minLength": 1
         }
       }
     }
@@ -169,7 +170,8 @@
       "minLength": 1
     },
     "sourceRepository": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "entries": {
       "type": "array",

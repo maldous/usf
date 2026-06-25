@@ -199,7 +199,8 @@
     },
     "targetUsfConcept": {
       "type": "string",
-      "$comment": "Source path MUST NOT dictate target path."
+      "$comment": "Source path MUST NOT dictate target path.",
+      "minLength": 1
     },
     "impliesImplementationAcceptance": {
       "type": "boolean",
