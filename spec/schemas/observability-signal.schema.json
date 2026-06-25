@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:observability-signal",
+  "title": "USF Observability Signal Schema",
+  "description": "Draft JSON Schema for observability signal definitions (logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, correlation identifiers). Each declares its kind (observability-signal-kinds), name, source, and purpose, mapped to a semantic contract and to proof/evidence where applicable. Observability is a semantic asset: removing or renaming a signal requires semantic review, not an incidental refactor. USF claims no full OpenTelemetry compliance until concrete attribute schemas exist. Governs the ontology concept Observability Signal. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "signalKind", "name", "source"],
+  "$defs": {
+    "signalKind": {"type": "string", "enum": ["log", "metric", "trace", "span", "runtime-event", "runtime-proof-output", "service-resource-attribute", "correlation-identifier"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "signalKind": {"$ref": "#/$defs/signalKind"},
+    "name": {"type": "string", "minLength": 1},
+    "source": {"type": "string", "minLength": 1},
+    "purpose": {"type": "string"},
+    "semanticContractRef": {"type": "string"},
+    "evidenceRefs": {"type": "array", "items": {"type": "string"}},
+    "proofRefs": {"type": "array", "items": {"type": "string"}},
+    "retention": {"type": "string"},
+    "correlation": {"type": "string"},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+  }
+}
