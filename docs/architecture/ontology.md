@@ -23,7 +23,7 @@
 
 1.3 It defines the **conceptual model** that later machine-readable artefacts will formalise: taxonomy, vocabulary, schemas, registries, ADRs, validators, evidence envelopes, source-import maps, and implementation extraction.
 
-1.4 It **does not create those artefacts**. It defines the nouns, relationships, constraints, and authority roles those artefacts must follow. Exact shapes are deferred (§18).
+1.4 This document **does not itself create those artefacts**. It defines the nouns, relationships, constraints, and authority roles those artefacts must follow. Initial exact shapes were deferred to §18; later, under directive, the 23 draft schema files and an advisory validator were authored and are recorded in §18 (see schema-authoring §26 Amendment A), while active maturity and real-instance validation remain deferred.
 
 ---
 
