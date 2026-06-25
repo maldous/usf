@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:source-disposition",
+  "title": "USF Source Disposition Schema",
+  "description": "Draft JSON Schema for the declared treatment of a source element mapped into (or excluded from) USF. Enforces the no-knowledge-loss rule: every dispositioned element links to a source reference, carries a disposition value (disposition-values), and a rationale. Governs the ontology concepts Disposition and Source Reference. A disposition is a recorded decision, not silence, and does not by itself imply implementation acceptance. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "sourceRef", "disposition", "rationale"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "sourceRef": {
+      "$comment": "Link to a source reference: either an id string or an inline reference object.",
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {"type": "object", "required": ["repository"], "properties": {"repository": {"type": "string"}, "path": {"type": "string"}, "commit": {"type": "string"}, "tag": {"type": "string"}}}
+      ]
+    },
+    "disposition": {"type": "string", "enum": ["preserve", "rename", "refactor", "merge", "split", "replace", "retire", "defer", "reject"]},
+    "rationale": {"type": "string", "minLength": 1},
+    "sourceKind": {"type": "string", "enum": ["source-file", "semantic-artefact", "documentation", "make-target", "package-script", "environment-variable", "configuration-file", "configuration-key", "compose-service", "application", "package", "module", "test", "e2e-journey", "proof-script", "generated-report", "readiness-gate", "operational-semantic", "event-semantic", "ui-semantic", "data-migration-artefact", "observability-audit-artefact"]},
+    "sourceRole": {"type": "string", "enum": ["semantic-source", "behavioural-evidence", "proof-evidence", "operational-evidence", "configuration-evidence", "command-evidence", "ui-evidence", "interface-evidence", "event-workflow-evidence", "data-evidence", "observability-audit-evidence", "generated-summary-evidence", "historical-lineage"]},
+    "targetUsfConcept": {"type": "string", "$comment": "The USF concept/artefact the element maps to, or an explicit exclusion. Source path MUST NOT dictate target path."},
+    "impliesImplementationAcceptance": {"type": "boolean", "const": false, "$comment": "Disposition never confers implementation acceptance by itself."}
+  }
+}
