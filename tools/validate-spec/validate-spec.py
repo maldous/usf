@@ -146,7 +146,7 @@ ENUM_BINDINGS = {
     ("source-reference", "/$defs/disposition"): "disposition-values",
     ("source-reference", "/properties/evidenceRole"): "evidence-kinds",
     ("taxonomy", "/$defs/classificationMode"): "classification-modes",
-    ("taxonomy", "/$defs/lifecycleState"): "schema-lifecycle-states",
+    ("taxonomy", "/$defs/lifecycleState"): "lifecycle-states",
     ("ui-semantic-model", "/$defs/uiKind"): "ui-semantic-kinds",
     ("validator-report", "/$defs/severity"): "validation-severities",
     ("validator-report", "/$defs/status"): "report-statuses",
@@ -181,6 +181,7 @@ RULES = {
     "USF-ENUM-003":     ("blocking", "Forbidden token present as an enum value"),
     "USF-ENUM-004":     ("blocking", "Bound enum pointer missing or has no enum (binding drift)"),
     "USF-ENUM-005":     ("error",    "Unbound enum resembles a vocabulary set; bind it explicitly"),
+    "USF-ENUM-006":     ("blocking", "Enum binding disagrees with the value set named in the node $comment"),
     "USF-TAX-001":      ("blocking", "Registry taxonomyRefs item does not resolve"),
     "USF-VOCAB-001":    ("blocking", "Registry vocabularyRefs item does not resolve"),
     "USF-ONT-001":      ("blocking", "Registry governsOntologyConcepts item does not resolve"),
@@ -303,6 +304,35 @@ def build_ctx(F):
             elif not isinstance(obj[k], list) or not all(isinstance(x, dict) for x in obj[k]):
                 F.add("USF-SHAPE-001", name, f"'{k}' must be an array of objects")
                 fatal = True
+    # Nested shape: the fields indexed below MUST be present and well-typed, else USF-SHAPE-001
+    # (item 2 review): a parseable-but-malformed catalogue must not throw a traceback.
+    if not fatal:
+        for i, vs in enumerate(voc["valueSets"]):
+            if not isinstance(vs.get("id"), str):
+                F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].id must be a string"); fatal = True
+            if not isinstance(vs.get("values"), list):
+                F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].values must be an array"); fatal = True
+            else:
+                for j, v in enumerate(vs["values"]):
+                    if not (isinstance(v, dict) and isinstance(v.get("id"), str)):
+                        F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].values[{j}].id must be a string"); fatal = True
+            for j, a in enumerate(vs.get("aliases", []) if isinstance(vs.get("aliases"), list) else []):
+                if not isinstance(a, dict):
+                    F.add("USF-SHAPE-001", "vocabulary", f"valueSets[{i}].aliases[{j}] must be an object"); fatal = True
+        for key in ("valueSetLifecycleStates", "valueLifecycleStates"):
+            for i, x in enumerate(voc[key]):
+                if not isinstance(x.get("id"), str):
+                    F.add("USF-SHAPE-001", "vocabulary", f"{key}[{i}].id must be a string"); fatal = True
+        for i, t in enumerate(tax["taxonomies"]):
+            if not (isinstance(t.get("id"), str) and isinstance(t.get("family"), str)):
+                F.add("USF-SHAPE-001", "taxonomy", f"taxonomies[{i}] needs string id and family"); fatal = True
+        for i, fa in enumerate(tax["taxonomyFamilies"]):
+            if not isinstance(fa.get("id"), str):
+                F.add("USF-SHAPE-001", "taxonomy", f"taxonomyFamilies[{i}].id must be a string"); fatal = True
+        for i, e in enumerate(reg["schemas"]):
+            for k in ("id", "path", "class", "lifecycleState", "authorityRole"):
+                if not isinstance(e.get(k), str):
+                    F.add("USF-SHAPE-001", "registry", f"schemas[{i}].{k} must be a string"); fatal = True
     if fatal or not sd:
         return None
     canon = {vs["id"]: set(v.get("id") for v in vs.get("values", [])) for vs in voc["valueSets"]}
@@ -419,6 +449,12 @@ def check_enums(ctx, F):
                     F.add("USF-ENUM-002", f"{name}{pointer}", f"aliases {sorted(actual & aliass.get(vsid, set()))} of {vsid}")
                 if actual & forbidden:
                     F.add("USF-ENUM-003", f"{name}{pointer}", f"forbidden {sorted(actual & forbidden)}")
+                node = resolve_pointer(d, pointer)
+                comment = node.get("$comment", "") if isinstance(node, dict) else ""
+                declared = {sid for sid in recog if re.search(r"(?<![a-z-])" + re.escape(sid) + r"(?![a-z-])", comment)}
+                if declared and vsid not in declared:
+                    F.add("USF-ENUM-006", f"{name}{pointer}",
+                          f"binding {vsid} disagrees with the value set named in $comment {sorted(declared)}")
             elif (name, pointer) not in ENUM_LOCAL_ALLOW:
                 for sid, vals in nonempty.items():
                     if actual == vals or (actual > vals and len(actual & vals) >= 2) or \
@@ -567,7 +603,7 @@ def load_manifest(F):
 
 def check_fixtures(ctx, F):
     """Positive fixtures must validate; negative fixtures must be rejected FOR THE INTENDED REASON
-    declared in tests/fixtures/manifest.d/*.json (item 3a)."""
+    declared in tools/validate-spec/manifests/*.json (item 3a)."""
     sd = ctx["sd"]
     pos = sorted(glob.glob(f"{CORPUS}/fixtures/positive/**/*.json", recursive=True))
     neg = sorted(glob.glob(f"{CORPUS}/fixtures/negative/**/*.json", recursive=True))
@@ -723,7 +759,7 @@ def emit_report(ctx, F, path):
     tax_refs = sorted(ctx["tax_ids"])[:1] or ["governance"]
     report = {
         "id": "usf.validator-report.spec", "title": "USF Spec Validator Report",
-        "description": "Generated validator report for the USF spec corpus produced by tools/validate-spec.py. "
+        "description": "Generated validator report for the USF spec corpus produced by tools/validate-spec/validate-spec.py. "
                        "Rank-7 generated-report; never overrides evidence or semantics.",
         "authorityLevel": "generated-report", "status": status, "lifecycleState": "draft",
         "ontologyConcepts": ["Validator", "Generated Report"], "taxonomyRefs": tax_refs, "vocabularyRefs": vocab_refs,

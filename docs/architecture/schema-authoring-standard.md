@@ -156,7 +156,7 @@ https://json-schema.org/draft/2020-12/schema
 5.5 Scope of this decision:
 
 - **The exact validator package is not chosen here.** The historical readiness validator (`../react/tools/v2-readiness/`) is a custom, fail-closed `.mjs` rule engine (rules `rNN-*.mjs`, exit codes `0/1/2`, "fails closed", "normalises no aliases"), **not** a JSON-Schema/`ajv`-based validator; JSON Schema was used historically to *define* artefact shape (`ui-definition.schema.json`), while a custom validator *enforced* rules. USF preserves that separation: JSON Schema 2020-12 defines shape; the validator package is **deferred** to validator implementation (§24, §26).
-- **Tooling selection is deferred**, but **the dialect choice constrains future schemas immediately** (§23, §24).
+- **Tooling selection** *(since resolved for this phase by directive — see §26 Amendment A; `jsonschema==4.10.3`)*, but **the dialect choice constrains future schemas immediately** (§23, §24).
 
 ---
 
@@ -703,7 +703,7 @@ A future validator (not created now) MUST be able to:
 - detect provider/environment schemas that would allow unsafe substitution (`hermetic-mock` as live; `production-shaped` as `production-live`);
 - detect source-reference/import schemas that would allow silent source loss (an element without a disposition).
 
-The validator MUST fail closed on any such finding (Charter §5.10; Standards Profile §18.2; historical evidence: `../react/docs/v2-foundation/v2-readiness-validator-spec.md` — "It fails closed: any contradiction is an error", exit codes `0/1/2`, "the validator normalises no aliases"). No validator is created now.
+The validator MUST fail closed on any such finding (Charter §5.10; Standards Profile §18.2; historical evidence: `../react/docs/v2-foundation/v2-readiness-validator-spec.md` — "It fails closed: any contradiction is an error", exit codes `0/1/2`, "the validator normalises no aliases"). This document creates no validator; a draft/advisory validator was subsequently authorised under directive — see §26 Amendment A.
 
 ---
 
@@ -741,6 +741,15 @@ Future AI agents (and humans) MUST:
 
 ## 26. Deferred Work
 
+**Amendment A (2026-06 — validator implementation partially resolved by directive).** Under an explicit directive, the 23 planned schemas and a draft/advisory validator have since been authored and committed, partially superseding the deferrals in this section and the "no validator is created" / "tooling deferred" statements elsewhere in this document (§5 grounding notes; §24). Specifically:
+
+- The 23 planned schema files now exist under `spec/schemas/` at lifecycle `draft` (the registry tracks them; none are `active`).
+- `tools/validate-spec/validate-spec.py` is the authorised **draft/advisory** USF validator (artefact-kind validator, lifecycle `draft`).
+- `jsonschema==4.10.3` is the selected JSON Schema **Draft 2020-12** validation package for this phase (pinned in `tools/validate-spec/requirements.txt`).
+- It is **CI-enforced** for the current `spec/` corpus (`.github/workflows/validate-spec.yml`, per Naming Standard §6.E.1) and implements schema self-validation and schema↔registry/taxonomy/vocabulary/ontology checks.
+- It is **advisory**: it promotes **no** schema to `active`; it normalises no aliases; it fails closed.
+- **Still deferred:** validation of real (non-synthetic) domain instances; a formal ADR recording this lift and promoting this standard to **validator-enforced** maturity; `$id`/semver versioning policy; and any future validator expansion. The remaining bullets below stay deferred except as stated here.
+
 Deferred, not blockers. Each MUST be resolved by a future ADR, schema, or validator before it is enforced:
 
 - actual schema file creation (all 23 planned schemas);
@@ -752,8 +761,8 @@ Deferred, not blockers. Each MUST be resolved by a future ADR, schema, or valida
 - the proof-evidence schema (`proof-evidence.schema.json`);
 - the validator-report schema (`validator-report.schema.json`);
 - the provider-mode and environment schemas;
-- validator implementation;
-- schema-validation tool/package selection (the exact 2020-12 validator);
+- validator implementation; *(partially resolved — see Amendment A)*
+- schema-validation tool/package selection (the exact 2020-12 validator); *(resolved for this phase: `jsonschema==4.10.3` — see Amendment A)*
 - schema self-validation (the registry validating itself);
 - schema-to-registry, schema-to-taxonomy, schema-to-vocabulary, and schema-to-ontology validators;
 - OpenAPI / AsyncAPI concrete artefact decisions;
