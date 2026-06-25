@@ -15,7 +15,9 @@
     "ontologyConcepts",
     "taxonomyRefs",
     "vocabularyRefs",
-    "aiGuidance"
+    "aiGuidance",
+    "purpose",
+    "secretBearing"
   ],
   "$defs": {
     "configurationKind": {
@@ -215,6 +217,65 @@
         "required": [
           "sourceManifest"
         ]
+      }
+    },
+    {
+      "$comment": "provider-configuration declares the provider mode it selects.",
+      "if": {
+        "properties": {
+          "configurationKind": {
+            "const": "provider-configuration"
+          }
+        },
+        "required": [
+          "configurationKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "providerMode"
+        ]
+      }
+    },
+    {
+      "$comment": "environment-configuration declares the environment it scopes to.",
+      "if": {
+        "properties": {
+          "configurationKind": {
+            "const": "environment-configuration"
+          }
+        },
+        "required": [
+          "configurationKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "environment"
+        ]
+      }
+    },
+    {
+      "$comment": "proof-configuration declares proof relevance true.",
+      "if": {
+        "properties": {
+          "configurationKind": {
+            "const": "proof-configuration"
+          }
+        },
+        "required": [
+          "configurationKind"
+        ]
+      },
+      "then": {
+        "required": [
+          "proofRelevant"
+        ],
+        "properties": {
+          "proofRelevant": {
+            "const": true
+          }
+        }
       }
     }
   ]

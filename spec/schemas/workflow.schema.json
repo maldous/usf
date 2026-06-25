@@ -34,6 +34,44 @@
         "failure-path",
         "compensation-path"
       ]
+    },
+    "workflowStep": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        }
+      },
+      "$comment": "Deliberate extension point: typed interim shape (id required); the full step shape is deferred to workflow import. Closure validator-deferred."
+    },
+    "stateTransition": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        }
+      },
+      "$comment": "Deliberate extension point: typed interim shape (from/to required); full transition shape deferred."
     }
   },
   "properties": {
@@ -58,7 +96,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "type": "object"
+        "$ref": "#/$defs/workflowStep"
       }
     },
     "ordering": {
@@ -67,7 +105,7 @@
     "stateTransitions": {
       "type": "array",
       "items": {
-        "type": "object"
+        "$ref": "#/$defs/stateTransition"
       }
     },
     "failurePaths": {

@@ -181,6 +181,9 @@
         "properties": {
           "collectedEvidence": {
             "minItems": 1
+          },
+          "emittedEvidence": {
+            "minItems": 1
           }
         }
       }

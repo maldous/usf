@@ -159,11 +159,52 @@
     },
     "facets": {
       "type": "object",
-      "minProperties": 1,
-      "additionalProperties": {
-        "$ref": "#/$defs/facet"
+      "additionalProperties": false,
+      "required": [
+        "lifecycle",
+        "stateModel",
+        "permissions",
+        "contracts",
+        "validation",
+        "errorModel",
+        "auditModel",
+        "readinessModel",
+        "proof",
+        "uiSemanticDefinition"
+      ],
+      "properties": {
+        "lifecycle": {
+          "$ref": "#/$defs/facet"
+        },
+        "stateModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "permissions": {
+          "$ref": "#/$defs/facet"
+        },
+        "contracts": {
+          "$ref": "#/$defs/facet"
+        },
+        "validation": {
+          "$ref": "#/$defs/facet"
+        },
+        "errorModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "auditModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "readinessModel": {
+          "$ref": "#/$defs/facet"
+        },
+        "proof": {
+          "$ref": "#/$defs/facet"
+        },
+        "uiSemanticDefinition": {
+          "$ref": "#/$defs/facet"
+        }
       },
-      "$comment": "Historical facet set: lifecycle, stateModel, permissions, contracts, validation, errorModel, auditModel, readinessModel, proof, uiSemanticDefinition."
+      "$comment": "The ten capability facets (../react v1-capability-closure). All ten are required; each facet marked complete must cite evidence (see $defs/facet)."
     },
     "sourceRefs": {
       "type": "array",
