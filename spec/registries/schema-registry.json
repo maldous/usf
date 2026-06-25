@@ -28,7 +28,7 @@
     "isSeventhFoundationalArtefact": true,
     "isDraftFoundational": true,
     "isMachineReadableGovernance": true,
-    "isNotItselfASchemaFile": "This registry is governance data; it is not a JSON Schema. It will itself be validated later by spec/schemas/schema-registry.schema.json once that schema is authored and validator-checkable.",
+    "isNotItselfASchemaFile": "This registry is governance data; it is not a JSON Schema. Its validating schema spec/schemas/schema-registry.schema.json has now been authored (lifecycleState draft) and the registry is checked against it for shape; enforcement remains advisory until a validator tool is integrated (active).",
     "createdBeforeActualSchemaFiles": true,
     "governsLaterSchemaCreation": true,
     "idPrefixNote": "This artefact uses the global artefact-ID namespace 'usf.' (id 'usf.schema-registry'), consistent with the taxonomy ('usf.taxonomy-catalog') and vocabulary ('usf.vocabulary-catalog') catalogues. The 'usf.' prefix is a deliberate globally-scoped machine-readable identifier namespace and is NOT a redundant-usf violation: the redundant-usf prohibition applies to repository path segments, package and implementation names, and unnecessary repeated local names, not to global artefact IDs that may be consumed outside the repository context. Schema file names and paths (e.g. spec/schemas/schema-registry.schema.json) remain unprefixed because they are paths, not global IDs."
