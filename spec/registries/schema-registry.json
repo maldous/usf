@@ -5,7 +5,7 @@
   "status": "draft-foundational",
   "version": "0.2.0",
   "authorityLevel": "semantic-definition",
-  "purpose": "Defines the canonical schema system for USF: which JSON Schemas are expected, why each exists, what ontology concept it governs, what taxonomy classifications and vocabulary value sets it depends on, what authority level it supports, and what lifecycle state it is in. It governs later schema creation so future schemas do not drift in naming, identity, metadata, references, authority, or enum values. It is machine-readable governance, not a schema file; it creates no schema files.",
+  "purpose": "Defines the canonical schema system for USF: which JSON Schemas are expected, why each exists, what ontology concept it governs, what taxonomy classifications and vocabulary value sets it depends on, what authority level it supports, and what lifecycle state it is in. It governs later schema creation so future schemas do not drift in naming, identity, metadata, references, authority, or enum values. It is machine-readable governance, not a schema file. The registry artefact itself authors no schema files; the schema files it catalogues are now present under spec/schemas/ as separate artefacts (lifecycleState draft), validated against spec/schemas/schema-registry.schema.json.",
   "createdAfter": [
     "docs/architecture/charter.md",
     "docs/architecture/authority-model.md",
