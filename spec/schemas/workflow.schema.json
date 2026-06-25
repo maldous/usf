@@ -37,6 +37,7 @@
     },
     "workflowStep": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "id"
       ],
@@ -50,12 +51,32 @@
         },
         "operation": {
           "type": "string"
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "null"
+            ]
+          },
+          "$comment": "Typed extension map (scalar values) for the deferred full shape."
         }
       },
-      "$comment": "Deliberate extension point: typed interim shape (id required); the full step shape is deferred to workflow import. Closure validator-deferred."
+      "$comment": "Deliberate extension point: typed, CLOSED interim shape; further fields go through the typed scalar extensions map until the full step shape is authored."
     },
     "stateTransition": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "from",
         "to"
@@ -69,9 +90,22 @@
         },
         "trigger": {
           "type": "string"
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "null"
+            ]
+          },
+          "$comment": "Typed extension map (scalar values) for the deferred full shape."
         }
       },
-      "$comment": "Deliberate extension point: typed interim shape (from/to required); full transition shape deferred."
+      "$comment": "Deliberate extension point: typed, CLOSED interim shape; further fields via the typed scalar extensions map."
     }
   },
   "properties": {
@@ -141,7 +175,8 @@
       }
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "authorityLevel": {
       "type": "string",

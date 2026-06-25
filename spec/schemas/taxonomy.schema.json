@@ -5,94 +5,345 @@
   "description": "Draft JSON Schema for the USF taxonomy catalogue (spec/taxonomies/taxonomy-catalog.json) and future taxonomy artefacts. Validates taxonomy families and taxonomies per the catalogue's taxonomyRules: each family declares governed ontology concepts, purpose, expected future taxonomies/vocabulary/schema dependencies, source inputs, and AI guidance; each taxonomy belongs to a family and declares classificationMode (classification-modes), lifecycle status (lifecycle-states), governed ontology concepts, categories, category rules, future vocabulary/schema dependencies, source inputs, and AI guidance. CLOSURE POLICY: families, taxonomies, and categories are closed; descriptive metadata blocks (currentRepositoryState, governance, taxonomyRelationships, vocabularyDependencies, reactSourceLearnings, externalStandardsInfluence, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. Cross-record checks (unique family/taxonomy ids, every taxonomy in a known family) are validator-deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
   "type": "object",
   "$defs": {
-    "kebab": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "kebab": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
     "classificationMode": {
       "$comment": "Canonical values from the vocabulary value set 'classification-modes'.",
       "type": "string",
-      "enum": ["exclusive", "non-exclusive", "hierarchical", "relational", "dimensional"]
+      "enum": [
+        "exclusive",
+        "non-exclusive",
+        "hierarchical",
+        "relational",
+        "dimensional"
+      ]
     },
     "lifecycleState": {
       "$comment": "Canonical values from the vocabulary value set 'lifecycle-states'.",
       "type": "string",
-      "enum": ["proposed", "planned", "draft", "active", "deprecated", "retired", "replaced", "deferred"]
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
     },
     "category": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "description"],
+      "required": [
+        "id",
+        "description"
+      ],
       "properties": {
-        "id": {"$ref": "#/$defs/kebab"},
-        "description": {"type": "string", "minLength": 1}
+        "id": {
+          "$ref": "#/$defs/kebab"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "taxonomyFamily": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "description", "governedOntologyConcepts", "purpose", "expectedFutureTaxonomies", "expectedFutureVocabularyDependencies", "expectedFutureSchemaDependencies", "reactSourceInputs", "aiGuidance"],
+      "required": [
+        "id",
+        "title",
+        "description",
+        "governedOntologyConcepts",
+        "purpose",
+        "expectedFutureTaxonomies",
+        "expectedFutureVocabularyDependencies",
+        "expectedFutureSchemaDependencies",
+        "reactSourceInputs",
+        "aiGuidance"
+      ],
       "properties": {
-        "id": {"$ref": "#/$defs/kebab"},
-        "title": {"type": "string"},
-        "description": {"type": "string"},
-        "governedOntologyConcepts": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-        "purpose": {"type": "string"},
-        "expectedFutureTaxonomies": {"type": "array", "items": {"$ref": "#/$defs/kebab"}},
-        "expectedFutureVocabularyDependencies": {"type": "array", "items": {"$ref": "#/$defs/kebab"}},
-        "expectedFutureSchemaDependencies": {"type": "array", "items": {"type": "string"}},
-        "reactSourceInputs": {"type": "array", "items": {"type": "string"}},
-        "aiGuidance": {"type": "string"}
+        "id": {
+          "$ref": "#/$defs/kebab"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "governedOntologyConcepts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "expectedFutureTaxonomies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kebab"
+          }
+        },
+        "expectedFutureVocabularyDependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kebab"
+          }
+        },
+        "expectedFutureSchemaDependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reactSourceInputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aiGuidance": {
+          "type": "string"
+        }
       }
     },
     "taxonomy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "family", "status", "classificationMode", "governedOntologyConcepts", "purpose", "categories", "categoryRules", "futureVocabularyDependencies", "futureSchemaDependencies", "reactSourceInputs", "aiGuidance"],
+      "required": [
+        "id",
+        "title",
+        "family",
+        "status",
+        "classificationMode",
+        "governedOntologyConcepts",
+        "purpose",
+        "categories",
+        "categoryRules",
+        "futureVocabularyDependencies",
+        "futureSchemaDependencies",
+        "reactSourceInputs",
+        "aiGuidance"
+      ],
       "properties": {
-        "id": {"$ref": "#/$defs/kebab"},
-        "title": {"type": "string"},
-        "family": {"$ref": "#/$defs/kebab"},
-        "status": {"$ref": "#/$defs/lifecycleState"},
-        "classificationMode": {"$ref": "#/$defs/classificationMode"},
-        "governedOntologyConcepts": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-        "purpose": {"type": "string"},
-        "categories": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/category"}},
-        "categoryRules": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-        "futureVocabularyDependencies": {"type": "array", "items": {"$ref": "#/$defs/kebab"}},
-        "futureSchemaDependencies": {"type": "array", "items": {"type": "string"}},
-        "reactSourceInputs": {"type": "array", "items": {"type": "string"}},
-        "validationExpectations": {"type": "array", "items": {"type": "string"}},
-        "driftRisks": {"type": "array", "items": {"type": "string"}},
-        "aiGuidance": {"type": "string"},
-        "deferredDetails": {"type": "array", "items": {"type": "string"}}
+        "id": {
+          "$ref": "#/$defs/kebab"
+        },
+        "title": {
+          "type": "string"
+        },
+        "family": {
+          "$ref": "#/$defs/kebab"
+        },
+        "status": {
+          "$ref": "#/$defs/lifecycleState"
+        },
+        "classificationMode": {
+          "$ref": "#/$defs/classificationMode"
+        },
+        "governedOntologyConcepts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/category"
+          }
+        },
+        "categoryRules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "futureVocabularyDependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kebab"
+          }
+        },
+        "futureSchemaDependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reactSourceInputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validationExpectations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "driftRisks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aiGuidance": {
+          "type": "string"
+        },
+        "deferredDetails": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     }
   },
-  "required": ["id", "title", "status", "version", "authorityLevel", "purpose", "taxonomyFamilies", "taxonomies"],
+  "required": [
+    "id",
+    "title",
+    "status",
+    "version",
+    "authorityLevel",
+    "purpose",
+    "taxonomyFamilies",
+    "taxonomies"
+  ],
   "additionalProperties": false,
   "properties": {
-    "$schema": {"type": ["string", "null"]},
-    "id": {"const": "usf.taxonomy-catalog"},
-    "title": {"type": "string"},
-    "status": {"type": "string"},
-    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
-    "authorityLevel": {"type": "string", "const": "semantic-definition"},
-    "purpose": {"type": "string"},
-    "createdAfter": {"type": "array", "items": {"type": "string"}},
-    "consistentWith": {"type": "array", "items": {"type": "string"}},
-    "normativeLanguage": {"type": "string"},
-    "scopeNote": {"type": "string"},
-    "currentRepositoryState": {"type": "object", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
-    "governance": {"type": "object", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
-    "taxonomyDesignPrinciples": {"type": "array", "items": {"type": "string"}},
-    "taxonomyRules": {"type": "array", "items": {"type": "string"}},
-    "taxonomyFamilies": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/taxonomyFamily"}},
-    "taxonomies": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/taxonomy"}},
-    "taxonomyRelationships": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
-    "vocabularyDependencies": {"type": "object", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
-    "reactSourceLearnings": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
-    "externalStandardsInfluence": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
-    "validationExpectations": {"type": "array", "items": {"type": "string"}},
-    "aiAgentRules": {"type": "array", "items": {"type": "string"}},
-    "deferredWork": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."},
-    "acceptanceCriteria": {"type": "array", "$comment": "Descriptive metadata; deliberately permissive in this draft."}
+    "$schema": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "const": "usf.taxonomy-catalog"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "createdAfter": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "consistentWith": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "normativeLanguage": {
+      "type": "string"
+    },
+    "scopeNote": {
+      "type": "string"
+    },
+    "currentRepositoryState": {
+      "type": "object",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    },
+    "governance": {
+      "type": "object",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    },
+    "taxonomyDesignPrinciples": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "taxonomyRules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "taxonomyFamilies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/taxonomyFamily"
+      }
+    },
+    "taxonomies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/taxonomy"
+      }
+    },
+    "taxonomyRelationships": {
+      "type": "array",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    },
+    "vocabularyDependencies": {
+      "type": "object",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    },
+    "reactSourceLearnings": {
+      "type": "array",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    },
+    "externalStandardsInfluence": {
+      "type": "array",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    },
+    "validationExpectations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "aiAgentRules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deferredWork": {
+      "type": "array",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "$comment": "Descriptive metadata; deliberately permissive in this draft."
+    }
   }
 }

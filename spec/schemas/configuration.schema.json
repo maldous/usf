@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:configuration",
   "title": "USF Configuration Schema",
-  "description": "Draft JSON Schema for configuration artefacts (env vars, files, keys, secret-bearing settings, provider/environment/proof/runtime/compose configuration). Each declares its kind (configuration-kinds), secret classification, and provider mode (provider-modes) / environment (environment-classes) / proof relevance. A secret-bearing setting MUST NOT carry its literal value (never leak secrets); generated configuration declares its source manifest (generated config is regenerated, not hand-edited). Governs the ontology concept Configuration. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
+  "description": "Draft JSON Schema for configuration artefacts (env vars, files, keys, secret-bearing settings, provider/environment/proof/runtime/compose configuration). Each declares its kind (configuration-kinds), secret classification, and provider mode (provider-modes) / environment (environment-classes) / proof relevance. A secret-bearing setting MUST NOT carry its literal value (never leak secrets); generated configuration declares its source manifest (generated config is regenerated, not hand-edited). Governs the ontology concept Configuration. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3). MODEL NOTE: a configuration carries one primary configurationKind plus dimension flags; secretBearing true is permitted on any kind (e.g. environment-variable) to mark a secret dimension, but the secret-bearing-setting kind requires secretBearing true. A literal value is never serialised for a secret-bearing setting.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -68,7 +68,8 @@
       "type": "string"
     },
     "purpose": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "secretBearing": {
       "type": "boolean"
@@ -110,7 +111,8 @@
       "minLength": 1
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "authorityLevel": {
       "type": "string",
@@ -273,6 +275,26 @@
         ],
         "properties": {
           "proofRelevant": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "$comment": "secret-bearing-setting kind must declare secretBearing true (internal consistency).",
+      "if": {
+        "properties": {
+          "configurationKind": {
+            "const": "secret-bearing-setting"
+          }
+        },
+        "required": [
+          "configurationKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "secretBearing": {
             "const": true
           }
         }

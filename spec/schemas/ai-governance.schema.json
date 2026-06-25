@@ -81,7 +81,8 @@
       "$comment": "AI output is never authoritative without validation."
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "authorityLevel": {
       "type": "string",

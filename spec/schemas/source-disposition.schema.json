@@ -6,45 +6,184 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "id", "title", "description", "authorityLevel", "lifecycleState",
-    "ontologyConcepts", "taxonomyRefs", "vocabularyRefs", "aiGuidance",
-    "sourceRef", "disposition", "rationale"
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "sourceRef",
+    "disposition",
+    "rationale"
   ],
   "$defs": {
-    "kebab": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"}
+    "kebab": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "title": {"type": "string", "minLength": 1},
-    "description": {"type": "string"},
-    "authorityLevel": {"type": "string", "const": "semantic-definition", "$comment": "authority-levels value pinned to the registry authorityRole."},
-    "lifecycleState": {"type": "string", "enum": ["proposed", "planned", "draft", "active", "deprecated", "retired", "replaced", "deferred"]},
-    "ontologyConcepts": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-    "taxonomyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebab"}},
-    "vocabularyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebab"}},
-    "aiGuidance": {"type": "string", "minLength": 1},
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels value pinned to the registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      }
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      }
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    },
     "sourceRef": {
       "$comment": "A source reference: either an id string or a closed inline reference object.",
       "oneOf": [
-        {"type": "string", "minLength": 1},
+        {
+          "type": "string",
+          "minLength": 1
+        },
         {
           "type": "object",
           "additionalProperties": false,
-          "required": ["repository"],
+          "required": [
+            "repository"
+          ],
           "properties": {
-            "repository": {"type": "string", "minLength": 1},
-            "path": {"type": "string"},
-            "commit": {"type": "string"},
-            "tag": {"type": "string"}
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "path": {
+              "type": "string"
+            },
+            "commit": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
           }
         }
       ]
     },
-    "disposition": {"type": "string", "enum": ["preserve", "rename", "refactor", "merge", "split", "replace", "retire", "defer", "reject"]},
-    "rationale": {"type": "string", "minLength": 1},
-    "sourceKind": {"type": "string", "enum": ["source-file", "semantic-artefact", "documentation", "make-target", "package-script", "environment-variable", "configuration-file", "configuration-key", "compose-service", "application", "package", "module", "test", "e2e-journey", "proof-script", "generated-report", "readiness-gate", "operational-semantic", "event-semantic", "ui-semantic", "data-migration-artefact", "observability-audit-artefact"]},
-    "sourceRole": {"type": "string", "enum": ["semantic-source", "behavioural-evidence", "proof-evidence", "operational-evidence", "configuration-evidence", "command-evidence", "ui-evidence", "interface-evidence", "event-workflow-evidence", "data-evidence", "observability-audit-evidence", "generated-summary-evidence", "historical-lineage"]},
-    "targetUsfConcept": {"type": "string", "$comment": "Source path MUST NOT dictate target path."},
-    "impliesImplementationAcceptance": {"type": "boolean", "const": false, "$comment": "Disposition never confers implementation acceptance by itself."}
+    "disposition": {
+      "type": "string",
+      "enum": [
+        "preserve",
+        "rename",
+        "refactor",
+        "merge",
+        "split",
+        "replace",
+        "retire",
+        "defer",
+        "reject"
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceKind": {
+      "type": "string",
+      "enum": [
+        "source-file",
+        "semantic-artefact",
+        "documentation",
+        "make-target",
+        "package-script",
+        "environment-variable",
+        "configuration-file",
+        "configuration-key",
+        "compose-service",
+        "application",
+        "package",
+        "module",
+        "test",
+        "e2e-journey",
+        "proof-script",
+        "generated-report",
+        "readiness-gate",
+        "operational-semantic",
+        "event-semantic",
+        "ui-semantic",
+        "data-migration-artefact",
+        "observability-audit-artefact"
+      ]
+    },
+    "sourceRole": {
+      "type": "string",
+      "enum": [
+        "semantic-source",
+        "behavioural-evidence",
+        "proof-evidence",
+        "operational-evidence",
+        "configuration-evidence",
+        "command-evidence",
+        "ui-evidence",
+        "interface-evidence",
+        "event-workflow-evidence",
+        "data-evidence",
+        "observability-audit-evidence",
+        "generated-summary-evidence",
+        "historical-lineage"
+      ]
+    },
+    "targetUsfConcept": {
+      "type": "string",
+      "$comment": "Source path MUST NOT dictate target path."
+    },
+    "impliesImplementationAcceptance": {
+      "type": "boolean",
+      "const": false,
+      "$comment": "Disposition never confers implementation acceptance by itself."
+    }
   }
 }

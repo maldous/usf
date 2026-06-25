@@ -36,6 +36,7 @@
     },
     "uiJourney": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "id"
       ],
@@ -52,9 +53,22 @@
           "items": {
             "type": "string"
           }
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "null"
+            ]
+          },
+          "$comment": "Typed extension map (scalar values) for the deferred full shape."
         }
       },
-      "$comment": "Deliberate extension point: typed interim shape (id required); full journey shape deferred to UI import. Closure validator-deferred."
+      "$comment": "Deliberate extension point: typed, CLOSED interim shape; further fields via the typed scalar extensions map."
     }
   },
   "properties": {
@@ -142,7 +156,8 @@
       }
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "authorityLevel": {
       "type": "string",

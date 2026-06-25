@@ -5,113 +5,318 @@
   "description": "Draft JSON Schema for the USF Schema Registry (spec/registries/schema-registry.json). Validates the registry's identity envelope and its governed collections: schema entries, schema classes, schema lifecycle states, schema families, and external standards. As the singleton registry's self-validation target, the identity fields id, title, authorityLevel, and foundationalSequencePosition are pinned with const. Each schema entry must record taxonomyRefs and vocabularyRefs (its taxonomy/vocabulary dependencies). Enforces schema classes from schema-classes, lifecycle states from schema-lifecycle-states, and authority roles from authority-levels. Governs the ontology concepts Registry and Validator. CLOSURE POLICY: the governed collections (schemas, schemaClasses, schemaLifecycleStates, schemaFamilies, externalStandards) and the top-level object are closed; descriptive metadata blocks (identityNotes, currentRepositoryState, governance, namingConventions, commonRequirements, commonEnvelope, reactSourceLearnings, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. ENFORCEMENT SCOPE: shape and enum constraints only; cross-record checks (unique schema ids/paths, no schema 'active' without an existing validator-checkable file, forbidden-token scanning, schema/registry lifecycle-vs-file-existence consistency) are NOT expressible in plain JSON Schema and are documented validator responsibilities deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
   "type": "object",
   "$defs": {
-    "kebabName": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "kebabName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
     "noForbiddenToken": {
       "$comment": "Forbidden canonical tokens per docs/architecture/directory-and-file-naming-standard.md section 18.",
-      "not": {"pattern": "(^|[-./])(v2|legacy|old|new|temp|transitional)([-./]|$)"}
+      "not": {
+        "pattern": "(^|[-./])(v2|legacy|old|new|temp|transitional)([-./]|$)"
+      }
     },
     "schemaClass": {
       "$comment": "Canonical values only (no aliases) from the vocabulary catalogue value set 'schema-classes'.",
       "type": "string",
       "enum": [
-        "governance-schema", "semantic-schema", "evidence-schema", "source-reference-schema",
-        "registry-schema", "taxonomy-schema", "vocabulary-schema", "adr-schema",
-        "validator-report-schema", "proof-schema", "provider-schema", "environment-schema",
-        "command-schema", "configuration-schema", "interface-schema", "event-schema",
-        "workflow-schema", "observability-schema", "audit-schema", "ui-semantic-schema",
+        "governance-schema",
+        "semantic-schema",
+        "evidence-schema",
+        "source-reference-schema",
+        "registry-schema",
+        "taxonomy-schema",
+        "vocabulary-schema",
+        "adr-schema",
+        "validator-report-schema",
+        "proof-schema",
+        "provider-schema",
+        "environment-schema",
+        "command-schema",
+        "configuration-schema",
+        "interface-schema",
+        "event-schema",
+        "workflow-schema",
+        "observability-schema",
+        "audit-schema",
+        "ui-semantic-schema",
         "import-manifest-schema"
       ]
     },
     "schemaLifecycleState": {
       "$comment": "Canonical values only (no aliases) from the vocabulary catalogue value set 'schema-lifecycle-states'.",
       "type": "string",
-      "enum": ["proposed", "planned", "draft", "active", "deprecated", "retired", "replaced", "deferred"]
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
     },
     "authorityLevel": {
       "$comment": "Canonical values only (no aliases; e.g. usf-semantic-definition is an alias and is NOT accepted) from the vocabulary catalogue value set 'authority-levels'.",
       "type": "string",
       "enum": [
-        "semantic-definition", "adr", "validator-rule", "runtime-proof-evidence",
-        "source-implementation", "historical-source-evidence", "generated-report"
+        "semantic-definition",
+        "adr",
+        "validator-rule",
+        "runtime-proof-evidence",
+        "source-implementation",
+        "historical-source-evidence",
+        "generated-report"
       ]
     },
     "schemaEntry": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "id", "title", "path", "class", "family", "lifecycleState", "status",
-        "governsOntologyConcepts", "taxonomyRefs", "vocabularyRefs", "authorityRole"
+        "id",
+        "title",
+        "path",
+        "class",
+        "family",
+        "lifecycleState",
+        "status",
+        "governsOntologyConcepts",
+        "taxonomyRefs",
+        "vocabularyRefs",
+        "authorityRole",
+        "purpose",
+        "requiredBecause",
+        "expectedConsumers",
+        "validationResponsibilities",
+        "driftRisks",
+        "aiGuidance"
       ],
       "properties": {
         "id": {
           "allOf": [
-            {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*\\.schema\\.json$"},
-            {"$ref": "#/$defs/noForbiddenToken"}
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*\\.schema\\.json$"
+            },
+            {
+              "$ref": "#/$defs/noForbiddenToken"
+            }
           ]
         },
-        "title": {"type": "string", "minLength": 1},
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
         "path": {
           "allOf": [
-            {"type": "string", "pattern": "^spec/schemas/[a-z0-9]+(-[a-z0-9]+)*\\.schema\\.json$"},
-            {"$ref": "#/$defs/noForbiddenToken"}
+            {
+              "type": "string",
+              "pattern": "^spec/schemas/[a-z0-9]+(-[a-z0-9]+)*\\.schema\\.json$"
+            },
+            {
+              "$ref": "#/$defs/noForbiddenToken"
+            }
           ]
         },
-        "class": {"$ref": "#/$defs/schemaClass"},
-        "family": {"$ref": "#/$defs/kebabName"},
-        "lifecycleState": {"$ref": "#/$defs/schemaLifecycleState"},
-        "status": {"$ref": "#/$defs/schemaLifecycleState"},
-        "governsOntologyConcepts": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-        "purpose": {"type": "string"},
-        "requiredBecause": {"type": "string"},
-        "sourceInputs": {"type": "array", "items": {"type": "string"}},
-        "taxonomyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebabName"}},
-        "vocabularyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebabName"}},
-        "expectedConsumers": {"type": "array", "items": {"type": "string"}},
-        "validationResponsibilities": {"type": "array", "items": {"type": "string"}},
-        "authorityRole": {"$ref": "#/$defs/authorityLevel"},
-        "driftRisks": {"type": "array", "items": {"type": "string"}},
-        "aiGuidance": {"type": "string"},
-        "deferredDetails": {"type": "array", "items": {"type": "string"}}
+        "class": {
+          "$ref": "#/$defs/schemaClass"
+        },
+        "family": {
+          "$ref": "#/$defs/kebabName"
+        },
+        "lifecycleState": {
+          "$ref": "#/$defs/schemaLifecycleState"
+        },
+        "status": {
+          "$ref": "#/$defs/schemaLifecycleState"
+        },
+        "governsOntologyConcepts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "requiredBecause": {
+          "type": "string"
+        },
+        "sourceInputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taxonomyRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/kebabName"
+          }
+        },
+        "vocabularyRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/kebabName"
+          }
+        },
+        "expectedConsumers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validationResponsibilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "authorityRole": {
+          "$ref": "#/$defs/authorityLevel"
+        },
+        "driftRisks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aiGuidance": {
+          "type": "string"
+        },
+        "deferredDetails": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     }
   },
   "required": [
-    "id", "title", "status", "version", "authorityLevel", "purpose",
-    "schemaClasses", "schemaLifecycleStates", "commonRequirements", "commonEnvelope",
-    "schemaFamilies", "schemas", "validationExpectations", "aiAgentRules"
+    "id",
+    "title",
+    "status",
+    "version",
+    "authorityLevel",
+    "purpose",
+    "schemaClasses",
+    "schemaLifecycleStates",
+    "commonRequirements",
+    "commonEnvelope",
+    "schemaFamilies",
+    "schemas",
+    "validationExpectations",
+    "aiAgentRules"
   ],
   "additionalProperties": false,
   "properties": {
-    "$schema": {"type": ["string", "null"]},
-    "id": {"const": "usf.schema-registry"},
-    "title": {"const": "USF Schema Registry"},
-    "status": {"type": "string", "minLength": 1},
-    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
-    "authorityLevel": {"const": "semantic-definition"},
-    "purpose": {"type": "string", "minLength": 1},
-    "createdAfter": {"type": "array", "items": {"type": "string"}},
-    "consistentWith": {"type": "array", "items": {"type": "string"}},
-    "foundationalSequencePosition": {"const": 7},
-    "normativeLanguage": {"type": "string"},
-    "identityNotes": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
-    "currentRepositoryState": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
-    "governance": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
-    "namingConventions": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
+    "$schema": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "const": "usf.schema-registry"
+    },
+    "title": {
+      "const": "USF Schema Registry"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "const": "semantic-definition"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "createdAfter": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "consistentWith": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "foundationalSequencePosition": {
+      "const": 7
+    },
+    "normativeLanguage": {
+      "type": "string"
+    },
+    "identityNotes": {
+      "type": "object",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
+    "currentRepositoryState": {
+      "type": "object",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
+    "governance": {
+      "type": "object",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
+    "namingConventions": {
+      "type": "object",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
     "schemaClasses": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "authorityRole"],
+        "required": [
+          "id",
+          "sourceValueSet",
+          "description",
+          "authorityRole",
+          "expectedConsumers",
+          "validationPurpose",
+          "aiGuidance"
+        ],
         "properties": {
-          "id": {"$ref": "#/$defs/schemaClass"},
-          "sourceValueSet": {"type": "string"},
-          "description": {"type": "string"},
-          "authorityRole": {"$ref": "#/$defs/authorityLevel"},
-          "expectedConsumers": {"type": "array", "items": {"type": "string"}},
-          "validationPurpose": {"type": "string"},
-          "aiGuidance": {"type": "string"}
+          "id": {
+            "$ref": "#/$defs/schemaClass"
+          },
+          "sourceValueSet": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "authorityRole": {
+            "$ref": "#/$defs/authorityLevel"
+          },
+          "expectedConsumers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "validationPurpose": {
+            "type": "string"
+          },
+          "aiGuidance": {
+            "type": "string"
+          }
         }
       }
     },
@@ -121,67 +326,182 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id",
+          "sourceValueSet",
+          "meaning",
+          "allowedUse",
+          "validatorExpectation",
+          "aiGuidance",
+          "referencesAllowed",
+          "schemaFileRequired"
+        ],
         "properties": {
-          "id": {"$ref": "#/$defs/schemaLifecycleState"},
-          "sourceValueSet": {"type": "string"},
-          "meaning": {"type": "string"},
-          "allowedUse": {"type": "string"},
-          "validatorExpectation": {"type": "string"},
-          "aiGuidance": {"type": "string"},
-          "referencesAllowed": {"type": "boolean"},
-          "schemaFileRequired": {"type": "boolean"}
+          "id": {
+            "$ref": "#/$defs/schemaLifecycleState"
+          },
+          "sourceValueSet": {
+            "type": "string"
+          },
+          "meaning": {
+            "type": "string"
+          },
+          "allowedUse": {
+            "type": "string"
+          },
+          "validatorExpectation": {
+            "type": "string"
+          },
+          "aiGuidance": {
+            "type": "string"
+          },
+          "referencesAllowed": {
+            "type": "boolean"
+          },
+          "schemaFileRequired": {
+            "type": "boolean"
+          }
         }
       }
     },
-    "commonRequirements": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
-    "commonEnvelope": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
+    "commonRequirements": {
+      "type": "object",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
+    "commonEnvelope": {
+      "type": "object",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
     "schemaFamilies": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "purpose"],
+        "required": [
+          "id",
+          "purpose",
+          "relatedOntologyConcepts",
+          "relatedTaxonomyFamilies",
+          "relatedTaxonomies",
+          "relatedVocabularyValueSets",
+          "expectedSchemas",
+          "futureValidatorExpectations",
+          "aiGuidance"
+        ],
         "properties": {
-          "id": {"$ref": "#/$defs/kebabName"},
-          "purpose": {"type": "string"},
-          "relatedOntologyConcepts": {"type": "array", "items": {"type": "string"}},
-          "relatedTaxonomyFamilies": {"type": "array", "items": {"type": "string"}},
-          "relatedTaxonomies": {"type": "array", "items": {"type": "string"}},
-          "relatedVocabularyValueSets": {"type": "array", "items": {"type": "string"}},
-          "expectedSchemas": {"type": "array", "items": {"type": "string"}},
-          "reactSourceLearnings": {"type": "array", "items": {"type": "string"}},
-          "futureValidatorExpectations": {"type": "string"},
-          "aiGuidance": {"type": "string"}
+          "id": {
+            "$ref": "#/$defs/kebabName"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "relatedOntologyConcepts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relatedTaxonomyFamilies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relatedTaxonomies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relatedVocabularyValueSets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expectedSchemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reactSourceLearnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "futureValidatorExpectations": {
+            "type": "string"
+          },
+          "aiGuidance": {
+            "type": "string"
+          }
         }
       }
     },
     "schemas": {
       "type": "array",
       "minItems": 1,
-      "items": {"$ref": "#/$defs/schemaEntry"}
+      "items": {
+        "$ref": "#/$defs/schemaEntry"
+      }
     },
     "externalStandards": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "status"],
+        "required": [
+          "id",
+          "status"
+        ],
         "properties": {
-          "id": {"$ref": "#/$defs/kebabName"},
-          "status": {"type": "string"},
-          "affectsSchemas": {"type": "string"},
-          "willNotClaimYet": {"type": "string"},
-          "validatorImplications": {"type": "string"},
-          "aiGuidance": {"type": "string"}
+          "id": {
+            "$ref": "#/$defs/kebabName"
+          },
+          "status": {
+            "type": "string"
+          },
+          "affectsSchemas": {
+            "type": "string"
+          },
+          "willNotClaimYet": {
+            "type": "string"
+          },
+          "validatorImplications": {
+            "type": "string"
+          },
+          "aiGuidance": {
+            "type": "string"
+          }
         }
       }
     },
-    "reactSourceLearnings": {"type": "array", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
-    "validationExpectations": {"type": "array", "items": {"type": "string"}},
-    "aiAgentRules": {"type": "array", "items": {"type": "string"}},
-    "deferredWork": {"type": "array", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
-    "acceptanceCriteria": {"type": "array", "$comment": "Descriptive metadata; intentionally permissive in this draft."}
+    "reactSourceLearnings": {
+      "type": "array",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
+    "validationExpectations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "aiAgentRules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deferredWork": {
+      "type": "array",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "$comment": "Descriptive metadata; intentionally permissive in this draft."
+    }
   }
 }

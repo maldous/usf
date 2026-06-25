@@ -6,43 +6,197 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "id", "title", "description", "authorityLevel", "lifecycleState",
-    "ontologyConcepts", "taxonomyRefs", "vocabularyRefs", "aiGuidance",
-    "interfaceKind", "purpose", "boundary", "semanticContractRef"
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "interfaceKind",
+    "purpose",
+    "boundary",
+    "semanticContractRef"
   ],
   "$defs": {
-    "kebab": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
-    "interfaceKind": {"type": "string", "enum": ["api-route", "command", "query", "event-handler", "service-boundary", "cli-interface", "provider-port", "adapter-interface", "internal-contract", "external-contract"]},
-    "contractBody": {"type": "object", "$comment": "Deliberately-open extension point: the per-interface request/response contract body; internal shape deferred to interface-contract import."}
+    "kebab": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "interfaceKind": {
+      "type": "string",
+      "enum": [
+        "api-route",
+        "command",
+        "query",
+        "event-handler",
+        "service-boundary",
+        "cli-interface",
+        "provider-port",
+        "adapter-interface",
+        "internal-contract",
+        "external-contract"
+      ]
+    },
+    "contractBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "schemaRef": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "null"
+            ]
+          },
+          "$comment": "Typed extension map (scalar values) for the deferred full shape."
+        }
+      },
+      "$comment": "Typed, CLOSED interim request/response contract body; full per-interface shape deferred via the typed scalar extensions map."
+    }
   },
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "title": {"type": "string", "minLength": 1},
-    "description": {"type": "string"},
-    "authorityLevel": {"type": "string", "const": "semantic-definition", "$comment": "authority-levels value pinned to the registry authorityRole."},
-    "lifecycleState": {"type": "string", "enum": ["proposed", "planned", "draft", "active", "deprecated", "retired", "replaced", "deferred"]},
-    "ontologyConcepts": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-    "taxonomyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebab"}},
-    "vocabularyRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/kebab"}},
-    "aiGuidance": {"type": "string", "minLength": 1},
-    "interfaceKind": {"$ref": "#/$defs/interfaceKind"},
-    "purpose": {"type": "string", "minLength": 1},
-    "boundary": {"type": "string", "minLength": 1},
-    "inputContract": {"$ref": "#/$defs/contractBody"},
-    "outputContract": {"$ref": "#/$defs/contractBody"},
-    "requestContract": {"$ref": "#/$defs/contractBody"},
-    "responseContract": {"$ref": "#/$defs/contractBody"},
-    "permissions": {"type": "array", "items": {"type": "string"}},
-    "security": {"type": "string"},
-    "semanticContractRef": {"type": "string", "minLength": 1},
-    "driftDetectable": {"type": "boolean"},
-    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition",
+      "$comment": "authority-levels value pinned to the registry authorityRole."
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      }
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      }
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "interfaceKind": {
+      "$ref": "#/$defs/interfaceKind"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "boundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputContract": {
+      "$ref": "#/$defs/contractBody"
+    },
+    "outputContract": {
+      "$ref": "#/$defs/contractBody"
+    },
+    "requestContract": {
+      "$ref": "#/$defs/contractBody"
+    },
+    "responseContract": {
+      "$ref": "#/$defs/contractBody"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "security": {
+      "type": "string"
+    },
+    "semanticContractRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "driftDetectable": {
+      "type": "boolean"
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
   },
   "anyOf": [
-    {"$comment": "At least one input/output (request/response) contract must be present, matching the description.",
-     "required": ["inputContract"]},
-    {"required": ["outputContract"]},
-    {"required": ["requestContract"]},
-    {"required": ["responseContract"]}
+    {
+      "$comment": "At least one input/output (request/response) contract must be present, matching the description.",
+      "required": [
+        "inputContract"
+      ]
+    },
+    {
+      "required": [
+        "outputContract"
+      ]
+    },
+    {
+      "required": [
+        "requestContract"
+      ]
+    },
+    {
+      "required": [
+        "responseContract"
+      ]
+    }
   ]
 }
