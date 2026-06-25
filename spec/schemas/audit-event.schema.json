@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:audit-event",
+  "title": "USF Audit Event Schema",
+  "description": "Draft JSON Schema for audit event definitions (audit events, security-sensitive audits, state-changing audits, accountability records). Each declares its kind (audit-event-kinds), actor, action, subject, timestamp semantics, and security-sensitivity / state-change classification, mapped to the interface/workflow/semantic contract it accompanies. Every mutating or privileged action MUST have a defined audit semantic; audit coverage MUST NOT be removed as an incidental refactor. Governs the ontology concept Audit Event. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "auditKind", "actor", "action", "subject"],
+  "$defs": {
+    "auditKind": {"type": "string", "enum": ["audit-event", "security-sensitive-audit", "state-changing-audit", "accountability-record"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "auditKind": {"$ref": "#/$defs/auditKind"},
+    "actor": {"type": "string", "minLength": 1},
+    "action": {"type": "string", "minLength": 1},
+    "subject": {"type": "string", "minLength": 1},
+    "timestampSemantics": {"type": "string"},
+    "securitySensitive": {"type": "boolean"},
+    "stateChanging": {"type": "boolean"},
+    "relatedInterface": {"type": "string"},
+    "relatedWorkflow": {"type": "string"},
+    "semanticContractRef": {"type": "string"},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+  }
+}
