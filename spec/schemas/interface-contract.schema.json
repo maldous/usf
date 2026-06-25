@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:interface-contract",
   "title": "USF Interface Contract Schema",
-  "description": "Draft JSON Schema for interface contracts (API routes, commands, queries, event handlers, service boundaries, CLI interfaces, provider ports, adapter interfaces, internal/external contracts). Each declares its kind (interface-kinds), purpose, boundary, a reference to the governing semantic contract, and at least one input/output (request/response) contract. Interfaces are contract-first or contract-reconciled and MUST NOT be inferred from handlers when a contract exists. USF claims no full OpenAPI compliance until concrete OpenAPI artefacts exist. Governs the ontology concepts Interface, Service, and Port. The four contract-body objects are deliberately-open extension points: their internal shape is a deferred per-interface contract body, so they are typed as object with a documented rationale rather than accidentally open. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11); kind (artefact-kinds) and version are deviated/deferred (recorded per section 9.3). lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for interface contracts (API routes, commands, queries, event handlers, service boundaries, CLI interfaces, provider ports, adapter interfaces, internal/external contracts). Each declares its kind (interface-kinds), purpose, boundary, a reference to the governing semantic contract, and at least one input/output (request/response) contract. Interfaces are contract-first or contract-reconciled and MUST NOT be inferred from handlers when a contract exists. USF claims no full OpenAPI compliance until concrete OpenAPI artefacts exist. Governs the ontology concepts Interface, Service, and Port. The four contract-body objects are CLOSED, typed shapes that must define at least one of schemaRef, fields, description, or a typed extensions map (no empty contract body). GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11); kind (artefact-kinds) and version are deviated/deferred (recorded per section 9.3). lifecycleState draft; not active.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -43,21 +43,49 @@
     "contractBody": {
       "type": "object",
       "additionalProperties": false,
+      "$comment": "Closed, typed contract body. At least one of schemaRef, non-empty fields, non-empty description, or a non-empty typed extensions map must be present, so an empty contract body is rejected.",
+      "anyOf": [
+        {
+          "required": [
+            "schemaRef"
+          ]
+        },
+        {
+          "required": [
+            "fields"
+          ]
+        },
+        {
+          "required": [
+            "description"
+          ]
+        },
+        {
+          "required": [
+            "extensions"
+          ]
+        }
+      ],
       "properties": {
         "description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "schemaRef": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "fields": {
           "type": "array",
+          "minItems": 1,
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "extensions": {
           "type": "object",
+          "minProperties": 1,
           "additionalProperties": {
             "type": [
               "string",
@@ -66,11 +94,9 @@
               "boolean",
               "null"
             ]
-          },
-          "$comment": "Typed extension map (scalar values) for the deferred full shape."
+          }
         }
-      },
-      "$comment": "Typed, CLOSED interim request/response contract body; full per-interface shape deferred via the typed scalar extensions map."
+      }
     }
   },
   "properties": {

@@ -83,10 +83,12 @@
       ],
       "properties": {
         "from": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "to": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "trigger": {
           "type": "string"
@@ -144,17 +146,21 @@
     },
     "failurePaths": {
       "type": "array",
+      "minItems": 1,
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       },
-      "$comment": "Explicit failure routes; present (may be empty only with recorded rationale)."
+      "$comment": "At least one explicit failure path is required."
     },
     "compensationPaths": {
       "type": "array",
+      "minItems": 1,
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       },
-      "$comment": "Explicit compensating actions."
+      "$comment": "At least one explicit compensation path is required; a workflow with no compensating action states that explicitly."
     },
     "relatedEvents": {
       "type": "array",

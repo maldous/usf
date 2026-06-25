@@ -57,10 +57,12 @@
           "$ref": "#/$defs/severity"
         },
         "subject": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "message": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "evidenceRefs": {
           "type": "array",
@@ -222,7 +224,7 @@
       }
     },
     {
-      "$comment": "Partial and fail statuses must still reference the evidence they summarise.",
+      "$comment": "A fail or partial report must reference evidence and carry at least one finding.",
       "if": {
         "properties": {
           "status": {
@@ -238,10 +240,14 @@
       },
       "then": {
         "required": [
-          "evidenceRefs"
+          "evidenceRefs",
+          "findings"
         ],
         "properties": {
           "evidenceRefs": {
+            "minItems": 1
+          },
+          "findings": {
             "minItems": 1
           }
         }

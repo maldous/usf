@@ -71,10 +71,12 @@
           "$ref": "#/$defs/kebab"
         },
         "title": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "governedOntologyConcepts": {
           "type": "array",
@@ -84,7 +86,8 @@
           }
         },
         "purpose": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "expectedFutureTaxonomies": {
           "type": "array",
@@ -111,7 +114,8 @@
           }
         },
         "aiGuidance": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -138,7 +142,8 @@
           "$ref": "#/$defs/kebab"
         },
         "title": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "family": {
           "$ref": "#/$defs/kebab"
@@ -157,7 +162,8 @@
           }
         },
         "purpose": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "categories": {
           "type": "array",
@@ -204,7 +210,8 @@
           }
         },
         "aiGuidance": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "deferredDetails": {
           "type": "array",

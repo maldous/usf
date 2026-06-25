@@ -98,13 +98,16 @@
       "$ref": "#/$defs/eventWorkflowKind"
     },
     "payloadSchemaRef": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "schemaVersion": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "producer": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "consumers": {
       "type": "array",
@@ -113,26 +116,32 @@
       }
     },
     "ordering": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "idempotencyKey": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "retryPolicy": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "dlqPolicy": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "retention": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "canonical": {
       "type": "boolean",
       "$comment": "true = canonical event; false = test-only event."
     },
     "failureSemantics": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "sourceRefs": {
       "type": "array",

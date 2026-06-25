@@ -139,10 +139,12 @@
           }
         },
         "purpose": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "requiredBecause": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "sourceInputs": {
           "type": "array",
@@ -168,13 +170,15 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "minItems": 1
         },
         "validationResponsibilities": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "minItems": 1
         },
         "authorityRole": {
           "$ref": "#/$defs/authorityLevel"
@@ -183,10 +187,12 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "minItems": 1
         },
         "aiGuidance": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "deferredDetails": {
           "type": "array",
@@ -297,10 +303,12 @@
             "$ref": "#/$defs/schemaClass"
           },
           "sourceValueSet": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "authorityRole": {
             "$ref": "#/$defs/authorityLevel"
@@ -309,13 +317,16 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1
           },
           "validationPurpose": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "aiGuidance": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       }
@@ -341,19 +352,24 @@
             "$ref": "#/$defs/schemaLifecycleState"
           },
           "sourceValueSet": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "meaning": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "allowedUse": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "validatorExpectation": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "aiGuidance": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "referencesAllowed": {
             "type": "boolean"
@@ -394,31 +410,36 @@
             "$ref": "#/$defs/kebabName"
           },
           "purpose": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "relatedOntologyConcepts": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1
           },
           "relatedTaxonomyFamilies": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1
           },
           "relatedTaxonomies": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1
           },
           "relatedVocabularyValueSets": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1
           },
           "expectedSchemas": {
             "type": "array",
@@ -433,10 +454,12 @@
             }
           },
           "futureValidatorExpectations": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "aiGuidance": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       }
