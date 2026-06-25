@@ -165,6 +165,359 @@ The directories `docs/`, `spec/`, `evidence/`, and `tools/` may be untracked bef
 
 `.gitkeep` files are placeholders only. They are not semantic artefacts.
 
+## Linear Work Tracking
+
+Linear is an external operational work-tracking system for USF agent workflows.
+
+Linear is **not** part of the USF semantic definition corpus.
+
+Linear is **not** USF authority.
+
+Linear issues, projects, labels, comments, cycles, milestones, and initiatives MUST NOT override:
+
+1. the Charter
+2. the Authority Model
+3. the Standards Profile
+4. the Ontology / Meta Model
+5. the Taxonomy Catalogue
+6. the Vocabulary Catalogue
+7. the Schema Registry
+8. the Directory and File Naming Standard
+9. the Schema Authoring Standard
+10. the Git Practices Standard
+11. accepted ADRs
+12. validator results
+13. runtime proof evidence
+14. Git history and tags
+
+Linear tracks work.
+USF artefacts define truth.
+Git records change.
+Validators prove consistency.
+
+### Canonical Linear Team
+
+The canonical Linear team for USF work tracking is:
+
+```text
+https://linear.app/maldous/team/USF
+```
+
+Agents MUST use this team when inspecting or, if explicitly authorised, creating or updating USF work items.
+
+Agents MUST NOT create or use another Linear team for USF unless explicitly instructed.
+
+### Linear Credentials
+
+Agents MAY use `LINEAR_API_KEY` only when explicitly instructed to inspect, create, update, or reconcile Linear issues.
+
+Agents MUST NOT print, log, commit, expose, echo, or persist `LINEAR_API_KEY`.
+
+Agents MUST NOT use `LINEAR_WEBHOOK_SECRET` for API writes.
+
+`LINEAR_WEBHOOK_SECRET` is only for verifying inbound Linear webhook payloads if USF later creates webhook handling code.
+
+Agents MUST NOT create webhook handling code unless explicitly instructed.
+
+### No Automatic Linear Backlog Creation
+
+Agents MUST NOT automatically create:
+
+* Linear projects
+* Linear issues
+* Linear labels
+* Linear milestones
+* Linear cycles
+* Linear initiatives
+* Linear issue dependencies
+
+Agents MUST NOT create an initial Linear backlog unless the user explicitly instructs them to do so.
+
+Agents MAY recommend a Linear backlog structure in prose.
+
+Agents MAY inspect Linear and report what exists if explicitly asked.
+
+Agents MAY draft proposed Linear issues in text without creating them.
+
+Agents MUST ask or stop before applying Linear mutations unless the user has clearly authorised Linear writes.
+
+### Permitted Linear Modes
+
+Agents may operate in one of these modes only.
+
+#### Inspect-only mode
+
+Allowed:
+
+* list teams
+* list projects
+* list relevant issues
+* list labels
+* list statuses
+* list cycles
+* identify duplicates
+* report gaps
+
+Forbidden:
+
+* creating anything
+* updating anything
+* deleting anything
+* commenting on issues
+* changing statuses
+* changing dependencies
+
+#### Draft-only mode
+
+Allowed:
+
+* draft proposed projects, issues, labels, dependencies, and comments in text
+* produce issue bodies for review
+* recommend issue ordering and dependencies
+
+Forbidden:
+
+* creating or updating anything in Linear
+
+#### Apply mode
+
+Allowed only when explicitly authorised.
+
+Allowed:
+
+* create or update projects
+* create or update issues
+* create or update labels
+* add or update dependencies
+* comment on issues
+* mark issues blocked or done
+
+Required:
+
+* report every mutation
+* include issue keys or URLs
+* preserve USF authority references
+* avoid semantic overclaiming
+* avoid duplicate tracking
+
+### Required Linear Preflight
+
+Before making any Linear change, an agent MUST:
+
+1. read this `AGENTS.md`
+2. read the relevant tool shim, such as `CLAUDE.md` or `CODEX.md`, if applicable
+3. read the current USF foundational governance artefacts from disk
+4. parse the three JSON catalogues if the work involves taxonomy, vocabulary, schema registry, schemas, validators, imports, or evidence
+5. inspect the canonical Linear USF team
+6. inspect existing projects, labels, statuses, cycles, and related issues
+7. reuse existing Linear entities where appropriate
+8. avoid duplicate projects, labels, and issues
+9. print the proposed Linear changes before applying them, unless the user has explicitly authorised direct mutation
+
+### Linear Issue Content Rules
+
+Each Linear issue SHOULD represent one independently reviewable unit of work.
+
+Each Linear issue SHOULD include:
+
+```markdown
+## Purpose
+
+## Scope
+
+## Inputs
+
+## Outputs
+
+## Authority References
+
+## Acceptance Criteria
+
+## Validation
+
+## Non-goals
+
+## Dependencies
+
+## Notes
+```
+
+Each Linear issue MUST include this statement unless clearly inapplicable:
+
+```text
+This issue tracks work only. It does not define USF semantic authority.
+```
+
+Each issue MUST reference relevant repository artefacts by path where applicable.
+
+Each issue MUST distinguish:
+
+* work to be done
+* authority references
+* validation expectations
+* non-goals
+* dependencies
+* deferred work
+* blockers
+
+### Linear Labels
+
+Agents SHOULD reuse existing Linear labels.
+
+If label creation is explicitly authorised, use stable semantic labels such as:
+
+```text
+usf
+foundation
+schema
+validator
+adr
+evidence
+import
+governance
+blocked
+```
+
+Agents MUST NOT create labels using:
+
+```text
+v2
+legacy
+old
+new
+temp
+transitional
+```
+
+### Linear Dependency Rules
+
+Agents MUST model dependencies explicitly when creating or proposing issues.
+
+Agents MUST NOT mark an issue as ready if prerequisite semantic, schema, validator, evidence, or import work is incomplete.
+
+Agents MUST NOT create implementation/runtime work items before semantic authority, schema authority, validator expectations, and import/disposition rules allow them.
+
+### Linear Status Rules
+
+Agents MUST NOT mark a Linear issue complete unless:
+
+* the repository change exists
+* the relevant files were modified or created
+* JSON parses where applicable
+* schema validation runs where applicable
+* validators or tests run where applicable
+* every acceptance criterion stated in the issue is individually confirmed (see "Acceptance Criteria Confirmation" below)
+* Git status was reviewed
+* no implementation/runtime code was created unless explicitly authorised
+* the issue does not conflict with USF authority
+
+If work is blocked by a USF authority conflict, the issue MUST be marked blocked or equivalent and must describe the conflict.
+
+#### Acceptance Criteria Confirmation
+
+Before an agent marks any Linear issue complete or done, the agent MUST confirm **each** acceptance criterion listed in that issue, not merely assert that the work is finished.
+
+* The agent MUST check off each acceptance-criteria checklist item in the issue (for example, change each `- [ ]` to `- [x]` in the issue description) so the confirmed state is visible on the issue itself.
+* For any criterion that cannot be ticked, the agent MUST NOT mark the issue done: it either resolves the gap or records the criterion as unmet, leaves the issue open, and comments with the blocker.
+* The confirmation MUST be truthful: a checklist item MUST NOT be ticked unless the corresponding check actually ran and passed (Authority Model §6.9 honest-completion bar). The agent MUST NOT claim a validation that did not run.
+* The agent SHOULD record, in the issue comment, the evidence for confirmation (commands run, file path, commit, validation result) so the tick is auditable.
+* This rule applies whether the issue is completed immediately or at the end of a batch: an issue moves to done only after its own acceptance criteria are individually confirmed.
+
+### Linear Comments
+
+Agents MAY add Linear comments only when explicitly authorised.
+
+When adding comments, agents SHOULD distinguish:
+
+```text
+Observed fact
+Inference
+Recommendation
+Decision required
+```
+
+Agents SHOULD comment when:
+
+* a decision is needed
+* scope changes
+* a dependency is discovered
+* an issue is blocked
+* validation fails
+* validation passes
+* a commit, tag, or PR is created
+* deferred work is identified
+
+### Linear Request Hygiene (WAF Mitigation)
+
+The Linear MCP endpoint is fronted by a Cloudflare Web Application Firewall that can block a request when the request body looks like code or an attack payload. This was observed in practice: comment and issue/description bodies containing Markdown code fences, backticks, shell- or SQL-looking command strings, or tokens beginning with a dollar sign were rejected with a Cloudflare "Sorry, you have been blocked" page, while the same content sent as plain text succeeded.
+
+To mitigate, when creating or updating Linear comments, issue descriptions, or project descriptions, agents SHOULD:
+
+* prefer plain text; avoid Markdown code fences and backticks in bodies sent to Linear;
+* write commands, identifiers, and paths as plain words (for example, describe a parse step as "strict JSON parse" rather than pasting the literal command, and write code identifiers without backticks);
+* avoid strings that resemble SQL or shell commands, and avoid bodies that begin a token with a dollar sign;
+* keep acceptance-criteria checklist items as plain "- [x]" lines (these are safe and are the preferred confirmation form);
+* on a Cloudflare block, retry once with a plain-text, shorter body rather than resending the same payload; if it still fails, treat it as a transient endpoint block, record the pending update, and do not hammer the endpoint.
+
+Agents MUST also distinguish two failure shapes: a Cloudflare WAF block page typically means the write did NOT occur (safe to retry), whereas a generic "connection lost" error MAY have committed the write — verify with a read before retrying so a duplicate is not created.
+
+This is request hygiene for an external endpoint. It does not change USF authority and MUST NOT be used to weaken the truthfulness of Linear content: a plainer wording still has to be accurate.
+
+### Git and Linear Relationship
+
+A Linear issue key MAY be referenced in a commit body or PR description once issue keys exist.
+
+A Linear issue MUST NOT be closed solely because code was written.
+
+A Linear issue MAY be closed only when the corresponding USF artefact, validation, and acceptance criteria are complete.
+
+Git history and repository artefacts remain the auditable record of change.
+
+Linear is only an external execution tracker.
+
+### Linear Stop Conditions
+
+Agents MUST stop before modifying Linear if:
+
+* `LINEAR_API_KEY` is missing
+* the canonical USF Linear team cannot be identified
+* the requested change would duplicate existing Linear work
+* the requested Linear item conflicts with USF authority
+* the requested issue would require implementation work before semantic authority exists
+* the requested issue would encode forbidden naming
+* the requested issue would treat `../react` as future live authority
+* the requested issue would treat generated reports as canonical
+* issue dependencies are unresolved
+* the user has not explicitly authorised Linear mutation
+
+### Linear Reporting Requirements
+
+After any authorised Linear mutation, agents MUST report:
+
+* Linear team used
+* project used or created
+* issues created
+* issues updated
+* issue keys or URLs
+* dependencies created or updated
+* labels used
+* blockers found
+* assumptions
+* any work intentionally not created
+* whether any Linear item requires human decision
+
+### Linear Final Rule
+
+Linear MUST remain outside the USF semantic authority model.
+
+Do not use Linear to define platform meaning.
+
+Do not use Linear to override repository artefacts.
+
+Do not use Linear to bypass validators.
+
+Do not use Linear to justify implementation before semantic authority exists.
+
 ## External Standards Posture
 
 USF uses external standards carefully and honestly.
