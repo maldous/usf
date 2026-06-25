@@ -18,31 +18,6 @@
     "aiGuidance"
   ],
   "$defs": {
-    "authorityLevel": {
-      "type": "string",
-      "enum": [
-        "semantic-definition",
-        "adr",
-        "validator-rule",
-        "runtime-proof-evidence",
-        "source-implementation",
-        "historical-source-evidence",
-        "generated-report"
-      ]
-    },
-    "lifecycleState": {
-      "type": "string",
-      "enum": [
-        "proposed",
-        "planned",
-        "draft",
-        "active",
-        "deprecated",
-        "retired",
-        "replaced",
-        "deferred"
-      ]
-    },
     "facet": {
       "type": "object",
       "additionalProperties": false,
