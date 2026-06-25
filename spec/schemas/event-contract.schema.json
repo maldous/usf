@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:event-contract",
+  "title": "USF Event Contract Schema",
+  "description": "Draft JSON Schema for event and message contracts. Each declares its kind (event-workflow-kinds), a payload schema reference, producer and consumers, ordering expectation, idempotency key, retry and dead-letter policy, retention, and whether it is canonical or test-only. Events MUST have a contract before emission and MUST NOT be invented in implementation code. USF claims no full AsyncAPI compliance until concrete artefacts exist. Governs the ontology concept Event. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "eventKind"],
+  "$defs": {
+    "eventWorkflowKind": {"type": "string", "enum": ["event", "message", "workflow", "cross-capability-interaction", "state-transition", "asynchronous-operation", "synchronous-operation", "failure-path", "compensation-path"]}
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "eventKind": {"$ref": "#/$defs/eventWorkflowKind"},
+    "title": {"type": "string"},
+    "payloadSchemaRef": {"type": "string"},
+    "schemaVersion": {"type": "string"},
+    "producer": {"type": "string"},
+    "consumers": {"type": "array", "items": {"type": "string"}},
+    "ordering": {"type": "string"},
+    "idempotencyKey": {"type": "string"},
+    "retryPolicy": {"type": "string"},
+    "dlqPolicy": {"type": "string"},
+    "retention": {"type": "string"},
+    "canonical": {"type": "boolean", "$comment": "true = canonical event; false = test-only event."},
+    "failureSemantics": {"type": "string"},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "$comment": "An event/message contract must carry payload, ordering, idempotency, DLQ, and retention semantics before emission.",
+      "if": {"properties": {"eventKind": {"enum": ["event", "message"]}}, "required": ["eventKind"]},
+      "then": {"required": ["payloadSchemaRef", "ordering", "idempotencyKey", "dlqPolicy", "retention"]}
+    }
+  ]
+}
