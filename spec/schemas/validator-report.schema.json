@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:validator-report",
+  "title": "USF Validator Report Schema",
+  "description": "Draft JSON Schema for validator report output (rank-7 generated-report). Findings carry a severity (validation-severities); the report carries a status (report-statuses). Enforces that a pass status requires fresh, non-stale evidence (stale and unknown MUST NOT satisfy pass) and that pass/fail/partial statuses reference the evidence they summarise. Preserves the blocking-vs-advisory distinction. Governs the ontology concepts Validator and Generated Report; a valid report remains lowest authority and never overrides evidence or semantics. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "authorityLevel", "status", "findings"],
+  "$defs": {
+    "severity": {"type": "string", "enum": ["blocking", "error", "warning", "advisory", "info"]},
+    "status": {"type": "string", "enum": ["pass", "fail", "partial", "stale", "not-run", "advisory", "unknown"]},
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "subject", "message"],
+      "properties": {
+        "ruleId": {"type": "string"},
+        "severity": {"$ref": "#/$defs/severity"},
+        "subject": {"type": "string"},
+        "message": {"type": "string"},
+        "evidenceRefs": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "authorityLevel": {"type": "string", "const": "generated-report", "$comment": "authority-levels value 'generated-report' (rank 7)."},
+    "status": {"$ref": "#/$defs/status"},
+    "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "evidenceRefs": {"type": "array", "items": {"type": "string"}},
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {"commit": {"type": "string"}, "stale": {"type": "boolean"}}
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "A pass status requires fresh evidence: freshness present and not stale (stale/unknown MUST NOT satisfy pass).",
+      "if": {"properties": {"status": {"const": "pass"}}, "required": ["status"]},
+      "then": {
+        "required": ["freshness", "evidenceRefs"],
+        "properties": {
+          "freshness": {"required": ["stale"], "properties": {"stale": {"const": false}}},
+          "evidenceRefs": {"minItems": 1}
+        }
+      }
+    },
+    {
+      "$comment": "Partial and fail statuses must still reference the evidence they summarise.",
+      "if": {"properties": {"status": {"enum": ["fail", "partial"]}}, "required": ["status"]},
+      "then": {"required": ["evidenceRefs"], "properties": {"evidenceRefs": {"minItems": 1}}}
+    }
+  ]
+}
