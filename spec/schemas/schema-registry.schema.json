@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:schema-registry",
   "title": "USF Schema Registry Schema",
-  "description": "Draft JSON Schema for the USF Schema Registry (spec/registries/schema-registry.json). Validates the registry's identity envelope and its governed structures: schema entries, schema classes, schema lifecycle states, and schema families. Enforces that schema classes come from the schema-classes vocabulary, lifecycle states from schema-lifecycle-states, and authority roles from authority-levels. Governs the ontology concepts Registry and Validator. Cross-record checks (unique ids/paths, no schema 'active' without an existing validator-checkable file, forbidden-token scanning) are validator responsibilities deferred to validator implementation per docs/architecture/schema-authoring-standard.md section 24; this schema is lifecycleState draft and is not active.",
+  "description": "Draft JSON Schema for the USF Schema Registry (spec/registries/schema-registry.json). Validates the registry's identity envelope and its governed collections: schema entries, schema classes, schema lifecycle states, schema families, and external standards. Enforces that schema classes come from the schema-classes vocabulary, lifecycle states from schema-lifecycle-states, and authority roles from authority-levels. Governs the ontology concepts Registry and Validator. CLOSURE POLICY: the governed collections (schemas, schemaClasses, schemaLifecycleStates, schemaFamilies, externalStandards) and the top-level object are closed (additionalProperties:false); the descriptive metadata blocks (identityNotes, currentRepositoryState, governance, namingConventions, commonRequirements, commonEnvelope, reactSourceLearnings, deferredWork, acceptanceCriteria) are intentionally typed permissively (object/array) in this draft pending full registry self-validation, so they are deliberately-open extension points rather than accidentally open. ENFORCEMENT SCOPE: this schema enforces shape and enum constraints only; cross-record checks (unique schema ids/paths, no schema 'active' without an existing validator-checkable file, forbidden-token scanning, schema/registry lifecycle-vs-file-existence consistency) are NOT expressible in plain JSON Schema and are documented validator responsibilities deferred to validator implementation per docs/architecture/schema-authoring-standard.md section 24. lifecycleState draft; not active.",
   "type": "object",
   "$defs": {
     "kebabName": {
@@ -14,7 +14,7 @@
       "not": {"pattern": "(^|[-./])(v2|legacy|old|new|temp|transitional)([-./]|$)"}
     },
     "schemaClass": {
-      "$comment": "Canonical values from the vocabulary catalogue value set 'schema-classes'.",
+      "$comment": "Canonical values only (no aliases) from the vocabulary catalogue value set 'schema-classes'.",
       "type": "string",
       "enum": [
         "governance-schema", "semantic-schema", "evidence-schema", "source-reference-schema",
@@ -26,12 +26,12 @@
       ]
     },
     "schemaLifecycleState": {
-      "$comment": "Canonical values from the vocabulary catalogue value set 'schema-lifecycle-states'.",
+      "$comment": "Canonical values only (no aliases) from the vocabulary catalogue value set 'schema-lifecycle-states'.",
       "type": "string",
       "enum": ["proposed", "planned", "draft", "active", "deprecated", "retired", "replaced", "deferred"]
     },
     "authorityLevel": {
-      "$comment": "Canonical values from the vocabulary catalogue value set 'authority-levels'.",
+      "$comment": "Canonical values only (no aliases; e.g. usf-semantic-definition is an alias and is NOT accepted) from the vocabulary catalogue value set 'authority-levels'.",
       "type": "string",
       "enum": [
         "semantic-definition", "adr", "validator-rule", "runtime-proof-evidence",
@@ -96,19 +96,25 @@
     "consistentWith": {"type": "array", "items": {"type": "string"}},
     "foundationalSequencePosition": {"type": "integer"},
     "normativeLanguage": {"type": "string"},
-    "identityNotes": {"type": "object"},
-    "currentRepositoryState": {"type": "object"},
-    "governance": {"type": "object"},
-    "namingConventions": {"type": "object"},
+    "identityNotes": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
+    "currentRepositoryState": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
+    "governance": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
+    "namingConventions": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
     "schemaClasses": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": ["id", "authorityRole"],
         "properties": {
           "id": {"$ref": "#/$defs/schemaClass"},
-          "authorityRole": {"$ref": "#/$defs/authorityLevel"}
+          "sourceValueSet": {"type": "string"},
+          "description": {"type": "string"},
+          "authorityRole": {"$ref": "#/$defs/authorityLevel"},
+          "expectedConsumers": {"type": "array", "items": {"type": "string"}},
+          "validationPurpose": {"type": "string"},
+          "aiGuidance": {"type": "string"}
         }
       }
     },
@@ -117,19 +123,41 @@
       "minItems": 1,
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": ["id"],
-        "properties": {"id": {"$ref": "#/$defs/schemaLifecycleState"}}
+        "properties": {
+          "id": {"$ref": "#/$defs/schemaLifecycleState"},
+          "sourceValueSet": {"type": "string"},
+          "meaning": {"type": "string"},
+          "allowedUse": {"type": "string"},
+          "validatorExpectation": {"type": "string"},
+          "aiGuidance": {"type": "string"},
+          "referencesAllowed": {"type": "boolean"},
+          "schemaFileRequired": {"type": "boolean"}
+        }
       }
     },
-    "commonRequirements": {"type": "object"},
-    "commonEnvelope": {"type": "object"},
+    "commonRequirements": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
+    "commonEnvelope": {"type": "object", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
     "schemaFamilies": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": ["id", "purpose"],
-        "properties": {"id": {"$ref": "#/$defs/kebabName"}, "purpose": {"type": "string"}}
+        "properties": {
+          "id": {"$ref": "#/$defs/kebabName"},
+          "purpose": {"type": "string"},
+          "relatedOntologyConcepts": {"type": "array", "items": {"type": "string"}},
+          "relatedTaxonomyFamilies": {"type": "array", "items": {"type": "string"}},
+          "relatedTaxonomies": {"type": "array", "items": {"type": "string"}},
+          "relatedVocabularyValueSets": {"type": "array", "items": {"type": "string"}},
+          "expectedSchemas": {"type": "array", "items": {"type": "string"}},
+          "reactSourceLearnings": {"type": "array", "items": {"type": "string"}},
+          "futureValidatorExpectations": {"type": "string"},
+          "aiGuidance": {"type": "string"}
+        }
       }
     },
     "schemas": {
@@ -137,11 +165,26 @@
       "minItems": 1,
       "items": {"$ref": "#/$defs/schemaEntry"}
     },
-    "externalStandards": {"type": "array", "items": {"type": "object"}},
-    "reactSourceLearnings": {"type": "array"},
+    "externalStandards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status"],
+        "properties": {
+          "id": {"$ref": "#/$defs/kebabName"},
+          "status": {"type": "string"},
+          "affectsSchemas": {"type": "string"},
+          "willNotClaimYet": {"type": "string"},
+          "validatorImplications": {"type": "string"},
+          "aiGuidance": {"type": "string"}
+        }
+      }
+    },
+    "reactSourceLearnings": {"type": "array", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
     "validationExpectations": {"type": "array", "items": {"type": "string"}},
     "aiAgentRules": {"type": "array", "items": {"type": "string"}},
-    "deferredWork": {"type": "array"},
-    "acceptanceCriteria": {"type": "array"}
+    "deferredWork": {"type": "array", "$comment": "Descriptive metadata; intentionally permissive in this draft."},
+    "acceptanceCriteria": {"type": "array", "$comment": "Descriptive metadata; intentionally permissive in this draft."}
   }
 }
