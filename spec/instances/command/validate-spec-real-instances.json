@@ -1,0 +1,48 @@
+{
+  "id": "command.validate-spec-real-instances",
+  "commandKind": "validation-command",
+  "title": "Validate Real Semantic Instances",
+  "description": "Draft command semantic instance for validating committed real semantic instances, ADR records, and evidence records together.",
+  "purpose": "Validate the committed semantic corpus and evidence records as real repository artefacts rather than fixtures, including cross-reference resolution and authority-boundary checks.",
+  "invocation": "python3 tools/validate-spec/validate-spec.py real-instances --json",
+  "inputs": [
+    "spec/instances",
+    "docs/adr",
+    "evidence/proof-evidence",
+    "evidence/evidence-envelope",
+    "spec/registries/source-import-manifest.json",
+    "tools/validate-spec/source-reference-allowlist.json"
+  ],
+  "outputs": [
+    "JSON validator result on standard output",
+    "process exit code"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [],
+  "failureSemantics": "Non-zero exit indicates unresolved references, invalid real records, duplicate semantic identities, authority mismatch, proof/evidence failure, or unreadable input. This command validates existing artefacts and does not create proof evidence.",
+  "emitsEvidence": false,
+  "sourceRefs": [
+    "tools/validate-spec/validate-spec.py",
+    "docs/architecture/directory-and-file-naming-standard.md",
+    "docs/architecture/proof-and-evidence-pipeline-plan.md"
+  ],
+  "disposition": "preserve",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Validator"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Use this command before claiming repository-level instance readiness. Passing output is generated validation evidence, not semantic authority."
+}

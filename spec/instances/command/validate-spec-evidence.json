@@ -1,0 +1,49 @@
+{
+  "id": "command.validate-spec-evidence",
+  "commandKind": "validation-command",
+  "title": "Validate Evidence Records",
+  "description": "Draft command semantic instance for the repeatable USF evidence validator gate.",
+  "purpose": "Validate committed proof-evidence and evidence-envelope records for schema shape, source/reference resolution, provider/environment safety, proof overclaim, freshness shape, and report/evidence authority boundaries.",
+  "invocation": "python3 tools/validate-spec/validate-spec.py evidence --json",
+  "inputs": [
+    "evidence/proof-evidence",
+    "evidence/evidence-envelope",
+    "spec/schemas/proof-evidence.schema.json",
+    "spec/schemas/evidence-envelope.schema.json",
+    "spec/registries/source-import-manifest.json",
+    "tools/validate-spec/source-reference-allowlist.json"
+  ],
+  "outputs": [
+    "JSON validator result on standard output",
+    "process exit code"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [],
+  "failureSemantics": "Non-zero exit indicates invalid evidence shape, unresolved evidence/source references, proof overclaim, provider or environment claim violation, stale pass report, or unreadable input. Generated validator output is a report and must not replace evidence records.",
+  "emitsEvidence": false,
+  "sourceRefs": [
+    "tools/validate-spec/validate-spec.py",
+    "docs/architecture/proof-and-evidence-pipeline-plan.md",
+    "docs/architecture/proof-tool-contract-standard.md"
+  ],
+  "disposition": "preserve",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Evidence",
+    "Validator"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Use this command as a validation gate for evidence records only. Do not treat a clean generated result as proof execution or as authority above the validated records."
+}

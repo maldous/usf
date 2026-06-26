@@ -1,0 +1,50 @@
+{
+  "id": "command.validate-spec-selftest",
+  "commandKind": "validation-command",
+  "title": "Validate Validator Selftests",
+  "description": "Draft command semantic instance for the planted-defect and fixture selftest validator gate.",
+  "purpose": "Validate that repository validator rules catch their planted defects and expected negative fixture failures with stable rule coverage.",
+  "invocation": "python3 tools/validate-spec/validate-spec.py selftest --json",
+  "inputs": [
+    "tools/validate-spec/planted-defects",
+    "tools/validate-spec/fixtures",
+    "tools/validate-spec/validate-spec.py",
+    "spec/schemas",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/registries/schema-registry.json"
+  ],
+  "outputs": [
+    "JSON validator result on standard output",
+    "process exit code"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [],
+  "failureSemantics": "Non-zero exit indicates a validator rule, planted defect, fixture, schema, or expected rule ID no longer behaves as declared. Selftest output cannot itself authorize schema activation or implementation extraction.",
+  "emitsEvidence": false,
+  "sourceRefs": [
+    "tools/validate-spec/validate-spec.py",
+    "tools/validate-spec/planted-defects/instance-invalid-against-schema.json",
+    "tools/validate-spec/fixtures/negative/command/missing-inputs.json",
+    "docs/architecture/schema-validator-posture-decision.md"
+  ],
+  "disposition": "preserve",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Validator"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Use this command to prove validator guard coverage before relying on validator changes. Do not use selftest success to invent product semantics."
+}
