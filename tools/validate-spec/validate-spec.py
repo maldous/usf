@@ -109,6 +109,7 @@ OPEN_EXTENSION_POINTS = {
 # (item 5 review) tool/CI additions are blocking unless explicitly authorised here.
 AUTHORIZED_TOOLING = {
     ".github/workflows/validate-spec.yml",
+    "tools/prove-authentication-slice.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",
 }
