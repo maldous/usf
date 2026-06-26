@@ -1,7 +1,7 @@
 {
   "id": "interface.authentication-login-api",
   "title": "Authentication Login API Contract",
-  "description": "Draft USF-native interface contract for an authentication login boundary, source-backed by historical OpenAPI and authentication proof evidence. The first proof slice treats this as the governed inbound interface for request validation, response shape, error semantics, permission boundary, audit event production, and workflow participation.",
+  "description": "Draft USF-native interface contract for an authentication login route boundary, source-backed by historical OpenAPI, route, audit, observability, security, and authentication proof evidence. The first proof slice treats this as the governed inbound route interface for request validation, response shape, error semantics, tenant and permission boundary, audit event production, observability correlation, and workflow participation.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -15,10 +15,10 @@
   "vocabularyRefs": [
     "interface-kinds"
   ],
-  "aiGuidance": "Keep the contract USF-native per ADR 0002. Do not claim OpenAPI compliance from this instance alone.",
+  "aiGuidance": "Keep the contract USF-native per ADR 0002. Do not claim OpenAPI compliance from this instance alone. Route behaviour must be governed by this interface, audit, observability, workflow, and proof semantics rather than inferred from historical handler structure.",
   "interfaceKind": "api-route",
-  "purpose": "Represent the authenticated login boundary as a governed contract before implementation extraction, including validation, output shape, error paths, permission boundary, audit production, and workflow linkage.",
-  "boundary": "platform-api inbound authentication boundary; it accepts anonymous login initiation and callback/session requests, emits authenticated or denied outcomes, and must not expose provider tokens or trust client-supplied tenant identity.",
+  "purpose": "Represent the authentication login route boundary as a governed contract before implementation extraction, including validation, output shape, error paths, tenant and permission boundary, trace/log/metric/audit correlation, and workflow linkage.",
+  "boundary": "platform-api inbound authentication route boundary; it accepts anonymous login initiation and callback/session requests, emits authenticated or denied outcomes, correlates route observations, and must not expose provider tokens or trust client-supplied tenant identity.",
   "semanticContractRef": "semantic-contract.authentication-platform",
   "requestContract": {
     "description": "Login request semantics cover provider selection, callback state binding, session lookup, logout, custom-domain callback derivation, tenant host context, and redirect origin validation. Field-level request schema remains deferred, but validation semantics are source-backed and must reject missing state, invalid callback origin, provider mismatch, absent session, and unsafe tenant context.",
@@ -28,7 +28,9 @@
       "session-cookie",
       "custom-domain-origin",
       "tenant-host-context",
-      "redirect-origin"
+      "redirect-origin",
+      "request-id",
+      "trace-id"
     ]
   },
   "responseContract": {
@@ -41,21 +43,28 @@
       "no-session",
       "logout-complete",
       "audit-event-reference",
-      "workflow-state"
+      "workflow-state",
+      "observability-signal-reference",
+      "proof-evidence-reference"
     ]
   },
   "permissions": [
     "anonymous-login-attempt",
     "authenticated-session-creation"
   ],
-  "security": "Authentication boundary must preserve fail-closed authorization defaults, audited session creation, explicit denied/error outcomes, and event emission through event.authentication-login-audit and workflow.authentication-login. Historical route evidence remains source evidence only and cannot override the USF-native interface contract.",
+  "security": "Authentication route boundary must preserve fail-closed authorization defaults, tenant host validation, session-cookie integrity, callback-state validation, audited session creation, explicit denied/error outcomes, permission-gated follow-on access, request and trace correlation, and event emission through event.authentication-login-audit, audit.authentication-login, observability.authentication-login-audit, workflow.authentication-login, and workflow.authentication-identity-context. Historical route evidence remains source evidence only and cannot override the USF-native interface contract.",
   "driftDetectable": true,
   "sourceRefs": [
     "docs/api/openapi.json",
     "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "apps/platform-api/src/server/routes.ts",
     "apps/platform-api/src/server/auth.ts",
     "apps/platform-api/src/server/session.ts",
+    "apps/platform-api/src/server/authorize-resource.ts",
+    "apps/platform-api/src/server/observability.ts",
+    "apps/platform-api/src/usecases/audit.ts",
     "apps/platform-api/src/usecases/auth.ts",
+    "apps/platform-api/tests/unit/cookie-security.test.ts",
     "apps/platform-api/tests/substrate/auth-routes.test.ts",
     "apps/platform-api/tests/unit/auth-usecase.test.ts",
     "docs/evidence/identity/keycloak-login-callback.md",
