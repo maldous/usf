@@ -2,7 +2,7 @@
   "id": "data.identity-schema",
   "dataKind": "migration",
   "title": "Identity Schema Migration Contract",
-  "description": "Draft data and migration semantic instance for the historical identity schema migration lineage. The first data assurance slice treats this as the governed identity migration contract for order, checksum immutability, tenant isolation, backup/restore evidence expectations, retention, and safe failure handling.",
+  "description": "Draft data and migration semantic instance for the historical identity schema migration lineage and first-slice identity data-governance boundary. The first data assurance slice treats this as the governed identity migration contract for order, checksum immutability, tenant isolation, classification, retention, export, legal hold, deletion request handling, backup/restore evidence expectations, audit/observability correlation, and safe failure handling.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -15,14 +15,20 @@
   "vocabularyRefs": [
     "data-migration-kinds"
   ],
-  "aiGuidance": "A committed migration is immutable. Do not rewrite migration semantics to match implementation convenience. Backup and restore claims require emitted and collected evidence; generated reports cannot substitute for missing collected evidence.",
-  "tenancyIsolation": "Tenant identity data must remain tenant-isolated through membership, organisation, tenant resource configuration, user projection, and external identity linkage semantics. Cross-tenant read or write access fails closed unless a separately governed system-bypass context is explicitly authorised outside this first slice.",
+  "aiGuidance": "A committed migration is immutable. Do not rewrite migration semantics to match implementation convenience. Storage and data-governance behaviour must be proven under an authorised proof plan before readiness is claimed. Backup, restore, export, legal-hold, deletion, and retention claims require emitted and collected evidence; generated reports cannot substitute for missing collected evidence.",
+  "tenancyIsolation": "Tenant identity data must remain tenant-isolated through membership, organisation, tenant resource configuration, user projection, and external identity linkage semantics. Cross-tenant read or write access fails closed unless a separately governed system-bypass context is explicitly authorised outside this first slice. Quota-before-write and broader object-storage enforcement are non-applicable to this authentication first slice until separately represented.",
   "migrationOrder": 1,
   "checksum": "source-import:apps/platform-api/src/db/migrations/001-identity-schema.sql",
   "immutable": true,
-  "retention": "Identity records follow governed retention and deletion concerns once authored in detail; until then, backup, restore, rollback, and deletion claims remain proof-gated and must preserve raw evidence.",
+  "retention": "Identity records are governed as tenant-scoped identity data. Retention, export, legal hold, deletion request handling, backup, restore, and rollback claims remain proof-gated until authorised evidence exists. No destructive deletion or restore drill may be claimed from this instance alone; audit and observability correlation must be preserved for any future data-governance proof.",
   "sourceRefs": [
     "apps/platform-api/src/db/migrations/001-identity-schema.sql",
-    "apps/platform-api/src/db/migrations/004-rls-policies.sql"
+    "apps/platform-api/src/db/migrations/004-rls-policies.sql",
+    "apps/platform-api/src/db/migrations/012-rls-current-user-check.sql",
+    "apps/platform-api/src/db/migrations/016-membership-identity-v2.sql",
+    "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
+    "apps/platform-api/tests/substrate/session-fixture.test.ts",
+    "docs/adr/0063-data-governance-and-compliance-architecture.md",
+    "docs/adr/0064-backup-recovery-retention-and-legal-hold-architecture.md"
   ]
 }
