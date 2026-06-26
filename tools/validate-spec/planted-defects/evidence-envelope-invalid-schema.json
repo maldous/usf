@@ -1,0 +1,9 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-001",
+  "records": {
+    "evidence/evidence-envelope/invalid-envelope.json": {
+      "id": "evidence.invalid-envelope"
+    }
+  }
+}

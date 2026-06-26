@@ -1,0 +1,42 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-004",
+  "existingPaths": [
+    "docs/architecture/charter.md"
+  ],
+  "records": {
+    "evidence/proof-evidence/unresolved-collected-reference.json": {
+      "id": "proof.unresolved-collected-reference",
+      "kind": "proof",
+      "title": "Unresolved Collected Evidence Reference",
+      "description": "Planted proof whose collectedEvidence reference is not committed evidence.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Proof",
+        "Proof Level",
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "proof-classification"
+      ],
+      "vocabularyRefs": [
+        "proof-levels",
+        "provider-modes",
+        "environment-classes"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "proofLevelClaimed": "behaviour-proven",
+      "proofLevelObserved": "behaviour-proven",
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "liveExternalProviderClaim": false,
+      "emittedEvidence": [
+        "docs/architecture/charter.md"
+      ],
+      "collectedEvidence": [
+        "evidence.missing"
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-003",
+  "existingPaths": [
+    "docs/architecture/charter.md"
+  ],
+  "records": {
+    "evidence/evidence-envelope/duplicate-a.json": {
+      "id": "evidence.duplicate",
+      "title": "Duplicate Evidence A",
+      "description": "First planted duplicate evidence identifier.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "normalised-evidence",
+      "sourceRefs": [
+        "docs/architecture/charter.md"
+      ]
+    },
+    "evidence/evidence-envelope/duplicate-b.json": {
+      "id": "evidence.duplicate",
+      "title": "Duplicate Evidence B",
+      "description": "Second planted duplicate evidence identifier.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "normalised-evidence",
+      "sourceRefs": [
+        "docs/architecture/charter.md"
+      ]
+    }
+  }
+}
