@@ -1,7 +1,7 @@
 {
   "id": "event.authentication-login-audit",
   "title": "Authentication Login Audit Event Contract",
-  "description": "Draft event contract for authentication login audit emission, source-backed by historical audit and authentication proof evidence.",
+  "description": "Draft event contract for authentication login audit emission, source-backed by historical audit and authentication proof evidence. The first assurance slice uses this event to link interface behaviour, workflow state, audit record, observability signal, and future proof evidence by request identifier.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -21,13 +21,13 @@
   "consumers": [
     "audit.authentication-login"
   ],
-  "ordering": "after authentication decision and before readiness claim",
+  "ordering": "after authentication decision, before response readiness is claimed, and before any proof evidence claims audit coverage",
   "idempotencyKey": "request-id",
-  "retryPolicy": "retry only where duplicate audit events remain idempotent by request identifier",
-  "dlqPolicy": "failed audit emission is a blocking readiness finding, not silently discarded",
+  "retryPolicy": "retry only where duplicate audit events remain idempotent by request identifier and do not create conflicting authentication outcomes",
+  "dlqPolicy": "failed audit emission is a blocking readiness finding, not silently discarded; proof evidence must fail closed if audit collection is missing",
   "retention": "retained according to audit-event retention policy once authored",
   "canonical": true,
-  "failureSemantics": "Missing collected audit evidence fails closed for any proof claim that depends on this event.",
+  "failureSemantics": "Missing collected audit evidence, missing request-id correlation, or mismatched proof-id correlation fails closed for any proof claim that depends on this event.",
   "sourceRefs": [
     "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
     "apps/platform-api/src/usecases/audit.ts"

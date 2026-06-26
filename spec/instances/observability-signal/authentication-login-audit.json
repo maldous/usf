@@ -4,7 +4,7 @@
   "name": "auth-login-audit",
   "source": "audit.authentication-login",
   "title": "Authentication Login Audit Signal",
-  "description": "Draft observability signal instance for authentication login audit correlation.",
+  "description": "Draft observability signal instance for authentication login audit correlation. The first assurance slice uses this runtime-event signal to connect request trace identity, audit event identity, tenant context, provider mode, and future proof output without claiming OpenTelemetry compliance.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -19,10 +19,10 @@
     "observability-attribute-names"
   ],
   "aiGuidance": "Signal names and attributes are USF-controlled and OpenTelemetry-informed; do not claim OpenTelemetry compliance from this instance.",
-  "purpose": "Correlate login audit decisions with request and proof identifiers.",
+  "purpose": "Correlate login audit decisions with request, trace, tenant, provider-mode, capability, and proof identifiers for the authentication login slice.",
   "semanticContractRef": "semantic-contract.authentication-platform",
   "retention": "retained according to audit and observability policy once evidence retention is authored",
-  "correlation": "request-id links login interface, audit event, and proof output",
+  "correlation": "request-id links login interface, authentication workflow, audit event, observability signal, and proof output; trace-id and proof-id must agree with collected proof evidence when a proof claim depends on this signal",
   "attributes": [
     "service-name",
     "deployment-environment",
