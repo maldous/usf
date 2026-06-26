@@ -2,7 +2,7 @@
   "id": "ui.authentication-login",
   "uiKind": "journey",
   "title": "Authentication Login UI Journey",
-  "description": "Draft UI semantic model instance for the login journey, separate from visual styling and source JSX structure.",
+  "description": "Draft UI semantic model instance for the login journey, separate from visual styling and source JSX structure. The first UI assurance slice governs login journey states, validation, explicit error handling, permission-gated surfaces, accessibility requirements, user actions, and semantic interface invocation before implementation extraction.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -15,7 +15,7 @@
   "vocabularyRefs": [
     "ui-semantic-kinds"
   ],
-  "aiGuidance": "Regenerate UI from semantics; do not invent validation, permission, accessibility, or journey behaviour from visual design.",
+  "aiGuidance": "Regenerate UI from semantics; do not invent validation, permission, accessibility, or journey behaviour from visual design, JSX layout, component names, screenshots, or generated reports.",
   "surface": "authentication",
   "route": "/login",
   "journeys": [
@@ -24,9 +24,29 @@
       "name": "Login attempt",
       "steps": [
         "render login surface",
-        "submit credentials or provider selection",
-        "receive authenticated or denied state",
+        "invoke governed login interface handoff",
+        "receive authenticated, denied, provider-failure, no-session, or auth-error retry state",
         "record audit and observability correlation"
+      ]
+    },
+    {
+      "id": "auth-error-retry",
+      "name": "Authentication error retry",
+      "steps": [
+        "render generic authentication error",
+        "announce error without visual-only signalling",
+        "offer retry action",
+        "invoke governed login interface handoff on retry"
+      ]
+    },
+    {
+      "id": "permission-gated-surface",
+      "name": "Permission gated surface",
+      "steps": [
+        "query session actor",
+        "evaluate required permission from semantic permission context",
+        "render forbidden state when permission is absent",
+        "avoid exposing gated control as enabled when permission is absent"
       ]
     }
   ],
@@ -36,32 +56,49 @@
     "authenticated",
     "denied",
     "provider-failure",
-    "no-session"
+    "no-session",
+    "auth-error",
+    "forbidden"
   ],
   "validations": [
     "required login input is represented before submission",
-    "provider selection is represented before redirect or callback handling",
+    "provider selection or login handoff is represented before redirect or callback handling",
+    "retry action preserves generic error semantics and does not expose raw provider error details",
     "custom-domain callback origin is represented as source-backed lineage, not live-provider proof",
-    "deferred real-IdP claim mapping is visible as a readiness limitation"
+    "deferred real-IdP claim mapping is visible as a readiness limitation",
+    "session query result is represented before permission-gated controls are shown as available",
+    "permission checks are semantic permission checks and not visual hiding alone"
   ],
   "errors": [
     "authentication denied state is explicit",
+    "generic auth-error state is explicit and retryable",
     "provider failure state is explicit",
     "no-session state redirects or blocks authenticated surfaces",
+    "forbidden state is explicit for missing permissions",
     "stale proof or readiness failure cannot be shown as ready"
   ],
   "permissions": [
-    "anonymous-login-attempt"
+    "anonymous-login-attempt",
+    "authenticated-session-creation",
+    "permission-gated-control-visible-only-when-authorized"
   ],
   "accessibility": [
     "login controls have programmatic names",
-    "error state is announced without relying on visual styling only"
+    "error state is announced without relying on visual styling only",
+    "auth-error retry control has an accessible name",
+    "forbidden state communicates denied access without relying on colour or layout only",
+    "keyboard interaction reaches login and retry actions"
   ],
   "userActions": [
-    "submit-login"
+    "submit-login",
+    "retry-login",
+    "query-session",
+    "attempt-permission-gated-action"
   ],
   "commandQueryMappings": [
-    "interface.authentication-login-api"
+    "interface.authentication-login-api",
+    "workflow.authentication-login",
+    "workflow.authentication-identity-context"
   ],
   "capabilityRefs": [
     "semantic-contract.authentication-platform"
@@ -75,7 +112,9 @@
     "apps/react-enterprise-app/src/auth/login-providers.ts",
     "apps/react-enterprise-app/src/components/RequirePermission.tsx",
     "apps/react-enterprise-app/src/hooks/use-session.ts",
+    "apps/react-enterprise-app/src/tests/use-session.test.ts",
     "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+    "docs/evidence/frontend/react-component-platform-baseline.md",
     "docs/evidence/auth/oidc-login-mapping-proof.md",
     "docs/evidence/identity/keycloak-login-callback.md"
   ]
