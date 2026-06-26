@@ -1,0 +1,67 @@
+{
+  "id": "0001-validator-deferral-lift",
+  "kind": "adr",
+  "title": "Validator Deferral Lift",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-26",
+  "context": "PR 2 merged at commit 801bec0 authored the 23 JSON Schema files at draft lifecycle and added the draft/advisory tools/validate-spec validator ahead of active validator maturity.",
+  "decision": "USF permits the 23 schema files to exist at draft lifecycle and permits the draft/advisory validator to validate schemas, catalogues, fixtures, registry alignment, enum bindings, import manifests, and safety checks before active validator maturity. jsonschema 4.10.3 is selected for this phase only. No schema is promoted to active.",
+  "consequences": [
+    "Future schema and vocabulary work can be checked through a committed repeatable path.",
+    "Active schema promotion remains deferred.",
+    "Validator maturity and release-blocking status remain separate future work."
+  ],
+  "invariants": [
+    "No schema is active unless the schema file exists, parses as JSON Schema, and is validator-checkable under an explicit promotion decision.",
+    "The current validator remains draft/advisory until a later decision promotes its maturity.",
+    "Validator output must not overclaim proof or readiness.",
+    "jsonschema 4.10.3 is a phase selection, not a permanent tooling mandate."
+  ],
+  "permittedChanges": [
+    "Add validator rules that enforce existing USF semantics.",
+    "Add schema fixtures that demonstrate positive and negative validation behaviour.",
+    "Replace the validator package in a later ADR or validator decision if compatibility requires it."
+  ],
+  "forbiddenDrift": [
+    "Do not mark draft schemas active because the draft/advisory validator can read them.",
+    "Do not treat advisory validation as runtime proof evidence.",
+    "Do not weaken schema or validator checks to make a branch pass.",
+    "Do not import runtime/application code as part of this validator lift."
+  ],
+  "aiAlignmentRules": [
+    "Agents must run and report the actual validator commands used.",
+    "Agents must not claim validation that did not run.",
+    "Agents must treat generated validator reports as lower authority than the artefacts and evidence they summarize."
+  ],
+  "semanticRefs": [
+    "docs/architecture/schema-authoring-standard.md#section-26-amendment-a",
+    "docs/architecture/standards-profile.md#section-23-amendment",
+    "docs/architecture/directory-and-file-naming-standard.md#section-6-e-1",
+    "spec/schemas/adr.schema.json"
+  ],
+  "sourceRefs": [
+    "git:801bec0"
+  ],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py",
+    ".github/workflows/validate-spec.yml"
+  ],
+  "rationale": "Draft schemas and an advisory validator make later work repeatable and reviewable without claiming release-blocking validator maturity.",
+  "description": "Records the validator-deferral lift that allowed draft schemas and advisory validation to exist before active maturity.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Validator",
+    "Semantic Contract"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification",
+    "validation-reporting-classification"
+  ],
+  "vocabularyRefs": [
+    "lifecycle-states",
+    "ai-governance-kinds"
+  ],
+  "aiGuidance": "Use this ADR to distinguish draft/advisory validation from active validator maturity and from runtime proof."
+}

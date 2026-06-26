@@ -424,19 +424,34 @@
     {
       "id": "capability-domains",
       "title": "Capability Domains",
-      "status": "deferred",
-      "description": "A deferred value set for classifying capabilities by domain. The historical ../react 12-category dimension is recognised as source evidence, but canonical USF values are intentionally not authored yet.",
+      "status": "active",
+      "description": "A controlled value set for classifying capabilities by domain. The canonical values are grounded in the current ../react v1-capability-closure.json category dimension and recorded by ADR 0003.",
       "governedTaxonomies": ["semantic-architecture-classification"],
       "governedOntologyConcepts": ["Capability", "Semantic Contract"],
       "expectedSchemaConsumers": ["semantic-contract.schema.json"],
-      "expectedValidatorUse": "Until canonical values are authored, validators MUST NOT accept historical labels as canonical USF capability-domain values.",
-      "sourceInputs": ["../react capability category dimension: identity-access, authentication, entitlements-billing, events-workflow, security-governance, observability-ops, data-platform, developer-platform, compute-runtime, configuration, search, foundation"],
-      "values": [],
+      "expectedValidatorUse": "Require semantic-contract capabilityDomain values to match this controlled value set exactly.",
+      "sourceInputs": ["../react/docs/v2-foundation/v1-capability-closure.json category dimension: authentication, compute-runtime, configuration, data-platform, developer-platform, entitlements-billing, events-workflow, foundation, identity-access, observability-ops, search, security-governance, storage, support-admin"],
+      "values": [
+        {"id": "authentication", "label": "Authentication", "description": "Capabilities for login, sessions, credentials, and authentication-provider flows.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category authentication", "aiGuidance": "Use only for authentication semantics; do not collapse identity or authorization into this domain."},
+        {"id": "compute-runtime", "label": "Compute Runtime", "description": "Capabilities for workers, job execution, runtime command execution, and compute substrates.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category compute-runtime", "aiGuidance": "Classify runtime execution semantics here, not deployment environment semantics."},
+        {"id": "configuration", "label": "Configuration", "description": "Capabilities for configuration registry, history, validation, and generated environment projections.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category configuration", "aiGuidance": "Configuration is a semantic asset; do not treat generated projections as authority."},
+        {"id": "data-platform", "label": "Data Platform", "description": "Capabilities for relational storage, migrations, tenancy controls, data retention, backup, and restore.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category data-platform", "aiGuidance": "Preserve tenancy, migration, backup, and retention semantics explicitly."},
+        {"id": "developer-platform", "label": "Developer Platform", "description": "Capabilities for developer-facing integration surfaces, webhooks, and platform developer operations.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category developer-platform", "aiGuidance": "Keep developer-facing capability semantics distinct from internal tooling implementation."},
+        {"id": "entitlements-billing", "label": "Entitlements and Billing", "description": "Capabilities for product catalogues, plans, prices, subscriptions, billing, and entitlement enforcement.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category entitlements-billing", "aiGuidance": "Preserve entitlement and billing semantics together only where the contract couples them."},
+        {"id": "events-workflow", "label": "Events and Workflow", "description": "Capabilities for event buses, durable queues, workflows, DLQ/redrive, and cross-capability orchestration.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category events-workflow", "aiGuidance": "Events and workflows require explicit contracts before implementation emission."},
+        {"id": "foundation", "label": "Foundation", "description": "Capabilities for the USF foundation scope, semantic governance, proof, validators, and source lineage.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category foundation", "aiGuidance": "Use for governance/foundation semantics, not as a broad miscellaneous bucket."},
+        {"id": "identity-access", "label": "Identity and Access", "description": "Capabilities for tenant identity, users, roles, permissions, authorization, and access policy.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category identity-access", "aiGuidance": "Keep identity/access semantics distinct from authentication session mechanics."},
+        {"id": "observability-ops", "label": "Observability and Operations", "description": "Capabilities for logs, metrics, traces, alerting, operational readiness, and runtime observability correlation.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category observability-ops", "aiGuidance": "Observability is a semantic asset; removal or rename requires semantic review."},
+        {"id": "search", "label": "Search", "description": "Capabilities for indexing, query, and searchable product/domain surfaces.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category search", "aiGuidance": "Do not infer search semantics from storage or UI alone."},
+        {"id": "security-governance", "label": "Security Governance", "description": "Capabilities for security controls, quality gates, secret scanning, dependency scanning, and governance enforcement.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category security-governance", "aiGuidance": "Do not downgrade security governance findings to advisory without authority."},
+        {"id": "storage", "label": "Storage", "description": "Capabilities for object storage, tenant prefixes, signed URLs, and storage-provider behaviour.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category storage", "aiGuidance": "Keep object-storage semantics distinct from relational data-platform semantics."},
+        {"id": "support-admin", "label": "Support Administration", "description": "Capabilities for tenant lifecycle support actions such as provision, suspend, delete, and export.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react v1-capability-closure category support-admin", "aiGuidance": "Treat support/admin operations as governed state-changing capabilities with audit expectations."}
+      ],
       "aliases": [],
       "forbiddenValues": [],
-      "driftRisks": ["Promoting historical capability categories into canonical USF values without an ADR and vocabulary update."],
-      "aiGuidance": ["Treat historical capability-domain labels as source evidence only until this value set is populated."],
-      "deferredDetails": ["Canonical capability-domain values require a future ADR or vocabulary update before use."]
+      "driftRisks": ["Treating the domain set as a miscellaneous bucket.", "Dropping an observed source category without a recorded disposition."],
+      "aiGuidance": ["Use only these canonical values for capabilityDomain.", "Historical source category labels are lineage for these values, not independent authority.", "Adding, merging, or retiring a capability domain requires vocabulary and validator review."],
+      "deferredDetails": ["Later source import work may add aliases if historical category labels diverge from the canonical value IDs."]
     },
     {
       "id": "schema-lifecycle-states",
@@ -742,7 +757,59 @@
       "forbiddenValues": [],
       "driftRisks": ["Removing a signal as an incidental refactor."],
       "aiGuidance": ["Observability is a semantic asset; removal requires semantic review."],
-      "deferredDetails": ["Exact OpenTelemetry attribute vocabulary mapping."]
+      "deferredDetails": ["Exact OpenTelemetry attribute vocabulary mapping beyond the initial USF-controlled attribute names."]
+    },
+    {
+      "id": "observability-signal-names",
+      "title": "Observability Signal Names",
+      "status": "active",
+      "description": "Controlled names for USF observability signal definitions. The set is OpenTelemetry-informed but USF-defined and does not claim OpenTelemetry compliance.",
+      "governedTaxonomies": ["observability-audit-classification"],
+      "governedOntologyConcepts": ["Observability Signal"],
+      "expectedSchemaConsumers": ["observability-signal.schema.json"],
+      "expectedValidatorUse": "Require observability-signal name to be drawn from this controlled value set; arbitrary signal names are not automatically valid.",
+      "sourceInputs": ["../react operational-semantics observabilitySignals/metrics/logs/traces", "../react/docs/evidence/e2e/prod-observability-correlation-latest.json"],
+      "values": [
+        {"id": "auth-login-duration-seconds", "label": "Authentication Login Duration Seconds", "description": "Metric measuring authentication login latency in seconds.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react observability auth login duration metric", "aiGuidance": "Use for login latency measurement; preserve correlation to readiness proof."},
+        {"id": "auth-login-audit", "label": "Authentication Login Audit", "description": "Log signal recording authentication login attempts for accountability.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react authentication audit/logging semantics", "aiGuidance": "Use for login accountability; do not treat as a domain event contract."},
+        {"id": "request-trace", "label": "Request Trace", "description": "Trace signal linking request handling across service boundaries.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react Tempo/request correlation evidence", "aiGuidance": "Use where causality across services must be preserved."},
+        {"id": "runtime-proof-output", "label": "Runtime Proof Output", "description": "Signal emitted by a runtime proof and preserved as proof evidence.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react usf-audit proof evidence", "aiGuidance": "Do not drop proof output during report generation."},
+        {"id": "service-resource-identity", "label": "Service Resource Identity", "description": "Signal describing service/resource identity for correlation.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react OpenTelemetry-style resource semantics", "aiGuidance": "Use controlled resource attributes; do not assert OpenTelemetry compliance."},
+        {"id": "correlation-identifier", "label": "Correlation Identifier", "description": "Signal carrying correlation identity across logs, metrics, traces, proof, and audit evidence.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react request/trace correlation", "aiGuidance": "Preserve across evidence collection and generated reports."}
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": ["Accepting arbitrary observability names as valid.", "Claiming OpenTelemetry compliance without artefacts and validators."],
+      "aiGuidance": ["Observability signal names must be controlled USF values.", "Historical spellings such as auth_login_duration_seconds and auth.login.audit remain source notes, not canonical aliases.", "Do not rename or remove a signal as an incidental refactor."],
+      "deferredDetails": ["Further source import work may expand this set from the complete operational-semantics observability corpus."]
+    },
+    {
+      "id": "observability-attribute-names",
+      "title": "Observability Attribute Names",
+      "status": "active",
+      "description": "Controlled names for observability attributes, service/resource identity, and correlation fields. The set is OpenTelemetry-informed but USF-defined and does not claim OpenTelemetry compliance.",
+      "governedTaxonomies": ["observability-audit-classification"],
+      "governedOntologyConcepts": ["Observability Signal"],
+      "expectedSchemaConsumers": ["observability-signal.schema.json"],
+      "expectedValidatorUse": "Require declared observability-signal attributes to be drawn from this controlled value set; arbitrary attributes are not automatically valid.",
+      "sourceInputs": ["../react operational-semantics observability attributes", "../react Loki/Tempo/Sentry correlation evidence", "OpenTelemetry-style service/resource identity principles from standards-profile section 8"],
+      "values": [
+        {"id": "service-name", "label": "Service Name", "description": "Name of the service emitting or owning the signal.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "OpenTelemetry-style service.name principle; ../react service correlation", "aiGuidance": "Service identity is controlled; do not invent alternate keys."},
+        {"id": "service-version", "label": "Service Version", "description": "Version or build identity of the emitting service when available.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "OpenTelemetry-style service.version principle", "aiGuidance": "Use only when version identity is actually observed."},
+        {"id": "deployment-environment", "label": "Deployment Environment", "description": "Execution environment associated with the signal.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react environment readiness and OTel-style deployment.environment principle", "aiGuidance": "Do not infer environment from provider mode."},
+        {"id": "provider-mode", "label": "Provider Mode", "description": "Provider mode associated with proof or runtime evidence.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react provider mode proof evidence", "aiGuidance": "Do not upgrade hermetic evidence to live-provider evidence."},
+        {"id": "tenant-id", "label": "Tenant ID", "description": "Tenant identity used for correlation and tenancy proof.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react tenant-scoped observability and RLS proof semantics", "aiGuidance": "Preserve tenant isolation; do not expose sensitive values in generated reports."},
+        {"id": "trace-id", "label": "Trace ID", "description": "Trace correlation identifier.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react request/trace correlation", "aiGuidance": "Use for trace correlation only; preserve through evidence collection."},
+        {"id": "span-id", "label": "Span ID", "description": "Span correlation identifier inside a trace.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react Tempo span correlation", "aiGuidance": "Use only in trace/span context."},
+        {"id": "request-id", "label": "Request ID", "description": "Request correlation identifier.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react request correlation", "aiGuidance": "Preserve across logs and traces when present."},
+        {"id": "proof-id", "label": "Proof ID", "description": "Runtime proof identity linked to emitted evidence.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react usf-audit proof evidence", "aiGuidance": "Use to link a signal to proof evidence; do not treat generated report IDs as proof IDs."},
+        {"id": "capability-id", "label": "Capability ID", "description": "Capability identity associated with a signal.", "lifecycle": "canonical", "canonical": true, "sourceNotes": "../react capability closure and proof evidence linkage", "aiGuidance": "Use only for declared capability semantics."}
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": ["Accepting arbitrary observability attributes as valid.", "Claiming OpenTelemetry compliance from OpenTelemetry-informed names alone."],
+      "aiGuidance": ["Observability attributes must be controlled USF values.", "OpenTelemetry spellings such as service.name remain source notes unless a future ADR adopts them directly.", "Do not infer provider mode or environment from an attribute name."],
+      "deferredDetails": ["A future ADR or vocabulary update may expand this list after exhaustive source import and OpenTelemetry mapping."]
     },
     {
       "id": "audit-event-kinds",
@@ -901,12 +968,12 @@
     "Exact field-level enum wiring in schemas (resolved at draft level — see schema-authoring §26 Amendment A) (validator enforces bindings).",
     "Exact alias import from ../react where exhaustive source mining is needed.",
     "Exact OpenAPI/AsyncAPI vocabulary mapping.",
-    "Exact OpenTelemetry attribute vocabulary mapping.",
+    "Full OpenTelemetry attribute mapping beyond the initial USF-controlled observability values.",
     "Exact command catalogue import.",
     "Exact configuration catalogue import.",
     "Exact UI semantic import.",
     "Exact source disposition inventory.",
-    "Canonical capability-domain values (value set exists as deferred; values are not yet authored)."
+    "Further source import work may add capability-domain aliases if historical labels diverge from canonical IDs."
   ],
   "acceptanceCriteria": [
     {"criterion": "Valid JSON.", "satisfied": true},

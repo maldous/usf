@@ -1,7 +1,7 @@
 {
   "id": "usf.observability-signal.example.minimal",
   "signalKind": "log",
-  "name": "auth.login.audit",
+  "name": "auth-login-audit",
   "source": "authentication-service",
   "purpose": "Record authentication login attempts for accountability.",
   "title": "Authentication login log signal",
@@ -10,6 +10,6 @@
   "lifecycleState": "draft",
   "ontologyConcepts": ["Observability Signal"],
   "taxonomyRefs": ["observability-audit-classification"],
-  "vocabularyRefs": ["observability-signal-kinds"],
+  "vocabularyRefs": ["observability-signal-kinds", "observability-signal-names"],
   "aiGuidance": "Treat this signal as a semantic asset; do not infer additional optional fields that are not declared."
 }
