@@ -2,7 +2,7 @@
   "id": "workflow.authentication-login",
   "workflowKind": "workflow",
   "title": "Authentication Login Workflow",
-  "description": "Draft workflow semantic instance linking the login interface, audit event, provider posture, and UI journey.",
+  "description": "Draft workflow semantic instance linking the login interface, audit event, provider posture, and UI journey. The first workflow assurance slice requires normal transitions, denied transitions, illegal transition rejection, missing audit failure, and stale or missing proof evidence failure to be explicit.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -21,7 +21,7 @@
     "provider-mode.mock-identity-provider",
     "audit.authentication-login"
   ],
-  "ordering": "request validation, provider authentication, audit recording, response emission",
+  "ordering": "request validation, provider authentication, illegal transition rejection, audit recording, proof-evidence correlation, response emission",
   "steps": [
     {
       "id": "receive-login-request",
@@ -32,6 +32,11 @@
       "id": "evaluate-provider-response",
       "description": "Evaluate the configured identity provider response without upgrading provider mode; denied and provider-error outcomes remain explicit states.",
       "operation": "provider-mode.mock-identity-provider"
+    },
+    {
+      "id": "reject-illegal-transition",
+      "description": "Reject session creation, authenticated response emission, or proof success when request validation, provider decision, or tenant identity state is missing or contradictory.",
+      "operation": "workflow.authentication-login"
     },
     {
       "id": "record-audit",
@@ -56,6 +61,11 @@
       "trigger": "provider-decision-denied-or-validation-failed"
     },
     {
+      "from": "authenticating",
+      "to": "denied",
+      "trigger": "illegal-transition-or-missing-required-state"
+    },
+    {
       "from": "authenticated",
       "to": "unauthenticated",
       "trigger": "logout-or-session-destroyed"
@@ -64,12 +74,15 @@
   "failurePaths": [
     "denied-login-emits-explicit-denied-state-without-session",
     "provider-unavailable-fails-closed",
+    "illegal-session-creation-transition-fails-closed",
     "audit-recording-missing-fails-proof-claim",
+    "proof-evidence-missing-or-stale-fails-workflow-readiness",
     "stale-proof-must-not-satisfy-current-readiness",
     "readiness-failure-must-not-upgrade-provider-mode"
   ],
   "compensationPaths": [
-    "no-compensating-action-for-denied-login; preserve audit record"
+    "no-compensating-action-for-denied-login; preserve audit record",
+    "no-compensating-action-for-illegal-transition; deny and preserve audit/evidence failure"
   ],
   "relatedEvents": [
     "event.authentication-login-audit"

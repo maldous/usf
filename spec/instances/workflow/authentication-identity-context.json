@@ -2,7 +2,7 @@
   "id": "workflow.authentication-identity-context",
   "workflowKind": "cross-capability-interaction",
   "title": "Authentication Identity Context Interaction",
-  "description": "Draft cross-capability workflow linking authentication login with tenant identity, user membership, host resolution, and RBAC semantics for the first implementation slice.",
+  "description": "Draft cross-capability workflow linking authentication login with tenant identity, user membership, host resolution, and RBAC semantics for the first implementation slice. The first workflow assurance slice requires invalid ordering, missing tenant context, missing membership, missing audit, and missing or stale proof evidence to fail closed.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -24,7 +24,7 @@
     "semantic-contract.tenant-host-identity-resolution",
     "workflow.authentication-login"
   ],
-  "ordering": "resolve host tenant identity, reject inactive or other-tenant host ownership, validate login request, resolve external identity and membership for the resolved tenant, deny absent or other-tenant membership, project session actor, evaluate permissions for protected surfaces",
+  "ordering": "resolve host tenant identity, reject inactive or other-tenant host ownership, validate login request, reject illegal ordering, resolve external identity and membership for the resolved tenant, deny absent or other-tenant membership, project session actor, evaluate permissions for protected surfaces, preserve audit/evidence correlation",
   "steps": [
     {
       "id": "resolve-host-tenant",
@@ -40,6 +40,11 @@
       "id": "authenticate-user",
       "description": "Run authentication login workflow and preserve denied/provider-failure outcomes.",
       "operation": "workflow.authentication-login"
+    },
+    {
+      "id": "reject-illegal-identity-transition",
+      "description": "Reject membership projection, permission-context readiness, or proof success when host resolution, login decision, membership state, audit evidence, or proof evidence is missing or contradictory.",
+      "operation": "workflow.authentication-identity-context"
     },
     {
       "id": "resolve-membership",
@@ -74,6 +79,11 @@
       "trigger": "login-denied-or-membership-missing"
     },
     {
+      "from": "tenant-context-resolved",
+      "to": "denied",
+      "trigger": "illegal-ordering-or-missing-required-state"
+    },
+    {
       "from": "session-actor-projected",
       "to": "permission-context-ready",
       "trigger": "rbac-evaluated"
@@ -87,10 +97,14 @@
     "other-tenant-membership-fails-closed",
     "cross-tenant-read-write-denied",
     "permission-denied-fails-closed",
-    "provider-mode-must-not-upgrade-by-environment"
+    "provider-mode-must-not-upgrade-by-environment",
+    "illegal-membership-projection-transition-fails-closed",
+    "missing-audit-evidence-fails-workflow-readiness",
+    "proof-evidence-missing-or-stale-fails-workflow-readiness"
   ],
   "compensationPaths": [
-    "no-compensating-action-for-denied-authentication; preserve audit and observability semantics"
+    "no-compensating-action-for-denied-authentication; preserve audit and observability semantics",
+    "no-compensating-action-for-illegal-transition; deny and preserve audit/evidence failure"
   ],
   "relatedEvents": [
     "event.authentication-login-audit"
