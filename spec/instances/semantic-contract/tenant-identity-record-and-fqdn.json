@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.tenant-identity-record-and-fqdn",
   "title": "Tenant Identity Record and FQDN Semantic Contract",
-  "description": "Draft semantic contract for tenant identity records, FQDN ownership, and tenant lookup semantics required by the authentication first slice.",
+  "description": "Draft semantic contract for tenant identity records, FQDN ownership, and tenant lookup semantics required by the authentication first slice. The first implementation slice requires tenant ownership to fail closed for unresolved hosts, inactive custom domains, and cross-tenant domain ownership conflicts.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -29,10 +29,11 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Tenant identity state covers known tenant record, verified host/FQDN association, and unresolved host fail-closed outcome.",
+      "description": "Tenant identity state covers known tenant record, verified host/FQDN association, active custom-domain ownership, same-tenant domain reuse, cross-tenant domain conflict, disabled or inactive host ownership, and unresolved host fail-closed outcome.",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
-        "docs/evidence/platform/domain-identity-capability-permutation-review.md"
+        "docs/evidence/platform/domain-identity-capability-permutation-review.md",
+        "docs/evidence/platform/platform-bedrock-correctness-hardening.md"
       ]
     },
     "permissions": {
@@ -51,23 +52,28 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Tenant lookup validation must reject unresolved, unverified, or disabled host identity before authentication context is trusted.",
+      "description": "Tenant lookup validation must reject unresolved, unverified, inactive, disabled, or other-tenant host identity before authentication context is trusted. A same-domain ownership conflict must be denied before issuing proof material, callback material, or session context.",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
-        "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts"
+        "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
+        "docs/evidence/platform/platform-bedrock-correctness-hardening.md"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "Unresolved or disabled tenant identity fails closed and cannot be replaced by generated report status.",
+      "description": "Unresolved, disabled, inactive, or cross-tenant tenant identity fails closed and cannot be replaced by generated report status. Conflict outcomes must not leak ownership proof tokens or silently downgrade to a different tenant.",
       "sourceRefs": [
         "docs/evidence/auth/custom-domain-auth-origin.md",
-        "docs/evidence/platform/domain-identity-capability-permutation-review.md"
+        "docs/evidence/platform/domain-identity-capability-permutation-review.md",
+        "docs/evidence/platform/platform-bedrock-correctness-hardening.md"
       ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Tenant identity audit details remain deferred to a later identity-access audit instance."
+      "status": "complete",
+      "description": "The first slice requires denied cross-tenant domain ownership attempts to emit safe audit metadata and prohibits token leakage in rejected conflict outcomes. Detailed full identity audit taxonomy remains a later expansion.",
+      "sourceRefs": [
+        "docs/evidence/platform/platform-bedrock-correctness-hardening.md"
+      ]
     },
     "readinessModel": {
       "status": "complete",
@@ -94,6 +100,7 @@
     "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
     "docs/evidence/identity/identity-access-baseline.md",
     "docs/evidence/platform/domain-identity-capability-permutation-review.md",
+    "docs/evidence/platform/platform-bedrock-correctness-hardening.md",
     "packages/domain-identity/src/index.ts"
   ],
   "adrRefs": [

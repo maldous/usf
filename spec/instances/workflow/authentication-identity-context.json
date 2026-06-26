@@ -24,12 +24,17 @@
     "semantic-contract.tenant-host-identity-resolution",
     "workflow.authentication-login"
   ],
-  "ordering": "resolve host tenant identity, validate login request, resolve external identity and membership, project session actor, evaluate permissions for protected surfaces",
+  "ordering": "resolve host tenant identity, reject inactive or other-tenant host ownership, validate login request, resolve external identity and membership for the resolved tenant, deny absent or other-tenant membership, project session actor, evaluate permissions for protected surfaces",
   "steps": [
     {
       "id": "resolve-host-tenant",
       "description": "Resolve request host or custom domain to tenant identity before trusting callback/session context.",
       "operation": "semantic-contract.tenant-host-identity-resolution"
+    },
+    {
+      "id": "reject-invalid-host-boundary",
+      "description": "Deny unknown, inactive, invalid, reserved, or other-tenant host identity before issuing tenant callback or session context.",
+      "operation": "semantic-contract.tenant-identity-record-and-fqdn"
     },
     {
       "id": "authenticate-user",
@@ -38,7 +43,7 @@
     },
     {
       "id": "resolve-membership",
-      "description": "Resolve external identity and tenant membership into a safe session actor.",
+      "description": "Resolve external identity and tenant membership for the resolved tenant into a safe session actor; absent or other-tenant membership remains denied.",
       "operation": "semantic-contract.user-identity-and-tenant-membership"
     },
     {
@@ -52,6 +57,11 @@
       "from": "request-with-host",
       "to": "tenant-context-resolved",
       "trigger": "host-identity-valid"
+    },
+    {
+      "from": "request-with-host",
+      "to": "denied",
+      "trigger": "host-identity-invalid-inactive-or-other-tenant"
     },
     {
       "from": "tenant-context-resolved",
@@ -71,7 +81,11 @@
   ],
   "failurePaths": [
     "unknown-host-fails-closed",
+    "inactive-custom-domain-fails-closed",
+    "cross-tenant-domain-conflict-fails-closed",
     "membership-missing-fails-closed",
+    "other-tenant-membership-fails-closed",
+    "cross-tenant-read-write-denied",
     "permission-denied-fails-closed",
     "provider-mode-must-not-upgrade-by-environment"
   ],
