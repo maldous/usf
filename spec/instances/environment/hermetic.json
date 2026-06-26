@@ -2,7 +2,7 @@
   "id": "environment.hermetic",
   "environment": "hermetic",
   "title": "Hermetic Environment",
-  "description": "Draft environment instance for deterministic offline proof using hermetic providers.",
+  "description": "Draft environment instance for deterministic offline proof using hermetic providers. Hermetic execution is valid for internal behaviour proof, but it cannot imply local, sandbox, live-external-provider, production-shaped, or production-live readiness.",
   "permittedProviderModes": [
     "hermetic-mock"
   ],
@@ -27,5 +27,5 @@
     "environment-classes",
     "provider-modes"
   ],
-  "aiGuidance": "Environment is separate from provider mode and cannot upgrade provider evidence by implication."
+  "aiGuidance": "Environment is separate from provider mode and cannot upgrade provider evidence by implication. Hermetic remains hermetic even when proof output is fresh and passing."
 }
