@@ -1,0 +1,31 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INSTANCE-004",
+  "instances": {
+    "spec/instances/audit-event/unresolved-reference.json": {
+      "id": "audit.unresolved-reference",
+      "auditKind": "audit-event",
+      "actor": "actor",
+      "action": "action",
+      "subject": "subject",
+      "title": "Unresolved Reference Audit",
+      "description": "Planted audit event with an unresolved semantic reference.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Audit Event"
+      ],
+      "taxonomyRefs": [
+        "observability-audit-classification"
+      ],
+      "vocabularyRefs": [
+        "audit-event-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "timestampSemantics": "recorded at action time",
+      "securitySensitive": false,
+      "stateChanging": false,
+      "relatedInterface": "interface.missing"
+    }
+  }
+}

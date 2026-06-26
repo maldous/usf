@@ -1,0 +1,9 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INSTANCE-002",
+  "instances": {
+    "spec/instances/command/invalid.json": {
+      "id": "command.invalid"
+    }
+  }
+}
