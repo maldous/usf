@@ -21,10 +21,22 @@
   "boundary": "platform-api inbound authentication boundary",
   "semanticContractRef": "semantic-contract.authentication-platform",
   "requestContract": {
-    "description": "Login request semantics are source-backed but not yet expanded into field-level USF schema."
+    "description": "Login request semantics cover provider selection, callback state binding, session lookup, logout, and custom-domain callback derivation. Field-level request schema remains deferred, but validation semantics are source-backed.",
+    "fields": [
+      "provider-selection",
+      "callback-state-token",
+      "session-cookie",
+      "custom-domain-origin"
+    ]
   },
   "responseContract": {
-    "description": "Login response semantics are source-backed but not yet expanded into field-level USF schema."
+    "description": "Login response semantics return authenticated, denied, provider-failure, or no-session states without exposing raw identity-provider tokens.",
+    "fields": [
+      "authenticated-session",
+      "denied-login",
+      "provider-failure",
+      "no-session"
+    ]
   },
   "permissions": [
     "anonymous-login-attempt",
@@ -34,6 +46,12 @@
   "driftDetectable": true,
   "sourceRefs": [
     "docs/api/openapi.json",
-    "apps/platform-api/scripts/auth-settings-runtime-proof.ts"
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "apps/platform-api/src/server/auth.ts",
+    "apps/platform-api/src/server/session.ts",
+    "apps/platform-api/src/usecases/auth.ts",
+    "apps/platform-api/tests/substrate/auth-routes.test.ts",
+    "docs/evidence/identity/keycloak-login-callback.md",
+    "docs/evidence/auth/custom-domain-auth-origin.md"
   ]
 }
