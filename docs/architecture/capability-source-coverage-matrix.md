@@ -191,6 +191,7 @@ Known first-slice semantic gap facets, carried into USF-66: `stateModel`, `valid
 | Source-use policy is not recorded per first-slice file. | blocking for implementation | Disposition alone does not authorise copy, adapt, rewrite, or evidence-only use. | USF-64 |
 | Fresh commit-pinned proof for the future extracted slice does not yet exist. | blocking for readiness claims | Historical proof is lineage; generated reports and stale evidence cannot prove current readiness. | USF-59 / USF-73 |
 | Schema and validator active posture remains a decision, not a fact. | deferred decision | No schema is active and the validator remains advisory until explicitly promoted. | USF-67 |
+| Historical capabilities marked not-applicable-final are not implementation extraction targets. | non-applicable | These rows preserve historical lineage and explicit no-loss disposition, but they must not drive generated implementation until a later semantic decision changes their applicability. | USF-58 |
 
 ## Appendix A: First-Slice Source Rows
 
