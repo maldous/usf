@@ -1,0 +1,95 @@
+{
+  "id": "workflow.authentication-identity-context",
+  "workflowKind": "cross-capability-interaction",
+  "title": "Authentication Identity Context Interaction",
+  "description": "Draft cross-capability workflow linking authentication login with tenant identity, user membership, host resolution, and RBAC semantics for the first implementation slice.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Preserve this interaction as a semantic contract. Do not collapse tenant identity, membership, and RBAC into authentication implementation details.",
+  "participants": [
+    "semantic-contract.authentication-platform",
+    "semantic-contract.tenant-identity-record-and-fqdn",
+    "semantic-contract.user-identity-and-tenant-membership",
+    "semantic-contract.rbac-roles-and-permissions",
+    "semantic-contract.tenant-host-identity-resolution",
+    "workflow.authentication-login"
+  ],
+  "ordering": "resolve host tenant identity, validate login request, resolve external identity and membership, project session actor, evaluate permissions for protected surfaces",
+  "steps": [
+    {
+      "id": "resolve-host-tenant",
+      "description": "Resolve request host or custom domain to tenant identity before trusting callback/session context.",
+      "operation": "semantic-contract.tenant-host-identity-resolution"
+    },
+    {
+      "id": "authenticate-user",
+      "description": "Run authentication login workflow and preserve denied/provider-failure outcomes.",
+      "operation": "workflow.authentication-login"
+    },
+    {
+      "id": "resolve-membership",
+      "description": "Resolve external identity and tenant membership into a safe session actor.",
+      "operation": "semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "id": "evaluate-permission-context",
+      "description": "Apply RBAC permissions to authenticated request context without replacing permissions with role-name resemblance.",
+      "operation": "semantic-contract.rbac-roles-and-permissions"
+    }
+  ],
+  "stateTransitions": [
+    {
+      "from": "request-with-host",
+      "to": "tenant-context-resolved",
+      "trigger": "host-identity-valid"
+    },
+    {
+      "from": "tenant-context-resolved",
+      "to": "session-actor-projected",
+      "trigger": "login-accepted-and-membership-resolved"
+    },
+    {
+      "from": "tenant-context-resolved",
+      "to": "denied",
+      "trigger": "login-denied-or-membership-missing"
+    },
+    {
+      "from": "session-actor-projected",
+      "to": "permission-context-ready",
+      "trigger": "rbac-evaluated"
+    }
+  ],
+  "failurePaths": [
+    "unknown-host-fails-closed",
+    "membership-missing-fails-closed",
+    "permission-denied-fails-closed",
+    "provider-mode-must-not-upgrade-by-environment"
+  ],
+  "compensationPaths": [
+    "no-compensating-action-for-denied-authentication; preserve audit and observability semantics"
+  ],
+  "relatedEvents": [
+    "event.authentication-login-audit"
+  ],
+  "relatedInterfaces": [
+    "interface.authentication-login-api"
+  ],
+  "sourceRefs": [
+    "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+    "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
+    "apps/platform-api/src/server/auth.ts",
+    "apps/platform-api/src/usecases/auth.ts",
+    "apps/platform-api/src/server/authorize-resource.ts",
+    "docs/evidence/identity/keycloak-login-callback.md"
+  ]
+}
