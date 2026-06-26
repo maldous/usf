@@ -25,10 +25,11 @@ Modes (default: all):
     catalogues   validate the 3 catalogue instances + catalogue data integrity
     registry     repository inventory (bijection) + registry synchronisation
     fixtures     tools/validate-spec/fixtures positive/negative corpus + expected-reason manifest
+    instances    committed semantic corpus instances under spec/instances
     imports      source-import manifest schema + internal no-loss checks
     selftest     plant defects from tools/validate-spec/planted-defects/ and assert the exact rule id fires
     pr           base/head diff gate (--base, --head); fails closed if git fails
-    all          schemas + enums + catalogues + registry + safety + fixtures + imports + selftest
+    all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + selftest
                  (+ pr when --base/--head is given)
 
 Options:
@@ -38,7 +39,7 @@ Options:
     --head REF          PR head git ref
 """
 import argparse, copy, glob, json, os, re, subprocess, sys
-from collections import Counter
+from collections import Counter, defaultdict
 
 try:
     from jsonschema import Draft202012Validator
@@ -212,6 +213,10 @@ RULES = {
     "USF-FIXTURE-002":  ("blocking", "Positive fixture unexpectedly rejected"),
     "USF-FIXTURE-003":  ("blocking", "Negative fixture has no expected-reason manifest entry"),
     "USF-FIXTURE-004":  ("blocking", "Negative fixture rejected for the wrong reason"),
+    "USF-INSTANCE-002": ("blocking", "Semantic corpus instance invalid against its schema"),
+    "USF-INSTANCE-003": ("blocking", "Semantic corpus instance directory has no matching schema"),
+    "USF-INSTANCE-004": ("blocking", "Semantic corpus instance reference does not resolve"),
+    "USF-INSTANCE-005": ("blocking", "Semantic corpus instance id is duplicated"),
     "USF-IMPORT-001":   ("blocking", "Source import manifest invalid against import-manifest schema"),
     "USF-IMPORT-002":   ("blocking", "Source import manifest entry count mismatch"),
     "USF-IMPORT-003":   ("blocking", "Source import manifest sourceRef.path values are missing or duplicated"),
@@ -689,6 +694,116 @@ def check_fixtures(ctx, F):
     return "ran"
 
 
+INSTANCE_REF_FIELDS = {
+    "sourceRefs", "adrRefs", "evidenceRefs", "proofRefs", "readinessGateRefs",
+    "capabilityRefs", "relatedEvents", "relatedInterfaces", "references",
+    "participants", "consumers", "commandQueryMappings",
+}
+INSTANCE_REF_SCALARS = {
+    "semanticContractRef", "payloadSchemaRef", "relatedInterface", "relatedWorkflow",
+    "producer", "source",
+}
+
+
+def _collect_instance_refs(node, path="$"):
+    if isinstance(node, dict):
+        for k, v in node.items():
+            here = f"{path}.{k}"
+            if k in INSTANCE_REF_FIELDS and isinstance(v, list):
+                for item in v:
+                    if isinstance(item, str):
+                        yield here, item
+            elif k in INSTANCE_REF_SCALARS and isinstance(v, str):
+                yield here, v
+            elif k == "operation" and ".steps[" in here and isinstance(v, str):
+                yield here, v
+            yield from _collect_instance_refs(v, here)
+    elif isinstance(node, list):
+        for i, item in enumerate(node):
+            yield from _collect_instance_refs(item, f"{path}[{i}]")
+
+
+def _schema_for_instance_path(path):
+    marker = "spec/instances/"
+    rel = path.split(marker, 1)[1] if marker in path else path
+    return rel.split("/", 1)[0].split(os.sep, 1)[0]
+
+
+def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None):
+    instance_id_to_paths = defaultdict(list)
+    for p, data in data_by_path.items():
+        if isinstance(data, dict) and isinstance(data.get("id"), str):
+            instance_id_to_paths[data["id"]].append(p)
+
+    for instance_id, paths in sorted(instance_id_to_paths.items()):
+        if len(paths) > 1:
+            F.add("USF-INSTANCE-005", instance_id, f"duplicate instance id in {paths}")
+
+    instance_ids = set(instance_id_to_paths)
+    source_paths = source_paths or set()
+    existing_paths = existing_paths or set()
+    schema_urns = {schema.get("$id") for schema in ctx["sd"].values() if isinstance(schema, dict)}
+    schema_paths = {f"spec/schemas/{name}.schema.json" for name in ctx["sd"]}
+
+    def resolves(ref):
+        if ref in instance_ids or ref in source_paths or ref in schema_urns or ref in schema_paths or ref in existing_paths:
+            return True
+        if ref.startswith("urn:usf:schema:"):
+            return ref.split("#", 1)[0] in schema_urns
+        if ref.startswith("source:"):
+            return ref.removeprefix("source:") in source_paths
+        return False
+
+    for p, data in data_by_path.items():
+        schema = _schema_for_instance_path(p)
+        if schema not in ctx["sd"]:
+            F.add("USF-INSTANCE-003", p, f"no schema '{schema}'")
+            continue
+        errs = list(Draft202012Validator(ctx["sd"][schema]).iter_errors(data))
+        for err in errs:
+            F.add("USF-INSTANCE-002", p, err.message[:160])
+        if errs:
+            continue
+        for field, ref in _collect_instance_refs(data):
+            if not resolves(ref):
+                F.add("USF-INSTANCE-004", f"{p}:{field}", f"unresolved reference: {ref}")
+
+
+def check_instances(ctx, F):
+    """Validate committed semantic corpus instances under spec/instances.
+
+    Directory name selects the schema: spec/instances/<schema-id>/*.json. References
+    resolve to another instance id, an existing repository path, a schema URN, or a
+    sourceRef.path recorded in the import manifest. This keeps real instances on the
+    same repeatable validator path as schemas, fixtures, and imports.
+    """
+    root = "spec/instances"
+    paths = sorted(glob.glob(f"{root}/**/*.json", recursive=True))
+    if not paths:
+        return "not-run"
+
+    data_by_path = {}
+    for p in paths:
+        data = load_json(p, F)
+        if data is not None:
+            data_by_path[p] = data
+
+    source_paths = set()
+    manifest = load_json("spec/registries/source-import-manifest.json", F)
+    if isinstance(manifest, dict):
+        for entry in manifest.get("entries", []):
+            source_ref = entry.get("sourceRef") if isinstance(entry, dict) else None
+            source_path = source_ref.get("path") if isinstance(source_ref, dict) else None
+            if isinstance(source_path, str):
+                source_paths.add(source_path)
+
+    existing_paths = {p[2:] if p.startswith("./") else p
+                      for p in glob.glob("**/*", recursive=True)
+                      if os.path.isfile(p)}
+    validate_instance_data(ctx, F, data_by_path, source_paths=source_paths, existing_paths=existing_paths)
+    return "ran"
+
+
 def check_imports(ctx, F):
     """Validate committed source-import instances in the repeatable validator path.
 
@@ -822,12 +937,26 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            apply_patch(sandbox, patch)
+            if patch["target"] != "instances":
+                apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
             continue
         f2 = Findings()
-        run_all_checks(sandbox, f2)
+        if patch["target"] == "instances":
+            instances = patch.get("instances")
+            if not isinstance(instances, dict):
+                F.add("USF-SELFTEST-001", df, "instances planted-defect needs an instances object")
+                continue
+            validate_instance_data(
+                sandbox,
+                f2,
+                instances,
+                source_paths=set(patch.get("sourcePaths", [])),
+                existing_paths=set(patch.get("existingPaths", [])),
+            )
+        else:
+            run_all_checks(sandbox, f2)
         if patch["expectedRule"] not in f2.rule_ids():
             F.add("USF-SELFTEST-001", df, f"expected {patch['expectedRule']}; got {sorted(f2.rule_ids())[:8]}")
     return "ran"
@@ -902,7 +1031,7 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "imports", "selftest", "pr", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "selftest", "pr", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
@@ -921,8 +1050,8 @@ def main():
     pr_requested = a.base is not None or a.head is not None
     run = {
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
-        "fixtures": ["fixtures"], "imports": ["imports"], "selftest": ["selftest"], "pr": ["pr"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "imports", "selftest"]
+        "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "selftest": ["selftest"], "pr": ["pr"],
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -937,6 +1066,8 @@ def main():
         check_safety(ctx, F)
     if "fixtures" in run:
         fixtures_state = check_fixtures(ctx, F)
+    if "instances" in run:
+        check_instances(ctx, F)
     if "imports" in run:
         check_imports(ctx, F)
     if "selftest" in run:

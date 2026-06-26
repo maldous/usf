@@ -1,0 +1,23 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INSTANCE-003",
+  "instances": {
+    "spec/instances/no-such-schema/unknown.json": {
+      "id": "unknown.instance",
+      "title": "Unknown Schema Instance",
+      "description": "Planted instance under an unknown schema directory.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Semantic Contract"
+      ],
+      "taxonomyRefs": [
+        "semantic-corpus-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    }
+  }
+}

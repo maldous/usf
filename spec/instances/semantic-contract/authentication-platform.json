@@ -1,0 +1,89 @@
+{
+  "id": "semantic-contract.authentication-platform",
+  "title": "Authentication Platform Semantic Contract",
+  "description": "Draft semantic contract for the authentication platform slice carried from historical identity, authorization, audit, proof, and UI source evidence. Complete facets cite explicit source-import paths; facets not yet recovered as full USF contracts remain gaps.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "lifecycle-states",
+    "capability-domains"
+  ],
+  "aiGuidance": "Use this contract as a source-backed draft semantic target. Do not infer additional authentication behaviour from source files without promoting that intent into a reviewed semantic instance.",
+  "capability": "authentication-platform",
+  "capabilityDomain": "authentication",
+  "facets": {
+    "lifecycle": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/scripts/auth-settings-runtime-proof.ts"
+      ]
+    },
+    "stateModel": {
+      "status": "gap",
+      "description": "Detailed authentication state transitions remain to be recovered from historical semantic evidence."
+    },
+    "permissions": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/react-enterprise-app/src/components/RequirePermission.tsx"
+      ]
+    },
+    "contracts": {
+      "status": "complete",
+      "sourceRefs": [
+        "docs/api/openapi.json"
+      ]
+    },
+    "validation": {
+      "status": "gap",
+      "description": "Validation fields are represented only by referenced source lineage in this draft slice."
+    },
+    "errorModel": {
+      "status": "gap",
+      "description": "Error model recovery is deferred until detailed source evidence is normalised."
+    },
+    "auditModel": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/auth-settings-audit.test.ts"
+      ]
+    },
+    "readinessModel": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/scripts/provider-readiness-contract-runtime-proof.ts"
+      ]
+    },
+    "proof": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/scripts/auth-settings-runtime-proof.ts"
+      ]
+    },
+    "uiSemanticDefinition": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/react-enterprise-app/src/auth/login-providers.ts"
+      ]
+    }
+  },
+  "sourceRefs": [
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
+    "docs/api/openapi.json",
+    "apps/react-enterprise-app/src/auth/login-providers.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0001-validator-deferral-lift.md",
+    "docs/adr/0002-interface-event-contract-format.md",
+    "docs/adr/0003-capability-domain-values.md"
+  ]
+}

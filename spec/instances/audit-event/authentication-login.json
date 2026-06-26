@@ -1,0 +1,31 @@
+{
+  "id": "audit.authentication-login",
+  "auditKind": "security-sensitive-audit",
+  "actor": "authentication-subject",
+  "action": "authentication-login",
+  "subject": "session",
+  "title": "Authentication Login Audit Event",
+  "description": "Draft audit event semantic instance for login decisions and session creation attempts.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Audit Event"
+  ],
+  "taxonomyRefs": [
+    "observability-audit-classification"
+  ],
+  "vocabularyRefs": [
+    "audit-event-kinds"
+  ],
+  "aiGuidance": "Privileged or security-sensitive authentication actions remain auditable; do not remove audit coverage as an incidental refactor.",
+  "timestampSemantics": "Timestamp is recorded at the decision boundary and correlated with request-id.",
+  "securitySensitive": true,
+  "stateChanging": true,
+  "relatedInterface": "interface.authentication-login-api",
+  "relatedWorkflow": "workflow.authentication-login",
+  "semanticContractRef": "semantic-contract.authentication-platform",
+  "sourceRefs": [
+    "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
+    "apps/platform-api/src/usecases/audit.ts"
+  ]
+}

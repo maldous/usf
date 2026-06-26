@@ -189,6 +189,7 @@ Current approved children:
 - `spec/vocabularies/`
 - `spec/registries/`
 - `spec/schemas/`
+- `spec/instances/`
 
 Rules:
 
@@ -196,6 +197,7 @@ Rules:
 - `spec/vocabularies/` contains vocabulary catalogues and future controlled value sets (currently `vocabulary-catalog.json`).
 - `spec/registries/` contains registries and cross-reference/resolution maps (currently `schema-registry.json`).
 - `spec/schemas/` contains JSON Schema files **only when** schema creation is explicitly authorised (AGENTS `Schema Rules`). *(Superseded — see schema-authoring-standard §26 Amendment A: it now holds the 23 schema files at lifecycle `draft`; none are `active`.)*
+- `spec/instances/` contains schema-validated semantic corpus instances, grouped by the schema ID they instantiate, for example `spec/instances/semantic-contract/`. This directory is authorised for real semantic instances after the source import map and draft schema validator exist; it MUST NOT contain schemas, generated reports, or implementation/runtime code.
 - `spec/` MUST NOT contain implementation source code, human-readable prose governance (which belongs under `docs/`), or generated reports (which belong under `evidence/`, §15).
 
 ### `evidence/`

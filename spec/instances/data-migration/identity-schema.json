@@ -1,0 +1,28 @@
+{
+  "id": "data.identity-schema",
+  "dataKind": "migration",
+  "title": "Identity Schema Migration Contract",
+  "description": "Draft data and migration semantic instance for the historical identity schema migration lineage.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Data Model",
+    "Migration"
+  ],
+  "taxonomyRefs": [
+    "data-migration-classification"
+  ],
+  "vocabularyRefs": [
+    "data-migration-kinds"
+  ],
+  "aiGuidance": "A committed migration is immutable. Do not rewrite migration semantics to match implementation convenience.",
+  "tenancyIsolation": "Tenant isolation must be preserved by later detailed data contracts and proof evidence.",
+  "migrationOrder": 1,
+  "checksum": "source-import:apps/platform-api/src/db/migrations/001-identity-schema.sql",
+  "immutable": true,
+  "retention": "identity records follow the governed retention and deletion concern once authored in detail",
+  "sourceRefs": [
+    "apps/platform-api/src/db/migrations/001-identity-schema.sql",
+    "apps/platform-api/src/db/migrations/004-rls-policies.sql"
+  ]
+}

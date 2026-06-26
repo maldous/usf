@@ -1,0 +1,30 @@
+{
+  "id": "provider-mode.mock-identity-provider",
+  "title": "Mock Identity Provider Hermetic Mode",
+  "providerMode": "hermetic-mock",
+  "description": "Draft provider-mode instance for mock identity provider use as hermetic proof only.",
+  "port": "identity-provider-port",
+  "adapter": "mock-identity-provider-adapter",
+  "environment": "hermetic",
+  "liveExternalProviderClaim": false,
+  "sourceRefs": [
+    "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts",
+    "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts"
+  ],
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Provider",
+    "Provider Mode",
+    "Adapter",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "provider-classification"
+  ],
+  "vocabularyRefs": [
+    "provider-modes",
+    "environment-classes"
+  ],
+  "aiGuidance": "Mock identity provider evidence is valid hermetic proof only and never satisfies a live-external-provider claim."
+}

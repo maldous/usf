@@ -1,0 +1,42 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INSTANCE-005",
+  "instances": {
+    "spec/instances/environment/a.json": {
+      "id": "environment.duplicate",
+      "environment": "hermetic",
+      "title": "Duplicate Environment A",
+      "description": "Planted duplicate instance identifier for validator selftest.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Environment"
+      ],
+      "taxonomyRefs": [
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "environment-classes"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    },
+    "spec/instances/environment/b.json": {
+      "id": "environment.duplicate",
+      "environment": "integration",
+      "title": "Duplicate Environment B",
+      "description": "Second planted duplicate instance identifier for validator selftest.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Environment"
+      ],
+      "taxonomyRefs": [
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "environment-classes"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    }
+  }
+}

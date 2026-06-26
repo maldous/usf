@@ -1,0 +1,68 @@
+{
+  "id": "ui.authentication-login",
+  "uiKind": "journey",
+  "title": "Authentication Login UI Journey",
+  "description": "Draft UI semantic model instance for the login journey, separate from visual styling and source JSX structure.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "UI Semantic Model",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "ui-semantic-classification"
+  ],
+  "vocabularyRefs": [
+    "ui-semantic-kinds"
+  ],
+  "aiGuidance": "Regenerate UI from semantics; do not invent validation, permission, accessibility, or journey behaviour from visual design.",
+  "surface": "authentication",
+  "route": "/login",
+  "journeys": [
+    {
+      "id": "login-attempt",
+      "name": "Login attempt",
+      "steps": [
+        "render login surface",
+        "submit credentials or provider selection",
+        "receive authenticated or denied state",
+        "record audit and observability correlation"
+      ]
+    }
+  ],
+  "states": [
+    "unauthenticated",
+    "authenticating",
+    "authenticated",
+    "denied"
+  ],
+  "validations": [
+    "required login input is represented before submission"
+  ],
+  "errors": [
+    "authentication denied state is explicit"
+  ],
+  "permissions": [
+    "anonymous-login-attempt"
+  ],
+  "accessibility": [
+    "login controls have programmatic names",
+    "error state is announced without relying on visual styling only"
+  ],
+  "userActions": [
+    "submit-login"
+  ],
+  "commandQueryMappings": [
+    "interface.authentication-login-api"
+  ],
+  "capabilityRefs": [
+    "semantic-contract.authentication-platform"
+  ],
+  "proofRefs": [
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts"
+  ],
+  "sourceRefs": [
+    "apps/react-enterprise-app/src/auth/login-providers.ts",
+    "apps/react-enterprise-app/src/components/RequirePermission.tsx"
+  ]
+}

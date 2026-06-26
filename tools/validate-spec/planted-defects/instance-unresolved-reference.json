@@ -1,0 +1,46 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INSTANCE-004",
+  "instances": {
+    "spec/instances/workflow/unresolved-participant-reference.json": {
+      "id": "workflow.unresolved-participant-reference",
+      "workflowKind": "workflow",
+      "title": "Unresolved Participant Reference Workflow",
+      "description": "Planted workflow with an unresolved participant reference in a newly validated relationship field.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Workflow"
+      ],
+      "taxonomyRefs": [
+        "event-workflow-classification"
+      ],
+      "vocabularyRefs": [
+        "event-workflow-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "participants": [
+        "interface.missing"
+      ],
+      "ordering": "single planted validation step",
+      "steps": [
+        {
+          "id": "planted-step",
+          "description": "Exercise workflow validation."
+        }
+      ],
+      "stateTransitions": [
+        {
+          "from": "start",
+          "to": "finish"
+        }
+      ],
+      "failurePaths": [
+        "unresolved participant fails validation"
+      ],
+      "compensationPaths": [
+        "no compensation for planted selftest"
+      ]
+    }
+  }
+}

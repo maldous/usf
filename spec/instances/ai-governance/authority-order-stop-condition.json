@@ -1,0 +1,40 @@
+{
+  "id": "ai-governance.authority-order-stop-condition",
+  "aiKind": "required-stop-condition",
+  "title": "Authority Order Stop Condition",
+  "description": "Draft AI governance instance recording that unresolved authority conflict is a stop condition, not a reason to infer semantics.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "AI Agent"
+  ],
+  "taxonomyRefs": [
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "ai-governance-kinds",
+    "authority-levels"
+  ],
+  "aiGuidance": "AI-generated output is operational assistance only. USF semantics, ADRs, validators, and proof evidence define truth.",
+  "rationale": "The Charter and Authority Model require agents to stop rather than invent behaviour when semantic authority is missing or contradictory.",
+  "references": [
+    "AGENTS.md",
+    "CODEX.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/charter.md"
+  ],
+  "authorityOrderAcknowledged": true,
+  "stopConditions": [
+    "foundational artefact missing",
+    "JSON catalogue cannot be parsed",
+    "source evidence contradicts accepted USF semantics",
+    "task requires implementation code without approved directive",
+    "authority conflict cannot be resolved safely"
+  ],
+  "driftRisks": [
+    "implementation-only reasoning",
+    "generated report treated as canonical",
+    "historical source path treated as future target path"
+  ],
+  "treatedAsAuthoritative": false
+}
