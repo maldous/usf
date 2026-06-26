@@ -2,14 +2,18 @@
   "id": "provider-mode.mock-identity-provider",
   "title": "Mock Identity Provider Hermetic Mode",
   "providerMode": "hermetic-mock",
-  "description": "Draft provider-mode instance for mock identity provider use as hermetic proof only. This mode can support behaviour-proven hermetic evidence for the authentication slice, but it never satisfies live-external-provider, external-sandbox, production-shaped, or production-live claims by naming or environment implication.",
+  "description": "Draft provider-mode instance for mock identity provider use as hermetic proof only. This mode can support behaviour-proven hermetic evidence for the authentication slice, including unavailable-provider, timeout, retry-denied, degraded-mode, recovery, health-check, and misconfiguration semantics when an authorised proof exercises them. It never satisfies live-external-provider, external-sandbox, production-shaped, or production-live claims by naming or environment implication.",
   "port": "identity-provider-port",
   "adapter": "mock-identity-provider-adapter",
   "environment": "hermetic",
   "liveExternalProviderClaim": false,
   "sourceRefs": [
     "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts",
-    "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts"
+    "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts",
+    "apps/platform-api/scripts/provider-readiness-contract-runtime-proof.ts",
+    "apps/platform-api/src/adapters/http-provider-readiness-probe.ts",
+    "apps/platform-api/src/server/auth-providers.ts",
+    "apps/platform-api/tests/unit/auth-providers.test.ts"
   ],
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
@@ -26,5 +30,5 @@
     "provider-modes",
     "environment-classes"
   ],
-  "aiGuidance": "Mock identity provider evidence is valid hermetic proof only. Do not upgrade it to live-external-provider, external-sandbox, production-shaped, or production-live evidence from environment name, route name, generated report status, or source resemblance."
+  "aiGuidance": "Mock identity provider evidence is valid hermetic proof only. Provider failure, timeout, retry, degraded mode, health check, recovery, and misconfiguration outcomes must fail closed unless fresh authorised proof records the behaviour. Do not upgrade this evidence to live-external-provider, external-sandbox, production-shaped, or production-live evidence from environment name, route name, generated report status, or source resemblance."
 }
