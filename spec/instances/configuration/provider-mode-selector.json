@@ -3,8 +3,8 @@
   "configurationKind": "provider-configuration",
   "key": "provider-mode-selector",
   "title": "Provider Mode Selector Configuration",
-  "description": "Draft configuration semantic instance for explicit provider-mode selection and proof honesty.",
-  "purpose": "Keep provider mode explicit so hermetic, local-composed, sandbox, and live-external claims are not upgraded by implication.",
+  "description": "Draft configuration semantic instance for explicit provider-mode selection and proof honesty. The first assurance slice treats this as non-secret, non-generated, proof-relevant configuration that must preserve provider/environment separation.",
+  "purpose": "Keep provider mode explicit so hermetic, local-composed, sandbox, live-external, production-shaped, and production-live claims are not upgraded by implication. If this configuration becomes generated in a later slice, it must declare generated-source lineage through sourceManifest before any readiness claim can depend on it.",
   "secretBearing": false,
   "providerMode": "hermetic-mock",
   "environment": "hermetic",
@@ -30,5 +30,5 @@
     "provider-modes",
     "environment-classes"
   ],
-  "aiGuidance": "Provider mode is proof-relevant configuration. Never infer live-external readiness from environment name or generated reports."
+  "aiGuidance": "Provider mode is proof-relevant configuration. Never infer live-external readiness from environment name, generated reports, source paths, or route naming. Secret-bearing variants must not carry literal values, and generated variants must cite sourceManifest."
 }

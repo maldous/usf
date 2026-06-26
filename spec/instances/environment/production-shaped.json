@@ -2,7 +2,7 @@
   "id": "environment.production-shaped",
   "environment": "production-shaped",
   "title": "Production Shaped Environment",
-  "description": "Draft environment instance for production-shaped validation that is explicitly not production-live.",
+  "description": "Draft environment instance for production-shaped validation that is explicitly not production-live. Production-shaped can exercise production-like topology or configuration, but it cannot satisfy production-live, live-external-provider, or external live readiness without separately authorised evidence.",
   "permittedProviderModes": [
     "local-composed-real-service",
     "external-sandbox"
@@ -28,5 +28,5 @@
     "environment-classes",
     "provider-modes"
   ],
-  "aiGuidance": "Production-shaped does not satisfy production-live and cannot be used as live external provider readiness evidence."
+  "aiGuidance": "Production-shaped does not satisfy production-live and cannot be used as live external provider readiness evidence. Do not infer production-live from naming, generated reports, source paths, or passing hermetic proof."
 }
