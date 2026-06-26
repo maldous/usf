@@ -1,7 +1,7 @@
 {
   "id": "interface.authentication-login-api",
   "title": "Authentication Login API Contract",
-  "description": "Draft USF-native interface contract for an authentication login boundary, source-backed by historical OpenAPI and authentication proof evidence.",
+  "description": "Draft USF-native interface contract for an authentication login boundary, source-backed by historical OpenAPI and authentication proof evidence. The first proof slice treats this as the governed inbound interface for request validation, response shape, error semantics, permission boundary, audit event production, and workflow participation.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -17,32 +17,38 @@
   ],
   "aiGuidance": "Keep the contract USF-native per ADR 0002. Do not claim OpenAPI compliance from this instance alone.",
   "interfaceKind": "api-route",
-  "purpose": "Represent the authenticated login boundary as a governed contract before implementation extraction.",
-  "boundary": "platform-api inbound authentication boundary",
+  "purpose": "Represent the authenticated login boundary as a governed contract before implementation extraction, including validation, output shape, error paths, permission boundary, audit production, and workflow linkage.",
+  "boundary": "platform-api inbound authentication boundary; it accepts anonymous login initiation and callback/session requests, emits authenticated or denied outcomes, and must not expose provider tokens or trust client-supplied tenant identity.",
   "semanticContractRef": "semantic-contract.authentication-platform",
   "requestContract": {
-    "description": "Login request semantics cover provider selection, callback state binding, session lookup, logout, and custom-domain callback derivation. Field-level request schema remains deferred, but validation semantics are source-backed.",
+    "description": "Login request semantics cover provider selection, callback state binding, session lookup, logout, custom-domain callback derivation, tenant host context, and redirect origin validation. Field-level request schema remains deferred, but validation semantics are source-backed and must reject missing state, invalid callback origin, provider mismatch, absent session, and unsafe tenant context.",
     "fields": [
       "provider-selection",
       "callback-state-token",
       "session-cookie",
-      "custom-domain-origin"
+      "custom-domain-origin",
+      "tenant-host-context",
+      "redirect-origin"
     ]
   },
   "responseContract": {
-    "description": "Login response semantics return authenticated, denied, provider-failure, or no-session states without exposing raw identity-provider tokens.",
+    "description": "Login response semantics return authenticated, denied, validation-failure, provider-failure, no-session, and logout states without exposing raw identity-provider tokens. A behaviour proof must observe both success and failure outcomes and must link claimed outcomes to audit and workflow semantics.",
     "fields": [
       "authenticated-session",
       "denied-login",
+      "validation-failure",
       "provider-failure",
-      "no-session"
+      "no-session",
+      "logout-complete",
+      "audit-event-reference",
+      "workflow-state"
     ]
   },
   "permissions": [
     "anonymous-login-attempt",
     "authenticated-session-creation"
   ],
-  "security": "Authentication boundary must preserve fail-closed authorization defaults and audited session creation.",
+  "security": "Authentication boundary must preserve fail-closed authorization defaults, audited session creation, explicit denied/error outcomes, and event emission through event.authentication-login-audit and workflow.authentication-login. Historical route evidence remains source evidence only and cannot override the USF-native interface contract.",
   "driftDetectable": true,
   "sourceRefs": [
     "docs/api/openapi.json",
@@ -51,6 +57,7 @@
     "apps/platform-api/src/server/session.ts",
     "apps/platform-api/src/usecases/auth.ts",
     "apps/platform-api/tests/substrate/auth-routes.test.ts",
+    "apps/platform-api/tests/unit/auth-usecase.test.ts",
     "docs/evidence/identity/keycloak-login-callback.md",
     "docs/evidence/auth/custom-domain-auth-origin.md"
   ]
