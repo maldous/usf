@@ -2,7 +2,7 @@
   "id": "workflow.authentication-identity-context",
   "workflowKind": "cross-capability-interaction",
   "title": "Authentication Identity Context Interaction",
-  "description": "Draft cross-capability workflow linking authentication login with tenant identity, user membership, host resolution, and RBAC semantics for the first implementation slice. The first workflow assurance slice requires invalid ordering, missing tenant context, missing membership, missing audit, and missing or stale proof evidence to fail closed.",
+  "description": "Draft cross-capability workflow linking authentication login with tenant identity, user membership, host resolution, RBAC, audit, observability, and proof-command semantics for the first implementation slice. The first workflow assurance slice requires invalid ordering, missing tenant context, missing membership, missing audit, missing observability correlation, unauthorized permission context, and missing or stale proof evidence to fail closed.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -15,16 +15,22 @@
   "vocabularyRefs": [
     "event-workflow-kinds"
   ],
-  "aiGuidance": "Preserve this interaction as a semantic contract. Do not collapse tenant identity, membership, and RBAC into authentication implementation details.",
+  "aiGuidance": "Preserve this interaction as a semantic contract. Do not collapse tenant identity, membership, RBAC, audit, observability, or proof evidence into authentication implementation details. Absence of a listed interaction is non-applicable for this slice rather than permission to infer behaviour from source structure.",
   "participants": [
     "semantic-contract.authentication-platform",
     "semantic-contract.tenant-identity-record-and-fqdn",
     "semantic-contract.user-identity-and-tenant-membership",
     "semantic-contract.rbac-roles-and-permissions",
     "semantic-contract.tenant-host-identity-resolution",
-    "workflow.authentication-login"
+    "workflow.authentication-login",
+    "event.authentication-login-audit",
+    "audit.authentication-login",
+    "observability.authentication-login-audit",
+    "provider-mode.mock-identity-provider",
+    "environment.hermetic",
+    "command.authentication-slice-proof"
   ],
-  "ordering": "resolve host tenant identity, reject inactive or other-tenant host ownership, validate login request, reject illegal ordering, resolve external identity and membership for the resolved tenant, deny absent or other-tenant membership, project session actor, evaluate permissions for protected surfaces, preserve audit/evidence correlation",
+  "ordering": "resolve host tenant identity, reject inactive or other-tenant host ownership, validate login request, preserve provider-mode and environment boundaries, reject illegal ordering, resolve external identity and membership for the resolved tenant, deny absent or other-tenant membership, project session actor, evaluate permissions for protected surfaces, record audit, emit observability correlation, and preserve proof evidence correlation",
   "steps": [
     {
       "id": "resolve-host-tenant",
@@ -38,7 +44,7 @@
     },
     {
       "id": "authenticate-user",
-      "description": "Run authentication login workflow and preserve denied/provider-failure outcomes.",
+      "description": "Run authentication login workflow and preserve denied/provider-failure outcomes without treating the provider substrate as stronger than observed.",
       "operation": "workflow.authentication-login"
     },
     {
@@ -55,6 +61,21 @@
       "id": "evaluate-permission-context",
       "description": "Apply RBAC permissions to authenticated request context without replacing permissions with role-name resemblance.",
       "operation": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "id": "record-cross-capability-audit",
+      "description": "Record authentication, tenant-boundary, membership, permission, denied, and illegal-transition outcomes through the authentication audit event before proof success is claimed.",
+      "operation": "audit.authentication-login"
+    },
+    {
+      "id": "correlate-observability-signal",
+      "description": "Emit or preserve observability correlation for provider mode, request, proof, and capability identifiers without treating generated reports as authority.",
+      "operation": "observability.authentication-login-audit"
+    },
+    {
+      "id": "preserve-proof-boundary",
+      "description": "Bind the cross-capability interaction to the proof-only authentication slice command and fail closed when proof evidence is missing, stale, or claims a stronger provider/environment posture than observed.",
+      "operation": "command.authentication-slice-proof"
     }
   ],
   "stateTransitions": [
@@ -87,6 +108,16 @@
       "from": "session-actor-projected",
       "to": "permission-context-ready",
       "trigger": "rbac-evaluated"
+    },
+    {
+      "from": "permission-context-ready",
+      "to": "audit-and-observability-correlated",
+      "trigger": "audit-recorded-and-observability-correlated"
+    },
+    {
+      "from": "audit-and-observability-correlated",
+      "to": "proof-ready",
+      "trigger": "fresh-hermetic-proof-evidence-bound"
     }
   ],
   "failurePaths": [
@@ -97,13 +128,19 @@
     "other-tenant-membership-fails-closed",
     "cross-tenant-read-write-denied",
     "permission-denied-fails-closed",
+    "permission-context-without-authenticated-membership-fails-closed",
+    "audit-event-missing-fails-proof-claim",
+    "observability-correlation-missing-fails-proof-claim",
     "provider-mode-must-not-upgrade-by-environment",
+    "hermetic-proof-must-not-upgrade-to-live-provider-or-production-live",
     "illegal-membership-projection-transition-fails-closed",
     "missing-audit-evidence-fails-workflow-readiness",
     "proof-evidence-missing-or-stale-fails-workflow-readiness"
   ],
   "compensationPaths": [
     "no-compensating-action-for-denied-authentication; preserve audit and observability semantics",
+    "no-compensating-action-for-invalid-host-or-membership; deny before session projection and preserve audit evidence",
+    "no-compensating-action-for-permission-denied; keep session state unchanged and preserve denied authorization audit semantics",
     "no-compensating-action-for-illegal-transition; deny and preserve audit/evidence failure"
   ],
   "relatedEvents": [
@@ -116,8 +153,13 @@
     "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
     "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
     "apps/platform-api/src/server/auth.ts",
+    "apps/platform-api/src/server/session.ts",
     "apps/platform-api/src/usecases/auth.ts",
     "apps/platform-api/src/server/authorize-resource.ts",
+    "apps/platform-api/src/usecases/audit.ts",
+    "apps/platform-api/tests/substrate/session-fixture.test.ts",
+    "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
+    "apps/platform-api/tests/unit/authorize-resource.test.ts",
     "docs/evidence/identity/keycloak-login-callback.md"
   ]
 }
