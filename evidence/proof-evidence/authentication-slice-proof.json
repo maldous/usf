@@ -1,0 +1,51 @@
+{
+  "id": "usf.proof-evidence.authentication-slice-proof",
+  "kind": "proof",
+  "title": "Authentication slice proof",
+  "description": "Draft USF proof-evidence record emitted by the bounded proof-only authentication slice harness. It exercises the committed USF authentication login API, audit, workflow, provider-mode, and hermetic environment semantics without creating product runtime or importing React runtime code.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Proof",
+    "Proof Level",
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "proof-classification",
+    "provider-classification",
+    "environment-classification"
+  ],
+  "vocabularyRefs": [
+    "proof-levels",
+    "provider-modes",
+    "environment-classes",
+    "evidence-kinds"
+  ],
+  "aiGuidance": "This is hermetic proof-only evidence for the semantic authentication slice. It does not start USF-39, authorise implementation extraction, claim live-external-provider readiness, or claim production-live readiness.",
+  "claimExercised": "The proof-only harness asserted the authentication login API/audit/workflow/provider-mode slice: login request and response semantics, audit event production and consumption, workflow participants and operations, hermetic mock provider mode, hermetic environment constraints, and observability/audit correlation.",
+  "proofLevelClaimed": "behaviour-proven",
+  "proofLevelObserved": "behaviour-proven",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "liveExternalProviderClaim": false,
+  "emittedEvidence": [
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/0",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/1",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/2",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/3",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/4",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/5",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/6",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/7",
+    "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/8"
+  ],
+  "collectedEvidence": [
+    "evidence.runtime-proof.authentication-slice-proof",
+    "evidence.normalised.authentication-slice-proof-lineage"
+  ],
+  "freshness": {
+    "commit": "cdbe3f971d71a496c97b3b6cb9399ce625580987",
+    "stale": false
+  },
+  "failureSemantics": "If any required semantic instance, reference, provider/environment invariant, emitted evidence, collected evidence, or freshness pin is missing or stale, the proof fails closed and must not satisfy readiness. Checks executed: command is proof-only; command emits evidence; command includes hermetic scope; semantic contract is authentication; semantic proof facet complete; interface binds semantic contract; interface request carries provider-selection; interface request carries callback-state-token; interface request carries session-cookie; interface request carries custom-domain-origin; interface response carries authenticated-session; interface response carries denied-login; interface response carries provider-failure; interface response carries no-session; interface drift detectable; event producer is interface; event consumer is audit; event is canonical; workflow participant interface.authentication-login-api; workflow participant provider-mode.mock-identity-provider; workflow participant audit.authentication-login; workflow operation interface.authentication-login-api; workflow operation provider-mode.mock-identity-provider; workflow operation audit.authentication-login; workflow relates audit event; workflow relates interface; provider mode is hermetic mock; provider environment is hermetic; provider has no live claim; environment is hermetic; environment permits hermetic mock; environment has no production live claim; audit is security sensitive; audit is state changing; audit related interface; audit related workflow; observability source is audit; observability attribute provider-mode; observability attribute request-id; observability attribute proof-id; observability attribute capability-id"
+}
