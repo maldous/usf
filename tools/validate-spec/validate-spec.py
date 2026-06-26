@@ -226,6 +226,11 @@ RULES = {
     "USF-IMPORT-005":   ("blocking", "Source import manifest targetUsfConcept reuses a source path"),
     "USF-IMPORT-006":   ("blocking", "Package metadata is not classified as a package unit"),
     "USF-IMPORT-007":   ("blocking", "Runtime proof script is not classified as proof evidence"),
+    "USF-IMPORT-008":   ("blocking", "Source import sub-manifest invalid against import-manifest schema"),
+    "USF-IMPORT-009":   ("blocking", "Source import sub-manifest row does not reconcile to baseline manifest"),
+    "USF-IMPORT-010":   ("blocking", "Source import sub-manifest sourceRef.path values are missing or duplicated"),
+    "USF-IMPORT-011":   ("blocking", "Source import sub-manifest targetUsfConcept is not extraction-useful"),
+    "USF-IMPORT-012":   ("blocking", "Source import sub-manifest entry count mismatch"),
     "USF-EVIDENCE-001": ("blocking", "Evidence envelope invalid against evidence-envelope schema"),
     "USF-EVIDENCE-002": ("blocking", "Proof evidence invalid against proof-evidence schema"),
     "USF-EVIDENCE-003": ("blocking", "Evidence/proof id is duplicated"),
@@ -827,33 +832,34 @@ def check_imports(ctx, F):
     against ../react remains documented evidence until a source-evidence harness is
     authorised.
     """
-    path = "spec/registries/source-import-manifest.json"
-    if not os.path.exists(path):
+    baseline_path = "spec/registries/source-import-manifest.json"
+    if not os.path.exists(baseline_path):
         return "not-run"
-    data = load_json(path, F)
+    data = load_json(baseline_path, F)
     if data is None:
         return "ran"
     errors = list(Draft202012Validator(ctx["sd"]["import-manifest"]).iter_errors(data))
     for err in errors:
-        F.add("USF-IMPORT-001", path, err.message[:160])
+        F.add("USF-IMPORT-001", baseline_path, err.message[:160])
     if errors or not isinstance(data, dict):
         return "ran"
 
     entries = data.get("entries")
     if not isinstance(entries, list):
-        F.add("USF-IMPORT-001", path, "entries must be an array")
+        F.add("USF-IMPORT-001", baseline_path, "entries must be an array")
         return "ran"
     expected_count = 1673
     if len(entries) != expected_count:
-        F.add("USF-IMPORT-002", path, f"{len(entries)} entries != expected {expected_count}")
+        F.add("USF-IMPORT-002", baseline_path, f"{len(entries)} entries != expected {expected_count}")
 
     seen_paths = set()
     duplicate_paths = set()
+    baseline_by_path = {}
     source_kinds = ctx["canon"].get("source-kinds", set())
     source_roles = ctx["canon"].get("source-roles", set())
     dispositions = ctx["canon"].get("disposition-values", set())
     for i, entry in enumerate(entries):
-        subject = f"{path}:entries[{i}]"
+        subject = f"{baseline_path}:entries[{i}]"
         source_ref = entry.get("sourceRef") if isinstance(entry, dict) else None
         source_path = source_ref.get("path") if isinstance(source_ref, dict) else None
         if not source_path:
@@ -862,6 +868,7 @@ def check_imports(ctx, F):
             duplicate_paths.add(source_path)
         else:
             seen_paths.add(source_path)
+            baseline_by_path[source_path] = entry
 
         for field, allowed in (("sourceKind", source_kinds), ("sourceRole", source_roles), ("disposition", dispositions)):
             value = entry.get(field) if isinstance(entry, dict) else None
@@ -885,7 +892,62 @@ def check_imports(ctx, F):
                 F.add("USF-IMPORT-007", source_path, f"{entry.get('sourceKind')}/{entry.get('sourceRole')}")
 
     if duplicate_paths:
-        F.add("USF-IMPORT-003", path, f"duplicate sourceRef.path values: {sorted(duplicate_paths)[:10]}")
+        F.add("USF-IMPORT-003", baseline_path, f"duplicate sourceRef.path values: {sorted(duplicate_paths)[:10]}")
+
+    broad_targets = {
+        "Configuration",
+        "Package / Module",
+        "Proof",
+        "Source Reference",
+    }
+    for sub_path in sorted(glob.glob("spec/registries/*source-import-manifest.json")):
+        if sub_path == baseline_path:
+            continue
+        sub_data = load_json(sub_path, F)
+        if sub_data is None:
+            continue
+        sub_errors = list(Draft202012Validator(ctx["sd"]["import-manifest"]).iter_errors(sub_data))
+        for err in sub_errors:
+            F.add("USF-IMPORT-008", sub_path, err.message[:160])
+        if sub_errors or not isinstance(sub_data, dict):
+            continue
+        sub_entries = sub_data.get("entries")
+        if not isinstance(sub_entries, list):
+            F.add("USF-IMPORT-008", sub_path, "entries must be an array")
+            continue
+        if sub_path.endswith("authentication-slice-source-import-manifest.json") and len(sub_entries) != 159:
+            F.add("USF-IMPORT-012", sub_path, f"{len(sub_entries)} entries != expected 159")
+        sub_seen_paths = set()
+        sub_duplicate_paths = set()
+        for i, entry in enumerate(sub_entries):
+            subject = f"{sub_path}:entries[{i}]"
+            source_ref = entry.get("sourceRef") if isinstance(entry, dict) else None
+            source_path = source_ref.get("path") if isinstance(source_ref, dict) else None
+            if not source_path:
+                F.add("USF-IMPORT-010", subject, "sourceRef.path is required for sub-manifest reconciliation")
+                continue
+            if source_path in sub_seen_paths:
+                sub_duplicate_paths.add(source_path)
+            sub_seen_paths.add(source_path)
+            baseline_entry = baseline_by_path.get(source_path)
+            if baseline_entry is None:
+                F.add("USF-IMPORT-009", source_path, "not present in baseline source-import manifest")
+                continue
+            for field in ("sourceKind", "sourceRole", "disposition"):
+                if entry.get(field) != baseline_entry.get(field):
+                    F.add("USF-IMPORT-009", subject, f"{field}={entry.get(field)!r} does not match baseline {baseline_entry.get(field)!r}")
+            target = entry.get("targetUsfConcept") if isinstance(entry, dict) else None
+            if (
+                not isinstance(target, str)
+                or target in broad_targets
+                or target.startswith("planned ")
+                or target == source_path
+                or target.startswith("../")
+                or re.match(r"^(apps|packages|docs|spec|tools|evidence|config|infra|scripts|services|src)/", target)
+            ):
+                F.add("USF-IMPORT-011", subject, repr(target))
+        if sub_duplicate_paths:
+            F.add("USF-IMPORT-010", sub_path, f"duplicate sourceRef.path values: {sorted(sub_duplicate_paths)[:10]}")
     return "ran"
 
 

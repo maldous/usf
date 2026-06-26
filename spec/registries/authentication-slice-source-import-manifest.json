@@ -1,0 +1,2091 @@
+{
+  "id": "authentication-slice-source-import-manifest",
+  "title": "Authentication Slice Source Import Manifest",
+  "sourceRepository": "../react",
+  "description": "Controlled first-slice source import sub-manifest for authentication, identity-access, provider-mode, UI, proof, event, audit, observability, and data rows selected by the USF-65 capability/source coverage matrix. Rows reconcile to the baseline source import manifest and refine broad target concepts to authored semantic instances or specific governed slice concepts. This is historical-source-evidence only and imports no runtime/application code.",
+  "authorityLevel": "historical-source-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Source Reference",
+    "Disposition"
+  ],
+  "taxonomyRefs": [
+    "source-evidence-classification",
+    "source-role-classification"
+  ],
+  "vocabularyRefs": [
+    "source-kinds",
+    "source-roles",
+    "disposition-values"
+  ],
+  "aiGuidance": "Use this sub-manifest for first-slice source-use decisions in USF-64. Do not copy code or treat disposition as implementation acceptance.",
+  "entries": [
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": ".claude/skills/auth-redaction-review/SKILL.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0214. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:auth-settings. Protecting tests: apps/platform-api/scripts/auth-settings-runtime-proof.ts. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:composed-provider-readiness. Protecting tests: apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:domain-identity-matrix. Protecting tests: apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts. Historical decision refs: ADR-ACT-0230, ADR-ACT-0234. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/scripts/observability-signals-runtime-proof.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:observability-signals. Protecting tests: apps/platform-api/scripts/observability-signals-runtime-proof.ts. Historical decision refs: ADR-ACT-0284. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "observability.authentication-login-audit; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/scripts/oidc-enterprise-runtime-proof.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:oidc-enterprise. Protecting tests: apps/platform-api/scripts/oidc-enterprise-runtime-proof.ts. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: proof:provider-environment-classification. Protecting tests: apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TenantDomainRegistry. Protecting tests: npm run proof:tenant-custom-domain-auth-origin. Historical decision refs: ADR-ACT-0230, ADR-ACT-0234. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/db/migrations/001-identity-schema.sql",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "data-migration-artefact",
+      "sourceRole": "data-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical deletion condition: n/a (checksum-immutable; forward-only). Protecting tests: npm run db-migrate. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "data.identity-schema; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/db/migrations/004-rls-policies.sql",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "data-migration-artefact",
+      "sourceRole": "data-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical deletion condition: n/a (checksum-immutable; forward-only). Protecting tests: npm run db-migrate. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "data.identity-schema; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/db/migrations/009-tenant-auth-settings-credentials.sql",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "data-migration-artefact",
+      "sourceRole": "data-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: tenant_auth_settings, tenant_auth_credentials. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/db/migrations/016-membership-identity-v2.sql",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "data-migration-artefact",
+      "sourceRole": "data-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: memberships, external_identities. Protecting tests: npm run test:platform-api. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/db/migrations/017-auth-settings-credential-lifecycle.sql",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "data-migration-artefact",
+      "sourceRole": "data-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: tenant_auth_credentials lifecycle. Protecting tests: npm run test:platform-api. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/ports/identity-repository.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: IdentityRepositoryPort. Protecting tests: npm run test:platform-api, npm run test:architecture. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/auth-providers.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/auth.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api, npm run test:e2e. Historical decision refs: ADR-0022, ADR-ACT-0157, ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/authorize-resource.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: authorizeResource. Protecting tests: npm run test:platform-api, npm run test:e2e. Historical decision refs: ADR-0021, ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/forward-auth.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api, npm run test:e2e. Historical decision refs: ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/observability.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0284. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "observability.authentication-login-audit; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/oidc-http-fetcher.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/routes.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "split",
+      "rationale": "Historical inventory disposition split normalized to split. Historical deletion condition: all per-resource route modules extracted and openapi drift gate green. Retained interfaces: routes. Protecting tests: npm run test:platform-api, npm run test:e2e, tools/architecture/validate-openapi-drift. Historical decision refs: ADR-ACT-0286, ADR-ACT-0287. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-identity-context"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/server/session.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: createFixtureSessionActor, getFixtureSession, FixtureRole. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-0022. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/usecases/audit.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-0021. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "audit.authentication-login; event.authentication-login-audit"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/usecases/auth-provider-config.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/usecases/auth-settings-readiness.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/usecases/auth-settings.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/usecases/auth.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: AuthUseCaseDeps, resolveSessionFromIdentity, destroySession. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-0021, ADR-0022. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/src/usecases/oidc-discovery.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/substrate/auth-routes.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157, ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-0036. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/substrate/session-fixture.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/auth-provider-config.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/auth-providers.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157, ADR-0040. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "audit.authentication-login; event.authentication-login-audit"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/auth-settings-readiness.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/auth-usecase.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/authorize-resource.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-0040. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/forward-auth.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/keycloak-mapper-readiness.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: keycloak protocol-mapper readiness check. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/oidc-discovery.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: OIDC discovery. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/platform-api/tests/unit/oidc-mapping.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: OIDC claim mapping. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/auth/login-providers.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical deletion condition: n/a \u2014 BFF provider contract is the semantic source for the V2 login UI. Retained interfaces: LoginProvider, loginProvidersQueryKey, login providers query hook (mirrors GET /api/auth/providers). Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/components/AuthenticatedLayout.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 _authenticated layout wraps Outlet in AppShell; session gating preserved. Retained interfaces: authenticated layout route wrapper. Protecting tests: apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "refactor",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: V2 permission-gate preserves deny/allow semantics; gating behaviour proven. Retained interfaces: RequirePermission props (permission gating), client-side permission check contract. Protecting tests: apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-0036. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/features/admin-auth/AdminAuthPage.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 auth page reproduces IdP journeys; page test green; redaction preserved. Retained interfaces: auth config journeys, permission gating, typed error states, secret redaction (no raw KC config). Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0036. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/features/admin-auth/IdpManager.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 IdP manager reproduces OIDC config behaviour; oidc test green. Retained interfaces: IdP CRUD journeys, OIDC option fields, form validation. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-auth page behaviour spec. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: OIDC IdP manager behaviour spec. Historical decision refs: ADR-ACT-0157, ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/features/admin-auth/admin-auth-client.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-auth/IdP REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx, apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/features/admin-auth/use-admin-auth.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/hooks/use-session.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession, sessionQueryKey, SessionFetchError, hasPermission. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0021. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/msw/fixtures/session.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: SessionPersona personas (tenantAdmin/viewer/systemAdmin/noMembership). Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: LoginRoute. Protecting tests: apps/react-enterprise-app/src/routes/__tests__/login.test.tsx. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/routes/_authenticated.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: authenticated layout route, session guard/redirect behaviour. Historical decision refs: ADR-ACT-0203, ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/routes/admin/auth.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition replace-retain-contract normalized to replace. Retained interfaces: /admin/auth route, IdP config behaviour, permission gating. Historical decision refs: ADR-ACT-0157, ADR-0036. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/routes/login.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition replace-retain-contract normalized to replace. Retained interfaces: /login route, native-auth (OIDC Option B) behaviour, KC-parity visuals. Historical decision refs: ADR-ACT-0157, ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: _authenticated layout guard. Protecting tests: apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx. Historical decision refs: ADR-ACT-0203. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "apps/react-enterprise-app/src/tests/use-session.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession hook. Protecting tests: apps/react-enterprise-app/src/tests/use-session.test.ts. Historical decision refs: ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docker/keycloak/themes/platform/login/error.ftl",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: kc-brokered-idp-failure-bounce-to-app-login. Protecting tests: test:e2e (auth journeys). Historical decision refs: ADR-ACT-0157, ADR-ACT-0156, ADR-0022. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docker/keycloak/themes/platform/login/login.ftl",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: kc-invisible-auth-themed-login-form. Protecting tests: test:e2e (auth journeys). Historical decision refs: ADR-ACT-0157, ADR-0022. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docker/keycloak/themes/platform/login/resources/css/brand-6.css",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "rename",
+      "rationale": "Historical inventory disposition git-move normalized to rename. Historical deletion condition: rename to brand.css (drop -6 cache-bust suffix); update theme.properties styles= reference and purge CDN cache after move. Retained interfaces: kc-app-pixel-identical-brand-overrides. Protecting tests: test:e2e (auth visual consistency). Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docker/keycloak/themes/platform/login/theme.properties",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "refactor",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: kc-theme-parent-keycloak.v2, styles-load-order. Protecting tests: test:e2e (auth visual consistency). Historical decision refs: ADR-ACT-0157, ADR-ACT-0156. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0021-define-identity-tenancy-roles-and-permissions-model.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: identity-tenancy-rbac-model. Protecting tests: test:platform-api. Historical decision refs: ADR-0021. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0022-define-authentication-session-and-sso-integration-boundary.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: auth-session-sso-boundary. Protecting tests: test:platform-api, test:e2e. Historical decision refs: ADR-0022, ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0030-define-dynamic-authorisation-and-tenant-admin-self-service.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: dynamic-authz-tenant-admin. Protecting tests: test:platform-api. Historical decision refs: ADR-0030. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0037-per-tenant-authentication-provider-configuration.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: per-tenant-auth-provider-config. Protecting tests: test:platform-api. Historical decision refs: ADR-0037. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0038-tenant-identity-and-membership-v2.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ADR-0038. Protecting tests: adr-compliance, node tools/architecture/orchestrator/src/index.mjs all. Historical decision refs: ADR-0038. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-identity-context"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0041-per-tenant-auth-settings-credential-provisioning.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ADR-0041. Protecting tests: adr-compliance, auth-redaction-review. Historical decision refs: ADR-0041. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0042-writable-mfa-policy-and-auth-settings-runtime-proof.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ADR-0042. Protecting tests: adr-compliance, auth-redaction-review. Historical decision refs: ADR-0042. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0044-auth-settings-credential-lifecycle.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ADR-0044. Protecting tests: adr-compliance, auth-redaction-review. Historical decision refs: ADR-0044. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0046-oidc-enterprise-hardening.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ADR-0046. Protecting tests: adr-compliance, auth-redaction-review. Historical decision refs: ADR-0046. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/adr/0073-composed-service-sso-via-keycloak-oidc.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ADR-0073. Protecting tests: adr-compliance, auth-redaction-review. Historical decision refs: ADR-0073. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/api/openapi.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "semantic-artefact",
+      "sourceRole": "semantic-source",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: OpenAPI 3.1 BFF REST surface. Protecting tests: validate-openapi-drift --strict, openapi-route-review, npm run test:platform-api. Historical decision refs: ADR-0013, ADR-ACT-0286, ADR-ACT-0287. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-identity-context"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/auth-settings-credential-lifecycle.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run proof:auth-settings. Historical decision refs: ADR-0022, ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/custom-domain-auth-origin.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run test:e2e. Historical decision refs: ADR-0029. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.tenant-host-identity-resolution; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/oidc-enterprise-hardening.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run test:e2e. Historical decision refs: ADR-0022. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/oidc-login-mapping-proof.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run test:e2e. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/per-tenant-auth-settings-credential-provisioning.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run proof:auth-settings. Historical decision refs: ADR-0022, ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/real-keycloak-login.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run test:e2e. Historical decision refs: ADR-0022, ADR-0029, ADR-ACT-0155. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/writable-idp-management-secret-redaction.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-0022. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/auth/writable-mfa-policy-and-runtime-proof.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run proof:auth-settings. Historical decision refs: ADR-0022, ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/identity/identity-access-baseline.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "generated-report",
+      "sourceRole": "generated-summary-evidence",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a \u2014 historical identity baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/identity/identity-access-baseline.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical identity baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/identity/keycloak-login-callback.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "generated-report",
+      "sourceRole": "generated-summary-evidence",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a \u2014 historical login-callback proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/identity/keycloak-login-callback.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical login-callback proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/identity/keycloak-provisioning-baseline.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "generated-report",
+      "sourceRole": "generated-summary-evidence",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a \u2014 historical provisioning baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/identity/keycloak-provisioning-baseline.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical provisioning baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/identity/tenant-identity-membership-v2.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "rename",
+      "rationale": "Historical inventory disposition git-move normalized to rename. Historical deletion condition: n/a \u2014 rename drops transitional -v2 suffix to clean V2 name. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157, ADR-ACT-0230. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/infrastructure/mock-oidc-broker-tests.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical mock-oidc broker proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/evidence/platform/domain-identity-capability-permutation-review.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical decision refs: ADR-ACT-0230, ADR-ACT-0234. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/local-development/mock-identity.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-identity-context"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/local-development/real-login-e2e.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: npm run test:e2e. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "docs/specs/2026-05-29-keycloak-auth-e2e.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "semantic-artefact",
+      "sourceRole": "semantic-source",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Protecting tests: npm run test:e2e. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "e2e/discovery/persona-authz.spec.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "e2e-journey",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: persona authz journey assertions. Protecting tests: npm run test:e2e. Historical decision refs: ADR-0075, ADR-ACT-0285. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "e2e/external/auth-negative.spec.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "e2e-journey",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: auth negative-path assertions. Protecting tests: npm run test:e2e:prod. Historical decision refs: ADR-0075, ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "e2e/external/login.spec.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "e2e-journey",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: login journey assertions. Protecting tests: npm run test:e2e:prod. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "e2e/identity/broker-login.spec.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "e2e-journey",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: broker-login journey assertions. Protecting tests: npm run test:e2e. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "e2e/identity/global-setup.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: identity global-setup fixture bootstrap. Protecting tests: npm run test:e2e. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "e2e/identity/redirect-merge.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: mergeRedirect pure-function contract. Protecting tests: e2e/identity/redirect-merge.test.ts. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "e2e/identity/redirect-merge.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: mergeRedirect helper. Protecting tests: e2e/identity/redirect-merge.test.ts. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/ci-oidc/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/ci-oidc/main.tf",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ci-oidc IAM OIDC provider/role resources. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/ci-oidc/outputs.tf",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ci-oidc module outputs. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/ci-oidc/variables.tf",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ci-oidc module input variables. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/keycloak/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/keycloak/main.tf",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: keycloak realm/client terraform resources. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/keycloak/outputs.tf",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: keycloak module outputs. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/keycloak/variables.tf",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: keycloak module input variables. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "infra/modules/keycloak/versions.tf",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: terraform required_providers pinning. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/adapters-keycloak/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/adapters-keycloak/package.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/adapters-keycloak. Historical decision refs: ADR-ACT-0157, ADR-ACT-0282. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/adapters-keycloak/src/index.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "refactor",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: @platform/adapters-keycloak, KeycloakAdapter, token-exchange, getUserInfo. Protecting tests: packages/adapters-keycloak/tests/adapters-keycloak.test.ts. Historical decision refs: ADR-ACT-0157, ADR-ACT-0278, ADR-ACT-0282. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/adapters-keycloak/tests/.gitkeep",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition delete-after-proof normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: delete once tests directory is non-empty in V2. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/adapters-keycloak/tests/adapters-keycloak.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/adapters-keycloak/tsconfig.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/adapters-postgres/src/postgres-identity-repository.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "refactor",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: IdentityRepository, PostgresIdentityRepository. Protecting tests: packages/adapters-postgres/tests/adapters-postgres.test.ts. Historical decision refs: ADR-ACT-0282. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/authorisation-runtime/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical decision refs: ADR-0007. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/authorisation-runtime/package.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "refactor",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: @platform/authorisation-runtime. Protecting tests: packages/authorisation-runtime/tests/authorisation-runtime.test.ts. Historical decision refs: ADR-0001, ADR-0005. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/authorisation-runtime/src/index.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "refactor",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: authorisation-runtime public API. Protecting tests: packages/authorisation-runtime/tests/authorisation-runtime.test.ts. Historical decision refs: ADR-0001, ADR-0005. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/authorisation-runtime/tests/authorisation-runtime.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: packages/authorisation-runtime/tests/authorisation-runtime.test.ts. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/authorisation-runtime/tsconfig.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/contracts-auth/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical decision refs: ADR-0007. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/contracts-auth/package.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/contracts-auth. Protecting tests: packages/contracts-auth/tests/contracts-auth.test.ts. Historical decision refs: ADR-0001, ADR-0005, ADR-0008. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/contracts-auth/src/index.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: contracts-auth schemas/DTOs. Protecting tests: packages/contracts-auth/tests/contracts-auth.test.ts. Historical decision refs: ADR-0008. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/contracts-auth/tests/contracts-auth.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: packages/contracts-auth/tests/contracts-auth.test.ts. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/contracts-auth/tsconfig.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/domain-identity/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: Regenerated by tools/architecture/generate-package-readmes; never hand-edited.. Historical decision refs: ADR-0007. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/domain-identity/package.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/domain-identity. Protecting tests: packages/domain-identity/tests/domain-identity.test.ts. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/domain-identity/src/index.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: User, UserStatus, ExternalIdentity, Organisation. Protecting tests: packages/domain-identity/tests/domain-identity.test.ts. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/domain-identity/tests/domain-identity.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: packages/domain-identity/tests/domain-identity.test.ts. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/domain-identity/tsconfig.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/platform-errors/tests/platform-errors-auth.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: packages/platform-errors/tests/platform-errors-auth.test.ts. Historical decision refs: ADR-0020. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/security-auth/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "generated-report",
+      "sourceRole": "generated-summary-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: regenerated by tools/architecture/generate-package-readmes. Historical decision refs: ADR-0007. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/security-auth/package.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/security-auth. Protecting tests: packages/security-auth/tests/security-auth.test.ts. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/security-auth/src/index.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/security-auth. Protecting tests: packages/security-auth/tests/security-auth.test.ts. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/security-auth/tests/.gitkeep",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition delete-after-proof normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: tests directory has committed test files; placeholder no longer needed. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/security-auth/tests/security-auth.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: packages/security-auth/tests/security-auth.test.ts. Historical decision refs: ADR-ACT-0157. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/session-runtime/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "generated-report",
+      "sourceRole": "generated-summary-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: regenerated by tools/architecture/generate-package-readmes. Historical decision refs: ADR-0007. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/session-runtime/package.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/session-runtime. Protecting tests: packages/session-runtime/tests/session-runtime.test.ts. Historical decision refs: ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/session-runtime/src/index.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/session-runtime. Protecting tests: packages/session-runtime/tests/session-runtime.test.ts. Historical decision refs: ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/session-runtime/tests/.gitkeep",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "retire",
+      "rationale": "Historical inventory disposition delete-after-proof normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: tests directory has committed test files; placeholder no longer needed. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/session-runtime/tests/session-runtime.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Protecting tests: packages/session-runtime/tests/session-runtime.test.ts. Historical decision refs: ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "packages/session-runtime/tsconfig.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "playwright.identity.config.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: e2e/identity testDir. Historical decision refs: ADR-0075, ADR-ACT-0285. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "scripts/keycloak/provision-bff-authz.sh",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: BFF authz provisioning. Historical decision refs: ADR-ACT-0157, ADR-ACT-0278. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "scripts/sonar/provision-oidc.sh",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "proof-script",
+      "sourceRole": "proof-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: sonar OIDC provisioning. Historical decision refs: ADR-ACT-0290. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "scripts/tests/tests/sonar-oidc-honesty.test.mjs",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: make sonar. Historical decision refs: ADR-ACT-0290, ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "command.authentication-slice-proof"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/Dockerfile",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: mock-oidc container. Protecting tests: tests/integration/compose-smoke.test.mjs. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/README.md",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "documentation",
+      "sourceRole": "historical-lineage",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/package-lock.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "generated-report",
+      "sourceRole": "generated-summary-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: regenerated by npm install against v2 package.json. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/package.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "package",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/mock-oidc. Protecting tests: services/mock-oidc/src/server.test.ts. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/src/config.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: loadConfig, PROVIDERS, PROVIDER_ALIAS, ProviderKey. Protecting tests: services/mock-oidc/src/server.test.ts. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/src/logger.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: logger. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/src/providers.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: buildProvider. Protecting tests: services/mock-oidc/src/server.test.ts. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/src/scenarios.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: SCENARIOS, SCENARIO_META, isScenario. Protecting tests: services/mock-oidc/src/server.test.ts. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/src/server.test.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/src/server.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: mock-oidc HTTP entrypoint, /interaction, OIDC discovery. Protecting tests: services/mock-oidc/src/server.test.ts. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/src/users.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: accountId. Protecting tests: services/mock-oidc/src/server.test.ts. Historical decision refs: ADR-ACT-0220. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    },
+    {
+      "sourceRef": {
+        "repository": "../react",
+        "path": "services/mock-oidc/tsconfig.json",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+        "tag": "v1-final"
+      },
+      "sourceKind": "configuration-file",
+      "sourceRole": "configuration-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. First-slice authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
+    }
+  ]
+}
