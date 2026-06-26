@@ -1,0 +1,9 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-IMPL-004",
+  "nameStatusLines": [
+    "M\tdocs/architecture/implementation-extraction-directive.md",
+    "M\tdocs/architecture/authentication-slice-source-use-disposition-matrix.md",
+    "A\tapps/authentication-api/temp/index.ts"
+  ]
+}

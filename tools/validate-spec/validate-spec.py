@@ -29,9 +29,10 @@ Modes (default: all):
     imports      source-import manifest schema + internal no-loss checks
     evidence     committed proof/evidence records under evidence/
     real-instances  authored ADR/source/semantic/evidence/report instance corpus
+    implementation  committed implementation artefact guard checks
     selftest     plant defects from tools/validate-spec/planted-defects/ and assert the exact rule id fires
     pr           base/head diff gate (--base, --head); fails closed if git fails
-    all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + evidence + real-instances + selftest
+    all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + evidence + real-instances + implementation + selftest
                  (+ pr when --base/--head is given)
 
 Options:
@@ -246,6 +247,11 @@ RULES = {
     "USF-REAL-004":     ("blocking", "Real ADR reference does not resolve"),
     "USF-REAL-005":     ("blocking", "Real validator-report instance invalid against validator-report schema"),
     "USF-REAL-006":     ("blocking", "Real ADR semantic reference is not a semantic artefact"),
+    "USF-IMPL-001":     ("blocking", "Implementation artefact is not authorised by an implementation directive"),
+    "USF-IMPL-002":     ("blocking", "Implementation artefact has no source disposition coverage"),
+    "USF-IMPL-003":     ("blocking", "Implementation artefact mirrors a historical source path"),
+    "USF-IMPL-004":     ("blocking", "Implementation artefact path uses a forbidden name"),
+    "USF-IMPL-005":     ("blocking", "Implementation artefact is outside authorised target roots"),
     "USF-SELFTEST-001": ("blocking", "Planted defect did NOT raise its expected rule id"),
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
@@ -1471,7 +1477,7 @@ def check_selftest(ctx, F):
             if not isinstance(lines, list):
                 F.add("USF-SELFTEST-001", df, "pr-paths planted-defect needs nameStatusLines")
                 continue
-            validate_pr_paths(f2, lines)
+            validate_pr_paths(f2, lines, source_paths=set(patch.get("sourcePaths", [])))
         else:
             run_all_checks(sandbox, f2)
         if patch["expectedRule"] not in f2.rule_ids():
@@ -1486,14 +1492,119 @@ def git_checked(*args):
     return r.stdout.strip()
 
 
-IMPLEMENTATION_PATH_RE = re.compile(r"(^|/)(apps|packages|services|src|config|infra|scripts)/")
+IMPLEMENTATION_ROOTS = ("apps", "packages", "services", "src", "config", "infra", "scripts")
+IMPLEMENTATION_PATH_RE = re.compile(r"(^|/)(" + "|".join(IMPLEMENTATION_ROOTS) + r")/")
+IMPLEMENTATION_DIRECTIVE_PATHS = {
+    "docs/architecture/implementation-extraction-directive.md",
+    "spec/instances/ai-governance/implementation-extraction-directive.json",
+}
+AUTHORIZED_IMPLEMENTATION_ROOTS = {
+    "apps/authentication-api",
+    "packages/authentication-domain",
+    "packages/identity-domain",
+    "packages/authorization-policy",
+    "packages/identity-provider-adapter",
+    "packages/authentication-observability",
+    "config/authentication",
+}
 
 
 def _is_implementation_path(path):
     return bool(IMPLEMENTATION_PATH_RE.search(path))
 
 
-def validate_pr_paths(F, name_status_lines):
+def _normalise_path(path):
+    return path.replace("\\", "/").lstrip("./")
+
+
+def _implementation_root(path):
+    path = _normalise_path(path)
+    parts = path.split("/")
+    if not parts or parts[0] not in IMPLEMENTATION_ROOTS:
+        return None
+    if len(parts) < 2:
+        return parts[0]
+    return "/".join(parts[:2])
+
+
+def _has_changed_disposition(changed_paths):
+    return any(
+        re.match(r"docs/architecture/.*source-use-disposition-matrix\.md$", p)
+        or re.match(r"spec/registries/.*source-import-manifest\.json$", p)
+        for p in changed_paths
+    )
+
+
+def _source_mirror_prefixes(source_paths):
+    prefixes = set()
+    for source_path in source_paths:
+        source_path = _normalise_path(source_path)
+        parts = source_path.split("/")
+        if len(parts) >= 2 and parts[0] in IMPLEMENTATION_ROOTS:
+            prefixes.add("/".join(parts[:2]))
+    return prefixes
+
+
+def _implementation_directive_referenced(changed_paths, existing_paths=None):
+    existing_paths = existing_paths or set()
+    all_paths = set(changed_paths) | set(existing_paths)
+    return bool(IMPLEMENTATION_DIRECTIVE_PATHS & all_paths)
+
+
+def _implementation_path_has_forbidden_name(path):
+    path = _normalise_path(path)
+    return bool(FORB.search(path) or REDUNDANT_USF.search(path))
+
+
+def _validate_implementation_path(F, path, *, directive_referenced, disposition_changed, source_mirror_prefixes):
+    root = _implementation_root(path)
+    if root is None:
+        return
+    if not directive_referenced:
+        F.add("USF-IMPL-001", path, "implementation artefact requires an authorised implementation directive")
+    if not disposition_changed:
+        F.add("USF-IMPL-002", path, "implementation artefact requires source disposition or import-manifest coverage")
+    if root in source_mirror_prefixes:
+        F.add("USF-IMPL-003", path, f"target root mirrors historical source root {root}")
+    if _implementation_path_has_forbidden_name(path):
+        F.add("USF-IMPL-004", path, "implementation path contains a forbidden canonical token")
+    if root not in AUTHORIZED_IMPLEMENTATION_ROOTS:
+        F.add("USF-IMPL-005", path, f"{root} is not in the authorised target topology")
+
+
+def validate_implementation_paths(F, paths, *, changed_paths=None, source_paths=None, existing_paths=None):
+    paths = [_normalise_path(p) for p in paths]
+    changed_paths = [_normalise_path(p) for p in (changed_paths or [])]
+    source_paths = {_normalise_path(p) for p in (source_paths or set())}
+    existing_paths = {_normalise_path(p) for p in (existing_paths or set())}
+    directive_referenced = _implementation_directive_referenced(changed_paths, existing_paths=existing_paths)
+    disposition_changed = _has_changed_disposition(changed_paths)
+    mirror_prefixes = _source_mirror_prefixes(source_paths)
+    for path in paths:
+        _validate_implementation_path(
+            F,
+            path,
+            directive_referenced=directive_referenced,
+            disposition_changed=disposition_changed,
+            source_mirror_prefixes=mirror_prefixes,
+        )
+
+
+def check_implementation(ctx, F):
+    implementation_files = sorted(p for p in _existing_repo_paths() if _is_implementation_path(p))
+    if not implementation_files:
+        return "not-run"
+    validate_implementation_paths(
+        F,
+        implementation_files,
+        changed_paths=[],
+        source_paths=_source_import_paths(F),
+        existing_paths=_existing_repo_paths(),
+    )
+    return "ran"
+
+
+def validate_pr_paths(F, name_status_lines, source_paths=None):
     changed_paths = []
     added_paths = []
     for line in name_status_lines:
@@ -1501,19 +1612,19 @@ def validate_pr_paths(F, name_status_lines):
         if len(parts) < 2:
             continue
         status, path = parts[0], parts[-1]
+        path = _normalise_path(path)
         changed_paths.append(path)
         if status.startswith("A"):
             added_paths.append(path)
-            if _is_implementation_path(path) or re.search(r"\.(ts|tsx|jsx)$", path):
-                F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
-    disposition_changed = any(
-        re.match(r"docs/architecture/.*source-use-disposition-matrix\.md$", p)
-        or re.match(r"spec/registries/.*source-import-manifest\.json$", p)
-        for p in changed_paths
-    )
+    directive_referenced = _implementation_directive_referenced(changed_paths)
     for path in added_paths:
-        if _is_implementation_path(path) and not disposition_changed:
-            F.add("USF-PR-DISPOSITION", path, "added implementation file lacks changed source disposition/import coverage")
+        if (_is_implementation_path(path) or re.search(r"\.(ts|tsx|jsx)$", path)) and not directive_referenced:
+            F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
+    validate_implementation_paths(F, added_paths, changed_paths=changed_paths, source_paths=source_paths or _source_import_paths(F))
+    if not _has_changed_disposition(changed_paths):
+        for path in added_paths:
+            if _is_implementation_path(path):
+                F.add("USF-PR-DISPOSITION", path, "added implementation file lacks changed source disposition/import coverage")
 
 
 def check_pr(ctx, F, base, head):
@@ -1577,7 +1688,7 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "selftest", "pr", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest", "pr", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
@@ -1598,9 +1709,9 @@ def main():
     run = {
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
         "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "evidence": ["evidence"],
-        "real-instances": ["real-instances"],
+        "real-instances": ["real-instances"], "implementation": ["implementation"],
         "selftest": ["selftest"], "pr": ["pr"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "evidence", "real-instances", "selftest"]
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -1623,6 +1734,8 @@ def main():
         check_evidence(ctx, F)
     if "real-instances" in run:
         real_instances_state = check_real_instances(ctx, F)
+    if "implementation" in run:
+        check_implementation(ctx, F)
     if "selftest" in run:
         selftest_state = check_selftest(ctx, F)
     if "pr" in run:
