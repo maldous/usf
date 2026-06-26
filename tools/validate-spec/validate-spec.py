@@ -28,9 +28,10 @@ Modes (default: all):
     instances    committed semantic corpus instances under spec/instances
     imports      source-import manifest schema + internal no-loss checks
     evidence     committed proof/evidence records under evidence/
+    real-instances  authored ADR/source/semantic/evidence/report instance corpus
     selftest     plant defects from tools/validate-spec/planted-defects/ and assert the exact rule id fires
     pr           base/head diff gate (--base, --head); fails closed if git fails
-    all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + evidence + selftest
+    all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + evidence + real-instances + selftest
                  (+ pr when --base/--head is given)
 
 Options:
@@ -232,6 +233,11 @@ RULES = {
     "USF-EVIDENCE-005": ("blocking", "Evidence/proof source reference does not resolve"),
     "USF-EVIDENCE-006": ("blocking", "Proof evidence claimed level exceeds observed level"),
     "USF-EVIDENCE-007": ("blocking", "Proof evidence live-provider claim exceeds provider/level evidence"),
+    "USF-REAL-001":     ("blocking", "Real-instance corpus category is missing"),
+    "USF-REAL-002":     ("blocking", "Real ADR instance invalid against adr schema"),
+    "USF-REAL-003":     ("blocking", "Real ADR machine instance has no matching markdown ADR"),
+    "USF-REAL-004":     ("blocking", "Real ADR reference does not resolve"),
+    "USF-REAL-005":     ("blocking", "Real validator-report instance invalid against validator-report schema"),
     "USF-SELFTEST-001": ("blocking", "Planted defect did NOT raise its expected rule id"),
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
@@ -937,7 +943,7 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None):
 
     Directory selects the schema: evidence/evidence-envelope/*.json or
     evidence/proof-evidence/*.json. Historical source refs are allowed only for
-    explicit ../react paths that still resolve on disk.
+    explicit ../react paths.
     """
     existing_paths = existing_paths or set()
     id_to_paths = defaultdict(list)
@@ -1014,6 +1020,161 @@ def check_evidence(ctx, F):
     return "ran"
 
 
+ADR_REF_FIELDS = {"semanticRefs", "sourceRefs", "proofRefs", "validatorRefs"}
+REAL_REQUIRED_CATEGORIES = ("adr", "source-import", "semantic", "evidence-envelope", "proof-evidence")
+
+
+def _load_json_files(paths, F):
+    data_by_path = {}
+    for p in paths:
+        data = load_json(p, F)
+        if data is not None:
+            data_by_path[p] = data
+    return data_by_path
+
+
+def _source_import_paths(F):
+    source_paths = set()
+    manifest = load_json("spec/registries/source-import-manifest.json", F)
+    if isinstance(manifest, dict):
+        for entry in manifest.get("entries", []):
+            source_ref = entry.get("sourceRef") if isinstance(entry, dict) else None
+            source_path = source_ref.get("path") if isinstance(source_ref, dict) else None
+            if isinstance(source_path, str):
+                source_paths.add(source_path)
+    return source_paths
+
+
+def _existing_repo_paths():
+    try:
+        tracked = git_checked("ls-files")
+        return {p for p in tracked.splitlines() if p}
+    except Exception:
+        return {p[2:] if p.startswith("./") else p
+                for p in glob.glob("**/*", recursive=True)
+                if os.path.isfile(p)}
+
+
+def _ref_resolves(ref, existing_paths, source_paths, ids=None):
+    base = _strip_fragment(ref)
+    ids = ids or set()
+    if ref in ids or base in ids:
+        return True
+    if base in existing_paths or base in source_paths:
+        return True
+    if ref.startswith("git:") and len(ref) > 4:
+        return True
+    if base.startswith("../react/"):
+        return True
+    if ref.startswith("urn:usf:schema:") and ref.split("#", 1)[0] in {
+        schema.get("$id") for schema in CTX_FOR_REF_RESOLUTION["sd"].values() if isinstance(schema, dict)
+    }:
+        return True
+    return False
+
+
+CTX_FOR_REF_RESOLUTION = {"sd": {}}
+
+
+def validate_real_adr_data(ctx, F, data_by_path, existing_paths=None, source_paths=None, proof_ids=None):
+    existing_paths = existing_paths or set()
+    source_paths = source_paths or set()
+    proof_ids = proof_ids or set()
+    CTX_FOR_REF_RESOLUTION["sd"] = ctx["sd"]
+    for p, data in data_by_path.items():
+        errors = list(Draft202012Validator(ctx["sd"]["adr"]).iter_errors(data))
+        for err in errors:
+            F.add("USF-REAL-002", p, err.message[:160])
+        if not isinstance(data, dict):
+            continue
+        adr_id = data.get("id")
+        if isinstance(adr_id, str) and re.match(r"^\d{4}-", adr_id):
+            if not glob.glob(f"docs/adr/{adr_id}.md"):
+                F.add("USF-REAL-003", p, f"missing docs/adr/{adr_id}.md")
+        for field in ADR_REF_FIELDS:
+            values = data.get(field, [])
+            if not isinstance(values, list):
+                continue
+            for ref in values:
+                if not isinstance(ref, str):
+                    continue
+                ids = proof_ids if field == "proofRefs" else set()
+                if not _ref_resolves(ref, existing_paths, source_paths, ids=ids):
+                    F.add("USF-REAL-004", f"{p}:{field}", f"unresolved reference: {ref}")
+
+
+def validate_real_instance_inventory(F, category_paths):
+    states = {}
+    for name in REAL_REQUIRED_CATEGORIES:
+        paths = category_paths.get(name, [])
+        if not paths:
+            F.add("USF-REAL-001", name, "required real-instance corpus category is empty")
+            states[name] = "not-run"
+        else:
+            states[name] = "ran"
+    return states
+
+
+def validate_validator_report_data(ctx, F, data_by_path):
+    for p, data in data_by_path.items():
+        errors = list(Draft202012Validator(ctx["sd"]["validator-report"]).iter_errors(data))
+        for err in errors:
+            F.add("USF-REAL-005", p, err.message[:160])
+
+
+def validate_validator_report_records(ctx, F, paths):
+    validate_validator_report_data(ctx, F, _load_json_files(paths, F))
+
+
+def check_real_instances(ctx, F):
+    """Aggregate real authored instance validation for USF-31.
+
+    This composes the existing focused modes and adds ADR/report real-instance
+    coverage so one repeatable command validates the current authored corpus.
+    """
+    states = {}
+    adr_paths = sorted(glob.glob("tools/validate-spec/fixtures/positive/adr/000*.json"))
+    semantic_paths = sorted(glob.glob("spec/instances/**/*.json", recursive=True))
+    envelope_paths = sorted(glob.glob("evidence/evidence-envelope/*.json"))
+    proof_paths = sorted(glob.glob("evidence/proof-evidence/*.json"))
+    import_present = os.path.exists("spec/registries/source-import-manifest.json")
+    report_paths = sorted(p for p in glob.glob("**/*validator-report*.json", recursive=True)
+                          if not p.startswith(f"{CORPUS}/fixtures/")
+                          and not p.startswith(f"{CORPUS}/manifests/")
+                          and not p.startswith(f"{CORPUS}/planted-defects/")
+                          and not p.startswith("spec/schemas/"))
+
+    states = validate_real_instance_inventory(F, {
+        "adr": adr_paths,
+        "source-import": ["spec/registries/source-import-manifest.json"] if import_present else [],
+        "semantic": semantic_paths,
+        "evidence-envelope": envelope_paths,
+        "proof-evidence": proof_paths,
+    })
+
+    check_imports(ctx, F)
+    check_instances(ctx, F)
+    check_evidence(ctx, F)
+
+    existing_paths = _existing_repo_paths()
+    source_paths = _source_import_paths(F)
+    proof_ids = set()
+    for data in _load_json_files(proof_paths, F).values():
+        if isinstance(data, dict) and isinstance(data.get("id"), str):
+            proof_ids.add(data["id"])
+    validate_real_adr_data(
+        ctx,
+        F,
+        _load_json_files(adr_paths, F),
+        existing_paths=existing_paths,
+        source_paths=source_paths,
+        proof_ids=proof_ids,
+    )
+    validate_validator_report_records(ctx, F, report_paths)
+    states["validator-report"] = "ran" if report_paths else "not-run"
+    return states
+
+
 PATCH_ROOTS = {"registry": "reg", "vocabulary": "voc", "taxonomy": "tax"}
 
 
@@ -1076,7 +1237,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence"}:
+            if patch["target"] not in {"instances", "evidence", "real-adrs", "real-inventory", "validator-reports"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1105,6 +1266,31 @@ def check_selftest(ctx, F):
                 records,
                 existing_paths=set(patch.get("existingPaths", [])),
             )
+        elif patch["target"] == "real-adrs":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "real-adrs planted-defect needs a records object")
+                continue
+            validate_real_adr_data(
+                sandbox,
+                f2,
+                records,
+                existing_paths=set(patch.get("existingPaths", [])),
+                source_paths=set(patch.get("sourcePaths", [])),
+                proof_ids=set(patch.get("proofIds", [])),
+            )
+        elif patch["target"] == "real-inventory":
+            inventory = patch.get("inventory")
+            if not isinstance(inventory, dict):
+                F.add("USF-SELFTEST-001", df, "real-inventory planted-defect needs an inventory object")
+                continue
+            validate_real_instance_inventory(f2, inventory)
+        elif patch["target"] == "validator-reports":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "validator-reports planted-defect needs a records object")
+                continue
+            validate_validator_report_data(sandbox, f2, records)
         else:
             run_all_checks(sandbox, f2)
         if patch["expectedRule"] not in f2.rule_ids():
@@ -1181,7 +1367,7 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "selftest", "pr", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "selftest", "pr", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
@@ -1197,12 +1383,14 @@ def main():
         sys.exit(1)
 
     fixtures_state = selftest_state = None
+    real_instances_state = None
     pr_requested = a.base is not None or a.head is not None
     run = {
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
         "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "evidence": ["evidence"],
+        "real-instances": ["real-instances"],
         "selftest": ["selftest"], "pr": ["pr"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "evidence", "selftest"]
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "evidence", "real-instances", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -1223,6 +1411,8 @@ def main():
         check_imports(ctx, F)
     if "evidence" in run:
         check_evidence(ctx, F)
+    if "real-instances" in run:
+        real_instances_state = check_real_instances(ctx, F)
     if "selftest" in run:
         selftest_state = check_selftest(ctx, F)
     if "pr" in run:
@@ -1239,6 +1429,10 @@ def main():
         for label, st in (("fixtures", fixtures_state), ("selftest", selftest_state)):
             if st == "not-run":
                 head += f"  ({label}: none present)"
+        if real_instances_state:
+            skipped = sorted(k for k, st in real_instances_state.items() if st == "not-run")
+            if skipped:
+                head += f"  (real-instances optional not present: {', '.join(skipped)})"
         print(head)
         for f in F.items:
             print(f"  [{f['severity']}] {f['ruleId']} {f['subject']}: {f['message']}")

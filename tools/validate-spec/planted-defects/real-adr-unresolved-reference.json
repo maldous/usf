@@ -1,0 +1,49 @@
+{
+  "target": "real-adrs",
+  "expectedRule": "USF-REAL-004",
+  "records": {
+    "tools/validate-spec/fixtures/positive/adr/0001-validator-deferral-lift.json": {
+      "id": "0001-validator-deferral-lift",
+      "kind": "adr",
+      "title": "Validator Deferral Lift",
+      "description": "Planted real ADR machine record with an unresolved semantic reference.",
+      "authorityLevel": "adr",
+      "lifecycleState": "active",
+      "ontologyConcepts": [
+        "ADR"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification"
+      ],
+      "vocabularyRefs": [
+        "lifecycle-states"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "decisionStatus": "accepted",
+      "context": "Selftest context.",
+      "decision": "Selftest decision.",
+      "rationale": "Selftest rationale.",
+      "semanticRefs": [
+        "docs/architecture/no-such-real-reference.md"
+      ],
+      "invariants": [
+        "Selftest invariant."
+      ],
+      "permittedChanges": [
+        "Selftest permitted change."
+      ],
+      "forbiddenDrift": [
+        "Selftest forbidden drift."
+      ],
+      "consequences": [
+        "Selftest consequence."
+      ],
+      "aiAlignmentRules": [
+        "Selftest AI rule."
+      ]
+    }
+  },
+  "existingPaths": [
+    "docs/adr/0001-validator-deferral-lift.md"
+  ]
+}

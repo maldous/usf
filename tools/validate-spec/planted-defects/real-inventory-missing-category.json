@@ -1,0 +1,19 @@
+{
+  "target": "real-inventory",
+  "expectedRule": "USF-REAL-001",
+  "inventory": {
+    "adr": [
+      "tools/validate-spec/fixtures/positive/adr/0001-validator-deferral-lift.json"
+    ],
+    "source-import": [
+      "spec/registries/source-import-manifest.json"
+    ],
+    "semantic": [
+      "spec/instances/interface-contract/authentication-login-api.json"
+    ],
+    "evidence-envelope": [
+      "evidence/evidence-envelope/authentication-login-audit.json"
+    ],
+    "proof-evidence": []
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "target": "real-adrs",
+  "expectedRule": "USF-REAL-003",
+  "records": {
+    "tools/validate-spec/fixtures/positive/adr/9998-missing-markdown.json": {
+      "id": "9998-missing-markdown",
+      "kind": "adr",
+      "title": "Missing Markdown ADR",
+      "description": "Planted real ADR machine record with no matching Markdown ADR.",
+      "authorityLevel": "adr",
+      "lifecycleState": "active",
+      "ontologyConcepts": [
+        "ADR"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification"
+      ],
+      "vocabularyRefs": [
+        "lifecycle-states"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "decisionStatus": "accepted",
+      "context": "Selftest context.",
+      "decision": "Selftest decision.",
+      "rationale": "Selftest rationale.",
+      "semanticRefs": [
+        "docs/architecture/charter.md"
+      ],
+      "invariants": [
+        "Selftest invariant."
+      ],
+      "permittedChanges": [
+        "Selftest permitted change."
+      ],
+      "forbiddenDrift": [
+        "Selftest forbidden drift."
+      ],
+      "consequences": [
+        "Selftest consequence."
+      ],
+      "aiAlignmentRules": [
+        "Selftest AI rule."
+      ]
+    }
+  },
+  "existingPaths": [
+    "docs/architecture/charter.md"
+  ]
+}

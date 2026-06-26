@@ -1,0 +1,9 @@
+{
+  "target": "real-adrs",
+  "expectedRule": "USF-REAL-002",
+  "records": {
+    "tools/validate-spec/fixtures/positive/adr/9997-invalid.json": {
+      "id": "9997-invalid"
+    }
+  }
+}
