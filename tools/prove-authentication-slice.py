@@ -50,10 +50,10 @@ GOVERNANCE_INPUTS = [
 ]
 
 HISTORICAL_INPUTS = [
-    "../react/apps/platform-api/scripts/auth-settings-runtime-proof.ts",
-    "../react/apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
-    "../react/apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
-    "../react/apps/platform-api/tests/substrate/auth-routes.test.ts",
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+    "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
+    "apps/platform-api/tests/substrate/auth-routes.test.ts",
 ]
 
 
