@@ -3,8 +3,8 @@
   "configurationKind": "provider-configuration",
   "key": "provider-mode-selector",
   "title": "Provider Mode Selector Configuration",
-  "description": "Draft configuration semantic instance for explicit provider-mode selection and proof honesty. The first assurance slice treats this as non-secret, non-generated, proof-relevant configuration that must preserve provider/environment separation.",
-  "purpose": "Keep provider mode explicit so hermetic, local-composed, sandbox, live-external, production-shaped, and production-live claims are not upgraded by implication. If this configuration becomes generated in a later slice, it must declare generated-source lineage through sourceManifest before any readiness claim can depend on it.",
+  "description": "Draft configuration semantic instance for explicit provider-mode selection, proof honesty, and provider reliability fail-closed behaviour. The first assurance slice treats this as non-secret, non-generated, proof-relevant configuration that must preserve provider/environment separation and must not hide unavailable-provider, timeout, degraded, recovery, health-check, or misconfiguration outcomes.",
+  "purpose": "Keep provider mode explicit so hermetic, local-composed, sandbox, live-external, production-shaped, and production-live claims are not upgraded by implication. Provider misconfiguration, missing provider selection, unavailable provider, timeout, retry exhaustion, failed health check, or degraded posture must fail closed for readiness claims. If this configuration becomes generated in a later slice, it must declare generated-source lineage through sourceManifest before any readiness claim can depend on it.",
   "secretBearing": false,
   "providerMode": "hermetic-mock",
   "environment": "hermetic",
@@ -13,7 +13,10 @@
   "reloadOrRestart": "restart",
   "sourceRefs": [
     "apps/platform-api/scripts/provider-config-runtime-proof.ts",
-    "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts"
+    "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts",
+    "apps/platform-api/scripts/provider-readiness-contract-runtime-proof.ts",
+    "apps/platform-api/src/ports/provider-readiness-probe.ts",
+    "apps/platform-api/tests/unit/auth-provider-config.test.ts"
   ],
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
@@ -30,5 +33,5 @@
     "provider-modes",
     "environment-classes"
   ],
-  "aiGuidance": "Provider mode is proof-relevant configuration. Never infer live-external readiness from environment name, generated reports, source paths, or route naming. Secret-bearing variants must not carry literal values, and generated variants must cite sourceManifest."
+  "aiGuidance": "Provider mode is proof-relevant configuration. Never infer live-external readiness from environment name, generated reports, source paths, route naming, or a recovered/degraded provider state. Secret-bearing variants must not carry literal values, generated variants must cite sourceManifest, and misconfiguration must fail closed until fresh proof shows recovery."
 }
