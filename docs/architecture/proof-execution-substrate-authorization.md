@@ -3,16 +3,36 @@
 | | |
 |---|---|
 | **Document type** | Architecture / proof execution substrate authorization |
-| **Status** | Draft / blocker decision |
+| **Status** | Draft / amended proof-substrate decision |
 | **Authority level** | Semantic-definition planning guidance; subordinate to the Charter, Authority Model, accepted ADRs, validators, and runtime proof evidence |
-| **Issue scope** | USF-76 |
+| **Issue scope** | USF-76, amended by USF-77 Option A |
 | **Primary inputs** | `docs/architecture/proof-posture-execution-assessment.md`, `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/proof-and-evidence-pipeline-plan.md`, `spec/instances/command/authentication-slice-proof.json`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md` |
 
-This document records the proof execution substrate authorization decision for the authentication slice. It creates no proof evidence, emits no generated report, imports no runtime/application code, creates no implementation directory, and promotes no schema to `active`.
+This document records the proof execution substrate authorization decisions for the authentication slice. It imports no runtime/application code, creates no implementation directory, and promotes no schema to `active`.
 
 ## Decision
 
-No current proof execution substrate is authorized for the authentication slice.
+USF-76 declined proof execution from the then-current repository state. USF-77 Option A later authorizes a bounded proof-only authentication-slice substrate for the hermetic authentication login API/audit/workflow/provider-mode slice.
+
+The USF-77 Option A authorization is narrow:
+
+- The only authorized proof tool is `tools/prove-authentication-slice.py`.
+- The only authorized proof output records are:
+  - `evidence/proof-evidence/authentication-slice-proof.json`
+  - `evidence/evidence-envelope/authentication-slice-proof.json`
+  - `evidence/evidence-envelope/authentication-slice-proof-lineage.json`
+- The proof substrate is a deterministic semantic harness over committed USF semantic instances and governance artefacts.
+- The proof substrate is not product implementation runtime.
+- Historical React proof scripts and tests are lineage/design inputs only; they are not executed, copied, imported as runtime, mirrored as target paths, or treated as USF proof commands.
+- The authorized provider mode is `hermetic-mock`.
+- The authorized environment is `hermetic`.
+- The authorized observed proof level is `behaviour-proven`.
+- `liveExternalProviderClaim` must be `false`.
+- No production-live claim is authorized.
+
+No other proof runner, runtime substrate, package graph, service topology, Make target, package manifest, product handler, adapter, server, database, cache, identity-provider service, compose file, implementation directory, or historical React proof command is authorized by this decision.
+
+## USF-76 Decline Baseline
 
 The current USF repository has semantic instances, draft schemas, validators, source import manifests, and stale historical observability proof evidence. It does not have an executable authentication runtime, proof runner, package graph, service topology, Make target, package manifest, or composed proof substrate that can exercise the authentication slice without importing or executing historical runtime code.
 
@@ -23,28 +43,28 @@ The historical authentication proof files remain source and proof-command lineag
 - `../react/apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts`
 - `../react/apps/platform-api/tests/substrate/auth-routes.test.ts`
 
-Those files depend on the historical runtime package graph, source handlers, adapters, local services, or test harnesses. Running them directly from USF would bypass USF source disposition and implementation-directory authorization. Copying them into USF would import runtime/application code or mirror historical source paths without a future implementation directive. Rewriting a proof runner now would create an unevidenced harness around behaviour that has not yet been implemented in USF. None of those paths may satisfy current proof readiness.
+Those files depend on the historical runtime package graph, source handlers, adapters, local services, or test harnesses. Running them directly from USF would bypass USF source disposition and implementation-directory authorization. Copying them into USF would import runtime/application code or mirror historical source paths without a future implementation directive. None of those paths may satisfy current proof readiness.
 
 ## Current Authorization Table
 
 | Requirement | Current decision |
 |---|---|
-| Permitted proof execution substrate | None authorized from the current repository state. |
+| Permitted proof execution substrate | `tools/prove-authentication-slice.py` only, as a proof-only semantic harness authorized by USF-77 Option A. |
 | Allowed runtime setup | None. No application runtime, source handler, adapter, server, package graph, or composed service may be created or executed under this issue. |
 | Allowed package setup | None. No package manifest, package directory, dependency graph, or runtime package may be created under this issue. |
 | Allowed service setup | None. No Redis, Postgres, Keycloak, mock IdP service, compose file, container setup, or service directory may be created under this issue. |
 | Historical proof script source-use policy | Evidence-only lineage. The files may be read and cited as source evidence but not executed, copied, mirrored, or treated as USF proof commands. |
-| Proof runner logic treatment | Reference only. Copy, adapt, and rewrite are not authorized for proof runner logic in the current repository state. |
-| Target providerMode | No current proof target is authorized. The future minimum for the first authentication proof remains `hermetic-mock` unless a later accepted directive chooses a stronger posture. |
-| Target environment | No current proof target is authorized. The future minimum for the first authentication proof remains `hermetic` unless a later accepted directive chooses a stronger posture. |
-| Required proofLevelObserved | No current proof level is observed. A future first-slice proof must observe at least `behaviour-proven` for the hermetic internal proof floor before it may satisfy USF-59. |
+| Proof runner logic treatment | New proof-only semantic harness logic is authorized in `tools/prove-authentication-slice.py`; React proof runner logic remains evidence-only lineage and is not copied or executed. |
+| Target providerMode | `hermetic-mock` for the USF-77 Option A proof. Stronger provider modes are not authorized here. |
+| Target environment | `hermetic` for the USF-77 Option A proof. Stronger environments are not authorized here. |
+| Required proofLevelObserved | `behaviour-proven` for the bounded proof-only authentication slice. |
 | Freshness requirement | Any future proof claim must carry `freshness.stale` equal to `false` and `freshness.commit` equal to the USF commit being claimed. Historical or mismatched commits remain stale lineage only. |
-| Evidence output expectation | No output is authorized now. Future proof execution must produce non-empty emitted evidence and collected evidence above discovery level, with proof-evidence and evidence-envelope records committed under the existing `evidence/` homes. |
-| Generated report treatment | No generated report is authorized now. A future report may summarize evidence only as rank-7 output and may not replace proof evidence. |
+| Evidence output expectation | The authorized proof must produce non-empty emitted evidence and collected evidence above discovery level, with proof-evidence and evidence-envelope records committed under the existing `evidence/` homes. |
+| Generated report treatment | No generated report is authorized here. A future report may summarize evidence only as rank-7 output and may not replace proof evidence. |
 
-## Future Authorization Bar
+## Future Authorization Bar Beyond USF-77 Option A
 
-A later proof-substrate directive may authorize execution only if it supplies all of the following:
+A later proof-substrate directive beyond USF-77 Option A may authorize additional execution only if it supplies all of the following:
 
 - the exact proof substrate and command to run;
 - the exact proof-only or implementation directories and files, if any, that are authorized;
@@ -57,16 +77,17 @@ A later proof-substrate directive may authorize execution only if it supplies al
 - the validation commands to run before merge;
 - the stop conditions for missing evidence, stale evidence, provider/environment overclaim, generated-report authority, source-path mirroring, and un-dispositioned runtime import.
 
-For the first authentication slice, the minimum future proof posture remains the hermetic internal proof floor from `docs/architecture/production-proof-posture-matrix.md`: `providerMode` `hermetic-mock`, `environment` `hermetic`, and `proofLevelObserved` at least `behaviour-proven`, with current commit freshness.
+For the first authentication slice, USF-77 Option A authorizes the hermetic internal proof floor from `docs/architecture/production-proof-posture-matrix.md`: `providerMode` `hermetic-mock`, `environment` `hermetic`, and `proofLevelObserved` `behaviour-proven`, with current commit freshness.
 
 Local composed, external sandbox, production-shaped, live external provider, and production-live proof remain not authorized by this document. They require their own explicit substrate, credentials or topology where applicable, and fresh evidence. Hermetic, local, or sandbox proof must not be upgraded into live-external-provider or production-live readiness.
 
 ## Downstream Effect
 
-- USF-73 remains not complete because no required proof posture has fresh current evidence.
-- USF-59 remains blocked because no fresh commit-pinned authentication-slice proof record can be produced from the current repository state.
-- USF-61 remains blocked from issuing an implementation-extraction directive while fresh proof remains absent, unless a later higher-authority decision explicitly changes that gate without weakening proof-freshness, provider-honesty, or no-overclaim rules.
-- USF-75 remains blocked from a final go decision.
+- USF-77 Option A can close only if the proof-only harness and evidence records merge with clean validation.
+- USF-59 can close for the hermetic authentication first-slice proof only if the merged evidence is fresh, non-stale, schema-valid, and validator-clean.
+- USF-73 is only satisfied for the hermetic internal proof floor. Local composed, external sandbox, production-shaped, live external provider, and production-live postures remain unproven unless a later issue explicitly narrows or separately authorizes those gates.
+- USF-61 remains blocked until USF-59 is closed and USF-73 is either closed for the required implementation-entry scope or explicitly narrowed with recorded authority.
+- USF-75 remains blocked from a final go decision until USF-61 and every required downstream gate close.
 - USF-39 remains Backlog and must not start from this decision.
 
 ## Validation Expectations
@@ -79,7 +100,7 @@ This authorization decision must be merged only with clean validation:
 - `python3 tools/validate-spec/validate-spec.py selftest --json`
 - `python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD`
 
-No JSON evidence is created by this document. If later work creates evidence records, every changed JSON file must parse strictly and validate under the relevant evidence/proof modes.
+If evidence records are created, every changed JSON file must parse strictly and validate under the relevant evidence/proof modes.
 
 ## No-Go Rules
 
@@ -97,4 +118,4 @@ No JSON evidence is created by this document. If later work creates evidence rec
 
 ## Readiness Verdict
 
-USF-76 can close as a proof-substrate authorization decision once this document is merged and validation passes. The decision is a decline for current execution, not an authorization to run proof. It advances the prerequisite chain by making the blocker explicit and reviewable, but it does not unblock USF-73, USF-59, USF-61, USF-75, or USF-39.
+USF-76 remains closed as the prior decline decision. USF-77 Option A is now the bounded proof-only authorization for the hermetic authentication slice. It can unblock USF-59 only for the first-slice hermetic proof if the corresponding proof/evidence records merge with clean validation. It does not by itself close broader multi-environment, live-provider, production-live, implementation-directive, final-readiness, or USF-39 gates.

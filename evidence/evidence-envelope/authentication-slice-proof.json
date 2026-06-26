@@ -1,0 +1,43 @@
+{
+  "id": "evidence.runtime-proof.authentication-slice-proof",
+  "title": "Runtime evidence envelope for authentication slice proof",
+  "description": "Draft runtime-proof evidence envelope emitted by the USF proof-only authentication slice harness.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "evidence-classification"
+  ],
+  "vocabularyRefs": [
+    "evidence-kinds",
+    "provider-modes",
+    "environment-classes"
+  ],
+  "aiGuidance": "Use only as current hermetic proof-only evidence for the named authentication semantic slice. Do not treat it as implementation extraction, live-provider evidence, or production-live readiness.",
+  "evidenceKind": "runtime-proof-evidence",
+  "sourceRefs": [
+    "spec/instances/command/authentication-slice-proof.json",
+    "spec/instances/semantic-contract/authentication-platform.json",
+    "spec/instances/interface-contract/authentication-login-api.json",
+    "spec/instances/event-contract/authentication-login-audit.json",
+    "spec/instances/workflow/authentication-login.json",
+    "spec/instances/provider-mode/mock-identity-provider.json",
+    "spec/instances/environment/hermetic.json",
+    "spec/instances/audit-event/authentication-login.json",
+    "spec/instances/observability-signal/authentication-login-audit.json",
+    "docs/architecture/production-proof-posture-matrix.md",
+    "docs/architecture/proof-and-evidence-pipeline-plan.md",
+    "docs/architecture/authentication-slice-source-use-disposition-matrix.md",
+    "docs/architecture/proof-execution-substrate-authorization.md",
+    "docs/architecture/react-foundation-artifact-reuse-assessment.md",
+    "tools/prove-authentication-slice.py"
+  ],
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "freshness": {
+    "commit": "d1c6498a4f2086a016627328bb39ad9ec1d1cb59",
+    "stale": false
+  }
+}
