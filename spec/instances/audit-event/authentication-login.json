@@ -5,7 +5,7 @@
   "action": "authentication-login",
   "subject": "session",
   "title": "Authentication Login Audit Event",
-  "description": "Draft audit event semantic instance for login decisions and session creation attempts.",
+  "description": "Draft audit event semantic instance for login decisions and session creation attempts. The first assurance slice requires the audit record to correlate the login interface, authentication workflow, observability signal, and future proof evidence by request identifier.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -18,7 +18,7 @@
     "audit-event-kinds"
   ],
   "aiGuidance": "Privileged or security-sensitive authentication actions remain auditable; do not remove audit coverage as an incidental refactor.",
-  "timestampSemantics": "Timestamp is recorded at the decision boundary and correlated with request-id.",
+  "timestampSemantics": "Timestamp is recorded at the authentication decision boundary and correlated with request-id; future proof evidence must preserve the observed request-id and proof-id relationship rather than relying on a generated report summary.",
   "securitySensitive": true,
   "stateChanging": true,
   "relatedInterface": "interface.authentication-login-api",
