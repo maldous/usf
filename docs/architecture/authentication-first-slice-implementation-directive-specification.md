@@ -76,7 +76,7 @@ Every target file must cite source-use matrix row numbers from `docs/architectur
 Required first-pass proof floor:
 
 - proof posture: hermetic internal authentication first-slice proof;
-- proof evidence: current authentication proof evidence under `evidence/proof-evidence/authentication-slice-proof.json` and matching evidence envelopes;
+- proof evidence: fresh authentication proof evidence under `evidence/proof-evidence/authentication-slice-proof.json` and matching evidence envelopes, rerun for the exact commit claimed by the later directive or implementation PR;
 - required proof level: `behaviour-proven`;
 - provider mode target: `hermetic-mock`;
 - environment target: `hermetic`;

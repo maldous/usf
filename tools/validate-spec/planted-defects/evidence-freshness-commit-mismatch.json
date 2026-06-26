@@ -1,0 +1,29 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-009",
+  "currentCommit": "head-commit",
+  "records": {
+    "evidence/evidence-envelope/freshness-mismatch.json": {
+      "id": "evidence.freshness-mismatch",
+      "title": "Freshness Mismatch",
+      "description": "Planted evidence whose freshness is marked non-stale for a commit different from the current commit.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "runtime-proof-evidence",
+      "freshness": {
+        "commit": "old-commit",
+        "stale": false
+      }
+    }
+  }
+}

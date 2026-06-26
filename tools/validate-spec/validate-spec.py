@@ -242,6 +242,7 @@ RULES = {
     "USF-EVIDENCE-006": ("blocking", "Proof evidence claimed level exceeds observed level"),
     "USF-EVIDENCE-007": ("blocking", "Proof evidence live-provider claim exceeds provider/level evidence"),
     "USF-EVIDENCE-008": ("blocking", "Evidence JSON file is outside a discovered evidence directory"),
+    "USF-EVIDENCE-009": ("blocking", "Evidence freshness is marked non-stale for a different commit than current HEAD"),
     "USF-REAL-001":     ("blocking", "Real-instance corpus category is missing"),
     "USF-REAL-002":     ("blocking", "Real ADR instance invalid against adr schema"),
     "USF-REAL-003":     ("blocking", "Real ADR machine instance has no matching markdown ADR"),
@@ -1060,7 +1061,8 @@ def _collect_evidence_source_refs(data):
             yield "emittedEvidence", ref
 
 
-def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_paths=None, source_allowlist=None):
+def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_paths=None,
+                           source_allowlist=None, current_commit=None):
     """Validate committed evidence/proof records and their cross-record references.
 
     Directory selects the schema: evidence/evidence-envelope/*.json or
@@ -1102,6 +1104,12 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_pat
 
         if not isinstance(data, dict):
             continue
+
+        freshness = data.get("freshness")
+        if isinstance(freshness, dict) and freshness.get("stale") is False and current_commit:
+            commit = freshness.get("commit")
+            if isinstance(commit, str) and commit != current_commit:
+                F.add("USF-EVIDENCE-009", p, f"{commit} != {current_commit}")
 
         for field, ref in _collect_evidence_source_refs(data):
             if not _source_ref_resolves(ref, existing_paths, source_paths, source_allowlist):
@@ -1159,8 +1167,13 @@ def check_evidence(ctx, F):
                       if os.path.isfile(p)}
     source_paths = _source_import_paths(F)
     source_allowlist = _source_reference_allowlist(F)
+    try:
+        current_commit = git_checked("rev-parse", "HEAD")
+    except Exception:
+        current_commit = None
     validate_evidence_data(ctx, F, data_by_path, existing_paths=existing_paths,
-                           source_paths=source_paths, source_allowlist=source_allowlist)
+                           source_paths=source_paths, source_allowlist=source_allowlist,
+                           current_commit=current_commit)
     return "ran"
 
 
@@ -1433,6 +1446,7 @@ def check_selftest(ctx, F):
                 existing_paths=set(patch.get("existingPaths", [])),
                 source_paths=set(patch.get("sourcePaths", [])),
                 source_allowlist={k: set(v) for k, v in patch.get("sourceAllowlist", {}).items()},
+                current_commit=patch.get("currentCommit"),
             )
         elif patch["target"] == "real-adrs":
             records = patch.get("records")

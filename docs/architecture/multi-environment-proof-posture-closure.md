@@ -10,9 +10,9 @@
 
 This closure records the multi-environment proof posture state for the first authentication implementation slice. It creates no implementation code, implementation directory, product runtime, source import, generated report, or schema activation. It does not start USF-39.
 
-## Closure Result
+## Posture Result
 
-USF-73 is satisfied only for the proof posture required before a future first-slice implementation directive can be considered: the hermetic internal proof floor.
+USF-73 has historical proof evidence for the hermetic internal proof floor at claim commit `3a94677bd5be463841975511cdb61fa22da87146`. It is not satisfied for current-head readiness unless the proof is rerun and the evidence records name the exact commit being claimed with stale freshness set to false.
 
 USF-73 does not satisfy local composed, external sandbox, production-shaped, live external provider, or production-live proof. Those postures remain not-proven and are release-blocking or later implementation-merge-blocking according to `docs/architecture/production-proof-posture-matrix.md`.
 
@@ -41,7 +41,7 @@ The proof command did not create a product runtime, execute historical React pro
 
 | Posture | Provider mode | Environment | USF-62 gate type | Current USF-73 result | Reason |
 |---|---|---|---|---|---|
-| Hermetic internal proof floor | `hermetic-mock` | `hermetic` | directive-blocking | proven for the bounded authentication slice | Fresh proof evidence exists for the claimed commit, with `freshness.stale` false and observed proof level `behaviour-proven`. |
+| Hermetic internal proof floor | `hermetic-mock` | `hermetic` | directive-blocking | historical proof exists; current-head proof rerun required | Proof evidence exists for claim commit `3a94677bd5be463841975511cdb61fa22da87146`, with observed proof level `behaviour-proven`. Because later commits changed the repository, the committed proof records are stale for current-head readiness. |
 | Local composed substrate proof | `local-composed-real-service` | `integration` | implementation-merge-blocking once implementation exists | not proven / deferred | No local composed implementation substrate is authorized or present. Historical React local proof scripts require runtime packages and services that USF has not imported. |
 | External sandbox provider proof | `external-sandbox` | `production-shaped` | release-blocking | not proven / deferred | No external sandbox provider substrate, credentials, or proof command is authorized by the current USF proof substrate decision. |
 | Production-shaped rehearsal proof | `external-sandbox` or `local-composed-real-service` | `production-shaped` | release-blocking | not proven / deferred | No production-shaped topology or rehearsal proof evidence exists. Production-shaped proof cannot be inferred from hermetic evidence. |
@@ -53,8 +53,8 @@ The proof command did not create a product runtime, execute historical React pro
 
 | USF-73 acceptance criterion | Result | Evidence |
 |---|---|---|
-| Fresh proof records exist for every posture required by USF-62. | Satisfied for the first-slice directive-blocking posture. | USF-62 requires the hermetic floor before the first implementation directive. The refreshed authentication proof evidence records claim the current pre-PR main commit and have `freshness.stale` false. Stronger postures are not required before first implementation merge unless a future directive claims them. |
-| No stale record supports current readiness. | Satisfied for the hermetic first-slice claim. | Historical observability proof and React proof outputs remain lineage only. The current readiness claim cites only the refreshed authentication proof evidence. |
+| Fresh proof records exist for every posture required by USF-62. | Not satisfied for current-head readiness. | Historical authentication proof evidence exists for claim commit `3a94677bd5be463841975511cdb61fa22da87146`. A later directive or implementation PR must rerun proof for the exact commit being claimed before using it as current proof evidence. Stronger postures remain out of scope unless a future directive claims them. |
+| No stale record supports current readiness. | Satisfied by correction. | Historical observability proof, React proof outputs, and authentication proof records whose freshness commit differs from current head remain lineage only and must be marked stale. |
 | No hermetic/local/sandbox evidence satisfies live-external-provider or production-live claims. | Satisfied. | The proof evidence records `providerMode` as `hermetic-mock`, `environment` as `hermetic`, and `liveExternalProviderClaim` as false. This document records production-live as not-proven. |
 | validate-spec evidence and real-instances are clean. | Required before merge. | The PR must pass `validate-spec evidence --json` and `validate-spec real-instances --json`, plus the full required validation set. |
 | USF-59 can cite this work or is updated to avoid overlap. | Satisfied by citation. | USF-59 remains the first-slice hermetic authentication proof record. This closure refreshes the same authorized evidence and records the broader posture classification without redefining USF-59. |
@@ -75,7 +75,7 @@ The proof command did not create a product runtime, execute historical React pro
 
 ## Readiness Effect
 
-READY_WITH_NON_BLOCKING_DEFERRED_WORK for the first-slice hermetic proof posture required before a future human-filled implementation directive can be considered.
+NOT_READY_BLOCKING_ISSUES_REMAIN for any current-head proof-readiness claim until the hermetic authentication proof is rerun for the exact commit being claimed.
 
 NOT_READY_BLOCKING_ISSUES_REMAIN for live external provider, production-shaped, production-live, local composed, or release readiness claims.
 

@@ -12,7 +12,7 @@ This rollup classifies the proof-slice gate state before the implementation dire
 
 ## Rollup Verdict
 
-GO for USF-61 to draft a filled implementation directive for the current authentication first slice, provided the directive stays within the current hermetic proof floor and explicitly keeps live-external-provider and production-live claims out of scope.
+GO for USF-61 to draft a filled implementation directive for the authentication first slice, provided the directive stays within the hermetic proof floor, explicitly keeps live-external-provider and production-live claims out of scope, and requires fresh proof to be rerun for the exact commit claimed by any later implementation-readiness decision.
 
 NO-GO for starting USF-39. USF-39 remains blocked until USF-61 produces an accepted filled implementation directive, USF-75 performs final pre-USF-39 revalidation, and the human separately authorizes implementation extraction.
 
@@ -27,7 +27,7 @@ Current proof/evidence records:
 - `evidence/evidence-envelope/authentication-slice-proof-lineage.json`;
 - historical observability proof lineage under `evidence/proof-evidence/observability-signals-runtime-proof.json` and matching envelopes.
 
-The authentication proof record is current only for the named hermetic authentication slice. It records `providerMode` `hermetic-mock`, `environment` `hermetic`, observed proof level `behaviour-proven`, non-stale freshness, no live-external-provider claim, and no production-live claim.
+The authentication proof record is historical proof evidence for its recorded claim commit. It records `providerMode` `hermetic-mock`, `environment` `hermetic`, observed proof level `behaviour-proven`, no live-external-provider claim, and no production-live claim. Because the recorded freshness commit differs from the current repository head, the committed record is stale for current-head readiness and must be rerun before it can support a new current-readiness claim.
 
 Historical observability proof records remain lineage. They must not satisfy current readiness unless the relevant freshness, provider mode, environment, and evidence references are valid for the claim.
 
@@ -51,7 +51,7 @@ Historical observability proof records remain lineage. They must not satisfy cur
 | USF-91 storage and data governance runtime assurance slice | complete for semantic planning | no | yes | Storage/data governance expectations are explicit; runtime storage assurance is deferred. |
 | USF-92 provider reliability, degraded mode, and recovery proof slice | complete for semantic planning | no | yes | Provider failure/degraded/recovery expectations are explicit; runtime adapter reliability proof is deferred. |
 | USF-93 React readiness rule parity matrix | complete | no | partial | Historical readiness rules are mapped to USF coverage or explicit gaps. |
-| USF-73 multi-environment proof evidence execution | deferred | no, if USF-61 scopes first pass to hermetic only | yes | Blocks any live-external-provider, production-shaped-as-release, production-live, or broader multi-environment claim. |
+| USF-73 multi-environment proof evidence execution | deferred | no, if USF-61 scopes first pass to hermetic only and requires fresh proof before a current claim | yes | Blocks any live-external-provider, production-shaped-as-release, production-live, broader multi-environment claim, or current-head proof claim until fresh evidence is rerun for the claimed commit. |
 
 ## Merge-Blocking Versus Release-Blocking Gaps
 
@@ -96,7 +96,7 @@ Release-blocking or claim-blocking until separately proven:
 USF-61 may proceed to draft the filled implementation directive only under these constraints:
 
 - slice: current authentication login API/audit/workflow/provider-mode slice;
-- proof floor: hermetic internal proof using current authentication proof evidence;
+- proof floor: hermetic internal proof using fresh authentication proof evidence rerun for the exact commit claimed by the later directive or implementation PR;
 - provider mode: hermetic-mock unless a later proof directive adds stronger evidence;
 - environment: hermetic unless a later proof directive adds stronger evidence;
 - live-external-provider proof: no for the first directive unless USF-73 or equivalent later evidence closes it;
