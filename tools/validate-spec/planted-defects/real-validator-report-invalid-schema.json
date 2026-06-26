@@ -1,0 +1,9 @@
+{
+  "target": "validator-reports",
+  "expectedRule": "USF-REAL-005",
+  "records": {
+    "evidence/validator-report/invalid-validator-report.json": {
+      "id": "invalid-validator-report"
+    }
+  }
+}
