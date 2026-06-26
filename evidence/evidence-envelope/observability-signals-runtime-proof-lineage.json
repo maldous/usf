@@ -1,0 +1,22 @@
+{
+  "id": "evidence.normalised.observability-signals-runtime-proof-lineage",
+  "title": "Normalised lineage for observability signals proof",
+  "description": "Draft normalised evidence envelope that retains the historical raw proof record and proof-evidence index references used to derive the USF proof record.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "evidence-classification"
+  ],
+  "vocabularyRefs": [
+    "evidence-kinds"
+  ],
+  "aiGuidance": "Normalisation preserves lineage only. The historical raw proof and index remain evidence inputs, not USF semantic authority.",
+  "evidenceKind": "normalised-evidence",
+  "sourceRefs": [
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json",
+    "../react/docs/v2-foundation/usf-audit/proof-evidence-index.json"
+  ]
+}
