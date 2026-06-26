@@ -1,0 +1,40 @@
+{
+  "id": "observability.authentication-login-audit",
+  "signalKind": "runtime-event",
+  "name": "auth-login-audit",
+  "source": "audit.authentication-login",
+  "title": "Authentication Login Audit Signal",
+  "description": "Draft observability signal instance for authentication login audit correlation.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Observability Signal"
+  ],
+  "taxonomyRefs": [
+    "observability-audit-classification"
+  ],
+  "vocabularyRefs": [
+    "observability-signal-kinds",
+    "observability-signal-names",
+    "observability-attribute-names"
+  ],
+  "aiGuidance": "Signal names and attributes are USF-controlled and OpenTelemetry-informed; do not claim OpenTelemetry compliance from this instance.",
+  "purpose": "Correlate login audit decisions with request and proof identifiers.",
+  "semanticContractRef": "semantic-contract.authentication-platform",
+  "retention": "retained according to audit and observability policy once evidence retention is authored",
+  "correlation": "request-id links login interface, audit event, and proof output",
+  "attributes": [
+    "service-name",
+    "deployment-environment",
+    "provider-mode",
+    "tenant-id",
+    "trace-id",
+    "request-id",
+    "proof-id",
+    "capability-id"
+  ],
+  "sourceRefs": [
+    "apps/platform-api/scripts/observability-signals-runtime-proof.ts",
+    "apps/platform-api/src/server/observability.ts"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "command.validate-spec-all",
+  "commandKind": "validation-command",
+  "title": "Validate Spec Corpus",
+  "description": "Draft command semantic instance for the repeatable USF specification validator gate.",
+  "purpose": "Validate schemas, catalogues, fixtures, real semantic instances, source-import manifest checks, and validator selftests.",
+  "invocation": "python3 tools/validate-spec/validate-spec.py all",
+  "inputs": [
+    "spec",
+    "docs",
+    "tools/validate-spec"
+  ],
+  "outputs": [
+    "validator findings on standard output",
+    "process exit code"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [],
+  "failureSemantics": "Non-zero exit indicates blocking or error findings; the validator fails closed on unreadable input or unresolved cross-file checks.",
+  "emitsEvidence": true,
+  "sourceRefs": [
+    "tools/e2e/validate-e2e/src/index.mjs",
+    "Makefile"
+  ],
+  "disposition": "replace",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Run this gate before claiming semantic corpus completion; do not treat a generated report as higher authority than the checked artefacts."
+}

@@ -1,0 +1,31 @@
+{
+  "id": "environment.hermetic",
+  "environment": "hermetic",
+  "title": "Hermetic Environment",
+  "description": "Draft environment instance for deterministic offline proof using hermetic providers.",
+  "permittedProviderModes": [
+    "hermetic-mock"
+  ],
+  "productionLiveClaim": false,
+  "readinessGateRefs": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md"
+  ],
+  "sourceRefs": [
+    "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts"
+  ],
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Environment",
+    "Provider Mode"
+  ],
+  "taxonomyRefs": [
+    "environment-classification"
+  ],
+  "vocabularyRefs": [
+    "environment-classes",
+    "provider-modes"
+  ],
+  "aiGuidance": "Environment is separate from provider mode and cannot upgrade provider evidence by implication."
+}

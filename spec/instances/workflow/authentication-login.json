@@ -1,0 +1,66 @@
+{
+  "id": "workflow.authentication-login",
+  "workflowKind": "workflow",
+  "title": "Authentication Login Workflow",
+  "description": "Draft workflow semantic instance linking the login interface, audit event, provider posture, and UI journey.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Workflow",
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Preserve ordering, failure, and compensation semantics during implementation extraction; source proof does not replace this contract.",
+  "participants": [
+    "interface.authentication-login-api",
+    "provider-mode.mock-identity-provider",
+    "audit.authentication-login"
+  ],
+  "ordering": "request validation, provider authentication, audit recording, response emission",
+  "steps": [
+    {
+      "id": "receive-login-request",
+      "description": "Receive the login request at the authentication interface.",
+      "operation": "interface.authentication-login-api"
+    },
+    {
+      "id": "evaluate-provider-response",
+      "description": "Evaluate the configured identity provider response without upgrading provider mode.",
+      "operation": "provider-mode.mock-identity-provider"
+    },
+    {
+      "id": "record-audit",
+      "description": "Record the login audit event before claiming proof success.",
+      "operation": "audit.authentication-login"
+    }
+  ],
+  "stateTransitions": [
+    {
+      "from": "unauthenticated",
+      "to": "authenticated-or-denied",
+      "trigger": "provider-decision-recorded"
+    }
+  ],
+  "failurePaths": [
+    "provider-unavailable-fails-closed",
+    "audit-recording-missing-fails-proof-claim"
+  ],
+  "compensationPaths": [
+    "no-compensating-action-for-denied-login; preserve audit record"
+  ],
+  "relatedEvents": [
+    "event.authentication-login-audit"
+  ],
+  "relatedInterfaces": [
+    "interface.authentication-login-api"
+  ],
+  "sourceRefs": [
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "apps/platform-api/tests/unit/auth-settings-audit.test.ts"
+  ]
+}

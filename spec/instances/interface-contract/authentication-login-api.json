@@ -1,0 +1,39 @@
+{
+  "id": "interface.authentication-login-api",
+  "title": "Authentication Login API Contract",
+  "description": "Draft USF-native interface contract for an authentication login boundary, source-backed by historical OpenAPI and authentication proof evidence.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Keep the contract USF-native per ADR 0002. Do not claim OpenAPI compliance from this instance alone.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent the authenticated login boundary as a governed contract before implementation extraction.",
+  "boundary": "platform-api inbound authentication boundary",
+  "semanticContractRef": "semantic-contract.authentication-platform",
+  "requestContract": {
+    "description": "Login request semantics are source-backed but not yet expanded into field-level USF schema."
+  },
+  "responseContract": {
+    "description": "Login response semantics are source-backed but not yet expanded into field-level USF schema."
+  },
+  "permissions": [
+    "anonymous-login-attempt",
+    "authenticated-session-creation"
+  ],
+  "security": "Authentication boundary must preserve fail-closed authorization defaults and audited session creation.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "docs/api/openapi.json",
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts"
+  ]
+}

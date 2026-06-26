@@ -1,0 +1,35 @@
+{
+  "id": "event.authentication-login-audit",
+  "title": "Authentication Login Audit Event Contract",
+  "description": "Draft event contract for authentication login audit emission, source-backed by historical audit and authentication proof evidence.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Event"
+  ],
+  "taxonomyRefs": [
+    "event-workflow-classification"
+  ],
+  "vocabularyRefs": [
+    "event-workflow-kinds"
+  ],
+  "aiGuidance": "Do not emit or rename this event without updating event semantics, audit semantics, and validators together.",
+  "eventKind": "event",
+  "payloadSchemaRef": "urn:usf:schema:audit-event",
+  "schemaVersion": "draft",
+  "producer": "interface.authentication-login-api",
+  "consumers": [
+    "audit.authentication-login"
+  ],
+  "ordering": "after authentication decision and before readiness claim",
+  "idempotencyKey": "request-id",
+  "retryPolicy": "retry only where duplicate audit events remain idempotent by request identifier",
+  "dlqPolicy": "failed audit emission is a blocking readiness finding, not silently discarded",
+  "retention": "retained according to audit-event retention policy once authored",
+  "canonical": true,
+  "failureSemantics": "Missing collected audit evidence fails closed for any proof claim that depends on this event.",
+  "sourceRefs": [
+    "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
+    "apps/platform-api/src/usecases/audit.ts"
+  ]
+}

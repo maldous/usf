@@ -1,0 +1,32 @@
+{
+  "id": "environment.production-shaped",
+  "environment": "production-shaped",
+  "title": "Production Shaped Environment",
+  "description": "Draft environment instance for production-shaped validation that is explicitly not production-live.",
+  "permittedProviderModes": [
+    "local-composed-real-service",
+    "external-sandbox"
+  ],
+  "productionLiveClaim": false,
+  "readinessGateRefs": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md"
+  ],
+  "sourceRefs": [
+    "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts"
+  ],
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Environment",
+    "Provider Mode"
+  ],
+  "taxonomyRefs": [
+    "environment-classification"
+  ],
+  "vocabularyRefs": [
+    "environment-classes",
+    "provider-modes"
+  ],
+  "aiGuidance": "Production-shaped does not satisfy production-live and cannot be used as live external provider readiness evidence."
+}

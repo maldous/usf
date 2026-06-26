@@ -1,0 +1,34 @@
+{
+  "id": "configuration.provider-mode-selector",
+  "configurationKind": "provider-configuration",
+  "key": "provider-mode-selector",
+  "title": "Provider Mode Selector Configuration",
+  "description": "Draft configuration semantic instance for explicit provider-mode selection and proof honesty.",
+  "purpose": "Keep provider mode explicit so hermetic, local-composed, sandbox, and live-external claims are not upgraded by implication.",
+  "secretBearing": false,
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofRelevant": true,
+  "generated": false,
+  "reloadOrRestart": "restart",
+  "sourceRefs": [
+    "apps/platform-api/scripts/provider-config-runtime-proof.ts",
+    "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts"
+  ],
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Configuration",
+    "Provider Mode",
+    "Environment"
+  ],
+  "taxonomyRefs": [
+    "configuration-classification"
+  ],
+  "vocabularyRefs": [
+    "configuration-kinds",
+    "provider-modes",
+    "environment-classes"
+  ],
+  "aiGuidance": "Provider mode is proof-relevant configuration. Never infer live-external readiness from environment name or generated reports."
+}
