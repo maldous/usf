@@ -1,0 +1,50 @@
+{
+  "allowlist": [
+    {
+      "path": "../react/docs/evidence/api/openapi-drift-hard-gate.md",
+      "rationale": "Historical ADR evidence cited by ADR 0002; retained as lineage until the corresponding source-import entry is authored."
+    },
+    {
+      "path": "../react/docs/evidence/e2e/prod-observability-correlation-latest.json",
+      "rationale": "Historical ADR evidence cited by ADR 0004; retained as lineage until the corresponding source-import entry is authored."
+    },
+    {
+      "path": "../react/docs/v2-foundation/event-semantics.json",
+      "rationale": "Historical event-semantics evidence cited by ADR 0002; retained as lineage until the corresponding source-import entry is authored."
+    },
+    {
+      "path": "../react/docs/v2-foundation/operational-semantics.json",
+      "rationale": "Historical operational-semantics evidence cited by ADR 0004; retained as lineage until the corresponding source-import entry is authored."
+    },
+    {
+      "path": "../react/docs/v2-foundation/v1-capability-closure.json",
+      "rationale": "Historical capability-domain evidence cited by ADR 0003; retained as lineage until the corresponding source-import entry is authored."
+    },
+    {
+      "path": "../react/docs/v2-foundation/v2-decision-catalog.json",
+      "rationale": "Historical ADR-template lineage evidence cited by the ADR fixture corpus; retained until canonical ADR import coverage includes it."
+    },
+    {
+      "path": "../react/docs/v2-foundation/v2-decision-lineage.json",
+      "rationale": "Historical ADR-template lineage evidence cited by the ADR fixture corpus; retained until canonical ADR import coverage includes it."
+    },
+    {
+      "path": "../react/usf-audit/proof-evidence/",
+      "rationale": "Historical proof-evidence directory cited by ADR 0004; retained as directory-level lineage until individual source-import rows exist."
+    },
+    {
+      "path": "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json",
+      "fragments": [
+        "auditEventIds",
+        "metricSamples",
+        "traceIds",
+        "logCorrelationIds"
+      ],
+      "rationale": "Historical observability proof-output record referenced by current proof evidence. Named fragments identify emitted evidence fields from the historical JSON until a source-import row covers the proof output."
+    },
+    {
+      "path": "../react/docs/v2-foundation/usf-audit/proof-evidence-index.json",
+      "rationale": "Historical proof-evidence index referenced by the current normalised evidence lineage record until a source-import row covers the index."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-005",
+  "records": {
+    "evidence/evidence-envelope/react-prefix-only-source-reference.json": {
+      "id": "evidence.react-prefix-only-source-reference",
+      "title": "React Prefix Only Source Reference",
+      "description": "Planted evidence envelope whose historical source reference has the historical prefix but is not manifest-backed, repository-local, or allowlisted.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "normalised-evidence",
+      "sourceRefs": [
+        "../react/docs/v2-foundation/no-such-source-reference.json"
+      ]
+    }
+  }
+}
