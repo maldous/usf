@@ -1,0 +1,12 @@
+{
+  "target": "report-discovery",
+  "expectedRule": "USF-REAL-005",
+  "records": {
+    "evidence/readiness-report.json": {
+      "id": "report.readiness-undiscovered",
+      "authorityLevel": "generated-report",
+      "status": "pass",
+      "findings": []
+    }
+  }
+}
