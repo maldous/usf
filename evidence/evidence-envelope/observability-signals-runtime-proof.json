@@ -1,0 +1,29 @@
+{
+  "id": "evidence.runtime-proof.observability-signals-runtime-proof",
+  "title": "Runtime evidence envelope for observability signals proof",
+  "description": "Draft runtime-proof evidence envelope for the historical observability-signals proof normalised into USF evidence form.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "evidence-classification"
+  ],
+  "vocabularyRefs": [
+    "evidence-kinds",
+    "provider-modes",
+    "environment-classes"
+  ],
+  "aiGuidance": "Use this envelope as historical runtime proof evidence only. Its stale freshness pin must not satisfy current readiness or live-provider claims.",
+  "evidenceKind": "runtime-proof-evidence",
+  "sourceRefs": [
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json"
+  ],
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "freshness": {
+    "commit": "32195d249bbd297cb579b5116f7aac7dbc0431b9",
+    "stale": true
+  }
+}

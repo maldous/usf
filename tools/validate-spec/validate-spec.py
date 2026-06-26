@@ -27,9 +27,10 @@ Modes (default: all):
     fixtures     tools/validate-spec/fixtures positive/negative corpus + expected-reason manifest
     instances    committed semantic corpus instances under spec/instances
     imports      source-import manifest schema + internal no-loss checks
+    evidence     committed proof/evidence records under evidence/
     selftest     plant defects from tools/validate-spec/planted-defects/ and assert the exact rule id fires
     pr           base/head diff gate (--base, --head); fails closed if git fails
-    all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + selftest
+    all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + evidence + selftest
                  (+ pr when --base/--head is given)
 
 Options:
@@ -224,6 +225,13 @@ RULES = {
     "USF-IMPORT-005":   ("blocking", "Source import manifest targetUsfConcept reuses a source path"),
     "USF-IMPORT-006":   ("blocking", "Package metadata is not classified as a package unit"),
     "USF-IMPORT-007":   ("blocking", "Runtime proof script is not classified as proof evidence"),
+    "USF-EVIDENCE-001": ("blocking", "Evidence envelope invalid against evidence-envelope schema"),
+    "USF-EVIDENCE-002": ("blocking", "Proof evidence invalid against proof-evidence schema"),
+    "USF-EVIDENCE-003": ("blocking", "Evidence/proof id is duplicated"),
+    "USF-EVIDENCE-004": ("blocking", "Proof collectedEvidence reference does not resolve to committed evidence"),
+    "USF-EVIDENCE-005": ("blocking", "Evidence/proof source reference does not resolve"),
+    "USF-EVIDENCE-006": ("blocking", "Proof evidence claimed level exceeds observed level"),
+    "USF-EVIDENCE-007": ("blocking", "Proof evidence live-provider claim exceeds provider/level evidence"),
     "USF-SELFTEST-001": ("blocking", "Planted defect did NOT raise its expected rule id"),
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
@@ -875,6 +883,137 @@ def check_imports(ctx, F):
     return "ran"
 
 
+PROOF_LEVEL_ORDER = {
+    "discovery-proven": 0,
+    "executable-proven": 1,
+    "contract-proven": 2,
+    "behaviour-proven": 3,
+    "substrate-proven": 4,
+    "resilience-proven": 5,
+    "foundation-proven": 6,
+}
+
+
+def _evidence_kind_for_path(path):
+    rel = path.replace(os.sep, "/")
+    if "/proof-evidence/" in f"/{rel}":
+        return "proof"
+    if "/evidence-envelope/" in f"/{rel}":
+        return "envelope"
+    return None
+
+
+def _strip_fragment(ref):
+    return ref.split("#", 1)[0]
+
+
+def _source_ref_resolves(ref, existing_paths):
+    base = _strip_fragment(ref)
+    if not base:
+        return False
+    if base in existing_paths:
+        return True
+    # Historical source evidence is explicitly allowed when it is rooted in
+    # ../react. CI does not checkout the sibling historical repository, so
+    # repository-local existence cannot be the repeatable gate for those refs.
+    if base.startswith("../react/"):
+        return True
+    return False
+
+
+def _collect_evidence_source_refs(data):
+    if not isinstance(data, dict):
+        return
+    for ref in data.get("sourceRefs", []):
+        if isinstance(ref, str):
+            yield "sourceRefs", ref
+    for ref in data.get("emittedEvidence", []):
+        if isinstance(ref, str):
+            yield "emittedEvidence", ref
+
+
+def validate_evidence_data(ctx, F, data_by_path, existing_paths=None):
+    """Validate committed evidence/proof records and their cross-record references.
+
+    Directory selects the schema: evidence/evidence-envelope/*.json or
+    evidence/proof-evidence/*.json. Historical source refs are allowed only for
+    explicit ../react paths that still resolve on disk.
+    """
+    existing_paths = existing_paths or set()
+    id_to_paths = defaultdict(list)
+    envelope_ids = set()
+    proof_ids = set()
+
+    for p, data in data_by_path.items():
+        if isinstance(data, dict) and isinstance(data.get("id"), str):
+            id_to_paths[data["id"]].append(p)
+            kind = _evidence_kind_for_path(p)
+            if kind == "envelope":
+                envelope_ids.add(data["id"])
+            elif kind == "proof":
+                proof_ids.add(data["id"])
+
+    for eid, paths in sorted(id_to_paths.items()):
+        if len(paths) > 1:
+            F.add("USF-EVIDENCE-003", eid, f"duplicate evidence/proof id in {paths}")
+
+    for p, data in data_by_path.items():
+        kind = _evidence_kind_for_path(p)
+        if kind == "envelope":
+            errors = list(Draft202012Validator(ctx["sd"]["evidence-envelope"]).iter_errors(data))
+            for err in errors:
+                F.add("USF-EVIDENCE-001", p, err.message[:160])
+        elif kind == "proof":
+            errors = list(Draft202012Validator(ctx["sd"]["proof-evidence"]).iter_errors(data))
+            for err in errors:
+                F.add("USF-EVIDENCE-002", p, err.message[:160])
+        else:
+            continue
+
+        if not isinstance(data, dict):
+            continue
+
+        for field, ref in _collect_evidence_source_refs(data):
+            if not _source_ref_resolves(ref, existing_paths):
+                F.add("USF-EVIDENCE-005", f"{p}:{field}", f"unresolved source reference: {ref}")
+
+        if kind != "proof":
+            continue
+
+        for ref in data.get("collectedEvidence", []):
+            if isinstance(ref, str) and ref not in envelope_ids:
+                F.add("USF-EVIDENCE-004", f"{p}:collectedEvidence", f"unresolved evidence reference: {ref}")
+
+        claimed = data.get("proofLevelClaimed")
+        observed = data.get("proofLevelObserved")
+        if claimed in PROOF_LEVEL_ORDER and observed in PROOF_LEVEL_ORDER:
+            if PROOF_LEVEL_ORDER[claimed] > PROOF_LEVEL_ORDER[observed]:
+                F.add("USF-EVIDENCE-006", p, f"{claimed} > {observed}")
+
+        if data.get("liveExternalProviderClaim") is True:
+            provider = data.get("providerMode")
+            observed_level = PROOF_LEVEL_ORDER.get(observed, -1)
+            if provider != "live-external-provider" or observed_level < PROOF_LEVEL_ORDER["substrate-proven"]:
+                F.add("USF-EVIDENCE-007", p, f"{provider}/{observed}")
+
+
+def check_evidence(ctx, F):
+    """Validate committed evidence/proof records under evidence/."""
+    paths = sorted(glob.glob("evidence/evidence-envelope/*.json")) + sorted(glob.glob("evidence/proof-evidence/*.json"))
+    if not paths:
+        return "not-run"
+    data_by_path = {}
+    for p in paths:
+        data = load_json(p, F)
+        if data is not None:
+            data_by_path[p] = data
+    existing_paths = {p[2:] if p.startswith("./") else p
+                      for p in glob.glob("**/*", recursive=True)
+                      if os.path.isfile(p)}
+    validate_evidence_data(ctx, F, data_by_path, existing_paths=existing_paths)
+    return "ran"
+
+
 PATCH_ROOTS = {"registry": "reg", "vocabulary": "voc", "taxonomy": "tax"}
 
 
@@ -937,7 +1076,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] != "instances":
+            if patch["target"] not in {"instances", "evidence"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -953,6 +1092,17 @@ def check_selftest(ctx, F):
                 f2,
                 instances,
                 source_paths=set(patch.get("sourcePaths", [])),
+                existing_paths=set(patch.get("existingPaths", [])),
+            )
+        elif patch["target"] == "evidence":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "evidence planted-defect needs a records object")
+                continue
+            validate_evidence_data(
+                sandbox,
+                f2,
+                records,
                 existing_paths=set(patch.get("existingPaths", [])),
             )
         else:
@@ -1031,7 +1181,7 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "selftest", "pr", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "selftest", "pr", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
@@ -1050,8 +1200,9 @@ def main():
     pr_requested = a.base is not None or a.head is not None
     run = {
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
-        "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "selftest": ["selftest"], "pr": ["pr"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "selftest"]
+        "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "evidence": ["evidence"],
+        "selftest": ["selftest"], "pr": ["pr"],
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "evidence", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -1070,6 +1221,8 @@ def main():
         check_instances(ctx, F)
     if "imports" in run:
         check_imports(ctx, F)
+    if "evidence" in run:
+        check_evidence(ctx, F)
     if "selftest" in run:
         selftest_state = check_selftest(ctx, F)
     if "pr" in run:

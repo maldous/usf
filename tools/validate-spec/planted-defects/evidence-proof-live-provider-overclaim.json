@@ -1,0 +1,63 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-007",
+  "existingPaths": [
+    "docs/architecture/charter.md"
+  ],
+  "records": {
+    "evidence/evidence-envelope/collected.json": {
+      "id": "evidence.collected",
+      "title": "Collected Evidence",
+      "description": "Collected evidence for planted proof selftest.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "normalised-evidence",
+      "sourceRefs": [
+        "docs/architecture/charter.md"
+      ]
+    },
+    "evidence/proof-evidence/live-provider-overclaim.json": {
+      "id": "proof.live-provider-overclaim",
+      "kind": "proof",
+      "title": "Live Provider Overclaim",
+      "description": "Planted proof that claims live external provider evidence from a hermetic substrate.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Proof",
+        "Proof Level",
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "proof-classification"
+      ],
+      "vocabularyRefs": [
+        "proof-levels",
+        "provider-modes",
+        "environment-classes"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "proofLevelClaimed": "behaviour-proven",
+      "proofLevelObserved": "behaviour-proven",
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "liveExternalProviderClaim": true,
+      "emittedEvidence": [
+        "docs/architecture/charter.md"
+      ],
+      "collectedEvidence": [
+        "evidence.collected"
+      ]
+    }
+  }
+}

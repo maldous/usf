@@ -1,0 +1,46 @@
+{
+  "id": "usf.proof-evidence.observability-signals-runtime-proof",
+  "kind": "proof",
+  "title": "Observability signals runtime proof",
+  "description": "Draft USF proof-evidence record normalised from the historical observability-signals runtime proof. The record preserves the observed behaviour proof level and lineage without treating historical test evidence as live-provider or production evidence.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Proof",
+    "Proof Level",
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "proof-classification",
+    "provider-classification",
+    "environment-classification"
+  ],
+  "vocabularyRefs": [
+    "proof-levels",
+    "provider-modes",
+    "environment-classes",
+    "evidence-kinds"
+  ],
+  "aiGuidance": "Treat this as historical behaviour evidence only. Do not relabel it as live-external-provider evidence, production-live evidence, or current readiness.",
+  "claimExercised": "The historical observability-signals proof exercised alert, incident, and observability-signal routes and preserved audit, metric, trace, and log evidence for the observed run.",
+  "proofLevelClaimed": "behaviour-proven",
+  "proofLevelObserved": "behaviour-proven",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "liveExternalProviderClaim": false,
+  "emittedEvidence": [
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#auditEventIds",
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#metricSamples",
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#traceIds",
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#logCorrelationIds"
+  ],
+  "collectedEvidence": [
+    "evidence.runtime-proof.observability-signals-runtime-proof",
+    "evidence.normalised.observability-signals-runtime-proof-lineage"
+  ],
+  "freshness": {
+    "commit": "32195d249bbd297cb579b5116f7aac7dbc0431b9",
+    "stale": true
+  },
+  "failureSemantics": "This record is historical evidence only. If freshness, provider mode, environment, or referenced evidence cannot be verified for a current claim, the proof must fail closed."
+}

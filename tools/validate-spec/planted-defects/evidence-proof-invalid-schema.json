@@ -1,0 +1,9 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-002",
+  "records": {
+    "evidence/proof-evidence/invalid-proof.json": {
+      "id": "proof.invalid-proof"
+    }
+  }
+}

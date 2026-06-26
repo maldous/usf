@@ -1,0 +1,27 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-EVIDENCE-005",
+  "records": {
+    "evidence/evidence-envelope/unresolved-source-reference.json": {
+      "id": "evidence.unresolved-source-reference",
+      "title": "Unresolved Source Reference",
+      "description": "Planted evidence envelope whose source reference does not resolve.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "normalised-evidence",
+      "sourceRefs": [
+        "docs/architecture/no-such-source.md"
+      ]
+    }
+  }
+}
