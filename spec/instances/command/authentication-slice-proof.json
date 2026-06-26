@@ -1,0 +1,49 @@
+{
+  "id": "command.authentication-slice-proof",
+  "commandKind": "proof-command",
+  "title": "Authentication Slice Proof Command Semantics",
+  "description": "Draft command semantic instance for the historical proof commands that back the authentication, identity, and provider-mode first-slice semantics.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Proof"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "This command instance records proof-command semantics only. Do not execute proof or claim fresh readiness from historical commands.",
+  "purpose": "Represent the proof-command boundary for authentication settings, domain identity, custom-domain auth origin, and auth route evidence before implementation extraction.",
+  "invocation": "historical proof commands for auth-settings, domain-identity-matrix, tenant-custom-domain-auth-origin, and auth route tests",
+  "inputs": [
+    "semantic-contract.authentication-platform",
+    "semantic-contract.tenant-identity-record-and-fqdn",
+    "semantic-contract.user-identity-and-tenant-membership",
+    "semantic-contract.tenant-host-identity-resolution",
+    "configuration.provider-mode-selector"
+  ],
+  "outputs": [
+    "historical proof evidence lineage",
+    "provider-mode honesty constraints",
+    "fail-closed authentication findings when proof evidence is stale or missing"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [],
+  "failureSemantics": "Missing, stale, or provider-mislabelled proof evidence fails closed and must not be treated as production-live readiness.",
+  "emitsEvidence": true,
+  "sourceRefs": [
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+    "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
+    "apps/platform-api/tests/substrate/auth-routes.test.ts"
+  ],
+  "disposition": "preserve"
+}

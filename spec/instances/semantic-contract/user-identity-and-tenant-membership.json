@@ -1,0 +1,114 @@
+{
+  "id": "semantic-contract.user-identity-and-tenant-membership",
+  "title": "User Identity and Tenant Membership Semantic Contract",
+  "description": "Draft semantic contract for user identity, external identity linkage, tenant membership, and session actor projection required by the authentication first slice.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "lifecycle-states",
+    "capability-domains"
+  ],
+  "aiGuidance": "Treat user identity and membership as semantic prerequisites for authenticated session context. Do not infer membership rules from implementation structure alone.",
+  "capability": "user-identity-and-tenant-membership",
+  "capabilityDomain": "identity-access",
+  "facets": {
+    "lifecycle": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/src/db/migrations/016-membership-identity-v2.sql",
+        "docs/evidence/identity/tenant-identity-membership-v2.md"
+      ]
+    },
+    "stateModel": {
+      "status": "complete",
+      "description": "Membership state covers no user, external identity resolved, membership present, membership absent, and session actor projected.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/auth.ts",
+        "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
+        "docs/evidence/identity/keycloak-login-callback.md"
+      ]
+    },
+    "permissions": {
+      "status": "complete",
+      "sourceRefs": [
+        "docs/evidence/identity/identity-access-baseline.md",
+        "packages/domain-identity/src/index.ts"
+      ]
+    },
+    "contracts": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/src/ports/identity-repository.ts",
+        "packages/contracts-auth/src/index.ts",
+        "packages/session-runtime/src/index.ts"
+      ]
+    },
+    "validation": {
+      "status": "complete",
+      "description": "Session actor projection validates tenant membership and must not trust client-supplied tenant identifiers.",
+      "sourceRefs": [
+        "apps/platform-api/tests/substrate/session-fixture.test.ts",
+        "apps/platform-api/tests/unit/auth-usecase.test.ts",
+        "docs/evidence/identity/identity-access-baseline.md"
+      ]
+    },
+    "errorModel": {
+      "status": "complete",
+      "description": "Absent session, absent membership, or unresolved external identity must fail closed as unauthenticated or forbidden context.",
+      "sourceRefs": [
+        "apps/platform-api/tests/substrate/auth-routes.test.ts",
+        "docs/evidence/identity/keycloak-login-callback.md"
+      ]
+    },
+    "auditModel": {
+      "status": "gap",
+      "description": "Detailed membership audit event semantics remain deferred to later identity-access expansion."
+    },
+    "readinessModel": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts"
+      ]
+    },
+    "proof": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
+        "apps/platform-api/tests/unit/auth-usecase.test.ts"
+      ]
+    },
+    "uiSemanticDefinition": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/react-enterprise-app/src/hooks/use-session.ts",
+        "apps/react-enterprise-app/src/tests/use-session.test.ts"
+      ]
+    }
+  },
+  "sourceRefs": [
+    "apps/platform-api/src/db/migrations/016-membership-identity-v2.sql",
+    "apps/platform-api/src/ports/identity-repository.ts",
+    "apps/platform-api/src/usecases/auth.ts",
+    "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
+    "apps/platform-api/tests/substrate/session-fixture.test.ts",
+    "apps/platform-api/tests/unit/auth-usecase.test.ts",
+    "apps/react-enterprise-app/src/hooks/use-session.ts",
+    "docs/evidence/identity/identity-access-baseline.md",
+    "docs/evidence/identity/keycloak-login-callback.md",
+    "docs/evidence/identity/tenant-identity-membership-v2.md",
+    "packages/contracts-auth/src/index.ts",
+    "packages/domain-identity/src/index.ts",
+    "packages/session-runtime/src/index.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0003-capability-domain-values.md"
+  ]
+}

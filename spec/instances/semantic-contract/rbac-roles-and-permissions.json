@@ -1,0 +1,101 @@
+{
+  "id": "semantic-contract.rbac-roles-and-permissions",
+  "title": "RBAC Roles and Permissions Semantic Contract",
+  "description": "Draft semantic contract for role and permission evaluation supporting authentication and request authorization.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "lifecycle-states",
+    "capability-domains"
+  ],
+  "aiGuidance": "Permissions are semantic enforcement primitives. Do not replace permission checks with role-name resemblance during implementation extraction.",
+  "capability": "rbac-roles-and-permissions",
+  "capabilityDomain": "identity-access",
+  "facets": {
+    "lifecycle": {
+      "status": "complete",
+      "sourceRefs": [
+        "docs/adr/0021-define-identity-tenancy-roles-and-permissions-model.md"
+      ]
+    },
+    "stateModel": {
+      "status": "gap",
+      "description": "Detailed role lifecycle state remains deferred; first-slice use requires permission evaluation only."
+    },
+    "permissions": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/src/server/authorize-resource.ts",
+        "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+        "packages/authorisation-runtime/src/index.ts"
+      ]
+    },
+    "contracts": {
+      "status": "complete",
+      "sourceRefs": [
+        "packages/authorisation-runtime/src/index.ts",
+        "packages/contracts-auth/src/index.ts"
+      ]
+    },
+    "validation": {
+      "status": "complete",
+      "description": "Permission evaluation validates requested resource/action against the authenticated actor context and fails closed on missing authorization.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts",
+        "packages/authorisation-runtime/tests/authorisation-runtime.test.ts"
+      ]
+    },
+    "errorModel": {
+      "status": "complete",
+      "description": "Missing or insufficient permission yields denied authorization, not partial access or generated-report readiness.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts",
+        "packages/platform-errors/tests/platform-errors-auth.test.ts"
+      ]
+    },
+    "auditModel": {
+      "status": "gap",
+      "description": "Detailed privileged-access audit semantics are deferred to audit-of-privileged-access expansion."
+    },
+    "readinessModel": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
+    },
+    "proof": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts",
+        "packages/authorisation-runtime/tests/authorisation-runtime.test.ts"
+      ]
+    },
+    "uiSemanticDefinition": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/react-enterprise-app/src/components/RequirePermission.tsx"
+      ]
+    }
+  },
+  "sourceRefs": [
+    "apps/platform-api/src/server/authorize-resource.ts",
+    "apps/platform-api/tests/unit/authorize-resource.test.ts",
+    "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+    "docs/adr/0021-define-identity-tenancy-roles-and-permissions-model.md",
+    "packages/authorisation-runtime/src/index.ts",
+    "packages/authorisation-runtime/tests/authorisation-runtime.test.ts",
+    "packages/contracts-auth/src/index.ts",
+    "packages/platform-errors/tests/platform-errors-auth.test.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0003-capability-domain-values.md"
+  ]
+}

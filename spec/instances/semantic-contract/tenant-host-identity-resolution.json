@@ -1,0 +1,96 @@
+{
+  "id": "semantic-contract.tenant-host-identity-resolution",
+  "title": "Tenant Host Identity Resolution Semantic Contract",
+  "description": "Draft semantic contract for resolving request host identity to tenant context before authentication callback and session handling.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "lifecycle-states",
+    "capability-domains"
+  ],
+  "aiGuidance": "Host identity resolution is a semantic prerequisite for tenant-scoped authentication. Do not treat custom-domain source evidence as live-provider login proof.",
+  "capability": "tenant-host-identity-resolution",
+  "capabilityDomain": "identity-access",
+  "facets": {
+    "lifecycle": {
+      "status": "complete",
+      "sourceRefs": [
+        "docs/evidence/auth/custom-domain-auth-origin.md"
+      ]
+    },
+    "stateModel": {
+      "status": "complete",
+      "description": "Host resolution state covers platform host, active custom tenant host, inactive custom host, and unknown host fail-closed outcome.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+        "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts"
+      ]
+    },
+    "permissions": {
+      "status": "not-applicable",
+      "description": "Host resolution happens before authenticated user permissions exist; it produces tenant context rather than authorizing user action."
+    },
+    "contracts": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/src/server/auth.ts",
+        "docs/evidence/auth/custom-domain-auth-origin.md"
+      ]
+    },
+    "validation": {
+      "status": "complete",
+      "description": "Custom host origin must select the correct tenant realm and callback URL without treating mock or local proof as live IdP readiness.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
+        "docs/evidence/auth/custom-domain-auth-origin.md"
+      ]
+    },
+    "errorModel": {
+      "status": "complete",
+      "description": "Unknown, inactive, or disabled host identity fails closed and must not create an authenticated tenant context.",
+      "sourceRefs": [
+        "docs/evidence/auth/custom-domain-auth-origin.md",
+        "docs/evidence/platform/domain-identity-capability-permutation-review.md"
+      ]
+    },
+    "auditModel": {
+      "status": "gap",
+      "description": "Detailed host-resolution audit semantics are deferred to later identity-access audit expansion."
+    },
+    "readinessModel": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts"
+      ]
+    },
+    "proof": {
+      "status": "complete",
+      "sourceRefs": [
+        "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+        "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts"
+      ]
+    },
+    "uiSemanticDefinition": {
+      "status": "not-applicable",
+      "description": "Host identity resolution is request-context semantics, not a direct UI surface in the first slice."
+    }
+  },
+  "sourceRefs": [
+    "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+    "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
+    "apps/platform-api/src/server/auth.ts",
+    "docs/evidence/auth/custom-domain-auth-origin.md",
+    "docs/evidence/platform/domain-identity-capability-permutation-review.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0003-capability-domain-values.md"
+  ]
+}
