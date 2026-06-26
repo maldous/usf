@@ -6,10 +6,10 @@
   "lifecycleState": "draft",
   "ontologyConcepts": ["Semantic Contract", "Capability"],
   "taxonomyRefs": ["semantic-architecture-classification"],
-  "vocabularyRefs": ["authority-levels"],
+  "vocabularyRefs": ["authority-levels", "capability-domains"],
   "aiGuidance": "A complete facet must cite at least one evidence or source reference; otherwise drop it to a gap.",
   "capability": "authentication-login",
-  "capabilityDomain": "identity",
+  "capabilityDomain": "identity-access",
   "facets": {
     "lifecycle": { "status": "complete", "evidenceRefs": ["evidence/lifecycle-proof.json"] },
     "stateModel": { "status": "complete", "sourceRefs": ["../react/docs/v2-foundation/state-model.json"] },

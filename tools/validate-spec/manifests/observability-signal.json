@@ -1,5 +1,5 @@
 [
-  {"path":"negative/observability-signal/empty-name.json","schema":"observability-signal","keyword":"minLength","pointer":"/name"},
+  {"path":"negative/observability-signal/empty-name.json","schema":"observability-signal","keyword":"enum","pointer":"/name"},
   {"path":"negative/observability-signal/empty-purpose.json","schema":"observability-signal","keyword":"minLength","pointer":"/purpose"},
   {"path":"negative/observability-signal/empty-source.json","schema":"observability-signal","keyword":"minLength","pointer":"/source"},
   {"path":"negative/observability-signal/empty-string-evidence-ref.json","schema":"observability-signal","keyword":"minLength","pointer":"/evidenceRefs/0"},

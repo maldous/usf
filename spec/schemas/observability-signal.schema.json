@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:observability-signal",
   "title": "USF Observability Signal Schema",
-  "description": "Draft JSON Schema for observability signal definitions (logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, correlation identifiers). Each declares its kind (observability-signal-kinds), name, source, and purpose, mapped to a semantic contract and to proof/evidence where applicable. Observability is a semantic asset: removing or renaming a signal requires semantic review, not an incidental refactor. USF claims no full OpenTelemetry compliance until concrete attribute schemas exist. Governs the ontology concept Observability Signal. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
+  "description": "Draft JSON Schema for observability signal definitions (logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, correlation identifiers). Each declares its kind (observability-signal-kinds), name (observability-signal-names), source, and purpose, mapped to a semantic contract and to proof/evidence where applicable; declared attributes are constrained to observability-attribute-names. Observability is a semantic asset: removing or renaming a signal requires semantic review, not an incidental refactor. USF claims no full OpenTelemetry compliance; these values are OpenTelemetry-informed USF controls. Governs the ontology concept Observability Signal. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -33,6 +33,34 @@
         "service-resource-attribute",
         "correlation-identifier"
       ]
+    },
+    "signalName": {
+      "type": "string",
+      "enum": [
+        "auth-login-duration-seconds",
+        "auth-login-audit",
+        "request-trace",
+        "runtime-proof-output",
+        "service-resource-identity",
+        "correlation-identifier"
+      ],
+      "$comment": "observability-signal-names canonical values."
+    },
+    "attributeName": {
+      "type": "string",
+      "enum": [
+        "service-name",
+        "service-version",
+        "deployment-environment",
+        "provider-mode",
+        "tenant-id",
+        "trace-id",
+        "span-id",
+        "request-id",
+        "proof-id",
+        "capability-id"
+      ],
+      "$comment": "observability-attribute-names canonical values."
     }
   },
   "properties": {
@@ -44,8 +72,7 @@
       "$ref": "#/$defs/signalKind"
     },
     "name": {
-      "type": "string",
-      "minLength": 1
+      "$ref": "#/$defs/signalName"
     },
     "source": {
       "type": "string",
@@ -82,6 +109,13 @@
     "correlation": {
       "type": "string",
       "minLength": 1
+    },
+    "attributes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/attributeName"
+      },
+      "uniqueItems": true
     },
     "sourceRefs": {
       "type": "array",

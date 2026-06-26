@@ -1,0 +1,63 @@
+{
+  "id": "0003-capability-domain-values",
+  "kind": "adr",
+  "title": "Capability Domain Values",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-26",
+  "context": "The capability-domains value set was deferred and described the historical category dimension as 12 categories, but the current source file ../react/docs/v2-foundation/v1-capability-closure.json contains 75 capability records across 14 observed category values.",
+  "decision": "USF adopts the 14 observed source category values as the active canonical capability-domains value set, constrains semantic-contract capabilityDomain to that value set, and binds the enum to the vocabulary catalogue in the validator.",
+  "consequences": [
+    "capability-domains is no longer deferred.",
+    "Semantic-contract fixtures must use canonical capability-domain values.",
+    "Future capability imports can validate their domain values repeatably."
+  ],
+  "invariants": [
+    "capabilityDomain values must be drawn from capability-domains.",
+    "Historical source labels are lineage only; canonical values live in the vocabulary catalogue.",
+    "No observed source category may be dropped without a recorded disposition."
+  ],
+  "permittedChanges": [
+    "Add aliases if later source import finds divergent labels.",
+    "Split, merge, rename, or retire a domain only through vocabulary and validator changes with recorded rationale."
+  ],
+  "forbiddenDrift": [
+    "Do not use capability domains as a miscellaneous bucket.",
+    "Do not invent free-text capability domains in semantic-contract instances.",
+    "Do not treat source category labels outside the vocabulary as canonical values.",
+    "Do not collapse authentication into identity-access without a later recorded decision."
+  ],
+  "aiAlignmentRules": [
+    "Agents must preserve source lineage when classifying capabilities.",
+    "Agents must not infer capability domains from paths or package names.",
+    "Agents must stop or record a decision if source category evidence conflicts with the vocabulary."
+  ],
+  "semanticRefs": [
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/schemas/semantic-contract.schema.json",
+    "docs/architecture/ontology.md#section-5-2"
+  ],
+  "sourceRefs": [
+    "../react/docs/v2-foundation/v1-capability-closure.json"
+  ],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "The source file is historical evidence, not future authority, but no source category should disappear without disposition. Carrying the observed 14 values as canonical USF vocabulary preserves the source dimension while making it explicit and validator-checkable.",
+  "description": "Records the capability-domain value-set decision and the choice to carry all 14 observed source categories.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Capability",
+    "Semantic Contract"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "capability-domains",
+    "lifecycle-states",
+    "ai-governance-kinds"
+  ],
+  "aiGuidance": "Use capability-domains from the vocabulary catalogue and preserve source category lineage."
+}

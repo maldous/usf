@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:semantic-contract",
   "title": "USF Semantic Contract Schema",
-  "description": "Draft JSON Schema for rank-1 semantic contracts (capability facets and related contracts). Carries an authority level (authority-levels) and lifecycle state (lifecycle-states), governed ontology concepts, and a facet set; a facet asserted complete MUST cite authoritative evidence, otherwise it is a gap. Governs the ontology concepts Semantic Contract, Capability, Port, Interface, Configuration, and Data Model. NOTE: the capability-domains vocabulary value set is DEFERRED (no canonical values authored yet); therefore capabilityDomain is modelled as an open string and is NOT enum-constrained here, recorded as deferred per schema-authoring-standard and the vocabulary catalogue. Validators MUST NOT accept historical capability labels as canonical until that value set is populated. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
+  "description": "Draft JSON Schema for rank-1 semantic contracts (capability facets and related contracts). Carries an authority level (authority-levels) and lifecycle state (lifecycle-states), governed ontology concepts, and a facet set; a facet asserted complete MUST cite authoritative evidence, otherwise it is a gap. Governs the ontology concepts Semantic Contract, Capability, Port, Interface, Configuration, and Data Model. capabilityDomain is constrained to the active capability-domains vocabulary value set. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -138,7 +138,23 @@
     },
     "capabilityDomain": {
       "type": "string",
-      "$comment": "DEFERRED value set capability-domains: open string until canonical values are authored; do not treat historical ../react labels as canonical.",
+      "enum": [
+        "authentication",
+        "compute-runtime",
+        "configuration",
+        "data-platform",
+        "developer-platform",
+        "entitlements-billing",
+        "events-workflow",
+        "foundation",
+        "identity-access",
+        "observability-ops",
+        "search",
+        "security-governance",
+        "storage",
+        "support-admin"
+      ],
+      "$comment": "capability-domains canonical values.",
       "minLength": 1
     },
     "facets": {
