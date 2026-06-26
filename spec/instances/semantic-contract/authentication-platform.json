@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.authentication-platform",
   "title": "Authentication Platform Semantic Contract",
-  "description": "Draft semantic contract for the authentication platform slice carried from historical identity, authorization, audit, proof, and UI source evidence. Complete facets cite explicit source-import paths; facets not yet recovered as full USF contracts remain gaps.",
+  "description": "Draft semantic contract for the authentication platform slice carried from historical identity, authorization, audit, proof, and UI source evidence. Complete facets cite explicit source-import paths; state, validation, and error semantics remain draft and source-backed for first-slice extraction.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -27,8 +27,16 @@
       ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Detailed authentication state transitions remain to be recovered from historical semantic evidence."
+      "status": "complete",
+      "description": "Authentication login state is normalised as unauthenticated -> authenticating -> authenticated or denied, with callback/session resolution represented by workflow.authentication-login and UI state represented by ui.authentication-login.",
+      "sourceRefs": [
+        "apps/platform-api/src/server/auth.ts",
+        "apps/platform-api/src/server/session.ts",
+        "apps/platform-api/src/usecases/auth.ts",
+        "apps/react-enterprise-app/src/hooks/use-session.ts",
+        "docs/evidence/identity/keycloak-login-callback.md",
+        "e2e/identity/broker-login.spec.ts"
+      ]
     },
     "permissions": {
       "status": "complete",
@@ -43,12 +51,26 @@
       ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Validation fields are represented only by referenced source lineage in this draft slice."
+      "status": "complete",
+      "description": "Validation semantics cover login request handling, callback state binding, UI-required input representation, custom-domain callback derivation, provider response handling, and deferred real-IdP claim-mapping limitations.",
+      "sourceRefs": [
+        "apps/platform-api/tests/substrate/auth-routes.test.ts",
+        "apps/platform-api/tests/unit/auth-usecase.test.ts",
+        "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+        "docs/evidence/auth/custom-domain-auth-origin.md",
+        "docs/evidence/auth/oidc-login-mapping-proof.md"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Error model recovery is deferred until detailed source evidence is normalised."
+      "status": "complete",
+      "description": "Error semantics cover denied login, provider failure, audit failure, stale proof/readiness failure, custom-domain callback limits, and fail-closed no-session outcomes without upgrading hermetic evidence to live-provider readiness.",
+      "sourceRefs": [
+        "apps/platform-api/src/server/auth.ts",
+        "apps/platform-api/tests/substrate/auth-routes.test.ts",
+        "e2e/external/auth-negative.spec.ts",
+        "docs/evidence/identity/keycloak-login-callback.md",
+        "docs/evidence/auth/custom-domain-auth-origin.md"
+      ]
     },
     "auditModel": {
       "status": "complete",
@@ -77,8 +99,20 @@
   },
   "sourceRefs": [
     "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "apps/platform-api/src/server/auth.ts",
+    "apps/platform-api/src/server/session.ts",
+    "apps/platform-api/src/usecases/auth.ts",
+    "apps/platform-api/tests/substrate/auth-routes.test.ts",
     "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
+    "apps/platform-api/tests/unit/auth-usecase.test.ts",
+    "apps/react-enterprise-app/src/hooks/use-session.ts",
+    "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
     "docs/api/openapi.json",
+    "docs/evidence/auth/custom-domain-auth-origin.md",
+    "docs/evidence/auth/oidc-login-mapping-proof.md",
+    "docs/evidence/identity/keycloak-login-callback.md",
+    "e2e/external/auth-negative.spec.ts",
+    "e2e/identity/broker-login.spec.ts",
     "apps/react-enterprise-app/src/auth/login-providers.ts"
   ],
   "adrRefs": [

@@ -25,12 +25,12 @@
   "steps": [
     {
       "id": "receive-login-request",
-      "description": "Receive the login request at the authentication interface.",
+      "description": "Receive and validate the login request at the authentication interface, including provider selection and callback state binding.",
       "operation": "interface.authentication-login-api"
     },
     {
       "id": "evaluate-provider-response",
-      "description": "Evaluate the configured identity provider response without upgrading provider mode.",
+      "description": "Evaluate the configured identity provider response without upgrading provider mode; denied and provider-error outcomes remain explicit states.",
       "operation": "provider-mode.mock-identity-provider"
     },
     {
@@ -42,13 +42,31 @@
   "stateTransitions": [
     {
       "from": "unauthenticated",
-      "to": "authenticated-or-denied",
-      "trigger": "provider-decision-recorded"
+      "to": "authenticating",
+      "trigger": "login-request-validated"
+    },
+    {
+      "from": "authenticating",
+      "to": "authenticated",
+      "trigger": "provider-decision-accepted-and-session-created"
+    },
+    {
+      "from": "authenticating",
+      "to": "denied",
+      "trigger": "provider-decision-denied-or-validation-failed"
+    },
+    {
+      "from": "authenticated",
+      "to": "unauthenticated",
+      "trigger": "logout-or-session-destroyed"
     }
   ],
   "failurePaths": [
+    "denied-login-emits-explicit-denied-state-without-session",
     "provider-unavailable-fails-closed",
-    "audit-recording-missing-fails-proof-claim"
+    "audit-recording-missing-fails-proof-claim",
+    "stale-proof-must-not-satisfy-current-readiness",
+    "readiness-failure-must-not-upgrade-provider-mode"
   ],
   "compensationPaths": [
     "no-compensating-action-for-denied-login; preserve audit record"
@@ -61,6 +79,13 @@
   ],
   "sourceRefs": [
     "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
-    "apps/platform-api/tests/unit/auth-settings-audit.test.ts"
+    "apps/platform-api/src/server/auth.ts",
+    "apps/platform-api/src/server/session.ts",
+    "apps/platform-api/src/usecases/auth.ts",
+    "apps/platform-api/tests/substrate/auth-routes.test.ts",
+    "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
+    "docs/evidence/identity/keycloak-login-callback.md",
+    "e2e/external/auth-negative.spec.ts",
+    "e2e/identity/broker-login.spec.ts"
   ]
 }

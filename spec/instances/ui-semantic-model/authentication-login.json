@@ -34,13 +34,21 @@
     "unauthenticated",
     "authenticating",
     "authenticated",
-    "denied"
+    "denied",
+    "provider-failure",
+    "no-session"
   ],
   "validations": [
-    "required login input is represented before submission"
+    "required login input is represented before submission",
+    "provider selection is represented before redirect or callback handling",
+    "custom-domain callback origin is represented as source-backed lineage, not live-provider proof",
+    "deferred real-IdP claim mapping is visible as a readiness limitation"
   ],
   "errors": [
-    "authentication denied state is explicit"
+    "authentication denied state is explicit",
+    "provider failure state is explicit",
+    "no-session state redirects or blocks authenticated surfaces",
+    "stale proof or readiness failure cannot be shown as ready"
   ],
   "permissions": [
     "anonymous-login-attempt"
@@ -59,10 +67,16 @@
     "semantic-contract.authentication-platform"
   ],
   "proofRefs": [
-    "apps/platform-api/scripts/auth-settings-runtime-proof.ts"
+    "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
+    "e2e/identity/broker-login.spec.ts",
+    "e2e/external/auth-negative.spec.ts"
   ],
   "sourceRefs": [
     "apps/react-enterprise-app/src/auth/login-providers.ts",
-    "apps/react-enterprise-app/src/components/RequirePermission.tsx"
+    "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+    "apps/react-enterprise-app/src/hooks/use-session.ts",
+    "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+    "docs/evidence/auth/oidc-login-mapping-proof.md",
+    "docs/evidence/identity/keycloak-login-callback.md"
   ]
 }
