@@ -63,6 +63,7 @@ def _find_root(start):
 
 ROOT = _find_root(os.path.dirname(os.path.abspath(__file__)))
 CORPUS = "tools/validate-spec"   # validator assets: fixtures/, manifests/, planted-defects/
+SOURCE_REFERENCE_ALLOWLIST = f"{CORPUS}/source-reference-allowlist.json"
 os.chdir(ROOT)
 
 DRAFT = "https://json-schema.org/draft/2020-12/schema"
@@ -975,17 +976,66 @@ def _strip_fragment(ref):
     return ref.split("#", 1)[0]
 
 
-def _source_ref_resolves(ref, existing_paths):
-    base = _strip_fragment(ref)
+def _split_ref_fragment(ref):
+    base, sep, fragment = ref.partition("#")
+    return base, fragment if sep else None
+
+
+def _source_reference_allowlist(F):
+    data = load_json(SOURCE_REFERENCE_ALLOWLIST, F)
+    allowed = {}
+    if data is None:
+        return allowed
+    entries = data.get("allowlist") if isinstance(data, dict) else None
+    if not isinstance(entries, list):
+        F.add("USF-PARSE-001", SOURCE_REFERENCE_ALLOWLIST, "allowlist must be an array")
+        return allowed
+    for i, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            F.add("USF-PARSE-001", f"{SOURCE_REFERENCE_ALLOWLIST}:{i}", "allowlist entry must be an object")
+            continue
+        path = entry.get("path")
+        rationale = entry.get("rationale")
+        fragments = entry.get("fragments", [])
+        if not isinstance(path, str) or not path:
+            F.add("USF-PARSE-001", f"{SOURCE_REFERENCE_ALLOWLIST}:{i}", "allowlist path is required")
+            continue
+        if not isinstance(rationale, str) or not rationale.strip():
+            F.add("USF-PARSE-001", f"{SOURCE_REFERENCE_ALLOWLIST}:{path}", "allowlist rationale is required")
+            continue
+        if not isinstance(fragments, list) or not all(isinstance(v, str) and v for v in fragments):
+            F.add("USF-PARSE-001", f"{SOURCE_REFERENCE_ALLOWLIST}:{path}", "fragments must be non-empty strings")
+            continue
+        allowed[path] = set(fragments)
+    return allowed
+
+
+def _json_fragment_resolves(base, fragment, existing_paths):
+    if fragment is None:
+        return True
+    if base not in existing_paths:
+        return False
+    if not base.endswith(".json"):
+        return True
+    if not fragment.startswith("/"):
+        return False
+    data = load_json(base, Findings())
+    return data is not None and resolve_pointer(data, fragment) is not None
+
+
+def _source_ref_resolves(ref, existing_paths, source_paths=None, source_allowlist=None):
+    base, fragment = _split_ref_fragment(ref)
+    source_paths = source_paths or set()
+    source_allowlist = source_allowlist or {}
     if not base:
         return False
     if base in existing_paths:
+        return _json_fragment_resolves(base, fragment, existing_paths)
+    if base in source_paths:
         return True
-    # Historical source evidence is explicitly allowed when it is rooted in
-    # ../react. CI does not checkout the sibling historical repository, so
-    # repository-local existence cannot be the repeatable gate for those refs.
-    if base.startswith("../react/"):
-        return True
+    if base in source_allowlist:
+        allowed_fragments = source_allowlist[base]
+        return fragment is None or fragment in allowed_fragments
     return False
 
 
@@ -1000,14 +1050,16 @@ def _collect_evidence_source_refs(data):
             yield "emittedEvidence", ref
 
 
-def validate_evidence_data(ctx, F, data_by_path, existing_paths=None):
+def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_paths=None, source_allowlist=None):
     """Validate committed evidence/proof records and their cross-record references.
 
     Directory selects the schema: evidence/evidence-envelope/*.json or
-    evidence/proof-evidence/*.json. Historical source refs are allowed only for
-    explicit ../react paths.
+    evidence/proof-evidence/*.json. Source refs resolve through repository paths,
+    source-import manifest paths, or the explicit source-reference allowlist.
     """
     existing_paths = existing_paths or set()
+    source_paths = source_paths or set()
+    source_allowlist = source_allowlist or {}
     id_to_paths = defaultdict(list)
     envelope_ids = set()
     proof_ids = set()
@@ -1042,7 +1094,7 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None):
             continue
 
         for field, ref in _collect_evidence_source_refs(data):
-            if not _source_ref_resolves(ref, existing_paths):
+            if not _source_ref_resolves(ref, existing_paths, source_paths, source_allowlist):
                 F.add("USF-EVIDENCE-005", f"{p}:{field}", f"unresolved source reference: {ref}")
 
         if kind != "proof":
@@ -1078,7 +1130,10 @@ def check_evidence(ctx, F):
     existing_paths = {p[2:] if p.startswith("./") else p
                       for p in glob.glob("**/*", recursive=True)
                       if os.path.isfile(p)}
-    validate_evidence_data(ctx, F, data_by_path, existing_paths=existing_paths)
+    source_paths = _source_import_paths(F)
+    source_allowlist = _source_reference_allowlist(F)
+    validate_evidence_data(ctx, F, data_by_path, existing_paths=existing_paths,
+                           source_paths=source_paths, source_allowlist=source_allowlist)
     return "ran"
 
 
@@ -1117,16 +1172,14 @@ def _existing_repo_paths():
                 if os.path.isfile(p)}
 
 
-def _ref_resolves(ref, existing_paths, source_paths, ids=None):
+def _ref_resolves(ref, existing_paths, source_paths, ids=None, source_allowlist=None):
     base = _strip_fragment(ref)
     ids = ids or set()
     if ref in ids or base in ids:
         return True
-    if base in existing_paths or base in source_paths:
+    if _source_ref_resolves(ref, existing_paths, source_paths, source_allowlist):
         return True
     if ref.startswith("git:") and len(ref) > 4:
-        return True
-    if base.startswith("../react/"):
         return True
     if ref.startswith("urn:usf:schema:") and ref.split("#", 1)[0] in {
         schema.get("$id") for schema in CTX_FOR_REF_RESOLUTION["sd"].values() if isinstance(schema, dict)
@@ -1138,10 +1191,11 @@ def _ref_resolves(ref, existing_paths, source_paths, ids=None):
 CTX_FOR_REF_RESOLUTION = {"sd": {}}
 
 
-def validate_real_adr_data(ctx, F, data_by_path, existing_paths=None, source_paths=None, proof_ids=None):
+def validate_real_adr_data(ctx, F, data_by_path, existing_paths=None, source_paths=None, proof_ids=None, source_allowlist=None):
     existing_paths = existing_paths or set()
     source_paths = source_paths or set()
     proof_ids = proof_ids or set()
+    source_allowlist = source_allowlist or {}
     CTX_FOR_REF_RESOLUTION["sd"] = ctx["sd"]
     for p, data in data_by_path.items():
         errors = list(Draft202012Validator(ctx["sd"]["adr"]).iter_errors(data))
@@ -1161,7 +1215,7 @@ def validate_real_adr_data(ctx, F, data_by_path, existing_paths=None, source_pat
                 if not isinstance(ref, str):
                     continue
                 ids = proof_ids if field == "proofRefs" else set()
-                if not _ref_resolves(ref, existing_paths, source_paths, ids=ids):
+                if not _ref_resolves(ref, existing_paths, source_paths, ids=ids, source_allowlist=source_allowlist):
                     F.add("USF-REAL-004", f"{p}:{field}", f"unresolved reference: {ref}")
 
 
@@ -1220,6 +1274,7 @@ def check_real_instances(ctx, F):
 
     existing_paths = _existing_repo_paths()
     source_paths = _source_import_paths(F)
+    source_allowlist = _source_reference_allowlist(F)
     proof_ids = set()
     for data in _load_json_files(proof_paths, F).values():
         if isinstance(data, dict) and isinstance(data.get("id"), str):
@@ -1231,6 +1286,7 @@ def check_real_instances(ctx, F):
         existing_paths=existing_paths,
         source_paths=source_paths,
         proof_ids=proof_ids,
+        source_allowlist=source_allowlist,
     )
     validate_validator_report_records(ctx, F, report_paths)
     states["validator-report"] = "ran" if report_paths else "not-run"
@@ -1327,6 +1383,8 @@ def check_selftest(ctx, F):
                 f2,
                 records,
                 existing_paths=set(patch.get("existingPaths", [])),
+                source_paths=set(patch.get("sourcePaths", [])),
+                source_allowlist={k: set(v) for k, v in patch.get("sourceAllowlist", {}).items()},
             )
         elif patch["target"] == "real-adrs":
             records = patch.get("records")
@@ -1340,6 +1398,7 @@ def check_selftest(ctx, F):
                 existing_paths=set(patch.get("existingPaths", [])),
                 source_paths=set(patch.get("sourcePaths", [])),
                 proof_ids=set(patch.get("proofIds", [])),
+                source_allowlist={k: set(v) for k, v in patch.get("sourceAllowlist", {}).items()},
             )
         elif patch["target"] == "real-inventory":
             inventory = patch.get("inventory")
