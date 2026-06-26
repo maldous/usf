@@ -239,16 +239,19 @@ RULES = {
     "USF-EVIDENCE-005": ("blocking", "Evidence/proof source reference does not resolve"),
     "USF-EVIDENCE-006": ("blocking", "Proof evidence claimed level exceeds observed level"),
     "USF-EVIDENCE-007": ("blocking", "Proof evidence live-provider claim exceeds provider/level evidence"),
+    "USF-EVIDENCE-008": ("blocking", "Evidence JSON file is outside a discovered evidence directory"),
     "USF-REAL-001":     ("blocking", "Real-instance corpus category is missing"),
     "USF-REAL-002":     ("blocking", "Real ADR instance invalid against adr schema"),
     "USF-REAL-003":     ("blocking", "Real ADR machine instance has no matching markdown ADR"),
     "USF-REAL-004":     ("blocking", "Real ADR reference does not resolve"),
     "USF-REAL-005":     ("blocking", "Real validator-report instance invalid against validator-report schema"),
+    "USF-REAL-006":     ("blocking", "Real ADR semantic reference is not a semantic artefact"),
     "USF-SELFTEST-001": ("blocking", "Planted defect did NOT raise its expected rule id"),
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
     "USF-PR-DELETE":    ("blocking", "PR deletes a schema file still referenced by the registry"),
     "USF-PR-TOOL":      ("blocking", "PR adds unauthorised tool/CI (not in AUTHORIZED_TOOLING)"),
+    "USF-PR-DISPOSITION": ("blocking", "PR adds implementation file without source disposition coverage"),
 }
 
 
@@ -1117,9 +1120,26 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_pat
                 F.add("USF-EVIDENCE-007", p, f"{provider}/{observed}")
 
 
+def validate_evidence_paths(F, paths, records=None):
+    known_dirs = ("evidence/evidence-envelope/", "evidence/proof-evidence/")
+    records = records or {}
+    for p in sorted(paths):
+        if not p.startswith("evidence/") or not p.endswith(".json"):
+            continue
+        if p.startswith(known_dirs):
+            continue
+        data = records.get(p)
+        if isinstance(data, dict) and data.get("authorityLevel") == "generated-report":
+            continue
+        F.add("USF-EVIDENCE-008", p, "evidence JSON must be under evidence/evidence-envelope or evidence/proof-evidence unless it is a generated report")
+
+
 def check_evidence(ctx, F):
     """Validate committed evidence/proof records under evidence/."""
     paths = sorted(glob.glob("evidence/evidence-envelope/*.json")) + sorted(glob.glob("evidence/proof-evidence/*.json"))
+    all_evidence_json = sorted(glob.glob("evidence/**/*.json", recursive=True))
+    records = {p: load_json(p, F) for p in all_evidence_json if p not in set(paths)}
+    validate_evidence_paths(F, all_evidence_json, records)
     if not paths:
         return "not-run"
     data_by_path = {}
@@ -1188,6 +1208,11 @@ def _ref_resolves(ref, existing_paths, source_paths, ids=None, source_allowlist=
     return False
 
 
+def _is_semantic_ref_type(ref):
+    base = _strip_fragment(ref)
+    return base.startswith("urn:usf:schema:") or base.startswith("docs/architecture/") or base.startswith("spec/") or base.startswith("docs/adr/")
+
+
 CTX_FOR_REF_RESOLUTION = {"sd": {}}
 
 
@@ -1213,6 +1238,9 @@ def validate_real_adr_data(ctx, F, data_by_path, existing_paths=None, source_pat
                 continue
             for ref in values:
                 if not isinstance(ref, str):
+                    continue
+                if field == "semanticRefs" and not _is_semantic_ref_type(ref):
+                    F.add("USF-REAL-006", f"{p}:{field}", f"non-semantic reference: {ref}")
                     continue
                 ids = proof_ids if field == "proofRefs" else set()
                 if not _ref_resolves(ref, existing_paths, source_paths, ids=ids, source_allowlist=source_allowlist):
@@ -1242,6 +1270,23 @@ def validate_validator_report_records(ctx, F, paths):
     validate_validator_report_data(ctx, F, _load_json_files(paths, F))
 
 
+def discover_validator_report_paths(F, paths=None):
+    candidates = []
+    search_paths = paths if paths is not None else glob.glob("**/*.json", recursive=True)
+    for p in sorted(search_paths):
+        if (p.startswith(f"{CORPUS}/fixtures/")
+                or p.startswith(f"{CORPUS}/manifests/")
+                or p.startswith(f"{CORPUS}/planted-defects/")
+                or p.startswith("spec/schemas/")):
+            continue
+        data = load_json(p, F)
+        is_report_name = os.path.basename(p).endswith("-report.json") or "validator-report" in os.path.basename(p)
+        is_generated_report = isinstance(data, dict) and data.get("authorityLevel") == "generated-report"
+        if is_report_name or is_generated_report:
+            candidates.append(p)
+    return candidates
+
+
 def check_real_instances(ctx, F):
     """Aggregate real authored instance validation for USF-31.
 
@@ -1254,11 +1299,7 @@ def check_real_instances(ctx, F):
     envelope_paths = sorted(glob.glob("evidence/evidence-envelope/*.json"))
     proof_paths = sorted(glob.glob("evidence/proof-evidence/*.json"))
     import_present = os.path.exists("spec/registries/source-import-manifest.json")
-    report_paths = sorted(p for p in glob.glob("**/*validator-report*.json", recursive=True)
-                          if not p.startswith(f"{CORPUS}/fixtures/")
-                          and not p.startswith(f"{CORPUS}/manifests/")
-                          and not p.startswith(f"{CORPUS}/planted-defects/")
-                          and not p.startswith("spec/schemas/"))
+    report_paths = discover_validator_report_paths(F)
 
     states = validate_real_instance_inventory(F, {
         "adr": adr_paths,
@@ -1355,7 +1396,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "real-adrs", "real-inventory", "validator-reports"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "pr-paths"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1400,6 +1441,12 @@ def check_selftest(ctx, F):
                 proof_ids=set(patch.get("proofIds", [])),
                 source_allowlist={k: set(v) for k, v in patch.get("sourceAllowlist", {}).items()},
             )
+        elif patch["target"] == "evidence-paths":
+            paths = patch.get("paths")
+            if not isinstance(paths, list):
+                F.add("USF-SELFTEST-001", df, "evidence-paths planted-defect needs a paths array")
+                continue
+            validate_evidence_paths(f2, paths, patch.get("records", {}))
         elif patch["target"] == "real-inventory":
             inventory = patch.get("inventory")
             if not isinstance(inventory, dict):
@@ -1412,6 +1459,19 @@ def check_selftest(ctx, F):
                 F.add("USF-SELFTEST-001", df, "validator-reports planted-defect needs a records object")
                 continue
             validate_validator_report_data(sandbox, f2, records)
+        elif patch["target"] == "report-discovery":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "report-discovery planted-defect needs a records object")
+                continue
+            paths = discover_validator_report_paths(f2, list(records))
+            validate_validator_report_data(sandbox, f2, {p: records[p] for p in paths})
+        elif patch["target"] == "pr-paths":
+            lines = patch.get("nameStatusLines")
+            if not isinstance(lines, list):
+                F.add("USF-SELFTEST-001", df, "pr-paths planted-defect needs nameStatusLines")
+                continue
+            validate_pr_paths(f2, lines)
         else:
             run_all_checks(sandbox, f2)
         if patch["expectedRule"] not in f2.rule_ids():
@@ -1424,6 +1484,36 @@ def git_checked(*args):
     if r.returncode != 0:
         raise RuntimeError(r.stderr.strip() or f"git {' '.join(args)} failed (exit {r.returncode})")
     return r.stdout.strip()
+
+
+IMPLEMENTATION_PATH_RE = re.compile(r"(^|/)(apps|packages|services|src|config|infra|scripts)/")
+
+
+def _is_implementation_path(path):
+    return bool(IMPLEMENTATION_PATH_RE.search(path))
+
+
+def validate_pr_paths(F, name_status_lines):
+    changed_paths = []
+    added_paths = []
+    for line in name_status_lines:
+        parts = line.split("\t")
+        if len(parts) < 2:
+            continue
+        status, path = parts[0], parts[-1]
+        changed_paths.append(path)
+        if status.startswith("A"):
+            added_paths.append(path)
+            if _is_implementation_path(path) or re.search(r"\.(ts|tsx|jsx)$", path):
+                F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
+    disposition_changed = any(
+        re.match(r"docs/architecture/.*source-use-disposition-matrix\.md$", p)
+        or re.match(r"spec/registries/.*source-import-manifest\.json$", p)
+        for p in changed_paths
+    )
+    for path in added_paths:
+        if _is_implementation_path(path) and not disposition_changed:
+            F.add("USF-PR-DISPOSITION", path, "added implementation file lacks changed source disposition/import coverage")
 
 
 def check_pr(ctx, F, base, head):
@@ -1439,13 +1529,12 @@ def check_pr(ctx, F, base, head):
     if not diff and not same:
         print(f"ERROR: empty diff but {base} and {head} differ (bad refs / missing fetch?)", file=sys.stderr)
         sys.exit(2)
+    validate_pr_paths(F, diff.splitlines())
     reg_paths = {e["path"] for e in ctx["reg"]["schemas"]}
     for line in diff.splitlines():
         parts = line.split("\t")
         status, path = parts[0], parts[-1]
         if status.startswith("A"):
-            if re.search(r"(^|/)(src|app|packages)/", path) or re.search(r"\.(ts|tsx|jsx)$", path):
-                F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
             is_tooling = (re.match(r"tools/.*\.(py|mjs|js|sh)$", path)
                           or path.startswith(".github/workflows/")
                           or re.search(r"(^|/)requirements[^/]*\.txt$", path))

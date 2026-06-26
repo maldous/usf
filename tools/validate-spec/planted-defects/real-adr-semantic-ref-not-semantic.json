@@ -1,0 +1,59 @@
+{
+  "target": "real-adrs",
+  "expectedRule": "USF-REAL-006",
+  "existingPaths": [
+    "docs/architecture/schema-authoring-standard.md",
+    "spec/schemas/adr.schema.json",
+    "tools/validate-spec/validate-spec.py",
+    ".github/workflows/validate-spec.yml"
+  ],
+  "records": {
+    "tools/validate-spec/fixtures/positive/adr/9998-semantic-ref-type.json": {
+      "id": "9998-semantic-ref-type",
+      "kind": "adr",
+      "title": "Semantic Ref Type Defect",
+      "authorityLevel": "adr",
+      "decisionStatus": "accepted",
+      "date": "2026-06-26",
+      "context": "Selftest fixture.",
+      "decision": "Selftest fixture.",
+      "consequences": [
+        "Selftest fixture."
+      ],
+      "invariants": [
+        "Selftest fixture."
+      ],
+      "permittedChanges": [
+        "Selftest fixture."
+      ],
+      "forbiddenDrift": [
+        "Selftest fixture."
+      ],
+      "aiAlignmentRules": [
+        "Selftest fixture."
+      ],
+      "semanticRefs": [
+        "git:801bec0"
+      ],
+      "sourceRefs": [
+        "git:801bec0"
+      ],
+      "validatorRefs": [
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "rationale": "Selftest fixture.",
+      "description": "Selftest fixture.",
+      "lifecycleState": "active",
+      "ontologyConcepts": [
+        "ADR"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification"
+      ],
+      "vocabularyRefs": [
+        "lifecycle-states"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-PR-DISPOSITION",
+  "nameStatusLines": [
+    "A\tapps/platform-api/src/index.ts"
+  ]
+}

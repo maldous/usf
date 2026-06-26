@@ -1,0 +1,12 @@
+{
+  "target": "evidence-paths",
+  "expectedRule": "USF-EVIDENCE-008",
+  "paths": [
+    "evidence/runtime-proof-unvalidated.json"
+  ],
+  "records": {
+    "evidence/runtime-proof-unvalidated.json": {
+      "authorityLevel": "runtime-proof-evidence"
+    }
+  }
+}
