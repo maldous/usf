@@ -2,7 +2,7 @@
   "id": "command.authentication-slice-proof",
   "commandKind": "proof-command",
   "title": "Authentication Slice Proof Command Semantics",
-  "description": "Draft command semantic instance for the historical proof commands that back the authentication, identity, and provider-mode first-slice semantics.",
+  "description": "Draft command semantic instance for the USF proof-only authentication slice harness and the historical proof commands that informed its design.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -17,29 +17,42 @@
     "environment-classes",
     "disposition-values"
   ],
-  "aiGuidance": "This command instance records proof-command semantics only. Do not execute proof or claim fresh readiness from historical commands.",
-  "purpose": "Represent the proof-command boundary for authentication settings, domain identity, custom-domain auth origin, and auth route evidence before implementation extraction.",
-  "invocation": "historical proof commands for auth-settings, domain-identity-matrix, tenant-custom-domain-auth-origin, and auth route tests",
+  "aiGuidance": "This command instance records proof-command semantics only. The USF proof harness may emit evidence when explicitly run with write mode. Historical React commands remain lineage evidence and must not be executed as USF proof commands or treated as implementation authority.",
+  "purpose": "Represent the proof-command boundary for the authentication login API, audit event, workflow, hermetic mock provider, and hermetic environment slice before implementation extraction.",
+  "invocation": "python3 tools/prove-authentication-slice.py --claim-commit HEAD --write-evidence",
   "inputs": [
-    "semantic-contract.authentication-platform",
-    "semantic-contract.tenant-identity-record-and-fqdn",
-    "semantic-contract.user-identity-and-tenant-membership",
-    "semantic-contract.tenant-host-identity-resolution",
-    "configuration.provider-mode-selector"
+    "spec/instances/command/authentication-slice-proof.json",
+    "spec/instances/semantic-contract/authentication-platform.json",
+    "spec/instances/interface-contract/authentication-login-api.json",
+    "spec/instances/event-contract/authentication-login-audit.json",
+    "spec/instances/workflow/authentication-login.json",
+    "spec/instances/provider-mode/mock-identity-provider.json",
+    "spec/instances/environment/hermetic.json",
+    "spec/instances/audit-event/authentication-login.json",
+    "spec/instances/observability-signal/authentication-login-audit.json",
+    "docs/architecture/proof-tool-contract-standard.md",
+    "docs/architecture/proof-execution-substrate-authorization.md"
   ],
   "outputs": [
-    "historical proof evidence lineage",
-    "provider-mode honesty constraints",
-    "fail-closed authentication findings when proof evidence is stale or missing"
+    "evidence/proof-evidence/authentication-slice-proof.json",
+    "evidence/evidence-envelope/authentication-slice-proof.json",
+    "evidence/evidence-envelope/authentication-slice-proof-lineage.json",
+    "machine-readable command summary on standard output",
+    "process exit code"
   ],
   "environmentScope": [
     "local",
     "hermetic"
   ],
-  "sideEffects": [],
-  "failureSemantics": "Missing, stale, or provider-mislabelled proof evidence fails closed and must not be treated as production-live readiness.",
+  "sideEffects": [
+    "writes proof evidence and evidence envelopes only when invoked in write-evidence mode",
+    "prints a generated summary that remains lower authority than committed evidence records"
+  ],
+  "failureSemantics": "Missing semantic inputs, unresolved references, stale claim commit, provider/environment mismatch, proof overclaim, missing emitted evidence, or missing collected evidence fails closed. Hermetic proof must not satisfy live-external-provider or production-live readiness.",
   "emitsEvidence": true,
   "sourceRefs": [
+    "tools/prove-authentication-slice.py",
+    "docs/architecture/proof-tool-contract-standard.md",
     "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
     "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
     "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",

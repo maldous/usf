@@ -1,0 +1,47 @@
+{
+  "id": "command.validate-spec-pr",
+  "commandKind": "validation-command",
+  "title": "Validate Pull Request Diff Gate",
+  "description": "Draft command semantic instance for validating a pull-request diff against the current main branch.",
+  "purpose": "Validate changed paths for forbidden implementation/runtime directories, source-path mirroring, unauthorized implementation extraction, forbidden naming, and other pull-request scoped guard rules before merge.",
+  "invocation": "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD",
+  "inputs": [
+    "origin/main",
+    "HEAD",
+    "spec/registries/source-import-manifest.json",
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "outputs": [
+    "pull-request validator findings on standard output",
+    "process exit code"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [],
+  "failureSemantics": "Non-zero exit indicates forbidden or unauthorized changed paths, source-path mirroring, implementation directory creation, unresolved source-disposition context, or a git diff failure. The command is advisory validation and must fail closed on ambiguous implementation extraction risk.",
+  "emitsEvidence": false,
+  "sourceRefs": [
+    "tools/validate-spec/validate-spec.py",
+    "spec/registries/source-import-manifest.json",
+    "docs/architecture/git-practices-standard.md",
+    "docs/architecture/directory-and-file-naming-standard.md"
+  ],
+  "disposition": "preserve",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Validator"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Run this command before merging PRs. Passing PR output does not start USF-39, authorize runtime code, or override semantic authority."
+}
