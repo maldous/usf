@@ -4,6 +4,10 @@
 
 Accepted.
 
+## Description
+
+Records the contract-format decision for interface and event contracts: USF-native JSON contract artefacts are canonical for this phase, while OpenAPI and AsyncAPI remain adapted principles only.
+
 ## Context
 
 `docs/architecture/standards-profile.md` sections 8, 15, and 23 classify OpenAPI-style interface contracts and AsyncAPI-style event contracts as adapted principles with artefact adoption deferred. Draft schemas already exist at `spec/schemas/interface-contract.schema.json` and `spec/schemas/event-contract.schema.json`.
@@ -36,6 +40,10 @@ The draft USF schemas already encode the governance envelope, controlled vocabul
 - `../react/docs/evidence/api/openapi-drift-hard-gate.md`
 - `../react/docs/v2-foundation/event-semantics.json`
 
+## Proof References
+
+- None. This ADR records contract format authority; future drift checks and proof evidence remain separate artefacts.
+
 ## Validator References
 
 - `tools/validate-spec/validate-spec.py`
@@ -65,8 +73,17 @@ The draft USF schemas already encode the governance envelope, controlled vocabul
 - External-standard compliance claims remain honest and limited.
 - Future drift checks must target USF-native contract artefacts first.
 
-## AI Alignment
+## AI Alignment Rules
 
 - Agents must read USF-native contracts before reasoning from source code.
 - Agents must avoid false compliance language.
 - Agents must surface any conflict between generated projections and USF-native contracts.
+
+## Supersession
+
+- Supersedes: none
+- Superseded by: none
+
+## Machine-Readable ADR Instance
+
+- `tools/validate-spec/fixtures/positive/adr/0002-interface-event-contract-format.json`

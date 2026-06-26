@@ -4,6 +4,10 @@
 
 Accepted.
 
+## Description
+
+Records the capability-domain value-set decision and the choice to carry all 14 category values observed in the current historical source evidence.
+
 ## Context
 
 `spec/vocabularies/vocabulary-catalog.json` previously deferred the `capability-domains` value set and described the historical capability category dimension as a 12-category source input.
@@ -47,6 +51,10 @@ The source file is historical evidence, not future authority, but no source cate
 
 - `../react/docs/v2-foundation/v1-capability-closure.json`
 
+## Proof References
+
+- None. This ADR records vocabulary classification authority; runtime proof evidence is not asserted.
+
 ## Validator References
 
 - `tools/validate-spec/validate-spec.py`
@@ -75,8 +83,17 @@ The source file is historical evidence, not future authority, but no source cate
 - Semantic-contract fixtures must use canonical capability-domain values.
 - Future capability imports can validate their domain values repeatably.
 
-## AI Alignment
+## AI Alignment Rules
 
 - Agents must preserve source lineage when classifying capabilities.
 - Agents must not infer capability domains from paths or package names.
 - Agents must stop or record a decision if source category evidence conflicts with the vocabulary.
+
+## Supersession
+
+- Supersedes: none
+- Superseded by: none
+
+## Machine-Readable ADR Instance
+
+- `tools/validate-spec/fixtures/positive/adr/0003-capability-domain-values.json`

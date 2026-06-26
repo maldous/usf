@@ -4,6 +4,10 @@
 
 Accepted.
 
+## Description
+
+Records the decision that draft schema files and the draft/advisory spec validator may exist before active validator maturity, without promoting any schema to active.
+
 ## Context
 
 PR 2, merged at commit `801bec0`, authored the 23 JSON Schema files at draft lifecycle and added the draft/advisory `tools/validate-spec/` validator ahead of active validator maturity.
@@ -30,6 +34,10 @@ Draft schemas and an advisory validator make later work repeatable and reviewabl
 ## Source References
 
 - PR 2 merged commit `801bec0`
+
+## Proof References
+
+- None. This ADR records governance and validator maturity; it does not assert runtime proof.
 
 ## Validator References
 
@@ -62,8 +70,17 @@ Draft schemas and an advisory validator make later work repeatable and reviewabl
 - Active schema promotion remains deferred.
 - Validator maturity and release-blocking status remain separate future work.
 
-## AI Alignment
+## AI Alignment Rules
 
 - Agents must run and report the actual validator commands used.
 - Agents must not claim validation that did not run.
 - Agents must treat generated validator reports as lower authority than the artefacts and evidence they summarize.
+
+## Supersession
+
+- Supersedes: none
+- Superseded by: none
+
+## Machine-Readable ADR Instance
+
+- `tools/validate-spec/fixtures/positive/adr/0001-validator-deferral-lift.json`
