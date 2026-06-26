@@ -15,7 +15,7 @@
     "provider-modes",
     "environment-classes"
   ],
-  "aiGuidance": "Use only as current hermetic proof-only evidence for the named authentication semantic slice. Do not treat it as implementation extraction, live-provider evidence, or production-live readiness.",
+  "aiGuidance": "Use as historical hermetic proof-only evidence for the named authentication semantic slice unless freshness is rerun and commit-pinned for the current claim. Do not treat it as implementation extraction, live-provider evidence, production-live readiness, or current readiness while stale.",
   "evidenceKind": "runtime-proof-evidence",
   "sourceRefs": [
     "spec/instances/command/authentication-slice-proof.json",
@@ -38,6 +38,6 @@
   "environment": "hermetic",
   "freshness": {
     "commit": "3a94677bd5be463841975511cdb61fa22da87146",
-    "stale": false
+    "stale": true
   }
 }

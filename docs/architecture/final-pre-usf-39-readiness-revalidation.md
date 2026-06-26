@@ -23,27 +23,27 @@ The repository is ready only for a human to decide whether to issue a filled imp
 The following gate inputs are present and merged:
 
 - semantic corpus and source-import foundations from USF-58 through USF-74, except where the gate explicitly narrows or defers broader proof;
-- bounded hermetic authentication proof substrate and evidence from USF-77 Option A;
+- bounded hermetic authentication proof substrate and historical claim-commit evidence from USF-77 Option A;
 - proof-tool contract standard from USF-78;
 - proof-slice plans and static readiness artefacts from USF-79 through USF-93;
 - proof-slice readiness rollup from USF-94;
 - AI agent work packet and review contract from USF-95;
 - implementation directive specification from USF-61.
 
-USF-73 remains deferred for multi-environment, live-external-provider, production-shaped, and production-live proof. That does not block keeping USF-39 Backlog or issuing a hermetic-only first-slice directive later, but it blocks any broader readiness claim.
+USF-73 remains deferred for current-head proof freshness, multi-environment proof, live-external-provider proof, production-shaped proof, and production-live proof. That does not block keeping USF-39 Backlog or issuing a hermetic-only first-slice directive later, but it blocks any current implementation-readiness or broader readiness claim until proof is rerun for the exact commit being claimed.
 
 ## Acceptance Criteria Confirmation
 
 | USF-75 acceptance criterion | Result | Evidence |
 |---|---|---|
-| Every blocker created after the readiness audit is complete or formally waived. | Satisfied for a NO-GO revalidation. | The proof-slice rollup classifies current-slice gates and records USF-73 as deferred unless a later directive narrows first implementation to the hermetic slice. The missing human-filled directive remains the reason USF-39 stays Backlog, not an authorization to proceed. |
+| Every blocker created after the readiness audit is complete or formally waived. | Satisfied for a NO-GO revalidation only. | The proof-slice rollup classifies current-slice gates and records USF-73 as deferred for current-head proof freshness unless a later directive reruns proof for the claimed commit. The missing human-filled directive remains the reason USF-39 stays Backlog, not an authorization to proceed. |
 | validate-spec all, imports, instances, evidence, real-instances, selftest, and any new implementation guard modes are clean. | Satisfied. | The required validator modes pass on the reviewed tree: all, imports, instances, evidence, real-instances, selftest, implementation, and PR diff mode. |
 | Source-use, directory authorization, proof posture, schema posture, report policy, and directive template are all resolved. | Satisfied for the current gate. | Source-use, destination-directory constraints, proof posture, schema posture, generated-report policy, implementation directive template, and AI work-packet contract exist as reviewed governance artefacts. |
 | USF-39 can either remain blocked with reasons or move only if a human implementation directive exists. | Satisfied by remaining blocked. | No filled human implementation directive exists. USF-39 remains Backlog and must not move under this document. |
 
 ## Proof State
 
-Current proof beyond authentication does not exist. The only executed current USF proof slice is the bounded authentication login API/audit/workflow/provider-mode slice.
+Current proof beyond authentication does not exist. Historical USF proof evidence exists for the bounded authentication login API/audit/workflow/provider-mode slice at its recorded claim commit, but it is stale for current-head readiness until rerun for the exact commit being claimed.
 
 The authentication proof posture is hermetic only:
 
