@@ -2,7 +2,7 @@
   "id": "data.identity-schema",
   "dataKind": "migration",
   "title": "Identity Schema Migration Contract",
-  "description": "Draft data and migration semantic instance for the historical identity schema migration lineage.",
+  "description": "Draft data and migration semantic instance for the historical identity schema migration lineage. The first data assurance slice treats this as the governed identity migration contract for order, checksum immutability, tenant isolation, backup/restore evidence expectations, retention, and safe failure handling.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -15,12 +15,12 @@
   "vocabularyRefs": [
     "data-migration-kinds"
   ],
-  "aiGuidance": "A committed migration is immutable. Do not rewrite migration semantics to match implementation convenience.",
-  "tenancyIsolation": "Tenant isolation must be preserved by later detailed data contracts and proof evidence.",
+  "aiGuidance": "A committed migration is immutable. Do not rewrite migration semantics to match implementation convenience. Backup and restore claims require emitted and collected evidence; generated reports cannot substitute for missing collected evidence.",
+  "tenancyIsolation": "Tenant identity data must remain tenant-isolated through membership, organisation, tenant resource configuration, user projection, and external identity linkage semantics. Cross-tenant read or write access fails closed unless a separately governed system-bypass context is explicitly authorised outside this first slice.",
   "migrationOrder": 1,
   "checksum": "source-import:apps/platform-api/src/db/migrations/001-identity-schema.sql",
   "immutable": true,
-  "retention": "identity records follow the governed retention and deletion concern once authored in detail",
+  "retention": "Identity records follow governed retention and deletion concerns once authored in detail; until then, backup, restore, rollback, and deletion claims remain proof-gated and must preserve raw evidence.",
   "sourceRefs": [
     "apps/platform-api/src/db/migrations/001-identity-schema.sql",
     "apps/platform-api/src/db/migrations/004-rls-policies.sql"
