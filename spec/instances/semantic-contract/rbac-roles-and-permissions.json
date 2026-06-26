@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.rbac-roles-and-permissions",
   "title": "RBAC Roles and Permissions Semantic Contract",
-  "description": "Draft semantic contract for role and permission evaluation supporting authentication and request authorization.",
+  "description": "Draft semantic contract for role and permission evaluation supporting authentication and request authorization. The first implementation slice covers static permission allow/deny, dynamic policy allow/deny, step-up/authentication-required denial, accessible UI denial, audit-query permission filtering, and tenant-boundary preservation.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -27,11 +27,16 @@
       ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Detailed role lifecycle state remains deferred; first-slice use requires permission evaluation only."
+      "status": "complete",
+      "description": "First-slice authorization state is normalised as requested -> evaluated -> allowed, denied, authentication-required, or step-up-required. Role lifecycle administration remains outside this slice.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts",
+        "packages/authorisation-runtime/tests/authorisation-runtime.test.ts"
+      ]
     },
     "permissions": {
       "status": "complete",
+      "description": "Permission semantics require a resolved actor permission, a matching enabled resource policy, or an explicit UMA grant. Missing permission, unmatched policy, disabled or invalid policy, unresolved token, and explicit policy denial fail closed.",
       "sourceRefs": [
         "apps/platform-api/src/server/authorize-resource.ts",
         "apps/react-enterprise-app/src/components/RequirePermission.tsx",
@@ -40,6 +45,7 @@
     },
     "contracts": {
       "status": "complete",
+      "description": "The first-slice authorization contract contains a resource, scope, required permission, actor identity, actor roles, actor permissions, optional dynamic resource policies, and a typed allow/deny result.",
       "sourceRefs": [
         "packages/authorisation-runtime/src/index.ts",
         "packages/contracts-auth/src/index.ts"
@@ -47,39 +53,48 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Permission evaluation validates requested resource/action against the authenticated actor context and fails closed on missing authorization.",
+      "description": "Permission evaluation validates requested resource/action against the authenticated actor context and fails closed on missing permission, denied dynamic policy, disabled policy, invalid policy, unresolved token, and missing contextual audit permission.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts",
+        "apps/platform-api/tests/unit/audit.test.ts",
         "packages/authorisation-runtime/tests/authorisation-runtime.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "Missing or insufficient permission yields denied authorization, not partial access or generated-report readiness.",
+      "description": "Missing or insufficient permission yields denied authorization, not partial access or generated-report readiness. Dynamic policy denial returns forbidden, insufficient authentication returns step-up/authentication-required, and unavailable or unregistered dynamic provider paths may fall back only to the static permission backstop.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts",
         "packages/platform-errors/tests/platform-errors-auth.test.ts"
       ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Detailed privileged-access audit semantics are deferred to audit-of-privileged-access expansion."
+      "status": "complete",
+      "description": "First-slice audit semantics require contextual audit reads to be permission-filtered, tenant-scoped, resource-scoped, and secret-redacted. Broader privileged-access audit expansion remains deferred.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/audit.test.ts"
+      ]
     },
     "readinessModel": {
       "status": "complete",
-      "sourceRefs": [
-        "apps/platform-api/tests/unit/authorize-resource.test.ts"
-      ]
-    },
-    "proof": {
-      "status": "complete",
+      "description": "Readiness requires positive and negative authorization behaviours to be defined and later proven under an authorized proof-only substrate before implementation extraction can rely on this slice.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts",
         "packages/authorisation-runtime/tests/authorisation-runtime.test.ts"
       ]
     },
+    "proof": {
+      "status": "complete",
+      "description": "Future proof must exercise static allow, static deny, dynamic policy allow, dynamic policy deny, missing policy fail-closed, step-up/authentication-required denial, accessible UI denial, audit permission filtering, and tenant-boundary preservation. No proof evidence is created by this semantic instance.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts",
+        "apps/platform-api/tests/unit/audit.test.ts",
+        "packages/authorisation-runtime/tests/authorisation-runtime.test.ts"
+      ]
+    },
     "uiSemanticDefinition": {
       "status": "complete",
+      "description": "UI permission gating renders an accessible forbidden state when the actor lacks the required permission and must not duplicate authentication semantics.",
       "sourceRefs": [
         "apps/react-enterprise-app/src/components/RequirePermission.tsx"
       ]
@@ -87,6 +102,7 @@
   },
   "sourceRefs": [
     "apps/platform-api/src/server/authorize-resource.ts",
+    "apps/platform-api/tests/unit/audit.test.ts",
     "apps/platform-api/tests/unit/authorize-resource.test.ts",
     "apps/react-enterprise-app/src/components/RequirePermission.tsx",
     "docs/adr/0021-define-identity-tenancy-roles-and-permissions-model.md",
