@@ -1,0 +1,8 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-IMPL-002",
+  "nameStatusLines": [
+    "M\tdocs/architecture/implementation-extraction-directive.md",
+    "A\tapps/authentication-api/src/index.ts"
+  ]
+}
