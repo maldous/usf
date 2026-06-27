@@ -1,4 +1,6 @@
 {
-  "description": "Approved proof-anchor signer fingerprints per ADR 0006. Empty means no signer is trusted yet (fail-closed): any proof-freshness anchor that claims a signerFingerprint is rejected by USF-ANCHOR-008 until a maintainer registers a GPG or SSH public-key fingerprint here. Registering a signer is the remaining external input for USF-101.",
-  "trustedSigners": []
+  "description": "Approved proof-anchor signer fingerprints per ADR 0006 and ADR 0007. Per ADR 0007 the approved signer is the repository CI identity using GitHub artifact attestations (OIDC/sigstore): cryptographic verification is performed in CI by gh attestation verify (or git verify-tag) against the maldous/usf workflow identity, and the validator data-level check (USF-ANCHOR-008) requires an anchor payload's signerFingerprint to be listed in trustedSigners. An anchor whose signer is not listed here, or whose attestation fails CI verification, is rejected. No fresh anchor exists until a post-merge CI run publishes and verifies one for the target commit.",
+  "trustedSigners": [
+    "ci-github-actions:maldous/usf:proof-anchor"
+  ]
 }
