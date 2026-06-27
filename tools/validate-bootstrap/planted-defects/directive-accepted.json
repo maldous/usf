@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.directive-accepted",
+  "description": "An implementation directive that appears accepted must fail closed before bootstrap.",
+  "expectedRule": "USF-BOOTSTRAP-003",
+  "mutation": {
+    "directiveText": "# Directive\n\nHuman-only acceptance boundary.\n\nUSF-39 remains Backlog.\n\n| Field | Value |\n|---|---|\n| Authorising human (name) | Example Human |\n| Authorisation date | 2026-06-27 |\n| USF-100 acceptance recorded | accepted |\n| Separate USF-39 start action authorised | authorised |\n"
+  }
+}

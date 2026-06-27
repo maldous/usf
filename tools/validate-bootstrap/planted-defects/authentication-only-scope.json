@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.authentication-only-scope",
+  "description": "Bootstrap readiness framed around only authentication instead of all semantic capability domains must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-005",
+  "mutation": {
+    "directiveText": "# USF V2 Implementation Extraction Directive\n\nStatus: DRAFT.\n\nHuman-only acceptance boundary.\n\nThis directive is unsigned. USF-39 remains Backlog. A separate USF-39 start action is required.\n\nScope: authentication only.\n"
+  }
+}

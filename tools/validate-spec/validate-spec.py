@@ -111,6 +111,7 @@ AUTHORIZED_TOOLING = {
     ".github/workflows/validate-spec.yml",
     ".github/workflows/proof-anchor.yml",
     "tools/prove-authentication-slice.py",
+    "tools/validate-bootstrap/validate-bootstrap.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",
 }
@@ -283,6 +284,7 @@ RULES = {
     "USF-ANCHOR-006":   ("blocking", "Proof freshness anchor production-live claim exceeds environment evidence"),
     "USF-ANCHOR-007":   ("blocking", "Generated report accepted as proof freshness anchor payload"),
     "USF-ANCHOR-008":   ("blocking", "Proof freshness anchor signer is not in the approved trust root"),
+    "USF-BOOTSTRAP-001": ("blocking", "Bootstrap-readiness validator failed"),
 }
 
 
@@ -2323,6 +2325,31 @@ def check_pr(ctx, F, base, head):
             F.add("USF-PR-ACTIVE", e["id"], "schema marked active")
 
 
+def check_bootstrap(F):
+    path = "tools/validate-bootstrap/validate-bootstrap.py"
+    if not os.path.exists(path):
+        F.add("USF-BOOTSTRAP-001", path, "bootstrap validator is missing")
+        return "not-run"
+    cmd = [sys.executable, path, "all", "--json"]
+    completed = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, check=False)
+    if completed.returncode == 2:
+        F.add("USF-BOOTSTRAP-001", path, completed.stderr.strip() or "bootstrap validator internal error")
+        return "ran"
+    try:
+        payload = json.loads(completed.stdout or "{}")
+    except json.JSONDecodeError:
+        F.add("USF-BOOTSTRAP-001", path, "bootstrap validator did not emit valid JSON")
+        return "ran"
+    for finding in payload.get("findings", []):
+        subject = finding.get("subject", path)
+        rule = finding.get("ruleId", "unknown")
+        message = finding.get("message", "")
+        F.add("USF-BOOTSTRAP-001", subject, f"{rule}: {message}")
+    if completed.returncode not in (0, 1):
+        F.add("USF-BOOTSTRAP-001", path, completed.stderr.strip() or "bootstrap validator failed")
+    return "ran"
+
+
 def emit_report(ctx, F, path):
     sha = git_checked("rev-parse", "HEAD") if subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True).returncode == 0 else "unknown"
     dirty = bool(subprocess.run(["git", "status", "--porcelain", *DIRTY_PATHS], cwd=ROOT, capture_output=True, text=True).stdout.strip())
@@ -2353,7 +2380,7 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest", "pr", "anchor", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "bootstrap", "selftest", "pr", "anchor", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
@@ -2375,9 +2402,9 @@ def main():
     run = {
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
         "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "evidence": ["evidence"],
-        "real-instances": ["real-instances"], "implementation": ["implementation"],
+        "real-instances": ["real-instances"], "implementation": ["implementation"], "bootstrap": ["bootstrap"],
         "selftest": ["selftest"], "pr": ["pr"], "anchor": ["anchor"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "readiness", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest"]
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "readiness", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "bootstrap", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -2404,6 +2431,8 @@ def main():
         real_instances_state = check_real_instances(ctx, F)
     if "implementation" in run:
         check_implementation(ctx, F)
+    if "bootstrap" in run:
+        check_bootstrap(F)
     if "selftest" in run:
         selftest_state = check_selftest(ctx, F)
     if "pr" in run:
