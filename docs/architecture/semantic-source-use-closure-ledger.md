@@ -84,6 +84,8 @@ This ledger is reviewable planning evidence only. The accompanying validator rul
 
 Complete one-pass implementation readiness remains NO-GO.
 
+As of the Wave 3 corpus harvest, 43 of the 67 semantic-contract instances are source-backed drafts whose facets cite manifest-verified React source rows (identity-access, configuration, data-platform partial, events-workflow partial, observability-ops partial, entitlements-billing partial, developer-platform partial, security-governance partial, foundation partial, compute-runtime partial, storage, search, support-admin partial); the remainder are honest deferred gaps (behavioural source not yet in the manifest, pending USF-74 import), governance/decision-framework concepts, or not-applicable-final exclusions.
+
 USF-97 is materially advanced by making every capability-matrix semantic-contract target validator-readable as either source-backed draft, deferred gap, or non-applicable exclusion. The React L5 / USF V2 equivalence audit (`docs/architecture/react-l5-equivalence-audit.md`) further advances USF-97 by classifying all 75 historical capabilities against the controlled equivalence and gap vocabularies and reducing the remaining work to an enumerated, ranked authoring backlog. It is not complete. The next repository-workable step is to replace deferred gap facets with source-backed domain semantics and per-domain source-use matrices, or preserve explicit exclusions where authority says the capability is out of scope.
 
 USF-39 remains Backlog.

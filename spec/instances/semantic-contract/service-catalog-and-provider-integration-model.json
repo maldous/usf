@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.service-catalog-and-provider-integration-model",
   "title": "Service Catalog And Provider Integration Model Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 56: Service catalog + provider integration model. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Source-backed draft semantic contract for the service catalog and provider integration model capability, recovered from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Service",
+    "Configuration"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,101 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facet descriptions are concise source-backed summaries citing verified manifest rows; proof is hermetic/stale, not current readiness. Enrich facet detail and publish fresh proof before generation; respect the hexagonal constraint in ADR 0005.",
   "capability": "service-catalog-and-provider-integration-model",
   "capabilityDomain": "foundation",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/platform-services.ts",
+        "apps/platform-api/src/usecases/service-catalog.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "State model recovered from cited React storage/port/adapter source.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/platform-services.ts",
+        "apps/platform-api/src/usecases/service-catalog.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/platform-services.test.ts",
+        "apps/platform-api/tests/unit/service-catalog.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Operation/interface contracts recovered from cited React source behind ports/adapters.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/platform-services.ts",
+        "apps/platform-api/src/usecases/service-catalog.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Validation recovered from cited React tests and source.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/platform-services.test.ts",
+        "apps/platform-api/tests/unit/service-catalog.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Deterministic fail-closed error outcomes recovered from cited React tests and source.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/platform-services.test.ts",
+        "apps/platform-api/tests/unit/service-catalog.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/platform-services.test.ts",
+        "apps/platform-api/tests/unit/service-catalog.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/platform-services-runtime-proof.ts",
+        "apps/platform-api/scripts/service-catalog-registry-runtime-proof.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/platform-services-runtime-proof.ts",
+        "apps/platform-api/scripts/service-catalog-registry-runtime-proof.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/scripts/platform-services-runtime-proof.ts",
+    "apps/platform-api/scripts/service-catalog-registry-runtime-proof.ts",
+    "apps/platform-api/src/usecases/platform-services.ts",
+    "apps/platform-api/src/usecases/service-catalog.ts",
+    "apps/platform-api/tests/unit/platform-services.test.ts",
+    "apps/platform-api/tests/unit/service-catalog.test.ts",
+    "docs/adr/0055-service-catalog-and-provider-integration-model.md",
+    "docs/evidence/platform/phase-1-service-catalog-entitlements-scope.md",
+    "docs/evidence/platform/phase-1-service-catalog-entitlements.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

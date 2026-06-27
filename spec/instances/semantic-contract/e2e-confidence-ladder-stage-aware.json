@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.e2e-confidence-ladder-stage-aware",
   "title": "E2E Confidence Ladder Stage Aware Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 71: E2E confidence ladder (stage-aware). All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Deferred governance/decision-framework semantic contract for e2e confidence ladder stage aware. Realised through consuming capabilities and governance documents rather than a behavioural source unit; no behavioural source row to back facets.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "deferred",
   "ontologyConcepts": [
@@ -22,46 +22,50 @@
   "facets": {
     "lifecycle": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "stateModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "permissions": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "contracts": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "validation": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "errorModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "auditModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "readinessModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "proof": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Decision-framework/governance concept realised through consuming capabilities; not a behavioural contract with importable source. Author or keep as governance concept before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

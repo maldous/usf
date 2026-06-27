@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.serverless-function-runtime",
   "title": "Serverless Function Runtime Semantic Contract",
-  "description": "Explicit non-applicable semantic contract placeholder for coverage matrix row(s) 38: Serverless / function runtime. The historical capability is not an implementation extraction target under current USF authority.",
+  "description": "Not-applicable-final semantic contract for serverless function runtime. Excluded from V2 implementation scope; retained as lineage. A later semantic decision is required to change applicability.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "deferred",
   "ontologyConcepts": [
@@ -22,46 +22,50 @@
   "facets": {
     "lifecycle": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "stateModel": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "permissions": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "contracts": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "validation": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "errorModel": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "auditModel": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "readinessModel": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "proof": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     },
     "uiSemanticDefinition": {
       "status": "not-applicable",
-      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+      "description": "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }
