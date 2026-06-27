@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.readiness-overclaim",
+  "description": "A readiness artefact that claims implementation GO before authority must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-004",
+  "mutation": {
+    "readinessText": "# Final V2 Readiness Reconciliation\n\nComplete one-pass implementation readiness is GO. Ready to start USF-39.\n"
+  }
+}

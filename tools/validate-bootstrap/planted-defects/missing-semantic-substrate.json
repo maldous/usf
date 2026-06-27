@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.missing-semantic-substrate",
+  "description": "Bootstrap readiness without semantic-contract instances must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-005",
+  "mutation": {
+    "emptySemanticContracts": true
+  }
+}

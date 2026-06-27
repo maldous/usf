@@ -1,0 +1,46 @@
+{
+  "id": "command.validate-bootstrap-all",
+  "commandKind": "validation-command",
+  "title": "Validate Bootstrap Readiness",
+  "description": "Draft command semantic instance for the standalone whole-platform, all-slices USF bootstrap-readiness validator gate.",
+  "purpose": "Validate bootstrap-specific readiness invariants before any future bootstrap tag or implementation-start action: required readiness artefacts exist, the implementation directive remains human-only and unsigned, USF-39 remains Backlog, no implementation-shaped roots exist before bootstrap, and the semantic/source-use substrate covers the current all-slices semantic-contract corpus.",
+  "invocation": "python3 tools/validate-bootstrap/validate-bootstrap.py all",
+  "inputs": [
+    "docs/architecture",
+    "spec/instances",
+    "spec/registries",
+    "tools/validate-bootstrap",
+    "tools/validate-spec"
+  ],
+  "outputs": [
+    "bootstrap validator findings on standard output",
+    "process exit code"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [],
+  "failureSemantics": "Non-zero exit indicates blocking bootstrap-readiness findings; the validator fails closed on missing required artefacts, readiness overclaims, forbidden implementation roots, missing semantic/source-use substrate, or failed planted-defect selftests.",
+  "emitsEvidence": true,
+  "sourceRefs": [
+    "tools/validate-bootstrap/validate-bootstrap.py",
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "disposition": "replace",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Validator"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Run this gate with validate-spec before claiming bootstrap readiness; it is a whole-platform/all-slices gate and does not authorise implementation, sign USF-100, move USF-39, or claim production readiness."
+}

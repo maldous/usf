@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.forbidden-root",
+  "description": "An implementation-shaped root before bootstrap must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-002",
+  "mutation": {
+    "addPath": "apps/api/index.ts"
+  }
+}
