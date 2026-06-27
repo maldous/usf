@@ -1,0 +1,38 @@
+{
+  "target": "validator-reports",
+  "expectedRule": "USF-REPORT-003",
+  "currentCommit": "head-commit",
+  "evidenceIds": [
+    "evidence.collected"
+  ],
+  "records": {
+    "spec/readiness-report.json": {
+      "id": "report.wrong-home",
+      "authorityLevel": "generated-report",
+      "status": "pass",
+      "findings": [],
+      "evidenceRefs": [
+        "evidence.collected"
+      ],
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      },
+      "title": "Wrong Home Report",
+      "description": "Planted generated report committed outside the approved evidence home.",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Validator",
+        "Generated Report"
+      ],
+      "taxonomyRefs": [
+        "validation-reporting-classification"
+      ],
+      "vocabularyRefs": [
+        "report-statuses",
+        "validation-severities"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    }
+  }
+}

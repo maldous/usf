@@ -1,0 +1,7 @@
+{
+  "target": "directive-text",
+  "expectedRule": "USF-DIRECTIVE-001",
+  "records": {
+    "docs/architecture/implementation-extraction-directive.md": "# Implementation Extraction Directive\n\nThis template does not fill the directive.\n\n| Field | Required answer |\n|---|---|\n| Authorising human | TBD |\n"
+  }
+}

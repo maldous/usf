@@ -213,6 +213,10 @@ RULES = {
     "USF-MIG-001":      ("blocking", "data-migration: mutable migration accepted"),
     "USF-REPORT-001":   ("blocking", "validator-report: pass accepted with blocking finding"),
     "USF-REPORT-002":   ("blocking", "validator-report: fail accepted with zero findings"),
+    "USF-REPORT-003":   ("blocking", "generated report is outside the approved evidence home"),
+    "USF-REPORT-004":   ("blocking", "generated report filename carries a status/readiness claim"),
+    "USF-REPORT-005":   ("blocking", "generated report evidence reference does not resolve"),
+    "USF-REPORT-006":   ("blocking", "generated report freshness is marked non-stale for a different commit than current HEAD"),
     "USF-FACET-001":    ("blocking", "semantic-contract: partial facet set accepted"),
     "USF-FIXTURE-001":  ("blocking", "Negative fixture not rejected by its schema"),
     "USF-FIXTURE-002":  ("blocking", "Positive fixture unexpectedly rejected"),
@@ -254,6 +258,7 @@ RULES = {
     "USF-IMPL-003":     ("blocking", "Implementation artefact mirrors a historical source path"),
     "USF-IMPL-004":     ("blocking", "Implementation artefact path uses a forbidden name"),
     "USF-IMPL-005":     ("blocking", "Implementation artefact is outside authorised target roots"),
+    "USF-DIRECTIVE-001": ("blocking", "Implementation directive is missing accepted filled-directive content"),
     "USF-SELFTEST-001": ("blocking", "Planted defect did NOT raise its expected rule id"),
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
@@ -1279,15 +1284,65 @@ def validate_real_instance_inventory(F, category_paths):
     return states
 
 
-def validate_validator_report_data(ctx, F, data_by_path):
+REPORT_STATUS_TOKENS = {"pass", "green", "complete", "ready", "final", "stale", "unknown"}
+
+
+def _report_filename_status_tokens(path):
+    stem = os.path.basename(path).removesuffix(".json").lower()
+    return set(re.split(r"[-_.]+", stem)) & REPORT_STATUS_TOKENS
+
+
+def validate_validator_report_data(ctx, F, data_by_path, existing_paths=None, evidence_ids=None,
+                                   current_commit=None):
+    existing_paths = existing_paths or set()
+    evidence_ids = evidence_ids or set()
     for p, data in data_by_path.items():
         errors = list(Draft202012Validator(ctx["sd"]["validator-report"]).iter_errors(data))
         for err in errors:
             F.add("USF-REAL-005", p, err.message[:160])
+        if not isinstance(data, dict):
+            continue
+        if data.get("authorityLevel") == "generated-report":
+            if not p.startswith("evidence/"):
+                F.add("USF-REPORT-003", p, "generated reports must be committed under evidence/")
+            status_tokens = _report_filename_status_tokens(p)
+            if status_tokens:
+                F.add("USF-REPORT-004", p, f"status/readiness tokens in filename: {sorted(status_tokens)}")
+        for ref in data.get("evidenceRefs", []):
+            if not isinstance(ref, str):
+                continue
+            if ref.startswith("commit:"):
+                continue
+            if ref in evidence_ids:
+                continue
+            if not _source_ref_resolves(ref, existing_paths):
+                F.add("USF-REPORT-005", f"{p}:evidenceRefs", f"unresolved evidence reference: {ref}")
+        freshness = data.get("freshness")
+        if data.get("status") == "pass" and isinstance(freshness, dict) and freshness.get("stale") is False and current_commit:
+            commit = freshness.get("commit")
+            if isinstance(commit, str) and commit != current_commit:
+                F.add("USF-REPORT-006", p, f"{commit} != {current_commit}")
 
 
 def validate_validator_report_records(ctx, F, paths):
-    validate_validator_report_data(ctx, F, _load_json_files(paths, F))
+    existing_paths = _existing_repo_paths()
+    evidence_ids = set()
+    evidence_paths = sorted(glob.glob("evidence/evidence-envelope/*.json")) + sorted(glob.glob("evidence/proof-evidence/*.json"))
+    for data in _load_json_files(evidence_paths, F).values():
+        if isinstance(data, dict) and isinstance(data.get("id"), str):
+            evidence_ids.add(data["id"])
+    try:
+        current_commit = git_checked("rev-parse", "HEAD")
+    except Exception:
+        current_commit = None
+    validate_validator_report_data(
+        ctx,
+        F,
+        _load_json_files(paths, F),
+        existing_paths=existing_paths,
+        evidence_ids=evidence_ids,
+        current_commit=current_commit,
+    )
 
 
 def discover_validator_report_paths(F, paths=None):
@@ -1416,7 +1471,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "pr-paths"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1479,14 +1534,34 @@ def check_selftest(ctx, F):
             if not isinstance(records, dict):
                 F.add("USF-SELFTEST-001", df, "validator-reports planted-defect needs a records object")
                 continue
-            validate_validator_report_data(sandbox, f2, records)
+            validate_validator_report_data(
+                sandbox,
+                f2,
+                records,
+                existing_paths=set(patch.get("existingPaths", [])),
+                evidence_ids=set(patch.get("evidenceIds", [])),
+                current_commit=patch.get("currentCommit"),
+            )
         elif patch["target"] == "report-discovery":
             records = patch.get("records")
             if not isinstance(records, dict):
                 F.add("USF-SELFTEST-001", df, "report-discovery planted-defect needs a records object")
                 continue
             paths = discover_validator_report_paths(f2, list(records))
-            validate_validator_report_data(sandbox, f2, {p: records[p] for p in paths})
+            validate_validator_report_data(
+                sandbox,
+                f2,
+                {p: records[p] for p in paths},
+                existing_paths=set(patch.get("existingPaths", [])),
+                evidence_ids=set(patch.get("evidenceIds", [])),
+                current_commit=patch.get("currentCommit"),
+            )
+        elif patch["target"] == "directive-text":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "directive-text planted-defect needs a records object")
+                continue
+            validate_implementation_directives(f2, list(records), records=records)
         elif patch["target"] == "pr-paths":
             lines = patch.get("nameStatusLines")
             if not isinstance(lines, list):
@@ -1511,7 +1586,25 @@ IMPLEMENTATION_ROOTS = ("apps", "packages", "services", "src", "config", "infra"
 IMPLEMENTATION_PATH_RE = re.compile(r"(^|/)(" + "|".join(IMPLEMENTATION_ROOTS) + r")/")
 IMPLEMENTATION_DIRECTIVE_PATHS = {
     "docs/architecture/implementation-extraction-directive.md",
-    "spec/instances/ai-governance/implementation-extraction-directive.json",
+}
+IMPLEMENTATION_DIRECTIVE_TEXT_PATH = "docs/architecture/implementation-extraction-directive.md"
+DIRECTIVE_REQUIRED_PHRASES = {
+    "authorising human",
+    "linear record",
+    "scope",
+    "target files",
+    "source-use",
+    "fresh proof",
+    "validation",
+    "non-goals",
+    "usf-39 remains backlog",
+}
+DIRECTIVE_PLACEHOLDER_PHRASES = {
+    "required answer",
+    "invalid examples",
+    "this template does not fill",
+    "tbd",
+    "todo",
 }
 AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "apps/authentication-api",
@@ -1560,6 +1653,18 @@ def _source_mirror_prefixes(source_paths):
     return prefixes
 
 
+def _source_mirror_suffixes(source_paths):
+    suffixes = set()
+    for source_path in source_paths:
+        source_path = _normalise_path(source_path)
+        parts = source_path.split("/")
+        if len(parts) >= 5 and parts[0] in IMPLEMENTATION_ROOTS:
+            remainder = "/".join(parts[2:])
+            if len(remainder.split("/")) >= 3:
+                suffixes.add(remainder)
+    return suffixes
+
+
 def _implementation_directive_referenced(changed_paths, existing_paths=None):
     existing_paths = existing_paths or set()
     all_paths = set(changed_paths) | set(existing_paths)
@@ -1571,7 +1676,31 @@ def _implementation_path_has_forbidden_name(path):
     return bool(FORB.search(path) or REDUNDANT_USF.search(path))
 
 
-def _validate_implementation_path(F, path, *, directive_referenced, disposition_changed, source_mirror_prefixes):
+def validate_implementation_directive_text(F, path, text):
+    lower = text.lower()
+    missing = sorted(phrase for phrase in DIRECTIVE_REQUIRED_PHRASES if phrase not in lower)
+    placeholders = sorted(phrase for phrase in DIRECTIVE_PLACEHOLDER_PHRASES if phrase in lower)
+    if missing:
+        F.add("USF-DIRECTIVE-001", path, f"missing required filled-directive phrases: {missing}")
+    if placeholders:
+        F.add("USF-DIRECTIVE-001", path, f"placeholder/template phrases remain: {placeholders}")
+
+
+def validate_implementation_directives(F, paths=None, records=None):
+    paths = paths or []
+    records = records or {}
+    for path in sorted(_normalise_path(p) for p in paths):
+        if path != IMPLEMENTATION_DIRECTIVE_TEXT_PATH:
+            continue
+        text = records.get(path)
+        if text is None:
+            text = load_text(path, F)
+        if text is not None:
+            validate_implementation_directive_text(F, path, text)
+
+
+def _validate_implementation_path(F, path, *, directive_referenced, disposition_changed, source_mirror_prefixes,
+                                  source_mirror_suffixes):
     root = _implementation_root(path)
     if root is None:
         return
@@ -1579,8 +1708,11 @@ def _validate_implementation_path(F, path, *, directive_referenced, disposition_
         F.add("USF-IMPL-001", path, "implementation artefact requires an authorised implementation directive")
     if not disposition_changed:
         F.add("USF-IMPL-002", path, "implementation artefact requires source disposition or import-manifest coverage")
-    if root in source_mirror_prefixes:
-        F.add("USF-IMPL-003", path, f"target root mirrors historical source root {root}")
+    remainder = "/".join(_normalise_path(path).split("/")[2:])
+    mirrored_suffix = next((suffix for suffix in sorted(source_mirror_suffixes) if remainder == suffix), None)
+    if root in source_mirror_prefixes or mirrored_suffix:
+        detail = f"target root mirrors historical source root {root}" if root in source_mirror_prefixes else f"target suffix mirrors historical source suffix {mirrored_suffix}"
+        F.add("USF-IMPL-003", path, detail)
     if _implementation_path_has_forbidden_name(path):
         F.add("USF-IMPL-004", path, "implementation path contains a forbidden canonical token")
     if root not in AUTHORIZED_IMPLEMENTATION_ROOTS:
@@ -1595,6 +1727,7 @@ def validate_implementation_paths(F, paths, *, changed_paths=None, source_paths=
     directive_referenced = _implementation_directive_referenced(changed_paths, existing_paths=existing_paths)
     disposition_changed = _has_changed_disposition(changed_paths)
     mirror_prefixes = _source_mirror_prefixes(source_paths)
+    mirror_suffixes = _source_mirror_suffixes(source_paths)
     for path in paths:
         _validate_implementation_path(
             F,
@@ -1602,12 +1735,15 @@ def validate_implementation_paths(F, paths, *, changed_paths=None, source_paths=
             directive_referenced=directive_referenced,
             disposition_changed=disposition_changed,
             source_mirror_prefixes=mirror_prefixes,
+            source_mirror_suffixes=mirror_suffixes,
         )
 
 
 def check_implementation(ctx, F):
     implementation_files = sorted(p for p in _existing_repo_paths() if _is_implementation_path(p))
-    if not implementation_files:
+    directive_files = sorted(p for p in _existing_repo_paths() if p in IMPLEMENTATION_DIRECTIVE_PATHS)
+    validate_implementation_directives(F, directive_files)
+    if not implementation_files and not directive_files:
         return "not-run"
     validate_implementation_paths(
         F,

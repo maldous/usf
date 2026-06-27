@@ -1,0 +1,36 @@
+{
+  "target": "validator-reports",
+  "expectedRule": "USF-REPORT-005",
+  "records": {
+    "evidence/readiness-report.json": {
+      "id": "report.unresolved-evidence-ref",
+      "authorityLevel": "generated-report",
+      "status": "fail",
+      "findings": [
+        {
+          "severity": "blocking",
+          "subject": "proof",
+          "message": "Planted failure."
+        }
+      ],
+      "evidenceRefs": [
+        "evidence.missing"
+      ],
+      "title": "Unresolved Evidence Reference Report",
+      "description": "Planted generated report whose evidenceRefs do not resolve.",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Validator",
+        "Generated Report"
+      ],
+      "taxonomyRefs": [
+        "validation-reporting-classification"
+      ],
+      "vocabularyRefs": [
+        "report-statuses",
+        "validation-severities"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    }
+  }
+}

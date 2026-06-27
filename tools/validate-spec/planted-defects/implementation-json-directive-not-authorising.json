@@ -1,0 +1,12 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-IMPL-001",
+  "nameStatusLines": [
+    "A\tspec/instances/ai-governance/implementation-extraction-directive.json",
+    "M\tdocs/architecture/authentication-slice-source-use-disposition-matrix.md",
+    "A\tapps/authentication-api/src/server/authentication.ts"
+  ],
+  "sourcePaths": [
+    "packages/platform-api/src/server/authentication.ts"
+  ]
+}
