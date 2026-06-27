@@ -36,6 +36,7 @@ RULES = {
     "USF-BOOTSTRAP-009": ("blocking", "generated bootstrap mapping index or summary is stale"),
     "USF-BOOTSTRAP-010": ("blocking", "bootstrap readiness governance decision coverage is incomplete"),
     "USF-BOOTSTRAP-011": ("blocking", "bootstrap readiness ADR coverage is incomplete"),
+    "USF-BOOTSTRAP-012": ("blocking", "authentication proof runner is not consolidated into bootstrap validator"),
     "USF-BOOTSTRAP-SELFTEST": ("blocking", "planted bootstrap defect did not raise its expected rule"),
 }
 
@@ -87,6 +88,7 @@ BOOTSTRAP_MAPPING_SUMMARY = "evidence/generated-reports/bootstrap-mapping-summar
 AUTH_PROOF_PATH = "evidence/proof-evidence/authentication-slice-proof.json"
 AUTH_RUNTIME_ENVELOPE_PATH = "evidence/evidence-envelope/authentication-slice-proof.json"
 AUTH_LINEAGE_ENVELOPE_PATH = "evidence/evidence-envelope/authentication-slice-proof-lineage.json"
+OBSOLETE_STANDALONE_AUTH_PROOF_PATH = "tools/prove-authentication-slice.py"
 
 AUTH_INSTANCE_PATHS = {
     "command": "spec/instances/command/authentication-slice-proof.json",
@@ -371,6 +373,21 @@ def check_validate_spec_wiring(F, state):
     for needle in ["bootstrap", "tools/validate-bootstrap/validate-bootstrap.py"]:
         if needle not in text:
             F.add("USF-BOOTSTRAP-007", VALIDATE_SPEC_PATH, f"missing validate-spec bootstrap wiring token: {needle}")
+
+
+def check_authentication_proof_runner_consolidated(F, state):
+    if OBSOLETE_STANDALONE_AUTH_PROOF_PATH in state["paths"]:
+        F.add(
+            "USF-BOOTSTRAP-012",
+            OBSOLETE_STANDALONE_AUTH_PROOF_PATH,
+            "authentication slice proof must remain a proof-authentication-slice mode of tools/validate-bootstrap/validate-bootstrap.py",
+        )
+    if not os.path.exists(__file__):
+        return
+    text = read_text(__file__)
+    for needle in ["proof-authentication-slice", "run_authentication_proof"]:
+        if needle not in text:
+            F.add("USF-BOOTSTRAP-012", "tools/validate-bootstrap/validate-bootstrap.py", f"missing integrated proof runner token: {needle}")
 
 
 def mapping_digest(record):
@@ -856,6 +873,7 @@ def run_checks(modes, F, state=None):
         check_bootstrap_mappings(F, state)
         check_bootstrap_governance(F, state)
         check_bootstrap_adr(F, state)
+        check_authentication_proof_runner_consolidated(F, state)
         check_anchor_for_current_main(F)
         check_validate_spec_wiring(F, state)
     if "implementation" in modes:
