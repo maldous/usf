@@ -275,6 +275,8 @@ def main():
     parser.add_argument("--emit-anchor-payload", action="store_true",
                         help="Print deterministic unsigned anchor payload JSON instead of the summary; writes nothing.")
     args = parser.parse_args()
+    if args.emit_anchor_payload and args.write:
+        parser.error("--emit-anchor-payload is write-free and cannot be combined with --write")
 
     os.chdir(ROOT)
     claim_commit = args.claim_commit or git("rev-parse", "HEAD")

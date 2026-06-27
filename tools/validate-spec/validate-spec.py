@@ -1559,8 +1559,8 @@ def check_selftest(ctx, F):
         patch = load_json(df, F)                      # parse-safe (item 4): bad JSON -> USF-PARSE-001
         if patch is None:
             continue
-        if not isinstance(patch, dict) or "expectedRule" not in patch or "target" not in patch:
-            F.add("USF-SELFTEST-001", df, "planted-defect missing target/expectedRule")
+        if not isinstance(patch, dict) or "target" not in patch or ("expectedRule" not in patch and patch.get("expectedClean") is not True):
+            F.add("USF-SELFTEST-001", df, "selftest case missing target and expectedRule/expectedClean")
             continue
         sandbox = copy.deepcopy(ctx)
         try:
@@ -1674,7 +1674,10 @@ def check_selftest(ctx, F):
             validate_anchor_payload_data(f2, records, current_commit=patch.get("currentCommit"))
         else:
             run_all_checks(sandbox, f2)
-        if patch["expectedRule"] not in f2.rule_ids():
+        if patch.get("expectedClean") is True:
+            if f2.items:
+                F.add("USF-SELFTEST-001", df, f"expected clean; got {sorted(f2.rule_ids())[:8]}")
+        elif patch["expectedRule"] not in f2.rule_ids():
             F.add("USF-SELFTEST-001", df, f"expected {patch['expectedRule']}; got {sorted(f2.rule_ids())[:8]}")
     return "ran"
 
