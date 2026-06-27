@@ -1,0 +1,4 @@
+{
+  "description": "Approved proof-anchor signer fingerprints per ADR 0006. Empty means no signer is trusted yet (fail-closed): any proof-freshness anchor that claims a signerFingerprint is rejected by USF-ANCHOR-008 until a maintainer registers a GPG or SSH public-key fingerprint here. Registering a signer is the remaining external input for USF-101.",
+  "trustedSigners": []
+}
