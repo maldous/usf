@@ -1,9 +1,9 @@
 {
   "id": "semantic-contract.accessibility-a11y-gate",
   "title": "Accessibility A11Y Gate Semantic Contract",
-  "description": "Deferred semantic contract for accessibility a11y gate. Behavioural source (usecases, tests, proofs) is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring facets.",
+  "description": "Coverage-complete semantic contract for the accessibility a11y gate capability. Semantic information captured from ../react's semantic corpus as informational lineage via the USF coverage record and equivalence audit; no ../react source code is imported and the V2 implementation language is an open decision.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
     "Capability"
@@ -16,49 +16,85 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Coverage-complete draft grounded in semantic information (../react informational lineage only; no source import; language open). Proof is hermetic/stale lineage, not current readiness. Enrich detail and publish fresh proof before generation; respect the hexagonal constraint in ADR 0005.",
   "capability": "accessibility-a11y-gate",
   "capabilityDomain": "foundation",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the lifecycle and operations as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the state and data model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the permission and tenant-isolation model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the operation and interface contracts as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the input and invariant validation as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the fail-closed error model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the audit model for state-changing actions as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. This facet captures the readiness posture as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "complete",
+      "description": "Accessibility gate asserting landmark, role, ARIA, and axe expectations as a contract over UI capabilities. Proof expectation captured as semantic information; ../react proof is hermetic/runtime lineage and fresh USF proof is pending USF-101/USF-59.",
+      "sourceRefs": [
+        "docs/architecture/capability-source-coverage-matrix.md",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ]
     },
     "uiSemanticDefinition": {
-      "status": "gap",
-      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
+      "status": "not-applicable",
+      "description": "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable."
     }
   },
   "sourceRefs": [
