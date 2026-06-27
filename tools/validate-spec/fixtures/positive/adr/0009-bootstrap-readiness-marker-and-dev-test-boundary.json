@@ -1,0 +1,91 @@
+{
+  "id": "0009-bootstrap-readiness-marker-and-dev-test-boundary",
+  "kind": "adr",
+  "title": "Bootstrap Readiness Marker and Dev Test Boundary",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-28",
+  "context": "The active bootstrap goal requires USF to move toward controlled bootstrap readiness without starting implementation. The repository has a bootstrap readiness governance record, topology plan, semantic source-use closure ledger, machine-readable bootstrap mappings, and validate-bootstrap coverage. These decisions affect future implementation permission, proof posture, provider targets, source-use boundaries, and marker movement, so they need ADR coverage rather than only planning prose or tracker comments. Historical React evidence remains rank-6 lineage and cannot authorise copying, path mirroring, or implementation start.",
+  "decision": "USF adopts the bootstrap-readiness boundary. The future v2-bootstrap marker is a movable human-friendly marker on main and may be placed or moved only when governance, source-use treatment, topology, proof expectations, immutable proof/evidence anchors, and bootstrap validation support a later implementation attempt. The marker is not production readiness, not implementation completion, not USF-39 start authority, and not a substitute for immutable proof/evidence anchors. The initial authorised implementation attempt after bootstrap is local dev/test readiness only: dev uses in-memory providers, test uses Docker Compose OSS providers, and staging, production, live-external-provider, deployment, and production-live proof are deferred. Topology strings remain planning authority only until a signed directive and separate USF-39 start action exist.",
+  "consequences": [
+    "Bootstrap readiness has rank-2 ADR coverage for its marker policy and dev/test boundary.",
+    "The bootstrap readiness governance document remains the detailed governance record, constrained by this ADR.",
+    "Validate-bootstrap must fail closed if this ADR coverage is missing or loses the core boundary markers.",
+    "The v2-bootstrap marker remains not attempted until all bootstrap blockers are resolved and validation plus immutable anchors support it."
+  ],
+  "invariants": [
+    "The v2-bootstrap marker is not production readiness.",
+    "The v2-bootstrap marker is not implementation completion.",
+    "The v2-bootstrap marker is not USF-39 start authority.",
+    "USF-39 remains Backlog until a signed USF-100 directive and a separate USF-39 start action exist.",
+    "Local dev/test bootstrap readiness must not claim staging, production, live-external-provider, deployment, or production-live proof.",
+    "Future topology names are planning authority only before implementation is separately authorised.",
+    "React remains source lineage only; no runtime source, config, Compose file, migration, test, or package scaffold is copied by this decision."
+  ],
+  "permittedChanges": [
+    "Strengthen validate-bootstrap checks for marker policy, ADR coverage, topology planning, source-use coverage, proof deferrals, and forbidden implementation roots.",
+    "Add or regenerate machine-readable bootstrap mappings and generated summaries where the JSON mapping remains authoritative.",
+    "Add governance records, ADRs, and validator selftests that make bootstrap readiness more falsifiable.",
+    "Move the future v2-bootstrap marker only after bootstrap blockers are resolved and repository evidence explains the move."
+  ],
+  "forbiddenDrift": [
+    "Do not treat v2-bootstrap as production readiness, implementation completion, deployment readiness, or live-provider proof.",
+    "Do not use v2-bootstrap, a proof-anchor tag, a generated report, or a Linear comment as permission to start USF-39.",
+    "Do not create implementation roots or scaffold before the signed directive and separate start action.",
+    "Do not weaken dev/test provider separation by allowing in-memory providers to satisfy test Compose proof.",
+    "Do not treat React Compose, migrations, package layout, or source paths as target files to copy or mirror."
+  ],
+  "aiAlignmentRules": [
+    "Agents must read this ADR before creating, moving, or relying on a bootstrap readiness marker.",
+    "Agents must preserve the distinction between local dev/test readiness and staging, production, live-external-provider, deployment, or production-live proof.",
+    "Agents must stop before creating implementation roots or scaffold from this ADR alone.",
+    "Agents must treat Linear comments as tracker context only and must verify repository artefacts and validators before claiming bootstrap readiness."
+  ],
+  "semanticRefs": [
+    "docs/architecture/bootstrap-readiness-governance.md",
+    "docs/architecture/target-implementation-topology-plan.md",
+    "docs/architecture/semantic-source-use-closure-ledger.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/implementation-extraction-directive.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/charter.md",
+    "spec/registries/bootstrap-mapping-index.json",
+    "spec/instances/bootstrap-mapping/authentication-platform.json",
+    "spec/instances/bootstrap-mapping/composed-provider-readiness-spine.json",
+    "spec/instances/bootstrap-mapping/relational-storage-and-migrations-and-rls.json",
+    "spec/instances/bootstrap-mapping/support-mode-break-glass-access.json"
+  ],
+  "sourceRefs": [
+    "compose.yaml",
+    "make/compose.mk",
+    "docs/adr/0071-composed-provider-readiness.md",
+    "docs/adr/0073-composed-service-sso-via-keycloak-oidc.md"
+  ],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-bootstrap/validate-bootstrap.py",
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "A marker is useful as a human coordination point but cannot prove correctness. Keeping the marker movable lets it follow the latest accepted candidate while immutable proof-anchor tags preserve auditability. The dev/test boundary preserves the Charter's hermetic and locally provable posture without overclaiming live-provider or production readiness. Separating the marker from USF-39 start authority prevents accidental implementation start from a bootstrap tag, CI result, generated report, or Linear comment.",
+  "description": "Records the decision that the future v2-bootstrap marker is a movable bootstrap readiness marker only, and that the initial authorised implementation attempt it precedes is scoped to local dev/test readiness.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Provider Mode",
+    "Environment",
+    "Proof",
+    "Source Reference"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "provider-modes",
+    "environment-classes",
+    "proof-levels"
+  ],
+  "aiGuidance": "Use this ADR when evaluating bootstrap readiness, marker movement, local dev/test proof boundaries, deferred production proof, or whether any future work is allowed to create implementation roots."
+}

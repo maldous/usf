@@ -35,6 +35,7 @@ RULES = {
     "USF-BOOTSTRAP-008": ("blocking", "bootstrap mapping corpus is incomplete or invalid"),
     "USF-BOOTSTRAP-009": ("blocking", "generated bootstrap mapping index or summary is stale"),
     "USF-BOOTSTRAP-010": ("blocking", "bootstrap readiness governance decision coverage is incomplete"),
+    "USF-BOOTSTRAP-011": ("blocking", "bootstrap readiness ADR coverage is incomplete"),
     "USF-BOOTSTRAP-SELFTEST": ("blocking", "planted bootstrap defect did not raise its expected rule"),
 }
 
@@ -44,6 +45,7 @@ REQUIRED_ARTEFACTS = [
     "docs/architecture/complete-readiness-blocker-register.md",
     "docs/architecture/final-v2-readiness-reconciliation.md",
     "docs/architecture/bootstrap-readiness-governance.md",
+    "docs/adr/0009-bootstrap-readiness-marker-and-dev-test-boundary.md",
     "docs/architecture/target-implementation-topology-plan.md",
     "docs/architecture/semantic-source-use-closure-ledger.md",
     "spec/registries/source-import-manifest.json",
@@ -77,6 +79,7 @@ DIRECTIVE_PATH = "docs/architecture/implementation-extraction-directive.md"
 VALIDATE_SPEC_PATH = "tools/validate-spec/validate-spec.py"
 SELFTEST_DIR = "tools/validate-bootstrap/planted-defects"
 BOOTSTRAP_GOVERNANCE_PATH = "docs/architecture/bootstrap-readiness-governance.md"
+BOOTSTRAP_ADR_PATH = "docs/adr/0009-bootstrap-readiness-marker-and-dev-test-boundary.md"
 BOOTSTRAP_MAPPING_SCHEMA = "spec/schemas/bootstrap-mapping.schema.json"
 BOOTSTRAP_MAPPING_DIR = "spec/instances/bootstrap-mapping"
 BOOTSTRAP_MAPPING_INDEX = "spec/registries/bootstrap-mapping-index.json"
@@ -259,11 +262,15 @@ def build_state(overrides=None):
     bootstrap_governance_text = overrides.get("bootstrapGovernanceText")
     if bootstrap_governance_text is None and BOOTSTRAP_GOVERNANCE_PATH in paths and os.path.exists(BOOTSTRAP_GOVERNANCE_PATH):
         bootstrap_governance_text = read_text(BOOTSTRAP_GOVERNANCE_PATH)
+    bootstrap_adr_text = overrides.get("bootstrapAdrText")
+    if bootstrap_adr_text is None and BOOTSTRAP_ADR_PATH in paths and os.path.exists(BOOTSTRAP_ADR_PATH):
+        bootstrap_adr_text = read_text(BOOTSTRAP_ADR_PATH)
     return {
         "paths": paths,
         "directiveText": directive_text or "",
         "readinessTexts": readiness_texts,
         "bootstrapGovernanceText": bootstrap_governance_text or "",
+        "bootstrapAdrText": bootstrap_adr_text or "",
         "semanticContracts": overrides.get("semanticContracts", semantic_contracts),
         "semanticRecords": overrides.get("semanticRecords", semantic_records),
         "semanticDomains": overrides.get("semanticDomains", sorted(semantic_domains)),
@@ -590,6 +597,45 @@ def check_bootstrap_governance(F, state):
             F.add("USF-BOOTSTRAP-010", BOOTSTRAP_GOVERNANCE_PATH, message)
 
 
+def check_bootstrap_adr(F, state):
+    if BOOTSTRAP_ADR_PATH not in state["paths"]:
+        F.add("USF-BOOTSTRAP-011", BOOTSTRAP_ADR_PATH, "bootstrap readiness ADR is missing")
+        return
+    lower = state["bootstrapAdrText"].lower()
+    required_markers = [
+        ("accepted", "ADR is accepted"),
+        ("v2-bootstrap", "marker name is recorded"),
+        ("movable human-friendly marker", "marker role is recorded"),
+        ("not production readiness", "production-readiness boundary is recorded"),
+        ("not implementation completion", "implementation-completion boundary is recorded"),
+        ("not usf-39 start authority", "USF-39 boundary is recorded"),
+        ("immutable proof/evidence anchors", "immutable anchor requirement is recorded"),
+        ("local dev/test readiness only", "local dev/test scope is recorded"),
+        ("dev targets in-memory providers", "dev provider target is recorded"),
+        ("test targets docker compose oss providers", "test provider target is recorded"),
+        ("staging, production, live-external-provider, deployment, and production-live proof", "deferred stronger proof is recorded"),
+        ("usf-39 remains backlog", "USF-39 Backlog boundary is recorded"),
+        ("signed usf-100 directive", "signed directive dependency is recorded"),
+        ("separate usf-39 start action", "separate start dependency is recorded"),
+        ("creates no implementation code", "non-implementation boundary is recorded"),
+    ]
+    for marker, message in required_markers:
+        if marker not in lower:
+            F.add("USF-BOOTSTRAP-011", BOOTSTRAP_ADR_PATH, f"missing bootstrap ADR marker: {message}")
+
+    forbidden_claims = [
+        ("v2-bootstrap is production readiness", "marker claims production readiness"),
+        ("v2-bootstrap is implementation completion", "marker claims implementation completion"),
+        ("v2-bootstrap authorises usf-39", "marker claims USF-39 authority"),
+        ("v2-bootstrap authorizes usf-39", "marker claims USF-39 authority"),
+        ("linear comments define bootstrap authority", "Linear is treated as authority"),
+        ("react compose may be copied", "React source copying is allowed"),
+    ]
+    for marker, message in forbidden_claims:
+        if marker in lower:
+            F.add("USF-BOOTSTRAP-011", BOOTSTRAP_ADR_PATH, message)
+
+
 def require(condition, label, observed):
     if not condition:
         raise AssertionError(f"{label}: {observed!r}")
@@ -809,6 +855,7 @@ def run_checks(modes, F, state=None):
         check_mapping_substrate(F, state)
         check_bootstrap_mappings(F, state)
         check_bootstrap_governance(F, state)
+        check_bootstrap_adr(F, state)
         check_anchor_for_current_main(F)
         check_validate_spec_wiring(F, state)
     if "implementation" in modes:
@@ -870,6 +917,8 @@ def run_selftest(F):
             overrides["mappingSummary"] = mutation["mappingSummary"]
         if "bootstrapGovernanceText" in mutation:
             overrides["bootstrapGovernanceText"] = mutation["bootstrapGovernanceText"]
+        if "bootstrapAdrText" in mutation:
+            overrides["bootstrapAdrText"] = mutation["bootstrapAdrText"]
         local = Findings()
         run_checks(["readiness", "implementation"], local, build_state(overrides))
         if expected not in {item["ruleId"] for item in local.items}:

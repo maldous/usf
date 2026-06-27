@@ -1,0 +1,7 @@
+{
+  "description": "Bootstrap readiness ADR coverage omits the marker and dev/test boundary.",
+  "expectedRule": "USF-BOOTSTRAP-011",
+  "mutation": {
+    "bootstrapAdrText": "USF-39 remains Backlog. The marker is not production readiness."
+  }
+}
