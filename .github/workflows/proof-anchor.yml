@@ -35,7 +35,7 @@ jobs:
         run: pip install -r tools/validate-spec/requirements.txt
       - name: Emit deterministic anchor payload for the merge commit
         run: |
-          python3 tools/prove-authentication-slice.py \
+          python3 tools/validate-bootstrap/validate-bootstrap.py proof-authentication-slice \
             --emit-anchor-payload \
             --signer "ci-github-actions:maldous/usf:proof-anchor" > anchor-payload.json
           cat anchor-payload.json

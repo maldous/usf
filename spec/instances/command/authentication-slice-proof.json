@@ -19,7 +19,7 @@
   ],
   "aiGuidance": "This command instance records proof-command semantics only. The USF proof harness may emit evidence when explicitly run with write mode. Historical React commands remain lineage evidence and must not be executed as USF proof commands or treated as implementation authority.",
   "purpose": "Represent the proof-command boundary for the authentication login API, audit event, workflow, hermetic mock provider, and hermetic environment slice before implementation extraction.",
-  "invocation": "python3 tools/prove-authentication-slice.py --claim-commit HEAD --write-evidence",
+  "invocation": "python3 tools/validate-bootstrap/validate-bootstrap.py proof-authentication-slice --claim-commit HEAD --write-evidence",
   "inputs": [
     "spec/instances/command/authentication-slice-proof.json",
     "spec/instances/semantic-contract/authentication-platform.json",
@@ -51,7 +51,7 @@
   "failureSemantics": "Missing semantic inputs, unresolved references, stale claim commit, provider/environment mismatch, proof overclaim, missing emitted evidence, or missing collected evidence fails closed. Hermetic proof must not satisfy live-external-provider or production-live readiness.",
   "emitsEvidence": true,
   "sourceRefs": [
-    "tools/prove-authentication-slice.py",
+    "tools/validate-bootstrap/validate-bootstrap.py",
     "docs/architecture/proof-tool-contract-standard.md",
     "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
     "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",

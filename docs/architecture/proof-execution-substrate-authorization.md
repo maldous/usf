@@ -16,7 +16,7 @@ USF-76 declined proof execution from the then-current repository state. USF-77 O
 
 The USF-77 Option A authorization is narrow:
 
-- The only authorized proof tool is `tools/prove-authentication-slice.py`.
+- The only authorized proof tool is `tools/validate-bootstrap/validate-bootstrap.py proof-authentication-slice`.
 - The only authorized proof output records are:
   - `evidence/proof-evidence/authentication-slice-proof.json`
   - `evidence/evidence-envelope/authentication-slice-proof.json`
@@ -49,12 +49,12 @@ Those files depend on the historical runtime package graph, source handlers, ada
 
 | Requirement | Current decision |
 |---|---|
-| Permitted proof execution substrate | `tools/prove-authentication-slice.py` only, as a proof-only semantic harness authorized by USF-77 Option A. |
+| Permitted proof execution substrate | `tools/validate-bootstrap/validate-bootstrap.py proof-authentication-slice` only, as a proof-only semantic harness authorized by USF-77 Option A. |
 | Allowed runtime setup | None. No application runtime, source handler, adapter, server, package graph, or composed service may be created or executed under this issue. |
 | Allowed package setup | None. No package manifest, package directory, dependency graph, or runtime package may be created under this issue. |
 | Allowed service setup | None. No Redis, Postgres, Keycloak, mock IdP service, compose file, container setup, or service directory may be created under this issue. |
 | Historical proof script source-use policy | Evidence-only lineage. The files may be read and cited as source evidence but not executed, copied, mirrored, or treated as USF proof commands. |
-| Proof runner logic treatment | New proof-only semantic harness logic is authorized in `tools/prove-authentication-slice.py`; React proof runner logic remains evidence-only lineage and is not copied or executed. |
+| Proof runner logic treatment | New proof-only semantic harness logic is authorized in the `proof-authentication-slice` mode of `tools/validate-bootstrap/validate-bootstrap.py`; React proof runner logic remains evidence-only lineage and is not copied or executed. |
 | Target providerMode | `hermetic-mock` for the USF-77 Option A proof. Stronger provider modes are not authorized here. |
 | Target environment | `hermetic` for the USF-77 Option A proof. Stronger environments are not authorized here. |
 | Required proofLevelObserved | `behaviour-proven` for the bounded proof-only authentication slice. |

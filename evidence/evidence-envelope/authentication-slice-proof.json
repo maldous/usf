@@ -32,7 +32,7 @@
     "docs/architecture/authentication-slice-source-use-disposition-matrix.md",
     "docs/architecture/proof-execution-substrate-authorization.md",
     "docs/architecture/react-foundation-artifact-reuse-assessment.md",
-    "tools/prove-authentication-slice.py"
+    "tools/validate-bootstrap/validate-bootstrap.py"
   ],
   "providerMode": "hermetic-mock",
   "environment": "hermetic",

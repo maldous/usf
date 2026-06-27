@@ -1,0 +1,14 @@
+{
+  "id": "bootstrap-defect.stale-bootstrap-mapping-index",
+  "description": "A generated bootstrap mapping index that does not match the mapping corpus must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-009",
+  "mutation": {
+    "mappingIndex": {
+      "id": "generated.bootstrap-mapping-index",
+      "mappingCount": 0,
+      "semanticContractCount": 0,
+      "domainCounts": {},
+      "mappings": []
+    }
+  }
+}

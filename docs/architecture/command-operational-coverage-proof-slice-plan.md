@@ -6,7 +6,7 @@
 | **Status** | Draft / proof-governance planning |
 | **Authority level** | Semantic-definition planning guidance; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, and runtime proof evidence |
 | **Issue scope** | USF-87 |
-| **Primary inputs** | `spec/schemas/command.schema.json`, `spec/instances/command/`, `docs/architecture/proof-tool-contract-standard.md`, `tools/validate-spec/validate-spec.py`, `tools/prove-authentication-slice.py`, `spec/registries/source-import-manifest.json` |
+| **Primary inputs** | `spec/schemas/command.schema.json`, `spec/instances/command/`, `docs/architecture/proof-tool-contract-standard.md`, `tools/validate-spec/validate-spec.py`, `tools/validate-bootstrap/validate-bootstrap.py`, `spec/registries/source-import-manifest.json` |
 
 This plan records command coverage for the current pre-implementation authentication proof slice. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, and does not start USF-39.
 
