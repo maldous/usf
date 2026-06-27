@@ -1,0 +1,91 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-SEMANTIC-001",
+  "sourcePaths": [
+    "known-source.md"
+  ],
+  "evidenceIds": [
+    "evidence.known"
+  ],
+  "instances": {
+    "spec/instances/semantic-contract/unresolved-complete-evidence-ref.json": {
+      "id": "semantic-contract.unresolved-complete-evidence-ref",
+      "title": "Unresolved Complete Evidence Ref",
+      "description": "Planted semantic contract whose complete facet cites an unresolved evidence reference.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Semantic Contract"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "capability-domains"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "facets": {
+        "lifecycle": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "stateModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "permissions": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "contracts": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "validation": {
+          "status": "complete",
+          "evidenceRefs": [
+            "evidence.missing"
+          ]
+        },
+        "errorModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "auditModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "readinessModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "proof": {
+          "status": "complete",
+          "evidenceRefs": [
+            "evidence.known"
+          ]
+        },
+        "uiSemanticDefinition": {
+          "status": "not-applicable",
+          "description": "No UI semantics for this planted fixture."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-POSTURE-001",
+  "existingPaths": [
+    "spec/instances/command/authentication-slice-proof.json"
+  ],
+  "records": {
+    "evidence/evidence-envelope/posture-provider-mismatch.json": {
+      "id": "evidence.runtime-proof.posture-provider-mismatch",
+      "title": "Posture Provider Mismatch Envelope",
+      "description": "Planted runtime proof envelope with provider mode mismatching its collected proof.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds",
+        "provider-modes",
+        "environment-classes"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "runtime-proof-evidence",
+      "sourceRefs": [
+        "spec/instances/command/authentication-slice-proof.json"
+      ],
+      "providerMode": "local-composed-real-service",
+      "environment": "hermetic",
+      "freshness": {
+        "commit": "old-commit",
+        "stale": true
+      }
+    },
+    "evidence/proof-evidence/posture-provider-mismatch.json": {
+      "id": "usf.proof-evidence.posture-provider-mismatch",
+      "kind": "proof",
+      "title": "Posture Provider Mismatch Proof",
+      "description": "Planted proof with collected runtime envelope provider mismatch.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Proof",
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "proof-classification",
+        "provider-classification",
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "proof-levels",
+        "provider-modes",
+        "environment-classes",
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "proofLevelClaimed": "behaviour-proven",
+      "proofLevelObserved": "behaviour-proven",
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "liveExternalProviderClaim": false,
+      "emittedEvidence": [
+        "spec/instances/command/authentication-slice-proof.json"
+      ],
+      "collectedEvidence": [
+        "evidence.runtime-proof.posture-provider-mismatch"
+      ],
+      "freshness": {
+        "commit": "old-commit",
+        "stale": true
+      }
+    }
+  }
+}

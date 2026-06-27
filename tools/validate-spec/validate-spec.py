@@ -238,6 +238,8 @@ RULES = {
     "USF-IMPORT-010":   ("blocking", "Source import sub-manifest sourceRef.path values are missing or duplicated"),
     "USF-IMPORT-011":   ("blocking", "Source import sub-manifest targetUsfConcept is not extraction-useful"),
     "USF-IMPORT-012":   ("blocking", "Source import sub-manifest entry count mismatch"),
+    "USF-IMPORT-013":   ("blocking", "Source import manifest audit base is inconsistent"),
+    "USF-SEMANTIC-001": ("blocking", "Semantic complete facet reference does not resolve"),
     "USF-EVIDENCE-001": ("blocking", "Evidence envelope invalid against evidence-envelope schema"),
     "USF-EVIDENCE-002": ("blocking", "Proof evidence invalid against proof-evidence schema"),
     "USF-EVIDENCE-003": ("blocking", "Evidence/proof id is duplicated"),
@@ -247,6 +249,8 @@ RULES = {
     "USF-EVIDENCE-007": ("blocking", "Proof evidence live-provider claim exceeds provider/level evidence"),
     "USF-EVIDENCE-008": ("blocking", "Evidence JSON file is outside a discovered evidence directory"),
     "USF-EVIDENCE-009": ("blocking", "Evidence freshness is marked non-stale for a different commit than current HEAD"),
+    "USF-POSTURE-001":  ("blocking", "Proof evidence posture does not match collected runtime envelope posture"),
+    "USF-POSTURE-002":  ("blocking", "Current proof readiness is claimed without an accepted freshness anchor"),
     "USF-REAL-001":     ("blocking", "Real-instance corpus category is missing"),
     "USF-REAL-002":     ("blocking", "Real ADR instance invalid against adr schema"),
     "USF-REAL-003":     ("blocking", "Real ADR machine instance has no matching markdown ADR"),
@@ -738,6 +742,14 @@ def check_fixtures(ctx, F):
     return "ran"
 
 
+SOURCE_AUDIT_BASE = {
+    "repository": "../react",
+    "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+    "tag": "v1-final",
+    "entryCount": 1673,
+}
+
+
 INSTANCE_REF_FIELDS = {
     "sourceRefs", "adrRefs", "evidenceRefs", "proofRefs", "readinessGateRefs",
     "capabilityRefs", "relatedEvents", "relatedInterfaces", "references",
@@ -773,7 +785,23 @@ def _schema_for_instance_path(path):
     return rel.split("/", 1)[0].split(os.sep, 1)[0]
 
 
-def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None):
+def _validate_semantic_complete_facets(F, path, data, resolves):
+    facets = data.get("facets") if isinstance(data, dict) else None
+    if not isinstance(facets, dict):
+        return
+    for facet_name, facet in facets.items():
+        if not isinstance(facet, dict) or facet.get("status") != "complete":
+            continue
+        for field in ("sourceRefs", "evidenceRefs"):
+            refs = facet.get(field, [])
+            if not isinstance(refs, list):
+                continue
+            for ref in refs:
+                if isinstance(ref, str) and not resolves(ref):
+                    F.add("USF-SEMANTIC-001", f"{path}:facets.{facet_name}.{field}", f"unresolved reference: {ref}")
+
+
+def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None, evidence_ids=None):
     instance_id_to_paths = defaultdict(list)
     for p, data in data_by_path.items():
         if isinstance(data, dict) and isinstance(data.get("id"), str):
@@ -786,11 +814,18 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
     instance_ids = set(instance_id_to_paths)
     source_paths = source_paths or set()
     existing_paths = existing_paths or set()
+    evidence_ids = evidence_ids or set()
     schema_urns = {schema.get("$id") for schema in ctx["sd"].values() if isinstance(schema, dict)}
     schema_paths = {f"spec/schemas/{name}.schema.json" for name in ctx["sd"]}
 
     def resolves(ref):
-        if ref in instance_ids or ref in source_paths or ref in schema_urns or ref in schema_paths or ref in existing_paths:
+        base = ref.split("#", 1)[0]
+        if (ref in instance_ids or base in instance_ids
+                or ref in evidence_ids or base in evidence_ids
+                or ref in source_paths or base in source_paths
+                or ref in schema_urns or base in schema_urns
+                or ref in schema_paths or base in schema_paths
+                or ref in existing_paths or base in existing_paths):
             return True
         if ref.startswith("urn:usf:schema:"):
             return ref.split("#", 1)[0] in schema_urns
@@ -811,6 +846,8 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         for field, ref in _collect_instance_refs(data):
             if not resolves(ref):
                 F.add("USF-INSTANCE-004", f"{p}:{field}", f"unresolved reference: {ref}")
+        if schema == "semantic-contract":
+            _validate_semantic_complete_facets(F, p, data, resolves)
 
 
 def check_instances(ctx, F):
@@ -844,7 +881,13 @@ def check_instances(ctx, F):
     existing_paths = {p[2:] if p.startswith("./") else p
                       for p in glob.glob("**/*", recursive=True)
                       if os.path.isfile(p)}
-    validate_instance_data(ctx, F, data_by_path, source_paths=source_paths, existing_paths=existing_paths)
+    evidence_ids = set()
+    for p in sorted(glob.glob("evidence/evidence-envelope/*.json")) + sorted(glob.glob("evidence/proof-evidence/*.json")):
+        record = load_json(p, F)
+        if isinstance(record, dict) and isinstance(record.get("id"), str):
+            evidence_ids.add(record["id"])
+    validate_instance_data(ctx, F, data_by_path, source_paths=source_paths,
+                           existing_paths=existing_paths, evidence_ids=evidence_ids)
     return "ran"
 
 
@@ -873,9 +916,10 @@ def check_imports(ctx, F):
     if not isinstance(entries, list):
         F.add("USF-IMPORT-001", baseline_path, "entries must be an array")
         return "ran"
-    expected_count = 1673
+    expected_count = SOURCE_AUDIT_BASE["entryCount"]
     if len(entries) != expected_count:
         F.add("USF-IMPORT-002", baseline_path, f"{len(entries)} entries != expected {expected_count}")
+    validate_import_manifest_audit_base(F, baseline_path, data)
 
     seen_paths = set()
     duplicate_paths = set()
@@ -974,6 +1018,41 @@ def check_imports(ctx, F):
         if sub_duplicate_paths:
             F.add("USF-IMPORT-010", sub_path, f"duplicate sourceRef.path values: {sorted(sub_duplicate_paths)[:10]}")
     return "ran"
+
+
+def validate_import_manifest_audit_base(F, path, data, expected=None):
+    expected = expected or SOURCE_AUDIT_BASE
+    if not isinstance(data, dict):
+        F.add("USF-IMPORT-013", path, "manifest must be an object")
+        return
+    if data.get("sourceRepository") != expected["repository"]:
+        F.add("USF-IMPORT-013", path, f"sourceRepository={data.get('sourceRepository')!r}")
+    entries = data.get("entries")
+    if not isinstance(entries, list):
+        F.add("USF-IMPORT-013", path, "entries must be an array")
+        return
+    if len(entries) != expected["entryCount"]:
+        F.add("USF-IMPORT-013", path, f"{len(entries)} entries != audit base {expected['entryCount']}")
+    seen_paths = set()
+    duplicate_paths = set()
+    for i, entry in enumerate(entries):
+        source_ref = entry.get("sourceRef") if isinstance(entry, dict) else None
+        subject = f"{path}:entries[{i}].sourceRef"
+        if not isinstance(source_ref, dict):
+            F.add("USF-IMPORT-013", subject, "sourceRef must be an object")
+            continue
+        source_path = source_ref.get("path")
+        if not isinstance(source_path, str) or not source_path:
+            F.add("USF-IMPORT-013", subject, "sourceRef.path must be a non-empty string")
+        elif source_path in seen_paths:
+            duplicate_paths.add(source_path)
+        else:
+            seen_paths.add(source_path)
+        for field in ("repository", "commit", "tag"):
+            if source_ref.get(field) != expected[field]:
+                F.add("USF-IMPORT-013", subject, f"{field}={source_ref.get(field)!r} != {expected[field]!r}")
+    if duplicate_paths:
+        F.add("USF-IMPORT-013", path, f"duplicate audit-base paths: {sorted(duplicate_paths)[:10]}")
 
 
 PROOF_LEVEL_ORDER = {
@@ -1172,6 +1251,7 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_pat
     source_allowlist = source_allowlist or {}
     id_to_paths = defaultdict(list)
     envelope_ids = set()
+    envelope_by_id = {}
     proof_ids = set()
 
     for p, data in data_by_path.items():
@@ -1180,6 +1260,7 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_pat
             kind = _evidence_kind_for_path(p)
             if kind == "envelope":
                 envelope_ids.add(data["id"])
+                envelope_by_id[data["id"]] = data
             elif kind == "proof":
                 proof_ids.add(data["id"])
 
@@ -1208,6 +1289,8 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_pat
             commit = freshness.get("commit")
             if isinstance(commit, str) and commit != current_commit:
                 F.add("USF-EVIDENCE-009", p, f"{commit} != {current_commit}")
+            if kind == "proof":
+                F.add("USF-POSTURE-002", p, "non-stale proof evidence requires an accepted post-merge freshness anchor")
 
         for field, ref in _collect_evidence_source_refs(data):
             if not _source_ref_resolves(ref, existing_paths, source_paths, source_allowlist):
@@ -1219,6 +1302,12 @@ def validate_evidence_data(ctx, F, data_by_path, existing_paths=None, source_pat
         for ref in data.get("collectedEvidence", []):
             if isinstance(ref, str) and ref not in envelope_ids:
                 F.add("USF-EVIDENCE-004", f"{p}:collectedEvidence", f"unresolved evidence reference: {ref}")
+            elif isinstance(ref, str):
+                envelope = envelope_by_id.get(ref)
+                if isinstance(envelope, dict) and envelope.get("evidenceKind") == "runtime-proof-evidence":
+                    for field in ("providerMode", "environment", "freshness"):
+                        if envelope.get(field) != data.get(field):
+                            F.add("USF-POSTURE-001", f"{p}:collectedEvidence:{ref}", f"{field} does not match proof evidence")
 
         claimed = data.get("proofLevelClaimed")
         observed = data.get("proofLevelObserved")
@@ -1564,7 +1653,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths", "anchor-payloads"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths", "anchor-payloads", "import-manifest-data"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1581,6 +1670,7 @@ def check_selftest(ctx, F):
                 instances,
                 source_paths=set(patch.get("sourcePaths", [])),
                 existing_paths=set(patch.get("existingPaths", [])),
+                evidence_ids=set(patch.get("evidenceIds", [])),
             )
         elif patch["target"] == "evidence":
             records = patch.get("records")
@@ -1672,6 +1762,18 @@ def check_selftest(ctx, F):
                 F.add("USF-SELFTEST-001", df, "anchor-payloads planted-defect needs a records object")
                 continue
             validate_anchor_payload_data(f2, records, current_commit=patch.get("currentCommit"))
+        elif patch["target"] == "import-manifest-data":
+            record = patch.get("record")
+            if not isinstance(record, dict):
+                F.add("USF-SELFTEST-001", df, "import-manifest-data planted-defect needs a record object")
+                continue
+            expected = patch.get("expectedAuditBase")
+            validate_import_manifest_audit_base(
+                f2,
+                "planted-import-manifest",
+                record,
+                expected=expected if isinstance(expected, dict) else None,
+            )
         else:
             run_all_checks(sandbox, f2)
         if patch.get("expectedClean") is True:

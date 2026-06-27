@@ -1,0 +1,77 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-POSTURE-001",
+  "existingPaths": [
+    "spec/instances/command/authentication-slice-proof.json"
+  ],
+  "records": {
+    "evidence/evidence-envelope/posture-freshness-mismatch.json": {
+      "id": "evidence.runtime-proof.posture-freshness-mismatch",
+      "title": "Posture Freshness Mismatch Envelope",
+      "description": "Planted runtime proof envelope with freshness mismatching its collected proof.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds",
+        "provider-modes",
+        "environment-classes"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "runtime-proof-evidence",
+      "sourceRefs": [
+        "spec/instances/command/authentication-slice-proof.json"
+      ],
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "freshness": {
+        "commit": "different-old-commit",
+        "stale": true
+      }
+    },
+    "evidence/proof-evidence/posture-freshness-mismatch.json": {
+      "id": "usf.proof-evidence.posture-freshness-mismatch",
+      "kind": "proof",
+      "title": "Posture Freshness Mismatch Proof",
+      "description": "Planted proof with collected runtime envelope freshness mismatch.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Proof",
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "proof-classification",
+        "provider-classification",
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "proof-levels",
+        "provider-modes",
+        "environment-classes",
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "proofLevelClaimed": "behaviour-proven",
+      "proofLevelObserved": "behaviour-proven",
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "liveExternalProviderClaim": false,
+      "emittedEvidence": [
+        "spec/instances/command/authentication-slice-proof.json"
+      ],
+      "collectedEvidence": [
+        "evidence.runtime-proof.posture-freshness-mismatch"
+      ],
+      "freshness": {
+        "commit": "old-commit",
+        "stale": true
+      }
+    }
+  }
+}
