@@ -6,8 +6,8 @@
 | **Status** | Draft / NO-GO register |
 | **Authority level** | Reviewable readiness classification; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, and semantic instances |
 | **Issue scope** | USF-39 readiness; USF-59; USF-73; USF-97; USF-98; USF-99; USF-100; USF-101 |
-| **Base repository state reviewed** | `05e224adb78a8199d365539a7077d663cf98942d` |
-| **Branch update scope** | Records proof-freshness publication model progress and PR freshness guardrails introduced after the base state; final merged commit is determined by Git history |
+| **Base repository state reviewed** | `8f0981b72776997b51a9756941ba1ad482dbfd5e` |
+| **Branch update scope** | Records proof-freshness anchor payload progress and validator hardening introduced after PR 58; final merged commit is determined by Git history |
 
 This document records the current complete-readiness blocker state before implementation extraction. It creates no implementation code, implementation directory, product runtime, source import, proof evidence, generated report, schema activation, or implementation directive. It does not start USF-39.
 
@@ -20,7 +20,7 @@ USF-39 must remain Backlog because the repository does not yet have all of the f
 - a safe proof freshness publication model for current commit evidence;
 - fresh non-stale proof evidence for every readiness claim;
 - full semantic and source-use closure for every implementation-relevant slice, or explicit scope exclusions;
-- validator-checkable source audit base and aggregate provider/environment posture gates;
+- validator-checkable semantic completeness, source audit base, and aggregate provider/environment posture gates;
 - a human-filled implementation directive that cites exact scope, source-use, proof evidence, validation gates, no-go rules, and stop conditions.
 
 The current repository remains valid as a semantic-first readiness foundation. It is not a complete implementation-start authority.
@@ -33,7 +33,7 @@ The current repository remains valid as a semantic-first readiness foundation. I
 | USF-59 current commit-pinned proof evidence | Backlog | USF-73, USF-99, USF-100, USF-39 | Blocked by USF-101 |
 | USF-73 multi-environment proof evidence | Backlog | USF-99, USF-100, USF-39 | Blocked by USF-101 and stronger proof infrastructure |
 | USF-97 full semantic and source-use closure | Backlog | USF-100, USF-39 | Repository-workable, but broad and not complete |
-| USF-98 one-pass readiness validator hardening | Backlog | USF-100, USF-39 | Partially advanced by PR 54; repository-workable follow-up remains |
+| USF-98 one-pass readiness validator hardening | Backlog | USF-100, USF-39 | Partially advanced by PR 54, PR 58, and current validator hardening; repository-workable follow-up remains |
 | USF-99 one-pass runtime proof and evidence execution | Backlog | USF-100, USF-39 | Blocked by proof publication model, runtime proof scope, and implementation prohibition |
 | USF-100 human-filled implementation directive | Backlog | USF-39 | Requires human authority after blockers close |
 | USF-39 implementation extraction | Backlog | Implementation start | Must not start without final GO and separate directive |
@@ -64,9 +64,9 @@ Future work must either add validated semantic/source-use records for each imple
 
 ### USF-98 Validator Hardening
 
-PR 54 merged validator guardrails for generated report homes, report filenames, evidence references, stale pass claims, implementation directive content, deeper source-path mirroring, and planted defects.
+PR 54 merged validator guardrails for generated report homes, report filenames, evidence references, stale pass claims, implementation directive content, deeper source-path mirroring, and planted defects. PR 58 added proof freshness anchor payload invariant checks and positive/negative selftests without accepting unsigned payloads as proof authority.
 
-USF-98 remains open because semantic completeness claims, source-disposition completeness against a claimed source audit base, and aggregate provider/environment posture classification are not yet fully validator-checkable.
+The current validator hardening adds fail-closed checks for complete semantic facet references, the pinned source import audit-base tuple, proof/envelope posture agreement, and non-stale proof without an accepted freshness anchor. USF-98 remains open because broad readiness scope classification, full source-use closure outside the authentication slice, and complete aggregate posture classification for future implementation claims still require additional validator-readable scope artefacts and proof publication authority.
 
 ### USF-99 Runtime Proof and Evidence
 

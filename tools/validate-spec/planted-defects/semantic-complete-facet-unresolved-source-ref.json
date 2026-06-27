@@ -1,0 +1,88 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-SEMANTIC-001",
+  "sourcePaths": [
+    "known-source.md"
+  ],
+  "instances": {
+    "spec/instances/semantic-contract/unresolved-complete-source-ref.json": {
+      "id": "semantic-contract.unresolved-complete-source-ref",
+      "title": "Unresolved Complete Source Ref",
+      "description": "Planted semantic contract whose complete facet cites an unresolved source reference.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Semantic Contract"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "capability-domains"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "facets": {
+        "lifecycle": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "stateModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "missing-source.md"
+          ]
+        },
+        "permissions": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "contracts": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "validation": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "errorModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "auditModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "readinessModel": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "proof": {
+          "status": "complete",
+          "sourceRefs": [
+            "known-source.md"
+          ]
+        },
+        "uiSemanticDefinition": {
+          "status": "not-applicable",
+          "description": "No UI semantics for this planted fixture."
+        }
+      }
+    }
+  }
+}

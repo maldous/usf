@@ -1,0 +1,78 @@
+{
+  "target": "evidence",
+  "expectedRule": "USF-POSTURE-002",
+  "currentCommit": "head-commit",
+  "existingPaths": [
+    "spec/instances/command/authentication-slice-proof.json"
+  ],
+  "records": {
+    "evidence/evidence-envelope/posture-non-stale-without-anchor.json": {
+      "id": "evidence.runtime-proof.posture-non-stale-without-anchor",
+      "title": "Non Stale Without Anchor Envelope",
+      "description": "Planted runtime proof envelope for a non-stale proof without an accepted anchor.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds",
+        "provider-modes",
+        "environment-classes"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "evidenceKind": "runtime-proof-evidence",
+      "sourceRefs": [
+        "spec/instances/command/authentication-slice-proof.json"
+      ],
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      }
+    },
+    "evidence/proof-evidence/posture-non-stale-without-anchor.json": {
+      "id": "usf.proof-evidence.posture-non-stale-without-anchor",
+      "kind": "proof",
+      "title": "Non Stale Without Anchor Proof",
+      "description": "Planted non-stale proof that lacks an accepted post-merge freshness anchor.",
+      "authorityLevel": "runtime-proof-evidence",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Proof",
+        "Evidence"
+      ],
+      "taxonomyRefs": [
+        "proof-classification",
+        "provider-classification",
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "proof-levels",
+        "provider-modes",
+        "environment-classes",
+        "evidence-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "proofLevelClaimed": "behaviour-proven",
+      "proofLevelObserved": "behaviour-proven",
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "liveExternalProviderClaim": false,
+      "emittedEvidence": [
+        "spec/instances/command/authentication-slice-proof.json"
+      ],
+      "collectedEvidence": [
+        "evidence.runtime-proof.posture-non-stale-without-anchor"
+      ],
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      }
+    }
+  }
+}
