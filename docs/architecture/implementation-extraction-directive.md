@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Document type** | Architecture / human implementation directive |
-| **Status** | DRAFT — prepared for the authorising human, awaiting acceptance signature; not yet accepted |
+| **Status** | SIGNED / USF-100 ACCEPTED — authorising human Matthew Aldous, 28 June 2026 (Australia/Melbourne); does not authorise USF-39 start |
 | **Authority level** | Human implementation directive once signed; subordinate to the Charter, Authority Model, accepted ADRs, validators, and runtime proof evidence |
 | **Issue scope** | USF-100 (this directive); authorises USF-39 only after signature and a separate start action |
 | **Drafted by** | Agent draft under delegation, for human review; the agent does not self-authorise implementation |
@@ -13,21 +13,20 @@ This is the human-filled implementation directive for the whole USF V2 implement
 
 ## Directive Status and Acceptance
 
-This document is a DRAFT prepared so the authorising human can review and sign it. It is not accepted until the signature block at the end is completed by the authorising human and the USF-100 Linear record is updated to record acceptance. Until then this draft carries no implementation authority, the validator treats its content as well-formed but not as a human-accepted start authority, and USF-39 remains Backlog.
+This document was prepared as a DRAFT for the authorising human and is now signed by Matthew Aldous on 28 June 2026 (Australia/Melbourne). This signature accepts the directive as the human-filled USF-100 artefact only. It does not start USF-39, does not move USF-39 out of Backlog, and does not create implementation authority without the separately required final revalidation and separate USF-39 start action.
 
-Acceptance requires three distinct human actions, none of which the agent performs:
+USF-100 acceptance is complete when the signed directive is merged and the USF-100 Linear record records the acceptance. Implementation start still requires two separate human-gated actions:
 
-- completing the signature block below with a named human and an authorisation date;
-- recording acceptance on the USF-100 Linear record;
-- issuing a separate USF-39 start action after USF-75 final pre-extraction revalidation passes.
+- a USF-75-equivalent final pre-extraction revalidation immediately before start;
+- a separate USF-39 start action after that revalidation passes.
 
 ## Human-Only Acceptance Boundary
 
-This human-only acceptance boundary is deliberate: the validator can check directive structure, required scope phrases, and unsafe omissions, but it cannot sign the directive, accept USF-100, move USF-39, or decide that deferred slice gates are acceptable. Any future acceptance must name the authorising human, the accepted commit, and the residual blockers or explicit deferrals that the human accepts. A generated report, CI status, local proof stdout, or agent-written comment is not acceptance authority.
+This human-only acceptance boundary is deliberate: the validator can check directive structure, required scope phrases, and unsafe omissions, but it cannot sign the directive, accept USF-100, move USF-39, or decide that deferred slice gates are acceptable. This acceptance names the authorising human, the accepted date, and the residual start gates that remain after USF-100. A generated report, CI status, local proof stdout, or agent-written comment is not acceptance authority.
 
 ## Authorising Human
 
-The authorising human accountable for this directive is recorded in the signature block below. The agent leaves this unsigned. No implicit, agent-made, or "as discussed" authorisation is valid; the directive is authorised only by the named human and the authorisation date in the signature block.
+The authorising human accountable for this directive is Matthew Aldous. This signature supersedes the earlier unsigned draft state. No implicit, agent-made, or "as discussed" authorisation is valid; the directive is authorised only by the named human and the authorisation date in the signature block. This authorisation accepts USF-100 only and does not authorise the separate USF-39 start action.
 
 ## Linear Record
 
@@ -133,13 +132,13 @@ Implementation is permitted only in topology-listed, validator-authorised roots,
 ## Non-Goals
 
 - Starting USF-39 or moving USF-39 out of Backlog.
-- Creating implementation or runtime code or directories from this draft.
+- Creating implementation or runtime code or directories from this directive.
 - Importing `../react` runtime or application code.
 - Mirroring historical source paths.
 - Promoting any schema or the validator to active maturity.
 - Claiming live-external-provider or production-live readiness.
 - Treating generated reports, CI status, stdout, or unsigned anchors as authority.
-- Treating this draft as accepted before the signature block and the USF-100 record record acceptance.
+- Treating this directive signature as a separate USF-39 start action.
 - Creating runtime/tooling scaffold from the recorded TypeScript/Node target before separate implementation authorisation, or importing source to do so.
 
 ## Mandatory Stop Conditions
@@ -171,14 +170,14 @@ Every implementation PR under this directive cites: this accepted directive; the
 
 ## Acceptance Signature Block
 
-This block is completed by the authorising human. The agent leaves it unsigned.
+This block records USF-100 acceptance by the authorising human. The earlier unsigned draft state is superseded by the signed values below.
 
 | Field | Value |
 |---|---|
-| Authorising human (name) | _unsigned — to be completed by the authorising human_ |
-| Authorisation date | _unsigned_ |
-| USF-100 acceptance recorded | _unsigned — record on the USF-100 Linear issue at acceptance_ |
-| USF-75 final pre-extraction revalidation passed | _unsigned — confirm before the USF-39 start action_ |
-| Separate USF-39 start action authorised | _unsigned — issued separately after acceptance_ |
+| Authorising human (name) | Matthew Aldous |
+| Authorisation date | 28 June 2026 (Australia/Melbourne) |
+| USF-100 acceptance recorded | Recorded on the USF-100 Linear issue for this signed directive; this is not USF-39 start authority. |
+| USF-75 final pre-extraction revalidation passed | Pending immediate revalidation before the separate USF-39 start action. |
+| Separate USF-39 start action authorised | Not authorised by this signature; must be issued separately after revalidation. |
 
-Until every line above is completed by the authorising human, this directive is an unaccepted draft, no implementation is authorised, and USF-39 remains Backlog.
+The first three lines above complete USF-100 acceptance. Implementation remains unauthorised until final pre-extraction revalidation passes and a separate USF-39 start action is issued. USF-39 remains Backlog.
