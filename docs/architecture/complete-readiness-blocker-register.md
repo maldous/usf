@@ -32,7 +32,7 @@ The current repository remains valid as a semantic-first readiness foundation. I
 The harvest materially reduces and sharpens the blocker set without weakening any safety rule. The smallest truthful remaining NO-GO set is:
 
 1. USF-101: DONE. The proof-anchor CI workflow (`.github/workflows/proof-anchor.yml`, ADR-0006 carrier + ADR-0007 CI signer) is enabled, and its first post-merge run (run 28285948217 on commit `22db242`) emitted, verified, attested, and published a fresh signed anchor (tag `proof-anchor-22db242`); it republishes a fresh anchor on every merge. USF-59 is DONE (authentication-slice fresh, verified, commit-pinned proof via the anchor). USF-73 and USF-99 remain bounded by pre-implementation proof scope: stronger multi-environment postures and broad per-slice runtime proof require the implementation that USF-39 would create, and are recorded as deferred/not-proven rather than claimed.
-2. USF-100: a human-filled implementation directive (its exact inputs are now assembled in the audit, section 11) — blocked on USF-101 classification.
+2. USF-100: a human-filled implementation directive. A ready-to-sign DRAFT now exists at `docs/architecture/implementation-extraction-directive.md`, scoped to the whole-platform V2 migration (all slices), validator-clean (USF-DIRECTIVE-001 passes), and unaccepted. It is blocked only on the authorising human's signature; the USF-101 proof publication classification it depended on is now Done.
 3. USF-113: human ratification (ADR) of carrying the React hexagonal architecture forward as a V2 constraint.
 4. USF-97: a bounded, enumerated authoring backlog (per-domain source-backed facets and per-domain source-use matrices), sequenced after the directive scopes the first domains.
 5. USF-98/USF-117: a machine-readable equivalence ledger and validator rules with planted defects (repository-workable follow-up).
@@ -90,9 +90,9 @@ No product runtime may be created merely to satisfy this issue. If proof require
 
 ### USF-100 Human-Filled Implementation Directive
 
-No human-filled directive currently exists. The implementation directive template and related standards define what such a directive must contain, but they do not themselves authorise implementation extraction.
+A ready-to-sign DRAFT directive now exists at `docs/architecture/implementation-extraction-directive.md`. It is scoped to the whole-platform V2 migration (all slices, every semantic-contract capability), not a single slice. It is validator-clean (USF-DIRECTIVE-001 passes, no placeholder phrases) and explicitly unaccepted: its acceptance signature block is unsigned, USF-100 is not closed, and USF-39 remains Backlog. The agent does not self-authorise; acceptance requires the authorising human to complete the signature block, record acceptance on USF-100, and issue a separate USF-39 start action after USF-75 final pre-extraction revalidation.
 
-The directive cannot be filled truthfully until the readiness blockers it cites are closed or explicitly classified without weakening USF authority.
+The draft was authorable truthfully because the readiness blockers it cites are now closed or explicitly classified: USF-101 (proof publication model) and USF-59 (fresh commit-pinned proof) are Done, and the remaining items (USF-73/USF-97/USF-98/USF-99/USF-117) are recorded as deferred or bounded per-slice gates rather than weakened. Each slice's exact target files, source-use disposition matrix, and authorised topology roots must be completed before that slice's files are created.
 
 ## No-Go Rules Preserved
 
