@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.obsolete-standalone-authentication-proof-runner",
+  "description": "Reintroducing the obsolete standalone authentication proof runner outside the bootstrap validator must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-012",
+  "mutation": {
+    "addPath": "tools/prove-authentication-slice.py"
+  }
+}
