@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.directive-signed-claims-implementation-authority",
+  "description": "A human-signed USF-100 directive that treats the signature as implementation authority by itself must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-003",
+  "mutation": {
+    "directiveText": "# Directive\n\n## Human-Only Acceptance Boundary\n\nHuman-only acceptance boundary.\n\nUSF-39 remains Backlog.\n\nA separate USF-39 start action and a final pre-extraction revalidation are required.\n\nImplementation is authorised by this signature alone.\n\n## Acceptance Signature Block\n\n| Field | Value |\n|---|---|\n| Authorising human (name) | Example Human |\n| Authorisation date | 28 June 2026 |\n| USF-100 acceptance recorded | recorded on the USF-100 Linear issue |\n| Separate USF-39 start action authorised | not authorised by this signature |\n"
+  }
+}
