@@ -1,0 +1,7 @@
+{
+  "description": "A readiness artefact that omits the bootstrap marker readiness verdict must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-014",
+  "mutation": {
+    "readinessText": "# Final V2 Readiness Reconciliation\n\nComplete one-pass V2 implementation readiness is NO-GO. USF-39 remains Backlog.\n"
+  }
+}

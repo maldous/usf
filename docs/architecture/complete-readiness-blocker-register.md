@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Document type** | Architecture / readiness blocker register |
-| **Status** | Draft / NO-GO register |
+| **Status** | Draft / READY_FOR_V2_BOOTSTRAP marker register and NO-GO implementation register |
 | **Authority level** | Reviewable readiness classification; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, and semantic instances |
 | **Issue scope** | USF-39 readiness; USF-59; USF-73; USF-97; USF-98; USF-99; USF-100; USF-101; React L5 equivalence audit workstream USF-102–USF-119 |
 | **Base repository state reviewed** | `fabe47b8fc70d34b34d1fc05c39da998c74a6748` |
@@ -15,6 +15,8 @@ This register is a point-in-time review pinned to the commit above. Later govern
 
 ## Current Verdict
 
+Bootstrap marker readiness is READY_FOR_V2_BOOTSTRAP.
+
 Complete one-pass implementation readiness is NO-GO.
 
 USF-39 must remain Backlog because the repository does not yet have all of the following:
@@ -25,7 +27,7 @@ USF-39 must remain Backlog because the repository does not yet have all of the f
 - validator-checkable semantic completeness, source audit base, and aggregate provider/environment posture gates;
 - a human-filled implementation directive that cites exact scope, source-use, proof evidence, validation gates, no-go rules, and stop conditions.
 
-The current repository remains valid as a semantic-first readiness foundation. It is not a complete implementation-start authority.
+The current repository remains valid as a semantic-first readiness foundation and is ready for the human-friendly bootstrap marker once validation passes on `main` with the matching immutable proof-anchor tag. It is not a complete implementation-start authority.
 
 ## React L5 Equivalence Audit Harvest (USF-102 workstream)
 
@@ -125,6 +127,8 @@ Before any future implementation PR, the repository must have:
 - a human-filled directive that the implementation validator accepts.
 
 ## Final Classification
+
+The current state is READY_FOR_V2_BOOTSTRAP for bootstrap marker readiness.
 
 The current state is NO-GO for complete one-pass implementation readiness.
 

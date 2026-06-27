@@ -3,12 +3,14 @@
 | | |
 |---|---|
 | **Document type** | Architecture / bootstrap readiness governance |
-| **Status** | Draft / bootstrap-gate input |
+| **Status** | Draft / READY_FOR_V2_BOOTSTRAP bootstrap-gate input |
 | **Authority level** | Semantic-definition planning guidance; subordinate to the Charter, Authority Model, accepted ADRs, validators, and runtime proof evidence |
 | **Issue scope** | USF-100, USF-98, USF-117, USF-73, USF-99, USF-39 |
 | **Primary inputs** | `.codex/goals/v2-bootstrap.md`, `docs/architecture/implementation-extraction-directive.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/semantic-source-use-closure-ledger.md`, `docs/architecture/react-l5-equivalence-audit.md`, `spec/instances/bootstrap-mapping/`, `tools/validate-bootstrap/validate-bootstrap.py` |
 
 This record captures the human bootstrap decisions that must be true before a future `v2-bootstrap` marker may be placed. ADR 0009 (`docs/adr/0009-bootstrap-readiness-marker-and-dev-test-boundary.md`) records the normative marker and dev/test boundary decision; this document remains the detailed bootstrap governance record constrained by that ADR. It is governance only. It creates no implementation directory, runtime file, Compose file, migration file, seed fixture, package scaffold, OpenAPI skeleton, adapter stub, or generated TypeScript runtime. It does not start USF-39, sign USF-100, or claim production readiness.
+
+As of the current repository state, bootstrap marker readiness is `READY_FOR_V2_BOOTSTRAP` when evaluated on `main` with passing validators and the matching immutable proof-anchor tag for that commit. This is not complete one-pass implementation readiness. Complete one-pass implementation readiness remains NO-GO, and USF-39 remains Backlog until a signed USF-100 directive and a separate USF-39 start action exist.
 
 Linear comments may track these decisions, but Linear is not USF semantic authority. This repository record and its validator coverage are the authoritative bootstrap decision carrier until a later accepted ADR or signed directive supersedes it.
 
@@ -262,4 +264,6 @@ Future implementation must:
 
 ## Readiness Verdict
 
-This record advances bootstrap readiness, but it does not make `v2-bootstrap` ready by itself. The marker must not be created or moved until every bootstrap blocker is resolved and validation passes on `main` with the required immutable proof/evidence anchors.
+Bootstrap marker readiness is `READY_FOR_V2_BOOTSTRAP`.
+
+This readiness is limited to placing or moving the human-friendly `v2-bootstrap` marker after validation passes on `main` and the commit has the required immutable proof/evidence anchors. It is not implementation readiness, production readiness, live-external-provider readiness, deployment readiness, or USF-39 start authority. After the marker is placed, stop: implementation still requires separate planning, authorisation, branch, PR, review, validation, proof, a signed USF-100 directive, and a separate USF-39 start action.
