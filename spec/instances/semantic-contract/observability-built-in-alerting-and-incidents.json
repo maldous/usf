@@ -24,56 +24,56 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "description": "Provides a built-in alerting and incident lifecycle over the platform's own signals: it registers metric signals, evaluates alert rules against samples, raises incidents, and bridges fired alerts to notification dispatch via an observability signals / alerts / incidents / readiness contract. The capability is provider- and database-backed but owns no tenant records, and its lifecycle/readiness model must be preserved across extraction.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/observability.ts"
       ]
     },
     "stateModel": {
       "status": "complete",
-      "description": "Persistent/runtime state model recovered from cited React storage and port/adapter source.",
+      "description": "Persisted state includes metric signals and metric samples, alert rules carrying comparator/threshold/severity, alert evaluation state (no-data, within, fired), incidents (open, acknowledged, resolved), and notification dispatch statuses (sent, suppressed), all under tenant row-level-security boundaries. State evolution uses ordered, forward-only migrations that preserve the proven alert/incident state machine and cannot silently drop or remap records.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/observability.ts"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "description": "Alert-rule, incident, and signal operations are admin-gated under standard platform security controls, with row-level-security enforcing tenant boundaries on stored signals and incidents. Permission and fail-closed checks are preserved across extraction so an unauthorised or unscoped caller cannot read or mutate alert/incident state.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability-alerting.test.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Operation and interface contracts recovered from cited React source behind ports/adapters.",
+      "description": "Exposes operations to read observability signals, manage alert rules, and view/transition incidents behind ports/adapters, plus a readiness query, so the metric/log providers and notification bridge are swappable without changing the contract. Alert evaluation deterministically maps samples to no-data/within/fired and fired alerts drive incident creation and notification dispatch with stable, well-defined transitions.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/observability.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Input and invariant validation recovered from cited React tests and source.",
+      "description": "Alert-rule inputs (comparator, threshold, severity) and incident transitions are validated against allowed values and the legal state machine before being applied, and missing or invalid configuration fails closed. Signal and alert names are constrained to the controlled observability vocabulary so arbitrary names are not accepted as canonical.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability-alerting.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "Deterministic, fail-closed error outcomes recovered from cited React tests and source.",
+      "description": "Provider failure returns a typed degraded/readiness failure rather than fabricating evaluation results, and repeated typed errors crossing a threshold are an explicit alert condition. Illegal incident transitions and invalid rule mutations are rejected deterministically, keeping mutation boundaries closed; the dominant risk is semantic/config drift since no tenant records are owned.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability-alerting.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "description": "Alert-rule changes, incident transitions, and notification dispatch are recorded as auditable actions before the effect is acknowledged, correlated to request and trace identifiers. The audit trail preserves the suppression vs. sent distinction and must agree with proof output when a readiness or incident claim depends on it.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability-alerting.test.ts"
       ]
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "description": "Readiness is a queryable posture spanning signal ingestion, alert evaluation, and incident/notification wiring that degrades explicitly when the underlying providers are unavailable, disabling dependent side-effect paths while keeping read-only readiness and audit visible. Emitted readiness, error, and audit signals use the controlled, OpenTelemetry-informed observability vocabulary.",
       "sourceRefs": [
         "apps/platform-api/scripts/alerting-runtime-proof.ts",
         "apps/platform-api/scripts/alert-notification-bridge-runtime-proof.ts"
@@ -81,7 +81,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by the cited observability-signals, alerting, incident-foundation, and alert-notification-bridge runtime proofs plus alerting tests, demonstrating rule evaluation, incident transitions, and notification bridging as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/alerting-runtime-proof.ts",
         "apps/platform-api/scripts/alert-notification-bridge-runtime-proof.ts"

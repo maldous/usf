@@ -24,21 +24,21 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "description": "A configuration definition moves through active, deprecated, and internal states, and the runtime resolves an effective value per tenant from either the platform default or a tenant override. Setting an override performs an audit-first upsert and clearing it performs an audit-first delete, after which a best-effort change-notification event is emitted; the audit precedes the persistence mutation so the change is always recorded.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/platform-config.ts"
       ]
     },
     "stateModel": {
       "status": "complete",
-      "description": "Persistent/runtime state model recovered from cited React storage and port/adapter source.",
+      "description": "State is split between a pure, serialisable registry of configuration definitions (each carrying storage key, value type such as string/enum/boolean/json, allowed values, tenant-overridability, lifecycle, and per-definition read/write permissions) and the persisted tenant override values. The effective value carries a source marker distinguishing platform default from tenant override, and feature-flag compatibility transforms are applied during resolution.",
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/005-platform-config.sql"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "description": "Reads require a tenant-scoped configuration-read permission and additionally filter the visible definitions by each definition's required read permission; mutations require a tenant-scoped configuration-write permission and the use case re-enforces each definition's required write permission. Feature-flag definitions require dedicated feature permissions, and all resolution is tenant-isolated so one tenant never observes another tenant's overrides.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-config.test.ts",
         "apps/platform-api/tests/unit/config-contracts.test.ts"
@@ -46,7 +46,7 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Operation and interface contracts recovered from cited React source behind ports/adapters.",
+      "description": "The interface exposes a list operation filterable by category that returns serialised definitions paired with effective value and source, a patch operation that sets a single key's override from a supplied value, and a delete operation that clears an override. Operation semantics are mediated by a configuration-store port with a persistent adapter so the contract is independent of the storage technology.",
       "sourceRefs": [
         "apps/platform-api/src/config/registry.ts",
         "apps/platform-api/src/server/routes.ts"
@@ -54,7 +54,7 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Input and invariant validation recovered from cited React tests and source.",
+      "description": "Validation rejects unknown keys, non-overridable definitions, missing values, enum values outside the declared allowed set, and type mismatches against the definition's value type, and it honours category filters and per-definition permission scope. These invariants are enforced in the use case rather than only at the edge, so the same rules hold for every caller.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-config.test.ts",
         "apps/platform-api/tests/unit/config-contracts.test.ts"
@@ -62,7 +62,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Deterministic, fail-closed error outcomes recovered from cited React tests and source.",
+      "description": "Outcomes are deterministic and fail-closed: invalid input maps to a validation error, unknown keys to not-found, non-overridable definitions to an unprocessable-entity outcome, insufficient permission to forbidden, and absence of tenant context to a bad-request; successful writes and deletes return no-content. Best-effort change-notification fan-out is decoupled and its failure never rolls back the committed configuration mutation.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-config.test.ts",
         "apps/platform-api/tests/unit/config-contracts.test.ts"
@@ -70,7 +70,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "description": "A set operation emits the definition's configured change audit action and a clear operation emits a value-cleared audit action, in both cases before the tenant settings are mutated and carrying key and value metadata. Audit emission is a precondition for the write, so a failed audit prevents the persistence change entirely.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-config.test.ts",
         "apps/platform-api/tests/unit/config-contracts.test.ts"
@@ -78,7 +78,7 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "description": "The capability is invariant-ready once the tenant settings store is reachable; the definition registry itself is pure and serialisable and therefore always available, while the history/audit projection of past changes is validated separately. When the persistence substrate is unavailable the capability degrades explicitly rather than silently serving stale or partial values.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-config.test.ts",
         "apps/platform-api/tests/unit/config-contracts.test.ts"
@@ -86,7 +86,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by unit proofs over the configuration use case and contract validation (definition resolution, override source, validation rules, and audit-first writes) and by an adjacent live history projection proof that validates the audit/history record of configuration changes against a real substrate. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-config.test.ts",
         "apps/platform-api/tests/unit/config-contracts.test.ts"

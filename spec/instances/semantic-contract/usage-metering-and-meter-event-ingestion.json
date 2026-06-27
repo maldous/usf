@@ -24,56 +24,56 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "description": "The metering lifecycle ingests meter events from operator/internal callers, validates that the meter and quantity are known, enforces the meter's entitlement, idempotently inserts the event by tenant plus meter plus idempotency key, allows explicit negative adjustments, aggregates lifetime usage, and exposes tenant and operator usage reads. Ingestion is the authoritative entry point for usage that downstream quota and billing depend on.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/metering.ts"
       ]
     },
     "stateModel": {
       "status": "complete",
-      "description": "State model recovered from cited React storage/port/adapter source.",
+      "description": "State is a meter catalog (meter key, entitlement key, display name, unit) plus meter-event rows containing organisation, meter, quantity, idempotency key, subject/source/metadata, and occurred-at time. The idempotency key participates in event identity so a replayed event does not double-count, and negative adjustments are stored as explicit events rather than mutating prior rows.",
       "sourceRefs": [
         "apps/platform-api/src/ports/metering-repository.ts"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "description": "Meter-event ingestion is operator/internal and tenant-scoped, with usage reads available to the owning tenant and to operators for a specified tenant. Row-level isolation keys persistence by organisation so one tenant cannot read or write another tenant's usage; meter entitlement is enforced before an event is accepted.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/metering.test.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Operation/interface contracts recovered from cited React source behind ports/adapters.",
+      "description": "The interface is a metering repository port behind which ingestion records events and queries aggregate usage, exposed through operator meter-event submission and tenant/operator usage-read operations. The contract requires a known meter, a quantity, and an idempotency key for safe ingestion.",
       "sourceRefs": [
         "apps/platform-api/src/ports/metering-repository.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Validation recovered from cited React tests and source.",
+      "description": "Validation requires the meter to exist in the catalog, the quantity to be valid (including signed adjustments), and the meter's entitlement to be satisfied before the event is recorded. The idempotency key is validated so repeated submissions of the same key are deduplicated rather than aggregated twice.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/metering.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "Deterministic fail-closed error outcomes recovered from cited React tests and source.",
+      "description": "Unknown meter, missing entitlement, or invalid quantity fail closed with deterministic typed outcomes and the event is not recorded. Duplicate idempotency keys resolve to the original event without double-counting, and provider unavailability returns a typed degraded failure rather than a fabricated success.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/metering.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "description": "Ingestion records the event durably with subject/source/metadata so usage is attributable, and entitlement-gated rejection is observable. Audit/operational records precede or accompany the mutation rather than being reconstructed afterward.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/metering.test.ts"
       ]
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "description": "Readiness is proven against live relational storage covering idempotent insertion, the entitlement gate, aggregation, and row-level tenant isolation with no secret columns; route handlers and access-control metadata are validated separately. When the metering substrate is unavailable, mutation paths are disabled and readiness degrades explicitly.",
       "sourceRefs": [
         "apps/platform-api/scripts/metering-quota-routes-runtime-proof.ts",
         "apps/platform-api/scripts/metering-runtime-proof.ts"
@@ -81,7 +81,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by metering unit tests and runtime proofs validating live idempotency, the entitlement gate, aggregation, isolation, and route handlers. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/metering-quota-routes-runtime-proof.ts",
         "apps/platform-api/scripts/metering-runtime-proof.ts"

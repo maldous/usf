@@ -24,21 +24,21 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "description": "Provides tenant product search backed by full-text indexing with a reindex path and a readiness probe, exposed through tenant search and admin search readiness and reindex operations; documents are indexed into a tenant-scoped relational full-text store and queried with permission gating. Indexed documents are kept in sync with their sources and can be rebuilt via reindex. The search engine is a full-text-search adapter behind a port, with alternative engines available as future provider adapters.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/search.ts"
       ]
     },
     "stateModel": {
       "status": "complete",
-      "description": "State model recovered from cited React storage/port/adapter source.",
+      "description": "Each indexed document carries a tenant/organisation id, document id, document type, title, a full-text search vector with an associated index, a URL, non-secret metadata, and an optional permission key, with uniqueness on tenant plus type plus document id. Readiness is reported as a full-text-search engine with status ready, degraded, or blocked. The index store is a tenant-scoped relational table under row-level security and excludes secret fields from indexed metadata.",
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/026-search-documents.sql"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "description": "Search results are isolated by tenant under the canonical row-level-security predicate and further gated by an optional per-document permission key so a user only sees documents they are entitled to, never another tenant's documents. Admin readiness and reindex are operator-scoped privileged operations. Indexed metadata deliberately omits secret fields so the search surface cannot leak sensitive values.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
         "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
@@ -46,14 +46,14 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Operation/interface contracts recovered from cited React source behind ports/adapters.",
+      "description": "The contract exposes a tenant search query plus admin search readiness and reindex, all mediated through the search repository/query port and full-text adapter. The query contract enforces tenant isolation and permission-key gating, and the index contract maintains the document shape (search vector, metadata without secrets, optional permission key) with its uniqueness constraint. Reindex rebuilds the tenant-scoped index from sources.",
       "sourceRefs": [
         "apps/platform-api/src/ports/search-repository.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Validation recovered from cited React tests and source.",
+      "description": "Queries are validated and scoped to the tenant and, where present, the permission key, so unscoped or cross-tenant queries are rejected; indexing validates the document shape and uniqueness on tenant/type/document id. Readiness is validated by a probe reporting ready, degraded, or blocked. Missing or invalid configuration fails closed rather than returning unscoped results.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
         "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
@@ -61,7 +61,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Deterministic fail-closed error outcomes recovered from cited React tests and source.",
+      "description": "The model is fail-closed: a query under one tenant context must return zero rows from another tenant, an unready engine reports degraded or blocked rather than serving stale or unscoped results, and provider failure returns a typed degraded or readiness error with mutation boundaries closed. The search surface never fabricates results or exposes secret metadata. Tenant data cannot be silently dropped or remapped.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
         "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
@@ -69,7 +69,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "description": "Search and reindex operations preserve tenant context through route/use-case/provider spans, with typed error logs carrying the tenant/organisation identifier when tenant-scoped, and readiness transitions are observable as a signal. Indexed metadata excludes secrets so audit and logs do not surface sensitive content. Recovery must preserve tenant boundary and audit.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
         "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
@@ -77,7 +77,7 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "description": "Readiness is reported by the full-text engine probe as ready, degraded, or blocked, and is verified by isolation and route proofs; the capability degrades explicitly when the search adapter is unavailable, disabling index mutation while keeping read-only readiness and audit visible. Readiness being blocked, a failed search/search-isolation/search-routes proof during promotion, or a missing isolation or audit signal raise alerts and block promotion.",
       "sourceRefs": [
         "apps/platform-api/scripts/search-isolation-runtime-proof.ts",
         "apps/platform-api/scripts/search-routes-runtime-proof.ts"
@@ -85,7 +85,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by the search, search-isolation, and search-routes proofs, including a cross-tenant isolation assertion that a foreign-tenant query returns zero rows. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/search-isolation-runtime-proof.ts",
         "apps/platform-api/scripts/search-routes-runtime-proof.ts"

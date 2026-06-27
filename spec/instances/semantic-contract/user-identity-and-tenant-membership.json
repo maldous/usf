@@ -25,11 +25,12 @@
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/016-membership-identity-v2.sql",
         "docs/evidence/identity/tenant-identity-membership-v2.md"
-      ]
+      ],
+      "description": "Membership lifecycle is explicit: an invite validates and creates either a pending invitation for a new user or a direct membership for an existing user, an invited membership becomes active on first login, role/status/username can be updated, a disabled membership can be re-enabled, and removal deletes the membership. Each transition is gated by precondition reads before any change."
     },
     "stateModel": {
       "status": "complete",
-      "description": "Membership state covers no user, external identity resolved, membership present for the resolved tenant, membership absent, membership belonging to a different tenant, and session actor projected only after tenant membership is verified.",
+      "description": "State is a tenant-scoped membership carrying user id, organisation id, tenant role, optional username, status (invited, active, or disabled), creation/update/last-login timestamps, and inviter, alongside separate pending-invitation rows. Membership is always scoped to one organisation.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/auth.ts",
         "apps/platform-api/src/db/migrations/004-rls-policies.sql",
@@ -43,7 +44,8 @@
       "sourceRefs": [
         "docs/evidence/identity/identity-access-baseline.md",
         "packages/domain-identity/src/index.ts"
-      ]
+      ],
+      "description": "Routes require the specific member read, invite, update-role, or delete permission, and the manager role intentionally holds only a legacy member bundle without the tenant member-management permissions. All reads and writes derive the tenant from resolved context, never from client input, preserving tenant isolation."
     },
     "contracts": {
       "status": "complete",
@@ -51,11 +53,12 @@
         "apps/platform-api/src/ports/identity-repository.ts",
         "packages/contracts-auth/src/index.ts",
         "packages/session-runtime/src/index.ts"
-      ]
+      ],
+      "description": "The operation surface lists members, invites a member, updates or deletes a member, updates username or status, resends an invite, and reads external identities. Mutations return typed results mapped to standard success and error responses."
     },
     "validation": {
       "status": "complete",
-      "description": "Session actor projection validates tenant membership for the resolved tenant and must not trust client-supplied tenant identifiers. Cross-tenant read and write access must be denied unless an explicitly authorised system-bypass context is present outside this first slice.",
+      "description": "Email is format-validated and lowercased, system-admin is rejected as a tenant membership role, username format and status transitions are explicit, and the last tenant-admin cannot be demoted, disabled, or removed. Invalid input is rejected before any mutation.",
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/004-rls-policies.sql",
         "apps/platform-api/src/db/migrations/012-rls-current-user-check.sql",
@@ -66,7 +69,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Absent session, absent membership, other-tenant membership, or unresolved external identity must fail closed as unauthenticated or forbidden context. A tenant-scoped actor must not read or write another tenant's membership, tenant resource configuration, user projection, or external identity linkage.",
+      "description": "Typed outcomes include invalid-body, conflict, already-invited, not-found, the three last-admin guards, invalid-transition, and ok, mapped fail-closed to 400/409/404/422/204/201 responses; provider failure returns a typed degraded result and keeps mutation boundaries closed. Conflict paths emit no misleading state.",
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/004-rls-policies.sql",
         "apps/platform-api/src/db/migrations/012-rls-current-user-check.sql",
@@ -76,7 +79,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "The first slice requires denied tenant-membership projection and permission-denied outcomes to remain auditable through the authentication and authorization audit path. Detailed membership event taxonomy remains a later identity-access expansion.",
+      "description": "Invite, role change, username/status change, resend-invite, and remove emit audit only after validation and precondition reads, audit failure aborts the mutation, and conflict paths emit no misleading audit. Audit precedes the membership change.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/auth-usecase.test.ts",
         "docs/evidence/identity/keycloak-login-callback.md"
@@ -86,14 +89,16 @@
       "status": "complete",
       "sourceRefs": [
         "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts"
-      ]
+      ],
+      "description": "Readiness is invariant-ready once tenant context and the identity store are available, with an admin-count readiness signal, and degraded mode disables store-dependent mutation while keeping read-only listing and audit visible. Pending-invitation queries always filter by organisation id."
     },
     "proof": {
       "status": "complete",
       "sourceRefs": [
         "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
         "apps/platform-api/tests/unit/auth-usecase.test.ts"
-      ]
+      ],
+      "description": "Unit and substrate proofs cover the membership usecase and its v2 variant, the identity domain, the identity repository, and organisation profile and member route coverage, demonstrated in React via hermetic state-machine and permission validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59."
     },
     "uiSemanticDefinition": {
       "status": "complete",

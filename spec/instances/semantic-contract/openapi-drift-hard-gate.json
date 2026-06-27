@@ -22,7 +22,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the lifecycle and operations as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The drift-gate lifecycle extracts routes from the route table, loads the OpenAPI document, compares path and method coverage, collects and resolves local references, detects schemaless JSON request/response bodies, reports drift, and fails strict mode when any drift exists. It runs as a repository architecture gate rather than a runtime service, blocking promotion on contract divergence.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -30,7 +30,7 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the state and data model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "State includes the extracted route method/path set, the OpenAPI path/method entries, the missing-route set, the extra-documented-route set, unresolved references, the schemaless-operation list, and a strict versus report-only exit decision. There is no owned database; state is the computed comparison between the live routes and the documented contract.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -38,7 +38,7 @@
     },
     "permissions": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the permission and tenant-isolation model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The gate is a repository architecture check and not a runtime permission surface; documented runtime permissions remain in route metadata and schemas. Access to change the contract is governed by repository controls, not tenant authorization.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -46,7 +46,7 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the operation and interface contracts as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The contract is that the OpenAPI document matches the route table for path and method coverage, that local references resolve, and that JSON request and response bodies have schemas. The OpenAPI document is treated as the authoritative generated client/docs contract.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -54,7 +54,7 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the input and invariant validation as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Validation proves a clean repository exits strict with success, missing and extra routes are detected, unresolved references are detected, schemaless bodies are detected, bodyless status responses are exempted, and the live document has no schemaless bodies or dangling references. Strict mode is the enforced configuration.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -62,7 +62,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the fail-closed error model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "A missing route file or OpenAPI file raises an error; strict mode exits non-zero on any drift; report-only mode exits successfully while warning with explicit drift lists. The hard gate fails closed so undocumented or mismatched routes cannot pass.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -70,7 +70,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the audit model for state-changing actions as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Contract changes are audited through version control and architecture-test output rather than runtime audit rows. The gate's pass/fail result is the durable record of contract conformance at each promotion.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -78,7 +78,7 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. This facet captures the readiness posture as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Readiness is the strict drift gate passing with zero missing routes, zero extra routes, zero unresolved references, and zero schemaless bodies. Any nonzero drift blocks readiness rather than producing a warning that can be ignored.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -86,7 +86,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Hard gate comparing runtime routes to the OpenAPI contract, failing closed on path, method, or schema drift. Proof expectation captured as semantic information; ../react proof is hermetic/runtime lineage and fresh USF proof is pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by the OpenAPI drift validation tests and the architecture test target asserting strict-mode exit and drift detection. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"

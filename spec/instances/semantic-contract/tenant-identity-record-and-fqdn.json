@@ -25,11 +25,12 @@
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/001-identity-schema.sql",
         "docs/evidence/identity/identity-access-baseline.md"
-      ]
+      ],
+      "description": "Tenant identity covers provisioning of a tenant record and resolution of request hosts to that tenant: apex, reserved, invalid, and malformed hosts resolve to no tenant, seeded slug FQDNs resolve with a slug host source, and active verified custom domains resolve through the domain registry with a custom-domain host source. Provisioning is operator-driven and host resolution is a deterministic per-request derivation."
     },
     "stateModel": {
       "status": "complete",
-      "description": "Tenant identity state covers known tenant record, verified host/FQDN association, active custom-domain ownership, same-tenant domain reuse, cross-tenant domain conflict, disabled or inactive host ownership, and unresolved host fail-closed outcome.",
+      "description": "State includes the organisation id, slug/FQDN, a derived realm name of the form tenant-{organisationId}, a host source (slug, custom_domain, or fixture), and the per-FQDN domain-registry states for custom domains. A custom domain only contributes tenant context once it is verified and active.",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
         "docs/evidence/platform/domain-identity-capability-permutation-review.md",
@@ -41,18 +42,20 @@
       "sourceRefs": [
         "docs/adr/0038-tenant-identity-and-membership-v2.md",
         "packages/domain-identity/src/index.ts"
-      ]
+      ],
+      "description": "Tenant provisioning is operator-controlled and gated by platform tenant read/create permissions, while host-identity resolution is read-only request context that grants no data access without the route's own permission checks. Tenant isolation is preserved because resolution never produces a partial or fallback tenant."
     },
     "contracts": {
       "status": "complete",
       "sourceRefs": [
         "apps/platform-api/src/ports/identity-repository.ts",
         "packages/domain-identity/src/index.ts"
-      ]
+      ],
+      "description": "The operation surface provides tenant provisioning and a host-identity lookup, with runtime resolution consuming the request Host / forwarded-host headers. The contract returns the resolved tenant context or an explicit no-tenant result."
     },
     "validation": {
       "status": "complete",
-      "description": "Tenant lookup validation must reject unresolved, unverified, inactive, disabled, or other-tenant host identity before authentication context is trusted. A same-domain ownership conflict must be denied before issuing proof material, callback material, or session context.",
+      "description": "Host validation classifies apex, slug, local slug, reserved, unknown, malformed, host-with-port, and possible-custom-domain cases, and forwarded-host precedence is enforced deterministically. Custom domains must be verified and active to be accepted.",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
         "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
@@ -61,7 +64,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Unresolved, disabled, inactive, or cross-tenant tenant identity fails closed and cannot be replaced by generated report status. Conflict outcomes must not leak ownership proof tokens or silently downgrade to a different tenant.",
+      "description": "Invalid, unknown, reserved, apex, and inactive/pending/disabled custom hosts resolve fail-closed to a null tenant context rather than to a partial or fallback tenant, and provider failure returns a typed degraded result without fabricating tenant state. No untrusted host is ever silently served as a tenant.",
       "sourceRefs": [
         "docs/evidence/auth/custom-domain-auth-origin.md",
         "docs/evidence/platform/domain-identity-capability-permutation-review.md",
@@ -70,7 +73,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "The first slice requires denied cross-tenant domain ownership attempts to emit safe audit metadata and prohibits token leakage in rejected conflict outcomes. Detailed full identity audit taxonomy remains a later expansion.",
+      "description": "Tenant provisioning is audited at the provisioning surface, while host-identity resolution is read-only and carries no mutation audit, with failed resolution logged rather than audited. Audit precedes the provisioning change.",
       "sourceRefs": [
         "docs/evidence/platform/platform-bedrock-correctness-hardening.md"
       ]
@@ -79,14 +82,16 @@
       "status": "complete",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts"
-      ]
+      ],
+      "description": "Readiness is invariant-ready once the resolver and domain registry are available, and degraded mode disables registry-dependent mutation while keeping read-only resolution and audit visible. Live proofs skip honestly when seeded local substrate is absent rather than faking tenant resolution."
     },
     "proof": {
       "status": "complete",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
         "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts"
-      ]
+      ],
+      "description": "A runtime domain-identity matrix proof validates host classification plus live slug resolution, and a custom-domain resolution proof validates live registry resolution with rejection of inactive, pending, and disabled domains and a unique-enabled-domain guard. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59."
     },
     "uiSemanticDefinition": {
       "status": "not-applicable",
