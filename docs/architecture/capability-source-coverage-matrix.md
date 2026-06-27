@@ -81,14 +81,40 @@ Manifest row distribution:
 | `split` | 1 |
 | `merge` | 1 |
 
+Current semantic corpus inventory:
+
+| Instance category | Files |
+|---|---:|
+| `ai-governance` | 1 |
+| `audit-event` | 1 |
+| `command` | 6 |
+| `configuration` | 1 |
+| `data-migration` | 1 |
+| `environment` | 2 |
+| `event-contract` | 1 |
+| `interface-contract` | 1 |
+| `observability-signal` | 1 |
+| `provider-mode` | 1 |
+| `semantic-contract` | 5 |
+| `ui-semantic-model` | 1 |
+| `workflow` | 2 |
+| **Total** | **24** |
+
 ## First Implementation Slice Boundary
 
 The first implementation slice remains the authentication platform/login slice. The exact source-row membership for this planning pass is the manifest-backed set in Appendix A. Every row in that set maps to a concrete existing or planned semantic target. Rows outside that set remain deferred to USF-58, USF-74, and USF-64 before any implementation extraction can use them.
 
-Existing semantic targets for the first slice:
+Existing committed semantic targets for the current authentication-centered slice:
 
 - `audit.authentication-login`
+- `command.authentication-slice-proof`
+- `command.validate-spec-all`
+- `command.validate-spec-evidence`
+- `command.validate-spec-pr`
+- `command.validate-spec-real-instances`
+- `command.validate-spec-selftest`
 - `configuration.provider-mode-selector`
+- `data-migration.identity-schema`
 - `environment.hermetic`
 - `environment.production-shaped`
 - `event.authentication-login-audit`
@@ -96,10 +122,15 @@ Existing semantic targets for the first slice:
 - `observability.authentication-login-audit`
 - `provider-mode.mock-identity-provider`
 - `semantic-contract.authentication-platform`
+- `semantic-contract.rbac-roles-and-permissions`
+- `semantic-contract.tenant-host-identity-resolution`
+- `semantic-contract.tenant-identity-record-and-fqdn`
+- `semantic-contract.user-identity-and-tenant-membership`
 - `ui.authentication-login`
+- `workflow.authentication-identity-context`
 - `workflow.authentication-login`
 
-Known first-slice semantic gap facets, carried into USF-66: `stateModel`, `validation`, and `errorModel` on `semantic-contract.authentication-platform`.
+The earlier first-slice semantic gap facets `stateModel`, `validation`, and `errorModel` on `semantic-contract.authentication-platform` are now marked complete in the committed semantic instance. That is semantic-normalisation progress only. Current-readiness proof remains blocked by USF-101, USF-59, and USF-73, and broader platform closure remains blocked by USF-97.
 
 ## Capability Matrix
 
@@ -185,10 +216,10 @@ Known first-slice semantic gap facets, carried into USF-66: `stateModel`, `valid
 
 | Gap | Classification | Rationale | Downstream issue |
 |---|---|---|---|
-| First-slice authentication state model, validation, and error model are not fully normalised into USF semantic instances. | blocking | Current `semantic-contract.authentication-platform` marks these facets as gaps. Implementation cannot infer them from code. | USF-66 |
-| Most historical capability contracts are not represented as authored USF semantic-contract instances. | blocking for broad generation; deferred for first slice | The repository currently has one semantic contract instance and a small authentication slice. | USF-58 |
+| First-slice authentication state model, validation, and error model are semantically normalised but not fresh-proof ready. | readiness-blocking | Current `semantic-contract.authentication-platform` marks these facets complete, but committed proof evidence is stale for current readiness and stronger provider/environment postures remain unproven. | USF-101, USF-59, USF-73, USF-98 |
+| Most historical capability contracts are not represented as authored USF semantic-contract instances. | blocking for broad generation; deferred for first slice | The repository currently has five semantic-contract instances and 24 total semantic corpus instances. Most of the 75 historical capability records remain unauthored or unclassified as USF semantic contracts. | USF-97 |
 | Baseline manifest `targetUsfConcept` values are broad concepts such as Source Reference, Proof, Package / Module, and Configuration. | blocking for extraction targeting | Implementation extraction needs concrete semantic targets and per-slice row membership. | USF-74 and USF-64 |
-| Source-use policy is not recorded per first-slice file. | blocking for implementation | Disposition alone does not authorise copy, adapt, rewrite, or evidence-only use. | USF-64 |
+| Source-use policy exists for the authentication slice but not for full platform closure. | blocking for broad implementation | `docs/architecture/authentication-slice-source-use-disposition-matrix.md` records 159 authentication slice rows with zero direct runtime-copy permission. Equivalent source-use ledgers do not yet exist for the remaining implementation-relevant domains. | USF-97 |
 | Fresh commit-pinned proof for the future extracted slice does not yet exist. | blocking for readiness claims | Historical proof is lineage; generated reports and stale evidence cannot prove current readiness. | USF-59 / USF-73 |
 | Schema and validator active posture remains a decision, not a fact. | deferred decision | No schema is active and the validator remains advisory until explicitly promoted. | USF-67 |
 | Historical capabilities marked not-applicable-final are not implementation extraction targets. | non-applicable | These rows preserve historical lineage and explicit no-loss disposition, but they must not drive generated implementation until a later semantic decision changes their applicability. | USF-58 |
