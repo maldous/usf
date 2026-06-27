@@ -30,6 +30,22 @@ The original USF-75 result above predates the bootstrap/toolchain movement (gove
 
 Fresh result: NO-GO for starting USF-39 still holds, but the blocker set is now reduced to two human gates only: a signed USF-100 directive and a separate USF-39 start action. All agent-resolvable readiness inputs (semantic corpus, source-use disposition framework, proof-anchor mechanism, validators, runtime/toolchain decision, dev/test boundary, accepted deferrals) are in place and validating clean. A new USF-75-equivalent revalidation must be rerun once USF-100 is signed and immediately before the separate USF-39 start action.
 
+## Final Pre-Extraction Revalidation (post-USF-100 signature)
+
+USF-100 is now signed and accepted (PR 85, merge commit `f30f09f`, authorising human Matthew Aldous, 28 June 2026 Australia/Melbourne). The "rerun once USF-100 is signed and immediately before the separate USF-39 start action" condition above is therefore met, and this section records that rerun. It does not start USF-39.
+
+- Commit revalidated: `f30f09fe6ccab8a72511f73c155a3fe1f05fc3a8`.
+- `validate-spec` all, imports, instances, evidence, real-instances, implementation, selftest, and pr diff mode: zero findings. `python3 -m py_compile` of both validators: ok. `git diff --check`: clean.
+- `validate-bootstrap all` and `selftest`: clean. Bootstrap marker readiness `READY_FOR_V2_BOOTSTRAP`; the `v2-bootstrap` marker points to `f30f09f`.
+- Current-commit immutable proof anchor present and verified: `proof-anchor-f30f09f` (tag on origin dereferences to HEAD; CI attest, verify-attestation, and publish steps succeeded; one attestation for the canonical payload digest).
+- Directive state: SIGNED / USF-100 ACCEPTED. The signature accepts USF-100 only; it does not authorise the USF-39 start and creates no implementation authority by itself (validator-enforced: a signed directive that claims a USF-39 start, omits this revalidation, or claims implementation authority fails closed under USF-BOOTSTRAP-003).
+- No implementation/runtime roots exist (`apps`, `capabilities`, `adapters`, `packages`, `tests`, `services`, `infra`); no schema is active; no production/live readiness is claimed.
+- Scope: whole-platform (all slices), local dev/test bootstrap boundary per ADR 0009; staging, production, live-external-provider, and production-live proof explicitly deferred (USF-73 and USF-99 accepted deferrals).
+
+Gate result: PASS. Every agent-checkable readiness gate is clean at the signed bootstrap point and USF-100 is accepted. The sole remaining step before implementation is the separate, explicit human USF-39 start action. This revalidation does not perform that action; USF-39 remains Backlog and is not started.
+
+Snapshot note: this revalidation reviewed `f30f09f`. The commit that records it is a governance-only commit that advances HEAD and carries its own per-merge proof anchor. If the USF-39 start action is issued from a later HEAD, re-run this gate at that exact commit immediately before starting.
+
 ## Gate Inputs Reviewed
 
 The following gate inputs are present and merged:
@@ -116,6 +132,6 @@ Strict JSON parse is required for changed JSON. This document changes no JSON.
 
 READY_WITH_NON_BLOCKING_DEFERRED_WORK for closing the current pre-implementation proof-slice readiness chain as far as honestly possible.
 
-NOT_READY_HUMAN_DECISION_REQUIRED for USF-39 implementation extraction. A separate human-filled implementation directive is still required.
+NOT_READY_HUMAN_DECISION_REQUIRED for USF-39 implementation extraction. The human-filled USF-100 directive is now signed and accepted (PR 85, commit `f30f09f`); the final pre-extraction revalidation has passed at that commit; the sole remaining gate is the separate, explicit USF-39 start action, which this revalidation does not perform.
 
 USF-39 remains Backlog and implementation extraction has not started.
