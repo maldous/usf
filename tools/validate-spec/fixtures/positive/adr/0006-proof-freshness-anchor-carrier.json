@@ -1,0 +1,69 @@
+{
+  "id": "0006-proof-freshness-anchor-carrier",
+  "kind": "adr",
+  "title": "Proof Freshness Anchor Carrier",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-27",
+  "context": "The anchor-carrier decision record previously recorded that no carrier or signer trust model was accepted yet while recommending a signed annotated Git tag, and the publication-model document records the post-merge evidence-anchor model. The validator already checks unsigned anchor-payload invariants but does not accept any carrier or signer as trusted, and it fails closed when committed evidence claims non-stale freshness for a different commit than HEAD. The core problem is that committed evidence naming the current commit changes that commit when committed, so it is stale after merge. The chosen proof ceiling is hermetic-first; live-external and production-live remain deferred and are never inferred. The decision is made under the readiness-acceleration directive recorded in Linear USF-101, with the carrier delegated to the agent and the signing identity to be supplied by the maintainer.",
+  "decision": "USF adopts the signed annotated Git tag as the proof-freshness anchor carrier. A proof run executes against a merge commit; after merge, a maintainer publishes a signed annotated Git tag on that exact commit whose message carries the deterministic anchor payload. The tag, not any committed evidence JSON and not any generated report, is the freshness anchor. The anchor is trusted only when its signature verifies against an approved trust root recorded in the repository as a committed allowlist of trusted signer fingerprints. An unsigned tag, an untrusted signer, a payload-digest mismatch, or a generated report must not be accepted as proof authority. The decision preserves stale-cannot-prove, hermetic-not-live, and shaped-not-live rules.",
+  "consequences": [
+    "USF-101 has an accepted carrier and trust model; the remaining work is the validator signature and trust-root verification with planted defects, registration of a maintainer signer fingerprint, and a successful fresh signed publication.",
+    "USF-59, USF-73, and USF-99 remain blocked only on that remaining work and on execution-substrate access, not on an undecided model.",
+    "The implementation directive under USF-100 can cite this carrier as the readiness-evidence publication mechanism."
+  ],
+  "invariants": [
+    "The freshness anchor for a commit is a signed annotated Git tag on that exact commit; committed evidence JSON and generated reports are not freshness anchors.",
+    "An anchor is trusted only when its signature verifies against an approved trust root recorded in the repository.",
+    "Stale evidence must not support a current readiness claim.",
+    "Hermetic proof must not be presented as live-external; production-shaped must not be presented as production-live."
+  ],
+  "permittedChanges": [
+    "Implement the validator tag-signature and trust-root verification with planted defects and a selftest under USF-98 and USF-101.",
+    "Register an approved signer fingerprint in a committed trust-root allowlist when the maintainer supplies it.",
+    "Add GitHub-native attestation as an additional secondary anchor in a later ADR.",
+    "Publish a fresh signed proof anchor for a target commit once the signer key is registered."
+  ],
+  "forbiddenDrift": [
+    "Do not accept an unsigned tag, an untrusted signer, or a payload-digest mismatch as proof authority.",
+    "Do not treat a generated report or a committed evidence JSON file as the freshness anchor.",
+    "Do not weaken the freshness, posture, or PR-freshness checks to make a branch claim non-stale readiness before a published anchor exists.",
+    "Do not upgrade hermetic or production-shaped proof to live-external or production-live by way of an anchor."
+  ],
+  "aiAlignmentRules": [
+    "Agents must not mark proof evidence non-stale for the current commit by committing a JSON file; freshness comes only from a verified signed tag.",
+    "Agents must not accept an unsigned or untrusted anchor as proof authority, and must stop if asked to.",
+    "Agents must preserve the hermetic-first ceiling and never infer a live-external or production-live claim from an anchor."
+  ],
+  "semanticRefs": [
+    "docs/architecture/proof-freshness-anchor-carrier-decision.md",
+    "docs/architecture/proof-freshness-publication-model.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/git-practices-standard.md",
+    "spec/schemas/proof-evidence.schema.json"
+  ],
+  "sourceRefs": [],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "A signed annotated tag points at the exact merge commit without changing it, resolving the self-referential commit-hash problem that a committed evidence file cannot. A signature against an approved trust root supplies the missing trust model so the anchor is verifiable rather than asserted. GitHub-native attestation was rejected as the primary carrier because it makes the trust provider external and less explicit, though it may be added later; a committed post-merge evidence file was rejected because it cannot escape the self-reference and would be stale on commit.",
+  "description": "Records the decision that the USF proof-freshness anchor carrier is a signed annotated Git tag verified against an approved maintainer trust root, resolving the self-referential commit-hash problem without weakening proof honesty.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Proof",
+    "Generated Report",
+    "Validator"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "ai-governance-kinds"
+  ],
+  "aiGuidance": "Use this ADR when publishing, referencing, or validating proof freshness, or when deciding whether an anchor may be treated as proof authority."
+}
