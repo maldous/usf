@@ -109,6 +109,7 @@ OPEN_EXTENSION_POINTS = {
 # (item 5 review) tool/CI additions are blocking unless explicitly authorised here.
 AUTHORIZED_TOOLING = {
     ".github/workflows/validate-spec.yml",
+    ".github/workflows/proof-anchor.yml",
     "tools/prove-authentication-slice.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",
@@ -2217,11 +2218,12 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest", "pr", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest", "pr", "anchor", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
     ap.add_argument("--head")
+    ap.add_argument("--anchor-file", help="proof-freshness anchor payload JSON to verify (anchor mode)")
     a = ap.parse_args()
 
     F = Findings()
@@ -2239,7 +2241,7 @@ def main():
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
         "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "evidence": ["evidence"],
         "real-instances": ["real-instances"], "implementation": ["implementation"],
-        "selftest": ["selftest"], "pr": ["pr"],
+        "selftest": ["selftest"], "pr": ["pr"], "anchor": ["anchor"],
         "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
@@ -2269,6 +2271,17 @@ def main():
         selftest_state = check_selftest(ctx, F)
     if "pr" in run:
         check_pr(ctx, F, a.base or "main", a.head or "HEAD")
+    if "anchor" in run:
+        if not a.anchor_file:
+            print("ERROR: anchor mode requires --anchor-file", file=sys.stderr)
+            sys.exit(2)
+        anchor_data = load_json(a.anchor_file, F)
+        try:
+            anchor_commit = a.head or git_checked("rev-parse", "HEAD")
+        except Exception:
+            anchor_commit = None
+        if anchor_data is not None:
+            validate_anchor_payload_data(F, {a.anchor_file: anchor_data}, current_commit=anchor_commit)
 
     if a.report:
         emit_report(ctx, F, a.report)
