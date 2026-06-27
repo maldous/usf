@@ -1,0 +1,11 @@
+{
+  "id": "bootstrap-defect.missing-bootstrap-proof-posture",
+  "description": "A bootstrap mapping that omits a required local/integration/staging/production proof posture must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-013",
+  "mutation": {
+    "removeProofGate": {
+      "semanticContractRef": "semantic-contract.authentication-platform",
+      "environment": "production-live"
+    }
+  }
+}

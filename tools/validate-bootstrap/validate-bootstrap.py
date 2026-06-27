@@ -37,6 +37,7 @@ RULES = {
     "USF-BOOTSTRAP-010": ("blocking", "bootstrap readiness governance decision coverage is incomplete"),
     "USF-BOOTSTRAP-011": ("blocking", "bootstrap readiness ADR coverage is incomplete"),
     "USF-BOOTSTRAP-012": ("blocking", "authentication proof runner is not consolidated into bootstrap validator"),
+    "USF-BOOTSTRAP-013": ("blocking", "bootstrap mapping proof/readiness posture coverage is incomplete"),
     "USF-BOOTSTRAP-SELFTEST": ("blocking", "planted bootstrap defect did not raise its expected rule"),
 }
 
@@ -116,6 +117,46 @@ AUTH_HISTORICAL_INPUTS = [
     "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
     "apps/platform-api/tests/substrate/auth-routes.test.ts",
 ]
+
+REQUIRED_MAPPING_PROOF_POSTURES = [
+    {
+        "label": "local hermetic behaviour proof before implementation claim",
+        "environment": "local",
+        "providerMode": "hermetic-mock",
+        "proofLevel": "behaviour-proven",
+        "status": "required-before-implementation-claim",
+    },
+    {
+        "label": "integration composed provider proof before test readiness claim",
+        "environment": "integration",
+        "providerMode": "local-composed-real-service",
+        "proofLevel": "substrate-proven",
+        "status": "required-before-test-readiness-claim",
+    },
+    {
+        "label": "staging live-provider proof explicitly deferred",
+        "environment": "staging",
+        "providerMode": "live-external-provider",
+        "proofLevel": "not-claimed",
+        "status": "deferred-not-bootstrap-readiness",
+    },
+    {
+        "label": "production-live proof explicitly deferred",
+        "environment": "production-live",
+        "providerMode": "live-external-provider",
+        "proofLevel": "not-claimed",
+        "status": "deferred-not-bootstrap-readiness",
+    },
+]
+
+REQUIRED_MAPPING_DEFERRAL_SCOPES = {
+    "implementation-start",
+    "staging-production-live-proof",
+}
+
+REQUIRED_MAPPING_BLOCKER_SCOPES = {
+    "pre-file-implementation-gate",
+}
 
 
 class Findings:
@@ -390,6 +431,43 @@ def check_authentication_proof_runner_consolidated(F, state):
             F.add("USF-BOOTSTRAP-012", "tools/validate-bootstrap/validate-bootstrap.py", f"missing integrated proof runner token: {needle}")
 
 
+def has_matching_proof_posture(gates, required):
+    for gate in gates:
+        if not isinstance(gate, dict):
+            continue
+        if all(gate.get(key) == value for key, value in required.items() if key != "label"):
+            return True
+    return False
+
+
+def check_mapping_posture_coverage(F, path, record):
+    gates = record.get("expectedProofGates", [])
+    if not isinstance(gates, list):
+        F.add("USF-BOOTSTRAP-013", path, "expectedProofGates is not an array")
+        gates = []
+    for required in REQUIRED_MAPPING_PROOF_POSTURES:
+        if not has_matching_proof_posture(gates, required):
+            F.add("USF-BOOTSTRAP-013", path, f"missing required proof posture: {required['label']}")
+
+    deferral_scopes = {
+        item.get("scope")
+        for item in record.get("deferrals", [])
+        if isinstance(item, dict) and isinstance(item.get("scope"), str)
+    }
+    missing_deferrals = sorted(REQUIRED_MAPPING_DEFERRAL_SCOPES - deferral_scopes)
+    if missing_deferrals:
+        F.add("USF-BOOTSTRAP-013", path, f"missing required deferral scopes: {missing_deferrals}")
+
+    blocker_scopes = {
+        item.get("scope")
+        for item in record.get("blockers", [])
+        if isinstance(item, dict) and isinstance(item.get("scope"), str)
+    }
+    missing_blockers = sorted(REQUIRED_MAPPING_BLOCKER_SCOPES - blocker_scopes)
+    if missing_blockers:
+        F.add("USF-BOOTSTRAP-013", path, f"missing required blocker scopes: {missing_blockers}")
+
+
 def mapping_digest(record):
     canonical = json.dumps(record, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(canonical).hexdigest()
@@ -518,6 +596,7 @@ def check_bootstrap_mappings(F, state):
             missing_source = sorted(set(semantic.get("sourceRefs", [])) - set(record.get("sourceRefs", [])))
             if missing_source:
                 F.add("USF-BOOTSTRAP-008", path, f"mapping omits semantic sourceRefs: {missing_source[:5]}")
+        check_mapping_posture_coverage(F, path, record)
         for gate in record.get("expectedProofGates", []):
             if not isinstance(gate, dict):
                 continue
@@ -933,6 +1012,27 @@ def run_selftest(F):
             overrides["mappingIndex"] = mutation["mappingIndex"]
         if "mappingSummary" in mutation:
             overrides["mappingSummary"] = mutation["mappingSummary"]
+        if "removeProofGate" in mutation:
+            target = mutation["removeProofGate"]
+            mappings = copy.deepcopy(overrides.get("bootstrapMappings", base["bootstrapMappings"]))
+            for mapping_path, record in list(mappings.items()):
+                if not isinstance(record, dict):
+                    continue
+                if record.get("semanticContractRef") != target.get("semanticContractRef"):
+                    continue
+                record["expectedProofGates"] = [
+                    gate
+                    for gate in record.get("expectedProofGates", [])
+                    if not (
+                        isinstance(gate, dict)
+                        and all(
+                            gate.get(key) == value
+                            for key, value in target.items()
+                            if key != "semanticContractRef"
+                        )
+                    )
+                ]
+            overrides["bootstrapMappings"] = mappings
         if "bootstrapGovernanceText" in mutation:
             overrides["bootstrapGovernanceText"] = mutation["bootstrapGovernanceText"]
         if "bootstrapAdrText" in mutation:
