@@ -69,6 +69,8 @@ Every proof tool MUST print a machine-readable summary when it completes. The su
 
 The command summary is a generated report-style convenience output. It MUST NOT be treated as the proof authority. The committed proof-evidence and evidence-envelope records remain the proof authority when evidence is written and validated.
 
+A proof tool MAY also emit a deterministic unsigned proof freshness anchor payload when an approved publication model requires a post-merge anchor. That payload is publication input only. It is not proof authority unless a later accepted carrier and signer/trust decision binds it to a verified post-merge anchor.
+
 ## Freshness Rules
 
 Proof freshness is commit-pinned.
@@ -136,6 +138,26 @@ For the current authentication slice authorized by USF-77 Option A, the only aut
 - `evidence/evidence-envelope/authentication-slice-proof-lineage.json`.
 
 Future proof slices MUST name their exact authorized evidence outputs before a proof tool writes them.
+
+## Anchor Payload Output
+
+When a proof tool emits a proof freshness anchor payload, the payload MUST bind:
+
+- target commit;
+- proof id;
+- provider mode;
+- environment;
+- proof level claimed;
+- proof level observed;
+- live external provider claim;
+- production-live claim;
+- freshness;
+- emitted evidence;
+- collected evidence;
+- source references;
+- canonical payload digest.
+
+The payload MUST be deterministic so a future post-merge carrier can sign or reference the same digest. The payload MUST NOT claim signer trust, signature validity, carrier validity, or publication success by itself.
 
 ## Source-Use Rules
 

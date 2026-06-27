@@ -1,0 +1,32 @@
+{
+  "target": "anchor-payloads",
+  "expectedRule": "USF-ANCHOR-005",
+  "records": {
+    "anchor.live-provider-overclaim": {
+      "payloadKind": "proof-freshness-anchor-payload",
+      "payloadVersion": "draft-anchor-payload-1",
+      "targetCommit": "head-commit",
+      "proofId": "usf.proof-evidence.authentication-slice-proof",
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "proofLevelClaimed": "behaviour-proven",
+      "proofLevelObserved": "behaviour-proven",
+      "liveExternalProviderClaim": true,
+      "productionLiveClaim": false,
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      },
+      "emittedEvidence": [
+        "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/0"
+      ],
+      "collectedEvidence": [
+        "evidence.runtime-proof.authentication-slice-proof"
+      ],
+      "sourceRefs": [
+        "tools/prove-authentication-slice.py"
+      ],
+      "payloadDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  }
+}

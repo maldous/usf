@@ -41,7 +41,7 @@ Options:
     --base REF          PR base git ref
     --head REF          PR head git ref
 """
-import argparse, copy, glob, json, os, re, subprocess, sys
+import argparse, copy, glob, hashlib, json, os, re, subprocess, sys
 from collections import Counter, defaultdict
 
 try:
@@ -266,6 +266,13 @@ RULES = {
     "USF-PR-TOOL":      ("blocking", "PR adds unauthorised tool/CI (not in AUTHORIZED_TOOLING)"),
     "USF-PR-DISPOSITION": ("blocking", "PR adds implementation file without source disposition coverage"),
     "USF-PR-FRESHNESS": ("blocking", "PR changes evidence/report JSON with non-stale freshness before post-merge publication"),
+    "USF-ANCHOR-001":   ("blocking", "Proof freshness anchor payload is incomplete or malformed"),
+    "USF-ANCHOR-002":   ("blocking", "Proof freshness anchor target/freshness commit mismatch"),
+    "USF-ANCHOR-003":   ("blocking", "Proof freshness anchor payload digest mismatch"),
+    "USF-ANCHOR-004":   ("blocking", "Proof freshness anchor proof level is overclaimed"),
+    "USF-ANCHOR-005":   ("blocking", "Proof freshness anchor live-provider claim exceeds provider/level evidence"),
+    "USF-ANCHOR-006":   ("blocking", "Proof freshness anchor production-live claim exceeds environment evidence"),
+    "USF-ANCHOR-007":   ("blocking", "Generated report accepted as proof freshness anchor payload"),
 }
 
 
@@ -979,6 +986,91 @@ PROOF_LEVEL_ORDER = {
     "foundation-proven": 6,
 }
 
+ANCHOR_PAYLOAD_REQUIRED = {
+    "payloadKind",
+    "payloadVersion",
+    "targetCommit",
+    "proofId",
+    "providerMode",
+    "environment",
+    "proofLevelClaimed",
+    "proofLevelObserved",
+    "liveExternalProviderClaim",
+    "productionLiveClaim",
+    "freshness",
+    "emittedEvidence",
+    "collectedEvidence",
+    "sourceRefs",
+    "payloadDigest",
+}
+
+
+def _anchor_payload_digest(data):
+    payload = copy.deepcopy(data)
+    payload.pop("payloadDigest", None)
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return "sha256:" + hashlib.sha256(encoded).hexdigest()
+
+
+def validate_anchor_payload_data(F, data_by_name, current_commit=None):
+    """Validate unsigned deterministic payloads for future proof freshness anchors.
+
+    This intentionally does not accept a carrier or signer as trusted. Carrier and
+    signer trust remain blocked until a later authority decision defines them.
+    """
+    for name, data in data_by_name.items():
+        if not isinstance(data, dict):
+            F.add("USF-ANCHOR-001", name, "anchor payload must be a JSON object")
+            continue
+        if data.get("authorityLevel") == "generated-report":
+            F.add("USF-ANCHOR-007", name, "generated reports cannot serve as proof freshness anchor payloads")
+
+        missing = sorted(k for k in ANCHOR_PAYLOAD_REQUIRED if k not in data)
+        if missing:
+            F.add("USF-ANCHOR-001", name, f"missing fields: {missing}")
+            continue
+        if data.get("payloadKind") != "proof-freshness-anchor-payload":
+            F.add("USF-ANCHOR-001", name, f"unexpected payloadKind: {data.get('payloadKind')}")
+
+        target = data.get("targetCommit")
+        freshness = data.get("freshness")
+        if not isinstance(target, str) or not target:
+            F.add("USF-ANCHOR-001", name, "targetCommit must be a non-empty string")
+        if current_commit and target != current_commit:
+            F.add("USF-ANCHOR-002", name, f"{target} != {current_commit}")
+        if not isinstance(freshness, dict):
+            F.add("USF-ANCHOR-001", name, "freshness must be an object")
+        else:
+            if freshness.get("commit") != target or freshness.get("stale") is not False:
+                F.add("USF-ANCHOR-002", name, "freshness must be non-stale and match targetCommit")
+
+        digest = data.get("payloadDigest")
+        if not isinstance(digest, str) or not digest.startswith("sha256:"):
+            F.add("USF-ANCHOR-001", name, "payloadDigest must be a sha256 digest")
+        elif digest != _anchor_payload_digest(data):
+            F.add("USF-ANCHOR-003", name, "payloadDigest does not match canonical payload content")
+
+        for field in ("emittedEvidence", "collectedEvidence", "sourceRefs"):
+            value = data.get(field)
+            if not isinstance(value, list) or not value or not all(isinstance(item, str) and item for item in value):
+                F.add("USF-ANCHOR-001", f"{name}:{field}", "field must be a non-empty string array")
+
+        claimed = data.get("proofLevelClaimed")
+        observed = data.get("proofLevelObserved")
+        if claimed in PROOF_LEVEL_ORDER and observed in PROOF_LEVEL_ORDER:
+            if PROOF_LEVEL_ORDER[claimed] > PROOF_LEVEL_ORDER[observed]:
+                F.add("USF-ANCHOR-004", name, f"{claimed} > {observed}")
+        else:
+            F.add("USF-ANCHOR-001", name, "proof levels must be canonical values")
+
+        if data.get("liveExternalProviderClaim") is True:
+            observed_level = PROOF_LEVEL_ORDER.get(observed, -1)
+            if data.get("providerMode") != "live-external-provider" or observed_level < PROOF_LEVEL_ORDER["substrate-proven"]:
+                F.add("USF-ANCHOR-005", name, f"{data.get('providerMode')}/{observed}")
+
+        if data.get("productionLiveClaim") is True and data.get("environment") != "production-live":
+            F.add("USF-ANCHOR-006", name, f"environment={data.get('environment')}")
+
 
 def _evidence_kind_for_path(path):
     rel = path.replace(os.sep, "/")
@@ -1472,7 +1564,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths", "anchor-payloads"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1574,6 +1666,12 @@ def check_selftest(ctx, F):
                 source_paths=set(patch.get("sourcePaths", [])),
                 changed_records=patch.get("records", {}),
             )
+        elif patch["target"] == "anchor-payloads":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "anchor-payloads planted-defect needs a records object")
+                continue
+            validate_anchor_payload_data(f2, records, current_commit=patch.get("currentCommit"))
         else:
             run_all_checks(sandbox, f2)
         if patch["expectedRule"] not in f2.rule_ids():
@@ -1819,6 +1917,28 @@ def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=N
                 F.add("USF-PR-DISPOSITION", path, "added implementation file lacks changed source disposition/import coverage")
 
 
+def load_changed_json_records_at_ref(ref, name_status_lines):
+    records = {}
+    for line in name_status_lines:
+        parts = line.split("\t")
+        if len(parts) < 2:
+            continue
+        status, path = parts[0], _normalise_path(parts[-1])
+        if status.startswith("D") or not path.endswith(".json"):
+            continue
+        try:
+            raw = git_checked("show", f"{ref}:{path}")
+        except RuntimeError as e:
+            print(f"ERROR: pr mode could not read {path} at {ref}: {e}", file=sys.stderr)
+            sys.exit(2)
+        try:
+            records[path] = json.loads(raw)
+        except json.JSONDecodeError as e:
+            print(f"ERROR: pr mode changed JSON is invalid at {ref}:{path}: {e}", file=sys.stderr)
+            sys.exit(2)
+    return records
+
+
 def check_pr(ctx, F, base, head):
     if not base or not head:
         print("ERROR: pr mode requires --base and --head", file=sys.stderr)
@@ -1832,7 +1952,9 @@ def check_pr(ctx, F, base, head):
     if not diff and not same:
         print(f"ERROR: empty diff but {base} and {head} differ (bad refs / missing fetch?)", file=sys.stderr)
         sys.exit(2)
-    validate_pr_paths(F, diff.splitlines())
+    diff_lines = diff.splitlines()
+    changed_records = load_changed_json_records_at_ref(head, diff_lines)
+    validate_pr_paths(F, diff_lines, changed_records=changed_records)
     reg_paths = {e["path"] for e in ctx["reg"]["schemas"]}
     for line in diff.splitlines():
         parts = line.split("\t")

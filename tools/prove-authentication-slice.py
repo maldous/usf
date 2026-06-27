@@ -17,6 +17,8 @@ records under the approved evidence homes.
 """
 
 import argparse
+import copy
+import hashlib
 import json
 import os
 import subprocess
@@ -236,10 +238,42 @@ def build_records(commit, checks):
     return proof, runtime_envelope, lineage_envelope
 
 
+def _canonical_json(data):
+    return json.dumps(data, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+
+def build_anchor_payload(commit, proof, runtime_envelope, lineage_envelope):
+    """Build the deterministic payload a future signed post-merge anchor would bind.
+
+    This payload is not proof authority by itself. It is an unsigned publication
+    input intended for a later approved carrier and signer/trust model.
+    """
+    payload = {
+        "payloadKind": "proof-freshness-anchor-payload",
+        "payloadVersion": "draft-anchor-payload-1",
+        "targetCommit": commit,
+        "proofId": proof["id"],
+        "providerMode": proof["providerMode"],
+        "environment": proof["environment"],
+        "proofLevelClaimed": proof["proofLevelClaimed"],
+        "proofLevelObserved": proof["proofLevelObserved"],
+        "liveExternalProviderClaim": proof["liveExternalProviderClaim"],
+        "productionLiveClaim": False,
+        "freshness": copy.deepcopy(proof["freshness"]),
+        "emittedEvidence": copy.deepcopy(proof["emittedEvidence"]),
+        "collectedEvidence": copy.deepcopy(proof["collectedEvidence"]),
+        "sourceRefs": sorted(set(runtime_envelope.get("sourceRefs", []) + lineage_envelope.get("sourceRefs", []))),
+    }
+    payload["payloadDigest"] = "sha256:" + hashlib.sha256(_canonical_json(payload)).hexdigest()
+    return payload
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run the proof-only USF authentication slice harness.")
     parser.add_argument("--claim-commit", default=None, help="Commit SHA the proof run claims; defaults to HEAD.")
     parser.add_argument("--write", action="store_true", help="Write evidence records under evidence/.")
+    parser.add_argument("--emit-anchor-payload", action="store_true",
+                        help="Print deterministic unsigned anchor payload JSON instead of the summary; writes nothing.")
     args = parser.parse_args()
 
     os.chdir(ROOT)
@@ -247,11 +281,16 @@ def main():
     instances = {name: load_json(path) for name, path in INSTANCE_PATHS.items()}
     checks = run_assertions(instances)
     proof, runtime_envelope, lineage_envelope = build_records(claim_commit, checks)
+    anchor_payload = build_anchor_payload(claim_commit, proof, runtime_envelope, lineage_envelope)
 
     if args.write:
         write_json(RUNTIME_ENVELOPE_PATH, runtime_envelope)
         write_json(LINEAGE_ENVELOPE_PATH, lineage_envelope)
         write_json(PROOF_PATH, proof)
+
+    if args.emit_anchor_payload:
+        print(json.dumps(anchor_payload, indent=2, sort_keys=True))
+        return
 
     print(json.dumps({
         "status": "pass",
@@ -263,6 +302,7 @@ def main():
         "productionLiveClaim": False,
         "checks": len(checks),
         "wroteEvidence": bool(args.write),
+        "anchorPayloadDigest": anchor_payload["payloadDigest"],
     }, indent=2))
 
 

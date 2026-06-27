@@ -31,6 +31,8 @@ The preferred model is a post-merge proof evidence anchor:
 
 The anchor may be a signed annotated Git tag, a dedicated signed evidence ref, or another deliberate post-merge attestation carrier. The carrier choice still needs explicit authority and infrastructure approval before USF-101 can be marked complete.
 
+`docs/architecture/proof-freshness-anchor-carrier-decision.md` records the current decision state: no carrier or signer/trust model is accepted yet. It recommends a signed annotated Git tag for later approval, but the recommendation is not proof authority and does not complete USF-101.
+
 ## Authority Rules
 
 - Runtime proof evidence remains above generated reports.
@@ -58,6 +60,8 @@ The proof harness may run without writing evidence and may emit execution signal
 
 Future proof publication support may emit a deterministic anchor payload for the target commit. Creating or signing the anchor is a publication step, not product implementation. It must not import React runtime code, create product runtime, or upgrade hermetic evidence to live-external-provider or production-live evidence.
 
+The current authentication proof harness can emit that deterministic unsigned payload for review and future signing. The unsigned payload is not proof authority; it becomes relevant only if a later accepted carrier/trust decision binds it to a signed post-merge anchor.
+
 ## No-Go Rules
 
 - No committed JSON evidence freshness self-claim that becomes stale after merge.
@@ -71,6 +75,6 @@ Future proof publication support may emit a deterministic anchor payload for the
 
 ## Current Classification
 
-USF-101 is materially advanced by this publication model and the PR freshness guard, but it is not complete. Completion still requires an approved anchor carrier, signer or attestation trust model, validator anchor verification, planted defects for those checks, and a successful fresh proof publication against the target commit.
+USF-101 is materially advanced by this publication model, the PR freshness guard, deterministic unsigned payload support, and payload invariant selftests, but it is not complete. Completion still requires an approved anchor carrier, signer or attestation trust model, validator carrier/signature verification, planted defects for those checks, and a successful fresh proof publication against the target commit.
 
 USF-39 remains Backlog.
