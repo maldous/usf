@@ -16,7 +16,19 @@ NO-GO for starting USF-39.
 
 USF-39 must remain Backlog because no separate human-filled implementation directive has authorized implementation extraction. USF-61 produced an implementation directive specification only. That specification defines what a later directive must include; it does not itself authorize implementation files, implementation directories, React runtime import, runtime package creation, or product execution.
 
-The repository is ready only for a human to decide whether to issue a filled implementation directive for the bounded authentication proof substrate. If that directive is issued later, USF-39 must still start under the directive's exact scope and validation gates, not under this revalidation document.
+The repository is ready only for a human to decide whether to issue a filled implementation directive. If that directive is issued later, USF-39 must still start under the directive's exact scope and validation gates, not under this revalidation document.
+
+## Fresh Revalidation (post-bootstrap toolchain movement)
+
+The original USF-75 result above predates the bootstrap/toolchain movement (governance commits through `03be7ea`: the TypeScript/Node runtime decision, ADR 0009 dev/test boundary, the machine-readable bootstrap-mapping corpus, and `tools/validate-bootstrap`). This section records a fresh rerun on current main; it does not start USF-39.
+
+- Commit revalidated: `03be7eaddd2e50f08ca5e833fdcadd659182bfe8`.
+- `validate-spec` all, imports, instances, evidence, real-instances, implementation, selftest, and pr diff mode: zero findings.
+- `validate-bootstrap all`: clean. Bootstrap marker readiness: `READY_FOR_V2_BOOTSTRAP`.
+- Current-commit immutable proof anchor present and independently verified: `proof-anchor-03be7ea` (tag on origin dereferences to HEAD; the CI attest, verify-attestation, and publish steps succeeded; one attestation exists for the canonical payload digest).
+- Scope: whole-platform (all slices), local dev/test bootstrap boundary per ADR 0009; staging, production, live-external-provider, and production-live proof explicitly deferred (USF-73 and USF-99 accepted deferrals).
+
+Fresh result: NO-GO for starting USF-39 still holds, but the blocker set is now reduced to two human gates only: a signed USF-100 directive and a separate USF-39 start action. All agent-resolvable readiness inputs (semantic corpus, source-use disposition framework, proof-anchor mechanism, validators, runtime/toolchain decision, dev/test boundary, accepted deferrals) are in place and validating clean. A new USF-75-equivalent revalidation must be rerun once USF-100 is signed and immediately before the separate USF-39 start action.
 
 ## Gate Inputs Reviewed
 

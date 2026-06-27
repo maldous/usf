@@ -207,15 +207,18 @@ USF-118 status: readiness inputs assembled; the directive itself remains a human
 
 ## 12. USF-119 — Final equivalence rollup and reduced blocker set
 
-What React L5 fully proved (lineage): contract/behaviour and local/sandbox substrate/resilience/foundation proofs across the platform. What USF has equivalently captured: the authentication/identity proof substrate as source-backed drafts + governance instances, with additional semantic-contract inventory across the full platform. What USF has equivalently proven fresh: the authentication proof freshness anchor for current main (`proof-anchor-fabe47b`) at hermetic-mock/hermetic/behaviour-proven. What is missing: per-domain source-backed facets, per-domain source-use matrices, per-slice proof commands, broader fresh proof, and final human directive acceptance. What is deferred/excluded: explicitly deprecated, not-applicable, or post-slice-gate capabilities.
+What React L5 fully proved (lineage): contract/behaviour and local/sandbox substrate/resilience/foundation proofs across the platform. What USF has equivalently captured: the full semantic-contract corpus (64 complete-facet drafts, 1 deprecated, 2 non-applicable) plus governance, command, environment, and machine-readable bootstrap-mapping instances. What USF has equivalently proven fresh: the authentication proof-substrate freshness anchor for current main at hermetic-mock/hermetic/behaviour-proven. What is deferred/excluded: staging, production, live-external-provider, deployment, and production-live proof (ADR 0009 dev/test boundary), plus deprecated/not-applicable capabilities.
 
-Smallest truthful remaining NO-GO set (root-first):
+Child-audit closure (USF-102 subtree): USF-103, USF-104, USF-105, USF-106, USF-113, and USF-118 are Done; the USF-107 through USF-112 and USF-114 through USF-116 audit classifications are complete in sections 3 through 9 of this document and are closed on that basis; USF-117 (machine-readable equivalence ledger) is materially advanced by the bootstrap-mapping corpus (`spec/registries/bootstrap-mapping-index.json`, `spec/schemas/bootstrap-mapping.schema.json`, and `tools/validate-bootstrap`) and is carried forward for full per-claim validator coverage.
 
-1. USF-100: a human-filled implementation directive. The draft exists and is whole-platform, but it is unsigned and cannot start USF-39.
-2. USF-97: broad semantic/source-use closure beyond the current authentication source-use matrix. This is repository-workable but remains large, and every slice still needs an explicit topology/source-use/proof gate before files are created.
-3. USF-98/USF-117: machine-readable equivalence ledger, aggregate posture gates, stale-readiness detection, and planted-defect coverage. This is repository-workable follow-up.
-4. USF-73/USF-99: stronger multi-environment and broad runtime proof remain unproven and must not be inferred from the hermetic authentication anchor.
-5. USF-75: final pre-extraction revalidation must be rerun after any USF-100 acceptance and before a separate USF-39 start action.
+Decisions now recorded (removing prior blockers): the V2 runtime target is TypeScript/Node, and the local dev/test boundary, provider targets, tenant-isolation/RLS/break-glass controls, and proof deferrals are recorded in `docs/architecture/bootstrap-readiness-governance.md` and ADR 0009 and enforced by `tools/validate-bootstrap` (clean). Bootstrap marker readiness is `READY_FOR_V2_BOOTSTRAP`.
+
+Smallest truthful remaining set to a local dev/test bootstrap implementation start (root-first), both human:
+
+1. USF-100: the whole-platform implementation directive draft exists and is validator-clean, but it is UNSIGNED and cannot start USF-39.
+2. USF-39 start: a separate explicit human start action, after a USF-75 revalidation.
+
+Owned and deferred (not blocking the bootstrap start): USF-97 per-domain source-use disposition matrices (USF-74 manifest import is needed only if source-derived adaptation is chosen for a slice; a semantic-first, new-with-rationale generation needs none); USF-98 and USF-117 deeper validator coverage (full equivalence ledger, aggregate posture gates); USF-73 and USF-99 staging/production/live/runtime proof (accepted deferral under ADR 0009).
 
 USF-39 remains Backlog and is not started.
 
@@ -229,4 +232,4 @@ This document is reviewable planning evidence only. It authorises no implementat
 
 ## 15. Current readiness verdict
 
-Complete one-pass implementation readiness remains NO-GO. The blocker set is materially smaller and more explicit: USF-101 and USF-113 are Done, while USF-100 remains unsigned, USF-97/USF-98/USF-117 remain repository-workable, and USF-73/USF-99 remain bounded by proof breadth and future runtime substrates. React L5 knowledge is harvested as acceleration input. USF-39 remains Backlog.
+Bootstrap marker readiness is `READY_FOR_V2_BOOTSTRAP` (`validate-bootstrap` clean; the current main commit carries its matching immutable proof anchor). Complete one-pass implementation readiness remains NO-GO only on the two human gates: a signed USF-100 directive and a separate USF-39 start action (after a USF-75 revalidation). The V2 runtime decision (TypeScript/Node) and the local dev/test boundary are recorded and validator-enforced; USF-101 and USF-113 are Done; USF-103 through USF-106 and USF-118 are Done and the USF-107 through USF-116 audit classifications are closed; USF-117, USF-98, and USF-97 are carried forward as owned non-blocking work; USF-73 and USF-99 are accepted deferrals. React L5 knowledge is harvested as acceleration input. USF-39 remains Backlog.
