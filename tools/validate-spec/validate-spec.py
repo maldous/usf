@@ -279,6 +279,7 @@ RULES = {
     "USF-ANCHOR-005":   ("blocking", "Proof freshness anchor live-provider claim exceeds provider/level evidence"),
     "USF-ANCHOR-006":   ("blocking", "Proof freshness anchor production-live claim exceeds environment evidence"),
     "USF-ANCHOR-007":   ("blocking", "Generated report accepted as proof freshness anchor payload"),
+    "USF-ANCHOR-008":   ("blocking", "Proof freshness anchor signer is not in the approved trust root"),
 }
 
 
@@ -1150,12 +1151,31 @@ def _anchor_payload_digest(data):
     return "sha256:" + hashlib.sha256(encoded).hexdigest()
 
 
-def validate_anchor_payload_data(F, data_by_name, current_commit=None):
+PROOF_ANCHOR_TRUST_ROOT = f"{CORPUS}/proof-anchor-trust-root.json"
+
+
+def _proof_anchor_trusted_signers():
+    """Approved proof-anchor signer fingerprints (ADR 0006). Fail-closed: a missing or
+    malformed trust root, or an empty list, means no signer is trusted yet, so any anchor
+    that claims a signer is rejected (USF-ANCHOR-008) until a maintainer fingerprint is
+    registered. Full tag-signature verification (git verify-tag) is a CI/pr-mode step
+    layered on top once a real signed tag and a registered signer exist."""
+    data = load_json(PROOF_ANCHOR_TRUST_ROOT, Findings())
+    if isinstance(data, dict) and isinstance(data.get("trustedSigners"), list):
+        return {s for s in data["trustedSigners"] if isinstance(s, str) and s}
+    return set()
+
+
+def validate_anchor_payload_data(F, data_by_name, current_commit=None, trusted_signers=None):
     """Validate unsigned deterministic payloads for future proof freshness anchors.
 
-    This intentionally does not accept a carrier or signer as trusted. Carrier and
-    signer trust remain blocked until a later authority decision defines them.
+    Carrier and signer trust are decided by ADR 0006 (signed annotated Git tag verified
+    against an approved trust root). This checks the trust-root membership of a claimed
+    signer fingerprint; it does not by itself run the tag-signature verification, which is
+    a CI/pr-mode step that requires a real signed tag and a registered signer.
     """
+    if trusted_signers is None:
+        trusted_signers = _proof_anchor_trusted_signers()
     for name, data in data_by_name.items():
         if not isinstance(data, dict):
             F.add("USF-ANCHOR-001", name, "anchor payload must be a JSON object")
@@ -1208,6 +1228,13 @@ def validate_anchor_payload_data(F, data_by_name, current_commit=None):
 
         if data.get("productionLiveClaim") is True and data.get("environment") != "production-live":
             F.add("USF-ANCHOR-006", name, f"environment={data.get('environment')}")
+
+        signer = data.get("signerFingerprint")
+        if signer is not None:
+            if not isinstance(signer, str) or not signer:
+                F.add("USF-ANCHOR-001", name, "signerFingerprint must be a non-empty string when present")
+            elif signer not in trusted_signers:
+                F.add("USF-ANCHOR-008", name, f"signer is not in the approved proof-anchor trust root: {signer}")
 
 
 def _evidence_kind_for_path(path):

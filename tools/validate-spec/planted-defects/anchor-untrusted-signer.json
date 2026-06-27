@@ -1,0 +1,34 @@
+{
+  "target": "anchor-payloads",
+  "expectedRule": "USF-ANCHOR-008",
+  "currentCommit": "head-commit",
+  "records": {
+    "anchor.untrusted-signer": {
+      "payloadKind": "proof-freshness-anchor-payload",
+      "payloadVersion": "draft-anchor-payload-1",
+      "targetCommit": "head-commit",
+      "proofId": "usf.proof-evidence.authentication-slice-proof",
+      "providerMode": "hermetic-mock",
+      "environment": "hermetic",
+      "proofLevelClaimed": "behaviour-proven",
+      "proofLevelObserved": "behaviour-proven",
+      "liveExternalProviderClaim": false,
+      "productionLiveClaim": false,
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      },
+      "emittedEvidence": [
+        "evidence/evidence-envelope/authentication-slice-proof.json#/sourceRefs/0"
+      ],
+      "collectedEvidence": [
+        "evidence.runtime-proof.authentication-slice-proof"
+      ],
+      "sourceRefs": [
+        "tools/prove-authentication-slice.py"
+      ],
+      "signerFingerprint": "UNTRUSTED-TEST-FINGERPRINT-0000",
+      "payloadDigest": "sha256:f94e1f10667e2e76ce4f6df131931de01ce44cfd547d9d0d943861a8981dbd08"
+    }
+  }
+}
