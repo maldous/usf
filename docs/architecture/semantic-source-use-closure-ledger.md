@@ -6,7 +6,7 @@
 | **Status** | Draft / readiness gap ledger |
 | **Authority level** | Reviewable planning artefact; subordinate to the Charter, Authority Model, accepted ADRs, validators, runtime proof evidence, semantic instances, and source import manifests |
 | **Issue scope** | USF-97; USF-100; USF-39 readiness |
-| **Base inputs** | `spec/instances/`, `spec/registries/source-import-manifest.json`, `spec/registries/authentication-slice-source-import-manifest.json`, `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/regeneration-sufficiency-semantic-graph-closure.md` |
+| **Base inputs** | `spec/instances/`, `spec/registries/source-import-manifest.json`, `spec/registries/authentication-slice-source-import-manifest.json`, `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/regeneration-sufficiency-semantic-graph-closure.md`, `docs/architecture/react-l5-equivalence-audit.md` |
 
 This ledger records the current closure state for semantic and source-use breadth beyond the authentication-centered slice. It creates no implementation code, implementation directory, proof evidence, generated report, source import, schema activation, or implementation directive. It does not start USF-39.
 
@@ -84,6 +84,6 @@ This ledger is reviewable planning evidence only. The accompanying validator rul
 
 Complete one-pass implementation readiness remains NO-GO.
 
-USF-97 is materially advanced by making every capability-matrix semantic-contract target validator-readable as either source-backed draft, deferred gap, or non-applicable exclusion. It is not complete. The next repository-workable step is to replace deferred gap facets with source-backed domain semantics and source-use matrices, or preserve explicit exclusions where authority says the capability is out of scope.
+USF-97 is materially advanced by making every capability-matrix semantic-contract target validator-readable as either source-backed draft, deferred gap, or non-applicable exclusion. The React L5 / USF V2 equivalence audit (`docs/architecture/react-l5-equivalence-audit.md`) further advances USF-97 by classifying all 75 historical capabilities against the controlled equivalence and gap vocabularies and reducing the remaining work to an enumerated, ranked authoring backlog. It is not complete. The next repository-workable step is to replace deferred gap facets with source-backed domain semantics and per-domain source-use matrices, or preserve explicit exclusions where authority says the capability is out of scope.
 
 USF-39 remains Backlog.
