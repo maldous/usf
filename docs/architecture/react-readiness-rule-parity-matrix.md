@@ -18,7 +18,7 @@ The historical React readiness rule set observed for this matrix is R1 through R
 React readiness rules are rank-6 historical evidence and validator inspiration. USF parity means one of:
 
 - **covered**: a USF validator, semantic artefact, proof/evidence record, or gate document already addresses the rule intent for the current repository scope;
-- **partial**: USF covers the first authentication slice or a governance subset, but broader platform/runtime coverage remains intentionally deferred;
+- **partial**: USF covers the authentication proof-substrate slice or a governance subset, but broader platform/runtime coverage remains intentionally deferred;
 - **deferred**: the rule depends on implementation/runtime artefacts, production/live posture, broad semantic expansion, or generated report families that do not yet exist in USF;
 - **not applicable**: the historical rule is specific to the React cutover structure and is superseded by USF governance.
 

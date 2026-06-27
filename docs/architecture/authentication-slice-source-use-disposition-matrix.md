@@ -10,7 +10,7 @@
 | **Row count** | 159 source rows |
 | **Historical evidence basis** | `../react` historical source evidence only |
 
-This document defines source-use permission for the first authentication implementation slice. It does not create implementation files, implementation directories, schemas, evidence, proof output, generated reports, or runtime code.
+This document defines source-use permission for the authentication proof-substrate slice. It does not create implementation files, implementation directories, schemas, evidence, proof output, generated reports, or runtime code.
 
 ## Governance Rules
 

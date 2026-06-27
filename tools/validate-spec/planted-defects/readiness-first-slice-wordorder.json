@@ -1,0 +1,8 @@
+{
+  "target": "readiness-docs",
+  "expectedRule": "USF-READINESS-001",
+  "records": {
+    "docs/architecture/final-v2-readiness-reconciliation.md": "commit reviewed `fabe47b8fc70d34b34d1fc05c39da998c74a6748`. USF-39 remains Backlog. USF-100 is an unsigned whole-platform draft directive. NO-GO. proof-anchor-fabe47b. USF-73 USF-75 USF-97 USF-98 USF-99 USF-101 USF-113 USF-117 USF-118 USF-119.",
+    "docs/architecture/example-plan.md": "This plan targets the first authentication slice only."
+  }
+}

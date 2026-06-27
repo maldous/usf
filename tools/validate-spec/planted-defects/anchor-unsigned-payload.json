@@ -1,9 +1,9 @@
 {
   "target": "anchor-payloads",
-  "expectedClean": true,
+  "expectedRule": "USF-ANCHOR-008",
   "currentCommit": "head-commit",
   "records": {
-    "anchor.valid-form": {
+    "anchor.unsigned": {
       "payloadKind": "proof-freshness-anchor-payload",
       "payloadVersion": "draft-anchor-payload-1",
       "targetCommit": "head-commit",
@@ -27,8 +27,7 @@
       "sourceRefs": [
         "tools/prove-authentication-slice.py"
       ],
-      "signerFingerprint": "ci-github-actions:maldous/usf:proof-anchor",
-      "payloadDigest": "sha256:92a3fe394f2105f4074f6be48cdceadf5466efe7bd19fba498f5b9cbe8821331"
+      "payloadDigest": "sha256:848251d882bdcfd65b57d6e245f32617789bf6181ed0ae8a8c97db949822fb4b"
     }
   }
 }

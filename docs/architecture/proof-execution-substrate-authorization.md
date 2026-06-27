@@ -77,7 +77,7 @@ A later proof-substrate directive beyond USF-77 Option A may authorize additiona
 - the validation commands to run before merge;
 - the stop conditions for missing evidence, stale evidence, provider/environment overclaim, generated-report authority, source-path mirroring, and un-dispositioned runtime import.
 
-For the first authentication slice, USF-77 Option A authorizes the hermetic internal proof floor from `docs/architecture/production-proof-posture-matrix.md`: `providerMode` `hermetic-mock`, `environment` `hermetic`, and `proofLevelObserved` `behaviour-proven`, with current commit freshness.
+For the authentication proof-substrate slice, USF-77 Option A authorizes the hermetic internal proof floor from `docs/architecture/production-proof-posture-matrix.md`: `providerMode` `hermetic-mock`, `environment` `hermetic`, and `proofLevelObserved` `behaviour-proven`, with current commit freshness.
 
 Local composed, external sandbox, production-shaped, live external provider, and production-live proof remain not authorized by this document. They require their own explicit substrate, credentials or topology where applicable, and fresh evidence. Hermetic, local, or sandbox proof must not be upgraded into live-external-provider or production-live readiness.
 

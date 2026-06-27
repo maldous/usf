@@ -29,6 +29,20 @@ The workflow, its `AUTHORIZED_TOOLING` entry, and the naming standard §6.E.1 au
 4. Attest the payload with the CI identity (`actions/attest-build-provenance`), then verify provenance: `gh attestation verify anchor-payload.json --repo "$GITHUB_REPOSITORY"`. Publish the anchor as an annotated tag on the merge commit. The tag object is not a standalone GPG-signed tag; the cryptographic trust is the verified GitHub artifact attestation for the payload.
 5. Record the published tag and attestation as the freshness anchor for that commit. Do not commit a non-stale evidence JSON file (the PR-freshness gate, USF-PR-FRESHNESS, blocks that on purpose).
 
+## Verifying the current HEAD carries a published, attested anchor
+
+The repository asserts that the live default-branch HEAD always carries a fresh, verified proof-anchor. That assertion is only honest if it is independently checkable. Use this procedure to confirm it for the current HEAD, and treat any failed step as "current HEAD is not anchored yet" (fail closed).
+
+Short-SHA convention: the tag name is `proof-anchor-$(git rev-parse --short HEAD)`. `git rev-parse --short` returns the repository's abbreviated SHA (commonly 7 hex characters, and longer only if needed for uniqueness). Always derive the lookup token with the same command; do not hand-truncate to 6 characters, or the tag will appear missing when it is present.
+
+1. Derive the expected tag for the exact HEAD: `SHORT=$(git rev-parse --short HEAD); echo "proof-anchor-$SHORT"`.
+2. Confirm the tag exists on origin and dereferences to HEAD: `git ls-remote --tags origin "refs/tags/proof-anchor-$SHORT"` (the `^{}` peeled line must equal `git rev-parse HEAD`).
+3. Confirm the publication run for this HEAD succeeded, including its attest and verify steps: find the `proof-anchor.yml` run whose `headSha` equals HEAD and confirm the `Attest the anchor payload`, `Verify the attestation`, and `Publish the anchor` steps each report success.
+4. Confirm a CI attestation exists for the exact payload artifact: re-emit the deterministic payload (`python3 tools/prove-authentication-slice.py --emit-anchor-payload --signer ci-github-actions:maldous/usf:proof-anchor > anchor-payload.json`), take its `sha256sum`, and query `gh api repos/$GITHUB_REPOSITORY/attestations/sha256:<digest>` — at least one attestation with a verification certificate must be returned.
+5. Confirm the published payload validates against HEAD: `python3 tools/validate-spec/validate-spec.py anchor --anchor-file anchor-payload.json --head "$(git rev-parse HEAD)" --json` must report zero findings, which includes the unsigned-anchor fail-closed check (USF-ANCHOR-008 now requires a trusted `signerFingerprint` on every anchor).
+
+If any step fails, the current HEAD has no verified freshness anchor: republish via the workflow (a no-op empty commit or re-run on the default branch) or amend any readiness prose that assumes HEAD is anchored, rather than treating HEAD as fresh.
+
 ## What this closes and does not close
 
 - Closes the publication mechanism for a fresh, CI-attested, hermetically-proven anchor on the merge commit, which is the missing step for USF-59 (authentication-slice current-commit proof).

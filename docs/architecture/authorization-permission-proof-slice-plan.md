@@ -52,7 +52,7 @@ These files are lineage and behavioural evidence only. They MUST NOT be executed
 
 ## Behaviour Slice
 
-The first authorization proof slice must define and later prove:
+The authorization proof slice must define and later prove:
 
 - static permission allow: actor has the required permission and the guarded action is allowed;
 - static permission deny: actor lacks the required permission and the guarded action is denied;
