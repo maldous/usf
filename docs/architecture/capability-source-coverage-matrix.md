@@ -44,7 +44,7 @@ This document creates no implementation files, imports no runtime code, executes
 | Historical capability domain `support-admin` | 2 |
 | Source import manifest rows | 1673 |
 | First-slice source rows selected here | 159 |
-| Current authored semantic instances | 24 |
+| Current authored semantic instances | 87 |
 
 Manifest row distribution:
 
@@ -85,7 +85,7 @@ Current semantic corpus inventory:
 
 | Instance category | Files |
 |---|---:|
-| `ai-governance` | 1 |
+| `ai-governance` | 2 |
 | `audit-event` | 1 |
 | `command` | 6 |
 | `configuration` | 1 |
@@ -95,10 +95,10 @@ Current semantic corpus inventory:
 | `interface-contract` | 1 |
 | `observability-signal` | 1 |
 | `provider-mode` | 1 |
-| `semantic-contract` | 5 |
+| `semantic-contract` | 67 |
 | `ui-semantic-model` | 1 |
 | `workflow` | 2 |
-| **Total** | **24** |
+| **Total** | **87** |
 
 ## First Implementation Slice Boundary
 
@@ -217,7 +217,7 @@ The earlier first-slice semantic gap facets `stateModel`, `validation`, and `err
 | Gap | Classification | Rationale | Downstream issue |
 |---|---|---|---|
 | First-slice authentication state model, validation, and error model are semantically normalised but not fresh-proof ready. | readiness-blocking | Current `semantic-contract.authentication-platform` marks these facets complete, but committed proof evidence is stale for current readiness and stronger provider/environment postures remain unproven. | USF-101, USF-59, USF-73, USF-98 |
-| Most historical capability contracts are not represented as authored USF semantic-contract instances. | blocking for broad generation; deferred for first slice | The repository currently has five semantic-contract instances and 24 total semantic corpus instances. Most of the 75 historical capability records remain unauthored or unclassified as USF semantic contracts. | USF-97 |
+| Most historical capability contracts are represented only as deferred/gap semantic-contract instances. | blocking for broad generation; deferred for first slice | The repository currently has 67 semantic-contract instances and 87 total semantic corpus instances. The 67 semantic-contract targets named by this matrix are represented, but most non-authentication targets intentionally remain deferred gap contracts rather than source-backed complete facets. | USF-97 |
 | Baseline manifest `targetUsfConcept` values are broad concepts such as Source Reference, Proof, Package / Module, and Configuration. | blocking for extraction targeting | Implementation extraction needs concrete semantic targets and per-slice row membership. | USF-74 and USF-64 |
 | Source-use policy exists for the authentication slice but not for full platform closure. | blocking for broad implementation | `docs/architecture/authentication-slice-source-use-disposition-matrix.md` records 159 authentication slice rows with zero direct runtime-copy permission. Equivalent source-use ledgers do not yet exist for the remaining implementation-relevant domains. | USF-97 |
 | Fresh commit-pinned proof for the future extracted slice does not yet exist. | blocking for readiness claims | Historical proof is lineage; generated reports and stale evidence cannot prove current readiness. | USF-59 / USF-73 |

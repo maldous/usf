@@ -1,0 +1,67 @@
+{
+  "id": "semantic-contract.mock-providers-dev-test",
+  "title": "Mock Providers Dev Test Semantic Contract",
+  "description": "Explicit non-applicable semantic contract placeholder for coverage matrix row(s) 51: Mock providers (dev/test). The historical capability is not an implementation extraction target under current USF authority.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "deferred",
+  "ontologyConcepts": [
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "lifecycle-states",
+    "capability-domains"
+  ],
+  "aiGuidance": "Do not implement or generate this target from historical source. It is recorded to preserve no-loss lineage and to make the exclusion validator-readable; a later accepted semantic decision is required to change applicability.",
+  "capability": "mock-providers-dev-test",
+  "capabilityDomain": "developer-platform",
+  "facets": {
+    "lifecycle": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "stateModel": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "permissions": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "contracts": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "validation": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "errorModel": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "auditModel": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "readinessModel": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "proof": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    },
+    "uiSemanticDefinition": {
+      "status": "not-applicable",
+      "description": "Not applicable under current USF authority; kept only as explicit exclusion lineage."
+    }
+  },
+  "sourceRefs": [
+    "docs/architecture/capability-source-coverage-matrix.md"
+  ]
+}

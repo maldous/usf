@@ -1,0 +1,8 @@
+{
+  "target": "semantic-coverage-matrix",
+  "expectedRule": "USF-SEMANTIC-002",
+  "matrixText": "## Capability Matrix\n\n| # | Domain | Capability | Slice | Semantic target | Required follow-up | Source/evidence summary |\n|---:|---|---|---|---|---|---|\n| 1 | `foundation` | Missing semantic target | deferred | `semantic-contract.missing-semantic-target` | Author before implementation use. | status=delivered-and-proven; proof=fixture |\n\n## Gap Classification\n",
+  "semanticContractIds": [
+    "semantic-contract.existing-semantic-target"
+  ]
+}

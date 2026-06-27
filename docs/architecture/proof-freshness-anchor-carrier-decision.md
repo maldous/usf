@@ -49,6 +49,66 @@ The accepted decision must specify:
 - post-merge publication procedure;
 - corrective process for an incorrect published anchor.
 
+## Approval-Ready Decision Text
+
+A future human authority may approve the recommended carrier by accepting decision text equivalent to:
+
+```text
+USF accepts signed annotated Git tags as the proof freshness anchor carrier for USF-101.
+
+The accepted tag naming convention is proof-freshness/<target-commit>/<proof-id-slug>.
+The accepted signer or trust root is [exact human, bot, key, certificate, or attestation identity].
+Signature verification is mandatory in [local validation, CI, or both].
+The canonical payload shape is the proof-freshness-anchor-payload shape validated by USF-ANCHOR-001 through USF-ANCHOR-007, plus any later accepted carrier/signature fields.
+The canonical digest algorithm is SHA-256 over the canonical JSON payload without the payloadDigest field.
+
+The anchor must bind target commit, proof id, provider mode, environment, proof level claimed, proof level observed, freshness status, evidence references, and payload digest.
+
+Missing, unsigned, untrusted, wrong-target, digest-mismatched, stale, generated-report-only, CI-only, or local-stdout-only anchors fail closed.
+
+This decision does not start USF-39, does not authorize implementation/runtime code, does not upgrade hermetic proof to live-external-provider, and does not upgrade production-shaped evidence to production-live.
+```
+
+The bracketed signer/trust and enforcement-surface values are intentionally unfilled. They require human or infrastructure authority and must not be inferred by an AI agent.
+
+## Validator-Readable Proposed Policy
+
+Until the approval text above is accepted, validator behaviour must remain fail-closed:
+
+- committed proof evidence with `freshness.stale` set to false is rejected unless its commit is the checked commit and an accepted post-merge anchor model exists;
+- changed PR evidence or generated-report JSON cannot claim non-stale freshness;
+- unsigned anchor payloads are checked only for deterministic shape, digest, target, provider, environment, proof-level, and overclaim invariants;
+- unsigned payloads do not satisfy proof freshness authority;
+- generated reports are rejected as anchor payloads;
+- live-external-provider and production-live claims fail closed unless the provider mode, environment, and proof level support them.
+
+After approval, validator behaviour must add carrier checks:
+
+- verify the signed annotated tag target equals the claimed target commit;
+- verify the tag name follows the accepted convention;
+- verify the signer or attestation identity is trusted by the accepted trust model;
+- verify the signed payload digest matches the canonical payload;
+- verify the payload proof id resolves to committed proof evidence;
+- verify payload provider mode, environment, proof level, freshness, emitted evidence, collected evidence, and source references match committed proof and evidence records;
+- reject missing, unsigned, untrusted, wrong-target, stale, digest-mismatched, generated-report-only, and CI-only anchors with stable rule IDs and planted defects.
+
+## Post-Approval Operating Procedure
+
+After the carrier and trust decision is accepted, the safe publication procedure is:
+
+1. Merge the readiness or implementation-governance commit whose proof freshness is being claimed.
+2. Check out the exact merged target commit.
+3. Run the authorised proof command for the claimed slice without creating product runtime or importing historical runtime code.
+4. Emit the deterministic proof freshness anchor payload for that exact target commit.
+5. Verify the payload locally with the validator's payload-invariant mode.
+6. Create the signed annotated proof freshness tag or accepted carrier against the exact target commit.
+7. Verify the carrier signature and signer/trust root according to the accepted decision.
+8. Run the validator modes required by the accepted decision, including evidence, real-instances, implementation, selftest, and any anchor verification mode.
+9. Publish the carrier only if validation passes.
+10. Record the publication result without treating a generated report, CI status, or local stdout as proof authority.
+
+An incorrect published anchor must be corrected by an explicit corrective record or superseding anchor under the accepted corrective process. A tag or anchor must not be silently moved to hide an incorrect claim.
+
 ## Current Repository-Checkable Progress
 
 The proof-only authentication harness can emit a deterministic unsigned anchor payload with:
