@@ -1,0 +1,70 @@
+{
+  "id": "0005-react-hexagonal-architecture-carry-forward",
+  "kind": "adr",
+  "title": "React Hexagonal Architecture Carry Forward",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-27",
+  "context": "The React L5 equivalence audit inventoried strong evidence that the historical repository was materially hexagonal: explicit ports and adapters directories, usecases depending on ports rather than adapters, dependency-direction enforcement in the dependency-cruiser and lint configuration, public-export-only imports, and a contracts, domain, adapter, and runtime package split. This historical evidence is rank-6 lineage, not future live authority. The decision is made under the readiness-acceleration directive recorded in Linear USF-113 with the human decision delegated to the agent. The target runtime is TypeScript and Node, matching React lineage.",
+  "decision": "USF treats hexagonal architecture as a binding implementation constraint. The future extracted implementation must separate a framework-agnostic domain core from inbound and outbound ports, implement every external dependency as an adapter behind a port, keep the dependency direction acyclic with domain depending on ports and never on adapters, isolate frameworks at the edges, keep the UI layer dependent only on contract artefacts, and expose modules through public exports only. This ADR defines requirements only and creates no implementation code, directory, or schema activation.",
+  "consequences": [
+    "USF-113 has a recorded binding architecture decision.",
+    "Future port and adapter semantic authoring under USF-97 and boundary enforcement under USF-98 have an accepted constraint to satisfy.",
+    "The implementation directive under USF-100 must cite this ADR, and extraction under USF-39 must conform to it."
+  ],
+  "invariants": [
+    "The domain core must remain framework-agnostic.",
+    "The dependency direction must remain acyclic: domain depends on ports, adapters implement ports, and domain must not import adapters.",
+    "Every external dependency must be reached through a port and an adapter, never directly from the domain.",
+    "The UI layer must depend only on contract artefacts, never on domain or adapter code."
+  ],
+  "permittedChanges": [
+    "Author concrete port and adapter semantic instances under USF-97.",
+    "Add validator or directive checks that enforce ports, adapters, and dependency direction under USF-98 and USF-100.",
+    "Choose specific adapter implementations per provider mode, provided the port contract is preserved."
+  ],
+  "forbiddenDrift": [
+    "Do not introduce a domain dependency on an adapter or a framework.",
+    "Do not let the UI layer import domain or adapter code.",
+    "Do not infer architecture from generated implementation instead of this decision and the semantic contracts.",
+    "Do not create implementation directories on the basis of this ADR alone; extraction requires a separate implementation directive and a final GO."
+  ],
+  "aiAlignmentRules": [
+    "Agents must read this ADR before authoring any port, adapter, or implementation-topology artefact.",
+    "Agents must not weaken the dependency-direction or framework-isolation invariants to make a change pass.",
+    "Agents must stop and propose a superseding ADR rather than silently introducing a domain-to-adapter or UI-to-domain dependency."
+  ],
+  "semanticRefs": [
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/charter.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/target-implementation-topology-plan.md"
+  ],
+  "sourceRefs": [
+    "../react/.dependency-cruiser.cjs",
+    "../react/docs/v2-foundation/v2-directory-contracts.json"
+  ],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "Hexagonal structure is the property that made the historical repository testable in isolation, swappable across provider modes, and proof-honest. Reproducing the foundation from React input while preserving proof honesty and the hermetic-first ceiling requires the same boundaries. Leaving architecture implicit and inferring it later from generated code would violate the semantic-first principle and risk drift, so it is rejected.",
+  "description": "Records the decision that USF carries the React hexagonal ports-and-adapters architecture forward as an explicit binding constraint and names the boundaries and dependency-direction rules a future implementation must satisfy.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Port",
+    "Adapter",
+    "Application"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "ai-governance-kinds"
+  ],
+  "aiGuidance": "Use this ADR when authoring ports, adapters, dependency-direction rules, or the implementation topology, or when reviewing whether a change preserves the hexagonal boundaries."
+}

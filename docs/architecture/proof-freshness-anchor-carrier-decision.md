@@ -3,11 +3,13 @@
 | | |
 |---|---|
 | **Document type** | Architecture / authority decision requirement |
-| **Status** | Draft / human decision required |
+| **Status** | Amended — carrier accepted by ADR 0006 (signed annotated Git tag); signer-key registration, validator signature verification, and a fresh signed publication remain |
 | **Authority level** | Reviewable decision proposal; not an accepted ADR and not proof authority |
 | **Issue scope** | USF-101; USF-98; USF-59; USF-73; USF-99; USF-100; USF-39 readiness |
 
-This document records the missing authority decision for the proof freshness anchor carrier and trust model. It creates no implementation code, product runtime, source import, proof evidence, generated report, schema activation, accepted ADR, signed anchor, tag, or implementation directive. It does not start USF-39.
+This document records the proof freshness anchor carrier and trust model. It creates no implementation code, product runtime, source import, proof evidence, generated report, schema activation, signed anchor, tag, or implementation directive. It does not start USF-39.
+
+> **Amendment (2026-06-27).** The carrier this document recommends is now accepted by `docs/adr/0006-proof-freshness-anchor-carrier.md`: a signed annotated Git tag verified against an approved trust root. This document remains the analysis; the ADR is the decision. Still outstanding for USF-101: validator tag-signature and trust-root verification (with planted defects), registration of a maintainer signer fingerprint, and a successful fresh signed publication.
 
 ## Current Decision State
 
