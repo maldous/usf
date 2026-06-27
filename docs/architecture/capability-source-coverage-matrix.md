@@ -44,7 +44,7 @@ This document creates no implementation files, imports no runtime code, executes
 | Historical capability domain `support-admin` | 2 |
 | Source import manifest rows | 1673 |
 | First-slice source rows selected here | 159 |
-| Current authored semantic instances | 14 |
+| Current authored semantic instances | 24 |
 
 Manifest row distribution:
 
@@ -114,7 +114,7 @@ Existing committed semantic targets for the current authentication-centered slic
 - `command.validate-spec-real-instances`
 - `command.validate-spec-selftest`
 - `configuration.provider-mode-selector`
-- `data-migration.identity-schema`
+- `data.identity-schema`
 - `environment.hermetic`
 - `environment.production-shaped`
 - `event.authentication-login-audit`

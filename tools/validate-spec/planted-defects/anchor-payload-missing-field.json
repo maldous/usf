@@ -1,0 +1,9 @@
+{
+  "target": "anchor-payloads",
+  "expectedRule": "USF-ANCHOR-001",
+  "records": {
+    "anchor.missing-field": {
+      "payloadKind": "proof-freshness-anchor-payload"
+    }
+  }
+}
