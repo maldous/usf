@@ -1,0 +1,15 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-PR-FRESHNESS",
+  "nameStatusLines": [
+    "M\tevidence/proof-evidence/authentication-slice-proof.json"
+  ],
+  "records": {
+    "evidence/proof-evidence/authentication-slice-proof.json": {
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      }
+    }
+  }
+}

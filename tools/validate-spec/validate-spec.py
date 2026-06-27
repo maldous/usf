@@ -75,7 +75,7 @@ ENVELOPE = ["id", "title", "description", "authorityLevel", "lifecycleState",
             "ontologyConcepts", "taxonomyRefs", "vocabularyRefs", "aiGuidance"]
 SCHEMA_TOP_KEYS = ["$schema", "$id", "title", "description", "type", "required", "properties"]
 CATALOGUE_SCHEMAS = {"schema-registry", "taxonomy", "vocabulary"}
-DIRTY_PATHS = ["spec", "tools", "docs", ".github"]
+DIRTY_PATHS = ["spec", "tools", "docs", "evidence", ".github"]
 REQUIRED_FIELD_GUARDS = {
     "command": ["inputs", "outputs", "environmentScope", "sideEffects"],
     "observability-signal": ["purpose"],
@@ -265,6 +265,7 @@ RULES = {
     "USF-PR-DELETE":    ("blocking", "PR deletes a schema file still referenced by the registry"),
     "USF-PR-TOOL":      ("blocking", "PR adds unauthorised tool/CI (not in AUTHORIZED_TOOLING)"),
     "USF-PR-DISPOSITION": ("blocking", "PR adds implementation file without source disposition coverage"),
+    "USF-PR-FRESHNESS": ("blocking", "PR changes evidence/report JSON with non-stale freshness before post-merge publication"),
 }
 
 
@@ -1567,7 +1568,12 @@ def check_selftest(ctx, F):
             if not isinstance(lines, list):
                 F.add("USF-SELFTEST-001", df, "pr-paths planted-defect needs nameStatusLines")
                 continue
-            validate_pr_paths(f2, lines, source_paths=set(patch.get("sourcePaths", [])))
+            validate_pr_paths(
+                f2,
+                lines,
+                source_paths=set(patch.get("sourcePaths", [])),
+                changed_records=patch.get("records", {}),
+            )
         else:
             run_all_checks(sandbox, f2)
         if patch["expectedRule"] not in f2.rule_ids():
@@ -1755,8 +1761,40 @@ def check_implementation(ctx, F):
     return "ran"
 
 
-def validate_pr_paths(F, name_status_lines, source_paths=None):
+def _is_pr_freshness_governed_record(path, data):
+    if path.startswith("evidence/"):
+        return True
+    return isinstance(data, dict) and data.get("authorityLevel") == "generated-report"
+
+
+def validate_pr_freshness(F, changed_paths, changed_records=None):
+    changed_records = changed_records or {}
+    for path in changed_paths:
+        if not path.endswith(".json"):
+            continue
+        if path in changed_records:
+            data = changed_records[path]
+        elif os.path.exists(path):
+            data = load_json(path, F)
+        else:
+            continue
+        if not isinstance(data, dict):
+            continue
+        if not _is_pr_freshness_governed_record(path, data):
+            continue
+        freshness = data.get("freshness")
+        if isinstance(freshness, dict) and freshness.get("stale") is False:
+            F.add(
+                "USF-PR-FRESHNESS",
+                path,
+                "changed evidence/report JSON cannot claim non-stale freshness in a PR; "
+                "publish current proof through an accepted post-merge evidence anchor",
+            )
+
+
+def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=None):
     changed_paths = []
+    changed_existing_paths = []
     added_paths = []
     for line in name_status_lines:
         parts = line.split("\t")
@@ -1765,8 +1803,11 @@ def validate_pr_paths(F, name_status_lines, source_paths=None):
         status, path = parts[0], parts[-1]
         path = _normalise_path(path)
         changed_paths.append(path)
+        if not status.startswith("D"):
+            changed_existing_paths.append(path)
         if status.startswith("A"):
             added_paths.append(path)
+    validate_pr_freshness(F, changed_existing_paths, changed_records=changed_records)
     directive_referenced = _implementation_directive_referenced(changed_paths)
     for path in added_paths:
         if (_is_implementation_path(path) or re.search(r"\.(ts|tsx|jsx)$", path)) and not directive_referenced:

@@ -6,7 +6,8 @@
 | **Status** | Draft / NO-GO register |
 | **Authority level** | Reviewable readiness classification; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, and semantic instances |
 | **Issue scope** | USF-39 readiness; USF-59; USF-73; USF-97; USF-98; USF-99; USF-100; USF-101 |
-| **Repository state reviewed** | `0b4db8df9ebf3adbf1b09b9e7044976675bd371d` |
+| **Base repository state reviewed** | `05e224adb78a8199d365539a7077d663cf98942d` |
+| **Branch update scope** | Records proof-freshness publication model progress and PR freshness guardrails introduced after the base state; final merged commit is determined by Git history |
 
 This document records the current complete-readiness blocker state before implementation extraction. It creates no implementation code, implementation directory, product runtime, source import, proof evidence, generated report, schema activation, or implementation directive. It does not start USF-39.
 
@@ -46,6 +47,8 @@ The proof-only authentication harness can run against the current repository sta
 The current validator correctly fails closed when a record says `freshness.stale` is false but its `freshness.commit` differs from the current commit. A normal committed JSON update cannot satisfy that rule after merge if it writes the commit being claimed into the same commit, because committing the JSON changes the commit hash.
 
 This requires an explicit publication model, such as a post-merge attestation, tag or signed evidence anchor, dedicated evidence publication workflow, or a higher-authority freshness decision that preserves proof honesty. Generated reports must not be promoted to proof authority.
+
+`docs/architecture/proof-freshness-publication-model.md` records the preferred post-merge evidence-anchor model and the validator guard that blocks PRs from changing evidence or generated-report JSON to claim non-stale freshness before publication. This materially advances USF-101, but it does not complete it. USF-101 still requires an approved anchor carrier, signer or attestation trust model, validator anchor verification, planted defects for those checks, and a successful fresh proof publication for the target commit.
 
 ### USF-59 and USF-73 Proof Evidence
 
