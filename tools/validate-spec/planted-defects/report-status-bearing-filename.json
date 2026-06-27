@@ -1,0 +1,38 @@
+{
+  "target": "validator-reports",
+  "expectedRule": "USF-REPORT-004",
+  "currentCommit": "head-commit",
+  "evidenceIds": [
+    "evidence.collected"
+  ],
+  "records": {
+    "evidence/full-pass-report.json": {
+      "id": "report.status-bearing-filename",
+      "authorityLevel": "generated-report",
+      "status": "pass",
+      "findings": [],
+      "evidenceRefs": [
+        "evidence.collected"
+      ],
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      },
+      "title": "Status Bearing Filename Report",
+      "description": "Planted generated report whose filename carries a pass status claim.",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Validator",
+        "Generated Report"
+      ],
+      "taxonomyRefs": [
+        "validation-reporting-classification"
+      ],
+      "vocabularyRefs": [
+        "report-statuses",
+        "validation-severities"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    }
+  }
+}

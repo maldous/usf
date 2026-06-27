@@ -1,0 +1,38 @@
+{
+  "target": "validator-reports",
+  "expectedRule": "USF-REPORT-006",
+  "currentCommit": "head-commit",
+  "evidenceIds": [
+    "evidence.collected"
+  ],
+  "records": {
+    "evidence/readiness-report.json": {
+      "id": "report.freshness-mismatch",
+      "authorityLevel": "generated-report",
+      "status": "pass",
+      "findings": [],
+      "evidenceRefs": [
+        "evidence.collected"
+      ],
+      "freshness": {
+        "commit": "old-commit",
+        "stale": false
+      },
+      "title": "Readiness Report",
+      "description": "Planted generated report whose pass status is marked fresh for a non-current commit.",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Validator",
+        "Generated Report"
+      ],
+      "taxonomyRefs": [
+        "validation-reporting-classification"
+      ],
+      "vocabularyRefs": [
+        "report-statuses",
+        "validation-severities"
+      ],
+      "aiGuidance": "Selftest fixture only."
+    }
+  }
+}
