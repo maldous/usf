@@ -1,0 +1,68 @@
+{
+  "id": "0007-proof-anchor-ci-signing-identity",
+  "kind": "adr",
+  "title": "Proof Anchor CI Signing Identity",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-27",
+  "context": "ADR 0006 accepted a signed annotated Git tag verified against an approved trust root as the proof-freshness anchor carrier and left the signer and GitHub-native attestation to a later decision. The validator already enforces unsigned anchor-payload invariants and a data-level signer trust-root membership check (USF-ANCHOR-008) against a trust root that was empty and fail-closed. The self-referential commit-hash problem means a fresh anchor must be signed on the merge commit after it exists, which is inherently a post-merge CI action. The decision is made under the readiness-acceleration directive recorded in Linear USF-101 with the maintainer choosing a CI key.",
+  "decision": "USF adopts the repository CI identity as the approved proof-anchor signer, implemented with GitHub artifact attestations (the GitHub Actions OIDC identity and sigstore) so no human-held private key is required. The trust root registers this CI signer identity. A post-merge proof-anchor workflow runs the hermetic proof harness against the merge commit, builds the deterministic anchor payload, and publishes it as a signed or attested annotated tag on that commit. Verification has two layers: cryptographic verification in CI (gh attestation verify or git verify-tag against the repository CI identity) and the validator data-level check that the payload signerFingerprint is in the trust root. The publication workflow and enablement procedure are recorded in a runbook; enabling it is a deliberate maintainer step, after which the first CI run publishes the fresh anchor.",
+  "consequences": [
+    "USF-101 signer model is decided (CI attestation identity) and registered; the remaining work is enabling the publication workflow and the first CI publication run, which closes the fresh-proof step for the authentication slice (USF-59).",
+    "USF-73 and USF-99 remain bounded by what can be hermetically proven before implementation extraction and are not closed by this ADR.",
+    "The implementation directive (USF-100) can cite the CI anchor as the readiness-evidence publication mechanism."
+  ],
+  "invariants": [
+    "The proof-anchor signer is the approved CI identity registered in the trust root; an anchor whose signerFingerprint is not in the trust root is rejected by USF-ANCHOR-008.",
+    "A fresh anchor is published on the merge commit by CI; committed evidence JSON and generated reports are never the freshness anchor.",
+    "Cryptographic verification of the attestation or signature is performed in CI and is not replaced by the validator data-level check.",
+    "Hermetic proof must not be presented as live-external; production-shaped must not be presented as production-live."
+  ],
+  "permittedChanges": [
+    "Enable the proof-anchor publication workflow per the runbook and grant the required Actions permissions.",
+    "Add or rotate the registered CI signer identity in the trust root by an explicit change.",
+    "Add a maintainer-held GPG signer as an additional trust-root entry under ADR 0006 if required."
+  ],
+  "forbiddenDrift": [
+    "Do not accept an anchor whose signer is absent from the trust root, or whose attestation fails CI verification.",
+    "Do not claim a fresh-proof readiness state before a CI-published, verified anchor exists for the target commit.",
+    "Do not treat a generated report or a committed evidence JSON file as the freshness anchor.",
+    "Do not weaken the freshness, posture, or PR-freshness checks to simulate a published anchor."
+  ],
+  "aiAlignmentRules": [
+    "Agents must not mark proof evidence fresh for the current commit by committing a file; freshness comes only from a CI-published, verified anchor.",
+    "Agents must not add or enable a signing workflow they cannot verify without recording it as a maintainer-enabled procedure, and must not claim a published anchor that no CI run produced.",
+    "Agents must preserve the hermetic-first ceiling and never infer a live-external or production-live claim from an anchor."
+  ],
+  "semanticRefs": [
+    "docs/adr/0006-proof-freshness-anchor-carrier.md",
+    "docs/architecture/proof-freshness-anchor-carrier-decision.md",
+    "docs/architecture/proof-freshness-publication-model.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/git-practices-standard.md"
+  ],
+  "sourceRefs": [],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "A CI attestation identity removes the need to store or rotate a private signing key while binding the anchor to a verifiable, repository-scoped signer; this is stronger and lower-maintenance than a manually managed GPG key. A maintainer-held GPG key as a CI secret is permitted by ADR 0006 but the attestation identity is preferred because it needs no secret provisioning. Producing the anchor locally was rejected because committing evidence cannot escape the self-referential commit-hash problem.",
+  "description": "Selects the repository CI identity (GitHub artifact attestations, OIDC/sigstore) as the approved proof-anchor signer for the ADR 0006 carrier, registers the trust root, and records the post-merge publication procedure; it does not itself publish a fresh anchor.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Proof",
+    "Validator",
+    "Generated Report"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "ai-governance-kinds"
+  ],
+  "aiGuidance": "Use this ADR when publishing or verifying a proof-freshness anchor: the signer is the CI attestation identity registered in the trust root, publication is a post-merge CI step, and no fresh anchor may be claimed before a CI-verified anchor exists."
+}

@@ -9,7 +9,7 @@
 
 This document records the proof freshness anchor carrier and trust model. It creates no implementation code, product runtime, source import, proof evidence, generated report, schema activation, signed anchor, tag, or implementation directive. It does not start USF-39.
 
-> **Amendment (2026-06-27).** The carrier this document recommends is now accepted by `docs/adr/0006-proof-freshness-anchor-carrier.md`: a signed annotated Git tag verified against an approved trust root. This document remains the analysis; the ADR is the decision. Still outstanding for USF-101: validator tag-signature and trust-root verification (with planted defects), registration of a maintainer signer fingerprint, and a successful fresh signed publication.
+> **Amendment (2026-06-27).** The carrier this document recommends is now accepted by `docs/adr/0006-proof-freshness-anchor-carrier.md`: a signed annotated Git tag verified against an approved trust root. The signer is accepted by `docs/adr/0007-proof-anchor-ci-signing-identity.md`: the repository CI identity using GitHub artifact attestations, registered in `tools/validate-spec/proof-anchor-trust-root.json` and data-checked by USF-ANCHOR-008. This document remains the analysis; the ADRs are the decisions. The only outstanding step for USF-101 is operational: enable the proof-anchor CI workflow per `docs/runbooks/proof-anchor-publication.md` and let the first post-merge CI run publish and verify a fresh signed anchor for the target commit.
 
 ## Current Decision State
 
