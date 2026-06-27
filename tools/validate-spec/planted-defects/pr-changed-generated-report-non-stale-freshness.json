@@ -1,0 +1,16 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-PR-FRESHNESS",
+  "nameStatusLines": [
+    "M\tdocs/readiness-report.json"
+  ],
+  "records": {
+    "docs/readiness-report.json": {
+      "authorityLevel": "generated-report",
+      "freshness": {
+        "commit": "head-commit",
+        "stale": false
+      }
+    }
+  }
+}
