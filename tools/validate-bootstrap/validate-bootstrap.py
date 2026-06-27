@@ -4,7 +4,8 @@
 This is governance tooling only. It does not create implementation/runtime files,
 does not import React source, and does not publish evidence. It checks the
 bootstrap-specific invariants that sit above the general spec corpus validator:
-the implementation directive must remain human-only and unsigned, readiness
+the implementation directive may be human-signed and accepted for USF-100 while
+the separate USF-39 start stays unauthorised, readiness
 documents must distinguish bootstrap marker readiness from implementation
 readiness, implementation-shaped roots must not exist before bootstrap, and the
 semantic/source-use substrate required for a later implementation attempt must
@@ -362,24 +363,45 @@ def check_no_forbidden_roots(F, state):
 def check_directive_boundary(F, state):
     text = state["directiveText"]
     lower = text.lower()
+    # USF-100 may now be human-signed and accepted. The boundary that must hold is the separation of
+    # USF-100 acceptance from USF-39 start: the signature accepts USF-100 only and must not start
+    # USF-39, act as implementation authority by itself, authorise runtime/scaffold before the
+    # separate start action, or treat the final pre-extraction revalidation as already satisfied.
     required_phrases = [
-        "draft",
         "human-only acceptance boundary",
-        "unsigned",
         "usf-39 remains backlog",
         "separate usf-39 start action",
+        "final pre-extraction revalidation",
     ]
     for phrase in required_phrases:
         if phrase not in lower:
             F.add("USF-BOOTSTRAP-003", DIRECTIVE_PATH, f"missing required directive boundary phrase: {phrase}")
-    signed_markers = [
-        "authorisation date | 202",
-        "usf-100 acceptance recorded | accepted",
+    # Fail closed if the directive treats the signature as USF-39 start or implementation authority,
+    # marks the separate start action as authorised, or claims the final revalidation already passed.
+    forbidden_assertions = [
         "separate usf-39 start action authorised | authorised",
+        "separate usf-39 start action authorised | yes",
+        "final pre-extraction revalidation passed | yes",
+        "final pre-extraction revalidation passed | passed",
+        "revalidation already passed",
+        "this signature authorises the usf-39 start",
+        "this signature starts usf-39",
+        "this signature is implementation authority",
+        "this signature creates implementation authority",
+        "implementation is authorised by this signature alone",
+        "runtime scaffold is authorised before",
+        "implementation roots are authorised before",
+        "usf-39 has started",
+        "usf-39 is now started",
+        "usf-39 start is authorised by this directive",
     ]
-    for marker in signed_markers:
+    for marker in forbidden_assertions:
         if marker in lower:
-            F.add("USF-BOOTSTRAP-003", DIRECTIVE_PATH, f"directive appears accepted or signed: {marker}")
+            F.add("USF-BOOTSTRAP-003", DIRECTIVE_PATH, f"directive treats the signature as USF-39 start or implementation authority: {marker}")
+    # A signed acceptance block must keep the separate USF-39 start action explicitly not authorised.
+    if "acceptance signature block" in lower and "start action authorised" in lower:
+        if "not authorised by this signature" not in lower:
+            F.add("USF-BOOTSTRAP-003", DIRECTIVE_PATH, "signed acceptance block must keep the separate USF-39 start action explicitly not authorised")
 
 
 def check_runtime_toolchain_decisions(F, state):
