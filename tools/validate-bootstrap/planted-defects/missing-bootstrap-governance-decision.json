@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.missing-bootstrap-governance-decision",
+  "description": "Bootstrap readiness without the required marker, tenant isolation, break-glass, provider, migration, and supply-chain decisions must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-010",
+  "mutation": {
+    "bootstrapGovernanceText": "# Bootstrap Readiness Governance\n\nUSF-39 remains Backlog.\n"
+  }
+}

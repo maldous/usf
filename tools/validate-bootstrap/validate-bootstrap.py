@@ -34,6 +34,7 @@ RULES = {
     "USF-BOOTSTRAP-007": ("blocking", "bootstrap validator is not wired into validate-spec"),
     "USF-BOOTSTRAP-008": ("blocking", "bootstrap mapping corpus is incomplete or invalid"),
     "USF-BOOTSTRAP-009": ("blocking", "generated bootstrap mapping index or summary is stale"),
+    "USF-BOOTSTRAP-010": ("blocking", "bootstrap readiness governance decision coverage is incomplete"),
     "USF-BOOTSTRAP-SELFTEST": ("blocking", "planted bootstrap defect did not raise its expected rule"),
 }
 
@@ -42,6 +43,7 @@ REQUIRED_ARTEFACTS = [
     "docs/architecture/react-l5-equivalence-audit.md",
     "docs/architecture/complete-readiness-blocker-register.md",
     "docs/architecture/final-v2-readiness-reconciliation.md",
+    "docs/architecture/bootstrap-readiness-governance.md",
     "docs/architecture/target-implementation-topology-plan.md",
     "docs/architecture/semantic-source-use-closure-ledger.md",
     "spec/registries/source-import-manifest.json",
@@ -74,6 +76,7 @@ FORBIDDEN_ROOTS = {
 DIRECTIVE_PATH = "docs/architecture/implementation-extraction-directive.md"
 VALIDATE_SPEC_PATH = "tools/validate-spec/validate-spec.py"
 SELFTEST_DIR = "tools/validate-bootstrap/planted-defects"
+BOOTSTRAP_GOVERNANCE_PATH = "docs/architecture/bootstrap-readiness-governance.md"
 BOOTSTRAP_MAPPING_SCHEMA = "spec/schemas/bootstrap-mapping.schema.json"
 BOOTSTRAP_MAPPING_DIR = "spec/instances/bootstrap-mapping"
 BOOTSTRAP_MAPPING_INDEX = "spec/registries/bootstrap-mapping-index.json"
@@ -253,10 +256,14 @@ def build_state(overrides=None):
     mapping_summary = None
     if BOOTSTRAP_MAPPING_SUMMARY in paths and os.path.exists(BOOTSTRAP_MAPPING_SUMMARY):
         mapping_summary = read_text(BOOTSTRAP_MAPPING_SUMMARY)
+    bootstrap_governance_text = overrides.get("bootstrapGovernanceText")
+    if bootstrap_governance_text is None and BOOTSTRAP_GOVERNANCE_PATH in paths and os.path.exists(BOOTSTRAP_GOVERNANCE_PATH):
+        bootstrap_governance_text = read_text(BOOTSTRAP_GOVERNANCE_PATH)
     return {
         "paths": paths,
         "directiveText": directive_text or "",
         "readinessTexts": readiness_texts,
+        "bootstrapGovernanceText": bootstrap_governance_text or "",
         "semanticContracts": overrides.get("semanticContracts", semantic_contracts),
         "semanticRecords": overrides.get("semanticRecords", semantic_records),
         "semanticDomains": overrides.get("semanticDomains", sorted(semantic_domains)),
@@ -516,6 +523,73 @@ def check_bootstrap_mappings(F, state):
         F.add("USF-BOOTSTRAP-009", BOOTSTRAP_MAPPING_SUMMARY, "generated mapping summary is stale or missing")
 
 
+def check_bootstrap_governance(F, state):
+    if BOOTSTRAP_GOVERNANCE_PATH not in state["paths"]:
+        F.add("USF-BOOTSTRAP-010", BOOTSTRAP_GOVERNANCE_PATH, "bootstrap readiness governance record is missing")
+        return
+    text = state["bootstrapGovernanceText"]
+    lower = text.lower()
+    required_markers = [
+        ("v2-bootstrap", "future bootstrap marker is named"),
+        ("movable human-friendly marker", "marker mobility and human-friendly role are stated"),
+        ("not production readiness", "marker does not claim production readiness"),
+        ("not implementation completion", "marker does not claim implementation completion"),
+        ("not usf-39 start authority", "marker does not authorise USF-39"),
+        ("immutable proof/evidence anchors", "immutable anchor requirement is stated"),
+        ("usf-39 remains backlog", "USF-39 Backlog boundary is stated"),
+        ("separate usf-39 start action", "separate implementation start action is required"),
+        ("all slices", "bootstrap scope is whole-platform/all-slices"),
+        ("token-first tenant context", "tenant context source is stated"),
+        ("postgres rls", "database-layer RLS requirement is stated"),
+        ("set local", "transaction-scoped Postgres context binding is stated"),
+        ("current_setting('app.tenant_id')", "RLS tenant context lookup is stated"),
+        ("bypassrls", "BYPASSRLS prohibition is stated"),
+        ("force row level security", "FORCE RLS requirement is stated"),
+        ("tenant-scoped", "persistent object tenant-scoped classification is stated"),
+        ("cross-tenant aggregate", "persistent object aggregate classification is stated"),
+        ("migration/control-plane", "persistent object migration/control-plane classification is stated"),
+        ("two-person jit approval", "break-glass two-person approval is stated"),
+        ("requester cannot approve", "break-glass requester/approver separation is stated"),
+        ("break-glass must not disable rls", "break-glass RLS boundary is stated"),
+        ("in-memory idp", "dev in-memory identity provider target is stated"),
+        ("keycloak", "test OIDC provider target is stated"),
+        ("nats", "test event bus provider target is stated"),
+        ("temporal", "test workflow provider target is stated"),
+        ("minio", "test object storage provider target is stated"),
+        ("openbao", "test secret/config provider target is stated"),
+        ("opentelemetry collector", "test observability collector target is stated"),
+        ("prometheus", "test metrics target is stated"),
+        ("grafana", "test dashboard target is stated"),
+        ("loki", "test log target is stated"),
+        ("tempo", "test trace target is stated"),
+        ("mailpit", "test email target is stated"),
+        ("append-only postgres audit ledger", "canonical audit/evidence store is stated"),
+        ("no in-memory providers in test", "dev/test provider split is stated"),
+        ("staging, production, live-external-provider, and production-live proof", "non-local proof deferral is stated"),
+        ("react final proven schema lineage", "migration lineage source is stated"),
+        ("0001", "future baseline migration identity is stated"),
+        ("no real tenant, customer, or user data migration", "real-data migration exclusion is stated"),
+        ("pnpm lockfile", "lockfile target is stated"),
+        ("pin node and pnpm versions", "toolchain pinning is stated"),
+        ("no floating `latest` images", "floating latest image prohibition is stated"),
+        ("make verify", "future verification gate is stated"),
+    ]
+    for marker, message in required_markers:
+        if marker not in lower:
+            F.add("USF-BOOTSTRAP-010", BOOTSTRAP_GOVERNANCE_PATH, f"missing bootstrap governance marker: {message}")
+
+    forbidden_claims = [
+        ("v2-bootstrap is production readiness", "marker claims production readiness"),
+        ("v2-bootstrap is implementation completion", "marker claims implementation completion"),
+        ("v2-bootstrap authorises usf-39", "marker claims USF-39 authority"),
+        ("in-memory providers in test are allowed", "test provider split is weakened"),
+        ("break-glass may disable rls", "break-glass RLS boundary is weakened"),
+    ]
+    for marker, message in forbidden_claims:
+        if marker in lower:
+            F.add("USF-BOOTSTRAP-010", BOOTSTRAP_GOVERNANCE_PATH, message)
+
+
 def require(condition, label, observed):
     if not condition:
         raise AssertionError(f"{label}: {observed!r}")
@@ -734,6 +808,7 @@ def run_checks(modes, F, state=None):
         check_readiness_no_go(F, state)
         check_mapping_substrate(F, state)
         check_bootstrap_mappings(F, state)
+        check_bootstrap_governance(F, state)
         check_anchor_for_current_main(F)
         check_validate_spec_wiring(F, state)
     if "implementation" in modes:
@@ -793,6 +868,8 @@ def run_selftest(F):
             overrides["mappingIndex"] = mutation["mappingIndex"]
         if "mappingSummary" in mutation:
             overrides["mappingSummary"] = mutation["mappingSummary"]
+        if "bootstrapGovernanceText" in mutation:
+            overrides["bootstrapGovernanceText"] = mutation["bootstrapGovernanceText"]
         local = Findings()
         run_checks(["readiness", "implementation"], local, build_state(overrides))
         if expected not in {item["ruleId"] for item in local.items}:
