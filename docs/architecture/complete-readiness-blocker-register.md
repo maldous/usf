@@ -29,6 +29,8 @@ USF-39 must remain Backlog because the repository does not yet have all of the f
 
 The current repository remains valid as a semantic-first readiness foundation and is ready for the human-friendly bootstrap marker once validation passes on `main` with the matching immutable proof-anchor tag. It is not a complete implementation-start authority.
 
+After the bootstrap/toolchain movement (TypeScript/Node decision, ADR 0009 dev/test boundary, `tools/validate-bootstrap` clean), the agent-resolvable readiness inputs are in place. The remaining gates to a local dev/test bootstrap implementation start are exactly two, and both are human: a signed USF-100 directive, then a separate USF-39 start action (with a USF-75-equivalent revalidation rerun immediately before it). The final consolidated rollup is `docs/architecture/react-l5-equivalence-audit.md` section 12; the fresh revalidation is in `docs/architecture/final-pre-usf-39-readiness-revalidation.md`. USF-39 remains Backlog.
+
 ## React L5 Equivalence Audit Harvest (USF-102 workstream)
 
 `../react` was inspected at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767` (tag `v1-final`) as historical evidence only, and the harvest is recorded in `docs/architecture/react-l5-equivalence-audit.md`. That audit classifies every historical capability, proof, source-use, build, environment, CI, operational, data, configuration, governance, hexagonal-architecture, and UI artefact against the USF V2 corpus using the controlled equivalence and gap vocabularies.
