@@ -1,0 +1,157 @@
+# USF V2 Implementation Extraction Directive (Whole-Platform, All Slices)
+
+| | |
+|---|---|
+| **Document type** | Architecture / human implementation directive |
+| **Status** | DRAFT — prepared for the authorising human, awaiting acceptance signature; not yet accepted |
+| **Authority level** | Human implementation directive once signed; subordinate to the Charter, Authority Model, accepted ADRs, validators, and runtime proof evidence |
+| **Issue scope** | USF-100 (this directive); authorises USF-39 only after signature and a separate start action |
+| **Drafted by** | Agent draft under delegation, for human review; the agent does not self-authorise implementation |
+| **Primary inputs** | `docs/architecture/implementation-directive-template.md`, `docs/architecture/authentication-first-slice-implementation-directive-specification.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/semantic-source-use-closure-ledger.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/adr/0005-react-hexagonal-architecture-carry-forward.md`, `docs/adr/0006-proof-freshness-anchor-carrier.md`, `docs/adr/0007-proof-anchor-ci-signing-identity.md`, `docs/architecture/complete-readiness-blocker-register.md`, `tools/validate-spec/validate-spec.py` |
+
+This is the human-filled implementation directive for the whole USF V2 implementation extraction. It governs the entire V2 migration across all slices. It does not itself create implementation code, create implementation directories, import `../react` runtime code, mirror source paths, emit proof evidence, emit generated reports, or promote schemas. It does not move USF-39 out of Backlog. USF-39 remains Backlog until this directive is signed and a separate explicit start action is authorised.
+
+## Directive Status and Acceptance
+
+This document is a DRAFT prepared so the authorising human can review and sign it. It is not accepted until the signature block at the end is completed by the authorising human and the USF-100 Linear record is updated to record acceptance. Until then this draft carries no implementation authority, the validator treats its content as well-formed but not as a human-accepted start authority, and USF-39 remains Backlog.
+
+Acceptance requires three distinct human actions, none of which the agent performs:
+
+- completing the signature block below with a named human and an authorisation date;
+- recording acceptance on the USF-100 Linear record;
+- issuing a separate USF-39 start action after USF-75 final pre-extraction revalidation passes.
+
+## Authorising Human
+
+The authorising human accountable for this directive is recorded in the signature block below. The agent leaves this unsigned. No implicit, agent-made, or "as discussed" authorisation is valid; the directive is authorised only by the named human and the authorisation date in the signature block.
+
+## Linear Record
+
+This directive is tracked on USF-100. The USF-100 Linear record is the work-tracking record for directive review and acceptance; it is not a semantic authority. The directive's authority comes from the signed document and the governing repository artefacts, not from any Linear comment text.
+
+## Scope
+
+The scope of this directive is the whole USF V2 implementation extraction: all slices of the Universal Service Foundation, covering every semantic capability in the current semantic corpus. The V2 migration is all slices, not a single bounded slice. The scope is the complete set of semantic-contract instances under `spec/instances/semantic-contract/` and their associated workflows, interfaces, events, audit records, observability signals, commands, provider modes, environments, configurations, and data-migration semantics, as inventoried in `docs/architecture/semantic-source-use-closure-ledger.md` and classified in `docs/architecture/react-l5-equivalence-audit.md`.
+
+Capabilities classified `excluded-not-applicable` or `deprecated` in the closure ledger and equivalence audit are out of scope and stay out of scope unless a later signed directive revision adds them. Capabilities classified `semantic-only-deferred` are in scope for extraction but must first have their semantic facets and source-use disposition completed before their target files are created (see slice gating below).
+
+The migration extracts the whole platform under one accepted directive, sequenced slice by slice, so that every slice is governed by identical authority, source-use, and proof rules. No slice is implemented ahead of its semantic and source-use closure, and no slice weakens the rules that govern the others.
+
+## Governing Repository Artefacts
+
+The directive is governed by, and every implementation PR must remain consistent with: the Charter and Authority Model; accepted ADRs, including ADR-0005 (hexagonal architecture carried forward, language-agnostic), ADR-0006 (proof-freshness anchor carrier), and ADR-0007 (proof-anchor CI signing identity); the semantic-contract instances for the slice being implemented; `docs/architecture/target-implementation-topology-plan.md`; the per-slice source-use disposition matrices; `docs/architecture/semantic-source-use-closure-ledger.md`; `docs/architecture/production-proof-posture-matrix.md` where present; the schema/validator posture decision; the generated-report readiness policy; and the validator rules in `tools/validate-spec/validate-spec.py`. A generated report is never cited as authority, and historical `../react` evidence is never cited as live authority.
+
+## Target Directories and Target Files
+
+Every target file is named in the topology plan before it is created. Implementation is confined to hexagonal application/domain/adapter/configuration roots authorised in `docs/architecture/target-implementation-topology-plan.md` and enforced by the validator's authorised-implementation-roots set. The currently authorised roots are `apps/authentication-api/`, `packages/authentication-domain/`, `packages/identity-domain/`, `packages/authorization-policy/`, `packages/identity-provider-adapter/`, `packages/authentication-observability/`, and `config/authentication/`.
+
+Because this directive authorises all slices but the topology and authorised-roots set are presently enumerated only for the identity/authentication slice, each additional slice is gated: before any of its files are created, a reviewed topology update must add that slice's exact target directories and target files, the validator's authorised-implementation-roots set must be extended to include them, and the slice's source-use disposition matrix must exist. Any implementation-shaped directory not yet listed in the topology plan and the validator remains blocked. Blocked examples include `apps/platform-api/`, `apps/web/`, `services/`, `src/`, `infra/`, `scripts/`, `deploy/`, `docker/`, `k8s/`, and `terraform/`. No target path may mirror a historical `../react` source path.
+
+## Source-Use Policy
+
+Every target file is assigned exactly one source-use treatment in its slice's disposition matrix:
+
+- `source-derived-adapt`: behaviour adapted from cited source-use rows; code is not copied and target paths do not mirror historical paths;
+- `source-derived-rewrite`: behaviour rewritten from cited source-use rows, preserving semantics and lineage without copying code;
+- `new-with-rationale`: no source row drives the file; the directive records the semantic reason and source-disposition rationale;
+- `evidence-only-support`: source rows inform review or lineage only and cannot produce runtime code.
+
+`../react` is informational lineage only. Direct runtime or application code import from `../react` is not authorised by this directive for any slice. A specific file may be imported only if a later signed directive revision names that exact file with its source-use treatment, proof rationale, and target file. The V2 implementation language and runtime remain an open decision; this directive imports no `../react` source and assumes no specific target language.
+
+## Source-Use Disposition Coverage
+
+Every created target file cites the source-use disposition matrix row numbers for its slice or a reviewed `new-with-rationale` entry. No file is created solely because a historical source path exists. A slice whose disposition matrix does not yet cover its target files is not ready for implementation, and its files must not be created.
+
+## Proof Floor and Production Posture
+
+The proof floor for every slice is hermetic internal behaviour proof, fresh and commit-pinned for the claimed commit. Each slice's behaviour must be proven by the proof harness for that slice and carried by the proof-freshness anchor mechanism (ADR-0006 carrier, ADR-0007 CI signer, `.github/workflows/proof-anchor.yml`), which publishes and verifies a signed, attested anchor on the merge commit. Committed evidence JSON remains historical by design and is never the freshness carrier. The required proof level is `behaviour-proven`; the provider-mode target is `hermetic-mock`; the environment target is `hermetic`.
+
+Fresh proof is required, per slice, before that slice's implementation PR merges when the PR makes or refreshes a behaviour claim. A behaviour claim whose proof is stale, missing for the claimed commit, or absent is a stop condition.
+
+Live-external-provider proof and production-live proof are out of scope for this directive across all slices. Hermetic proof must not be upgraded into live-external-provider or production-live readiness, and production-shaped evidence, if later authored, must not be treated as production-live evidence. If a human raises live-external-provider or production-live proof to required for any slice, USF-73 or an equivalent proof-execution issue must close first, under a separate signed directive revision.
+
+## Provider Mode and Environment
+
+Provider mode and environment use the controlled vocabulary values and are stated explicitly on every proof and readiness claim. Hermetic, local, sandbox, and live-external claims are kept separate, and production-shaped is kept separate from production-live. Provider mode is never upgraded by environment, and environment is never upgraded by provider mode.
+
+## Schema and Validator Posture
+
+All schemas remain draft. No schema is promoted to active by this directive or by any implementation PR under it unless a separate active-promotion PR satisfies the USF-30 active-promotion criteria. The validator remains the required gate for repository consistency, and every implementation PR must pass the implementation guard and PR diff modes that exist at the time of the PR. Advisory validation is not treated as active validator maturity without a separate promotion change.
+
+## Generated Reports
+
+Generated reports may be cited only as rank-7 summaries with freshness and evidence references. A report never authorises implementation, never replaces proof evidence, never promotes schemas, never defines semantics, and never closes a source-disposition gap. Direct validators and proof records govern.
+
+## Validation Commands
+
+The following commands are required on the PR head before any implementation PR merges, and after merge where applicable:
+
+- `python3 tools/validate-spec/validate-spec.py all --json`
+- `python3 tools/validate-spec/validate-spec.py imports --json`
+- `python3 tools/validate-spec/validate-spec.py instances --json`
+- `python3 tools/validate-spec/validate-spec.py evidence --json`
+- `python3 tools/validate-spec/validate-spec.py real-instances --json`
+- `python3 tools/validate-spec/validate-spec.py implementation --json`
+- `python3 tools/validate-spec/validate-spec.py selftest --json`
+- `python3 tools/validate-spec/validate-spec.py anchor --anchor-file anchor-payload.json --head HEAD` for any PR that makes or refreshes a proof claim
+- `python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD`
+- the slice's proof command when the PR makes or refreshes a behaviour claim
+
+Strict JSON parse is required for any changed JSON. If implementation files are created, the implementation and PR guardrails must find no unauthorised directory, no missing source disposition, no source-path mirroring, no forbidden path token, no active schema promotion, and no unapproved tooling.
+
+## Implementation Boundaries
+
+Implementation is permitted only in topology-listed, validator-authorised roots, only for files named in the topology plan, and only for slices whose semantic facets and source-use disposition are complete. Unlisted roots are blocked. No runtime code is imported from `../react` without a specific signed source-import authorisation. No directory is created outside the authorised roots. No schema is activated. No proof claim exceeds the proof level observed.
+
+## Non-Goals
+
+- Starting USF-39 or moving USF-39 out of Backlog.
+- Creating implementation or runtime code or directories from this draft.
+- Importing `../react` runtime or application code.
+- Mirroring historical source paths.
+- Promoting any schema or the validator to active maturity.
+- Claiming live-external-provider or production-live readiness.
+- Treating generated reports, CI status, stdout, or unsigned anchors as authority.
+- Treating this draft as accepted before the signature block and the USF-100 record record acceptance.
+- Fixing the V2 implementation language or importing source to do so.
+
+## Mandatory Stop Conditions
+
+USF-39 remains Backlog, or an implementation PR must stop, when any of these is true:
+
+- the slice being implemented is not named in scope or its semantic facets and source-use disposition are incomplete;
+- a destination directory or target file is not listed in the topology plan and the validator authorised-roots set;
+- a target path mirrors a historical source path;
+- a target file has no source-use disposition row and no reviewed `new-with-rationale` entry;
+- an `evidence-only-support` row is used to produce runtime code;
+- `../react` runtime or application code is copied without a specific signed source-import authorisation;
+- provider mode or environment is missing, ambiguous, or upgraded by the other;
+- hermetic proof is treated as live-external-provider proof, or production-shaped evidence as production-live;
+- a behaviour claim's proof is stale, missing for the claimed commit, or absent;
+- the proof level claimed exceeds the proof level observed;
+- a generated report is used as semantic authority, proof evidence, source disposition, or implementation authorisation;
+- any schema is marked active, or advisory validation is treated as active maturity, without a separate USF-30 promotion PR;
+- required validators or proof commands are not run, fail, or produce stale evidence;
+- the directive conflicts with the Charter, Authority Model, accepted ADRs, semantic instances, source-use matrices, topology plan, proof posture, schema posture, generated-report policy, or validator findings.
+
+## Per-Created-File Reconciliation
+
+Every created implementation file includes a closure row in the PR body or a linked closure record naming: the target file; the directive entry that authorises it; the authorised destination directory; the semantic refs; the ADR refs or an explicit no-ADR-change statement; the source-use treatment; the source-use disposition row numbers or `new-with-rationale` entry; the runtime import statement; the validator evidence; the proof or evidence requirement or an explicit no-proof-claim statement; the generated-report treatment; and any deferred work with why it does not weaken the current slice. A PR is incomplete if any created target file lacks this reconciliation.
+
+## Required PR Citation
+
+Every implementation PR under this directive cites: this accepted directive; the target semantic instances it implements; the target files authorised by the topology plan; the source-use disposition rows or `new-with-rationale` entries for each target file; the proof and evidence records used for the claim; the validator commands run on the PR head; and any generated reports only as rank-7 summaries. The PR body states explicitly that source-path mirroring, direct runtime code copy, schema activation, generated-report authority, hermetic-as-live proof, and production-shaped-as-production-live claims are not authorised.
+
+## Acceptance Signature Block
+
+This block is completed by the authorising human. The agent leaves it unsigned.
+
+| Field | Value |
+|---|---|
+| Authorising human (name) | _unsigned — to be completed by the authorising human_ |
+| Authorisation date | _unsigned_ |
+| USF-100 acceptance recorded | _unsigned — record on the USF-100 Linear issue at acceptance_ |
+| USF-75 final pre-extraction revalidation passed | _unsigned — confirm before the USF-39 start action_ |
+| Separate USF-39 start action authorised | _unsigned — issued separately after acceptance_ |
+
+Until every line above is completed by the authorising human, this directive is an unaccepted draft, no implementation is authorised, and USF-39 remains Backlog.
