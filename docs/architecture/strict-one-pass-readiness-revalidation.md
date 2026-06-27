@@ -8,7 +8,7 @@
 | **Issue scope** | USF-96 |
 | **Primary inputs** | `docs/architecture/final-pre-usf-39-readiness-revalidation.md`, `docs/architecture/proof-slice-readiness-rollup.md`, `docs/architecture/multi-environment-proof-posture-closure.md`, `docs/architecture/react-readiness-rule-parity-matrix.md`, `docs/architecture/regeneration-sufficiency-semantic-graph-closure.md`, `spec/instances/`, `evidence/`, `tools/validate-spec/validate-spec.py`, Linear USF-58 through USF-100 |
 
-This revalidation records the stricter human standard for USF-39 readiness: complete one-pass V2 readiness, not narrow authentication first-slice readiness. It creates no implementation code, implementation directory, runtime substrate, proof evidence, generated report, source import, or schema activation. It does not start USF-39.
+This revalidation records the stricter human standard for USF-39 readiness: complete one-pass V2 readiness, not narrow authentication proof substrate readiness. It creates no implementation code, implementation directory, runtime substrate, proof evidence, generated report, source import, or schema activation. It does not start USF-39.
 
 ## Revalidation Result
 
@@ -16,7 +16,7 @@ NO-GO for complete one-pass V2 implementation readiness.
 
 USF-39 remains Backlog. The current repository is internally consistent for its authored planning, semantic, validator, and historical evidence state, but it does not prove that every V2 implementation-relevant slice is ready to generate the implementation in one pass.
 
-The prior readiness chain remains useful as a bounded first-slice planning record. It is not sufficient for the clarified standard because many merged artefacts explicitly close only authentication-slice planning, static semantics, proof plans, or parity matrices, and because current proof evidence is stale for the repository head.
+The prior readiness chain remains useful as a bounded proof-substrate planning record. It is not sufficient for the clarified standard because many merged artefacts explicitly close only authentication-slice planning, static semantics, proof plans, or parity matrices, and because current proof evidence is stale for the repository head.
 
 ## Current Evidence
 
@@ -57,12 +57,12 @@ Current semantic instance coverage is concentrated on the authentication slice. 
 | Authentication / identity login | Partial: authentication instances exist | Partial: authentication slice manifest exists | Shape and reference validation passes | Historical hermetic proof exists but is stale for current head | Hermetic only; stronger postures unproven | Auth slice only | NO-GO | USF-59, USF-73, USF-99 |
 | Authorization / permissions | Partial: RBAC semantic contract exists | Not complete for one-pass V2 | Validator checks shape, not full runtime assurance | Proof plan only; no fresh executed proof | Not proven beyond semantic planning | Not proven for full graph | NO-GO | USF-97, USF-99 |
 | Tenant / identity boundary | Partial semantic instances exist | Not complete for one-pass V2 | Validator checks shape, not runtime boundary proof | Proof plan only; no fresh executed proof | Not proven beyond hermetic planning | Not proven for full graph | NO-GO | USF-97, USF-99 |
-| Interface / API contracts | Authentication interface exists | Authentication-only source-use coverage | Contract shape validation passes | No product route or runtime behaviour proof | Runtime route posture unproven | API graph incomplete for one-pass V2 | NO-GO | USF-97, USF-98, USF-99 |
-| Event / audit / observability | Authentication event, audit, and signal instances exist | Authentication-only coverage | Shape and reference validation passes | Historical observability proof is stale; no fresh runtime emission proof | Live and production observability unproven | Broader event family graph incomplete | NO-GO | USF-97, USF-99 |
-| Workflow / state machine | Authentication workflow instances exist | Authentication-only coverage | Shape and reference validation passes | Proof plan only; no fresh executed state-machine proof | Runtime workflow posture unproven | Broad workflow graph incomplete | NO-GO | USF-97, USF-99 |
+| Interface / API contracts | Authentication interface exists | Authentication proof-substrate source-use coverage | Contract shape validation passes | No product route or runtime behaviour proof | Runtime route posture unproven | API graph incomplete for one-pass V2 | NO-GO | USF-97, USF-98, USF-99 |
+| Event / audit / observability | Authentication event, audit, and signal instances exist | Authentication proof-substrate coverage | Shape and reference validation passes | Historical observability proof is stale; no fresh runtime emission proof | Live and production observability unproven | Broader event family graph incomplete | NO-GO | USF-97, USF-99 |
+| Workflow / state machine | Authentication workflow instances exist | Authentication proof-substrate coverage | Shape and reference validation passes | Proof plan only; no fresh executed state-machine proof | Runtime workflow posture unproven | Broad workflow graph incomplete | NO-GO | USF-97, USF-99 |
 | Provider / environment / configuration | Hermetic and production-shaped instances exist | Source-use not complete for all provider/config surfaces | Record-level safety checks exist | No fresh current-head proof; stronger postures unproven | Hermetic historical only; local, sandbox, live, production-live unproven | Environment matrix incomplete | NO-GO | USF-73, USF-97, USF-99 |
 | Data / migration / backup / restore | Identity data migration instance exists | Not complete for storage and migration surfaces | Shape checks exist | No runtime migration, backup, restore, PITR, retention, legal-hold proof | Production data posture unproven | Data graph incomplete | NO-GO | USF-97, USF-99 |
-| UI journey / accessibility / permission gating | Authentication UI semantic model exists | Authentication-only coverage | Shape checks exist | No rendered UI or accessibility runtime proof | UI runtime posture unproven | Full UI generation graph incomplete | NO-GO | USF-97, USF-99 |
+| UI journey / accessibility / permission gating | Authentication UI semantic model exists | Authentication proof-substrate coverage | Shape checks exist | No rendered UI or accessibility runtime proof | UI runtime posture unproven | Full UI generation graph incomplete | NO-GO | USF-97, USF-99 |
 | Command / operational command coverage | Validation and proof command instances exist | Full command inventory not reconciled | Current command shape checks pass | Validator execution exists; runtime command parity proof absent | Operational posture incomplete | Broad command graph incomplete | NO-GO | USF-97, USF-98 |
 | Cross-capability interactions | Authentication identity-context workflow exists | Not complete for all cross-capability units | Shape checks exist | No fresh cross-capability runtime proof | Runtime dependency posture unproven | Broad interaction graph incomplete | NO-GO | USF-97, USF-99 |
 | Route security / route observability | Authentication interface semantics exist | Runtime route source-use not complete | Shape checks exist | No product route security or observability runtime proof | Runtime route posture unproven | Route graph incomplete | NO-GO | USF-97, USF-99 |
@@ -76,7 +76,7 @@ Current semantic instance coverage is concentrated on the authentication slice. 
 
 The strict one-pass standard is blocked by:
 
-- USF-59: current commit-pinned proof evidence for the first extraction slice.
+- USF-59: current commit-pinned proof evidence for the claimed extraction scope.
 - USF-73: multi-environment proof evidence execution for required production posture.
 - USF-97: full V2 semantic and source-use closure beyond authentication.
 - USF-98: one-pass V2 readiness validator hardening.

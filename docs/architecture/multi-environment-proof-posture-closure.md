@@ -57,7 +57,7 @@ The proof command did not create a product runtime, execute historical React pro
 | No stale record supports current readiness. | Satisfied by correction. | Historical observability proof, React proof outputs, and authentication proof records whose freshness commit differs from current head remain lineage only and must be marked stale. |
 | No hermetic/local/sandbox evidence satisfies live-external-provider or production-live claims. | Satisfied. | The proof evidence records `providerMode` as `hermetic-mock`, `environment` as `hermetic`, and `liveExternalProviderClaim` as false. This document records production-live as not-proven. |
 | validate-spec evidence and real-instances are clean. | Required before merge. | The PR must pass `validate-spec evidence --json` and `validate-spec real-instances --json`, plus the full required validation set. |
-| USF-59 can cite this work or is updated to avoid overlap. | Satisfied by citation. | USF-59 remains the first-slice hermetic authentication proof record. This closure refreshes the same authorized evidence and records the broader posture classification without redefining USF-59. |
+| USF-59 can cite this work or is updated to avoid overlap. | Satisfied by citation. | USF-59 remains the proof-substrate hermetic authentication proof record. This closure refreshes the same authorized evidence and records the broader posture classification without redefining USF-59. |
 
 ## No-Go Rules Reconfirmed
 

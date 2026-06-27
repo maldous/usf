@@ -84,7 +84,7 @@ Local composed, external sandbox, production-shaped, live external provider, and
 ## Downstream Effect
 
 - USF-77 Option A can close only if the proof-only harness and evidence records merge with clean validation.
-- USF-59 can close for the hermetic authentication first-slice proof only if the merged evidence is fresh, non-stale, schema-valid, and validator-clean.
+- USF-59 can close for the hermetic authentication proof substrate proof only if the merged evidence is fresh, non-stale, schema-valid, and validator-clean.
 - USF-73 is only satisfied for the hermetic internal proof floor. Local composed, external sandbox, production-shaped, live external provider, and production-live postures remain unproven unless a later issue explicitly narrows or separately authorizes those gates.
 - USF-61 remains blocked until USF-59 is closed and USF-73 is either closed for the required implementation-entry scope or explicitly narrowed with recorded authority.
 - USF-75 remains blocked from a final go decision until USF-61 and every required downstream gate close.
@@ -118,4 +118,4 @@ If evidence records are created, every changed JSON file must parse strictly and
 
 ## Readiness Verdict
 
-USF-76 remains closed as the prior decline decision. USF-77 Option A is now the bounded proof-only authorization for the hermetic authentication slice. It can unblock USF-59 only for the first-slice hermetic proof if the corresponding proof/evidence records merge with clean validation. It does not by itself close broader multi-environment, live-provider, production-live, implementation-directive, final-readiness, or USF-39 gates.
+USF-76 remains closed as the prior decline decision. USF-77 Option A is now the bounded proof-only authorization for the hermetic authentication slice. It can unblock USF-59 only for the proof-substrate hermetic proof if the corresponding proof/evidence records merge with clean validation. It does not by itself close broader multi-environment, live-provider, production-live, implementation-directive, final-readiness, or USF-39 gates.

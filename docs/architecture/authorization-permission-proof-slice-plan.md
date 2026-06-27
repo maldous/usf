@@ -20,7 +20,7 @@ The slice is intentionally proof-plan only. A future proof runner may be created
 
 The primary semantic input is `semantic-contract.rbac-roles-and-permissions`.
 
-Supporting first-slice semantic inputs are:
+Supporting proof-substrate semantic inputs are:
 
 - `semantic-contract.authentication-platform`;
 - `interface.authentication-login-api`;

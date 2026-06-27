@@ -12,11 +12,11 @@ This rollup classifies the proof-slice gate state before the implementation dire
 
 ## Rollup Verdict
 
-GO for USF-61 to draft a filled implementation directive for the authentication first slice, provided the directive stays within the hermetic proof floor, explicitly keeps live-external-provider and production-live claims out of scope, and requires fresh proof to be rerun for the exact commit claimed by any later implementation-readiness decision.
+GO only as an authentication proof-substrate input to the all-slices implementation directive. This rollup is not a sufficient implementation directive scope and cannot narrow V2 to authentication. Any later directive must preserve the hermetic proof floor, explicitly keep live-external-provider and production-live claims out of scope unless separately proven, and require fresh proof for the exact commit claimed by any later implementation-readiness decision.
 
 NO-GO for starting USF-39. USF-39 remains blocked until USF-61 produces an accepted filled implementation directive, USF-75 performs final pre-USF-39 revalidation, and the human separately authorizes implementation extraction.
 
-NO-GO for live-external-provider or production-live readiness. USF-73 remains the deferred multi-environment proof execution gate unless a later human directive narrows the proof requirement for the first implementation pass.
+NO-GO for live-external-provider or production-live readiness. USF-73 remains the deferred multi-environment proof execution gate unless a later human directive narrows the proof requirement for the implementation pass.
 
 ## Proof and Evidence Baseline
 
@@ -36,7 +36,7 @@ Historical observability proof records remain lineage. They must not satisfy cur
 | Issue | Classification | Merge-blocking for USF-61 directive drafting? | Release/live-blocking? | Rollup treatment |
 |---|---|---:|---:|---|
 | USF-78 common proof tool contract | complete | no | no | Shared proof-only tool contract exists and can be cited. |
-| USF-79 authorization and permission behaviour proof slice | complete for current slice | no | partial | Authorization and permission semantics are covered for first-slice planning; broader runtime proof remains tied to future implementation. |
+| USF-79 authorization and permission behaviour proof slice | complete for current slice | no | partial | Authorization and permission semantics are covered for proof-substrate planning; broader runtime proof remains tied to future implementation. |
 | USF-80 tenant and identity boundary proof slice | complete for current slice | no | partial | Tenant/identity boundaries are represented for authentication planning; live/runtime enforcement waits for implementation proof. |
 | USF-81 interface contract behaviour proof slice | complete for current slice | no | partial | Interface contract semantics exist; product route/runtime behaviour is not claimed. |
 | USF-82 event, audit, and observability runtime assurance slice | complete for current slice | no | partial | Audit/event/observability semantics exist; runtime observability execution outside proof-only harness remains deferred. |
@@ -51,11 +51,11 @@ Historical observability proof records remain lineage. They must not satisfy cur
 | USF-91 storage and data governance runtime assurance slice | complete for semantic planning | no | yes | Storage/data governance expectations are explicit; runtime storage assurance is deferred. |
 | USF-92 provider reliability, degraded mode, and recovery proof slice | complete for semantic planning | no | yes | Provider failure/degraded/recovery expectations are explicit; runtime adapter reliability proof is deferred. |
 | USF-93 React readiness rule parity matrix | complete | no | partial | Historical readiness rules are mapped to USF coverage or explicit gaps. |
-| USF-73 multi-environment proof evidence execution | deferred | no, if USF-61 scopes first pass to hermetic only and requires fresh proof before a current claim | yes | Blocks any live-external-provider, production-shaped-as-release, production-live, broader multi-environment claim, or current-head proof claim until fresh evidence is rerun for the claimed commit. |
+| USF-73 multi-environment proof evidence execution | deferred | no for hermetic proof-substrate input only; yes for any stronger provider/environment claim | yes | Blocks any live-external-provider, production-shaped-as-release, production-live, broader multi-environment claim, or current-head proof claim until fresh evidence is rerun for the claimed commit. |
 
 ## Merge-Blocking Versus Release-Blocking Gaps
 
-Not merge-blocking for USF-61 directive drafting:
+Not merge-blocking for using this rollup as a proof-substrate input:
 
 - broad runtime route execution;
 - product UI execution;
@@ -67,7 +67,7 @@ Not merge-blocking for USF-61 directive drafting:
 
 Blocking for USF-39 start:
 
-- no accepted filled USF-61 implementation directive exists yet;
+- no accepted filled all-slices implementation directive exists yet;
 - USF-75 final pre-USF-39 readiness revalidation is not complete;
 - no separate human implementation directive has authorized moving USF-39 out of Backlog.
 
@@ -93,18 +93,18 @@ Release-blocking or claim-blocking until separately proven:
 
 ## USF-61 Input
 
-USF-61 may proceed to draft the filled implementation directive only under these constraints:
+An all-slices implementation directive may cite this rollup for the authentication proof substrate only under these constraints:
 
-- slice: current authentication login API/audit/workflow/provider-mode slice;
+- proof substrate: authentication login API/audit/workflow/provider-mode;
 - proof floor: hermetic internal proof using fresh authentication proof evidence rerun for the exact commit claimed by the later directive or implementation PR;
 - provider mode: hermetic-mock unless a later proof directive adds stronger evidence;
 - environment: hermetic unless a later proof directive adds stronger evidence;
-- live-external-provider proof: no for the first directive unless USF-73 or equivalent later evidence closes it;
-- production-live proof: no for the first directive unless USF-73 or equivalent later evidence closes it;
+- live-external-provider proof: no for the implementation directive unless USF-73 or equivalent later evidence closes it;
+- production-live proof: no for the implementation directive unless USF-73 or equivalent later evidence closes it;
 - schemas: remain draft unless a separate active-promotion PR satisfies the active-promotion criteria;
 - implementation: still not authorized until the filled directive is accepted and USF-75 revalidates readiness.
 
-If USF-61 needs to require live-external-provider, production-shaped release, production-live, or broad runtime proof before first implementation, then this rollup becomes a NO-GO input until USF-73 or a more specific proof execution issue closes that evidence gap.
+If the implementation directive needs to require live-external-provider, production-shaped release, production-live, or broad runtime proof before implementation, then this rollup becomes a NO-GO input until USF-73 or a more specific proof execution issue closes that evidence gap.
 
 ## Validation Expectations
 
@@ -133,6 +133,6 @@ Strict JSON parse is required for any changed JSON. This document changes no JSO
 
 ## Readiness Verdict
 
-READY_WITH_NON_BLOCKING_DEFERRED_WORK for USF-61 directive drafting under the hermetic first-slice constraints stated above.
+READY_WITH_NON_BLOCKING_DEFERRED_WORK for USF-61 directive drafting under the hermetic proof-substrate constraints stated above.
 
 NOT_READY_BLOCKING_ISSUES_REMAIN for USF-39 implementation extraction. USF-39 remains Backlog and is not started by this rollup.

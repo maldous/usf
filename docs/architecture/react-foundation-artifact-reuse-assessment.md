@@ -26,7 +26,7 @@ The current USF repository already contains merged planning and validation artef
 - PR #28 is merged and records that no current proof execution substrate is authorised for the authentication slice.
 - The current validator baseline passes for `all`, `imports`, `instances`, `evidence`, `real-instances`, and `selftest`.
 
-The remaining blocker is not lack of historical React artefacts. It is lack of an authorised current USF proof substrate and fresh current proof evidence for the first implementation slice.
+The remaining blocker is not lack of historical React artefacts. It is lack of an authorised current USF proof substrate and fresh current proof evidence for the implementation proof substrate.
 
 ## Artefact Inventory
 
@@ -58,10 +58,10 @@ The remaining blocker is not lack of historical React artefacts. It is lack of a
 | Issue | React artefacts that accelerate it | Current USF representation | Remaining gap or decision |
 |---|---|---|---|
 | USF-58 semantic expansion | capability closure, operational semantics, event semantics, interactions, UI model, data/migration plan, environment/config catalogues | Authored semantic instances plus `capability-source-coverage-matrix.md` | Broad domain corpus is still intentionally deferred beyond the current tracked slice. Future expansion should normalise by domain, not copy JSON wholesale. |
-| USF-65 capability/source coverage | file inventory, path map, capability closure, operational semantics, UI model | `docs/architecture/capability-source-coverage-matrix.md` | No immediate gap found for the current first-slice gate. Future work can add domain-specific matrices if scope widens. |
+| USF-65 capability/source coverage | file inventory, path map, capability closure, operational semantics, UI model | `docs/architecture/capability-source-coverage-matrix.md` | No immediate gap found for the current proof-substrate gate. Future work can add domain-specific matrices if scope widens. |
 | USF-66 authentication gaps | auth capability rows, auth proof inputs, auth routes/tests, session and IdP source evidence | Auth semantic instances and authentication source-use matrix | Done for the tracked slice; future auth implementation still needs a current proof substrate and directive. |
-| USF-74 per-domain sub-manifests | baseline inventory, path map, command catalogue, proof evidence index | `spec/registries/authentication-slice-source-import-manifest.json` with 159 rows | Current first-slice sub-manifest exists. Additional domain sub-manifests are deferred until new domains enter implementation scope. |
-| USF-64 source-use/disposition matrix | file inventory, path map, source import manifest, auth source rows | `docs/architecture/authentication-slice-source-use-disposition-matrix.md` | Current first-slice matrix forbids direct runtime import and authorises zero copied rows. |
+| USF-74 per-domain sub-manifests | baseline inventory, path map, command catalogue, proof evidence index | `spec/registries/authentication-slice-source-import-manifest.json` with 159 rows | Current proof-substrate sub-manifest exists. Additional domain sub-manifests are deferred until new domains enter implementation scope. |
+| USF-64 source-use/disposition matrix | file inventory, path map, source import manifest, auth source rows | `docs/architecture/authentication-slice-source-use-disposition-matrix.md` | Current proof-substrate matrix forbids direct runtime import and authorises zero copied rows. |
 | USF-60, USF-69, USF-70 validator hardening | readiness rules R1-R62, import parity tests, proof evidence tests, generated report rules | USF validator modes, selftests, implementation guard and source/evidence resolution hardening | No new immediate validator blocker found from this audit. Candidate future hardening: command-catalog coverage and generated report freshness coverage if those artefacts are authored. |
 | USF-62 proof posture | proof ladder, provider/environment gates, proof evidence index, negative-control reports | `docs/architecture/production-proof-posture-matrix.md` | Posture is represented. Current evidence remains stale/historical for USF. |
 | USF-73 proof execution | runtime proof scripts, package scripts, Make targets, proof evidence records | `docs/architecture/proof-posture-execution-assessment.md` and PR #28 decline decision | Blocked. React artefacts require historical runtime package graph/source handlers/adapters/local services and cannot be executed as USF proof without a later substrate directive. |

@@ -14,7 +14,7 @@ This policy records how generated reports and readiness artefacts may be used ar
 
 USF-39 implementation-extraction PRs may use generated reports only as derived, evidence-backed summaries. A generated report is authority rank 7 and never becomes semantic authority, proof evidence, source-import disposition, an ADR, or a validator rule.
 
-The only report types permitted for the first implementation-extraction gate are:
+The only report types permitted for an implementation-extraction gate are:
 
 - validator reports emitted by `tools/validate-spec/validate-spec.py --report` when explicitly requested;
 - readiness summary reports produced by a later authorised readiness command;

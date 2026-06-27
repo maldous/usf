@@ -1,4 +1,4 @@
-# Authentication First-Slice Implementation Directive Specification
+# Authentication Proof Substrate Directive Specification
 
 | | |
 |---|---|
@@ -8,17 +8,17 @@
 | **Issue scope** | USF-61 |
 | **Primary inputs** | `docs/architecture/implementation-directive-template.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/proof-slice-readiness-rollup.md`, `docs/architecture/proof-and-evidence-pipeline-plan.md`, `docs/architecture/generated-report-readiness-policy.md`, `docs/architecture/schema-validator-posture-decision.md`, `docs/architecture/ai-agent-work-packet-and-review-contract.md` |
 
-This specification defines the required content for a later human-filled implementation directive for the authentication first slice. It is not the filled directive. It starts no implementation, creates no implementation/runtime code, creates no implementation directory, imports no React runtime/application code, emits no proof evidence, emits no generated report, and promotes no schema.
+This specification defines the required content for a later human-filled implementation directive for the authentication proof substrate. It is not the filled directive. It starts no implementation, creates no implementation/runtime code, creates no implementation directory, imports no React runtime/application code, emits no proof evidence, emits no generated report, and promotes no schema.
 
 ## Directive Status
 
 USF-39 remains Backlog. A later human implementation directive is still required before USF-39 can start.
 
-This document resolves the directive specification and production-posture decisions for the first slice. It does not itself authorize file creation under the target implementation topology.
+This document resolves the directive specification and production-posture decisions for the proof-substrate scope. It does not itself authorize file creation under the target implementation topology.
 
-## First Implementation Slice
+## Authentication Proof Substrate Boundary
 
-The first implementation slice is bounded to the authentication login API/audit/workflow/provider-mode slice.
+This document records the authentication login API/audit/workflow/provider-mode proof substrate only. It is not the V2 migration scope boundary; V2 migration must cover all slices before USF-39 can start.
 
 In-scope semantic instances:
 
@@ -40,11 +40,11 @@ In-scope semantic instances:
 - `ui-semantic-model.authentication-login`;
 - `command.authentication-slice-proof`.
 
-Out of scope: broad platform implementation, live external provider integration, production-live operation, product UI beyond the authentication login semantic journey, generalized storage/runtime migration execution, backup/restore execution, and any source package or directory not named by a later filled directive.
+This proof-substrate reference does not by itself cover broad platform implementation, live external provider integration, production-live operation, product UI beyond the authentication login semantic journey, generalized storage/runtime migration execution, backup/restore execution, or any source package or directory not named by a later filled directive. Those areas are not excluded from V2; they remain required all-slices readiness work before USF-39 can start.
 
 ## Conditional Destination Directories
 
-A later filled directive may authorize only these destination directories for the first slice, and only when it names exact target files before creation:
+A later all-slices directive may cite these destination directories for the authentication proof substrate, and only when it names exact target files before creation:
 
 | Conditional directory | Purpose | Governing authority |
 |---|---|---|
@@ -67,30 +67,30 @@ The later filled directive must assign every target file exactly one treatment:
 - `new-with-rationale`: no direct source row drives the file, but the directive records the semantic reason and source-disposition rationale;
 - `evidence-only-support`: source rows inform review or lineage only and cannot produce runtime code.
 
-Direct runtime/application code import from `../react` is not authorized for the first directive unless a later explicit source-import directive names a specific file, source-use treatment, proof rationale, and target file.
+Direct runtime/application code import from `../react` is not authorized for the implementation directive unless a later explicit source-import directive names a specific file, source-use treatment, proof rationale, and target file.
 
 Every target file must cite source-use matrix row numbers from `docs/architecture/authentication-slice-source-use-disposition-matrix.md` or a reviewed `new-with-rationale` entry. A historical source path alone is never sufficient.
 
 ## Proof Floor and Production Posture
 
-Required first-pass proof floor:
+Required proof-substrate floor:
 
-- proof posture: hermetic internal authentication first-slice proof;
+- proof posture: hermetic internal authentication proof substrate proof;
 - proof evidence: fresh authentication proof evidence under `evidence/proof-evidence/authentication-slice-proof.json` and matching evidence envelopes, rerun for the exact commit claimed by the later directive or implementation PR;
 - required proof level: `behaviour-proven`;
 - provider mode target: `hermetic-mock`;
 - environment target: `hermetic`;
 - freshness: non-stale and commit-pinned for the claim;
-- live-external-provider proof required for first pass: no;
-- production-live proof required for first pass: no.
+- live-external-provider proof required for implementation pass: no;
+- production-live proof required for implementation pass: no.
 
-The later directive must state that live-external-provider and production-live claims are out of scope for the first implementation pass. If a human raises either claim to required before first implementation, USF-73 or an equivalent proof execution issue must close first.
+The later directive must state that live-external-provider and production-live claims are out of scope for hermetic proof-substrate claims. If a human raises either claim to required before implementation, USF-73 or an equivalent proof execution issue must close first.
 
 Hermetic proof must not be upgraded into live-external-provider or production-live readiness. Production-shaped evidence, if later authored, must not be treated as production-live evidence.
 
 ## Schema and Validator Posture
 
-Schemas remain draft. No schema is promoted active by this specification or by the first implementation directive unless a separate active-promotion PR satisfies the active-promotion criteria.
+Schemas remain draft. No schema is promoted active by this specification or by the implementation directive unless a separate active-promotion PR satisfies the active-promotion criteria.
 
 The validator remains the required advisory gate for repository consistency. A future implementation PR must pass the implementation guard and PR diff modes that exist at the time of the PR.
 

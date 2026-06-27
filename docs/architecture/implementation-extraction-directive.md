@@ -7,7 +7,7 @@
 | **Authority level** | Human implementation directive once signed; subordinate to the Charter, Authority Model, accepted ADRs, validators, and runtime proof evidence |
 | **Issue scope** | USF-100 (this directive); authorises USF-39 only after signature and a separate start action |
 | **Drafted by** | Agent draft under delegation, for human review; the agent does not self-authorise implementation |
-| **Primary inputs** | `docs/architecture/implementation-directive-template.md`, `docs/architecture/authentication-first-slice-implementation-directive-specification.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/semantic-source-use-closure-ledger.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/adr/0005-react-hexagonal-architecture-carry-forward.md`, `docs/adr/0006-proof-freshness-anchor-carrier.md`, `docs/adr/0007-proof-anchor-ci-signing-identity.md`, `docs/architecture/complete-readiness-blocker-register.md`, `tools/validate-spec/validate-spec.py` |
+| **Primary inputs** | `docs/architecture/implementation-directive-template.md`, `docs/architecture/authentication-proof-substrate-implementation-directive-specification.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/semantic-source-use-closure-ledger.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/architecture/final-v2-readiness-reconciliation.md`, `docs/adr/0005-react-hexagonal-architecture-carry-forward.md`, `docs/adr/0006-proof-freshness-anchor-carrier.md`, `docs/adr/0007-proof-anchor-ci-signing-identity.md`, `docs/adr/0008-proof-anchor-attested-tag-carrier-amendment.md`, `docs/architecture/complete-readiness-blocker-register.md`, `tools/validate-spec/validate-spec.py` |
 
 This is the human-filled implementation directive for the whole USF V2 implementation extraction. It governs the entire V2 migration across all slices. It does not itself create implementation code, create implementation directories, import `../react` runtime code, mirror source paths, emit proof evidence, emit generated reports, or promote schemas. It does not move USF-39 out of Backlog. USF-39 remains Backlog until this directive is signed and a separate explicit start action is authorised.
 
@@ -20,6 +20,10 @@ Acceptance requires three distinct human actions, none of which the agent perfor
 - completing the signature block below with a named human and an authorisation date;
 - recording acceptance on the USF-100 Linear record;
 - issuing a separate USF-39 start action after USF-75 final pre-extraction revalidation passes.
+
+## Human-Only Acceptance Boundary
+
+This human-only acceptance boundary is deliberate: the validator can check directive structure, required scope phrases, and unsafe omissions, but it cannot sign the directive, accept USF-100, move USF-39, or decide that deferred slice gates are acceptable. Any future acceptance must name the authorising human, the accepted commit, and the residual blockers or explicit deferrals that the human accepts. A generated report, CI status, local proof stdout, or agent-written comment is not acceptance authority.
 
 ## Authorising Human
 
@@ -36,6 +40,29 @@ The scope of this directive is the whole USF V2 implementation extraction: all s
 Capabilities classified `excluded-not-applicable` or `deprecated` in the closure ledger and equivalence audit are out of scope and stay out of scope unless a later signed directive revision adds them. Capabilities classified `semantic-only-deferred` are in scope for extraction but must first have their semantic facets and source-use disposition completed before their target files are created (see slice gating below).
 
 The migration extracts the whole platform under one accepted directive, sequenced slice by slice, so that every slice is governed by identical authority, source-use, and proof rules. No slice is implemented ahead of its semantic and source-use closure, and no slice weakens the rules that govern the others.
+
+## Whole-Platform Slice Readiness Pack
+
+This whole-platform slice readiness pack states the slice gates that must exist before a slice creates files. It is not implementation code and it does not create target files. The pack uses the current semantic-contract corpus as the slice inventory. Every slice must satisfy its pre-file slice gate before any file is created: topology roots must be named, exact target files or an explicit pre-file hold must be recorded, a per-slice source-use disposition matrix must cover the target files, a proof command must exist for any behaviour claim, and any validator extensions required to enforce those gates must be in place.
+
+| Slice / capability domain | Semantic contracts | Target topology and files | Source-use matrix | Proof floor and proof command | Explicit exclusions or deferrals |
+|---|---:|---|---|---|---|
+| `authentication` | 1 | Conditional roots are listed in `docs/architecture/target-implementation-topology-plan.md`; exact target files still require per-PR listing before creation. | `docs/architecture/authentication-slice-source-use-disposition-matrix.md`. | Hermetic-mock, hermetic, behaviour-proven; `tools/prove-authentication-slice.py` and `command.authentication-slice-proof`. | Live-external-provider and production-live remain out of scope. |
+| `identity-access` | 13 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before any target file. | Hermetic proof command required before any behaviour claim. | Delegated administration and UI facets remain partly deferred as recorded in the closure ledger. |
+| `configuration` | 6 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before any target file. | Hermetic proof command required before any behaviour claim. | UI facets and non-auth configuration breadth remain gated. |
+| `data-platform` | 6 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before migrations, storage, retention, import/export, or governance files. | Hermetic proof command required before any behaviour claim. | Data migration/runtime artefacts remain uncreated; deferred manifest rows must be imported before use. |
+| `events-workflow` | 4 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before event bus, scheduler, notification, or workflow files. | Hermetic proof command required before any behaviour claim. | Workflow engine source/proof rows remain deferred. |
+| `foundation` | 11 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before any foundation runtime or configuration file. | Hermetic proof command required before any behaviour claim. | Governance documents do not authorise runtime roots by themselves. |
+| `observability-ops` | 7 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before logs, metrics, alerting, service-catalogue, or ops files. | Hermetic proof command required before any behaviour claim; observability proof remains hermetic/local. | On-call/status-page alerting remains deprecated or excluded as recorded in the closure ledger. |
+| `security-governance` | 3 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before any governance/security implementation file. | Hermetic proof command required before any behaviour claim. | AI stop conditions are authority controls, not runtime implementation permission. |
+| `storage` | 1 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before object-storage files. | Hermetic proof command required before any behaviour claim. | Object storage remains a deferred gap contract until authored. |
+| `support-admin` | 2 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before support/admin files. | Hermetic proof command required before any behaviour claim. | Support/admin targets remain deferred gap contracts until authored. |
+| `compute-runtime` | 3 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before worker, function, or secret-runtime files. | Hermetic proof command required before any behaviour claim. | Runtime substrate creation is blocked until separately authorised by topology and validator gates. |
+| `entitlements-billing` | 4 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before entitlement, billing, metering, or quota files. | Hermetic proof command required before any behaviour claim. | Entitlement and billing contracts remain deferred gap contracts until authored. |
+| `developer-platform` | 5 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before developer-platform files. | Hermetic proof command required before any behaviour claim. | Developer-platform targets remain deferred or non-applicable until authored. |
+| `search` | 1 | Pre-file slice gate: topology roots and exact target files must be added before creation. | Required before search files. | Hermetic proof command required before any behaviour claim. | Search remains a deferred gap contract until authored. |
+
+The required validator extensions before broad implementation are: fail-closed checks that every implementation slice has topology roots, exact target files or an explicit pre-file hold, a per-slice source-use disposition matrix, proof-command coverage for any behaviour claim, and no path mirroring or implementation directory outside the authorised roots.
 
 ## Governing Repository Artefacts
 
@@ -64,7 +91,7 @@ Every created target file cites the source-use disposition matrix row numbers fo
 
 ## Proof Floor and Production Posture
 
-The proof floor for every slice is hermetic internal behaviour proof, fresh and commit-pinned for the claimed commit. Each slice's behaviour must be proven by the proof harness for that slice and carried by the proof-freshness anchor mechanism (ADR-0006 carrier, ADR-0007 CI signer, `.github/workflows/proof-anchor.yml`), which publishes and verifies a signed, attested anchor on the merge commit. Committed evidence JSON remains historical by design and is never the freshness carrier. The required proof level is `behaviour-proven`; the provider-mode target is `hermetic-mock`; the environment target is `hermetic`.
+The proof floor for every slice is hermetic internal behaviour proof, fresh and commit-pinned for the claimed commit. Each slice's behaviour must be proven by the proof harness for that slice and carried by the proof-freshness anchor mechanism (ADR-0006 carrier lineage, ADR-0007 CI signer, ADR-0008 attested-tag amendment, `.github/workflows/proof-anchor.yml`), which publishes and verifies a CI-attested anchor on the merge commit. Committed evidence JSON remains historical by design and is never the freshness carrier. The required proof level is `behaviour-proven`; the provider-mode target is `hermetic-mock`; the environment target is `hermetic`.
 
 Fresh proof is required, per slice, before that slice's implementation PR merges when the PR makes or refreshes a behaviour claim. A behaviour claim whose proof is stale, missing for the claimed commit, or absent is a stop condition.
 

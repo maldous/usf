@@ -6,7 +6,7 @@
 | **Status** | Draft / gate result |
 | **Authority level** | Reviewable readiness artefact; subordinate to the Charter, Authority Model, accepted ADRs, validators, semantic instances, runtime proof evidence, source-use matrices, and any later human-filled implementation directive |
 | **Issue scope** | USF-75 |
-| **Primary inputs** | USF-58 through USF-74, USF-78 through USF-95, `docs/architecture/proof-slice-readiness-rollup.md`, `docs/architecture/authentication-first-slice-implementation-directive-specification.md`, `docs/architecture/proof-tool-contract-standard.md`, `docs/architecture/proof-execution-substrate-authorization.md`, `evidence/`, `spec/instances/`, and `tools/validate-spec/validate-spec.py` |
+| **Primary inputs** | USF-58 through USF-74, USF-78 through USF-95, `docs/architecture/proof-slice-readiness-rollup.md`, `docs/architecture/authentication-proof-substrate-implementation-directive-specification.md`, `docs/architecture/proof-tool-contract-standard.md`, `docs/architecture/proof-execution-substrate-authorization.md`, `evidence/`, `spec/instances/`, and `tools/validate-spec/validate-spec.py` |
 
 This revalidation records the final pre-USF-39 gate state after the proof-slice readiness chain. It creates no implementation code, implementation directory, proof evidence, generated report, schema activation, source import, or runtime substrate. It does not start USF-39.
 
@@ -16,7 +16,7 @@ NO-GO for starting USF-39.
 
 USF-39 must remain Backlog because no separate human-filled implementation directive has authorized implementation extraction. USF-61 produced an implementation directive specification only. That specification defines what a later directive must include; it does not itself authorize implementation files, implementation directories, React runtime import, runtime package creation, or product execution.
 
-The repository is ready only for a human to decide whether to issue a filled implementation directive for the bounded authentication first slice. If that directive is issued later, USF-39 must still start under the directive's exact scope and validation gates, not under this revalidation document.
+The repository is ready only for a human to decide whether to issue a filled implementation directive for the bounded authentication proof substrate. If that directive is issued later, USF-39 must still start under the directive's exact scope and validation gates, not under this revalidation document.
 
 ## Gate Inputs Reviewed
 
@@ -30,7 +30,7 @@ The following gate inputs are present and merged:
 - AI agent work packet and review contract from USF-95;
 - implementation directive specification from USF-61.
 
-USF-73 remains deferred for current-head proof freshness, multi-environment proof, live-external-provider proof, production-shaped proof, and production-live proof. That does not block keeping USF-39 Backlog or issuing a hermetic-only first-slice directive later, but it blocks any current implementation-readiness or broader readiness claim until proof is rerun for the exact commit being claimed.
+USF-73 remains deferred for current-head proof freshness, multi-environment proof, live-external-provider proof, production-shaped proof, and production-live proof. That does not block keeping USF-39 Backlog or issuing a hermetic-only proof-substrate directive later, but it blocks any current implementation-readiness or broader readiness claim until proof is rerun for the exact commit being claimed.
 
 ## Acceptance Criteria Confirmation
 

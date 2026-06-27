@@ -44,7 +44,7 @@ Those files are source evidence and proof-command lineage. They are not executab
 
 ## Required Evidence To Close USF-73
 
-USF-73 can close only when the required proof postures have records that satisfy the production proof posture matrix. For the first implementation directive path, the minimum missing artefacts are:
+USF-73 can close only when the required proof postures have records that satisfy the production proof posture matrix. For the implementation directive path, the minimum missing artefacts are:
 
 - a permitted proof execution substrate for the authentication slice;
 - emitted evidence from the executed proof;
@@ -58,7 +58,7 @@ The current state does not meet those requirements.
 
 ## Relationship To Downstream Gates
 
-- USF-59 remains blocked because no fresh commit-pinned proof record exists for the first extraction slice.
+- USF-59 remains blocked because no fresh commit-pinned proof record exists for the claimed extraction scope.
 - USF-61 must not issue an implementation extraction directive while USF-59 remains blocked, unless a human decision explicitly narrows USF-61 to a non-authorising planning artefact.
 - USF-75 cannot perform a final pre-USF-39 go decision until USF-73, USF-59, and USF-61 are resolved. Any path that does not require fresh proof evidence would require an explicit higher-authority amendment that preserves the proof-freshness, provider-honesty, and no-overclaim rules.
 - USF-39 must remain Backlog and must not start from this assessment.

@@ -8,7 +8,7 @@
 | **Issue scope** | USF-90 |
 | **Primary inputs** | `spec/instances/interface-contract/authentication-login-api.json`, `spec/instances/audit-event/authentication-login.json`, `spec/instances/observability-signal/authentication-login-audit.json`, `spec/instances/workflow/authentication-login.json`, `spec/instances/workflow/authentication-identity-context.json`, `docs/architecture/proof-tool-contract-standard.md`, `spec/registries/source-import-manifest.json` |
 
-This plan records route-level security and observability assurance for the current authentication first slice. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, makes no live or production proof claim, and does not start USF-39.
+This plan records route-level security and observability assurance for the current authentication proof substrate. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, makes no live or production proof claim, and does not start USF-39.
 
 ## Purpose
 
@@ -119,4 +119,4 @@ This plan does not authorize:
 
 ## Readiness Effect
 
-When merged with clean validation, this plan and the updated route interface satisfy the current tracked USF-90 route assurance slice. They do not complete deferred route coverage outside the authentication first slice and do not authorize implementation extraction.
+When merged with clean validation, this plan and the updated route interface satisfy the current tracked USF-90 route assurance slice. They do not complete deferred route coverage outside the authentication proof substrate and do not authorize implementation extraction.

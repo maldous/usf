@@ -6,7 +6,7 @@ Accepted.
 
 ## Description
 
-Records the decision that the USF proof-freshness anchor carrier is a signed annotated Git tag, verified by the validator against an approved maintainer trust root, and specifies the model that resolves the self-referential commit-hash problem without weakening proof honesty. It records the decision and the required follow-up; it does not by itself implement the validator signature check, register a signer key, or publish fresh proof.
+Records the original decision that the USF proof-freshness anchor carrier is a signed annotated Git tag, verified by the validator against an approved maintainer trust root, and specifies the model that resolves the self-referential commit-hash problem without weakening proof honesty. ADR 0008 supersedes the "signed tag" wording for the implemented carrier: the current workflow publishes an annotated tag carrying a CI-attested anchor payload, rather than a standalone GPG-signed tag.
 
 ## Context
 
@@ -34,6 +34,7 @@ A signed annotated tag points at the exact merge commit without changing it, whi
 - `docs/architecture/proof-freshness-publication-model.md`
 - `docs/architecture/authority-model.md`
 - `docs/architecture/git-practices-standard.md`
+- `docs/adr/0008-proof-anchor-attested-tag-carrier-amendment.md`
 - `spec/schemas/proof-evidence.schema.json`
 
 ## Source References
@@ -84,7 +85,7 @@ A signed annotated tag points at the exact merge commit without changing it, whi
 ## Supersession
 
 - Supersedes: none
-- Superseded by: none
+- Superseded by: `docs/adr/0008-proof-anchor-attested-tag-carrier-amendment.md` for the implemented carrier wording
 
 ## Machine-Readable ADR Instance
 

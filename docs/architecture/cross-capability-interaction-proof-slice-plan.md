@@ -8,11 +8,11 @@
 | **Issue scope** | USF-89 |
 | **Primary inputs** | `spec/instances/workflow/authentication-identity-context.json`, `spec/instances/workflow/authentication-login.json`, `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/proof-tool-contract-standard.md`, `spec/registries/source-import-manifest.json` |
 
-This plan records the current first-slice cross-capability interaction boundary. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, and does not start USF-39.
+This plan records the current proof-substrate cross-capability interaction boundary. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, and does not start USF-39.
 
 ## Purpose
 
-The authentication first slice crosses authentication, identity access, RBAC, audit, observability, provider mode, environment, and proof-command semantics. Implementation extraction cannot infer those interactions from source shape, package boundaries, or generated reports.
+The authentication proof substrate crosses authentication, identity access, RBAC, audit, observability, provider mode, environment, and proof-command semantics. Implementation extraction cannot infer those interactions from source shape, package boundaries, or generated reports.
 
 USF already has a workflow schema kind for `cross-capability-interaction`; therefore the current slice uses `workflow.authentication-identity-context` rather than creating a new schema type.
 
@@ -56,7 +56,7 @@ This slice has no rollback-style business transaction. Compensation is explicit 
 
 ## Explicit Non-Interactions
 
-The following are non-applicable for the current first-slice interaction and must not be guessed from historical source:
+The following are non-applicable for the current proof-substrate interaction and must not be guessed from historical source:
 
 - billing, entitlement metering, quota, subscription, invoice, and dunning interactions;
 - search indexing and product search interactions;
@@ -111,4 +111,4 @@ This plan does not authorize:
 
 ## Readiness Effect
 
-When merged with clean validation, this plan and the strengthened workflow satisfy the current tracked USF-89 cross-capability interaction slice. They do not complete deferred cross-domain interaction coverage outside the authentication first slice and do not authorize implementation extraction.
+When merged with clean validation, this plan and the strengthened workflow satisfy the current tracked USF-89 cross-capability interaction slice. They do not complete deferred cross-domain interaction coverage outside the authentication proof substrate and do not authorize implementation extraction.
