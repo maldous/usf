@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.provider-environment-classification",
   "title": "Provider Environment Classification Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 70: Provider environment classification. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Deferred semantic contract for provider environment classification. Behavioural source (usecases, tests, proofs) is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring facets.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "deferred",
   "ontologyConcepts": [
@@ -22,46 +22,50 @@
   "facets": {
     "lifecycle": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "stateModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "permissions": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "contracts": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "validation": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "errorModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "auditModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "readinessModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "proof": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Behavioural source is not yet in the USF source-import manifest; import the source rows (USF-74) before authoring source-backed facets."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

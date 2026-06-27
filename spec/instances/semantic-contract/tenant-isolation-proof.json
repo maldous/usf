@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.tenant-isolation-proof",
   "title": "Tenant Isolation Proof Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 47: Tenant isolation proof. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Source-backed draft semantic contract for the tenant isolation proof capability, recovered from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Audit Event",
+    "Validator"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,101 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facet descriptions are concise source-backed summaries citing verified manifest rows; proof is hermetic/stale, not current readiness. Enrich facet detail and publish fresh proof before generation; respect the hexagonal constraint in ADR 0005.",
   "capability": "tenant-isolation-proof",
   "capabilityDomain": "security-governance",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/tenant-storage.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "State model recovered from cited React storage/port/adapter source.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/tenant-storage.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/cookie-security.test.ts",
+        "apps/platform-api/tests/unit/tenant-storage.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Operation/interface contracts recovered from cited React source behind ports/adapters.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/tenant-storage.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Validation recovered from cited React tests and source.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/cookie-security.test.ts",
+        "apps/platform-api/tests/unit/tenant-storage.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Deterministic fail-closed error outcomes recovered from cited React tests and source.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/cookie-security.test.ts",
+        "apps/platform-api/tests/unit/tenant-storage.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/cookie-security.test.ts",
+        "apps/platform-api/tests/unit/tenant-storage.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+        "apps/platform-api/scripts/tenant-storage-runtime-proof.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+        "apps/platform-api/scripts/tenant-storage-runtime-proof.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
+    "apps/platform-api/scripts/tenant-storage-runtime-proof.ts",
+    "apps/platform-api/src/usecases/tenant-storage.ts",
+    "apps/platform-api/tests/unit/cookie-security.test.ts",
+    "apps/platform-api/tests/unit/tenant-storage.test.ts",
+    "docs/adr/0049-tenant-storage-readiness.md",
+    "docs/evidence/operations/tenant-storage-readiness.md",
+    "docs/evidence/platform/domain-identity-capability-permutation-review.md",
+    "e2e/prod/cookie-security.test.ts",
+    "e2e/prod/security-headers.test.ts",
+    "packages/domain-identity/README.md",
+    "packages/domain-identity/package.json"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }
