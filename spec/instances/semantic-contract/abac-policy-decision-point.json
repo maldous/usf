@@ -24,7 +24,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Read current policy, audit, set replacement; request evaluation is authorization-server-first with a static fail-closed fallback and step-up on insufficient auth.",
+      "description": "The decision point reads the current resource policy, audits, and sets a replacement, while request evaluation is authorization-server-first when a token is present, falls back to a static permission backstop when the resource is unregistered or the server is unavailable, denies fail-closed on policy denial, and requests step-up on insufficient auth level. Policy administration and per-request evaluation are distinct flows over the same guard metadata.",
       "sourceRefs": [
         "apps/platform-api/src/server/authorize-resource.ts",
         "apps/platform-api/tests/unit/authorize-resource.test.ts"
@@ -32,49 +32,49 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Each guarded route declares a resource, scope, and required permission; optional resource-policy records and decision results form the state.",
+      "description": "State is each guarded route's resource, scope, and required permission, plus optional resource-policy records and a decision result that is one of granted, policy-denied, insufficient-auth-level, server-unavailable, or resource-not-registered, with a static permission fallback. The decision is derived per request rather than stored.",
       "sourceRefs": [
         "apps/platform-api/src/server/authorize-resource.ts"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "Routes declare requiredPermission/resource/scope; policy writes sit behind tenant auth-settings; audit precedes mutation.",
+      "description": "Routes declare an explicit required permission, resource, and scope consumed as a policy-enforcement point, and resource-policy writes sit behind tenant auth-settings permission with audit-before-adapter mutation. Authorization itself is the permission gate for every protected operation.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Resource-policy read/write plus per-route guard metadata consumed by the authorization pipeline.",
+      "description": "The operation surface is resource-policy read and replacement plus the per-route resource and scope guard metadata consumed by the request pipeline and the query authorizer. Decisions are returned to callers rather than persisted as contract output.",
       "sourceRefs": [
         "apps/platform-api/src/server/authorize-resource.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Unknown/unregistered resources degrade to static evaluation; an absent static policy denies; an injected policy may allow.",
+      "description": "Unknown or unregistered resources degrade only to the static permission backstop, an absent static permission denies, an injected resource policy may allow without a static permission, and wildcard policy names are accepted. Validation never opens an unregistered resource by default.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "policy_denied, insufficient_auth/step-up, and missing-token outcomes; fail-closed by default.",
+      "description": "Policy denial maps to 403, insufficient auth level maps to a step-up-required/401, a missing expected token maps to authentication-required/401, and static fallback without a permission maps to 403; every path is fail-closed by default. Server unavailability is an explicit non-decisive degradation, not an implicit allow.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "Resource-policy mutations are audited before the adapter set; read-only authorization checks are logged, not per-request audited.",
+      "description": "Resource-policy mutations emit an audit-before-change event and audit failure prevents the adapter mutation, while read-only authorization checks are logged or returned rather than audited per request. Audit precedes any policy change.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts"
       ]
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Ready for the local policy seam; authorization-server unavailability is an explicit non-decisive degradation with static fallback.",
+      "description": "Readiness is invariant-ready for the local policy seam, and authorization-server unavailability and resource-not-registered are explicit degraded, non-decisive states with a static fallback rather than a fake allow. Degraded mode keeps read-only readiness and audit visible.",
       "sourceRefs": [
         "apps/platform-api/scripts/entitlement-policy-chain-runtime-proof.ts",
         "apps/platform-api/tests/unit/authorize-resource.test.ts"
@@ -82,7 +82,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Unit and runtime proof of the decision and policy chain. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Unit proofs cover the decision logic and resource-policy administration and a runtime proof covers permission-before-entitlement policy ordering, demonstrated in React via hermetic state/policy-chain validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/entitlement-policy-chain-runtime-proof.ts",
         "apps/platform-api/tests/unit/authorize-resource.test.ts"

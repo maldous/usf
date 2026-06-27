@@ -24,21 +24,21 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "description": "Exposes platform metrics and distributed traces through an admin observability metrics contract and an observability readiness query, giving operators time-series and span visibility into platform behaviour. The capability is provider-backed but owns no tenant records; it affects shared platform behaviour and must keep its lifecycle/readiness model stable across extraction.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/observability.ts"
       ]
     },
     "stateModel": {
       "status": "complete",
-      "description": "Persistent/runtime state model recovered from cited React storage and port/adapter source.",
+      "description": "It owns no database schema: durable storage lives in the metrics/trace backends (a Prometheus-style series store and an OTLP/Tempo-style trace store) reached through ports, while the capability holds only contract/config and a readiness record. Spans preserve tenant and request context as attributes for correlation, and behaviour changes must update the corresponding semantic artefacts rather than introducing an owned schema.",
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/029-observability.sql"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "description": "Metrics and readiness operations are admin-gated under standard platform security controls; since no tenant rows are owned, isolation is enforced through scoped attributes (organisation/tenant id on signals and spans) rather than row-level data ownership. Access to the shared observability surface still fails closed when configuration or permission is missing.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability.test.ts",
         "apps/platform-api/tests/substrate/observability-smoke.test.ts"
@@ -46,14 +46,14 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Operation and interface contracts recovered from cited React source behind ports/adapters.",
+      "description": "Provides a metrics query operation and a readiness query behind ports/adapters so the metrics and trace providers (e.g. Prometheus and an OTel collector feeding Tempo) are swappable without changing the contract. The emitted metric names follow a stable per-capability convention (request total, failure total, readiness state) and traces expose route/use-case/provider spans that carry tenant context end to end.",
       "sourceRefs": [
         "apps/platform-api/src/server/observability.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Input and invariant validation recovered from cited React tests and source.",
+      "description": "Query parameters are validated for type, range, and required scope before being passed to a provider, and missing or invalid configuration fails closed instead of inventing defaults. Invariants ensure metric and span emission stays within the declared, controlled vocabulary so arbitrary metric or attribute names are not silently accepted.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability.test.ts",
         "apps/platform-api/tests/substrate/observability-smoke.test.ts"
@@ -61,7 +61,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Deterministic, fail-closed error outcomes recovered from cited React tests and source.",
+      "description": "Provider failure returns a typed degraded/readiness failure and never fabricates successful provider state; repeated typed errors crossing a threshold are an explicit alert condition. Because the capability owns no tenant data, the dominant failure risk is semantic drift or configuration loss rather than data loss, and error paths keep mutation boundaries closed.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability.test.ts",
         "apps/platform-api/tests/substrate/observability-smoke.test.ts"
@@ -69,7 +69,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "description": "Configuration and contract changes are tracked as auditable platform actions with correlation to request and trace identifiers, even though no tenant records are mutated. Audit and observability signals must agree with collected proof output when a proof claim depends on a given metric or trace.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/observability.test.ts",
         "apps/platform-api/tests/substrate/observability-smoke.test.ts"
@@ -77,14 +77,14 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "description": "Readiness is a queryable posture covering metrics and trace pipelines that degrades explicitly when the metrics provider or OTel collector is unavailable, disabling dependent side-effect paths while keeping read-only readiness and audit visible. Emitted readiness, error, and audit signals use the controlled, OpenTelemetry-informed observability vocabulary without claiming OpenTelemetry compliance.",
       "sourceRefs": [
         "apps/platform-api/scripts/observability-signals-runtime-proof.ts"
       ]
     },
     "proof": {
       "status": "complete",
-      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by the cited metrics (Prometheus) and dashboards runtime proofs plus observability tests, demonstrating metric exposure, trace correlation, and readiness reporting as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/observability-signals-runtime-proof.ts"
       ]

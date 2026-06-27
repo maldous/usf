@@ -22,7 +22,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the lifecycle and operations as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Classification capability that places each provider on an environment-posture axis (hermetic, local, sandbox, live) while keeping provider mode and environment as separate honest dimensions; it is provider-backed but owns no database schema. It deploys the V1-proven env-classification matrix contract and must keep its lifecycle/readiness model unchanged during extraction, with migrations limited to contract/config references that update semantic artefacts when behaviour changes. Recovery re-runs proof:provider-environment-classification before promotion continues.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -30,7 +30,7 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the state and data model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The state is the classification matrix: per provider/capability, its environment posture and the separation between provider mode and environment, held as configuration rather than owned tenant rows. It has no owned database schema, so backup scope is configuration/evidence only and restore cannot create tenant data. The matrix encodes that hermetic-mock must not be read as live-external and that environment must not upgrade provider mode by implication.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -38,7 +38,7 @@
     },
     "permissions": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the permission and tenant-isolation model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "It owns no tenant records and exposes no tenant-mutating routes, so standard platform security controls apply; its tenant impact is indirect through correct posture labelling. Classification is an operator/governance concern, not an end-user permission. The separation it enforces is what prevents a hermetic or sandbox provider from being treated as production-live.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -46,7 +46,7 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the operation and interface contracts as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The contract is the env-classification matrix that consumers read to know a provider's honest environment posture, mediated through configuration rather than a tenant API. Configuration is read from the declared provider/config plane and missing or invalid configuration fails closed instead of inventing defaults. The matrix is the authority other capabilities use to avoid overclaiming proof posture.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -54,7 +54,7 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the input and invariant validation as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Validation enforces the cross-dimension safety rules: provider mode and environment stay independent, hermetic-mock must not satisfy live-external-provider, and production-shaped must not satisfy production-live. Inputs are the per-provider posture declarations, which must be consistent and complete. Any classification that would upgrade posture by implication is rejected.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -62,7 +62,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the fail-closed error model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Provider failure returns a typed degraded/readiness failure, keeps mutation boundaries closed, and does not fabricate successful provider state; degraded mode disables dependent side-effect paths while keeping read-only readiness and audit visible. The risk class is semantic drift or configuration loss, not tenant data loss. A blocked classification readiness or failing promotion proof is alertable.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -70,7 +70,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the audit model for state-changing actions as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Because it owns no tenant mutation, its audit concern is the recorded classification lineage: changes to a provider's environment posture are captured as reviewable configuration/semantic changes. Readiness and audit stay visible in degraded mode. This preserves an honest, inspectable record that prevents posture inflation.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -78,7 +78,7 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. This facet captures the readiness posture as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Readiness means every relevant provider has an explicit, consistent environment classification with provider mode and environment kept separate; unavailable dependencies fail closed through the readiness model. Readiness is shown by re-running proof:provider-environment-classification rather than a live heartbeat. Stale or unknown classifications do not count as ready.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -86,7 +86,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Classification of providers by environment posture (hermetic, local, sandbox, live) keeping provider mode and environment as separate honest dimensions. Proof expectation captured as semantic information; ../react proof is hermetic/runtime lineage and fresh USF proof is pending USF-101/USF-59.",
+      "description": "Proof is proof:provider-environment-classification, demonstrating that the matrix keeps provider mode and environment as separate, honestly classified dimensions. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"

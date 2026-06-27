@@ -24,7 +24,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "description": "Registers platform services and their provider integration model, governing how each service is built, composed, or adapted and how it is exposed; it is provider-backed, database-backed, and touches tenant data. It deploys the V1-proven contract for platform-services readiness and GET /api/platform/service-catalog (catalog v2) and must keep its lifecycle/readiness model unchanged during extraction. Recovery re-runs proof:platform-services, proof:service-clickthrough-policy, proof:service-catalog-registry, and proof:entitlements-routes before promotion continues.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/platform-services.ts",
         "apps/platform-api/src/usecases/service-catalog.ts"
@@ -32,7 +32,7 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "State model recovered from cited React storage/port/adapter source.",
+      "description": "State includes each service's key, name, and category; its environment model; visibility (tenant_scoped_safe, global_only, or not_exposed); the integration decision (build, compose, adapter, defer, or reject); the entitlement key; proof references; console-access flags; readiness status; and provider details. Database changes use ordered SQL migrations that must preserve this proven state model, and rollback is forward-fix or guarded restore after migration lineage is verified so tenant data is never silently dropped or remapped. As a tenant-data participant it is subject to tenant backup/export/retention/legal-hold semantics.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/platform-services.ts",
         "apps/platform-api/src/usecases/service-catalog.ts"
@@ -40,7 +40,7 @@
     },
     "permissions": {
       "status": "complete",
-      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "description": "Because it can affect tenant-visible data or access, it must preserve tenant isolation: visibility classifications (tenant_scoped_safe vs global_only vs not_exposed) and entitlement keys gate what each tenant can see and reach. Mutating operations are administrative and must keep mutation boundaries closed on failure. Tenant-scoped reads and clickthrough access are governed by the recorded visibility and entitlement model.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-services.test.ts",
         "apps/platform-api/tests/unit/service-catalog.test.ts"
@@ -48,7 +48,7 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Operation/interface contracts recovered from cited React source behind ports/adapters.",
+      "description": "The interface contract is the platform-services readiness surface and the service-catalog read API behind ports/adapters, returning catalog entries with their decision, visibility, entitlement, and readiness fields. Configuration is read from the declared provider/config plane and missing or invalid configuration fails closed rather than inventing UI defaults. Provider integration is mediated through ports so adapters can be swapped without changing the catalog contract.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/platform-services.ts",
         "apps/platform-api/src/usecases/service-catalog.ts"
@@ -56,7 +56,7 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Validation recovered from cited React tests and source.",
+      "description": "Validation enforces that each catalog entry has a coherent decision, visibility, entitlement, and readiness state, that tenant-scoped exposure is safe, and that provider details resolve. Inputs are checked before mutation and missing or invalid configuration fails closed. It guards against exposing a service more broadly than its visibility classification permits.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-services.test.ts",
         "apps/platform-api/tests/unit/service-catalog.test.ts"
@@ -64,7 +64,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Deterministic fail-closed error outcomes recovered from cited React tests and source.",
+      "description": "Provider failure returns a typed degraded/readiness failure, keeps mutation boundaries closed, and does not fabricate successful provider state; degraded mode disables side-effecting paths that depend on the observability adapters while keeping read-only readiness and audit visible. Tenant data loss is possible only if migration, restore, or export semantics are bypassed, which the error model forbids. A missing tenant isolation or audit signal is an alertable tenant-data-or-security condition.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-services.test.ts",
         "apps/platform-api/tests/unit/service-catalog.test.ts"
@@ -72,7 +72,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "description": "State-changing catalog and integration actions follow audit-before-mutation behaviour recovered from the React source and tests, recording the actor and change so the tenant boundary and DSR/GDPR evidence are preserved. Audit and readiness signals stay visible in degraded mode. Recovery preserves tenant boundary and audit evidence rather than silently overwriting it.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-services.test.ts",
         "apps/platform-api/tests/unit/service-catalog.test.ts"
@@ -80,7 +80,7 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "description": "Readiness reflects whether each service's providers resolve and its catalog entry is coherent; it degrades explicitly when the underlying substrate (for example the observability adapters) is unavailable rather than reporting false health. Readiness fails closed and remains visible read-only in degraded mode. Promotion is gated on the named platform-services and catalog proofs passing.",
       "sourceRefs": [
         "apps/platform-api/scripts/platform-services-runtime-proof.ts",
         "apps/platform-api/scripts/service-catalog-registry-runtime-proof.ts"
@@ -88,7 +88,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by proof:platform-services, proof:service-clickthrough-policy, proof:service-catalog-registry, and proof:entitlements-routes together with the cited unit tests, demonstrating catalog, visibility, entitlement, and readiness semantics. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/platform-services-runtime-proof.ts",
         "apps/platform-api/scripts/service-catalog-registry-runtime-proof.ts"

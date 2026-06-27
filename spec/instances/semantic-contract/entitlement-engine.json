@@ -24,7 +24,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Absent or not-granted denies by default; operator grant transitions to granted; revoke transitions to revoked; revoked/absent block access.",
+      "description": "Entitlement lifecycle is deny-by-default: an absent or not-granted key denies, an operator grant moves a key to granted, an operator revoke moves it to revoked, and both revoked and absent block access. Tenant self-reads project the catalog of keys as granted, revoked, or not-granted.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/entitlements.ts",
         "apps/platform-api/tests/unit/entitlements.test.ts"
@@ -32,7 +32,7 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Per-organisation entitlement keys with granted|revoked state, source, metadata, and update lineage; RLS-isolated.",
+      "description": "State is an organisation id plus entitlement key with a state of granted or revoked alongside source, metadata, update timestamp, and updater, while the tenant self-read view projects every catalog key into granted, revoked, or not-granted. Feature flags are explicitly distinct from entitlements.",
       "sourceRefs": [
         "apps/platform-api/src/db/migrations/022-tenant-entitlements.sql",
         "apps/platform-api/src/db/migrations/023-fix-entitlements-rls.sql"
@@ -40,49 +40,49 @@
     },
     "permissions": {
       "status": "complete",
-      "description": "tenant.entitlements.read for tenants; platform.entitlements.read/write for operators; the policy chain denies before entitlement evaluation.",
+      "description": "Tenant read requires the tenant entitlements read permission and operator read/write require the platform entitlements read/write permissions, and policy-chain evaluation denies on missing permission before evaluating entitlement. Cross-tenant grants do not leak across the tenant boundary.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/entitlements.test.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Org self-read and operator read/patch of tenant entitlements behind ports/adapters.",
+      "description": "The operation surface is a tenant self-read of entitlements, an operator read of a tenant's entitlements, an operator write to grant or revoke, and a service-catalog read. Decisions are enforced through an assert/evaluate seam rather than only returned data.",
       "sourceRefs": [
         "apps/platform-api/scripts/entitlements-routes-runtime-proof.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Unknown keys are rejected without audit; invalid tenant ids return errors; feature flags are not entitlements; no cross-tenant leakage.",
+      "description": "Unknown entitlement keys are rejected without audit, invalid tenant identifiers return 400, feature flags are not treated as entitlements, and cross-tenant grants do not leak. Invalid input changes no state.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/entitlements.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "Assertion denies with a forbidden outcome; evaluation returns denied; invalid route inputs are rejected.",
+      "description": "The assertion path throws a typed forbidden error when not entitled, the evaluation path returns a denied decision by permission or entitlement, and invalid tenant or key cases return 400; provider failure returns a typed degraded result fail-closed. Access defaults to denied when state is missing.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/entitlements.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "Grant and revoke emit entitlement.granted/revoked before the mutation; a failing audit blocks persistence.",
+      "description": "Grant and revoke emit entitlement-granted and entitlement-revoked audit-before-change events, and a failing audit blocks persistence and leaves rows unchanged. Read-side evaluation is not audited as a mutation.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/entitlements.test.ts"
       ]
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Deterministic once persistence is migrated; the proof verifies table, RLS, no-secrets, isolation, grant/revoke, and audit-before-change.",
+      "description": "Entitlement reads are deterministic once the data substrate is migrated, and degraded mode disables store-dependent mutation while keeping read-only reads and audit visible. Live readiness verifies table existence, forced row-level security, no secret columns, tenant isolation, operator bypass, grant/revoke, and audit-before-change.",
       "sourceRefs": [
         "apps/platform-api/scripts/entitlements-postgres-runtime-proof.ts"
       ]
     },
     "proof": {
       "status": "complete",
-      "description": "Unit and runtime proof of entitlement evaluation, persistence, and routes. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers the deny-by-default state machine and runtime proofs cover the entitlement seam, permission-before-entitlement ordering, the live data substrate, and the routes, demonstrated in React via hermetic and live-substrate validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/entitlements-runtime-proof.ts",
         "apps/platform-api/scripts/entitlements-postgres-runtime-proof.ts",

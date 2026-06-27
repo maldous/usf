@@ -24,11 +24,12 @@
       "status": "complete",
       "sourceRefs": [
         "docs/evidence/auth/custom-domain-auth-origin.md"
-      ]
+      ],
+      "description": "Host identity follows a classify-then-resolve lifecycle: apex, reserved, invalid, and malformed hosts stay global with no tenant, tenant slug hosts resolve by organisation slug, active custom domains resolve through the domain registry, and inactive, pending, or disabled custom domains remain unresolved. Resolution is a pure per-request derivation feeding the request pipeline."
     },
     "stateModel": {
       "status": "complete",
-      "description": "Host resolution state covers platform host, slug tenant host, active custom tenant host, verified-but-inactive custom host, custom-domain conflict, reserved host, invalid host, and unknown host fail-closed outcome.",
+      "description": "State is a host classification kind (apex, tenant_slug, reserved_subdomain, invalid_subdomain, possible_custom_domain, or malformed) plus, when resolved, a tenant context containing organisation id, slug, realm name, and host source. Untrusted classifications carry no tenant context.",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
         "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
@@ -44,11 +45,12 @@
       "sourceRefs": [
         "apps/platform-api/src/server/auth.ts",
         "docs/evidence/auth/custom-domain-auth-origin.md"
-      ]
+      ],
+      "description": "The operation surface is a host-identity lookup plus the implicit Host / forwarded-host request context consumed by the gateway pipeline. It returns the classification and any resolved tenant context."
     },
     "validation": {
       "status": "complete",
-      "description": "Custom host origin must select the correct tenant realm and callback URL only for active owned domains, and must not treat verified-but-inactive, unknown, or other-tenant domains as tenant context. Mock or local proof is not live IdP readiness.",
+      "description": "Classification covers port stripping, reserved slugs, malformed hosts, unknown apex subdomains, possible-custom-domain hosts, and forwarded-host precedence. Only verified active domains and known slugs validate to a tenant.",
       "sourceRefs": [
         "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
         "docs/evidence/auth/custom-domain-auth-origin.md",
@@ -57,7 +59,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Unknown, inactive, disabled, invalid, reserved, or other-tenant host identity fails closed and must not create an authenticated tenant context or callback origin.",
+      "description": "Untrusted or unresolved hosts return a null tenant context fail-closed, and global routes reject apex subdomains with an explicit detail rather than silently serving global content; provider failure returns a typed degraded result. No host is ever resolved to a fallback tenant.",
       "sourceRefs": [
         "docs/evidence/auth/custom-domain-auth-origin.md",
         "docs/evidence/platform/domain-identity-capability-permutation-review.md",
@@ -66,7 +68,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "The first slice requires rejected domain conflict and denied host-resolution outcomes to remain audit-visible without leaking ownership tokens. Detailed host-resolution audit taxonomy remains a later expansion.",
+      "description": "No mutation audit applies because resolution is a read-only derivation; failed resolution is surfaced through resolver and pipeline warnings. There is no state change to audit.",
       "sourceRefs": [
         "docs/evidence/platform/platform-bedrock-correctness-hardening.md"
       ]
@@ -75,14 +77,16 @@
       "status": "complete",
       "sourceRefs": [
         "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts"
-      ]
+      ],
+      "description": "Readiness is invariant-ready when resolver code and the domain registry are available, and degraded mode disables registry-dependent paths while keeping read-only resolution visible. Runtime proof needs local substrate for live resolution and skips honestly when no seeded organisation exists."
     },
     "proof": {
       "status": "complete",
       "sourceRefs": [
         "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
         "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts"
-      ]
+      ],
+      "description": "Runtime domain-identity matrix and custom-domain resolution proofs validate live local resolver behaviour across all host classes, demonstrated in React via hermetic/runtime substrate validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59."
     },
     "uiSemanticDefinition": {
       "status": "not-applicable",

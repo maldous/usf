@@ -24,7 +24,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Read-only contextual query: choose a logical resource, map to stored, check per-context permission, query tenant-scoped, redact secrets, bound results.",
+      "description": "The privileged-audit lifecycle is a read-only contextual query over durable audit rows: choose a logical resource, map it to the stored resource and per-context permission, query tenant-scoped audit events, redact secret metadata, and return a bounded result. It consumes the audit evidence produced by privileged operations such as support/break-glass access.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/audit.ts",
         "apps/platform-api/tests/unit/audit.test.ts"
@@ -32,7 +32,7 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Audit events carry action, actor, resource, id, timestamp, and redacted metadata; logical resources map to stored event kinds.",
+      "description": "State is an audit-event projection carrying id, action, actor id, resource, resource id, timestamp, and redacted metadata, where logical resources map to member, config, feature, and auth-settings contexts. The capability projects existing durable rows rather than owning new mutable state.",
       "sourceRefs": [
         "packages/audit-events/src/index.ts",
         "apps/platform-api/src/usecases/audit.ts"
@@ -40,35 +40,35 @@
     },
     "permissions": {
       "status": "complete",
-      "description": "Coarse tenant.audit.read plus a per-context permission for members, config, features, or auth-settings.",
+      "description": "The route requires a coarse tenant audit-read permission and the usecase additionally enforces a per-context permission such as member, config, feature, or auth-settings read. The tenant id comes from the resolved session, never from the client, preserving tenant isolation.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/audit.test.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Org-scoped audit query with resource/actor/action/time filters; tenant derives from the session, never the client.",
+      "description": "The operation surface is a single tenant-scoped audit query accepting resource, resource id, action, actor, from/to, and limit parameters. It returns a bounded, redacted projection.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/audit.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Unknown logical resources are invalid; missing per-context permission is forbidden; the result limit is clamped.",
+      "description": "Unknown logical resources are invalid, a missing per-context permission is forbidden, the limit is clamped to a bounded range, and resource-id, action, actor, and date filters are optional. Invalid queries return no rows.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/audit.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "ok, forbidden, and invalid outcomes with deterministic mapping.",
+      "description": "Typed outcomes are ok, forbidden, and invalid, mapped fail-closed to 200, 403, and 400; provider failure returns a typed degraded result. The query never returns cross-tenant or unauthorised rows.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/audit.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "This capability reads existing audit events rather than mutating; secret metadata is redacted and request metadata is not exposed.",
+      "description": "The capability reads existing audit events and is not itself a mutation audit, redacting secret-like metadata keys and not exposing client IP or user agent. It is the consumer side of the privileged-access audit dependency, failing closed when producer evidence is unavailable.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/audit.ts",
         "packages/audit-events/tests/audit-events.test.ts"
@@ -76,14 +76,14 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Invariant-ready; the read-only projection enforces isolation, secret exclusion, pagination, and no mutation.",
+      "description": "Readiness is invariant-ready for contextual audit reads, and degraded mode keeps read-only projection visible while disabling any dependent mutation. A broader live history proof validates read-only projection, source isolation, secret exclusion, pagination, and absence of mutation against the live data substrate.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/audit.test.ts"
       ]
     },
     "proof": {
       "status": "complete",
-      "description": "Unit proof of the read-only audit projection and the shared audit-event contract. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers the contextual audit semantics and an adjacent runtime history proof validates live read-only audit/history projection, demonstrated in React via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/audit.test.ts",
         "packages/audit-events/tests/audit-events.test.ts"

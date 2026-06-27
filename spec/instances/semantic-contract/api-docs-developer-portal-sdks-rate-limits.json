@@ -22,7 +22,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the lifecycle and operations as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The developer-platform lifecycle exposes the OpenAPI and GraphQL contracts, creates an API key with a reveal-once secret, lists redacted keys, authenticates requests, revokes keys, shows a developer portal summary, and evaluates configured rate limits. The portal is built from the source API contracts and surfaces SDK/docs material alongside rate-limit visibility, gated by contract-drift checks.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -30,7 +30,7 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the state and data model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "State includes API keys in active or revoked state with prefix, scopes, and created/revoked metadata and no plaintext secret, developer portal summaries, the OpenAPI route contract and GraphQL contract, and rate-limit policy plus per-window count and exceeded state. Only a key prefix and hash are retained, never the raw secret.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -38,7 +38,7 @@
     },
     "permissions": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the permission and tenant-isolation model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The tenant developer portal requires a tenant developer-read permission; API key list/create/revoke require tenant API-key read/write permissions; operator key and rate-limit operations require platform-level permissions. API key creation is additionally gated by an API-access entitlement that is deny-by-default.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -46,7 +46,7 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the operation and interface contracts as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Contracts include the OpenAPI document, the GraphQL schema/runtime, the developer portal read operation, tenant API-key list/create/delete operations, operator tenant API-key reads, and tenant/operator rate-limit operations. The OpenAPI document is the generated client/docs contract and is held to a drift gate.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -54,7 +54,7 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the input and invariant validation as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Validation proves entitlement-gated key creation, the secret is returned exactly once, list and operator responses omit the secret/hash/salt, a valid secret authenticates while the stored hash cannot, a revoked key is denied, and route metadata matches declared scopes. OpenAPI drift failing the architecture gate is part of validation.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -62,7 +62,7 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the fail-closed error model as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "Missing tenant context fails with a client error, missing API-access entitlement returns not-entitled, a revoked or invalid key authenticates to null, an invalid tenant identifier fails the operator rate-limit operation, and OpenAPI drift fails the architecture gates. Errors fail closed and never leak the secret or hash.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -70,7 +70,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the audit model for state-changing actions as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "API key creation/revocation and rate-limit policy changes carry actor metadata and audit safe metadata before the change; secrets and hashes are never emitted into audit. Read-only portal/docs access is not a mutation audit.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -78,7 +78,7 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. This facet captures the readiness posture as semantic information; backing is the USF coverage record and equivalence audit (../react semantic-corpus lineage).",
+      "description": "The developer portal is always-on once built from source contracts, while live relational and cache proofs classify provider availability for API keys and rate limits, with the cache provider degrading to relational counting. Provider unavailability degrades readiness rather than fabricating availability.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"
@@ -86,7 +86,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Developer portal publishing the OpenAPI contract, SDK/docs surface, and API rate-limit exposure, gated by contract-drift checks. Proof expectation captured as semantic information; ../react proof is hermetic/runtime lineage and fresh USF proof is pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by API-key, API-key-route, and rate-limit runtime proofs plus OpenAPI drift and GraphQL runtime contract checks against live key/rate-limit substrate. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/react-l5-equivalence-audit.md"

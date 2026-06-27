@@ -24,63 +24,63 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "description": "Provides a read-only projection of tenant and admin history assembled from audit and related sources, exposed through tenant-history and admin-tenant-history reads; it is strictly a query surface and performs no mutation. Entries are projected from underlying records into a safe summarised shape on read. The projection deliberately excludes sensitive raw material so history can be browsed without exposing secrets.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/history.ts"
       ]
     },
     "stateModel": {
       "status": "complete",
-      "description": "Persistent/runtime state model recovered from cited React storage and port/adapter source.",
+      "description": "Each history entry carries an identifier, source, type, title, occurrence time, and a safe actor/status summary, returned with total, limit, and offset for paging; it deliberately excludes raw metadata, payloads, tokens, and secrets. The model is a projection over existing audit and event records rather than an owned canonical table, served through a history repository port. Paging fields make the read-only result set bounded and navigable.",
       "sourceRefs": [
         "apps/platform-api/src/ports/history-repository.ts"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "description": "Reads are tenant-scoped so a tenant sees only its own history, while the admin variant is operator-scoped to read a named tenant's history under privileged access; both preserve tenant isolation. Because the projection omits payloads, tokens, and secrets, even authorised readers cannot extract sensitive material through history. Access flows through ports and adapters, never a direct client database connection.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/history.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Operation and interface contracts recovered from cited React source behind ports/adapters.",
+      "description": "The contract is two read operations (tenant history and admin tenant history) returning the paged, summarised projection shape with no write side. The repository port defines the query and paging contract, and the projection guarantees the exclusion of raw payloads and secrets as a contract obligation. As a read-only surface it participates in backup/export/retention semantics only as a consumer of the underlying records.",
       "sourceRefs": [
         "apps/platform-api/src/ports/history-repository.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Input and invariant validation recovered from cited React tests and source.",
+      "description": "Paging inputs (limit, offset) are validated and bounded, and the projection enforces the safe-shape contract by emitting only the allowed summary fields. Tenant context is required so the read is correctly scoped. Missing or invalid configuration fails closed rather than returning an unscoped result.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/history.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "Deterministic, fail-closed error outcomes recovered from cited React tests and source.",
+      "description": "Because it is read-only there is no mutation to roll back; failures return a typed degraded or readiness error rather than a partial or fabricated result, and the read fails closed when tenant context or the substrate is unavailable. Provider failure keeps boundaries closed and does not invent history entries. Tenant data cannot be exposed across tenants.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/history.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "description": "The capability is itself a window onto the audit/history record set, presenting a safe summarised view; reads preserve tenant context through spans and typed logs carry the tenant/organisation identifier when tenant-scoped. It never writes, so it adds no mutation audit of its own beyond the access trail. The underlying audit records it projects remain the canonical evidence.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/history.ts"
       ]
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "description": "Readiness depends on the underlying audit/history store being reachable; the capability degrades explicitly when that substrate is unavailable, keeping read-only readiness and audit visible (it has no mutation path to disable). Readiness being blocked, a failed history proof during promotion, or a missing isolation or audit signal raise alerts and block promotion.",
       "sourceRefs": [
         "apps/platform-api/scripts/history-runtime-proof.ts"
       ]
     },
     "proof": {
       "status": "complete",
-      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Behaviour is exercised by the history proof against the history repository projection, asserting the safe summarised shape and tenant scoping. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/history-runtime-proof.ts"
       ]

@@ -23,7 +23,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "List, create, update, and delete tenant groups with name validation, duplicate checks, and protected-name guards.",
+      "description": "Group lifecycle is list existing groups, create after name validation and a duplicate check, update after existence and conflict checks, and delete after a protected-name guard. Each mutation runs its precondition checks before touching the provider.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/groups.ts",
         "apps/platform-api/tests/unit/groups.test.ts"
@@ -31,56 +31,56 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Groups are realm-scoped (id, name, path) in the tenant identity provider; reserved names are protected; not persisted in the relational store.",
+      "description": "State is a tenant-realm group identified by id, name, and path, with reserved names protected; groups live in the identity provider's realm and are not persisted in the relational store. The group set is scoped to the tenant realm.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/groups.ts"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "tenant.groups.read/create/update/delete, tenant-scoped, mapped to organisation:groups authorization scopes.",
+      "description": "Routes require the specific group read, create, update, or delete permission, are tenant-scoped, and declare a group resource and matching scopes, resolving the tenant realm credential from context. One tenant cannot manage another tenant's groups.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/groups.test.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Org-scoped group list/create and per-group update/delete operations.",
+      "description": "The operation surface lists and creates groups and updates or deletes a group by id, backed by the tenant-credential realm admin adapter. Mutations return typed results mapped to standard responses.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/groups.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Name must be a non-empty string within length, free of separators/control characters, not reserved, and not a case-insensitive duplicate.",
+      "description": "Group names must be non-empty strings of at most 64 characters with no path separators or control characters, must not be reserved, and must not duplicate an existing name case-insensitively. Invalid names are rejected before any provider write.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/groups.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "invalid_name, conflict, not_found, and protected outcomes; missing credential degrades explicitly.",
+      "description": "Typed outcomes include invalid-name, conflict, not-found, protected, and ok, mapped fail-closed to 400/409/404/422/201/204, and a missing tenant credential returns a no-credential/503 result; provider failure keeps mutation boundaries closed. No partial group state is left behind.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/groups.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "Group create/update/delete are audited after validation and before the identity-provider mutation.",
+      "description": "Create, update, and delete emit group-created, group-updated, and group-deleted audit-before-change events after precondition checks, and audit failure aborts the provider mutation. Read-only listing is not audited.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/groups.test.ts"
       ]
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Requires tenant context and an auth-settings credential; identity-provider unavailability is an explicit degradation.",
+      "description": "Semantic readiness is invariant-ready, while route execution additionally requires tenant context and the tenant-realm auth-settings credential, and degraded mode disables provider-dependent mutation while keeping read-only readiness visible. A UI semantic harness proves the generation contract without shipping a legacy page.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/groups.test.ts"
       ]
     },
     "proof": {
       "status": "complete",
-      "description": "Unit proof of group validation, conflicts, and protected names. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers group lifecycle and validation and a UI semantic harness proves the headless journey, demonstrated in React via hermetic behaviour/state validation plus a semantic harness for future UI generation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/groups.test.ts"
       ]

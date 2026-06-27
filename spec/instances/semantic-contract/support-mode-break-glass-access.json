@@ -24,7 +24,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Request approval (workflow waits), approve (completes), then a time-boxed support session audited for the exact target; direct entry creates the same scoped session.",
+      "description": "Support-access lifecycle is request-approval moving an approval workflow to waiting, then approval completing it and creating an audited time-boxed support session scoped to exactly one target tenant; a direct enter-support-mode path creates the same scoped session after validation. The session is deliberately short-lived (one hour).",
       "sourceRefs": [
         "apps/platform-api/src/usecases/support.ts",
         "apps/platform-api/tests/unit/support-mode.test.ts"
@@ -32,49 +32,49 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Workflow status and a scoped session with supportMode flag, effective/target organisation, reason, roles, and a bounded TTL; no standing tenant permissions.",
+      "description": "State is the support approval workflow id and status plus the support session id, a support-mode flag, the effective and target organisation/tenant ids, the access reason, roles, a time-to-live of one hour, and explicitly no tenant-scoped permissions. The session carries break-glass context rather than ordinary tenant membership.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/support.ts"
       ]
     },
     "permissions": {
       "status": "complete",
-      "description": "platform.admin.access with a system-admin defence-in-depth role; access is restricted to the matching target tenant FQDN.",
+      "description": "The route requires platform admin access and support enter semantics, and the usecase additionally enforces the system-admin role as defence-in-depth and only permits a support-mode system-admin to access the matching effective tenant's FQDN. A support actor without an effective organisation cannot access any tenant.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/support-mode.test.ts"
       ]
     },
     "contracts": {
       "status": "complete",
-      "description": "Support-session creation and the request/approve support-approval workflow operations.",
+      "description": "The operation surface creates a support session and drives the support approval workflow through request and approve operations. Session creation is the gated outcome of the approval flow.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/support.ts"
       ]
     },
     "validation": {
       "status": "complete",
-      "description": "Non-admin, empty/whitespace reason, and empty target are rejected before audit; support-mode without an effective organisation cannot access.",
+      "description": "A non-system-admin, an empty or whitespace reason, and an empty target organisation are all rejected before audit or session creation, and a support-mode actor lacking an effective organisation cannot access a tenant FQDN. Invalid requests create no session.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/support-mode.test.ts"
       ]
     },
     "errorModel": {
       "status": "complete",
-      "description": "forbidden, reason_required, and invalid_target outcomes; wrong-tenant FQDN denial; audit failure prevents creation.",
+      "description": "Errors include forbidden, reason-required, invalid-target, wrong-tenant FQDN denial, and audit-backend failure that prevents session creation; every path is fail-closed. No session is created when validation or audit fails.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/support-mode.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "support_session.created is audited before creation and the approval request is audited with workflow state; a failing audit yields no session.",
+      "description": "Support session creation emits a support-session-created audit-before-change event, the approval request emits an audit with the requested state and workflow id, and audit failure results in no support session. Audit precedes session creation, and this capability is the producer whose privileged-access audit evidence the audit-of-privileged-access capability depends on.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/support-mode.test.ts"
       ]
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Hermetic-domain ready for approval/session semantics; the workflow waits and completes on signal; no external-provider claim.",
+      "description": "Readiness is hermetic-domain ready for approval and support-session semantics, with the workflow waiting for an approval signal and completing on approval, and no live external provider is claimed. Degraded mode disables provider-dependent paths while keeping read-only readiness and audit visible.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/support-mode.test.ts",
         "e2e/support/correlation-core.mjs"
@@ -82,7 +82,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Unit and journey proof of the approval/session state machine. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers the workflow and session state machine and a runtime proof covers the approval flow, demonstrated in React via hermetic local workflow/session state-machine validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/support-mode.test.ts",
         "e2e/support/correlation.ts"

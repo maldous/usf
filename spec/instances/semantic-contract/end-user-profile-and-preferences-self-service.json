@@ -24,7 +24,7 @@
   "facets": {
     "lifecycle": {
       "status": "complete",
-      "description": "Self-service profile and notification preference lifecycle: read self, update self; dispatch honours enabled preferences.",
+      "description": "Profile lifecycle moves from a default to an updated own-profile record, and preference lifecycle moves from default-empty to updated channel/category preferences that are read back; notification dispatch then treats enabled preferences as sent and disabled preferences as suppressed. All operations act only on the authenticated subject's own data.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/profile.ts",
         "apps/platform-api/tests/unit/profile.test.ts"
@@ -32,7 +32,7 @@
     },
     "stateModel": {
       "status": "complete",
-      "description": "Tenant- and user-scoped profile (displayName, locale, timezone) and per-channel/category preference rows; RLS tenant isolation.",
+      "description": "State is tenant-and-user-scoped: a profile (display name, locale, timezone), a preference set (channel, category, enabled flag), and a durable dispatch log status of sent, suppressed, or failed. There are no secret-bearing columns in the self-service state.",
       "sourceRefs": [
         "apps/platform-api/src/ports/profile-repository.ts",
         "apps/platform-api/src/adapters/postgres-profile-repository.ts",
@@ -41,7 +41,7 @@
     },
     "permissions": {
       "status": "complete",
-      "description": "profile.read_self and profile.update_self bound to the authenticated session subject; never a caller-supplied userId.",
+      "description": "Reads use a self-read permission and writes use a self-update permission, with the user id always taken from the authenticated session subject and never from a path or body parameter. The separate operator notification test uses platform notification permissions outside this self-service surface, preserving isolation.",
       "sourceRefs": [
         "apps/platform-api/src/usecases/profile.ts",
         "apps/platform-api/tests/unit/profile.test.ts"
@@ -49,7 +49,7 @@
     },
     "contracts": {
       "status": "complete",
-      "description": "Self profile read/update and notification-preference read/update operations behind ports/adapters.",
+      "description": "The operation surface is read and update of the caller's own profile and notification preferences, with supporting notification readiness and test operations. Responses return the updated record or a typed validation result.",
       "sourceRefs": [
         "apps/platform-api/scripts/profile-self-service-runtime-proof.ts",
         "apps/platform-api/src/usecases/notifications.ts"
@@ -57,7 +57,7 @@
     },
     "validation": {
       "status": "complete",
-      "description": "Rejects empty displayName and invalid payloads; secret-bearing fields are not notifiable.",
+      "description": "Profile update rejects an empty display name, the route schema rejects invalid profile or preference payloads, dispatch rejects secret-bearing payload fields, and a write without tenant context returns a no-tenant error. Invalid input is rejected before any change.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/profile.test.ts",
         "apps/platform-api/tests/unit/notifications.test.ts"
@@ -65,14 +65,14 @@
     },
     "errorModel": {
       "status": "complete",
-      "description": "Validation and no-tenant errors; deterministic outcomes, fail-closed on missing tenant context.",
+      "description": "Validation failures return safe validation-error responses, no-tenant writes return a 400 no-tenant outcome, and secret-bearing notification payloads raise an explicit not-notifiable error; provider failure returns a typed degraded result fail-closed. No partial profile state is persisted on failure.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/profile.test.ts"
       ]
     },
     "auditModel": {
       "status": "complete",
-      "description": "Profile and preference changes are audited before the mutation is applied.",
+      "description": "Profile updates emit a profile-updated audit-before-change event, preference updates emit a preference audit, and operator test sends emit a notification-tested event. Audit precedes the change.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/profile.test.ts",
         "apps/platform-api/tests/unit/notifications.test.ts"
@@ -80,7 +80,7 @@
     },
     "readinessModel": {
       "status": "complete",
-      "description": "Always-on once persistence is migrated; readiness proofs skip honestly when the substrate is unavailable.",
+      "description": "Profile and preferences are always-on once the data substrate is migrated, and degraded mode disables store-dependent writes while keeping read-only access and audit visible. Live proofs skip honestly when the substrate is unavailable and verify no secret columns plus tenant-isolation enforcement.",
       "sourceRefs": [
         "apps/platform-api/scripts/profile-self-service-runtime-proof.ts",
         "apps/platform-api/scripts/notification-preferences-runtime-proof.ts"
@@ -88,7 +88,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Unit and runtime proof of self-service behaviour. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Unit proofs cover the profile and notification usecases, and runtime proofs validate live profile self-service, notification preferences, and dispatch against the data substrate with row-level tenant isolation, demonstrated in React via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/profile-self-service-runtime-proof.ts",
         "apps/platform-api/scripts/notification-dispatch-runtime-proof.ts",
