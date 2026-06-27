@@ -1,12 +1,13 @@
 {
   "id": "semantic-contract.tenant-groups",
   "title": "Tenant Groups Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 5: Tenant groups. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Source-backed draft semantic contract for the tenant groups capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Interface"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +17,85 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facets cite verified manifest source rows as lineage; proof is hermetic/stale and not current readiness. Do not treat as implementation authority or fresh proof; respect the hexagonal constraint in ADR 0005.",
   "capability": "tenant-groups",
   "capabilityDomain": "identity-access",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "List, create, update, and delete tenant groups with name validation, duplicate checks, and protected-name guards.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/groups.ts",
+        "apps/platform-api/tests/unit/groups.test.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Groups are realm-scoped (id, name, path) in the tenant identity provider; reserved names are protected; not persisted in the relational store.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/groups.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "tenant.groups.read/create/update/delete, tenant-scoped, mapped to organisation:groups authorization scopes.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/groups.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Org-scoped group list/create and per-group update/delete operations.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/groups.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Name must be a non-empty string within length, free of separators/control characters, not reserved, and not a case-insensitive duplicate.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/groups.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "invalid_name, conflict, not_found, and protected outcomes; missing credential degrades explicitly.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/groups.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Group create/update/delete are audited after validation and before the identity-provider mutation.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/groups.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Requires tenant context and an auth-settings credential; identity-provider unavailability is an explicit degradation.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/groups.test.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unit proof of group validation, conflicts, and protected names. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/groups.test.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; the React headless group journey is lineage only. Author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/src/usecases/groups.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

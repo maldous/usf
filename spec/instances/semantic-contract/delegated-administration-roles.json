@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.delegated-administration-roles",
   "title": "Delegated Administration Roles Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 9: Delegated administration roles. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Deferred semantic contract for delegated administration roles. React documents this capability (ADR and delegated-capability-permissions evidence), but its behavioural source (usecases, tests, migration) is not yet in the USF source-import manifest, so facets remain gaps. Closing it requires importing those source rows (USF-74) before source-backed facets can be authored.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "deferred",
   "ontologyConcepts": [
@@ -62,6 +62,12 @@
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/adr/0058-policy-decision-point-and-delegated-administration.md",
+    "docs/evidence/platform/delegated-capability-permissions.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }
