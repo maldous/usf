@@ -20,13 +20,15 @@ The prior readiness chain remains useful as a bounded first-slice planning recor
 
 ## Current Evidence
 
-Current repository head inspected for this revalidation:
+Base repository state inspected for this revalidation, before adding this record:
 
 ```text
 ee02fda7b46803ea75d446e3f601bea664fb0f66
 ```
 
-Validator modes passed on this repository state:
+The PR commit that adds this record is separately validated against that base. The readiness verdict below is about the governed repository state at the inspected base plus this revalidation record; this record itself is not proof evidence and does not make the state ready.
+
+Validator modes passed on the inspected base and on the PR branch containing this record:
 
 - `python3 tools/validate-spec/validate-spec.py all --json`
 - `python3 tools/validate-spec/validate-spec.py imports --json`
