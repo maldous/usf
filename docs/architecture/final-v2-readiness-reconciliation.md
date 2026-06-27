@@ -15,6 +15,10 @@ This document reconciles the current repository and Linear state before any USF-
 
 Complete one-pass V2 implementation readiness is NO-GO. USF-39 remains Backlog.
 
+## Snapshot and Lineage
+
+This reconciliation is a point-in-time review pinned to the repository commit recorded above. Governance-only commits that land after it, including the commit that merges this reconciliation, advance HEAD without changing the readiness verdict. Current proof freshness is never carried by this prose: the proof-anchor workflow republishes a fresh, CI-attested, verified anchor for each new merge commit, so the live HEAD always carries its own matching proof-anchor tag. A reader at a later HEAD should treat the pinned commit and its anchor here as the reviewed baseline, and the anchor tag on the current HEAD as the current freshness carrier.
+
 ## Current Linear Issue State Reviewed
 
 | Issue | Linear state reviewed | Current reconciliation |

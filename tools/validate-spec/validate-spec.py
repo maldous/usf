@@ -2089,11 +2089,20 @@ def validate_readiness_reconciliation(F, records=None):
             "USF-100 is an unsigned whole-platform draft directive",
             "USF-39 remains Backlog",
             "NO-GO",
-            "proof-anchor-fabe47b",
         ]
         missing_phrases = sorted(phrase for phrase in required_phrases if phrase not in reconciliation)
         if missing_phrases:
             F.add("USF-READINESS-001", READINESS_RECONCILIATION_PATH, f"missing required reconciliation phrases: {missing_phrases}")
+        # Derive the expected proof-anchor token from the reviewed commit instead of hardcoding a
+        # specific commit. This keeps the rule from baking in a stale commit and forces the
+        # reconciliation's cited anchor to match its own pinned commit.
+        anchor_commit = re.search(r"commit reviewed[^`]*`([0-9a-f]{7,40})`", reconciliation, re.IGNORECASE)
+        if not anchor_commit:
+            F.add("USF-READINESS-001", READINESS_RECONCILIATION_PATH, "reconciliation does not pin a reviewed repository commit")
+        else:
+            short = anchor_commit.group(1)[:7]
+            if f"proof-anchor-{short}" not in reconciliation:
+                F.add("USF-READINESS-001", READINESS_RECONCILIATION_PATH, f"reviewed commit {short} is not matched by a cited proof-anchor-{short}")
 
     for path, stale_phrases in READINESS_STALE_PHRASES.items():
         text = records.get(path)

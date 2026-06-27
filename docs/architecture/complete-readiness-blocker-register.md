@@ -11,6 +11,8 @@
 
 This document records the current complete-readiness blocker state before implementation extraction. It creates no implementation code, implementation directory, product runtime, source import, proof evidence, generated report, schema activation, or implementation directive. It does not start USF-39.
 
+This register is a point-in-time review pinned to the commit above. Later governance-only commits advance HEAD without changing the verdict, and current proof freshness is carried by the per-merge proof-anchor tag on the live HEAD, not by this prose.
+
 ## Current Verdict
 
 Complete one-pass implementation readiness is NO-GO.
