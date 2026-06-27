@@ -8,7 +8,7 @@
 | **Issue scope** | USF-73 |
 | **Primary inputs** | `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/proof-execution-substrate-authorization.md`, `docs/architecture/proof-tool-contract-standard.md`, `evidence/proof-evidence/authentication-slice-proof.json`, `evidence/evidence-envelope/authentication-slice-proof.json`, and `tools/prove-authentication-slice.py` |
 
-This closure records the multi-environment proof posture state for the first authentication implementation slice. It creates no implementation code, implementation directory, product runtime, source import, generated report, or schema activation. It does not start USF-39.
+This closure records the multi-environment proof posture state for the authentication proof-substrate slice. It creates no implementation code, implementation directory, product runtime, source import, generated report, or schema activation. It does not start USF-39.
 
 ## Posture Result
 

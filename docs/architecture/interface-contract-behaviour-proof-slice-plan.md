@@ -6,7 +6,7 @@ This planning note is a proof and governance artefact for USF-81. It does not cr
 
 ## Purpose
 
-Define the first interface behaviour proof slice for the governed authentication login API contract. Static schema validity is not sufficient for behaviour claims; claimed behaviour must be source-linked, semantically governed, and proven through authorised evidence before it is used for implementation readiness.
+Define the interface behaviour proof slice for the governed authentication login API contract. Static schema validity is not sufficient for behaviour claims; claimed behaviour must be source-linked, semantically governed, and proven through authorised evidence before it is used for implementation readiness.
 
 ## Governed Interface
 

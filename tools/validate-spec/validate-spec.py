@@ -1233,12 +1233,13 @@ def validate_anchor_payload_data(F, data_by_name, current_commit=None, trusted_s
         if data.get("productionLiveClaim") is True and data.get("environment") != "production-live":
             F.add("USF-ANCHOR-006", name, f"environment={data.get('environment')}")
 
+        # A proof anchor is only trustworthy if it carries a trusted signer fingerprint.
+        # An unsigned payload must fail closed: otherwise the trust root is bypassable by omission.
         signer = data.get("signerFingerprint")
-        if signer is not None:
-            if not isinstance(signer, str) or not signer:
-                F.add("USF-ANCHOR-001", name, "signerFingerprint must be a non-empty string when present")
-            elif signer not in trusted_signers:
-                F.add("USF-ANCHOR-008", name, f"signer is not in the approved proof-anchor trust root: {signer}")
+        if not isinstance(signer, str) or not signer:
+            F.add("USF-ANCHOR-008", name, "proof anchor payload is unsigned: a trusted signerFingerprint is required")
+        elif signer not in trusted_signers:
+            F.add("USF-ANCHOR-008", name, f"signer is not in the approved proof-anchor trust root: {signer}")
 
 
 def _evidence_kind_for_path(path):
@@ -2133,6 +2134,11 @@ def validate_readiness_reconciliation(F, records=None):
         for phrase in sorted(READINESS_FORBIDDEN_SCOPE_PHRASES):
             if phrase in lower:
                 F.add("USF-READINESS-001", path, f"forbidden auth-first or first-step scope phrase remains: {phrase}")
+        # Catch word-order variants the exact-substring set misses, e.g. "first authentication slice",
+        # "first authentication implementation slice", "first authorization proof slice". The V2
+        # migration is whole-platform/all-slices; no slice may be framed as the "first" one.
+        for m in re.finditer(r"first(?:[\s-]+[\w]+){0,3}[\s-]+slice", lower):
+            F.add("USF-READINESS-001", path, f"forbidden first-slice scope framing remains: {m.group(0)!r}")
 
 
 def validate_implementation_directives(F, paths=None, records=None):

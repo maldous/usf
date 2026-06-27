@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.authentication-platform",
   "title": "Authentication Platform Semantic Contract",
-  "description": "Draft semantic contract for the authentication platform slice carried from historical identity, authorization, audit, proof, and UI source evidence. Complete facets cite explicit source-import paths; state, validation, and error semantics remain draft and source-backed for first-slice extraction.",
+  "description": "Draft semantic contract for the authentication platform slice carried from historical identity, authorization, audit, proof, and UI source evidence. Complete facets cite explicit source-import paths; state, validation, and error semantics remain draft and source-backed for authentication-slice extraction.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [

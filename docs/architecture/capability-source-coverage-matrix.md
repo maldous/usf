@@ -15,6 +15,10 @@ This matrix turns the whole-platform V2 semantic-generation gap into a reviewabl
 
 This document creates no implementation files, imports no runtime code, executes no proof, emits no generated report, and promotes no schema to active.
 
+## Coverage status reconciliation (post Wave-3)
+
+The per-row USF-status values below were authored before the Wave-3 corpus completion and several still read `deferred` ("defer until a semantic target exists"). That predates the current corpus: every `semantic-contract` target in this matrix now has a committed instance — 64 complete-facet draft contracts (43 source-backed by manifest rows, 21 coverage-complete from the React semantic corpus; proof deferred), 1 deprecated, and 2 non-applicable (see `docs/architecture/semantic-source-use-closure-ledger.md`). Read a `deferred` row as "the semantic contract exists as a complete-facet draft; per-domain source-use disposition and fresh proof remain the open work," not as "no semantic target exists." Any `delivered-and-proven` note describes the historical `../react` state captured as lineage, not USF proof.
+
 ## Inputs
 
 - Historical capability records: `../react/docs/v2-foundation/v1-capability-closure.json` (75 records).

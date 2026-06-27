@@ -8,7 +8,7 @@
 | **Issue scope** | USF-63 |
 | **Primary inputs** | `docs/architecture/directory-and-file-naming-standard.md`, `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `spec/registries/authentication-slice-source-import-manifest.json`, `spec/instances/` |
 
-This plan defines the only implementation-shaped destination directories that a later USF-61 implementation directive may authorise for the first authentication implementation slice. It creates no directories, writes no runtime code, imports no source code, emits no evidence, and does not weaken the current implementation-directory stop rules.
+This plan defines the only implementation-shaped destination directories that a later USF-61 implementation directive may authorise for the authentication proof-substrate slice. It creates no directories, writes no runtime code, imports no source code, emits no evidence, and does not weaken the current implementation-directory stop rules.
 
 ## Whole-Platform Reconciliation Note
 
