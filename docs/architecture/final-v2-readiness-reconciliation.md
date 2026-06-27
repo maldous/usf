@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Document type | Architecture / final V2 readiness reconciliation |
-| Status | Reviewable reconciliation / NO-GO |
+| Status | Reviewable reconciliation / READY_FOR_V2_BOOTSTRAP marker and NO-GO implementation |
 | Authority level | Readiness classification; subordinate to the Charter, Authority Model, ADRs, validators, runtime proof evidence, and semantic instances |
 | Repository commit reviewed | `fabe47b8fc70d34b34d1fc05c39da998c74a6748` |
 | Current proof anchor reviewed | `proof-anchor-fabe47b` |
@@ -12,6 +12,8 @@
 | Linear team reviewed | Universal Service Foundation |
 
 This document reconciles the current repository and Linear state before any USF-39 implementation start. It creates no implementation code, creates no runtime directory, imports no `../react` code, promotes no schema, emits no evidence, and treats no generated report as authority.
+
+Bootstrap marker readiness is READY_FOR_V2_BOOTSTRAP.
 
 Complete one-pass V2 implementation readiness is NO-GO. USF-39 remains Backlog.
 
@@ -69,7 +71,7 @@ The implemented carrier is an annotated Git tag carrying a CI-attested anchor pa
 
 For commit `fabe47b8fc70d34b34d1fc05c39da998c74a6748`, `proof-anchor-fabe47b` targets the merge commit and carries the anchor payload for `usf.proof-evidence.authentication-slice-proof`. The workflow run `28286276338` emitted the payload, validated it, attested it, verified the attestation, and published the annotated tag. This closes current authentication-slice freshness for USF-59 and USF-101. It does not close USF-73 or USF-99.
 
-## Remaining Blockers
+## Remaining Implementation Blockers
 
 The remaining complete-readiness blockers are:
 
@@ -93,6 +95,8 @@ The remaining complete-readiness blockers are:
 - No USF-39 movement out of Backlog.
 
 ## Final Readiness Classification
+
+The final reconciled state is READY_FOR_V2_BOOTSTRAP for bootstrap marker readiness when validation passes on `main` and the current commit has the matching immutable proof-anchor tag.
 
 The final reconciled state is NO-GO for complete one-pass V2 implementation readiness.
 

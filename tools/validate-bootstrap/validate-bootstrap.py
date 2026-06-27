@@ -5,9 +5,10 @@ This is governance tooling only. It does not create implementation/runtime files
 does not import React source, and does not publish evidence. It checks the
 bootstrap-specific invariants that sit above the general spec corpus validator:
 the implementation directive must remain human-only and unsigned, readiness
-documents must remain NO-GO until authority changes, implementation-shaped roots
-must not exist before bootstrap, and the semantic/source-use substrate required
-for a later implementation attempt must be present.
+documents must distinguish bootstrap marker readiness from implementation
+readiness, implementation-shaped roots must not exist before bootstrap, and the
+semantic/source-use substrate required for a later implementation attempt must
+be present.
 """
 import argparse
 import copy
@@ -38,6 +39,7 @@ RULES = {
     "USF-BOOTSTRAP-011": ("blocking", "bootstrap readiness ADR coverage is incomplete"),
     "USF-BOOTSTRAP-012": ("blocking", "authentication proof runner is not consolidated into bootstrap validator"),
     "USF-BOOTSTRAP-013": ("blocking", "bootstrap mapping proof/readiness posture coverage is incomplete"),
+    "USF-BOOTSTRAP-014": ("blocking", "bootstrap readiness marker support is incomplete"),
     "USF-BOOTSTRAP-SELFTEST": ("blocking", "planted bootstrap defect did not raise its expected rule"),
 }
 
@@ -359,13 +361,17 @@ def check_directive_boundary(F, state):
             F.add("USF-BOOTSTRAP-003", DIRECTIVE_PATH, f"directive appears accepted or signed: {marker}")
 
 
-def check_readiness_no_go(F, state):
+def check_readiness_boundary(F, state):
     for path, text in state["readinessTexts"].items():
         lower = text.lower()
         if "usf-39 remains backlog" not in lower:
             F.add("USF-BOOTSTRAP-004", path, "readiness document does not preserve USF-39 Backlog state")
         if path != DIRECTIVE_PATH and "no-go" not in lower:
-            F.add("USF-BOOTSTRAP-004", path, "readiness document does not preserve NO-GO classification")
+            F.add("USF-BOOTSTRAP-004", path, "readiness document does not preserve implementation NO-GO classification")
+        if path != DIRECTIVE_PATH and "ready_for_v2_bootstrap" not in lower:
+            F.add("USF-BOOTSTRAP-014", path, "readiness document does not record bootstrap marker readiness")
+        if path != DIRECTIVE_PATH and "bootstrap marker readiness" not in lower:
+            F.add("USF-BOOTSTRAP-014", path, "readiness document does not distinguish bootstrap marker readiness")
         forbidden_claims = [
             "production-live readiness is complete",
             "live-external-provider readiness is complete",
@@ -634,6 +640,8 @@ def check_bootstrap_governance(F, state):
     lower = text.lower()
     required_markers = [
         ("v2-bootstrap", "future bootstrap marker is named"),
+        ("ready_for_v2_bootstrap", "bootstrap marker readiness verdict is stated"),
+        ("bootstrap marker readiness", "bootstrap readiness is distinguished from implementation readiness"),
         ("movable human-friendly marker", "marker mobility and human-friendly role are stated"),
         ("not production readiness", "marker does not claim production readiness"),
         ("not implementation completion", "marker does not claim implementation completion"),
@@ -685,6 +693,8 @@ def check_bootstrap_governance(F, state):
         ("v2-bootstrap is production readiness", "marker claims production readiness"),
         ("v2-bootstrap is implementation completion", "marker claims implementation completion"),
         ("v2-bootstrap authorises usf-39", "marker claims USF-39 authority"),
+        ("complete one-pass implementation readiness is go", "implementation readiness is overclaimed"),
+        ("ready to start usf-39", "USF-39 start readiness is overclaimed"),
         ("in-memory providers in test are allowed", "test provider split is weakened"),
         ("break-glass may disable rls", "break-glass RLS boundary is weakened"),
     ]
@@ -701,6 +711,7 @@ def check_bootstrap_adr(F, state):
     required_markers = [
         ("accepted", "ADR is accepted"),
         ("v2-bootstrap", "marker name is recorded"),
+        ("bootstrap readiness", "bootstrap readiness boundary is recorded"),
         ("movable human-friendly marker", "marker role is recorded"),
         ("not production readiness", "production-readiness boundary is recorded"),
         ("not implementation completion", "implementation-completion boundary is recorded"),
@@ -947,7 +958,7 @@ def run_checks(modes, F, state=None):
     if "readiness" in modes:
         check_required_artefacts(F, state)
         check_directive_boundary(F, state)
-        check_readiness_no_go(F, state)
+        check_readiness_boundary(F, state)
         check_mapping_substrate(F, state)
         check_bootstrap_mappings(F, state)
         check_bootstrap_governance(F, state)
