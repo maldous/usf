@@ -110,7 +110,6 @@ OPEN_EXTENSION_POINTS = {
 AUTHORIZED_TOOLING = {
     ".github/workflows/validate-spec.yml",
     ".github/workflows/proof-anchor.yml",
-    "tools/prove-authentication-slice.py",
     "tools/validate-bootstrap/validate-bootstrap.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",

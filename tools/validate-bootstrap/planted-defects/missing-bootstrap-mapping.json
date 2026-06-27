@@ -1,0 +1,8 @@
+{
+  "id": "bootstrap-defect.missing-bootstrap-mapping",
+  "description": "A semantic contract without a canonical bootstrap mapping must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-008",
+  "mutation": {
+    "removeMappingFor": "semantic-contract.authentication-platform"
+  }
+}

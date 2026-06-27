@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:bootstrap-mapping",
+  "title": "USF Bootstrap Mapping Schema",
+  "description": "Draft JSON Schema for canonical semantic-to-implementation bootstrap mappings. Each mapping records one semantic contract's future implementation target, provider/adapter target, expected tests, expected proof gates, source lineage, deferrals, blockers, and persistent-object classifications without creating implementation/runtime files. The mapping is semantic-definition authority for bootstrap planning; generated aggregate indexes and summaries are review-only. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "semanticContractRef",
+    "mappingStatus",
+    "capabilityDomain",
+    "sourceRefs",
+    "capabilityTargets",
+    "adapterProviderTargets",
+    "expectedTests",
+    "expectedProofGates",
+    "deferrals",
+    "blockers",
+    "persistentObjectExpectations"
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nonEmptyStringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "role",
+        "status"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "role": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "testExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "target",
+        "expectation"
+      ],
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "expectation": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "proofGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "providerMode",
+        "proofLevel",
+        "status",
+        "expectation"
+      ],
+      "properties": {
+        "environment": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "providerMode": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "proofLevel": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "expectation": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "deferredWork": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "reason"
+      ],
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "issueRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "reason",
+        "blockingUntil"
+      ],
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "blockingUntil": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "issueRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "persistentObjectExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "object",
+        "classification",
+        "expectation"
+      ],
+      "properties": {
+        "object": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "classification": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "expectation": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^bootstrap-mapping\\.semantic-contract\\.[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "title": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "taxonomyRefs": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "vocabularyRefs": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "aiGuidance": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "semanticContractRef": {
+      "type": "string",
+      "pattern": "^semantic-contract\\.[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "mappingStatus": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "capabilityDomain": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "sourceRefs": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "capabilityTargets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/target"
+      },
+      "uniqueItems": true
+    },
+    "adapterProviderTargets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/target"
+      },
+      "uniqueItems": true
+    },
+    "expectedTests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/testExpectation"
+      },
+      "uniqueItems": true
+    },
+    "expectedProofGates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/proofGate"
+      },
+      "uniqueItems": true
+    },
+    "deferrals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/deferredWork"
+      },
+      "uniqueItems": true
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/blocker"
+      },
+      "uniqueItems": true
+    },
+    "persistentObjectExpectations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/persistentObjectExpectation"
+      },
+      "uniqueItems": true
+    }
+  }
+}

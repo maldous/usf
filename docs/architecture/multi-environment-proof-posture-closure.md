@@ -6,7 +6,7 @@
 | **Status** | Draft / implementation-gate input |
 | **Authority level** | Reviewable readiness artefact; subordinate to the Charter, Authority Model, accepted ADRs, validators, semantic instances, runtime proof evidence, source-use matrices, and any later human-filled implementation directive |
 | **Issue scope** | USF-73 |
-| **Primary inputs** | `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/proof-execution-substrate-authorization.md`, `docs/architecture/proof-tool-contract-standard.md`, `evidence/proof-evidence/authentication-slice-proof.json`, `evidence/evidence-envelope/authentication-slice-proof.json`, and `tools/prove-authentication-slice.py` |
+| **Primary inputs** | `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/proof-execution-substrate-authorization.md`, `docs/architecture/proof-tool-contract-standard.md`, `evidence/proof-evidence/authentication-slice-proof.json`, `evidence/evidence-envelope/authentication-slice-proof.json`, and `tools/validate-bootstrap/validate-bootstrap.py` |
 
 This closure records the multi-environment proof posture state for the authentication proof-substrate slice. It creates no implementation code, implementation directory, product runtime, source import, generated report, or schema activation. It does not start USF-39.
 
@@ -20,7 +20,7 @@ USF-73 does not satisfy local composed, external sandbox, production-shaped, liv
 
 The only proof executed for this closure is the authorized proof-only authentication harness:
 
-- command: `python3 tools/prove-authentication-slice.py --write`;
+- command: `python3 tools/validate-bootstrap/validate-bootstrap.py proof-authentication-slice --write`;
 - claim commit: `3a94677bd5be463841975511cdb61fa22da87146`;
 - provider mode: `hermetic-mock`;
 - environment: `hermetic`;

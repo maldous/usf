@@ -25,10 +25,10 @@
         "evidence.runtime-proof.authentication-slice-proof"
       ],
       "sourceRefs": [
-        "tools/prove-authentication-slice.py"
+        "tools/validate-bootstrap/validate-bootstrap.py"
       ],
       "signerFingerprint": "ci-github-actions:maldous/usf:proof-anchor",
-      "payloadDigest": "sha256:92a3fe394f2105f4074f6be48cdceadf5466efe7bd19fba498f5b9cbe8821331"
+      "payloadDigest": "sha256:43f4739e6bb861db57b8e9258d96560fb43ab90dc97a97ca3c948df9633108f1"
     }
   }
 }

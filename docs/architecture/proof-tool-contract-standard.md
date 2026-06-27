@@ -6,7 +6,7 @@
 | **Status** | Draft / proof-governance standard |
 | **Authority level** | Semantic-definition planning guidance; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, and runtime proof evidence |
 | **Issue scope** | USF-78 |
-| **Primary inputs** | `docs/architecture/proof-and-evidence-pipeline-plan.md`, `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/proof-execution-substrate-authorization.md`, `tools/prove-authentication-slice.py`, `spec/schemas/proof-evidence.schema.json`, `spec/schemas/evidence-envelope.schema.json` |
+| **Primary inputs** | `docs/architecture/proof-and-evidence-pipeline-plan.md`, `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/proof-execution-substrate-authorization.md`, `tools/validate-bootstrap/validate-bootstrap.py`, `spec/schemas/proof-evidence.schema.json`, `spec/schemas/evidence-envelope.schema.json` |
 
 This standard defines the shared contract for proof-only tools in USF. It creates no proof evidence, runs no proof, imports no runtime/application code, creates no implementation directory, emits no generated report, and promotes no schema to `active`.
 

@@ -25,7 +25,7 @@
         "evidence.runtime-proof.authentication-slice-proof"
       ],
       "sourceRefs": [
-        "tools/prove-authentication-slice.py"
+        "tools/validate-bootstrap/validate-bootstrap.py"
       ],
       "payloadDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
     }
