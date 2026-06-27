@@ -14,7 +14,7 @@ This decision is made under the readiness-acceleration directive recorded in Lin
 
 The React L5 equivalence audit (`docs/architecture/react-l5-equivalence-audit.md` section 7.1) inventoried strong evidence that `../react` was materially built around hexagonal architecture: explicit `ports/` and `adapters/` directories under `../react/apps/platform-api/src/`, usecases depending on ports rather than adapters, dependency-direction enforcement in `../react/.dependency-cruiser.cjs` and the lint configuration, public-export-only imports via TypeScript path aliases, and a contracts/domain/adapter/runtime package split. This historical evidence is rank-6 lineage, not future live authority.
 
-The USF ontology already defines the relevant concepts: Port (section 5.15), Adapter (section 5.16), Interface (section 5.17), Application (section 5.12), Package / Module (section 5.13), and Service (section 5.14). The chosen target runtime is TypeScript / Node, matching React lineage.
+The USF ontology already defines the relevant concepts: Port (section 5.15), Adapter (section 5.16), Interface (section 5.17), Application (section 5.12), Package / Module (section 5.13), and Service (section 5.14). The V2 implementation language and runtime are an **open decision** deferred to a future implementation directive; this ADR carries only the **language-agnostic** ports/adapters architecture as semantic information. `../react` is historical lineage only — its TypeScript implementation is evidence, not a V2 language commitment, and no `../react` source code is imported.
 
 ## Decision
 
