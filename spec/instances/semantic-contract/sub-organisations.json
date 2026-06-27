@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.sub-organisations",
   "title": "Sub Organisations Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 6: Sub-organisations. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Source-backed draft semantic contract for the sub organisations capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Interface",
+    "Data Model"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,87 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facets cite verified manifest source rows as lineage; proof is hermetic/stale and not current readiness. Do not treat as implementation authority or fresh proof; respect the hexagonal constraint in ADR 0005.",
   "capability": "sub-organisations",
   "capabilityDomain": "identity-access",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "List active children, create with slug/displayName, update displayName, deactivate by setting is_active false.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/sub-organisations.ts",
+        "apps/platform-api/tests/unit/sub-organisations.test.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Organisation rows carry parent_id, slug, display_name, is_active; the API view is flat and tenant-scoped, parent_id internal.",
+      "sourceRefs": [
+        "apps/platform-api/src/db/migrations/013-sub-organisations.sql",
+        "apps/platform-api/src/usecases/sub-organisations.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "tenant.suborgs.read/create/update/delete, tenant-scoped, mapped to organisation:sub-organisations authorization scopes.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/sub-organisations.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Org-scoped sub-organisation list/create and per-sub-org update/deactivate operations.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/sub-organisations.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Slug format and length constraints, reserved-slug rejection, and a global duplicate-slug check.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/sub-organisations.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "invalid_body, reserved_slug, conflict, and not_found outcomes with deterministic mapping.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/sub-organisations.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Create/update/deactivate are audited before the database mutation; a failing audit aborts it.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/sub-organisations.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Ready once the organisations table is migrated; the parent_id filter derives from the FQDN-resolved tenant.",
+      "sourceRefs": [
+        "apps/platform-api/src/db/migrations/013-sub-organisations.sql",
+        "apps/platform-api/tests/unit/sub-organisations.test.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unit proof of slug validation, reserved slugs, conflicts, and deactivation. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/sub-organisations.test.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; the React headless sub-organisation journey is lineage only. Author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/src/usecases/sub-organisations.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

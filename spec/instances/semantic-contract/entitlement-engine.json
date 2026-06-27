@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.entitlement-engine",
   "title": "Entitlement Engine Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 10: Entitlement engine. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Source-backed draft semantic contract for the entitlement engine capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Port",
+    "Data Model"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,89 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facets cite verified manifest source rows as lineage; proof is hermetic/stale and not current readiness. Do not treat as implementation authority or fresh proof; respect the hexagonal constraint in ADR 0005.",
   "capability": "entitlement-engine",
   "capabilityDomain": "identity-access",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Absent or not-granted denies by default; operator grant transitions to granted; revoke transitions to revoked; revoked/absent block access.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/entitlements.ts",
+        "apps/platform-api/tests/unit/entitlements.test.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Per-organisation entitlement keys with granted|revoked state, source, metadata, and update lineage; RLS-isolated.",
+      "sourceRefs": [
+        "apps/platform-api/src/db/migrations/022-tenant-entitlements.sql",
+        "apps/platform-api/src/db/migrations/023-fix-entitlements-rls.sql"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "tenant.entitlements.read for tenants; platform.entitlements.read/write for operators; the policy chain denies before entitlement evaluation.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/entitlements.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Org self-read and operator read/patch of tenant entitlements behind ports/adapters.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/entitlements-routes-runtime-proof.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unknown keys are rejected without audit; invalid tenant ids return errors; feature flags are not entitlements; no cross-tenant leakage.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/entitlements.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Assertion denies with a forbidden outcome; evaluation returns denied; invalid route inputs are rejected.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/entitlements.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Grant and revoke emit entitlement.granted/revoked before the mutation; a failing audit blocks persistence.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/entitlements.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Deterministic once persistence is migrated; the proof verifies table, RLS, no-secrets, isolation, grant/revoke, and audit-before-change.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/entitlements-postgres-runtime-proof.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unit and runtime proof of entitlement evaluation, persistence, and routes. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/entitlements-runtime-proof.ts",
+        "apps/platform-api/scripts/entitlements-postgres-runtime-proof.ts",
+        "apps/platform-api/scripts/entitlements-routes-runtime-proof.ts",
+        "apps/platform-api/tests/unit/entitlements.test.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/src/usecases/entitlements.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.audit-of-privileged-access",
   "title": "Audit Of Privileged Access Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 12: Audit of privileged access. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Source-backed draft semantic contract for the audit of privileged access capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Audit Event",
+    "Interface"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,93 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facets cite verified manifest source rows as lineage; proof is hermetic/stale and not current readiness. Do not treat as implementation authority or fresh proof; respect the hexagonal constraint in ADR 0005.",
   "capability": "audit-of-privileged-access",
   "capabilityDomain": "identity-access",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Read-only contextual query: choose a logical resource, map to stored, check per-context permission, query tenant-scoped, redact secrets, bound results.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/audit.ts",
+        "apps/platform-api/tests/unit/audit.test.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Audit events carry action, actor, resource, id, timestamp, and redacted metadata; logical resources map to stored event kinds.",
+      "sourceRefs": [
+        "packages/audit-events/src/index.ts",
+        "apps/platform-api/src/usecases/audit.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Coarse tenant.audit.read plus a per-context permission for members, config, features, or auth-settings.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/audit.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Org-scoped audit query with resource/actor/action/time filters; tenant derives from the session, never the client.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/audit.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unknown logical resources are invalid; missing per-context permission is forbidden; the result limit is clamped.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/audit.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "ok, forbidden, and invalid outcomes with deterministic mapping.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/audit.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "This capability reads existing audit events rather than mutating; secret metadata is redacted and request metadata is not exposed.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/audit.ts",
+        "packages/audit-events/tests/audit-events.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Invariant-ready; the read-only projection enforces isolation, secret exclusion, pagination, and no mutation.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/audit.test.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unit proof of the read-only audit projection and the shared audit-event contract. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/audit.test.ts",
+        "packages/audit-events/tests/audit-events.test.ts"
+      ]
     },
     "uiSemanticDefinition": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Audit panels with logical-resource, action, actor, and time filters, pagination, forbidden/invalid states, and redacted metadata.",
+      "sourceRefs": [
+        "apps/react-enterprise-app/src/features/admin/audit-client.ts",
+        "apps/react-enterprise-app/src/features/admin/use-audit.ts"
+      ]
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/src/usecases/audit.ts",
+    "packages/audit-events/src/index.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

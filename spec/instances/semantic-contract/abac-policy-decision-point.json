@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.abac-policy-decision-point",
-  "title": "Abac Policy Decision Point Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 8: ABAC / Policy Decision Point. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "title": "ABAC Policy Decision Point Semantic Contract",
+  "description": "Source-backed draft semantic contract for the abac policy decision point capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Port",
+    "Interface"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,87 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facets cite verified manifest source rows as lineage; proof is hermetic/stale and not current readiness. Do not treat as implementation authority or fresh proof; respect the hexagonal constraint in ADR 0005.",
   "capability": "abac-policy-decision-point",
   "capabilityDomain": "identity-access",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Read current policy, audit, set replacement; request evaluation is authorization-server-first with a static fail-closed fallback and step-up on insufficient auth.",
+      "sourceRefs": [
+        "apps/platform-api/src/server/authorize-resource.ts",
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Each guarded route declares a resource, scope, and required permission; optional resource-policy records and decision results form the state.",
+      "sourceRefs": [
+        "apps/platform-api/src/server/authorize-resource.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Routes declare requiredPermission/resource/scope; policy writes sit behind tenant auth-settings; audit precedes mutation.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Resource-policy read/write plus per-route guard metadata consumed by the authorization pipeline.",
+      "sourceRefs": [
+        "apps/platform-api/src/server/authorize-resource.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unknown/unregistered resources degrade to static evaluation; an absent static policy denies; an injected policy may allow.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "policy_denied, insufficient_auth/step-up, and missing-token outcomes; fail-closed by default.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Resource-policy mutations are audited before the adapter set; read-only authorization checks are logged, not per-request audited.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Ready for the local policy seam; authorization-server unavailability is an explicit non-decisive degradation with static fallback.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/entitlement-policy-chain-runtime-proof.ts",
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unit and runtime proof of the decision and policy chain. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/entitlement-policy-chain-runtime-proof.ts",
+        "apps/platform-api/tests/unit/authorize-resource.test.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/src/server/authorize-resource.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

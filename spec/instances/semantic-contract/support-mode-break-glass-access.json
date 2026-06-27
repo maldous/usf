@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.support-mode-break-glass-access",
-  "title": "Support Mode Break Glass Access Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 11: Support-mode / break-glass access. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "title": "Support Mode And Break Glass Access Semantic Contract",
+  "description": "Source-backed draft semantic contract for the support mode break glass access capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Workflow",
+    "Audit Event"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,87 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facets cite verified manifest source rows as lineage; proof is hermetic/stale and not current readiness. Do not treat as implementation authority or fresh proof; respect the hexagonal constraint in ADR 0005.",
   "capability": "support-mode-break-glass-access",
   "capabilityDomain": "identity-access",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Request approval (workflow waits), approve (completes), then a time-boxed support session audited for the exact target; direct entry creates the same scoped session.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/support.ts",
+        "apps/platform-api/tests/unit/support-mode.test.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Workflow status and a scoped session with supportMode flag, effective/target organisation, reason, roles, and a bounded TTL; no standing tenant permissions.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/support.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "platform.admin.access with a system-admin defence-in-depth role; access is restricted to the matching target tenant FQDN.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/support-mode.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Support-session creation and the request/approve support-approval workflow operations.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/support.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Non-admin, empty/whitespace reason, and empty target are rejected before audit; support-mode without an effective organisation cannot access.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/support-mode.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "forbidden, reason_required, and invalid_target outcomes; wrong-tenant FQDN denial; audit failure prevents creation.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/support-mode.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "support_session.created is audited before creation and the approval request is audited with workflow state; a failing audit yields no session.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/support-mode.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Hermetic-domain ready for approval/session semantics; the workflow waits and completes on signal; no external-provider claim.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/support-mode.test.ts",
+        "e2e/support/correlation-core.mjs"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Unit and journey proof of the approval/session state machine. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/support-mode.test.ts",
+        "e2e/support/correlation.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/src/usecases/support.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }
