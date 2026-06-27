@@ -101,6 +101,36 @@ The intended later layout is:
 
 These are not authorised paths yet. They are planned future topology names only. They must be created only after the signed directive, per-slice topology gate, source-use disposition coverage, and validator gates authorise them.
 
+## Runtime, API, Data Access, and Toolchain Decisions
+
+The target runtime is modern TypeScript/Node. This is a future implementation decision only; it creates no implementation directory, package workspace, source file, build file, CI implementation scaffold, OpenAPI skeleton, adapter stub, generated TypeScript runtime, or runtime dependency before separate implementation authorisation.
+
+Future implementation toolchain decisions:
+
+- modern active LTS Node;
+- pnpm workspaces;
+- native ESM;
+- strict TypeScript;
+- Vitest or equivalent for tests;
+- ESLint and Prettier formatting gates;
+- TypeScript compiler checks;
+- Makefile orchestration for local commands once implementation is separately authorised.
+
+Future API and contract decisions:
+
+- Fastify at the `apps/api` adapter edge;
+- committed OpenAPI contract;
+- Fastify route/schema conformance checks against the committed OpenAPI contract;
+- TypeBox and JSON Schema-first request/response validation.
+
+Future data-access decisions:
+
+- SQL-first Postgres migrations;
+- Kysely inside database adapters only;
+- generated Kysely database types from the real migrated Compose/Postgres schema;
+- deterministic generated database types committed only when authorised;
+- stale generated database types fail verification.
+
 ## Tenant Isolation and Security Controls
 
 Tenant isolation is mandatory. Future implementation must enforce tenant isolation at both the application layer and the database layer.
@@ -255,6 +285,7 @@ Future implementation must:
 - the record treats the marker as production readiness, implementation completion, or USF-39 start authority;
 - the record omits immutable proof/evidence anchors;
 - the record omits USF-39 Backlog and separate-start boundaries;
+- the record omits the modern TypeScript/Node, Node LTS, pnpm, native ESM, strict TypeScript, Fastify, OpenAPI, TypeBox, Kysely, and toolchain decisions;
 - tenant isolation, Postgres RLS, `SET LOCAL`, `current_setting('app.tenant_id')`, `BYPASSRLS`, and `FORCE ROW LEVEL SECURITY` controls are missing;
 - break-glass two-person JIT approval, requester/approver separation, and RLS-aware scoped elevation are missing;
 - dev in-memory providers or test Compose OSS providers are missing;

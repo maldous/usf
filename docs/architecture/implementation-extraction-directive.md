@@ -83,7 +83,7 @@ Every target file is assigned exactly one source-use treatment in its slice's di
 - `new-with-rationale`: no source row drives the file; the directive records the semantic reason and source-disposition rationale;
 - `evidence-only-support`: source rows inform review or lineage only and cannot produce runtime code.
 
-`../react` is informational lineage only. Direct runtime or application code import from `../react` is not authorised by this directive for any slice. A specific file may be imported only if a later signed directive revision names that exact file with its source-use treatment, proof rationale, and target file. The V2 implementation language and runtime remain an open decision; this directive imports no `../react` source and assumes no specific target language.
+`../react` is informational lineage only. Direct runtime or application code import from `../react` is not authorised by this directive for any slice. A specific file may be imported only if a later signed directive revision names that exact file with its source-use treatment, proof rationale, and target file. The target runtime is modern TypeScript/Node as recorded in bootstrap governance; this directive imports no `../react` source and creates no implementation or scaffold before bootstrap or before separate implementation authorisation.
 
 ## Source-Use Disposition Coverage
 
@@ -140,7 +140,7 @@ Implementation is permitted only in topology-listed, validator-authorised roots,
 - Claiming live-external-provider or production-live readiness.
 - Treating generated reports, CI status, stdout, or unsigned anchors as authority.
 - Treating this draft as accepted before the signature block and the USF-100 record record acceptance.
-- Fixing the V2 implementation language or importing source to do so.
+- Creating runtime/tooling scaffold from the recorded TypeScript/Node target before separate implementation authorisation, or importing source to do so.
 
 ## Mandatory Stop Conditions
 

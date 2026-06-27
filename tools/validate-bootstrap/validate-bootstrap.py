@@ -40,6 +40,7 @@ RULES = {
     "USF-BOOTSTRAP-012": ("blocking", "authentication proof runner is not consolidated into bootstrap validator"),
     "USF-BOOTSTRAP-013": ("blocking", "bootstrap mapping proof/readiness posture coverage is incomplete"),
     "USF-BOOTSTRAP-014": ("blocking", "bootstrap readiness marker support is incomplete"),
+    "USF-BOOTSTRAP-015": ("blocking", "bootstrap runtime/toolchain decision coverage is incomplete"),
     "USF-BOOTSTRAP-SELFTEST": ("blocking", "planted bootstrap defect did not raise its expected rule"),
 }
 
@@ -159,6 +160,26 @@ REQUIRED_MAPPING_DEFERRAL_SCOPES = {
 REQUIRED_MAPPING_BLOCKER_SCOPES = {
     "pre-file-implementation-gate",
 }
+
+REQUIRED_TOOLCHAIN_GOVERNANCE_MARKERS = [
+    ("target runtime is modern typescript/node", "target runtime is fixed to TypeScript/Node"),
+    ("modern active lts node", "modern active LTS Node is recorded"),
+    ("pnpm workspaces", "pnpm workspace decision is recorded"),
+    ("native esm", "native ESM decision is recorded"),
+    ("strict typescript", "strict TypeScript decision is recorded"),
+    ("fastify", "Fastify API adapter decision is recorded"),
+    ("openapi", "OpenAPI contract decision is recorded"),
+    ("typebox", "TypeBox validation decision is recorded"),
+    ("kysely", "Kysely data-access decision is recorded"),
+    ("toolchain decisions", "toolchain decision section is recorded"),
+]
+
+OPEN_RUNTIME_DIRECTIVE_PHRASES = [
+    "implementation language and runtime remain an open decision",
+    "language and runtime remain an open decision",
+    "assumes no specific target language",
+    "fixing the v2 implementation language",
+]
 
 
 class Findings:
@@ -359,6 +380,20 @@ def check_directive_boundary(F, state):
     for marker in signed_markers:
         if marker in lower:
             F.add("USF-BOOTSTRAP-003", DIRECTIVE_PATH, f"directive appears accepted or signed: {marker}")
+
+
+def check_runtime_toolchain_decisions(F, state):
+    governance_lower = state["bootstrapGovernanceText"].lower()
+    for marker, message in REQUIRED_TOOLCHAIN_GOVERNANCE_MARKERS:
+        if marker not in governance_lower:
+            F.add("USF-BOOTSTRAP-015", BOOTSTRAP_GOVERNANCE_PATH, f"missing runtime/toolchain marker: {message}")
+
+    directive_lower = state["directiveText"].lower()
+    if "target runtime is modern typescript/node as recorded in bootstrap governance" not in directive_lower:
+        F.add("USF-BOOTSTRAP-015", DIRECTIVE_PATH, "implementation directive does not bind runtime target to bootstrap governance")
+    for phrase in OPEN_RUNTIME_DIRECTIVE_PHRASES:
+        if phrase in directive_lower:
+            F.add("USF-BOOTSTRAP-015", DIRECTIVE_PATH, f"directive reopens runtime/language decision: {phrase}")
 
 
 def check_readiness_boundary(F, state):
@@ -682,6 +717,15 @@ def check_bootstrap_governance(F, state):
         ("no real tenant, customer, or user data migration", "real-data migration exclusion is stated"),
         ("pnpm lockfile", "lockfile target is stated"),
         ("pin node and pnpm versions", "toolchain pinning is stated"),
+        ("target runtime is modern typescript/node", "target TypeScript/Node runtime is stated"),
+        ("modern active lts node", "modern active LTS Node is stated"),
+        ("pnpm workspaces", "pnpm workspace decision is stated"),
+        ("native esm", "native ESM decision is stated"),
+        ("strict typescript", "strict TypeScript decision is stated"),
+        ("fastify", "Fastify API adapter decision is stated"),
+        ("openapi", "OpenAPI contract decision is stated"),
+        ("typebox", "TypeBox validation decision is stated"),
+        ("kysely", "Kysely data-access decision is stated"),
         ("no floating `latest` images", "floating latest image prohibition is stated"),
         ("make verify", "future verification gate is stated"),
     ]
@@ -958,6 +1002,7 @@ def run_checks(modes, F, state=None):
     if "readiness" in modes:
         check_required_artefacts(F, state)
         check_directive_boundary(F, state)
+        check_runtime_toolchain_decisions(F, state)
         check_readiness_boundary(F, state)
         check_mapping_substrate(F, state)
         check_bootstrap_mappings(F, state)
@@ -1046,6 +1091,13 @@ def run_selftest(F):
             overrides["bootstrapMappings"] = mappings
         if "bootstrapGovernanceText" in mutation:
             overrides["bootstrapGovernanceText"] = mutation["bootstrapGovernanceText"]
+        if "removeBootstrapGovernanceText" in mutation:
+            overrides["bootstrapGovernanceText"] = base["bootstrapGovernanceText"].replace(
+                mutation["removeBootstrapGovernanceText"],
+                "",
+            )
+        if "appendDirectiveText" in mutation:
+            overrides["directiveText"] = overrides.get("directiveText", base["directiveText"]) + mutation["appendDirectiveText"]
         if "bootstrapAdrText" in mutation:
             overrides["bootstrapAdrText"] = mutation["bootstrapAdrText"]
         local = Findings()

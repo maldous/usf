@@ -1,0 +1,7 @@
+{
+  "description": "An implementation directive that reintroduces an open language or runtime decision must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-015",
+  "mutation": {
+    "appendDirectiveText": "\nThe V2 implementation language and runtime remain an open decision; this directive assumes no specific target language.\n"
+  }
+}

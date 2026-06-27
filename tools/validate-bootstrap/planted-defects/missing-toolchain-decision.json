@@ -1,0 +1,7 @@
+{
+  "description": "A bootstrap governance record that omits a required runtime or toolchain decision must fail closed.",
+  "expectedRule": "USF-BOOTSTRAP-015",
+  "mutation": {
+    "removeBootstrapGovernanceText": "strict TypeScript"
+  }
+}
