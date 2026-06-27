@@ -83,7 +83,7 @@ Until a promotion PR exists:
 
 USF-61 can cite this decision as follows:
 
-> USF-67 records that all schema registry entries remain draft and `validate-spec` remains advisory for the first implementation extraction gate. USF-39 must not claim active schema or active validator maturity unless a separate promotion PR later satisfies USF-30 and updates the registry, standards, ADRs, validator rules, and CI together.
+> USF-67 records that all schema registry entries remain draft and `validate-spec` remains advisory for the implementation extraction gate. USF-39 must not claim active schema or active validator maturity unless a separate promotion PR later satisfies USF-30 and updates the registry, standards, ADRs, validator rules, and CI together.
 
 ## Non-Goals
 

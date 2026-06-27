@@ -1,0 +1,7 @@
+{
+  "target": "directive-text",
+  "expectedRule": "USF-DIRECTIVE-002",
+  "records": {
+    "docs/architecture/implementation-extraction-directive.md": "# Implementation Extraction Directive\n\nAuthorising human: unsigned.\n\nLinear record: USF-100.\n\nScope: whole platform.\n\nTarget files are gated.\n\nSource-use is required.\n\nFresh proof is required.\n\nValidation is required.\n\nNon-goals: USF-39 remains Backlog.\n"
+  }
+}

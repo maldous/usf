@@ -266,6 +266,8 @@ RULES = {
     "USF-IMPL-004":     ("blocking", "Implementation artefact path uses a forbidden name"),
     "USF-IMPL-005":     ("blocking", "Implementation artefact is outside authorised target roots"),
     "USF-DIRECTIVE-001": ("blocking", "Implementation directive is missing accepted filled-directive content"),
+    "USF-DIRECTIVE-002": ("blocking", "Implementation directive is missing whole-platform slice gate coverage or human-only acceptance boundary"),
+    "USF-READINESS-001": ("blocking", "Readiness document contains stale pre-reconciliation state"),
     "USF-SELFTEST-001": ("blocking", "Planted defect did NOT raise its expected rule id"),
     "USF-PR-RUNTIME":   ("blocking", "PR adds implementation/runtime code"),
     "USF-PR-ACTIVE":    ("blocking", "PR marks a schema lifecycleState active"),
@@ -1156,11 +1158,12 @@ PROOF_ANCHOR_TRUST_ROOT = f"{CORPUS}/proof-anchor-trust-root.json"
 
 
 def _proof_anchor_trusted_signers():
-    """Approved proof-anchor signer fingerprints (ADR 0006). Fail-closed: a missing or
-    malformed trust root, or an empty list, means no signer is trusted yet, so any anchor
-    that claims a signer is rejected (USF-ANCHOR-008) until a maintainer fingerprint is
-    registered. Full tag-signature verification (git verify-tag) is a CI/pr-mode step
-    layered on top once a real signed tag and a registered signer exist."""
+    """Approved proof-anchor signer fingerprints (ADR 0006, ADR 0007, ADR 0008).
+
+    Fail-closed: a missing or malformed trust root, or an empty list, means no signer
+    is trusted, so any anchor that claims a signer is rejected (USF-ANCHOR-008). CI
+    performs cryptographic attestation verification before publishing the annotated tag.
+    """
     data = load_json(PROOF_ANCHOR_TRUST_ROOT, Findings())
     if isinstance(data, dict) and isinstance(data.get("trustedSigners"), list):
         return {s for s in data["trustedSigners"] if isinstance(s, str) and s}
@@ -1168,12 +1171,12 @@ def _proof_anchor_trusted_signers():
 
 
 def validate_anchor_payload_data(F, data_by_name, current_commit=None, trusted_signers=None):
-    """Validate unsigned deterministic payloads for future proof freshness anchors.
+    """Validate deterministic payloads for proof freshness anchors.
 
-    Carrier and signer trust are decided by ADR 0006 (signed annotated Git tag verified
-    against an approved trust root). This checks the trust-root membership of a claimed
-    signer fingerprint; it does not by itself run the tag-signature verification, which is
-    a CI/pr-mode step that requires a real signed tag and a registered signer.
+    Carrier and signer trust are decided by ADR 0006 (carrier lineage), ADR 0007
+    (repository CI attestation identity), and ADR 0008 (annotated tag carrying a
+    CI-attested payload). This checks the trust-root membership of a claimed signer
+    fingerprint; CI verifies the cryptographic attestation before publishing the tag.
     """
     if trusted_signers is None:
         trusted_signers = _proof_anchor_trusted_signers()
@@ -1724,6 +1727,7 @@ def run_all_checks(ctx, F):
     check_registry(ctx, F)
     check_catalogues(ctx, F)
     check_safety(ctx, F)
+    validate_readiness_reconciliation(F)
 
 
 def check_selftest(ctx, F):
@@ -1740,7 +1744,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1832,6 +1836,12 @@ def check_selftest(ctx, F):
                 F.add("USF-SELFTEST-001", df, "directive-text planted-defect needs a records object")
                 continue
             validate_implementation_directives(f2, list(records), records=records)
+        elif patch["target"] == "readiness-docs":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "readiness-docs planted-defect needs a records object")
+                continue
+            validate_readiness_reconciliation(f2, records=records)
         elif patch["target"] == "pr-paths":
             lines = patch.get("nameStatusLines")
             if not isinstance(lines, list):
@@ -1919,6 +1929,15 @@ DIRECTIVE_REQUIRED_PHRASES = {
     "non-goals",
     "usf-39 remains backlog",
 }
+DIRECTIVE_WHOLE_PLATFORM_PHRASES = {
+    "whole-platform slice readiness pack",
+    "human-only acceptance boundary",
+    "pre-file slice gate",
+    "topology roots",
+    "per-slice source-use disposition matrix",
+    "proof command",
+    "validator extensions",
+}
 DIRECTIVE_PLACEHOLDER_PHRASES = {
     "required answer",
     "invalid examples",
@@ -1999,11 +2018,112 @@ def _implementation_path_has_forbidden_name(path):
 def validate_implementation_directive_text(F, path, text):
     lower = text.lower()
     missing = sorted(phrase for phrase in DIRECTIVE_REQUIRED_PHRASES if phrase not in lower)
+    missing_pack = sorted(phrase for phrase in DIRECTIVE_WHOLE_PLATFORM_PHRASES if phrase not in lower)
     placeholders = sorted(phrase for phrase in DIRECTIVE_PLACEHOLDER_PHRASES if phrase in lower)
     if missing:
         F.add("USF-DIRECTIVE-001", path, f"missing required filled-directive phrases: {missing}")
+    if missing_pack:
+        F.add("USF-DIRECTIVE-002", path, f"missing whole-platform directive phrases: {missing_pack}")
     if placeholders:
         F.add("USF-DIRECTIVE-001", path, f"placeholder/template phrases remain: {placeholders}")
+
+
+READINESS_RECONCILIATION_PATH = "docs/architecture/final-v2-readiness-reconciliation.md"
+READINESS_STALE_PHRASES = {
+    "docs/architecture/complete-readiness-blocker-register.md": [
+        "`badef5da0c03a1e019d3f7bb84d8268ee8bc8255`",
+        "USF-113: human ratification",
+        "run 28285948217 on commit `22db242`",
+        "tag proof-anchor-22db242",
+    ],
+    "docs/architecture/proof-freshness-publication-model.md": [
+        "no carrier or signer/trust model is accepted yet",
+        "USF-101 is materially advanced",
+        "it is not complete. Completion still requires",
+    ],
+    "docs/architecture/proof-freshness-anchor-carrier-decision.md": [
+        "no carrier or signer/trust model is accepted yet",
+        "approval-ready",
+    ],
+    "docs/architecture/react-l5-equivalence-audit.md": [
+        "USF base state reviewed | `badef5da0c03a1e019d3f7bb84d8268ee8bc8255`",
+        "USF-113: human ratification",
+        "USF-117 status: ledger format + vocabulary defined and documented; validator coverage deferred",
+    ],
+}
+READINESS_REQUIRED_ISSUES = {
+    "USF-39", "USF-73", "USF-75", "USF-97", "USF-98", "USF-99", "USF-100",
+    "USF-101", "USF-113", "USF-117", "USF-118", "USF-119",
+}
+READINESS_FORBIDDEN_SCOPE_PHRASES = {
+    "authentication only",
+    "authentication-only",
+    "authentication first slice",
+    "authentication first-slice",
+    "authentication-centered",
+    "auth only",
+    "first directive",
+    "first extraction",
+    "first implementation",
+    "first pass",
+    "first-pass",
+    "first-slice",
+    "first slice",
+    "first-step",
+    "first step",
+}
+
+
+def validate_readiness_reconciliation(F, records=None):
+    records = records or {}
+    if not os.path.exists(READINESS_RECONCILIATION_PATH) and READINESS_RECONCILIATION_PATH not in records:
+        F.add("USF-READINESS-001", READINESS_RECONCILIATION_PATH, "final readiness reconciliation artefact is missing")
+    reconciliation = records.get(READINESS_RECONCILIATION_PATH)
+    if reconciliation is None and os.path.exists(READINESS_RECONCILIATION_PATH):
+        reconciliation = load_text(READINESS_RECONCILIATION_PATH, F)
+    if reconciliation is not None:
+        missing = sorted(issue for issue in READINESS_REQUIRED_ISSUES if issue not in reconciliation)
+        if missing:
+            F.add("USF-READINESS-001", READINESS_RECONCILIATION_PATH, f"missing issue status entries: {missing}")
+        required_phrases = [
+            "USF-100 is an unsigned whole-platform draft directive",
+            "USF-39 remains Backlog",
+            "NO-GO",
+            "proof-anchor-fabe47b",
+        ]
+        missing_phrases = sorted(phrase for phrase in required_phrases if phrase not in reconciliation)
+        if missing_phrases:
+            F.add("USF-READINESS-001", READINESS_RECONCILIATION_PATH, f"missing required reconciliation phrases: {missing_phrases}")
+
+    for path, stale_phrases in READINESS_STALE_PHRASES.items():
+        text = records.get(path)
+        if text is None and os.path.exists(path):
+            text = load_text(path, F)
+        if text is None:
+            continue
+        for phrase in stale_phrases:
+            if phrase in text:
+                F.add("USF-READINESS-001", path, f"stale readiness phrase remains: {phrase}")
+
+    paths = []
+    if records:
+        paths = sorted(records)
+    else:
+        paths = sorted(
+            glob.glob("docs/architecture/*.md")
+            + glob.glob("docs/runbooks/*.md")
+            + glob.glob("docs/adr/*.md")
+        )
+    for path in paths:
+        text = records.get(path)
+        if text is None and os.path.exists(path):
+            text = load_text(path, F)
+        if text is None:
+            continue
+        lower = text.lower()
+        for phrase in sorted(READINESS_FORBIDDEN_SCOPE_PHRASES):
+            if phrase in lower:
+                F.add("USF-READINESS-001", path, f"forbidden auth-first or first-step scope phrase remains: {phrase}")
 
 
 def validate_implementation_directives(F, paths=None, records=None):
@@ -2242,7 +2362,7 @@ def main():
         "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "evidence": ["evidence"],
         "real-instances": ["real-instances"], "implementation": ["implementation"],
         "selftest": ["selftest"], "pr": ["pr"], "anchor": ["anchor"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest"]
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "readiness", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -2255,6 +2375,8 @@ def main():
         check_registry(ctx, F)
     if "safety" in run:
         check_safety(ctx, F)
+    if "readiness" in run:
+        validate_readiness_reconciliation(F)
     if "fixtures" in run:
         fixtures_state = check_fixtures(ctx, F)
     if "instances" in run:

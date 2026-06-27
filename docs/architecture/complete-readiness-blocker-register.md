@@ -6,8 +6,8 @@
 | **Status** | Draft / NO-GO register |
 | **Authority level** | Reviewable readiness classification; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, and semantic instances |
 | **Issue scope** | USF-39 readiness; USF-59; USF-73; USF-97; USF-98; USF-99; USF-100; USF-101; React L5 equivalence audit workstream USF-102–USF-119 |
-| **Base repository state reviewed** | `badef5da0c03a1e019d3f7bb84d8268ee8bc8255` |
-| **Branch update scope** | Records the React L5 / USF V2 equivalence audit harvest (`docs/architecture/react-l5-equivalence-audit.md`) and the resulting reduced blocker set; `../react` was inspected at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767` (tag `v1-final`) as historical evidence only; final merged commit is determined by Git history |
+| **Base repository state reviewed** | `fabe47b8fc70d34b34d1fc05c39da998c74a6748` |
+| **Branch update scope** | Records the React L5 / USF V2 equivalence audit harvest, proof-anchor publication state, and final V2 readiness reconciliation; `../react` was inspected at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767` (tag `v1-final`) as historical evidence only; final merged commit is determined by Git history |
 
 This document records the current complete-readiness blocker state before implementation extraction. It creates no implementation code, implementation directory, product runtime, source import, proof evidence, generated report, schema activation, or implementation directive. It does not start USF-39.
 
@@ -17,8 +17,8 @@ Complete one-pass implementation readiness is NO-GO.
 
 USF-39 must remain Backlog because the repository does not yet have all of the following:
 
-- a safe proof freshness publication model for current commit evidence — RESOLVED (USF-101 Done): the proof-anchor CI workflow publishes and verifies a signed/attested anchor on each merge commit;
-- fresh non-stale proof evidence for every readiness claim — PARTIAL: the authentication first slice now has a fresh, verified, commit-pinned anchor (USF-59 Done); broader runtime proof remains bounded by pre-implementation scope (USF-99) and stronger multi-environment postures remain deferred (USF-73);
+- a safe proof freshness publication model for current commit evidence — RESOLVED (USF-101 Done): the proof-anchor CI workflow publishes and verifies a CI-attested anchor on each merge commit;
+- fresh non-stale proof evidence for every readiness claim — PARTIAL: the authentication proof substrate now has a fresh, verified, commit-pinned anchor (USF-59 Done); broader runtime proof remains bounded by pre-implementation scope (USF-99) and stronger multi-environment postures remain deferred (USF-73);
 - full semantic and source-use closure for every implementation-relevant slice, or explicit scope exclusions;
 - validator-checkable semantic completeness, source audit base, and aggregate provider/environment posture gates;
 - a human-filled implementation directive that cites exact scope, source-use, proof evidence, validation gates, no-go rules, and stop conditions.
@@ -31,11 +31,11 @@ The current repository remains valid as a semantic-first readiness foundation. I
 
 The harvest materially reduces and sharpens the blocker set without weakening any safety rule. The smallest truthful remaining NO-GO set is:
 
-1. USF-101: DONE. The proof-anchor CI workflow (`.github/workflows/proof-anchor.yml`, ADR-0006 carrier + ADR-0007 CI signer) is enabled, and its first post-merge run (run 28285948217 on commit `22db242`) emitted, verified, attested, and published a fresh signed anchor (tag `proof-anchor-22db242`); it republishes a fresh anchor on every merge. USF-59 is DONE (authentication-slice fresh, verified, commit-pinned proof via the anchor). USF-73 and USF-99 remain bounded by pre-implementation proof scope: stronger multi-environment postures and broad per-slice runtime proof require the implementation that USF-39 would create, and are recorded as deferred/not-proven rather than claimed.
-2. USF-100: a human-filled implementation directive. A ready-to-sign DRAFT now exists at `docs/architecture/implementation-extraction-directive.md`, scoped to the whole-platform V2 migration (all slices), validator-clean (USF-DIRECTIVE-001 passes), and unaccepted. It is blocked only on the authorising human's signature; the USF-101 proof publication classification it depended on is now Done.
-3. USF-113: human ratification (ADR) of carrying the React hexagonal architecture forward as a V2 constraint.
-4. USF-97: a bounded, enumerated authoring backlog (per-domain source-backed facets and per-domain source-use matrices), sequenced after the directive scopes the first domains.
-5. USF-98/USF-117: a machine-readable equivalence ledger and validator rules with planted defects (repository-workable follow-up).
+1. USF-101: DONE. The proof-anchor CI workflow (`.github/workflows/proof-anchor.yml`, ADR 0006 carrier lineage + ADR 0007 CI signer + ADR 0008 attested-tag amendment) is enabled, and the current reviewed main run `28286276338` on commit `fabe47b8fc70d34b34d1fc05c39da998c74a6748` emitted, verified, attested, and published a fresh CI-attested anchor (`proof-anchor-fabe47b`); it republishes a fresh anchor on every merge. USF-59 is DONE (authentication-slice fresh, verified, commit-pinned proof via the anchor). USF-73 and USF-99 remain bounded by pre-implementation proof scope: stronger multi-environment postures and broad per-slice runtime proof require the implementation that USF-39 would create, and are recorded as deferred/not-proven rather than claimed.
+2. USF-100: a human-filled implementation directive. A ready-to-sign DRAFT now exists at `docs/architecture/implementation-extraction-directive.md`, scoped to the whole-platform V2 migration (all slices), validator-clean for directive text, and unaccepted. It is blocked on the authorising human's signature, USF-100 acceptance, and final USF-75 revalidation before any USF-39 start action.
+3. USF-113: DONE. ADR 0005 records the hexagonal architecture carry-forward decision as language-agnostic authority.
+4. USF-97: IN PROGRESS. The domain corpus is broad but not implementation-closed; per-slice source-use matrices and exact topology/file gates are still required before files are created.
+5. USF-98/USF-117: IN PROGRESS/BACKLOG. The validator now checks additional readiness and directive staleness conditions, but complete equivalence-ledger and aggregate posture gates remain repository-workable follow-up.
 
 All React L5 proof remains lineage/stale for USF; no hermetic proof is upgraded to live-external and no production-shaped evidence is upgraded to production-live.
 
@@ -43,10 +43,10 @@ All React L5 proof remains lineage/stale for USF; no hermetic proof is upgraded 
 
 | Blocker | Current state | Blocks | Classification |
 |---|---:|---|---|
-| USF-101 proof freshness publication model | Done | — | Resolved: CI proof-anchor workflow publishes+verifies a signed anchor per commit (run 28285948217, tag proof-anchor-22db242) |
+| USF-101 proof freshness publication model | Done | — | Resolved: CI proof-anchor workflow publishes and verifies a CI-attested anchor per commit (current reviewed run 28286276338, tag proof-anchor-fabe47b) |
 | USF-59 current commit-pinned proof evidence | Done | — | Resolved: authentication-slice fresh, verified, commit-pinned anchor via the proof-anchor workflow |
-| USF-73 multi-environment proof evidence | Backlog | USF-99, USF-100, USF-39 | Blocked by USF-101 and stronger proof infrastructure |
-| USF-97 full semantic and source-use closure | Backlog | USF-100, USF-39 | Repository-workable, but broad and not complete |
+| USF-73 multi-environment proof evidence | Backlog | USF-99, USF-100, USF-39 | Blocked by stronger proof infrastructure and implementation/runtime substrates, not by USF-101 |
+| USF-97 full semantic and source-use closure | In Progress | USF-100, USF-39 | Repository-workable, but broad and not complete |
 | USF-98 one-pass readiness validator hardening | Backlog | USF-100, USF-39 | Partially advanced by PR 54, PR 58, and current validator hardening; repository-workable follow-up remains |
 | USF-99 one-pass runtime proof and evidence execution | Backlog | USF-100, USF-39 | Blocked by proof publication model, runtime proof scope, and implementation prohibition |
 | USF-100 human-filled implementation directive | Backlog | USF-39 | Requires human authority after blockers close |
@@ -62,19 +62,19 @@ The current validator correctly fails closed when a record says `freshness.stale
 
 This requires an explicit publication model, such as a post-merge attestation, tag or signed evidence anchor, dedicated evidence publication workflow, or a higher-authority freshness decision that preserves proof honesty. Generated reports must not be promoted to proof authority.
 
-`docs/architecture/proof-freshness-publication-model.md` records the preferred post-merge evidence-anchor model and the validator guard that blocks PRs from changing evidence or generated-report JSON to claim non-stale freshness before publication. `docs/architecture/proof-freshness-anchor-carrier-decision.md` records that no carrier or signer/trust model is accepted yet, while recommending a signed annotated Git tag for later authority approval. The proof harness can emit a deterministic unsigned anchor payload and the validator can selftest payload invariants, but that payload is not proof authority. This materially advances USF-101. The carrier and signer are now decided: `docs/adr/0006-proof-freshness-anchor-carrier.md` accepts a signed annotated Git tag verified against an approved trust root, and `docs/adr/0007-proof-anchor-ci-signing-identity.md` accepts the repository CI identity (GitHub artifact attestations, OIDC/sigstore) as the signer, registered in `tools/validate-spec/proof-anchor-trust-root.json` and data-checked by validator rule USF-ANCHOR-008. The React L5 proof audit (`docs/architecture/react-l5-equivalence-audit.md`, section 5) confirms no React proof can substitute: all React proof is hermetic/local/sandbox lineage and is stale for current USF readiness. USF-101 is now DONE. The proof-anchor CI workflow (`.github/workflows/proof-anchor.yml`) is enabled, and its first post-merge run (run 28285948217 on commit `22db242`) emitted the deterministic anchor payload, verified it (`validate-spec anchor`, USF-ANCHOR-001..008 incl. trust-root membership), attested it keyless with the repository CI identity (`actions/attest-build-provenance`), verified the attestation (`gh attestation verify`), and published the signed annotated tag `proof-anchor-22db242` on the merge commit. The workflow republishes a fresh anchor on each subsequent merge, so the live commit always carries a fresh, verified anchor; committed evidence JSON remains historical/stale by design and is never the freshness carrier.
+`docs/architecture/proof-freshness-publication-model.md` records the post-merge evidence-anchor model and the validator guard that blocks PRs from changing evidence or generated-report JSON to claim non-stale freshness before publication. `docs/architecture/proof-freshness-anchor-carrier-decision.md` records the accepted carrier and trust model. The proof harness emits a deterministic anchor payload and the validator selftests payload invariants; local payloads are not proof authority. The carrier and signer are decided by ADR 0006, ADR 0007, and ADR 0008: the implemented carrier is an annotated tag carrying a CI-attested payload from the registered repository CI identity in `tools/validate-spec/proof-anchor-trust-root.json`, data-checked by validator rule USF-ANCHOR-008. The React L5 proof audit (`docs/architecture/react-l5-equivalence-audit.md`, section 5) confirms no React proof can substitute: all React proof is hermetic/local/sandbox lineage and is stale for current USF readiness. USF-101 is DONE. For the current reviewed main commit, the proof-anchor CI workflow run `28286276338` emitted the deterministic anchor payload, verified it (`validate-spec anchor`, USF-ANCHOR-001..008 including trust-root membership), attested it keyless with the repository CI identity (`actions/attest-build-provenance`), verified the attestation (`gh attestation verify`), and published the annotated tag `proof-anchor-fabe47b` on the merge commit. The workflow republishes a fresh anchor on each subsequent merge, so the live commit carries a fresh, verified anchor; committed evidence JSON remains historical/stale by design and is never the freshness carrier.
 
 ### USF-59 and USF-73 Proof Evidence
 
-Existing authentication proof records are historical hermetic evidence for their recorded claim commit. They are intentionally marked stale for current readiness. They do not claim live-external-provider readiness or production-live readiness.
+Existing authentication proof records are historical hermetic evidence for their recorded claim commit. Current authentication-slice freshness is carried by the post-merge anchor (`proof-anchor-fabe47b`) rather than by mutating committed evidence JSON to claim non-stale freshness. The records do not claim live-external-provider readiness or production-live readiness.
 
-Fresh proof evidence cannot be honestly committed as current readiness evidence until USF-101 is resolved. Stronger postures remain unproven and must not be inferred from hermetic proof.
+Stronger postures remain unproven and must not be inferred from hermetic proof.
 
 ### USF-97 Semantic and Source-Use Closure
 
 The current semantic corpus now contains validator-readable semantic-contract instances for every semantic-contract target named by the capability source coverage matrix. Five authentication/identity contracts are source-backed drafts; the remaining non-authentication targets are explicit deferred gap or non-applicable contracts. That is useful target-inventory closure, but it does not prove complete one-pass coverage for every implementation-relevant capability, route, provider, data, UI, workflow, command, storage, reliability, and cross-capability concern.
 
-Future work must replace deferred gap facets with validated semantic/source-use records for each implementation-relevant slice, or preserve explicit scope exclusions without treating React source structure as authority. The React L5 equivalence audit (`docs/architecture/react-l5-equivalence-audit.md`, section 4) now classifies all 75 historical capabilities (source-backed-but-stale-proof, semantic-only-deferred, or excluded-not-applicable) and reduces USF-97 to an enumerated, ranked authoring backlog plus per-domain source-use matrices, sequenced after the implementation directive scopes the first domains.
+Future work must replace deferred gap facets with validated semantic/source-use records for each implementation-relevant slice, or preserve explicit scope exclusions without treating React source structure as authority. The React L5 equivalence audit (`docs/architecture/react-l5-equivalence-audit.md`, section 4) now classifies all 75 historical capabilities (source-backed-but-stale-proof, semantic-only-deferred, or excluded-not-applicable) and reduces USF-97 to an enumerated, ranked authoring backlog plus per-domain source-use matrices for the whole-platform directive.
 
 ### USF-98 Validator Hardening
 

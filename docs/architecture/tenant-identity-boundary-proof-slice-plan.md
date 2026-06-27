@@ -12,7 +12,7 @@ Define the first tenant and identity boundary proof slice that must be satisfied
 
 The slice is bounded to authentication login API, tenant host identity, tenant identity record and FQDN ownership, user identity and tenant membership, authentication identity context workflow, RBAC permission context, and authentication audit/observability linkage.
 
-The first-slice semantic instances are:
+The proof-substrate semantic instances are:
 
 - `spec/instances/interface-contract/authentication-login-api.json`
 - `spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json`

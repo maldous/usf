@@ -10,6 +10,10 @@
 
 This plan defines the only implementation-shaped destination directories that a later USF-61 implementation directive may authorise for the first authentication implementation slice. It creates no directories, writes no runtime code, imports no source code, emits no evidence, and does not weaken the current implementation-directory stop rules.
 
+## Whole-Platform Reconciliation Note
+
+The whole-platform implementation directive draft at `docs/architecture/implementation-extraction-directive.md` is broader than this topology plan. This plan currently enumerates only the authentication/identity proof-substrate roots below. Every other semantic slice remains under a pre-file slice gate: before files are created, a reviewed topology update must name that slice's roots and exact target files, the source-use disposition matrix must cover those files, and the validator must enforce the added roots. This plan must not be read as authorising broad platform roots by implication.
+
 ## Decision
 
 USF-39 must not create implementation-shaped directories unless USF-61 explicitly cites this plan and the future implementation PR stays within the allowed topology below.
@@ -57,7 +61,7 @@ No target file may be created solely because a historical source path exists. No
 
 ## Directories That Remain Blocked
 
-Any implementation-shaped directory not listed in the allowed topology remains blocked for the first implementation slice.
+Any implementation-shaped directory not listed in the allowed topology remains blocked for the implementation proof substrate.
 
 Still blocked examples include:
 
@@ -81,7 +85,7 @@ USF-61 must not cite this plan as authority for any unlisted directory. A later 
 
 USF-61 can cite this plan as follows:
 
-> USF-63 conditionally authorises only the first-slice implementation directories listed in `docs/architecture/target-implementation-topology-plan.md`. The future USF-39 directive must name each target file, keep source-path mirroring forbidden, reconcile every file to the source-use matrix or a new-with-rationale entry, and treat every unlisted implementation-shaped directory as blocked.
+> USF-63 conditionally authorises only the proof-substrate implementation directories listed in `docs/architecture/target-implementation-topology-plan.md`. The future USF-39 directive must name each target file, keep source-path mirroring forbidden, reconcile every file to the source-use matrix or a new-with-rationale entry, and treat every unlisted implementation-shaped directory as blocked.
 
 ## Validation Expectations
 

@@ -7,7 +7,7 @@
 | Authority level | Reviewable planning artefact; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and source import manifests |
 | Issue scope | USF-102 (umbrella); USF-103–USF-119; reduces USF-97 and USF-98; feeds USF-100; preserves USF-39 Backlog |
 | Historical evidence basis | Sibling repository `../react` at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767`, tag `v1-final` (rank-6 historical evidence) |
-| USF base state reviewed | `badef5da0c03a1e019d3f7bb84d8268ee8bc8255` (origin/main) |
+| USF base state reviewed | `fabe47b8fc70d34b34d1fc05c39da998c74a6748` (origin/main) |
 
 This document is the consolidated React L5 to USF V2 equivalence audit. It harvests `../react` semantic, proof, source-use, build, environment, CI, operational, data, configuration, governance, hexagonal-architecture, and UI evidence and maps each to a USF V2 equivalent, an explicit gap, an explicit exclusion, or an explicit deferral.
 
@@ -35,7 +35,7 @@ Equivalence classification:
 - `v2-semantic-only` — USF has (or this audit authorises) a semantic record only; no fresh proof and, for deferred items, no completed source-backed facets yet.
 - `v2-source-use-only` — carried only as source lineage/disposition evidence; no USF semantic contract yet.
 - `react-only-gap` — present in React, absent from USF with no current representation.
-- `deferred-post-v2` — intentionally deferred beyond first-step V2 scope.
+- `deferred-post-v2` — intentionally deferred beyond whole-platform V2 scope.
 - `excluded-not-applicable` — explicitly out of scope / not-applicable-final.
 - `obsolete-do-not-carry` — examined and deliberately not carried forward.
 - `unknown-unclassified` — not yet classifiable; requires inspection or human decision.
@@ -65,9 +65,9 @@ Observed `../react` asset classes (lineage citations; counts approximate):
 | Compose substrate | `../react/compose.yaml` (~54 services), `../react/docker/`, `../react/infra/` | `configuration-file` | Substrate lineage; not authorised for USF runtime |
 | E2E journeys | `../react/e2e/**`, `../react/playwright.*.config.ts` | `e2e-journey` (13 rows) | Profile split internal/build/identity/discovery/external/prod |
 
-Audit-base classification: `v2-source-use-only` / `no-gap` for the frozen inventory itself. Candidate manifest coverage additions worth a future source-disposition decision (do not block first-step scope): `../react/make/*.mk` build rules, `../react/tools/semgrep/*` security rules, and `../react/services/mock-oidc/**` substrate. Environment secrets and runtime caches (`../react/.password`, `../react/.npmrc`, `*.rvf`, `*.db`) are `excluded-not-applicable` / `missing-environment-posture` and must remain exclusions, never imported.
+Audit-base classification: `v2-source-use-only` / `no-gap` for the frozen inventory itself. Candidate manifest coverage additions worth a future source-disposition decision (do not block whole-platform scope): `../react/make/*.mk` build rules, `../react/tools/semgrep/*` security rules, and `../react/services/mock-oidc/**` substrate. Environment secrets and runtime caches (`../react/.password`, `../react/.npmrc`, `*.rvf`, `*.db`) are `excluded-not-applicable` / `missing-environment-posture` and must remain exclusions, never imported.
 
-USF-103 status: the audit-base is frozen and validator-enforced; the inventory is recorded. Remaining: optional manifest-coverage additions are a bounded source-disposition decision, not a first-step blocker.
+USF-103 status: the audit-base is frozen and validator-enforced; the inventory is recorded. Remaining: optional manifest-coverage additions are a bounded source-disposition decision, not a whole-platform blocker.
 
 ## 4. USF-104 — Semantic capability equivalence ledger
 
@@ -77,13 +77,13 @@ Classification summary (full per-capability mapping lives in `docs/architecture/
 
 | Group | Capabilities | Equivalence class | Gap type | Note |
 |---|---|---|---|---|
-| Authentication/identity first slice | platform login+session, IdP/OIDC brokering, claim/role mapping, MFA/session/lockout, OIDC discovery/JWKS, custom-domain auth callback, tenant identity (record+FQDN), user identity+membership, RBAC, tenant host identity | `v2-equivalent-stale-proof` | `stale-proof-evidence` + `missing-freshness-anchor` | Source-backed drafts; proof hermetic/stale, blocked by USF-101 |
+| Authentication/identity proof substrate | platform login+session, IdP/OIDC brokering, claim/role mapping, MFA/session/lockout, OIDC discovery/JWKS, custom-domain auth callback, tenant identity (record+FQDN), user identity+membership, RBAC, tenant host identity | `v2-equivalent-current` for authentication proof freshness; broader identity remains gated | `missing-proof-evidence` for non-auth breadth | Source-backed drafts; current authentication proof freshness is carried by `proof-anchor-fabe47b`; proof remains hermetic-only |
 | Real/simulated IdP login, serverless runtime, mock providers (dev/test) | matrix `not-applicable-final` rows | `excluded-not-applicable` | `excluded-by-scope` | Preserve as exclusions; do not implement |
 | All remaining historical capabilities (configuration, entitlements-billing, data-platform, events-workflow, compute-runtime, observability-ops, search, storage, security-governance, developer-platform, support-admin, foundation) | ~58 capabilities | `v2-semantic-only` → `deferred-post-v2` | `missing-semantic-contract` | Represented as explicit deferred gap contracts; facets not yet source-backed |
 
 Reconciliation of USF-only authority instances back to React evidence: the `ai-governance` (authority-order and proof-freshness-anchor stop conditions), `command.validate-spec-*`, and `environment.*` instances are new USF-only authority (no React L5 equivalent) and are correctly marked as such — they encode USF governance, not historical behaviour.
 
-Distinction preserved: semantic capture (a USF instance exists) is separate from proof freshness (current proof is stale). No contract is inferred from React code; every first-slice mapping routes through the authentication-slice source-use disposition matrix (zero direct runtime-copy permission).
+Distinction preserved: semantic capture (a USF instance exists) is separate from proof freshness and proof breadth. Authentication current-commit freshness is anchored by `proof-anchor-fabe47b`; non-authentication proof remains missing or lineage-only. No contract is inferred from React code; every proof-substrate mapping routes through the authentication-slice source-use disposition matrix (zero direct runtime-copy permission).
 
 Reduced USF-97 gap (smallest authoring set, ranked, post-directive):
 
@@ -101,7 +101,7 @@ Proof-equivalence taxonomy (proven / demonstrated / stale / missing / publicatio
 
 | React proof domain (lineage) | React observed level / provider | USF state | Equivalence class | Gap type |
 |---|---|---|---|---|
-| Authentication / domain-identity (`../react/apps/platform-api/scripts/auth-settings-runtime-proof.ts`, `domain-identity-matrix-runtime-proof.ts`) | L3 behaviour, hermetic/contract | committed USF proof is stale (lineage envelopes present) | `v2-equivalent-stale-proof` | `stale-proof-evidence` + `missing-freshness-anchor` |
+| Authentication / domain-identity (`../react/apps/platform-api/scripts/auth-settings-runtime-proof.ts`, `domain-identity-matrix-runtime-proof.ts`) | L3 behaviour, hermetic/contract | current USF authentication proof freshness is carried by `proof-anchor-fabe47b`; committed JSON remains historical | `v2-equivalent-current` | `no-gap` for authentication freshness; broader identity proof still requires per-slice proof |
 | Substrate/resilience/foundation (`l4-*`, `l5-*`, `l6-*-runtime-proof.ts`) | L4–L6, local-composed / sandbox | no fresh USF proof; cited as lineage only | `v2-source-use-only` | `missing-proof-evidence` |
 | Data/migration/backup/PITR (`postgres-migration-*`, `backup-local-*`, `pitr-restore-drill-*`) | L3–L4, local-real | lineage only | `v2-source-use-only` | `missing-proof-evidence` (release-blocking before any prod data claim) |
 | External-provider integrations (billing/Lago, workflow/Temporal, secrets/OpenBao, storage/MinIO) | L3–L4, in-memory / external-sandbox | lineage only | `v2-source-use-only` | `missing-proof-evidence`; live-external NOT proven and must not be inferred |
@@ -110,9 +110,9 @@ Proof-equivalence taxonomy (proven / demonstrated / stale / missing / publicatio
 Lineage vs fresh-required:
 
 - Treat as lineage (cite-only): all React L2–L3 contract/behaviour proofs and L4–L6 local/sandbox proofs. They are valid design input; they are not USF current readiness.
-- Require fresh USF execution before any USF readiness claim: the first-slice authentication hermetic proof at the current commit (USF-59) and any multi-environment posture (USF-73). Both are blocked by USF-101.
+- Require fresh USF execution before any USF readiness claim: the proof-substrate authentication hermetic proof at the current commit is anchored by `proof-anchor-fabe47b`; any multi-environment posture (USF-73) and broad runtime proof (USF-99) still require separate proof.
 
-USF-105 status: taxonomy and equivalence ledger complete. The freshness blockers are isolated to USF-101 (root) → USF-59/USF-73/USF-99.
+USF-105 status: taxonomy and equivalence ledger complete. USF-101 and USF-59 are Done for the authentication anchor path; USF-73 and USF-99 remain open for stronger and broader proof.
 
 ## 6. USF-106 — Source-use and disposition equivalence
 
@@ -128,13 +128,13 @@ USF-106 status: the authentication slice is closed; per-domain source-use matric
 
 ## 7. Hexagonal architecture (USF-113) and UI ports/adapters (USF-114)
 
-### 7.1 USF-113 — Hexagonal architecture decision proposal
+### 7.1 USF-113 — Hexagonal architecture decision
 
 Evidence that `../react` was materially hexagonal (lineage): explicit `ports/` and `adapters/` directories under `../react/apps/platform-api/src/`; usecases depending on ports, not adapters; dependency-direction enforcement via `../react/.dependency-cruiser.cjs`, `../react/eslint.config.mjs`, and `../react/knip.json`; TypeScript path aliases forcing public-export-only imports; a contracts/domain/adapter/runtime package split under `../react/packages/`; and a UI layer importing only contract/design-system/i18n packages.
 
-Proposal (requires human ratification; this audit does not ratify): V2 SHOULD carry hexagonal architecture forward as an explicit architecture constraint — domain/ports/adapters separation, acyclic dependency direction, framework isolation, and public-export-only imports — to be recorded in a future ADR before implementation extraction. This maps to USF ontology concepts Port (§5.15), Adapter (§5.16), Interface (§5.17), Application (§5.12), Package/Module (§5.13), Service (§5.14).
+ADR 0005 ratifies carrying hexagonal architecture forward as an explicit architecture constraint: domain/ports/adapters separation, acyclic dependency direction, framework isolation, and public-export-only imports. This maps to USF ontology concepts Port (§5.15), Adapter (§5.16), Interface (§5.17), Application (§5.12), Package/Module (§5.13), Service (§5.14).
 
-Classification: `v2-semantic-only` / `missing-hexagonal-architecture-decision`. Owning issue: USF-113. Decision authority: human (ADR).
+Classification: `v2-semantic-only` / `no-gap` for the architecture decision. Owning issue: USF-113. Decision authority: ADR 0005. Linear status reviewed as Done.
 
 ### 7.2 USF-114 — UI contract / port / adapter readiness ledger
 
@@ -164,7 +164,7 @@ USF-114 status: ledger complete; concrete contracts are USF-97/USF-86 follow-up 
 | CI gates | `../react/.github/workflows/*` (quality, architecture, CodeQL) | USF has `.github/workflows/validate-spec.yml` fail-closed gate + advisory validator | `v2-equivalent-current` (spec gate) / `v2-source-use-only` (product gates) | `no-gap` / `missing-validator-coverage` |
 | React readiness rules R1–R62 | `../react/tools/v2-readiness/` | mapped by `react-readiness-rule-parity-matrix.md`; USF enforces its own rule set | `v2-semantic-only` | `missing-validator-coverage` (partial) |
 
-USF-107/108/109 status: equivalence matrices complete; the concrete toolchain/environment/topology decisions are explicit human/ADR items, not first-step blockers if first-step scope is hermetic authentication only. Provider mode and environment remain separate dimensions; no upgrade by implication.
+USF-107/108/109 status: equivalence matrices complete; the concrete toolchain/environment/topology decisions are explicit human/ADR items for the all-slices migration. Authentication is only the current proof substrate, not the scope boundary for V2. Provider mode and environment remain separate dimensions; no upgrade by implication.
 
 ## 9. Operational (USF-110), data/migration/storage (USF-111), configuration/secrets/provider (USF-112), security/identity/tenancy/governance (USF-115), observability/events/workflow/reliability (USF-116)
 
@@ -174,7 +174,7 @@ USF-107/108/109 status: equivalence matrices complete; the concrete toolchain/en
 | Migrations / RLS / tenant isolation | `../react/apps/platform-api/src/db/migrations/*.sql` | `data.identity-schema` lineage; `data-migration-backup-restore-proof-slice-plan.md` | `v2-source-use-only` | `missing-semantic-contract` (safety-sensitive) |
 | Backup / restore / PITR / retention / legal-hold | `../react/scripts/backup/*`, `pitr-restore-drill-*` | planning docs only | `v2-source-use-only` | `missing-proof-evidence` |
 | Object storage (tenant prefixes, signed URLs, quota) | `../react/apps/platform-api/src/.../tenant-storage*` | deferred gap contract; `storage-data-governance-assurance-slice-plan.md` | `v2-semantic-only` | `missing-semantic-contract` |
-| Configuration / secrets / provider settings | `../react/config/environments/*`, OpenBao, `USF_PROVIDER_MODE` | `configuration.provider-mode-selector` (non-secret first slice) | `v2-semantic-only` | `missing-semantic-contract` |
+| Configuration / secrets / provider settings | `../react/config/environments/*`, OpenBao, `USF_PROVIDER_MODE` | `configuration.provider-mode-selector` (non-secret proof-substrate scope) | `v2-semantic-only` | `missing-semantic-contract` |
 | Security/identity/tenancy/governance | RLS, ABAC, break-glass, audit-of-privileged-access | authority-order AI stop condition + identity drafts; rest deferred | `v2-semantic-only` / `v2-equivalent-stale-proof` | `missing-semantic-contract` |
 | Observability/events/workflow/reliability | observability signals, event bus/DLQ, workflow engine, resilience | `observability.authentication-login-audit`, `event.authentication-login-audit`, `workflow.*` for the slice; rest deferred | `v2-semantic-only` | `missing-semantic-contract` |
 
@@ -190,32 +190,32 @@ Proposed per-row fields: `reactArtefactPathOrId`, `reactClaimType`, `reactProofL
 
 Stability: the equivalence and gap vocabularies in section 2 are stable and documented. Fail-closed candidates for a FUTURE validator rule (not implemented here; each would require a planted defect and a selftest, per `USF-SELFTEST-001` discipline): a rule asserting every equivalence row carries a classification token from the controlled set; a rule asserting `liveExternalProviderClaim`/`productionLiveClaim` in any equivalence row obeys the same posture floor already enforced for proof evidence (`USF-EVIDENCE-007`, `USF-ANCHOR-005/006`). These are recorded as USF-117/USF-98 follow-up, not activated.
 
-USF-117 status: ledger format + vocabulary defined and documented; validator coverage deferred (recorded, not implemented).
+USF-117 status: ledger format + vocabulary defined and documented; initial stale-readiness and directive-structure validator coverage is now present, while full machine-readable equivalence-ledger coverage remains follow-up.
 
-## 11. USF-118 — First-step V2 scope and implementation-directive readiness inputs
+## 11. USF-118 — Whole-platform V2 scope and implementation-directive readiness inputs
 
 Exact inputs a human-filled USF-100 directive can consume (this audit does not fill the directive):
 
-- First-step scope: the authentication platform/login slice only (matches the existing first-slice boundary and the 159-row source-use matrix).
-- Architecture constraint: hexagonal (section 7.1) — pending USF-113 ratification.
-- Proof floor: hermetic-mock at the current commit; live-external and production-live explicitly out of first-step scope.
+- Whole-platform scope: all semantic slices in the V2 corpus. Authentication has the existing proof-substrate boundary and 159-row source-use matrix, but it is not the migration scope boundary.
+- Architecture constraint: hexagonal (section 7.1) — ratified by ADR 0005; USF-113 is Done.
+- Proof floor: hermetic-mock at the current commit for every slice making a behaviour claim; live-external and production-live explicitly out of whole-platform scope unless later separately authorised and proven.
 - Source-use: zero direct runtime-copy; every source-derived unit dispositioned.
 - Exclusions: the `not-applicable-final` capabilities (section 4) stay excluded.
-- Hard stop conditions: USF-101 freshness anchor unresolved; any stale proof; any hermetic→live or shaped→live upgrade; any schema activation; any forbidden path token; USF-39 movement without separate authority.
+- Hard stop conditions: missing per-slice proof anchor for a behaviour claim; any stale proof used as current readiness; any hermetic→live or shaped→live upgrade; any schema activation; any forbidden path token; USF-39 movement without separate authority.
 
 USF-118 status: readiness inputs assembled; the directive itself remains a human deliverable (USF-100).
 
 ## 12. USF-119 — Final equivalence rollup and reduced blocker set
 
-What React L5 fully proved (lineage): contract/behaviour and local/sandbox substrate/resilience/foundation proofs across the platform. What USF has equivalently captured: the authentication/identity first slice as source-backed drafts + governance instances. What USF has equivalently proven fresh: nothing yet — all USF proof is stale/lineage. What is missing: per-domain source-backed facets, per-domain source-use matrices, and fresh proof. What is deferred/excluded: post-first-step domains and the `not-applicable-final` capabilities.
+What React L5 fully proved (lineage): contract/behaviour and local/sandbox substrate/resilience/foundation proofs across the platform. What USF has equivalently captured: the authentication/identity proof substrate as source-backed drafts + governance instances, with additional semantic-contract inventory across the full platform. What USF has equivalently proven fresh: the authentication proof freshness anchor for current main (`proof-anchor-fabe47b`) at hermetic-mock/hermetic/behaviour-proven. What is missing: per-domain source-backed facets, per-domain source-use matrices, per-slice proof commands, broader fresh proof, and final human directive acceptance. What is deferred/excluded: explicitly deprecated, not-applicable, or post-slice-gate capabilities.
 
 Smallest truthful remaining NO-GO set (root-first):
 
-1. USF-101 (root): a human decision on the proof-freshness anchor carrier + signer/trust root, plus execution-substrate access. Until then USF-59, USF-73, USF-99 cannot publish fresh proof. This is the single highest-leverage blocker.
-2. USF-100: a human-filled implementation directive (inputs ready, section 11) — blocked on USF-101 classification.
-3. USF-113: human ratification of the hexagonal-architecture constraint (ADR).
-4. USF-97: a bounded, enumerated authoring backlog (per-domain facets + source-use matrices) — repository-workable but large, sequenced after the directive scopes which domains are in first pass.
-5. USF-98/USF-117: machine-readable equivalence ledger + validator rules with planted defects — repository-workable follow-up.
+1. USF-100: a human-filled implementation directive. The draft exists and is whole-platform, but it is unsigned and cannot start USF-39.
+2. USF-97: broad semantic/source-use closure beyond the current authentication source-use matrix. This is repository-workable but remains large, and every slice still needs an explicit topology/source-use/proof gate before files are created.
+3. USF-98/USF-117: machine-readable equivalence ledger, aggregate posture gates, stale-readiness detection, and planted-defect coverage. This is repository-workable follow-up.
+4. USF-73/USF-99: stronger multi-environment and broad runtime proof remain unproven and must not be inferred from the hermetic authentication anchor.
+5. USF-75: final pre-extraction revalidation must be rerun after any USF-100 acceptance and before a separate USF-39 start action.
 
 USF-39 remains Backlog and is not started.
 
@@ -229,4 +229,4 @@ This document is reviewable planning evidence only. It authorises no implementat
 
 ## 15. Current readiness verdict
 
-Complete one-pass implementation readiness remains NO-GO. The blocker set is materially smaller and more explicit: it reduces to one root human decision (USF-101 anchor carrier/trust + substrate), one human directive (USF-100), one architecture ratification (USF-113), and a bounded enumerated authoring backlog (USF-97/USF-98/USF-117). React L5 knowledge is harvested as acceleration input. USF-39 remains Backlog.
+Complete one-pass implementation readiness remains NO-GO. The blocker set is materially smaller and more explicit: USF-101 and USF-113 are Done, while USF-100 remains unsigned, USF-97/USF-98/USF-117 remain repository-workable, and USF-73/USF-99 remain bounded by proof breadth and future runtime substrates. React L5 knowledge is harvested as acceleration input. USF-39 remains Backlog.

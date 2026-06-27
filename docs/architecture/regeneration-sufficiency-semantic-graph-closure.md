@@ -12,7 +12,7 @@ This document records the regeneration sufficiency and semantic graph closure ch
 
 ## Closure Claim
 
-The current authentication login API/audit/workflow/provider-mode slice has a reviewable semantic graph sufficient to inform a later filled implementation directive. This is a first-slice closure claim only.
+The current authentication login API/audit/workflow/provider-mode slice has a reviewable semantic graph sufficient to inform a later filled implementation directive. This is a proof-substrate closure claim only.
 
 This document does not claim complete platform semantic closure. It does not start USF-39. It does not authorize implementation extraction. It does not permit direct runtime/application source import from `../react`. It does not treat historical source, historical proof, or generated reports as authority.
 
@@ -43,7 +43,7 @@ Historical React artefacts remain rank-6 evidence and lineage. They can explain 
 
 ## Blocking Gaps and Deferred Scope
 
-The following gaps are explicit and blocking for broader implementation extraction, but they do not invalidate the current authentication first-slice graph closure:
+The following gaps are explicit and blocking for broader implementation extraction, but they do not invalidate the current authentication proof substrate graph closure:
 
 - USF-39 remains Backlog and no accepted filled implementation directive exists in this document.
 - Full platform capability closure beyond the current authentication slice is not complete.
@@ -120,6 +120,6 @@ USF-39 remains blocked until a separate explicit implementation directive is acc
 
 ## Readiness Verdict
 
-READY_WITH_NON_BLOCKING_DEFERRED_WORK for the current authentication first-slice regeneration sufficiency and semantic graph closure check.
+READY_WITH_NON_BLOCKING_DEFERRED_WORK for the current authentication proof substrate regeneration sufficiency and semantic graph closure check.
 
 NOT_READY_BLOCKING_ISSUES_REMAIN for broad platform implementation extraction. USF-39 remains Backlog and is not started by this document.

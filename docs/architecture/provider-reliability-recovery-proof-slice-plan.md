@@ -8,7 +8,7 @@
 | **Issue scope** | USF-92 |
 | **Primary inputs** | `spec/instances/provider-mode/mock-identity-provider.json`, `spec/instances/configuration/provider-mode-selector.json`, `spec/instances/environment/hermetic.json`, `spec/instances/workflow/authentication-login.json`, `spec/instances/workflow/authentication-identity-context.json`, `docs/architecture/proof-tool-contract-standard.md`, `spec/registries/source-import-manifest.json` |
 
-This plan records provider reliability, degraded mode, and recovery semantics for the current authentication first slice. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, creates no evidence records, makes no live provider proof claim, and does not start USF-39.
+This plan records provider reliability, degraded mode, and recovery semantics for the current authentication proof substrate. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, creates no evidence records, makes no live provider proof claim, and does not start USF-39.
 
 ## Purpose
 
@@ -22,7 +22,7 @@ The in-scope provider and configuration records are:
 - `configuration.provider-mode-selector`;
 - `environment.hermetic`.
 
-They govern the authentication first slice only. Broader provider families remain deferred until separately represented.
+They govern the authentication proof substrate only. Broader provider families remain deferred until separately represented.
 
 ## Reliability Semantics
 
@@ -71,7 +71,7 @@ Evidence records are created only from executed authorised proof. This plan crea
 
 ## Explicit Non-Applicability
 
-The following are outside the current authentication first slice:
+The following are outside the current authentication proof substrate:
 
 - live identity-provider proof;
 - external sandbox IdP proof;
@@ -111,4 +111,4 @@ This plan does not authorize:
 
 ## Readiness Effect
 
-When merged with clean validation, this plan and the updated provider/configuration records satisfy the current tracked USF-92 provider reliability slice for the authentication first slice. They do not complete deferred live-provider, external-sandbox, production-live, or non-authentication provider coverage and do not authorize implementation extraction.
+When merged with clean validation, this plan and the updated provider/configuration records satisfy the current tracked USF-92 provider reliability slice for the authentication proof substrate. They do not complete deferred live-provider, external-sandbox, production-live, or non-authentication provider coverage and do not authorize implementation extraction.

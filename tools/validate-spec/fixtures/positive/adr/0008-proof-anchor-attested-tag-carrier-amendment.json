@@ -1,0 +1,72 @@
+{
+  "id": "0008-proof-anchor-attested-tag-carrier-amendment",
+  "kind": "adr",
+  "title": "Proof Anchor Attested Tag Carrier Amendment",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-27",
+  "context": "ADR 0006 selected a signed annotated Git tag as the proof-freshness anchor carrier, and ADR 0007 selected the repository CI identity using GitHub artifact attestations as the signer and trust model. The implemented workflow emits a deterministic anchor payload, validates it, attests it with the repository CI identity, verifies that attestation in CI, and publishes the payload as an annotated tag on the merge commit. The phrase signed annotated Git tag is therefore imprecise for the implemented workflow because the tag itself is not a GPG-signed tag.",
+  "decision": "USF adopts the implemented carrier as an attested annotated Git tag. The freshness authority is the combination of the annotated tag target, deterministic payload, CI attestation, attestation verification step, and committed trust-root signer identity. A plain annotated tag without a CI-attested payload and successful attestation verification is not proof authority. A generated report or committed evidence JSON file is not a freshness anchor.",
+  "consequences": [
+    "ADR 0006 remains carrier decision lineage, but its signed-tag wording is superseded for the implemented CI-attested carrier.",
+    "ADR 0007 remains the signer and trust identity decision and is clarified by this amendment.",
+    "Runbook, readiness register, directive, and validator wording use attested annotated tag or equivalent phrasing for the implemented carrier."
+  ],
+  "invariants": [
+    "The implemented anchor carrier is an annotated Git tag with a CI-attested payload, not a standalone GPG-signed tag.",
+    "The payload must be attested and verified by the repository CI identity before the tag is treated as a freshness anchor.",
+    "The payload target commit and annotated tag target must be the same merge commit.",
+    "Committed evidence JSON and generated reports are never proof-freshness anchors.",
+    "Hermetic proof remains hermetic and must not be upgraded to live-external-provider or production-live."
+  ],
+  "permittedChanges": [
+    "Keep using the CI attestation workflow as the proof-freshness carrier.",
+    "Add a true signed-tag carrier later only through a new ADR or amendment that records the signer, trust root, and validator checks.",
+    "Add validator checks that verify recorded anchor evidence for a claimed merge commit."
+  ],
+  "forbiddenDrift": [
+    "Do not describe the current workflow as producing a true signed Git tag.",
+    "Do not accept a plain annotated tag without a verified CI attestation as proof authority.",
+    "Do not use local stdout, CI status alone, generated reports, or committed evidence JSON as proof authority.",
+    "Do not treat this amendment as implementation authority or as permission to move USF-39."
+  ],
+  "aiAlignmentRules": [
+    "Agents must distinguish a true signed tag from an annotated tag carrying a CI-attested payload.",
+    "Agents must verify the anchor payload and CI attestation before treating an anchor as current proof freshness.",
+    "Agents must not start USF-39, create implementation/runtime code, or move Linear state from this amendment."
+  ],
+  "semanticRefs": [
+    "docs/adr/0006-proof-freshness-anchor-carrier.md",
+    "docs/adr/0007-proof-anchor-ci-signing-identity.md",
+    "docs/architecture/proof-freshness-publication-model.md",
+    "docs/architecture/authority-model.md"
+  ],
+  "sourceRefs": [],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py",
+    "tools/validate-spec/proof-anchor-trust-root.json"
+  ],
+  "supersedes": [
+    "docs/adr/0006-proof-freshness-anchor-carrier.md"
+  ],
+  "rationale": "The implemented carrier avoids managed private keys while preserving the core invariant ADR 0006 required: the anchor is bound to the merge commit after that commit exists and is verifiable against an approved trust identity. The CI attestation identity is repository-scoped, visible in the workflow run, and recorded in the trust root. This is more precise than calling the tag itself signed.",
+  "description": "Amends ADR 0006 and ADR 0007 to name the implemented proof-freshness carrier as an annotated Git tag whose payload is attested and verified by the repository CI identity.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Proof",
+    "Validator",
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "ai-governance-kinds"
+  ],
+  "aiGuidance": "Use this ADR to describe the current proof-anchor carrier precisely: it is an annotated tag carrying a CI-attested payload, not a standalone signed Git tag."
+}

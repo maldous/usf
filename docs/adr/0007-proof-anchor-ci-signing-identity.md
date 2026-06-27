@@ -6,7 +6,7 @@ Accepted.
 
 ## Description
 
-Selects the approved signer for the proof-freshness anchor carrier decided in ADR 0006. The approved signer is the repository's CI identity using GitHub artifact attestations (OIDC/sigstore), requiring no manually managed private key. It records the trust root, the validator hookup, and the post-merge publication procedure. It does not itself publish a fresh anchor; publication is performed by a CI run on the merge commit.
+Selects the approved trust identity for the proof-freshness anchor carrier lineage decided in ADR 0006 and amended in ADR 0008. The approved identity is the repository's CI identity using GitHub artifact attestations (OIDC/sigstore), requiring no manually managed private key. It records the trust root, the validator hookup, and the post-merge publication procedure. It does not itself publish a fresh anchor; publication is performed by a CI run on the merge commit.
 
 ## Context
 
@@ -18,7 +18,7 @@ The self-referential commit-hash problem means a fresh anchor cannot be produced
 
 ## Decision
 
-USF adopts the repository CI identity as the approved proof-anchor signer, implemented with GitHub artifact attestations (the GitHub Actions OIDC identity and sigstore), so no human-held private key is required. The trust root `tools/validate-spec/proof-anchor-trust-root.json` registers this CI signer identity. A post-merge proof-anchor workflow runs the hermetic proof harness against the merge commit, builds the deterministic anchor payload (already invariant-checked), and publishes it as a signed/attested annotated tag on that commit. Verification has two layers: cryptographic verification in CI (gh attestation verify, or git verify-tag, against the repository CI identity) and the validator's data-level check that the payload's signerFingerprint is in the trust root (USF-ANCHOR-008).
+USF adopts the repository CI identity as the approved proof-anchor trust identity, implemented with GitHub artifact attestations (the GitHub Actions OIDC identity and sigstore), so no human-held private key is required. The trust root `tools/validate-spec/proof-anchor-trust-root.json` registers this CI identity. A post-merge proof-anchor workflow runs the hermetic proof harness against the merge commit, builds the deterministic anchor payload (already invariant-checked), attests that payload, verifies the attestation in CI, and publishes the payload as an annotated tag on that commit. Verification has two layers: cryptographic verification of the payload attestation in CI (`gh attestation verify`) and the validator's data-level check that the payload's `signerFingerprint` is in the trust root (USF-ANCHOR-008).
 
 The publication workflow and the procedure to enable it are recorded in `docs/runbooks/proof-anchor-publication.md`. Enabling the workflow (moving it to the CI workflows path and granting the required Actions permissions) is a deliberate maintainer step, after which the first CI run publishes the fresh anchor.
 
@@ -29,6 +29,7 @@ A CI attestation identity removes the need to store or rotate a private signing 
 ## Semantic References
 
 - `docs/adr/0006-proof-freshness-anchor-carrier.md`
+- `docs/adr/0008-proof-anchor-attested-tag-carrier-amendment.md`
 - `docs/architecture/proof-freshness-anchor-carrier-decision.md`
 - `docs/architecture/proof-freshness-publication-model.md`
 - `docs/architecture/authority-model.md`

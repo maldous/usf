@@ -8,11 +8,11 @@
 | **Issue scope** | USF-91 |
 | **Primary inputs** | `spec/instances/data-migration/identity-schema.json`, `spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json`, `spec/instances/semantic-contract/user-identity-and-tenant-membership.json`, `spec/instances/workflow/authentication-identity-context.json`, `docs/architecture/data-migration-backup-restore-proof-slice-plan.md`, `docs/architecture/proof-tool-contract-standard.md`, `spec/registries/source-import-manifest.json` |
 
-This plan records storage and data-governance assurance for the current authentication first slice. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, runs no destructive proof, creates no evidence records, and does not start USF-39.
+This plan records storage and data-governance assurance for the current authentication proof substrate. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, runs no destructive proof, creates no evidence records, and does not start USF-39.
 
 ## Purpose
 
-The first implementation slice depends on tenant-scoped identity data, not on the full storage platform. The governed data surface must still state ownership, isolation, retention, export, legal hold, deletion, audit, observability, and proof expectations before implementation extraction can rely on data safety claims.
+The implementation proof substrate depends on tenant-scoped identity data, not on the full storage platform. The governed data surface must still state ownership, isolation, retention, export, legal hold, deletion, audit, observability, and proof expectations before implementation extraction can rely on data safety claims.
 
 ## In-Scope Data Boundary
 
@@ -23,13 +23,13 @@ It governs:
 - identity schema migration order and checksum immutability;
 - tenant identity and membership storage semantics;
 - row-level or equivalent tenant isolation for membership, tenant resource configuration, user projection, and external identity linkage;
-- cross-tenant read and write denial for the authentication first slice;
+- cross-tenant read and write denial for the authentication proof substrate;
 - audit and observability correlation for future data-governance proof;
 - proof-gated retention, export, legal hold, deletion, backup, restore, and rollback claims.
 
 ## Tenant Isolation And Governance Expectations
 
-The first-slice data assurance boundary requires:
+The proof-substrate data assurance boundary requires:
 
 - tenant identity data remains tenant-scoped;
 - membership must belong to the resolved tenant before session actor projection;
@@ -54,7 +54,7 @@ Future proof must distinguish:
 
 ## Explicit Non-Applicability
 
-The following are outside the current authentication first slice:
+The following are outside the current authentication proof substrate:
 
 - object storage and signed URL operations;
 - tenant storage object lifecycle;
@@ -129,4 +129,4 @@ This plan does not authorize:
 
 ## Readiness Effect
 
-When merged with clean validation, this plan and the updated data record satisfy the current tracked USF-91 storage and data-governance assurance slice for the authentication first slice. They do not complete deferred storage platform, backup, restore, legal-hold, deletion, quota, or production readiness coverage and do not authorize implementation extraction.
+When merged with clean validation, this plan and the updated data record satisfy the current tracked USF-91 storage and data-governance assurance slice for the authentication proof substrate. They do not complete deferred storage platform, backup, restore, legal-hold, deletion, quota, or production readiness coverage and do not authorize implementation extraction.
