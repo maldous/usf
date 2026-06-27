@@ -1,0 +1,48 @@
+{
+  "id": "ai-governance.proof-freshness-anchor-approval-stop-condition",
+  "aiKind": "required-stop-condition",
+  "title": "Proof Freshness Anchor Approval Stop Condition",
+  "description": "Draft AI governance instance recording that proof freshness anchor carrier and signer trust approval is required before non-stale current proof evidence can support implementation-start readiness.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "AI Agent",
+    "Proof",
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "ai-governance-classification"
+  ],
+  "vocabularyRefs": [
+    "ai-governance-kinds",
+    "authority-levels"
+  ],
+  "aiGuidance": "Do not treat unsigned payloads, local proof stdout, CI status, generated reports, or untrusted tags as proof freshness authority. Stop until an accepted carrier and trust model exists.",
+  "rationale": "The proof freshness publication model identifies a self-referential commit-hash problem for committed current proof evidence, and the carrier decision document states that no anchor carrier or signer/trust model is accepted yet.",
+  "references": [
+    "docs/architecture/authority-model.md",
+    "docs/architecture/proof-freshness-publication-model.md",
+    "docs/architecture/proof-freshness-anchor-carrier-decision.md",
+    "docs/architecture/complete-readiness-blocker-register.md",
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "authorityOrderAcknowledged": true,
+  "stopConditions": [
+    "proof freshness anchor carrier is not accepted",
+    "signer or trust root is not accepted",
+    "signature verification procedure is missing",
+    "non-stale proof evidence would be committed without an accepted post-merge anchor",
+    "anchor payload is unsigned or untrusted",
+    "anchor target commit does not match the proof freshness claim",
+    "anchor payload digest does not match canonical payload content",
+    "anchor depends only on generated report, CI status, or local stdout"
+  ],
+  "driftRisks": [
+    "stale proof used as current readiness",
+    "unsigned payload treated as runtime proof evidence",
+    "generated report promoted above proof evidence",
+    "hermetic proof upgraded to live-external-provider",
+    "production-shaped evidence upgraded to production-live"
+  ],
+  "treatedAsAuthoritative": false
+}

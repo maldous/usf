@@ -239,7 +239,9 @@ RULES = {
     "USF-IMPORT-011":   ("blocking", "Source import sub-manifest targetUsfConcept is not extraction-useful"),
     "USF-IMPORT-012":   ("blocking", "Source import sub-manifest entry count mismatch"),
     "USF-IMPORT-013":   ("blocking", "Source import manifest audit base is inconsistent"),
+    "USF-IMPORT-014":   ("blocking", "Source import sub-manifest target concept does not resolve to an instance"),
     "USF-SEMANTIC-001": ("blocking", "Semantic complete facet reference does not resolve"),
+    "USF-SEMANTIC-002": ("blocking", "Coverage matrix semantic-contract target has no instance"),
     "USF-EVIDENCE-001": ("blocking", "Evidence envelope invalid against evidence-envelope schema"),
     "USF-EVIDENCE-002": ("blocking", "Proof evidence invalid against proof-evidence schema"),
     "USF-EVIDENCE-003": ("blocking", "Evidence/proof id is duplicated"),
@@ -801,6 +803,55 @@ def _validate_semantic_complete_facets(F, path, data, resolves):
                     F.add("USF-SEMANTIC-001", f"{path}:facets.{facet_name}.{field}", f"unresolved reference: {ref}")
 
 
+def _semantic_contract_targets_from_matrix(matrix_text):
+    in_matrix = False
+    for line in matrix_text.splitlines():
+        if line.strip() == "## Capability Matrix":
+            in_matrix = True
+            continue
+        if in_matrix and line.startswith("## "):
+            break
+        if not in_matrix or not line.startswith("| "):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 5 or not cells[0].isdigit():
+            continue
+        for target in re.findall(r"semantic-contract\.([a-z0-9-]+)", cells[4]):
+            yield "semantic-contract." + target
+
+
+def validate_semantic_coverage_matrix(F, matrix_text, semantic_contract_ids, matrix_path):
+    missing = sorted(set(_semantic_contract_targets_from_matrix(matrix_text)) - set(semantic_contract_ids))
+    for target in missing:
+        F.add("USF-SEMANTIC-002", matrix_path, f"missing semantic contract instance: {target}")
+
+
+def _load_instance_ids(F):
+    instance_ids = set()
+    for p in sorted(glob.glob("spec/instances/**/*.json", recursive=True)):
+        record = load_json(p, F)
+        if isinstance(record, dict) and isinstance(record.get("id"), str):
+            instance_ids.add(record["id"])
+    return instance_ids
+
+
+def _target_concept_tokens(target):
+    if not isinstance(target, str):
+        return []
+    return [token.strip() for token in target.split(";") if token.strip()]
+
+
+def validate_source_import_submanifest_targets(F, sub_path, entries, instance_ids):
+    if not isinstance(entries, list):
+        return
+    for i, entry in enumerate(entries):
+        subject = f"{sub_path}:entries[{i}]"
+        target = entry.get("targetUsfConcept") if isinstance(entry, dict) else None
+        for token in _target_concept_tokens(target):
+            if token not in instance_ids:
+                F.add("USF-IMPORT-014", subject, f"unresolved targetUsfConcept token: {token}")
+
+
 def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None, evidence_ids=None):
     instance_id_to_paths = defaultdict(list)
     for p, data in data_by_path.items():
@@ -848,6 +899,12 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
                 F.add("USF-INSTANCE-004", f"{p}:{field}", f"unresolved reference: {ref}")
         if schema == "semantic-contract":
             _validate_semantic_complete_facets(F, p, data, resolves)
+
+    matrix_path = "docs/architecture/capability-source-coverage-matrix.md"
+    if matrix_path in existing_paths:
+        matrix_text = load_text(matrix_path, F)
+        if matrix_text is not None:
+            validate_semantic_coverage_matrix(F, matrix_text, instance_ids, matrix_path)
 
 
 def check_instances(ctx, F):
@@ -969,6 +1026,7 @@ def check_imports(ctx, F):
         "Proof",
         "Source Reference",
     }
+    instance_ids = _load_instance_ids(F)
     for sub_path in sorted(glob.glob("spec/registries/*source-import-manifest.json")):
         if sub_path == baseline_path:
             continue
@@ -1015,6 +1073,7 @@ def check_imports(ctx, F):
                 or re.match(r"^(apps|packages|docs|spec|tools|evidence|config|infra|scripts|services|src)/", target)
             ):
                 F.add("USF-IMPORT-011", subject, repr(target))
+        validate_source_import_submanifest_targets(F, sub_path, sub_entries, instance_ids)
         if sub_duplicate_paths:
             F.add("USF-IMPORT-010", sub_path, f"duplicate sourceRef.path values: {sorted(sub_duplicate_paths)[:10]}")
     return "ran"
@@ -1653,7 +1712,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths", "anchor-payloads", "import-manifest-data"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1773,6 +1832,30 @@ def check_selftest(ctx, F):
                 "planted-import-manifest",
                 record,
                 expected=expected if isinstance(expected, dict) else None,
+            )
+        elif patch["target"] == "semantic-coverage-matrix":
+            matrix_text = patch.get("matrixText")
+            semantic_contract_ids = patch.get("semanticContractIds")
+            if not isinstance(matrix_text, str) or not isinstance(semantic_contract_ids, list):
+                F.add("USF-SELFTEST-001", df, "semantic-coverage-matrix planted-defect needs matrixText and semanticContractIds")
+                continue
+            validate_semantic_coverage_matrix(
+                f2,
+                matrix_text,
+                set(semantic_contract_ids),
+                patch.get("matrixPath", "planted-capability-source-coverage-matrix.md"),
+            )
+        elif patch["target"] == "source-import-submanifest-targets":
+            entries = patch.get("entries")
+            instance_ids = patch.get("instanceIds")
+            if not isinstance(entries, list) or not isinstance(instance_ids, list):
+                F.add("USF-SELFTEST-001", df, "source-import-submanifest-targets planted-defect needs entries and instanceIds")
+                continue
+            validate_source_import_submanifest_targets(
+                f2,
+                patch.get("subPath", "planted-source-import-manifest.json"),
+                entries,
+                set(instance_ids),
             )
         else:
             run_all_checks(sandbox, f2)

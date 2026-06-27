@@ -6,8 +6,8 @@
 | **Status** | Draft / NO-GO register |
 | **Authority level** | Reviewable readiness classification; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, and semantic instances |
 | **Issue scope** | USF-39 readiness; USF-59; USF-73; USF-97; USF-98; USF-99; USF-100; USF-101 |
-| **Base repository state reviewed** | `8f0981b72776997b51a9756941ba1ad482dbfd5e` |
-| **Branch update scope** | Records proof-freshness anchor payload progress and validator hardening introduced after PR 58; final merged commit is determined by Git history |
+| **Base repository state reviewed** | `1c786f4268502cbf73aeaeb0b1c6f6552866e564` |
+| **Branch update scope** | Records semantic-contract target inventory coverage and validator hardening introduced after PR 59; final merged commit is determined by Git history |
 
 This document records the current complete-readiness blocker state before implementation extraction. It creates no implementation code, implementation directory, product runtime, source import, proof evidence, generated report, schema activation, or implementation directive. It does not start USF-39.
 
@@ -58,15 +58,15 @@ Fresh proof evidence cannot be honestly committed as current readiness evidence 
 
 ### USF-97 Semantic and Source-Use Closure
 
-The current semantic corpus and source-use material are concentrated on the authentication-centered slice. That is useful, but it does not prove complete one-pass coverage for every implementation-relevant capability, route, provider, data, UI, workflow, command, storage, reliability, and cross-capability concern.
+The current semantic corpus now contains validator-readable semantic-contract instances for every semantic-contract target named by the capability source coverage matrix. Five authentication/identity contracts are source-backed drafts; the remaining non-authentication targets are explicit deferred gap or non-applicable contracts. That is useful target-inventory closure, but it does not prove complete one-pass coverage for every implementation-relevant capability, route, provider, data, UI, workflow, command, storage, reliability, and cross-capability concern.
 
-Future work must either add validated semantic/source-use records for each implementation-relevant slice or record explicit scope exclusions without treating React source structure as authority.
+Future work must replace deferred gap facets with validated semantic/source-use records for each implementation-relevant slice, or preserve explicit scope exclusions without treating React source structure as authority.
 
 ### USF-98 Validator Hardening
 
 PR 54 merged validator guardrails for generated report homes, report filenames, evidence references, stale pass claims, implementation directive content, deeper source-path mirroring, and planted defects. PR 58 added proof freshness anchor payload invariant checks and positive/negative selftests without accepting unsigned payloads as proof authority.
 
-The current validator hardening adds fail-closed checks for complete semantic facet references, the pinned source import audit-base tuple, proof/envelope posture agreement, and non-stale proof without an accepted freshness anchor. USF-98 remains open because broad readiness scope classification, full source-use closure outside the authentication slice, and complete aggregate posture classification for future implementation claims still require additional validator-readable scope artefacts and proof publication authority.
+The current validator hardening adds fail-closed checks for complete semantic facet references, the pinned source import audit-base tuple, proof/envelope posture agreement, non-stale proof without an accepted freshness anchor, and coverage-matrix semantic-contract targets without instances. USF-98 remains open because full source-use closure outside the authentication slice, completed source-backed non-authentication facets, and complete aggregate posture classification for future implementation claims still require additional validator-readable scope artefacts and proof publication authority.
 
 ### USF-99 Runtime Proof and Evidence
 

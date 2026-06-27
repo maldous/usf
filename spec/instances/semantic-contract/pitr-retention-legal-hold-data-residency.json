@@ -1,0 +1,67 @@
+{
+  "id": "semantic-contract.pitr-retention-legal-hold-data-residency",
+  "title": "PITR Retention Legal Hold Data Residency Semantic Contract",
+  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 28: PITR, retention, legal hold, data residency. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "deferred",
+  "ontologyConcepts": [
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "lifecycle-states",
+    "capability-domains"
+  ],
+  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "capability": "pitr-retention-legal-hold-data-residency",
+  "capabilityDomain": "data-platform",
+  "facets": {
+    "lifecycle": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "stateModel": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "permissions": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "contracts": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "validation": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "errorModel": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "auditModel": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "readinessModel": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "proof": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    },
+    "uiSemanticDefinition": {
+      "status": "gap",
+      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+    }
+  },
+  "sourceRefs": [
+    "docs/architecture/capability-source-coverage-matrix.md"
+  ]
+}
