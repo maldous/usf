@@ -242,11 +242,13 @@ def _canonical_json(data):
     return json.dumps(data, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
 
-def build_anchor_payload(commit, proof, runtime_envelope, lineage_envelope):
-    """Build the deterministic payload a future signed post-merge anchor would bind.
+def build_anchor_payload(commit, proof, runtime_envelope, lineage_envelope, signer=None):
+    """Build the deterministic payload a signed post-merge anchor binds.
 
-    This payload is not proof authority by itself. It is an unsigned publication
-    input intended for a later approved carrier and signer/trust model.
+    The payload alone is not proof authority. Under ADR 0006/0007 a post-merge CI run
+    attests this payload with the repository CI signer (registered in the proof-anchor
+    trust root) and publishes it on the merge commit; validator rule USF-ANCHOR-008
+    checks that an embedded signerFingerprint is an approved trust-root signer.
     """
     payload = {
         "payloadKind": "proof-freshness-anchor-payload",
@@ -264,6 +266,8 @@ def build_anchor_payload(commit, proof, runtime_envelope, lineage_envelope):
         "collectedEvidence": copy.deepcopy(proof["collectedEvidence"]),
         "sourceRefs": sorted(set(runtime_envelope.get("sourceRefs", []) + lineage_envelope.get("sourceRefs", []))),
     }
+    if signer:
+        payload["signerFingerprint"] = signer
     payload["payloadDigest"] = "sha256:" + hashlib.sha256(_canonical_json(payload)).hexdigest()
     return payload
 
@@ -273,7 +277,9 @@ def main():
     parser.add_argument("--claim-commit", default=None, help="Commit SHA the proof run claims; defaults to HEAD.")
     parser.add_argument("--write", action="store_true", help="Write evidence records under evidence/.")
     parser.add_argument("--emit-anchor-payload", action="store_true",
-                        help="Print deterministic unsigned anchor payload JSON instead of the summary; writes nothing.")
+                        help="Print deterministic anchor payload JSON instead of the summary; writes nothing.")
+    parser.add_argument("--signer", default=None,
+                        help="Embed this signerFingerprint in the anchor payload (must be an approved trust-root signer; see ADR 0007).")
     args = parser.parse_args()
     if args.emit_anchor_payload and args.write:
         parser.error("--emit-anchor-payload is write-free and cannot be combined with --write")
@@ -283,7 +289,7 @@ def main():
     instances = {name: load_json(path) for name, path in INSTANCE_PATHS.items()}
     checks = run_assertions(instances)
     proof, runtime_envelope, lineage_envelope = build_records(claim_commit, checks)
-    anchor_payload = build_anchor_payload(claim_commit, proof, runtime_envelope, lineage_envelope)
+    anchor_payload = build_anchor_payload(claim_commit, proof, runtime_envelope, lineage_envelope, signer=args.signer)
 
     if args.write:
         write_json(RUNTIME_ENVELOPE_PATH, runtime_envelope)
