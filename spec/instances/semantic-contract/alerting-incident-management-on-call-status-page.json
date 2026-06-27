@@ -1,9 +1,9 @@
 {
   "id": "semantic-contract.alerting-incident-management-on-call-status-page",
   "title": "Alerting Incident Management On Call Status Page Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 42: Alerting, incident management, on-call, status page. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Deprecated/superseded semantic contract for alerting incident management on call status page. Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "deprecated",
   "ontologyConcepts": [
     "Semantic Contract",
     "Capability"
@@ -22,46 +22,50 @@
   "facets": {
     "lifecycle": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "stateModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "permissions": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "contracts": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "validation": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "errorModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "auditModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "readinessModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "proof": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Superseded: Superseded by semantic-contract.observability-built-in-alerting-and-incidents (the proven canonical alerting/incident capability). Retained as lineage only; do not carry forward or generate from this contract."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }
