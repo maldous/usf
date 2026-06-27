@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.tenant-data-import-export",
   "title": "Tenant Data Import Export Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 30: Tenant data import / export. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Deferred semantic contract for tenant data import export. Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "deferred",
   "ontologyConcepts": [
@@ -22,46 +22,50 @@
   "facets": {
     "lifecycle": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "stateModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "permissions": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "contracts": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "validation": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "errorModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "auditModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "readinessModel": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "proof": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "Gap under current USF authority: Tenant data import/export behavioural source (usecase, proof) is not yet in the USF source-import manifest. Import the source rows (USF-74) before authoring source-backed facets."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }

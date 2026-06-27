@@ -1,12 +1,14 @@
 {
   "id": "semantic-contract.tenant-service-clickthrough-policy",
   "title": "Tenant Service Clickthrough Policy Semantic Contract",
-  "description": "Deferred semantic contract placeholder for coverage matrix row(s) 68: Tenant service clickthrough policy. All facets remain gaps until later semantic expansion authors source-backed behaviour, proof, and source-use closure.",
+  "description": "Source-backed draft semantic contract for the tenant service clickthrough policy capability, recovered from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
   "authorityLevel": "semantic-definition",
-  "lifecycleState": "deferred",
+  "lifecycleState": "draft",
   "ontologyConcepts": [
     "Semantic Contract",
-    "Capability"
+    "Capability",
+    "Observability Signal",
+    "Interface"
   ],
   "taxonomyRefs": [
     "semantic-architecture-classification"
@@ -16,52 +18,93 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Do not treat this deferred gap contract as implementation authority. Before implementation use, replace gap facets with reviewed source-backed semantic content, source-use row membership, and proof expectations.",
+  "aiGuidance": "Source-backed draft. Facet descriptions are concise source-backed summaries citing verified manifest rows; proof is hermetic/stale, not current readiness. Enrich facet detail and publish fresh proof before generation; respect the hexagonal constraint in ADR 0005.",
   "capability": "tenant-service-clickthrough-policy",
   "capabilityDomain": "observability-ops",
   "facets": {
     "lifecycle": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Capability lifecycle recovered from cited React source as lineage.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/service-clickthrough.ts",
+        "apps/platform-api/src/usecases/clickthrough-services.ts"
+      ]
     },
     "stateModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Persistent/runtime state model recovered from cited React storage and port/adapter source.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/service-clickthrough.ts",
+        "apps/platform-api/src/usecases/clickthrough-services.ts"
+      ]
     },
     "permissions": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Permission and tenant-isolation model recovered from cited React source and tests.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/service-clickthrough.test.ts"
+      ]
     },
     "contracts": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Operation and interface contracts recovered from cited React source behind ports/adapters.",
+      "sourceRefs": [
+        "apps/platform-api/src/usecases/service-clickthrough.ts",
+        "apps/platform-api/src/usecases/clickthrough-services.ts"
+      ]
     },
     "validation": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Input and invariant validation recovered from cited React tests and source.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/service-clickthrough.test.ts"
+      ]
     },
     "errorModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Deterministic, fail-closed error outcomes recovered from cited React tests and source.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/service-clickthrough.test.ts"
+      ]
     },
     "auditModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Audit-before-mutation behaviour recovered from cited React source and tests.",
+      "sourceRefs": [
+        "apps/platform-api/tests/unit/service-clickthrough.test.ts"
+      ]
     },
     "readinessModel": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Readiness posture recovered from cited React proof and tests; degrades explicitly when the substrate is unavailable.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/service-clickthrough-policy-runtime-proof.ts",
+        "apps/platform-api/scripts/clickthrough-services-runtime-proof.ts"
+      ]
     },
     "proof": {
-      "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "status": "complete",
+      "description": "Behaviour exercised by cited React proof and tests. Demonstrated in React via hermetic/runtime proof lineage; fresh USF proof pending USF-101/USF-59.",
+      "sourceRefs": [
+        "apps/platform-api/scripts/service-clickthrough-policy-runtime-proof.ts",
+        "apps/platform-api/scripts/clickthrough-services-runtime-proof.ts"
+      ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "Gap under current USF authority; must be authored with source-backed semantics before implementation use."
+      "description": "No verified UI source path in the manifest yet; author the UI semantic model before generation."
     }
   },
   "sourceRefs": [
-    "docs/architecture/capability-source-coverage-matrix.md"
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md",
+    "apps/platform-api/scripts/service-clickthrough-policy-runtime-proof.ts",
+    "apps/platform-api/scripts/clickthrough-services-runtime-proof.ts",
+    "apps/platform-api/src/usecases/service-clickthrough.ts",
+    "apps/platform-api/src/usecases/clickthrough-services.ts",
+    "apps/platform-api/tests/unit/service-clickthrough.test.ts"
+  ],
+  "adrRefs": [
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
   ]
 }
