@@ -1,0 +1,89 @@
+{
+  "id": "persistent-object-classification-registry",
+  "title": "USF Persistent Object Classification Registry",
+  "status": "draft",
+  "standard": "docs/architecture/enterprise-persistence-metadata-and-classification-standard.md",
+  "authorityNote": "Machine-readable authority enforced by tools/validate-parity/validate-db.py over the migration SQL under adapters/db/migrations. Every persisted table must be classified here; required field sets per class must agree with the standard document.",
+  "classes": {
+    "tenant-scoped": {
+      "requiredFields": ["tenant_id", "created_at", "created_by", "updated_at", "updated_by", "version", "correlation_id", "data_classification", "retention_policy"],
+      "rls": { "enable": true, "force": true, "tenantPolicy": true },
+      "mutation": true,
+      "appendOnly": false
+    },
+    "global-reference": {
+      "requiredFields": ["created_at", "updated_at", "version", "data_classification", "retention_policy"],
+      "rls": { "enable": false, "force": false, "tenantPolicy": false },
+      "mutation": true,
+      "appendOnly": false
+    },
+    "system-internal": {
+      "requiredFields": ["created_at", "updated_at"],
+      "rls": { "enable": false, "force": false, "tenantPolicy": false },
+      "mutation": true,
+      "appendOnly": false
+    },
+    "cross-tenant-aggregate": {
+      "requiredFields": ["aggregate_scope", "aggregation_window", "created_at", "source_system", "data_classification", "retention_policy"],
+      "rls": { "enable": false, "force": false, "tenantPolicy": false },
+      "mutation": true,
+      "appendOnly": false
+    },
+    "audit-evidence": {
+      "requiredFields": ["id", "occurred_at", "recorded_at", "tenant_id", "actor_id", "action", "subject_type", "subject_id", "outcome", "correlation_id", "causation_id", "trace_id", "source_system", "data_classification", "retention_policy", "row_hash"],
+      "rls": { "enable": true, "force": true, "tenantPolicy": true },
+      "mutation": false,
+      "appendOnly": true
+    },
+    "append-only-ledger": {
+      "requiredFields": ["id", "occurred_at", "recorded_at", "tenant_id", "actor_id", "action", "subject_type", "subject_id", "outcome", "correlation_id", "causation_id", "trace_id", "source_system", "data_classification", "retention_policy", "row_hash"],
+      "rls": { "enable": true, "force": true, "tenantPolicy": true },
+      "mutation": false,
+      "appendOnly": true
+    },
+    "migration-control-plane": {
+      "requiredFields": ["migration_id", "checksum", "applied_at", "applied_by", "tool_version", "status"],
+      "rls": { "enable": false, "force": false, "tenantPolicy": false },
+      "mutation": true,
+      "appendOnly": false
+    },
+    "ephemeral-runtime-state": {
+      "requiredFields": ["created_at", "expires_at"],
+      "rls": { "enable": false, "force": false, "tenantPolicy": false },
+      "mutation": true,
+      "appendOnly": false
+    }
+  },
+  "objects": {
+    "tenants": {
+      "class": "global-reference",
+      "introducedIn": "0001-bootstrap",
+      "fieldOverrides": {},
+      "exceptions": []
+    },
+    "tenant_memberships": {
+      "class": "tenant-scoped",
+      "introducedIn": "0001-bootstrap",
+      "fieldOverrides": {},
+      "exceptions": []
+    },
+    "break_glass_grants": {
+      "class": "tenant-scoped",
+      "introducedIn": "0001-bootstrap",
+      "fieldOverrides": {},
+      "exceptions": []
+    },
+    "audit_ledger": {
+      "class": "append-only-ledger",
+      "introducedIn": "0001-bootstrap",
+      "fieldOverrides": { "id": "audit_id" },
+      "exceptions": []
+    },
+    "schema_migrations": {
+      "class": "migration-control-plane",
+      "introducedIn": "0002-enterprise-persistence-metadata",
+      "fieldOverrides": {},
+      "exceptions": []
+    }
+  }
+}

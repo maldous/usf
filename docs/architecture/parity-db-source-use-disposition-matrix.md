@@ -1,0 +1,28 @@
+# Parity-DB Source-Use Disposition Matrix
+
+| | |
+|---|---|
+| Document type | Architecture / source-use governance matrix |
+| Status | Draft / parity-db (USF-138) implementation coverage |
+| Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
+| Issue scope | USF-138 under USF-133 |
+| Source row basis | `docs/architecture/enterprise-persistence-metadata-and-classification-standard.md`, `docs/architecture/persistent-object-classification-registry.json`, ADR 0010, and historical `../react` DB/RLS/migration/audit evidence as lineage only |
+| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no live/production database claim |
+
+## Treatment Rules
+
+Every implementation target file added by the parity-db slice is listed here with a treatment and rationale. `source-derived-rewrite` means the behaviour was recovered from historical `../react` evidence and freshly authored against USF semantics (no copy, no path mirroring). `new-with-rationale` means USF-defined with no source antecedent. `evidence-only-support` means a test/proof artefact.
+
+## Implementation Target Files
+
+| Target file | Treatment | Source-use basis | Rationale |
+| --- | --- | --- | --- |
+| `adapters/db/migrations/0002-enterprise-persistence-metadata.sql` | source-derived-rewrite | Historical react lifecycle/audit/RLS evidence; enterprise persistence standard | Forward-only migration adding classification-driven lifecycle, actor, trace, integrity, and retention metadata, the migration-control-plane table, and integrity guardrail triggers. |
+| `adapters/db/migrations/manifest.json` | new-with-rationale | Migration order/checksum/immutability requirement | Ordered, per-file SHA-256 manifest pinning migration immutability and order. |
+| `packages/proof/src/db-rls-isolation-proof.ts` | evidence-only-support | RLS and enterprise persistence proof requirement | Composed-Postgres data-isolation proof executed under the real application role with migration-owner separation and catalog evidence. |
+| `tests/adapters/migration-manifest.test.ts` | evidence-only-support | Migration immutability/order and generated-type freshness requirement | Hermetic tests for manifest order/checksum/immutability and generated-type freshness. |
+| `tests/adapters/persistence-metadata.test.ts` | evidence-only-support | Enterprise persistence metadata and classification standard | Hermetic tests asserting classification coverage, required metadata columns, and integrity triggers in the migrations. |
+
+## Non-goals
+
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No real customer/tenant data; fixtures are deterministic synthetic only.
