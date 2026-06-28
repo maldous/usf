@@ -42,9 +42,31 @@ export const TenantContextResponseSchema = Type.Object({
   auditEvents: Type.Number({ minimum: 1 }),
 });
 
-export const ErrorResponseSchema = Type.Object({
+export const ApiErrorResponseSchema = Type.Object({
   error: Type.String(),
+  error_id: Type.String(),
+  status: Type.Number(),
+  code: Type.String(),
+  reason_code: Type.String(),
+  reasonCode: Type.Optional(Type.String()),
+  safe_message: Type.String(),
+  correlation_id: Type.String(),
+  request_id: Type.String(),
+  trace_id: Type.Union([Type.String(), Type.Null()]),
+  details: Type.Optional(
+    Type.Array(
+      Type.Object({
+        path: Type.String(),
+        code: Type.String(),
+        safe_message: Type.String(),
+      }),
+    ),
+  ),
+  documentation_ref: Type.Union([Type.String(), Type.Null()]),
+  retry_after: Type.Union([Type.String(), Type.Null()]),
 });
+
+export const ErrorResponseSchema = ApiErrorResponseSchema;
 
 // Authorization surfaces (parity-tenant-authz, USF-140). UI-consumable and safe:
 // deny responses carry a non-enumerating reason code, never internal policy detail.
@@ -66,10 +88,7 @@ export const AuthorizeDecisionResponseSchema = Type.Object({
   policyVersion: Type.String(),
 });
 
-export const ForbiddenResponseSchema = Type.Object({
-  error: Type.String(),
-  reasonCode: Type.String(),
-});
+export const ForbiddenResponseSchema = ApiErrorResponseSchema;
 
 export const PermissionsResponseSchema = Type.Object({
   tenantId: Type.String({ minLength: 1 }),
@@ -207,3 +226,148 @@ export const FileVerifyResponseSchema = Type.Object({
   ok: Type.Boolean(),
   reasonCode: Type.String(),
 });
+
+// Jobs/workflows API surfaces (parity-api-contracts, USF-154). Safe views only:
+// no payload, no lease internals, no provider internals.
+
+export const JobViewSchema = Type.Object({
+  jobId: Type.String(),
+  tenantId: Type.Union([Type.String(), Type.Null()]),
+  classification: Type.String(),
+  jobType: Type.String(),
+  status: Type.String(),
+  attempt: Type.Number(),
+  maxRetries: Type.Number(),
+  failureClass: Type.Union([Type.String(), Type.Null()]),
+  safeFailureMessage: Type.Union([Type.String(), Type.Null()]),
+  createdAt: Type.Number(),
+});
+
+export const JobsListResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  jobs: Type.Array(JobViewSchema),
+  nextCursor: NullableString,
+});
+
+export const JobCreateRequestSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  classification: Type.String({ minLength: 1 }),
+  jobType: Type.String({ minLength: 1 }),
+  payloadRefs: Type.Optional(Type.Record(Type.String(), Type.String())),
+  maxRetries: Type.Optional(Type.Number({ minimum: 0, maximum: 100 })),
+  priority: Type.Optional(Type.Number()),
+  runAfterSec: Type.Optional(Type.Number({ minimum: 0 })),
+});
+
+export const JobCreateResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  deduplicated: Type.Boolean(),
+  job: JobViewSchema,
+});
+
+export const TenantActionRequestSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+});
+
+export const ActionResultResponseSchema = Type.Object({
+  ok: Type.Boolean(),
+  reasonCode: Type.String(),
+});
+
+// Notifications/messaging API surfaces (parity-api-contracts, USF-154). Safe
+// notification views expose recipient hashes, not raw addresses or message bodies.
+
+export const NotificationVariableSchema = Type.Object({
+  name: Type.String({ minLength: 1 }),
+  required: Type.Boolean(),
+  dataClassification: Type.String({ minLength: 1 }),
+});
+
+export const NotificationTemplateCreateRequestSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  templateId: Type.String({ minLength: 1 }),
+  templateKey: Type.String({ minLength: 1 }),
+  templateVersion: Type.String({ minLength: 1 }),
+  templateClassification: Type.String({ minLength: 1 }),
+  subjectTemplate: Type.String({ minLength: 1 }),
+  bodyTemplate: Type.String({ minLength: 1 }),
+  allowedVariables: Type.Array(NotificationVariableSchema),
+});
+
+export const NotificationTemplateResponseSchema = Type.Object({
+  templateId: Type.String(),
+  templateKey: Type.String(),
+  templateVersion: Type.String(),
+  templateHash: Type.String(),
+  templateStatus: Type.String(),
+  templateClassification: Type.String(),
+  allowedChannels: Type.Array(Type.String()),
+  allowedNotificationClasses: Type.Array(Type.String()),
+});
+
+export const NotificationRecipientRequestSchema = Type.Object({
+  recipientId: Type.String({ minLength: 1 }),
+  recipientActorId: Type.Union([Type.String(), Type.Null()]),
+  recipientTenantId: Type.String({ minLength: 1 }),
+  recipientType: Type.String({ minLength: 1 }),
+  addressRef: Type.String({ minLength: 1 }),
+  addressType: Type.String({ minLength: 1 }),
+  addressVerified: Type.Boolean(),
+  addressStatus: Type.String({ minLength: 1 }),
+  addressSource: Type.String({ minLength: 1 }),
+  addressLastVerifiedAt: Type.Union([Type.String(), Type.Null()]),
+});
+
+export const NotificationCreateRequestSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  recipient: NotificationRecipientRequestSchema,
+  channel: Type.String({ minLength: 1 }),
+  classification: Type.String({ minLength: 1 }),
+  templateId: Type.String({ minLength: 1 }),
+  correlationId: Type.Optional(Type.String()),
+});
+
+export const NotificationViewSchema = Type.Object({
+  notificationId: Type.String(),
+  tenantId: Type.String(),
+  recipientId: Type.String(),
+  recipientType: Type.String(),
+  recipientAddressHash: Type.String(),
+  channel: Type.String(),
+  classification: Type.String(),
+  templateId: Type.String(),
+  templateVersion: Type.String(),
+  templateHash: Type.String(),
+  deliveryStatus: Type.String(),
+  providerMode: Type.String(),
+  providerRef: Type.String(),
+  providerMessageId: NullableString,
+  idempotencyKey: Type.String(),
+  retryCount: Type.Number(),
+  maxRetries: Type.Number(),
+  failureReasonCode: NullableString,
+  safeFailureMessage: NullableString,
+  dataClassification: Type.String(),
+  retentionPolicy: Type.String(),
+  legalHold: Type.Boolean(),
+  createdAt: Type.String(),
+  updatedAt: Type.String(),
+});
+
+export const NotificationCreateResponseSchema = Type.Object({
+  notification: NotificationViewSchema,
+});
+
+export const NotificationsListResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  notifications: Type.Array(NotificationViewSchema),
+  nextCursor: NullableString,
+});
+
+export const NotificationSendResponseSchema = Type.Object({
+  notification: NotificationViewSchema,
+  jobId: Type.String(),
+  deduplicated: Type.Boolean(),
+});
+
+export * from "./api-surface.ts";
