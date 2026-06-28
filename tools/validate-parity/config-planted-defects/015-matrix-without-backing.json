@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-CONFIG-015",
+  "mutation": {
+    "matrixConfigSet": {
+      "usf_tests": [],
+      "usf_proofs": []
+    }
+  },
+  "description": "015-matrix-without-backing.json"
+}

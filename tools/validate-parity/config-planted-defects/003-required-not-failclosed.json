@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-003",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "required-missing",
+      "new": "ok-missing"
+    }
+  },
+  "description": "003-required-not-failclosed.json"
+}

@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-008",
+  "mutation": {
+    "file": "capabilities/config/src/config-service.ts",
+    "replace": {
+      "old": "context.tenantId",
+      "new": "anyTenant"
+    }
+  },
+  "description": "008-config-not-tenant-scoped.json"
+}

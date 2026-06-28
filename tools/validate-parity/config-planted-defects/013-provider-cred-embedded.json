@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-013",
+  "mutation": {
+    "file": "capabilities/config/src/registry.ts",
+    "replace": {
+      "old": "secretReferenceAllowed",
+      "new": "embeddedCred"
+    }
+  },
+  "description": "013-provider-cred-embedded.json"
+}

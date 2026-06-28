@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-011",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "newValueHash",
+      "new": "newValueRaw"
+    }
+  },
+  "description": "011-change-evidence-raw.json"
+}
