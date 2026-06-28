@@ -14,6 +14,12 @@
       "id": "0002-enterprise-persistence-metadata",
       "file": "0002-enterprise-persistence-metadata.sql",
       "sha256": "b6d18395c6aea33106d788a655bb00837c05ecdde90e86e5d55fb62997d57a8f"
+    },
+    {
+      "order": 3,
+      "id": "0003-files",
+      "file": "0003-files.sql",
+      "sha256": "2e9a56113332bb0e05e051e286969f1b2f7e8ee72ee28dc2133d4574fe8d7ce9"
     }
   ]
 }

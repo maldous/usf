@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-011",
+  "mutation": {
+    "file": "packages/proof/src/files-storage-proof.ts",
+    "replace": {
+      "old": "liveObjectStoreClaim: false",
+      "new": "liveObjectStoreClaim: true"
+    }
+  },
+  "description": "011-object-store-overclaim.json"
+}

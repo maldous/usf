@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-012",
+  "mutation": {
+    "file": "capabilities/files/src/file-service.ts",
+    "replace": {
+      "old": "integrity-mismatch",
+      "new": "all-fine"
+    }
+  },
+  "description": "012-no-integrity.json"
+}

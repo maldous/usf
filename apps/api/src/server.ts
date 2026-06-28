@@ -8,6 +8,11 @@ import {
   ConfigCurrentResponseSchema,
   ErrorResponseSchema,
   FeatureFlagsResponseSchema,
+  FileDownloadResponseSchema,
+  FilesListResponseSchema,
+  FileUploadRequestSchema,
+  FileVerifyResponseSchema,
+  FileViewSchema,
   ForbiddenResponseSchema,
   HealthResponseSchema,
   LoginRequestSchema,
@@ -18,6 +23,7 @@ import {
   TenantContextResponseSchema,
 } from "@foundation/contracts";
 import {
+  FileValidationError,
   TenantMismatchError,
   createAuditRecord,
   stableId,
@@ -29,6 +35,7 @@ import {
 } from "@foundation/core";
 import { AuditAccessDeniedError, toSafeAuditEventView } from "@foundation/capability-audit";
 import { FEATURE_FLAG_REGISTRY } from "@foundation/capability-config";
+import { FileAccessDeniedError } from "@foundation/capability-files";
 import {
   contextFromClaims,
   permissionsForRoles,
@@ -541,6 +548,272 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
         providerMode: DEV_PROVIDER_MODE_LABEL,
         providers: runtime.providers,
       };
+    },
+  );
+
+  // File surfaces (parity-files-storage, USF-146). Tenant-scoped, PDP-protected,
+  // redacted least-disclosure, non-enumerating. No object keys, provider creds, or
+  // original filenames in views; download is gated by PDP + scan/lifecycle status.
+  app.get<{ Querystring: { tenantId?: string; status?: string; limit?: string; cursor?: string } }>(
+    "/v1/files",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            tenantId: { type: "string" },
+            status: { type: "string" },
+            limit: { type: "string" },
+            cursor: { type: "string" },
+          },
+          required: ["tenantId"],
+        },
+        response: {
+          200: FilesListResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      const q = request.query;
+      if (context.tenantId !== q.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      const criteria = {
+        tenantId: q.tenantId,
+        ...(q.status ? { status: q.status as never } : {}),
+        ...(q.limit ? { limit: Number(q.limit) } : {}),
+        ...(q.cursor ? { cursor: q.cursor } : {}),
+      };
+      try {
+        const page = await runtime.fileService.list(context, criteria, accessFrom(request));
+        return { tenantId: context.tenantId, files: page.files, nextCursor: page.nextCursor };
+      } catch (error) {
+        if (error instanceof FileAccessDeniedError) {
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
+    },
+  );
+
+  app.post<{
+    Body: {
+      tenantId: string;
+      fileId: string;
+      filename: string;
+      contentType: string;
+      sizeBytes: number;
+      body: string;
+      classification?: string;
+      declaredChecksum?: string;
+    };
+  }>(
+    "/v1/files",
+    {
+      schema: {
+        body: FileUploadRequestSchema,
+        response: { 200: FileViewSchema, 400: ErrorResponseSchema, 403: ForbiddenResponseSchema },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      const body = request.body;
+      if (context.tenantId !== body.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      try {
+        return await runtime.fileService.upload(
+          context,
+          {
+            fileId: body.fileId,
+            filename: body.filename,
+            contentType: body.contentType,
+            sizeBytes: body.sizeBytes,
+            body: body.body,
+            ...(body.classification ? { classification: body.classification as never } : {}),
+            ...(body.declaredChecksum ? { declaredChecksum: body.declaredChecksum } : {}),
+          },
+          accessFrom(request),
+        );
+      } catch (error) {
+        if (error instanceof FileAccessDeniedError) {
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        if (error instanceof FileValidationError) {
+          reply.code(400);
+          return { error: error.message };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
+    },
+  );
+
+  app.get<{ Params: { id: string }; Querystring: { tenantId?: string } }>(
+    "/v1/files/:id",
+    {
+      schema: {
+        params: { type: "object", properties: { id: { type: "string" } }, required: ["id"] },
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: {
+          200: FileViewSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+          404: ErrorResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      try {
+        const view = await runtime.fileService.get(context, request.params.id, accessFrom(request));
+        if (!view) {
+          reply.code(404);
+          return { error: "file not found" };
+        }
+        return view;
+      } catch (error) {
+        if (error instanceof FileAccessDeniedError) {
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
+    },
+  );
+
+  app.post<{ Params: { id: string }; Querystring: { tenantId?: string } }>(
+    "/v1/files/:id/download",
+    {
+      schema: {
+        params: { type: "object", properties: { id: { type: "string" } }, required: ["id"] },
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: {
+          200: FileDownloadResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      try {
+        const { body, view } = await runtime.fileService.download(
+          context,
+          request.params.id,
+          accessFrom(request),
+        );
+        return {
+          fileId: view.fileId,
+          contentType: view.contentType,
+          sizeBytes: view.sizeBytes,
+          body,
+        };
+      } catch (error) {
+        if (error instanceof FileAccessDeniedError) {
+          // Deny covers missing/cross-tenant/quarantined/scan-gated; non-enumerating.
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
+    },
+  );
+
+  app.post<{ Params: { id: string }; Querystring: { tenantId?: string } }>(
+    "/v1/files/:id/verify",
+    {
+      schema: {
+        params: { type: "object", properties: { id: { type: "string" } }, required: ["id"] },
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: {
+          200: FileVerifyResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      try {
+        const result = await runtime.fileService.verify(
+          context,
+          request.params.id,
+          accessFrom(request),
+        );
+        return { fileId: request.params.id, ok: result.ok, reasonCode: result.reasonCode };
+      } catch (error) {
+        if (error instanceof FileAccessDeniedError) {
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
     },
   );
 

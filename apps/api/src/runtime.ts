@@ -3,7 +3,11 @@ import { InMemoryIdentityProvider } from "@foundation/adapter-idp";
 import { InMemoryMailProvider } from "@foundation/adapter-mail";
 import { CapturedObservabilitySink } from "@foundation/adapter-obs";
 import { InMemorySecretStore } from "@foundation/adapter-secrets";
-import { InMemoryObjectStore } from "@foundation/adapter-store";
+import {
+  InMemoryFileMetadataStore,
+  InMemoryObjectStore,
+  InMemoryScanProvider,
+} from "@foundation/adapter-store";
 import { InMemoryWorkflowEngine } from "@foundation/adapter-wf";
 import {
   InMemoryAuditEventStore,
@@ -32,7 +36,7 @@ import {
   type ConfigService,
   type SecretService,
 } from "@foundation/capability-config";
-import { FileCapability } from "@foundation/capability-files";
+import { FileCapability, createFileService, type FileService } from "@foundation/capability-files";
 import { JobCapability } from "@foundation/capability-jobs";
 import { NotificationCapability } from "@foundation/capability-notify";
 
@@ -61,6 +65,7 @@ export interface DevRuntime {
   readonly auditQuery: AuditQueryService;
   readonly configService: ConfigService;
   readonly secretService: SecretService;
+  readonly fileService: FileService;
 }
 
 export const DEV_TENANT_ID = "dev-tenant";
@@ -110,6 +115,17 @@ export function createDevRuntime(): DevRuntime {
   });
   const secretService = createSecretService({ resolver: secrets, pdp, audit: auditRecorder });
 
+  const fileMetadataStore = new InMemoryFileMetadataStore();
+  const scanProvider = new InMemoryScanProvider();
+  const fileService = createFileService({
+    objectStore,
+    metadataStore: fileMetadataStore,
+    scanProvider,
+    pdp,
+    audit: auditRecorder,
+    objectKeySalt: "dev-object-key-salt",
+  });
+
   return {
     providerModeLabel: DEV_PROVIDER_MODE_LABEL,
     providerClass: "hermetic-mock",
@@ -133,5 +149,6 @@ export function createDevRuntime(): DevRuntime {
     auditQuery,
     configService,
     secretService,
+    fileService,
   };
 }

@@ -138,19 +138,30 @@
     {
       "react_item_id": "files-storage",
       "category": "port",
-      "react_paths": ["packages/object-storage"],
-      "behaviour_summary": "S3-compatible object storage, tenant prefixes, signed URLs, data governance.",
+      "react_paths": ["packages/object-storage", "packages/files", "services (minio/clamav)"],
+      "behaviour_summary": "Tenant-scoped file information assets: authoritative file metadata (RLS), opaque non-guessable object keys, upload validation (size/content-type/checksum, fail-closed), PDP-gated download with scan/lifecycle gate, soft delete/restore, legal-hold purge-block, integrity (checksum + metadata hash + tamper detect), provider config via secret refs, value-free file audit. Live MinIO/S3, ClamAV, presigned URLs, derived objects, versioning, backup/DR, DLP deferred.",
       "usf_status": "partial",
-      "usf_paths": ["capabilities/files", "adapters/store"],
-      "usf_tests": [],
-      "usf_proofs": [],
+      "usf_paths": [
+        "capabilities/files (file-service)",
+        "packages/core (file/object model + object-key safety + validation + integrity)",
+        "packages/ports (object-store/file-metadata/scan ports)",
+        "adapters/store (object store + metadata store + scan provider)",
+        "adapters/db (0003-files.sql RLS table)",
+        "apps/api (v1/files surfaces)",
+        "packages/proof (files-storage-proof)"
+      ],
+      "usf_tests": ["tests/capabilities/files-storage.test.ts", "tests/apps/files-api.test.ts"],
+      "usf_proofs": [
+        "packages/proof/src/files-storage-proof.ts (make files-proof: files RLS isolation, FORCE RLS, legal-hold purge-block, object-key uniqueness)",
+        "packages/proof/src/db-rls-isolation-proof.ts"
+      ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-133",
+      "blocker": "USF-147",
       "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "spec/instances/semantic-contract/object-storage-and-tenant-prefixes-and-signed-urls.json; bootstrap in-memory store present.",
-      "retry_condition": "Per-domain implementation directive authorises parity-files; storage behaviours migrated with USF tests."
+      "domain_authorised": true,
+      "evidence": "files-and-object-storage standard docs/architecture/files-and-object-storage-standard.md; source-use docs/architecture/parity-files-storage-source-use-disposition-matrix.md; validate-files (13 rules + planted defects); make files-proof pass; USF-146; deferred depth USF-147.",
+      "retry_condition": "Deferred files/storage depth (live MinIO/S3 + ClamAV + presigned URLs, DB-backed file metadata runtime adapter, derived objects, object versioning, backup/restore/DR, DLP/exfiltration, encryption/KMS, quotas) implemented and proven under USF-147; then re-classify migrated."
     },
     {
       "react_item_id": "jobs-workflows",

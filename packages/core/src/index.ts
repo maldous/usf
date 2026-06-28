@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, createHmac } from "node:crypto";
 
 export type ProviderMode = "hermetic-mock" | "local-composed-real-service";
 
@@ -1029,4 +1029,398 @@ export function configChangeEvidence(input: {
     previousValueHash: hash(input.previousValue),
     newValueHash: hash(input.newValue),
   });
+}
+
+// ---------------------------------------------------------------------------
+// Files / object-storage model (parity-files-storage, USF-146).
+//
+// Files are tenant-scoped INFORMATION ASSETS: the metadata record is authoritative
+// (ownership, classification, lifecycle, access, retention, integrity); the object
+// store holds opaque blobs only. Object keys are opaque, non-guessable, and
+// path-traversal-safe and never embed tenant names, emails, original filenames, or
+// secrets. Uploads are untrusted input (filename/content-type/checksum verified;
+// size fails closed). Downloads are privileged (PDP + scan gate). ISO 27001-
+// supporting technical control evidence only; no certification claim. See
+// docs/architecture/files-and-object-storage-standard.md.
+// ---------------------------------------------------------------------------
+
+export const FILE_SCHEMA_VERSION = "file-1";
+
+// Information-asset classification (app-layer access model). Maps to the 5-value
+// DB data_classification persistence scale; "regulated"/"legal-evidence" map to
+// "restricted"/"security-sensitive" at rest. Unknown classification fails closed.
+export const FILE_CLASSIFICATIONS = Object.freeze([
+  "public",
+  "internal",
+  "confidential",
+  "restricted",
+  "security-sensitive",
+  "regulated",
+  "legal-evidence",
+] as const);
+export type FileClassification = (typeof FILE_CLASSIFICATIONS)[number];
+
+export const FILE_OBJECT_CLASSES = Object.freeze([
+  "tenant-file",
+  "system-file",
+  "audit-evidence-file",
+  "export-package",
+  "import-package",
+  "temporary-upload",
+  "quarantine-object",
+  "derived-preview",
+  "thumbnail",
+  "provider-internal-object",
+] as const);
+export type FileObjectClass = (typeof FILE_OBJECT_CLASSES)[number];
+
+export const FILE_STATUSES = Object.freeze([
+  "pending-upload",
+  "uploaded",
+  "available",
+  "quarantined",
+  "blocked",
+  "deleted",
+  "restored",
+  "purged",
+  "failed",
+] as const);
+export type FileStatusValue = (typeof FILE_STATUSES)[number];
+
+export const FILE_SCAN_STATUSES = Object.freeze([
+  "not-required",
+  "pending",
+  "clean",
+  "suspicious",
+  "infected",
+  "failed",
+  "quarantined",
+  "provider-unavailable",
+] as const);
+export type FileScanStatusValue = (typeof FILE_SCAN_STATUSES)[number];
+
+/** Classifications that require the stronger sensitive-read permission to download. */
+export const SENSITIVE_FILE_CLASSIFICATIONS: readonly FileClassification[] = Object.freeze([
+  "restricted",
+  "security-sensitive",
+  "regulated",
+  "legal-evidence",
+]);
+
+export function isSensitiveFileClassification(classification: FileClassification): boolean {
+  return SENSITIVE_FILE_CLASSIFICATIONS.includes(classification);
+}
+
+// Upload limits (fail closed). Content-type allow-list is one of several checks, never
+// the only one (content_type from the client is untrusted until verified).
+export const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024; // 25 MiB dev/test ceiling
+export const ALLOWED_CONTENT_TYPES = Object.freeze([
+  "text/plain",
+  "application/json",
+  "application/pdf",
+  "image/png",
+  "image/jpeg",
+  "text/csv",
+  "application/octet-stream",
+] as const);
+
+export class FileValidationError extends Error {
+  readonly reasonCode: string;
+  constructor(reasonCode: string, detail: string) {
+    super(`file rejected: ${reasonCode} (${detail})`);
+    this.name = "FileValidationError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export function sha256Hex(content: string): string {
+  return createHash("sha256").update(content, "utf8").digest("hex");
+}
+
+// Deterministic-in-tests, non-enumerable-in-semantics object key. A salt is required;
+// without it (or with a guessable one) keys would be enumerable. The key is opaque hex
+// path segments only — it embeds no tenant name, email, filename, secret, or
+// business-revealing timestamp, and is path-traversal-safe by construction.
+export function generateObjectKey(input: {
+  tenantId: string;
+  fileId: string;
+  salt: string;
+}): string {
+  // HMAC keyed by the salt over a JSON-encoded part list: unambiguous across part
+  // boundaries (no separator collision) and unguessable without the salt.
+  const h = createHmac("sha256", input.salt)
+    .update(JSON.stringify([input.tenantId, input.fileId]), "utf8")
+    .digest("hex");
+  return `o/${h.slice(0, 2)}/${h.slice(2, 4)}/${h}`;
+}
+
+// Opaque key shape: lowercase hex segments separated by single slashes; no dots, no
+// traversal, no separators that could be abused. Validators/tests assert this holds.
+const SAFE_OBJECT_KEY = /^[a-z0-9]{1,16}(?:\/[a-z0-9]{1,128}){1,10}$/;
+const TRAVERSAL_PATTERNS = ["..", "%2e", "%2f", "%5c", "\\", " ", " ", " ", "﻿", "\0"];
+
+export function assertSafeObjectKey(key: string): void {
+  const lowered = key.toLowerCase();
+  for (const bad of TRAVERSAL_PATTERNS) {
+    if (lowered.includes(bad)) {
+      throw new FileValidationError("unsafe-object-key", "contains a traversal/separator pattern");
+    }
+  }
+  if (key.startsWith("/") || !SAFE_OBJECT_KEY.test(key)) {
+    throw new FileValidationError("unsafe-object-key", "not an opaque hex object key");
+  }
+}
+
+// True if an object key leaks sensitive identifiers (tenant id, email local-part,
+// original filename stem, or a secret-like token). A generated key never does; this
+// guards against hand-built keys.
+export function objectKeyLeaksSensitive(
+  key: string,
+  context: { tenantId?: string; email?: string; filename?: string },
+): boolean {
+  const lowered = key.toLowerCase();
+  const needles: string[] = [];
+  if (context.tenantId) needles.push(context.tenantId.toLowerCase());
+  if (context.email) {
+    needles.push(context.email.toLowerCase(), context.email.split("@")[0]!.toLowerCase());
+  }
+  if (context.filename) {
+    const stem = context.filename.toLowerCase().replace(/\.[a-z0-9]+$/, "");
+    if (stem.length >= 3) needles.push(stem);
+  }
+  return needles.some((n) => n.length >= 3 && lowered.includes(n)) || isSecretLikeKey(key);
+}
+
+// A filesystem-safe display filename derived from an untrusted original. The original
+// is preserved separately as metadata; this is never used as a storage key.
+export function safeFilename(original: string): string {
+  const base = original.replace(/^.*[\\/]/, "").trim();
+  const cleaned = base.replace(/[^A-Za-z0-9._-]/g, "_").replace(/\.{2,}/g, "_");
+  return cleaned.slice(0, 200) || "file";
+}
+
+export interface UploadValidationInput {
+  readonly contentType: string;
+  readonly sizeBytes: number;
+  readonly declaredChecksum?: string;
+  readonly body?: string;
+  readonly allowZeroByte?: boolean;
+}
+
+// Fails closed: oversize, disallowed/empty content-type, zero-byte (unless explicitly
+// allowed), and checksum mismatch when the body is available to verify. The client
+// content-type is recorded as unverified; verification is the caller's responsibility.
+export function validateUpload(input: UploadValidationInput): { checksum: string | null } {
+  if (input.sizeBytes < 0 || input.sizeBytes > MAX_FILE_SIZE_BYTES) {
+    throw new FileValidationError("size-limit", `0..${MAX_FILE_SIZE_BYTES} bytes`);
+  }
+  if (input.sizeBytes === 0 && !input.allowZeroByte) {
+    throw new FileValidationError("zero-byte", "empty uploads are not allowed by default");
+  }
+  if (!input.contentType || !ALLOWED_CONTENT_TYPES.includes(input.contentType as never)) {
+    throw new FileValidationError("content-type", "content type is not in the allow-list");
+  }
+  let checksum: string | null = null;
+  if (input.body !== undefined) {
+    checksum = sha256Hex(input.body);
+    if (input.declaredChecksum && input.declaredChecksum !== checksum) {
+      throw new FileValidationError(
+        "checksum-mismatch",
+        "declared checksum does not match content",
+      );
+    }
+    if (input.body.length !== input.sizeBytes) {
+      throw new FileValidationError("size-mismatch", "declared size does not match content length");
+    }
+  }
+  return { checksum };
+}
+
+export interface FileMetadata {
+  readonly fileId: string;
+  readonly tenantId: string;
+  readonly ownerActorId: string;
+  readonly objectKey: string;
+  readonly bucket: string;
+  readonly providerRef: string;
+  readonly storageClass: string;
+  readonly objectClass: FileObjectClass;
+  readonly filenameOriginal: string;
+  readonly filenameSafe: string;
+  readonly contentType: string;
+  readonly contentTypeVerified: boolean;
+  readonly sizeBytes: number;
+  readonly checksumSha256: string | null;
+  readonly etag: string | null;
+  readonly status: FileStatusValue;
+  readonly scanStatus: FileScanStatusValue;
+  readonly quarantineReason: string | null;
+  readonly classification: FileClassification;
+  readonly dataClassification: DataSensitivity;
+  readonly retentionPolicy: string;
+  readonly legalHold: boolean;
+  readonly correlationId: string;
+  readonly causationId: string | null;
+  readonly traceId: string | null;
+  readonly createdAt: string;
+  readonly createdBy: string;
+  readonly deletedAt: string | null;
+  readonly metadataHash: string;
+}
+
+// Maps the 7-value information-asset classification onto the 5-value DB persistence
+// scale (regulated→restricted, legal-evidence→security-sensitive).
+function dataSensitivityFor(classification: FileClassification): DataSensitivity {
+  switch (classification) {
+    case "regulated":
+      return "restricted";
+    case "legal-evidence":
+      return "security-sensitive";
+    default:
+      return classification;
+  }
+}
+
+export function metadataHash(meta: Omit<FileMetadata, "metadataHash">): string {
+  return createHash("sha256")
+    .update(
+      JSON.stringify([
+        meta.fileId,
+        meta.tenantId,
+        meta.objectKey,
+        meta.contentType,
+        meta.sizeBytes,
+        meta.checksumSha256,
+        meta.status,
+        meta.scanStatus,
+        meta.classification,
+        meta.legalHold,
+      ]),
+      "utf8",
+    )
+    .digest("hex");
+}
+
+export interface CreateFileMetadataInput {
+  readonly fileId: string;
+  readonly tenantId: string;
+  readonly ownerActorId: string;
+  readonly salt: string;
+  readonly filenameOriginal: string;
+  readonly contentType: string;
+  readonly sizeBytes: number;
+  readonly body?: string;
+  readonly declaredChecksum?: string;
+  readonly classification?: FileClassification;
+  readonly objectClass?: FileObjectClass;
+  readonly correlationId?: string;
+  readonly causationId?: string | null;
+  readonly traceId?: string | null;
+  readonly legalHold?: boolean;
+  readonly retentionPolicy?: string;
+}
+
+// Builds validated, classified file metadata with a safe generated object key and a
+// computed checksum + metadata hash. Fails closed on a non-canonical classification or
+// failed upload validation.
+export function createFileMetadata(input: CreateFileMetadataInput): FileMetadata {
+  const classification = input.classification ?? "confidential";
+  if (!FILE_CLASSIFICATIONS.includes(classification)) {
+    throw new FileValidationError("unknown-classification", `not a canonical classification`);
+  }
+  const { checksum } = validateUpload({
+    contentType: input.contentType,
+    sizeBytes: input.sizeBytes,
+    ...(input.declaredChecksum !== undefined ? { declaredChecksum: input.declaredChecksum } : {}),
+    ...(input.body !== undefined ? { body: input.body } : {}),
+  });
+  const objectKey = generateObjectKey({
+    tenantId: input.tenantId,
+    fileId: input.fileId,
+    salt: input.salt,
+  });
+  assertSafeObjectKey(objectKey);
+  const base = {
+    fileId: assertNonEmpty(input.fileId, "fileId"),
+    tenantId: assertNonEmpty(input.tenantId, "tenantId"),
+    ownerActorId: assertNonEmpty(input.ownerActorId, "ownerActorId"),
+    objectKey,
+    bucket: "tenant-objects",
+    providerRef: "in-memory",
+    storageClass: "standard",
+    objectClass: input.objectClass ?? "tenant-file",
+    filenameOriginal: input.filenameOriginal,
+    filenameSafe: safeFilename(input.filenameOriginal),
+    contentType: input.contentType,
+    contentTypeVerified: false,
+    sizeBytes: input.sizeBytes,
+    checksumSha256: checksum,
+    etag: null,
+    status: "uploaded" as FileStatusValue,
+    scanStatus: "not-required" as FileScanStatusValue,
+    quarantineReason: null,
+    classification,
+    dataClassification: dataSensitivityFor(classification),
+    retentionPolicy: input.retentionPolicy ?? "standard",
+    legalHold: input.legalHold ?? false,
+    correlationId: input.correlationId ?? input.fileId,
+    causationId: input.causationId ?? null,
+    traceId: input.traceId ?? null,
+    createdAt: new Date().toISOString(),
+    createdBy: input.ownerActorId,
+    deletedAt: null,
+  };
+  return Object.freeze({ ...base, metadataHash: metadataHash(base) });
+}
+
+// Download gate: a file is downloadable only when its lifecycle status and scan status
+// are both safe. Deleted/purged/blocked/quarantined files and pending/suspicious/
+// infected/failed/quarantined scans fail closed (privileged release is a separate path).
+export function isDownloadable(meta: Pick<FileMetadata, "status" | "scanStatus">): {
+  ok: boolean;
+  reasonCode: string;
+} {
+  if (meta.status !== "available" && meta.status !== "uploaded" && meta.status !== "restored") {
+    return { ok: false, reasonCode: `status-${meta.status}` };
+  }
+  if (!["not-required", "clean"].includes(meta.scanStatus)) {
+    return { ok: false, reasonCode: `scan-${meta.scanStatus}` };
+  }
+  return { ok: true, reasonCode: "ok" };
+}
+
+export interface SafeFileView {
+  readonly fileId: string;
+  readonly tenantId: string;
+  readonly ownerActorId: string;
+  readonly filenameSafe: string;
+  readonly contentType: string;
+  readonly sizeBytes: number;
+  readonly checksumSha256: string | null;
+  readonly status: string;
+  readonly scanStatus: string;
+  readonly classification: string;
+  readonly legalHold: boolean;
+  readonly createdAt: string;
+  readonly verificationStatus: string;
+}
+
+// Least-disclosure projection for API/list output: NO object key, bucket, provider
+// ref, original filename (PII), correlation internals, or metadata hash internals.
+export function toSafeFileView(meta: FileMetadata): SafeFileView {
+  return {
+    fileId: meta.fileId,
+    tenantId: meta.tenantId,
+    ownerActorId: meta.ownerActorId,
+    filenameSafe: meta.filenameSafe,
+    contentType: meta.contentType,
+    sizeBytes: meta.sizeBytes,
+    checksumSha256: meta.checksumSha256,
+    status: meta.status,
+    scanStatus: meta.scanStatus,
+    classification: meta.classification,
+    legalHold: meta.legalHold,
+    createdAt: meta.createdAt,
+    verificationStatus: meta.checksumSha256 ? "checksum-recorded" : "unverified",
+  };
 }

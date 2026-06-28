@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-001",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "FILE_CLASSIFICATIONS",
+      "new": "FILE_CLASSES"
+    }
+  },
+  "description": "001-no-classification.json"
+}

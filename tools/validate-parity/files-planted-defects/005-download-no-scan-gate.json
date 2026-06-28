@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-005",
+  "mutation": {
+    "file": "capabilities/files/src/file-service.ts",
+    "replace": {
+      "old": "\"file.download.denied\"",
+      "new": "\"noop.denied\""
+    }
+  },
+  "description": "005-download-no-scan-gate.json"
+}

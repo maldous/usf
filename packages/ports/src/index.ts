@@ -8,6 +8,9 @@ import type {
   AuditRecord,
   AuthorizationRequest,
   ConfigLayer,
+  FileMetadata,
+  FileScanStatusValue,
+  FileStatusValue,
   IdentityClaims,
   PolicyDecision,
   SecretReference,
@@ -28,6 +31,11 @@ export interface AuditLedger {
 export interface ObjectStore {
   putObject(input: { tenantId: string; key: string; body: string }): Promise<void>;
   getObject(input: { tenantId: string; key: string }): Promise<string | undefined>;
+  deleteObject(input: { tenantId: string; key: string }): Promise<void>;
+  headObject(input: {
+    tenantId: string;
+    key: string;
+  }): Promise<{ exists: boolean; sizeBytes: number } | undefined>;
 }
 
 export interface EventBus {
@@ -158,4 +166,67 @@ export interface SecretResolver {
 // USF-145). No live external Vault/Key Vault/KMS before separate authorisation.
 export interface ExternalSecretManager {
   fetch(reference: SecretReference): Promise<{ value: string }>;
+}
+
+// Files / object-storage ports (parity-files-storage, USF-146). Capabilities depend
+// on these ports, never on a storage/scanner provider implementation.
+
+export interface FileQueryCriteria {
+  readonly tenantId: string;
+  readonly status?: FileStatusValue;
+  readonly limit?: number;
+  readonly cursor?: string;
+}
+
+export interface FilePage {
+  readonly files: readonly FileMetadata[];
+  readonly nextCursor: string | null;
+}
+
+export interface FileMetadataPatch {
+  readonly status?: FileStatusValue;
+  readonly scanStatus?: FileScanStatusValue;
+  readonly quarantineReason?: string | null;
+  readonly contentTypeVerified?: boolean;
+  readonly legalHold?: boolean;
+  readonly deletedAt?: string | null;
+  readonly updatedBy: string;
+}
+
+// Authoritative tenant-scoped file metadata store. get/list/update require a tenant
+// context and only ever touch the context tenant's rows; a cross-tenant id resolves to
+// undefined (non-enumerating).
+export interface FileMetadataStore {
+  insert(meta: FileMetadata): Promise<void>;
+  get(context: TenantContext, fileId: string): Promise<FileMetadata | undefined>;
+  list(context: TenantContext, criteria: FileQueryCriteria): Promise<FilePage>;
+  update(
+    context: TenantContext,
+    fileId: string,
+    patch: FileMetadataPatch,
+  ): Promise<FileMetadata | undefined>;
+}
+
+// Malware/DLP scan posture as a port + status model only (no live antivirus/DLP in
+// this slice; live scanner is deferred — USF-147). Scanner failure must not silently
+// permit a risky file: callers treat a non-clean result as deny.
+export interface ScanProvider {
+  readonly mode: "in-memory" | "local-composed-test" | "mock" | "live-external";
+  scan(input: {
+    tenantId: string;
+    objectKey: string;
+    body?: string;
+  }): Promise<{ status: FileScanStatusValue; scannerRef: string }>;
+}
+
+// Future port — declared for forward-compat, NOT implemented in this slice (deferred,
+// USF-147). A live signed/presigned URL issuer must be scoped, expiring, purpose-bound,
+// tenant-bound, and audit-recorded; no live object-store signing before authorisation.
+export interface SignedUrlIssuer {
+  issue(input: {
+    tenantId: string;
+    fileId: string;
+    purpose: string;
+    ttlSeconds: number;
+  }): Promise<{ token: string; expiresAt: string }>;
 }

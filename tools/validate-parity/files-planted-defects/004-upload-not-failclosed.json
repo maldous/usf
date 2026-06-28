@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-004",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "checksum-mismatch",
+      "new": "checksum-ok"
+    }
+  },
+  "description": "004-upload-not-failclosed.json"
+}

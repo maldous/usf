@@ -12,3 +12,11 @@ export class FileCapability {
     return this.objectStore.getObject({ tenantId: context.tenantId, key });
   }
 }
+
+export {
+  FileAccessDeniedError,
+  createFileService,
+  type FileAccessContext,
+  type FileService,
+  type UploadFileInput,
+} from "./file-service.ts";
