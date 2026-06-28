@@ -13,6 +13,11 @@ import type {
   FileStatusValue,
   IdentityClaims,
   JobRecord,
+  NotificationChannel,
+  NotificationClassification,
+  NotificationDeliveryStatus,
+  NotificationProviderConfig,
+  NotificationProviderMode,
   PolicyDecision,
   SecretReference,
   Session,
@@ -53,6 +58,51 @@ export interface WorkflowEngine {
 
 export interface MailProvider {
   send(input: { tenantId: string; to: string; subject: string; body: string }): Promise<void>;
+}
+
+// Notification provider port (parity-notifications-messaging, USF-133). This is a
+// controlled delivery boundary, not a live provider claim. Provider credentials are
+// represented only by NotificationProviderConfig.credentialRef (SecretReference);
+// send results are normalized and value-free.
+export interface NotificationProviderSendInput {
+  readonly tenantId: string;
+  readonly notificationId: string;
+  readonly deliveryId: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly providerRef: string;
+  readonly providerMode: NotificationProviderMode;
+  readonly recipientId: string;
+  readonly recipientAddressRef: string;
+  readonly recipientAddressHash: string;
+  readonly templateId: string;
+  readonly templateVersion: string;
+  readonly templateHash: string;
+  readonly idempotencyKey: string;
+  readonly subject: string;
+  readonly body: string;
+  readonly payloadClassification: string;
+}
+
+export type NotificationProviderSendResult =
+  | {
+      readonly ok: true;
+      readonly deliveryStatus: Extract<NotificationDeliveryStatus, "sent" | "provider-unknown">;
+      readonly providerMessageId: string;
+      readonly safeProviderSummary: string;
+    }
+  | {
+      readonly ok: false;
+      readonly deliveryStatus: Extract<NotificationDeliveryStatus, "failed" | "provider-unknown">;
+      readonly failureReasonCode: string;
+      readonly safeFailureMessage: string;
+      readonly retryable: boolean;
+    };
+
+export interface NotificationProvider {
+  readonly providerMode: NotificationProviderMode;
+  configure(config: NotificationProviderConfig): void;
+  send(input: NotificationProviderSendInput): Promise<NotificationProviderSendResult>;
 }
 
 export interface SecretStore {

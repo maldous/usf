@@ -207,6 +207,7 @@ export const AUDIT_CATEGORIES = Object.freeze([
   "data-mutation",
   "configuration",
   "file",
+  "notification",
   "job",
   "integration",
   "security",
@@ -264,6 +265,31 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "configuration.changed": { category: "configuration", severity: "warning", reserved: true },
   "file.uploaded": { category: "file", severity: "info", reserved: true },
   "file.downloaded": { category: "file", severity: "info", reserved: true },
+  // Notifications and messaging (parity-notifications-messaging, USF-133).
+  // Emitted by this slice (value-free; never a raw recipient address, rendered body,
+  // provider credential, provider internals, stack trace, token, or object key):
+  "notification.created": { category: "notification", severity: "info" },
+  "notification.rendered": { category: "notification", severity: "info" },
+  "notification.queued": { category: "notification", severity: "info" },
+  "notification.scheduled": { category: "notification", severity: "info" },
+  "notification.sent": { category: "notification", severity: "notice" },
+  "notification.delivered": { category: "notification", severity: "notice", reserved: true },
+  "notification.failed": { category: "notification", severity: "warning" },
+  "notification.retrying": { category: "notification", severity: "notice" },
+  "notification.dead_lettered": { category: "notification", severity: "warning" },
+  "notification.suppressed": { category: "notification", severity: "notice" },
+  "notification.cancelled": { category: "notification", severity: "notice" },
+  "notification.denied": { category: "notification", severity: "warning" },
+  "notification.read": { category: "notification", severity: "info" },
+  "notification.template.created": { category: "notification", severity: "notice" },
+  "notification.template.changed": { category: "notification", severity: "warning" },
+  "notification.template.approved": { category: "notification", severity: "warning" },
+  "notification.preference.changed": { category: "notification", severity: "notice" },
+  "notification.suppression.changed": { category: "notification", severity: "warning" },
+  "notification.provider.changed": { category: "notification", severity: "warning" },
+  "notification.bulk.started": { category: "notification", severity: "warning", reserved: true },
+  "notification.bulk.completed": { category: "notification", severity: "warning", reserved: true },
+  "notification.bulk.failed": { category: "notification", severity: "high", reserved: true },
   // Jobs & workflows (parity-jobs-workflows, USF-133). Emitted by this slice
   // (value-free; never a raw payload/secret/credential/stack-trace):
   "job.created": { category: "job", severity: "info" },
@@ -376,6 +402,11 @@ export const BLOCKED_METADATA_KEYS = Object.freeze([
   "private_key",
   "privatekey",
   "credential",
+  "connection_string",
+  "bearer",
+  "jwt",
+  "object_key",
+  "objectkey",
   "session_token",
   "access_key",
   "client_secret",
@@ -853,6 +884,7 @@ export const SECRET_KEY_PATTERNS = Object.freeze([
   "sas",
   "bearer",
   "jwt",
+  "object_key",
 ] as const);
 
 // Separator-insensitive: api-key, api_key, apiKey, api.key all match "apikey".
@@ -1918,4 +1950,967 @@ export interface WorkflowRecord {
   readonly approvalDecidedBy: string | null;
   readonly createdAt: number;
   readonly updatedAt: number;
+}
+
+// ===========================================================================
+// Notifications & messaging (parity-notifications-messaging, USF-133).
+//
+// Notifications are controlled tenant-scoped communications. A notification is
+// the intent to communicate; a message is the rendered channel payload; a delivery
+// is a provider/channel attempt; delivery evidence is the value-free record of the
+// attempt/outcome. This is ISO 27001-supporting technical control evidence only:
+// no certification, deliverability, SMTP/SMS/push/webhook-live, or production-live
+// readiness claim.
+// ===========================================================================
+
+export const NOTIFICATION_SCHEMA_VERSION = "notification-1";
+
+export const NOTIFICATION_CLASSIFICATIONS = Object.freeze([
+  "security",
+  "authentication",
+  "authorization",
+  "transactional",
+  "workflow",
+  "operational",
+  "system",
+  "file",
+  "identity",
+  "configuration",
+  "audit",
+  "maintenance",
+  "marketing",
+  "bulk",
+  "test",
+] as const);
+export type NotificationClassification = (typeof NOTIFICATION_CLASSIFICATIONS)[number];
+
+export const NOTIFICATION_CHANNELS = Object.freeze([
+  "email",
+  "sms",
+  "push",
+  "in-app",
+  "webhook",
+  "provider-internal",
+  "test",
+] as const);
+export type NotificationChannel = (typeof NOTIFICATION_CHANNELS)[number];
+
+export const NOTIFICATION_DELIVERY_STATUSES = Object.freeze([
+  "draft",
+  "queued",
+  "scheduled",
+  "rendering",
+  "rendered",
+  "suppressed",
+  "sending",
+  "sent",
+  "delivered",
+  "failed",
+  "retrying",
+  "dead-lettered",
+  "cancelled",
+  "expired",
+  "blocked",
+  "provider-unknown",
+] as const);
+export type NotificationDeliveryStatus = (typeof NOTIFICATION_DELIVERY_STATUSES)[number];
+
+export const NOTIFICATION_PROVIDER_MODES = Object.freeze([
+  "in-memory",
+  "local-test",
+  "mock",
+  "live-external-deferred",
+] as const);
+export type NotificationProviderMode = (typeof NOTIFICATION_PROVIDER_MODES)[number];
+
+export const CONSENT_STATUSES = Object.freeze([
+  "unknown",
+  "granted",
+  "denied",
+  "withdrawn",
+  "not-required",
+  "system-mandated",
+] as const);
+export type ConsentStatus = (typeof CONSENT_STATUSES)[number];
+
+export const SUPPRESSION_REASONS = Object.freeze([
+  "recipient-opted-out",
+  "tenant-disabled-channel",
+  "address-unverified",
+  "address-bounced",
+  "complaint-received",
+  "legal-hold",
+  "policy-blocked",
+  "rate-limited",
+  "provider-blocked",
+  "security-blocked",
+  "do-not-contact",
+] as const);
+export type SuppressionReason = (typeof SUPPRESSION_REASONS)[number];
+
+export const UNSUBSCRIBE_STATUSES = Object.freeze([
+  "unknown",
+  "subscribed",
+  "unsubscribed",
+  "not-applicable",
+] as const);
+export type UnsubscribeStatus = (typeof UNSUBSCRIBE_STATUSES)[number];
+
+export const ADDRESS_TYPES = Object.freeze([
+  "email",
+  "phone",
+  "push-token",
+  "webhook-url",
+  "actor-inbox",
+  "provider-ref",
+  "test",
+] as const);
+export type NotificationAddressType = (typeof ADDRESS_TYPES)[number];
+
+export const ADDRESS_STATUSES = Object.freeze([
+  "unknown",
+  "active",
+  "unverified",
+  "bounced",
+  "complained",
+  "suppressed",
+  "disabled",
+] as const);
+export type NotificationAddressStatus = (typeof ADDRESS_STATUSES)[number];
+
+export const RECIPIENT_TYPES = Object.freeze([
+  "actor",
+  "user",
+  "tenant-admin",
+  "service",
+  "external-contact",
+  "test",
+] as const);
+export type NotificationRecipientType = (typeof RECIPIENT_TYPES)[number];
+
+export const TEMPLATE_STATUSES = Object.freeze(["draft", "approved", "deprecated"] as const);
+export type NotificationTemplateStatus = (typeof TEMPLATE_STATUSES)[number];
+
+export const BOUNCE_STATUSES = Object.freeze(["none", "bounced"] as const);
+export type BounceStatus = (typeof BOUNCE_STATUSES)[number];
+
+export const COMPLAINT_STATUSES = Object.freeze(["none", "complaint-received"] as const);
+export type ComplaintStatus = (typeof COMPLAINT_STATUSES)[number];
+
+export const FEEDBACK_EVENT_TYPES = Object.freeze([
+  "delivery.bounced",
+  "delivery.complaint.received",
+  "delivery.opened",
+  "delivery.clicked",
+  "delivery.unsubscribed",
+  "delivery.provider_failed",
+  "delivery.provider_deferred",
+] as const);
+export type NotificationFeedbackEventType = (typeof FEEDBACK_EVENT_TYPES)[number];
+
+export const MANDATORY_NOTIFICATION_CLASSES: readonly NotificationClassification[] = Object.freeze([
+  "security",
+  "authentication",
+  "authorization",
+]);
+
+export const CONSENT_REQUIRED_NOTIFICATION_CLASSES: readonly NotificationClassification[] =
+  Object.freeze(["marketing", "bulk"]);
+
+const DATA_SENSITIVITY_RANK: Readonly<Record<DataSensitivity, number>> = Object.freeze({
+  public: 0,
+  internal: 1,
+  confidential: 2,
+  restricted: 3,
+  "security-sensitive": 4,
+});
+
+export class NotificationPolicyError extends Error {
+  readonly reasonCode: string;
+
+  constructor(reasonCode: string, message: string) {
+    super(message);
+    this.name = "NotificationPolicyError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export class NotificationTemplateError extends Error {
+  readonly reasonCode: string;
+
+  constructor(reasonCode: string, message: string) {
+    super(message);
+    this.name = "NotificationTemplateError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export interface NotificationChannelPolicy {
+  readonly channel: NotificationChannel;
+  readonly providerMode: NotificationProviderMode;
+  readonly allowedNotificationClasses: readonly NotificationClassification[];
+  readonly verifiedRecipientRequired: boolean;
+  readonly maxPayloadBytes: number;
+  readonly retryPolicy: BackoffPolicy;
+  readonly redactionPolicy: "metadata-only" | "body-retained-by-classification";
+}
+
+export const DEFAULT_NOTIFICATION_BACKOFF: BackoffPolicy = Object.freeze({
+  strategy: "exponential",
+  baseSeconds: 5,
+  factor: 2,
+  maxRetries: 3,
+  maxBackoffSeconds: 900,
+  jitter: false,
+});
+
+export const DEFAULT_NOTIFICATION_CHANNEL_POLICIES: Readonly<
+  Record<NotificationChannel, NotificationChannelPolicy>
+> = Object.freeze({
+  email: Object.freeze({
+    channel: "email",
+    providerMode: "in-memory",
+    allowedNotificationClasses: NOTIFICATION_CLASSIFICATIONS,
+    verifiedRecipientRequired: true,
+    maxPayloadBytes: 256_000,
+    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
+    redactionPolicy: "metadata-only",
+  }),
+  sms: Object.freeze({
+    channel: "sms",
+    providerMode: "in-memory",
+    allowedNotificationClasses: Object.freeze([
+      "security",
+      "authentication",
+      "authorization",
+      "transactional",
+      "workflow",
+      "operational",
+      "test",
+    ] as const),
+    verifiedRecipientRequired: true,
+    maxPayloadBytes: 1_600,
+    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
+    redactionPolicy: "metadata-only",
+  }),
+  push: Object.freeze({
+    channel: "push",
+    providerMode: "in-memory",
+    allowedNotificationClasses: Object.freeze([
+      "security",
+      "authentication",
+      "authorization",
+      "transactional",
+      "workflow",
+      "operational",
+      "system",
+      "test",
+    ] as const),
+    verifiedRecipientRequired: true,
+    maxPayloadBytes: 4_096,
+    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
+    redactionPolicy: "metadata-only",
+  }),
+  "in-app": Object.freeze({
+    channel: "in-app",
+    providerMode: "in-memory",
+    allowedNotificationClasses: NOTIFICATION_CLASSIFICATIONS,
+    verifiedRecipientRequired: false,
+    maxPayloadBytes: 64_000,
+    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
+    redactionPolicy: "metadata-only",
+  }),
+  webhook: Object.freeze({
+    channel: "webhook",
+    providerMode: "in-memory",
+    allowedNotificationClasses: Object.freeze([
+      "transactional",
+      "workflow",
+      "operational",
+      "system",
+      "file",
+      "configuration",
+      "audit",
+      "maintenance",
+      "test",
+    ] as const),
+    verifiedRecipientRequired: true,
+    maxPayloadBytes: 128_000,
+    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
+    redactionPolicy: "metadata-only",
+  }),
+  "provider-internal": Object.freeze({
+    channel: "provider-internal",
+    providerMode: "mock",
+    allowedNotificationClasses: Object.freeze(["operational", "system", "test"] as const),
+    verifiedRecipientRequired: false,
+    maxPayloadBytes: 16_000,
+    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
+    redactionPolicy: "metadata-only",
+  }),
+  test: Object.freeze({
+    channel: "test",
+    providerMode: "local-test",
+    allowedNotificationClasses: Object.freeze(["test"] as const),
+    verifiedRecipientRequired: false,
+    maxPayloadBytes: 64_000,
+    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
+    redactionPolicy: "metadata-only",
+  }),
+});
+
+export interface NotificationProviderConfig {
+  readonly providerRef: string;
+  readonly providerType: string;
+  readonly providerMode: NotificationProviderMode;
+  readonly channel: NotificationChannel;
+  readonly endpoint: string | null;
+  readonly allowedHosts: readonly string[];
+  readonly allowedSchemes: readonly string[];
+  readonly tlsRequired: boolean;
+  readonly credentialRef: SecretReference | null;
+  readonly senderIdentityRef: string | null;
+  readonly rateLimitPolicy: string;
+  readonly retryPolicy: BackoffPolicy;
+  readonly timeoutPolicy: string;
+  readonly circuitBreakerPolicy: string;
+  readonly egressPolicy: string;
+}
+
+export interface NotificationTemplateVariableDefinition {
+  readonly name: string;
+  readonly required: boolean;
+  readonly dataClassification: DataSensitivity;
+}
+
+export interface NotificationTemplateDefinition {
+  readonly templateId: string;
+  readonly templateKey: string;
+  readonly templateVersion: string;
+  readonly templateHash: string;
+  readonly templateStatus: NotificationTemplateStatus;
+  readonly templateOwner: string;
+  readonly templateClassification: NotificationClassification;
+  readonly allowedChannels: readonly NotificationChannel[];
+  readonly allowedNotificationClasses: readonly NotificationClassification[];
+  readonly subjectTemplate: string;
+  readonly bodyTemplate: string;
+  readonly subjectClassification: DataSensitivity;
+  readonly bodyClassification: DataSensitivity;
+  readonly payloadClassification: DataSensitivity;
+  readonly renderContextSchema: Readonly<Record<string, unknown>>;
+  readonly allowedVariables: readonly NotificationTemplateVariableDefinition[];
+  readonly createdBy: string;
+  readonly approvedBy: string | null;
+  readonly approvedAt: string | null;
+  readonly deprecatedAt: string | null;
+  readonly immutableAfterFirstUse: boolean;
+  readonly firstUsedAt: string | null;
+}
+
+export interface RenderedNotificationMessage {
+  readonly notificationId: string;
+  readonly tenantId: string;
+  readonly recipientId: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly templateId: string;
+  readonly templateVersion: string;
+  readonly templateHash: string;
+  readonly subject: string;
+  readonly body: string;
+  readonly subjectClassification: DataSensitivity;
+  readonly bodyClassification: DataSensitivity;
+  readonly payloadClassification: DataSensitivity;
+}
+
+export interface NotificationRecipient {
+  readonly recipientId: string;
+  readonly recipientActorId: string | null;
+  readonly recipientTenantId: string;
+  readonly recipientType: NotificationRecipientType;
+  readonly addressRef: string;
+  readonly addressType: NotificationAddressType;
+  readonly addressVerified: boolean;
+  readonly addressStatus: NotificationAddressStatus;
+  readonly addressSource: string;
+  readonly addressLastVerifiedAt: string | null;
+}
+
+export interface NotificationPreference {
+  readonly tenantId: string;
+  readonly recipientId: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification | "all";
+  readonly preferenceScope: string;
+  readonly preferenceSource: string;
+  readonly consentStatus: ConsentStatus;
+  readonly unsubscribeStatus: UnsubscribeStatus;
+}
+
+export interface NotificationSuppression {
+  readonly tenantId: string;
+  readonly recipientId: string;
+  readonly channel: NotificationChannel | "all";
+  readonly classification: NotificationClassification | "all";
+  readonly suppressionStatus: "none" | "active";
+  readonly suppressionReason: SuppressionReason;
+  readonly suppressionSource: string;
+  readonly suppressedAt: string | null;
+  readonly suppressedBy: string | null;
+  readonly expiresAt: string | null;
+  readonly bounceStatus: BounceStatus;
+  readonly complaintStatus: ComplaintStatus;
+  readonly doNotContact: boolean;
+}
+
+export interface NotificationIntent {
+  readonly notificationId: string;
+  readonly tenantId: string;
+  readonly actorId: string;
+  readonly serviceActorId: string | null;
+  readonly recipientId: string;
+  readonly recipientType: NotificationRecipientType;
+  readonly recipientAddressRef: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly templateId: string;
+  readonly templateVersion: string;
+  readonly templateHash: string;
+  readonly subjectClassification: DataSensitivity;
+  readonly bodyClassification: DataSensitivity;
+  readonly payloadClassification: DataSensitivity;
+  readonly deliveryStatus: NotificationDeliveryStatus;
+  readonly providerMode: NotificationProviderMode;
+  readonly providerRef: string;
+  readonly providerMessageId: string | null;
+  readonly idempotencyKey: string;
+  readonly dedupeKey: string;
+  readonly correlationId: string;
+  readonly causationId: string | null;
+  readonly traceId: string | null;
+  readonly requestId: string | null;
+  readonly scheduledFor: string | null;
+  readonly sentAt: string | null;
+  readonly deliveredAt: string | null;
+  readonly failedAt: string | null;
+  readonly suppressedAt: string | null;
+  readonly retryCount: number;
+  readonly maxRetries: number;
+  readonly deadLetterReason: string | null;
+  readonly failureReasonCode: string | null;
+  readonly safeFailureMessage: string | null;
+  readonly dataClassification: DataSensitivity;
+  readonly retentionPolicy: string;
+  readonly legalHold: boolean;
+  readonly messageBodyRetentionPolicy: string;
+  readonly renderedPayloadRetentionPolicy: string;
+  readonly deliveryEvidenceRetentionPolicy: string;
+  readonly purgeAllowedAt: string | null;
+  readonly createdAt: string;
+  readonly createdBy: string;
+  readonly updatedAt: string;
+  readonly updatedBy: string;
+}
+
+export interface NotificationDeliveryEvidence {
+  readonly notificationId: string;
+  readonly tenantId: string;
+  readonly deliveryId: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly deliveryStatus: NotificationDeliveryStatus;
+  readonly providerMode: NotificationProviderMode;
+  readonly providerRef: string;
+  readonly providerMessageId: string | null;
+  readonly idempotencyKey: string;
+  readonly retryCount: number;
+  readonly maxRetries: number;
+  readonly failureReasonCode: string | null;
+  readonly safeFailureMessage: string | null;
+  readonly recipientAddressHash: string;
+  readonly templateId: string;
+  readonly templateVersion: string;
+  readonly templateHash: string;
+  readonly recordedAt: string;
+}
+
+export interface SafeNotificationView {
+  readonly notificationId: string;
+  readonly tenantId: string;
+  readonly recipientId: string;
+  readonly recipientType: NotificationRecipientType;
+  readonly recipientAddressHash: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly templateId: string;
+  readonly templateVersion: string;
+  readonly templateHash: string;
+  readonly deliveryStatus: NotificationDeliveryStatus;
+  readonly providerMode: NotificationProviderMode;
+  readonly providerRef: string;
+  readonly providerMessageId: string | null;
+  readonly idempotencyKey: string;
+  readonly retryCount: number;
+  readonly maxRetries: number;
+  readonly failureReasonCode: string | null;
+  readonly safeFailureMessage: string | null;
+  readonly dataClassification: DataSensitivity;
+  readonly retentionPolicy: string;
+  readonly legalHold: boolean;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export function assertNotificationClassification(
+  classification: string,
+): NotificationClassification {
+  if (!NOTIFICATION_CLASSIFICATIONS.includes(classification as NotificationClassification)) {
+    throw new NotificationPolicyError(
+      "unknown-classification",
+      "notification classification is unknown",
+    );
+  }
+  return classification as NotificationClassification;
+}
+
+export function assertNotificationChannel(channel: string): NotificationChannel {
+  if (!NOTIFICATION_CHANNELS.includes(channel as NotificationChannel)) {
+    throw new NotificationPolicyError("unknown-channel", "notification channel is unknown");
+  }
+  return channel as NotificationChannel;
+}
+
+export function isMandatoryNotification(classification: NotificationClassification): boolean {
+  return MANDATORY_NOTIFICATION_CLASSES.includes(classification);
+}
+
+export function notificationRequiresConsent(classification: NotificationClassification): boolean {
+  return CONSENT_REQUIRED_NOTIFICATION_CLASSES.includes(classification);
+}
+
+export function maxDataSensitivity(values: readonly DataSensitivity[]): DataSensitivity {
+  return values.reduce<DataSensitivity>(
+    (max, value) => (DATA_SENSITIVITY_RANK[value] > DATA_SENSITIVITY_RANK[max] ? value : max),
+    "public",
+  );
+}
+
+function isHttpLocalEndpoint(endpoint: string): boolean {
+  try {
+    const url = new URL(endpoint);
+    return (
+      (url.protocol === "http:" || url.protocol === "https:") &&
+      (url.hostname === "localhost" || url.hostname === "127.0.0.1" || url.hostname === "::1")
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function validateNotificationProviderConfig(
+  config: NotificationProviderConfig,
+): NotificationProviderConfig {
+  assertNonEmpty(config.providerRef, "providerRef");
+  assertNonEmpty(config.providerType, "providerType");
+  assertNotificationChannel(config.channel);
+  if (!NOTIFICATION_PROVIDER_MODES.includes(config.providerMode)) {
+    throw new NotificationPolicyError(
+      "unknown-provider-mode",
+      "notification provider mode is unknown",
+    );
+  }
+  assertBoundedBackoff(config.retryPolicy);
+  if (config.providerMode === "live-external-deferred") {
+    throw new NotificationPolicyError(
+      "live-external-provider-deferred",
+      "live external notification provider mode is deferred",
+    );
+  }
+  if (typeof (config as unknown as { credentialRef?: unknown }).credentialRef === "string") {
+    throw new NotificationPolicyError(
+      "raw-provider-credential",
+      "provider credential must be a secret_ref",
+    );
+  }
+  if (config.credentialRef && !config.credentialRef.secretRef.startsWith("secret://")) {
+    throw new NotificationPolicyError(
+      "invalid-secret-ref",
+      "provider credential must be a secret_ref",
+    );
+  }
+  if (config.endpoint) {
+    const endpoint = new URL(config.endpoint);
+    const scheme = endpoint.protocol.slice(0, -1);
+    if (!config.allowedSchemes.includes(scheme)) {
+      throw new NotificationPolicyError(
+        "provider-scheme-blocked",
+        "provider endpoint scheme is not allowed",
+      );
+    }
+    if (!config.allowedHosts.includes(endpoint.hostname)) {
+      throw new NotificationPolicyError(
+        "provider-host-blocked",
+        "provider endpoint host is not allowed",
+      );
+    }
+    if (!config.tlsRequired && !isHttpLocalEndpoint(config.endpoint)) {
+      throw new NotificationPolicyError(
+        "tls-required",
+        "provider transport requires TLS unless local-only",
+      );
+    }
+    if (config.tlsRequired && endpoint.protocol !== "https:") {
+      throw new NotificationPolicyError("tls-required", "provider endpoint must use TLS");
+    }
+  }
+  return Object.freeze({ ...config });
+}
+
+function canonicalTemplateHashInput(
+  template: Omit<NotificationTemplateDefinition, "templateHash">,
+): string {
+  return JSON.stringify({
+    templateId: template.templateId,
+    templateKey: template.templateKey,
+    templateVersion: template.templateVersion,
+    templateStatus: template.templateStatus,
+    templateOwner: template.templateOwner,
+    templateClassification: template.templateClassification,
+    allowedChannels: [...template.allowedChannels].sort(),
+    allowedNotificationClasses: [...template.allowedNotificationClasses].sort(),
+    subjectTemplate: template.subjectTemplate,
+    bodyTemplate: template.bodyTemplate,
+    subjectClassification: template.subjectClassification,
+    bodyClassification: template.bodyClassification,
+    payloadClassification: template.payloadClassification,
+    allowedVariables: [...template.allowedVariables]
+      .map((v) => ({ ...v }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  });
+}
+
+export function notificationTemplateHash(
+  template: Omit<NotificationTemplateDefinition, "templateHash">,
+): string {
+  return createHash("sha256").update(canonicalTemplateHashInput(template)).digest("hex");
+}
+
+export function createNotificationTemplateDefinition(
+  template: Omit<NotificationTemplateDefinition, "templateHash">,
+): NotificationTemplateDefinition {
+  assertNotificationClassification(template.templateClassification);
+  for (const channel of template.allowedChannels) {
+    assertNotificationChannel(channel);
+  }
+  for (const classification of template.allowedNotificationClasses) {
+    assertNotificationClassification(classification);
+  }
+  const allowed = new Set<string>();
+  for (const variable of template.allowedVariables) {
+    if (isSecretLikeKey(variable.name)) {
+      throw new NotificationTemplateError(
+        "secret-variable-name",
+        "template variable name is secret-like",
+      );
+    }
+    if (allowed.has(variable.name)) {
+      throw new NotificationTemplateError("duplicate-variable", "template variable is duplicated");
+    }
+    allowed.add(variable.name);
+  }
+  return Object.freeze({
+    ...template,
+    templateHash: notificationTemplateHash(template),
+  });
+}
+
+function placeholderNames(template: string): readonly string[] {
+  const names: string[] = [];
+  for (const match of template.matchAll(/{{\s*([A-Za-z0-9_.-]+)\s*}}/g)) {
+    const name = match[1];
+    if (name) {
+      names.push(name);
+    }
+  }
+  return Object.freeze(names);
+}
+
+export function containsSecretLikeNotificationContent(value: string): boolean {
+  const tokens = value.split(/[\s:=;,]+/).filter(Boolean);
+  return tokens.some((token) => isSecretLikeKey(token) || looksLikeSecretValue(token));
+}
+
+function renderTemplateString(
+  template: string,
+  values: Readonly<Record<string, string>>,
+  allowedNames: ReadonlySet<string>,
+): string {
+  for (const name of placeholderNames(template)) {
+    if (!allowedNames.has(name)) {
+      throw new NotificationTemplateError(
+        "unknown-variable",
+        "template references an unknown variable",
+      );
+    }
+    if (!(name in values)) {
+      throw new NotificationTemplateError("missing-variable", "template variable is missing");
+    }
+  }
+  return template.replace(/{{\s*([A-Za-z0-9_.-]+)\s*}}/g, (_, name: string) => values[name] ?? "");
+}
+
+export function renderNotificationTemplate(input: {
+  readonly notificationId: string;
+  readonly tenantId: string;
+  readonly recipientId: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly template: NotificationTemplateDefinition;
+  readonly values: Readonly<Record<string, string>>;
+}): RenderedNotificationMessage {
+  const classification = assertNotificationClassification(input.classification);
+  const channel = assertNotificationChannel(input.channel);
+  const template = input.template;
+  if (template.templateStatus !== "approved") {
+    throw new NotificationTemplateError(
+      "template-not-approved",
+      "template must be approved before use",
+    );
+  }
+  if (!template.allowedChannels.includes(channel)) {
+    throw new NotificationTemplateError(
+      "channel-not-allowed",
+      "template is not allowed for this channel",
+    );
+  }
+  if (!template.allowedNotificationClasses.includes(classification)) {
+    throw new NotificationTemplateError(
+      "classification-not-allowed",
+      "template is not allowed for this classification",
+    );
+  }
+  const allowedNames = new Set(template.allowedVariables.map((v) => v.name));
+  for (const key of Object.keys(input.values)) {
+    if (!allowedNames.has(key)) {
+      throw new NotificationTemplateError(
+        "unknown-variable",
+        "template values include an unknown variable",
+      );
+    }
+    const value = input.values[key];
+    if (value === undefined) {
+      throw new NotificationTemplateError("missing-variable", "template variable is missing");
+    }
+    if (isSecretLikeKey(key) || containsSecretLikeNotificationContent(value)) {
+      throw new NotificationTemplateError("secret-like-value", "template value is secret-like");
+    }
+  }
+  for (const variable of template.allowedVariables) {
+    if (variable.required && !(variable.name in input.values)) {
+      throw new NotificationTemplateError("missing-variable", "template variable is missing");
+    }
+  }
+  const subject = renderTemplateString(template.subjectTemplate, input.values, allowedNames);
+  const body = renderTemplateString(template.bodyTemplate, input.values, allowedNames);
+  if (
+    containsSecretLikeNotificationContent(subject) ||
+    containsSecretLikeNotificationContent(body)
+  ) {
+    throw new NotificationTemplateError(
+      "secret-like-render-output",
+      "rendered output is secret-like",
+    );
+  }
+  const payloadClassification = maxDataSensitivity([
+    template.subjectClassification,
+    template.bodyClassification,
+    template.payloadClassification,
+    ...template.allowedVariables.map((v) => v.dataClassification),
+  ]);
+  return Object.freeze({
+    notificationId: assertNonEmpty(input.notificationId, "notificationId"),
+    tenantId: assertNonEmpty(input.tenantId, "tenantId"),
+    recipientId: assertNonEmpty(input.recipientId, "recipientId"),
+    channel,
+    classification,
+    templateId: template.templateId,
+    templateVersion: template.templateVersion,
+    templateHash: template.templateHash,
+    subject,
+    body,
+    subjectClassification: template.subjectClassification,
+    bodyClassification: template.bodyClassification,
+    payloadClassification,
+  });
+}
+
+export function notificationAddressHash(addressRef: string): string {
+  return `addr_${opaqueHash(addressRef).slice(0, 24)}`;
+}
+
+export function notificationDeliveryIdempotencyKey(input: {
+  readonly tenantId: string;
+  readonly notificationId: string;
+  readonly channel: NotificationChannel;
+  readonly recipientId: string;
+  readonly templateId: string;
+  readonly templateVersion: string;
+}): string {
+  return stableId("notifyidem", [
+    input.tenantId,
+    input.notificationId,
+    input.channel,
+    input.recipientId,
+    input.templateId,
+    input.templateVersion,
+  ]);
+}
+
+export function notificationDedupeKey(input: {
+  readonly tenantId: string;
+  readonly recipientId: string;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly templateId: string;
+  readonly templateVersion: string;
+  readonly correlationId: string;
+}): string {
+  return stableId("notifydedupe", [
+    input.tenantId,
+    input.recipientId,
+    input.channel,
+    input.classification,
+    input.templateId,
+    input.templateVersion,
+    input.correlationId,
+  ]);
+}
+
+export function evaluateNotificationDeliveryPolicy(input: {
+  readonly context: TenantContext;
+  readonly recipient: NotificationRecipient;
+  readonly channel: NotificationChannel;
+  readonly classification: NotificationClassification;
+  readonly preference?: NotificationPreference;
+  readonly suppression?: NotificationSuppression;
+  readonly allowMandatoryOptOutBypass: boolean;
+  readonly allowUnverifiedSensitiveRecipient: boolean;
+  readonly testRecipientAuthorised: boolean;
+}): { readonly allowed: true } | { readonly allowed: false; readonly reasonCode: string } {
+  assertTenantMatch(input.context, input.recipient.recipientTenantId, "notification.recipient");
+  const classification = assertNotificationClassification(input.classification);
+  const channel = assertNotificationChannel(input.channel);
+  const channelPolicy = DEFAULT_NOTIFICATION_CHANNEL_POLICIES[channel];
+  if (!channelPolicy.allowedNotificationClasses.includes(classification)) {
+    return { allowed: false, reasonCode: "channel-classification-blocked" };
+  }
+  if (
+    classification === "test" &&
+    input.recipient.recipientType !== "test" &&
+    !input.testRecipientAuthorised
+  ) {
+    return { allowed: false, reasonCode: "test-recipient-not-authorised" };
+  }
+  if (
+    (channelPolicy.verifiedRecipientRequired || isMandatoryNotification(classification)) &&
+    !input.recipient.addressVerified &&
+    !input.allowUnverifiedSensitiveRecipient
+  ) {
+    return { allowed: false, reasonCode: "address-unverified" };
+  }
+  if (
+    input.recipient.addressStatus === "bounced" ||
+    input.recipient.addressStatus === "complained" ||
+    input.recipient.addressStatus === "suppressed" ||
+    input.recipient.addressStatus === "disabled"
+  ) {
+    return { allowed: false, reasonCode: `address-${input.recipient.addressStatus}` };
+  }
+  const suppression = input.suppression;
+  if (
+    suppression &&
+    (suppression.channel === channel || suppression.channel === "all") &&
+    (suppression.classification === classification || suppression.classification === "all") &&
+    (suppression.suppressionStatus === "active" || suppression.doNotContact)
+  ) {
+    const mandatoryBypass =
+      isMandatoryNotification(classification) &&
+      input.allowMandatoryOptOutBypass &&
+      suppression.suppressionReason === "recipient-opted-out";
+    if (!mandatoryBypass) {
+      return { allowed: false, reasonCode: suppression.suppressionReason };
+    }
+  }
+  const preference = input.preference;
+  if (notificationRequiresConsent(classification)) {
+    if (!preference || preference.consentStatus !== "granted") {
+      return { allowed: false, reasonCode: "consent-required" };
+    }
+    if (preference.unsubscribeStatus === "unsubscribed") {
+      return { allowed: false, reasonCode: "recipient-opted-out" };
+    }
+  }
+  return { allowed: true };
+}
+
+export function toSafeNotificationView(notification: NotificationIntent): SafeNotificationView {
+  return Object.freeze({
+    notificationId: notification.notificationId,
+    tenantId: notification.tenantId,
+    recipientId: notification.recipientId,
+    recipientType: notification.recipientType,
+    recipientAddressHash: notificationAddressHash(notification.recipientAddressRef),
+    channel: notification.channel,
+    classification: notification.classification,
+    templateId: notification.templateId,
+    templateVersion: notification.templateVersion,
+    templateHash: notification.templateHash,
+    deliveryStatus: notification.deliveryStatus,
+    providerMode: notification.providerMode,
+    providerRef: notification.providerRef,
+    providerMessageId: notification.providerMessageId,
+    idempotencyKey: notification.idempotencyKey,
+    retryCount: notification.retryCount,
+    maxRetries: notification.maxRetries,
+    failureReasonCode: notification.failureReasonCode,
+    safeFailureMessage: notification.safeFailureMessage,
+    dataClassification: notification.dataClassification,
+    retentionPolicy: notification.retentionPolicy,
+    legalHold: notification.legalHold,
+    createdAt: notification.createdAt,
+    updatedAt: notification.updatedAt,
+  });
+}
+
+export function createNotificationDeliveryEvidence(input: {
+  readonly notification: NotificationIntent;
+  readonly deliveryId: string;
+  readonly deliveryStatus: NotificationDeliveryStatus;
+  readonly providerMessageId?: string | null;
+  readonly failureReasonCode?: string | null;
+  readonly safeFailureMessage?: string | null;
+  readonly recordedAt?: string;
+}): NotificationDeliveryEvidence {
+  return Object.freeze({
+    notificationId: input.notification.notificationId,
+    tenantId: input.notification.tenantId,
+    deliveryId: assertNonEmpty(input.deliveryId, "deliveryId"),
+    channel: input.notification.channel,
+    classification: input.notification.classification,
+    deliveryStatus: input.deliveryStatus,
+    providerMode: input.notification.providerMode,
+    providerRef: input.notification.providerRef,
+    providerMessageId: input.providerMessageId ?? input.notification.providerMessageId,
+    idempotencyKey: input.notification.idempotencyKey,
+    retryCount: input.notification.retryCount,
+    maxRetries: input.notification.maxRetries,
+    failureReasonCode: input.failureReasonCode ?? input.notification.failureReasonCode,
+    safeFailureMessage: input.safeFailureMessage ?? input.notification.safeFailureMessage ?? null,
+    recipientAddressHash: notificationAddressHash(input.notification.recipientAddressRef),
+    templateId: input.notification.templateId,
+    templateVersion: input.notification.templateVersion,
+    templateHash: input.notification.templateHash,
+    recordedAt: input.recordedAt ?? new Date().toISOString(),
+  });
 }

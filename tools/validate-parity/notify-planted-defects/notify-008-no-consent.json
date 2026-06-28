@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-008",
+  "file": "packages/core/src/index.ts",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "export function notificationRequiresConsent",
+      "new": "function notificationConsentNotRequired"
+    }
+  }
+}

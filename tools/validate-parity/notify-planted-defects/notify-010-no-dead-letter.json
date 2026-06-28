@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-010",
+  "file": "capabilities/notify/src/index.ts",
+  "mutation": {
+    "file": "capabilities/notify/src/index.ts",
+    "replace": {
+      "old": "terminal ? \"dead-lettered\" : \"retrying\"",
+      "new": "terminal ? \"failed\" : \"retrying\""
+    }
+  }
+}

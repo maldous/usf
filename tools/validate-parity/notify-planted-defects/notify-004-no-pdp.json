@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-004",
+  "file": "capabilities/notify/src/index.ts",
+  "mutation": {
+    "file": "capabilities/notify/src/index.ts",
+    "replace": {
+      "old": "pdp.decide",
+      "new": "pdp.skip"
+    }
+  }
+}

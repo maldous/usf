@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-001",
+  "file": "packages/core/src/index.ts",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "NOTIFICATION_CLASSIFICATIONS",
+      "new": "NOTIFICATION_CLASSES_REMOVED"
+    }
+  }
+}

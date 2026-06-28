@@ -36,16 +36,17 @@ describe("auxiliary local dev capabilities", () => {
     const mail = new InMemoryMailProvider();
     const notify = new NotificationCapability(mail);
 
-    await notify.sendTenantNotice(tenantA, "Local notice", "hello");
+    await notify.sendTenantNotice(tenantA, "Local notice", "synthetic local body");
 
-    expect(mail.messages).toEqual([
-      {
-        tenantId: "tenant-a",
-        to: "matthew@example.test",
-        subject: "Local notice",
-        body: "hello",
-      },
-    ]);
+    expect(mail.messages).toHaveLength(1);
+    expect(mail.messages[0]).toMatchObject({
+      tenantId: "tenant-a",
+      subject: "redacted-notification-subject",
+      body: "[redacted-notification-body]",
+    });
+    expect(mail.messages[0]?.to).toMatch(/^addr_/);
+    expect(JSON.stringify(mail.messages)).not.toContain("synthetic local body");
+    expect(JSON.stringify(mail.messages)).not.toContain("@example.test");
   });
 
   it("schedules tenant jobs through the in-memory workflow provider", async () => {

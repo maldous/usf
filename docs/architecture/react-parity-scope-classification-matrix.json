@@ -240,23 +240,405 @@
       "react_item_id": "notifications",
       "category": "service",
       "react_paths": [
-        "packages/notifications"
+        "apps/platform-api/src/usecases/notifications.ts",
+        "apps/platform-api/src/adapters/notification-transports.ts",
+        "apps/platform-api/src/usecases/email-sender.ts",
+        "apps/platform-api/src/usecases/webhook-worker.ts",
+        "packages/email-runtime/src/index.ts"
       ],
-      "behaviour_summary": "Multi-transport delivery (SMTP/Brevo/webhook), preferences, channels, dispatcher.",
+      "behaviour_summary": "Controlled tenant-scoped communications: notification intent, message rendering, provider/channel delivery, preferences, suppression, retry/idempotency, and value-free delivery evidence.",
       "usf_status": "partial",
       "usf_paths": [
-        "capabilities/notify",
-        "adapters/mail"
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "capabilities/notify/src/index.ts",
+        "adapters/mail/src/index.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "tools/validate-parity/validate-notify.py",
+        "docs/architecture/notifications-and-messaging-standard.md"
       ],
-      "usf_tests": [],
-      "usf_proofs": [],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof",
+        "make parity (validate-notify USF-NOTIFY-001..016 with planted defects)"
+      ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-133",
+      "blocker": "USF-152",
       "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json; bootstrap notify surface present.",
-      "retry_condition": "Per-domain implementation directive authorises parity-notify; notification behaviours migrated with USF tests."
+      "domain_authorised": true,
+      "evidence": "USF-152 implements foundation notification intent/message/delivery semantics with PDP, audit, provider abstraction, templates, preferences, suppression, delivery jobs, idempotency, retry, dead-letter, and value-free evidence. Deeper deliverability/live-provider/API/UI/bulk/outbox depth remains deferred and explicitly tracked.",
+      "retry_condition": "Deferred notifications depth completes DB-backed outbox/persistence, live provider webhook feedback, deliverability controls, bulk/campaign execution, rate limits, retention purge runtime, and safe future API/UI surfaces; no live provider readiness is claimed."
+    },
+    {
+      "react_item_id": "notifications.model",
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/notifications.ts",
+        "apps/platform-api/src/db/migrations/028-profile-notifications.sql"
+      ],
+      "behaviour_summary": "Notification intent/log/status model with tenant/user scope and sent/suppressed/failed outcomes.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/notify/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "USF defines notification as intent, message as rendered payload, delivery as provider attempt, and delivery evidence as value-free outcome record with exact classifications and statuses.",
+      "retry_condition": "None for this foundation slice."
+    },
+    {
+      "react_item_id": "notifications.template-model",
+      "category": "service",
+      "react_paths": [
+        "packages/adapters-brevo/README.md",
+        "docs/adr/0047-tenant-email-sender-configuration.md"
+      ],
+      "behaviour_summary": "React did not implement a foundation template governance model; USF adds controlled templates required by this directive.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/notify/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Typed templates carry version, hash, classification, allowed channels/classes, render context, allowed variables, approval fields, immutable-after-use posture, and safe renderer.",
+      "retry_condition": "Human approval workflow runtime depth remains deferred beyond approval fields and privileged actions."
+    },
+    {
+      "react_item_id": "notifications.recipient-address-safety",
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/ports/notification-recipient-resolver.ts",
+        "apps/platform-api/src/adapters/notification-transports.ts"
+      ],
+      "behaviour_summary": "Recipient destinations are resolved server-side and missing destinations fail closed; React does not model verified address state in depth.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/notify/src/index.ts",
+        "adapters/mail/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Recipient identity is separate from address_ref; verified/status/source fields are represented; audit/provider evidence stores recipientAddressHash, not raw address.",
+      "retry_condition": "DB-backed recipient registry and richer address verification workflows remain deferred."
+    },
+    {
+      "react_item_id": "notifications.channel-governance",
+      "category": "adapter",
+      "react_paths": [
+        "apps/platform-api/src/adapters/notification-transports.ts",
+        "packages/email-runtime/src/index.ts"
+      ],
+      "behaviour_summary": "React implements email, webhook, and local/in_app channels with local/test transport evidence; SMS and push are future language only.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/mail/src/index.ts",
+        "docs/architecture/notifications-and-messaging-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-153",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "USF defines email, sms, push, in-app, webhook, provider-internal, and test channel governance with allowed classifications, verification rules, size limits, retry, suppression, and redaction posture. Runtime delivery adapter is in-memory/test only.",
+      "retry_condition": "Implement authorised live/composed channel adapters only under a future directive; current slice makes no live delivery claim."
+    },
+    {
+      "react_item_id": "notifications.provider-abstraction",
+      "category": "provider",
+      "react_paths": [
+        "apps/platform-api/src/config/notification-config.ts",
+        "apps/platform-api/src/usecases/email-sender.ts",
+        "apps/platform-api/src/adapters/smtp-email-adapter.ts"
+      ],
+      "behaviour_summary": "React has typed notification/email sender config, local SMTP/Mailpit proof, redacted settings, and write-only credentials.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/ports/src/index.ts",
+        "adapters/mail/src/index.ts",
+        "capabilities/config/src/registry.ts",
+        "capabilities/notify/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof",
+        "make config-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "NotificationProvider port, in-memory provider, secret-ref credential config, provider modes in-memory/local-test/mock/live-external-deferred, and fail-closed config validation are implemented.",
+      "retry_condition": "Live external providers, SMTP/Brevo/Mailpit readiness, and provider webhooks remain deferred."
+    },
+    {
+      "react_item_id": "notifications.delivery-job-idempotency-retry",
+      "category": "job",
+      "react_paths": [
+        "apps/platform-api/src/usecases/webhook-worker.ts",
+        "apps/platform-api/src/usecases/webhooks.ts",
+        "docs/adr/0052-webhook-delivery-worker.md"
+      ],
+      "behaviour_summary": "Webhook delivery queue claims rows, signs attempts, retries with backoff, records results, and dead-letters after bounded attempts.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "capabilities/notify/src/index.ts",
+        "capabilities/jobs/src/job-service.ts",
+        "packages/core/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts",
+        "tests/capabilities/jobs-workflows.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof",
+        "make jobs-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Notification delivery enqueues notification.delivery operational jobs with notification-job classification, tenant scope, idempotency key, duplicate suppression, bounded retry, and dead-letter evidence.",
+      "retry_condition": "Durable DB outbox/inbox persistence is deferred."
+    },
+    {
+      "react_item_id": "notifications.preferences-consent-suppression",
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/notifications.ts",
+        "apps/platform-api/src/adapters/postgres-notification-repository.ts"
+      ],
+      "behaviour_summary": "React preferences are per user/tenant/channel/category enable flags; disabled preference suppresses delivery.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/notify/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "USF represents consent_status, preference_scope/source, unsubscribe_status, suppression_status/reason/source, bounce/complaint/do_not_contact posture, fail-closed marketing/bulk consent, and suppression audit.",
+      "retry_condition": "Full user self-service/API preference surfaces remain deferred."
+    },
+    {
+      "react_item_id": "notifications.bounce-complaint-feedback",
+      "category": "event",
+      "react_paths": [
+        "docs/adr/0047-tenant-email-sender-configuration.md",
+        "docs/evidence/configuration/tenant-email-sender-configuration.md"
+      ],
+      "behaviour_summary": "Bounce and complaint handling are follow-up/deliverability posture in React evidence, not implemented runtime feedback handling.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/notifications-and-messaging-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-153",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Feedback event types, bounce/complaint status fields, and suppression update posture are represented. Live inbound provider webhook handling, open/click tracking, and deliverability automation are deferred.",
+      "retry_condition": "Future directive authorises inbound feedback webhooks, privacy controls, and suppression updates from provider feedback."
+    },
+    {
+      "react_item_id": "notifications.unsubscribe-posture",
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/notifications.ts",
+        "docs/evidence/platform/phase-6-profile-notifications.md"
+      ],
+      "behaviour_summary": "React preference disable is not a full unsubscribe governance model.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/notify/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-153",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "unsubscribe_status is represented and marketing/bulk sends fail closed when unsubscribed. End-user unsubscribe routes and feedback ingestion are deferred.",
+      "retry_condition": "Implement governed unsubscribe API/feedback handling in a future API/UI surface directive."
+    },
+    {
+      "react_item_id": "notifications.mandatory-security",
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/notifications.ts",
+        "packages/audit-events/src/index.ts"
+      ],
+      "behaviour_summary": "React has security-like notification categories but not the expanded mandatory security notification policy model.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/notify/src/index.ts",
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Security/authentication/authorization classifications are explicit, opt-out bypass requires explicit policy, and failures produce evidence.",
+      "retry_condition": "Specific recipient-set policies for individual security events are deferred to the producing domains."
+    },
+    {
+      "react_item_id": "notifications.bulk-rate-retention",
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/support-announcements.ts",
+        "docs/adr/0066-support-administration-and-break-glass-architecture.md"
+      ],
+      "behaviour_summary": "Announcements are bulk-like in React but do not provide mature campaign consent, rate limit, cancellation, retention, or purge controls.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/notifications-and-messaging-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-153",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Bulk classification, access action, retention fields, legal_hold, purge_allowed_at, and rate-limit posture are defined. Bulk/campaign execution, quota runtime, and purge runtime are deferred.",
+      "retry_condition": "Future directive authorises campaign/bulk execution, quotas, abuse controls, retention purge, and legal-hold workflows."
+    },
+    {
+      "react_item_id": "notifications.audit-evidence-redaction",
+      "category": "audit",
+      "react_paths": [
+        "packages/audit-events/src/index.ts",
+        "apps/platform-api/src/usecases/notifications.ts",
+        "apps/platform-api/src/usecases/email-sender.ts",
+        "apps/platform-api/src/usecases/webhooks.ts"
+      ],
+      "behaviour_summary": "React audits preference changes, test sends, email sender changes/tests, webhooks, and dispatch markers with redaction posture.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/notify/src/index.ts",
+        "capabilities/audit/src"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts",
+        "tests/capabilities/audit-evidence.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof",
+        "make audit-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-152",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Notification lifecycle events are canonical and value-free; audit metadata stores identifiers, hashes, classifications, outcomes, and safe summaries, not raw body/address/provider credentials.",
+      "retry_condition": "Audit export and advanced audit-of-notification-access surfaces remain governed by audit/API deferred work."
+    },
+    {
+      "react_item_id": "notifications.future-ui-api-surfaces",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx",
+        "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
+      ],
+      "behaviour_summary": "React exposes preference, readiness, test-send, email sender, and webhook control-plane routes plus UI tests.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "usf_proofs": [
+        "make notify-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-153",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Foundation behaviours from UI/control-plane tests are rewritten as capability tests. No notification UI, browser E2E, or HTTP notification API is implemented in this slice.",
+      "retry_condition": "Future API/UI directive authorises redacted PDP-protected notification routes/OpenAPI and downstream UI consumption."
     },
     {
       "react_item_id": "api-routes-openapi",

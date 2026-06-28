@@ -1,0 +1,132 @@
+[
+  {
+    "usf_item_id": "semantic-contract.notification-delivery-and-preferences-and-channels",
+    "category": "notification-model",
+    "usf_paths": ["spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json", "spec/instances/bootstrap-mapping/notification-delivery-and-preferences-and-channels.json"],
+    "usf_tests": [],
+    "usf_proofs": [],
+    "behaviour_summary": "Source-backed draft contract covers preferences, channels, delivery attempts, readiness, suppression, and audit posture.",
+    "coverage_status": "semantic-only",
+    "notes": "Lineage evidence; fresh USF proof added in this branch."
+  },
+  {
+    "usf_item_id": "capability.notify.controlled-communications",
+    "category": "notification-model",
+    "usf_paths": ["packages/core/src/index.ts", "capabilities/notify/src/index.ts"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Controlled notification intent/message/delivery/evidence model with exact classification, tenant scope, safe views, and lifecycle state.",
+    "coverage_status": "migrated",
+    "notes": "Replaces the prior thin tenant notice wrapper."
+  },
+  {
+    "usf_item_id": "template-model.versioned-safe-renderer",
+    "category": "template",
+    "usf_paths": ["packages/core/src/index.ts", "capabilities/notify/src/index.ts"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Typed templates with version, hash, classification, allowed variables, allowed channels/classes, approval fields, immutable-after-use posture, and no arbitrary code execution.",
+    "coverage_status": "migrated",
+    "notes": "Approval workflow runtime remains deferred."
+  },
+  {
+    "usf_item_id": "recipient.identity-address-safety",
+    "category": "recipient",
+    "usf_paths": ["packages/core/src/index.ts", "capabilities/notify/src/index.ts", "adapters/mail/src/index.ts"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Recipient identity separated from address_ref with verification/status/source fields and address hashing in provider/audit evidence.",
+    "coverage_status": "migrated",
+    "notes": "No DB-backed address registry yet."
+  },
+  {
+    "usf_item_id": "channel.governance-model",
+    "category": "channel",
+    "usf_paths": ["packages/core/src/index.ts", "docs/architecture/notifications-and-messaging-standard.md"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Channels email, sms, push, in-app, webhook, provider-internal, and test are modeled with provider modes, allowed classifications, verification, size, retry, suppression, and redaction posture.",
+    "coverage_status": "partial",
+    "notes": "Only in-memory/local-test provider runtime is implemented."
+  },
+  {
+    "usf_item_id": "provider.notification-port-in-memory",
+    "category": "provider-config",
+    "usf_paths": ["packages/ports/src/index.ts", "adapters/mail/src/index.ts", "capabilities/config/src/registry.ts", "capabilities/notify/src/index.ts"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts", "tests/capabilities/config-secrets.test.ts"],
+    "usf_proofs": ["make notify-proof", "make config-proof"],
+    "behaviour_summary": "NotificationProvider port and in-memory adapter use secret-reference provider config, fail-closed validation, local/test/mock modes, and live-external-deferred posture.",
+    "coverage_status": "migrated",
+    "notes": "No live external provider implementation or readiness claim."
+  },
+  {
+    "usf_item_id": "delivery-job.notification-delivery",
+    "category": "delivery-job",
+    "usf_paths": ["capabilities/notify/src/index.ts", "capabilities/jobs/src/job-service.ts"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts", "tests/capabilities/jobs-workflows.test.ts"],
+    "usf_proofs": ["make notify-proof", "make jobs-proof"],
+    "behaviour_summary": "notification.delivery jobs use notification-job classification, tenant scope, service actors through PR #98 substrate, idempotency key, and value-free payload refs.",
+    "coverage_status": "migrated",
+    "notes": "Transactional DB outbox remains deferred."
+  },
+  {
+    "usf_item_id": "retry-idempotency-dead-letter",
+    "category": "retry",
+    "usf_paths": ["packages/core/src/index.ts", "capabilities/notify/src/index.ts", "capabilities/jobs/src/job-service.ts"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Duplicate delivery submissions deduplicate; retries are bounded; provider failures are redacted; exhausted retry records dead-letter evidence.",
+    "coverage_status": "migrated",
+    "notes": "Provider-specific circuit-breaker runtime remains deferred."
+  },
+  {
+    "usf_item_id": "preferences-consent-suppression",
+    "category": "preference",
+    "usf_paths": ["packages/core/src/index.ts", "capabilities/notify/src/index.ts"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Preferences, consent, unsubscribe status, suppression status/reason/source, bounce/complaint posture, and do_not_contact are represented and audited.",
+    "coverage_status": "migrated",
+    "notes": "Self-service API/UI surfaces deferred."
+  },
+  {
+    "usf_item_id": "bounce-complaint-feedback-posture",
+    "category": "bounce",
+    "usf_paths": ["packages/core/src/index.ts", "docs/architecture/notifications-and-messaging-standard.md"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Feedback event types and suppression status fields are represented; live inbound provider webhook handling is deferred.",
+    "coverage_status": "deferred",
+    "notes": "No open/click tracking; privacy-sensitive tracking disabled by default in standard."
+  },
+  {
+    "usf_item_id": "notification-audit-redaction",
+    "category": "audit",
+    "usf_paths": ["packages/core/src/index.ts", "capabilities/notify/src/index.ts", "capabilities/audit/src"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof", "make audit-proof"],
+    "behaviour_summary": "Notification lifecycle audit events are canonical; audit metadata is value-free and excludes raw address, body, provider credentials, and raw provider errors.",
+    "coverage_status": "migrated",
+    "notes": "Advanced audit export/API remains deferred."
+  },
+  {
+    "usf_item_id": "api-surface.deferred",
+    "category": "api-surface",
+    "usf_paths": ["docs/architecture/notifications-and-messaging-standard.md"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof"],
+    "behaviour_summary": "Future API/UI notification behaviours are documented and proven at capability level only; no notification HTTP routes or UI are implemented.",
+    "coverage_status": "deferred",
+    "notes": "OpenAPI remains free of raw notification data."
+  },
+  {
+    "usf_item_id": "notify-proof-validator-matrix",
+    "category": "proof",
+    "usf_paths": ["packages/proof/src/notifications-messaging-proof.ts", "tools/validate-parity/validate-notify.py", "docs/architecture/react-parity-scope-classification-matrix.json"],
+    "usf_tests": ["tests/capabilities/notifications-messaging.test.ts"],
+    "usf_proofs": ["make notify-proof", "make parity"],
+    "behaviour_summary": "Fresh proof, validator, planted defects, source-use, and parity matrix backing exist for the notification/messaging slice.",
+    "coverage_status": "migrated",
+    "notes": "Validator selftests pass."
+  }
+]

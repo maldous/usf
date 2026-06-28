@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-NOTIFY-014",
+  "mutation": {
+    "matrixNotificationsSet": {
+      "domain_authorised": false,
+      "usf_tests": [],
+      "usf_proofs": []
+    }
+  }
+}

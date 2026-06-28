@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-002",
+  "file": "docs/architecture/notifications-and-messaging-standard.md",
+  "mutation": {
+    "file": "docs/architecture/notifications-and-messaging-standard.md",
+    "replace": {
+      "old": "Do not claim ISO certification",
+      "new": "ISO certification is claimed"
+    }
+  }
+}
