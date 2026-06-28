@@ -14,8 +14,10 @@ import type {
   IdentityClaims,
   PolicyDecision,
   SecretReference,
+  Session,
   TenantContext,
   TenantMembership,
+  VerifiedKeycloakToken,
 } from "@foundation/core";
 
 export interface IdentityProvider {
@@ -84,6 +86,26 @@ export interface IdentityDirectory {
     externalSubject: string;
     identityProvider: string;
   }): ActorIdentity | undefined;
+}
+
+// Keycloak-brokered identity ports (parity-auth-keycloak-broker, USF-133 / ADR 0012).
+// Keycloak is the only USF-facing issuer; USF validates Keycloak-issued tokens only.
+
+/** Validates a Keycloak-issued compact JWT and returns a VerifiedKeycloakToken.
+ *  MUST fail closed by throwing KeycloakTokenError on any invalid issuer (incl. a
+ *  brokered-upstream issuer presented directly), audience, signature, algorithm,
+ *  key, expiry, or not-before. Never returns an unverified token. */
+export interface KeycloakTokenVerifier {
+  verify(token: string): VerifiedKeycloakToken;
+}
+
+/** A tenant-bound session store. Holds only opaque-hashed identifiers (never raw
+ *  tokens/cookies). Capabilities depend on this port, not a concrete store. */
+export interface SessionStore {
+  create(session: Session): void;
+  get(sessionId: string): Session | undefined;
+  put(session: Session): void;
+  forActor(actorId: string): readonly Session[];
 }
 
 // Audit / evidence ports (parity-audit, USF-142). Capabilities depend on these

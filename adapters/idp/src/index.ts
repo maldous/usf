@@ -22,3 +22,15 @@ export const keycloakTestProvider = Object.freeze({
   issuer: "http://localhost:8090/realms/foundation",
   tenantClaim: "tenant_id",
 });
+
+export {
+  createKeycloakTokenVerifier,
+  type Jwk,
+  type Jwks,
+  type KeycloakVerifierConfig,
+} from "./keycloak-verifier.ts";
+export {
+  HermeticKeycloak,
+  type HermeticForgeOptions,
+  type HermeticTokenInput,
+} from "./hermetic-keycloak.ts";

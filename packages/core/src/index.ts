@@ -306,6 +306,37 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "feature_flag.evaluated": { category: "configuration", severity: "debug" },
   "feature_flag.changed": { category: "configuration", severity: "warning", reserved: true },
   "provider_config.changed": { category: "configuration", severity: "warning", reserved: true },
+  // Keycloak-brokered authentication/identity (parity-auth-keycloak-broker, USF-133).
+  // Emitted by this slice (value-free; never a token/cookie/secret):
+  "authentication.login.failed": { category: "authentication", severity: "warning" },
+  "authentication.logout": { category: "authentication", severity: "info" },
+  "authentication.session.created": { category: "authentication", severity: "info" },
+  "authentication.session.revoked": { category: "authentication", severity: "warning" },
+  "authentication.session.expired": { category: "authentication", severity: "notice" },
+  "authentication.token.denied": { category: "security", severity: "warning" },
+  "authentication.keycloak.denied": { category: "security", severity: "warning" },
+  "authentication.brokered_identity.denied": { category: "security", severity: "warning" },
+  "authentication.tenant_selection.denied": { category: "tenant-context", severity: "warning" },
+  // Identity lifecycle / deprovisioning — defined now, deprovisioning runtime DEFERRED:
+  "authentication.identity.linked": { category: "admin", severity: "warning", reserved: true },
+  "authentication.identity.unlinked": { category: "admin", severity: "warning", reserved: true },
+  "authentication.identity.disabled": { category: "admin", severity: "warning", reserved: true },
+  "authentication.identity.suspended": { category: "admin", severity: "warning", reserved: true },
+  // Tenant self-service SSO control plane — DEFINED for forward-compat; the governed
+  // request/approve/verify/activate runtime is DEFERRED to a Linear blocker.
+  "tenant_sso.requested": { category: "admin", severity: "notice", reserved: true },
+  "tenant_sso.configured": { category: "admin", severity: "warning", reserved: true },
+  "tenant_sso.domain_verified": { category: "admin", severity: "notice", reserved: true },
+  "tenant_sso.activated": { category: "admin", severity: "warning", reserved: true },
+  "tenant_sso.suspended": { category: "admin", severity: "warning", reserved: true },
+  "tenant_sso.revoked": { category: "admin", severity: "high", reserved: true },
+  "tenant_sso.denied": { category: "security", severity: "warning", reserved: true },
+  // Identity threat/abuse detection hooks — reserved (no live SIEM in this slice):
+  "security.broker_link_collision": { category: "security", severity: "high", reserved: true },
+  "security.domain_claim_conflict": { category: "security", severity: "high", reserved: true },
+  "security.stale_session_used": { category: "security", severity: "high", reserved: true },
+  "security.revoked_membership_used": { category: "security", severity: "high", reserved: true },
+  "security.token_replay_suspected": { category: "security", severity: "critical", reserved: true },
 });
 
 // Metadata keys (matched case-insensitively as substrings) that MUST NEVER appear
@@ -1423,4 +1454,160 @@ export function toSafeFileView(meta: FileMetadata): SafeFileView {
     createdAt: meta.createdAt,
     verificationStatus: meta.checksumSha256 ? "checksum-recorded" : "unverified",
   };
+}
+
+// ===========================================================================
+// Keycloak-brokered authentication & identity (parity-auth-keycloak-broker,
+// USF-133 / ADR 0012). Constitutional boundary (Charter §6, ADR 0010/0012):
+//   * Keycloak is the ONLY USF-facing identity provider and token issuer.
+//   * USF validates Keycloak-issued tokens ONLY (local OIDC/JWT validation).
+//   * Upstream external IdPs exist only as opaque brokered provenance BEHIND
+//     Keycloak; their tokens are never accepted, and no individual upstream
+//     provider is modelled, named, configured, or special-cased in USF.
+//   * Identity is authentication input; the PDP (ADR 0010) remains the sole
+//     authorization authority. A Keycloak claim/role/group or a broker alias
+//     never authorizes on its own.
+//   * Email is never the primary actor identity (realm + subject is).
+// ===========================================================================
+
+/** Identity assurance ladder (NIST-AAL-inspired; informs PDP, never replaces it).
+ *  Step-up/MFA live flow is DEFERRED — see the Auth & Identity Standard. */
+export const ASSURANCE_LEVELS = Object.freeze([
+  "loa0-unknown",
+  "loa1-password-or-brokered-basic",
+  "loa2-mfa-or-stronger",
+  "loa3-phishing-resistant-or-admin-approved",
+  "loa4-high-assurance-admin",
+] as const);
+export type AssuranceLevel = (typeof ASSURANCE_LEVELS)[number];
+
+/** USF accepts exactly one signing algorithm family for Keycloak tokens. `none`,
+ *  HS*, and anything outside this allow-list fail closed. */
+export const KEYCLOAK_TOKEN_ALG_ALLOWLIST = Object.freeze(["RS256"] as const);
+export type KeycloakTokenAlg = (typeof KEYCLOAK_TOKEN_ALG_ALLOWLIST)[number];
+
+/** Why a presented token was rejected. Value-free and safe for audit/logs/errors. */
+export type KeycloakDenyReason =
+  | "malformed-token"
+  | "unsupported-algorithm"
+  | "unknown-key"
+  | "invalid-signature"
+  | "issuer-not-keycloak"
+  | "brokered-upstream-issuer-presented-directly"
+  | "audience-mismatch"
+  | "expired"
+  | "not-yet-valid"
+  | "issued-in-future"
+  | "missing-subject"
+  | "missing-realm";
+
+export class KeycloakTokenError extends Error {
+  readonly reasonCode: KeycloakDenyReason;
+  constructor(reasonCode: KeycloakDenyReason) {
+    // Message carries only the value-free reason code; never the token.
+    super(`keycloak token rejected: ${reasonCode}`);
+    this.name = "KeycloakTokenError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+/** Opaque brokered-upstream provenance carried THROUGH Keycloak. Provenance only —
+ *  never an authorization input. No individual upstream provider is named/modelled. */
+export interface BrokeredIdentityProvenance {
+  readonly brokerAlias: string | null;
+  readonly brokeredSubjectRef: string | null;
+  readonly brokeredIssuerRef: string | null;
+  readonly emailVerifiedUpstream: boolean;
+}
+
+/** A validated Keycloak-issued token. USF only ever holds verified tokens of this
+ *  shape; raw token strings never enter the domain, audit, logs, errors, or APIs. */
+export interface VerifiedKeycloakToken {
+  readonly issuer: string;
+  readonly keycloakRealm: string;
+  readonly keycloakSubject: string;
+  readonly audience: readonly string[];
+  readonly email: string | null;
+  readonly emailVerified: boolean;
+  readonly assuranceLevel: AssuranceLevel;
+  readonly issuedAt: number;
+  readonly notBefore: number | null;
+  readonly expiresAt: number;
+  readonly keycloakSessionState: string | null;
+  readonly provenance: BrokeredIdentityProvenance;
+  // Claims are authentication inputs ONLY; the PDP never trusts them as grants.
+  readonly realmRoleClaims: readonly string[];
+  readonly groupClaims: readonly string[];
+}
+
+export const SESSION_STATUSES = Object.freeze([
+  "created",
+  "active",
+  "expired",
+  "revoked",
+  "logged_out",
+  "invalid",
+  "unknown",
+] as const);
+export type SessionStatus = (typeof SESSION_STATUSES)[number];
+
+export const SESSION_RISK_LEVELS = Object.freeze(["low", "elevated", "high"] as const);
+export type SessionRiskLevel = (typeof SESSION_RISK_LEVELS)[number];
+
+/** A tenant-bound session. Holds OPAQUE hashes of the Keycloak subject/session, never
+ *  raw tokens, cookies, refresh tokens, or credentials. */
+export interface Session {
+  readonly sessionId: string;
+  readonly actorId: string;
+  readonly keycloakRealm: string;
+  readonly keycloakSubjectHash: string;
+  readonly keycloakSessionIdHash: string | null;
+  readonly selectedTenantId: string | null;
+  readonly assuranceLevel: AssuranceLevel;
+  readonly status: SessionStatus;
+  readonly riskLevel: SessionRiskLevel;
+  readonly authenticationTime: string;
+  readonly lastActivityAt: string;
+  readonly expiresAt: string;
+  readonly idleExpiresAt: string;
+  readonly revokedAt: string | null;
+  readonly revocationReason: string | null;
+}
+
+/** Least-disclosure projection of a session for API output: no hashes, no realm
+ *  internals, no broker internals — only what a UI safely needs. */
+export interface SafeSessionView {
+  readonly sessionId: string;
+  readonly actorId: string;
+  readonly selectedTenantId: string | null;
+  readonly assuranceLevel: AssuranceLevel;
+  readonly status: SessionStatus;
+  readonly riskLevel: SessionRiskLevel;
+  readonly authenticationTime: string;
+  readonly expiresAt: string;
+}
+
+export function toSafeSessionView(session: Session): SafeSessionView {
+  return Object.freeze({
+    sessionId: session.sessionId,
+    actorId: session.actorId,
+    selectedTenantId: session.selectedTenantId,
+    assuranceLevel: session.assuranceLevel,
+    status: session.status,
+    riskLevel: session.riskLevel,
+    authenticationTime: session.authenticationTime,
+    expiresAt: session.expiresAt,
+  });
+}
+
+/** Opaque, stable, non-reversible hash for identifiers that must appear in
+ *  evidence (subject/session) without disclosing the raw value. */
+export function opaqueHash(value: string): string {
+  return createHash("sha256").update(assertNonEmpty(value, "opaqueHash.value")).digest("hex");
+}
+
+/** The stable external-subject key for an actor: Keycloak realm + subject. Email is
+ *  deliberately NOT part of the key (duplicate emails must not collapse actors). */
+export function keycloakExternalSubject(realm: string, subject: string): string {
+  return `keycloak:${assertNonEmpty(realm, "realm")}:${assertNonEmpty(subject, "subject")}`;
 }

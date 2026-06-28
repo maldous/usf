@@ -30,3 +30,28 @@ export function createAuthService(deps: {
     },
   };
 }
+
+// Keycloak-brokered authentication/identity/session (parity-auth-keycloak-broker, USF-133).
+export {
+  actorFromVerifiedToken,
+  KEYCLOAK_IDENTITY_PROVIDER,
+  resolveActorFromToken,
+  type IdentityDenyReason,
+  type IdentityResolution,
+  type ResolveActorOptions,
+} from "./identity.ts";
+export {
+  createSessionService,
+  InMemorySessionStore,
+  type SessionDenyReason,
+  type SessionService,
+  type SessionServiceDeps,
+  type SessionValidation,
+} from "./session.ts";
+export {
+  createKeycloakAuthService,
+  type AuthenticateOutcome,
+  type KeycloakAuthDeps,
+  type KeycloakAuthService,
+  type TenantSelectionOutcome,
+} from "./keycloak-auth.ts";
