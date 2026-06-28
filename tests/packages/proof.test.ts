@@ -4,6 +4,7 @@ import {
   runBootstrapProof,
   runDevSmoke,
   runJobsWorkflowsProof,
+  runProviderAdaptersProof,
 } from "@foundation/proof";
 import { describe, expect, it } from "vitest";
 
@@ -61,6 +62,19 @@ describe("api/contracts proof", () => {
       publicApiReadinessClaim: false,
       externalSdkReadinessClaim: false,
       productionLiveClaim: false,
+    });
+  });
+});
+
+describe("provider adapters/modes proof", () => {
+  it("proves provider registry, mode boundaries, redaction, and import boundaries without live claims", async () => {
+    await expect(runProviderAdaptersProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      liveProviderReadinessClaim: false,
+      liveExternalProviderReadinessClaim: false,
+      productionLiveClaim: false,
+      supplierApprovalClaim: false,
     });
   });
 });

@@ -1,9 +1,14 @@
 import { buildApi } from "@foundation/app-api";
-import { DEV_ACTOR_ID, DEV_TENANT_ID } from "@foundation/app-api/runtime";
+import { DEV_ACTOR_ID, DEV_SECURITY_ACTOR_ID, DEV_TENANT_ID } from "@foundation/app-api/runtime";
 import { API_ROUTE_CONTRACTS } from "@foundation/contracts";
 import { describe, expect, it } from "vitest";
 
 const devHeaders = { "x-dev-tenant-id": DEV_TENANT_ID, "x-dev-actor-id": DEV_ACTOR_ID };
+const securityHeaders = {
+  "x-dev-tenant-id": DEV_TENANT_ID,
+  "x-dev-actor-id": DEV_SECURITY_ACTOR_ID,
+  "x-dev-roles": "security-admin",
+};
 
 function expectSafeErrorEnvelope(body: Record<string, unknown>, status: number) {
   expect(body).toMatchObject({
@@ -107,6 +112,60 @@ describe("API contracts runtime surface", () => {
     });
     expect(conflict.statusCode).toBe(409);
     expectSafeErrorEnvelope(conflict.json(), 409);
+
+    await app.close();
+  });
+
+  it("guards and redacts provider status surfaces", async () => {
+    const app = buildApi();
+    await app.ready();
+
+    const denied = await app.inject({
+      method: "GET",
+      url: `/v1/providers?tenantId=${DEV_TENANT_ID}`,
+      headers: devHeaders,
+    });
+    expect(denied.statusCode).toBe(403);
+    expectSafeErrorEnvelope(denied.json(), 403);
+
+    const listed = await app.inject({
+      method: "GET",
+      url: `/v1/providers?tenantId=${DEV_TENANT_ID}`,
+      headers: securityHeaders,
+    });
+    expect(listed.statusCode).toBe(200);
+    const listedBody = listed.json();
+    expect(listedBody.providers.length).toBeGreaterThan(0);
+    const listedText = JSON.stringify(listedBody).toLowerCase();
+    expect(listedText).not.toContain("secret://");
+    expect(listedText).not.toContain("endpoint://");
+    expect(listedText).not.toContain("bearer ");
+    expect(listedText).not.toContain("http://");
+    expect(listedText).not.toContain("https://");
+    expect(
+      listedBody.providers.every(
+        (provider: { liveReadinessClaim: boolean }) => provider.liveReadinessClaim === false,
+      ),
+    ).toBe(true);
+    expect(
+      listedBody.providers.every(
+        (provider: { productionReadinessClaim: boolean }) =>
+          provider.productionReadinessClaim === false,
+      ),
+    ).toBe(true);
+
+    const detail = await app.inject({
+      method: "GET",
+      url: `/v1/providers/notification-delivery-in-memory?tenantId=${DEV_TENANT_ID}`,
+      headers: securityHeaders,
+    });
+    expect(detail.statusCode).toBe(200);
+    expect(detail.json().provider).toMatchObject({
+      providerId: "notification-delivery-in-memory",
+      credentialPosture: "secret-reference-present",
+      liveReadinessClaim: false,
+      productionReadinessClaim: false,
+    });
 
     await app.close();
   });

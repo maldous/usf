@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-missing-registry",
+  "expectedRuleId": "USF-PROVIDERS-001",
+  "edits": [
+    {
+      "target": "packages/core/src/index.ts",
+      "old": "export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[]",
+      "new": "export const PROVIDER_REGISTRY_MISSING: readonly ProviderRegistryEntry[]"
+    }
+  ]
+}

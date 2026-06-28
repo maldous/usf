@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-missing-proof-wiring",
+  "expectedRuleId": "USF-PROVIDERS-005",
+  "edits": [
+    {
+      "target": "Makefile",
+      "old": "providers-proof:",
+      "new": "providers-proof-missing:"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-missing-provider-route-action",
+  "expectedRuleId": "USF-PROVIDERS-007",
+  "edits": [
+    {
+      "target": "apps/api/src/server.ts",
+      "old": "\"provider.list\",",
+      "new": "\"provider.list.missing\","
+    }
+  ]
+}
