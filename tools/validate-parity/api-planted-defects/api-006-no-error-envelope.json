@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-006",
+  "mutation": {
+    "file": "packages/contracts/src/index.ts",
+    "replace": {
+      "old": "ApiErrorResponseSchema",
+      "new": "RawErrorResponseSchema"
+    }
+  }
+}

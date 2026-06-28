@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-004",
+  "mutation": {
+    "file": "packages/openapi/src/check.ts",
+    "replace": {
+      "old": "checkRouteCoverage",
+      "new": "skipRouteCoverage"
+    }
+  }
+}

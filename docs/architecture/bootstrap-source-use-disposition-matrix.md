@@ -122,6 +122,26 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 | `tools/validate-parity/validate-notify.py` | source-derived-rewrite | Existing parity validator pattern and notification validator expectations | Static parity validator for controlled notification invariants. |
 | `tools/validate-parity/notify-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk notification validator rules fire. |
 
+## Parity API/Contracts Additions
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `docs/architecture/api-and-contract-surface-standard.md` | source-derived-rewrite | React API route, OpenAPI, contract, guard, error, pagination, idempotency, and contract-governance lineage plus USF-154 enterprise controls | Defines API as a security and contract boundary for the local/dev/test foundation surface. |
+| `docs/architecture/parity-api-contracts-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the API/contracts slice. |
+| `packages/contracts/src/api-surface.ts` | source-derived-rewrite | React route catalogue and OpenAPI drift evidence | Route metadata table covering classification, capability mapping, tenant/auth/PDP posture, idempotency, pagination, lifecycle, examples, and future UI/API metadata. |
+| `packages/contracts/src/index.ts` | source-derived-rewrite | React contract/schema and error-envelope lineage | Adds the safe API error envelope plus jobs and notifications request/response schemas. |
+| `apps/api/src/runtime.ts` | source-derived-rewrite | React runtime composition lineage and PR #98/#99 substrates | Wires jobs and notifications capabilities into the local dev/test API runtime through USF ports. |
+| `apps/api/src/server.ts` | source-derived-rewrite | React route guard, tenant guard, safe error, correlation, idempotency, and API-route lineage | Implements guarded jobs and notifications routes plus safe error and idempotency semantics. |
+| `adapters/store/src/index.ts` | source-derived-rewrite | React API pagination and tenant isolation behaviour evidence | Keeps file pagination cursors opaque by avoiding raw tenant IDs in cursor payloads. |
+| `packages/openapi/src/index.ts` | source-derived-rewrite | React OpenAPI contract/drift behaviour evidence | Generates OpenAPI 3.1 from USF route metadata and schemas. |
+| `packages/openapi/src/check.ts` | source-derived-rewrite | React OpenAPI drift gate and schema coverage validator lineage | Checks generated/committed OpenAPI parity, route coverage, operation IDs, metadata, schema refs, example safety, and boundary claims. |
+| `packages/openapi/openapi.json` | evidence-only-support | OpenAPI drift hard-gate output from USF metadata | Committed machine-readable local/dev/test API contract surface. |
+| `packages/proof/src/api-contracts-proof.ts` | source-derived-rewrite | React API proof and route behaviour lineage | Fresh hermetic proof for guarded tenant-safe API contracts, OpenAPI safety, idempotency, pagination, and foundation route integration. |
+| `tests/apps/api-contracts.test.ts` | source-derived-rewrite | React API route, guard, error, idempotency, and pagination tests rewritten as foundation tests | Proves runtime API contract behaviour without UI/Playwright. |
+| `tests/packages/openapi.test.ts` | source-derived-rewrite | React OpenAPI drift and schema coverage tests | Proves operation ID uniqueness, route/OpenAPI mapping, metadata, synthetic examples, and no public readiness overclaim. |
+| `tools/validate-parity/validate-api.py` | source-derived-rewrite | Existing parity validator pattern and API validator expectations | Static parity validator for API/contracts invariants. |
+| `tools/validate-parity/api-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk API validator rules fire. |
+
 ## Boundary Confirmation
 
 No file in this matrix is copied from `../react`; no target path mirrors a historical source path; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.

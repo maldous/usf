@@ -1,0 +1,69 @@
+# Parity API Contracts Source-Use Disposition Matrix
+
+|                    |                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------ |
+| Document type      | Architecture / source-use disposition matrix                                         |
+| Status             | Draft / USF-154 implementation evidence                                              |
+| Authority level    | Reviewable source-use matrix; subordinate to Charter, Authority Model, ADRs, validators, and proof evidence |
+| Issue scope        | USF-154, child of USF-133                                                            |
+| Historical lineage | `../react` is rank-6 evidence only                                                   |
+
+This matrix records the treatment of files touched for the API/routes/OpenAPI/contracts parity domain. No React runtime/application code is copied. No React path is mirrored. No public API or production readiness is claimed. No staging, deployment, gateway, external-client SDK, external developer platform, production-live, or regulatory/certification readiness is claimed.
+
+## Runtime And Contract Files
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `packages/contracts/src/api-surface.ts` | source-derived-rewrite | React route catalogue, OpenAPI drift gate, API guard, error, pagination, and contract lineage | Fresh USF route metadata model with classifications, capability mapping, tenant/auth/PDP posture, idempotency, pagination, lifecycle, compatibility, security, CORS/CSRF, field exposure, observability, gateway posture, and synthetic examples. |
+| `packages/contracts/src/index.ts` | source-derived-rewrite | React request/response schema and error-envelope lineage; prior USF contracts | Adds safe API error envelope plus job and notification request/response schemas for the contract surface. |
+| `apps/api/src/runtime.ts` | source-derived-rewrite | React API composition and provider bootstrap lineage; PR #98 and PR #99 substrates | Wires jobs and notifications capabilities into the local dev/test API runtime through USF ports and in-memory providers. |
+| `apps/api/src/server.ts` | source-derived-rewrite | React route guard, tenant guard, safe error, idempotency, and API-route lineage | Implements guarded tenant-safe routes, safe error envelope conversion, request/correlation IDs, API idempotency ledger, jobs routes, and notifications routes. |
+| `adapters/store/src/index.ts` | source-derived-rewrite | React pagination and tenant isolation behaviour evidence | Keeps file pagination cursors opaque by avoiding raw tenant IDs in cursor payloads. |
+| `packages/openapi/src/index.ts` | source-derived-rewrite | React OpenAPI contract/drift behaviour evidence | Generates the OpenAPI 3.1 surface from USF route metadata and schemas with safe examples and no public/production readiness claim. |
+| `packages/openapi/src/check.ts` | source-derived-rewrite | React OpenAPI drift gate and schema coverage validator lineage | Checks generated/committed OpenAPI parity, route coverage, operation IDs, metadata, schema refs, example safety, and overclaim boundaries. |
+| `packages/openapi/openapi.json` | evidence-only-support | OpenAPI drift hard-gate output from USF metadata | Committed machine-readable local/dev/test contract surface. |
+| `packages/openapi/package.json` | new-with-rationale | OpenAPI checker subpath export required by proof | Exposes the checker for the proof without adding an external SDK claim. |
+| `tsconfig.base.json` | new-with-rationale | Existing path-alias pattern | Adds a local path alias for the OpenAPI checker. |
+
+## Tests, Proofs, Validators, And Commands
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `tests/apps/api-contracts.test.ts` | source-derived-rewrite | React API route, guard, error, idempotency, and pagination tests rewritten as foundation tests | Proves implemented route metadata, tenant/PDP denial, safe error envelope, deterministic idempotency conflict, validation redaction, and opaque cursors without UI/Playwright. |
+| `tests/packages/openapi.test.ts` | source-derived-rewrite | React OpenAPI drift and schema coverage tests | Proves operation ID uniqueness, route/OpenAPI mapping, metadata presence, synthetic examples, browser/security posture metadata, and no public readiness overclaim. |
+| `tests/packages/proof.test.ts` | evidence-only-support | Existing proof test harness | Adds API/contracts proof coverage. |
+| `packages/proof/src/api-contracts-proof.ts` | source-derived-rewrite | React API proof, OpenAPI validator, tenant guard, idempotency, and route test lineage | Fresh hermetic proof for guarded tenant-safe API contracts, OpenAPI safety, idempotency, pagination, and notification/job route integration. |
+| `packages/proof/src/index.ts` | evidence-only-support | Proof export surface | Exports the API contracts proof function. |
+| `package.json` | new-with-rationale | Existing proof/verify/parity command pattern | Adds proof:api, includes it in verify, and includes validate-api in parity. |
+| `Makefile` | new-with-rationale | Existing make proof target pattern | Adds `make api-proof`. |
+| `tools/validate-parity/validate-api.py` | source-derived-rewrite | Existing parity validator patterns and API validator expectations | Adds robust API/contracts parity checks and selftest harness. |
+| `tools/validate-parity/api-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Proves high-risk API validator rules fire. |
+
+## Architecture And Matrix Files
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `docs/architecture/api-and-contract-surface-standard.md` | source-derived-rewrite | React API semantic contract plus enterprise API/contract-governance follow-up | Defines USF API as a security and contract boundary for this parity slice. |
+| `docs/architecture/parity-api-contracts-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Records lineage/disposition for this domain. |
+| `docs/architecture/bootstrap-source-use-disposition-matrix.md` | evidence-only-support | Existing bootstrap source-use matrix | Updates prior API/OpenAPI rows and adds new proof/validator/test/doc rows. |
+| `docs/architecture/react-parity-scope-classification-matrix.json` | evidence-only-support | Existing parity matrix | Marks the API/contracts domain authorised under USF-154 and backs it with tests/proofs; item rows classify domain subareas. |
+| `docs/architecture/react-parity-scope-classification-matrix.md` | evidence-only-support | Human-readable parity matrix | Mirrors the JSON status truthfully. |
+
+## Historical React Behaviour Disposition
+
+| React behaviour group | Disposition | USF target |
+| --------------------- | ----------- | ---------- |
+| API route catalogue and REST route registration | rewrite-from-behaviour | `API_ROUTE_CONTRACTS`, Fastify routes, route-to-capability metadata |
+| OpenAPI drift gate and schemaless-operation checks | rewrite-from-behaviour | OpenAPI generator/checker, OpenAPI tests, API proof |
+| Route auth guard and tenant middleware | rewrite-from-behaviour | tenant guard, PDP guard, safe denial tests |
+| Error envelope, validation shape, and stack-trace safety | rewrite-from-behaviour | `ApiErrorResponseSchema`, safe error handler, validation redaction tests |
+| Pagination/filter/sort posture | rewrite-from-behaviour | cursor metadata, opaque cursor proof, allow-list metadata |
+| Idempotency headers and replay safety | rewrite-from-behaviour | API idempotency ledger for side-effecting job and notification send routes |
+| Correlation/request IDs and safe observability | rewrite-from-behaviour | request/correlation propagation and OpenAPI metadata |
+| Future UI/API readiness metadata | rewrite-from-behaviour | field exposure, lifecycle, action/capability tags, reason codes, route metadata |
+| GraphQL/federation, generated external clients, live gateway/edge, public compatibility guarantees, and full consumer contracts | deferred/lineage-only | Deferred to API/contracts depth issue; not claimed by this slice |
+| React UI/Playwright API behaviours | foundation-behaviour-rewritten-from-ui-test | API/capability/contract/proof tests only; no UI/Playwright added |
+
+## Boundary Confirmation
+
+No React runtime/application code is copied. No target path mirrors a historical React path. Runtime files are source-derived rewrites or new-with-rationale. Generated reports are not treated as canonical. No public API or production readiness is claimed.

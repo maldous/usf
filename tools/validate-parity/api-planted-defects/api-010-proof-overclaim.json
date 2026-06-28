@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-010",
+  "mutation": {
+    "file": "packages/proof/src/api-contracts-proof.ts",
+    "replace": {
+      "old": "publicApiReadinessClaim: false",
+      "new": "publicApiReadinessClaim: true"
+    }
+  }
+}

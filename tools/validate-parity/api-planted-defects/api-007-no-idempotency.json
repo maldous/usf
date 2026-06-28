@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-007",
+  "mutation": {
+    "file": "apps/api/src/server.ts",
+    "replace": {
+      "old": "idempotencyLedger",
+      "new": "dedupeLedgerRemoved"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import {
   metadataHash,
+  opaqueHash,
   type FileMetadata,
   type FileScanStatusValue,
   type TenantContext,
@@ -44,17 +45,23 @@ export class InMemoryObjectStore implements ObjectStore {
 }
 
 function encodeCursor(tenantId: string, offset: number): string {
-  return Buffer.from(JSON.stringify({ t: tenantId, n: offset }), "utf8").toString("base64url");
+  return Buffer.from(
+    JSON.stringify({ h: opaqueHash(`file-cursor:${tenantId}`).slice(0, 24), n: offset }),
+    "utf8",
+  ).toString("base64url");
 }
 
 function decodeCursor(cursor: string | undefined, tenantId: string): number {
   if (!cursor) return 0;
   try {
     const parsed = JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")) as {
-      t?: unknown;
+      h?: unknown;
       n?: unknown;
     };
-    return parsed.t === tenantId && typeof parsed.n === "number" ? parsed.n : 0;
+    return parsed.h === opaqueHash(`file-cursor:${tenantId}`).slice(0, 24) &&
+      typeof parsed.n === "number"
+      ? parsed.n
+      : 0;
   } catch {
     return 0;
   }

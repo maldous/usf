@@ -1,6 +1,6 @@
 import { InMemoryEventBus } from "@foundation/adapter-bus";
 import { InMemoryIdentityProvider } from "@foundation/adapter-idp";
-import { InMemoryMailProvider } from "@foundation/adapter-mail";
+import { InMemoryNotificationProvider } from "@foundation/adapter-mail";
 import { CapturedObservabilitySink } from "@foundation/adapter-obs";
 import { InMemorySecretStore } from "@foundation/adapter-secrets";
 import {
@@ -8,7 +8,7 @@ import {
   InMemoryObjectStore,
   InMemoryScanProvider,
 } from "@foundation/adapter-store";
-import { InMemoryWorkflowEngine } from "@foundation/adapter-wf";
+import { InMemoryOperationalJobStore, InMemoryWorkflowEngine } from "@foundation/adapter-wf";
 import {
   InMemoryAuditEventStore,
   InMemoryAuditLedger,
@@ -37,7 +37,7 @@ import {
   type SecretService,
 } from "@foundation/capability-config";
 import { FileCapability, createFileService, type FileService } from "@foundation/capability-files";
-import { JobCapability } from "@foundation/capability-jobs";
+import { JobCapability, createJobService, type JobService } from "@foundation/capability-jobs";
 import { NotificationCapability } from "@foundation/capability-notify";
 
 export const DEV_PROVIDER_MODE_LABEL = "dev in-memory";
@@ -53,7 +53,10 @@ export interface DevRuntime {
   readonly eventBus: InMemoryEventBus;
   readonly fileCapability: FileCapability;
   readonly jobCapability: JobCapability;
+  readonly jobService: JobService;
+  readonly jobStore: InMemoryOperationalJobStore;
   readonly notificationCapability: NotificationCapability;
+  readonly notificationProvider: InMemoryNotificationProvider;
   readonly observability: CapturedObservabilitySink;
   readonly secrets: InMemorySecretStore;
   readonly membershipDirectory: InMemoryTenantMembershipDirectory;
@@ -77,8 +80,9 @@ export function createDevRuntime(): DevRuntime {
   const eventBus = new InMemoryEventBus();
   const config = new InMemoryConfigProvider();
   const workflowEngine = new InMemoryWorkflowEngine();
+  const jobStore = new InMemoryOperationalJobStore();
   const objectStore = new InMemoryObjectStore();
-  const mailProvider = new InMemoryMailProvider();
+  const notificationProvider = new InMemoryNotificationProvider();
   const observability = new CapturedObservabilitySink();
   const secrets = new InMemorySecretStore();
 
@@ -125,6 +129,17 @@ export function createDevRuntime(): DevRuntime {
     audit: auditRecorder,
     objectKeySalt: "dev-object-key-salt",
   });
+  const jobService = createJobService({
+    jobs: jobStore,
+    pdp,
+    memberships: membershipDirectory,
+    audit: auditRecorder,
+  });
+  const notificationCapability = new NotificationCapability(notificationProvider, {
+    pdp,
+    audit: auditRecorder,
+    jobs: jobService,
+  });
 
   return {
     providerModeLabel: DEV_PROVIDER_MODE_LABEL,
@@ -137,7 +152,10 @@ export function createDevRuntime(): DevRuntime {
     eventBus,
     fileCapability: new FileCapability(objectStore),
     jobCapability: new JobCapability(workflowEngine),
-    notificationCapability: new NotificationCapability(mailProvider),
+    jobService,
+    jobStore,
+    notificationCapability,
+    notificationProvider,
     observability,
     secrets,
     membershipDirectory,

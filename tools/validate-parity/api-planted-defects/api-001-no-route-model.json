@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-001",
+  "mutation": {
+    "file": "packages/contracts/src/api-surface.ts",
+    "replace": {
+      "old": "API_ROUTE_CONTRACTS",
+      "new": "API_ROUTE_CONTRACTS_REMOVED"
+    }
+  }
+}
