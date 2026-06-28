@@ -210,18 +210,31 @@
       "behaviour_summary": "Durable workflows, approval chains, scheduled jobs, operational automation, state machines.",
       "usf_status": "partial",
       "usf_paths": [
-        "capabilities/jobs",
-        "adapters/wf"
+        "capabilities/jobs/src/job-service.ts",
+        "capabilities/jobs/src/workflow-service.ts",
+        "adapters/wf/src/index.ts",
+        "packages/ports/src/index.ts",
+        "packages/proof/src/jobs-workflows-proof.ts",
+        "tools/validate-parity/validate-jobs.py",
+        "docs/architecture/jobs-and-workflows-standard.md",
+        "docs/adr/0013-jobs-and-workflows-execution-model.md"
       ],
-      "usf_tests": [],
-      "usf_proofs": [],
+      "usf_tests": [
+        "tests/capabilities/jobs-workflows.test.ts",
+        "tests/adapters/operational-job-store.test.ts",
+        "tests/packages/proof.test.ts (jobs proof in-process)"
+      ],
+      "usf_proofs": [
+        "make jobs-proof (packages/proof/src/jobs-workflows-proof.ts): tenant-safe, idempotent, bounded-retry, dead-letter, lease, scheduling, approval-SoD, audited job/workflow execution (20 checks, behaviour-proven)",
+        "make parity (validate-jobs USF-JOBS-001..019 with planted defects)"
+      ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-133",
       "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "ADR 0011 (USF workflow/job port family; Temporal/Windmill provider classes) resolves the former requires-human-decision; spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json.",
-      "retry_condition": "Per-domain implementation directive authorises parity-jobs; durable workflow + operational job ports migrated with USF tests."
+      "domain_authorised": true,
+      "evidence": "ADR 0011 (workflow/job port family) realised under ADR 0013 (execution model) and the jobs-and-workflows standard. Implemented hermetically: durable workflow port + operational job port (in-memory adapters; Temporal/Windmill lineage-only), classification, tenant-scoped execution + concrete service actors, PDP authz for job/workflow actions, bounded retry + deterministic backoff, idempotency + scheduled-window dedupe, dead-letter with evidence, lease exclusivity + safe re-acquire, deterministic UTC scheduling + missed-run policy + fail-closed unknown schedule, approval separation of duties, failure taxonomy + redaction, value-free lifecycle audit. Proven by make jobs-proof and validate-jobs. Enterprise breadth (versioning/replay, outbox/inbox, quotas, pause/drain, backup/restore, dry-run, live Temporal/Windmill/queue, HTTP surfaces) DEFINED in the standard and DEFERRED.",
+      "retry_condition": "Deferred jobs/workflows depth blocker completes live Temporal/Windmill/queue integration, workflow versioning/replay/migration, transactional outbox/inbox runtime, quotas/backpressure, pause/resume/drain, backup/restore/replay, cron + tenant-local/DST schedules, concurrency/heartbeat, high-risk operational automation runtime, provider egress allow-listing + circuit breakers, live observability/alerting, and HTTP API surfaces; full jobs/workflows parity then moves to migrated."
     },
     {
       "react_item_id": "notifications",
