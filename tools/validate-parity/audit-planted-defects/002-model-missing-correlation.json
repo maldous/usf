@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-002",
+  "description": "model loses correlation identity",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "correlationId",
+      "new": "corrIdent"
+    }
+  }
+}

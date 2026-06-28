@@ -4,8 +4,8 @@
   "mutation": {
     "file": "capabilities/tenant/src/authorization-policy.ts",
     "replace": {
-      "old": "auditor: Object.freeze([\"audit.read\"]),",
-      "new": "auditor: Object.freeze([\"audit.read\", \"*\"]),"
+      "old": "auditor: Object.freeze([\"audit.read\", \"audit.search\", \"audit.verify\"]),",
+      "new": "auditor: Object.freeze([\"audit.read\", \"audit.search\", \"audit.verify\", \"*\"]),"
     }
   }
 }

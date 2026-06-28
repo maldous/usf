@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-007",
+  "description": "denied audit access not recorded",
+  "mutation": {
+    "file": "capabilities/audit/src/query-service.ts",
+    "replace": {
+      "old": "\"audit.query.denied\"",
+      "new": "\"noop.denied\""
+    }
+  }
+}
