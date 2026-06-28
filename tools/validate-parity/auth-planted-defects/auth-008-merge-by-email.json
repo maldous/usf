@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-008",
+  "mutation": {
+    "file": "capabilities/tenant/src/membership.ts",
+    "replace": {
+      "old": "${input.identityProvider}:${input.externalSubject}",
+      "new": "${input.email}"
+    }
+  }
+}

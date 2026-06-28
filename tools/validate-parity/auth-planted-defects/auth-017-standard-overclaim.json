@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-017",
+  "mutation": {
+    "file": "docs/architecture/auth-and-identity-standard.md",
+    "replace": {
+      "old": "no certification claim",
+      "new": "certified compliant"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-007",
+  "mutation": {
+    "file": "capabilities/auth/src/identity.ts",
+    "replace": {
+      "old": "keycloakExternalSubject",
+      "new": "emailAsKey"
+    }
+  }
+}

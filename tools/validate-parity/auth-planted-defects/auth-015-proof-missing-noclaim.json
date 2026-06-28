@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-015",
+  "mutation": {
+    "file": "packages/proof/src/auth-identity-proof.ts",
+    "replace": {
+      "old": "liveKeycloakClaim: false",
+      "new": "liveKeycloakClaim: REMOVED"
+    }
+  }
+}

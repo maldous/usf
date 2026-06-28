@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-013",
+  "mutation": {
+    "file": "capabilities/auth/src/keycloak-auth.ts",
+    "replace": {
+      "old": "membership.status !== \"active\"",
+      "new": "false"
+    }
+  }
+}

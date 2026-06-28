@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-010",
+  "mutation": {
+    "file": "capabilities/auth/src/session.ts",
+    "replace": {
+      "old": "no unbounded session",
+      "new": "sessions may be unbounded"
+    }
+  }
+}
