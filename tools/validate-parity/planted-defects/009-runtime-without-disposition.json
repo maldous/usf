@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-009",
+  "description": "runtime row with blank source-use disposition",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "source_use_disposition": " "
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-007",
+  "description": "test/proof group with blank classification",
+  "mutation": {
+    "testPatch": {
+      "index": 0,
+      "set": {
+        "classification": " "
+      }
+    }
+  }
+}

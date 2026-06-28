@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-016",
+  "description": "UI-needed capability records no surface",
+  "mutation": {
+    "uiPatch": {
+      "index": 0,
+      "set": {
+        "ui_needed": true
+      }
+    }
+  }
+}

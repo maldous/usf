@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-PARITY-017",
+  "description": "UI/browser artefact added to the foundation",
+  "mutation": {
+    "addPath": "apps/api/src/widget.tsx"
+  }
+}

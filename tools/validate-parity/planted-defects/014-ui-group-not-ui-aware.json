@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-014",
+  "description": "Playwright group classified without a UI-aware status",
+  "mutation": {
+    "testPatch": {
+      "index": 3,
+      "set": {
+        "classification": "covered"
+      }
+    }
+  }
+}

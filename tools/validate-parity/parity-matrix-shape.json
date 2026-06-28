@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:tooling:react-parity-matrix-shape",
+  "title": "React Parity Matrix Shape (validator tooling)",
+  "description": "Draft JSON Schema used by tools/validate-parity/validate-parity.py to shape-check the machine-readable React parity scope classification matrix. This is validator tooling shape data (analogous to tools/validate-spec manifests), NOT a rank-1 semantic-corpus schema, and is deliberately not registered in spec/registries/schema-registry.json: the parity matrix is a governance tracking artefact and the rank-1 authority-levels ladder has no fitting value for it. Cross-field rules (status carriers, mirroring, UI classification, readiness-claim consistency) are enforced in Python by the validator, not by this schema.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "status",
+    "stage",
+    "foundationReadinessClaimed",
+    "playwrightRequiredForFoundation",
+    "allowedPlanningCarriers",
+    "statusValues",
+    "domains",
+    "uiArtefacts",
+    "testProofGroups"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "minLength": 1 },
+    "stage": { "type": "string", "minLength": 1 },
+    "authorityNote": { "type": "string" },
+    "foundationReadinessClaimed": { "type": "boolean" },
+    "playwrightRequiredForFoundation": { "type": "boolean" },
+    "allowedPlanningCarriers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "statusValues": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "react_item_id",
+          "category",
+          "react_paths",
+          "behaviour_summary",
+          "usf_status",
+          "usf_paths",
+          "usf_tests",
+          "usf_proofs",
+          "semantic_authority",
+          "source_use_disposition",
+          "blocker",
+          "blocking_foundation_readiness",
+          "domain_authorised",
+          "evidence",
+          "retry_condition"
+        ],
+        "properties": {
+          "react_item_id": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "react_paths": { "type": "array", "items": { "type": "string" } },
+          "behaviour_summary": { "type": "string", "minLength": 1 },
+          "usf_status": { "type": "string", "minLength": 1 },
+          "usf_paths": { "type": "array", "items": { "type": "string" } },
+          "usf_tests": { "type": "array", "items": { "type": "string" } },
+          "usf_proofs": { "type": "array", "items": { "type": "string" } },
+          "semantic_authority": { "type": "string", "enum": ["known", "missing", "unclear"] },
+          "source_use_disposition": { "type": "string", "minLength": 1 },
+          "blocker": { "type": "string" },
+          "blocking_foundation_readiness": { "type": "boolean" },
+          "domain_authorised": { "type": "boolean" },
+          "evidence": { "type": "string" },
+          "retry_condition": { "type": "string" }
+        }
+      }
+    },
+    "uiArtefacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "react_paths", "usf_status", "ui_needed", "rationale"],
+        "properties": {
+          "item": { "type": "string", "minLength": 1 },
+          "react_paths": { "type": "array", "items": { "type": "string" } },
+          "usf_status": { "type": "string", "minLength": 1 },
+          "ui_needed": { "type": "boolean" },
+          "surface": { "type": "array", "items": { "type": "string" } },
+          "rationale": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "testProofGroups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["group", "react_paths", "classification", "foundation_behaviour", "action"],
+        "properties": {
+          "group": { "type": "string", "minLength": 1 },
+          "react_paths": { "type": "array", "items": { "type": "string" } },
+          "classification": { "type": "string", "minLength": 1 },
+          "foundation_behaviour": { "type": "boolean" },
+          "requiredForFoundation": { "type": "boolean" },
+          "action": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

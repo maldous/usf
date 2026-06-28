@@ -1,0 +1,14 @@
+{
+  "expectedRule": "USF-PARITY-008",
+  "description": "migrated item with no tests or proofs",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "usf_status": "migrated",
+        "usf_tests": [],
+        "usf_proofs": []
+      }
+    }
+  }
+}

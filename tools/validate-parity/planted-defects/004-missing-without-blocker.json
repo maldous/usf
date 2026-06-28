@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-PARITY-004",
+  "description": "missing item with empty blocker",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "usf_status": "missing",
+        "blocker": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-005",
+  "description": "partial item with empty carrier",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "blocker": ""
+      }
+    }
+  }
+}
