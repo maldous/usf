@@ -253,6 +253,8 @@ def check_rows(F, state):
         # 016 ui-needed surface
         if row.get("ui_needed") is True and not (row.get("surface") or []):
             F.add("USF-PARITY-016", f"ui:{item}", "capability needed by a future UI records no surface")
+        if row.get("usf_status") in INCOMPLETE_STATUSES:
+            incomplete_blocking_present = True
 
     for row in test_groups:
         if not isinstance(row, dict):
@@ -266,6 +268,10 @@ def check_rows(F, state):
             continue
         if classification not in CANON_STATUSES:
             F.add("USF-PARITY-003", f"test:{group}", f"non-canonical classification: {classification}")
+        # A partial/missing/deferred/requires-human-decision test or proof group is
+        # incomplete foundation work and must block any full-readiness claim (012).
+        if classification in INCOMPLETE_STATUSES:
+            incomplete_blocking_present = True
         # 014 UI/Playwright group must carry a UI-aware classification. Detect real
         # browser/UI suites (Playwright, React app, design system, ui reference harness,
         # TSX) rather than any path containing "e2e" (which also matches tooling like
@@ -277,16 +283,17 @@ def check_rows(F, state):
         # 015 mixed/foundation classified wholly UI-only
         if row.get("foundation_behaviour") is True and classification == "ui-ux-only-out-of-foundation-scope":
             F.add("USF-PARITY-015", f"test:{group}", "foundation-behaviour group classified wholly UI-only")
+        # 013 (per group) only a UI/Playwright group may not be marked required for
+        # foundation readiness; a non-browser foundation group may legitimately be required.
+        if row.get("requiredForFoundation") is True and looks_ui:
+            F.add("USF-PARITY-013", f"test:{group}", "UI/Playwright test group marked required for foundation readiness")
 
-    # 012 readiness claim while incomplete
+    # 012 readiness claim while incomplete (domains, ui artefacts, and test/proof groups)
     if matrix.get("foundationReadinessClaimed") is True and incomplete_blocking_present:
         F.add("USF-PARITY-012", MATRIX_PATH, "foundationReadinessClaimed is true while incomplete blocking items remain")
-    # 013 playwright required
+    # 013 (matrix) Playwright/browser E2E must not be required for the UI-agnostic foundation
     if matrix.get("playwrightRequiredForFoundation") is True:
         F.add("USF-PARITY-013", MATRIX_PATH, "playwrightRequiredForFoundation must be false for the UI-agnostic foundation")
-    for row in test_groups:
-        if isinstance(row, dict) and row.get("requiredForFoundation") is True:
-            F.add("USF-PARITY-013", f"test:{row.get('group','?')}", "test group marked required for foundation readiness")
 
 
 def check_no_unauthorised_ui_artefacts(F, state):
@@ -316,6 +323,10 @@ def apply_mutation(base_matrix, base_paths, mutation):
     if "setTop" in mutation:
         for k, v in mutation["setTop"].items():
             matrix[k] = v
+    if "domainsSetAll" in mutation:
+        for row in matrix.get("domains", []):
+            for k, v in mutation["domainsSetAll"].items():
+                row[k] = v
     for section_key, op_key in (("domains", "domainPatch"), ("uiArtefacts", "uiPatch"), ("testProofGroups", "testPatch")):
         if op_key in mutation:
             patch = mutation[op_key]

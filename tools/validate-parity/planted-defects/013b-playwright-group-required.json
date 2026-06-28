@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-PARITY-013",
+  "description": "a UI/Playwright test group is marked required for foundation readiness",
+  "mutation": {
+    "testPatch": { "index": 3, "set": { "requiredForFoundation": true } }
+  }
+}
