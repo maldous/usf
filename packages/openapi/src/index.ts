@@ -184,6 +184,67 @@ export function buildOpenApiDocument() {
           },
         },
       },
+      "/v1/files": {
+        get: {
+          operationId: "listFilesV1",
+          responses: {
+            "200": {
+              description:
+                "Tenant-scoped, redacted, paginated file metadata (PDP-protected; no object keys or credentials)",
+            },
+            "400": { description: "Tenant context mismatch" },
+            "403": { description: "Authorization denied with a safe, non-enumerating reason code" },
+          },
+        },
+        post: {
+          operationId: "uploadFileV1",
+          responses: {
+            "200": {
+              description: "Uploaded file metadata view (validated, classified, scanned; redacted)",
+            },
+            "400": {
+              description: "Validation error (size/content-type/checksum) or tenant mismatch",
+            },
+            "403": { description: "Authorization denied" },
+          },
+        },
+      },
+      "/v1/files/{id}": {
+        get: {
+          operationId: "getFileV1",
+          responses: {
+            "200": {
+              description: "A single tenant-scoped, redacted file metadata view (PDP-protected)",
+            },
+            "400": { description: "Tenant context mismatch" },
+            "403": { description: "Authorization denied" },
+            "404": { description: "File not found in this tenant (non-enumerating)" },
+          },
+        },
+      },
+      "/v1/files/{id}/download": {
+        post: {
+          operationId: "downloadFileV1",
+          responses: {
+            "200": { description: "File content for an authorised, scan-clean, non-deleted file" },
+            "400": { description: "Tenant context mismatch" },
+            "403": {
+              description:
+                "Denied: unauthorised, quarantined/infected/pending scan, deleted, or non-enumerating not-found",
+            },
+          },
+        },
+      },
+      "/v1/files/{id}/verify": {
+        post: {
+          operationId: "verifyFileV1",
+          responses: {
+            "200": { description: "Content/metadata integrity verification result (checksum)" },
+            "400": { description: "Tenant context mismatch" },
+            "403": { description: "Authorization denied" },
+          },
+        },
+      },
     },
   } as const;
 }

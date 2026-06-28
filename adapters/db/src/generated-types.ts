@@ -109,16 +109,77 @@ export interface SchemaMigrationsTable {
   status: MigrationStatus;
 }
 
+export type FileStatus =
+  | "pending-upload"
+  | "uploaded"
+  | "available"
+  | "quarantined"
+  | "blocked"
+  | "deleted"
+  | "restored"
+  | "purged"
+  | "failed";
+
+export type FileScanStatus =
+  | "not-required"
+  | "pending"
+  | "clean"
+  | "suspicious"
+  | "infected"
+  | "failed"
+  | "quarantined"
+  | "provider-unavailable";
+
+export interface FilesTable {
+  file_id: string;
+  tenant_id: string;
+  owner_actor_id: string;
+  object_key: string;
+  bucket: string;
+  provider_ref: string;
+  storage_class: string;
+  filename_original: string;
+  filename_safe: string;
+  content_type: string;
+  content_type_verified: boolean;
+  size_bytes: number;
+  checksum_sha256: string | null;
+  etag: string | null;
+  status: FileStatus;
+  scan_status: FileScanStatus;
+  quarantine_reason: string | null;
+  created_at: Date;
+  created_by: string;
+  updated_at: Date;
+  updated_by: string;
+  deleted_at: Date | null;
+  deleted_by: string | null;
+  deleted_reason: string | null;
+  restored_at: Date | null;
+  restored_by: string | null;
+  version: number;
+  correlation_id: string;
+  causation_id: string | null;
+  trace_id: string | null;
+  request_id: string | null;
+  source_system: string;
+  source_event_id: string | null;
+  data_classification: DataClassification;
+  retention_policy: RetentionPolicy;
+  legal_hold: boolean;
+}
+
 export interface BootstrapDatabase {
   tenants: TenantsTable;
   tenant_memberships: TenantMembershipsTable;
   audit_ledger: AuditLedgerTable;
   break_glass_grants: BreakGlassGrantsTable;
   schema_migrations: SchemaMigrationsTable;
+  files: FilesTable;
 }
 
 // SHA-256 over the ordered per-file migration SHA-256 list in
 // adapters/db/migrations/manifest.json. Regenerate these types and this pin when
 // a new forward-only migration is added.
 export const generatedFromMigrationsManifestSha256 =
-  "d5a26062ad27a1d7ddc9567d4fd5a7c24036944d6479aa6ce4ce97a9b7a5396d";
+  "5d28b8e11982c704c0ef5c64c1a56534c538bfd3a2bc90cd62cf7c2dc96d58fb";

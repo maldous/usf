@@ -157,3 +157,53 @@ export const ProviderStatusResponseSchema = Type.Object({
   // Provider modes only (in-memory/local-composed-test/mock/live-external); never credentials.
   providers: Type.Record(Type.String(), Type.String()),
 });
+
+// Files/storage surfaces (parity-files-storage, USF-146). Tenant-scoped, PDP-protected,
+// RLS-backed (DB substrate), redacted least-disclosure, non-enumerating. The view
+// carries NO object key, bucket, provider ref, original filename, or credentials.
+
+export const FileViewSchema = Type.Object({
+  fileId: Type.String(),
+  tenantId: Type.String(),
+  ownerActorId: Type.String(),
+  filenameSafe: Type.String(),
+  contentType: Type.String(),
+  sizeBytes: Type.Number(),
+  checksumSha256: NullableString,
+  status: Type.String(),
+  scanStatus: Type.String(),
+  classification: Type.String(),
+  legalHold: Type.Boolean(),
+  createdAt: Type.String(),
+  verificationStatus: Type.String(),
+});
+
+export const FilesListResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  files: Type.Array(FileViewSchema),
+  nextCursor: NullableString,
+});
+
+export const FileUploadRequestSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  fileId: Type.String({ minLength: 1 }),
+  filename: Type.String({ minLength: 1 }),
+  contentType: Type.String({ minLength: 1 }),
+  sizeBytes: Type.Number({ minimum: 0 }),
+  body: Type.String(),
+  classification: Type.Optional(Type.String()),
+  declaredChecksum: Type.Optional(Type.String()),
+});
+
+export const FileDownloadResponseSchema = Type.Object({
+  fileId: Type.String(),
+  contentType: Type.String(),
+  sizeBytes: Type.Number(),
+  body: Type.String(),
+});
+
+export const FileVerifyResponseSchema = Type.Object({
+  fileId: Type.String(),
+  ok: Type.Boolean(),
+  reasonCode: Type.String(),
+});

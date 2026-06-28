@@ -84,6 +84,12 @@
       "introducedIn": "0002-enterprise-persistence-metadata",
       "fieldOverrides": {},
       "exceptions": []
+    },
+    "files": {
+      "class": "tenant-scoped",
+      "introducedIn": "0003-files",
+      "fieldOverrides": {},
+      "exceptions": []
     }
   }
 }
