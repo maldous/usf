@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-002",
+  "mutation": {
+    "file": "adapters/db/migrations/0003-files.sql",
+    "replace": {
+      "old": "FORCE ROW LEVEL SECURITY",
+      "new": "NO ROW LEVEL SECURITY"
+    }
+  },
+  "description": "002-files-no-force-rls.json"
+}

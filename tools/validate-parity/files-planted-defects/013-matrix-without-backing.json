@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-FILES-013",
+  "mutation": {
+    "matrixFilesSet": {
+      "usf_tests": [],
+      "usf_proofs": []
+    }
+  },
+  "description": "013-matrix-without-backing.json"
+}

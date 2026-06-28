@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-007",
+  "mutation": {
+    "file": "capabilities/files/src/file-service.ts",
+    "replace": {
+      "old": "\"file.downloaded\"",
+      "new": "\"noop.dl\""
+    }
+  },
+  "description": "007-file-not-audited.json"
+}

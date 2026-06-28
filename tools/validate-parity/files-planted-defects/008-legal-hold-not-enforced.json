@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-008",
+  "mutation": {
+    "file": "capabilities/files/src/file-service.ts",
+    "replace": {
+      "old": "legal-hold",
+      "new": "no-hold"
+    }
+  },
+  "description": "008-legal-hold-not-enforced.json"
+}

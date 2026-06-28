@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-FILES-009",
+  "mutation": {
+    "file": "packages/openapi/openapi.json",
+    "append": "\"objectKey\": \"o/aa/bb/leak\""
+  },
+  "description": "009-object-key-in-openapi.json"
+}

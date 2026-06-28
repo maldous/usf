@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-006",
+  "mutation": {
+    "file": "apps/api/src/server.ts",
+    "replace": {
+      "old": "tenant context mismatch",
+      "new": "all good"
+    }
+  },
+  "description": "006-route-not-guarded.json"
+}

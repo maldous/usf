@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-FILES-003",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "assertSafeObjectKey",
+      "new": "noKeyCheck"
+    }
+  },
+  "description": "003-no-object-key-safety.json"
+}
