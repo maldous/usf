@@ -1,4 +1,9 @@
-import { runAuthIdentityProof, runBootstrapProof, runDevSmoke } from "@foundation/proof";
+import {
+  runAuthIdentityProof,
+  runBootstrapProof,
+  runDevSmoke,
+  runJobsWorkflowsProof,
+} from "@foundation/proof";
 import { describe, expect, it } from "vitest";
 
 describe("bootstrap proof", () => {
@@ -29,6 +34,19 @@ describe("keycloak-brokered auth/identity proof", () => {
       liveExternalProviderClaim: false,
       liveKeycloakClaim: false,
       brokeredUpstreamAcceptedDirectly: false,
+      productionLiveClaim: false,
+    });
+  });
+});
+
+describe("jobs/workflows proof", () => {
+  it("proves tenant-safe, idempotent, bounded-retry, audited job/workflow execution", async () => {
+    await expect(runJobsWorkflowsProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      liveTemporalClaim: false,
+      liveWindmillClaim: false,
+      liveQueueClaim: false,
       productionLiveClaim: false,
     });
   });
