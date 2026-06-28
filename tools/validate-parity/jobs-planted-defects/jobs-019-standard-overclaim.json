@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-019",
+  "mutation": {
+    "file": "docs/architecture/jobs-and-workflows-standard.md",
+    "replace": {
+      "old": "no certification claim",
+      "new": "certified compliant"
+    }
+  }
+}

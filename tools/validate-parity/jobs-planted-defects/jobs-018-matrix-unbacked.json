@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-JOBS-018",
+  "mutation": {
+    "matrixJobsSet": {
+      "usf_tests": [],
+      "usf_proofs": []
+    }
+  }
+}

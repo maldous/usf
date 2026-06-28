@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-JOBS-016",
+  "mutation": {
+    "file": "packages/openapi/openapi.json",
+    "append": "\"client_secret\": \"leaked\""
+  }
+}

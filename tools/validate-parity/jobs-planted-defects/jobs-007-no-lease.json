@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-007",
+  "mutation": {
+    "file": "adapters/wf/src/index.ts",
+    "replace": {
+      "old": "leaseExpiresAt",
+      "new": "leaseEnd"
+    }
+  }
+}

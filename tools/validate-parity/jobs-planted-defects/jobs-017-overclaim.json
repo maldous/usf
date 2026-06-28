@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-017",
+  "mutation": {
+    "file": "packages/proof/src/jobs-workflows-proof.ts",
+    "replace": {
+      "old": "productionLiveClaim: false",
+      "new": "productionLiveClaim: true"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-003",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "SERVICE_ACTOR_PREFIX",
+      "new": "SVC_PREFIX_X"
+    }
+  }
+}

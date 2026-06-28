@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-012",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "MISSED_RUN_POLICIES",
+      "new": "POLICIES_X"
+    }
+  }
+}

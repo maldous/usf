@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-005",
+  "mutation": {
+    "file": "capabilities/jobs/src/workflow-service.ts",
+    "replace": {
+      "old": "pdp.decide",
+      "new": "permitAll"
+    }
+  }
+}
