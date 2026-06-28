@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-DB-001",
+  "description": "001 unclassified table",
+  "mutation": {
+    "sqlAppend": "CREATE TABLE rogue_table (\n  id text PRIMARY KEY\n);"
+  }
+}

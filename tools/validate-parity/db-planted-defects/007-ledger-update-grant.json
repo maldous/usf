@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-DB-007",
+  "description": "007 ledger update grant",
+  "mutation": {
+    "sqlAppend": "GRANT UPDATE ON audit_ledger TO foundation_runtime;"
+  }
+}

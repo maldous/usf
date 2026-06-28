@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-DB-006",
+  "description": "006 missing tenant policy",
+  "mutation": {
+    "sqlReplace": {
+      "old": "CREATE POLICY tenant_memberships_isolation ON tenant_memberships\n  USING (tenant_id = app_tenant_id())\n  WITH CHECK (tenant_id = app_tenant_id());",
+      "new": ""
+    }
+  }
+}

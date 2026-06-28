@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-DB-009",
+  "description": "009 manifest tamper",
+  "mutation": {
+    "manifestTamper": true
+  }
+}

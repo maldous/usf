@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-DB-002",
+  "description": "002 unknown class",
+  "mutation": {
+    "registrySetClass": {
+      "object": "tenants",
+      "class": "bogus-class"
+    }
+  }
+}

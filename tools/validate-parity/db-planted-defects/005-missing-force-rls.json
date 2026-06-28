@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-DB-005",
+  "description": "005 missing force rls",
+  "mutation": {
+    "sqlReplace": {
+      "old": "ALTER TABLE tenant_memberships FORCE ROW LEVEL SECURITY;",
+      "new": ""
+    }
+  }
+}

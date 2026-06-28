@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-DB-010",
+  "description": "010 missing tenant index",
+  "mutation": {
+    "sqlReplace": {
+      "old": "CREATE INDEX break_glass_grants_tenant_idx ON break_glass_grants (tenant_id);",
+      "new": ""
+    }
+  }
+}

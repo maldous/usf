@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-DB-008",
+  "description": "008 security definer",
+  "mutation": {
+    "sqlAppend": "CREATE FUNCTION evil_fn() RETURNS void LANGUAGE sql SECURITY DEFINER AS $$ SELECT 1 $$;"
+  }
+}

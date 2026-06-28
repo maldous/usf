@@ -44,3 +44,11 @@ export class InMemoryTenantMembershipRepository implements TenantScopedRepositor
     return this.#memberships.get(tenantId) ?? [];
   }
 }
+
+export * from "./generated-types.ts";
+export {
+  checkGeneratedTypes,
+  loadManifest,
+  migrationsManifestSha256,
+  verifyMigrationManifest,
+} from "./check-generated-types.ts";
