@@ -16,6 +16,7 @@ import {
   stableId,
   type AuthorizationRequest,
   type IdentityClaims,
+  type TenantContext,
 } from "@foundation/core";
 import {
   contextFromClaims,
@@ -187,7 +188,13 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
       },
     },
     async (request, reply) => {
-      const context = contextFromClaims(devClaimsFromRequest(request), "local");
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
       const body = request.body;
       if (context.tenantId !== body.tenantId) {
         reply.code(400);

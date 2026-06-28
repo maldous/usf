@@ -119,7 +119,7 @@ describe("PDP break-glass integration", () => {
     const breakGlass = new BreakGlassRegistry();
     const g = breakGlass.approve({
       tenantId: TENANT_A,
-      requesterId: "requester",
+      requesterId: ACTOR,
       approverId: "approver",
       reason: "investigation",
       scope,
@@ -155,6 +155,32 @@ describe("PDP break-glass integration", () => {
     expect(decision.effect).toBe("permit");
     expect(decision.reasonCode).toBe("break-glass-permit");
     expect(decision.obligations).toContain("audit-break-glass");
+  });
+
+  it("denies reuse of another member's break-glass grant", () => {
+    const { breakGlass, grantId } = grant("tenant.members.*"); // requester = ACTOR
+    const dir = new InMemoryTenantMembershipDirectory();
+    dir.upsert({
+      membershipId: "m-other",
+      tenantId: TENANT_A,
+      actorId: "other-actor",
+      status: "active",
+      roles: ["tenant-member"],
+    });
+    const pdp = createPolicyDecisionPoint({ memberships: dir, breakGlass });
+    const otherContext = createTenantContext({
+      tenantId: TENANT_A,
+      actorId: "other-actor",
+      roles: ["tenant-member"],
+    });
+    const decision = pdp.decide({
+      context: otherContext,
+      action: "tenant.members.delete",
+      resource: { type: "tenant-member", id: "m-x", tenantId: TENANT_A, attributes: {} },
+      breakGlassGrantId: grantId,
+    });
+    expect(decision.effect).toBe("deny");
+    expect(decision.reasonCode).toBe("break-glass-actor-mismatch");
   });
 
   it("denies an out-of-scope grant", () => {

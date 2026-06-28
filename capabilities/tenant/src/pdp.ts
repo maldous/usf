@@ -124,6 +124,10 @@ export function createPolicyDecisionPoint(deps: PdpDeps): PolicyDecisionPoint {
             request.context.tenantId,
             now,
           );
+          // The grant elevates only its requester; another member may not reuse it.
+          if (grant.requesterId !== request.context.actorId) {
+            return deny("break-glass-actor-mismatch");
+          }
           if (scopeCoversAction(grant.scope, request.action)) {
             return permit(
               "break-glass-permit",
