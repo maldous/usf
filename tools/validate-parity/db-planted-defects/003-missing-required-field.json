@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-DB-003",
+  "description": "003 missing required field",
+  "mutation": {
+    "sqlReplace": {
+      "old": "ALTER TABLE tenant_memberships ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();",
+      "new": ""
+    }
+  }
+}

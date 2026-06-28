@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-DB-004",
+  "description": "004 missing enable rls",
+  "mutation": {
+    "sqlReplace": {
+      "old": "ALTER TABLE tenant_memberships ENABLE ROW LEVEL SECURITY;",
+      "new": ""
+    }
+  }
+}

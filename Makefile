@@ -2,7 +2,7 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := verify
 
-.PHONY: verify install dev dev-smoke dev.work test-compose parity
+.PHONY: verify install dev dev-smoke dev.work test-compose parity db-proof
 
 install:
 	corepack pnpm install --frozen-lockfile
@@ -21,6 +21,10 @@ test-compose:
 
 parity:
 	corepack pnpm parity
+
+db-proof:
+	docker compose -f compose.yaml up -d --wait postgres
+	bash -c 'corepack pnpm proof:db; s=$$?; docker compose -f compose.yaml down -v --remove-orphans; exit $$s'
 
 verify: install
 	corepack pnpm verify
