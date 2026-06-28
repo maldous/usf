@@ -644,24 +644,1102 @@
       "react_item_id": "api-routes-openapi",
       "category": "route",
       "react_paths": [
-        "apps/platform-api/src/server/routes.ts"
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
       ],
-      "behaviour_summary": "REST routes, GraphQL federation, typed contracts, OpenAPI drift gate, security headers.",
+      "behaviour_summary": "REST routes, GraphQL/federation lineage, typed contracts, OpenAPI drift gate, route guards, tenant context, safe errors, idempotency, pagination, security headers, and API tests.",
       "usf_status": "partial",
       "usf_paths": [
-        "apps/api",
-        "packages/openapi",
-        "packages/contracts"
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
       ],
-      "usf_tests": [],
-      "usf_proofs": [],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-133",
+      "blocker": "USF-155",
       "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "spec/instances/semantic-contract/openapi-drift-hard-gate.json; bootstrap routes + OpenAPI present.",
-      "retry_condition": "Per-domain implementation directive authorises parity-api; route parity migrated with USF contract tests."
+      "domain_authorised": true,
+      "evidence": "USF-154 implements local/dev/test API contract parity: route metadata, OpenAPI 3.1 generation/checking, guarded tenant-safe routes, safe error envelope, idempotency proof, opaque cursor proof, synthetic examples, and API proof. GraphQL/federation, generated external clients, public compatibility guarantees, live gateway/edge, and deeper bulk/rate-limit/browser-session depth remain deferred.",
+      "retry_condition": "Resolve USF-155 after an authorised API depth directive covers GraphQL/federation, generated clients, live gateway/edge posture, public compatibility policy, browser-session CSRF/cookie runtime, and advanced bulk/rate-limit controls.",
+      "linear_issue": "USF-154"
+    },
+    {
+      "react_item_id": "api.route-inventory",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Implemented route inventory is centralised in API_ROUTE_CONTRACTS and checked against Fastify and OpenAPI.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Implemented route inventory is centralised in API_ROUTE_CONTRACTS and checked against Fastify and OpenAPI.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.route-classification",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Every implemented route carries one canonical route classification and lifecycle metadata.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Every implemented route carries one canonical route classification and lifecycle metadata.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.route-to-capability-mapping",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Every implemented route records owning domain/capability, required action, PDP posture, tenant scope, and implementation target.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Every implemented route records owning domain/capability, required action, PDP posture, tenant scope, and implementation target.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.openapi-completeness",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "OpenAPI 3.1 is generated from route contracts; checker proves no implemented route is missing and no OpenAPI route lacks metadata.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "OpenAPI 3.1 is generated from route contracts; checker proves no implemented route is missing and no OpenAPI route lacks metadata.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.request-response-schemas",
+      "category": "schema",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Implemented routes use TypeBox request/response contracts and shared schema refs in OpenAPI.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Implemented routes use TypeBox request/response contracts and shared schema refs in OpenAPI.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.error-envelope",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Safe error envelope includes error_id, code, reason_code, safe_message, status, correlation_id, request_id, trace_id, details, documentation_ref, and retry_after.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Safe error envelope includes error_id, code, reason_code, safe_message, status, correlation_id, request_id, trace_id, details, documentation_ref, and retry_after.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.validation-errors",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Validation errors use safe field paths/reason codes and redact sensitive values.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Validation errors use safe field paths/reason codes and redact sensitive values.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.tenant-context",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Tenant-scoped routes require explicit tenant context; header/path/body mismatch fails closed and is non-enumerating.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Tenant-scoped routes require explicit tenant context; header/path/body mismatch fails closed and is non-enumerating.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.auth-pdp-guards",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Protected routes call PDP directly or delegate to PDP-protected capabilities; no token claim is treated as authorization.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Protected routes call PDP directly or delegate to PDP-protected capabilities; no token claim is treated as authorization.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.idempotency",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Side-effecting job create, job cancel, notification send, and notification cancel routes require Idempotency-Key; exceptions are documented in route metadata.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Side-effecting job create, job cancel, notification send, and notification cancel routes require Idempotency-Key; exceptions are documented in route metadata.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.pagination-filtering-sorting",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Opaque tenant-scoped cursor proof exists for file listing and route metadata records allow-listed filters/sorts.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-155",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Opaque cursor proof implemented; deeper query/filter/search semantics and cursor persistence are deferred.",
+      "retry_condition": "Authorised API depth directive implements persisted cursor/query semantics and sensitive search non-enumeration."
+    },
+    {
+      "react_item_id": "api.correlation-request-ids",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "API generates or propagates request and correlation IDs and returns them in safe error envelopes.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "API generates or propagates request and correlation IDs and returns them in safe error envelopes.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.security-headers",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "API sets no-store, nosniff, referrer policy, permissions policy, and records security header posture in OpenAPI metadata.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "API sets no-store, nosniff, referrer policy, permissions policy, and records security header posture in OpenAPI metadata.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.cors-csrf-browser-posture",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "CORS/CSRF/browser posture is represented in route metadata; browser session runtime is deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-155",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Metadata is present; no browser session/cookie runtime is implemented in this UI-free slice.",
+      "retry_condition": "Authorised browser/API depth directive implements session-cookie and CSRF runtime controls if needed."
+    },
+    {
+      "react_item_id": "api.rate-limiting-abuse-posture",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Rate-limit and abuse controls are represented as posture metadata only.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "packages/contracts/src/api-surface.ts"
+      ],
+      "usf_tests": [
+        "tests/packages/openapi.test.ts"
+      ],
+      "usf_proofs": [
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-155",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "No live edge/WAF/rate-limit provider readiness is claimed.",
+      "retry_condition": "Authorised API depth directive implements local rate/quota enforcement and abuse evidence."
+    },
+    {
+      "react_item_id": "api.example-safety",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "OpenAPI examples are synthetic and checker rejects secrets, credentials, raw object keys, recipient address refs, real emails, and readiness overclaims.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "OpenAPI examples are synthetic and checker rejects secrets, credentials, raw object keys, recipient address refs, real emails, and readiness overclaims.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.lifecycle-deprecation",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Route metadata records API version, contract version, schema version, operation version, lifecycle, deprecation status, sunset, replacement, and compatibility policy.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Route metadata records API version, contract version, schema version, operation version, lifecycle, deprecation status, sunset, replacement, and compatibility policy.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.compatibility-snapshots",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "OpenAPI diff/check posture exists; public compatibility snapshots and consumer-driven contracts are deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-155",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "OpenAPI checker exists and no public compatibility guarantee is claimed.",
+      "retry_condition": "Authorised compatibility directive adds synthetic snapshots, diff policy gates, and consumer contract posture."
+    },
+    {
+      "react_item_id": "api.future-ui-api-readiness",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Route metadata, tags, reason codes, schemas, examples, pagination metadata, and field exposure posture support future UI/API consumers without implementing UI.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "packages/contracts/src/api-surface.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Route metadata, tags, reason codes, schemas, examples, pagination metadata, and field exposure posture support future UI/API consumers without implementing UI.",
+      "retry_condition": "No retry needed for implemented local/dev/test contract proof."
+    },
+    {
+      "react_item_id": "api.bulk-api-safety",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Bulk/import/export API safety is defined but no bulk runtime is implemented by this slice.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md"
+      ],
+      "usf_tests": [
+        "tests/packages/openapi.test.ts"
+      ],
+      "usf_proofs": [
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-155",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Bulk posture is defined; high-risk bulk surfaces are deferred.",
+      "retry_condition": "Authorised bulk/API directive implements bounded tenant-scoped bulk routes with idempotency and audit."
+    },
+    {
+      "react_item_id": "api.gateway-edge-posture",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "Gateway/edge/TLS/WAF posture is defined but not claimed as live or deployed.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "packages/contracts/src/api-surface.ts"
+      ],
+      "usf_tests": [
+        "tests/packages/openapi.test.ts"
+      ],
+      "usf_proofs": [
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-155",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Local proof does not claim deployed edge controls.",
+      "retry_condition": "Authorised deployment/gateway directive defines and proves trusted proxy, forwarded header, TLS, WAF, and gateway controls."
+    },
+    {
+      "react_item_id": "api.graphql-generated-client-posture",
+      "category": "contract",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "React GraphQL/federation and generated-client lineage is inventoried and deferred; no external SDK readiness is claimed.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
+      ],
+      "usf_tests": [
+        "tests/packages/openapi.test.ts"
+      ],
+      "usf_proofs": [
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-155",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "OpenAPI route contracts are implemented; GraphQL/federation and generated clients remain lineage-only.",
+      "retry_condition": "Authorised API depth directive decides whether GraphQL/federation and generated clients are in foundation scope."
+    },
+    {
+      "react_item_id": "api.react-ui-playwright-api-behaviours",
+      "category": "test",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/src/openapi",
+        "packages/contracts",
+        "tools/architecture/openapi-drift-check.ts",
+        "e2e/prod/api-contract",
+        "e2e/prod/security-headers",
+        "e2e/prod/error-handling"
+      ],
+      "behaviour_summary": "React UI/Playwright API behaviours for API contract, security headers, error handling, and admin gates are rewritten as API/capability/contract/proof tests where foundation-relevant; UI-only assertions remain out of scope.",
+      "usf_status": "foundation-behaviour-rewritten-from-ui-test",
+      "usf_paths": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "packages/proof/src/api-contracts-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "corepack pnpm proof:api",
+        "corepack pnpm openapi:check",
+        "python3 tools/validate-parity/validate-api.py all --json"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-154",
+      "blocker": "USF-154",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "No Playwright/browser E2E is added; foundation behaviours are API tests and proof.",
+      "retry_condition": "No retry needed for rewritten behaviours; UI/UX remains tracked separately."
     },
     {
       "react_item_id": "db-rls-migrations",
