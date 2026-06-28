@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-020",
+  "mutation": {
+    "file": "capabilities/jobs/src/job-service.ts",
+    "replace": {
+      "old": "\"job.read\"",
+      "new": "\"job.noauthz\""
+    }
+  }
+}

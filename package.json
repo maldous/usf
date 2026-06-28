@@ -29,9 +29,10 @@
     "proof:config": "tsx packages/proof/src/config-secrets-proof.ts",
     "proof:files": "tsx packages/proof/src/files-storage-proof.ts",
     "proof:auth": "tsx packages/proof/src/auth-identity-proof.ts",
+    "proof:jobs": "tsx packages/proof/src/jobs-workflows-proof.ts",
     "repo:validate": "python3 tools/validate-spec/validate-spec.py all --json && python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
-    "parity": "python3 tools/validate-parity/validate-parity.py all --json && python3 tools/validate-parity/validate-db.py all --json && python3 tools/validate-parity/validate-authz.py all --json && python3 tools/validate-parity/validate-audit.py all --json && python3 tools/validate-parity/validate-config.py all --json && python3 tools/validate-parity/validate-files.py all --json && python3 tools/validate-parity/validate-auth.py all --json",
-    "verify": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm openapi:check && corepack pnpm db:types:check && corepack pnpm dev:smoke && corepack pnpm compose:config && corepack pnpm compose:smoke && corepack pnpm proof:bootstrap && corepack pnpm proof:config && corepack pnpm proof:auth && corepack pnpm repo:validate && corepack pnpm parity"
+    "parity": "python3 tools/validate-parity/validate-parity.py all --json && python3 tools/validate-parity/validate-db.py all --json && python3 tools/validate-parity/validate-authz.py all --json && python3 tools/validate-parity/validate-audit.py all --json && python3 tools/validate-parity/validate-config.py all --json && python3 tools/validate-parity/validate-files.py all --json && python3 tools/validate-parity/validate-auth.py all --json && python3 tools/validate-parity/validate-jobs.py all --json",
+    "verify": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm openapi:check && corepack pnpm db:types:check && corepack pnpm dev:smoke && corepack pnpm compose:config && corepack pnpm compose:smoke && corepack pnpm proof:bootstrap && corepack pnpm proof:config && corepack pnpm proof:auth && corepack pnpm proof:jobs && corepack pnpm repo:validate && corepack pnpm parity"
   },
   "dependencies": {
     "@sinclair/typebox": "0.34.49",

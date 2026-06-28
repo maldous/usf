@@ -12,12 +12,14 @@ import type {
   FileScanStatusValue,
   FileStatusValue,
   IdentityClaims,
+  JobRecord,
   PolicyDecision,
   SecretReference,
   Session,
   TenantContext,
   TenantMembership,
   VerifiedKeycloakToken,
+  WorkflowRecord,
 } from "@foundation/core";
 
 export interface IdentityProvider {
@@ -106,6 +108,34 @@ export interface SessionStore {
   get(sessionId: string): Session | undefined;
   put(session: Session): void;
   forActor(actorId: string): readonly Session[];
+}
+
+// Workflow/job port family (parity-jobs-workflows, USF-133 / ADR 0011). Two SEPARATE
+// ports: a durable workflow port and an operational job/automation port. Capabilities
+// depend only on these ports — never on Temporal or Windmill directly (ADR 0011).
+
+/** Operational job/automation store + queue. In-memory dev adapter; a composed-test
+ *  adapter (Windmill-like) is deferred. Holds tenant-scoped or service-actor jobs. */
+export interface OperationalJobPort {
+  submit(record: JobRecord): void;
+  get(jobId: string): JobRecord | undefined;
+  put(record: JobRecord): void;
+  /** Lease the next runnable job (status queued/scheduled/retrying whose runAfter has
+   *  passed and whose lease is free/expired) for an owner; sets lease + status leased. */
+  claim(input: { now: number; leaseOwner: string; leaseSeconds: number }): JobRecord | undefined;
+  forTenant(tenantId: string): readonly JobRecord[];
+  deadLettered(): readonly JobRecord[];
+  /** True if a tenant already has a job with this idempotency key (dedupe side effects). */
+  hasIdempotencyKey(tenantId: string | null, idempotencyKey: string): boolean;
+}
+
+/** Durable domain workflow store. In-memory dev adapter; Temporal is the canonical
+ *  composed-test provider (deferred — no live claim). Versioned, tenant-bound. */
+export interface DurableWorkflowPort {
+  start(record: WorkflowRecord): void;
+  get(workflowId: string): WorkflowRecord | undefined;
+  put(record: WorkflowRecord): void;
+  forTenant(tenantId: string): readonly WorkflowRecord[];
 }
 
 // Audit / evidence ports (parity-audit, USF-142). Capabilities depend on these

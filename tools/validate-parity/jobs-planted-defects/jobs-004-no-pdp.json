@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-004",
+  "mutation": {
+    "file": "capabilities/jobs/src/job-service.ts",
+    "replace": {
+      "old": "pdp.decide",
+      "new": "permitAll"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-015",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "\"job.created\"",
+      "new": "\"job.noop\""
+    }
+  }
+}

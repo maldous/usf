@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-013",
+  "mutation": {
+    "file": "capabilities/jobs/src/workflow-service.ts",
+    "replace": {
+      "old": "requester-cannot-self-approve",
+      "new": "approve-ok"
+    }
+  }
+}

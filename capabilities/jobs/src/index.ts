@@ -8,3 +8,19 @@ export class JobCapability {
     return this.workflowEngine.schedule({ tenantId: context.tenantId, workflow, payload });
   }
 }
+
+// Jobs/workflows port-family services (parity-jobs-workflows, USF-133 / ADR 0011/0013).
+export {
+  createJobService,
+  type JobHandler,
+  type JobRunResult,
+  type JobService,
+  type JobServiceDeps,
+  type SubmitOutcome,
+} from "./job-service.ts";
+export {
+  createWorkflowService,
+  type WorkflowOutcome,
+  type WorkflowService,
+  type WorkflowServiceDeps,
+} from "./workflow-service.ts";

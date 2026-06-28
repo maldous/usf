@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-010",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "safeFailureMessage",
+      "new": "rawFailureMessage"
+    }
+  }
+}

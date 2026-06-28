@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-011",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "redactJobPayload",
+      "new": "rawPayloadX"
+    }
+  }
+}

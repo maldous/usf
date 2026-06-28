@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-014",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "TERMINAL_JOB_STATUSES",
+      "new": "STATUSES_X"
+    }
+  }
+}
