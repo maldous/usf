@@ -553,6 +553,7 @@ export function canonicalAuditEventHash(
     event.resourceId,
     event.outcome,
     event.reasonCode,
+    event.safeMessage,
     event.policyVersion,
     event.decisionId,
     [...event.obligations],

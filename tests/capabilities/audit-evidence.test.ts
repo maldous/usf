@@ -7,6 +7,7 @@ import {
   toSafeAuditEventView,
 } from "@foundation/capability-audit";
 import {
+  BreakGlassRegistry,
   InMemoryTenantMembershipDirectory,
   createAuthorizer,
   createPolicyDecisionPoint,
@@ -304,6 +305,35 @@ describe("authorizer emits rich audit evidence (PR 93 integration)", () => {
     const denied = page.events.find((e) => e.outcome === "denied");
     expect(denied).toBeDefined();
     expect(denied!.reasonCode).toBe("rbac-deny");
+  });
+
+  it("records a failed break-glass attempt as break_glass.denied", async () => {
+    const store = new InMemoryAuditEventStore();
+    const recorder = createAuditRecorder({ ledger: store, component: "test" });
+    const auditLedger = new InMemoryAuditLedger();
+    const breakGlass = new BreakGlassRegistry();
+    const grant = breakGlass.approve({
+      tenantId: TENANT_A,
+      requesterId: ACTOR,
+      approverId: "approver",
+      reason: "investigation",
+      scope: "audit.*", // out of scope for a tenant.members.delete action
+      ttlMs: 60_000,
+    });
+    const pdp = createPolicyDecisionPoint({
+      memberships: membershipDir(["tenant-member"]),
+      breakGlass,
+    });
+    const authorizer = createAuthorizer({ pdp, auditLedger, audit: recorder });
+    await authorizer.authorize({
+      ...authzRequest(ctx(TENANT_A, ACTOR, ["tenant-member"]), "tenant.members.delete"),
+      breakGlassGrantId: grant.grantId,
+    });
+    const page = await store.query(ctx(), { tenantId: TENANT_A, limit: 100 });
+    const bg = page.events.find((e) => e.eventType === "break_glass.denied");
+    expect(bg).toBeDefined();
+    expect(bg!.outcome).toBe("denied");
+    expect(bg!.reasonCode).toBe("break-glass-out-of-scope");
   });
 });
 

@@ -13,14 +13,24 @@ export interface Authorizer {
 
 // Maps a PDP decision to a rich audit event (parity-audit, USF-142). Permit and deny
 // are both recorded (a denied privileged action is security-relevant evidence); a
-// break-glass permit is recorded as a high-severity break_glass.used event.
+// break-glass permit is recorded as a high-severity break_glass.used event and a
+// failed break-glass attempt as break_glass.denied.
 function decisionAuditDraft(decision: PolicyDecision) {
-  const breakGlass = decision.effect === "permit" && decision.reasonCode === "break-glass-permit";
+  const breakGlassUsed =
+    decision.effect === "permit" && decision.reasonCode === "break-glass-permit";
+  const breakGlassDenied =
+    decision.effect === "deny" && decision.reasonCode.startsWith("break-glass-");
+  const breakGlass = breakGlassUsed || breakGlassDenied;
+  const eventType = breakGlassUsed
+    ? "break_glass.used"
+    : breakGlassDenied
+      ? "break_glass.denied"
+      : "authorization.decision";
   return createAuditEventDraft({
     eventId: stableId("evt", [decision.tenantId, decision.actorId, "authz", decision.decisionId]),
-    eventType: breakGlass ? "break_glass.used" : "authorization.decision",
+    eventType,
     category: breakGlass ? "break-glass" : "authorization",
-    severity: breakGlass ? "high" : decision.effect === "deny" ? "warning" : "notice",
+    severity: breakGlassUsed ? "high" : decision.effect === "deny" ? "warning" : "notice",
     tenantId: decision.tenantId,
     actorId: decision.actorId,
     action: decision.action,
