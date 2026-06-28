@@ -62,6 +62,35 @@ export function buildOpenApiDocument() {
           },
         },
       },
+      "/v1/authz/check": {
+        post: {
+          operationId: "postAuthzCheckV1",
+          responses: {
+            "200": {
+              description: "Authorization permit decision from the USF policy decision point",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+            "403": {
+              description: "Authorization denied with a safe, non-enumerating reason code",
+            },
+          },
+        },
+      },
+      "/v1/authz/permissions": {
+        get: {
+          operationId: "getAuthzPermissionsV1",
+          responses: {
+            "200": {
+              description: "Effective permissions for the current actor and tenant (discovery)",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+          },
+        },
+      },
     },
   } as const;
 }

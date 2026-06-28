@@ -7,6 +7,14 @@ import { InMemoryObjectStore } from "@foundation/adapter-store";
 import { InMemoryWorkflowEngine } from "@foundation/adapter-wf";
 import { InMemoryAuditLedger } from "@foundation/capability-audit";
 import { createAuthService, type AuthService } from "@foundation/capability-auth";
+import {
+  BreakGlassRegistry,
+  InMemoryTenantMembershipDirectory,
+  createAuthorizer,
+  createPolicyDecisionPoint,
+  type Authorizer,
+} from "@foundation/capability-tenant";
+import type { PolicyDecisionPoint } from "@foundation/ports";
 import { InMemoryConfigProvider, devProviderPlan } from "@foundation/capability-config";
 import { FileCapability } from "@foundation/capability-files";
 import { JobCapability } from "@foundation/capability-jobs";
@@ -28,7 +36,14 @@ export interface DevRuntime {
   readonly notificationCapability: NotificationCapability;
   readonly observability: CapturedObservabilitySink;
   readonly secrets: InMemorySecretStore;
+  readonly membershipDirectory: InMemoryTenantMembershipDirectory;
+  readonly breakGlass: BreakGlassRegistry;
+  readonly pdp: PolicyDecisionPoint;
+  readonly authorizer: Authorizer;
 }
+
+export const DEV_TENANT_ID = "dev-tenant";
+export const DEV_ACTOR_ID = "dev-actor";
 
 export function createDevRuntime(): DevRuntime {
   const auditLedger = new InMemoryAuditLedger();
@@ -40,6 +55,18 @@ export function createDevRuntime(): DevRuntime {
   const mailProvider = new InMemoryMailProvider();
   const observability = new CapturedObservabilitySink();
   const secrets = new InMemorySecretStore();
+
+  const membershipDirectory = new InMemoryTenantMembershipDirectory();
+  membershipDirectory.upsert({
+    membershipId: "membership_dev",
+    tenantId: DEV_TENANT_ID,
+    actorId: DEV_ACTOR_ID,
+    status: "active",
+    roles: ["tenant-admin"],
+  });
+  const breakGlass = new BreakGlassRegistry();
+  const pdp = createPolicyDecisionPoint({ memberships: membershipDirectory, breakGlass });
+  const authorizer = createAuthorizer({ pdp, auditLedger });
 
   return {
     providerModeLabel: DEV_PROVIDER_MODE_LABEL,
@@ -55,5 +82,9 @@ export function createDevRuntime(): DevRuntime {
     notificationCapability: new NotificationCapability(mailProvider),
     observability,
     secrets,
+    membershipDirectory,
+    breakGlass,
+    pdp,
+    authorizer,
   };
 }

@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-AUTHZ-007",
+  "description": "007 adapter import",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorization-policy.ts",
+    "append": "import { Foo } from \"@foundation/adapter-db\";"
+  }
+}

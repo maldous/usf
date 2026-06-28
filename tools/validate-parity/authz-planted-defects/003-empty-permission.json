@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUTHZ-003",
+  "description": "003 empty permission",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorization-policy.ts",
+    "replace": {
+      "old": "ACTION_PERMISSIONS: Readonly<Record<string, string>> = Object.freeze({",
+      "new": "ACTION_PERMISSIONS: Readonly<Record<string, string>> = Object.freeze({\n  \"bad.action\": \"\","
+    }
+  }
+}

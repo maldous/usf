@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUTHZ-001",
+  "description": "001 default permit",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorization-policy.ts",
+    "replace": {
+      "old": "DEFAULT_EFFECT = \"deny\"",
+      "new": "DEFAULT_EFFECT = \"permit\""
+    }
+  }
+}

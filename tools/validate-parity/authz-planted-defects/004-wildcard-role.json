@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUTHZ-004",
+  "description": "004 wildcard role",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorization-policy.ts",
+    "replace": {
+      "old": "auditor: Object.freeze([\"audit.read\"]),",
+      "new": "auditor: Object.freeze([\"audit.read\", \"*\"]),"
+    }
+  }
+}

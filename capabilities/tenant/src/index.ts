@@ -82,3 +82,8 @@ export class BreakGlassRegistry {
     return grant;
   }
 }
+
+export * from "./authorization-policy.ts";
+export { InMemoryIdentityDirectory, InMemoryTenantMembershipDirectory } from "./membership.ts";
+export { createPolicyDecisionPoint, type PdpDeps } from "./pdp.ts";
+export { createAuthorizer, type Authorizer } from "./authorize.ts";

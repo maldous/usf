@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUTHZ-006",
+  "description": "006 self approval",
+  "mutation": {
+    "file": "capabilities/tenant/src/index.ts",
+    "replace": {
+      "old": "cannot approve their own access",
+      "new": "may approve their own access"
+    }
+  }
+}
