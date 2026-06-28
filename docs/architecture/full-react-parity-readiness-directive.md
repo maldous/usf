@@ -8,11 +8,11 @@
 | Follows | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `AGENTS.md` |
 | Primary inputs | `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/react-readiness-rule-parity-matrix.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/bootstrap-source-use-disposition-matrix.md`, `docs/architecture/complete-readiness-blocker-register.md`, the `spec/instances/` corpus, and historical `../react` evidence |
 | Companions | `docs/architecture/foundation-ui-agnostic-readiness-boundary.md`, `docs/architecture/react-parity-scope-classification-matrix.md`, `docs/architecture/full-parity-linear-tracking-plan.md` |
-| Repository state | No implementation/runtime code, no schema promotion, no proof execution, no React copy, no React path mirroring |
+| Repository state | The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89, USF-39). This directive and this pass introduce no new implementation/runtime code, no schema promotion, no proof execution, no React copy, and no React path mirroring. |
 
 > **Normative language.** **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, **MAY** carry BCP 14 / RFC 2119 intent.
 
-This directive establishes the **bar** for full functional parity readiness of the USF foundation against the historical `../react` repository. It creates no implementation files, imports no runtime code, executes no proof, emits no generated report, promotes no schema to active, and creates no Linear semantic authority. It is planning authority only.
+This directive establishes the **bar** for full functional parity readiness of the USF foundation against the historical `../react` repository. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89). This directive itself creates no new implementation files, imports no runtime code, executes no proof, emits no generated report, promotes no schema to active, and creates no Linear semantic authority. It is planning authority only.
 
 ## 1. Purpose
 
@@ -64,7 +64,11 @@ UI-scope statuses (new):
 - `ui-ux-only-out-of-foundation-scope` — UI/UX-only artefact (rendering, layout, navigation, DOM, visual, CSS); out of foundation scope.
 - `foundation-behaviour-rewritten-from-ui-test` — underlying foundation behaviour extracted from a UI/Playwright test and (to be) rewritten as a foundation-level API/capability/port/adapter/contract/proof test.
 
-4.1 For every item that is `partial`, `missing`, `deferred`, or `requires-human-decision`, a Linear issue MUST exist (no blocker may live only in a markdown report). See `full-parity-linear-tracking-plan.md`.
+4.1 Every `partial`, `missing`, `deferred`, or `requires-human-decision` item MUST be carried by a Linear blocker; no blocker may live only in a markdown report. The carrier is scoped to the level of decomposition reached:
+
+- **Current planning stage (this pass).** The matrix classifies at domain granularity. The domain-level `partial` set is carried, explicitly and sufficiently, by the umbrella planning blocker **USF-133**, with **USF-135** carrying parity-enforcement and **USF-136** carrying the `requires-human-decision` semantic-authority items. These three are the present blocker carriers; the absence of the 12 per-domain children does **not** make this matrix non-compliant.
+- **Per-domain children are gated.** The 12 `parity-*` children that decompose the domains to item-level rows are created only **after** a human-approved implementation directive authorises the corresponding domain (see `full-parity-linear-tracking-plan.md` §2). They are enumerated now, not created now.
+- **After a domain is authorised.** Once an implementation directive opens a domain, each item-level `partial`/`missing`/`requires-human-decision` row enumerated in that domain MUST have its own tracked blocker before that row may be acted on.
 
 4.2 No item may be `migrated` without USF tests/proofs. No historical test/proof may be left unclassified. No `requires-human-decision` item may be treated as resolved.
 

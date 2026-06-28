@@ -8,9 +8,9 @@
 | Follows | `docs/architecture/full-react-parity-readiness-directive.md`, `docs/architecture/foundation-ui-agnostic-readiness-boundary.md` |
 | Inventory substrate | `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/react-readiness-rule-parity-matrix.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/architecture/bootstrap-source-use-disposition-matrix.md`, `spec/instances/` |
 | Historical base | `../react` (rank-6 evidence only); frozen base recorded in `react-l5-equivalence-audit.md` |
-| Repository state | No implementation/runtime code, no proof execution, no React copy, no path mirroring |
+| Repository state | Introduces no new implementation/runtime code, no proof execution, no React copy, no path mirroring. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89). |
 
-> This matrix adds the **foundation-vs-UI scope lens** and the **test/proof classification** that the existing coverage matrices do not carry. It does **not** re-derive capability/rule/asset coverage — those remain authoritative in the substrate matrices above. Item-level rows (per service/port/adapter/route/job/workflow/provider/command/test) are produced under the Linear children in `full-parity-linear-tracking-plan.md`; this document is the domain-level classification.
+> This matrix adds the **foundation-vs-UI scope lens** and the **test/proof classification** that the existing coverage matrices do not carry. It does **not** re-derive capability/rule/asset coverage — those remain authoritative in the substrate matrices above. Item-level rows (per service/port/adapter/route/job/workflow/provider/command/test) are produced under the **planned** (gated) Linear children in `full-parity-linear-tracking-plan.md`; this document is the domain-level classification.
 
 ## 1. Status model
 
@@ -21,13 +21,13 @@ Row shape (per `full-react-parity-readiness-directive.md` §4.3): `react_item_id
 
 ## 2. Historical `../react` inventory (counts)
 
-Domain-level inventory of the historical repository (rank-6 evidence): **36 packages** (≈11 provider adapters, 8 runtimes, 6 contracts, 4 infra/tooling, 2 UI), **2 apps** (`platform-api` backend; `react-enterprise-app` SPA), **1 dev service** (`mock-oidc`), **~15 provider integrations**, **12 foundation domains**, plus a UI/UX surface (~23 admin feature modules + design system). Test/proof estimate: ~280+ foundation-behaviour test groups, ~20 mixed, ~15 UI-only, plus 7 Playwright configs and the make/proof-tooling ladder. Item-level enumeration is delegated to the Linear children.
+Domain-level inventory of the historical repository (rank-6 evidence): **36 packages** (≈11 provider adapters, 8 runtimes, 6 contracts, 4 infra/tooling, 2 UI), **2 apps** (`platform-api` backend; `react-enterprise-app` SPA), **1 dev service** (`mock-oidc`), **~15 provider integrations**, **12 foundation domains**, plus a UI/UX surface (~23 admin feature modules + design system). Test/proof estimate: ~280+ foundation-behaviour test groups, ~20 mixed, ~15 UI-only, plus 7 Playwright configs and the make/proof-tooling ladder. Item-level enumeration is delegated to the planned (gated) Linear children.
 
 ## 3. Foundation-domain classification (domain-level)
 
-Each domain below is foundation-relevant. The `usf_status` reflects the **full-parity** bar (not the narrower bootstrap scope). "Bootstrap" notes record what USF-39 already migrated at local dev/test scope. Every `partial`/`missing` row is tracked by a Linear child (see tracking plan); none is a markdown-only blocker.
+Each domain below is foundation-relevant. The `usf_status` reflects the **full-parity** bar (not the narrower bootstrap scope). "Bootstrap" notes record what USF-39 already migrated at local dev/test scope. At this planning stage the domain-level `partial` set is carried by the umbrella blocker **USF-133** (with **USF-135** for parity-enforcement and **USF-136** for `requires-human-decision` items); none is a markdown-only blocker. The per-domain children named in the "Planned child" column are **not created yet** — they are created only after a human-approved implementation directive (`full-parity-linear-tracking-plan.md` §2), so their absence does not make this matrix non-compliant (see directive §4.1).
 
-| # | Domain | category | Key historical items | usf_status | Bootstrap already migrated? | semantic_authority | Linear child | Substrate refs |
+| # | Domain | category | Key historical items | usf_status | Bootstrap already migrated? | semantic_authority | Planned child (gated) | Substrate refs |
 |---|---|---|---|---|---|---|---|---|
 | 1 | Auth / identity | service, port, adapter, route | Keycloak/OIDC brokering, session cookies, claim/role mapping, credential lifecycle, JWKS/discovery | partial | Yes — in-memory IdP + hermetic auth proof (L3–L4) | known | parity-auth | capability-source-coverage; auth-slice disposition matrix |
 | 2 | Tenant isolation + RBAC/ABAC | service, adapter, schema | PostgreSQL RLS, entitlements, delegated admin, resource/ABAC policy decisions | partial | Yes — tenant context capability | known (RLS); unclear (ABAC engine specifics) | parity-tenant | capability-source-coverage; `tenant-*`, `abac-*` instances |
@@ -83,4 +83,4 @@ These are `foundation-behaviour-rewritten-from-ui-test`. They are the highest-va
 
 ## 7. Completeness statement
 
-This domain-level classification has: assigned a disposition to all 12 foundation domains (all `partial`, each with a Linear child); classified the UI/UX surface and the UI/Playwright tests so none disappears silently; and named the foundation behaviours that must be rewritten out of the browser layer. It does **not** claim item-level completeness — per-service/route/adapter/test enumeration is the initial deliverable of each domain child. No foundation domain is left `unknown-unclassified`. Full foundation parity readiness is **not** complete.
+This domain-level classification has: assigned a disposition to all 12 foundation domains (all `partial`, carried now by the umbrella blocker USF-133 plus USF-135/USF-136; per-domain children gated to an implementation directive); classified the UI/UX surface and the UI/Playwright tests so none disappears silently; and named the foundation behaviours that must be rewritten out of the browser layer. It does **not** claim item-level completeness — per-service/route/adapter/test enumeration is the initial deliverable of each domain child. No foundation domain is left `unknown-unclassified`. Full foundation parity readiness is **not** complete.

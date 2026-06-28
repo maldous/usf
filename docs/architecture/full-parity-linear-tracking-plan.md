@@ -7,7 +7,7 @@
 | Authority level | Reviewable planning plan; Linear tracks work only and is not USF semantic authority (AGENTS.md, Authority Model) |
 | Follows | `docs/architecture/full-react-parity-readiness-directive.md`, `docs/architecture/react-parity-scope-classification-matrix.md` |
 | Canonical team | Universal Service Foundation; project Foundation & Governance |
-| Repository state | No implementation/runtime code; planning only |
+| Repository state | Planning only; introduces no new implementation/runtime code. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89). |
 
 This plan records the Linear tracking structure for full React functional parity foundation readiness. Linear is an external execution tracker; the readiness bar and disposition model are defined in the directive, not here.
 

@@ -7,7 +7,7 @@
 | Authority level | Reviewable planning boundary; subordinate to the Charter, Authority Model, accepted ADRs, validators, and proof evidence |
 | Follows | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `docs/architecture/full-react-parity-readiness-directive.md` |
 | Primary inputs | Historical `../react` UI and test evidence; `spec/schemas/ui-semantic-model.schema.json`; `spec/instances/ui-semantic-model/`; `docs/architecture/ui-journey-accessibility-proof-slice-plan.md` |
-| Repository state | No UI/React/browser artefacts; no Playwright; no implementation code |
+| Repository state | This pass introduces no UI/React/browser artefacts, no Playwright, and no new implementation code. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89), which has no UI/browser surface. |
 
 > **Normative language.** **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, **MAY** carry BCP 14 / RFC 2119 intent.
 
