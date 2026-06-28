@@ -107,19 +107,33 @@
     {
       "react_item_id": "config-secrets",
       "category": "config",
-      "react_paths": ["packages/config", "packages/openbao"],
-      "behaviour_summary": "Runtime config registry/history, provider config plane, OpenBao secrets, write-only settings.",
+      "react_paths": [
+        "packages/config",
+        "packages/config-runtime",
+        "packages/openbao",
+        "config/environments/*.json"
+      ],
+      "behaviour_summary": "Typed fail-closed config control plane: classification, scope/owner, deterministic precedence + override policy, secret-reference vs secret-value separation, redaction/non-leakage, secret lifecycle + access control, feature flags (safe default), config-change + secret-access audit (value-free). DB-backed config history, OpenBao/Postgres secret managers, and rotation execution deferred.",
       "usf_status": "partial",
-      "usf_paths": ["capabilities/config", "adapters/secrets"],
-      "usf_tests": [],
-      "usf_proofs": [],
+      "usf_paths": [
+        "capabilities/config (registry + config-service + secret-service)",
+        "packages/core (config/secret model + redaction + precedence)",
+        "packages/ports (config/secret/feature-flag ports)",
+        "adapters/secrets (SecretResolver)",
+        "apps/api (v1/config surfaces)",
+        "packages/proof (config-secrets-proof)"
+      ],
+      "usf_tests": ["tests/capabilities/config-secrets.test.ts", "tests/apps/config-api.test.ts"],
+      "usf_proofs": [
+        "packages/proof/src/config-secrets-proof.ts (make config-proof + in make verify: fail-closed, redaction, tenant isolation, secret lifecycle, deterministic flags)"
+      ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-133",
+      "blocker": "USF-145",
       "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "spec/instances/semantic-contract/runtime-secrets-management.json; bootstrap config wiring + in-memory secrets present.",
-      "retry_condition": "Per-domain implementation directive authorises parity-config; config + secrets behaviours migrated with USF tests."
+      "domain_authorised": true,
+      "evidence": "config-and-secrets standard docs/architecture/config-and-secrets-standard.md; source-use docs/architecture/parity-config-secrets-source-use-disposition-matrix.md; validate-config (15 rules + planted defects); make config-proof pass; USF-144; deferred depth USF-145.",
+      "retry_condition": "Deferred config/secrets depth (live OpenBao/Postgres secret managers, rotation execution, DB-backed config history, override workflow, runtime reload/cache, full provider plane, data residency, schema migration tooling) implemented and proven under USF-145; then re-classify migrated."
     },
     {
       "react_item_id": "files-storage",
