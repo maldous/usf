@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-AUTH-012",
+  "mutation": {
+    "file": "capabilities/auth/src/keycloak-auth.ts",
+    "append": "// regression: roles = token.realmRoleClaims"
+  }
+}

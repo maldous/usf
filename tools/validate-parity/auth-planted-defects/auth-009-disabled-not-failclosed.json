@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-009",
+  "mutation": {
+    "file": "capabilities/auth/src/identity.ts",
+    "replace": {
+      "old": "identity-disabled",
+      "new": "identity-ok"
+    }
+  }
+}

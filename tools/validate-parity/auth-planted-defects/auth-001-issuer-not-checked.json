@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-001",
+  "mutation": {
+    "file": "adapters/idp/src/keycloak-verifier.ts",
+    "replace": {
+      "old": "iss !== config.issuer",
+      "new": "iss === config.issuer"
+    }
+  }
+}

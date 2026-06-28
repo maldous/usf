@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-AUTH-016",
+  "mutation": {
+    "matrixAuthSet": {
+      "usf_tests": [],
+      "usf_proofs": []
+    }
+  }
+}

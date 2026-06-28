@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-011",
+  "mutation": {
+    "file": "capabilities/auth/src/session.ts",
+    "replace": {
+      "old": "session-logged-out",
+      "new": "session-active"
+    }
+  }
+}

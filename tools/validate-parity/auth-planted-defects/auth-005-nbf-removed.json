@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-005",
+  "mutation": {
+    "file": "adapters/idp/src/keycloak-verifier.ts",
+    "replace": {
+      "old": "not-yet-valid",
+      "new": "placeholder-reason"
+    }
+  }
+}

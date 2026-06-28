@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-002",
+  "mutation": {
+    "file": "adapters/idp/src/keycloak-verifier.ts",
+    "replace": {
+      "old": "brokered-upstream-issuer-presented-directly",
+      "new": "placeholder-reason"
+    }
+  }
+}
