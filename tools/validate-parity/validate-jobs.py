@@ -57,6 +57,7 @@ RULES = {
     "USF-JOBS-017": ("blocking", "jobs proof missing or makes a live/production overclaim"),
     "USF-JOBS-018": ("blocking", "jobs-workflows parity row lacks tests/proofs backing"),
     "USF-JOBS-019": ("blocking", "Jobs & Workflows Standard missing or lacks no-certification posture"),
+    "USF-JOBS-020": ("blocking", "privileged read/list are not PDP-gated and tenant-scoped"),
     "USF-JOBS-SELFTEST": ("blocking", "planted jobs defect did not raise its expected rule"),
 }
 
@@ -164,6 +165,8 @@ def run_checks(F, state=None):
         F.add("USF-JOBS-004", JOBSVC, "job actions must be PDP-guarded")
     if '"job.create"' not in policy or '"service-worker"' not in policy:
         F.add("USF-JOBS-004", POLICY, "job actions + service-worker role must be in the authz policy")
+    if not ('"job.read"' in jobsvc and '"job.list"' in jobsvc):
+        F.add("USF-JOBS-020", JOBSVC, "privileged read/list must be PDP-gated and tenant-scoped")
     if "pdp.decide" not in wfsvc or '"workflow.start"' not in wfsvc:
         F.add("USF-JOBS-005", WFSVC, "workflow actions must be PDP-guarded")
     if "assertBoundedBackoff" not in core or "no unbounded retry" not in core:

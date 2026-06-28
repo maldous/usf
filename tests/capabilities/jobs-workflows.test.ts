@@ -140,6 +140,25 @@ describe("job service authorization + classification", () => {
     const res = await h.jobs.cancel(h.ctx(A, "admin-a", ["tenant-admin"]), jb.job.jobId);
     expect(res.ok).toBe(false);
   });
+
+  it("read and list are PDP-gated and tenant-scoped", async () => {
+    const ctxA = h.ctx(A, "admin-a", ["tenant-admin"]);
+    const a = await h.jobs.submit({
+      context: ctxA,
+      classification: "operational-automation-job",
+      jobType: "x",
+    });
+    const jb = await h.jobs.submit({
+      context: h.ctx(B, "admin-b", ["tenant-admin"]),
+      classification: "operational-automation-job",
+      jobType: "y",
+    });
+    if (!a.ok || !jb.ok) throw new Error("setup");
+    expect((await h.jobs.read(ctxA, a.job.jobId)).ok).toBe(true);
+    expect((await h.jobs.read(ctxA, jb.job.jobId)).ok).toBe(false); // cross-tenant read denied
+    const list = await h.jobs.list(ctxA);
+    expect(list.ok && list.views.every((v) => v.tenantId === A)).toBe(true);
+  });
 });
 
 describe("job execution: retry, dead-letter, redaction, cancel", () => {

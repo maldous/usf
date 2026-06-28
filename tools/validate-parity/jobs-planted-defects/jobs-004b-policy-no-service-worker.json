@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-004",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorization-policy.ts",
+    "replace": {
+      "old": "\"service-worker\"",
+      "new": "\"svc-worker-x\""
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import {
   assertBoundedBackoff,
+  assertSchedule,
   type BackoffPolicy,
   createAuditEventDraft,
   isRetryable,
@@ -11,11 +12,13 @@ import {
   type JobStatus,
   nextBackoffSeconds,
   redactJobPayload,
+  type SafeJobView,
   safeFailureMessage,
   type ScheduleSpec,
   scheduleDueKey,
   stableId,
   type TenantContext,
+  toSafeJobView,
 } from "@foundation/core";
 import type {
   AuditRecorder,
@@ -82,7 +85,13 @@ export interface JobService {
     nowSec: number,
     job: { classification: JobClassification; jobType: string },
   ): Promise<SubmitOutcome | { ok: false; reasonCode: "already-enqueued-this-window" }>;
-  get(jobId: string): JobRecord | undefined;
+  read(
+    context: TenantContext,
+    jobId: string,
+  ): Promise<{ ok: true; view: SafeJobView } | { ok: false; reasonCode: string }>;
+  list(
+    context: TenantContext,
+  ): Promise<{ ok: true; views: readonly SafeJobView[] } | { ok: false; reasonCode: string }>;
 }
 
 export function createJobService(deps: JobServiceDeps): JobService {
@@ -127,11 +136,19 @@ export function createJobService(deps: JobServiceDeps): JobService {
     );
   }
 
-  function authorize(context: TenantContext, action: string, jobId: string): string | null {
+  // Authorize against the RESOURCE tenant. For an existing job we pass the job's own
+  // tenant, so the PDP tenant-boundary rule (resource.tenantId must equal the context
+  // tenant) is a real cross-tenant backstop, not a tautology.
+  function authorize(
+    context: TenantContext,
+    action: string,
+    jobId: string,
+    resourceTenantId: string = context.tenantId,
+  ): string | null {
     const decision = deps.pdp.decide({
       context,
       action,
-      resource: { type: "job", id: jobId, tenantId: context.tenantId, attributes: {} },
+      resource: { type: "job", id: jobId, tenantId: resourceTenantId, attributes: {} },
     });
     return decision.effect === "permit" ? null : decision.reasonCode;
   }
@@ -279,15 +296,17 @@ export function createJobService(deps: JobServiceDeps): JobService {
     },
 
     async cancel(context, jobId) {
-      const denyReason = authorize(context, "job.cancel", jobId);
-      if (denyReason) {
-        return { ok: false, reasonCode: denyReason };
-      }
       const job = deps.jobs.get(jobId);
       if (!job) {
         return { ok: false, reasonCode: "no-job" };
       }
-      // Tenant isolation: the PDP already denied a cross-tenant context, but guard again.
+      // Authorize against the job's tenant: a cross-tenant context fails the PDP
+      // tenant-boundary rule (the real backstop). The explicit equality check below is
+      // defence in depth for the null-tenant (system) case.
+      const denyReason = authorize(context, "job.cancel", jobId, job.tenantId ?? context.tenantId);
+      if (denyReason) {
+        return { ok: false, reasonCode: denyReason };
+      }
       if (job.tenantId !== context.tenantId) {
         return { ok: false, reasonCode: "tenant-boundary" };
       }
@@ -307,13 +326,18 @@ export function createJobService(deps: JobServiceDeps): JobService {
     },
 
     async retryFromDeadLetter(context, jobId) {
-      const denyReason = authorize(context, "job.dead_letter.retry", jobId);
-      if (denyReason) {
-        return { ok: false, reasonCode: denyReason };
-      }
       const job = deps.jobs.get(jobId);
       if (!job || job.tenantId !== context.tenantId) {
         return { ok: false, reasonCode: "no-job" };
+      }
+      const denyReason = authorize(
+        context,
+        "job.dead_letter.retry",
+        jobId,
+        job.tenantId ?? context.tenantId,
+      );
+      if (denyReason) {
+        return { ok: false, reasonCode: denyReason };
       }
       if (job.status !== "dead-lettered") {
         return { ok: false, reasonCode: "not-dead-lettered" };
@@ -337,6 +361,9 @@ export function createJobService(deps: JobServiceDeps): JobService {
     },
 
     async runDueSchedule(context, spec, nowSec, jobSpec) {
+      // Defence in depth: an unknown/non-UTC schedule fails closed in the service path,
+      // not only at the caller's construction site.
+      assertSchedule(spec);
       // Same window -> same idempotency key -> a double tick never double-enqueues.
       const dueKey = scheduleDueKey(spec, nowSec);
       if (deps.jobs.hasIdempotencyKey(context.tenantId, dueKey)) {
@@ -351,8 +378,27 @@ export function createJobService(deps: JobServiceDeps): JobService {
       });
     },
 
-    get(jobId) {
-      return deps.jobs.get(jobId);
+    async read(context, jobId) {
+      const job = deps.jobs.get(jobId);
+      if (!job) {
+        return { ok: false, reasonCode: "no-job" };
+      }
+      // Tenant-scoped, PDP-gated read: authorize against the job's tenant so a
+      // cross-tenant read is denied by the PDP tenant-boundary rule.
+      const denyReason = authorize(context, "job.read", jobId, job.tenantId ?? context.tenantId);
+      if (denyReason || job.tenantId !== context.tenantId) {
+        return { ok: false, reasonCode: denyReason ?? "tenant-boundary" };
+      }
+      return { ok: true, view: toSafeJobView(job) };
+    },
+
+    async list(context) {
+      const denyReason = authorize(context, "job.list", `tenant:${context.tenantId}`);
+      if (denyReason) {
+        return { ok: false, reasonCode: denyReason };
+      }
+      // Tenant-scoped projection (redacted, no payload/lease internals).
+      return { ok: true, views: deps.jobs.forTenant(context.tenantId).map(toSafeJobView) };
     },
   };
 }

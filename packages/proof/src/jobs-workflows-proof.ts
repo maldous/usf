@@ -295,6 +295,19 @@ async function main() {
   if (crossCancel.ok) throw new Error("tenant A cancelled a tenant B job");
   pass("tenant A cannot cancel a tenant B job (PDP tenant-boundary)");
 
+  // ---- Authorized, tenant-scoped read/list; cross-tenant read denied -------------
+  const readOwn = await jobs.read(ctxAdminA, created.job.jobId);
+  if (!readOwn.ok) throw new Error("tenant A could not read its own job");
+  const readCross = await jobs.read(ctxAdminA, jobB.job.jobId);
+  if (readCross.ok) throw new Error("tenant A read a tenant B job");
+  const memberRead = await jobs.read(ctxMemberA, created.job.jobId);
+  if (!memberRead.ok) throw new Error("a tenant member with job.read could not read");
+  const listed = await jobs.list(ctxAdminA);
+  if (!listed.ok || listed.views.some((v) => v.tenantId !== TENANT_A)) {
+    throw new Error("job list leaked another tenant or was denied");
+  }
+  pass("job read/list are PDP-gated and tenant-scoped (cross-tenant read denied)");
+
   // ---- Cross-tenant orchestration is tenant-by-tenant ---------------------------
   const sa = await jobs.submit({
     context: ctxServiceA,

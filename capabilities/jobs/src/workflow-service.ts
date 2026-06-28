@@ -34,7 +34,6 @@ export interface WorkflowService {
   approve(context: TenantContext, workflowId: string): Promise<WorkflowOutcome>;
   reject(context: TenantContext, workflowId: string): Promise<WorkflowOutcome>;
   canAccess(workflowId: string, tenantId: string): boolean;
-  get(workflowId: string): WorkflowRecord | undefined;
 }
 
 export function createWorkflowService(deps: WorkflowServiceDeps): WorkflowService {
@@ -210,10 +209,6 @@ export function createWorkflowService(deps: WorkflowServiceDeps): WorkflowServic
     canAccess(workflowId, tenantId) {
       const wf = deps.workflows.get(workflowId);
       return wf !== undefined && wf.tenantId === tenantId;
-    },
-
-    get(workflowId) {
-      return deps.workflows.get(workflowId);
     },
   };
 }
