@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-002",
+  "mutation": {
+    "file": "capabilities/config/src/registry.ts",
+    "replace": {
+      "old": "owner",
+      "new": "ownr"
+    }
+  },
+  "description": "002-no-owner-scope.json"
+}

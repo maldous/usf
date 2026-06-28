@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-007",
+  "mutation": {
+    "file": "capabilities/config/src/config-service.ts",
+    "replace": {
+      "old": "pdp.decide",
+      "new": "allowAll"
+    }
+  },
+  "description": "007-config-no-pdp.json"
+}

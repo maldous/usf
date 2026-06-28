@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-001",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "CONFIG_CLASSIFICATIONS",
+      "new": "CONFIG_CLASSES"
+    }
+  },
+  "description": "001-no-classification.json"
+}

@@ -44,3 +44,22 @@ export function assertNoInMemoryProviderInTest(providerName: string): void {
     throw new Error(`Test provider must not be in-memory: ${providerName}`);
   }
 }
+
+export {
+  CONFIG_REGISTRY,
+  FEATURE_FLAG_REGISTRY,
+  configDefinition,
+  featureFlagDefinition,
+} from "./registry.ts";
+export {
+  ConfigAccessDeniedError,
+  InMemoryConfigLayerProvider,
+  InMemoryFeatureFlagSource,
+  createConfigService,
+  type ConfigService,
+} from "./config-service.ts";
+export {
+  SecretAccessDeniedError,
+  createSecretService,
+  type SecretService,
+} from "./secret-service.ts";

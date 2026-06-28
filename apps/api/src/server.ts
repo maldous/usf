@@ -5,12 +5,15 @@ import {
   AuditVerifyResponseSchema,
   AuthorizeCheckRequestSchema,
   AuthorizeDecisionResponseSchema,
+  ConfigCurrentResponseSchema,
   ErrorResponseSchema,
+  FeatureFlagsResponseSchema,
   ForbiddenResponseSchema,
   HealthResponseSchema,
   LoginRequestSchema,
   LoginResponseSchema,
   PermissionsResponseSchema,
+  ProviderStatusResponseSchema,
   ReadyResponseSchema,
   TenantContextResponseSchema,
 } from "@foundation/contracts";
@@ -25,6 +28,7 @@ import {
   type TenantContext,
 } from "@foundation/core";
 import { AuditAccessDeniedError, toSafeAuditEventView } from "@foundation/capability-audit";
+import { FEATURE_FLAG_REGISTRY } from "@foundation/capability-config";
 import {
   contextFromClaims,
   permissionsForRoles,
@@ -441,6 +445,102 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
         reply.code(400);
         return { error: error instanceof Error ? error.message : "unknown error" };
       }
+    },
+  );
+
+  // Config surfaces (parity-config-secrets, USF-144). Tenant-scoped, PDP-protected,
+  // redacted, non-enumerating. No secret values, no raw provider credentials.
+  app.get<{ Querystring: { tenantId?: string } }>(
+    "/v1/config/current",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: { 200: ConfigCurrentResponseSchema, 400: ErrorResponseSchema },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      const config = await runtime.configService.list(context);
+      return { tenantId: context.tenantId, schemaVersion: "config-1", config };
+    },
+  );
+
+  app.get<{ Querystring: { tenantId?: string } }>(
+    "/v1/config/feature-flags",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: { 200: FeatureFlagsResponseSchema, 400: ErrorResponseSchema },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      const flags: Record<string, boolean> = {};
+      for (const def of FEATURE_FLAG_REGISTRY) {
+        flags[def.flagKey] = await runtime.configService.evaluateFlag(context, def.flagKey);
+      }
+      return { tenantId: context.tenantId, flags };
+    },
+  );
+
+  app.get<{ Querystring: { tenantId?: string } }>(
+    "/v1/config/provider-status",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: { 200: ProviderStatusResponseSchema, 400: ErrorResponseSchema },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      // Provider MODES only (never credentials); the plan is already non-secret.
+      return {
+        tenantId: context.tenantId,
+        providerMode: DEV_PROVIDER_MODE_LABEL,
+        providers: runtime.providers,
+      };
     },
   );
 

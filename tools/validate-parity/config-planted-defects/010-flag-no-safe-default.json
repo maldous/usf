@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-CONFIG-010",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "safeDefault",
+      "new": "dflt"
+    }
+  },
+  "description": "010-flag-no-safe-default.json"
+}
