@@ -1,4 +1,4 @@
-import { runBootstrapProof, runDevSmoke } from "@foundation/proof";
+import { runAuthIdentityProof, runBootstrapProof, runDevSmoke } from "@foundation/proof";
 import { describe, expect, it } from "vitest";
 
 describe("bootstrap proof", () => {
@@ -16,6 +16,20 @@ describe("bootstrap proof", () => {
       providerMode: "dev in-memory",
       tenantAcceptedStatus: 200,
       tenantMismatchStatus: 400,
+    });
+  });
+});
+
+describe("keycloak-brokered auth/identity proof", () => {
+  it("proves hermetic Keycloak token validation, identity mapping, sessions, and tenant handoff", async () => {
+    await expect(runAuthIdentityProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      keycloakSoleIssuer: true,
+      liveExternalProviderClaim: false,
+      liveKeycloakClaim: false,
+      brokeredUpstreamAcceptedDirectly: false,
+      productionLiveClaim: false,
     });
   });
 });
