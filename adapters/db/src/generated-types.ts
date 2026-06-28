@@ -121,4 +121,4 @@ export interface BootstrapDatabase {
 // adapters/db/migrations/manifest.json. Regenerate these types and this pin when
 // a new forward-only migration is added.
 export const generatedFromMigrationsManifestSha256 =
-  "6463cb0d4c9fdf154f1e05784097e4f0e853509e28b6a0239c2b89c2e9cbdeff";
+  "d5a26062ad27a1d7ddc9567d4fd5a7c24036944d6479aa6ce4ce97a9b7a5396d";

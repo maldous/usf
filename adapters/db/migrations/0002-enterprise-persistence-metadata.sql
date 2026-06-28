@@ -93,7 +93,7 @@ BEGIN
   NEW.updated_at := now();
   NEW.version := OLD.version + 1;
   RETURN NEW;
-END
+END;
 $$;
 
 CREATE TRIGGER tenants_lifecycle BEFORE UPDATE ON tenants
@@ -112,7 +112,7 @@ BEGIN
     RAISE EXCEPTION 'legal_hold prevents destructive delete';
   END IF;
   RETURN OLD;
-END
+END;
 $$;
 
 CREATE TRIGGER tenant_memberships_legal_hold BEFORE DELETE ON tenant_memberships
@@ -126,7 +126,7 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
   RAISE EXCEPTION 'audit_ledger is append-only; corrections must be compensating records';
-END
+END;
 $$;
 
 CREATE TRIGGER audit_ledger_no_mutation BEFORE UPDATE OR DELETE ON audit_ledger
@@ -141,6 +141,10 @@ BEGIN
   IF NEW.recorded_at IS NULL THEN
     NEW.recorded_at := now();
   END IF;
+  -- Serialize chain computation per tenant so concurrent same-tenant inserts cannot
+  -- both read the same previous_hash and fork the append-only chain. The advisory lock
+  -- is transaction-scoped and auto-releases at commit/rollback.
+  PERFORM pg_advisory_xact_lock(hashtext('audit_ledger_chain'), hashtext(NEW.tenant_id::text));
   SELECT row_hash INTO prev
   FROM audit_ledger
   WHERE tenant_id = NEW.tenant_id
@@ -160,7 +164,7 @@ BEGIN
       'UTF8')),
     'hex');
   RETURN NEW;
-END
+END;
 $$;
 
 CREATE TRIGGER audit_ledger_chain BEFORE INSERT ON audit_ledger
