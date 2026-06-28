@@ -1,0 +1,85 @@
+{
+  "id": "0010-authorization-policy-decision-point",
+  "kind": "adr",
+  "title": "USF Authorization Policy Decision Point",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-06-28",
+  "context": "The historical react stack expresses authorization across application-layer permission and resource-policy checks, attribute-based decisions, and database row-level security, with identity brokered through Keycloak. During the React functional parity readiness pass the exact USF authority for the policy decision point was recorded as a requires-human-decision item (USF-136) because the Authority Model forbids inferring missing semantics from historical implementation. A human has now decided the authorization model, so it needs rank-2 ADR coverage rather than tracker context or planning prose.",
+  "decision": "USF V2 uses a USF-owned internal policy decision point for application-layer authorization. The PDP combines RBAC and ABAC inputs and fails closed by default. An identity provider supplies identity claims only and is not the sole authorization system; final authorization decisions are owned by the USF PDP. Postgres row-level security remains mandatory for tenant-scoped persistence and acts as the database isolation backstop, not as the only authorization layer. Policy assignments, resource attributes, break-glass grants, and authorization evidence are represented in USF semantic contracts and persisted through authorised adapters. Capabilities must not delegate final authorization solely to the identity provider or to the database.",
+  "consequences": [
+    "The USF authorization model has rank-2 ADR coverage and unblocks the authorization portion of USF-136.",
+    "The abac-policy-decision-point semantic contract and related RBAC, tenant, and persistence contracts reference this ADR as authority.",
+    "A future implementation directive may author the PDP behind USF ports with fail-closed semantics and an RLS backstop, with its own proof.",
+    "Authorization evidence becomes a represented, auditable concern in semantic contracts."
+  ],
+  "invariants": [
+    "The application-layer policy decision point is owned by USF, not by an external identity provider.",
+    "The PDP combines RBAC and ABAC inputs.",
+    "The PDP fails closed by default.",
+    "An identity provider supplies identity claims only and is not the sole authorization system.",
+    "Postgres row-level security remains mandatory for tenant-scoped persistence.",
+    "Row-level security is a database isolation backstop and not the only authorization layer.",
+    "Policy assignments, resource attributes, break-glass grants, and authorization evidence are represented in USF semantic contracts and persisted through authorised adapters.",
+    "A capability must not delegate final authorization solely to the identity provider or to the database."
+  ],
+  "permittedChanges": [
+    "Implement the PDP behind USF ports and adapters under a separate authorised implementation directive, with semantic contracts, tests, and proof.",
+    "Enrich the RBAC, ABAC, tenant-isolation, break-glass, and persistence semantic contracts to reference this decision.",
+    "Add validators and proofs that demonstrate fail-closed PDP behaviour and RLS backstop behaviour."
+  ],
+  "forbiddenDrift": [
+    "Do not treat the identity provider as the authorization system of record.",
+    "Do not treat row-level security as the only authorization layer or remove it as the tenant-persistence backstop.",
+    "Do not allow a default-open authorization path; the PDP fails closed.",
+    "Do not infer PDP behaviour from historical react source; implement against USF semantics.",
+    "Do not copy react authorization code or mirror its paths."
+  ],
+  "aiAlignmentRules": [
+    "Agents must treat the USF-owned PDP as the application-layer authorization authority and must not delegate final authorization to an identity provider or the database alone.",
+    "Agents must preserve fail-closed default behaviour and the mandatory RLS tenant backstop.",
+    "Agents must not implement the PDP from this ADR alone; a separate authorised implementation directive is required.",
+    "Agents must not infer authorization semantics from historical react code."
+  ],
+  "semanticRefs": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/full-react-parity-readiness-directive.md",
+    "docs/architecture/react-parity-scope-classification-matrix.md",
+    "spec/instances/semantic-contract/abac-policy-decision-point.json",
+    "spec/instances/semantic-contract/rbac-roles-and-permissions.json",
+    "spec/instances/semantic-contract/tenant-isolation-proof.json",
+    "spec/instances/semantic-contract/relational-storage-and-migrations-and-rls.json",
+    "spec/instances/semantic-contract/support-mode-break-glass-access.json",
+    "spec/instances/semantic-contract/authentication-platform.json"
+  ],
+  "sourceRefs": [
+    "docs/architecture/capability-source-coverage-matrix.md",
+    "docs/architecture/react-l5-equivalence-audit.md"
+  ],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "Combining RBAC and ABAC in a USF-owned PDP keeps the application-layer authorization decision inside USF semantics, where it can be defined, proven, and audited, rather than scattered across a provider and the database. Failing closed by default preserves the Charter fail-closed posture. Keeping RLS mandatory but subordinate gives tenant isolation a database backstop without letting the database become the only place authorization is decided. Representing assignments, attributes, break-glass grants, and evidence in semantic contracts keeps authorization machine-readable and AI-buildable.",
+  "description": "Records the human-approved decision that USF V2 owns an application-layer policy decision point combining RBAC and ABAC, failing closed, with the identity provider supplying identity only and Postgres RLS as a mandatory tenant-persistence isolation backstop rather than the sole authorization layer.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Semantic Contract",
+    "Capability",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "capability-domains",
+    "provider-modes",
+    "environment-classes"
+  ],
+  "aiGuidance": "Use this ADR when evaluating USF authorization: the USF-owned PDP combines RBAC and ABAC and fails closed, the identity provider supplies identity only, and Postgres RLS is a mandatory tenant-persistence backstop and not the sole authorization layer. Do not implement from this ADR alone or infer authorization semantics from historical react code."
+}

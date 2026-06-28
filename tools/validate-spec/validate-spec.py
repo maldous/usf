@@ -1643,7 +1643,7 @@ def check_real_instances(ctx, F):
     coverage so one repeatable command validates the current authored corpus.
     """
     states = {}
-    adr_paths = sorted(glob.glob("tools/validate-spec/fixtures/positive/adr/000*.json"))
+    adr_paths = sorted(glob.glob("tools/validate-spec/fixtures/positive/adr/[0-9][0-9][0-9][0-9]-*.json"))
     semantic_paths = sorted(glob.glob("spec/instances/**/*.json", recursive=True))
     envelope_paths = sorted(glob.glob("evidence/evidence-envelope/*.json"))
     proof_paths = sorted(glob.glob("evidence/proof-evidence/*.json"))
