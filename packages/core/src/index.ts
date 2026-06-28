@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, createHmac } from "node:crypto";
 
 export type ProviderMode = "hermetic-mock" | "local-composed-real-service";
 
@@ -1146,8 +1146,10 @@ export function generateObjectKey(input: {
   fileId: string;
   salt: string;
 }): string {
-  const h = createHash("sha256")
-    .update(`${input.tenantId} ${input.fileId} ${input.salt}`, "utf8")
+  // HMAC keyed by the salt over a JSON-encoded part list: unambiguous across part
+  // boundaries (no separator collision) and unguessable without the salt.
+  const h = createHmac("sha256", input.salt)
+    .update(JSON.stringify([input.tenantId, input.fileId]), "utf8")
     .digest("hex");
   return `o/${h.slice(0, 2)}/${h.slice(2, 4)}/${h}`;
 }
