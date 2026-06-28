@@ -23,8 +23,10 @@ export const ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = Obj
     "audit.read",
     "audit.search",
     "audit.verify",
+    "config.read",
+    "config.write",
   ]),
-  "tenant-member": Object.freeze(["tenant.members.read"]),
+  "tenant-member": Object.freeze(["tenant.members.read", "config.read"]),
   auditor: Object.freeze(["audit.read", "audit.search", "audit.verify"]),
   "security-admin": Object.freeze([
     "tenant.members.read",
@@ -36,6 +38,11 @@ export const ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = Obj
     "audit.export",
     "audit.correct",
     "audit.purge",
+    "config.read",
+    "config.write",
+    "provider.config.read",
+    "provider.config.write",
+    "secret.read",
     "security.restricted.read",
   ]),
 });
@@ -52,6 +59,11 @@ export const ACTION_PERMISSIONS: Readonly<Record<string, string>> = Object.freez
   "audit.export": "audit.export",
   "audit.correct": "audit.correct",
   "audit.purge": "audit.purge",
+  "config.read": "config.read",
+  "config.write": "config.write",
+  "provider.config.read": "provider.config.read",
+  "provider.config.write": "provider.config.write",
+  "secret.read": "secret.read",
   "security.restricted.read": "security.restricted.read",
 });
 

@@ -290,6 +290,22 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   },
   "security.audit_integrity_failed": { category: "security", severity: "critical", reserved: true },
   "security.suspicious_export": { category: "security", severity: "high", reserved: true },
+  // Config/secrets events (parity-config-secrets, USF-144). Emitted by this slice;
+  // reserved ones are defined for forward-compat but not emitted yet.
+  "config.read": { category: "configuration", severity: "info" },
+  "config.changed": { category: "configuration", severity: "warning" },
+  "config.denied": { category: "configuration", severity: "warning" },
+  "config.validation_failed": { category: "configuration", severity: "high" },
+  "config.override.created": { category: "configuration", severity: "warning", reserved: true },
+  "config.override.expired": { category: "configuration", severity: "notice", reserved: true },
+  "config.drift.detected": { category: "configuration", severity: "high" },
+  "secret.accessed": { category: "configuration", severity: "notice" },
+  "secret.denied": { category: "configuration", severity: "warning" },
+  "secret.rotated": { category: "configuration", severity: "warning", reserved: true },
+  "secret.revoked": { category: "configuration", severity: "high", reserved: true },
+  "feature_flag.evaluated": { category: "configuration", severity: "debug" },
+  "feature_flag.changed": { category: "configuration", severity: "warning", reserved: true },
+  "provider_config.changed": { category: "configuration", severity: "warning", reserved: true },
 });
 
 // Metadata keys (matched case-insensitively as substrings) that MUST NEVER appear
@@ -642,4 +658,369 @@ export function verifyAuditChain(
     brokenAtSequence: null,
     reason: null,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Configuration / secrets model (parity-config-secrets, USF-144).
+//
+// Configuration is a typed, classified, validated CONTROL PLANE. Secrets are
+// credentials referenced by opaque pointers, never embedded. Required/invalid
+// config fails closed; secret VALUES never leave the secret adapter and never
+// appear in API responses, audit metadata, errors, validation findings, OpenAPI,
+// fixtures, or generated evidence. ISO 27001-supporting technical control evidence
+// only; no certification claim. See docs/architecture/config-and-secrets-standard.md.
+// ---------------------------------------------------------------------------
+
+export const CONFIG_SCHEMA_VERSION = "config-1";
+
+export const CONFIG_CLASSIFICATIONS = Object.freeze([
+  "public-config",
+  "internal-config",
+  "security-control",
+  "tenant-config",
+  "environment-config",
+  "provider-config",
+  "feature-flag",
+  "secret-reference",
+  "credential-metadata",
+  "runtime-ephemeral",
+  "deprecated-config",
+] as const);
+export type ConfigClassification = (typeof CONFIG_CLASSIFICATIONS)[number];
+
+// Deterministic precedence, lowest trust first. A later (higher-trust) layer wins,
+// except a lower-trust layer MUST NOT override a security-control key (override policy).
+export const CONFIG_SCOPES = Object.freeze([
+  "compiled-default",
+  "repository-default",
+  "environment",
+  "deployment",
+  "tenant",
+  "runtime-override",
+  "break-glass-override",
+] as const);
+export type ConfigScope = (typeof CONFIG_SCOPES)[number];
+
+export const ENVIRONMENT_CLASSES = Object.freeze([
+  "local-dev",
+  "local-composed-test",
+  "ci",
+  "staging",
+  "production",
+] as const);
+export type EnvironmentClass = (typeof ENVIRONMENT_CLASSES)[number];
+
+export const SECRET_LIFECYCLE_STATES = Object.freeze([
+  "created",
+  "active",
+  "deprecated",
+  "rotating",
+  "revoked",
+  "expired",
+  "destroyed",
+  "unknown",
+] as const);
+export type SecretLifecycleState = (typeof SECRET_LIFECYCLE_STATES)[number];
+
+export type ConfigValueType = "string" | "number" | "boolean" | "enum";
+
+export type OverridePolicy =
+  | "immutable" // only compiled/repository defaults
+  | "environment-only" // environment/deployment layers may set
+  | "tenant-allowed" // a tenant may override
+  | "operator-only" // runtime operator override only
+  | "break-glass-only"; // only a break-glass override
+
+export interface ConfigKeyDefinition {
+  readonly key: string;
+  readonly classification: ConfigClassification;
+  readonly scope: ConfigScope;
+  readonly owner: string;
+  readonly type: ConfigValueType;
+  readonly required: boolean;
+  readonly sensitive: boolean;
+  readonly securityControl: boolean;
+  readonly secretReferenceAllowed: boolean;
+  readonly overridePolicy: OverridePolicy;
+  readonly allowedEnvironments: readonly EnvironmentClass[];
+  readonly defaultValue: string | null;
+  readonly enumValues: readonly string[] | null;
+  readonly auditPolicy: "always" | "on-change" | "none";
+  readonly deprecated: boolean;
+  readonly schemaVersion: string;
+}
+
+export interface FeatureFlagDefinition {
+  readonly flagKey: string;
+  readonly defaultValue: boolean;
+  readonly safeDefault: boolean;
+  readonly scope: "global" | "tenant" | "environment";
+  readonly owner: string;
+  readonly expiresAt: string | null;
+  readonly securityControl: boolean;
+}
+
+// An opaque pointer to a secret value held by a secrets provider. This is NOT the
+// secret: it carries no value field and is safe to pass around / describe.
+export interface SecretReference {
+  readonly secretRef: string;
+  readonly secretProvider: string;
+  readonly scope: string;
+  readonly version: string;
+  readonly status: SecretLifecycleState;
+  readonly rotationPolicy: string;
+  readonly lastRotatedAt: string | null;
+  readonly nextRotationDueAt: string | null;
+  readonly owner: string;
+}
+
+export function isSecretClassification(classification: ConfigClassification): boolean {
+  return classification === "secret-reference" || classification === "credential-metadata";
+}
+
+// Secret-leak prevention. Block by key name (substring, case-insensitive) and by
+// obvious value shape (bearer/jwt/private-key/connection-string prefixes). Used to
+// keep secret values out of every outward channel.
+export const SECRET_KEY_PATTERNS = Object.freeze([
+  "password",
+  "passwd",
+  "pwd",
+  "secret",
+  "token",
+  "api_key",
+  "apikey",
+  "authorization",
+  "cookie",
+  "client_secret",
+  "private_key",
+  "credential",
+  "connection_string",
+  "dsn",
+  "sas",
+  "bearer",
+  "jwt",
+] as const);
+
+// Separator-insensitive: api-key, api_key, apiKey, api.key all match "apikey".
+function normalizeKey(value: string): string {
+  return value.toLowerCase().replace(/[-_.\s]/g, "");
+}
+
+export function isSecretLikeKey(key: string): boolean {
+  const normalized = normalizeKey(key);
+  return SECRET_KEY_PATTERNS.some((pattern) => normalized.includes(normalizeKey(pattern)));
+}
+
+// Best-effort value-shape detection (key names are the primary signal; this catches
+// values that escaped a non-obvious key). Pragmatic, not exhaustive.
+export function looksLikeSecretValue(value: string): boolean {
+  const v = value.trim();
+  return (
+    /^Bearer\s+/i.test(v) ||
+    /^eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\./.test(v) || // JWT
+    /-----BEGIN [A-Z ]*PRIVATE KEY-----/.test(v) ||
+    /^(sk|rk|pk)_[A-Za-z0-9]{16,}/.test(v) || // provider key prefixes
+    /(postgres|postgresql|mysql|mongodb|amqp|redis):\/\/[^@\s]+:[^@\s]+@/.test(v) // dsn with creds
+  );
+}
+
+export const CONFIG_REDACTED = "[redacted-secret]";
+
+// Returns a copy of a config map with secret-like keys masked and secret-shaped
+// values masked. Safe for API output, audit metadata, errors, and evidence.
+export function redactConfigMap(
+  map: Readonly<Record<string, string>>,
+): Readonly<Record<string, string>> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(map)) {
+    out[key] = isSecretLikeKey(key) || looksLikeSecretValue(value) ? CONFIG_REDACTED : value;
+  }
+  return Object.freeze(out);
+}
+
+export class ConfigValidationError extends Error {
+  readonly key: string;
+  readonly reasonCode: string;
+  // The message is intentionally value-free (never echoes a sensitive raw value).
+  constructor(key: string, reasonCode: string, detail: string) {
+    super(`config ${key} invalid: ${reasonCode} (${detail})`);
+    this.name = "ConfigValidationError";
+    this.key = key;
+    this.reasonCode = reasonCode;
+  }
+}
+
+function coerceConfigValue(def: ConfigKeyDefinition, raw: string): string | number | boolean {
+  switch (def.type) {
+    case "number": {
+      const n = Number(raw);
+      if (!Number.isFinite(n)) {
+        throw new ConfigValidationError(def.key, "not-a-number", "expected a finite number");
+      }
+      return n;
+    }
+    case "boolean": {
+      if (raw !== "true" && raw !== "false") {
+        throw new ConfigValidationError(def.key, "not-a-boolean", "expected true|false");
+      }
+      return raw === "true";
+    }
+    case "enum": {
+      if (!def.enumValues || !def.enumValues.includes(raw)) {
+        // Do not echo the raw value for a sensitive key; report the allowed set only.
+        throw new ConfigValidationError(
+          def.key,
+          "not-in-enum",
+          `allowed: ${def.enumValues?.join(",")}`,
+        );
+      }
+      return raw;
+    }
+    default:
+      return raw;
+  }
+}
+
+// The relative trust rank of a scope (index in CONFIG_SCOPES). Higher = more trusted.
+function scopeRank(scope: ConfigScope): number {
+  return CONFIG_SCOPES.indexOf(scope);
+}
+
+export interface ConfigLayer {
+  readonly scope: ConfigScope;
+  readonly value: string;
+}
+
+// Deterministic precedence resolution with fail-closed validation and override
+// policy. Required+absent fails closed; a security-control key may only be set by an
+// authorised override scope (never silently broadened by a lower-trust layer).
+export function resolveConfigValue(
+  def: ConfigKeyDefinition,
+  layers: readonly ConfigLayer[],
+): string | number | boolean {
+  // Highest-trust layer that is permitted to set this key wins.
+  const permitted = layers
+    .filter((layer) => overrideAllowed(def, layer.scope))
+    .sort((a, b) => scopeRank(b.scope) - scopeRank(a.scope));
+  const chosen = permitted[0];
+  if (!chosen) {
+    if (def.defaultValue !== null) {
+      return coerceConfigValue(def, def.defaultValue);
+    }
+    if (def.required) {
+      throw new ConfigValidationError(
+        def.key,
+        "required-missing",
+        "no value in any permitted layer",
+      );
+    }
+    // optional with no default → empty string is the only safe non-value
+    return def.type === "boolean" ? false : def.type === "number" ? 0 : "";
+  }
+  return coerceConfigValue(def, chosen.value);
+}
+
+// Whether a given scope may set this key, per its override policy. A security-control
+// key is never settable by the tenant layer unless its policy explicitly allows it.
+export function overrideAllowed(def: ConfigKeyDefinition, scope: ConfigScope): boolean {
+  const baseScopes: ConfigScope[] = ["compiled-default", "repository-default"];
+  if (baseScopes.includes(scope)) {
+    return true;
+  }
+  switch (def.overridePolicy) {
+    case "immutable":
+      return false;
+    case "environment-only":
+      return scope === "environment" || scope === "deployment";
+    case "tenant-allowed":
+      return scope === "environment" || scope === "deployment" || scope === "tenant";
+    case "operator-only":
+      return scope === "runtime-override" || scope === "break-glass-override";
+    case "break-glass-only":
+      return scope === "break-glass-override";
+    default:
+      return false;
+  }
+}
+
+export interface ConfigDriftFinding {
+  readonly key: string;
+  readonly kind:
+    | "unknown-key"
+    | "missing-required"
+    | "tenant-override-of-security-control"
+    | "value-outside-schema";
+  readonly detail: string;
+}
+
+// Detects configuration drift against the registry: unknown keys, missing required
+// keys, and a tenant layer attempting to set a security-control key.
+export function detectConfigDrift(
+  registry: readonly ConfigKeyDefinition[],
+  providedKeys: readonly { key: string; scope: ConfigScope }[],
+): readonly ConfigDriftFinding[] {
+  const findings: ConfigDriftFinding[] = [];
+  const byKey = new Map(registry.map((d) => [d.key, d]));
+  for (const p of providedKeys) {
+    const def = byKey.get(p.key);
+    if (!def) {
+      findings.push({ key: p.key, kind: "unknown-key", detail: "not in the config registry" });
+      continue;
+    }
+    if (def.securityControl && p.scope === "tenant" && def.overridePolicy !== "tenant-allowed") {
+      findings.push({
+        key: p.key,
+        kind: "tenant-override-of-security-control",
+        detail: "a tenant layer may not weaken a security control",
+      });
+    }
+  }
+  for (const def of registry) {
+    if (def.required && def.defaultValue === null && !providedKeys.some((p) => p.key === def.key)) {
+      findings.push({
+        key: def.key,
+        kind: "missing-required",
+        detail: "required key has no value",
+      });
+    }
+  }
+  return findings;
+}
+
+// Deterministic feature-flag evaluation: a known value wins, otherwise the safe
+// default. An unknown/missing flag fails to the safe default (never permissive by
+// accident). A security-control flag is never disabled by an ordinary flag layer.
+export function evaluateFeatureFlag(
+  def: FeatureFlagDefinition | undefined,
+  value: boolean | undefined,
+): boolean {
+  if (!def) {
+    return false; // unknown flag → safe (off)
+  }
+  if (value === undefined) {
+    return def.safeDefault;
+  }
+  return value;
+}
+
+// Value-free change evidence: hashes of the previous and new values (sha256), never
+// the raw values. Safe for audit metadata and config-change records.
+export function configChangeEvidence(input: {
+  key: string;
+  previousValue: string | null;
+  newValue: string | null;
+  changeActor: string;
+  changeReason: string;
+  changeSource: ConfigScope;
+}): Readonly<Record<string, string>> {
+  const hash = (v: string | null): string =>
+    v === null ? "null" : createHash("sha256").update(v).digest("hex");
+  return Object.freeze({
+    key: input.key,
+    changeActor: input.changeActor,
+    changeReason: input.changeReason,
+    changeSource: input.changeSource,
+    previousValueHash: hash(input.previousValue),
+    newValueHash: hash(input.newValue),
+  });
 }

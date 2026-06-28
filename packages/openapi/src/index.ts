@@ -144,6 +144,46 @@ export function buildOpenApiDocument() {
           },
         },
       },
+      "/v1/config/current": {
+        get: {
+          operationId: "getConfigCurrentV1",
+          responses: {
+            "200": {
+              description:
+                "Tenant-scoped, redacted current configuration (PDP-protected; no secret values or credentials)",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+          },
+        },
+      },
+      "/v1/config/feature-flags": {
+        get: {
+          operationId: "getConfigFeatureFlagsV1",
+          responses: {
+            "200": {
+              description: "Deterministic feature-flag evaluation for the tenant (safe defaults)",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+          },
+        },
+      },
+      "/v1/config/provider-status": {
+        get: {
+          operationId: "getConfigProviderStatusV1",
+          responses: {
+            "200": {
+              description: "Provider modes for the tenant (never credentials)",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+          },
+        },
+      },
     },
   } as const;
 }

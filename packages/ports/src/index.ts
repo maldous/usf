@@ -7,8 +7,10 @@ import type {
   AuditIntegrityResult,
   AuditRecord,
   AuthorizationRequest,
+  ConfigLayer,
   IdentityClaims,
   PolicyDecision,
+  SecretReference,
   TenantContext,
   TenantMembership,
 } from "@foundation/core";
@@ -128,4 +130,32 @@ export interface AuditExporter {
 
 export interface SiemForwarder {
   forward(event: AuditEvent): Promise<void>;
+}
+
+// Config / secrets ports (parity-config-secrets, USF-144). Capabilities depend on
+// these ports, never on a provider/secret-manager implementation. Secret VALUES are
+// resolved only through SecretResolver by an authorised internal caller.
+
+/** Supplies the ordered config layers for a key in a tenant/environment context. */
+export interface ConfigLayerProvider {
+  layers(input: { tenantId: string; key: string }): readonly ConfigLayer[];
+}
+
+/** Deterministic feature-flag value source (undefined = unknown → safe default). */
+export interface FeatureFlagSource {
+  flagValue(input: { tenantId: string; flagKey: string }): boolean | undefined;
+}
+
+// Resolves an opaque SecretReference to its value for an authorised internal
+// consumer only. Fails closed on revoked/expired/unknown-version. describe() returns
+// metadata (a SecretReference) and never a value.
+export interface SecretResolver {
+  describe(input: { tenantId: string; name: string }): Promise<SecretReference | undefined>;
+  resolveSecretValue(reference: SecretReference): Promise<string>;
+}
+
+// Future port — declared for forward-compat, NOT implemented in this slice (deferred,
+// USF-145). No live external Vault/Key Vault/KMS before separate authorisation.
+export interface ExternalSecretManager {
+  fetch(reference: SecretReference): Promise<{ value: string }>;
 }

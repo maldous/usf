@@ -135,3 +135,25 @@ export const AuditVerifyResponseSchema = Type.Object({
   brokenAtSequence: Type.Union([Type.Number(), Type.Null()]),
   reason: NullableString,
 });
+
+// Config/secrets surfaces (parity-config-secrets, USF-144). Tenant-scoped,
+// PDP-protected, redacted, non-enumerating. Secret VALUES and raw provider
+// credentials are never present in any of these schemas.
+
+export const ConfigCurrentResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  schemaVersion: Type.String(),
+  config: Type.Record(Type.String(), Type.String()),
+});
+
+export const FeatureFlagsResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  flags: Type.Record(Type.String(), Type.Boolean()),
+});
+
+export const ProviderStatusResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  providerMode: Type.String(),
+  // Provider modes only (in-memory/local-composed-test/mock/live-external); never credentials.
+  providers: Type.Record(Type.String(), Type.String()),
+});
