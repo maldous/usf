@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-AUTH-018",
+  "mutation": {
+    "file": "packages/proof/src/auth-identity-proof.ts",
+    "append": "const overclaim = { productionLiveClaim: true };"
+  }
+}
