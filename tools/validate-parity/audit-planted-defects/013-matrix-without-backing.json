@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUDIT-013",
+  "description": "audit matrix row lacks tests/proofs",
+  "mutation": {
+    "matrixAuditSet": {
+      "usf_tests": [],
+      "usf_proofs": []
+    }
+  }
+}

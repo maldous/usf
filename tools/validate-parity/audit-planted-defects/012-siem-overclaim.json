@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-012",
+  "description": "audit proof overclaims SIEM readiness",
+  "mutation": {
+    "file": "packages/proof/src/audit-evidence-proof.ts",
+    "replace": {
+      "old": "siemClaim: false",
+      "new": "siemClaim: true"
+    }
+  }
+}

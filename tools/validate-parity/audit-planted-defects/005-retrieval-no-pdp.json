@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-005",
+  "description": "audit retrieval bypasses the PDP",
+  "mutation": {
+    "file": "capabilities/audit/src/query-service.ts",
+    "replace": {
+      "old": "pdp.decide",
+      "new": "permitAll"
+    }
+  }
+}

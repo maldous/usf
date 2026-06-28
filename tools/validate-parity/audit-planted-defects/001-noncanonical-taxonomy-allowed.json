@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-001",
+  "description": "taxonomy not enforced as canonical",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "is not canonical",
+      "new": "is fine"
+    }
+  }
+}

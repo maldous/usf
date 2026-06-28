@@ -16,3 +16,13 @@ export class InMemoryAuditLedger implements AuditLedger {
     return [...this.#records];
   }
 }
+
+export { InMemoryAuditEventStore } from "./event-store.ts";
+export { createAuditRecorder, type AuditEventRecorder } from "./recorder.ts";
+export {
+  AuditAccessDeniedError,
+  createAuditQueryService,
+  type AuditAccessContext,
+  type AuditQueryService,
+} from "./query-service.ts";
+export { toSafeAuditEventView, type SafeAuditEventView } from "./safe-view.ts";

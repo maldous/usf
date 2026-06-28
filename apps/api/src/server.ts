@@ -1,4 +1,8 @@
 import {
+  AuditEventsResponseSchema,
+  AuditEventViewSchema,
+  AuditVerifyRequestSchema,
+  AuditVerifyResponseSchema,
   AuthorizeCheckRequestSchema,
   AuthorizeDecisionResponseSchema,
   ErrorResponseSchema,
@@ -14,15 +18,20 @@ import {
   TenantMismatchError,
   createAuditRecord,
   stableId,
+  type AuditCategory,
+  type AuditEventOutcome,
   type AuthorizationRequest,
   type IdentityClaims,
   type TenantContext,
 } from "@foundation/core";
+import { AuditAccessDeniedError, toSafeAuditEventView } from "@foundation/capability-audit";
 import {
   contextFromClaims,
   permissionsForRoles,
   requireRequestTenant,
 } from "@foundation/capability-tenant";
+import type { AuditAccessContext } from "@foundation/capability-audit";
+import type { AuditQueryCriteria } from "@foundation/ports";
 import { buildOpenApiDocument } from "@foundation/openapi";
 import Fastify, { type FastifyInstance, type FastifyRequest } from "fastify";
 import { DEV_PROVIDER_MODE_LABEL, createDevRuntime, type DevRuntime } from "./runtime.ts";
@@ -49,6 +58,17 @@ function devClaimsFromRequest(request: FastifyRequest): IdentityClaims {
     email,
     roles: Object.freeze(["tenant-admin"]),
     providerMode: "hermetic-mock",
+  };
+}
+
+function accessFrom(request: FastifyRequest): AuditAccessContext {
+  const requestId = firstHeaderValue(request, "x-request-id");
+  const correlationId = firstHeaderValue(request, "x-correlation-id");
+  const traceId = firstHeaderValue(request, "x-trace-id");
+  return {
+    ...(requestId ? { requestId } : {}),
+    ...(correlationId ? { correlationId } : {}),
+    ...(traceId ? { traceId } : {}),
   };
 }
 
@@ -256,6 +276,171 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
       const permissions =
         active && membership ? [...permissionsForRoles(membership.roles)].sort() : [];
       return { tenantId, actorId: claims.subject, active, permissions };
+    },
+  );
+
+  // Audit retrieval (parity-audit, USF-142). Tenant-scoped, PDP-protected,
+  // RLS-backed (DB substrate), non-enumerating, redacted. Reading audit evidence is
+  // itself a privileged action and is itself audited (audit-of-audit).
+  app.get<{
+    Querystring: {
+      tenantId?: string;
+      category?: string;
+      eventType?: string;
+      action?: string;
+      outcome?: string;
+      correlationId?: string;
+      limit?: string;
+      cursor?: string;
+    };
+  }>(
+    "/v1/audit/events",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            tenantId: { type: "string" },
+            category: { type: "string" },
+            eventType: { type: "string" },
+            action: { type: "string" },
+            outcome: { type: "string" },
+            correlationId: { type: "string" },
+            limit: { type: "string" },
+            cursor: { type: "string" },
+          },
+          required: ["tenantId"],
+        },
+        response: {
+          200: AuditEventsResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      const query = request.query;
+      if (context.tenantId !== query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      const criteria: AuditQueryCriteria = {
+        tenantId: query.tenantId,
+        ...(query.category ? { category: query.category as AuditCategory } : {}),
+        ...(query.eventType ? { eventType: query.eventType } : {}),
+        ...(query.action ? { action: query.action } : {}),
+        ...(query.outcome ? { outcome: query.outcome as AuditEventOutcome } : {}),
+        ...(query.correlationId ? { correlationId: query.correlationId } : {}),
+        ...(query.limit ? { limit: Number(query.limit) } : {}),
+        ...(query.cursor ? { cursor: query.cursor } : {}),
+      };
+      try {
+        const page = await runtime.auditQuery.list(context, criteria, accessFrom(request));
+        return {
+          tenantId: context.tenantId,
+          events: page.events.map(toSafeAuditEventView),
+          nextCursor: page.nextCursor,
+        };
+      } catch (error) {
+        if (error instanceof AuditAccessDeniedError) {
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
+    },
+  );
+
+  app.get<{ Params: { id: string }; Querystring: { tenantId?: string } }>(
+    "/v1/audit/events/:id",
+    {
+      schema: {
+        params: { type: "object", properties: { id: { type: "string" } }, required: ["id"] },
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: {
+          200: AuditEventViewSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+          404: ErrorResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.query.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      try {
+        const event = await runtime.auditQuery.get(context, request.params.id, accessFrom(request));
+        if (!event) {
+          reply.code(404);
+          return { error: "audit event not found" };
+        }
+        return toSafeAuditEventView(event);
+      } catch (error) {
+        if (error instanceof AuditAccessDeniedError) {
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
+    },
+  );
+
+  app.post<{ Body: { tenantId: string } }>(
+    "/v1/audit/verify",
+    {
+      schema: {
+        body: AuditVerifyRequestSchema,
+        response: {
+          200: AuditVerifyResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = contextFromClaims(devClaimsFromRequest(request), "local");
+      } catch {
+        reply.code(400);
+        return { error: "missing or invalid tenant context" };
+      }
+      if (context.tenantId !== request.body.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      try {
+        return await runtime.auditQuery.verify(context, accessFrom(request));
+      } catch (error) {
+        if (error instanceof AuditAccessDeniedError) {
+          reply.code(403);
+          return { error: "Not authorized", reasonCode: error.reasonCode };
+        }
+        reply.code(400);
+        return { error: error instanceof Error ? error.message : "unknown error" };
+      }
     },
   );
 

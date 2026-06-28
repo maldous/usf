@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-009",
+  "description": "break-glass use not recorded",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorize.ts",
+    "replace": {
+      "old": "\"break_glass.used\"",
+      "new": "\"bg.used\""
+    }
+  }
+}

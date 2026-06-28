@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-008",
+  "description": "authorizer no longer records rich decision evidence",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorize.ts",
+    "replace": {
+      "old": "createAuditEventDraft",
+      "new": "skipRich"
+    }
+  }
+}

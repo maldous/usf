@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-011",
+  "description": "tamper-evidence proof removed",
+  "mutation": {
+    "file": "packages/proof/src/audit-evidence-proof.ts",
+    "replace": {
+      "old": "proveTamperDetected",
+      "new": "skipped"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-010",
+  "description": "hash chain without verification",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "verifyAuditChain",
+      "new": "noVerify"
+    }
+  }
+}

@@ -6,11 +6,7 @@
   "authorityNote": "Machine-readable authority for the React parity scope classification. The companion docs/architecture/react-parity-scope-classification-matrix.md is the human-review view and must stay consistent with this file. This is a governance tracking artefact, not a rank-1 semantic-corpus artefact, and is enforced by tools/validate-parity/validate-parity.py.",
   "foundationReadinessClaimed": false,
   "playwrightRequiredForFoundation": false,
-  "allowedPlanningCarriers": [
-    "USF-133",
-    "USF-135",
-    "USF-136"
-  ],
+  "allowedPlanningCarriers": ["USF-133", "USF-135", "USF-136"],
   "statusValues": [
     "migrated",
     "covered",
@@ -27,20 +23,12 @@
     {
       "react_item_id": "auth-identity",
       "category": "service",
-      "react_paths": [
-        "apps/platform-api/src/server",
-        "packages/keycloak"
-      ],
+      "react_paths": ["apps/platform-api/src/server", "packages/keycloak"],
       "behaviour_summary": "Keycloak/OIDC brokering, session cookies, claim/role mapping, credential lifecycle, JWKS/discovery.",
       "usf_status": "partial",
-      "usf_paths": [
-        "capabilities/auth",
-        "adapters/idp"
-      ],
+      "usf_paths": ["capabilities/auth", "adapters/idp"],
       "usf_tests": [],
-      "usf_proofs": [
-        "evidence/proof-evidence/authentication-slice-proof.json"
-      ],
+      "usf_proofs": ["evidence/proof-evidence/authentication-slice-proof.json"],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-133",
@@ -52,9 +40,7 @@
     {
       "react_item_id": "tenant-rbac-abac",
       "category": "service",
-      "react_paths": [
-        "apps/platform-api/src/server/authorize-resource.ts"
-      ],
+      "react_paths": ["apps/platform-api/src/server/authorize-resource.ts"],
       "behaviour_summary": "Tenant context, application-layer PDP combining RBAC and ABAC (default-deny), tenant membership lifecycle, break-glass authorization, decision audit; identity is not authorization; RLS backstop.",
       "usf_status": "partial",
       "usf_paths": [
@@ -88,38 +74,43 @@
       "react_item_id": "audit-events",
       "category": "event",
       "react_paths": [
-        "packages/audit",
-        "packages/event-bus"
+        "packages/audit-events",
+        "packages/event-bus",
+        "apps/platform-api/src (audit/event recording)"
       ],
-      "behaviour_summary": "Audit recording, contextual query, redaction, event bus durable queues, DLQ, redrive.",
+      "behaviour_summary": "Tenant-safe, append-only, tamper-evident audit/evidence: structured event taxonomy, authorization-decision + break-glass evidence, correlation/causation/trace propagation, redaction, hash-chain integrity, tenant-scoped PDP-protected retrieval, and audit-of-audit. Durable event-bus outbox/DLQ/redrive is a separate events/jobs concern (deferred).",
       "usf_status": "partial",
       "usf_paths": [
         "capabilities/audit",
-        "adapters/bus"
+        "packages/core (audit event model + taxonomy + redaction + hash chain)",
+        "packages/ports (audit ledger/recorder ports)",
+        "apps/api (v1/audit retrieval surfaces)",
+        "packages/proof (audit-evidence-proof)"
       ],
-      "usf_tests": [],
-      "usf_proofs": [],
+      "usf_tests": [
+        "tests/capabilities/audit-evidence.test.ts",
+        "tests/apps/audit-api.test.ts",
+        "tests/capabilities/authorization.test.ts"
+      ],
+      "usf_proofs": [
+        "packages/proof/src/audit-evidence-proof.ts (make audit-proof: append-only, valid-chain re-verify, tamper detection, RLS isolation)",
+        "packages/proof/src/db-rls-isolation-proof.ts (append-only ledger + hash chain on real Postgres)"
+      ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-133",
+      "blocker": "USF-143",
       "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "spec/instances/semantic-contract/event-bus-durable-queues-dlq-redrive.json; bootstrap audit/event capture present.",
-      "retry_condition": "Per-domain implementation directive authorises parity-audit; audit + event bus behaviours migrated with USF tests."
+      "domain_authorised": true,
+      "evidence": "audit/evidence standard docs/architecture/audit-evidence-standard.md; source-use docs/architecture/parity-audit-source-use-disposition-matrix.md; validate-audit (13 rules + planted defects); make audit-proof pass; USF-142 implementation; deferred depth tracked in USF-143.",
+      "retry_condition": "Deferred audit depth (signing/KMS, full export, full retention/disposal, durable outbox, JS pg audit adapter, request/session capture, SIEM forwarder, detection monitoring) implemented and proven under USF-143; then re-classify migrated."
     },
     {
       "react_item_id": "config-secrets",
       "category": "config",
-      "react_paths": [
-        "packages/config",
-        "packages/openbao"
-      ],
+      "react_paths": ["packages/config", "packages/openbao"],
       "behaviour_summary": "Runtime config registry/history, provider config plane, OpenBao secrets, write-only settings.",
       "usf_status": "partial",
-      "usf_paths": [
-        "capabilities/config",
-        "adapters/secrets"
-      ],
+      "usf_paths": ["capabilities/config", "adapters/secrets"],
       "usf_tests": [],
       "usf_proofs": [],
       "semantic_authority": "known",
@@ -133,15 +124,10 @@
     {
       "react_item_id": "files-storage",
       "category": "port",
-      "react_paths": [
-        "packages/object-storage"
-      ],
+      "react_paths": ["packages/object-storage"],
       "behaviour_summary": "S3-compatible object storage, tenant prefixes, signed URLs, data governance.",
       "usf_status": "partial",
-      "usf_paths": [
-        "capabilities/files",
-        "adapters/store"
-      ],
+      "usf_paths": ["capabilities/files", "adapters/store"],
       "usf_tests": [],
       "usf_proofs": [],
       "semantic_authority": "known",
@@ -155,17 +141,10 @@
     {
       "react_item_id": "jobs-workflows",
       "category": "workflow",
-      "react_paths": [
-        "packages/workflow",
-        "packages/temporal",
-        "packages/windmill"
-      ],
+      "react_paths": ["packages/workflow", "packages/temporal", "packages/windmill"],
       "behaviour_summary": "Durable workflows, approval chains, scheduled jobs, operational automation, state machines.",
       "usf_status": "partial",
-      "usf_paths": [
-        "capabilities/jobs",
-        "adapters/wf"
-      ],
+      "usf_paths": ["capabilities/jobs", "adapters/wf"],
       "usf_tests": [],
       "usf_proofs": [],
       "semantic_authority": "known",
@@ -179,15 +158,10 @@
     {
       "react_item_id": "notifications",
       "category": "service",
-      "react_paths": [
-        "packages/notifications"
-      ],
+      "react_paths": ["packages/notifications"],
       "behaviour_summary": "Multi-transport delivery (SMTP/Brevo/webhook), preferences, channels, dispatcher.",
       "usf_status": "partial",
-      "usf_paths": [
-        "capabilities/notify",
-        "adapters/mail"
-      ],
+      "usf_paths": ["capabilities/notify", "adapters/mail"],
       "usf_tests": [],
       "usf_proofs": [],
       "semantic_authority": "known",
@@ -201,16 +175,10 @@
     {
       "react_item_id": "api-routes-openapi",
       "category": "route",
-      "react_paths": [
-        "apps/platform-api/src/server/routes.ts"
-      ],
+      "react_paths": ["apps/platform-api/src/server/routes.ts"],
       "behaviour_summary": "REST routes, GraphQL federation, typed contracts, OpenAPI drift gate, security headers.",
       "usf_status": "partial",
-      "usf_paths": [
-        "apps/api",
-        "packages/openapi",
-        "packages/contracts"
-      ],
+      "usf_paths": ["apps/api", "packages/openapi", "packages/contracts"],
       "usf_tests": [],
       "usf_proofs": [],
       "semantic_authority": "known",
@@ -224,10 +192,7 @@
     {
       "react_item_id": "db-rls-migrations",
       "category": "migration",
-      "react_paths": [
-        "packages/postgres",
-        "docker"
-      ],
+      "react_paths": ["packages/postgres", "docker"],
       "behaviour_summary": "PostgreSQL 16, forward-only checksummed migrations, per-tenant RLS, and enterprise persistence metadata/classification, lifecycle, append-only audit, and retention standard.",
       "usf_status": "partial",
       "usf_paths": [
@@ -260,14 +225,10 @@
     {
       "react_item_id": "provider-adapters-modes",
       "category": "provider",
-      "react_paths": [
-        "packages"
-      ],
+      "react_paths": ["packages"],
       "behaviour_summary": "Pluggable provider integrations (identity, observability, workflow, billing, storage, backup, antivirus); provider-mode selector.",
       "usf_status": "partial",
-      "usf_paths": [
-        "adapters"
-      ],
+      "usf_paths": ["adapters"],
       "usf_tests": [],
       "usf_proofs": [],
       "semantic_authority": "known",
@@ -281,14 +242,10 @@
     {
       "react_item_id": "observability",
       "category": "observability",
-      "react_paths": [
-        "packages/observability"
-      ],
+      "react_paths": ["packages/observability"],
       "behaviour_summary": "OTEL traces, Prometheus metrics, Loki logs, Tempo, Grafana, Sentry, alerting/incidents, request instrumentation.",
       "usf_status": "partial",
-      "usf_paths": [
-        "adapters/obs"
-      ],
+      "usf_paths": ["adapters/obs"],
       "usf_tests": [],
       "usf_proofs": [],
       "semantic_authority": "known",
@@ -302,23 +259,12 @@
     {
       "react_item_id": "developer-commands-proof",
       "category": "command",
-      "react_paths": [
-        "Makefile",
-        "make",
-        "scripts",
-        "tools"
-      ],
+      "react_paths": ["Makefile", "make", "scripts", "tools"],
       "behaviour_summary": "Confidence ladder, make targets, proof scripts, readiness gates.",
       "usf_status": "partial",
-      "usf_paths": [
-        "Makefile",
-        "packages/proof",
-        "tools"
-      ],
+      "usf_paths": ["Makefile", "packages/proof", "tools"],
       "usf_tests": [],
-      "usf_proofs": [
-        "evidence/proof-evidence/authentication-slice-proof.json"
-      ],
+      "usf_proofs": ["evidence/proof-evidence/authentication-slice-proof.json"],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-133",
@@ -331,27 +277,21 @@
   "uiArtefacts": [
     {
       "item": "react-enterprise-app SPA",
-      "react_paths": [
-        "apps/react-enterprise-app"
-      ],
+      "react_paths": ["apps/react-enterprise-app"],
       "usf_status": "ui-ux-only-out-of-foundation-scope",
       "ui_needed": false,
       "rationale": "React SPA (TanStack Router/Query, Tailwind); downstream consumer; classified, not migrated."
     },
     {
       "item": "ui-design-system",
-      "react_paths": [
-        "packages/ui-design-system"
-      ],
+      "react_paths": ["packages/ui-design-system"],
       "usf_status": "ui-ux-only-out-of-foundation-scope",
       "ui_needed": false,
       "rationale": "Component library / visual; out of foundation scope."
     },
     {
       "item": "ui-semantic-model metadata",
-      "react_paths": [
-        "docs/v2-foundation/ui-capability-model.json"
-      ],
+      "react_paths": ["docs/v2-foundation/ui-capability-model.json"],
       "usf_status": "covered",
       "ui_needed": true,
       "surface": [
@@ -364,33 +304,21 @@
   "testProofGroups": [
     {
       "group": "API/integration tests",
-      "react_paths": [
-        "apps/platform-api/tests",
-        "packages"
-      ],
+      "react_paths": ["apps/platform-api/tests", "packages"],
       "classification": "partial",
       "foundation_behaviour": true,
       "action": "Foundation tests pending port; rewrite as USF foundation tests under each domain child."
     },
     {
       "group": "architecture/governance tooling tests",
-      "react_paths": [
-        "tools/architecture",
-        "tools/v2-readiness",
-        "tools/security"
-      ],
+      "react_paths": ["tools/architecture", "tools/v2-readiness", "tools/security"],
       "classification": "partial",
       "foundation_behaviour": true,
       "action": "Map to USF validators/proof tooling parity (parity-commands)."
     },
     {
       "group": "proof scripts + evidence ladder",
-      "react_paths": [
-        "tools/e2e",
-        "scripts/evidence",
-        "scripts/tests",
-        "tests/integration"
-      ],
+      "react_paths": ["tools/e2e", "scripts/evidence", "scripts/tests", "tests/integration"],
       "classification": "partial",
       "foundation_behaviour": true,
       "action": "Map to USF proof tooling + compose proof (parity-commands, parity-db)."
@@ -423,20 +351,14 @@
     },
     {
       "group": "playwright build + ui reference harness",
-      "react_paths": [
-        "playwright.build.config.ts",
-        "tools/ui-reference-harness"
-      ],
+      "react_paths": ["playwright.build.config.ts", "tools/ui-reference-harness"],
       "classification": "ui-ux-only-out-of-foundation-scope",
       "foundation_behaviour": false,
       "action": "Classified out of foundation scope."
     },
     {
       "group": "component unit tests",
-      "react_paths": [
-        "apps/react-enterprise-app/src/tests",
-        "packages/ui-design-system/tests"
-      ],
+      "react_paths": ["apps/react-enterprise-app/src/tests", "packages/ui-design-system/tests"],
       "classification": "ui-ux-only-out-of-foundation-scope",
       "foundation_behaviour": false,
       "action": "Classified out of foundation scope."

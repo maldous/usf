@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-003",
+  "description": "events not versioned",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "eventVersion",
+      "new": "evtVer"
+    }
+  }
+}

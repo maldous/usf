@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUDIT-006",
+  "description": "audit retrieval drops tenant scoping",
+  "mutation": {
+    "file": "capabilities/audit/src/event-store.ts",
+    "replace": {
+      "old": "criteria.tenantId !== context.tenantId",
+      "new": "false"
+    }
+  }
+}
