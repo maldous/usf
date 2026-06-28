@@ -1,0 +1,19 @@
+{
+  "id": "db-migrations-manifest",
+  "title": "USF DB migration manifest",
+  "note": "Ordered, forward-only, checksummed migrations. Each sha256 pins the file for immutability/tamper detection. Enforced by tools/validate-parity/validate-db.py and adapters/db/src/check-generated-types.ts.",
+  "migrations": [
+    {
+      "order": 1,
+      "id": "0001-bootstrap",
+      "file": "0001-bootstrap.sql",
+      "sha256": "9920ddd66ba6be66b87a3434bd01eaafc48dfdc166cb501992b7bc36b0707af0"
+    },
+    {
+      "order": 2,
+      "id": "0002-enterprise-persistence-metadata",
+      "file": "0002-enterprise-persistence-metadata.sql",
+      "sha256": "c43c60151b4df6fc99b13f1fe7c3303d26f63be2f75448fdb013f7d062c04b0c"
+    }
+  ]
+}
