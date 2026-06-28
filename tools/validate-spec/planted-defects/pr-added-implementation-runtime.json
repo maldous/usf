@@ -3,5 +3,6 @@
   "expectedRule": "USF-PR-RUNTIME",
   "nameStatusLines": [
     "A\tapps/platform-api/src/index.ts"
-  ]
+  ],
+  "ignoreExistingDirective": true
 }

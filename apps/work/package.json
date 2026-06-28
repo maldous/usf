@@ -1,0 +1,10 @@
+{
+  "name": "@foundation/app-work",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/worker.ts",
+    "./main": "./src/main.ts"
+  }
+}

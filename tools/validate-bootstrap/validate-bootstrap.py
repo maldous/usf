@@ -162,6 +162,17 @@ REQUIRED_MAPPING_BLOCKER_SCOPES = {
     "pre-file-implementation-gate",
 }
 
+POST_START_ALLOWED_ROOTS = {
+    "apps",
+    "capabilities",
+    "adapters",
+    "packages",
+    "tests",
+}
+
+START_RECORD_DIR = ".codex/runs"
+START_RECORD_NAME = "bootstrap-start.json"
+
 REQUIRED_TOOLCHAIN_GOVERNANCE_MARKERS = [
     ("target runtime is modern typescript/node", "target runtime is fixed to TypeScript/Node"),
     ("modern active lts node", "modern active LTS Node is recorded"),
@@ -226,6 +237,22 @@ def repo_paths():
     return paths
 
 
+def bootstrap_start_records():
+    records = []
+    if not os.path.isdir(START_RECORD_DIR):
+        return records
+    for base, dirs, files in os.walk(START_RECORD_DIR):
+        dirs[:] = [d for d in dirs if d != "__pycache__"]
+        if START_RECORD_NAME not in files:
+            continue
+        path = os.path.join(base, START_RECORD_NAME).replace("\\", "/").removeprefix("./")
+        try:
+            records.append({"path": path, "record": read_json(path)})
+        except Exception as exc:
+            records.append({"path": path, "error": str(exc)})
+    return records
+
+
 def read_text(path):
     with open(path, encoding="utf-8") as handle:
         return handle.read()
@@ -262,6 +289,10 @@ def remote_main_head():
     return git_value("rev-parse", "origin/main") or ""
 
 
+def v2_bootstrap_target():
+    return git_value("rev-parse", "v2-bootstrap^{}") or ""
+
+
 def remote_has_tag(tag):
     completed = subprocess.run(
         ["git", "ls-remote", "--tags", "origin", f"refs/tags/{tag}"],
@@ -273,6 +304,19 @@ def remote_has_tag(tag):
     if completed.returncode != 0:
         return False
     return f"refs/tags/{tag}" in completed.stdout
+
+
+def is_ancestor(ancestor, descendant):
+    if not ancestor or not descendant:
+        return False
+    completed = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return completed.returncode == 0
 
 
 def build_state(overrides=None):
@@ -334,6 +378,9 @@ def build_state(overrides=None):
         bootstrap_adr_text = read_text(BOOTSTRAP_ADR_PATH)
     return {
         "paths": paths,
+        "startRecords": overrides.get("startRecords", bootstrap_start_records()),
+        "currentHead": overrides.get("currentHead", current_head()),
+        "v2BootstrapTarget": overrides.get("v2BootstrapTarget", v2_bootstrap_target()),
         "directiveText": directive_text or "",
         "readinessTexts": readiness_texts,
         "bootstrapGovernanceText": bootstrap_governance_text or "",
@@ -356,8 +403,60 @@ def check_required_artefacts(F, state):
 
 def check_no_forbidden_roots(F, state):
     roots = {path.split("/", 1)[0] for path in state["paths"]}
-    for root in sorted(roots & FORBIDDEN_ROOTS):
-        F.add("USF-BOOTSTRAP-002", root, "implementation-shaped root exists before bootstrap")
+    forbidden_roots = roots & FORBIDDEN_ROOTS
+    if not forbidden_roots:
+        return
+    start_errors = []
+    valid_start = False
+    for item in state.get("startRecords", []):
+        path = item.get("path", START_RECORD_NAME)
+        record = item.get("record")
+        if item.get("error"):
+            start_errors.append(f"{path}: cannot parse start record: {item['error']}")
+            continue
+        if not isinstance(record, dict):
+            start_errors.append(f"{path}: start record is not an object")
+            continue
+        expected = {
+            "kind": "usf-39-bootstrap-start",
+            "issue": "USF-39",
+            "authorisingHuman": "Matthew Aldous",
+            "finalPreExtractionRevalidation": "passed",
+            "scope": "local-dev-test-bootstrap",
+        }
+        missing = [key for key, value in expected.items() if record.get(key) != value]
+        if missing:
+            start_errors.append(f"{path}: invalid start record fields {missing}")
+            continue
+        start_commit = record.get("startCommit")
+        marker_target = record.get("v2BootstrapTarget")
+        current_head = state.get("currentHead")
+        git_marker_target = state.get("v2BootstrapTarget")
+        if start_commit != marker_target:
+            start_errors.append(f"{path}: startCommit does not match recorded v2BootstrapTarget")
+            continue
+        if marker_target != git_marker_target:
+            start_errors.append(f"{path}: recorded v2BootstrapTarget does not match git v2-bootstrap target")
+            continue
+        if current_head != start_commit and not is_ancestor(start_commit, current_head):
+            start_errors.append(f"{path}: HEAD does not descend from startCommit")
+            continue
+        linear = record.get("linear")
+        if not isinstance(linear, dict) or linear.get("team") != "USF" or linear.get("usf39Status") != "In Progress":
+            start_errors.append(f"{path}: missing Linear USF start evidence")
+            continue
+        if not linear.get("usf39CommentId") or not linear.get("usf100CommentId"):
+            start_errors.append(f"{path}: missing Linear comment evidence")
+            continue
+        valid_start = True
+        break
+    if not valid_start:
+        detail = "; ".join(start_errors) if start_errors else "no valid USF-39 bootstrap start record exists"
+        for root in sorted(forbidden_roots):
+            F.add("USF-BOOTSTRAP-002", root, f"implementation-shaped root exists before bootstrap: {detail}")
+        return
+    for root in sorted(forbidden_roots - POST_START_ALLOWED_ROOTS):
+        F.add("USF-BOOTSTRAP-002", root, "implementation-shaped root is outside the post-start local dev/test bootstrap topology")
 
 
 def check_directive_boundary(F, state):
@@ -1058,7 +1157,7 @@ def run_selftest(F):
     fixtures = load_selftest_fixtures(F)
     for path, fixture in fixtures:
         expected = fixture.get("expectedRule")
-        overrides = {}
+        overrides = {"startRecords": []}
         mutation = fixture.get("mutation", {})
         if mutation.get("removePath"):
             paths = set(base["paths"])

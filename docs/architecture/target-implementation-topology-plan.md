@@ -14,6 +14,45 @@ This plan defines the only implementation-shaped destination directories that a 
 
 The whole-platform implementation directive draft at `docs/architecture/implementation-extraction-directive.md` is broader than this topology plan. This plan currently enumerates only the authentication/identity proof-substrate roots below. Every other semantic slice remains under a pre-file slice gate: before files are created, a reviewed topology update must name that slice's roots and exact target files, the source-use disposition matrix must cover those files, and the validator must enforce the added roots. This plan must not be read as authorising broad platform roots by implication.
 
+## USF-39 Post-Start Local Dev/Test Bootstrap Topology
+
+After the separate USF-39 start action recorded for run `20260627T235923Z-f80da39`, this plan also authorises the local dev/test bootstrap topology listed below. This post-start topology is limited to the active bootstrap goal, the signed USF-100 directive, ADR 0009, and the start record in `.codex/runs/20260627T235923Z-f80da39/bootstrap-start.json`.
+
+The authorised post-start roots are:
+
+- `apps/api/`
+- `apps/work/`
+- `capabilities/auth/`
+- `capabilities/tenant/`
+- `capabilities/audit/`
+- `capabilities/notify/`
+- `capabilities/files/`
+- `capabilities/jobs/`
+- `capabilities/config/`
+- `adapters/db/`
+- `adapters/idp/`
+- `adapters/store/`
+- `adapters/bus/`
+- `adapters/wf/`
+- `adapters/mail/`
+- `adapters/secrets/`
+- `adapters/obs/`
+- `packages/core/`
+- `packages/ports/`
+- `packages/contracts/`
+- `packages/openapi/`
+- `packages/test/`
+- `packages/proof/`
+- `packages/source/`
+- `tests/apps/`
+- `tests/capabilities/`
+- `tests/adapters/`
+- `tests/packages/`
+
+The exact target files and their source-use treatments are named in `docs/architecture/bootstrap-source-use-disposition-matrix.md`. Any implementation file outside those roots or not named in that matrix remains blocked.
+
+This section does not authorise staging, production, live-external-provider, deployment, or production-live readiness. It does not authorise direct React runtime/application copy, React path mirroring, generated-report authority, or schema activation.
+
 ## Decision
 
 USF-39 must not create implementation-shaped directories unless USF-61 explicitly cites this plan and the future implementation PR stays within the allowed topology below.

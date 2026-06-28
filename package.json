@@ -1,0 +1,45 @@
+{
+  "name": "foundation-bootstrap",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24.16.0",
+    "pnpm": ">=11.9.0"
+  },
+  "scripts": {
+    "dev": "tsx apps/api/src/main.ts",
+    "dev:smoke": "tsx packages/proof/src/dev-smoke.ts",
+    "dev:work": "tsx apps/work/src/main.ts",
+    "format:check": "prettier --check \"{apps,capabilities,adapters,packages,tests}/**/*.{ts,json,yaml,yml}\" package.json pnpm-workspace.yaml tsconfig.json tsconfig.base.json eslint.config.js vitest.config.ts compose.yaml .prettierrc.json .codex/runs/20260627T235923Z-f80da39/bootstrap-start.json",
+    "format:write": "prettier --write \"{apps,capabilities,adapters,packages,tests}/**/*.{ts,json,yaml,yml}\" package.json pnpm-workspace.yaml tsconfig.json tsconfig.base.json eslint.config.js vitest.config.ts compose.yaml .prettierrc.json .codex/runs/20260627T235923Z-f80da39/bootstrap-start.json",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "openapi:check": "tsx packages/openapi/src/check.ts",
+    "db:types:check": "tsx adapters/db/src/check-generated-types.ts",
+    "compose:config": "docker compose -f compose.yaml config --quiet",
+    "compose:smoke": "bash -lc 'docker compose -f compose.yaml up -d --wait --wait-timeout 240; status=$?; docker compose -f compose.yaml down --remove-orphans; exit $status'",
+    "test-compose": "pnpm compose:config && pnpm compose:smoke",
+    "proof:bootstrap": "tsx packages/proof/src/bootstrap-proof.ts",
+    "repo:validate": "python3 tools/validate-spec/validate-spec.py all --json && python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+    "verify": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm openapi:check && corepack pnpm db:types:check && corepack pnpm dev:smoke && corepack pnpm compose:config && corepack pnpm compose:smoke && corepack pnpm proof:bootstrap && corepack pnpm repo:validate"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "0.34.49",
+    "fastify": "5.8.5",
+    "kysely": "0.29.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.13.2",
+    "eslint": "10.6.0",
+    "globals": "17.7.0",
+    "prettier": "3.9.1",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.62.0",
+    "vitest": "4.1.9"
+  }
+}

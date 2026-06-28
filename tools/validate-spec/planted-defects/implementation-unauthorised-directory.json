@@ -1,6 +1,6 @@
 {
   "target": "pr-paths",
-  "expectedRule": "USF-IMPL-001",
+  "expectedRule": "USF-IMPL-005",
   "nameStatusLines": [
     "A\tapps/authentication-api/src/index.ts",
     "M\tdocs/architecture/authentication-slice-source-use-disposition-matrix.md"

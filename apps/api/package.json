@@ -1,0 +1,10 @@
+{
+  "name": "@foundation/app-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/server.ts",
+    "./runtime": "./src/runtime.ts"
+  }
+}
