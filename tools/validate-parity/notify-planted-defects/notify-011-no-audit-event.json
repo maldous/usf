@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-011",
+  "file": "packages/core/src/index.ts",
+  "mutation": {
+    "file": "packages/core/src/index.ts",
+    "replace": {
+      "old": "\"notification.sent\"",
+      "new": "\"notification.sent.removed\""
+    }
+  }
+}

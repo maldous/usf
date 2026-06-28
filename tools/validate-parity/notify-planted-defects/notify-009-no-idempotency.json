@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-009",
+  "file": "capabilities/notify/src/index.ts",
+  "mutation": {
+    "file": "capabilities/notify/src/index.ts",
+    "replace": {
+      "old": "idempotencyKey: notification.idempotencyKey",
+      "new": "idempotencyKey: stableId(\"dedupeDisabled\", [notification.notificationId])"
+    }
+  }
+}

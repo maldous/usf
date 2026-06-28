@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-NOTIFY-012",
+  "file": "packages/proof/src/notifications-messaging-proof.ts",
+  "mutation": {
+    "file": "packages/proof/src/notifications-messaging-proof.ts",
+    "replace": {
+      "old": "liveExternalProviderClaim: false",
+      "new": "liveExternalProviderClaim: true"
+    }
+  }
+}
