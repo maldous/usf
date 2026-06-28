@@ -264,9 +264,32 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "configuration.changed": { category: "configuration", severity: "warning", reserved: true },
   "file.uploaded": { category: "file", severity: "info", reserved: true },
   "file.downloaded": { category: "file", severity: "info", reserved: true },
-  "job.started": { category: "job", severity: "info", reserved: true },
-  "job.completed": { category: "job", severity: "info", reserved: true },
-  "job.failed": { category: "job", severity: "warning", reserved: true },
+  // Jobs & workflows (parity-jobs-workflows, USF-133). Emitted by this slice
+  // (value-free; never a raw payload/secret/credential/stack-trace):
+  "job.created": { category: "job", severity: "info" },
+  "job.scheduled": { category: "job", severity: "info" },
+  "job.started": { category: "job", severity: "info" },
+  "job.leased": { category: "job", severity: "info" },
+  "job.completed": { category: "job", severity: "info" },
+  "job.failed": { category: "job", severity: "warning" },
+  "job.retrying": { category: "job", severity: "notice" },
+  "job.dead_lettered": { category: "job", severity: "warning" },
+  "job.cancelled": { category: "job", severity: "notice" },
+  "job.denied": { category: "job", severity: "warning" },
+  "job.expired": { category: "job", severity: "notice", reserved: true },
+  "job.heartbeat_missed": { category: "job", severity: "warning", reserved: true },
+  "schedule.created": { category: "job", severity: "notice" },
+  "schedule.changed": { category: "job", severity: "warning" },
+  "schedule.disabled": { category: "job", severity: "warning" },
+  "workflow.started": { category: "job", severity: "info" },
+  "workflow.signalled": { category: "job", severity: "info" },
+  "workflow.completed": { category: "job", severity: "info" },
+  "workflow.failed": { category: "job", severity: "warning" },
+  "workflow.cancelled": { category: "job", severity: "notice" },
+  "workflow.approval.requested": { category: "job", severity: "notice" },
+  "workflow.approval.approved": { category: "job", severity: "warning" },
+  "workflow.approval.rejected": { category: "job", severity: "warning" },
+  "workflow.admin.override": { category: "job", severity: "high", reserved: true },
   "security.denied": { category: "security", severity: "high" },
   "system.error": { category: "system", severity: "high" },
   // Audit-of-audit access (reading/exporting/verifying audit evidence is itself audited).
@@ -1610,4 +1633,289 @@ export function opaqueHash(value: string): string {
  *  deliberately NOT part of the key (duplicate emails must not collapse actors). */
 export function keycloakExternalSubject(realm: string, subject: string): string {
   return `keycloak:${assertNonEmpty(realm, "realm")}:${assertNonEmpty(subject, "subject")}`;
+}
+
+// ===========================================================================
+// Jobs & workflows (parity-jobs-workflows, USF-133 / ADR 0011 / ADR 0013).
+// ADR 0011 port family: a durable workflow port and a separate operational
+// job/automation port (in-memory dev adapters; Temporal/Windmill are lineage-
+// only, never a live claim). Jobs are controlled execution: classified, tenant-
+// scoped or run by a concrete service actor, PDP-authorized, bounded-retry,
+// idempotent on side effects, value-redacted on failure, and audited.
+// ===========================================================================
+
+/** Exactly-one classification for every job/workflow (ADR 0011 + jobs standard). */
+export const JOB_CLASSIFICATIONS = Object.freeze([
+  "durable-domain-workflow",
+  "operational-automation-job",
+  "scheduled-maintenance-job",
+  "human-approval-flow",
+  "event-triggered-job",
+  "import-export-job",
+  "notification-job",
+  "file-processing-job",
+  "audit-maintenance-job",
+  "security-control-job",
+  "identity-lifecycle-job",
+  "provider-sync-job",
+  "system-internal-job",
+] as const);
+export type JobClassification = (typeof JOB_CLASSIFICATIONS)[number];
+
+export const JOB_STATUSES = Object.freeze([
+  "queued",
+  "scheduled",
+  "leased",
+  "running",
+  "waiting",
+  "awaiting-approval",
+  "succeeded",
+  "failed",
+  "retrying",
+  "dead-lettered",
+  "cancelled",
+  "expired",
+  "blocked",
+] as const);
+export type JobStatus = (typeof JOB_STATUSES)[number];
+
+/** Terminal statuses never run again (cancelled/expired must not execute). */
+export const TERMINAL_JOB_STATUSES: readonly JobStatus[] = Object.freeze([
+  "succeeded",
+  "dead-lettered",
+  "cancelled",
+  "expired",
+]);
+
+export function isTerminalJobStatus(status: JobStatus): boolean {
+  return TERMINAL_JOB_STATUSES.includes(status);
+}
+
+export const WORKFLOW_STATUSES = Object.freeze([
+  "running",
+  "waiting",
+  "awaiting-approval",
+  "completed",
+  "failed",
+  "cancelled",
+] as const);
+export type WorkflowStatus = (typeof WORKFLOW_STATUSES)[number];
+
+/** Canonical, structured failure taxonomy. Unknown fails closed. */
+export const JOB_FAILURE_CLASSES = Object.freeze([
+  "validation-failed",
+  "authorization-denied",
+  "tenant-context-missing",
+  "tenant-context-mismatch",
+  "idempotency-conflict",
+  "provider-timeout",
+  "provider-denied",
+  "provider-error",
+  "transient-error",
+  "permanent-error",
+  "timeout",
+  "cancelled",
+  "expired",
+  "dead-lettered",
+  "unknown",
+] as const);
+export type JobFailureClass = (typeof JOB_FAILURE_CLASSES)[number];
+
+/** Only transient classes are retryable; everything else is permanent (fail closed). */
+const RETRYABLE_FAILURE_CLASSES: readonly JobFailureClass[] = Object.freeze([
+  "transient-error",
+  "provider-timeout",
+  "timeout",
+]);
+
+/** Bounded, deterministic backoff. maxRetries MUST be finite and >= 0 (no unbounded retry). */
+export interface BackoffPolicy {
+  readonly strategy: "fixed" | "exponential";
+  readonly baseSeconds: number;
+  readonly factor: number;
+  readonly maxRetries: number;
+  readonly maxBackoffSeconds: number;
+  readonly jitter: boolean;
+}
+
+export function assertBoundedBackoff(policy: BackoffPolicy): BackoffPolicy {
+  if (!Number.isFinite(policy.maxRetries) || policy.maxRetries < 0 || policy.maxRetries > 100) {
+    throw new Error("backoff maxRetries must be a finite bound in [0,100] (no unbounded retry)");
+  }
+  if (policy.baseSeconds < 0 || policy.maxBackoffSeconds < 0) {
+    throw new Error("backoff seconds must be non-negative");
+  }
+  return policy;
+}
+
+/** Deterministic backoff for an attempt (1-based). Jitter, when enabled, is a
+ *  documented deterministic spread derived from the attempt — never Math.random. */
+export function nextBackoffSeconds(policy: BackoffPolicy, attempt: number): number {
+  const raw =
+    policy.strategy === "fixed"
+      ? policy.baseSeconds
+      : policy.baseSeconds * Math.pow(policy.factor, Math.max(0, attempt - 1));
+  const capped = Math.min(raw, policy.maxBackoffSeconds);
+  if (!policy.jitter) {
+    return capped;
+  }
+  // Deterministic jitter: a stable fraction in [0.5,1.0] from the attempt index.
+  const fraction = 0.5 + ((attempt * 2654435761) % 1000) / 2000;
+  return Math.round(capped * fraction);
+}
+
+/** Whether a failed attempt may retry: the failure class is retryable AND the
+ *  bounded retry budget is not exhausted. Bounded by construction. */
+export function isRetryable(
+  failureClass: JobFailureClass,
+  attempt: number,
+  maxRetries: number,
+): boolean {
+  return RETRYABLE_FAILURE_CLASSES.includes(failureClass) && attempt <= maxRetries;
+}
+
+/** A concrete service-actor identity for system jobs. A service actor is NOT a
+ *  global tenant bypass: it has explicit permissions and is audited. */
+export const SERVICE_ACTOR_PREFIX = "urn:usf:service:";
+
+export function serviceActorId(name: string): string {
+  return `${SERVICE_ACTOR_PREFIX}${assertNonEmpty(name, "serviceActorName")}`;
+}
+
+export function isServiceActor(actorId: string): boolean {
+  return actorId.startsWith(SERVICE_ACTOR_PREFIX);
+}
+
+/** Deterministic schedule. Stored execution time is UTC; tenant-local interpretation
+ *  and cron are deferred (jobs standard). Missed-run policy is explicit. */
+export const MISSED_RUN_POLICIES = Object.freeze(["skip", "run-once", "fail-closed"] as const);
+export type MissedRunPolicy = (typeof MISSED_RUN_POLICIES)[number];
+
+export interface ScheduleSpec {
+  readonly scheduleId: string;
+  readonly intervalSeconds: number;
+  readonly timezone: "UTC";
+  readonly anchorEpochSeconds: number;
+  readonly missedRunPolicy: MissedRunPolicy;
+  readonly maxCatchupRuns: number;
+}
+
+export function assertSchedule(spec: ScheduleSpec): ScheduleSpec {
+  if (spec.timezone !== "UTC") {
+    throw new Error("stored schedule execution must be UTC (tenant-local is deferred)");
+  }
+  if (!Number.isFinite(spec.intervalSeconds) || spec.intervalSeconds <= 0) {
+    throw new Error("schedule intervalSeconds must be a positive finite number");
+  }
+  if (!MISSED_RUN_POLICIES.includes(spec.missedRunPolicy)) {
+    throw new Error(`unknown missed-run policy: ${spec.missedRunPolicy}`);
+  }
+  if (!Number.isFinite(spec.maxCatchupRuns) || spec.maxCatchupRuns < 0) {
+    throw new Error("schedule maxCatchupRuns must be a finite bound (catch-up is bounded)");
+  }
+  return spec;
+}
+
+/** Which scheduled window `nowSec` falls in. The same window yields the same key, so a
+ *  double tick never double-enqueues (idempotent scheduling; ../react lineage). */
+export function scheduleWindow(spec: ScheduleSpec, nowSec: number): number {
+  return Math.floor((nowSec - spec.anchorEpochSeconds) / spec.intervalSeconds);
+}
+
+export function scheduleDueKey(spec: ScheduleSpec, nowSec: number): string {
+  return `sched:${spec.scheduleId}:${scheduleWindow(spec, nowSec)}`;
+}
+
+/** Redacts a failure message so a secret-looking value never reaches a client-safe
+ *  field (reuses the config-slice secret detectors). */
+export function safeFailureMessage(raw: string): string {
+  const tokens = raw.split(/(\s+)/);
+  return tokens
+    .map((t) => (isSecretLikeKey(t) || looksLikeSecretValue(t) ? CONFIG_REDACTED : t))
+    .join("");
+}
+
+/** Redacts a job payload for evidence/audit/API: secret-like keys and secret-shaped
+ *  values are masked. Payloads SHOULD carry references, not sensitive objects. */
+export function redactJobPayload(
+  payload: Readonly<Record<string, unknown>>,
+): Readonly<Record<string, string>> {
+  const flat: Record<string, string> = {};
+  for (const [k, v] of Object.entries(payload)) {
+    flat[k] = typeof v === "string" ? v : JSON.stringify(v);
+  }
+  return redactConfigMap(flat);
+}
+
+/** An operational job record. Tenant-scoped (tenantId set) or a system job run by a
+ *  concrete service actor. Payload carries redacted references, never sensitive objects. */
+export interface JobRecord {
+  readonly jobId: string;
+  readonly tenantId: string | null;
+  readonly classification: JobClassification;
+  readonly jobType: string;
+  readonly status: JobStatus;
+  readonly actorId: string;
+  readonly serviceActorId: string | null;
+  readonly idempotencyKey: string | null;
+  readonly correlationId: string;
+  readonly priority: number;
+  readonly runAfter: number;
+  readonly attempt: number;
+  readonly maxRetries: number;
+  readonly leaseOwner: string | null;
+  readonly leaseExpiresAt: number | null;
+  readonly deadLetterReason: string | null;
+  readonly failureClass: JobFailureClass | null;
+  readonly safeFailureMessage: string | null;
+  readonly payloadRefs: Readonly<Record<string, string>>;
+  readonly createdAt: number;
+  readonly updatedAt: number;
+}
+
+/** Least-disclosure projection of a job for API/list output: no payload, no lease
+ *  internals, no raw failure context — only what a UI safely needs. */
+export interface SafeJobView {
+  readonly jobId: string;
+  readonly tenantId: string | null;
+  readonly classification: JobClassification;
+  readonly jobType: string;
+  readonly status: JobStatus;
+  readonly attempt: number;
+  readonly maxRetries: number;
+  readonly failureClass: JobFailureClass | null;
+  readonly safeFailureMessage: string | null;
+  readonly createdAt: number;
+}
+
+export function toSafeJobView(job: JobRecord): SafeJobView {
+  return Object.freeze({
+    jobId: job.jobId,
+    tenantId: job.tenantId,
+    classification: job.classification,
+    jobType: job.jobType,
+    status: job.status,
+    attempt: job.attempt,
+    maxRetries: job.maxRetries,
+    failureClass: job.failureClass,
+    safeFailureMessage: job.safeFailureMessage,
+    createdAt: job.createdAt,
+  });
+}
+
+/** A durable workflow record. Versioned; tenant-bound or system-scoped. */
+export interface WorkflowRecord {
+  readonly workflowId: string;
+  readonly tenantId: string | null;
+  readonly classification: JobClassification;
+  readonly workflowType: string;
+  readonly workflowVersion: string;
+  readonly status: WorkflowStatus;
+  readonly actorId: string;
+  readonly serviceActorId: string | null;
+  readonly correlationId: string;
+  readonly approvalRequestedBy: string | null;
+  readonly approvalDecidedBy: string | null;
+  readonly createdAt: number;
+  readonly updatedAt: number;
 }
