@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUTHZ-002",
+  "description": "002 idp grants authz",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorization-policy.ts",
+    "replace": {
+      "old": "IDP_GRANTS_AUTHORIZATION = false",
+      "new": "IDP_GRANTS_AUTHORIZATION = true"
+    }
+  }
+}

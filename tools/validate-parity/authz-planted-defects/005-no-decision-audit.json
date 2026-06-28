@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-AUTHZ-005",
+  "description": "005 no decision audit",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorize.ts",
+    "replace": {
+      "old": "\"authorization.decision\"",
+      "new": "\"authorization.noop\""
+    }
+  }
+}
