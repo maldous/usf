@@ -1,0 +1,212 @@
+{
+  "runId": "20260628T022226Z-91e3aac",
+  "parentIssue": "USF-39",
+  "reconciliationIssue": "USF-120",
+  "mergeCommit": "91e3aacbfa182de25947174b459f7b0421701c96",
+  "children": [
+    {
+      "area": "api-runtime-and-dev-entrypoints",
+      "linearIssue": "USF-121",
+      "title": "Bootstrap: API runtime and dev entrypoints",
+      "suggestedState": "Done",
+      "evidence": [
+        "apps/api/src/main.ts",
+        "apps/api/src/runtime.ts",
+        "apps/api/src/server.ts",
+        "Makefile",
+        "package.json",
+        "tests/apps/api.test.ts",
+        ".codex/runs/20260628T022226Z-91e3aac/manual-dev-probe.txt"
+      ],
+      "validation": [
+        "make dev-smoke",
+        "make verify",
+        "tests/apps/api.test.ts",
+        "OpenAPI route-surface guard"
+      ]
+    },
+    {
+      "area": "worker-dev-entrypoint",
+      "linearIssue": "USF-122",
+      "title": "Bootstrap: Worker dev entrypoint",
+      "suggestedState": "Done",
+      "evidence": [
+        "apps/work/src/main.ts",
+        "apps/work/src/worker.ts",
+        "Makefile",
+        "package.json",
+        "tests/apps/worker.test.ts"
+      ],
+      "validation": ["make verify", "typecheck", "tests/apps/worker.test.ts"]
+    },
+    {
+      "area": "auth-and-tenant-context-capability",
+      "linearIssue": "USF-123",
+      "title": "Bootstrap: Auth and tenant-context capability",
+      "suggestedState": "Done",
+      "evidence": [
+        "capabilities/auth/src/index.ts",
+        "capabilities/tenant/src/index.ts",
+        "adapters/idp/src/index.ts",
+        ".codex/runs/20260628T022226Z-91e3aac/manual-dev-probe.txt"
+      ],
+      "validation": [
+        "make dev-smoke",
+        "tests/capabilities/tenant-isolation.test.ts",
+        "tests/apps/api.test.ts"
+      ]
+    },
+    {
+      "area": "audit-and-event-capture-capability",
+      "linearIssue": "USF-124",
+      "title": "Bootstrap: Audit and event capture capability",
+      "suggestedState": "Done",
+      "evidence": [
+        "capabilities/audit/src/index.ts",
+        "adapters/bus/src/index.ts",
+        "adapters/obs/src/index.ts",
+        ".codex/runs/20260628T022226Z-91e3aac/manual-dev-probe.txt"
+      ],
+      "validation": [
+        "make dev-smoke",
+        "tests/capabilities/audit.test.ts",
+        "tests/packages/proof.test.ts"
+      ]
+    },
+    {
+      "area": "config-files-jobs-notify-capabilities",
+      "linearIssue": "USF-125",
+      "title": "Bootstrap: Config files jobs and notify capabilities",
+      "suggestedState": "Done",
+      "evidence": [
+        "capabilities/config/src/index.ts",
+        "capabilities/files/src/index.ts",
+        "capabilities/jobs/src/index.ts",
+        "capabilities/notify/src/index.ts",
+        "tests/capabilities/auxiliary-capabilities.test.ts"
+      ],
+      "validation": [
+        "make verify",
+        "tests/adapters/provider-substrate.test.ts",
+        "tests/capabilities/auxiliary-capabilities.test.ts"
+      ]
+    },
+    {
+      "area": "in-memory-dev-provider-adapters",
+      "linearIssue": "USF-126",
+      "title": "Bootstrap: In-memory dev provider adapters",
+      "suggestedState": "Done",
+      "evidence": [
+        "adapters/idp/src/index.ts",
+        "adapters/bus/src/index.ts",
+        "adapters/wf/src/index.ts",
+        "adapters/store/src/index.ts",
+        "adapters/secrets/src/index.ts",
+        "adapters/mail/src/index.ts",
+        "adapters/obs/src/index.ts",
+        "tests/capabilities/auxiliary-capabilities.test.ts",
+        ".codex/runs/20260628T022226Z-91e3aac/manual-dev-probe.txt"
+      ],
+      "validation": [
+        "make dev-smoke",
+        "manual dev probe",
+        "tests/capabilities/auxiliary-capabilities.test.ts"
+      ]
+    },
+    {
+      "area": "compose-provider-substrate",
+      "linearIssue": "USF-127",
+      "title": "Bootstrap: Compose provider substrate",
+      "suggestedState": "Done",
+      "evidence": [
+        "compose.yaml",
+        "adapters/obs/config/loki.yaml",
+        "adapters/obs/config/otel-collector.yaml",
+        "adapters/obs/config/prometheus.yaml",
+        "adapters/obs/config/tempo.yaml"
+      ],
+      "validation": [
+        "make verify",
+        "compose:config",
+        "compose:smoke",
+        "tests/adapters/provider-substrate.test.ts"
+      ]
+    },
+    {
+      "area": "db-rls-and-migration-proof",
+      "linearIssue": "USF-128",
+      "title": "Bootstrap: DB RLS and migration proof",
+      "suggestedState": "Done",
+      "evidence": [
+        "adapters/db/migrations/0001-bootstrap.sql",
+        "adapters/db/src/index.ts",
+        "adapters/db/src/generated-types.ts",
+        "adapters/db/src/check-generated-types.ts"
+      ],
+      "validation": [
+        "db:types:check",
+        "tests/adapters/db-rls.test.ts",
+        "tests/capabilities/break-glass.test.ts"
+      ]
+    },
+    {
+      "area": "openapi-contracts-and-schema-conformance",
+      "linearIssue": "USF-129",
+      "title": "Bootstrap: OpenAPI contracts and schema conformance",
+      "suggestedState": "Done",
+      "evidence": [
+        "packages/contracts/src/index.ts",
+        "packages/openapi/openapi.json",
+        "packages/openapi/src/check.ts",
+        "packages/openapi/src/index.ts"
+      ],
+      "validation": ["openapi:check", "tests/packages/openapi.test.ts", "manual dev probe"]
+    },
+    {
+      "area": "verification-and-proof-commands",
+      "linearIssue": "USF-130",
+      "title": "Bootstrap: Verification and proof commands",
+      "suggestedState": "Done",
+      "evidence": [
+        "Makefile",
+        "package.json",
+        "packages/proof/src/dev-smoke.ts",
+        "packages/proof/src/bootstrap-proof.ts"
+      ],
+      "validation": ["make dev-smoke", "make verify", "validate-spec all", "validate-bootstrap all"]
+    },
+    {
+      "area": "source-use-disposition-coverage",
+      "linearIssue": "USF-131",
+      "title": "Bootstrap: Source-use disposition coverage",
+      "suggestedState": "Done",
+      "evidence": [
+        "docs/architecture/bootstrap-source-use-disposition-matrix.md",
+        "packages/source/src/index.ts",
+        "tests/packages/source.test.ts"
+      ],
+      "validation": [
+        "validate-spec implementation",
+        "validate-bootstrap all",
+        "tests/packages/source.test.ts"
+      ]
+    },
+    {
+      "area": "bootstrap-validators-and-planted-defects",
+      "linearIssue": "USF-132",
+      "title": "Bootstrap: Bootstrap validators and planted defects",
+      "suggestedState": "Done",
+      "evidence": [
+        "tools/validate-bootstrap/validate-bootstrap.py",
+        "tools/validate-bootstrap/planted-defects/moved-bootstrap-marker-outside-start-ancestry.json",
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "validation": [
+        "validate-bootstrap all",
+        "validate-bootstrap selftest",
+        "validate-spec all",
+        "validate-spec selftest"
+      ]
+    }
+  ]
+}

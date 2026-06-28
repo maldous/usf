@@ -1,0 +1,9 @@
+corepack pnpm dev
+$ tsx apps/api/src/main.ts
+USF V2 dev runtime started
+API: http://127.0.0.1:3001
+Health: http://127.0.0.1:3001/healthz
+OpenAPI: http://127.0.0.1:3001/openapi.json
+Provider mode: dev in-memory
+[ELIFECYCLE] Command failed.
+make: *** [Makefile:11: dev] Terminated

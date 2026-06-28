@@ -435,8 +435,11 @@ def check_no_forbidden_roots(F, state):
         if start_commit != marker_target:
             start_errors.append(f"{path}: startCommit does not match recorded v2BootstrapTarget")
             continue
-        if marker_target != git_marker_target:
-            start_errors.append(f"{path}: recorded v2BootstrapTarget does not match git v2-bootstrap target")
+        if not git_marker_target:
+            start_errors.append(f"{path}: git v2-bootstrap target is unavailable")
+            continue
+        if marker_target != git_marker_target and not is_ancestor(marker_target, git_marker_target):
+            start_errors.append(f"{path}: git v2-bootstrap target does not descend from recorded v2BootstrapTarget")
             continue
         if current_head != start_commit and not is_ancestor(start_commit, current_head):
             start_errors.append(f"{path}: HEAD does not descend from startCommit")
@@ -1219,6 +1222,12 @@ def run_selftest(F):
             )
         if "appendDirectiveText" in mutation:
             overrides["directiveText"] = overrides.get("directiveText", base["directiveText"]) + mutation["appendDirectiveText"]
+        if "startRecords" in mutation:
+            overrides["startRecords"] = mutation["startRecords"]
+        if "currentHead" in mutation:
+            overrides["currentHead"] = mutation["currentHead"]
+        if "v2BootstrapTarget" in mutation:
+            overrides["v2BootstrapTarget"] = mutation["v2BootstrapTarget"]
         if "bootstrapAdrText" in mutation:
             overrides["bootstrapAdrText"] = mutation["bootstrapAdrText"]
         local = Findings()
