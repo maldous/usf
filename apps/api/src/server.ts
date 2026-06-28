@@ -1,8 +1,12 @@
 import {
+  AuthorizeCheckRequestSchema,
+  AuthorizeDecisionResponseSchema,
   ErrorResponseSchema,
+  ForbiddenResponseSchema,
   HealthResponseSchema,
   LoginRequestSchema,
   LoginResponseSchema,
+  PermissionsResponseSchema,
   ReadyResponseSchema,
   TenantContextResponseSchema,
 } from "@foundation/contracts";
@@ -10,9 +14,14 @@ import {
   TenantMismatchError,
   createAuditRecord,
   stableId,
+  type AuthorizationRequest,
   type IdentityClaims,
 } from "@foundation/core";
-import { contextFromClaims, requireRequestTenant } from "@foundation/capability-tenant";
+import {
+  contextFromClaims,
+  permissionsForRoles,
+  requireRequestTenant,
+} from "@foundation/capability-tenant";
 import { buildOpenApiDocument } from "@foundation/openapi";
 import Fastify, { type FastifyInstance, type FastifyRequest } from "fastify";
 import { DEV_PROVIDER_MODE_LABEL, createDevRuntime, type DevRuntime } from "./runtime.ts";
@@ -153,6 +162,93 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
         reply.code(400);
         return { error: error instanceof Error ? error.message : "unknown error" };
       }
+    },
+  );
+
+  app.post<{
+    Body: {
+      tenantId: string;
+      action: string;
+      resourceType: string;
+      resourceId: string;
+      dataClassification?: string;
+      breakGlassGrantId?: string;
+    };
+  }>(
+    "/v1/authz/check",
+    {
+      schema: {
+        body: AuthorizeCheckRequestSchema,
+        response: {
+          200: AuthorizeDecisionResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const context = contextFromClaims(devClaimsFromRequest(request), "local");
+      const body = request.body;
+      if (context.tenantId !== body.tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      const authzRequest: AuthorizationRequest = {
+        context,
+        action: body.action,
+        resource: {
+          type: body.resourceType,
+          id: body.resourceId,
+          tenantId: body.tenantId,
+          attributes: body.dataClassification
+            ? { data_classification: body.dataClassification }
+            : {},
+        },
+        requestContext: { correlation_id: stableId("corr", [context.tenantId, context.actorId]) },
+        ...(body.breakGlassGrantId ? { breakGlassGrantId: body.breakGlassGrantId } : {}),
+      };
+      const decision = await runtime.authorizer.authorize(authzRequest);
+      if (decision.effect === "permit") {
+        return {
+          effect: "permit" as const,
+          action: decision.action,
+          reasonCode: decision.reasonCode,
+          obligations: [...decision.obligations],
+          policyVersion: decision.policyVersion,
+        };
+      }
+      reply.code(403);
+      return { error: decision.safeMessage, reasonCode: decision.reasonCode };
+    },
+  );
+
+  app.get<{ Querystring: { tenantId?: string } }>(
+    "/v1/authz/permissions",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: { 200: PermissionsResponseSchema, 400: ErrorResponseSchema },
+      },
+    },
+    async (request, reply) => {
+      const claims = devClaimsFromRequest(request);
+      const tenantId = request.query.tenantId ?? "";
+      if (claims.tenantId !== tenantId) {
+        reply.code(400);
+        return { error: "tenant context mismatch" };
+      }
+      const membership = runtime.membershipDirectory.membership({
+        actorId: claims.subject,
+        tenantId,
+      });
+      const active = membership?.status === "active";
+      const permissions =
+        active && membership ? [...permissionsForRoles(membership.roles)].sort() : [];
+      return { tenantId, actorId: claims.subject, active, permissions };
     },
   );
 

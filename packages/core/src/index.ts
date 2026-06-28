@@ -108,3 +108,72 @@ export function createAuditRecord(input: {
 export function stableId(prefix: string, parts: readonly string[]): string {
   return `${assertNonEmpty(prefix, "prefix")}_${parts.map((part) => assertNonEmpty(part, "idPart")).join("_")}`;
 }
+
+// ---------------------------------------------------------------------------
+// Authorization model (parity-tenant-authz, USF-140).
+// Identity is not authorization: IdP/claims supply identity inputs; the USF PDP
+// makes the final application-layer decision; Postgres RLS is the DB backstop.
+// ---------------------------------------------------------------------------
+
+export type AuthorizationEffect = "permit" | "deny";
+
+export type MembershipStatus =
+  "pending" | "invited" | "active" | "suspended" | "revoked" | "expired" | "deleted";
+
+/** A stable internal actor, mapped from an external IdP subject + provider. */
+export interface ActorIdentity {
+  readonly actorId: string;
+  readonly externalSubject: string;
+  readonly identityProvider: string;
+  readonly email: string;
+  readonly emailVerified: boolean;
+  readonly enabled: boolean;
+}
+
+export interface TenantMembership {
+  readonly membershipId: string;
+  readonly tenantId: string;
+  readonly actorId: string;
+  readonly status: MembershipStatus;
+  readonly roles: readonly string[];
+}
+
+export interface AuthorizationResource {
+  readonly type: string;
+  readonly id: string;
+  readonly tenantId: string;
+  readonly attributes: Readonly<Record<string, string>>;
+}
+
+export interface AuthorizationRequest {
+  readonly context: TenantContext;
+  readonly action: string;
+  readonly resource: AuthorizationResource;
+  readonly requestContext?: Readonly<Record<string, string>>;
+  readonly breakGlassGrantId?: string;
+}
+
+/** Structured policy decision (ADR 0010). Permit is explicit; deny is default. */
+export interface PolicyDecision {
+  readonly decisionId: string;
+  readonly policyVersion: string;
+  readonly actorId: string;
+  readonly tenantId: string;
+  readonly action: string;
+  readonly resourceType: string;
+  readonly resourceId: string;
+  readonly effect: AuthorizationEffect;
+  readonly reasonCode: string;
+  readonly safeMessage: string;
+  readonly obligations: readonly string[];
+  readonly matchedPolicyIds: readonly string[];
+  readonly evaluationContextHash: string;
+  readonly correlationId: string;
+  readonly causationId: string | null;
+  readonly traceId: string | null;
+  readonly evaluatedAt: string;
+}
+
+export function isActiveMembership(membership: TenantMembership | undefined): boolean {
+  return membership?.status === "active";
+}

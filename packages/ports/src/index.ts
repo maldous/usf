@@ -1,4 +1,12 @@
-import type { AuditRecord, IdentityClaims, TenantContext } from "@foundation/core";
+import type {
+  ActorIdentity,
+  AuditRecord,
+  AuthorizationRequest,
+  IdentityClaims,
+  PolicyDecision,
+  TenantContext,
+  TenantMembership,
+} from "@foundation/core";
 
 export interface IdentityProvider {
   readonly mode: "hermetic-mock" | "local-composed-real-service";
@@ -41,4 +49,24 @@ export interface ObservabilitySink {
 export interface TenantScopedRepository<T> {
   insert(context: TenantContext, value: T): Promise<void>;
   list(context: TenantContext, tenantId: string): Promise<readonly T[]>;
+}
+
+// Authorization ports (parity-tenant-authz, USF-140). Capabilities depend on these
+// ports, never on an IdP, database, or provider implementation, for authorization.
+
+export interface PolicyDecisionPoint {
+  decide(request: AuthorizationRequest): PolicyDecision;
+}
+
+export interface TenantMembershipDirectory {
+  membership(input: { actorId: string; tenantId: string }): TenantMembership | undefined;
+  activeTenants(actorId: string): readonly string[];
+}
+
+/** Maps a stable internal actor from an external IdP subject + provider. */
+export interface IdentityDirectory {
+  resolveActor(input: {
+    externalSubject: string;
+    identityProvider: string;
+  }): ActorIdentity | undefined;
 }
