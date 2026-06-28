@@ -1,0 +1,67 @@
+export function buildOpenApiDocument() {
+  return {
+    openapi: "3.1.0",
+    info: {
+      title: "Foundation Local Dev/Test API",
+      version: "0.1.0",
+    },
+    paths: {
+      "/healthz": {
+        get: {
+          operationId: "getHealthz",
+          responses: {
+            "200": {
+              description: "Local dev runtime liveness response",
+            },
+          },
+        },
+      },
+      "/readyz": {
+        get: {
+          operationId: "getReadyz",
+          responses: {
+            "200": {
+              description: "Local dev runtime readiness response",
+            },
+          },
+        },
+      },
+      "/openapi.json": {
+        get: {
+          operationId: "getOpenApiDocument",
+          responses: {
+            "200": {
+              description: "Committed OpenAPI document",
+            },
+          },
+        },
+      },
+      "/auth/login": {
+        post: {
+          operationId: "postAuthLogin",
+          responses: {
+            "200": {
+              description: "Hermetic login response",
+            },
+            "400": {
+              description: "Validation or tenant-context error",
+            },
+          },
+        },
+      },
+      "/v1/tenant-context": {
+        get: {
+          operationId: "getTenantContextV1",
+          responses: {
+            "200": {
+              description: "Tenant context derived from dev mock identity headers",
+            },
+            "400": {
+              description: "Tenant mismatch or missing context",
+            },
+          },
+        },
+      },
+    },
+  } as const;
+}

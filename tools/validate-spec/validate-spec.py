@@ -1483,7 +1483,7 @@ def _source_import_paths(F):
 
 def _existing_repo_paths():
     try:
-        tracked = git_checked("ls-files")
+        tracked = git_checked("ls-files", "--cached", "--others", "--exclude-standard")
         return {p for p in tracked.splitlines() if p}
     except Exception:
         return {p[2:] if p.startswith("./") else p
@@ -1854,6 +1854,7 @@ def check_selftest(ctx, F):
                 lines,
                 source_paths=set(patch.get("sourcePaths", [])),
                 changed_records=patch.get("records", {}),
+                existing_paths=set() if patch.get("ignoreExistingDirective") else None,
             )
         elif patch["target"] == "anchor-payloads":
             records = patch.get("records")
@@ -1914,8 +1915,20 @@ def git_checked(*args):
     return r.stdout.strip()
 
 
-IMPLEMENTATION_ROOTS = ("apps", "packages", "services", "src", "config", "infra", "scripts")
+IMPLEMENTATION_ROOTS = (
+    "apps",
+    "capabilities",
+    "adapters",
+    "packages",
+    "tests",
+    "services",
+    "src",
+    "config",
+    "infra",
+    "scripts",
+)
 IMPLEMENTATION_PATH_RE = re.compile(r"(^|/)(" + "|".join(IMPLEMENTATION_ROOTS) + r")/")
+DISPOSITION_MATRIX_RE = re.compile(r"docs/architecture/.*source-use-disposition-matrix\.md$")
 IMPLEMENTATION_DIRECTIVE_PATHS = {
     "docs/architecture/implementation-extraction-directive.md",
 }
@@ -1948,13 +1961,34 @@ DIRECTIVE_PLACEHOLDER_PHRASES = {
     "todo",
 }
 AUTHORIZED_IMPLEMENTATION_ROOTS = {
-    "apps/authentication-api",
-    "packages/authentication-domain",
-    "packages/identity-domain",
-    "packages/authorization-policy",
-    "packages/identity-provider-adapter",
-    "packages/authentication-observability",
-    "config/authentication",
+    "apps/api",
+    "apps/work",
+    "capabilities/auth",
+    "capabilities/tenant",
+    "capabilities/audit",
+    "capabilities/notify",
+    "capabilities/files",
+    "capabilities/jobs",
+    "capabilities/config",
+    "adapters/db",
+    "adapters/idp",
+    "adapters/store",
+    "adapters/bus",
+    "adapters/wf",
+    "adapters/mail",
+    "adapters/secrets",
+    "adapters/obs",
+    "packages/core",
+    "packages/ports",
+    "packages/contracts",
+    "packages/openapi",
+    "packages/test",
+    "packages/proof",
+    "packages/source",
+    "tests/apps",
+    "tests/capabilities",
+    "tests/adapters",
+    "tests/packages",
 }
 
 
@@ -1963,7 +1997,10 @@ def _is_implementation_path(path):
 
 
 def _normalise_path(path):
-    return path.replace("\\", "/").lstrip("./")
+    path = path.replace("\\", "/")
+    while path.startswith("./"):
+        path = path[2:]
+    return path
 
 
 def _implementation_root(path):
@@ -1978,10 +2015,28 @@ def _implementation_root(path):
 
 def _has_changed_disposition(changed_paths):
     return any(
-        re.match(r"docs/architecture/.*source-use-disposition-matrix\.md$", p)
+        DISPOSITION_MATRIX_RE.match(p)
         or re.match(r"spec/registries/.*source-import-manifest\.json$", p)
         for p in changed_paths
     )
+
+
+def _implementation_disposition_targets(F, existing_paths=None):
+    if existing_paths is None:
+        matrix_paths = sorted(glob.glob("docs/architecture/*source-use-disposition-matrix.md"))
+    else:
+        matrix_paths = sorted(p for p in existing_paths if DISPOSITION_MATRIX_RE.match(p))
+    targets = set()
+    token_re = re.compile(r"`((?:apps|capabilities|adapters|packages|tests|config)/[^`\s|]+)`")
+    for path in matrix_paths:
+        if not os.path.exists(path):
+            continue
+        text = load_text(path, F)
+        if text is None:
+            continue
+        for match in token_re.finditer(text):
+            targets.add(_normalise_path(match.group(1).rstrip(".,;:")))
+    return targets
 
 
 def _source_mirror_prefixes(source_paths):
@@ -2155,15 +2210,15 @@ def validate_implementation_directives(F, paths=None, records=None):
             validate_implementation_directive_text(F, path, text)
 
 
-def _validate_implementation_path(F, path, *, directive_referenced, disposition_changed, source_mirror_prefixes,
-                                  source_mirror_suffixes):
+def _validate_implementation_path(F, path, *, directive_referenced, source_mirror_prefixes,
+                                  source_mirror_suffixes, disposition_targets):
     root = _implementation_root(path)
     if root is None:
         return
     if not directive_referenced:
         F.add("USF-IMPL-001", path, "implementation artefact requires an authorised implementation directive")
-    if not disposition_changed:
-        F.add("USF-IMPL-002", path, "implementation artefact requires source disposition or import-manifest coverage")
+    if path not in disposition_targets:
+        F.add("USF-IMPL-002", path, "implementation artefact requires target-file source disposition coverage")
     remainder = "/".join(_normalise_path(path).split("/")[2:])
     mirrored_suffix = next((suffix for suffix in sorted(source_mirror_suffixes) if remainder == suffix), None)
     if root in source_mirror_prefixes or mirrored_suffix:
@@ -2181,7 +2236,7 @@ def validate_implementation_paths(F, paths, *, changed_paths=None, source_paths=
     source_paths = {_normalise_path(p) for p in (source_paths or set())}
     existing_paths = {_normalise_path(p) for p in (existing_paths or set())}
     directive_referenced = _implementation_directive_referenced(changed_paths, existing_paths=existing_paths)
-    disposition_changed = _has_changed_disposition(changed_paths)
+    disposition_targets = _implementation_disposition_targets(F, existing_paths=existing_paths or None)
     mirror_prefixes = _source_mirror_prefixes(source_paths)
     mirror_suffixes = _source_mirror_suffixes(source_paths)
     for path in paths:
@@ -2189,9 +2244,9 @@ def validate_implementation_paths(F, paths, *, changed_paths=None, source_paths=
             F,
             path,
             directive_referenced=directive_referenced,
-            disposition_changed=disposition_changed,
             source_mirror_prefixes=mirror_prefixes,
             source_mirror_suffixes=mirror_suffixes,
+            disposition_targets=disposition_targets,
         )
 
 
@@ -2242,10 +2297,11 @@ def validate_pr_freshness(F, changed_paths, changed_records=None):
             )
 
 
-def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=None):
+def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=None, existing_paths=None):
     changed_paths = []
     changed_existing_paths = []
     added_paths = []
+    existing_paths = _existing_repo_paths() if existing_paths is None else {_normalise_path(p) for p in existing_paths}
     for line in name_status_lines:
         parts = line.split("\t")
         if len(parts) < 2:
@@ -2258,15 +2314,22 @@ def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=N
         if status.startswith("A"):
             added_paths.append(path)
     validate_pr_freshness(F, changed_existing_paths, changed_records=changed_records)
-    directive_referenced = _implementation_directive_referenced(changed_paths)
+    directive_referenced = _implementation_directive_referenced(changed_paths, existing_paths=existing_paths)
     for path in added_paths:
         if (_is_implementation_path(path) or re.search(r"\.(ts|tsx|jsx)$", path)) and not directive_referenced:
             F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
-    validate_implementation_paths(F, added_paths, changed_paths=changed_paths, source_paths=source_paths or _source_import_paths(F))
-    if not _has_changed_disposition(changed_paths):
-        for path in added_paths:
-            if _is_implementation_path(path):
-                F.add("USF-PR-DISPOSITION", path, "added implementation file lacks changed source disposition/import coverage")
+    validate_implementation_paths(
+        F,
+        added_paths,
+        changed_paths=changed_paths,
+        source_paths=source_paths or _source_import_paths(F),
+        existing_paths=existing_paths,
+    )
+    disposition_targets = _implementation_disposition_targets(F)
+    for path in added_paths:
+        path = _normalise_path(path)
+        if _is_implementation_path(path) and path not in disposition_targets:
+            F.add("USF-PR-DISPOSITION", path, "added implementation file lacks target-file source disposition coverage")
 
 
 def load_changed_json_records_at_ref(ref, name_status_lines):

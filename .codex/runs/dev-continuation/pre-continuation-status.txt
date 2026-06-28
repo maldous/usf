@@ -1,0 +1,26 @@
+ M .gitignore
+ M docs/architecture/target-implementation-topology-plan.md
+ M tools/validate-bootstrap/validate-bootstrap.py
+ M tools/validate-spec/planted-defects/implementation-json-directive-not-authorising.json
+ M tools/validate-spec/planted-defects/implementation-unauthorised-directory.json
+ M tools/validate-spec/planted-defects/pr-added-implementation-runtime.json
+ M tools/validate-spec/validate-spec.py
+?? .codex/agents/
+?? .codex/runs/
+?? .npmrc
+?? .prettierrc.json
+?? Makefile
+?? adapters/
+?? apps/
+?? capabilities/
+?? compose.yaml
+?? docs/architecture/bootstrap-source-use-disposition-matrix.md
+?? eslint.config.js
+?? package.json
+?? packages/
+?? pnpm-lock.yaml
+?? pnpm-workspace.yaml
+?? tests/
+?? tsconfig.base.json
+?? tsconfig.json
+?? vitest.config.ts
