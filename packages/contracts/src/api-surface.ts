@@ -400,6 +400,7 @@ export const API_ROUTE_CONTRACTS: readonly ApiRouteContract[] = Object.freeze([
   ...tenantReadRoutes,
   ...auditRoutes(),
   ...configRoutes(),
+  ...providerRoutes(),
   ...fileRoutes(),
   ...jobRoutes(),
   ...notificationRoutes(),
@@ -616,6 +617,90 @@ function configRoutes(): readonly ApiRouteContract[] {
         },
       },
     ),
+  ]);
+}
+
+function providerStatusExample() {
+  return {
+    providerId: "notification-delivery-in-memory",
+    providerName: "In-memory notification delivery provider",
+    providerCategory: "notification-delivery",
+    providerMode: "in-memory",
+    owningCapability: "notifications-messaging",
+    owningTeamOrRole: "platform-operator",
+    businessPurpose: "Hermetic notification delivery capture and evidence proof.",
+    dataClassification: "restricted",
+    tenantScope: "tenant-scoped",
+    environmentScope: "local-dev",
+    lifecycleState: "approved-for-local-test",
+    riskClassification: "security-sensitive",
+    criticality: "medium",
+    healthStatus: "healthy",
+    readinessStatus: "healthy",
+    livenessStatus: "healthy",
+    capabilityStatus: "healthy",
+    providerRegion: "local-dev",
+    dataResidencyStatus: "local-dev-test",
+    egressAllowed: false,
+    tlsRequired: false,
+    credentialPosture: "secret-reference-present",
+    endpointPosture: "none",
+    driftStatus: "deferred",
+    resiliencePosture: "bounded-local-dev-test",
+    failoverPosture: "no-dr-readiness-claim-without-proof",
+    supplierPosture: "not-applicable-local-dev-test",
+    liveReadinessClaim: false,
+    productionReadinessClaim: false,
+    lastReviewedAt: null,
+    reviewExpiresAt: null,
+    safeFailureMessage: null,
+    sourceUseDisposition: "source-derived-rewrite",
+  };
+}
+
+function providerRoutes(): readonly ApiRouteContract[] {
+  return Object.freeze([
+    route("providers.list", "GET", "/v1/providers", "listProvidersV1", {
+      domain: "provider-adapters",
+      capability: "provider-registry",
+      action: "provider.list",
+      classification: "operator-only",
+      tenantScope: "tenant-header-query",
+      requestSchema: "ProvidersQuery",
+      responses: {
+        "200": "ProvidersListResponse",
+        "400": "ApiErrorResponse",
+        "403": "ApiErrorResponse",
+      },
+      pagination: cursorPagination(["providerCategory", "providerMode", "readinessStatus"]),
+      audit:
+        "provider status access is PDP guarded and value-free; audit-of-access posture is represented",
+      pdp: "operator/security-admin provider.list permission required; provider credentials and endpoints never exposed",
+      dataClassification: "security-sensitive",
+      exampleResponse: {
+        tenantId: "tenant-alpha",
+        providers: [providerStatusExample()],
+        nextCursor: null,
+      },
+    }),
+    route("providers.get", "GET", "/v1/providers/:id", "getProviderByIdV1", {
+      domain: "provider-adapters",
+      capability: "provider-registry",
+      action: "provider.read",
+      classification: "operator-only",
+      tenantScope: "tenant-header-query-param",
+      requestSchema: "ProvidersQuery",
+      responses: {
+        "200": "ProviderDetailResponse",
+        "400": "ApiErrorResponse",
+        "403": "ApiErrorResponse",
+        "404": "ApiErrorResponse",
+      },
+      audit: "provider detail access is PDP guarded and value-free",
+      pdp: "operator/security-admin provider.read permission required; non-enumerating safe errors",
+      dataClassification: "security-sensitive",
+      exampleResponse: { tenantId: "tenant-alpha", provider: providerStatusExample() },
+    }),
   ]);
 }
 

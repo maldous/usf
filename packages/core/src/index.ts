@@ -263,6 +263,28 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "data.purged": { category: "data-mutation", severity: "high", reserved: true },
   "data.read": { category: "data-access", severity: "info", reserved: true },
   "configuration.changed": { category: "configuration", severity: "warning", reserved: true },
+  // Provider trust boundaries (parity-provider-adapters-modes, USF-133). These
+  // events are value-free: no raw endpoint, credential, token, request/response
+  // body, private provider detail, or stack trace is permitted in metadata.
+  "provider.registered": { category: "integration", severity: "notice", reserved: true },
+  "provider.configured": { category: "integration", severity: "warning", reserved: true },
+  "provider.enabled": { category: "integration", severity: "warning", reserved: true },
+  "provider.disabled": { category: "integration", severity: "warning", reserved: true },
+  "provider.suspended": { category: "integration", severity: "high", reserved: true },
+  "provider.revoked": { category: "integration", severity: "high", reserved: true },
+  "provider.mode.changed": { category: "integration", severity: "high", reserved: true },
+  "provider.health.checked": { category: "integration", severity: "info" },
+  "provider.readiness.checked": { category: "integration", severity: "info" },
+  "provider.call.started": { category: "integration", severity: "info", reserved: true },
+  "provider.call.succeeded": { category: "integration", severity: "info", reserved: true },
+  "provider.call.failed": { category: "integration", severity: "warning" },
+  "provider.secret_ref.used": { category: "integration", severity: "notice", reserved: true },
+  "provider.drift.detected": { category: "integration", severity: "warning", reserved: true },
+  "provider.failover.started": { category: "integration", severity: "high", reserved: true },
+  "provider.failover.completed": { category: "integration", severity: "high", reserved: true },
+  "provider.circuit.opened": { category: "integration", severity: "warning", reserved: true },
+  "provider.circuit.closed": { category: "integration", severity: "notice", reserved: true },
+  "provider.deferred": { category: "integration", severity: "notice" },
   "file.uploaded": { category: "file", severity: "info", reserved: true },
   "file.downloaded": { category: "file", severity: "info", reserved: true },
   // Notifications and messaging (parity-notifications-messaging, USF-133).
@@ -922,6 +944,1243 @@ export function redactConfigMap(
     out[key] = isSecretLikeKey(key) || looksLikeSecretValue(value) ? CONFIG_REDACTED : value;
   }
   return Object.freeze(out);
+}
+
+// ---------------------------------------------------------------------------
+// Provider adapters / modes model (parity-provider-adapters-modes, USF-133).
+//
+// Providers are controlled trust boundaries behind USF ports. A provider registry
+// entry records mode, owner, config/secret posture, risk, health/readiness,
+// lifecycle, egress, and supplier posture without exposing raw endpoints or
+// credentials. This is local/dev/test control evidence only. It makes no live
+// provider, production, supplier approval, or certification claim.
+// ---------------------------------------------------------------------------
+
+export const PROVIDER_CATEGORIES = Object.freeze([
+  "database",
+  "cache",
+  "object-storage",
+  "file-scan",
+  "identity",
+  "config",
+  "secrets",
+  "audit-ledger",
+  "event-bus",
+  "workflow-engine",
+  "operational-job-engine",
+  "notification-delivery",
+  "api-gateway",
+  "observability",
+  "search-index",
+] as const);
+export type ProviderCategory = (typeof PROVIDER_CATEGORIES)[number];
+
+export const PROVIDER_MODES = Object.freeze([
+  "in-memory",
+  "local-test",
+  "mock",
+  "composed-test",
+  "live-external-deferred",
+  "live-external-authorised",
+  "disabled",
+  "unavailable",
+] as const);
+export type ProviderAdapterMode = (typeof PROVIDER_MODES)[number];
+
+export const PROVIDER_LIFECYCLE_STATES = Object.freeze([
+  "proposed",
+  "approved-for-local-test",
+  "approved-for-composed-test",
+  "approved-for-live",
+  "suspended",
+  "deprecated",
+  "retired",
+  "revoked",
+] as const);
+export type ProviderLifecycleState = (typeof PROVIDER_LIFECYCLE_STATES)[number];
+
+export const PROVIDER_RISK_CLASSIFICATIONS = Object.freeze([
+  "low",
+  "medium",
+  "high",
+  "critical",
+  "regulated",
+  "security-sensitive",
+] as const);
+export type ProviderRiskClassification = (typeof PROVIDER_RISK_CLASSIFICATIONS)[number];
+
+export const PROVIDER_OPERATIONAL_STATUSES = Object.freeze([
+  "healthy",
+  "degraded",
+  "unavailable",
+  "disabled",
+  "not-configured",
+  "deferred",
+  "unauthorised",
+  "unknown",
+] as const);
+export type ProviderOperationalStatus = (typeof PROVIDER_OPERATIONAL_STATUSES)[number];
+
+export const PROVIDER_CRITICALITIES = Object.freeze(["low", "medium", "high", "critical"] as const);
+export type ProviderCriticality = (typeof PROVIDER_CRITICALITIES)[number];
+
+export interface ProviderCredentialPosture {
+  readonly credentialRef: SecretReference | null;
+  readonly secretRef: SecretReference | null;
+  readonly secretClassification: "none" | "secret-reference" | "credential-metadata";
+  readonly rotationPolicy: string;
+  readonly lastRotatedAt: string | null;
+  readonly rotationDueAt: string | null;
+  readonly revokedAt: string | null;
+  readonly credentialScope: string;
+  readonly leastPrivilegePolicy: string;
+}
+
+export interface ProviderTransportPosture {
+  readonly tlsRequired: boolean;
+  readonly minTlsVersion: string | null;
+  readonly certificateValidationRequired: boolean;
+  readonly mtlsRequired: boolean;
+  readonly caBundleRef: string | null;
+  readonly certificatePinningPolicy: string;
+  readonly insecureSkipVerifyAllowed: boolean;
+}
+
+export interface ProviderResiliencePosture {
+  readonly connectTimeout: string;
+  readonly requestTimeout: string;
+  readonly retryPolicy: string;
+  readonly circuitBreakerPolicy: string;
+  readonly fallbackPolicy: string;
+  readonly degradedModePolicy: string;
+  readonly bulkheadPolicy: string;
+}
+
+export interface ProviderFailoverPosture {
+  readonly primaryProviderRef: string | null;
+  readonly secondaryProviderRef: string | null;
+  readonly failoverPolicy: string;
+  readonly failbackPolicy: string;
+  readonly dataConsistencyPolicy: string;
+  readonly reconciliationPolicy: string;
+  readonly rpoTarget: string | null;
+  readonly rtoTarget: string | null;
+}
+
+export interface ProviderDriftPosture {
+  readonly expectedConfigHash: string | null;
+  readonly observedConfigHash: string | null;
+  readonly lastDriftCheckAt: string | null;
+  readonly driftStatus: "not-checked" | "in-sync" | "drifted" | "deferred";
+  readonly driftReasonCode: string | null;
+  readonly approvedExceptionRef: string | null;
+}
+
+export interface ProviderPermissionGrant {
+  readonly providerAction: string;
+  readonly providerPermission: "read" | "write" | "delete" | "admin" | "send" | "execute";
+  readonly credentialScope: string;
+  readonly allowedResourceScope: string;
+  readonly tenantScope: "none" | "single-tenant" | "tenant-scoped" | "multi-tenant";
+}
+
+export interface ProviderIncidentPosture {
+  readonly incidentRef: string | null;
+  readonly providerIncidentStatus: "none" | "open" | "monitoring" | "closed" | "deferred";
+  readonly lastIncidentAt: string | null;
+  readonly securityContactRef: string | null;
+  readonly escalationPolicyRef: string | null;
+  readonly customerImpactPolicy: string;
+}
+
+export interface ProviderSupplierPosture {
+  readonly supplierNameRef: string | null;
+  readonly subprocessorStatus: string;
+  readonly dataProcessingRole: string;
+  readonly contractStatus: string;
+  readonly securityReviewStatus: string;
+  readonly privacyReviewStatus: string;
+  readonly lastReviewedAt: string | null;
+  readonly reviewExpiresAt: string | null;
+}
+
+export interface ProviderRegistryEntry {
+  readonly providerId: string;
+  readonly providerName: string;
+  readonly providerCategory: ProviderCategory;
+  readonly providerMode: ProviderAdapterMode;
+  readonly owningCapability: string;
+  readonly owningTeamOrRole: string;
+  readonly portName: string;
+  readonly adapterName: string;
+  readonly businessPurpose: string;
+  readonly configRef: string;
+  readonly credentialRef: SecretReference | null;
+  readonly secretRef: SecretReference | null;
+  readonly endpointRef: string | null;
+  readonly providerRegion: string;
+  readonly allowedRegions: readonly string[];
+  readonly egressAllowed: boolean;
+  readonly egressDestinationAllowlist: readonly string[];
+  readonly crossRegionAllowed: boolean;
+  readonly crossBorderTransferPolicy: string;
+  readonly dataResidencyPolicy: string;
+  readonly dataResidencyStatus: string;
+  readonly subprocessorStatus: string;
+  readonly lifecycleState: ProviderLifecycleState;
+  readonly riskClassification: ProviderRiskClassification;
+  readonly riskDrivers: readonly string[];
+  readonly criticality: ProviderCriticality;
+  readonly availabilityDependency: string;
+  readonly configuredBy: string;
+  readonly approvedBy: string | null;
+  readonly lastReviewedAt: string | null;
+  readonly reviewExpiresAt: string | null;
+  readonly healthStatus: ProviderOperationalStatus;
+  readonly readinessStatus: ProviderOperationalStatus;
+  readonly livenessStatus: ProviderOperationalStatus;
+  readonly capabilityStatus: ProviderOperationalStatus;
+  readonly lastCheckedAt: string | null;
+  readonly failureReasonCode: string | null;
+  readonly safeFailureMessage: string | null;
+  readonly dataClassification: DataSensitivity;
+  readonly environmentScope: "local-dev" | "local-composed-test" | "ci" | "staging" | "production";
+  readonly tenantScope: "none" | "single-tenant" | "tenant-scoped" | "multi-tenant";
+  readonly liveReadinessClaim: boolean;
+  readonly productionReadinessClaim: boolean;
+  readonly explicitAuthorityRef: string | null;
+  readonly sourceUseDisposition:
+    "source-derived-rewrite" | "new-with-rationale" | "evidence-only-support";
+  readonly credentialPosture: ProviderCredentialPosture;
+  readonly transportPosture: ProviderTransportPosture;
+  readonly resiliencePosture: ProviderResiliencePosture;
+  readonly failoverPosture: ProviderFailoverPosture;
+  readonly driftPosture: ProviderDriftPosture;
+  readonly permissionGrants: readonly ProviderPermissionGrant[];
+  readonly incidentPosture: ProviderIncidentPosture;
+  readonly supplierPosture: ProviderSupplierPosture;
+}
+
+export interface SafeProviderStatusView {
+  readonly providerId: string;
+  readonly providerName: string;
+  readonly providerCategory: ProviderCategory;
+  readonly providerMode: ProviderAdapterMode;
+  readonly owningCapability: string;
+  readonly owningTeamOrRole: string;
+  readonly businessPurpose: string;
+  readonly dataClassification: DataSensitivity;
+  readonly tenantScope: string;
+  readonly environmentScope: string;
+  readonly lifecycleState: ProviderLifecycleState;
+  readonly riskClassification: ProviderRiskClassification;
+  readonly criticality: ProviderCriticality;
+  readonly healthStatus: ProviderOperationalStatus;
+  readonly readinessStatus: ProviderOperationalStatus;
+  readonly livenessStatus: ProviderOperationalStatus;
+  readonly capabilityStatus: ProviderOperationalStatus;
+  readonly providerRegion: string;
+  readonly dataResidencyStatus: string;
+  readonly egressAllowed: boolean;
+  readonly tlsRequired: boolean;
+  readonly credentialPosture: "none" | "secret-reference-present" | "secret-reference-revoked";
+  readonly endpointPosture: "none" | "reference-redacted" | "local-or-composed-reference";
+  readonly driftStatus: ProviderDriftPosture["driftStatus"];
+  readonly resiliencePosture: string;
+  readonly failoverPosture: string;
+  readonly supplierPosture: string;
+  readonly liveReadinessClaim: boolean;
+  readonly productionReadinessClaim: boolean;
+  readonly lastReviewedAt: string | null;
+  readonly reviewExpiresAt: string | null;
+  readonly safeFailureMessage: string | null;
+  readonly sourceUseDisposition: ProviderRegistryEntry["sourceUseDisposition"];
+}
+
+export interface ProviderRegistryFinding {
+  readonly providerId: string;
+  readonly ruleId: string;
+  readonly message: string;
+}
+
+export interface ProviderRegistryValidationResult {
+  readonly ok: boolean;
+  readonly findings: readonly ProviderRegistryFinding[];
+}
+
+export class ProviderUnavailableError extends Error {
+  readonly reasonCode: string;
+  readonly providerId: string;
+
+  constructor(providerId: string, reasonCode: string, message: string) {
+    super(message);
+    this.name = "ProviderUnavailableError";
+    this.providerId = providerId;
+    this.reasonCode = reasonCode;
+  }
+}
+
+function localSecretReference(name: string): SecretReference {
+  return Object.freeze({
+    secretRef: `secret://local-dev/${name}`,
+    secretProvider: "in-memory",
+    scope: "local-dev-test",
+    version: "1",
+    status: "active",
+    rotationPolicy: "local-dev-test-only",
+    lastRotatedAt: null,
+    nextRotationDueAt: null,
+    owner: "platform",
+  });
+}
+
+interface ProviderRegistryInput {
+  readonly providerId: string;
+  readonly providerName: string;
+  readonly providerCategory: ProviderCategory;
+  readonly providerMode: ProviderAdapterMode;
+  readonly owningCapability: string;
+  readonly portName: string;
+  readonly adapterName: string;
+  readonly businessPurpose: string;
+  readonly dataClassification: DataSensitivity;
+  readonly environmentScope?: ProviderRegistryEntry["environmentScope"];
+  readonly tenantScope?: ProviderRegistryEntry["tenantScope"];
+  readonly owningTeamOrRole?: string;
+  readonly configRef?: string;
+  readonly credentialRef?: SecretReference | null;
+  readonly secretRef?: SecretReference | null;
+  readonly endpointRef?: string | null;
+  readonly providerRegion?: string;
+  readonly allowedRegions?: readonly string[];
+  readonly egressAllowed?: boolean;
+  readonly egressDestinationAllowlist?: readonly string[];
+  readonly crossRegionAllowed?: boolean;
+  readonly crossBorderTransferPolicy?: string;
+  readonly dataResidencyPolicy?: string;
+  readonly dataResidencyStatus?: string;
+  readonly subprocessorStatus?: string;
+  readonly lifecycleState?: ProviderLifecycleState;
+  readonly riskClassification?: ProviderRiskClassification;
+  readonly riskDrivers?: readonly string[];
+  readonly criticality?: ProviderCriticality;
+  readonly availabilityDependency?: string;
+  readonly configuredBy?: string;
+  readonly approvedBy?: string | null;
+  readonly lastReviewedAt?: string | null;
+  readonly reviewExpiresAt?: string | null;
+  readonly healthStatus?: ProviderOperationalStatus;
+  readonly readinessStatus?: ProviderOperationalStatus;
+  readonly livenessStatus?: ProviderOperationalStatus;
+  readonly capabilityStatus?: ProviderOperationalStatus;
+  readonly lastCheckedAt?: string | null;
+  readonly failureReasonCode?: string | null;
+  readonly safeFailureMessage?: string | null;
+  readonly liveReadinessClaim?: boolean;
+  readonly productionReadinessClaim?: boolean;
+  readonly explicitAuthorityRef?: string | null;
+  readonly sourceUseDisposition?: ProviderRegistryEntry["sourceUseDisposition"];
+  readonly credentialPosture?: Partial<ProviderCredentialPosture>;
+  readonly transportPosture?: Partial<ProviderTransportPosture>;
+  readonly resiliencePosture?: Partial<ProviderResiliencePosture>;
+  readonly failoverPosture?: Partial<ProviderFailoverPosture>;
+  readonly driftPosture?: Partial<ProviderDriftPosture>;
+  readonly permissionGrants?: readonly ProviderPermissionGrant[];
+  readonly incidentPosture?: Partial<ProviderIncidentPosture>;
+  readonly supplierPosture?: Partial<ProviderSupplierPosture>;
+}
+
+function lifecycleForMode(mode: ProviderAdapterMode): ProviderLifecycleState {
+  if (mode === "composed-test") return "approved-for-composed-test";
+  if (mode === "in-memory" || mode === "mock" || mode === "local-test") {
+    return "approved-for-local-test";
+  }
+  if (mode === "disabled" || mode === "unavailable") return "suspended";
+  if (mode === "live-external-authorised") return "approved-for-live";
+  return "proposed";
+}
+
+function statusForMode(mode: ProviderAdapterMode): ProviderOperationalStatus {
+  if (mode === "disabled") return "disabled";
+  if (mode === "unavailable") return "unavailable";
+  if (mode === "live-external-deferred") return "deferred";
+  if (mode === "live-external-authorised") return "unauthorised";
+  return "healthy";
+}
+
+function makeProvider(input: ProviderRegistryInput): ProviderRegistryEntry {
+  const credentialRef = input.credentialRef ?? input.credentialPosture?.credentialRef ?? null;
+  const secretRef = input.secretRef ?? input.credentialPosture?.secretRef ?? credentialRef;
+  const defaultStatus = statusForMode(input.providerMode);
+  const credentialStatus =
+    credentialRef?.status === "revoked" || secretRef?.status === "revoked" ? "revoked" : "active";
+  const credentialPosture: ProviderCredentialPosture = Object.freeze({
+    credentialRef,
+    secretRef,
+    secretClassification: credentialRef || secretRef ? "secret-reference" : "none",
+    rotationPolicy: input.credentialPosture?.rotationPolicy ?? "not-required-for-local-dev-test",
+    lastRotatedAt: input.credentialPosture?.lastRotatedAt ?? credentialRef?.lastRotatedAt ?? null,
+    rotationDueAt:
+      input.credentialPosture?.rotationDueAt ?? credentialRef?.nextRotationDueAt ?? null,
+    revokedAt:
+      input.credentialPosture?.revokedAt ?? (credentialStatus === "revoked" ? "revoked" : null),
+    credentialScope: input.credentialPosture?.credentialScope ?? "least-privilege-local-dev-test",
+    leastPrivilegePolicy:
+      input.credentialPosture?.leastPrivilegePolicy ??
+      "provider credential grants only the declared port action set",
+  });
+  const externalLike =
+    input.providerMode === "live-external-authorised" ||
+    input.providerMode === "live-external-deferred";
+  return Object.freeze({
+    providerId: assertNonEmpty(input.providerId, "providerId"),
+    providerName: assertNonEmpty(input.providerName, "providerName"),
+    providerCategory: input.providerCategory,
+    providerMode: input.providerMode,
+    owningCapability: assertNonEmpty(input.owningCapability, "owningCapability"),
+    owningTeamOrRole: input.owningTeamOrRole ?? "platform-operator",
+    portName: assertNonEmpty(input.portName, "portName"),
+    adapterName: assertNonEmpty(input.adapterName, "adapterName"),
+    businessPurpose: assertNonEmpty(input.businessPurpose, "businessPurpose"),
+    configRef: input.configRef ?? `config://providers/${input.providerId}`,
+    credentialRef,
+    secretRef,
+    endpointRef: input.endpointRef ?? null,
+    providerRegion: input.providerRegion ?? "local-dev",
+    allowedRegions: Object.freeze([...(input.allowedRegions ?? ["local-dev"])]),
+    egressAllowed: input.egressAllowed ?? externalLike,
+    egressDestinationAllowlist: Object.freeze([...(input.egressDestinationAllowlist ?? [])]),
+    crossRegionAllowed: input.crossRegionAllowed ?? false,
+    crossBorderTransferPolicy:
+      input.crossBorderTransferPolicy ?? "not-authorised-for-local-dev-test",
+    dataResidencyPolicy: input.dataResidencyPolicy ?? "local-dev-test-only",
+    dataResidencyStatus: input.dataResidencyStatus ?? "local-dev-test",
+    subprocessorStatus: input.subprocessorStatus ?? "not-applicable-local-dev-test",
+    lifecycleState: input.lifecycleState ?? lifecycleForMode(input.providerMode),
+    riskClassification: input.riskClassification ?? "medium",
+    riskDrivers: Object.freeze([...(input.riskDrivers ?? [])]),
+    criticality: input.criticality ?? "medium",
+    availabilityDependency: input.availabilityDependency ?? "local-dev-test",
+    configuredBy: input.configuredBy ?? "repository-default",
+    approvedBy: input.approvedBy ?? null,
+    lastReviewedAt: input.lastReviewedAt ?? null,
+    reviewExpiresAt: input.reviewExpiresAt ?? null,
+    healthStatus: input.healthStatus ?? defaultStatus,
+    readinessStatus: input.readinessStatus ?? defaultStatus,
+    livenessStatus: input.livenessStatus ?? defaultStatus,
+    capabilityStatus: input.capabilityStatus ?? defaultStatus,
+    lastCheckedAt: input.lastCheckedAt ?? null,
+    failureReasonCode: input.failureReasonCode ?? null,
+    safeFailureMessage:
+      input.safeFailureMessage === undefined || input.safeFailureMessage === null
+        ? null
+        : safeFailureMessage(input.safeFailureMessage),
+    dataClassification: input.dataClassification,
+    environmentScope: input.environmentScope ?? "local-dev",
+    tenantScope: input.tenantScope ?? "tenant-scoped",
+    liveReadinessClaim: input.liveReadinessClaim ?? false,
+    productionReadinessClaim: input.productionReadinessClaim ?? false,
+    explicitAuthorityRef: input.explicitAuthorityRef ?? null,
+    sourceUseDisposition: input.sourceUseDisposition ?? "source-derived-rewrite",
+    credentialPosture,
+    transportPosture: Object.freeze({
+      tlsRequired: input.transportPosture?.tlsRequired ?? externalLike,
+      minTlsVersion: input.transportPosture?.minTlsVersion ?? (externalLike ? "1.2" : null),
+      certificateValidationRequired:
+        input.transportPosture?.certificateValidationRequired ?? externalLike,
+      mtlsRequired: input.transportPosture?.mtlsRequired ?? false,
+      caBundleRef: input.transportPosture?.caBundleRef ?? null,
+      certificatePinningPolicy:
+        input.transportPosture?.certificatePinningPolicy ?? "defined-and-deferred",
+      insecureSkipVerifyAllowed:
+        input.transportPosture?.insecureSkipVerifyAllowed ??
+        (input.providerMode === "local-test" || input.providerMode === "composed-test"),
+    }),
+    resiliencePosture: Object.freeze({
+      connectTimeout: input.resiliencePosture?.connectTimeout ?? "2s-local-dev-test",
+      requestTimeout: input.resiliencePosture?.requestTimeout ?? "10s-local-dev-test",
+      retryPolicy: input.resiliencePosture?.retryPolicy ?? "bounded-local-dev-test",
+      circuitBreakerPolicy:
+        input.resiliencePosture?.circuitBreakerPolicy ?? "posture-recorded-runtime-deferred",
+      fallbackPolicy:
+        input.resiliencePosture?.fallbackPolicy ?? "no-authz-or-tenant-isolation-weakening",
+      degradedModePolicy:
+        input.resiliencePosture?.degradedModePolicy ?? "explicit-degraded-status-fail-closed",
+      bulkheadPolicy:
+        input.resiliencePosture?.bulkheadPolicy ?? "posture-recorded-runtime-deferred",
+    }),
+    failoverPosture: Object.freeze({
+      primaryProviderRef: input.failoverPosture?.primaryProviderRef ?? null,
+      secondaryProviderRef: input.failoverPosture?.secondaryProviderRef ?? null,
+      failoverPolicy:
+        input.failoverPosture?.failoverPolicy ?? "no-dr-readiness-claim-without-proof",
+      failbackPolicy: input.failoverPosture?.failbackPolicy ?? "audited-when-represented",
+      dataConsistencyPolicy:
+        input.failoverPosture?.dataConsistencyPolicy ?? "tenant-context-preserved",
+      reconciliationPolicy:
+        input.failoverPosture?.reconciliationPolicy ?? "posture-recorded-runtime-deferred",
+      rpoTarget: input.failoverPosture?.rpoTarget ?? null,
+      rtoTarget: input.failoverPosture?.rtoTarget ?? null,
+    }),
+    driftPosture: Object.freeze({
+      expectedConfigHash: input.driftPosture?.expectedConfigHash ?? null,
+      observedConfigHash: input.driftPosture?.observedConfigHash ?? null,
+      lastDriftCheckAt: input.driftPosture?.lastDriftCheckAt ?? null,
+      driftStatus: input.driftPosture?.driftStatus ?? "deferred",
+      driftReasonCode: input.driftPosture?.driftReasonCode ?? null,
+      approvedExceptionRef: input.driftPosture?.approvedExceptionRef ?? null,
+    }),
+    permissionGrants: Object.freeze([...(input.permissionGrants ?? [])]),
+    incidentPosture: Object.freeze({
+      incidentRef: input.incidentPosture?.incidentRef ?? null,
+      providerIncidentStatus: input.incidentPosture?.providerIncidentStatus ?? "none",
+      lastIncidentAt: input.incidentPosture?.lastIncidentAt ?? null,
+      securityContactRef: input.incidentPosture?.securityContactRef ?? null,
+      escalationPolicyRef: input.incidentPosture?.escalationPolicyRef ?? null,
+      customerImpactPolicy:
+        input.incidentPosture?.customerImpactPolicy ??
+        "structured-event-posture-only-no-live-alerting-claim",
+    }),
+    supplierPosture: Object.freeze({
+      supplierNameRef: input.supplierPosture?.supplierNameRef ?? null,
+      subprocessorStatus:
+        input.supplierPosture?.subprocessorStatus ?? "not-applicable-local-dev-test",
+      dataProcessingRole: input.supplierPosture?.dataProcessingRole ?? "not-applicable",
+      contractStatus: input.supplierPosture?.contractStatus ?? "not-claimed",
+      securityReviewStatus: input.supplierPosture?.securityReviewStatus ?? "not-claimed",
+      privacyReviewStatus: input.supplierPosture?.privacyReviewStatus ?? "not-claimed",
+      lastReviewedAt: input.supplierPosture?.lastReviewedAt ?? input.lastReviewedAt ?? null,
+      reviewExpiresAt: input.supplierPosture?.reviewExpiresAt ?? input.reviewExpiresAt ?? null,
+    }),
+  });
+}
+
+const notificationSecretRef = localSecretReference("notification-mail-api-key");
+
+export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = Object.freeze([
+  makeProvider({
+    providerId: "config-in-memory",
+    providerName: "In-memory config provider",
+    providerCategory: "config",
+    providerMode: "in-memory",
+    owningCapability: "config-secrets",
+    portName: "ConfigLayerProvider",
+    adapterName: "InMemoryConfigLayerProvider",
+    businessPurpose: "Local/dev/test configuration resolution.",
+    dataClassification: "confidential",
+    riskClassification: "medium",
+    riskDrivers: ["configuration-control-plane"],
+  }),
+  makeProvider({
+    providerId: "secrets-in-memory",
+    providerName: "In-memory secret resolver",
+    providerCategory: "secrets",
+    providerMode: "in-memory",
+    owningCapability: "config-secrets",
+    portName: "SecretResolver",
+    adapterName: "InMemorySecretStore",
+    businessPurpose: "Synthetic local/dev/test secret references and values.",
+    dataClassification: "security-sensitive",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["credential access"],
+  }),
+  makeProvider({
+    providerId: "audit-ledger-in-memory",
+    providerName: "In-memory audit ledger",
+    providerCategory: "audit-ledger",
+    providerMode: "in-memory",
+    owningCapability: "audit-evidence",
+    portName: "AuditEventStore",
+    adapterName: "InMemoryAuditEventStore",
+    businessPurpose: "Local/dev/test audit event capture and hash-chain proof.",
+    dataClassification: "security-sensitive",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["audit/evidence function"],
+  }),
+  makeProvider({
+    providerId: "database-postgres-composed-test",
+    providerName: "Postgres composed-test database",
+    providerCategory: "database",
+    providerMode: "composed-test",
+    owningCapability: "db-rls-migrations",
+    portName: "RlsSession",
+    adapterName: "Postgres composed proof substrate",
+    businessPurpose: "Local composed DB/RLS/migration proof substrate.",
+    dataClassification: "restricted",
+    environmentScope: "local-composed-test",
+    providerRegion: "local-compose",
+    allowedRegions: ["local-compose"],
+    egressAllowed: false,
+    endpointRef: "endpoint://compose/postgres",
+    lifecycleState: "approved-for-composed-test",
+    riskClassification: "critical",
+    riskDrivers: ["tenant data access", "regulated data handling", "availability dependency"],
+    criticality: "critical",
+    availabilityDependency: "required-for-db-proof",
+    driftPosture: { driftStatus: "in-sync", expectedConfigHash: "compose-postgres-pinned" },
+  }),
+  makeProvider({
+    providerId: "identity-in-memory",
+    providerName: "In-memory identity provider",
+    providerCategory: "identity",
+    providerMode: "mock",
+    owningCapability: "auth-identity",
+    portName: "IdentityProvider",
+    adapterName: "InMemoryIdentityProvider",
+    businessPurpose: "Hermetic local/dev/test identity issuance.",
+    dataClassification: "confidential",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["identity/authentication function"],
+  }),
+  makeProvider({
+    providerId: "identity-keycloak-composed-test",
+    providerName: "Keycloak composed-test identity provider",
+    providerCategory: "identity",
+    providerMode: "composed-test",
+    owningCapability: "auth-identity",
+    portName: "KeycloakVerifier",
+    adapterName: "HermeticKeycloak and composed Keycloak verifier",
+    businessPurpose: "Local composed Keycloak substrate and hermetic verifier proof.",
+    dataClassification: "security-sensitive",
+    environmentScope: "local-composed-test",
+    providerRegion: "local-compose",
+    endpointRef: "endpoint://compose/keycloak",
+    lifecycleState: "approved-for-composed-test",
+    riskClassification: "critical",
+    riskDrivers: ["identity/authentication function", "credential access"],
+    criticality: "critical",
+    transportPosture: { tlsRequired: false, certificateValidationRequired: false },
+  }),
+  makeProvider({
+    providerId: "event-bus-in-memory",
+    providerName: "In-memory event bus",
+    providerCategory: "event-bus",
+    providerMode: "in-memory",
+    owningCapability: "jobs-workflows",
+    portName: "EventBus",
+    adapterName: "InMemoryEventBus",
+    businessPurpose: "Hermetic event publication for local/dev/test.",
+    dataClassification: "confidential",
+    riskClassification: "medium",
+    riskDrivers: ["workflow/job execution"],
+  }),
+  makeProvider({
+    providerId: "event-bus-nats-composed-test",
+    providerName: "NATS composed-test event bus",
+    providerCategory: "event-bus",
+    providerMode: "composed-test",
+    owningCapability: "jobs-workflows",
+    portName: "EventBus",
+    adapterName: "NATS composed substrate",
+    businessPurpose: "Declared composed event-bus substrate; runtime adapter deferred.",
+    dataClassification: "confidential",
+    environmentScope: "local-composed-test",
+    endpointRef: "endpoint://compose/nats",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "high",
+    riskDrivers: ["workflow/job execution", "availability dependency"],
+  }),
+  makeProvider({
+    providerId: "object-storage-in-memory",
+    providerName: "In-memory object store",
+    providerCategory: "object-storage",
+    providerMode: "in-memory",
+    owningCapability: "files-storage",
+    portName: "ObjectStore",
+    adapterName: "InMemoryObjectStore",
+    businessPurpose: "Tenant-prefixed local/dev/test object storage.",
+    dataClassification: "restricted",
+    riskClassification: "regulated",
+    riskDrivers: ["tenant data access", "file/object handling"],
+  }),
+  makeProvider({
+    providerId: "object-storage-minio-composed-test",
+    providerName: "MinIO composed-test object store",
+    providerCategory: "object-storage",
+    providerMode: "composed-test",
+    owningCapability: "files-storage",
+    portName: "ObjectStore",
+    adapterName: "MinIO composed substrate",
+    businessPurpose: "Declared composed object-storage substrate; runtime adapter deferred.",
+    dataClassification: "restricted",
+    environmentScope: "local-composed-test",
+    endpointRef: "endpoint://compose/minio",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "regulated",
+    riskDrivers: ["tenant data access", "file/object handling"],
+  }),
+  makeProvider({
+    providerId: "file-scan-in-memory",
+    providerName: "In-memory scan provider",
+    providerCategory: "file-scan",
+    providerMode: "in-memory",
+    owningCapability: "files-storage",
+    portName: "ScanProvider",
+    adapterName: "InMemoryScanProvider",
+    businessPurpose: "Local/dev/test file scan state simulation.",
+    dataClassification: "restricted",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["file/object handling", "regulated data handling"],
+  }),
+  makeProvider({
+    providerId: "file-scan-clamav-deferred",
+    providerName: "ClamAV live/composed scan provider class",
+    providerCategory: "file-scan",
+    providerMode: "live-external-deferred",
+    owningCapability: "files-storage",
+    portName: "ScanProvider",
+    adapterName: "ClamAV provider deferred",
+    businessPurpose: "Recognised malware-scan provider class; not implemented or live-ready.",
+    dataClassification: "restricted",
+    readinessStatus: "deferred",
+    healthStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["file/object handling", "egress to external network"],
+    transportPosture: { tlsRequired: true, certificateValidationRequired: true },
+    supplierPosture: { subprocessorStatus: "future-review-required" },
+  }),
+  makeProvider({
+    providerId: "workflow-engine-in-memory",
+    providerName: "In-memory workflow engine",
+    providerCategory: "workflow-engine",
+    providerMode: "in-memory",
+    owningCapability: "jobs-workflows",
+    portName: "WorkflowEngine",
+    adapterName: "InMemoryWorkflowEngine",
+    businessPurpose: "Hermetic workflow execution for local/dev/test proof.",
+    dataClassification: "confidential",
+    riskClassification: "high",
+    riskDrivers: ["workflow/job execution", "availability dependency"],
+  }),
+  makeProvider({
+    providerId: "workflow-engine-temporal-composed-test",
+    providerName: "Temporal composed-test workflow provider",
+    providerCategory: "workflow-engine",
+    providerMode: "composed-test",
+    owningCapability: "jobs-workflows",
+    portName: "WorkflowEngine",
+    adapterName: "Temporal composed substrate",
+    businessPurpose: "Declared composed durable workflow provider; runtime adapter deferred.",
+    dataClassification: "confidential",
+    environmentScope: "local-composed-test",
+    endpointRef: "endpoint://compose/temporal",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "critical",
+    criticality: "critical",
+    riskDrivers: ["workflow/job execution", "availability dependency"],
+  }),
+  makeProvider({
+    providerId: "operational-job-engine-in-memory",
+    providerName: "In-memory operational job store",
+    providerCategory: "operational-job-engine",
+    providerMode: "in-memory",
+    owningCapability: "jobs-workflows",
+    portName: "OperationalJobStore",
+    adapterName: "InMemoryOperationalJobStore",
+    businessPurpose: "Hermetic operational job execution and retry/dead-letter proof.",
+    dataClassification: "confidential",
+    riskClassification: "high",
+    riskDrivers: ["workflow/job execution"],
+  }),
+  makeProvider({
+    providerId: "operational-job-engine-windmill-deferred",
+    providerName: "Windmill operational job provider class",
+    providerCategory: "operational-job-engine",
+    providerMode: "live-external-deferred",
+    owningCapability: "jobs-workflows",
+    portName: "OperationalJobEngine",
+    adapterName: "Windmill provider deferred",
+    businessPurpose:
+      "Recognised operational automation provider class; not implemented or live-ready.",
+    dataClassification: "confidential",
+    healthStatus: "deferred",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "high",
+    riskDrivers: ["workflow/job execution", "egress to external network"],
+  }),
+  makeProvider({
+    providerId: "notification-delivery-in-memory",
+    providerName: "In-memory notification delivery provider",
+    providerCategory: "notification-delivery",
+    providerMode: "in-memory",
+    owningCapability: "notifications-messaging",
+    portName: "NotificationProvider",
+    adapterName: "InMemoryNotificationProvider",
+    businessPurpose: "Hermetic notification delivery capture and evidence proof.",
+    dataClassification: "restricted",
+    credentialRef: notificationSecretRef,
+    secretRef: notificationSecretRef,
+    riskClassification: "security-sensitive",
+    riskDrivers: ["notification delivery", "credential access"],
+    permissionGrants: [
+      {
+        providerAction: "send-test-notification",
+        providerPermission: "send",
+        credentialScope: "local-dev-test-notification-only",
+        allowedResourceScope: "synthetic-recipients-only",
+        tenantScope: "tenant-scoped",
+      },
+    ],
+  }),
+  makeProvider({
+    providerId: "notification-delivery-mailpit-composed-test",
+    providerName: "Mailpit composed-test notification sink",
+    providerCategory: "notification-delivery",
+    providerMode: "composed-test",
+    owningCapability: "notifications-messaging",
+    portName: "NotificationProvider",
+    adapterName: "Mailpit composed substrate",
+    businessPurpose: "Declared local email sink for composed proof; not live delivery.",
+    dataClassification: "restricted",
+    environmentScope: "local-composed-test",
+    endpointRef: "endpoint://compose/mailpit",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["notification delivery"],
+    transportPosture: { tlsRequired: false, certificateValidationRequired: false },
+  }),
+  makeProvider({
+    providerId: "notification-delivery-live-deferred",
+    providerName: "External notification delivery provider class",
+    providerCategory: "notification-delivery",
+    providerMode: "live-external-deferred",
+    owningCapability: "notifications-messaging",
+    portName: "NotificationProvider",
+    adapterName: "Live notification delivery provider deferred",
+    businessPurpose:
+      "Recognised external notification provider class; not implemented or live-ready.",
+    dataClassification: "restricted",
+    healthStatus: "deferred",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["notification delivery", "egress to external network", "credential access"],
+    supplierPosture: { subprocessorStatus: "future-review-required" },
+  }),
+  makeProvider({
+    providerId: "api-gateway-fastify-local-test",
+    providerName: "Fastify local API runtime",
+    providerCategory: "api-gateway",
+    providerMode: "local-test",
+    owningCapability: "api-contracts",
+    portName: "ApiRuntime",
+    adapterName: "Fastify local runtime",
+    businessPurpose: "Local/dev/test API contract proof surface.",
+    dataClassification: "confidential",
+    environmentScope: "local-dev",
+    riskClassification: "high",
+    riskDrivers: ["availability dependency", "tenant data access"],
+  }),
+  makeProvider({
+    providerId: "observability-captured-local",
+    providerName: "Captured local observability sink",
+    providerCategory: "observability",
+    providerMode: "local-test",
+    owningCapability: "observability",
+    portName: "ObservabilitySink",
+    adapterName: "CapturedObservabilitySink",
+    businessPurpose: "Local/dev/test captured observations without live backend.",
+    dataClassification: "confidential",
+    riskClassification: "medium",
+    riskDrivers: ["audit/evidence function"],
+  }),
+  makeProvider({
+    providerId: "observability-compose-stack",
+    providerName: "Composed observability stack",
+    providerCategory: "observability",
+    providerMode: "composed-test",
+    owningCapability: "observability",
+    portName: "ObservabilitySink",
+    adapterName: "OTel/Prometheus/Loki/Tempo composed configs",
+    businessPurpose: "Declared composed observability substrate; no live monitoring claim.",
+    dataClassification: "confidential",
+    environmentScope: "local-composed-test",
+    endpointRef: "endpoint://compose/observability-stack",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "high",
+    riskDrivers: ["audit/evidence function", "availability dependency"],
+  }),
+  makeProvider({
+    providerId: "cache-unavailable",
+    providerName: "Cache provider unavailable placeholder",
+    providerCategory: "cache",
+    providerMode: "unavailable",
+    owningCapability: "api-contracts",
+    portName: "CacheProvider",
+    adapterName: "No cache adapter",
+    businessPurpose: "Cache provider category represented; runtime provider unavailable.",
+    dataClassification: "confidential",
+    healthStatus: "unavailable",
+    readinessStatus: "unavailable",
+    capabilityStatus: "unavailable",
+    failureReasonCode: "provider-unavailable",
+    safeFailureMessage: "cache provider unavailable",
+    riskClassification: "medium",
+    lifecycleState: "suspended",
+  }),
+  makeProvider({
+    providerId: "search-index-disabled",
+    providerName: "Search index provider disabled placeholder",
+    providerCategory: "search-index",
+    providerMode: "disabled",
+    owningCapability: "api-contracts",
+    portName: "SearchIndexProvider",
+    adapterName: "No search index adapter",
+    businessPurpose: "Search provider category represented; runtime provider disabled.",
+    dataClassification: "confidential",
+    healthStatus: "disabled",
+    readinessStatus: "disabled",
+    capabilityStatus: "disabled",
+    failureReasonCode: "provider-disabled",
+    safeFailureMessage: "search index provider disabled",
+    riskClassification: "medium",
+    lifecycleState: "suspended",
+  }),
+]);
+
+function finding(providerId: string, ruleId: string, message: string): ProviderRegistryFinding {
+  return Object.freeze({ providerId, ruleId, message });
+}
+
+function secretReferenceOk(ref: unknown): boolean {
+  if (ref === null || ref === undefined) {
+    return true;
+  }
+  if (typeof ref !== "object" || !("secretRef" in ref)) {
+    return false;
+  }
+  const secretRef = (ref as { readonly secretRef?: unknown }).secretRef;
+  if (typeof secretRef !== "string") {
+    return false;
+  }
+  return (
+    secretRef.startsWith("secret://") &&
+    !looksLikeSecretValue(secretRef) &&
+    !endpointLooksRawOrLive(secretRef)
+  );
+}
+
+function endpointLooksRawOrLive(endpointRef: string | null): boolean {
+  if (!endpointRef) return false;
+  return (
+    /^https?:\/\//i.test(endpointRef) ||
+    /amazonaws|sendgrid|twilio|brevo|stripe|mailgun/i.test(endpointRef)
+  );
+}
+
+export function validateProviderRegistry(
+  registry: readonly ProviderRegistryEntry[] = PROVIDER_REGISTRY,
+): ProviderRegistryValidationResult {
+  const findings: ProviderRegistryFinding[] = [];
+  const seen = new Set<string>();
+  for (const provider of registry) {
+    if (seen.has(provider.providerId)) {
+      findings.push(
+        finding(provider.providerId, "provider-id-duplicate", "provider id duplicated"),
+      );
+    }
+    seen.add(provider.providerId);
+    if (!PROVIDER_CATEGORIES.includes(provider.providerCategory)) {
+      findings.push(
+        finding(provider.providerId, "provider-category-unknown", "provider category is unknown"),
+      );
+    }
+    if (!PROVIDER_MODES.includes(provider.providerMode)) {
+      findings.push(
+        finding(provider.providerId, "provider-mode-unknown", "provider mode is unknown"),
+      );
+    }
+    if (!PROVIDER_LIFECYCLE_STATES.includes(provider.lifecycleState)) {
+      findings.push(
+        finding(provider.providerId, "provider-lifecycle-unknown", "provider lifecycle is unknown"),
+      );
+    }
+    for (const [name, status] of Object.entries({
+      healthStatus: provider.healthStatus,
+      readinessStatus: provider.readinessStatus,
+      livenessStatus: provider.livenessStatus,
+      capabilityStatus: provider.capabilityStatus,
+    })) {
+      if (!PROVIDER_OPERATIONAL_STATUSES.includes(status as ProviderOperationalStatus)) {
+        findings.push(
+          finding(provider.providerId, "provider-status-unknown", `${name} is unknown`),
+        );
+      }
+    }
+    if (!assertNonEmpty(provider.owningCapability, "owningCapability")) {
+      findings.push(
+        finding(provider.providerId, "provider-owner-missing", "owning capability missing"),
+      );
+    }
+    if (!secretReferenceOk(provider.credentialRef) || !secretReferenceOk(provider.secretRef)) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "provider-secret-ref-invalid",
+          "provider credential must be a SecretReference",
+        ),
+      );
+    }
+    if (typeof (provider as unknown as { credentialRef?: unknown }).credentialRef === "string") {
+      findings.push(
+        finding(provider.providerId, "provider-raw-credential", "provider credential is embedded"),
+      );
+    }
+    if (provider.credentialRef?.status === "revoked" || provider.secretRef?.status === "revoked") {
+      findings.push(
+        finding(
+          provider.providerId,
+          "provider-credential-revoked",
+          "revoked provider credential cannot be used",
+        ),
+      );
+    }
+    if (endpointLooksRawOrLive(provider.endpointRef)) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "provider-endpoint-raw",
+          "provider endpoint must be an endpoint_ref",
+        ),
+      );
+    }
+    if (!provider.configRef.startsWith("config://")) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "provider-config-ref-invalid",
+          "provider config must use a config_ref",
+        ),
+      );
+    }
+    if (provider.providerMode === "live-external-deferred" && provider.liveReadinessClaim) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "deferred-provider-live-claim",
+          "deferred provider claims live readiness",
+        ),
+      );
+    }
+    if (
+      (provider.providerMode === "in-memory" ||
+        provider.providerMode === "local-test" ||
+        provider.providerMode === "mock" ||
+        provider.providerMode === "composed-test") &&
+      (provider.liveReadinessClaim || provider.productionReadinessClaim)
+    ) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "test-provider-readiness-overclaim",
+          "test provider claims live/production readiness",
+        ),
+      );
+    }
+    if (provider.providerMode === "live-external-authorised") {
+      if (!provider.explicitAuthorityRef || provider.lifecycleState !== "approved-for-live") {
+        findings.push(
+          finding(
+            provider.providerId,
+            "live-provider-authority-missing",
+            "live external authorised provider lacks explicit authority",
+          ),
+        );
+      }
+      if (!provider.lastReviewedAt || !provider.reviewExpiresAt) {
+        findings.push(
+          finding(
+            provider.providerId,
+            "live-provider-review-missing",
+            "live provider review posture missing",
+          ),
+        );
+      }
+      if (
+        !provider.transportPosture.tlsRequired ||
+        !provider.transportPosture.certificateValidationRequired
+      ) {
+        findings.push(
+          finding(
+            provider.providerId,
+            "live-provider-transport-unsafe",
+            "live provider transport security missing",
+          ),
+        );
+      }
+    }
+    if (
+      provider.providerMode !== "local-test" &&
+      provider.providerMode !== "composed-test" &&
+      provider.transportPosture.insecureSkipVerifyAllowed
+    ) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "provider-insecure-skip-verify",
+          "insecure skip verify is not allowed outside local-test/composed-test posture",
+        ),
+      );
+    }
+    if (provider.providerMode === "composed-test" && provider.productionReadinessClaim) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "composed-provider-production-claim",
+          "composed-test provider claims production readiness",
+        ),
+      );
+    }
+    if (
+      (provider.riskClassification === "regulated" ||
+        provider.dataClassification === "restricted") &&
+      provider.providerRegion === "unknown"
+    ) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "provider-region-unknown",
+          "regulated/restricted provider has unknown region",
+        ),
+      );
+    }
+    if (provider.safeFailureMessage && looksLikeSecretValue(provider.safeFailureMessage)) {
+      findings.push(
+        finding(
+          provider.providerId,
+          "provider-failure-secret",
+          "provider failure message is secret-like",
+        ),
+      );
+    }
+  }
+  return Object.freeze({ ok: findings.length === 0, findings: Object.freeze(findings) });
+}
+
+export function toSafeProviderStatus(provider: ProviderRegistryEntry): SafeProviderStatusView {
+  const hasCredential = provider.credentialRef !== null || provider.secretRef !== null;
+  const credentialRevoked =
+    provider.credentialRef?.status === "revoked" || provider.secretRef?.status === "revoked";
+  return Object.freeze({
+    providerId: provider.providerId,
+    providerName: provider.providerName,
+    providerCategory: provider.providerCategory,
+    providerMode: provider.providerMode,
+    owningCapability: provider.owningCapability,
+    owningTeamOrRole: provider.owningTeamOrRole,
+    businessPurpose: provider.businessPurpose,
+    dataClassification: provider.dataClassification,
+    tenantScope: provider.tenantScope,
+    environmentScope: provider.environmentScope,
+    lifecycleState: provider.lifecycleState,
+    riskClassification: provider.riskClassification,
+    criticality: provider.criticality,
+    healthStatus: provider.healthStatus,
+    readinessStatus: provider.readinessStatus,
+    livenessStatus: provider.livenessStatus,
+    capabilityStatus: provider.capabilityStatus,
+    providerRegion: provider.providerRegion,
+    dataResidencyStatus: provider.dataResidencyStatus,
+    egressAllowed: provider.egressAllowed,
+    tlsRequired: provider.transportPosture.tlsRequired,
+    credentialPosture: credentialRevoked
+      ? "secret-reference-revoked"
+      : hasCredential
+        ? "secret-reference-present"
+        : "none",
+    endpointPosture: provider.endpointRef
+      ? provider.providerMode === "local-test" || provider.providerMode === "composed-test"
+        ? "local-or-composed-reference"
+        : "reference-redacted"
+      : "none",
+    driftStatus: provider.driftPosture.driftStatus,
+    resiliencePosture: provider.resiliencePosture.retryPolicy,
+    failoverPosture: provider.failoverPosture.failoverPolicy,
+    supplierPosture: provider.supplierPosture.subprocessorStatus,
+    liveReadinessClaim: provider.liveReadinessClaim,
+    productionReadinessClaim: provider.productionReadinessClaim,
+    lastReviewedAt: provider.lastReviewedAt,
+    reviewExpiresAt: provider.reviewExpiresAt,
+    safeFailureMessage: provider.safeFailureMessage,
+    sourceUseDisposition: provider.sourceUseDisposition,
+  });
+}
+
+export function providerStatusViews(
+  registry: readonly ProviderRegistryEntry[] = PROVIDER_REGISTRY,
+): readonly SafeProviderStatusView[] {
+  return Object.freeze(
+    registry
+      .map((provider) => toSafeProviderStatus(provider))
+      .sort((a, b) => a.providerId.localeCompare(b.providerId)),
+  );
+}
+
+export function findProvider(providerId: string): ProviderRegistryEntry | undefined {
+  return PROVIDER_REGISTRY.find((provider) => provider.providerId === providerId);
+}
+
+export function assertProviderUsable(
+  provider: ProviderRegistryEntry,
+  purpose: string,
+): ProviderRegistryEntry {
+  if (provider.providerMode === "disabled" || provider.lifecycleState === "revoked") {
+    throw new ProviderUnavailableError(
+      provider.providerId,
+      "provider-disabled",
+      "provider is disabled",
+    );
+  }
+  if (provider.providerMode === "unavailable") {
+    throw new ProviderUnavailableError(
+      provider.providerId,
+      "provider-unavailable",
+      "provider is unavailable",
+    );
+  }
+  if (provider.providerMode === "live-external-deferred") {
+    throw new ProviderUnavailableError(
+      provider.providerId,
+      "provider-deferred",
+      "live external provider is deferred",
+    );
+  }
+  if (provider.providerMode === "live-external-authorised" && !provider.explicitAuthorityRef) {
+    throw new ProviderUnavailableError(
+      provider.providerId,
+      "provider-unauthorised",
+      "live external provider lacks authority",
+    );
+  }
+  if (
+    provider.readinessStatus === "unknown" ||
+    provider.readinessStatus === "deferred" ||
+    provider.readinessStatus === "disabled" ||
+    provider.readinessStatus === "unavailable" ||
+    provider.readinessStatus === "unauthorised" ||
+    provider.readinessStatus === "not-configured"
+  ) {
+    throw new ProviderUnavailableError(
+      provider.providerId,
+      `provider-${provider.readinessStatus}`,
+      `provider is not ready for ${safeFailureMessage(purpose)}`,
+    );
+  }
+  if (provider.credentialRef?.status === "revoked" || provider.secretRef?.status === "revoked") {
+    throw new ProviderUnavailableError(
+      provider.providerId,
+      "provider-credential-revoked",
+      "provider credential is revoked",
+    );
+  }
+  return provider;
 }
 
 export class ConfigValidationError extends Error {

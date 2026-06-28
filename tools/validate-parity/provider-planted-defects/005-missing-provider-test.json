@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-missing-provider-test",
+  "expectedRuleId": "USF-PROVIDERS-006",
+  "edits": [
+    {
+      "target": "tests/apps/api-contracts.test.ts",
+      "old": "guards and redacts provider status surfaces",
+      "new": "provider status surface smoke"
+    }
+  ]
+}

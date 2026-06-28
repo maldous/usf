@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-forbidden-sdk-import",
+  "expectedRuleId": "USF-PROVIDERS-008",
+  "edits": [
+    {
+      "target": "capabilities/config/src/index.ts",
+      "old": "export const devProviderPlan = Object.freeze({",
+      "new": "import { Client } from \"pg\";\n\nexport const devProviderPlan = Object.freeze({"
+    }
+  ]
+}

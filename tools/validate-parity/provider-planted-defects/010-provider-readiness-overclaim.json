@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-readiness-overclaim",
+  "expectedRuleId": "USF-PROVIDERS-010",
+  "edits": [
+    {
+      "target": "packages/core/src/index.ts",
+      "old": "liveReadinessClaim: input.liveReadinessClaim ?? false",
+      "new": "liveReadinessClaim: input.liveReadinessClaim ?? true"
+    }
+  ]
+}

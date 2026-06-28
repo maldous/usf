@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-missing-mode",
+  "expectedRuleId": "USF-PROVIDERS-003",
+  "edits": [
+    {
+      "target": "packages/core/src/index.ts",
+      "old": "  \"composed-test\",\n  \"live-external-deferred\",",
+      "new": "  \"live-external-deferred\","
+    }
+  ]
+}

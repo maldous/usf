@@ -1,0 +1,193 @@
+[
+  {
+    "usf_item_id": "provider-adapters-modes",
+    "category": "provider",
+    "usf_paths": [
+      "packages/core/src/index.ts",
+      "packages/ports/src/index.ts",
+      "capabilities/config/src/index.ts",
+      "capabilities/config/src/registry.ts",
+      "docs/architecture/react-parity-scope-classification-matrix.json"
+    ],
+    "tests": [
+      "tests/adapters/provider-substrate.test.ts",
+      "tests/capabilities/provider-adapters.test.ts"
+    ],
+    "proofs": [
+      "packages/proof/src/provider-adapters-proof.ts"
+    ],
+    "behaviour_summary": "Aggregate provider registry and mode taxonomy now records explicit provider categories, modes, owner capabilities, classifications, health/readiness, secret refs, and redacted status posture.",
+    "provider_modes": [
+      "in-memory",
+      "local-test",
+      "mock",
+      "composed-test",
+      "live-external-deferred",
+      "live-external-authorised",
+      "disabled",
+      "unavailable"
+    ],
+    "gaps_or_risks": [
+      "live-external-authorised providers are not registered or enabled",
+      "deep composed-provider readiness aggregation remains deferred"
+    ],
+    "notes": "USF-156 implements local/dev/test provider trust-boundary parity; USF-157 tracks live/risk/resilience depth."
+  },
+  {
+    "usf_item_id": "dev-runtime-provider-plan",
+    "category": "runtime",
+    "usf_paths": [
+      "apps/api/src/runtime.ts",
+      "apps/api/src/server.ts",
+      "apps/work/src/worker.ts",
+      "capabilities/config/src/index.ts"
+    ],
+    "tests": [
+      "tests/apps/api.test.ts",
+      "tests/apps/worker.test.ts",
+      "tests/apps/config-api.test.ts",
+      "tests/apps/api-contracts.test.ts"
+    ],
+    "proofs": [
+      "packages/proof/src/bootstrap-proof.ts",
+      "packages/proof/src/dev-smoke.ts",
+      "packages/proof/src/provider-adapters-proof.ts"
+    ],
+    "behaviour_summary": "API and worker dev runtimes wire in-memory/captured-local providers only; provider status routes expose redacted local/dev/test posture.",
+    "provider_modes": [
+      "dev in-memory",
+      "hermetic-mock",
+      "in-memory",
+      "local-test"
+    ],
+    "gaps_or_risks": [
+      "readyz reports initialized dev provider plan, not deep composed-provider readiness"
+    ],
+    "notes": "No live provider readiness claim."
+  },
+  {
+    "usf_item_id": "compose-provider-substrate",
+    "category": "provider-substrate",
+    "usf_paths": [
+      "compose.yaml",
+      "Makefile",
+      "package.json",
+      "capabilities/config/src/index.ts",
+      "packages/core/src/index.ts"
+    ],
+    "tests": [
+      "tests/adapters/provider-substrate.test.ts",
+      "tests/capabilities/provider-adapters.test.ts"
+    ],
+    "proofs": [
+      "packages/proof/src/db-rls-isolation-proof.ts",
+      "packages/proof/src/authz-rls-consistency-proof.ts",
+      "packages/proof/src/audit-evidence-proof.ts",
+      "packages/proof/src/files-storage-proof.ts",
+      "packages/proof/src/provider-adapters-proof.ts"
+    ],
+    "behaviour_summary": "Compose declares local providers; registry records composed-test entries truthfully and marks adapter/runtime readiness deferred where not wired.",
+    "provider_modes": [
+      "composed-test"
+    ],
+    "gaps_or_risks": [
+      "most composed services are substrate declarations, not wired runtime adapters"
+    ],
+    "notes": "Postgres has real composed proofs; broader composed provider readiness remains USF-157."
+  },
+  {
+    "usf_item_id": "identity-keycloak-auth",
+    "category": "identity-provider",
+    "usf_paths": [
+      "adapters/idp/src/index.ts",
+      "adapters/idp/src/hermetic-keycloak.ts",
+      "adapters/idp/src/keycloak-verifier.ts",
+      "capabilities/auth/src",
+      "packages/core/src/index.ts"
+    ],
+    "tests": [
+      "tests/adapters/keycloak-verifier.test.ts",
+      "tests/capabilities/auth-identity.test.ts",
+      "tests/packages/proof.test.ts"
+    ],
+    "proofs": [
+      "packages/proof/src/auth-identity-proof.ts",
+      "packages/proof/src/provider-adapters-proof.ts"
+    ],
+    "behaviour_summary": "Hermetic Keycloak proof remains covered by auth; provider registry records identity mock/composed-test provider posture without live Keycloak claim.",
+    "provider_modes": [
+      "mock",
+      "composed-test"
+    ],
+    "gaps_or_risks": [
+      "live Keycloak/JWKS discovery/browser flow remains deferred"
+    ],
+    "notes": "Identity is not authorization; PDP membership remains authoritative."
+  },
+  {
+    "usf_item_id": "config-secrets-provider-plane",
+    "category": "config-secrets",
+    "usf_paths": [
+      "capabilities/config/src",
+      "adapters/secrets/src/index.ts",
+      "packages/core/src/index.ts",
+      "packages/ports/src/index.ts",
+      "apps/api/src/server.ts"
+    ],
+    "tests": [
+      "tests/capabilities/config-secrets.test.ts",
+      "tests/apps/config-api.test.ts",
+      "tests/capabilities/provider-adapters.test.ts"
+    ],
+    "proofs": [
+      "packages/proof/src/config-secrets-proof.ts",
+      "packages/proof/src/provider-adapters-proof.ts"
+    ],
+    "behaviour_summary": "Provider config uses config refs and SecretReference-only credentials; status views and audit metadata are redacted.",
+    "provider_modes": [
+      "in-memory",
+      "local-test",
+      "mock",
+      "composed-test",
+      "live-external-deferred",
+      "live-external-authorised",
+      "disabled",
+      "unavailable"
+    ],
+    "gaps_or_risks": [
+      "external secret manager and rotation execution remain deferred"
+    ],
+    "notes": "Provider credential values are not exposed in config, API, audit, OpenAPI, tests, or proof output."
+  },
+  {
+    "usf_item_id": "api-openapi-provider-surfaces",
+    "category": "api-contract",
+    "usf_paths": [
+      "apps/api/src/server.ts",
+      "packages/contracts/src/api-surface.ts",
+      "packages/contracts/src/index.ts",
+      "packages/openapi/src/index.ts",
+      "packages/openapi/openapi.json"
+    ],
+    "tests": [
+      "tests/apps/api-contracts.test.ts",
+      "tests/packages/openapi.test.ts"
+    ],
+    "proofs": [
+      "packages/proof/src/api-contracts-proof.ts",
+      "packages/proof/src/provider-adapters-proof.ts"
+    ],
+    "behaviour_summary": "Provider status routes are operator-only, PDP-protected, tenant-guarded, OpenAPI-covered, and redacted.",
+    "provider_modes": [
+      "in-memory",
+      "composed-test",
+      "live-external-deferred",
+      "disabled",
+      "unavailable"
+    ],
+    "gaps_or_risks": [
+      "provider health/readiness subroutes are represented but not implemented"
+    ],
+    "notes": "No public API or production/provider readiness claim."
+  }
+]
