@@ -1,0 +1,50 @@
+## healthz
+{
+  "status": "ok",
+  "service": "foundation-api",
+  "providerMode": "dev in-memory",
+  "providerClass": "hermetic-mock",
+  "environment": "local"
+}
+## readyz
+{
+  "status": "ready",
+  "service": "foundation-api",
+  "providerMode": "dev in-memory",
+  "providerClass": "hermetic-mock",
+  "environment": "local",
+  "providers": {
+    "config": "in-memory",
+    "idp": "in-memory",
+    "bus": "in-memory",
+    "workflow": "in-memory",
+    "objectStore": "in-memory",
+    "secrets": "in-memory",
+    "mail": "in-memory",
+    "observability": "captured-local"
+  }
+}
+## openapi
+"3.1.0"
+"Foundation Local Dev/Test API"
+## valid tenant
+{
+  "tenantId": "tenant-a",
+  "actorId": "matthew",
+  "roles": [
+    "tenant-admin"
+  ],
+  "providerMode": "dev in-memory",
+  "providerClass": "hermetic-mock",
+  "environment": "local",
+  "auditEvents": 1
+}
+## tenant mismatch
+HTTP/1.1 400 Bad Request
+content-type: application/json; charset=utf-8
+content-length: 76
+Date: Sun, 28 Jun 2026 02:41:47 GMT
+Connection: keep-alive
+Keep-Alive: timeout=72
+
+{"error":"Tenant mismatch at request: expected tenant-a, observed tenant-b"}

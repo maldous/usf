@@ -9,7 +9,6 @@ import {
 import {
   TenantMismatchError,
   createAuditRecord,
-  createTenantContext,
   stableId,
   type IdentityClaims,
 } from "@foundation/core";
@@ -80,19 +79,7 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
     }),
   );
 
-  app.get(
-    "/health",
-    {
-      schema: {
-        response: { 200: HealthResponseSchema },
-      },
-    },
-    async () => ({ status: "ok", ...runtimeStatus(runtime) }),
-  );
-
   app.get("/openapi.json", async () => buildOpenApiDocument());
-
-  app.get("/api/openapi.json", async () => buildOpenApiDocument());
 
   app.get<{ Querystring: { tenantId?: string } }>(
     "/v1/tenant-context",
@@ -164,53 +151,6 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
         return await runtime.authService.login(request.body);
       } catch (error) {
         reply.code(400);
-        return { error: error instanceof Error ? error.message : "unknown error" };
-      }
-    },
-  );
-
-  app.get<{ Querystring: { tenantId?: string } }>(
-    "/tenant/context",
-    {
-      schema: {
-        querystring: {
-          type: "object",
-          properties: { tenantId: { type: "string" } },
-          required: ["tenantId"],
-        },
-        response: { 200: TenantContextResponseSchema, 400: ErrorResponseSchema },
-      },
-    },
-    async (request, reply) => {
-      const tenantId = String(request.headers["x-tenant-id"] ?? "");
-      const actorId = String(request.headers["x-actor-id"] ?? "");
-      try {
-        const context = createTenantContext({ tenantId, actorId, roles: ["tenant-admin"] });
-        const validated = requireRequestTenant(context, request.query.tenantId ?? "");
-        await runtime.auditLedger.append(
-          createAuditRecord({
-            id: stableId("audit", [validated.tenantId, validated.actorId, "tenant-context"]),
-            action: "tenant.context.read",
-            tenantId: validated.tenantId,
-            actorId: validated.actorId,
-            subject: validated.tenantId,
-            metadata: {
-              providerMode: DEV_PROVIDER_MODE_LABEL,
-              providerClass: validated.providerMode,
-            },
-          }),
-        );
-        return {
-          tenantId: validated.tenantId,
-          actorId: validated.actorId,
-          roles: [...validated.roles],
-          providerMode: DEV_PROVIDER_MODE_LABEL,
-          providerClass: validated.providerMode,
-          environment: "local" as const,
-          auditEvents: runtime.auditLedger.list(validated.tenantId).length,
-        };
-      } catch (error) {
-        reply.code(error instanceof TenantMismatchError ? 400 : 400);
         return { error: error instanceof Error ? error.message : "unknown error" };
       }
     },

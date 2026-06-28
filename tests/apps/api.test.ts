@@ -75,4 +75,16 @@ describe("api edge", () => {
     expect(response.json()).toHaveProperty("error");
     await app.close();
   });
+
+  it("keeps undocumented route aliases out of the local API surface", async () => {
+    const app = buildApi();
+    await app.ready();
+
+    for (const url of ["/health", "/api/openapi.json", "/tenant/context?tenantId=tenant-a"]) {
+      const response = await app.inject({ method: "GET", url });
+      expect(response.statusCode).toBe(404);
+    }
+
+    await app.close();
+  });
 });
