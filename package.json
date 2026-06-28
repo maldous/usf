@@ -24,7 +24,8 @@
     "test-compose": "pnpm compose:config && pnpm compose:smoke",
     "proof:bootstrap": "tsx packages/proof/src/bootstrap-proof.ts",
     "repo:validate": "python3 tools/validate-spec/validate-spec.py all --json && python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
-    "verify": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm openapi:check && corepack pnpm db:types:check && corepack pnpm dev:smoke && corepack pnpm compose:config && corepack pnpm compose:smoke && corepack pnpm proof:bootstrap && corepack pnpm repo:validate"
+    "parity": "python3 tools/validate-parity/validate-parity.py all --json",
+    "verify": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm openapi:check && corepack pnpm db:types:check && corepack pnpm dev:smoke && corepack pnpm compose:config && corepack pnpm compose:smoke && corepack pnpm proof:bootstrap && corepack pnpm repo:validate && corepack pnpm parity"
   },
   "dependencies": {
     "@sinclair/typebox": "0.34.49",

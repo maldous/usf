@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-PARITY-012",
+  "description": "full readiness claimed while partial items remain",
+  "mutation": {
+    "setTop": {
+      "foundationReadinessClaimed": true
+    }
+  }
+}

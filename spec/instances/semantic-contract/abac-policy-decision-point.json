@@ -99,6 +99,7 @@
     "apps/platform-api/src/server/authorize-resource.ts"
   ],
   "adrRefs": [
-    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
+    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md",
+    "docs/adr/0010-authorization-policy-decision-point.md"
   ]
 }

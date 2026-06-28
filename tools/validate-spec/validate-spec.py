@@ -113,6 +113,7 @@ AUTHORIZED_TOOLING = {
     "tools/validate-bootstrap/validate-bootstrap.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",
+    "tools/validate-parity/validate-parity.py",
 }
 # (item 4) Explicit enum -> vocabulary value-set bindings by (schema, JSON pointer). No guessing.
 # Every "/properties/lifecycleState" enum binds to lifecycle-states (handled in resolve below).
@@ -1643,7 +1644,7 @@ def check_real_instances(ctx, F):
     coverage so one repeatable command validates the current authored corpus.
     """
     states = {}
-    adr_paths = sorted(glob.glob("tools/validate-spec/fixtures/positive/adr/000*.json"))
+    adr_paths = sorted(glob.glob("tools/validate-spec/fixtures/positive/adr/[0-9][0-9][0-9][0-9]-*.json"))
     semantic_paths = sorted(glob.glob("spec/instances/**/*.json", recursive=True))
     envelope_paths = sorted(glob.glob("evidence/evidence-envelope/*.json"))
     proof_paths = sorted(glob.glob("evidence/proof-evidence/*.json"))

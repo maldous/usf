@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-PARITY-006",
+  "description": "requires-human-decision item with empty blocker",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "usf_status": "requires-human-decision",
+        "blocker": ""
+      }
+    }
+  }
+}

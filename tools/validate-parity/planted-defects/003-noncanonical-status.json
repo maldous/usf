@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-003",
+  "description": "domain uses a status outside the canonical set",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "usf_status": "bogus-status"
+      }
+    }
+  }
+}

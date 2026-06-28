@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-PARITY-012",
+  "description": "all domains complete but a partial test/proof group remains while full readiness is claimed",
+  "mutation": {
+    "domainsSetAll": { "usf_status": "covered" },
+    "setTop": { "foundationReadinessClaimed": true }
+  }
+}

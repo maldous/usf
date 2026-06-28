@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-PARITY-001",
+  "description": "matrix file absent",
+  "mutation": {
+    "removeMatrix": true
+  }
+}

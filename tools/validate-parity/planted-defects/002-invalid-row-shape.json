@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-002",
+  "description": "domain row missing required key",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "drop": [
+        "category"
+      ]
+    }
+  }
+}

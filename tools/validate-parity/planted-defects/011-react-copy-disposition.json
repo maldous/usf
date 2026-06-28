@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-011",
+  "description": "runtime row dispositioned as a React copy",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "source_use_disposition": "raw-copy"
+      }
+    }
+  }
+}

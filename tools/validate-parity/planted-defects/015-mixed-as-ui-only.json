@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-015",
+  "description": "foundation-behaviour test classified wholly UI-only",
+  "mutation": {
+    "testPatch": {
+      "index": 0,
+      "set": {
+        "classification": "ui-ux-only-out-of-foundation-scope"
+      }
+    }
+  }
+}

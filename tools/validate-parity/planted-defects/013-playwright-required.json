@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-PARITY-013",
+  "description": "foundation marks Playwright/browser E2E as required",
+  "mutation": {
+    "setTop": {
+      "playwrightRequiredForFoundation": true
+    }
+  }
+}

@@ -10,7 +10,7 @@
 | Historical base | `../react` (rank-6 evidence only); frozen base recorded in `react-l5-equivalence-audit.md` |
 | Repository state | Introduces no new implementation/runtime code, no proof execution, no React copy, no path mirroring. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89). |
 
-> This matrix adds the **foundation-vs-UI scope lens** and the **test/proof classification** that the existing coverage matrices do not carry. It does **not** re-derive capability/rule/asset coverage — those remain authoritative in the substrate matrices above. Item-level rows (per service/port/adapter/route/job/workflow/provider/command/test) are produced under the **planned** (gated) Linear children in `full-parity-linear-tracking-plan.md`; this document is the domain-level classification.
+> This matrix adds the **foundation-vs-UI scope lens** and the **test/proof classification** that the existing coverage matrices do not carry. It does **not** re-derive capability/rule/asset coverage — those remain authoritative in the substrate matrices above. Item-level rows (per service/port/adapter/route/job/workflow/provider/command/test) are produced under the **planned** (gated) Linear children in `full-parity-linear-tracking-plan.md`; this document is the domain-level classification. The machine-readable authority is `react-parity-scope-classification-matrix.json`, enforced by `tools/validate-parity/validate-parity.py` (`make parity`); this Markdown is the human-review view and is kept consistent with it. Test/proof rows use canonical disposition statuses (`partial` for foundation tests pending port; `foundation-behaviour-rewritten-from-ui-test` for UI-derived foundation behaviour; `ui-ux-only-out-of-foundation-scope` for UI-only).
 
 ## 1. Status model
 
@@ -60,11 +60,11 @@ Future UI/UX work consuming foundation contracts is tracked as a separate, **non
 
 | Group | react_paths | classification | Action |
 |---|---|---|---|
-| API/integration tests | `apps/platform-api/tests` (~70), `packages/*/tests` (~45) | foundation-behaviour | Port/rewrite as USF foundation tests under each domain child |
-| Architecture/governance tooling tests | `tools/architecture` (~47), `tools/v2-readiness`, `tools/security` | foundation-behaviour | Map to USF validators/proof tooling parity (parity-commands) |
-| Proof scripts + evidence ladder | `tools/e2e`, `scripts/evidence`, `scripts/tests`, `tests/integration/compose-smoke` | foundation-behaviour | Map to USF proof tooling + compose proof (parity-commands, parity-db) |
+| API/integration tests | `apps/platform-api/tests` (~70), `packages/*/tests` (~45) | partial | Foundation tests pending port; rewrite as USF foundation tests under each domain child |
+| Architecture/governance tooling tests | `tools/architecture` (~47), `tools/v2-readiness`, `tools/security` | partial | Map to USF validators/proof tooling parity (parity-commands) |
+| Proof scripts + evidence ladder | `tools/e2e`, `scripts/evidence`, `scripts/tests`, `tests/integration/compose-smoke` | partial | Map to USF proof tooling + compose proof (parity-commands, parity-db) |
 | Playwright `identity` / `internal` | `playwright.identity.config.ts`, `playwright.internal.config.ts`, `e2e/identity`, `e2e/internal` | foundation-behaviour-rewritten-from-ui-test | Rewrite as API/contract tests (auth broker, health, session contract) |
-| Playwright `discovery` / `external` / `prod` | `playwright.discovery.config.ts`, `playwright.external.config.ts`, `playwright.prod.config.ts`, `e2e/discovery`, `e2e/external`, `e2e/prod` | mixed → split | UI assertions out of scope; foundation portion rewritten (see §6) |
+| Playwright `discovery` / `external` / `prod` | `playwright.discovery.config.ts`, `playwright.external.config.ts`, `playwright.prod.config.ts`, `e2e/discovery`, `e2e/external`, `e2e/prod` | foundation-behaviour-rewritten-from-ui-test (mixed, split) | UI assertions out of scope; foundation portion rewritten (see §6) |
 | Playwright `build`; UI reference harness | `playwright.build.config.ts`, `tools/ui-reference-harness` | ui-ux-only-out-of-foundation-scope | Classified out of scope |
 | Component unit tests | `apps/react-enterprise-app/src/tests`, `packages/ui-design-system/tests` | ui-ux-only-out-of-foundation-scope | Classified out of scope |
 

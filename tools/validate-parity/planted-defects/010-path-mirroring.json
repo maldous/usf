@@ -1,0 +1,14 @@
+{
+  "expectedRule": "USF-PARITY-010",
+  "description": "USF path equals a React path",
+  "mutation": {
+    "domainPatch": {
+      "index": 0,
+      "set": {
+        "usf_paths": [
+          "apps/platform-api/src/server"
+        ]
+      }
+    }
+  }
+}
