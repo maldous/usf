@@ -1781,22 +1781,199 @@
       "react_item_id": "provider-adapters-modes",
       "category": "provider",
       "react_paths": [
-        "packages"
+        "packages/adapters-*",
+        "apps/platform-api/src/ports",
+        "apps/platform-api/src/adapters",
+        "compose.yaml",
+        "docs/v2-foundation/usf-audit/runtime-provider-inventory.json"
       ],
-      "behaviour_summary": "Pluggable provider integrations (identity, observability, workflow, billing, storage, backup, antivirus); provider-mode selector.",
+      "behaviour_summary": "Controlled provider trust boundaries: provider registry, provider modes, capability ownership, config classification, secret references, health/readiness, status redaction, provider audit, and capability-provider import boundaries.",
       "usf_status": "partial",
       "usf_paths": [
-        "adapters"
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "capabilities/config/src/registry.ts",
+        "capabilities/tenant/src/authorization-policy.ts",
+        "apps/api/src/server.ts",
+        "apps/api/src/runtime.ts",
+        "packages/contracts/src/index.ts",
+        "packages/contracts/src/api-surface.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/provider-adapters-proof.ts",
+        "docs/architecture/provider-adapters-and-modes-standard.md",
+        "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+        "tools/validate-parity/validate-providers.py"
       ],
-      "usf_tests": [],
-      "usf_proofs": [],
+      "usf_tests": [
+        "tests/capabilities/provider-adapters.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make providers-proof",
+        "make parity (validate-providers USF-PROVIDERS-* with planted defects)"
+      ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-133",
+      "linear_issue": "USF-156",
+      "blocker": "USF-157",
       "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "spec/instances/semantic-contract/provider-configuration-plane.json; bootstrap in-memory/hermetic adapters present; compose-local/sandbox/live deferred.",
-      "retry_condition": "Per-domain implementation directive authorises parity-providers; provider-mode parity migrated with composed-test proof."
+      "domain_authorised": true,
+      "evidence": "USF-156 implements the local/dev/test provider trust-boundary slice: provider categories/modes/lifecycle/risk/status registry, SecretReference-only credential posture, redacted provider status views, PDP-protected provider status routes, value-free provider audit events, capability-provider import-boundary proof, make providers-proof, and validate-providers. No live-external-authorised provider, supplier approval, production readiness, or certification claim is made.",
+      "retry_condition": "USF-157 completes deferred live provider, supplier/subprocessor, egress/TLS/certificate, runtime resilience, drift, incident, failover/DR, gateway, cache/search, and deep composed-provider readiness depth."
+    },
+    {
+      "react_item_id": "provider.registry",
+      "category": "provider",
+      "react_paths": [
+        "docs/v2-foundation/usf-audit/runtime-provider-inventory.json",
+        "apps/platform-api/src/server/dependencies.ts"
+      ],
+      "behaviour_summary": "Provider inventory and ownership are registered with category, mode, owner, purpose, classification, environment, region, risk, health, readiness, and source-use posture.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/provider-adapters-and-modes-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/provider-adapters.test.ts"
+      ],
+      "usf_proofs": [
+        "make providers-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-156",
+      "blocker": "USF-156",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "PROVIDER_REGISTRY covers all required categories with explicit modes, owners, classifications, risk, health/readiness, and safe status posture.",
+      "retry_condition": "No retry needed for the implemented local/dev/test registry."
+    },
+    {
+      "react_item_id": "provider.mode-boundaries",
+      "category": "provider",
+      "react_paths": [
+        "docs/v2-foundation/capability-proof-definition.json",
+        "docs/v2-foundation/environment-readiness-gates.json",
+        "docs/v2-foundation/usf-audit/in-memory-vs-real-parity-report.json"
+      ],
+      "behaviour_summary": "Provider modes distinguish in-memory, mock, local-test, composed-test, deferred live, authorised live, disabled, and unavailable. Test/composed proof never upgrades to live readiness.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/config/src/registry.ts",
+        "packages/proof/src/provider-adapters-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/provider-adapters.test.ts"
+      ],
+      "usf_proofs": [
+        "make providers-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-156",
+      "blocker": "USF-156",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Unknown modes fail validation; live-external-authorised without authority fails; in-memory/local-test/mock/composed-test entries have liveReadinessClaim=false and productionReadinessClaim=false.",
+      "retry_condition": "No retry needed for local/dev/test mode-boundary proof."
+    },
+    {
+      "react_item_id": "provider.config-secret-health-readiness",
+      "category": "provider",
+      "react_paths": [
+        "apps/platform-api/src/config/provider-readiness-config.ts",
+        "apps/platform-api/src/config/bootstrap-secrets.ts",
+        "apps/platform-api/src/server/health.ts"
+      ],
+      "behaviour_summary": "Provider config and readiness use classified config refs, SecretReference-only credentials, redacted status views, and distinct health/readiness/liveness/capability status.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/contracts/src/index.ts",
+        "apps/api/src/server.ts",
+        "packages/openapi/openapi.json"
+      ],
+      "usf_tests": [
+        "tests/capabilities/provider-adapters.test.ts",
+        "tests/apps/api-contracts.test.ts"
+      ],
+      "usf_proofs": [
+        "make providers-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-156",
+      "blocker": "USF-156",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Provider credentials are SecretReference objects only; provider status safe views redact endpoints/credentials/raw failures; health and readiness are distinct; deferred/disabled/unavailable fail closed.",
+      "retry_condition": "No retry needed for local/dev/test status and redaction proof."
+    },
+    {
+      "react_item_id": "provider.boundary-audit-api-status",
+      "category": "provider",
+      "react_paths": [
+        "docs/evidence/import-boundaries/source-import-boundary-validation.json",
+        "apps/platform-api/src/server/health.ts",
+        "apps/platform-api/src/ports/provider-readiness-probe.ts"
+      ],
+      "behaviour_summary": "Capabilities use ports rather than provider SDKs; provider health/readiness/status access is PDP-protected, OpenAPI-covered, redacted, and audit-recorded value-free.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/ports/src/index.ts",
+        "apps/api/src/server.ts",
+        "packages/contracts/src/api-surface.ts",
+        "packages/proof/src/provider-adapters-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/capabilities/provider-adapters.test.ts"
+      ],
+      "usf_proofs": [
+        "make providers-proof",
+        "make api-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-156",
+      "blocker": "USF-156",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Provider status routes are operator-only, PDP protected, tenant guarded, OpenAPI covered, and redacted. Provider audit event taxonomy includes provider.health.checked, provider.readiness.checked, provider.call.failed, and related reserved events. Proof scans capabilities/core/API routes for unauthorised provider SDK imports.",
+      "retry_condition": "No retry needed for the implemented local/dev/test provider status surface."
+    },
+    {
+      "react_item_id": "provider.deferred-live-risk-resilience-depth",
+      "category": "provider",
+      "react_paths": [
+        "packages/adapters-*",
+        "compose.yaml",
+        "docs/v2-foundation/usf-audit/proof-evidence-index.json"
+      ],
+      "behaviour_summary": "Live external providers, supplier/subprocessor workflow, egress/TLS/cert proof, runtime resilience, drift detection, incident hooks, failover/DR, cache/search/gateway, and deep composed readiness are represented but deferred.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/provider-adapters-and-modes-standard.md",
+        "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/provider-adapters.test.ts"
+      ],
+      "usf_proofs": [
+        "make providers-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-156",
+      "blocker": "USF-157",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "Deferred depth is explicitly tracked in USF-157. The current slice makes no live provider, production, supplier approval, DR, gateway-live, SOC, ISO, or regulatory certification claim.",
+      "retry_condition": "USF-157 receives an authorised implementation directive and proves the deferred live/risk/resilience controls without overclaiming."
     },
     {
       "react_item_id": "observability",

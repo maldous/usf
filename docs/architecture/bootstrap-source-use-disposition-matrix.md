@@ -142,6 +142,30 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 | `tools/validate-parity/validate-api.py` | source-derived-rewrite | Existing parity validator pattern and API validator expectations | Static parity validator for API/contracts invariants. |
 | `tools/validate-parity/api-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk API validator rules fire. |
 
+## Parity Provider Adapters/Modes Additions
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `docs/architecture/provider-adapters-and-modes-standard.md` | source-derived-rewrite | React provider, adapter, config, readiness, compose, and proof lineage plus USF-156 enterprise provider controls | Defines providers as controlled trust boundaries with explicit modes, ownership, risk, readiness, config, secret-ref, audit, and live-deferred boundaries. |
+| `docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the provider adapters/modes slice. |
+| `packages/core/src/index.ts` | source-derived-rewrite | React provider mode proof model, provider inventory, adapter boundary, config/secret, and health/readiness lineage | Adds provider category/mode/lifecycle/risk/status models, provider registry, validation, redacted status view, fail-closed usability checks, and provider audit event taxonomy. |
+| `capabilities/config/src/registry.ts` | source-derived-rewrite | React provider config mode and provider config registry lineage | Aligns provider mode config values with the provider mode taxonomy while keeping environment class separate. |
+| `capabilities/tenant/src/authorization-policy.ts` | source-derived-rewrite | React provider admin/readiness guard lineage and USF PDP authority | Adds explicit provider read/list/health/readiness/configure/mode-change permissions for operator surfaces. |
+| `packages/ports/src/index.ts` | source-derived-rewrite | React port/adapter boundary and provider mode lineage | Aligns scan provider mode posture with the provider taxonomy. |
+| `apps/api/src/runtime.ts` | source-derived-rewrite | React runtime provider/dependency composition lineage | Seeds a concrete local security-admin actor for operator-only provider status proof without treating identity claims as authorization. |
+| `apps/api/src/server.ts` | source-derived-rewrite | React provider readiness/status route lineage | Adds PDP-protected, tenant-guarded, redacted provider status routes and value-free provider health/readiness audit events. |
+| `packages/contracts/src/index.ts` | source-derived-rewrite | React contract/schema and provider status lineage | Adds provider status schemas that expose posture only, not credentials or raw endpoints. |
+| `packages/contracts/src/api-surface.ts` | source-derived-rewrite | React OpenAPI/route contract/provider status lineage | Adds operator-only provider route metadata, synthetic examples, capability mapping, and redaction posture. |
+| `packages/openapi/src/index.ts` | source-derived-rewrite | React OpenAPI drift gate lineage | Registers provider schemas and query fields in the generated OpenAPI surface. |
+| `packages/openapi/openapi.json` | evidence-only-support | Generated OpenAPI contract output from USF metadata | Committed local/dev/test OpenAPI contract with provider status routes and no live-provider claim. |
+| `packages/proof/src/provider-adapters-proof.ts` | source-derived-rewrite | React provider readiness/proof and import-boundary lineage | Hermetic proof for provider registry, mode boundaries, secret refs, status redaction, audit, and capability-provider import boundaries. |
+| `packages/proof/src/index.ts` | new-with-rationale | Proof package target | Exports provider-adapters proof. |
+| `tests/capabilities/provider-adapters.test.ts` | source-derived-rewrite | React provider/adapter/config/readiness tests rewritten as foundation tests | Proves provider registry, secret-ref posture, redaction, health/readiness separation, fail-closed modes, and value-free audit. |
+| `tests/apps/api-contracts.test.ts` | source-derived-rewrite | React provider status/API guard lineage rewritten as foundation API tests | Proves provider status route authorization and redaction without UI/Playwright. |
+| `tests/packages/proof.test.ts` | evidence-only-support | Proof package test pattern | Runs provider-adapters proof in-process. |
+| `tools/validate-parity/validate-providers.py` | source-derived-rewrite | Existing parity validator pattern and provider validator expectations | Static parity validator for provider/adapters/modes invariants. |
+| `tools/validate-parity/provider-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk provider validator rules fire. |
+
 ## Boundary Confirmation
 
 No file in this matrix is copied from `../react`; no target path mirrors a historical source path; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.

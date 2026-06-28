@@ -1,0 +1,122 @@
+[
+  {
+    "item": "provider registry",
+    "classification": "migrated",
+    "react_lineage": "runtime provider inventory and dependencies",
+    "usf_evidence": "PROVIDER_REGISTRY, validateProviderRegistry, tests, providers-proof"
+  },
+  {
+    "item": "provider categories",
+    "classification": "migrated",
+    "react_lineage": "adapter packages and compose provider families",
+    "usf_evidence": "15 required categories represented and tested"
+  },
+  {
+    "item": "provider modes",
+    "classification": "migrated",
+    "react_lineage": "provider mode proof model and environment gates",
+    "usf_evidence": "PROVIDER_MODES, config registry, unknown/live-authorised-without-authority validation"
+  },
+  {
+    "item": "provider ownership and capability boundary",
+    "classification": "migrated",
+    "react_lineage": "ports/adapters and import boundary evidence",
+    "usf_evidence": "owning capability/port/adapter fields plus provider import-boundary proof"
+  },
+  {
+    "item": "provider config and secret references",
+    "classification": "migrated",
+    "react_lineage": "provider config and bootstrap secrets",
+    "usf_evidence": "config refs, SecretReference-only tests, redacted status views"
+  },
+  {
+    "item": "health versus readiness",
+    "classification": "migrated",
+    "react_lineage": "health/readiness handlers and readiness probes",
+    "usf_evidence": "health/readiness/liveness/capability status fields and tests"
+  },
+  {
+    "item": "provider audit evidence",
+    "classification": "migrated",
+    "react_lineage": "provider readiness proof evidence",
+    "usf_evidence": "provider audit event taxonomy and value-free audit tests"
+  },
+  {
+    "item": "provider API/status surface",
+    "classification": "migrated",
+    "react_lineage": "provider status and health route contracts",
+    "usf_evidence": "/v1/providers and /v1/providers/{id}, OpenAPI, API tests"
+  },
+  {
+    "item": "provider validator and planted defects",
+    "classification": "migrated",
+    "react_lineage": "readiness validator tooling and negative controls",
+    "usf_evidence": "validate-providers and 10 planted defects"
+  },
+  {
+    "item": "provider test safety",
+    "classification": "migrated",
+    "react_lineage": "in-memory/mock/local provider tests",
+    "usf_evidence": "synthetic local tests and proof output with no live endpoints or credentials"
+  },
+  {
+    "item": "identity provider posture",
+    "classification": "covered",
+    "react_lineage": "mock OIDC and Keycloak provider lineage",
+    "usf_evidence": "auth identity proof plus provider identity registry entries"
+  },
+  {
+    "item": "files/storage provider posture",
+    "classification": "covered",
+    "react_lineage": "S3/MinIO/ClamAV/backup lineage",
+    "usf_evidence": "files proof plus object-storage and file-scan registry entries"
+  },
+  {
+    "item": "notifications provider posture",
+    "classification": "covered",
+    "react_lineage": "SMTP/Brevo/local notification transports",
+    "usf_evidence": "notify proof plus notification-delivery registry entries"
+  },
+  {
+    "item": "composed provider substrate",
+    "classification": "partial",
+    "react_lineage": "compose-local substrate",
+    "usf_evidence": "composed-test registry entries; deep composed readiness deferred"
+  },
+  {
+    "item": "provider lifecycle/review workflow",
+    "classification": "partial",
+    "react_lineage": "provider readiness/config review posture",
+    "usf_evidence": "lifecycle/review fields represented; workflow deferred"
+  },
+  {
+    "item": "provider risk/resilience/drift posture",
+    "classification": "partial",
+    "react_lineage": "timeout/retry/degraded/fail-closed proof lineage",
+    "usf_evidence": "risk, resilience, drift fields represented; runtime controls deferred"
+  },
+  {
+    "item": "supplier/subprocessor posture",
+    "classification": "partial",
+    "react_lineage": "external provider readiness posture",
+    "usf_evidence": "supplier posture fields represented without approval claim"
+  },
+  {
+    "item": "live-external-authorised providers",
+    "classification": "deferred",
+    "react_lineage": "live/external provider evidence families",
+    "usf_evidence": "USF-157; no live-external-authorised provider registered"
+  },
+  {
+    "item": "failover/DR execution",
+    "classification": "deferred",
+    "react_lineage": "backup/PITR/resilience proofs",
+    "usf_evidence": "failover posture fields only; no DR readiness claim"
+  },
+  {
+    "item": "gateway/cache/search runtime depth",
+    "classification": "deferred",
+    "react_lineage": "Caddy, Redis, search/client provider lineage",
+    "usf_evidence": "api-gateway/cache/search-index categories represented; runtime depth deferred"
+  }
+]
