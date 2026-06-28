@@ -313,7 +313,14 @@ export interface FileMetadataStore {
 // this slice; live scanner is deferred — USF-147). Scanner failure must not silently
 // permit a risky file: callers treat a non-clean result as deny.
 export interface ScanProvider {
-  readonly mode: "in-memory" | "local-composed-test" | "mock" | "live-external";
+  readonly mode:
+    | "in-memory"
+    | "local-test"
+    | "mock"
+    | "composed-test"
+    | "live-external-deferred"
+    | "disabled"
+    | "unavailable";
   scan(input: {
     tenantId: string;
     objectKey: string;

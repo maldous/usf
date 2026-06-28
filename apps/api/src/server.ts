@@ -30,7 +30,9 @@ import {
   NotificationViewSchema,
   NotificationsListResponseSchema,
   PermissionsResponseSchema,
+  ProviderDetailResponseSchema,
   ProviderStatusResponseSchema,
+  ProvidersListResponseSchema,
   ReadyResponseSchema,
   TenantActionRequestSchema,
   TenantContextResponseSchema,
@@ -43,8 +45,11 @@ import {
   NOTIFICATION_CHANNELS,
   TenantMismatchError,
   createAuditRecord,
+  findProvider,
+  providerStatusViews,
   stableId,
   toSafeJobView,
+  toSafeProviderStatus,
   type AuditCategory,
   type AuditEventOutcome,
   type AuthorizationRequest,
@@ -201,11 +206,18 @@ function devClaimsFromRequest(request: FastifyRequest): IdentityClaims {
   const tenantId = firstHeaderValue(request, "x-dev-tenant-id");
   const actorId = firstHeaderValue(request, "x-dev-actor-id") || "dev-actor";
   const email = firstHeaderValue(request, "x-dev-email") || `${actorId}@example.test`;
+  const rolesHeader = firstHeaderValue(request, "x-dev-roles");
+  const roles = rolesHeader
+    ? rolesHeader
+        .split(",")
+        .map((role) => role.trim())
+        .filter(Boolean)
+    : ["tenant-admin"];
   return {
     subject: actorId,
     tenantId,
     email,
-    roles: Object.freeze(["tenant-admin"]),
+    roles: Object.freeze(roles),
     providerMode: "hermetic-mock",
   };
 }
@@ -890,6 +902,189 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
         tenantId: context.tenantId,
         providerMode: DEV_PROVIDER_MODE_LABEL,
         providers: runtime.providers,
+      };
+    },
+  );
+
+  // Provider trust-boundary status (parity-provider-adapters-modes). This is an
+  // operator/security-admin surface for redacted local/dev/test provider posture,
+  // not a live provider readiness or production status API.
+  app.get<{ Querystring: { tenantId?: string } }>(
+    "/v1/providers",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: {
+          200: ProvidersListResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = tenantContextFromRequest(request);
+      } catch {
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing or invalid tenant context",
+        );
+      }
+      try {
+        requireRequestTenant(context, request.query.tenantId ?? "");
+      } catch (error) {
+        if (error instanceof TenantMismatchError) {
+          return tenantMismatch(request, reply);
+        }
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing tenant context",
+        );
+      }
+      const deny = await ensurePermission(
+        runtime,
+        context,
+        "provider.list",
+        "provider-registry",
+        "all",
+      );
+      if (deny) {
+        return sendError(request, reply, 403, "forbidden", deny, "Not authorized");
+      }
+      const ids = idsFor(request);
+      await runtime.auditRecorder.record({
+        eventId: stableId("audit", [ids.requestId, "provider-readiness-list"]),
+        eventType: "provider.readiness.checked",
+        tenantId: context.tenantId,
+        actorId: context.actorId,
+        action: "provider.readiness.checked",
+        outcome: "success",
+        resourceType: "provider-registry",
+        resourceId: "all",
+        reasonCode: "provider-status-read",
+        safeMessage: "provider readiness checked",
+        correlationId: ids.correlationId,
+        requestId: ids.requestId,
+        traceId: ids.traceId,
+        metadata: { provider_count: providerStatusViews().length },
+      });
+      return {
+        tenantId: context.tenantId,
+        providers: providerStatusViews(),
+        nextCursor: null,
+      };
+    },
+  );
+
+  app.get<{ Params: { id?: string }; Querystring: { tenantId?: string } }>(
+    "/v1/providers/:id",
+    {
+      schema: {
+        params: {
+          type: "object",
+          properties: { id: { type: "string" } },
+          required: ["id"],
+        },
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: {
+          200: ProviderDetailResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+          404: ErrorResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = tenantContextFromRequest(request);
+      } catch {
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing or invalid tenant context",
+        );
+      }
+      try {
+        requireRequestTenant(context, request.query.tenantId ?? "");
+      } catch (error) {
+        if (error instanceof TenantMismatchError) {
+          return tenantMismatch(request, reply);
+        }
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing tenant context",
+        );
+      }
+      const deny = await ensurePermission(
+        runtime,
+        context,
+        "provider.read",
+        "provider-registry",
+        request.params.id ?? "unknown",
+      );
+      if (deny) {
+        return sendError(request, reply, 403, "forbidden", deny, "Not authorized");
+      }
+      const provider = findProvider(request.params.id ?? "");
+      if (!provider) {
+        return sendError(
+          request,
+          reply,
+          404,
+          "not_found",
+          "provider-not-found",
+          "provider not found",
+        );
+      }
+      const ids = idsFor(request);
+      await runtime.auditRecorder.record({
+        eventId: stableId("audit", [ids.requestId, "provider-health", provider.providerId]),
+        eventType: "provider.health.checked",
+        tenantId: context.tenantId,
+        actorId: context.actorId,
+        action: "provider.health.checked",
+        outcome: "success",
+        resourceType: "provider",
+        resourceId: provider.providerId,
+        reasonCode: "provider-status-read",
+        safeMessage: "provider health checked",
+        correlationId: ids.correlationId,
+        requestId: ids.requestId,
+        traceId: ids.traceId,
+        metadata: {
+          provider_id: provider.providerId,
+          provider_mode: provider.providerMode,
+          readiness_status: provider.readinessStatus,
+        },
+      });
+      return {
+        tenantId: context.tenantId,
+        provider: toSafeProviderStatus(provider),
       };
     },
   );

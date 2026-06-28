@@ -173,8 +173,55 @@ export const FeatureFlagsResponseSchema = Type.Object({
 export const ProviderStatusResponseSchema = Type.Object({
   tenantId: Type.String({ minLength: 1 }),
   providerMode: Type.String(),
-  // Provider modes only (in-memory/local-composed-test/mock/live-external); never credentials.
+  // Provider modes only (in-memory/composed-test/mock/live-external-deferred); never credentials.
   providers: Type.Record(Type.String(), Type.String()),
+});
+
+export const ProviderRegistryStatusViewSchema = Type.Object({
+  providerId: Type.String({ minLength: 1 }),
+  providerName: Type.String({ minLength: 1 }),
+  providerCategory: Type.String({ minLength: 1 }),
+  providerMode: Type.String({ minLength: 1 }),
+  owningCapability: Type.String({ minLength: 1 }),
+  owningTeamOrRole: Type.String({ minLength: 1 }),
+  businessPurpose: Type.String({ minLength: 1 }),
+  dataClassification: Type.String({ minLength: 1 }),
+  tenantScope: Type.String({ minLength: 1 }),
+  environmentScope: Type.String({ minLength: 1 }),
+  lifecycleState: Type.String({ minLength: 1 }),
+  riskClassification: Type.String({ minLength: 1 }),
+  criticality: Type.String({ minLength: 1 }),
+  healthStatus: Type.String({ minLength: 1 }),
+  readinessStatus: Type.String({ minLength: 1 }),
+  livenessStatus: Type.String({ minLength: 1 }),
+  capabilityStatus: Type.String({ minLength: 1 }),
+  providerRegion: Type.String({ minLength: 1 }),
+  dataResidencyStatus: Type.String({ minLength: 1 }),
+  egressAllowed: Type.Boolean(),
+  tlsRequired: Type.Boolean(),
+  credentialPosture: Type.String({ minLength: 1 }),
+  endpointPosture: Type.String({ minLength: 1 }),
+  driftStatus: Type.String({ minLength: 1 }),
+  resiliencePosture: Type.String({ minLength: 1 }),
+  failoverPosture: Type.String({ minLength: 1 }),
+  supplierPosture: Type.String({ minLength: 1 }),
+  liveReadinessClaim: Type.Boolean(),
+  productionReadinessClaim: Type.Boolean(),
+  lastReviewedAt: NullableString,
+  reviewExpiresAt: NullableString,
+  safeFailureMessage: NullableString,
+  sourceUseDisposition: Type.String({ minLength: 1 }),
+});
+
+export const ProvidersListResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  providers: Type.Array(ProviderRegistryStatusViewSchema),
+  nextCursor: NullableString,
+});
+
+export const ProviderDetailResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  provider: ProviderRegistryStatusViewSchema,
 });
 
 // Files/storage surfaces (parity-files-storage, USF-146). Tenant-scoped, PDP-protected,

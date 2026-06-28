@@ -73,6 +73,7 @@ export interface DevRuntime {
 
 export const DEV_TENANT_ID = "dev-tenant";
 export const DEV_ACTOR_ID = "dev-actor";
+export const DEV_SECURITY_ACTOR_ID = "dev-security-actor";
 
 export function createDevRuntime(): DevRuntime {
   const auditLedger = new InMemoryAuditLedger();
@@ -93,6 +94,13 @@ export function createDevRuntime(): DevRuntime {
     actorId: DEV_ACTOR_ID,
     status: "active",
     roles: ["tenant-admin"],
+  });
+  membershipDirectory.upsert({
+    membershipId: "membership_dev_security",
+    tenantId: DEV_TENANT_ID,
+    actorId: DEV_SECURITY_ACTOR_ID,
+    status: "active",
+    roles: ["security-admin"],
   });
   const breakGlass = new BreakGlassRegistry();
   const pdp = createPolicyDecisionPoint({ memberships: membershipDirectory, breakGlass });

@@ -35,6 +35,9 @@
       "name": "platform-health"
     },
     {
+      "name": "provider-adapters"
+    },
+    {
       "name": "tenant-context"
     }
   ],
@@ -2228,6 +2231,564 @@
           "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
           "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
           "dataClassification": "confidential",
+          "apiVersion": "v1",
+          "contractVersion": "api-contracts-1",
+          "operationVersion": "1",
+          "lifecycle": "experimental",
+          "compatibilityPolicy": "breaking changes require route or contract version change",
+          "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+          "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+          "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+          "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+          "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred",
+          "sourceUseDisposition": "source-derived-rewrite",
+          "implementation": "apps/api/src/server.ts"
+        }
+      }
+    },
+    "/v1/providers": {
+      "get": {
+        "operationId": "listProvidersV1",
+        "tags": ["provider-adapters"],
+        "summary": "GET /v1/providers",
+        "description": "operator/security-admin provider.list permission required; provider credentials and endpoints never exposed",
+        "deprecated": false,
+        "security": [
+          {
+            "KeycloakBearerFuture": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/CorrelationIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TraceIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevTenantHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevActorHeader"
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "providerCategory",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "providerMode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "readinessStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Page size bounded by the route pagination policy."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque tenant-scoped cursor."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "provider-registry response",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProvidersListResponse"
+                },
+                "example": {
+                  "tenantId": "tenant-alpha",
+                  "providers": [
+                    {
+                      "providerId": "notification-delivery-in-memory",
+                      "providerName": "In-memory notification delivery provider",
+                      "providerCategory": "notification-delivery",
+                      "providerMode": "in-memory",
+                      "owningCapability": "notifications-messaging",
+                      "owningTeamOrRole": "platform-operator",
+                      "businessPurpose": "Hermetic notification delivery capture and evidence proof.",
+                      "dataClassification": "restricted",
+                      "tenantScope": "tenant-scoped",
+                      "environmentScope": "local-dev",
+                      "lifecycleState": "approved-for-local-test",
+                      "riskClassification": "security-sensitive",
+                      "criticality": "medium",
+                      "healthStatus": "healthy",
+                      "readinessStatus": "healthy",
+                      "livenessStatus": "healthy",
+                      "capabilityStatus": "healthy",
+                      "providerRegion": "local-dev",
+                      "dataResidencyStatus": "local-dev-test",
+                      "egressAllowed": false,
+                      "tlsRequired": false,
+                      "credentialPosture": "secret-reference-present",
+                      "endpointPosture": "none",
+                      "driftStatus": "deferred",
+                      "resiliencePosture": "bounded-local-dev-test",
+                      "failoverPosture": "no-dr-readiness-claim-without-proof",
+                      "supplierPosture": "not-applicable-local-dev-test",
+                      "liveReadinessClaim": false,
+                      "productionReadinessClaim": false,
+                      "lastReviewedAt": null,
+                      "reviewExpiresAt": null,
+                      "safeFailureMessage": null,
+                      "sourceUseDisposition": "source-derived-rewrite"
+                    }
+                  ],
+                  "nextCursor": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-usf-route": {
+          "routeId": "providers.list",
+          "routeClassification": "operator-only",
+          "owningDomain": "provider-adapters",
+          "owningCapability": "provider-registry",
+          "requiredAction": "provider.list",
+          "tenantScope": "tenant-header-query",
+          "pdpPolicy": "operator/security-admin provider.list permission required; provider credentials and endpoints never exposed",
+          "auditPolicy": "provider status access is PDP guarded and value-free; audit-of-access posture is represented",
+          "idempotencyPolicy": {
+            "required": false,
+            "header": null,
+            "scope": "not-side-effecting",
+            "window": "not-applicable",
+            "replayPolicy": "not-applicable",
+            "conflictPolicy": "not-applicable",
+            "exception": "safe-read"
+          },
+          "paginationPolicy": {
+            "type": "cursor",
+            "cursorScope": "tenant-scoped-opaque-cursor",
+            "defaultLimit": 50,
+            "maxLimit": 200,
+            "filterAllowList": ["providerCategory", "providerMode", "readinessStatus"],
+            "sortAllowList": ["createdAt", "eventId", "fileId", "jobId", "notificationId"]
+          },
+          "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+          "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+          "dataClassification": "security-sensitive",
+          "apiVersion": "v1",
+          "contractVersion": "api-contracts-1",
+          "operationVersion": "1",
+          "lifecycle": "experimental",
+          "compatibilityPolicy": "breaking changes require route or contract version change",
+          "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+          "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+          "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+          "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+          "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred",
+          "sourceUseDisposition": "source-derived-rewrite",
+          "implementation": "apps/api/src/server.ts"
+        }
+      }
+    },
+    "/v1/providers/{id}": {
+      "get": {
+        "operationId": "getProviderByIdV1",
+        "tags": ["provider-adapters"],
+        "summary": "GET /v1/providers/{id}",
+        "description": "operator/security-admin provider.read permission required; non-enumerating safe errors",
+        "deprecated": false,
+        "security": [
+          {
+            "KeycloakBearerFuture": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/CorrelationIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TraceIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevTenantHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevActorHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque route path parameter."
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "providerCategory",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "providerMode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "readinessStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Page size bounded by the route pagination policy."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque tenant-scoped cursor."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "provider-registry response",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderDetailResponse"
+                },
+                "example": {
+                  "tenantId": "tenant-alpha",
+                  "provider": {
+                    "providerId": "notification-delivery-in-memory",
+                    "providerName": "In-memory notification delivery provider",
+                    "providerCategory": "notification-delivery",
+                    "providerMode": "in-memory",
+                    "owningCapability": "notifications-messaging",
+                    "owningTeamOrRole": "platform-operator",
+                    "businessPurpose": "Hermetic notification delivery capture and evidence proof.",
+                    "dataClassification": "restricted",
+                    "tenantScope": "tenant-scoped",
+                    "environmentScope": "local-dev",
+                    "lifecycleState": "approved-for-local-test",
+                    "riskClassification": "security-sensitive",
+                    "criticality": "medium",
+                    "healthStatus": "healthy",
+                    "readinessStatus": "healthy",
+                    "livenessStatus": "healthy",
+                    "capabilityStatus": "healthy",
+                    "providerRegion": "local-dev",
+                    "dataResidencyStatus": "local-dev-test",
+                    "egressAllowed": false,
+                    "tlsRequired": false,
+                    "credentialPosture": "secret-reference-present",
+                    "endpointPosture": "none",
+                    "driftStatus": "deferred",
+                    "resiliencePosture": "bounded-local-dev-test",
+                    "failoverPosture": "no-dr-readiness-claim-without-proof",
+                    "supplierPosture": "not-applicable-local-dev-test",
+                    "liveReadinessClaim": false,
+                    "productionReadinessClaim": false,
+                    "lastReviewedAt": null,
+                    "reviewExpiresAt": null,
+                    "safeFailureMessage": null,
+                    "sourceUseDisposition": "source-derived-rewrite"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-usf-route": {
+          "routeId": "providers.get",
+          "routeClassification": "operator-only",
+          "owningDomain": "provider-adapters",
+          "owningCapability": "provider-registry",
+          "requiredAction": "provider.read",
+          "tenantScope": "tenant-header-query-param",
+          "pdpPolicy": "operator/security-admin provider.read permission required; non-enumerating safe errors",
+          "auditPolicy": "provider detail access is PDP guarded and value-free",
+          "idempotencyPolicy": {
+            "required": false,
+            "header": null,
+            "scope": "not-side-effecting",
+            "window": "not-applicable",
+            "replayPolicy": "not-applicable",
+            "conflictPolicy": "not-applicable",
+            "exception": "safe-read"
+          },
+          "paginationPolicy": {
+            "type": "none",
+            "cursorScope": "not-applicable",
+            "defaultLimit": null,
+            "maxLimit": null,
+            "filterAllowList": [],
+            "sortAllowList": []
+          },
+          "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+          "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+          "dataClassification": "security-sensitive",
           "apiVersion": "v1",
           "contractVersion": "api-contracts-1",
           "operationVersion": "1",
@@ -7455,6 +8016,388 @@
           }
         }
       },
+      "ProviderDetailResponse": {
+        "type": "object",
+        "required": ["tenantId", "provider"],
+        "properties": {
+          "tenantId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "provider": {
+            "type": "object",
+            "required": [
+              "providerId",
+              "providerName",
+              "providerCategory",
+              "providerMode",
+              "owningCapability",
+              "owningTeamOrRole",
+              "businessPurpose",
+              "dataClassification",
+              "tenantScope",
+              "environmentScope",
+              "lifecycleState",
+              "riskClassification",
+              "criticality",
+              "healthStatus",
+              "readinessStatus",
+              "livenessStatus",
+              "capabilityStatus",
+              "providerRegion",
+              "dataResidencyStatus",
+              "egressAllowed",
+              "tlsRequired",
+              "credentialPosture",
+              "endpointPosture",
+              "driftStatus",
+              "resiliencePosture",
+              "failoverPosture",
+              "supplierPosture",
+              "liveReadinessClaim",
+              "productionReadinessClaim",
+              "lastReviewedAt",
+              "reviewExpiresAt",
+              "safeFailureMessage",
+              "sourceUseDisposition"
+            ],
+            "properties": {
+              "providerId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "providerName": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "providerCategory": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "providerMode": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "owningCapability": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "owningTeamOrRole": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "businessPurpose": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "dataClassification": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "tenantScope": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "environmentScope": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "lifecycleState": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "riskClassification": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "criticality": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "healthStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "readinessStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "livenessStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "capabilityStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "providerRegion": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "dataResidencyStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "egressAllowed": {
+                "type": "boolean"
+              },
+              "tlsRequired": {
+                "type": "boolean"
+              },
+              "credentialPosture": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "endpointPosture": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "driftStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "resiliencePosture": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "failoverPosture": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "supplierPosture": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "liveReadinessClaim": {
+                "type": "boolean"
+              },
+              "productionReadinessClaim": {
+                "type": "boolean"
+              },
+              "lastReviewedAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reviewExpiresAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "safeFailureMessage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sourceUseDisposition": {
+                "minLength": 1,
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ProviderRegistryStatusView": {
+        "type": "object",
+        "required": [
+          "providerId",
+          "providerName",
+          "providerCategory",
+          "providerMode",
+          "owningCapability",
+          "owningTeamOrRole",
+          "businessPurpose",
+          "dataClassification",
+          "tenantScope",
+          "environmentScope",
+          "lifecycleState",
+          "riskClassification",
+          "criticality",
+          "healthStatus",
+          "readinessStatus",
+          "livenessStatus",
+          "capabilityStatus",
+          "providerRegion",
+          "dataResidencyStatus",
+          "egressAllowed",
+          "tlsRequired",
+          "credentialPosture",
+          "endpointPosture",
+          "driftStatus",
+          "resiliencePosture",
+          "failoverPosture",
+          "supplierPosture",
+          "liveReadinessClaim",
+          "productionReadinessClaim",
+          "lastReviewedAt",
+          "reviewExpiresAt",
+          "safeFailureMessage",
+          "sourceUseDisposition"
+        ],
+        "properties": {
+          "providerId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerCategory": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerMode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "owningCapability": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "owningTeamOrRole": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "businessPurpose": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "dataClassification": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "tenantScope": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "environmentScope": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "lifecycleState": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "riskClassification": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "criticality": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "healthStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "readinessStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "livenessStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "capabilityStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerRegion": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "dataResidencyStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "egressAllowed": {
+            "type": "boolean"
+          },
+          "tlsRequired": {
+            "type": "boolean"
+          },
+          "credentialPosture": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "endpointPosture": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "driftStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "resiliencePosture": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "failoverPosture": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "supplierPosture": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "liveReadinessClaim": {
+            "type": "boolean"
+          },
+          "productionReadinessClaim": {
+            "type": "boolean"
+          },
+          "lastReviewedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewExpiresAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "safeFailureMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceUseDisposition": {
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      },
       "ProviderStatusResponse": {
         "type": "object",
         "required": ["tenantId", "providerMode", "providers"],
@@ -7473,6 +8416,215 @@
                 "type": "string"
               }
             }
+          }
+        }
+      },
+      "ProvidersListResponse": {
+        "type": "object",
+        "required": ["tenantId", "providers", "nextCursor"],
+        "properties": {
+          "tenantId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "providerId",
+                "providerName",
+                "providerCategory",
+                "providerMode",
+                "owningCapability",
+                "owningTeamOrRole",
+                "businessPurpose",
+                "dataClassification",
+                "tenantScope",
+                "environmentScope",
+                "lifecycleState",
+                "riskClassification",
+                "criticality",
+                "healthStatus",
+                "readinessStatus",
+                "livenessStatus",
+                "capabilityStatus",
+                "providerRegion",
+                "dataResidencyStatus",
+                "egressAllowed",
+                "tlsRequired",
+                "credentialPosture",
+                "endpointPosture",
+                "driftStatus",
+                "resiliencePosture",
+                "failoverPosture",
+                "supplierPosture",
+                "liveReadinessClaim",
+                "productionReadinessClaim",
+                "lastReviewedAt",
+                "reviewExpiresAt",
+                "safeFailureMessage",
+                "sourceUseDisposition"
+              ],
+              "properties": {
+                "providerId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerName": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerCategory": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerMode": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "owningCapability": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "owningTeamOrRole": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "businessPurpose": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "dataClassification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "tenantScope": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "environmentScope": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "lifecycleState": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "riskClassification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "criticality": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "healthStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "readinessStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "livenessStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "capabilityStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerRegion": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "dataResidencyStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "egressAllowed": {
+                  "type": "boolean"
+                },
+                "tlsRequired": {
+                  "type": "boolean"
+                },
+                "credentialPosture": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "endpointPosture": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "driftStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "resiliencePosture": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "failoverPosture": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "supplierPosture": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "liveReadinessClaim": {
+                  "type": "boolean"
+                },
+                "productionReadinessClaim": {
+                  "type": "boolean"
+                },
+                "lastReviewedAt": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "reviewExpiresAt": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "safeFailureMessage": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sourceUseDisposition": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },
