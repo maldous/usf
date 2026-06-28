@@ -1,0 +1,59 @@
+RUN_ID=20260628T135624Z-d980b1e
+HEAD=d980b1e4cc7e9c5269c6e161d6a63dc3cab1aa13
+v2-bootstrap=a25e9d55dd88831c3792a7b157e4314433bb5ff6
+d980b1e (HEAD -> main, tag: proof-anchor-d980b1e, origin/main) feat(parity-jobs): migrate React jobs and workflows foundation parity (#98)
+a3539e6 (tag: proof-anchor-a3539e6) feat(parity-auth): migrate Keycloak broker authentication and identity foundation parity (#97)
+1db7765 (tag: proof-anchor-1db7765) feat(parity-files): migrate React files and storage foundation parity (#96)
+5334051 (tag: proof-anchor-5334051) feat(parity-config): migrate React configuration and secrets foundation parity (#95)
+b649249 (tag: proof-anchor-b649249) feat(parity-audit): migrate React audit/evidence foundation parity (#94)
+764b3e0 (tag: proof-anchor-764b3e0) feat(parity-authz): migrate React tenant/RBAC/ABAC authorization foundation parity (USF-140) (#93)
+25184c8 (tag: proof-anchor-25184c8) feat(parity-db): migrate React DB/RLS/migration foundation parity (USF-138) (#92)
+72fdc94 (tag: proof-anchor-72fdc94) docs+validator(USF-135,USF-136): record parity authority and enforce readiness gate (#91)
+1f05171 (tag: proof-anchor-1f05171) docs(architecture): React functional parity readiness directive (planning only — no implementation) (#90)
+aa40b0d (tag: proof-anchor-aa40b0d) linear(USF-120): reconcile USF-39 extraction tracking (#89)
+91e3aac (tag: v2-bootstrap, tag: proof-anchor-91e3aac) build(foundation): add local dev bootstrap runtime (#88)
+f80da39 (tag: proof-anchor-f80da39) docs(codex): update V2 bootstrap goal prompt (#87)
+ac3234f (tag: proof-anchor-ac3234f) readiness(USF-75): record final pre-extraction revalidation at signed USF-100 point (#86)
+f30f09f (tag: proof-anchor-f30f09f) docs(USF-100): record human acceptance signature (#85)
+279ba39 (tag: proof-anchor-279ba39) readiness(USF-119): finalize rollup + fresh pre-USF-39 revalidation (#84)
+03be7ea (tag: proof-anchor-03be7ea) governance(bootstrap): record TypeScript runtime target
+fd198e4 (tag: proof-anchor-fd198e4) Merge pull request #83 from maldous/governance/v2-bootstrap-ready
+9c3cb7b (governance/v2-bootstrap-ready) governance(bootstrap): mark bootstrap marker ready
+beb0ba9 (tag: proof-anchor-beb0ba9) Merge pull request #82 from maldous/validator/bootstrap-posture-coverage
+d7fcff0 (validator/bootstrap-posture-coverage) validator(bootstrap): enforce mapping proof posture coverage
+eca4458 (tag: proof-anchor-eca4458) Merge pull request #81 from maldous/validator/bootstrap-auth-proof-consolidation
+7d24388 (validator/bootstrap-auth-proof-consolidation) validator(bootstrap): guard authentication proof consolidation
+7906d9f (tag: proof-anchor-7906d9f) adr(bootstrap): record readiness marker boundary (#80)
+89803a1 (tag: proof-anchor-89803a1) validator(bootstrap): enforce governance decision coverage (#79)
+4923119 (tag: proof-anchor-4923119) spec(bootstrap): add mapping corpus and proof mode (#78)
+6392670 (tag: proof-anchor-6392670) validator(readiness): add bootstrap gate
+9673638 (tag: proof-anchor-9673638) validator+docs: fail-closed unsigned anchors, durable first-slice scope check, corpus-truthful ledgers (#76)
+b1b09e3 (tag: proof-anchor-b1b09e3) validator(readiness): derive proof-anchor from reviewed commit; snapshot lineage (#75)
+d10fd36 (tag: proof-anchor-d10fd36) Merge pull request #74 from maldous/codex/final-v2-readiness-reconciliation
+f8b6126 (origin/codex/final-v2-readiness-reconciliation) docs(readiness): reconcile final V2 readiness gates
+fabe47b (tag: proof-anchor-fabe47b) docs(directive): add ready-to-sign whole-platform USF V2 implementation directive (USF-100 draft) (#73)
+c873e71 (tag: proof-anchor-c873e71) docs(architecture): record proof chain closed (USF-101/USF-59 Done) (#72)
+22db242 (tag: proof-anchor-22db242) ci(foundation): enable proof-anchor publication workflow (USF-101/USF-59) (#71)
+4fab550 adr(foundation): select CI signing identity for the proof anchor (USF-101) (#70)
+4492d92 spec(instances): enrich all facets to generation-grade detail (USF-97) (#69)
+72bb80f spec(instances): complete semantic coverage of every React capability (USF-97) (#68)
+98a2c8e adr(foundation): correct ADR 0005 to leave V2 language an open decision (#67)
+01280ea spec(instances): source-back remaining domains where manifest-backed (USF-97) (#66)
+6eb518a spec(instances): source-back configuration, data, events, observability contracts (USF-97) (#65)
+f16ecf8 spec(instances): source-back identity-access semantic contracts (USF-97) (#64)
+84fc0e3 validator(validators): add proof-anchor signer trust-root check (#63)
+a6888e9 adr(foundation): record hexagonal carry-forward and proof-anchor decisions (#62)
+d1a0892 docs(architecture): add React L5 equivalence audit; reduce readiness blockers (#61)
+badef5d validator(readiness): close semantic target inventory (#60)
+1c786f4 Harden readiness scope validator checks
+8f0981b Add proof freshness anchor payload scaffolding
+1a9e0bb Record semantic source-use closure gaps
+7ffe193 Advance proof freshness publication guardrails
+05e224a Record complete readiness blocker register (#55)
+0b4db8d Harden one-pass readiness validator guardrails (#54)
+c94d628 Add strict one-pass readiness revalidation
+ee02fda Guard proof evidence freshness claims
+f3afb17 Close first-slice proof posture gate (#51)
+3a94677 Add final USF-39 readiness revalidation (#50)
+efd8f3c Add authentication directive specification
+?? .claude/
