@@ -77,3 +77,61 @@ export const PermissionsResponseSchema = Type.Object({
   active: Type.Boolean(),
   permissions: Type.Array(Type.String()),
 });
+
+// Audit/evidence surfaces (parity-audit, USF-142). Tenant-scoped, PDP-protected,
+// RLS-backed, non-enumerating, and redacted. The view exposes a safe verification
+// surface (sequence, event_hash, verification_status) but no internal chain plumbing.
+
+const NullableString = Type.Union([Type.String(), Type.Null()]);
+
+export const AuditEventViewSchema = Type.Object({
+  eventId: Type.String(),
+  eventType: Type.String(),
+  eventVersion: Type.String(),
+  category: Type.String(),
+  severity: Type.String(),
+  occurredAt: Type.String(),
+  recordedAt: Type.String(),
+  actorId: Type.String(),
+  actorType: Type.String(),
+  tenantId: Type.String(),
+  scopeType: Type.String(),
+  action: Type.String(),
+  subjectType: Type.String(),
+  subjectId: Type.String(),
+  resourceType: Type.String(),
+  resourceId: Type.String(),
+  outcome: Type.String(),
+  reasonCode: Type.String(),
+  policyVersion: NullableString,
+  decisionId: NullableString,
+  correlationId: Type.String(),
+  causationId: NullableString,
+  traceId: NullableString,
+  dataClassification: Type.String(),
+  retentionPolicy: Type.String(),
+  legalHold: Type.Boolean(),
+  sequence: Type.Number(),
+  eventHash: Type.String(),
+  verificationStatus: Type.String(),
+  metadata: Type.Record(Type.String(), Type.String()),
+});
+
+export const AuditEventsResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  events: Type.Array(AuditEventViewSchema),
+  nextCursor: NullableString,
+});
+
+export const AuditVerifyRequestSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+});
+
+export const AuditVerifyResponseSchema = Type.Object({
+  ok: Type.Boolean(),
+  chainScope: Type.String(),
+  count: Type.Number(),
+  verifiedAt: Type.String(),
+  brokenAtSequence: Type.Union([Type.Number(), Type.Null()]),
+  reason: NullableString,
+});

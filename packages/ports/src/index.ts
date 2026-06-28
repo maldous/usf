@@ -1,5 +1,10 @@
 import type {
   ActorIdentity,
+  AuditCategory,
+  AuditEvent,
+  AuditEventDraft,
+  AuditEventOutcome,
+  AuditIntegrityResult,
   AuditRecord,
   AuthorizationRequest,
   IdentityClaims,
@@ -69,4 +74,58 @@ export interface IdentityDirectory {
     externalSubject: string;
     identityProvider: string;
   }): ActorIdentity | undefined;
+}
+
+// Audit / evidence ports (parity-audit, USF-142). Capabilities depend on these
+// ports, never on a database or provider implementation, to record or read audit
+// evidence. The rich AuditEvent path supersedes the thin AuditRecord path for new
+// work; AuditLedger is retained for already-wired thin call sites.
+
+/** Records structured, append-only audit evidence. Components hold this, not the store. */
+export interface AuditRecorder {
+  record(draft: AuditEventDraft): Promise<AuditEvent>;
+}
+
+export interface AuditQueryCriteria {
+  readonly tenantId: string;
+  readonly category?: AuditCategory;
+  readonly eventType?: string;
+  readonly action?: string;
+  readonly outcome?: AuditEventOutcome;
+  readonly correlationId?: string;
+  readonly limit?: number;
+  /** Opaque forward cursor. Filters never accept another tenant's id. */
+  readonly cursor?: string;
+}
+
+export interface AuditEventPage {
+  readonly events: readonly AuditEvent[];
+  readonly nextCursor: string | null;
+}
+
+// Tenant-safe audit evidence store. query/get/verify require a tenant context and
+// only ever return the context tenant's events; a cross-tenant id resolves to
+// undefined (non-enumerating), never an error that confirms existence.
+export interface AuditEventLedger extends AuditRecorder {
+  query(context: TenantContext, criteria: AuditQueryCriteria): Promise<AuditEventPage>;
+  get(context: TenantContext, eventId: string): Promise<AuditEvent | undefined>;
+  verify(context: TenantContext): Promise<AuditIntegrityResult>;
+}
+
+// Future ports — declared for forward-compat, NOT implemented in this slice
+// (deferred, USF-143). No live KMS/HSM signing, no audit export route, and no live
+// SIEM integration before separate authorisation.
+export interface AuditSigner {
+  sign(input: { eventHash: string; chainKeyId: string }): Promise<{ signature: string }>;
+}
+
+export interface AuditExporter {
+  export(
+    context: TenantContext,
+    criteria: AuditQueryCriteria,
+  ): Promise<{ exportId: string; events: readonly AuditEvent[]; integrity: AuditIntegrityResult }>;
+}
+
+export interface SiemForwarder {
+  forward(event: AuditEvent): Promise<void>;
 }

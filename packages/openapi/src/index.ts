@@ -91,6 +91,59 @@ export function buildOpenApiDocument() {
           },
         },
       },
+      "/v1/audit/events": {
+        get: {
+          operationId: "getAuditEventsV1",
+          responses: {
+            "200": {
+              description:
+                "Tenant-scoped, redacted, paginated audit evidence (PDP-protected; reading audit is itself audited)",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+            "403": {
+              description: "Authorization denied with a safe, non-enumerating reason code",
+            },
+          },
+        },
+      },
+      "/v1/audit/events/{id}": {
+        get: {
+          operationId: "getAuditEventByIdV1",
+          responses: {
+            "200": {
+              description: "A single tenant-scoped, redacted audit event (PDP-protected)",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+            "403": {
+              description: "Authorization denied with a safe, non-enumerating reason code",
+            },
+            "404": {
+              description: "Audit event not found in this tenant (non-enumerating)",
+            },
+          },
+        },
+      },
+      "/v1/audit/verify": {
+        post: {
+          operationId: "postAuditVerifyV1",
+          responses: {
+            "200": {
+              description:
+                "Tenant audit hash-chain integrity verification result (PDP-protected; recorded as audit-of-audit)",
+            },
+            "400": {
+              description: "Tenant context mismatch",
+            },
+            "403": {
+              description: "Authorization denied with a safe, non-enumerating reason code",
+            },
+          },
+        },
+      },
     },
   } as const;
 }

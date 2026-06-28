@@ -5,7 +5,14 @@ import { CapturedObservabilitySink } from "@foundation/adapter-obs";
 import { InMemorySecretStore } from "@foundation/adapter-secrets";
 import { InMemoryObjectStore } from "@foundation/adapter-store";
 import { InMemoryWorkflowEngine } from "@foundation/adapter-wf";
-import { InMemoryAuditLedger } from "@foundation/capability-audit";
+import {
+  InMemoryAuditEventStore,
+  InMemoryAuditLedger,
+  createAuditQueryService,
+  createAuditRecorder,
+  type AuditEventRecorder,
+  type AuditQueryService,
+} from "@foundation/capability-audit";
 import { createAuthService, type AuthService } from "@foundation/capability-auth";
 import {
   BreakGlassRegistry,
@@ -40,6 +47,9 @@ export interface DevRuntime {
   readonly breakGlass: BreakGlassRegistry;
   readonly pdp: PolicyDecisionPoint;
   readonly authorizer: Authorizer;
+  readonly auditEvents: InMemoryAuditEventStore;
+  readonly auditRecorder: AuditEventRecorder;
+  readonly auditQuery: AuditQueryService;
 }
 
 export const DEV_TENANT_ID = "dev-tenant";
@@ -66,7 +76,10 @@ export function createDevRuntime(): DevRuntime {
   });
   const breakGlass = new BreakGlassRegistry();
   const pdp = createPolicyDecisionPoint({ memberships: membershipDirectory, breakGlass });
-  const authorizer = createAuthorizer({ pdp, auditLedger });
+  const auditEvents = new InMemoryAuditEventStore();
+  const auditRecorder = createAuditRecorder({ ledger: auditEvents, component: "api" });
+  const authorizer = createAuthorizer({ pdp, auditLedger, audit: auditRecorder });
+  const auditQuery = createAuditQueryService({ ledger: auditEvents, pdp, recorder: auditRecorder });
 
   return {
     providerModeLabel: DEV_PROVIDER_MODE_LABEL,
@@ -86,5 +99,8 @@ export function createDevRuntime(): DevRuntime {
     breakGlass,
     pdp,
     authorizer,
+    auditEvents,
+    auditRecorder,
+    auditQuery,
   };
 }
