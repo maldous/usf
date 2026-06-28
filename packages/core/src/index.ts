@@ -927,6 +927,12 @@ export function overrideAllowed(def: ConfigKeyDefinition, scope: ConfigScope): b
   if (baseScopes.includes(scope)) {
     return true;
   }
+  // Absolute invariant: a security-control key is never settable by the tenant
+  // layer, regardless of its override policy. Break-glass/operator overrides remain
+  // governed by the policy below (a deliberate, audited operator action).
+  if (def.securityControl && scope === "tenant") {
+    return false;
+  }
   switch (def.overridePolicy) {
     case "immutable":
       return false;

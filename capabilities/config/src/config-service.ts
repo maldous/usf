@@ -66,6 +66,10 @@ export class InMemoryFeatureFlagSource implements FeatureFlagSource {
 }
 
 export interface ConfigService {
+  // get() returns the raw typed value for an authorised internal caller; a
+  // secret-reference key resolves to an opaque pointer, never a secret value.
+  // Output surfaces (list(), the API) apply redaction; get() callers must not emit
+  // the value to an untrusted channel without redacting.
   get(context: TenantContext, key: string): Promise<string | number | boolean>;
   list(context: TenantContext): Promise<Readonly<Record<string, string>>>;
   evaluateFlag(context: TenantContext, flagKey: string): Promise<boolean>;

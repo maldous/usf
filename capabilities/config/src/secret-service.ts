@@ -82,7 +82,10 @@ export function createSecretService(deps: {
         ...(fields.severity ? { severity: fields.severity } : {}),
         metadata: {
           purpose: fields.purpose,
-          ...(fields.secretRef ? { secretRef: fields.secretRef } : {}),
+          // The opaque pointer is safe to record (it is not the value). Use a key
+          // that the audit redactor will not over-mask (the literal "secret" key
+          // substring would be redacted), so forensics keeps the secret reference.
+          ...(fields.secretRef ? { ref: fields.secretRef } : {}),
           ...(fields.status ? { status: fields.status } : {}),
         },
       }),
