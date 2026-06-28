@@ -1,5 +1,6 @@
 import {
   runAuthIdentityProof,
+  runApiContractsProof,
   runBootstrapProof,
   runDevSmoke,
   runJobsWorkflowsProof,
@@ -47,6 +48,18 @@ describe("jobs/workflows proof", () => {
       liveTemporalClaim: false,
       liveWindmillClaim: false,
       liveQueueClaim: false,
+      productionLiveClaim: false,
+    });
+  });
+});
+
+describe("api/contracts proof", () => {
+  it("proves guarded, tenant-safe, idempotent API contract readiness without public API claims", async () => {
+    await expect(runApiContractsProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      publicApiReadinessClaim: false,
+      externalSdkReadinessClaim: false,
       productionLiveClaim: false,
     });
   });

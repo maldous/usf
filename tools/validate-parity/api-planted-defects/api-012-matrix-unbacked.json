@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-012",
+  "mutation": {
+    "matrixApiSet": {
+      "domain_authorised": false,
+      "usf_tests": [],
+      "usf_proofs": []
+    }
+  }
+}

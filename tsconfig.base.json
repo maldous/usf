@@ -38,6 +38,7 @@
       "@foundation/contracts": ["packages/contracts/src/index.ts"],
       "@foundation/core": ["packages/core/src/index.ts"],
       "@foundation/openapi": ["packages/openapi/src/index.ts"],
+      "@foundation/openapi/check": ["packages/openapi/src/check.ts"],
       "@foundation/ports": ["packages/ports/src/index.ts"],
       "@foundation/proof": ["packages/proof/src/index.ts"],
       "@foundation/source": ["packages/source/src/index.ts"],
