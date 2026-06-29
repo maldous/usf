@@ -8,6 +8,7 @@ import {
   runObservabilityTelemetryProof,
   runProviderAdaptersProof,
   runRateLimitsAbuseControlsProof,
+  runResourceLifecycleProof,
   runSearchIndexingProof,
 } from "@foundation/proof";
 import { describe, expect, it } from "vitest";
@@ -140,6 +141,21 @@ describe("search/indexing proof", () => {
       liveVectorDatabaseReadinessClaim: false,
       aiRagReadinessClaim: false,
       publicSearchApiReadinessClaim: false,
+      productionLiveClaim: false,
+    });
+  });
+});
+
+describe("resource lifecycle proof", () => {
+  it("proves tenant-safe resource lifecycle and relationships without legal or production claims", async () => {
+    await expect(runResourceLifecycleProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      resourceProviderPosture: "in-memory-local-dev-test",
+      productionRecordManagementReadinessClaim: false,
+      legalRecordManagementReadinessClaim: false,
+      regulatoryRecordReadinessClaim: false,
+      eDiscoveryReadinessClaim: false,
       productionLiveClaim: false,
     });
   });
