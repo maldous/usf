@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-030",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "serviceOwner": ""
+      }
+    }
+  ]
+}

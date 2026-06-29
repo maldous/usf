@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-035",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "retentionPosture": "not-required"
+      }
+    }
+  ]
+}

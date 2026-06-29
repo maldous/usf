@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-036",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "missingEvidence": []
+      }
+    }
+  ]
+}

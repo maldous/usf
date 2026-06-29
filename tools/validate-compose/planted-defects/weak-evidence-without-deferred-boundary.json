@@ -1,0 +1,13 @@
+{
+  "expectedRuleId": "USF-COMPOSE-032",
+  "servicePatches": [
+    {
+      "serviceId": "pgadmin",
+      "values": {
+        "missingEvidence": [],
+        "nonEquivalenceBoundaries": [],
+        "deferredDepth": 0
+      }
+    }
+  ]
+}

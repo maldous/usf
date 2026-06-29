@@ -59,6 +59,112 @@ RULES = {
     "USF-COMPOSE-027": "Exposed port lacks readiness claim boundary",
     "USF-COMPOSE-028": "Exposed service with secrets/admin/runtime-state lacks hardening metadata",
     "USF-COMPOSE-029": "Generated Compose dependency is absent from the same target",
+    "USF-COMPOSE-030": "Service lacks durable catalogue metadata",
+    "USF-COMPOSE-031": "Service metadata allows prohibited readiness or compliance claim",
+    "USF-COMPOSE-032": "Service evidence grade is too weak for readiness tier without deferred boundary",
+    "USF-COMPOSE-033": "Shared control-plane service lacks owner, access, audit, data, or environment boundary",
+    "USF-COMPOSE-034": "Admin/operator service lacks auth, audit, break-glass, operator-boundary, or non-claim metadata",
+    "USF-COMPOSE-035": "Data-bearing service lacks classification, tenant, backup/restore, retention, or failure metadata",
+    "USF-COMPOSE-036": "External, cloud, deferred, or out-of-scope service lacks provider/deferred boundary or prohibited claims",
+    "USF-COMPOSE-037": "Service-level metadata contradicts port-level metadata",
+}
+
+REQUIRED_SERVICE_METADATA = {
+    "serviceOwner",
+    "riskOwner",
+    "controlOwner",
+    "purpose",
+    "environmentDisposition",
+    "providerBoundary",
+    "dataClassification",
+    "dataBoundary",
+    "readinessTier",
+    "evidenceGrade",
+    "controlPurpose",
+    "assetInventoryClass",
+    "accessPosture",
+    "authRequirement",
+    "auditPosture",
+    "auditRequirement",
+    "secretPosture",
+    "backupRestorePosture",
+    "retentionPosture",
+    "tenantBoundary",
+    "operationalOwnerBoundary",
+    "operatorAccessBoundary",
+    "sharedControlPlaneJustification",
+    "breakGlassRelevance",
+    "missingEvidence",
+    "iso27001Support",
+    "enterpriseFeatureSupport",
+    "readinessClaimsAllowed",
+    "readinessClaimsProhibited",
+}
+
+PROHIBITED_READINESS_CLAIMS = {
+    "full-react-parity-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+}
+
+STRONGER_CLAIM_TIERS = {
+    "local-substrate-catalogued",
+    "compose-target-catalogued",
+    "external-requirement-catalogued",
+}
+
+WEAK_EVIDENCE_GRADES = {"c", "d", "f"}
+
+DATA_CLASSIFICATION_RANK = {
+    "none": 0,
+    "synthetic-data": 1,
+    "telemetry-metadata": 2,
+    "operator-metadata": 2,
+    "assurance-metadata": 2,
+    "routing-metadata": 2,
+    "provider-metadata": 2,
+    "historical-runtime-metadata": 2,
+    "identity-metadata": 3,
+    "secret-metadata": 3,
+    "secret-reference-metadata": 3,
+    "workflow-metadata": 3,
+    "content-metadata": 3,
+    "backup-metadata": 3,
+    "environment-runtime-data": 4,
+    "production-data": 5,
+}
+
+DATA_BEARING_SERVICE_KINDS = {
+    "database",
+    "identity-backing-store",
+    "event-bus",
+    "workflow-runtime",
+    "workflow-backing-store",
+    "object-storage",
+    "secret-store",
+    "observability-backing-service",
+    "assurance-backing-store",
+    "cache",
+    "search-provider",
+    "file-scanner",
+    "operator-automation",
+    "operator-automation-worker",
+    "backup-restore",
+    "analytics-store",
+}
+
+ADMIN_OPERATOR_SERVICE_KINDS = {
+    "operator-admin",
+    "workflow-operator-ui",
+    "assurance-control-plane",
+    "operator-automation",
+    "gateway",
 }
 
 
@@ -249,6 +355,196 @@ def validate_secret_placeholders(catalogue: dict[str, Any], findings: list[dict[
                     add(findings, "USF-COMPOSE-028", f"{service['serviceId']}:{name}", "secret-like value is not an approved local bootstrap placeholder")
 
 
+def _empty_metadata(value: Any) -> bool:
+    return value is None or value == "" or value == [] or value == {}
+
+
+def _claim_list(service: dict[str, Any], field: str) -> set[str]:
+    value = service.get(field, [])
+    return set(value) if isinstance(value, list) else set()
+
+
+def _is_shared_control_plane(service: dict[str, Any]) -> bool:
+    return (
+        service.get("environmentDisposition") == "shared-cross-environment-control-plane"
+        or service.get("providerBoundary", {}).get("disposition") == "shared-control-plane"
+        or any(
+            policy.get("sharingModel") == "shared-control-plane"
+            for policy in service.get("environmentPolicies", {}).values()
+        )
+    )
+
+
+def _is_admin_or_operator_surface(service: dict[str, Any]) -> bool:
+    return (
+        service.get("adminSurface", {}).get("present")
+        or service.get("operatorSurface", {}).get("present")
+        or service.get("serviceKind") in ADMIN_OPERATOR_SERVICE_KINDS
+    )
+
+
+def _is_data_bearing(service: dict[str, Any]) -> bool:
+    return (
+        service.get("serviceKind") in DATA_BEARING_SERVICE_KINDS
+        or service.get("dataClassification") in {
+            "environment-runtime-data",
+            "identity-metadata",
+            "secret-metadata",
+            "secret-reference-metadata",
+            "workflow-metadata",
+            "content-metadata",
+            "backup-metadata",
+            "production-data",
+        }
+        or service.get("dataBoundary") in {
+            "environment-runtime-data",
+            "persistent-staging-data",
+            "redacted-production-derived-data",
+            "production-data",
+        }
+    )
+
+
+def _has_deferred_boundary(service: dict[str, Any]) -> bool:
+    return bool(
+        service.get("missingEvidence")
+        or service.get("deferredDepth", 0) > 0
+        or service.get("nonEquivalenceBoundaries")
+        or service.get("environmentDisposition") in {"deferred", "out-of-scope"}
+        or service.get("providerBoundary", {}).get("disposition") in {"deferred", "out-of-scope"}
+    )
+
+
+def _port_data_exceeds_service(port: dict[str, Any], service: dict[str, Any]) -> bool:
+    port_rank = DATA_CLASSIFICATION_RANK.get(port.get("dataClassification", "none"), 0)
+    service_rank = DATA_CLASSIFICATION_RANK.get(service.get("dataClassification", "none"), 0)
+    return port_rank > service_rank
+
+
+def validate_service_metadata(catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
+    for service in catalogue["services"]:
+        service_id = service["serviceId"]
+
+        for field in sorted(REQUIRED_SERVICE_METADATA):
+            if field not in service or _empty_metadata(service.get(field)):
+                add(findings, "USF-COMPOSE-030", f"{service_id}:{field}")
+
+        allowed_claims = _claim_list(service, "readinessClaimsAllowed")
+        prohibited_claims = _claim_list(service, "readinessClaimsProhibited")
+        if allowed_claims & PROHIBITED_READINESS_CLAIMS:
+            add(
+                findings,
+                "USF-COMPOSE-031",
+                service_id,
+                f"prohibited allowed claims: {sorted(allowed_claims & PROHIBITED_READINESS_CLAIMS)}",
+            )
+        missing_prohibited = PROHIBITED_READINESS_CLAIMS - prohibited_claims
+        if missing_prohibited:
+            add(findings, "USF-COMPOSE-031", service_id, f"missing prohibited claims: {sorted(missing_prohibited)}")
+        if service.get("iso27001Support", {}).get("certificationClaimed") is not False:
+            add(findings, "USF-COMPOSE-031", f"{service_id}:iso27001Support.certificationClaimed")
+
+        if (
+            service.get("readinessTier") in STRONGER_CLAIM_TIERS
+            and service.get("evidenceGrade") in WEAK_EVIDENCE_GRADES
+            and not _has_deferred_boundary(service)
+        ):
+            add(findings, "USF-COMPOSE-032", service_id)
+
+        if _is_shared_control_plane(service):
+            for field in [
+                "riskOwner",
+                "accessPosture",
+                "auditPosture",
+                "dataBoundary",
+                "tenantBoundary",
+                "operationalOwnerBoundary",
+                "sharedControlPlaneJustification",
+            ]:
+                if _empty_metadata(service.get(field)) or service.get(field) == "not-applicable":
+                    add(findings, "USF-COMPOSE-033", f"{service_id}:{field}")
+            if service.get("auditPosture") in {"not-required", "deferred"}:
+                add(findings, "USF-COMPOSE-033", f"{service_id}:auditPosture")
+            if service.get("dataBoundary") == "none":
+                add(findings, "USF-COMPOSE-033", f"{service_id}:dataBoundary")
+            for env_name, policy in service.get("environmentPolicies", {}).items():
+                if policy.get("sharingModel") == "shared-control-plane":
+                    for field in ["environmentScopeMechanism", "projectBoundary", "tenantBoundary", "accessBoundary"]:
+                        if policy.get(field) in {None, "", "none", "not-applicable"}:
+                            add(findings, "USF-COMPOSE-033", f"{service_id}:{env_name}:{field}")
+
+        if _is_admin_or_operator_surface(service):
+            for field in [
+                "authRequirement",
+                "auditRequirement",
+                "breakGlassRelevance",
+                "operatorAccessBoundary",
+                "readinessClaimsProhibited",
+            ]:
+                if _empty_metadata(service.get(field)):
+                    add(findings, "USF-COMPOSE-034", f"{service_id}:{field}")
+            if service.get("authRequirement") in {"not-required", "deferred"}:
+                add(findings, "USF-COMPOSE-034", f"{service_id}:authRequirement")
+            if service.get("auditRequirement") in {"not-required", "local-operational-logs", "deferred"}:
+                add(findings, "USF-COMPOSE-034", f"{service_id}:auditRequirement")
+            if service.get("breakGlassRelevance") in {"not-applicable", "deferred"}:
+                add(findings, "USF-COMPOSE-034", f"{service_id}:breakGlassRelevance")
+            if service.get("operatorAccessBoundary", "").startswith("No operator/admin"):
+                add(findings, "USF-COMPOSE-034", f"{service_id}:operatorAccessBoundary")
+
+        if _is_data_bearing(service):
+            for field in [
+                "dataClassification",
+                "tenantBoundary",
+                "backupRestorePosture",
+                "retentionPosture",
+                "failureImpact",
+            ]:
+                if _empty_metadata(service.get(field)):
+                    add(findings, "USF-COMPOSE-035", f"{service_id}:{field}")
+            if service.get("dataClassification") == "none":
+                add(findings, "USF-COMPOSE-035", f"{service_id}:dataClassification")
+            if service.get("tenantBoundary") in {"none", "not-applicable"}:
+                add(findings, "USF-COMPOSE-035", f"{service_id}:tenantBoundary")
+            if service.get("retentionPosture") == "not-required":
+                add(findings, "USF-COMPOSE-035", f"{service_id}:retentionPosture")
+
+        provider_disposition = service.get("providerBoundary", {}).get("disposition")
+        if provider_disposition in {"external-managed", "cloud-provider", "deferred", "out-of-scope"} or service.get(
+            "environmentDisposition"
+        ) in {"external-managed", "cloud-provider", "deferred", "out-of-scope"}:
+            for field in ["providerBoundary", "missingEvidence", "readinessClaimsProhibited"]:
+                if _empty_metadata(service.get(field)):
+                    add(findings, "USF-COMPOSE-036", f"{service_id}:{field}")
+            provider_boundary = service.get("providerBoundary", {})
+            for field in ["supplierBoundary", "evidenceBoundary", "notes"]:
+                if _empty_metadata(provider_boundary.get(field)):
+                    add(findings, "USF-COMPOSE-036", f"{service_id}:providerBoundary.{field}")
+            if missing_prohibited:
+                add(findings, "USF-COMPOSE-036", f"{service_id}:readinessClaimsProhibited")
+
+        for index, port in enumerate(service.get("ports", [])):
+            subject = f"{service_id}:ports.{index}:{port.get('name', '<unnamed>')}"
+            if _port_data_exceeds_service(port, service):
+                add(findings, "USF-COMPOSE-037", f"{subject}:dataClassification")
+            if port.get("adminSurface") and not service.get("adminSurface", {}).get("present"):
+                add(findings, "USF-COMPOSE-037", f"{subject}:adminSurface")
+            if port.get("operatorSurface") and not service.get("operatorSurface", {}).get("present"):
+                add(findings, "USF-COMPOSE-037", f"{subject}:operatorSurface")
+            if port.get("authRequired") and service.get("authRequirement") in {"not-required", "deferred"}:
+                add(findings, "USF-COMPOSE-037", f"{subject}:authRequirement")
+            if port.get("auditRequired") and service.get("auditRequirement") in {
+                "not-required",
+                "local-operational-logs",
+                "deferred",
+            }:
+                add(findings, "USF-COMPOSE-037", f"{subject}:auditRequirement")
+            if set(port.get("readinessClaimsAllowed", [])) & prohibited_claims:
+                add(findings, "USF-COMPOSE-037", f"{subject}:readinessClaimsAllowed")
+            if service.get("secretPosture") == "no-secrets" and port.get("secretExposureRisk") != "none":
+                add(findings, "USF-COMPOSE-037", f"{subject}:secretPosture")
+
+
 def validate_schema(catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
     schema = load_json(SCHEMA_PATH)
     validator = Draft202012Validator(schema)
@@ -368,6 +664,7 @@ def validate_catalogue(catalogue: dict[str, Any], findings: list[dict[str, str]]
                 add(findings, "USF-COMPOSE-015", service_id, "image tag latest is prohibited")
     validate_port_policy(catalogue, findings)
     validate_secret_placeholders(catalogue, findings)
+    validate_service_metadata(catalogue, findings)
 
 
 def _compose_service_names_from_text(text: str) -> set[str]:

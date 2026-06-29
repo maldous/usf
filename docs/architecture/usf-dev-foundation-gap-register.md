@@ -14,7 +14,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 | --- | --- | --- | --- |
 | P0-001 | USF-133 closure bar is undefined between in-memory, minimal compose, and universal compose | Human must accept the target readiness tier before USF-133 can close. | USF-133 remains open; no readiness claim. |
 | P0-002 | Universal React compose services are not all implemented, equivalently substituted, or Linear-tracked | Create exact child blockers or human decisions for every grade C/D service row. | No universal dev foundation claim. |
-| P0-003 | Durable service catalogue/CMDB posture is only this review matrix | Promote or replace the matrix with an accepted service-catalog artefact if required for closure. | Do not treat this generated review as semantic authority. |
+| P0-003 | Durable service catalogue/CMDB posture needed semantic authority and enforcement | `spec/instances/compose-service/service-catalogue.json` is now the semantic service catalogue authority, with service-level owner/risk/control/evidence/non-claim metadata governed by `spec/schemas/compose-service.schema.json` and `tools/validate-compose/validate-compose.py`. | This addresses the catalogue-asset gap only; it does not close USF-133 or claim full dev, test, staging, production, SOC, ISO, or live-provider readiness. |
 
 ## P1 Blockers Before Universal Dev Foundation Claim
 
@@ -62,7 +62,7 @@ Recommended draft-only Linear work, if accepted by a human in a later apply-mode
 | Draft issue | Purpose | Priority |
 | --- | --- | --- |
 | React parity: universal compose service disposition closure | Create exact trackers for all grade C/D compose service rows and close or defer them truthfully. | P0 |
-| React parity: service catalogue and trust-boundary review | Promote the review matrix into durable service catalogue/data-flow/control mapping posture. | P0 |
+| React parity: service catalogue and trust-boundary review | Keep the semantic service catalogue current as service decisions change; use validators to prevent metadata, evidence, and non-claim drift. | P0 follow-up governance |
 | React parity: operational service decisions | Resolve Sentry, SonarQube, ClickHouse, Redis, Meilisearch, ClamAV, LocalStack, WireMock, Windmill, pgAdmin, pgBackRest. | P1 |
 | React parity: operator/admin surface posture | Define admin console set, authn/authz, tenant safety, and future ops UI boundaries. | P1 |
 | React parity: alerting, dashboard, incident posture depth | Resolve Alertmanager, Alloy, dashboards, alert routing, and incident evidence depth. | P2 |
@@ -78,3 +78,11 @@ Recommended draft-only Linear work, if accepted by a human in a later apply-mode
 ## No-Claim Boundary
 
 This register does not claim full React parity readiness, universal dev readiness, staging, production, deployment, live provider, live monitoring, SOC, ISO, legal/regulatory, public API, AI/RAG, or production-live readiness.
+
+## USF-168 Service Catalogue Status
+
+`spec/instances/compose-service/service-catalogue.json` is the semantic authority for Compose service disposition. Generated Compose files are derivative outputs.
+
+USF-168 adds service-level owner, risk owner, control owner, purpose, environment disposition, data classification, readiness tier, evidence grade, control purpose, asset inventory class, access posture, audit posture, secret posture, backup/restore posture, retention posture, tenant boundary, operational owner boundary, ISO/IEC 27001-supporting evidence posture, enterprise feature support posture, and explicit readiness allowed/prohibited claim metadata.
+
+The catalogue supports asset inventory and Statement of Applicability evidence organisation only. It does not claim ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, live-provider readiness, enterprise production readiness, full React parity, or full dev readiness.

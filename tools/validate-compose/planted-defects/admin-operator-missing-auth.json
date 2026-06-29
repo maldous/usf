@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-034",
+  "servicePatches": [
+    {
+      "serviceId": "pgadmin",
+      "values": {
+        "authRequirement": "not-required"
+      }
+    }
+  ]
+}

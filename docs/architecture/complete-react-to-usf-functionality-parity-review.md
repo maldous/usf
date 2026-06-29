@@ -63,12 +63,14 @@ Evidence grades: A=5, B=11, C=7, D=7.
 | ui-runtime | UI/UX app | not-applicable | C | non-blocking | USF-134 | UI/UX is future non-foundation scope. |
 | i18n-runtime | Internationalisation | deferred | C | P2 | future UI/API blocker | Need decide if foundation requires i18n contracts before UI work. |
 | dev-commands | Developer command parity | partial | B | P1 | USF-133 follow-up | Commands exist, but Sonar/Sentry/compose-universal command parity remains incomplete. |
-| service-catalog-cmdb | Service catalogue/CMDB | partial | C | P0 | new tracker recommended | Need durable service catalogue or accepted matrix before close. |
+| service-catalog-cmdb | Service catalogue/CMDB | partial | C | P0 | USF-168 / `spec/instances/compose-service/service-catalogue.json` | Semantic service catalogue authority now exists and is validator-enforced, but it does not close USF-133 or prove broader readiness. |
 | data-flow-trust-boundaries | Data flows/trust boundaries | partial | C | P0 | new tracker recommended | Need complete data-flow/trust-boundary review for missing optional services. |
 
 ## Service Catalogue and CMDB Interpretation
 
-The dedicated compose matrix is a review catalogue, not a durable CMDB. It records service purpose, criticality, provider-mode posture, control themes, data classification, and the recommended tracking carrier. A durable service-catalog artefact or accepted matrix should be created before USF-133 closure if universal dev foundation is the intended bar.
+The dedicated compose matrix is a review catalogue, not the durable CMDB. The semantic service catalogue is `spec/instances/compose-service/service-catalogue.json`, governed by `spec/schemas/compose-service.schema.json` and `tools/validate-compose/validate-compose.py`. It records service purpose, owner, risk owner, control owner, environment disposition, data classification, readiness tier, evidence grade, access/audit/secret/backup/retention posture, tenant and operator boundaries, ISO/IEC 27001-supporting evidence posture, enterprise feature support posture, and explicit readiness non-claims.
+
+This service catalogue remains bounded to service disposition and generated Compose derivation. It does not claim full React parity readiness, full dev readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, or enterprise production readiness.
 
 ## Control Mapping
 
