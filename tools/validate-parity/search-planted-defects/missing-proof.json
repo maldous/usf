@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-SEARCH-004",
+  "override": {
+    "removeText": [
+      {
+        "path": "packages/proof/src/search-indexing-proof.ts",
+        "text": "liveSearchProviderReadinessClaim: false"
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-SEARCH-005",
+  "override": {
+    "removeText": [
+      {
+        "path": "tests/capabilities/search-indexing.test.ts",
+        "text": "tenant A cannot search tenant B documents"
+      }
+    ]
+  }
+}

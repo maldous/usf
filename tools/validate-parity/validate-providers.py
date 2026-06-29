@@ -91,6 +91,9 @@ REQUIRED_CATEGORIES = {
     "api-gateway",
     "observability",
     "search-index",
+    "full-text-search",
+    "autocomplete",
+    "vector-search",
 }
 
 REQUIRED_MODES = {

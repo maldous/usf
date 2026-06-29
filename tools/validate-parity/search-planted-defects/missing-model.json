@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-SEARCH-001",
+  "override": {
+    "removeText": [
+      {
+        "path": "packages/core/src/index.ts",
+        "text": "SEARCHABLE_RESOURCE_CLASSIFICATIONS"
+      }
+    ]
+  }
+}

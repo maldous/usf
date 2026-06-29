@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-SEARCH-003",
+  "override": {
+    "removeText": [
+      {
+        "path": "packages/ports/src/index.ts",
+        "text": "SearchIndexPort"
+      }
+    ]
+  }
+}

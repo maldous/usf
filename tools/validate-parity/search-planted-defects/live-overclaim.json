@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-SEARCH-007",
+  "override": {
+    "appendText": [
+      {
+        "path": "docs/architecture/search-indexing-and-discovery-standard.md",
+        "text": "\nlive search provider readiness is proven\n"
+      }
+    ]
+  }
+}

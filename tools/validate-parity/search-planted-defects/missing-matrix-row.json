@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-SEARCH-006",
+  "override": {
+    "matrixRemoveRows": [
+      "search.semantic-model"
+    ]
+  }
+}
