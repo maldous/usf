@@ -229,6 +229,25 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 | `tools/validate-parity/validate-bulk.py` | source-derived-rewrite | Existing parity validator pattern and import/export/bulk validator expectations | Static parity validator for import/export/bulk invariants and overclaim prevention. |
 | `tools/validate-parity/bulk-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk import/export/bulk validator rules fire. |
 
+## Parity Search/Indexing Additions
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `docs/architecture/search-indexing-and-discovery-standard.md` | source-derived-rewrite | React search ports, use case, route proofs, Postgres FTS/RLS proof lineage, and USF-164 enterprise controlled-discovery controls | Defines search as tenant-safe controlled discovery, including classifications, index governance, query safety, counts/facets/cursors, stale-index handling, reindex jobs, provider posture, audit, observability, guardrails, and deferred depth. |
+| `docs/architecture/parity-search-indexing-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the search/indexing slice. |
+| `packages/core/src/index.ts` | source-derived-rewrite | React search document, secret-field rejection, permission-filter, reindex, readiness, proof lineage, and follow-up controls | Adds searchable classifications, resource types, index lifecycle, source revalidation, safe result projection, query validation, cursor integrity, search audit events, and search provider registry posture. |
+| `packages/ports/src/index.ts` | source-derived-rewrite | React SearchIndexPort/SearchQueryPort lineage | Adds `SearchIndexPort` for capability/adapter separation and local/dev/test provider status. |
+| `adapters/search/package.json` | new-with-rationale | USF adapter workspace pattern | Workspace metadata for the search adapter. |
+| `adapters/search/src/index.ts` | source-derived-rewrite | React in-memory test repository and Postgres FTS behaviour evidence rewritten for USF | Implements tenant-scoped in-memory index/query, allow-listed facets, tenant-bound cursors, safe result projections, and no live search/vector/AI claim. |
+| `capabilities/search/package.json` | new-with-rationale | USF capability workspace pattern | Workspace metadata for the search capability. |
+| `capabilities/search/src/index.ts` | source-derived-rewrite | React search use case, route guard proof, reindex audit, and isolation proof lineage | Implements PDP-protected, guardrail-aware, file/job/audit/telemetry-linked search service with value-free audit and stale-source denial. |
+| `packages/proof/src/search-indexing-proof.ts` | source-derived-rewrite | React `proof:search`, `proof:search-isolation`, and `proof:search-routes` rewritten as a hermetic foundation proof | Proves tenant-safe redacted search, cursor/facet/count isolation, file-derived gating, guardrails, reindex jobs, audit, telemetry, and no live provider/AI/public API/production claim. |
+| `packages/proof/src/index.ts` | evidence-only-support | Proof package target | Exports search-indexing proof. |
+| `tests/capabilities/search-indexing.test.ts` | source-derived-rewrite | React search unit/proof behaviours rewritten as foundation tests plus USF-164 follow-up controls | Tests tenant isolation, PDP denial, unknown resource/classification/filter/sort/facet/query failures, redaction, file-derived scan gate, stale/deleted hiding, guardrails, reindex idempotency, and provider no-claim posture. |
+| `tests/packages/proof.test.ts` | evidence-only-support | Proof package test pattern | Runs search-indexing proof in-process. |
+| `tools/validate-parity/validate-search.py` | source-derived-rewrite | Existing parity validator pattern and search validator expectations | Static parity validator for search/indexing invariants and overclaim prevention. |
+| `tools/validate-parity/search-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk search/indexing validator rules fire. |
+
 ## Boundary Confirmation
 
 No file in this matrix is copied from `../react`; no target path mirrors a historical source path; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.

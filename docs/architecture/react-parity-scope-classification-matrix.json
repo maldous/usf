@@ -3594,6 +3594,394 @@
       ],
       "evidence": "React API/UI lineage behaviours for tenant isolation, route protection, validation, import/export evidence, and file safety are rewritten as foundation tests; no Playwright added.",
       "retry_condition": "UI/UX remains future non-foundation work"
+    },
+    {
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/search.ts",
+        "apps/platform-api/src/ports/search-repository.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.semantic-model",
+      "behaviour_summary": "Search is a controlled discovery surface with distinct source-of-truth, index document, query, result, facet, count, autocomplete, stale-index, and reindex concepts.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/search-indexing-and-discovery-standard.md",
+        "packages/core/src/index.ts",
+        "capabilities/search/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof (packages/proof/src/search-indexing-proof.ts)",
+        "make parity (validate-search with planted defects)"
+      ],
+      "evidence": "USF-164 search standard and core model define controlled discovery, not source authority.",
+      "retry_condition": "n/a"
+    },
+    {
+      "category": "schema",
+      "react_paths": [
+        "apps/platform-api/src/db/migrations/026-search-documents.sql",
+        "packages/contracts-admin/src/index.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.index-document-governance",
+      "behaviour_summary": "Index documents are tenant-scoped, classified, versioned, redacted projections with lifecycle, source hash, field allowlists, retention, deletion/purge, and legal-hold posture.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/search/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Core createSearchIndexDocument rejects unknown classifications/resource types and sensitive fields.",
+      "retry_condition": "persistent DB-backed search index remains deferred"
+    },
+    {
+      "category": "port",
+      "react_paths": [
+        "apps/platform-api/src/ports/search-repository.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.port-adapter-boundary",
+      "behaviour_summary": "Search capability depends on USF SearchIndexPort; provider-specific/live search implementations remain outside capability code.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/ports/src/index.ts",
+        "adapters/search/src/index.ts",
+        "capabilities/search/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "SearchIndexPort plus InMemorySearchIndex prove local/dev/test boundary.",
+      "retry_condition": "n/a"
+    },
+    {
+      "category": "adapter",
+      "react_paths": [
+        "apps/platform-api/tests/unit/search.test.ts",
+        "apps/platform-api/src/adapters/postgres-search-repository.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.in-memory-index",
+      "behaviour_summary": "In-memory local/dev/test search adapter supports index, delete, tenant-scoped query, facets/counts over authorised scope, opaque cursors, and safe status view.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "adapters/search/package.json",
+        "adapters/search/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Hermetic adapter has no live provider readiness claim.",
+      "retry_condition": "distributed/persistent search adapters deferred"
+    },
+    {
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/scripts/search-isolation-runtime-proof.ts",
+        "apps/platform-api/tests/unit/search.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.tenant-isolation-pdp",
+      "behaviour_summary": "Tenant A cannot search, count, facet, cursor, or infer Tenant B documents; protected actions go through PDP.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "capabilities/search/src/index.ts",
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Capability tests cover cross-tenant query/count/facet/cursor denial and PDP denial.",
+      "retry_condition": "n/a"
+    },
+    {
+      "category": "schema",
+      "react_paths": [
+        "packages/contracts-admin/src/index.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.query-filter-sort-facet",
+      "behaviour_summary": "Query length/terms, filters, sorts, facets, counts, and pagination cursors are allow-listed, bounded, tenant-scoped, and safe.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Tests prove unknown filter/sort/facet, oversized query, and cross-tenant cursor fail closed.",
+      "retry_condition": "n/a"
+    },
+    {
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/search.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.field-redaction-snippets",
+      "behaviour_summary": "Search results omit body, secret metadata, object keys, recipient addresses, restricted fields, and unsafe snippets.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/search/src/index.ts",
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Safe projection and leak tests cover redacted fields and blocked values.",
+      "retry_condition": "n/a"
+    },
+    {
+      "category": "service",
+      "react_paths": [
+        "apps/platform-api/src/usecases/search.ts",
+        "apps/platform-api/src/db/migrations/026-search-documents.sql"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.file-derived-content",
+      "behaviour_summary": "File-derived searchable content inherits file posture; quarantined, infected, pending-scan, deleted, purged, or blocked files are not indexed or returned.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/search/src/index.ts",
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Tests prove quarantined file-derived documents fail closed and deleted sources are hidden.",
+      "retry_condition": "OCR/extraction provider depth deferred"
+    },
+    {
+      "category": "job",
+      "react_paths": [
+        "apps/platform-api/src/usecases/search.ts",
+        "apps/platform-api/scripts/search-runtime-proof.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.reindex-jobs",
+      "behaviour_summary": "Reindex is a tenant-scoped, idempotent operational job with a concrete service actor and value-free audit evidence.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "capabilities/search/src/index.ts",
+        "packages/proof/src/search-indexing-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Reindex test/proof check service actor, idempotency, job creation, and audit events.",
+      "retry_condition": "distributed reindex workers deferred"
+    },
+    {
+      "category": "provider",
+      "react_paths": [
+        "docs/architecture/build-versus-compose-decision-framework.md",
+        "apps/platform-api/src/adapters/postgres-search-repository.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.provider-posture",
+      "behaviour_summary": "Search provider modes distinguish in-memory local/dev/test from deferred full-text, autocomplete, vector, embedding, external search, and AI/RAG providers.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/provider-adapters-and-modes-standard.md",
+        "docs/architecture/search-indexing-and-discovery-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts",
+        "tests/capabilities/provider-adapters.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof",
+        "make providers-proof"
+      ],
+      "evidence": "Provider registry contains in-memory search and deferred full-text/autocomplete/vector classes without live claims.",
+      "retry_condition": "USF-164 tracks any later live-search/vector/AI provider authority and proof"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "apps/platform-api/tests/unit/search.test.ts",
+        "apps/platform-api/scripts/search-routes-runtime-proof.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.guardrails-abuse",
+      "behaviour_summary": "Search queries, high-volume query, cursor misuse, autocomplete posture, enumeration, and reindex are represented with guardrail and abuse-signal posture.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "capabilities/search/src/index.ts",
+        "docs/architecture/search-indexing-and-discovery-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Concrete guardrail denial path and high-volume query signal posture are proven; broad runtime rollout deferred.",
+      "retry_condition": "USF-164 deferred depth covers autocomplete and broad exfiltration detection rollout"
+    },
+    {
+      "category": "audit",
+      "react_paths": [
+        "packages/audit-events/src/index.ts",
+        "apps/platform-api/src/usecases/search.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.audit-observability",
+      "behaviour_summary": "Search query, denial, result-access-denial, index update/delete, and reindex events are value-free and linked to tenant-safe telemetry/security signals.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/search/src/index.ts",
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Search audit events and telemetry signals are emitted without raw query text or restricted payloads.",
+      "retry_condition": "n/a"
+    },
+    {
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/server/routes.ts",
+        "apps/platform-api/scripts/search-routes-runtime-proof.ts",
+        "packages/contracts-admin/src/index.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.api-openapi-posture",
+      "behaviour_summary": "Future search API/OpenAPI surfaces must be tenant-scoped, PDP-protected, guardrail-aware, synthetic-example-only, redacted, and cursor-safe.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/search-indexing-and-discovery-standard.md",
+        "docs/architecture/parity-search-indexing-source-use-disposition-matrix.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof"
+      ],
+      "evidence": "Capability/contract posture is defined and proven; HTTP routes are intentionally deferred to avoid premature public API surface.",
+      "retry_condition": "USF-164 or a later API-surface child authorises bounded search routes/OpenAPI entries"
+    },
+    {
+      "category": "service",
+      "react_paths": [
+        "apps/react-enterprise-app/src/routes/admin/search.tsx",
+        "apps/platform-api/scripts/search-routes-runtime-proof.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-164",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "search.react-ui-playwright-behaviours",
+      "behaviour_summary": "Foundation search behaviours from React UI/API lineage are rewritten as capability/proof tests; UI assertions remain out of scope.",
+      "usf_status": "foundation-behaviour-rewritten-from-ui-test",
+      "usf_paths": [
+        "tests/capabilities/search-indexing.test.ts",
+        "packages/proof/src/search-indexing-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/search-indexing.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make search-proof",
+        "make parity (validate-search with planted defects)"
+      ],
+      "evidence": "Search route authorization, tenant isolation, result redaction, and reindex behaviours are rewritten without Playwright/browser E2E.",
+      "retry_condition": "UI/UX remains future non-foundation work"
     }
   ],
   "uiArtefacts": [
