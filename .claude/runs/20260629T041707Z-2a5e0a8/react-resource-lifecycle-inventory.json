@@ -1,0 +1,242 @@
+[
+  {
+    "react_item_id": "react.resource.package-lifecycle-metadata",
+    "category": "lifecycle",
+    "react_paths": [
+      "../react/packages/contracts-ingestion/package.json",
+      "../react/tools/architecture/validate-pipeline-composition/package.json",
+      "../react/tools/architecture/generate-lifecycle-reports/package.json",
+      "../react/packages/tooling-docker/package.json",
+      "../react/tools/architecture/generate-lifecycle-reports/tests/fixtures/valid/docs/schemas/package-json-architecture.schema.json",
+      "../react/packages/tooling-ci/package.json",
+      "../react/tools/architecture/generate-lifecycle-reports/tests/fixtures/valid/packages/maintenance-domain/package.json",
+      "../react/tools/architecture/generate-lifecycle-reports/tests/fixtures/valid/packages/external-adapter/package.json"
+    ],
+    "react_tests": [
+      "../react/compose.yaml",
+      "../react/config/environments/test.json",
+      "../react/make/compose.mk",
+      "../react/make/tools.mk",
+      "../react/e2e/ui-contract.json",
+      "../react/make/test.mk",
+      "../react/tools/architecture/validate-pipeline-composition/package.json",
+      "../react/packages/contracts-ingestion/tests/contracts-ingestion.test.ts"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical package metadata and generated reports classify package lifecycle stages and enforce generated-output ownership.",
+    "foundation_relevance": "covered",
+    "usf_target": "docs/architecture/react-parity-scope-classification-matrix.json and existing source-use validation; resource slice records lifecycle concepts but does not copy package metadata runtime.",
+    "source_use": "lineage-only",
+    "notes": "Historical package lifecycle is evidence for lifecycle governance terminology, not a resource runtime model."
+  },
+  {
+    "react_item_id": "react.resource.import-boundary-relationship-rules",
+    "category": "relationship",
+    "react_paths": [
+      "../react/docs/architecture/import-boundary-rules.json",
+      "../react/docs/architecture/import-boundary-rules.md",
+      "../react/docs/evidence/architecture/package-metadata-vocabulary-validation.md",
+      "../react/docs/v2-foundation/shards/inventory-11.json",
+      "../react/tools/architecture/validate-source-imports/src/index.mjs",
+      "../react/docs/adr/0011-define-architecture-tooling-execution-model.md",
+      "../react/docs/evidence/lifecycle/adr-act-0288-c1-deprecation.md",
+      "../react/docs/adr/ACTION-REGISTER.md"
+    ],
+    "react_tests": [
+      "../react/make/tools.mk",
+      "../react/tools/architecture/validate-pipeline-composition/package.json",
+      "../react/tools/architecture/validate-pipeline-composition/src/index.mjs",
+      "../react/tools/architecture/validate-pipeline-composition/README.md",
+      "../react/tools/architecture/generate-lifecycle-reports/package.json",
+      "../react/tools/architecture/generate-lifecycle-reports/README.md",
+      "../react/tools/architecture/orchestrator/package.json",
+      "../react/tools/architecture/orchestrator/tests/orchestrator-unit.test.mjs"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical architecture rules express package ownership, dependency relationships, domain boundaries, and forbidden adapter/framework imports.",
+    "foundation_relevance": "covered",
+    "usf_target": "resource relationship standard and validator rows; existing provider/API validators already enforce capability/provider boundaries.",
+    "source_use": "rewrite-from-behaviour",
+    "notes": "Rewritten as resource relationship and referential integrity posture, not path mirroring."
+  },
+  {
+    "react_item_id": "react.resource.identity-records-and-membership-state",
+    "category": "record",
+    "react_paths": [
+      "../react/e2e/external/tenant-prod.spec.ts",
+      "../react/docker/caddy/Caddyfile",
+      "../react/e2e/prod/api-contract.test.ts",
+      "../react/e2e/prod/security-headers.test.ts",
+      "../react/e2e/identity/broker-login.spec.ts",
+      "../react/e2e/identity/global-setup.ts",
+      "../react/packages/adapters-redis/package.json",
+      "../react/packages/audit-events/tests/audit-events.test.ts"
+    ],
+    "react_tests": [
+      "../react/compose.yaml",
+      "../react/README.md",
+      "../react/e2e/external/caddy-links.spec.ts",
+      "../react/e2e/external/auth-negative.spec.ts",
+      "../react/e2e/external/tool-services.spec.ts",
+      "../react/e2e/external/logout.spec.ts",
+      "../react/e2e/external/tenant-prod.spec.ts",
+      "../react/docker/caddy/Caddyfile"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical identity and membership behaviours rely on stable records, status changes, and tenant-scoped membership state.",
+    "foundation_relevance": "covered",
+    "usf_target": "capabilities/auth, capabilities/tenant, DB/RLS, PDP proof; resource slice adds generalized governed-record semantics.",
+    "source_use": "rewrite-from-behaviour",
+    "notes": "Identity semantics already migrated; resource lifecycle must interoperate without redefining identity authority."
+  },
+  {
+    "react_item_id": "react.resource.api-mutation-and-graphql-state",
+    "category": "mutation",
+    "react_paths": [
+      "../react/compose.yaml",
+      "../react/e2e/ui-contract.json",
+      "../react/docker/caddy/Caddyfile",
+      "../react/tools/architecture/generate-lifecycle-reports/tests/fixtures/valid/packages/stable-contract/package.json",
+      "../react/e2e/prod/admin-tools.test.ts",
+      "../react/docker/grafana/dashboards/platform-api-red-method.json",
+      "../react/packages/graphql-browser-client/package.json",
+      "../react/packages/graphql-browser-client/tests/client.test.ts"
+    ],
+    "react_tests": [
+      "../react/e2e/ui-contract.json",
+      "../react/e2e/prod/api-contract.test.ts",
+      "../react/tools/architecture/generate-lifecycle-reports/tests/fixtures/valid/packages/stable-contract/package.json",
+      "../react/packages/graphql-browser-client/package.json",
+      "../react/packages/graphql-browser-client/tests/client.test.ts",
+      "../react/packages/graphql-browser-client/src/client.ts",
+      "../react/packages/config-runtime/package.json",
+      "../react/packages/graphql-browser-client/README.md"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical API and GraphQL routes include mutation posture, tenant context, request ids, and route-level authorization concerns.",
+    "foundation_relevance": "covered",
+    "usf_target": "API/contracts proof plus new resource mutation service tests for schema-bound mutation and conflict handling.",
+    "source_use": "rewrite-from-behaviour",
+    "notes": "No React route paths copied; behaviours become capability and proof tests."
+  },
+  {
+    "react_item_id": "react.resource.persistence-and-lifecycle-records",
+    "category": "lifecycle",
+    "react_paths": [
+      "../react/compose.yaml",
+      "../react/config/environments/dev.json",
+      "../react/README.md",
+      "../react/renovate.json",
+      "../react/config/environments/staging.json",
+      "../react/config/environments/prod.json",
+      "../react/config/environments/test.json",
+      "../react/config/environments/shared.json"
+    ],
+    "react_tests": [
+      "../react/config/environments/dev.json",
+      "../react/README.md",
+      "../react/renovate.json",
+      "../react/config/environments/staging.json",
+      "../react/config/environments/prod.json",
+      "../react/config/environments/test.json",
+      "../react/config/environments/shared.json",
+      "../react/config/environments/common.json"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical persistence posture includes schema-per-tenant/RLS lineage, generated schema evidence, stateful records, and lifecycle/retention vocabulary.",
+    "foundation_relevance": "must-migrate",
+    "usf_target": "resource lifecycle core model, service, proof, tests, standard, and validator.",
+    "source_use": "rewrite-from-behaviour",
+    "notes": "This slice provides the missing generic resource lifecycle and relationship foundation."
+  },
+  {
+    "react_item_id": "react.resource.file-and-search-derived-records",
+    "category": "relationship",
+    "react_paths": [
+      "../react/Tiltfile",
+      "../react/make/quality.mk",
+      "../react/compose.yaml",
+      "../react/README.md",
+      "../react/make/compose.mk",
+      "../react/make/e2e.mk",
+      "../react/tools/architecture/validate-compose-ports/src/index.mjs",
+      "../react/tools/architecture/validate-pipeline-composition/package.json"
+    ],
+    "react_tests": [
+      "../react/Tiltfile",
+      "../react/make/quality.mk",
+      "../react/compose.yaml",
+      "../react/README.md",
+      "../react/make/compose.mk",
+      "../react/make/e2e.mk",
+      "../react/tools/architecture/validate-compose-ports/src/index.mjs",
+      "../react/tools/architecture/validate-pipeline-composition/package.json"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical file/search behaviours imply derived-resource relationships, redacted results, indexing lifecycle, and object-key secrecy.",
+    "foundation_relevance": "covered",
+    "usf_target": "files and search slices plus resource interaction proof for search/import/export safety.",
+    "source_use": "rewrite-from-behaviour",
+    "notes": "Resource slice proves it does not leak object keys and hides deleted resources from search/export posture."
+  },
+  {
+    "react_item_id": "react.resource.bulk-data-movement-records",
+    "category": "mutation",
+    "react_paths": [
+      "../react/make/quality.mk",
+      "../react/make/tools.mk",
+      "../react/e2e/ui-contract.json",
+      "../react/packages/contracts-ingestion/tests/contracts-ingestion.test.ts",
+      "../react/docker/entrypoint-api.sh",
+      "../react/packages/contracts-ingestion/src/index.ts",
+      "../react/docker/keycloak/themes/platform/login/resources/css/brand-6.css",
+      "../react/docker/caddy/Caddyfile"
+    ],
+    "react_tests": [
+      "../react/make/tools.mk",
+      "../react/docker/keycloak/themes/platform/login/resources/css/brand-6.css",
+      "../react/packages/adapters-object-storage/tests/adapters-object-storage.test.ts",
+      "../react/packages/graphql-browser-client/package.json",
+      "../react/packages/graphql-browser-client/README.md",
+      "../react/packages/config-runtime/src/index.ts",
+      "../react/packages/i18n-runtime/src/index.ts",
+      "../react/tools/architecture/orchestrator/package.json"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical bulk/import/export lineage implies high-volume resource mutation, validation, idempotency, preview, and evidence posture.",
+    "foundation_relevance": "covered",
+    "usf_target": "bulk slice plus resource lifecycle import/export interaction proof.",
+    "source_use": "rewrite-from-behaviour",
+    "notes": "No production data migration readiness claim."
+  },
+  {
+    "react_item_id": "react.resource-ui-playwright-behaviour-lineage",
+    "category": "resource-test",
+    "react_paths": [
+      "../react/make/e2e.mk",
+      "../react/e2e/ui-contract.json",
+      "../react/make/test.mk",
+      "../react/env/stage-policy.yaml",
+      "../react/e2e/external/caddy-links.spec.ts",
+      "../react/e2e/external/auth-negative.spec.ts",
+      "../react/e2e/external/tool-services.spec.ts",
+      "../react/e2e/external/smoke.test.ts"
+    ],
+    "react_tests": [
+      "../react/compose.yaml",
+      "../react/config/environments/test.json",
+      "../react/make/compose.mk",
+      "../react/make/e2e.mk",
+      "../react/e2e/ui-contract.json",
+      "../react/make/test.mk",
+      "../react/env/stage-policy.yaml",
+      "../react/tools/architecture/validate-pipeline-composition/package.json"
+    ],
+    "react_proofs": [],
+    "behaviour_summary": "Historical UI and browser tests may exercise resource mutation and state transition behaviours indirectly.",
+    "foundation_relevance": "covered",
+    "usf_target": "resource capability/proof tests; no UI and no Playwright introduced.",
+    "source_use": "lineage-only",
+    "notes": "UI behaviour is classified and rewritten as foundation tests where relevant."
+  }
+]

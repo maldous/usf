@@ -1,0 +1,58 @@
+[
+  {
+    "react_item_id": "react.resource.package-lifecycle-metadata",
+    "status": "covered",
+    "usf_target": "docs/architecture/react-parity-scope-classification-matrix.json and existing source-use validation; resource slice records lifecycle concepts but does not copy package metadata runtime.",
+    "linear_issue": null,
+    "notes": "Historical package lifecycle is evidence for lifecycle governance terminology, not a resource runtime model."
+  },
+  {
+    "react_item_id": "react.resource.import-boundary-relationship-rules",
+    "status": "covered",
+    "usf_target": "resource relationship standard and validator rows; existing provider/API validators already enforce capability/provider boundaries.",
+    "linear_issue": null,
+    "notes": "Rewritten as resource relationship and referential integrity posture, not path mirroring."
+  },
+  {
+    "react_item_id": "react.resource.identity-records-and-membership-state",
+    "status": "covered",
+    "usf_target": "capabilities/auth, capabilities/tenant, DB/RLS, PDP proof; resource slice adds generalized governed-record semantics.",
+    "linear_issue": null,
+    "notes": "Identity semantics already migrated; resource lifecycle must interoperate without redefining identity authority."
+  },
+  {
+    "react_item_id": "react.resource.api-mutation-and-graphql-state",
+    "status": "covered",
+    "usf_target": "API/contracts proof plus new resource mutation service tests for schema-bound mutation and conflict handling.",
+    "linear_issue": null,
+    "notes": "No React route paths copied; behaviours become capability and proof tests."
+  },
+  {
+    "react_item_id": "react.resource.persistence-and-lifecycle-records",
+    "status": "migrated",
+    "usf_target": "resource lifecycle core model, service, proof, tests, standard, and validator.",
+    "linear_issue": "USF-165",
+    "notes": "Implemented by the resource lifecycle core model, in-memory store, PDP-protected service, proof, tests, standard, source-use, and validator."
+  },
+  {
+    "react_item_id": "react.resource.file-and-search-derived-records",
+    "status": "covered",
+    "usf_target": "files and search slices plus resource interaction proof for search/import/export safety.",
+    "linear_issue": null,
+    "notes": "Resource slice proves it does not leak object keys and hides deleted resources from search/export posture."
+  },
+  {
+    "react_item_id": "react.resource.bulk-data-movement-records",
+    "status": "covered",
+    "usf_target": "bulk slice plus resource lifecycle import/export interaction proof.",
+    "linear_issue": null,
+    "notes": "No production data migration readiness claim."
+  },
+  {
+    "react_item_id": "react.resource-ui-playwright-behaviour-lineage",
+    "status": "covered",
+    "usf_target": "resource capability/proof tests; no UI and no Playwright introduced.",
+    "linear_issue": null,
+    "notes": "UI behaviour is classified and rewritten as foundation tests where relevant."
+  }
+]
