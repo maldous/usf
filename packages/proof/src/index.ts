@@ -9,3 +9,4 @@ export { runObservabilityTelemetryProof } from "./observability-telemetry-proof.
 export { runRateLimitsAbuseControlsProof } from "./rate-limits-abuse-controls-proof.ts";
 export { runImportExportBulkProof } from "./import-export-bulk-proof.ts";
 export { runSearchIndexingProof } from "./search-indexing-proof.ts";
+export { runResourceLifecycleProof } from "./resource-lifecycle-proof.ts";

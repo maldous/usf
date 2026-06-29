@@ -6542,3 +6542,768 @@ export function validateSearchQueryRequest(
     nowMs,
   });
 }
+
+// ---------------------------------------------------------------------------
+// Resource lifecycle, relationships, and schema-bound mutations (USF-165).
+//
+// Resources are governed tenant records. This model is local/dev/test parity
+// foundation only: it does not claim production legal record-management,
+// eDiscovery, regulatory retention, or production-live readiness.
+// ---------------------------------------------------------------------------
+
+export const RESOURCE_CLASSIFICATIONS = Object.freeze([
+  "public",
+  "tenant-data",
+  "confidential",
+  "restricted",
+  "security-sensitive",
+  "audit-sensitive",
+  "regulated",
+  "file-backed",
+  "search-indexed",
+  "bulk-managed",
+  "identity-derived",
+  "configuration-derived",
+  "provider-derived",
+  "system-internal",
+  "test-only",
+] as const);
+export type ResourceClassification = (typeof RESOURCE_CLASSIFICATIONS)[number];
+
+export const RESOURCE_TYPES = Object.freeze([
+  "tenant-record",
+  "file",
+  "bulk-operation",
+  "search-document",
+  "identity",
+  "configuration",
+  "provider",
+  "audit-event",
+  "notification",
+  "job",
+  "workflow",
+  "test-resource",
+] as const);
+export type ResourceType = (typeof RESOURCE_TYPES)[number];
+
+export const RESOURCE_LIFECYCLE_STATUSES = Object.freeze([
+  "draft",
+  "active",
+  "suspended",
+  "archived",
+  "soft-deleted",
+  "pending-delete",
+  "purge-eligible",
+  "purged",
+  "locked",
+  "held",
+  "merged",
+  "superseded",
+  "rejected",
+  "expired",
+] as const);
+export type ResourceLifecycleStatus = (typeof RESOURCE_LIFECYCLE_STATUSES)[number];
+
+export const RESOURCE_RELATIONSHIP_TYPES = Object.freeze([
+  "owns",
+  "belongs-to",
+  "references",
+  "depends-on",
+  "contains",
+  "derived-from",
+  "created-by",
+  "assigned-to",
+  "linked-to",
+  "supersedes",
+] as const);
+export type ResourceRelationshipType = (typeof RESOURCE_RELATIONSHIP_TYPES)[number];
+
+export const RESOURCE_MUTATION_TYPES = Object.freeze([
+  "create",
+  "update",
+  "patch",
+  "transition",
+  "archive",
+  "restore",
+  "soft-delete",
+  "purge",
+  "lock",
+  "unlock",
+  "link",
+  "unlink",
+] as const);
+export type ResourceMutationType = (typeof RESOURCE_MUTATION_TYPES)[number];
+
+export const RESOURCE_FIELD_CLASSIFICATIONS = Object.freeze([
+  "public",
+  "internal",
+  "confidential",
+  "restricted",
+  "security-sensitive",
+] as const);
+export type ResourceFieldClassification = (typeof RESOURCE_FIELD_CLASSIFICATIONS)[number];
+
+export const RESOURCE_DEFAULT_ALLOWED_TRANSITIONS: Readonly<
+  Record<ResourceLifecycleStatus, readonly ResourceLifecycleStatus[]>
+> = {
+  draft: ["active", "rejected", "expired"],
+  active: [
+    "suspended",
+    "archived",
+    "soft-deleted",
+    "purge-eligible",
+    "locked",
+    "held",
+    "merged",
+    "superseded",
+  ],
+  suspended: ["active", "archived", "soft-deleted"],
+  archived: ["active", "purge-eligible"],
+  "soft-deleted": ["active", "purge-eligible"],
+  "pending-delete": ["purge-eligible", "active"],
+  "purge-eligible": ["purged", "active"],
+  purged: [],
+  locked: ["active", "archived"],
+  held: ["active", "archived"],
+  merged: ["archived"],
+  superseded: ["archived"],
+  rejected: ["draft", "purge-eligible"],
+  expired: ["archived", "purge-eligible"],
+};
+
+export class ResourcePolicyError extends Error {
+  readonly reasonCode: string;
+
+  constructor(reasonCode: string, message: string) {
+    super(message);
+    this.name = "ResourcePolicyError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export interface ResourceFieldDefinition {
+  readonly fieldPath: string;
+  readonly classification: ResourceFieldClassification;
+  readonly required: boolean;
+  readonly mutable: boolean;
+  readonly visible: boolean;
+  readonly allowedOnCreate: boolean;
+  readonly allowedOnUpdate: boolean;
+  readonly restrictedAction: string | null;
+}
+
+export interface ResourceLifecycleTransitionRule {
+  readonly from: ResourceLifecycleStatus;
+  readonly to: ResourceLifecycleStatus;
+  readonly requiredAction: string;
+  readonly approvalRequired: boolean;
+  readonly requesterCannotApprove: boolean;
+}
+
+export interface ResourceSchemaDefinition {
+  readonly resourceType: ResourceType;
+  readonly schemaVersion: string;
+  readonly schemaHash: string;
+  readonly owningCapability: string;
+  readonly fields: readonly ResourceFieldDefinition[];
+  readonly transitions: readonly ResourceLifecycleTransitionRule[];
+}
+
+export interface ResourceRecord {
+  readonly resourceId: string;
+  readonly resourceType: ResourceType;
+  readonly classification: ResourceClassification;
+  readonly status: ResourceLifecycleStatus;
+  readonly tenantId: string | null;
+  readonly ownerActorId: string | null;
+  readonly stewardActorId: string | null;
+  readonly schemaVersion: string;
+  readonly schemaHash: string;
+  readonly version: number;
+  readonly revision: string;
+  readonly etag: string;
+  readonly fields: Readonly<Record<string, string>>;
+  readonly fieldClassifications: Readonly<Record<string, ResourceFieldClassification>>;
+  readonly immutableFields: readonly string[];
+  readonly hiddenFields: readonly string[];
+  readonly sourceRef: string | null;
+  readonly sourceHash: string | null;
+  readonly idempotencyKey: string;
+  readonly dedupeKey: string;
+  readonly correlationId: string;
+  readonly causationId: string | null;
+  readonly requestId: string;
+  readonly traceId: string | null;
+  readonly createdBy: string;
+  readonly updatedBy: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+  readonly locked: boolean;
+  readonly lockReason: string | null;
+  readonly legalHold: boolean;
+  readonly retentionPolicy: string;
+  readonly retainUntil: string | null;
+  readonly purgeAllowedAt: string | null;
+  readonly archivedAt: string | null;
+  readonly deletedAt: string | null;
+  readonly purgedAt: string | null;
+}
+
+export interface ResourceRelationshipRecord {
+  readonly relationshipId: string;
+  readonly relationshipType: ResourceRelationshipType;
+  readonly tenantId: string | null;
+  readonly sourceResourceId: string;
+  readonly targetResourceId: string;
+  readonly sourceResourceType: string;
+  readonly targetResourceType: string;
+  readonly required: boolean;
+  readonly directional: boolean;
+  readonly acyclic: boolean;
+  readonly cardinality: "one-to-one" | "one-to-many" | "many-to-one" | "many-to-many";
+  readonly cascadePolicy: "restrict" | "detach" | "cascade-soft-delete" | "cascade-purge";
+  readonly createdBy: string;
+  readonly createdAt: string;
+  readonly correlationId: string;
+}
+
+export interface ResourceMutationRequest {
+  readonly mutationType: ResourceMutationType;
+  readonly resourceId: string;
+  readonly tenantId: string | null;
+  readonly expectedVersion: number;
+  readonly expectedEtag: string;
+  readonly idempotencyKey: string;
+  readonly fieldChanges?: Readonly<Record<string, string>>;
+  readonly transitionTo?: string | null;
+  readonly approvedBy?: string | null;
+  readonly noDryRunRationale?: string | null;
+  readonly correlationId?: string | null;
+  readonly requestId?: string | null;
+  readonly traceId?: string | null;
+}
+
+export interface SafeResourceView {
+  readonly resourceId: string;
+  readonly resourceType: string;
+  readonly classification: ResourceClassification;
+  readonly status: ResourceLifecycleStatus;
+  readonly tenantId: string | null;
+  readonly ownerActorId: string | null;
+  readonly stewardActorId: string | null;
+  readonly schemaVersion: string;
+  readonly schemaHash: string;
+  readonly version: number;
+  readonly revision: string;
+  readonly etag: string;
+  readonly fields: Readonly<Record<string, string>>;
+  readonly idempotencyKeyHash: string;
+  readonly locked: boolean;
+  readonly legalHold: boolean;
+  readonly retentionPolicy: string;
+  readonly archivedAt: string | null;
+  readonly deletedAt: string | null;
+  readonly purgedAt: string | null;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export function assertResourceClassification(value: string): ResourceClassification {
+  if (!RESOURCE_CLASSIFICATIONS.includes(value as ResourceClassification)) {
+    throw new ResourcePolicyError(
+      "unknown-resource-classification",
+      "resource classification denied",
+    );
+  }
+  return value as ResourceClassification;
+}
+
+export function assertResourceType(value: string): ResourceType {
+  const safeType = assertSafeResourceText(value, "resourceType");
+  if (!RESOURCE_TYPES.includes(safeType as ResourceType)) {
+    throw new ResourcePolicyError("unknown-resource-type", "resource type denied");
+  }
+  return safeType as ResourceType;
+}
+
+export function assertResourceLifecycleStatus(value: string): ResourceLifecycleStatus {
+  if (!RESOURCE_LIFECYCLE_STATUSES.includes(value as ResourceLifecycleStatus)) {
+    throw new ResourcePolicyError("unknown-resource-status", "resource lifecycle status denied");
+  }
+  return value as ResourceLifecycleStatus;
+}
+
+export function assertResourceRelationshipType(value: string): ResourceRelationshipType {
+  if (!RESOURCE_RELATIONSHIP_TYPES.includes(value as ResourceRelationshipType)) {
+    throw new ResourcePolicyError("unknown-relationship-type", "resource relationship denied");
+  }
+  return value as ResourceRelationshipType;
+}
+
+export function assertResourceMutationType(value: string): ResourceMutationType {
+  if (!RESOURCE_MUTATION_TYPES.includes(value as ResourceMutationType)) {
+    throw new ResourcePolicyError("unknown-mutation-type", "resource mutation denied");
+  }
+  return value as ResourceMutationType;
+}
+
+export function resourceTextLooksSensitive(value: string): boolean {
+  const lowered = value.toLowerCase();
+  return (
+    telemetryValueLooksSensitive(value) ||
+    [
+      "object_key",
+      "object key",
+      "raw_payload",
+      "raw payload",
+      "raw_row",
+      "recipient_address",
+      "provider_response",
+      "stack_trace",
+      "connection_string",
+      "private_key",
+    ].some((token) => lowered.includes(token))
+  );
+}
+
+export function safeResourceValue(value: string): string {
+  const safe = safeTelemetryValue(value);
+  return resourceTextLooksSensitive(value) || resourceTextLooksSensitive(safe)
+    ? CONFIG_REDACTED
+    : safe;
+}
+
+function assertSafeResourceText(value: string, field: string): string {
+  const safe = assertNonEmpty(value, field);
+  if (resourceTextLooksSensitive(safe)) {
+    throw new ResourcePolicyError("resource-value-sensitive", "resource value denied");
+  }
+  return safe;
+}
+
+function assertSafeResourceField(field: string): string {
+  const safe = assertNonEmpty(field, "resource.fieldPath");
+  if (resourceTextLooksSensitive(safe)) {
+    throw new ResourcePolicyError("resource-field-sensitive", "resource field denied");
+  }
+  return safe;
+}
+
+function resourceEtag(input: {
+  readonly resourceId: string;
+  readonly version: number;
+  readonly status: ResourceLifecycleStatus;
+  readonly fields: Readonly<Record<string, string>>;
+}): string {
+  return `etag_${sha256Hex(JSON.stringify(input)).slice(0, 32)}`;
+}
+
+export function createResourceSchemaDefinition(input: {
+  readonly resourceType: string;
+  readonly schemaVersion: string;
+  readonly fields: readonly ResourceFieldDefinition[];
+  readonly owningCapability: string;
+  readonly schemaHash?: string;
+  readonly transitions?: readonly ResourceLifecycleTransitionRule[];
+}): ResourceSchemaDefinition {
+  const fields = input.fields.map((field) => {
+    const classification = field.classification;
+    if (!RESOURCE_FIELD_CLASSIFICATIONS.includes(classification)) {
+      throw new ResourcePolicyError("unknown-field-classification", "resource field denied");
+    }
+    return Object.freeze({
+      ...field,
+      fieldPath: assertSafeResourceField(field.fieldPath),
+      restrictedAction: field.restrictedAction ? safeResourceValue(field.restrictedAction) : null,
+    });
+  });
+  const transitions = (input.transitions ?? []).map((rule) => {
+    const from = assertResourceLifecycleStatus(rule.from);
+    const to = assertResourceLifecycleStatus(rule.to);
+    if (!RESOURCE_DEFAULT_ALLOWED_TRANSITIONS[from].includes(to)) {
+      throw new ResourcePolicyError("transition-not-allowed", "resource transition denied");
+    }
+    return Object.freeze({
+      ...rule,
+      from,
+      to,
+      requiredAction: safeResourceValue(rule.requiredAction),
+    });
+  });
+  const schemaBasis = {
+    resourceType: assertResourceType(input.resourceType),
+    schemaVersion: safeResourceValue(assertNonEmpty(input.schemaVersion, "resource.schemaVersion")),
+    fields: fields.map((field) => ({
+      fieldPath: field.fieldPath,
+      classification: field.classification,
+      required: field.required,
+      mutable: field.mutable,
+      visible: field.visible,
+      allowedOnCreate: field.allowedOnCreate,
+      allowedOnUpdate: field.allowedOnUpdate,
+    })),
+  };
+  return Object.freeze({
+    resourceType: schemaBasis.resourceType,
+    schemaVersion: schemaBasis.schemaVersion,
+    schemaHash: input.schemaHash ?? sha256Hex(JSON.stringify(schemaBasis)),
+    owningCapability: safeResourceValue(assertNonEmpty(input.owningCapability, "owningCapability")),
+    fields: Object.freeze(fields),
+    transitions: Object.freeze(transitions),
+  });
+}
+
+export function validateResourceFieldChanges(input: {
+  readonly schema: ResourceSchemaDefinition;
+  readonly existing?: ResourceRecord | null | undefined;
+  readonly mutationType: ResourceMutationType;
+  readonly changes: Readonly<Record<string, string>>;
+  readonly permittedActions?: readonly string[] | undefined;
+}): Readonly<Record<string, string>> {
+  const permitted = new Set(input.permittedActions ?? []);
+  const byPath = new Map(input.schema.fields.map((field) => [field.fieldPath, field]));
+  const safeChanges: Record<string, string> = {};
+  for (const [fieldPath, value] of Object.entries(input.changes)) {
+    const safePath = assertSafeResourceField(fieldPath);
+    const definition = byPath.get(safePath);
+    if (!definition) {
+      throw new ResourcePolicyError("unknown-field-denied", "resource field denied");
+    }
+    if (definition.visible === false) {
+      throw new ResourcePolicyError("hidden-field-denied", "resource field denied");
+    }
+    if (input.mutationType === "create" && !definition.allowedOnCreate) {
+      throw new ResourcePolicyError("field-not-allowed-on-create", "resource field denied");
+    }
+    if (input.mutationType !== "create" && !definition.allowedOnUpdate) {
+      throw new ResourcePolicyError("field-not-allowed-on-update", "resource field denied");
+    }
+    if (input.existing && !definition.mutable) {
+      throw new ResourcePolicyError("immutable-field-denied", "resource field denied");
+    }
+    if (
+      (definition.classification === "restricted" ||
+        definition.classification === "security-sensitive") &&
+      definition.restrictedAction &&
+      !permitted.has(definition.restrictedAction)
+    ) {
+      throw new ResourcePolicyError(
+        "restricted-field-permission-required",
+        "resource field denied",
+      );
+    }
+    safeChanges[safePath] = assertSafeResourceText(String(value), `resource.field.${safePath}`);
+  }
+  if (input.mutationType === "create") {
+    for (const field of input.schema.fields) {
+      if (field.required && !(field.fieldPath in safeChanges)) {
+        throw new ResourcePolicyError("required-field-missing", "resource field required");
+      }
+    }
+  }
+  return Object.freeze(safeChanges);
+}
+
+export function createResourceRecord(input: {
+  readonly resourceId: string;
+  readonly resourceType: string;
+  readonly classification: string;
+  readonly tenantId?: string | null;
+  readonly ownerActorId?: string | null;
+  readonly stewardActorId?: string | null;
+  readonly schema: ResourceSchemaDefinition;
+  readonly fields: Readonly<Record<string, string>>;
+  readonly idempotencyKey: string;
+  readonly actorId?: string | null;
+  readonly serviceActorId?: string | null;
+  readonly status?: string;
+  readonly sourceRef?: string | null;
+  readonly correlationId?: string;
+  readonly causationId?: string | null;
+  readonly requestId?: string;
+  readonly traceId?: string | null;
+  readonly locked?: boolean;
+  readonly lockReason?: string | null;
+  readonly legalHold?: boolean;
+  readonly retentionPolicy?: string;
+  readonly retainUntil?: string | null;
+  readonly purgeAllowedAt?: string | null;
+  readonly now?: string;
+}): ResourceRecord {
+  const classification = assertResourceClassification(input.classification);
+  const tenantId = input.tenantId ?? null;
+  if (!tenantId && !["public", "system-internal"].includes(classification)) {
+    throw new ResourcePolicyError("tenant-required", "resource tenant context required");
+  }
+  const resourceType = assertResourceType(input.resourceType);
+  if (resourceType !== input.schema.resourceType) {
+    throw new ResourcePolicyError("schema-resource-type-mismatch", "resource schema denied");
+  }
+  const actorId = input.actorId ?? null;
+  const serviceActorId = input.serviceActorId ?? null;
+  if (!actorId && !serviceActorId) {
+    throw new ResourcePolicyError("actor-or-service-actor-required", "resource actor required");
+  }
+  const fields = validateResourceFieldChanges({
+    schema: input.schema,
+    mutationType: "create",
+    changes: input.fields,
+    permittedActions: input.schema.fields
+      .map((field) => field.restrictedAction)
+      .filter((value): value is string => Boolean(value)),
+  });
+  const fieldClassifications: Record<string, ResourceFieldClassification> = {};
+  const immutableFields: string[] = [];
+  const hiddenFields: string[] = [];
+  for (const field of input.schema.fields) {
+    fieldClassifications[field.fieldPath] = field.classification;
+    if (!field.mutable) immutableFields.push(field.fieldPath);
+    if (!field.visible) hiddenFields.push(field.fieldPath);
+  }
+  const createdAt = input.now ?? new Date().toISOString();
+  const status = assertResourceLifecycleStatus(input.status ?? "draft");
+  const version = 1;
+  const resourceId = assertSafeResourceText(input.resourceId, "resourceId");
+  const etag = resourceEtag({ resourceId, version, status, fields });
+  const idempotencyKey = assertNonEmpty(input.idempotencyKey, "resource.idempotencyKey");
+  return Object.freeze({
+    resourceId,
+    resourceType,
+    classification,
+    status,
+    tenantId,
+    ownerActorId: input.ownerActorId ?? actorId,
+    stewardActorId: input.stewardActorId ?? null,
+    schemaVersion: input.schema.schemaVersion,
+    schemaHash: input.schema.schemaHash,
+    version,
+    revision: `rev_${opaqueHash(`${resourceId}:${version}:${etag}`).slice(0, 24)}`,
+    etag,
+    fields,
+    fieldClassifications: Object.freeze(fieldClassifications),
+    immutableFields: Object.freeze(immutableFields.sort()),
+    hiddenFields: Object.freeze(hiddenFields.sort()),
+    sourceRef: input.sourceRef ? safeResourceValue(input.sourceRef) : null,
+    sourceHash: input.sourceRef ? sha256Hex(input.sourceRef) : null,
+    idempotencyKey,
+    dedupeKey: `dedupe_${opaqueHash(idempotencyKey).slice(0, 24)}`,
+    correlationId: input.correlationId ?? stableId("corr", [resourceId]),
+    causationId: input.causationId ?? null,
+    requestId: input.requestId ?? stableId("req", [resourceId]),
+    traceId: input.traceId ?? null,
+    createdBy: actorId ?? serviceActorId ?? "unknown",
+    updatedBy: actorId ?? serviceActorId ?? "unknown",
+    createdAt,
+    updatedAt: createdAt,
+    locked: input.locked ?? false,
+    lockReason: input.lockReason ? safeResourceValue(input.lockReason) : null,
+    legalHold: input.legalHold ?? false,
+    retentionPolicy: safeResourceValue(
+      input.retentionPolicy ?? "classification-aware-local-dev-test",
+    ),
+    retainUntil: input.retainUntil ?? null,
+    purgeAllowedAt: input.purgeAllowedAt ?? null,
+    archivedAt: null,
+    deletedAt: null,
+    purgedAt: null,
+  });
+}
+
+export function updateResourceRecord(input: {
+  readonly record: ResourceRecord;
+  readonly schema: ResourceSchemaDefinition;
+  readonly mutationType: ResourceMutationType;
+  readonly actorId: string;
+  readonly expectedVersion: number;
+  readonly expectedEtag: string;
+  readonly idempotencyKey: string;
+  readonly fieldChanges?: Readonly<Record<string, string>> | undefined;
+  readonly transitionTo?: string | null | undefined;
+  readonly permittedActions?: readonly string[] | undefined;
+  readonly approvedBy?: string | null | undefined;
+  readonly now?: string;
+}): ResourceRecord {
+  const mutationType = assertResourceMutationType(input.mutationType);
+  if (input.record.version !== input.expectedVersion || input.record.etag !== input.expectedEtag) {
+    throw new ResourcePolicyError("version-conflict", "resource version conflict");
+  }
+  if (input.record.status === "purged") {
+    throw new ResourcePolicyError("resource-purged", "resource denied");
+  }
+  if (input.record.locked && !["unlock", "purge"].includes(mutationType)) {
+    throw new ResourcePolicyError("resource-locked", "resource locked");
+  }
+  if (input.record.legalHold && mutationType === "purge") {
+    throw new ResourcePolicyError("legal-hold-blocks-purge", "resource purge denied");
+  }
+
+  let nextStatus = input.record.status as ResourceLifecycleStatus;
+  const now = input.now ?? new Date().toISOString();
+  let archivedAt = input.record.archivedAt;
+  let deletedAt = input.record.deletedAt;
+  let purgedAt = input.record.purgedAt;
+  let locked = input.record.locked;
+  let lockReason = input.record.lockReason;
+  if (mutationType === "archive") {
+    nextStatus = "archived";
+    archivedAt = now;
+  } else if (mutationType === "restore") {
+    nextStatus = "active";
+    deletedAt = null;
+  } else if (mutationType === "soft-delete") {
+    nextStatus = "soft-deleted";
+    deletedAt = now;
+  } else if (mutationType === "purge") {
+    if (input.record.status !== "purge-eligible") {
+      throw new ResourcePolicyError("purge-status-required", "resource purge denied");
+    }
+    nextStatus = "purged";
+    purgedAt = now;
+  } else if (mutationType === "lock") {
+    nextStatus = "locked";
+    locked = true;
+    lockReason = "resource lifecycle lock";
+  } else if (mutationType === "unlock") {
+    nextStatus = "active";
+    locked = false;
+    lockReason = null;
+  } else if (mutationType === "transition") {
+    const requested = assertResourceLifecycleStatus(input.transitionTo ?? "");
+    const rule = input.schema.transitions.find(
+      (candidate) => candidate.from === input.record.status && candidate.to === requested,
+    );
+    if (!rule && !RESOURCE_DEFAULT_ALLOWED_TRANSITIONS[input.record.status].includes(requested)) {
+      throw new ResourcePolicyError("transition-not-allowed", "resource transition denied");
+    }
+    if (
+      rule?.approvalRequired &&
+      rule.requesterCannotApprove &&
+      input.approvedBy === input.actorId
+    ) {
+      throw new ResourcePolicyError("self-approval-denied", "resource approval denied");
+    }
+    nextStatus = requested;
+  }
+
+  const fields =
+    mutationType === "update" || mutationType === "patch"
+      ? Object.freeze({
+          ...input.record.fields,
+          ...validateResourceFieldChanges({
+            schema: input.schema,
+            existing: input.record,
+            mutationType,
+            changes: input.fieldChanges ?? {},
+            permittedActions: input.permittedActions,
+          }),
+        })
+      : input.record.fields;
+  const version = input.record.version + 1;
+  const etag = resourceEtag({
+    resourceId: input.record.resourceId,
+    version,
+    status: nextStatus,
+    fields,
+  });
+  return Object.freeze({
+    ...input.record,
+    status: nextStatus,
+    version,
+    revision: `rev_${opaqueHash(`${input.record.resourceId}:${version}:${etag}`).slice(0, 24)}`,
+    etag,
+    fields,
+    idempotencyKey: assertNonEmpty(input.idempotencyKey, "resource.idempotencyKey"),
+    dedupeKey: `dedupe_${opaqueHash(input.idempotencyKey).slice(0, 24)}`,
+    updatedBy: input.actorId,
+    updatedAt: now,
+    archivedAt,
+    deletedAt,
+    purgedAt,
+    locked,
+    lockReason,
+  });
+}
+
+export function createResourceRelationshipRecord(input: {
+  readonly relationshipId: string;
+  readonly relationshipType: string;
+  readonly tenantId?: string | null;
+  readonly source: ResourceRecord;
+  readonly target: ResourceRecord;
+  readonly required?: boolean;
+  readonly directional?: boolean;
+  readonly acyclic?: boolean;
+  readonly cardinality?: ResourceRelationshipRecord["cardinality"];
+  readonly cascadePolicy?: ResourceRelationshipRecord["cascadePolicy"];
+  readonly createdBy: string;
+  readonly correlationId?: string;
+  readonly createdAt?: string;
+}): ResourceRelationshipRecord {
+  const tenantId = input.tenantId ?? input.source.tenantId;
+  if (input.source.tenantId !== input.target.tenantId) {
+    throw new ResourcePolicyError(
+      "cross-tenant-relationship-denied",
+      "resource relationship denied",
+    );
+  }
+  if (tenantId !== input.source.tenantId) {
+    throw new ResourcePolicyError("relationship-tenant-mismatch", "resource relationship denied");
+  }
+  return Object.freeze({
+    relationshipId: assertSafeResourceText(input.relationshipId, "relationshipId"),
+    relationshipType: assertResourceRelationshipType(input.relationshipType),
+    tenantId,
+    sourceResourceId: input.source.resourceId,
+    targetResourceId: input.target.resourceId,
+    sourceResourceType: input.source.resourceType,
+    targetResourceType: input.target.resourceType,
+    required: input.required ?? false,
+    directional: input.directional ?? true,
+    acyclic: input.acyclic ?? true,
+    cardinality: input.cardinality ?? "many-to-many",
+    cascadePolicy: input.cascadePolicy ?? "restrict",
+    createdBy: assertSafeResourceText(input.createdBy, "relationship.createdBy"),
+    createdAt: input.createdAt ?? new Date().toISOString(),
+    correlationId: input.correlationId ?? stableId("corr", [input.relationshipId]),
+  });
+}
+
+export function toSafeResourceView(record: ResourceRecord): SafeResourceView {
+  const fields: Record<string, string> = {};
+  const hidden = new Set(record.hiddenFields);
+  for (const [key, value] of Object.entries(record.fields)) {
+    const classification = record.fieldClassifications[key] ?? "internal";
+    if (
+      hidden.has(key) ||
+      classification === "restricted" ||
+      classification === "security-sensitive"
+    ) {
+      continue;
+    }
+    fields[key] = safeResourceValue(value);
+  }
+  return Object.freeze({
+    resourceId: record.resourceId,
+    resourceType: record.resourceType,
+    classification: record.classification,
+    status: record.status,
+    tenantId: record.tenantId,
+    ownerActorId: record.ownerActorId,
+    stewardActorId: record.stewardActorId,
+    schemaVersion: record.schemaVersion,
+    schemaHash: record.schemaHash,
+    version: record.version,
+    revision: record.revision,
+    etag: record.etag,
+    fields: Object.freeze(fields),
+    idempotencyKeyHash: `idem_${opaqueHash(record.idempotencyKey).slice(0, 24)}`,
+    locked: record.locked,
+    legalHold: record.legalHold,
+    retentionPolicy: record.retentionPolicy,
+    archivedAt: record.archivedAt,
+    deletedAt: record.deletedAt,
+    purgedAt: record.purgedAt,
+    createdAt: record.createdAt,
+    updatedAt: record.updatedAt,
+  });
+}

@@ -3982,6 +3982,294 @@
       ],
       "evidence": "Search route authorization, tenant isolation, result redaction, and reindex behaviours are rewritten without Playwright/browser E2E.",
       "retry_condition": "UI/UX remains future non-foundation work"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.semantic-model",
+      "category": "model",
+      "react_paths": [
+        "../react/packages",
+        "../react/apps/platform-api/src",
+        "../react/docs/v2-foundation"
+      ],
+      "behaviour_summary": "Resource, record, entity, relationship, lifecycle, version, revision, mutation, and safe-view semantics are rewritten as USF resource lifecycle foundation model.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof",
+        "make parity (validate-resources with planted defects)"
+      ],
+      "evidence": "Core resource lifecycle model defines classifications, resource types, lifecycle statuses, relationship types, mutation types, schema-bound field metadata, versions, revisions, etags, retention/legal-hold fields, and redacted safe views.",
+      "retry_condition": "n/a"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.classification-lifecycle",
+      "category": "lifecycle",
+      "react_paths": [
+        "../react/packages",
+        "../react/apps/platform-api/src"
+      ],
+      "behaviour_summary": "Resource classification and lifecycle transitions fail closed on unknown classifications/statuses and enforce separation-of-duties approval where represented.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/resources/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "Unknown resource classification/status fails; transition approval denies self-approval; archive, restore, soft-delete, purge, lock, and unlock posture is represented.",
+      "retry_condition": "n/a"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.relationship-graph",
+      "category": "relationship",
+      "react_paths": [
+        "../react/packages",
+        "../react/apps/platform-api/src"
+      ],
+      "behaviour_summary": "Typed tenant-scoped resource relationships preserve relationship integrity, cross-tenant denial, acyclic graph posture, and required relationship purge blocking.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/resources/src/index.ts",
+        "capabilities/resources/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "ResourceRelationshipRecord plus InMemoryResourceLifecycleStore and service prove tenant-scoped links, relationship cycle denial, and required relationship purge block.",
+      "retry_condition": "n/a"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.schema-bound-mutations",
+      "category": "mutation",
+      "react_paths": [
+        "../react/apps/platform-api/src",
+        "../react/tests"
+      ],
+      "behaviour_summary": "Mutations are schema-bound and reject unknown, immutable, hidden, restricted, and secret-looking fields without echoing raw sensitive values.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/resources/src/index.ts",
+        "tests/capabilities/resource-lifecycle.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "validateResourceFieldChanges and capability tests prove unknown/immutable/hidden/restricted field denial and sensitive value rejection.",
+      "retry_condition": "n/a"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.version-concurrency-idempotency",
+      "category": "mutation",
+      "react_paths": [
+        "../react/apps/platform-api/src",
+        "../react/tests"
+      ],
+      "behaviour_summary": "Optimistic concurrency and idempotency suppress duplicate resource side effects and return deterministic conflict posture.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/resources/src/index.ts",
+        "capabilities/resources/src/index.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "Version/etag conflict checks and tenant-local idempotency keys are tested and proven in capability and proof flows.",
+      "retry_condition": "n/a"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.soft-delete-retention-holds",
+      "category": "retention",
+      "react_paths": [
+        "../react/packages",
+        "../react/apps/platform-api/src"
+      ],
+      "behaviour_summary": "Soft delete, archive, restore, purge, lock, legal hold, retention, and disposal posture are represented without legal/regulatory readiness claim.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/resources/src/index.ts",
+        "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "Legal hold blocks purge, purge requires purge-eligible status, purged records cannot mutate, and safe status view carries no legal/regulatory readiness claim.",
+      "retry_condition": "n/a"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.search-bulk-files-interactions",
+      "category": "integration",
+      "react_paths": [
+        "../react/apps/platform-api/src",
+        "../react/packages",
+        "../react/tests"
+      ],
+      "behaviour_summary": "Resource lifecycle interaction with search projections, import/export/bulk posture, files/attachments posture, and high-volume mutation guardrails is represented.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "capabilities/resources/src/index.ts",
+        "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "Soft delete removes search projection and bulk-managed resource creation is guardrail-denied safely; broad file attachment and bulk mutation runtime remain deferred.",
+      "retry_condition": "USF-165 deferred depth or later domain authorises file-backed resource attachment routes and broad import/export/bulk resource mutation runtime."
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.audit-observability-guardrails",
+      "category": "audit",
+      "react_paths": [
+        "../react/packages/audit-events",
+        "../react/apps/platform-api/src",
+        "../react/tests"
+      ],
+      "behaviour_summary": "Resource lifecycle events produce value-free audit evidence and tenant-safe observability/security signals, with guardrail denial posture.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "capabilities/resources/src/index.ts",
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "packages/proof/src/resource-lifecycle-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "Resource created/read/mutated/relationship/denied events are recorded value-free; security signals use safe hashes and reason codes; proof scans for blocked sensitive markers.",
+      "retry_condition": "n/a"
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.api-openapi-posture",
+      "category": "route",
+      "react_paths": [
+        "../react/apps/platform-api/src/server",
+        "../react/packages/contracts-admin"
+      ],
+      "behaviour_summary": "Future resource API/OpenAPI surfaces must be tenant-scoped, PDP-protected, schema-backed, idempotent for side effects, redacted, synthetic-example-only, and no-overclaim.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md",
+        "docs/architecture/parity-resource-lifecycle-source-use-disposition-matrix.md"
+      ],
+      "usf_tests": [],
+      "usf_proofs": [
+        "make resources-proof"
+      ],
+      "evidence": "Capability/contract posture is defined and proven; broad HTTP routes are deferred to avoid premature public API surface.",
+      "retry_condition": "USF-165 or a later API-surface child authorises bounded resource lifecycle routes/OpenAPI entries."
+    },
+    {
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-165",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "resource.react-ui-playwright-behaviours",
+      "category": "service",
+      "react_paths": [
+        "../react/apps/react-enterprise-app",
+        "../react/e2e",
+        "../react/tests"
+      ],
+      "behaviour_summary": "Foundation resource lifecycle behaviours from React UI/API lineage are rewritten as capability/proof tests; UI assertions remain out of scope.",
+      "usf_status": "foundation-behaviour-rewritten-from-ui-test",
+      "usf_paths": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "packages/proof/src/resource-lifecycle-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/resource-lifecycle.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make resources-proof",
+        "make parity (validate-resources with planted defects)"
+      ],
+      "evidence": "Resource lifecycle tenant isolation, PDP denial, schema-bound mutation, transition, relationship, retention, and guardrail behaviours are rewritten without Playwright/browser E2E.",
+      "retry_condition": "UI/UX remains future non-foundation work."
     }
   ],
   "uiArtefacts": [

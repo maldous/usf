@@ -1,0 +1,12 @@
+{
+  "name": "missing resource lifecycle audit and observability linkage",
+  "expectedRule": "USF-RESOURCES-008",
+  "override": {
+    "removeText": [
+      {
+        "path": "capabilities/resources/src/index.ts",
+        "text": "recordSecuritySignal"
+      }
+    ]
+  }
+}

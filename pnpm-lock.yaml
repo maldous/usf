@@ -60,6 +60,8 @@ importers:
 
   adapters/obs: {}
 
+  adapters/resources: {}
+
   adapters/search: {}
 
   adapters/secrets: {}
@@ -85,6 +87,8 @@ importers:
   capabilities/jobs: {}
 
   capabilities/notify: {}
+
+  capabilities/resources: {}
 
   capabilities/search: {}
 

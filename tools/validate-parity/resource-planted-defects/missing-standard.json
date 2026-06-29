@@ -1,0 +1,9 @@
+{
+  "name": "missing resource lifecycle standard",
+  "expectedRule": "USF-RESOURCES-002",
+  "override": {
+    "files": {
+      "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md": ""
+    }
+  }
+}

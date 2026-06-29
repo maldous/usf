@@ -1,0 +1,12 @@
+{
+  "name": "missing resource lifecycle port",
+  "expectedRule": "USF-RESOURCES-003",
+  "override": {
+    "removeText": [
+      {
+        "path": "packages/ports/src/index.ts",
+        "text": "ResourceLifecyclePort"
+      }
+    ]
+  }
+}
