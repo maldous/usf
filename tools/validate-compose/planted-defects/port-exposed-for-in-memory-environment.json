@@ -1,0 +1,15 @@
+{
+  "expectedRuleId": "USF-COMPOSE-025",
+  "servicePatches": [
+    {
+      "serviceId": "redis",
+      "values": {
+        "ports.0.environmentScopes": [
+          "dev",
+          "test",
+          "staging"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-028",
+  "servicePatches": [
+    {
+      "serviceId": "openbao",
+      "values": {
+        "composeService.environment.0.value": "tok_live_unapproved_placeholder_000000"
+      }
+    }
+  ]
+}

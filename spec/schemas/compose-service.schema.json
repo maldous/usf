@@ -18,6 +18,7 @@
     "environmentDefinitions",
     "reactComposeServiceCount",
     "sourceRefs",
+    "approvedLocalSecretPlaceholders",
     "services",
     "generatedComposeTargets"
   ],
@@ -359,29 +360,180 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "portId",
         "name",
         "containerPort",
         "publishedPort",
-        "purpose",
-        "accessModel"
+        "protocol",
+        "appProtocol",
+        "hostIp",
+        "bindScope",
+        "exposureClass",
+        "accessModel",
+        "environmentScopes",
+        "composeProfiles",
+        "profileScope",
+        "required",
+        "collisionGroup",
+        "concurrentEnvironmentPolicy",
+        "portAllocationMode",
+        "productionExposure",
+        "rationale",
+        "exposureRationale",
+        "accessPolicy",
+        "authRequired",
+        "tlsRequired",
+        "auditRequired",
+        "secretExposureRisk",
+        "dataClassification",
+        "adminSurface",
+        "operatorSurface",
+        "internetExposureAllowed",
+        "defaultDenyReason",
+        "productionExposureBoundary",
+        "iso27001SupportStatement",
+        "readinessClaimsAllowed",
+        "readinessClaimsProhibited",
+        "controlPurpose",
+        "riskOwner",
+        "retentionLoggingPosture",
+        "breakGlassRelevance",
+        "evidenceProduced",
+        "deferredControls"
       ],
       "properties": {
+        "portId": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
         "name": {
           "$ref": "#/$defs/nonEmptyString"
         },
         "containerPort": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 65535
         },
         "publishedPort": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 65535
         },
-        "purpose": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "tcp",
+            "udp"
+          ]
+        },
+        "appProtocol": {
           "$ref": "#/$defs/nonEmptyString"
+        },
+        "hostIp": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "bindScope": {
+          "$ref": "#/$defs/bindScope"
+        },
+        "exposureClass": {
+          "$ref": "#/$defs/exposureClass"
         },
         "accessModel": {
           "$ref": "#/$defs/accessModel"
+        },
+        "environmentScopes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/environmentScope"
+          },
+          "uniqueItems": true
+        },
+        "composeProfiles": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "profileScope": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "collisionGroup": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "concurrentEnvironmentPolicy": {
+          "$ref": "#/$defs/concurrentEnvironmentPolicy"
+        },
+        "portAllocationMode": {
+          "$ref": "#/$defs/portAllocationMode"
+        },
+        "productionExposure": {
+          "$ref": "#/$defs/bindScope"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "exposureRationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "accessPolicy": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "authRequired": {
+          "type": "boolean"
+        },
+        "tlsRequired": {
+          "type": "boolean"
+        },
+        "auditRequired": {
+          "type": "boolean"
+        },
+        "secretExposureRisk": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "dataClassification": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "adminSurface": {
+          "type": "boolean"
+        },
+        "operatorSurface": {
+          "type": "boolean"
+        },
+        "internetExposureAllowed": {
+          "type": "boolean"
+        },
+        "defaultDenyReason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "productionExposureBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "iso27001SupportStatement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "readinessClaimsAllowed": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "readinessClaimsProhibited": {
+          "$ref": "#/$defs/stringList"
+        },
+        "controlPurpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "retentionLoggingPosture": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "breakGlassRelevance": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceProduced": {
+          "$ref": "#/$defs/stringList"
+        },
+        "deferredControls": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
         }
       }
     },
@@ -605,6 +757,11 @@
         "composeProfiles",
         "generated",
         "seedReset",
+        "environmentScopeMechanism",
+        "projectBoundary",
+        "tenantBoundary",
+        "accessBoundary",
+        "productionExposureBoundary",
         "proofObligation",
         "selectedComposeTarget",
         "rationale"
@@ -653,6 +810,21 @@
           "$ref": "#/$defs/nonEmptyString"
         },
         "rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "environmentScopeMechanism": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "projectBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "tenantBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "accessBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "productionExposureBoundary": {
           "$ref": "#/$defs/nonEmptyString"
         }
       }
@@ -894,6 +1066,64 @@
           "$ref": "#/$defs/composeService"
         }
       }
+    },
+    "bindScope": {
+      "type": "string",
+      "enum": [
+        "loopback-only",
+        "internal-network-only",
+        "host-lan",
+        "public",
+        "external-provider",
+        "cloud-provider",
+        "prohibited",
+        "deferred"
+      ]
+    },
+    "exposureClass": {
+      "type": "string",
+      "enum": [
+        "runtime-api",
+        "database",
+        "cache",
+        "object-storage",
+        "identity",
+        "secrets",
+        "observability",
+        "assurance",
+        "operator-admin",
+        "gateway",
+        "provider-emulation",
+        "provider-mock",
+        "notification-test",
+        "webhook-test",
+        "workflow-runtime",
+        "workflow-ui",
+        "scanning",
+        "external-requirement-only"
+      ]
+    },
+    "concurrentEnvironmentPolicy": {
+      "type": "string",
+      "enum": [
+        "single-environment-only",
+        "concurrent-safe",
+        "offset-required",
+        "dynamic-required",
+        "prohibited",
+        "external-provider-only"
+      ]
+    },
+    "portAllocationMode": {
+      "type": "string",
+      "enum": [
+        "fixed",
+        "environment-offset",
+        "dynamic",
+        "external-managed",
+        "cloud-provider",
+        "not-published"
+      ]
     }
   },
   "properties": {
@@ -949,6 +1179,9 @@
       "minimum": 1
     },
     "sourceRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "approvedLocalSecretPlaceholders": {
       "$ref": "#/$defs/stringList"
     },
     "services": {

@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-023",
+  "servicePatches": [
+    {
+      "serviceId": "pgadmin",
+      "values": {
+        "ports.0.authRequired": false
+      }
+    }
+  ]
+}

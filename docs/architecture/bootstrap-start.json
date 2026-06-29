@@ -1,0 +1,29 @@
+{
+  "kind": "usf-39-bootstrap-start",
+  "runId": "20260627T235923Z-f80da39",
+  "issue": "USF-39",
+  "authorisingHuman": "Matthew Aldous",
+  "startCommit": "f80da3919bfeb4e5596ccac95a67d707bae0d3ae",
+  "v2BootstrapTarget": "f80da3919bfeb4e5596ccac95a67d707bae0d3ae",
+  "finalPreExtractionRevalidation": "passed",
+  "scope": "local-dev-test-bootstrap",
+  "branch": "issue-39-bootstrap-20260627T235923Z-f80da39",
+  "tag": {
+    "name": "v2-bootstrap",
+    "annotatedObject": "32a87597ae491a198864f70434b10a99855cc67a"
+  },
+  "linear": {
+    "team": "USF",
+    "usf39Status": "In Progress",
+    "usf39CommentId": "2efe5d22-9182-4e04-9f6f-2db51801846b",
+    "usf100CommentId": "825b4b4e-6270-49cb-ab99-080f86075cca"
+  },
+  "boundary": {
+    "environment": "local dev/test only",
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "liveExternalProviderClaim": false,
+    "deploymentReadinessClaim": false,
+    "productionLiveClaim": false
+  }
+}

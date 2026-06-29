@@ -2,7 +2,7 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := verify
 
-.PHONY: verify install dev dev-smoke dev.work compose-generate compose-validate compose-policy compose-check-generated compose-dev compose-test compose-staging compose-production test-compose parity db-proof authz-proof audit-proof config-proof files-proof auth-proof jobs-proof notify-proof api-proof providers-proof observability-proof guardrails-proof bulk-proof search-proof resources-proof
+.PHONY: verify install dev dev-smoke dev.work compose-generate compose-validate compose-policy compose-check-generated compose-dev compose-test compose-staging compose-production compose-ports compose-ports-dev compose-ports-test compose-ports-staging compose-ports-profiles compose-hardening compose-security test-compose parity db-proof authz-proof audit-proof config-proof files-proof auth-proof jobs-proof notify-proof api-proof providers-proof observability-proof guardrails-proof bulk-proof search-proof resources-proof
 
 install:
 	corepack pnpm install --frozen-lockfile
@@ -39,6 +39,27 @@ compose-staging:
 
 compose-production:
 	corepack pnpm compose:production
+
+compose-ports:
+	corepack pnpm compose:ports
+
+compose-ports-dev:
+	corepack pnpm compose:ports:dev
+
+compose-ports-test:
+	corepack pnpm compose:ports:test
+
+compose-ports-staging:
+	corepack pnpm compose:ports:staging
+
+compose-ports-profiles:
+	corepack pnpm compose:ports:profiles
+
+compose-hardening:
+	corepack pnpm compose:hardening
+
+compose-security:
+	corepack pnpm compose:security
 
 test-compose:
 	corepack pnpm test-compose

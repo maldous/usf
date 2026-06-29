@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-017",
+  "servicePatches": [
+    {
+      "serviceId": "nats",
+      "values": {
+        "ports.0.publishedPort": 5433
+      }
+    }
+  ]
+}

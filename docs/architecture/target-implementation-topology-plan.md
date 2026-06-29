@@ -16,7 +16,7 @@ The whole-platform implementation directive draft at `docs/architecture/implemen
 
 ## USF-39 Post-Start Local Dev/Test Bootstrap Topology
 
-After the separate USF-39 start action recorded for run `20260627T235923Z-f80da39`, this plan also authorises the local dev/test bootstrap topology listed below. This post-start topology is limited to the active bootstrap goal, the signed USF-100 directive, ADR 0009, and the start record in `.codex/runs/20260627T235923Z-f80da39/bootstrap-start.json`.
+After the separate USF-39 start action recorded for run `20260627T235923Z-f80da39`, this plan also authorises the local dev/test bootstrap topology listed below. This post-start topology is limited to the active bootstrap goal, the signed USF-100 directive, ADR 0009, and the start record in `docs/architecture/bootstrap-start.json`.
 
 The authorised post-start roots are:
 
