@@ -46,6 +46,8 @@ importers:
         specifier: 4.1.9
         version: 4.1.9(@types/node@24.13.2)(vite@8.1.0(@types/node@24.13.2)(esbuild@0.28.1)(tsx@4.22.4))
 
+  adapters/bulk: {}
+
   adapters/bus: {}
 
   adapters/db: {}
@@ -71,6 +73,8 @@ importers:
   capabilities/audit: {}
 
   capabilities/auth: {}
+
+  capabilities/bulk: {}
 
   capabilities/config: {}
 

@@ -7,3 +7,4 @@ export { runApiContractsProof } from "./api-contracts-proof.ts";
 export { runProviderAdaptersProof } from "./provider-adapters-proof.ts";
 export { runObservabilityTelemetryProof } from "./observability-telemetry-proof.ts";
 export { runRateLimitsAbuseControlsProof } from "./rate-limits-abuse-controls-proof.ts";
+export { runImportExportBulkProof } from "./import-export-bulk-proof.ts";

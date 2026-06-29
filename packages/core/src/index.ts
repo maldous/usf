@@ -210,6 +210,7 @@ export const AUDIT_CATEGORIES = Object.freeze([
   "notification",
   "job",
   "guardrail",
+  "bulk-operation",
   "integration",
   "security",
   "admin",
@@ -351,6 +352,28 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "guardrail.backpressure.applied": { category: "guardrail", severity: "warning" },
   "guardrail.abuse.suspected": { category: "security", severity: "high", reserved: true },
   "guardrail.policy.unknown_denied": { category: "security", severity: "warning" },
+  // Import/export/bulk operations (parity-import-export-bulk, USF-162).
+  // Emitted by this slice as value-free data-movement evidence: no raw rows,
+  // payloads, object keys, secrets, provider internals, or stack traces.
+  "bulk.operation.created": { category: "bulk-operation", severity: "notice" },
+  "bulk.operation.validated": { category: "bulk-operation", severity: "notice" },
+  "bulk.operation.previewed": { category: "bulk-operation", severity: "notice" },
+  "bulk.operation.approved": { category: "bulk-operation", severity: "warning" },
+  "bulk.operation.started": { category: "bulk-operation", severity: "warning" },
+  "bulk.operation.completed": { category: "bulk-operation", severity: "notice" },
+  "bulk.operation.failed": { category: "bulk-operation", severity: "warning" },
+  "bulk.operation.cancelled": { category: "bulk-operation", severity: "notice" },
+  "bulk.operation.denied": { category: "bulk-operation", severity: "warning" },
+  "import.created": { category: "bulk-operation", severity: "notice" },
+  "import.validated": { category: "bulk-operation", severity: "notice" },
+  "import.started": { category: "bulk-operation", severity: "warning" },
+  "import.completed": { category: "bulk-operation", severity: "notice" },
+  "import.failed": { category: "bulk-operation", severity: "warning" },
+  "export.created": { category: "bulk-operation", severity: "notice" },
+  "export.started": { category: "bulk-operation", severity: "warning" },
+  "export.completed": { category: "bulk-operation", severity: "notice" },
+  "export.failed": { category: "bulk-operation", severity: "warning" },
+  "evidence_package.created": { category: "bulk-operation", severity: "warning" },
   "security.denied": { category: "security", severity: "high" },
   "system.error": { category: "system", severity: "high" },
   // Audit-of-audit access (reading/exporting/verifying audit evidence is itself audited).
@@ -4985,4 +5008,769 @@ export function reasonCodeToSafeGuardrailMessage(reasonCode: string): string {
     default:
       return "Request blocked by guardrail";
   }
+}
+
+// ---------------------------------------------------------------------------
+// Import/export/bulk operations (parity-import-export-bulk, USF-162).
+//
+// Import/export is governed tenant-scoped data movement. This model supports
+// local/dev/test proof only: no production migration, legal export, eDiscovery,
+// regulatory export, live provider transfer, or production-live readiness claim.
+// ---------------------------------------------------------------------------
+
+export const BULK_OPERATION_TYPES = Object.freeze([
+  "import",
+  "export",
+  "bulk-create",
+  "bulk-update",
+  "bulk-delete",
+  "bulk-notify",
+  "bulk-file-export",
+  "audit-export",
+  "evidence-package-export",
+  "migration",
+  "reconciliation",
+] as const);
+export type BulkOperationType = (typeof BULK_OPERATION_TYPES)[number];
+
+export const BULK_OPERATION_CLASSIFICATIONS = Object.freeze([
+  "low-risk",
+  "tenant-data",
+  "confidential",
+  "restricted",
+  "security-sensitive",
+  "audit-sensitive",
+  "regulated",
+  "destructive",
+  "high-risk",
+  "test-only",
+] as const);
+export type BulkOperationClassification = (typeof BULK_OPERATION_CLASSIFICATIONS)[number];
+
+export const BULK_OPERATION_STATUSES = Object.freeze([
+  "draft",
+  "queued",
+  "validating",
+  "previewed",
+  "awaiting-approval",
+  "approved",
+  "running",
+  "succeeded",
+  "partially-succeeded",
+  "failed",
+  "cancelled",
+  "expired",
+  "rejected",
+  "quarantined",
+  "dead-lettered",
+  "purged",
+] as const);
+export type BulkOperationStatus = (typeof BULK_OPERATION_STATUSES)[number];
+
+export const BULK_SOURCE_DESTINATION_TYPES = Object.freeze([
+  "uploaded-file",
+  "generated-file",
+  "tenant-file",
+  "evidence-package",
+  "provider-source",
+  "provider-destination",
+  "system-internal",
+  "local-test",
+  "manual-operator",
+] as const);
+export type BulkSourceDestinationType = (typeof BULK_SOURCE_DESTINATION_TYPES)[number];
+
+export const BULK_FILE_FORMATS = Object.freeze([
+  "csv",
+  "json",
+  "jsonl",
+  "xlsx",
+  "zip",
+  "evidence-package",
+  "system-internal",
+] as const);
+export type BulkFileFormat = (typeof BULK_FILE_FORMATS)[number];
+
+export const BULK_ITEM_OUTCOMES = Object.freeze([
+  "pending",
+  "succeeded",
+  "failed",
+  "skipped",
+  "rejected",
+] as const);
+export type BulkItemOutcomeStatus = (typeof BULK_ITEM_OUTCOMES)[number];
+
+export const BULK_HIGH_RISK_CLASSIFICATIONS: readonly BulkOperationClassification[] = Object.freeze(
+  ["regulated", "destructive", "high-risk", "audit-sensitive"],
+);
+
+export class BulkOperationPolicyError extends Error {
+  readonly reasonCode: string;
+
+  constructor(reasonCode: string, message: string) {
+    super(message);
+    this.name = "BulkOperationPolicyError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export interface BulkEndpointRef {
+  readonly refType: BulkSourceDestinationType;
+  readonly ref: string;
+  readonly fileId: string | null;
+  readonly format: BulkFileFormat;
+  readonly classification: BulkOperationClassification;
+  readonly schemaId: string | null;
+  readonly schemaVersion: string | null;
+  readonly schemaHash: string | null;
+  readonly mappingId: string | null;
+  readonly mappingVersion: string | null;
+  readonly mappingHash: string | null;
+  readonly checksum: string | null;
+  readonly scanStatus: FileScanStatusValue | null;
+  readonly dataResidencyPolicy: string | null;
+}
+
+export interface BulkValidationError {
+  readonly rowNumber: number | null;
+  readonly recordRef: string | null;
+  readonly fieldPath: string;
+  readonly safeErrorCode: string;
+  readonly safeErrorMessage: string;
+}
+
+export interface BulkValidationSummary {
+  readonly valid: boolean;
+  readonly itemCount: number;
+  readonly errorCount: number;
+  readonly errors: readonly BulkValidationError[];
+}
+
+export interface BulkItemOutcome {
+  readonly itemId: string;
+  readonly rowNumber: number | null;
+  readonly sourceRecordHash: string | null;
+  readonly targetRecordRef: string | null;
+  readonly operation: BulkOperationType;
+  readonly outcome: BulkItemOutcomeStatus;
+  readonly safeErrorCode: string | null;
+  readonly safeErrorMessage: string | null;
+  readonly beforeHash: string | null;
+  readonly afterHash: string | null;
+  readonly correlationId: string | null;
+}
+
+export interface EvidencePackageManifest {
+  readonly evidencePackageId: string;
+  readonly packageType: "evidence-package";
+  readonly packageVersion: string;
+  readonly manifestHash: string;
+  readonly contentHash: string;
+  readonly sourceQueryHash: string;
+  readonly includedFileIds: readonly string[];
+  readonly includedAuditEventIds: readonly string[];
+  readonly createdBy: string;
+  readonly createdAt: string;
+  readonly legalHold: boolean;
+  readonly retentionPolicy: string;
+  readonly chainOfCustodyRef: string;
+}
+
+export interface BulkOperationRecord {
+  readonly operationId: string;
+  readonly operationType: BulkOperationType;
+  readonly classification: BulkOperationClassification;
+  readonly status: BulkOperationStatus;
+  readonly tenantId: string;
+  readonly actorId: string | null;
+  readonly serviceActorId: string | null;
+  readonly source: BulkEndpointRef;
+  readonly destination: BulkEndpointRef;
+  readonly fileId: string | null;
+  readonly jobId: string | null;
+  readonly workflowId: string | null;
+  readonly idempotencyKey: string;
+  readonly dedupeKey: string;
+  readonly sourceFingerprint: string;
+  readonly operationFingerprint: string;
+  readonly guardrailPolicyId: string | null;
+  readonly dryRunRequired: boolean;
+  readonly dryRunHash: string | null;
+  readonly previewHash: string | null;
+  readonly approvedPreviewHash: string | null;
+  readonly noDryRunRationale: string | null;
+  readonly partialSuccessAllowed: boolean;
+  readonly maxErrorCount: number;
+  readonly maxErrorRate: number;
+  readonly rollbackSupported: boolean;
+  readonly rollbackJobId: string | null;
+  readonly compensationSupported: boolean;
+  readonly compensationPlanRef: string | null;
+  readonly irreversibleOperation: boolean;
+  readonly irreversibleReason: string | null;
+  readonly exportScope: string | null;
+  readonly approvedScopeHash: string | null;
+  readonly validationSummary: BulkValidationSummary;
+  readonly itemCount: number;
+  readonly successCount: number;
+  readonly failureCount: number;
+  readonly safeFailureMessage: string | null;
+  readonly evidencePackage: EvidencePackageManifest | null;
+  readonly retentionPolicy: string;
+  readonly legalHold: boolean;
+  readonly retainUntil: string | null;
+  readonly purgeAllowedAt: string | null;
+  readonly correlationId: string;
+  readonly causationId: string | null;
+  readonly requestId: string;
+  readonly traceId: string | null;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface SafeBulkOperationView {
+  readonly operationId: string;
+  readonly operationType: BulkOperationType;
+  readonly classification: BulkOperationClassification;
+  readonly status: BulkOperationStatus;
+  readonly tenantId: string;
+  readonly actorId: string | null;
+  readonly serviceActorId: string | null;
+  readonly sourceType: BulkSourceDestinationType;
+  readonly destinationType: BulkSourceDestinationType;
+  readonly sourceFileId: string | null;
+  readonly destinationFileId: string | null;
+  readonly format: BulkFileFormat;
+  readonly jobId: string | null;
+  readonly idempotencyKeyHash: string;
+  readonly guardrailPolicyId: string | null;
+  readonly dryRunRequired: boolean;
+  readonly dryRunHash: string | null;
+  readonly previewHash: string | null;
+  readonly approvedPreviewHash: string | null;
+  readonly validationSummary: BulkValidationSummary;
+  readonly itemCount: number;
+  readonly successCount: number;
+  readonly failureCount: number;
+  readonly safeFailureMessage: string | null;
+  readonly evidencePackageId: string | null;
+  readonly manifestHash: string | null;
+  readonly contentHash: string | null;
+  readonly retentionPolicy: string;
+  readonly legalHold: boolean;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface BulkFormatSafetyInput {
+  readonly format: string;
+  readonly rows?: readonly (readonly string[])[];
+  readonly archiveEntries?: readonly string[];
+  readonly sizeBytes?: number;
+  readonly maxSizeBytes?: number;
+  readonly encoding?: string;
+}
+
+export function assertBulkOperationType(value: string): BulkOperationType {
+  if (!BULK_OPERATION_TYPES.includes(value as BulkOperationType)) {
+    throw new BulkOperationPolicyError("unknown-operation-type", "bulk operation type denied");
+  }
+  return value as BulkOperationType;
+}
+
+export function assertBulkOperationClassification(value: string): BulkOperationClassification {
+  if (!BULK_OPERATION_CLASSIFICATIONS.includes(value as BulkOperationClassification)) {
+    throw new BulkOperationPolicyError(
+      "unknown-operation-classification",
+      "bulk operation classification denied",
+    );
+  }
+  return value as BulkOperationClassification;
+}
+
+export function assertBulkOperationStatus(value: string): BulkOperationStatus {
+  if (!BULK_OPERATION_STATUSES.includes(value as BulkOperationStatus)) {
+    throw new BulkOperationPolicyError("unknown-operation-status", "bulk operation status denied");
+  }
+  return value as BulkOperationStatus;
+}
+
+export function assertBulkSourceDestinationType(value: string): BulkSourceDestinationType {
+  if (!BULK_SOURCE_DESTINATION_TYPES.includes(value as BulkSourceDestinationType)) {
+    throw new BulkOperationPolicyError("unknown-source-destination-type", "bulk endpoint denied");
+  }
+  return value as BulkSourceDestinationType;
+}
+
+export function assertBulkFileFormat(value: string): BulkFileFormat {
+  if (!BULK_FILE_FORMATS.includes(value as BulkFileFormat)) {
+    throw new BulkOperationPolicyError("unsupported-format", "bulk file format denied");
+  }
+  return value as BulkFileFormat;
+}
+
+export function bulkTextLooksSensitive(value: string): boolean {
+  const lowered = value.toLowerCase();
+  return (
+    telemetryValueLooksSensitive(value) ||
+    [
+      ...OBSERVABILITY_FORBIDDEN_PATTERNS,
+      "object_key",
+      "object key",
+      "raw_row",
+      "raw payload",
+      "provider_response",
+      "connection_string",
+      "private_key",
+    ].some((token) => lowered.includes(token))
+  );
+}
+
+export function safeBulkMessage(value: string): string {
+  const safe = safeTelemetryValue(value);
+  return bulkTextLooksSensitive(value) || bulkTextLooksSensitive(safe)
+    ? "bulk operation evidence"
+    : safe;
+}
+
+export function createBulkValidationError(input: {
+  readonly rowNumber?: number | null;
+  readonly recordRef?: string | null;
+  readonly fieldPath: string;
+  readonly safeErrorCode: string;
+  readonly safeErrorMessage: string;
+}): BulkValidationError {
+  return Object.freeze({
+    rowNumber: input.rowNumber ?? null,
+    recordRef: input.recordRef ? `rec_${opaqueHash(input.recordRef).slice(0, 24)}` : null,
+    fieldPath: safeBulkMessage(assertNonEmpty(input.fieldPath, "bulk.validation.fieldPath")),
+    safeErrorCode: safeBulkMessage(assertNonEmpty(input.safeErrorCode, "bulk.validation.code")),
+    safeErrorMessage: safeBulkMessage(
+      assertNonEmpty(input.safeErrorMessage, "bulk.validation.message"),
+    ),
+  });
+}
+
+export function createBulkValidationSummary(input: {
+  readonly itemCount: number;
+  readonly errors?: readonly BulkValidationError[];
+}): BulkValidationSummary {
+  const errors = Object.freeze([...(input.errors ?? [])]);
+  return Object.freeze({
+    valid: errors.length === 0,
+    itemCount: Math.max(0, input.itemCount),
+    errorCount: errors.length,
+    errors,
+  });
+}
+
+export function assertBulkFileFormatSafety(input: BulkFormatSafetyInput): BulkFileFormat {
+  const format = assertBulkFileFormat(input.format);
+  const maxSize = input.maxSizeBytes ?? MAX_FILE_SIZE_BYTES;
+  if (input.sizeBytes !== undefined && input.sizeBytes > maxSize) {
+    throw new BulkOperationPolicyError("oversized-file", "bulk file too large");
+  }
+  if (input.encoding && !["utf-8", "utf8"].includes(input.encoding.toLowerCase())) {
+    throw new BulkOperationPolicyError("encoding-mismatch", "bulk file encoding denied");
+  }
+  if ((format === "csv" || format === "xlsx") && input.rows) {
+    for (const row of input.rows) {
+      for (const cell of row) {
+        if (/^\s*[=+\-@]/u.test(cell)) {
+          throw new BulkOperationPolicyError(
+            "formula-injection-blocked",
+            "bulk spreadsheet formula denied",
+          );
+        }
+      }
+    }
+  }
+  if (format === "zip" && input.archiveEntries) {
+    for (const entry of input.archiveEntries) {
+      const normalized = entry.replaceAll("\\", "/");
+      if (normalized.startsWith("/") || normalized.split("/").includes("..")) {
+        throw new BulkOperationPolicyError("archive-traversal-blocked", "archive entry denied");
+      }
+    }
+  }
+  return format;
+}
+
+export function createBulkEndpointRef(input: {
+  readonly refType: string;
+  readonly ref: string;
+  readonly fileId?: string | null;
+  readonly format: string;
+  readonly classification: string;
+  readonly schemaId?: string | null;
+  readonly schemaVersion?: string | null;
+  readonly schemaHash?: string | null;
+  readonly mappingId?: string | null;
+  readonly mappingVersion?: string | null;
+  readonly mappingHash?: string | null;
+  readonly checksum?: string | null;
+  readonly scanStatus?: FileScanStatusValue | null;
+  readonly dataResidencyPolicy?: string | null;
+}): BulkEndpointRef {
+  const ref = assertNonEmpty(input.ref, "bulk.endpoint.ref");
+  if (bulkTextLooksSensitive(ref)) {
+    throw new BulkOperationPolicyError("endpoint-ref-sensitive", "bulk endpoint denied");
+  }
+  const refType = assertBulkSourceDestinationType(input.refType);
+  const fileId = input.fileId ?? null;
+  if (
+    ["uploaded-file", "generated-file", "tenant-file", "evidence-package"].includes(refType) &&
+    !fileId
+  ) {
+    throw new BulkOperationPolicyError("file-id-required", "bulk file reference required");
+  }
+  return Object.freeze({
+    refType,
+    ref: safeBulkMessage(ref),
+    fileId,
+    format: assertBulkFileFormat(input.format),
+    classification: assertBulkOperationClassification(input.classification),
+    schemaId: input.schemaId ?? null,
+    schemaVersion: input.schemaVersion ?? null,
+    schemaHash: input.schemaHash ?? null,
+    mappingId: input.mappingId ?? null,
+    mappingVersion: input.mappingVersion ?? null,
+    mappingHash: input.mappingHash ?? null,
+    checksum: input.checksum ?? null,
+    scanStatus: input.scanStatus ?? null,
+    dataResidencyPolicy: input.dataResidencyPolicy
+      ? safeBulkMessage(input.dataResidencyPolicy)
+      : null,
+  });
+}
+
+export function createEvidencePackageManifest(input: {
+  readonly evidencePackageId: string;
+  readonly packageVersion: string;
+  readonly sourceQueryRef: string;
+  readonly includedFileIds: readonly string[];
+  readonly includedAuditEventIds: readonly string[];
+  readonly createdBy: string;
+  readonly createdAt?: string;
+  readonly legalHold?: boolean;
+  readonly retentionPolicy: string;
+  readonly chainOfCustodyRef: string;
+}): EvidencePackageManifest {
+  const createdAt = input.createdAt ?? new Date().toISOString();
+  const includedFileIds = Object.freeze([...input.includedFileIds].sort());
+  const includedAuditEventIds = Object.freeze([...input.includedAuditEventIds].sort());
+  const sourceQueryHash = sha256Hex(input.sourceQueryRef);
+  const contentHash = sha256Hex(JSON.stringify({ includedAuditEventIds, includedFileIds }));
+  const manifestHash = sha256Hex(
+    JSON.stringify({
+      evidencePackageId: input.evidencePackageId,
+      packageVersion: input.packageVersion,
+      sourceQueryHash,
+      contentHash,
+      includedFileIds,
+      includedAuditEventIds,
+    }),
+  );
+  return Object.freeze({
+    evidencePackageId: assertNonEmpty(input.evidencePackageId, "evidencePackageId"),
+    packageType: "evidence-package",
+    packageVersion: assertNonEmpty(input.packageVersion, "packageVersion"),
+    manifestHash,
+    contentHash,
+    sourceQueryHash,
+    includedFileIds,
+    includedAuditEventIds,
+    createdBy: assertNonEmpty(input.createdBy, "evidence.createdBy"),
+    createdAt,
+    legalHold: input.legalHold ?? false,
+    retentionPolicy: safeBulkMessage(assertNonEmpty(input.retentionPolicy, "retentionPolicy")),
+    chainOfCustodyRef: `custody_${opaqueHash(input.chainOfCustodyRef).slice(0, 24)}`,
+  });
+}
+
+export function bulkOperationIdempotencyKey(input: {
+  readonly tenantId: string;
+  readonly operationType: string;
+  readonly sourceRef: string;
+  readonly classification: string;
+}): string {
+  return stableId("bulk-idem", [
+    input.tenantId,
+    input.operationType,
+    opaqueHash(input.sourceRef).slice(0, 24),
+    input.classification,
+  ]);
+}
+
+export function createBulkPreviewHash(input: {
+  readonly operationId: string;
+  readonly operationType: string;
+  readonly classification: string;
+  readonly itemCount: number;
+  readonly validationSummary: BulkValidationSummary;
+  readonly exportScope?: string | null;
+}): string {
+  return sha256Hex(
+    JSON.stringify({
+      operationId: input.operationId,
+      operationType: input.operationType,
+      classification: input.classification,
+      itemCount: input.itemCount,
+      errorCount: input.validationSummary.errorCount,
+      exportScope: input.exportScope ?? null,
+    }),
+  );
+}
+
+export function createBulkDryRunHash(input: {
+  readonly operationId: string;
+  readonly previewHash: string;
+  readonly estimatedImpact: string;
+}): string {
+  return sha256Hex(
+    JSON.stringify({
+      operationId: input.operationId,
+      previewHash: input.previewHash,
+      estimatedImpact: safeBulkMessage(input.estimatedImpact),
+    }),
+  );
+}
+
+export function createBulkOperationRecord(input: {
+  readonly operationId: string;
+  readonly operationType: string;
+  readonly classification: string;
+  readonly tenantId: string;
+  readonly actorId?: string | null;
+  readonly serviceActorId?: string | null;
+  readonly source: BulkEndpointRef;
+  readonly destination: BulkEndpointRef;
+  readonly fileId?: string | null;
+  readonly jobId?: string | null;
+  readonly workflowId?: string | null;
+  readonly idempotencyKey?: string;
+  readonly guardrailPolicyId?: string | null;
+  readonly dryRunRequired?: boolean;
+  readonly dryRunHash?: string | null;
+  readonly previewHash?: string | null;
+  readonly approvedPreviewHash?: string | null;
+  readonly noDryRunRationale?: string | null;
+  readonly partialSuccessAllowed?: boolean;
+  readonly maxErrorCount?: number;
+  readonly maxErrorRate?: number;
+  readonly rollbackSupported?: boolean;
+  readonly rollbackJobId?: string | null;
+  readonly compensationSupported?: boolean;
+  readonly compensationPlanRef?: string | null;
+  readonly irreversibleOperation?: boolean;
+  readonly irreversibleReason?: string | null;
+  readonly exportScope?: string | null;
+  readonly approvedScopeHash?: string | null;
+  readonly validationSummary?: BulkValidationSummary;
+  readonly itemCount?: number;
+  readonly successCount?: number;
+  readonly failureCount?: number;
+  readonly safeFailureMessage?: string | null;
+  readonly evidencePackage?: EvidencePackageManifest | null;
+  readonly retentionPolicy?: string;
+  readonly legalHold?: boolean;
+  readonly retainUntil?: string | null;
+  readonly purgeAllowedAt?: string | null;
+  readonly status?: string;
+  readonly correlationId?: string;
+  readonly causationId?: string | null;
+  readonly requestId?: string;
+  readonly traceId?: string | null;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+}): BulkOperationRecord {
+  const operationType = assertBulkOperationType(input.operationType);
+  const classification = assertBulkOperationClassification(input.classification);
+  const status = assertBulkOperationStatus(input.status ?? "draft");
+  const tenantId = assertNonEmpty(input.tenantId, "bulk.tenantId");
+  const actorId = input.actorId ?? null;
+  const serviceActorId = input.serviceActorId ?? null;
+  if (!actorId && !serviceActorId) {
+    throw new BulkOperationPolicyError("actor-or-service-actor-required", "bulk actor denied");
+  }
+  if (!input.idempotencyKey) {
+    throw new BulkOperationPolicyError("idempotency-required", "bulk idempotency required");
+  }
+  const idempotencyKey = input.idempotencyKey;
+  const isHighRisk = BULK_HIGH_RISK_CLASSIFICATIONS.includes(classification);
+  const dryRunRequired = input.dryRunRequired ?? isHighRisk;
+  const noDryRunRationale = input.noDryRunRationale ?? null;
+  if (isHighRisk && !dryRunRequired && !noDryRunRationale) {
+    throw new BulkOperationPolicyError("dry-run-preview-required", "bulk dry-run required");
+  }
+  const rollbackSupported = input.rollbackSupported ?? false;
+  const compensationSupported = input.compensationSupported ?? false;
+  const irreversibleOperation = input.irreversibleOperation ?? false;
+  const irreversibleReason = input.irreversibleReason ?? null;
+  if (
+    classification === "destructive" &&
+    !rollbackSupported &&
+    !compensationSupported &&
+    !(irreversibleOperation && irreversibleReason)
+  ) {
+    throw new BulkOperationPolicyError(
+      "destructive-rollback-posture-required",
+      "bulk rollback posture required",
+    );
+  }
+  if (operationType === "evidence-package-export" && !input.evidencePackage) {
+    throw new BulkOperationPolicyError(
+      "evidence-package-required",
+      "bulk evidence package required",
+    );
+  }
+  const validationSummary =
+    input.validationSummary ?? createBulkValidationSummary({ itemCount: input.itemCount ?? 0 });
+  const itemCount = input.itemCount ?? validationSummary.itemCount;
+  const createdAt = input.createdAt ?? new Date().toISOString();
+  const updatedAt = input.updatedAt ?? createdAt;
+  const sourceFingerprint = sha256Hex(
+    JSON.stringify({
+      source: input.source.ref,
+      checksum: input.source.checksum,
+      schemaHash: input.source.schemaHash,
+      mappingHash: input.source.mappingHash,
+    }),
+  );
+  const operationFingerprint = sha256Hex(
+    JSON.stringify({
+      operationType,
+      classification,
+      sourceFingerprint,
+      destination: input.destination.ref,
+      itemCount,
+      validationErrorCount: validationSummary.errorCount,
+    }),
+  );
+  return Object.freeze({
+    operationId: assertNonEmpty(input.operationId, "operationId"),
+    operationType,
+    classification,
+    status,
+    tenantId,
+    actorId,
+    serviceActorId,
+    source: input.source,
+    destination: input.destination,
+    fileId: input.fileId ?? input.source.fileId ?? input.destination.fileId ?? null,
+    jobId: input.jobId ?? null,
+    workflowId: input.workflowId ?? null,
+    idempotencyKey: assertNonEmpty(idempotencyKey, "bulk.idempotencyKey"),
+    dedupeKey: `dedupe_${opaqueHash(idempotencyKey).slice(0, 24)}`,
+    sourceFingerprint,
+    operationFingerprint,
+    guardrailPolicyId: input.guardrailPolicyId ?? null,
+    dryRunRequired,
+    dryRunHash: input.dryRunHash ?? null,
+    previewHash: input.previewHash ?? null,
+    approvedPreviewHash: input.approvedPreviewHash ?? null,
+    noDryRunRationale: noDryRunRationale ? safeBulkMessage(noDryRunRationale) : null,
+    partialSuccessAllowed: input.partialSuccessAllowed ?? false,
+    maxErrorCount: Math.max(0, input.maxErrorCount ?? 0),
+    maxErrorRate: Math.max(0, input.maxErrorRate ?? 0),
+    rollbackSupported,
+    rollbackJobId: input.rollbackJobId ?? null,
+    compensationSupported,
+    compensationPlanRef: input.compensationPlanRef ?? null,
+    irreversibleOperation,
+    irreversibleReason: irreversibleReason ? safeBulkMessage(irreversibleReason) : null,
+    exportScope: input.exportScope ? safeBulkMessage(input.exportScope) : null,
+    approvedScopeHash: input.approvedScopeHash ?? null,
+    validationSummary,
+    itemCount,
+    successCount: Math.max(0, input.successCount ?? 0),
+    failureCount: Math.max(0, input.failureCount ?? validationSummary.errorCount),
+    safeFailureMessage: input.safeFailureMessage
+      ? safeFailureMessage(input.safeFailureMessage)
+      : null,
+    evidencePackage: input.evidencePackage ?? null,
+    retentionPolicy: safeBulkMessage(
+      input.retentionPolicy ?? "classification-aware-local-dev-test",
+    ),
+    legalHold: input.legalHold ?? input.evidencePackage?.legalHold ?? false,
+    retainUntil: input.retainUntil ?? null,
+    purgeAllowedAt: input.purgeAllowedAt ?? null,
+    correlationId: input.correlationId ?? stableId("corr", [tenantId, input.operationId]),
+    causationId: input.causationId ?? null,
+    requestId: input.requestId ?? stableId("req", [tenantId, input.operationId]),
+    traceId: input.traceId ?? null,
+    createdAt,
+    updatedAt,
+  });
+}
+
+export function createBulkItemOutcome(input: {
+  readonly itemId: string;
+  readonly rowNumber?: number | null;
+  readonly sourceRecordRef?: string | null;
+  readonly targetRecordRef?: string | null;
+  readonly operation: string;
+  readonly outcome: BulkItemOutcomeStatus;
+  readonly safeErrorCode?: string | null;
+  readonly safeErrorMessage?: string | null;
+  readonly beforeRef?: string | null;
+  readonly afterRef?: string | null;
+  readonly correlationId?: string | null;
+}): BulkItemOutcome {
+  if (!BULK_ITEM_OUTCOMES.includes(input.outcome)) {
+    throw new BulkOperationPolicyError("unknown-item-outcome", "bulk item outcome denied");
+  }
+  return Object.freeze({
+    itemId: assertNonEmpty(input.itemId, "bulk.itemId"),
+    rowNumber: input.rowNumber ?? null,
+    sourceRecordHash: input.sourceRecordRef
+      ? `src_${opaqueHash(input.sourceRecordRef).slice(0, 24)}`
+      : null,
+    targetRecordRef: input.targetRecordRef
+      ? `target_${opaqueHash(input.targetRecordRef).slice(0, 24)}`
+      : null,
+    operation: assertBulkOperationType(input.operation),
+    outcome: input.outcome,
+    safeErrorCode: input.safeErrorCode ? safeBulkMessage(input.safeErrorCode) : null,
+    safeErrorMessage: input.safeErrorMessage ? safeBulkMessage(input.safeErrorMessage) : null,
+    beforeHash: input.beforeRef ? sha256Hex(input.beforeRef) : null,
+    afterHash: input.afterRef ? sha256Hex(input.afterRef) : null,
+    correlationId: input.correlationId ?? null,
+  });
+}
+
+export function toSafeBulkOperationView(operation: BulkOperationRecord): SafeBulkOperationView {
+  return Object.freeze({
+    operationId: operation.operationId,
+    operationType: operation.operationType,
+    classification: operation.classification,
+    status: operation.status,
+    tenantId: operation.tenantId,
+    actorId: operation.actorId,
+    serviceActorId: operation.serviceActorId,
+    sourceType: operation.source.refType,
+    destinationType: operation.destination.refType,
+    sourceFileId: operation.source.fileId,
+    destinationFileId: operation.destination.fileId,
+    format: operation.source.format,
+    jobId: operation.jobId,
+    idempotencyKeyHash: `idem_${opaqueHash(operation.idempotencyKey).slice(0, 24)}`,
+    guardrailPolicyId: operation.guardrailPolicyId,
+    dryRunRequired: operation.dryRunRequired,
+    dryRunHash: operation.dryRunHash,
+    previewHash: operation.previewHash,
+    approvedPreviewHash: operation.approvedPreviewHash,
+    validationSummary: operation.validationSummary,
+    itemCount: operation.itemCount,
+    successCount: operation.successCount,
+    failureCount: operation.failureCount,
+    safeFailureMessage: operation.safeFailureMessage,
+    evidencePackageId: operation.evidencePackage?.evidencePackageId ?? null,
+    manifestHash: operation.evidencePackage?.manifestHash ?? null,
+    contentHash: operation.evidencePackage?.contentHash ?? null,
+    retentionPolicy: operation.retentionPolicy,
+    legalHold: operation.legalHold,
+    createdAt: operation.createdAt,
+    updatedAt: operation.updatedAt,
+  });
 }

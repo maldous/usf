@@ -2955,6 +2955,645 @@
       ],
       "evidence": "Foundation guardrail behaviours from React UI/Playwright lineage are rewritten as capability/API/proof tests; UI assertions remain out of scope.",
       "retry_condition": "UI/UX remains future non-foundation work"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-portability.ts",
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts",
+        "../react/apps/platform-api/scripts/data-portability-runtime-proof.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.import-operations",
+      "behaviour_summary": "Import operations are represented as tenant-scoped, classified, file-backed data movement with explicit idempotency, validation, PDP, guardrail, job, audit, and telemetry posture.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/bulk/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)",
+        "make parity (validate-bulk with planted defects)"
+      ],
+      "evidence": "Import operation creation, quarantined-file rejection, tenant isolation, explicit idempotency, tenant-scoped job execution, and value-free audit are tested and proven.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-portability.ts",
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts",
+        "../react/apps/platform-api/src/usecases/data-governance.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.export-operations",
+      "behaviour_summary": "Export operations are represented as classified, value-minimised data movement with export scope, retention, file evidence, guardrail posture, and safe large-export security signals.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts",
+        "packages/proof/src/import-export-bulk-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "High-risk export preview approval, mismatched approved preview denial, classified export file evidence, and large-export signal posture are tested.",
+      "retry_condition": "broader export API and production exporter depth require separate authority"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts",
+        "../react/apps/platform-api/tests/substrate/api-pipeline.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.bulk-create-update-delete",
+      "behaviour_summary": "Bulk create/update/delete operation types, classifications, status model, actor/service-actor identity, idempotency, guardrails, and lifecycle audit are represented; destructive rollback execution remains partial.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Bulk-create operation guardrail denial, idempotency, and safe audit are proven; destructive rollback/compensation runtime is represented and deferred.",
+      "retry_condition": "authorise destructive bulk operation runtime, rollback, compensation, and approval workflow depth"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-governance.ts",
+        "../react/apps/platform-api/tests/unit/data-governance.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.audit-export",
+      "behaviour_summary": "Audit export is classified as audit-sensitive bulk export with stronger action, guardrail, retention, and value-free evidence posture; broad HTTP audit-export surface remains deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Audit-sensitive evidence package export has manifest/hash/audit linkage; dedicated audit-export HTTP route is deferred.",
+      "retry_condition": "authorise operator-only audit-export route and file package generation depth"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-portability.ts",
+        "../react/apps/platform-api/scripts/data-portability-runtime-proof.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.evidence-package-export",
+      "behaviour_summary": "Evidence package exports have package IDs, versioned manifests, content/source hashes, file IDs, audit event IDs, chain-of-custody refs, retention, legal-hold posture, and privileged audit evidence.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "packages/proof/src/import-export-bulk-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Evidence package manifestHash, contentHash, sourceQueryHash, file IDs, audit event IDs, retention, and legal hold are tested and proven without raw secrets.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/storage-objects.ts",
+        "../react/apps/platform-api/tests/unit/storage-objects.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.file-backed-import-export",
+      "behaviour_summary": "Import sources and export destinations use file_id/package references, classification, checksum, scan/quarantine status, retention, legal hold, and object-key non-leakage.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "capabilities/files/src/file-service.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Quarantined import files are rejected, export output uses classified file/evidence package references, and object keys are absent from API/audit/error/test/proof output.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/scripts/postgres-portable-tenant-import-applier-runtime-proof.ts",
+        "../react/apps/platform-api/src/adapters/postgres-portable-tenant-import-applier.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.job-backed-execution",
+      "behaviour_summary": "Bulk execution is job-backed through the operational job port with tenant scope, concrete service actor, idempotency key propagation, safe payload refs, and value-free job evidence.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/ports/src/index.ts",
+        "adapters/wf/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "packages/proof/src/import-export-bulk-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Operation start enqueues a tenant-scoped import-export-job with concrete service actor and safe payload refs.",
+      "retry_condition": "deeper resumable transactional import applier is deferred to future bulk depth"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-portability.ts",
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.validation-dry-run-preview",
+      "behaviour_summary": "Validation, row-safe errors, deterministic preview hashes, dry-run posture, approval hash binding, and mismatched-preview fail-closed behaviour are represented; full dry-run execution engine remains partial.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Preview hash is deterministic, preview/dry-run posture is non-mutating with no job creation, validation errors are field-scoped and redacted, and mismatched approved preview fails closed.",
+      "retry_condition": "authorise full dry-run impact engine and approval workflow"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.row-item-outcomes",
+      "behaviour_summary": "Bulk item outcomes are row/item scoped, hash raw source/target references, record before/after hashes, and store safe error codes/messages without raw row payloads.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Item outcome creation hashes row/source/target refs and stores value-redacted success/failure evidence.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.partial-success-thresholds",
+      "behaviour_summary": "Partial success, max error count/rate, failure threshold, rollback, and compensation posture are modelled; threshold enforcement and rollback runtime remain partial.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Partial-success status and value-free count summaries are represented and tested; threshold automation is deferred.",
+      "retry_condition": "authorise threshold enforcement, rollback, and compensation runtime"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.rollback-compensation-posture",
+      "behaviour_summary": "Destructive operations require rollback, compensation, or explicit irreversible rationale; rollback execution proof is deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make parity (validate-bulk with planted defects)"
+      ],
+      "evidence": "Core construction fails closed for destructive operations lacking rollback/compensation/irreversible rationale.",
+      "retry_condition": "authorise rollback job, compensation plan, and irreversible operation approval proof"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.idempotency",
+      "behaviour_summary": "Side-effecting bulk operations require explicit idempotency keys; duplicate submission does not duplicate operation/job side effects and replay state is tenant-scoped.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/bulk/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Missing idempotency fails closed and duplicate operation submissions return the existing tenant-scoped operation without duplicate side effects.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.guardrails",
+      "behaviour_summary": "Bulk operations carry guardrail policy IDs and can be denied safely by the local guardrail port with tenant-safe quota/admission evidence.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "capabilities/bulk/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Concrete bulk guardrail path denies over-quota operations with a safe reason code and value-free audit/telemetry evidence.",
+      "retry_condition": "broader file/export/notification bulk quotas remain future guardrail rollout depth"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/tests/substrate/api-pipeline.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.pdp-authorization",
+      "behaviour_summary": "Bulk create/read/list/validate/preview/approve/start/cancel operations go through PDP actions with tenant-bound resources and non-enumerating cross-tenant access.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "capabilities/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Missing permissions are denied; tenant A cannot read/list/start/cancel tenant B operation metadata.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-governance.ts",
+        "../react/apps/platform-api/tests/unit/data-governance.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.audit-evidence",
+      "behaviour_summary": "Bulk lifecycle events are value-free audit events with operation ID, tenant, actor/service actor, action, outcome, reason, correlation, causation, and trace posture.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Bulk lifecycle audit events are emitted and tested to exclude raw payloads, rows, object keys, and secrets.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-governance.ts",
+        "../react/apps/platform-api/tests/unit/data-governance.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.observability-security-signals",
+      "behaviour_summary": "Bulk start, completion, denial, validation failure, quarantine, large export, audit export, and evidence package signals are tenant-safe and redacted.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "capabilities/bulk/src/index.ts",
+        "adapters/obs/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Bulk denial, completion, large-export, and evidence-package signals are emitted through the telemetry port with safe context.",
+      "retry_condition": "broader detection/SIEM/live alerting remains deferred"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/retention.ts",
+        "../react/apps/platform-api/src/usecases/legal-hold.ts",
+        "../react/apps/platform-api/tests/unit/retention.test.ts",
+        "../react/apps/platform-api/tests/unit/legal-hold.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.retention-legal-hold-purge",
+      "behaviour_summary": "Retention, retain-until, purge-allowed, and legal-hold posture is represented on export/evidence packages; purge runtime remains deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Evidence packages carry retention policy and legal hold; privileged purge workflow is explicitly deferred.",
+      "retry_condition": "authorise bulk export purge workflow and retention scheduler integration"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-governance.ts",
+        "../react/apps/platform-api/tests/unit/data-governance.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.privacy-data-minimisation",
+      "behaviour_summary": "Bulk operation views expose safe IDs, counts, hashes, classifications, and summaries rather than raw rows, PII, object keys, provider details, or secrets.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "capabilities/bulk/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)"
+      ],
+      "evidence": "Safe operation views, validation errors, audit events, telemetry, and proof output are leak-scanned for object keys, raw payloads, and secret-looking terms.",
+      "retry_condition": "none"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-portability.ts",
+        "../react/apps/platform-api/tests/unit/data-portability.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.file-format-safety",
+      "behaviour_summary": "Supported formats and parser-safety posture are represented; CSV formula injection and archive traversal checks fail closed, while full parser/decompression engine depth is partial.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "tests/capabilities/import-export-bulk.test.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make parity (validate-bulk with planted defects)"
+      ],
+      "evidence": "CSV formula injection is blocked in tests; unsupported formats, oversized files, encoding mismatch, and archive traversal are fail-closed in core helpers.",
+      "retry_condition": "authorise full CSV/JSONL/XLSX/ZIP parser adapters and decompression bomb tests"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-portability.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.schema-versioning-mapping",
+      "behaviour_summary": "Import/export source and destination schema IDs, versions, schema hashes, mapping IDs, versions, mapping hashes, field classification posture, and unknown-field policy are represented.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make parity (validate-bulk with planted defects)"
+      ],
+      "evidence": "Schema and mapping version/hash fields are required in endpoint model for file-backed paths; schema registry/mapping execution remains deferred.",
+      "retry_condition": "authorise import/export schema registry and mapping execution engine"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/tests/substrate/api-pipeline.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.api-openapi-surfaces",
+      "behaviour_summary": "Future /v1/bulk-operations, imports, and exports surfaces are specified as tenant-scoped, PDP-protected, idempotent, guardrail-protected, redacted, and synthetic-example-only; broad HTTP surface is deferred.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [],
+      "usf_proofs": [],
+      "evidence": "Capability/contract posture is documented; no broad HTTP bulk route is implemented in this slice.",
+      "retry_condition": "authorise bounded API route surface and OpenAPI generation for bulk operations"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/data-portability.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.provider-external-transfer-posture",
+      "behaviour_summary": "Provider source/destination types are recognised as live-external-deferred unless separately authorised; no live provider transfer, credential, or endpoint readiness is claimed.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "docs/architecture/import-export-and-bulk-operations-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "usf_proofs": [
+        "make parity (validate-bulk with planted defects)"
+      ],
+      "evidence": "Provider source/destination modes are modelled and live-external transfer remains explicitly deferred.",
+      "retry_condition": "authorise provider-backed import/export transfer adapters, secret refs, and live/external proof separately"
+    },
+    {
+      "category": "import-export-bulk",
+      "react_paths": [
+        "../react/e2e",
+        "../react/apps/platform-api/tests/substrate/api-pipeline.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-162",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "bulk.react-ui-playwright-behaviours",
+      "behaviour_summary": "Foundation import/export behaviours from React UI/Playwright/API lineage are rewritten as capability/proof tests; UI assertions remain out of scope.",
+      "usf_status": "foundation-behaviour-rewritten-from-ui-test",
+      "usf_paths": [
+        "tests/capabilities/import-export-bulk.test.ts",
+        "packages/proof/src/import-export-bulk-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/import-export-bulk.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make bulk-proof (packages/proof/src/import-export-bulk-proof.ts)",
+        "make parity (validate-bulk with planted defects)"
+      ],
+      "evidence": "React API/UI lineage behaviours for tenant isolation, route protection, validation, import/export evidence, and file safety are rewritten as foundation tests; no Playwright added.",
+      "retry_condition": "UI/UX remains future non-foundation work"
     }
   ],
   "uiArtefacts": [

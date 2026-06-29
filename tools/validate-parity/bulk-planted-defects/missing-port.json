@@ -1,0 +1,11 @@
+{
+  "id": "bulk-missing-port",
+  "expectedRuleId": "USF-BULK-003",
+  "edits": [
+    {
+      "target": "packages/ports/src/index.ts",
+      "old": "export interface ImportExportPort",
+      "new": "export interface ImportExportStore"
+    }
+  ]
+}

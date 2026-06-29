@@ -1,0 +1,11 @@
+{
+  "id": "bulk-missing-matrix-row",
+  "expectedRuleId": "USF-BULK-006",
+  "edits": [
+    {
+      "target": "matrix",
+      "old": "\"react_item_id\": \"bulk.import-operations\"",
+      "new": "\"react_item_id\": \"bulk.import-operations-missing\""
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "bulk-missing-proof",
+  "expectedRuleId": "USF-BULK-004",
+  "edits": [
+    {
+      "target": "packages/proof/src/import-export-bulk-proof.ts",
+      "old": "export async function runImportExportBulkProof",
+      "new": "export async function runBulkProofMissing"
+    }
+  ]
+}

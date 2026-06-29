@@ -2,7 +2,7 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := verify
 
-.PHONY: verify install dev dev-smoke dev.work test-compose parity db-proof authz-proof audit-proof config-proof files-proof auth-proof jobs-proof notify-proof api-proof providers-proof observability-proof guardrails-proof
+.PHONY: verify install dev dev-smoke dev.work test-compose parity db-proof authz-proof audit-proof config-proof files-proof auth-proof jobs-proof notify-proof api-proof providers-proof observability-proof guardrails-proof bulk-proof
 
 install:
 	corepack pnpm install --frozen-lockfile
@@ -57,6 +57,9 @@ observability-proof:
 
 guardrails-proof:
 	corepack pnpm proof:guardrails
+
+bulk-proof:
+	corepack pnpm proof:bulk
 
 files-proof:
 	docker compose -f compose.yaml up -d --wait postgres

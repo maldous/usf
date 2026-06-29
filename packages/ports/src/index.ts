@@ -7,6 +7,8 @@ import type {
   AuditIntegrityResult,
   AuditRecord,
   AuthorizationRequest,
+  BulkItemOutcome,
+  BulkOperationRecord,
   ConfigLayer,
   FileMetadata,
   FileScanStatusValue,
@@ -152,6 +154,28 @@ export interface GuardrailPort {
     readonly liveEdgeReadinessClaim: false;
     readonly productionReadinessClaim: false;
   };
+}
+
+// Import/export/bulk operation port (parity-import-export-bulk, USF-162).
+// Stores controlled data-movement metadata and item-level outcomes only. Raw rows,
+// object keys, payloads, provider internals, and secrets are outside this port.
+export interface ImportExportPort {
+  create(record: BulkOperationRecord): BulkOperationRecord;
+  get(context: TenantContext, operationId: string): BulkOperationRecord | undefined;
+  put(context: TenantContext, record: BulkOperationRecord): BulkOperationRecord;
+  forTenant(
+    context: TenantContext,
+    input?: { limit?: number; cursor?: string },
+  ): {
+    readonly operations: readonly BulkOperationRecord[];
+    readonly nextCursor: string | null;
+  };
+  findByIdempotencyKey(
+    context: TenantContext,
+    idempotencyKey: string,
+  ): BulkOperationRecord | undefined;
+  appendItemOutcome(context: TenantContext, operationId: string, outcome: BulkItemOutcome): void;
+  itemOutcomes(context: TenantContext, operationId: string): readonly BulkItemOutcome[];
 }
 
 export interface ObservabilitySink extends TelemetryPort {

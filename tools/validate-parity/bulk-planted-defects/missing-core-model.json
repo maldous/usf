@@ -1,0 +1,11 @@
+{
+  "id": "bulk-missing-core-model",
+  "expectedRuleId": "USF-BULK-001",
+  "edits": [
+    {
+      "target": "packages/core/src/index.ts",
+      "old": "export const BULK_OPERATION_TYPES = Object.freeze",
+      "new": "export const BULK_OPERATION_TYPEZ = Object.freeze"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "bulk-missing-test",
+  "expectedRuleId": "USF-BULK-005",
+  "edits": [
+    {
+      "target": "tests/capabilities/import-export-bulk.test.ts",
+      "old": "CSV formula injection",
+      "new": "spreadsheet cell guard"
+    }
+  ]
+}

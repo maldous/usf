@@ -1,0 +1,28 @@
+{
+  "run_id": "20260629T014914Z-193ce55",
+  "domain": "parity-import-export-bulk",
+  "before_implementation_summary": "No dedicated import/export/bulk capability existed. Files, jobs, audit, guardrails, observability, API contracts, providers, config, and tenant/PDP substrates existed.",
+  "after_implementation_items": [
+    "packages/core bulk operation model, format safety, validation/item evidence, evidence-package manifest, and audit event taxonomy",
+    "packages/ports ImportExportPort",
+    "adapters/bulk InMemoryImportExportStore",
+    "capabilities/bulk createBulkOperationService",
+    "tests/capabilities/import-export-bulk.test.ts",
+    "packages/proof/src/import-export-bulk-proof.ts",
+    "tools/validate-parity/validate-bulk.py",
+    "docs/architecture/import-export-and-bulk-operations-standard.md",
+    "docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md",
+    "make bulk-proof and proof:bulk"
+  ],
+  "substrates_connected": [
+    "DB/RLS posture via tenant IDs and source-use matrix; durable DB runtime deferred",
+    "PDP via PolicyDecisionPoint for privileged bulk/import/export actions",
+    "audit via AuditRecorder and bulk lifecycle event taxonomy",
+    "files via FileMetadataStore scan/quarantine and file_id posture",
+    "jobs via OperationalJobPort import-export-job submission",
+    "guardrails via GuardrailPort",
+    "observability via TelemetryPort security signals",
+    "provider modes via live-external-deferred provider transfer posture",
+    "config/secrets via standard requiring no secrets and SecretReference-only provider future depth"
+  ]
+}

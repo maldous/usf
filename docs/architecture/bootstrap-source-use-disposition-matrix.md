@@ -210,6 +210,25 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 | `tools/validate-parity/validate-guardrails.py` | source-derived-rewrite | Existing parity validator pattern and guardrail validator expectations | Static parity validator for guardrail invariants. |
 | `tools/validate-parity/guardrails-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk guardrail validator rules fire. |
 
+## Parity Import/Export/Bulk Additions
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `docs/architecture/import-export-and-bulk-operations-standard.md` | source-derived-rewrite | React data portability, import/export, data governance, storage, retention, legal hold, and API route lineage plus USF-162 enterprise controls | Defines governed data movement semantics, classifications, file format safety, schema/mapping, dry-run/preview, row outcomes, evidence packages, idempotency, tenant isolation, guardrails, audit, observability, provider posture, and deferred depth. |
+| `docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the import/export/bulk slice. |
+| `packages/core/src/index.ts` | source-derived-rewrite | React portable tenant export/import, validation, evidence package, and data governance behaviour | Adds bulk operation types, classifications, statuses, file format safety, endpoint refs, validation errors, item outcomes, evidence package manifests, integrity hashes, idempotency, and bulk audit event taxonomy. |
+| `packages/ports/src/index.ts` | source-derived-rewrite | React repository/port boundary and bulk operation behaviour evidence | Adds `ImportExportPort` so bulk capability code depends on a USF port. |
+| `adapters/bulk/package.json` | new-with-rationale | USF adapter workspace pattern | Workspace metadata for the import/export adapter. |
+| `adapters/bulk/src/index.ts` | source-derived-rewrite | React resumable import/export store and proof behaviour rewritten for USF | Implements tenant-scoped in-memory operation metadata, tenant-local idempotency lookup, opaque pagination cursors, and item outcomes without raw rows. |
+| `capabilities/bulk/package.json` | new-with-rationale | USF capability workspace pattern | Workspace metadata for the bulk capability. |
+| `capabilities/bulk/src/index.ts` | source-derived-rewrite | React data portability use-case, route authorization, bulk job, and evidence behaviour rewritten for USF | Implements PDP-protected, guardrail-aware, file/job/audit/telemetry-linked bulk service with redacted safe views and no live/provider/production claim. |
+| `packages/proof/src/import-export-bulk-proof.ts` | source-derived-rewrite | React data-portability runtime proof and Postgres portable import applier proof lineage | Hermetic proof for tenant-safe import/export/bulk semantics without production, legal, regulatory, eDiscovery, or live-provider readiness claims. |
+| `packages/proof/src/index.ts` | evidence-only-support | Proof package target | Exports import/export/bulk proof. |
+| `tests/capabilities/import-export-bulk.test.ts` | source-derived-rewrite | React data-portability, data-governance, storage, retention, and API route tests rewritten as foundation tests | Tests tenant isolation, PDP denial, idempotency, dry-run/preview, validation safety, CSV formula blocking, file quarantine, guardrails, jobs, audit, signals, and evidence package hashes. |
+| `tests/packages/proof.test.ts` | evidence-only-support | Proof package test pattern | Runs import/export/bulk proof in-process. |
+| `tools/validate-parity/validate-bulk.py` | source-derived-rewrite | Existing parity validator pattern and import/export/bulk validator expectations | Static parity validator for import/export/bulk invariants and overclaim prevention. |
+| `tools/validate-parity/bulk-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk import/export/bulk validator rules fire. |
+
 ## Boundary Confirmation
 
 No file in this matrix is copied from `../react`; no target path mirrors a historical source path; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.
