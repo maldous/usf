@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.missing-matrix-row",
+  "expectedRuleId": "USF-GUARDRAILS-007",
+  "edits": [
+    {
+      "target": "matrix",
+      "old": "guardrails.future-api-ops-surfaces",
+      "new": "guardrails.future-api-ops-surfaces-defect"
+    }
+  ]
+}

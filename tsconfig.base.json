@@ -29,6 +29,7 @@
       "@foundation/capability-tenant": ["capabilities/tenant/src/index.ts"],
       "@foundation/adapter-bus": ["adapters/bus/src/index.ts"],
       "@foundation/adapter-db": ["adapters/db/src/index.ts"],
+      "@foundation/adapter-guardrails": ["adapters/guardrails/src/index.ts"],
       "@foundation/adapter-idp": ["adapters/idp/src/index.ts"],
       "@foundation/adapter-mail": ["adapters/mail/src/index.ts"],
       "@foundation/adapter-obs": ["adapters/obs/src/index.ts"],

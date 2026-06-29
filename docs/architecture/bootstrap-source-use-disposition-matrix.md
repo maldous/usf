@@ -188,6 +188,28 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 | `tools/validate-parity/validate-observability.py` | source-derived-rewrite | Existing parity validator pattern and observability validator expectations | Static parity validator for observability/telemetry invariants. |
 | `tools/validate-parity/observability-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk observability validator rules fire. |
 
+## Parity Rate Limits / Abuse Controls Additions
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md` | source-derived-rewrite | React rate-limit, quota, throttling, abuse-control, route guard, provider-protection, and quota proof lineage plus USF-160 enterprise guardrail controls | Defines guardrails as security and availability controls, including classifications, scopes, lifecycle, decision model, retry-after, tenant fairness, resource limits, distributed posture, and deferred live depth. |
+| `docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the guardrails slice. |
+| `packages/core/src/index.ts` | source-derived-rewrite | React rate-limit/quota decision, safe error, audit, telemetry, API, and provider posture lineage | Adds guardrail policy taxonomy, validation, decision model, safe status mapping, and guardrail audit event taxonomy. |
+| `packages/ports/src/index.ts` | source-derived-rewrite | React repository/port boundary lineage | Adds `GuardrailPort` for capability/adapter separation. |
+| `adapters/guardrails/package.json` | new-with-rationale | USF adapter workspace pattern | Workspace metadata for the guardrail adapter. |
+| `adapters/guardrails/src/index.ts` | source-derived-rewrite | React in-memory rate-limit repository and quota behaviour lineage | Implements in-memory single-node local/dev/test policy evaluation, usage accounting, idempotency-aware replay, and safe status view. |
+| `apps/api/src/runtime.ts` | source-derived-rewrite | React runtime composition and route policy lineage | Seeds concrete local jobs.create guardrail policy. |
+| `apps/api/src/server.ts` | source-derived-rewrite | React route guard, retry-after, safe error, telemetry, and audit lineage | Enforces `POST /v1/jobs` guardrail with safe 429 envelope, retry-after, security signal, and value-free audit. |
+| `packages/contracts/src/api-surface.ts` | source-derived-rewrite | React API contract/route posture lineage | Records concrete jobs.create guardrail policy and 429 contract. |
+| `packages/openapi/openapi.json` | evidence-only-support | Generated OpenAPI contract output from USF metadata | Regenerated local/dev/test OpenAPI contract with guardrail 429 response. |
+| `packages/proof/src/rate-limits-abuse-controls-proof.ts` | source-derived-rewrite | React rate-limit/quota runtime proofs rewritten as foundation proof | Hermetic proof for fail-closed, tenant-safe, idempotent guardrails without live enforcement claims. |
+| `packages/proof/src/index.ts` | new-with-rationale | Proof package target | Exports guardrails proof. |
+| `tests/capabilities/rate-limits-abuse-controls.test.ts` | source-derived-rewrite | React rate-limit/quota tests rewritten as foundation tests | Tests policy validation, rate-limit denial, tenant quota isolation, idempotency, provider backpressure, and no live claims. |
+| `tests/apps/api-contracts.test.ts` | source-derived-rewrite | React API route guard behaviour rewritten as foundation tests | Tests side-effecting route guardrail, safe 429, telemetry, and audit evidence. |
+| `tests/packages/proof.test.ts` | evidence-only-support | Proof package test pattern | Runs guardrails proof in-process. |
+| `tools/validate-parity/validate-guardrails.py` | source-derived-rewrite | Existing parity validator pattern and guardrail validator expectations | Static parity validator for guardrail invariants. |
+| `tools/validate-parity/guardrails-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk guardrail validator rules fire. |
+
 ## Boundary Confirmation
 
 No file in this matrix is copied from `../react`; no target path mirrors a historical source path; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.

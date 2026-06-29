@@ -87,7 +87,7 @@ Implemented local/dev/test contract rows are carried by USF-154. Partial/deferre
 | correlation/request IDs | migrated | safe error envelope and route metadata | observability backend depth |
 | security headers | migrated | API hook and OpenAPI metadata | deployment-specific HSTS/CSP depth |
 | CORS/CSRF posture | partial | metadata present; no UI/browser runtime added | browser session/cookie/CSRF runtime |
-| rate limiting/abuse posture | deferred | standard and route metadata | local quota/rate limiter and abuse events |
+| rate limiting/abuse posture | partial | `POST /v1/jobs` local guardrail, safe 429, retry-after, guardrail telemetry/audit, and `make guardrails-proof` | broad route/resource rollout, durable counters, and live edge/WAF/gateway enforcement |
 | example safety | migrated | OpenAPI checker rejects unsafe examples and overclaims | none for implemented routes |
 | API lifecycle/deprecation | migrated | lifecycle/version/compatibility metadata | removal/sunset runtime policy |
 | compatibility snapshots | partial | OpenAPI diff/check posture | synthetic compatibility snapshots and consumer contracts |
@@ -148,7 +148,35 @@ Implemented local/dev/test observability rows are carried by USF-158. Deferred l
 | future API/ops surfaces | partial | `/v1/observability/readiness` and `/v1/observability/signals` implemented safely | raw log/trace/metric export routes deferred |
 | React UI/Playwright observability behaviours | foundation-behaviour-rewritten-from-ui-test | request instrumentation and tenant observability behaviours rewritten as API/capability/proof tests | UI/UX assertions remain out of scope |
 
-Domain count: **12 foundation domains, all `partial`** for the full-parity bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full-parity scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine parity choice) and carried into their domain children.
+### Rate Limits / Abuse Controls Subdomain Classification
+
+Implemented local/dev/test guardrail rows are carried by USF-160. Deferred distributed/live enforcement and broad resource rollout depth are tracked by USF-161.
+
+| Item | usf_status | Evidence | Deferred depth |
+| --- | --- | --- | --- |
+| rate limits | migrated | `GuardrailPolicy`, `GuardrailPort`, `InMemoryGuardrailStore`, safe 429/retry-after tests, `make guardrails-proof` | distributed/persisted enforcement |
+| quotas | migrated | tenant-scoped quota accounting, 409 quota-conflict posture, tenant isolation tests | durable quota accounting and billing integration |
+| throttles | partial | throttle policy type and decision model represented | actual delay/admission scheduling |
+| admission control | partial | unknown policy/scope fail closed; policy-denied semantics represented | broad admission-control rollout |
+| tenant fairness | migrated | tenant A cannot consume or inspect tenant B quota | fair-share scheduler and starvation controls |
+| actor/session/service-actor limits | partial | actor and service-actor scopes represented; privileged actors not exempt by model | session/break-glass/admin runtime rollout |
+| API route guardrails | partial | `POST /v1/jobs` side-effecting route guarded with local policy and OpenAPI 429 | broad API route coverage and guardrail ops APIs |
+| job guardrails | migrated | jobs.create route guard plus idempotency replay no double-count | job concurrency/retry quota depth |
+| notification guardrails | partial | standard defines send/bulk notification quota posture | runtime send/bulk quota rollout |
+| file guardrails | partial | standard defines upload/download/export posture | runtime file quotas and exfiltration controls |
+| provider guardrails | partial | provider backpressure/protection model and tests | provider call budgets and circuit breaker integration |
+| bulk operation safety | partial | bulk operation classification and quota/idempotency posture | approval/dry-run/cancellation runtime |
+| data exfiltration posture | deferred | standard defines suspicious extraction signals | runtime detection/blocking rollout |
+| abuse signals | partial | `rate_limit.exceeded` and policy-denial security signals emitted where represented | credential stuffing, token replay, scraping, and bulk export signals |
+| backpressure/degradation | partial | 503 backpressure decision represented | queue delay, load shedding, and priority policies |
+| quota accounting/reset | migrated | deterministic reset_at and scoped usage counters | distributed reset consistency |
+| distributed enforcement posture | partial | single-node-in-memory, local-test, composed-test, distributed-deferred, live-edge-deferred represented | distributed/live edge enforcement authority and proof |
+| policy config | migrated | typed/classified policies reject secret-looking values | approval workflow and persisted config history |
+| observability/audit linkage | migrated | tenant-safe telemetry and value-free guardrail audit evidence | alerting/SIEM/export integration |
+| future API/ops surfaces | deferred | `/v1/guardrails/*` posture defined and deferred | operator-only PDP-protected runtime surfaces |
+| React UI/Playwright guardrail behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/API/proof tests | UI/UX assertions remain out of scope |
+
+Domain count: **13 foundation domains, all `partial`** for the full-parity bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full-parity scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine parity choice) and carried into their domain children.
 
 ## 4. UI/UX scope (out of foundation scope)
 

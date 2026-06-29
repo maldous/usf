@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.missing-model",
+  "expectedRuleId": "USF-GUARDRAILS-001",
+  "edits": [
+    {
+      "target": "packages/core/src/index.ts",
+      "old": "export const GUARDRAIL_POLICY_TYPES = Object.freeze",
+      "new": "export const GUARDRAIL_POLICY_TYPE_SET = Object.freeze"
+    }
+  ]
+}

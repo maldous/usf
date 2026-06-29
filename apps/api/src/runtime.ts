@@ -1,4 +1,5 @@
 import { InMemoryEventBus } from "@foundation/adapter-bus";
+import { InMemoryGuardrailStore } from "@foundation/adapter-guardrails";
 import { InMemoryIdentityProvider } from "@foundation/adapter-idp";
 import { InMemoryNotificationProvider } from "@foundation/adapter-mail";
 import { CapturedObservabilitySink } from "@foundation/adapter-obs";
@@ -39,6 +40,7 @@ import {
 import { FileCapability, createFileService, type FileService } from "@foundation/capability-files";
 import { JobCapability, createJobService, type JobService } from "@foundation/capability-jobs";
 import { NotificationCapability } from "@foundation/capability-notify";
+import type { GuardrailPolicy } from "@foundation/core";
 
 export const DEV_PROVIDER_MODE_LABEL = "dev in-memory";
 
@@ -69,6 +71,7 @@ export interface DevRuntime {
   readonly configService: ConfigService;
   readonly secretService: SecretService;
   readonly fileService: FileService;
+  readonly guardrails: InMemoryGuardrailStore;
 }
 
 export const DEV_TENANT_ID = "dev-tenant";
@@ -86,6 +89,8 @@ export function createDevRuntime(): DevRuntime {
   const notificationProvider = new InMemoryNotificationProvider();
   const observability = new CapturedObservabilitySink();
   const secrets = new InMemorySecretStore();
+  const guardrails = new InMemoryGuardrailStore();
+  guardrails.upsertPolicy(defaultJobCreateGuardrailPolicy());
 
   const membershipDirectory = new InMemoryTenantMembershipDirectory();
   membershipDirectory.upsert({
@@ -176,5 +181,48 @@ export function createDevRuntime(): DevRuntime {
     configService,
     secretService,
     fileService,
+    guardrails,
   };
+}
+
+function defaultJobCreateGuardrailPolicy(): GuardrailPolicy {
+  const timestamp = "2026-01-01T00:00:00.000Z";
+  return Object.freeze({
+    policyId: "api.jobs.create.local",
+    policyType: "rate-limit",
+    classification: "availability-protection",
+    scope: "route",
+    scopeRef: "jobs.create",
+    tenantId: null,
+    actorId: null,
+    serviceActorId: null,
+    routeId: "jobs.create",
+    operationId: "postJobCreateV1",
+    resourceType: "job",
+    providerId: null,
+    limit: 1000,
+    windowSeconds: 60,
+    burstLimit: null,
+    lifecycle: "active",
+    policyOwner: "platform",
+    owningCapability: "jobs-workflows",
+    riskLevel: "medium",
+    createdBy: "system",
+    approvedBy: "system",
+    lastReviewedAt: null,
+    reviewExpiresAt: null,
+    changeReason: "local dev and test route guardrail",
+    retryAfterPolicy: "safe-window-reset",
+    denialPolicy: "rate-limit-exceeded",
+    telemetryPolicy: "tenant-safe guardrail security signal",
+    auditPolicy: "value-free guardrail denial evidence",
+    environmentScope: "local-dev",
+    dataClassification: "security-sensitive",
+    distributedEnforcement: "single-node-in-memory",
+    liveWafReadinessClaim: false,
+    liveEdgeReadinessClaim: false,
+    productionReadinessClaim: false,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  });
 }

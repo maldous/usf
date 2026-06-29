@@ -11,6 +11,10 @@ import type {
   FileMetadata,
   FileScanStatusValue,
   FileStatusValue,
+  GuardrailDecision,
+  GuardrailEvaluationInput,
+  GuardrailPolicy,
+  GuardrailPolicyUsage,
   IdentityClaims,
   JobRecord,
   TelemetryHealthInput,
@@ -128,6 +132,26 @@ export interface TelemetryPort {
   recordLivenessSignal(input: TelemetryHealthInput): void;
   query(input: { tenantId: string; limit?: number; cursor?: string }): TelemetrySignalPage;
   safeStatusView(): TelemetryCollectorStatusView;
+}
+
+// Guardrail port (parity-rate-limits-abuse, USF-160). This is local/dev/test
+// policy enforcement and proof only; it is not live WAF, edge, gateway, bot,
+// fraud, or production abuse-prevention readiness.
+export interface GuardrailPort {
+  upsertPolicy(policy: GuardrailPolicy): GuardrailPolicy;
+  getPolicy(policyId: string): GuardrailPolicy | undefined;
+  listPolicies(input?: { tenantId?: string | null }): readonly GuardrailPolicy[];
+  evaluate(input: GuardrailEvaluationInput): GuardrailDecision;
+  resetWindow(input: { policyId: string; tenantId: string; subjectRef?: string | null }): void;
+  usage(input?: { policyId?: string; tenantId?: string }): readonly GuardrailPolicyUsage[];
+  safeStatusView(): {
+    readonly providerMode: "in-memory" | "local-test";
+    readonly distributedEnforcement: "single-node-in-memory";
+    readonly policyCount: number;
+    readonly liveWafReadinessClaim: false;
+    readonly liveEdgeReadinessClaim: false;
+    readonly productionReadinessClaim: false;
+  };
 }
 
 export interface ObservabilitySink extends TelemetryPort {

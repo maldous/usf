@@ -4637,6 +4637,36 @@
                 }
               }
             }
+          },
+          "429": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
           }
         },
         "x-usf-route": {
@@ -4647,7 +4677,7 @@
           "requiredAction": "job.create",
           "tenantScope": "tenant-header-body",
           "pdpPolicy": "job service calls PDP",
-          "auditPolicy": "job.create audited by job service",
+          "auditPolicy": "job.create audited by job service; guardrail denials emit value-free guardrail audit",
           "idempotencyPolicy": {
             "required": true,
             "header": "Idempotency-Key",
@@ -4665,7 +4695,7 @@
             "filterAllowList": [],
             "sortAllowList": []
           },
-          "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+          "rateLimitPolicy": "enforced local-dev-test guardrail api.jobs.create.local; single-node in-memory only; live WAF/edge/gateway enforcement deferred",
           "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
           "dataClassification": "confidential",
           "apiVersion": "v1",

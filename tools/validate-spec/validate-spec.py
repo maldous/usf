@@ -125,6 +125,7 @@ AUTHORIZED_TOOLING = {
     "tools/validate-parity/validate-api.py",
     "tools/validate-parity/validate-providers.py",
     "tools/validate-parity/validate-observability.py",
+    "tools/validate-parity/validate-guardrails.py",
 }
 # (item 4) Explicit enum -> vocabulary value-set bindings by (schema, JSON pointer). No guessing.
 # Every "/properties/lifecycleState" enum binds to lifecycle-states (handled in resolve below).
@@ -1990,6 +1991,7 @@ AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "adapters/mail",
     "adapters/secrets",
     "adapters/obs",
+    "adapters/guardrails",
     "packages/core",
     "packages/ports",
     "packages/contracts",

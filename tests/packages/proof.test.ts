@@ -6,6 +6,7 @@ import {
   runJobsWorkflowsProof,
   runObservabilityTelemetryProof,
   runProviderAdaptersProof,
+  runRateLimitsAbuseControlsProof,
 } from "@foundation/proof";
 import { describe, expect, it } from "vitest";
 
@@ -91,6 +92,21 @@ describe("observability/telemetry proof", () => {
       liveTracingBackendClaim: false,
       liveAlertingClaim: false,
       siemReadinessClaim: false,
+      productionLiveClaim: false,
+    });
+  });
+});
+
+describe("rate-limits/abuse-controls proof", () => {
+  it("proves tenant-safe fail-closed guardrails without live enforcement claims", async () => {
+    await expect(runRateLimitsAbuseControlsProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      enforcementPosture: "single-node-in-memory-local-dev-test",
+      liveWafReadinessClaim: false,
+      liveEdgeReadinessClaim: false,
+      liveGatewayReadinessClaim: false,
+      liveAbuseProviderReadinessClaim: false,
       productionLiveClaim: false,
     });
   });

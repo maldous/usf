@@ -1,5 +1,10 @@
 import { buildApi } from "@foundation/app-api";
-import { DEV_ACTOR_ID, DEV_SECURITY_ACTOR_ID, DEV_TENANT_ID } from "@foundation/app-api/runtime";
+import {
+  DEV_ACTOR_ID,
+  DEV_SECURITY_ACTOR_ID,
+  DEV_TENANT_ID,
+  createDevRuntime,
+} from "@foundation/app-api/runtime";
 import { API_ROUTE_CONTRACTS } from "@foundation/contracts";
 import { describe, expect, it } from "vitest";
 
@@ -112,6 +117,80 @@ describe("API contracts runtime surface", () => {
     });
     expect(conflict.statusCode).toBe(409);
     expectSafeErrorEnvelope(conflict.json(), 409);
+
+    await app.close();
+  });
+
+  it("enforces a tenant-safe side-effecting route guardrail with safe 429 evidence", async () => {
+    const runtime = createDevRuntime();
+    const defaultPolicy = runtime.guardrails.getPolicy("api.jobs.create.local");
+    expect(defaultPolicy).toBeDefined();
+    runtime.guardrails.upsertPolicy({ ...defaultPolicy!, limit: 1 });
+    const app = buildApi({ runtime });
+    await app.ready();
+    const payload = {
+      tenantId: DEV_TENANT_ID,
+      classification: "operational-automation-job",
+      jobType: "api-contract-guardrail-test",
+      payloadRefs: { ref: "synthetic" },
+    };
+
+    const created = await app.inject({
+      method: "POST",
+      url: "/v1/jobs",
+      headers: { ...devHeaders, "idempotency-key": "idem-api-guardrail-a" },
+      payload,
+    });
+    expect(created.statusCode).toBe(200);
+
+    const replayed = await app.inject({
+      method: "POST",
+      url: "/v1/jobs",
+      headers: { ...devHeaders, "idempotency-key": "idem-api-guardrail-a" },
+      payload,
+    });
+    expect(replayed.statusCode).toBe(200);
+    expect(replayed.json().job.jobId).toBe(created.json().job.jobId);
+
+    const limited = await app.inject({
+      method: "POST",
+      url: "/v1/jobs",
+      headers: { ...devHeaders, "idempotency-key": "idem-api-guardrail-b" },
+      payload: { ...payload, jobType: "api-contract-guardrail-second" },
+    });
+    expect(limited.statusCode).toBe(429);
+    expect(Number(limited.headers["retry-after"])).toBeGreaterThan(0);
+    const body = limited.json();
+    expectSafeErrorEnvelope(body, 429);
+    expect(body).toMatchObject({
+      code: "rate_limit_exceeded",
+      reason_code: "rate-limit-exceeded",
+      retry_after: expect.any(String),
+    });
+    const errorText = JSON.stringify(body).toLowerCase();
+    expect(errorText).not.toContain("idem-api-guardrail");
+    expect(errorText).not.toContain("api-contract-guardrail-second");
+
+    const signals = runtime.observability.query({ tenantId: DEV_TENANT_ID }).signals;
+    expect(signals.some((signal) => signal.signalName === "rate_limit.exceeded")).toBe(true);
+    const audit = await runtime.auditEvents.query(
+      {
+        tenantId: DEV_TENANT_ID,
+        actorId: DEV_ACTOR_ID,
+        roles: ["tenant-admin"],
+        providerMode: "hermetic-mock",
+        environment: "local",
+      },
+      { tenantId: DEV_TENANT_ID, eventType: "guardrail.limit.exceeded", limit: 10 },
+    );
+    expect(audit.events[0]).toMatchObject({
+      eventType: "guardrail.limit.exceeded",
+      outcome: "denied",
+      reasonCode: "rate-limit-exceeded",
+    });
+    const auditText = JSON.stringify(audit).toLowerCase();
+    expect(auditText).not.toContain("api-contract-guardrail-second");
+    expect(auditText).not.toContain("idem-api-guardrail");
 
     await app.close();
   });

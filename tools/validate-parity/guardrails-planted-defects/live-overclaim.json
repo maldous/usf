@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.live-overclaim",
+  "expectedRuleId": "USF-GUARDRAILS-008",
+  "edits": [
+    {
+      "target": "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+      "old": "In-memory enforcement is local/dev/test only.",
+      "new": "Live WAF readiness is proven by in-memory enforcement."
+    }
+  ]
+}
