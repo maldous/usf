@@ -170,6 +170,81 @@ describe("API contracts runtime surface", () => {
     await app.close();
   });
 
+  it("guards and redacts observability surfaces while preserving request context", async () => {
+    const app = buildApi();
+    await app.ready();
+
+    const denied = await app.inject({
+      method: "GET",
+      url: `/v1/observability/signals?tenantId=${DEV_TENANT_ID}`,
+      headers: devHeaders,
+    });
+    expect(denied.statusCode).toBe(403);
+    expectSafeErrorEnvelope(denied.json(), 403);
+
+    const accepted = await app.inject({
+      method: "GET",
+      url: `/v1/tenant-context?tenantId=${DEV_TENANT_ID}`,
+      headers: {
+        ...securityHeaders,
+        "x-request-id": "req-observability-api",
+        "x-correlation-id": "corr-observability-api",
+        "x-trace-id": "trace-observability-api",
+      },
+    });
+    expect(accepted.statusCode).toBe(200);
+
+    const readiness = await app.inject({
+      method: "GET",
+      url: `/v1/observability/readiness?tenantId=${DEV_TENANT_ID}`,
+      headers: securityHeaders,
+    });
+    expect(readiness.statusCode).toBe(200);
+    expect(readiness.json()).toMatchObject({
+      status: "ready-local-dev-test",
+      providerMode: "in-memory",
+      liveMonitoringReadinessClaim: false,
+      productionReadinessClaim: false,
+      collector: {
+        liveMetricsBackendClaim: false,
+        liveLogBackendClaim: false,
+        liveTracingBackendClaim: false,
+        liveAlertingClaim: false,
+        siemReadinessClaim: false,
+      },
+    });
+
+    const listed = await app.inject({
+      method: "GET",
+      url: `/v1/observability/signals?tenantId=${DEV_TENANT_ID}`,
+      headers: securityHeaders,
+    });
+    expect(listed.statusCode).toBe(200);
+    const body = listed.json();
+    expect(body.signals.length).toBeGreaterThan(0);
+    expect(
+      body.signals.some(
+        (signal: { requestId: string; correlationId: string; traceId: string }) =>
+          signal.requestId === "req-observability-api" &&
+          signal.correlationId === "corr-observability-api" &&
+          signal.traceId === "trace-observability-api",
+      ),
+    ).toBe(true);
+    expect(
+      body.signals.every((signal: { tenantId: string }) => signal.tenantId === DEV_TENANT_ID),
+    ).toBe(true);
+    const text = JSON.stringify(body).toLowerCase();
+    expect(text).not.toContain("bearer ");
+    expect(text).not.toContain("secret://");
+    expect(text).not.toContain("endpoint://");
+    expect(text).not.toContain("object_key");
+    expect(text).not.toContain("provider_response");
+    expect(text).not.toContain("stack trace");
+    expect(text).not.toContain("@example");
+
+    await app.close();
+  });
+
   it("redacts validation errors and returns safe correlation identifiers", async () => {
     const app = buildApi();
     await app.ready();
