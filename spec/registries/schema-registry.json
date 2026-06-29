@@ -1727,6 +1727,61 @@
       ]
     },
     {
+      "id": "runtime-proof.schema.json",
+      "title": "Runtime Proof Manifest Schema",
+      "path": "spec/schemas/runtime-proof.schema.json",
+      "class": "proof-schema",
+      "family": "evidence-and-proof",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Proof",
+        "Command",
+        "Evidence"
+      ],
+      "purpose": "Validates bounded runtime proof manifests for API and worker proof modes, service-catalogue linkage, proof commands, evidence boundaries, deferred boundaries, and explicit non-claims.",
+      "requiredBecause": "USF-181 runtime proof must be machine-readable and fail closed without upgrading in-memory or compose-boundary evidence into broader readiness claims.",
+      "sourceInputs": [
+        "spec/instances/compose-service/service-catalogue.json",
+        "apps/api/src/main.ts",
+        "apps/work/src/main.ts",
+        "packages/proof/src/runtime-application-proof.ts",
+        "../react compose runtime and proof command evidence"
+      ],
+      "taxonomyRefs": [
+        "proof-classification",
+        "provider-classification",
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "proof-levels",
+        "provider-modes",
+        "environment-classes",
+        "evidence-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "proof collectors",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "runtime modes present",
+        "API and worker proof commands present",
+        "compose-backed mode linked to service catalogue authority",
+        "deferred provider-binding boundary explicit",
+        "prohibited readiness claims absent"
+      ],
+      "authorityRole": "runtime-proof-evidence",
+      "driftRisks": [
+        "Treating in-memory proof as composed-provider proof.",
+        "Treating compose-boundary proof as staging, production, live-provider, SOC, ISO, full dev, or full React parity readiness."
+      ],
+      "aiGuidance": "Runtime proof manifests support bounded evidence only. Do not upgrade provider mode or readiness claims beyond observed proof output.",
+      "deferredDetails": [
+        "Current compose-backed proof starts the Compose boundary but records provider adapter binding as deferred."
+      ]
+    },
+    {
       "id": "provider-mode.schema.json",
       "title": "Provider Mode Schema",
       "path": "spec/schemas/provider-mode.schema.json",

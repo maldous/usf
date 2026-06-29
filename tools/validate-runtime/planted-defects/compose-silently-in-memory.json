@@ -1,0 +1,20 @@
+{
+  "expectedRule": "USF-RUNTIME-003",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/runtimeModes/1/composeBoundary/required",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/runtimeModes/1/composeBoundary/providerBinding",
+      "value": "not-applicable"
+    },
+    {
+      "op": "replace",
+      "path": "/runtimeModes/1/deferredBoundaryRefs",
+      "value": []
+    }
+  ]
+}

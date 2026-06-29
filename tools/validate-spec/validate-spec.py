@@ -132,6 +132,7 @@ AUTHORIZED_TOOLING = {
     "tools/validate-parity/validate-bulk.py",
     "tools/validate-parity/validate-search.py",
     "tools/validate-parity/validate-resources.py",
+    "tools/validate-runtime/validate-runtime.py",
 }
 # (item 4) Explicit enum -> vocabulary value-set bindings by (schema, JSON pointer). No guessing.
 # Every "/properties/lifecycleState" enum binds to lifecycle-states (handled in resolve below).
@@ -194,6 +195,7 @@ ENUM_BINDINGS = {
     ("proof-evidence", "/$defs/proofLevel"): "proof-levels",
     ("proof-evidence", "/$defs/providerMode"): "provider-modes",
     ("proof-evidence", "/$defs/environment"): "environment-classes",
+    ("runtime-proof", "/$defs/evidenceGrade"): "compose-evidence-grades",
     ("provider-mode", "/$defs/providerMode"): "provider-modes",
     ("provider-mode", "/$defs/environment"): "environment-classes",
     ("schema-registry", "/$defs/schemaClass"): "schema-classes",

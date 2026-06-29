@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-007",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/runtimeModes/1/composeBoundary/serviceCataloguePath",
+      "value": "docs/architecture/runtime-application-compose-parity.md"
+    }
+  ]
+}

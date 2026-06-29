@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-009",
+  "manifestPatches": [
+    {
+      "op": "remove",
+      "path": "/auditEvidenceBoundary"
+    }
+  ]
+}

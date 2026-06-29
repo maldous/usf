@@ -79,7 +79,7 @@ import type { AuditQueryCriteria } from "@foundation/ports";
 import { buildOpenApiDocument } from "@foundation/openapi";
 import { randomUUID } from "node:crypto";
 import Fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
-import { DEV_PROVIDER_MODE_LABEL, createDevRuntime, type DevRuntime } from "./runtime.ts";
+import { createDevRuntime, type DevRuntime } from "./runtime.ts";
 
 export interface BuildApiOptions {
   readonly runtime?: DevRuntime;
@@ -379,9 +379,13 @@ async function enforceRouteGuardrail(
 function runtimeStatus(runtime: DevRuntime) {
   return {
     service: "foundation-api" as const,
-    providerMode: DEV_PROVIDER_MODE_LABEL,
+    runtimeMode: runtime.runtimeMode,
+    providerMode: runtime.providerModeLabel,
     providerClass: runtime.providerClass,
     environment: runtime.environment,
+    serviceCatalogueAuthority: runtime.serviceCatalogueAuthority,
+    composeTarget: runtime.composeTarget,
+    deferredBoundaries: [...runtime.deferredBoundaries],
   };
 }
 
@@ -646,7 +650,8 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
             actorId: context.actorId,
             subject: context.tenantId,
             metadata: {
-              providerMode: DEV_PROVIDER_MODE_LABEL,
+              providerMode: runtime.providerModeLabel,
+              runtimeMode: runtime.runtimeMode,
               providerClass: context.providerMode,
             },
           }),
@@ -711,7 +716,8 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
           tenantId: context.tenantId,
           actorId: context.actorId,
           roles: [...context.roles],
-          providerMode: DEV_PROVIDER_MODE_LABEL,
+          runtimeMode: runtime.runtimeMode,
+          providerMode: runtime.providerModeLabel,
           providerClass: context.providerMode,
           environment: context.environment,
           auditEvents: runtime.auditLedger.list(context.tenantId).length,
@@ -1130,7 +1136,7 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
       // Provider MODES only (never credentials); the plan is already non-secret.
       return {
         tenantId: context.tenantId,
-        providerMode: DEV_PROVIDER_MODE_LABEL,
+        providerMode: runtime.providerModeLabel,
         providers: runtime.providers,
       };
     },

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-010",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/runtimeModes/1/deferredBoundaryRefs",
+      "value": []
+    }
+  ]
+}

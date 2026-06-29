@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-004",
+  "manifestPatches": [
+    {
+      "op": "remove",
+      "path": "/runtimeModes/0/workerProof"
+    }
+  ]
+}

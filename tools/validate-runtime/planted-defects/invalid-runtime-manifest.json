@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-001",
+  "manifestPatches": [
+    {
+      "op": "remove",
+      "path": "/title"
+    }
+  ]
+}

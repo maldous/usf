@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-RUNTIME-006",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/allowedClaims",
+      "value": [
+        "production-readiness"
+      ]
+    }
+  ]
+}

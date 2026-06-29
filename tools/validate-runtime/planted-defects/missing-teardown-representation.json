@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-008",
+  "proofSourceReplacements": [
+    {
+      "old": "finally",
+      "new": "finale"
+    }
+  ]
+}
