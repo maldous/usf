@@ -1388,25 +1388,34 @@
         "e2e/prod/error-handling"
       ],
       "behaviour_summary": "Rate-limit and abuse controls are represented as posture metadata only.",
-      "usf_status": "deferred",
+      "usf_status": "partial",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "packages/contracts/src/api-surface.ts"
+        "packages/contracts/src/api-surface.ts",
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "apps/api/src/server.ts",
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
       ],
       "usf_tests": [
-        "tests/packages/openapi.test.ts"
+        "tests/packages/openapi.test.ts",
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts"
       ],
       "usf_proofs": [
-        "python3 tools/validate-parity/validate-api.py all --json"
+        "python3 tools/validate-parity/validate-api.py all --json",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts): local/dev/test side-effecting route guardrail, retry-after, idempotency, tenant quota isolation, audit and telemetry"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "linear_issue": "USF-154",
-      "blocker": "USF-155",
+      "blocker": "USF-161",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "No live edge/WAF/rate-limit provider readiness is claimed.",
-      "retry_condition": "Authorised API depth directive implements local rate/quota enforcement and abuse evidence."
+      "evidence": "USF-160 adds local/dev/test guardrail semantics: core policy/decision model, GuardrailPort, in-memory single-node store, jobs.create route guard, safe 429/retry-after, tenant quota isolation, idempotency-aware accounting, value-free audit, tenant-safe telemetry, validate-guardrails, and make guardrails-proof. Broad route/resource rollout and live edge/WAF/gateway enforcement remain deferred.",
+      "retry_condition": "USF-161: Guardrail deferred depth completes broad route/resource rollout, durable/distributed counters, guardrail admin APIs, and explicitly authorised live enforcement providers; then reclassify this API posture row."
     },
     {
       "react_item_id": "api.example-safety",
@@ -1975,251 +1984,251 @@
       "evidence": "Deferred depth is explicitly tracked in USF-157. The current slice makes no live provider, production, supplier approval, DR, gateway-live, SOC, ISO, or regulatory certification claim.",
       "retry_condition": "USF-157 receives an authorised implementation directive and proves the deferred live/risk/resilience controls without overclaiming."
     },
-  {
-    "react_item_id": "observability",
-    "category": "observability",
-    "react_paths": [
-      "docs/adr/0020-define-observability-diagnostics-and-runtime-introspection-primitives.md",
-      "docs/adr/0062-observability-alerting-and-incident-architecture.md",
-      "docs/evidence/observability",
-      "apps/platform-api/src/usecases/observability.ts",
-      "apps/platform-api/src/usecases/tenant-observability.ts",
-      "apps/platform-api/src/usecases/logs.ts",
-      "apps/platform-api/src/adapters/in-memory-observability-repository.ts",
-      "apps/platform-api/tests/unit/observability.test.ts",
-      "apps/platform-api/scripts/observability-signals-runtime-proof.ts",
-      "e2e/discovery/browser-bff-trace.spec.ts"
-    ],
-    "behaviour_summary": "Controlled local/dev/test observability and telemetry surface: metrics, traces/spans, structured logs, operational/security signals, health/readiness/liveness, correlation propagation, redaction, tenant-safe operational insight, provider-mode posture, and future ops/API readiness.",
-    "usf_status": "partial",
-    "usf_paths": [
-      "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
-      "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
-      "packages/core/src/index.ts",
-      "packages/ports/src/index.ts",
-      "adapters/obs/src/index.ts",
-      "capabilities/tenant/src/authorization-policy.ts",
-      "apps/api/src/server.ts",
-      "packages/contracts/src/index.ts",
-      "packages/contracts/src/api-surface.ts",
-      "packages/openapi/src/index.ts",
-      "packages/openapi/openapi.json",
-      "packages/proof/src/observability-telemetry-proof.ts",
-      "tools/validate-parity/validate-observability.py"
-    ],
-    "usf_tests": [
-      "tests/capabilities/observability-telemetry.test.ts",
-      "tests/apps/api-contracts.test.ts",
-      "tests/packages/proof.test.ts"
-    ],
-    "usf_proofs": [
-      "make observability-proof",
-      "make parity (validate-observability USF-OBSERVABILITY-* with planted defects)"
-    ],
-    "semantic_authority": "known",
-    "source_use_disposition": "replace",
-    "linear_issue": "USF-158",
-    "blocker": "USF-159",
-    "blocking_foundation_readiness": true,
-    "domain_authorised": true,
-    "evidence": "USF-158 implements the local/dev/test observability telemetry slice: controlled signal model, bounded in-memory collector, safe metric label validation, span/log/event redaction, context propagation through the tenant-context API path, PDP-protected redacted observability routes, value-free audit of observability access, make observability-proof, and validate-observability. No live monitoring, SIEM, alerting, SOC, ISO, dashboard, incident-response, or production readiness claim is made.",
-    "retry_condition": "USF-159 completes deferred live observability backend, export, alerting, dashboard, incident, retention, SLI/SLO, and cross-tenant aggregate depth under explicit authority."
-  },
-  {
-    "react_item_id": "observability.metrics-cardinality",
-    "category": "observability",
-    "react_paths": [
-      "apps/platform-api/src/adapters/prometheus-metrics.ts",
-      "apps/platform-api/tests/unit/prometheus-metrics.test.ts",
-      "apps/platform-api/scripts/prometheus-metrics-runtime-proof.ts",
-      "docs/evidence/observability/alloy-label-policy-and-test-ingestion.md"
-    ],
-    "behaviour_summary": "Metrics use stable names, explicit types and units, allow-listed labels, tenant-safe label posture, and high-cardinality/sensitive-value rejection.",
-    "usf_status": "migrated",
-    "usf_paths": [
-      "packages/core/src/index.ts",
-      "adapters/obs/src/index.ts",
-      "tests/capabilities/observability-telemetry.test.ts",
-      "packages/proof/src/observability-telemetry-proof.ts"
-    ],
-    "usf_tests": [
-      "tests/capabilities/observability-telemetry.test.ts"
-    ],
-    "usf_proofs": [
-      "make observability-proof"
-    ],
-    "semantic_authority": "known",
-    "source_use_disposition": "replace",
-    "linear_issue": "USF-158",
-    "blocker": "USF-158",
-    "blocking_foundation_readiness": false,
-    "domain_authorised": true,
-    "evidence": "METRIC_TYPES, OBSERVABILITY_ALLOWED_LABELS, validateMetricLabels, collector metric capture, tests, and proof enforce allow-listed labels and reject high-cardinality or secret-looking metric labels.",
-    "retry_condition": "No retry needed for local/dev/test metric label governance."
-  },
-  {
-    "react_item_id": "observability.traces-logs-redaction",
-    "category": "observability",
-    "react_paths": [
-      "docs/adr/0020-define-observability-diagnostics-and-runtime-introspection-primitives.md",
-      "apps/platform-api/src/usecases/logs.ts",
-      "apps/platform-api/tests/unit/logs-usecase.test.ts",
-      "apps/platform-api/scripts/observability-metrics-traces-closure-runtime-proof.ts"
-    ],
-    "behaviour_summary": "Traces/spans and structured logs carry safe context and message templates while blocking secrets, tokens, object keys, raw recipient addresses, raw provider responses, and stack traces.",
-    "usf_status": "migrated",
-    "usf_paths": [
-      "packages/core/src/index.ts",
-      "adapters/obs/src/index.ts",
-      "tests/capabilities/observability-telemetry.test.ts",
-      "packages/proof/src/observability-telemetry-proof.ts"
-    ],
-    "usf_tests": [
-      "tests/capabilities/observability-telemetry.test.ts"
-    ],
-    "usf_proofs": [
-      "make observability-proof"
-    ],
-    "semantic_authority": "known",
-    "source_use_disposition": "replace",
-    "linear_issue": "USF-158",
-    "blocker": "USF-158",
-    "blocking_foundation_readiness": false,
-    "domain_authorised": true,
-    "evidence": "Telemetry spans and structured logs are redacted before persistence; tests and proof scan for token, cookie, credential, object-key, recipient-address, provider-response, and stack-trace leaks.",
-    "retry_condition": "No retry needed for local/dev/test trace/log redaction proof."
-  },
-  {
-    "react_item_id": "observability.context-tenant-isolation",
-    "category": "observability",
-    "react_paths": [
-      "e2e/discovery/browser-bff-trace.spec.ts",
-      "tools/e2e/correlation-headers.test.mjs",
-      "docs/evidence/observability/tenant-observability-readiness.md"
-    ],
-    "behaviour_summary": "Request, correlation, trace, tenant, actor, route, operation, job, provider, notification, file, and audit context propagates without creating authorization or leaking tenant data.",
-    "usf_status": "migrated",
-    "usf_paths": [
-      "apps/api/src/server.ts",
-      "adapters/obs/src/index.ts",
-      "tests/apps/api-contracts.test.ts",
-      "tests/capabilities/observability-telemetry.test.ts"
-    ],
-    "usf_tests": [
-      "tests/apps/api-contracts.test.ts",
-      "tests/capabilities/observability-telemetry.test.ts"
-    ],
-    "usf_proofs": [
-      "make observability-proof"
-    ],
-    "semantic_authority": "known",
-    "source_use_disposition": "replace",
-    "linear_issue": "USF-158",
-    "blocker": "USF-158",
-    "blocking_foundation_readiness": false,
-    "domain_authorised": true,
-    "evidence": "Tenant-context API emits safe metric/span signals with propagated request/correlation/trace IDs; tenant telemetry queries are tenant-scoped; tenant mismatch emits safe security signal where represented.",
-    "retry_condition": "No retry needed for implemented local/dev/test context propagation and tenant isolation."
-  },
-  {
-    "react_item_id": "observability.health-readiness-liveness-provider-modes",
-    "category": "observability",
-    "react_paths": [
-      "apps/platform-api/scripts/observability-readiness-route-runtime-proof.ts",
-      "apps/platform-api/scripts/provider-observability-contract-runtime-proof.ts",
-      "docs/evidence/observability/tenant-observability-readiness.md"
-    ],
-    "behaviour_summary": "Health, readiness, liveness, capability readiness, and provider-mode observability are distinct; deferred and disabled providers do not imply live readiness.",
-    "usf_status": "migrated",
-    "usf_paths": [
-      "packages/core/src/index.ts",
-      "adapters/obs/src/index.ts",
-      "packages/proof/src/observability-telemetry-proof.ts",
-      "docs/architecture/provider-adapters-and-modes-standard.md"
-    ],
-    "usf_tests": [
-      "tests/capabilities/observability-telemetry.test.ts"
-    ],
-    "usf_proofs": [
-      "make observability-proof",
-      "make providers-proof"
-    ],
-    "semantic_authority": "known",
-    "source_use_disposition": "replace",
-    "linear_issue": "USF-158",
-    "blocker": "USF-158",
-    "blocking_foundation_readiness": false,
-    "domain_authorised": true,
-    "evidence": "Collector status exposes health/readiness/liveness separately with liveMonitoringReadinessClaim=false; observability composed provider remains deferred; disabled providers fail closed.",
-    "retry_condition": "No retry needed for implemented local/dev/test provider-mode observability proof."
-  },
-  {
-    "react_item_id": "observability.api-ops-surfaces",
-    "category": "route",
-    "react_paths": [
-      "apps/platform-api/src/usecases/observability.ts",
-      "apps/platform-api/src/usecases/tenant-observability.ts",
-      "apps/react-enterprise-app/src/features/admin-observability",
-      "apps/react-enterprise-app/src/routes/admin/observability.tsx"
-    ],
-    "behaviour_summary": "Future ops/API observability surfaces are PDP-protected, tenant-guarded, OpenAPI-covered, redacted, non-enumerating, and do not expose raw logs or unrestricted telemetry.",
-    "usf_status": "migrated",
-    "usf_paths": [
-      "apps/api/src/server.ts",
-      "packages/contracts/src/index.ts",
-      "packages/contracts/src/api-surface.ts",
-      "packages/openapi/src/index.ts",
-      "packages/openapi/openapi.json",
-      "tests/apps/api-contracts.test.ts"
-    ],
-    "usf_tests": [
-      "tests/apps/api-contracts.test.ts",
-      "tests/packages/openapi.test.ts"
-    ],
-    "usf_proofs": [
-      "make api-proof",
-      "make observability-proof"
-    ],
-    "semantic_authority": "known",
-    "source_use_disposition": "replace",
-    "linear_issue": "USF-158",
-    "blocker": "USF-158",
-    "blocking_foundation_readiness": false,
-    "domain_authorised": true,
-    "evidence": "GET /v1/observability/readiness and GET /v1/observability/signals are operator-only, PDP protected, tenant guarded, redacted, paginated where applicable, OpenAPI covered, and tested. Raw logs/traces/metrics export and dashboards remain deferred.",
-    "retry_condition": "No retry needed for implemented local/dev/test observability API surfaces."
-  },
-  {
-    "react_item_id": "observability.alerting-incident-dashboard-live-depth",
-    "category": "observability",
-    "react_paths": [
-      "docs/adr/0062-observability-alerting-and-incident-architecture.md",
-      "apps/platform-api/scripts/alerting-runtime-proof.ts",
-      "apps/platform-api/scripts/incident-foundation-runtime-proof.ts",
-      "apps/platform-api/scripts/dashboards-runtime-proof.ts",
-      "compose.yaml"
-    ],
-    "behaviour_summary": "Live telemetry backends, SIEM/export, alert delivery, incident workflow, dashboards, retention purge, SLI/SLO measurement, cross-tenant aggregates, and external observability providers are represented as posture but deferred.",
-    "usf_status": "deferred",
-    "usf_paths": [
-      "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
-      "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md"
-    ],
-    "usf_tests": [
-      "tests/capabilities/observability-telemetry.test.ts"
-    ],
-    "usf_proofs": [
-      "make observability-proof"
-    ],
-    "semantic_authority": "known",
-    "source_use_disposition": "replace",
-    "linear_issue": "USF-158",
-    "blocker": "USF-159",
-    "blocking_foundation_readiness": true,
-    "domain_authorised": true,
-    "evidence": "USF-159 tracks deferred depth. This slice records posture and validators but makes no live monitoring, live metrics/log/tracing backend, SIEM, live alerting, dashboard, incident-response, SOC, ISO, or production readiness claim.",
-    "retry_condition": "USF-159 receives an authorised implementation directive and proves the deferred live/backend/deep operational controls without overclaiming."
-  },
+    {
+      "react_item_id": "observability",
+      "category": "observability",
+      "react_paths": [
+        "docs/adr/0020-define-observability-diagnostics-and-runtime-introspection-primitives.md",
+        "docs/adr/0062-observability-alerting-and-incident-architecture.md",
+        "docs/evidence/observability",
+        "apps/platform-api/src/usecases/observability.ts",
+        "apps/platform-api/src/usecases/tenant-observability.ts",
+        "apps/platform-api/src/usecases/logs.ts",
+        "apps/platform-api/src/adapters/in-memory-observability-repository.ts",
+        "apps/platform-api/tests/unit/observability.test.ts",
+        "apps/platform-api/scripts/observability-signals-runtime-proof.ts",
+        "e2e/discovery/browser-bff-trace.spec.ts"
+      ],
+      "behaviour_summary": "Controlled local/dev/test observability and telemetry surface: metrics, traces/spans, structured logs, operational/security signals, health/readiness/liveness, correlation propagation, redaction, tenant-safe operational insight, provider-mode posture, and future ops/API readiness.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+        "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/obs/src/index.ts",
+        "capabilities/tenant/src/authorization-policy.ts",
+        "apps/api/src/server.ts",
+        "packages/contracts/src/index.ts",
+        "packages/contracts/src/api-surface.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/observability-telemetry-proof.ts",
+        "tools/validate-parity/validate-observability.py"
+      ],
+      "usf_tests": [
+        "tests/capabilities/observability-telemetry.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make observability-proof",
+        "make parity (validate-observability USF-OBSERVABILITY-* with planted defects)"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-158",
+      "blocker": "USF-159",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "USF-158 implements the local/dev/test observability telemetry slice: controlled signal model, bounded in-memory collector, safe metric label validation, span/log/event redaction, context propagation through the tenant-context API path, PDP-protected redacted observability routes, value-free audit of observability access, make observability-proof, and validate-observability. No live monitoring, SIEM, alerting, SOC, ISO, dashboard, incident-response, or production readiness claim is made.",
+      "retry_condition": "USF-159 completes deferred live observability backend, export, alerting, dashboard, incident, retention, SLI/SLO, and cross-tenant aggregate depth under explicit authority."
+    },
+    {
+      "react_item_id": "observability.metrics-cardinality",
+      "category": "observability",
+      "react_paths": [
+        "apps/platform-api/src/adapters/prometheus-metrics.ts",
+        "apps/platform-api/tests/unit/prometheus-metrics.test.ts",
+        "apps/platform-api/scripts/prometheus-metrics-runtime-proof.ts",
+        "docs/evidence/observability/alloy-label-policy-and-test-ingestion.md"
+      ],
+      "behaviour_summary": "Metrics use stable names, explicit types and units, allow-listed labels, tenant-safe label posture, and high-cardinality/sensitive-value rejection.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/obs/src/index.ts",
+        "tests/capabilities/observability-telemetry.test.ts",
+        "packages/proof/src/observability-telemetry-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "usf_proofs": [
+        "make observability-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-158",
+      "blocker": "USF-158",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "METRIC_TYPES, OBSERVABILITY_ALLOWED_LABELS, validateMetricLabels, collector metric capture, tests, and proof enforce allow-listed labels and reject high-cardinality or secret-looking metric labels.",
+      "retry_condition": "No retry needed for local/dev/test metric label governance."
+    },
+    {
+      "react_item_id": "observability.traces-logs-redaction",
+      "category": "observability",
+      "react_paths": [
+        "docs/adr/0020-define-observability-diagnostics-and-runtime-introspection-primitives.md",
+        "apps/platform-api/src/usecases/logs.ts",
+        "apps/platform-api/tests/unit/logs-usecase.test.ts",
+        "apps/platform-api/scripts/observability-metrics-traces-closure-runtime-proof.ts"
+      ],
+      "behaviour_summary": "Traces/spans and structured logs carry safe context and message templates while blocking secrets, tokens, object keys, raw recipient addresses, raw provider responses, and stack traces.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/obs/src/index.ts",
+        "tests/capabilities/observability-telemetry.test.ts",
+        "packages/proof/src/observability-telemetry-proof.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "usf_proofs": [
+        "make observability-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-158",
+      "blocker": "USF-158",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Telemetry spans and structured logs are redacted before persistence; tests and proof scan for token, cookie, credential, object-key, recipient-address, provider-response, and stack-trace leaks.",
+      "retry_condition": "No retry needed for local/dev/test trace/log redaction proof."
+    },
+    {
+      "react_item_id": "observability.context-tenant-isolation",
+      "category": "observability",
+      "react_paths": [
+        "e2e/discovery/browser-bff-trace.spec.ts",
+        "tools/e2e/correlation-headers.test.mjs",
+        "docs/evidence/observability/tenant-observability-readiness.md"
+      ],
+      "behaviour_summary": "Request, correlation, trace, tenant, actor, route, operation, job, provider, notification, file, and audit context propagates without creating authorization or leaking tenant data.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "apps/api/src/server.ts",
+        "adapters/obs/src/index.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "usf_proofs": [
+        "make observability-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-158",
+      "blocker": "USF-158",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Tenant-context API emits safe metric/span signals with propagated request/correlation/trace IDs; tenant telemetry queries are tenant-scoped; tenant mismatch emits safe security signal where represented.",
+      "retry_condition": "No retry needed for implemented local/dev/test context propagation and tenant isolation."
+    },
+    {
+      "react_item_id": "observability.health-readiness-liveness-provider-modes",
+      "category": "observability",
+      "react_paths": [
+        "apps/platform-api/scripts/observability-readiness-route-runtime-proof.ts",
+        "apps/platform-api/scripts/provider-observability-contract-runtime-proof.ts",
+        "docs/evidence/observability/tenant-observability-readiness.md"
+      ],
+      "behaviour_summary": "Health, readiness, liveness, capability readiness, and provider-mode observability are distinct; deferred and disabled providers do not imply live readiness.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "adapters/obs/src/index.ts",
+        "packages/proof/src/observability-telemetry-proof.ts",
+        "docs/architecture/provider-adapters-and-modes-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "usf_proofs": [
+        "make observability-proof",
+        "make providers-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-158",
+      "blocker": "USF-158",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "Collector status exposes health/readiness/liveness separately with liveMonitoringReadinessClaim=false; observability composed provider remains deferred; disabled providers fail closed.",
+      "retry_condition": "No retry needed for implemented local/dev/test provider-mode observability proof."
+    },
+    {
+      "react_item_id": "observability.api-ops-surfaces",
+      "category": "route",
+      "react_paths": [
+        "apps/platform-api/src/usecases/observability.ts",
+        "apps/platform-api/src/usecases/tenant-observability.ts",
+        "apps/react-enterprise-app/src/features/admin-observability",
+        "apps/react-enterprise-app/src/routes/admin/observability.tsx"
+      ],
+      "behaviour_summary": "Future ops/API observability surfaces are PDP-protected, tenant-guarded, OpenAPI-covered, redacted, non-enumerating, and do not expose raw logs or unrestricted telemetry.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "apps/api/src/server.ts",
+        "packages/contracts/src/index.ts",
+        "packages/contracts/src/api-surface.ts",
+        "packages/openapi/src/index.ts",
+        "packages/openapi/openapi.json",
+        "tests/apps/api-contracts.test.ts"
+      ],
+      "usf_tests": [
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/openapi.test.ts"
+      ],
+      "usf_proofs": [
+        "make api-proof",
+        "make observability-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-158",
+      "blocker": "USF-158",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "evidence": "GET /v1/observability/readiness and GET /v1/observability/signals are operator-only, PDP protected, tenant guarded, redacted, paginated where applicable, OpenAPI covered, and tested. Raw logs/traces/metrics export and dashboards remain deferred.",
+      "retry_condition": "No retry needed for implemented local/dev/test observability API surfaces."
+    },
+    {
+      "react_item_id": "observability.alerting-incident-dashboard-live-depth",
+      "category": "observability",
+      "react_paths": [
+        "docs/adr/0062-observability-alerting-and-incident-architecture.md",
+        "apps/platform-api/scripts/alerting-runtime-proof.ts",
+        "apps/platform-api/scripts/incident-foundation-runtime-proof.ts",
+        "apps/platform-api/scripts/dashboards-runtime-proof.ts",
+        "compose.yaml"
+      ],
+      "behaviour_summary": "Live telemetry backends, SIEM/export, alert delivery, incident workflow, dashboards, retention purge, SLI/SLO measurement, cross-tenant aggregates, and external observability providers are represented as posture but deferred.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+        "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "usf_proofs": [
+        "make observability-proof"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "linear_issue": "USF-158",
+      "blocker": "USF-159",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "evidence": "USF-159 tracks deferred depth. This slice records posture and validators but makes no live monitoring, live metrics/log/tracing backend, SIEM, live alerting, dashboard, incident-response, SOC, ISO, or production readiness claim.",
+      "retry_condition": "USF-159 receives an authorised implementation directive and proves the deferred live/backend/deep operational controls without overclaiming."
+    },
     {
       "react_item_id": "developer-commands-proof",
       "category": "command",
@@ -2247,6 +2256,705 @@
       "domain_authorised": false,
       "evidence": "make verify/dev-smoke + validators present; full proof-ladder/command parity open.",
       "retry_condition": "Per-domain implementation directive authorises parity-commands; command + proof-ladder parity migrated."
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.rate-limits",
+      "behaviour_summary": "Fixed-window rate-limit policy, safe 429 retry-after, unknown policy fail-closed, local/dev/test single-node enforcement.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Fixed-window rate-limit policy, safe 429 retry-after, unknown policy fail-closed, local/dev/test single-node enforcement.",
+      "retry_condition": "none for local/dev/test rate-limit engine; distributed enforcement deferred separately"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.quotas",
+      "behaviour_summary": "Tenant-scoped quota accounting, deterministic reset, 409 quota conflict, and non-enumerating tenant usage proof.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Tenant-scoped quota accounting, deterministic reset, 409 quota conflict, and non-enumerating tenant usage proof.",
+      "retry_condition": "durable quota accounting and billing integration deferred"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.throttles",
+      "behaviour_summary": "Throttle control type and decision semantics represented; runtime delay scheduling deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Throttle control type and decision semantics represented; runtime delay scheduling deferred.",
+      "retry_condition": "USF-161: implement actual delay queue/admission integration"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.admission-control",
+      "behaviour_summary": "Admission denial semantics, unknown policy fail-closed, and security policy denial represented; broad admission rollout deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Admission denial semantics, unknown policy fail-closed, and security policy denial represented; broad admission rollout deferred.",
+      "retry_condition": "USF-161: roll out admission policies across protected entry points"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.tenant-fairness",
+      "behaviour_summary": "Tenant quotas are scoped by tenant, cannot be consumed cross-tenant, and usage query is tenant filtered.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Tenant quotas are scoped by tenant, cannot be consumed cross-tenant, and usage query is tenant filtered.",
+      "retry_condition": "fair-share scheduler and global starvation controls deferred"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.actor-session-service-actor-limits",
+      "behaviour_summary": "Actor and service-actor scope modeled; privileged actors are not exempt by default. Session-specific runtime guards deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Actor and service-actor scope modeled; privileged actors are not exempt by default. Session-specific runtime guards deferred.",
+      "retry_condition": "USF-161: session and break-glass rate-limit runtime rollout"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.api-route-guardrails",
+      "behaviour_summary": "POST /v1/jobs side-effecting route is guarded with safe 429; route metadata records posture.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "apps/api/src/server.ts",
+        "packages/contracts/src/api-surface.ts",
+        "packages/openapi/openapi.json"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "POST /v1/jobs side-effecting route is guarded with safe 429; route metadata records posture.",
+      "retry_condition": "USF-161: broad API route guard rollout and future guardrail ops APIs"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.job-guardrails",
+      "behaviour_summary": "jobs.create is protected by api.jobs.create.local and idempotency replay does not double-count.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "apps/api/src/runtime.ts",
+        "apps/api/src/server.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "jobs.create is protected by api.jobs.create.local and idempotency replay does not double-count.",
+      "retry_condition": "job concurrency and retry quota depth deferred"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.notification-guardrails",
+      "behaviour_summary": "Notification send/bulk guardrail posture represented in the standard; runtime notification quota rollout deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Notification send/bulk guardrail posture represented in the standard; runtime notification quota rollout deferred.",
+      "retry_condition": "USF-161: notification send, bulk send, and consent/suppression-linked quotas"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.file-guardrails",
+      "behaviour_summary": "File upload/download/export guardrail posture represented; full runtime file quota rollout deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "File upload/download/export guardrail posture represented; full runtime file quota rollout deferred.",
+      "retry_condition": "USF-161: file upload/download/export rate and quota policies"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.provider-guardrails",
+      "behaviour_summary": "Provider backpressure/protection model is represented without live provider enforcement claims.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Provider backpressure/protection model is represented without live provider enforcement claims.",
+      "retry_condition": "USF-161: provider call budgets, circuit breaker integration, cost controls"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.bulk-operation-safety",
+      "behaviour_summary": "Bulk operation classification and quota/idempotency posture represented; broad bulk runtime deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Bulk operation classification and quota/idempotency posture represented; broad bulk runtime deferred.",
+      "retry_condition": "USF-161: bulk operation approval/dry-run/cancellation guardrails"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.data-exfiltration-posture",
+      "behaviour_summary": "Suspicious extraction signals are defined but not broadly enforced in runtime.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [],
+      "usf_proofs": [],
+      "evidence": "Suspicious extraction signals are defined but not broadly enforced in runtime.",
+      "retry_condition": "USF-161: implement data-exfiltration detection signals and blocking posture"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.abuse-signals",
+      "behaviour_summary": "rate_limit.exceeded and policy denial signals emitted where represented; broader abuse signal catalogue deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "apps/api/src/server.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "rate_limit.exceeded and policy denial signals emitted where represented; broader abuse signal catalogue deferred.",
+      "retry_condition": "USF-161: credential stuffing, token replay, pagination scraping, and bulk export signals"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.backpressure-degradation",
+      "behaviour_summary": "Backpressure decision and 503 semantics represented; degraded-mode scheduler/runtime deferred.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Backpressure decision and 503 semantics represented; degraded-mode scheduler/runtime deferred.",
+      "retry_condition": "USF-161: queue delay, load shedding, and priority policies"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.quota-accounting-reset",
+      "behaviour_summary": "In-memory quota/rate windows have deterministic reset_at and tenant-scoped usage counters.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "In-memory quota/rate windows have deterministic reset_at and tenant-scoped usage counters.",
+      "retry_condition": "durable distributed reset consistency deferred"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.distributed-enforcement-posture",
+      "behaviour_summary": "single-node-in-memory, local-test, composed-test, distributed-deferred, live-edge-deferred posture represented without live claim.",
+      "usf_status": "partial",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "single-node-in-memory, local-test, composed-test, distributed-deferred, live-edge-deferred posture represented without live claim.",
+      "retry_condition": "USF-161: distributed and live edge enforcement require explicit authority"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.policy-config",
+      "behaviour_summary": "Policies are typed, classified, owned, reviewed, validated, and reject secret-looking config values.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Policies are typed, classified, owned, reviewed, validated, and reject secret-looking config values.",
+      "retry_condition": "policy approval workflow and persisted config history deferred"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.observability-audit-linkage",
+      "behaviour_summary": "Guardrail denials emit tenant-safe security signals and value-free guardrail audit evidence.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "apps/api/src/server.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Guardrail denials emit tenant-safe security signals and value-free guardrail audit evidence.",
+      "retry_condition": "broader signal routing and alerting deferred"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.future-api-ops-surfaces",
+      "behaviour_summary": "Future /v1/guardrails surfaces are defined and deferred; no HTTP ops surface implemented in this slice.",
+      "usf_status": "deferred",
+      "usf_paths": [
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+      ],
+      "usf_tests": [],
+      "usf_proofs": [],
+      "evidence": "Future /v1/guardrails surfaces are defined and deferred; no HTTP ops surface implemented in this slice.",
+      "retry_condition": "USF-161: authorise and implement operator-only PDP-protected guardrail policy/usage APIs"
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-160",
+      "blocking_foundation_readiness": true,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.react-ui-playwright-behaviours",
+      "behaviour_summary": "Foundation guardrail behaviours from React UI/Playwright lineage are rewritten as capability/API/proof tests; UI assertions remain out of scope.",
+      "usf_status": "foundation-behaviour-rewritten-from-ui-test",
+      "usf_paths": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)"
+      ],
+      "evidence": "Foundation guardrail behaviours from React UI/Playwright lineage are rewritten as capability/API/proof tests; UI assertions remain out of scope.",
+      "retry_condition": "UI/UX remains future non-foundation work"
     }
   ],
   "uiArtefacts": [

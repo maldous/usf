@@ -90,6 +90,7 @@ The intended later layout is:
 - `adapters/mail`
 - `adapters/secrets`
 - `adapters/obs`
+- `adapters/guardrails`
 - `packages/core`
 - `packages/ports`
 - `packages/contracts`
