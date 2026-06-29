@@ -32,6 +32,8 @@ import type {
   NotificationProviderConfig,
   NotificationProviderMode,
   PolicyDecision,
+  ResourceRecord,
+  ResourceRelationshipRecord,
   SecretReference,
   Session,
   SearchFacetBucket,
@@ -210,6 +212,41 @@ export interface SearchIndexPort {
     readonly aiRagReadinessClaim: false;
     readonly publicSearchApiReadinessClaim: false;
     readonly productionReadinessClaim: false;
+  };
+}
+
+// Resource lifecycle/relationship port (USF-165). Stores governed resource
+// records and relationship metadata only; raw payloads, object keys, provider
+// internals, and legal/regulatory readiness claims are outside this port.
+export interface ResourceLifecyclePort {
+  create(record: ResourceRecord): ResourceRecord;
+  get(context: TenantContext, resourceId: string): ResourceRecord | undefined;
+  put(context: TenantContext, record: ResourceRecord): ResourceRecord;
+  forTenant(
+    context: TenantContext,
+    input?: { limit?: number; cursor?: string; includeDeleted?: boolean },
+  ): {
+    readonly resources: readonly ResourceRecord[];
+    readonly nextCursor: string | null;
+  };
+  findByIdempotencyKey(context: TenantContext, idempotencyKey: string): ResourceRecord | undefined;
+  createRelationship(relationship: ResourceRelationshipRecord): ResourceRelationshipRecord;
+  relationship(
+    context: TenantContext,
+    relationshipId: string,
+  ): ResourceRelationshipRecord | undefined;
+  relationshipsForResource(
+    context: TenantContext,
+    resourceId: string,
+  ): readonly ResourceRelationshipRecord[];
+  deleteRelationship(context: TenantContext, relationshipId: string): boolean;
+  safeStatusView(): {
+    readonly providerMode: "in-memory" | "local-test";
+    readonly resourceCount: number;
+    readonly relationshipCount: number;
+    readonly productionReadinessClaim: false;
+    readonly legalRecordManagementReadinessClaim: false;
+    readonly regulatoryRecordReadinessClaim: false;
   };
 }
 
