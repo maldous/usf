@@ -10,6 +10,7 @@ import {
   type DevRuntime,
   type DevRuntimeMode,
 } from "@foundation/app-api/runtime";
+import type { PostgresComposedMembershipEvidence } from "@foundation/adapter-db";
 import type { MailpitComposedDeliveryEvidence } from "@foundation/adapter-mail";
 import type { TenantContext } from "@foundation/core";
 
@@ -33,6 +34,7 @@ export interface WorkerSmokeSummary {
   readonly notificationDeliveryStatus: "sent";
   readonly notificationProviderMessageIdPresent: boolean;
   readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
+  readonly databaseProviderEvidence: readonly PostgresComposedMembershipEvidence[];
   readonly auditEvents: number;
   readonly tenantBoundaryDenied: true;
   readonly authorizationDenied: true;
@@ -45,90 +47,102 @@ export async function runWorkerSmoke(
   options: { readonly runtimeMode?: DevRuntimeMode } = {},
 ): Promise<WorkerSmokeSummary> {
   const runtime = createDevRuntime({ runtimeMode: options.runtimeMode ?? runtimeModeFromEnv() });
-  const context = createTenantContext({
-    tenantId: DEV_TENANT_ID,
-    actorId: DEV_ACTOR_ID,
-    roles: ["tenant-admin"],
-  });
+  try {
+    const context = createTenantContext({
+      tenantId: DEV_TENANT_ID,
+      actorId: DEV_ACTOR_ID,
+      roles: ["tenant-admin"],
+    });
 
-  const submitted = await runtime.jobService.submit({
-    context,
-    classification: "scheduled-maintenance-job",
-    jobType: "runtime-proof.synthetic-maintenance",
-    payload: {
-      proofMode: runtime.runtimeMode,
-      synthetic: true,
-    },
-    idempotencyKey: `runtime-proof-${runtime.runtimeMode}`,
-  });
-  if (!submitted.ok) {
-    throw new Error(`worker smoke job submission denied: ${submitted.reasonCode}`);
+    const databaseEvidence = await runtime.proveDatabaseProviderRoundTrip(context, {
+      tenantId: DEV_TENANT_ID,
+      actorId: "runtime-proof-worker-db-actor",
+      email: "runtime-proof-worker-db-actor@example.test",
+      roles: ["tenant-member"],
+    });
+
+    const submitted = await runtime.jobService.submit({
+      context,
+      classification: "scheduled-maintenance-job",
+      jobType: "runtime-proof.synthetic-maintenance",
+      payload: {
+        proofMode: runtime.runtimeMode,
+        synthetic: true,
+      },
+      idempotencyKey: `runtime-proof-${runtime.runtimeMode}`,
+    });
+    if (!submitted.ok) {
+      throw new Error(`worker smoke job submission denied: ${submitted.reasonCode}`);
+    }
+
+    const completed = await runtime.jobService.claimAndRun("runtime-proof-worker", () => ({
+      ok: true,
+    }));
+    if (!completed || completed.status !== "succeeded") {
+      throw new Error("worker smoke job did not execute to succeeded status");
+    }
+
+    const otherTenant = createTenantContext({
+      tenantId: "other-dev-tenant",
+      actorId: "other-dev-actor",
+      roles: ["tenant-admin"],
+    });
+    const crossTenantRead = await runtime.jobService.read(otherTenant, submitted.job.jobId);
+    if (crossTenantRead.ok) {
+      throw new Error("worker smoke cross-tenant read did not fail closed");
+    }
+
+    const unauthorized = createTenantContext({
+      tenantId: DEV_TENANT_ID,
+      actorId: "unauthorized-worker-actor",
+      roles: ["tenant-member"],
+    });
+    const denied = await runtime.jobService.submit({
+      context: unauthorized,
+      classification: "scheduled-maintenance-job",
+      jobType: "runtime-proof.synthetic-denied",
+      payload: {
+        proofMode: runtime.runtimeMode,
+        synthetic: true,
+      },
+    });
+    if (denied.ok) {
+      throw new Error("worker smoke authorization failure did not fail closed");
+    }
+
+    const notification = await proveNotificationDelivery(runtime, context);
+
+    const audit = await runtime.auditEvents.query(context, {
+      tenantId: context.tenantId,
+      limit: 100,
+    });
+    if (audit.events.length < 5) {
+      throw new Error("worker smoke did not capture expected audit events");
+    }
+
+    return {
+      workerRuntime: "apps/work",
+      runtimeMode: runtime.runtimeMode,
+      providerMode: runtime.providerModeLabel,
+      tenantId: DEV_TENANT_ID,
+      actorId: DEV_ACTOR_ID,
+      jobId: submitted.job.jobId,
+      jobStatus: completed.status,
+      notificationProviderMode: notification.providerMode,
+      notificationDeliveryStatus: notification.deliveryStatus,
+      notificationProviderMessageIdPresent: notification.providerMessageIdPresent,
+      composedProviderEvidence: notification.composedProviderEvidence,
+      databaseProviderEvidence: databaseEvidence ? Object.freeze([databaseEvidence]) : [],
+      auditEvents: audit.events.length,
+      tenantBoundaryDenied: true,
+      authorizationDenied: true,
+      syntheticDataBoundary: "synthetic tenant, actor, and job payload only",
+      secretBoundary: "no real secrets or external provider credentials",
+      deferredBoundaries: runtime.deferredBoundaries,
+    };
+  } finally {
+    await runtime.close();
   }
-
-  const completed = await runtime.jobService.claimAndRun("runtime-proof-worker", () => ({
-    ok: true,
-  }));
-  if (!completed || completed.status !== "succeeded") {
-    throw new Error("worker smoke job did not execute to succeeded status");
-  }
-
-  const otherTenant = createTenantContext({
-    tenantId: "other-dev-tenant",
-    actorId: "other-dev-actor",
-    roles: ["tenant-admin"],
-  });
-  const crossTenantRead = await runtime.jobService.read(otherTenant, submitted.job.jobId);
-  if (crossTenantRead.ok) {
-    throw new Error("worker smoke cross-tenant read did not fail closed");
-  }
-
-  const unauthorized = createTenantContext({
-    tenantId: DEV_TENANT_ID,
-    actorId: "unauthorized-worker-actor",
-    roles: ["tenant-member"],
-  });
-  const denied = await runtime.jobService.submit({
-    context: unauthorized,
-    classification: "scheduled-maintenance-job",
-    jobType: "runtime-proof.synthetic-denied",
-    payload: {
-      proofMode: runtime.runtimeMode,
-      synthetic: true,
-    },
-  });
-  if (denied.ok) {
-    throw new Error("worker smoke authorization failure did not fail closed");
-  }
-
-  const notification = await proveNotificationDelivery(runtime, context);
-
-  const audit = await runtime.auditEvents.query(context, {
-    tenantId: context.tenantId,
-    limit: 100,
-  });
-  if (audit.events.length < 5) {
-    throw new Error("worker smoke did not capture expected audit events");
-  }
-
-  return {
-    workerRuntime: "apps/work",
-    runtimeMode: runtime.runtimeMode,
-    providerMode: runtime.providerModeLabel,
-    tenantId: DEV_TENANT_ID,
-    actorId: DEV_ACTOR_ID,
-    jobId: submitted.job.jobId,
-    jobStatus: completed.status,
-    notificationProviderMode: notification.providerMode,
-    notificationDeliveryStatus: notification.deliveryStatus,
-    notificationProviderMessageIdPresent: notification.providerMessageIdPresent,
-    composedProviderEvidence: notification.composedProviderEvidence,
-    auditEvents: audit.events.length,
-    tenantBoundaryDenied: true,
-    authorizationDenied: true,
-    syntheticDataBoundary: "synthetic tenant, actor, and job payload only",
-    secretBoundary: "no real secrets or external provider credentials",
-    deferredBoundaries: runtime.deferredBoundaries,
-  };
 }
 
 async function proveNotificationDelivery(

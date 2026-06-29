@@ -6,18 +6,28 @@ import {
   DEV_ACTOR_ID,
   DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL,
   DEV_IN_MEMORY_PROVIDER_MODE_LABEL,
+  DEV_SECURITY_ACTOR_ID,
   DEV_TENANT_ID,
   MAILPIT_PROVIDER_REGISTRY_ID,
   type DevProviderClass,
   type DevProviderModeLabel,
   type DevRuntimeMode,
 } from "@foundation/app-api/runtime";
+import {
+  PG_SDK_PACKAGE,
+  PG_SDK_VERSION,
+  POSTGRES_PROVIDER_REGISTRY_ID,
+  POSTGRES_RUNTIME_PROVIDER_BINDING_ID,
+  preparePostgresRuntimeProofDatabase,
+  type PostgresComposedMembershipEvidence,
+} from "@foundation/adapter-db";
 import type { MailpitComposedDeliveryEvidence } from "@foundation/adapter-mail";
 
 type ProofProcess = ChildProcessByStdio<null, Readable, Readable>;
 
 const COMPOSE_TARGET = "compose/compose.dev.generated.yaml";
 const SERVICE_CATALOGUE_AUTHORITY = "spec/instances/compose-service/service-catalogue.json";
+const POSTGRES_PROOF_OTHER_TENANT_ID = "22222222-2222-4222-8222-222222222222";
 const WORKER_SUMMARY_PREFIX = "Worker proof summary: ";
 const PROHIBITED_CLAIM_PATTERNS = [
   /\bproduction\b/i,
@@ -43,6 +53,8 @@ interface ApiProofSummary {
   readonly notificationProviderRef: "notify-in-memory" | typeof MAILPIT_PROVIDER_REGISTRY_ID;
   readonly notificationQueuedStatus: number;
   readonly composedProviderBindingsActive: number;
+  readonly databasePermissionStatus: number | null;
+  readonly databaseProviderEvidence: PostgresComposedMembershipEvidence | null;
   readonly auditEvents: number;
   readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY;
   readonly composeTarget: typeof COMPOSE_TARGET | null;
@@ -61,6 +73,7 @@ interface WorkerProofSummary {
   readonly notificationDeliveryStatus: "sent";
   readonly notificationProviderMessageIdPresent: boolean;
   readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
+  readonly databaseProviderEvidence: readonly PostgresComposedMembershipEvidence[];
   readonly auditEvents: number;
   readonly tenantBoundaryDenied: true;
   readonly authorizationDenied: true;
@@ -97,6 +110,7 @@ export interface RuntimeProofSummary {
   readonly prohibitedClaimsObserved: readonly [];
   readonly deferredBoundaries: readonly string[];
   readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
+  readonly databaseProviderEvidence: readonly PostgresComposedMembershipEvidence[];
 }
 
 function startProcess(
@@ -373,6 +387,9 @@ function assertWorkerSummary(value: unknown): asserts value is WorkerProofSummar
   if (value.tenantBoundaryDenied !== true || value.authorizationDenied !== true) {
     throw new Error("worker proof summary did not record fail-closed boundaries");
   }
+  if (!Array.isArray(value.databaseProviderEvidence)) {
+    throw new Error("worker proof summary did not report database provider evidence shape");
+  }
 }
 
 function expectedRuntimeProviderMode(mode: DevRuntimeMode): DevProviderModeLabel {
@@ -393,6 +410,34 @@ function expectedNotificationProviderRef(
   mode: DevRuntimeMode,
 ): "notify-in-memory" | typeof MAILPIT_PROVIDER_REGISTRY_ID {
   return mode === "dev-compose-backed" ? MAILPIT_PROVIDER_REGISTRY_ID : "notify-in-memory";
+}
+
+function assertPostgresEvidence(
+  value: unknown,
+  surface: "api" | "worker",
+): asserts value is PostgresComposedMembershipEvidence {
+  assertObject(value, `${surface} postgres provider evidence`);
+  if (
+    value.providerRef !== POSTGRES_PROVIDER_REGISTRY_ID ||
+    value.providerRegistryId !== POSTGRES_PROVIDER_REGISTRY_ID ||
+    value.bindingId !== POSTGRES_RUNTIME_PROVIDER_BINDING_ID ||
+    value.sdkPackage !== PG_SDK_PACKAGE ||
+    value.sdkVersion !== PG_SDK_VERSION ||
+    value.sdkBoundary !== "adapter-package-only" ||
+    value.endpointRef !== "endpoint://compose/postgres" ||
+    value.readinessChecked !== true ||
+    value.readbackChecked !== true ||
+    value.tenantIsolationChecked !== true ||
+    value.safeProviderSummary !== "postgres-composed-provider"
+  ) {
+    throw new Error(`${surface} postgres provider evidence is incomplete`);
+  }
+  if (surface === "worker" && value.writeChecked !== true) {
+    throw new Error("worker postgres provider evidence did not prove write behavior");
+  }
+  if (typeof value.membershipCount !== "number" || value.membershipCount < 1) {
+    throw new Error(`${surface} postgres provider evidence did not report memberships`);
+  }
 }
 
 function assertNoProhibitedClaims(value: unknown): void {
@@ -437,6 +482,13 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       ? ready.body.composedProviderBindings
       : [];
     if (mode === "dev-compose-backed") {
+      const hasPostgresBinding = composedProviderBindings.some(
+        (binding) =>
+          binding &&
+          typeof binding === "object" &&
+          "bindingId" in binding &&
+          binding.bindingId === POSTGRES_RUNTIME_PROVIDER_BINDING_ID,
+      );
       const hasMailpitBinding = composedProviderBindings.some(
         (binding) =>
           binding &&
@@ -444,6 +496,9 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
           "bindingId" in binding &&
           binding.bindingId === "mailpit-notification-provider",
       );
+      if (!hasPostgresBinding) {
+        throw new Error("/readyz did not report the active Postgres composed provider binding");
+      }
       if (!hasMailpitBinding) {
         throw new Error("/readyz did not report the active Mailpit composed provider binding");
       }
@@ -503,6 +558,32 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       throw new Error("authorization failure path did not fail closed");
     }
 
+    let databasePermissionStatus: number | null = null;
+    let databaseProviderEvidence: PostgresComposedMembershipEvidence | null = null;
+    if (mode === "dev-compose-backed") {
+      const permissions = await fetchJson(
+        `${baseUrl}/v1/authz/permissions?tenantId=${DEV_TENANT_ID}`,
+        {
+          headers: {
+            "x-dev-tenant-id": DEV_TENANT_ID,
+            "x-dev-actor-id": DEV_ACTOR_ID,
+            "x-dev-roles": "tenant-member",
+          },
+        },
+      );
+      databasePermissionStatus = permissions.status;
+      if (permissions.status !== 200) {
+        throw new Error(
+          `database-backed permission proof failed with status ${permissions.status}`,
+        );
+      }
+      const readyAfterDatabaseRead = await fetchJson(`${baseUrl}/readyz`);
+      assertObject(readyAfterDatabaseRead.body, "ready after database provider read");
+      const rawDatabaseProviderEvidence = readyAfterDatabaseRead.body.databaseProviderEvidence;
+      assertPostgresEvidence(rawDatabaseProviderEvidence, "api");
+      databaseProviderEvidence = rawDatabaseProviderEvidence;
+    }
+
     const notification = await runApiNotificationProof(baseUrl, mode);
 
     const summary: ApiProofSummary = {
@@ -519,6 +600,8 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       notificationProviderRef: notification.providerRef,
       notificationQueuedStatus: notification.queuedStatus,
       composedProviderBindingsActive: composedProviderBindings.length,
+      databasePermissionStatus,
+      databaseProviderEvidence,
       auditEvents,
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY,
       composeTarget: mode === "dev-compose-backed" ? COMPOSE_TARGET : null,
@@ -536,6 +619,7 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       notificationProviderMode: summary.notificationProviderMode,
       notificationQueuedStatus: summary.notificationQueuedStatus,
       composedProviderBindingsActive: summary.composedProviderBindingsActive,
+      databasePermissionStatus: summary.databasePermissionStatus,
       auditEvents: summary.auditEvents,
     });
     return summary;
@@ -575,6 +659,12 @@ async function runWorkerProof(mode: DevRuntimeMode): Promise<WorkerProofSummary>
           throw new Error("worker compose proof reported incomplete Mailpit provider evidence");
         }
       }
+      if (summary.databaseProviderEvidence.length === 0) {
+        throw new Error("worker compose proof did not report Postgres provider evidence");
+      }
+      for (const evidence of summary.databaseProviderEvidence) {
+        assertPostgresEvidence(evidence, "worker");
+      }
     }
     assertNoProhibitedClaims({
       runtimeMode: summary.runtimeMode,
@@ -582,6 +672,7 @@ async function runWorkerProof(mode: DevRuntimeMode): Promise<WorkerProofSummary>
       notificationProviderMode: summary.notificationProviderMode,
       jobStatus: summary.jobStatus,
       notificationDeliveryStatus: summary.notificationDeliveryStatus,
+      databaseProviderEvidence: summary.databaseProviderEvidence.length,
       auditEvents: summary.auditEvents,
       tenantBoundaryDenied: summary.tenantBoundaryDenied,
       authorizationDenied: summary.authorizationDenied,
@@ -697,7 +788,9 @@ async function runModeProof(
       worker.providerMode === DEV_IN_MEMORY_PROVIDER_MODE_LABEL ||
       api.notificationProviderMode !== "composed-test" ||
       worker.notificationProviderMode !== "composed-test" ||
-      worker.composedProviderEvidence.length === 0)
+      worker.composedProviderEvidence.length === 0 ||
+      api.databaseProviderEvidence === null ||
+      worker.databaseProviderEvidence.length === 0)
   ) {
     throw new Error("compose-backed proof did not prove a real composed provider binding");
   }
@@ -730,6 +823,10 @@ async function runModeProof(
     prohibitedClaimsObserved: [],
     deferredBoundaries,
     composedProviderEvidence: worker.composedProviderEvidence,
+    databaseProviderEvidence: [
+      ...(api.databaseProviderEvidence ? [api.databaseProviderEvidence] : []),
+      ...worker.databaseProviderEvidence,
+    ],
   };
 }
 
@@ -739,7 +836,10 @@ export async function runRuntimeProofInMemory(): Promise<RuntimeProofSummary> {
 
 export async function runRuntimeProofCompose(): Promise<RuntimeProofSummary> {
   const projectName = `foundation-runtime-proof-${process.pid}`;
-  return withComposeBoundary(projectName, () => runModeProof("dev-compose-backed", projectName));
+  return withComposeBoundary(projectName, async () => {
+    await preparePostgresRuntimeProofDatabase(runtimeProofDatabaseSeed());
+    return runModeProof("dev-compose-backed", projectName);
+  });
 }
 
 export async function runRuntimeProofAll(): Promise<readonly RuntimeProofSummary[]> {
@@ -756,10 +856,45 @@ function printSummary(summary: RuntimeProofSummary): void {
   console.log(`API notification provider mode: ${summary.api.notificationProviderMode}`);
   console.log(`Worker notification provider mode: ${summary.worker.notificationProviderMode}`);
   console.log(`Composed provider evidence count: ${summary.composedProviderEvidence.length}`);
+  console.log(`Postgres provider evidence count: ${summary.databaseProviderEvidence.length}`);
   console.log(`API audit events captured: ${summary.api.auditEvents}`);
   console.log(`Worker audit events captured: ${summary.worker.auditEvents}`);
   console.log(`Compose boundary started: ${summary.composeBoundary.started ? "yes" : "no"}`);
   console.log(`Prohibited claims observed: ${summary.prohibitedClaimsObserved.length}`);
+}
+
+function runtimeProofDatabaseSeed() {
+  return Object.freeze({
+    tenants: Object.freeze([
+      Object.freeze({
+        tenantId: DEV_TENANT_ID,
+        canonicalDomain: "runtime-proof.dev.example",
+        actors: Object.freeze([
+          Object.freeze({
+            actorId: DEV_ACTOR_ID,
+            email: "dev-actor@example.test",
+            roles: Object.freeze(["tenant-admin"]),
+          }),
+          Object.freeze({
+            actorId: DEV_SECURITY_ACTOR_ID,
+            email: "dev-security-actor@example.test",
+            roles: Object.freeze(["security-admin"]),
+          }),
+        ]),
+      }),
+      Object.freeze({
+        tenantId: POSTGRES_PROOF_OTHER_TENANT_ID,
+        canonicalDomain: "runtime-proof-other.dev.example",
+        actors: Object.freeze([
+          Object.freeze({
+            actorId: "runtime-proof-other-actor",
+            email: "runtime-proof-other-actor@example.test",
+            roles: Object.freeze(["tenant-admin"]),
+          }),
+        ]),
+      }),
+    ]),
+  });
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

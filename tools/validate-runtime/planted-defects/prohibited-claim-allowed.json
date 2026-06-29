@@ -4,9 +4,7 @@
     {
       "op": "replace",
       "path": "/allowedClaims",
-      "value": [
-        "production-readiness"
-      ]
+      "value": ["production-readiness"]
     }
   ]
 }

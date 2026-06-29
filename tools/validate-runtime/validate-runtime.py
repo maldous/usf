@@ -4,7 +4,7 @@
 This validator enforces USF-181/USF-183 runtime proof semantics. It does not
 execute runtime code and does not create evidence. It fails closed when the
 bounded API and worker runtime proof model is missing, when compose-backed proof
-is silently represented as in-memory proof, when Mailpit provider binding
+is silently represented as in-memory proof, when required Postgres or Mailpit provider binding
 evidence is missing, when SDK imports escape the adapter boundary, when proof
 commands are not wired, when service catalogue traceability is absent, when
 teardown representation is missing, or when a prohibited readiness/compliance/
@@ -39,7 +39,7 @@ RULES = {
     "USF-RUNTIME-008": ("blocking", "runtime proof code or manifest lacks teardown representation"),
     "USF-RUNTIME-009": ("blocking", "runtime proof evidence boundaries are missing"),
     "USF-RUNTIME-010": ("blocking", "compose-backed deferred boundary is missing"),
-    "USF-RUNTIME-011": ("blocking", "compose-backed provider binding is not resolved for required Mailpit proof"),
+    "USF-RUNTIME-011": ("blocking", "compose-backed provider binding is not resolved for required Postgres or Mailpit proof"),
     "USF-RUNTIME-012": ("blocking", "runtime provider binding matrix is missing or inconsistent"),
     "USF-RUNTIME-013": ("blocking", "provider SDK import escaped the authorised adapter boundary"),
     "USF-RUNTIME-014": ("blocking", "provider proof metadata exposes raw endpoint or credential material"),
@@ -57,6 +57,7 @@ PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
 RUNTIME_SOURCE_PATH = Path("apps/api/src/runtime.ts")
 WORKER_SOURCE_PATH = Path("apps/work/src/worker.ts")
 ADAPTER_MAIL_SOURCE_PATH = Path("adapters/mail/src/index.ts")
+ADAPTER_DB_SOURCE_PATH = Path("adapters/db/src/index.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
@@ -66,6 +67,13 @@ MAILPIT_PROVIDER_ID = "notification-delivery-mailpit-composed-test"
 MAILPIT_SERVICE_ID = "mailpit"
 MAILPIT_SDK_PACKAGE = "mailpit-api"
 MAILPIT_SDK_VERSION = "2.1.0"
+POSTGRES_BINDING_ID = "runtime-database-provider-binding"
+POSTGRES_PROVIDER_ID = "database-postgres-composed-test"
+POSTGRES_SERVICE_ID = "postgres"
+POSTGRES_SDK_PACKAGE = "pg"
+POSTGRES_SDK_VERSION = "8.22.0"
+POSTGRES_TYPES_PACKAGE = "@types/pg"
+POSTGRES_TYPES_VERSION = "8.20.0"
 
 REQUIRED_MODES = {"dev-in-memory", "dev-compose-backed"}
 REQUIRED_BOUNDARY_FIELDS = {
@@ -285,7 +293,7 @@ def check_compose_mode(F: Findings, state: dict[str, Any]) -> None:
         boundary.get("required") is not True
         or boundary.get("target") != COMPOSE_TARGET
         or boundary.get("providerBinding")
-        != "mailpit-notification-provider-resolved-with-explicit-deferrals"
+        != "postgres-and-mailpit-provider-bindings-resolved-with-explicit-deferrals"
     ):
         F.add("USF-RUNTIME-003", "dev-compose-backed", "compose-backed mode lacks resolved provider binding boundary")
     if compose.get("providerMode") == "dev in-memory":
@@ -448,30 +456,54 @@ def check_provider_bindings(F: Findings, state: dict[str, Any]) -> None:
     manifest = state["manifest"]
     bindings = binding_records(manifest)
     compose = mode_records(manifest).get("dev-compose-backed")
+    postgres = bindings.get(POSTGRES_BINDING_ID)
+    if not postgres:
+        F.add("USF-RUNTIME-011", "providerBindingMatrix", "Postgres active binding is missing")
+    else:
+        expected_postgres = {
+            "bindingStatus": "active",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "adapterName": "PostgresTenantMembershipRepository",
+            "sdkPackage": POSTGRES_SDK_PACKAGE,
+            "sdkVersion": POSTGRES_SDK_VERSION,
+            "sdkBoundary": "adapter-package-only",
+        }
+        for field, value in expected_postgres.items():
+            if postgres.get(field) != value:
+                F.add("USF-RUNTIME-011", POSTGRES_BINDING_ID, f"{field} must be {value}")
+        if POSTGRES_SERVICE_ID not in postgres.get("serviceCatalogueServiceIds", []):
+            F.add("USF-RUNTIME-011", POSTGRES_BINDING_ID, "service catalogue Postgres id missing")
+        if POSTGRES_PROVIDER_ID not in postgres.get("providerRegistryIds", []):
+            F.add("USF-RUNTIME-011", POSTGRES_BINDING_ID, "provider registry id missing")
+        if not postgres.get("apiProofEvidence") or not postgres.get("workerProofEvidence"):
+            F.add("USF-RUNTIME-012", POSTGRES_BINDING_ID, "active binding lacks API or worker proof evidence")
     active = bindings.get(MAILPIT_BINDING_ID)
     if not active:
         F.add("USF-RUNTIME-011", "providerBindingMatrix", "Mailpit active binding is missing")
-        return
-    expected = {
-        "bindingStatus": "active",
-        "providerMode": "composed-test",
-        "providerClass": "local-composed-real-service",
-        "adapterName": "MailpitNotificationProvider",
-        "portName": "NotificationProvider",
-        "sdkPackage": MAILPIT_SDK_PACKAGE,
-        "sdkVersion": MAILPIT_SDK_VERSION,
-        "sdkBoundary": "adapter-package-only",
-    }
-    for field, value in expected.items():
-        if active.get(field) != value:
-            F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, f"{field} must be {value}")
-    if MAILPIT_SERVICE_ID not in active.get("serviceCatalogueServiceIds", []):
-        F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, "service catalogue Mailpit id missing")
-    if MAILPIT_PROVIDER_ID not in active.get("providerRegistryIds", []):
-        F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, "provider registry id missing")
-    if not active.get("apiProofEvidence") or not active.get("workerProofEvidence"):
-        F.add("USF-RUNTIME-012", MAILPIT_BINDING_ID, "active binding lacks API or worker proof evidence")
+    else:
+        expected = {
+            "bindingStatus": "active",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "adapterName": "MailpitNotificationProvider",
+            "portName": "NotificationProvider",
+            "sdkPackage": MAILPIT_SDK_PACKAGE,
+            "sdkVersion": MAILPIT_SDK_VERSION,
+            "sdkBoundary": "adapter-package-only",
+        }
+        for field, value in expected.items():
+            if active.get(field) != value:
+                F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, f"{field} must be {value}")
+        if MAILPIT_SERVICE_ID not in active.get("serviceCatalogueServiceIds", []):
+            F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, "service catalogue Mailpit id missing")
+        if MAILPIT_PROVIDER_ID not in active.get("providerRegistryIds", []):
+            F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, "provider registry id missing")
+        if not active.get("apiProofEvidence") or not active.get("workerProofEvidence"):
+            F.add("USF-RUNTIME-012", MAILPIT_BINDING_ID, "active binding lacks API or worker proof evidence")
     if compose:
+        if POSTGRES_BINDING_ID not in compose.get("providerBindingRefs", []):
+            F.add("USF-RUNTIME-012", "dev-compose-backed", "compose mode does not reference active Postgres binding")
         if MAILPIT_BINDING_ID not in compose.get("providerBindingRefs", []):
             F.add("USF-RUNTIME-012", "dev-compose-backed", "compose mode does not reference active Mailpit binding")
         deferred_refs = set(compose.get("deferredProviderBindingRefs", []))
@@ -482,6 +514,9 @@ def check_provider_bindings(F: Findings, state: dict[str, Any]) -> None:
     proof_source = state["proofSource"]
     for marker in (
         "composedProviderEvidence",
+        "databaseProviderEvidence",
+        "preparePostgresRuntimeProofDatabase",
+        "Postgres provider evidence",
         "notificationProviderMode",
         "mailpit-api",
         "Mailpit provider evidence",
@@ -494,6 +529,9 @@ def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     adapter_text = state_text(state, ADAPTER_MAIL_SOURCE_PATH)
     if f'from "{MAILPIT_SDK_PACKAGE}"' not in adapter_text and f"from '{MAILPIT_SDK_PACKAGE}'" not in adapter_text:
         F.add("USF-RUNTIME-013", str(ADAPTER_MAIL_SOURCE_PATH), "Mailpit SDK import is missing from adapter boundary")
+    db_adapter_text = state_text(state, ADAPTER_DB_SOURCE_PATH)
+    if f'from "{POSTGRES_SDK_PACKAGE}"' not in db_adapter_text and f"from '{POSTGRES_SDK_PACKAGE}'" not in db_adapter_text:
+        F.add("USF-RUNTIME-013", str(ADAPTER_DB_SOURCE_PATH), "Postgres SDK import is missing from adapter boundary")
     forbidden_paths = list(FORBIDDEN_SDK_IMPORT_PATHS)
     forbidden_paths.extend(ts_files_under(Path("capabilities")))
     for path in forbidden_paths:
@@ -525,13 +563,23 @@ def check_provider_registry_linkage(F: Findings, state: dict[str, Any]) -> None:
         MAILPIT_PROVIDER_ID,
         "MailpitNotificationProvider",
         "endpoint://compose/mailpit",
+        POSTGRES_PROVIDER_ID,
+        "PostgresTenantMembershipRepository",
+        "endpoint://compose/postgres",
         "approved-for-composed-test",
     )
     for marker in required_markers:
         if marker not in registry_source:
             F.add("USF-RUNTIME-015", str(PROVIDER_REGISTRY_SOURCE_PATH), f"provider registry missing marker: {marker}")
     runtime_source = state_text(state, RUNTIME_SOURCE_PATH)
-    for marker in (MAILPIT_BINDING_ID, MAILPIT_PROVIDER_ID, MAILPIT_SERVICE_ID):
+    for marker in (
+        "POSTGRES_RUNTIME_PROVIDER_BINDING_ID",
+        "POSTGRES_PROVIDER_REGISTRY_ID",
+        "POSTGRES_SERVICE_CATALOGUE_ID",
+        MAILPIT_BINDING_ID,
+        MAILPIT_PROVIDER_ID,
+        MAILPIT_SERVICE_ID,
+    ):
         if marker not in runtime_source:
             F.add("USF-RUNTIME-015", str(RUNTIME_SOURCE_PATH), f"runtime binding source missing marker: {marker}")
 
@@ -541,6 +589,17 @@ def check_dependency_pinning(F: Findings, state: dict[str, Any]) -> None:
     version = deps.get(MAILPIT_SDK_PACKAGE)
     if version != MAILPIT_SDK_VERSION:
         F.add("USF-RUNTIME-016", f"package.json:{MAILPIT_SDK_PACKAGE}", "mailpit-api must be exact-version pinned to 2.1.0")
+    postgres_version = deps.get(POSTGRES_SDK_PACKAGE)
+    if postgres_version != POSTGRES_SDK_VERSION:
+        F.add("USF-RUNTIME-016", f"package.json:{POSTGRES_SDK_PACKAGE}", "pg must be exact-version pinned to 8.22.0")
+    dev_deps = state["package"].get("devDependencies", {})
+    postgres_types_version = dev_deps.get(POSTGRES_TYPES_PACKAGE)
+    if postgres_types_version != POSTGRES_TYPES_VERSION:
+        F.add(
+            "USF-RUNTIME-016",
+            f"package.json:{POSTGRES_TYPES_PACKAGE}",
+            "@types/pg must be exact-version pinned to 8.20.0",
+        )
 
 
 def run_checks(mode: str, state: dict[str, Any]) -> Findings:
