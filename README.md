@@ -44,17 +44,23 @@ That makes AI assistance more bounded, auditable, and useful.
 
 ### Provider-Portable Architecture
 
+![Provider-portable architecture](docs/assets/readme/image5.png)
+
 USF distinguishes provider contracts from provider implementations. Ports, adapters, provider modes, and environments are modelled separately, so a capability can be proven on hermetic or composed-local substrates while preserving the boundary required for external-provider readiness.
 
 This makes the foundation adaptable without weakening internal proof.
 
 ### Validator-Enforced Drift Control
 
+![Validator-enforced drift control](docs/assets/readme/image6.png)
+
 USF uses validators as enforcement, not decoration. The validator layer is responsible for checking schema validity, reference resolution, vocabulary usage, source disposition, provider-mode honesty, environment honesty, evidence completeness, and readiness overclaiming.
 
 The goal is not just to document architecture. The goal is to make drift detectable.
 
 ### Source-Aware Without Being Source-Subordinate
+
+![Source-aware extraction](docs/assets/readme/image7.png)
 
 USF carries forward hard-won operational and semantic knowledge from its historical source evidence, but the historical repository is not the future authority.
 
@@ -83,6 +89,8 @@ That combination creates a different kind of asset:
 - an enterprise substrate that can evolve providers, services, and UI without losing behavioural intent.
 
 ## Market Position
+
+![Market position](docs/assets/readme/image8.png)
 
 USF sits at the intersection of enterprise platform engineering, internal developer platforms, regulated software delivery, and AI-assisted engineering governance.
 
