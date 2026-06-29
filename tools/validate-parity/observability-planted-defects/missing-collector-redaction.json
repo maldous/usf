@@ -1,0 +1,11 @@
+{
+  "id": "observability.missing-collector-redaction",
+  "expectedRuleId": "USF-OBSERVABILITY-003",
+  "edits": [
+    {
+      "target": "adapters/obs/src/index.ts",
+      "old": "redactTelemetryAttributes(input.safeAttributes)",
+      "new": "unsafeTelemetryAttributes(input.safeAttributes)"
+    }
+  ]
+}

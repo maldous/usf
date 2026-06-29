@@ -1,0 +1,417 @@
+#!/usr/bin/env python3
+"""USF observability/telemetry parity validator (USF-158).
+
+Governance tooling only. It creates no runtime files, imports no React source, and
+publishes no evidence. It fails closed on controlled-observability invariants:
+classified telemetry signals, tenant-safe metric labels, redaction before capture,
+context propagation, PDP-protected observability surfaces, provider-mode-aware
+health/readiness/liveness, source-use honesty, and no live monitoring, SIEM,
+alerting, SOC, ISO, dashboard, incident-response, or production readiness claim.
+"""
+import argparse
+import json
+import os
+import re
+import sys
+
+RULES = {
+    "USF-OBSERVABILITY-001": ("blocking", "observability semantic model missing"),
+    "USF-OBSERVABILITY-002": ("blocking", "observability standard or source-use matrix missing"),
+    "USF-OBSERVABILITY-003": ("blocking", "telemetry collector lacks safe redaction, label, or tenant controls"),
+    "USF-OBSERVABILITY-004": ("blocking", "observability proof or command wiring missing"),
+    "USF-OBSERVABILITY-005": ("blocking", "observability tests missing required behaviours"),
+    "USF-OBSERVABILITY-006": ("blocking", "observability API/OpenAPI surface missing or unsafe"),
+    "USF-OBSERVABILITY-007": ("blocking", "observability PDP/audit posture missing"),
+    "USF-OBSERVABILITY-008": ("blocking", "observability parity matrix rows lack authorisation/backing"),
+    "USF-OBSERVABILITY-009": ("blocking", "observability live/SIEM/alerting/SOC/ISO/production overclaim"),
+    "USF-OBSERVABILITY-SELFTEST": ("blocking", "planted observability defect did not raise its expected rule"),
+}
+
+CORE = "packages/core/src/index.ts"
+PORTS = "packages/ports/src/index.ts"
+ADAPTER = "adapters/obs/src/index.ts"
+AUTHZ_POLICY = "capabilities/tenant/src/authorization-policy.ts"
+SERVER = "apps/api/src/server.ts"
+CONTRACTS = "packages/contracts/src/index.ts"
+API_SURFACE = "packages/contracts/src/api-surface.ts"
+OPENAPI_BUILDER = "packages/openapi/src/index.ts"
+OPENAPI_JSON = "packages/openapi/openapi.json"
+PROOF = "packages/proof/src/observability-telemetry-proof.ts"
+PROOF_INDEX = "packages/proof/src/index.ts"
+TESTS = "tests/capabilities/observability-telemetry.test.ts"
+API_TESTS = "tests/apps/api-contracts.test.ts"
+PROOF_TESTS = "tests/packages/proof.test.ts"
+STANDARD = "docs/architecture/observability-telemetry-and-operational-evidence-standard.md"
+SOURCE_USE = "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md"
+BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
+MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
+PACKAGE = "package.json"
+MAKEFILE = "Makefile"
+SELFTEST_DIR = "tools/validate-parity/observability-planted-defects"
+
+SOURCE_FILES = (
+    CORE,
+    PORTS,
+    ADAPTER,
+    AUTHZ_POLICY,
+    SERVER,
+    CONTRACTS,
+    API_SURFACE,
+    OPENAPI_BUILDER,
+    OPENAPI_JSON,
+    PROOF,
+    PROOF_INDEX,
+    TESTS,
+    API_TESTS,
+    PROOF_TESTS,
+    STANDARD,
+    SOURCE_USE,
+    BOOTSTRAP_SOURCE_USE,
+    PACKAGE,
+    MAKEFILE,
+)
+
+FORBIDDEN_OUTPUT_NEEDLES = [
+    "secret://",
+    "endpoint://",
+    "Bearer synthetic-token-value",
+    "recipient@sample.invalid",
+    "tenant-alpha/object/synthetic-sensitive-key",
+    "stack trace hidden",
+    "provider_response",
+    "production ready",
+    "siem readiness is proven",
+    "live monitoring readiness is proven",
+    "soc ready",
+    "iso certified",
+]
+
+
+class Findings:
+    def __init__(self):
+        self.items = []
+
+    def add(self, rule_id, subject, message=""):
+        severity = RULES.get(rule_id, ("error", ""))[0]
+        self.items.append(
+            {
+                "severity": severity,
+                "ruleId": rule_id,
+                "subject": str(subject),
+                "message": message or RULES.get(rule_id, ("", ""))[1],
+            }
+        )
+
+    def blocking_or_error(self):
+        return [item for item in self.items if item["severity"] in ("blocking", "error")]
+
+
+def find_root(start):
+    current = os.path.abspath(start)
+    while True:
+        if os.path.isdir(os.path.join(current, "docs")) and os.path.isdir(os.path.join(current, "spec")):
+            return current
+        parent = os.path.dirname(current)
+        if parent == current:
+            return os.path.abspath(start)
+        current = parent
+
+
+ROOT = find_root(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(ROOT)
+
+
+def read_text(path):
+    if not os.path.exists(path):
+        return ""
+    with open(path, encoding="utf-8") as handle:
+        return handle.read()
+
+
+def read_json(path):
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as handle:
+            return json.load(handle)
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def build_state(overrides=None):
+    overrides = overrides or {}
+    files = {path: read_text(path) for path in SOURCE_FILES}
+    for path, text in overrides.get("files", {}).items():
+        files[path] = text
+    matrix = overrides.get("matrix", read_json(MATRIX))
+    openapi = overrides.get("openapi", read_json(OPENAPI_JSON))
+    return {"files": files, "matrix": matrix, "openapi": openapi}
+
+
+def observability_rows(matrix):
+    if not isinstance(matrix, dict):
+        return []
+    rows = []
+    for row in matrix.get("domains", []):
+        if not isinstance(row, dict):
+            continue
+        rid = str(row.get("react_item_id", ""))
+        summary = str(row.get("behaviour_summary", "")).lower()
+        if rid.startswith("observability") or "observability" in summary or "telemetry" in summary:
+            rows.append(row)
+    return rows
+
+
+def run_checks(F, state=None):
+    state = state or build_state()
+    files = state["files"]
+    core = files[CORE]
+    ports = files[PORTS]
+    adapter = files[ADAPTER]
+    authz = files[AUTHZ_POLICY]
+    server = files[SERVER]
+    contracts = files[CONTRACTS]
+    api_surface = files[API_SURFACE]
+    openapi_builder = files[OPENAPI_BUILDER]
+    openapi_text = files[OPENAPI_JSON]
+    proof = files[PROOF]
+    proof_index = files[PROOF_INDEX]
+    tests = files[TESTS]
+    api_tests = files[API_TESTS]
+    proof_tests = files[PROOF_TESTS]
+    standard = files[STANDARD]
+    source_use = files[SOURCE_USE]
+    bootstrap_source_use = files[BOOTSTRAP_SOURCE_USE]
+    package = files[PACKAGE]
+    makefile = files[MAKEFILE]
+    matrix = state["matrix"]
+    openapi = state["openapi"]
+
+    for token in [
+        "TELEMETRY_SIGNAL_CATEGORIES",
+        "OBSERVABILITY_SIGNAL_CLASSIFICATIONS",
+        "OBSERVABILITY_ALLOWED_LABELS",
+        "OBSERVABILITY_FORBIDDEN_PATTERNS",
+        "TelemetrySignalBase",
+        "TelemetryValidationError",
+        "validateMetricLabels",
+        "redactTelemetryAttributes",
+    ]:
+        if token not in core:
+            F.add("USF-OBSERVABILITY-001", CORE, f"core model missing {token}")
+    if "export const TELEMETRY_SIGNAL_CATEGORIES = Object.freeze" not in core:
+        F.add("USF-OBSERVABILITY-001", CORE, "telemetry signal category declaration missing")
+    for token in [
+        "metric",
+        "span",
+        "structured-log",
+        "security-signal",
+        "readiness-signal",
+        "operational",
+        "privacy-sensitive",
+        "tenant-sensitive",
+    ]:
+        if token not in core:
+            F.add("USF-OBSERVABILITY-001", CORE, f"controlled value missing {token}")
+
+    if "TelemetryPort" not in ports or "recordMetric" not in ports or "recordStructuredLog" not in ports:
+        F.add("USF-OBSERVABILITY-001", PORTS, "telemetry port missing")
+    if "InMemoryTelemetryCollector" not in adapter or "safeStatusView" not in adapter:
+        F.add("USF-OBSERVABILITY-003", ADAPTER, "in-memory collector missing")
+    for token in [
+        "validateMetricLabels",
+        "redactTelemetryAttributes",
+        "redactTelemetryAttributes(input.safeAttributes)",
+        "redactTelemetryAttributes(input.attributes)",
+        "tenantId",
+        "encodeCursor",
+        "liveMonitoringReadinessClaim: false",
+        "siemReadinessClaim: false",
+    ]:
+        if token not in adapter:
+            F.add("USF-OBSERVABILITY-003", ADAPTER, f"collector control missing {token}")
+    if "provider_response" not in core or "stack_trace" not in core or "recipient_address" not in core:
+        F.add("USF-OBSERVABILITY-003", CORE, "blocked sensitive telemetry patterns missing")
+
+    if not os.path.exists(STANDARD) or "controlled operational evidence surface" not in standard.lower():
+        F.add("USF-OBSERVABILITY-002", STANDARD, "observability standard missing control language")
+    for token in [
+        "Signal Classification",
+        "Tenant-Safe Telemetry",
+        "Cardinality Governance",
+        "Redaction And Sensitive Value Blocking",
+        "Observability Access Control",
+        "Deferred Depth",
+    ]:
+        if token not in standard:
+            F.add("USF-OBSERVABILITY-002", STANDARD, f"standard section missing {token}")
+    if not os.path.exists(SOURCE_USE) or "React UI/Playwright observability behaviours" not in source_use:
+        F.add("USF-OBSERVABILITY-002", SOURCE_USE, "observability source-use matrix missing")
+    if "Parity Observability/Telemetry Additions" not in bootstrap_source_use:
+        F.add("USF-OBSERVABILITY-002", BOOTSTRAP_SOURCE_USE, "global source-use matrix missing observability additions")
+
+    if "proof:observability" not in package or "validate-observability.py all --json" not in package:
+        F.add("USF-OBSERVABILITY-004", PACKAGE, "observability proof/parity script wiring missing")
+    if not re.search(r"(?m)^observability-proof:", makefile):
+        F.add("USF-OBSERVABILITY-004", MAKEFILE, "make observability-proof missing")
+    for token in [
+        "runObservabilityTelemetryProof",
+        "liveMonitoringReadinessClaim: false",
+        "siemReadinessClaim: false",
+        "iso27001CertificationClaim: false",
+        "productionLiveClaim: false",
+    ]:
+        if token not in proof:
+            F.add("USF-OBSERVABILITY-004", PROOF, f"proof missing {token}")
+    if "runObservabilityTelemetryProof" not in proof_index or "runObservabilityTelemetryProof" not in proof_tests:
+        F.add("USF-OBSERVABILITY-004", PROOF_TESTS, "observability proof export/test missing")
+
+    for token in [
+        "allow-listed",
+        "high-cardinality labels",
+        "secret-looking metric label",
+        "redacts span attributes",
+        "tenant A cannot query tenant B telemetry",
+        "health and readiness are distinct",
+        "security signal",
+    ]:
+        if token not in tests:
+            F.add("USF-OBSERVABILITY-005", TESTS, f"observability test missing {token}")
+    if "guards and redacts observability surfaces" not in api_tests or "corr-observability-api" not in api_tests:
+        F.add("USF-OBSERVABILITY-005", API_TESTS, "observability API tests missing")
+
+    if (
+        '"/v1/observability/readiness"' not in server
+        or '"/v1/observability/signals"' not in server
+    ):
+        F.add("USF-OBSERVABILITY-006", SERVER, "observability API routes missing")
+    if '"observability.readiness.read"' not in server or '"observability.signal.read"' not in server:
+        F.add("USF-OBSERVABILITY-006", SERVER, "observability routes lack PDP actions")
+    if "toSafeTelemetrySignalView" not in server or "recordSecuritySignal" not in server:
+        F.add("USF-OBSERVABILITY-006", SERVER, "observability route safety/security signal handling missing")
+    if "ObservabilityReadinessResponseSchema" not in contracts or "ObservabilitySignalsResponseSchema" not in contracts:
+        F.add("USF-OBSERVABILITY-006", CONTRACTS, "observability schemas missing")
+    if "observability-readiness.get" not in api_surface or "observability-signals.list" not in api_surface:
+        F.add("USF-OBSERVABILITY-006", API_SURFACE, "observability route metadata missing")
+    if "ObservabilitySignalsQuery" not in openapi_builder or "ObservabilitySignalsResponse" not in openapi_builder:
+        F.add("USF-OBSERVABILITY-006", OPENAPI_BUILDER, "OpenAPI builder missing observability schemas/query")
+    if not isinstance(openapi, dict) or "/v1/observability/signals" not in (openapi.get("paths") or {}):
+        F.add("USF-OBSERVABILITY-006", OPENAPI_JSON, "committed OpenAPI missing observability routes")
+    for needle in FORBIDDEN_OUTPUT_NEEDLES:
+        if needle.lower() in openapi_text.lower():
+            F.add("USF-OBSERVABILITY-006", OPENAPI_JSON, f"OpenAPI contains unsafe observability content {needle}")
+
+    if "observability.signal.read" not in authz or "observability.readiness.read" not in authz:
+        F.add("USF-OBSERVABILITY-007", AUTHZ_POLICY, "observability PDP actions missing")
+    if "observability.read" not in core or "observability.readiness.checked" not in core:
+        F.add("USF-OBSERVABILITY-007", CORE, "observability audit event types missing")
+    if "observability.readiness.checked" not in server or "observability.read" not in server:
+        F.add("USF-OBSERVABILITY-007", SERVER, "observability access audit missing")
+
+    rows = observability_rows(matrix)
+    if len(rows) < 5:
+        F.add("USF-OBSERVABILITY-008", MATRIX, "observability parity matrix rows incomplete")
+    main = [row for row in rows if row.get("react_item_id") == "observability"]
+    if not main or main[0].get("domain_authorised") is not True:
+        F.add("USF-OBSERVABILITY-008", MATRIX, "observability main row not domain-authorised")
+    if not any(row.get("blocker") == "USF-159" for row in rows):
+        F.add("USF-OBSERVABILITY-008", MATRIX, "deferred observability depth lacks USF-159 blocker")
+    if not any(row.get("react_item_id") == "observability.alerting-incident-dashboard-live-depth" for row in rows):
+        F.add("USF-OBSERVABILITY-008", MATRIX, "deferred observability depth row missing")
+
+    overclaim_sources = "\n".join([standard, source_use, proof, openapi_text])
+    for phrase in [
+        "live monitoring readiness is proven",
+        "live alerting readiness is proven",
+        "siem readiness is proven",
+        "soc readiness is proven",
+        "iso certified",
+        "production monitoring readiness is proven",
+        "production-live",
+    ]:
+        if phrase in overclaim_sources.lower():
+            F.add("USF-OBSERVABILITY-009", "observability-overclaim", f"overclaim phrase present: {phrase}")
+
+
+def apply_defect(state, defect):
+    mutated = {
+        "files": dict(state["files"]),
+        "matrix": json.loads(json.dumps(state["matrix"])),
+        "openapi": json.loads(json.dumps(state["openapi"])),
+    }
+    for edit in defect.get("edits", []):
+        target = edit["target"]
+        old = edit.get("old", "")
+        new = edit.get("new", "")
+        if target == "matrix":
+            text = json.dumps(mutated["matrix"])
+            if old not in text:
+                raise AssertionError(f"old text not found in matrix for defect {defect.get('id')}")
+            mutated["matrix"] = json.loads(text.replace(old, new, 1))
+        elif target == "openapi":
+            text = json.dumps(mutated["openapi"])
+            if old not in text:
+                raise AssertionError(f"old text not found in openapi for defect {defect.get('id')}")
+            mutated["openapi"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][OPENAPI_JSON] = json.dumps(mutated["openapi"])
+        else:
+            text = mutated["files"].get(target, "")
+            if old not in text:
+                raise AssertionError(f"old text not found in {target} for defect {defect.get('id')}")
+            mutated["files"][target] = text.replace(old, new, 1)
+    return mutated
+
+
+def run_selftest(F):
+    if not os.path.isdir(SELFTEST_DIR):
+        F.add("USF-OBSERVABILITY-SELFTEST", SELFTEST_DIR, "observability planted-defects directory missing")
+        return
+    base = build_state()
+    files = sorted(name for name in os.listdir(SELFTEST_DIR) if name.endswith(".json"))
+    if len(files) < 5:
+        F.add("USF-OBSERVABILITY-SELFTEST", SELFTEST_DIR, "not enough observability planted defects")
+        return
+    for name in files:
+        path = os.path.join(SELFTEST_DIR, name)
+        defect = read_json(path)
+        if not isinstance(defect, dict):
+            F.add("USF-OBSERVABILITY-SELFTEST", path, "planted defect is not valid JSON")
+            continue
+        expected = defect.get("expectedRuleId")
+        child = Findings()
+        try:
+            run_checks(child, apply_defect(base, defect))
+        except Exception as exc:  # noqa: BLE001
+            child.add("USF-OBSERVABILITY-SELFTEST", path, f"defect application failed: {exc}")
+        if expected not in {item["ruleId"] for item in child.items}:
+            F.add("USF-OBSERVABILITY-SELFTEST", path, f"expected {expected} was not raised")
+
+
+def emit(F, as_json):
+    status = "pass" if not F.blocking_or_error() else "fail"
+    payload = {"status": status, "findings": F.items}
+    if as_json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(status)
+        for item in F.items:
+            print(f"{item['severity']} {item['ruleId']} {item['subject']}: {item['message']}")
+    return 0 if status == "pass" else 1
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mode", nargs="?", default="all", choices=["all", "selftest"])
+    parser.add_argument("--json", action="store_true")
+    args = parser.parse_args()
+    F = Findings()
+    if args.mode == "all":
+        run_checks(F)
+        run_selftest(F)
+    elif args.mode == "selftest":
+        run_selftest(F)
+    return emit(F, args.json)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

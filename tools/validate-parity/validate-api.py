@@ -188,7 +188,8 @@ def api_rows(matrix):
 def route_ids(api_surface):
     inline = re.findall(r'routeId:\s*"([^"]+)"', api_surface)
     helper = re.findall(r'route\(\s*"([^"]+)"', api_surface)
-    return inline + helper
+    inline_only = [route_id for route_id in inline if route_id not in helper]
+    return inline_only + helper
 
 
 def openapi_operations(document):

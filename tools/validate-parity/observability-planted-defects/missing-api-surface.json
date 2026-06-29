@@ -1,0 +1,11 @@
+{
+  "id": "observability.missing-api-surface",
+  "expectedRuleId": "USF-OBSERVABILITY-006",
+  "edits": [
+    {
+      "target": "apps/api/src/server.ts",
+      "old": "\"/v1/observability/signals\"",
+      "new": "\"/v1/observability/signals-defect\""
+    }
+  ]
+}

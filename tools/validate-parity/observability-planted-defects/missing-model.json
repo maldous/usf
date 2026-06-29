@@ -1,0 +1,11 @@
+{
+  "id": "observability.missing-model",
+  "expectedRuleId": "USF-OBSERVABILITY-001",
+  "edits": [
+    {
+      "target": "packages/core/src/index.ts",
+      "old": "export const TELEMETRY_SIGNAL_CATEGORIES = Object.freeze",
+      "new": "export const TELEMETRY_SIGNAL_SET = Object.freeze"
+    }
+  ]
+}
