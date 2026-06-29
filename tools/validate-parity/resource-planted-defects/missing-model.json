@@ -1,0 +1,12 @@
+{
+  "name": "missing resource lifecycle semantic model",
+  "expectedRule": "USF-RESOURCES-001",
+  "override": {
+    "removeText": [
+      {
+        "path": "packages/core/src/index.ts",
+        "text": "RESOURCE_LIFECYCLE_STATUSES"
+      }
+    ]
+  }
+}

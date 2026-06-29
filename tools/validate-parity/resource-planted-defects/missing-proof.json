@@ -1,0 +1,12 @@
+{
+  "name": "missing resource lifecycle proof",
+  "expectedRule": "USF-RESOURCES-004",
+  "override": {
+    "removeText": [
+      {
+        "path": "packages/proof/src/resource-lifecycle-proof.ts",
+        "text": "export async function runResourceLifecycleProof"
+      }
+    ]
+  }
+}

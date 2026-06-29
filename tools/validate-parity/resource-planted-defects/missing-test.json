@@ -1,0 +1,12 @@
+{
+  "name": "missing resource lifecycle test behaviour",
+  "expectedRule": "USF-RESOURCES-005",
+  "override": {
+    "removeText": [
+      {
+        "path": "tests/capabilities/resource-lifecycle.test.ts",
+        "text": "relationship integrity"
+      }
+    ]
+  }
+}

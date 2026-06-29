@@ -1,0 +1,7 @@
+{
+  "name": "missing resource lifecycle parity matrix row",
+  "expectedRule": "USF-RESOURCES-006",
+  "override": {
+    "matrixRemoveRows": ["resource.semantic-model"]
+  }
+}

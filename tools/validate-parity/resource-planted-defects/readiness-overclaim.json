@@ -1,0 +1,12 @@
+{
+  "name": "resource lifecycle readiness overclaim",
+  "expectedRule": "USF-RESOURCES-007",
+  "override": {
+    "appendText": [
+      {
+        "path": "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md",
+        "text": "\nproduction record-management readiness is proven\n"
+      }
+    ]
+  }
+}
