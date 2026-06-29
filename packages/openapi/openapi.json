@@ -32,6 +32,9 @@
       "name": "notifications-messaging"
     },
     {
+      "name": "observability-telemetry"
+    },
+    {
       "name": "platform-health"
     },
     {
@@ -2785,6 +2788,459 @@
             "maxLimit": null,
             "filterAllowList": [],
             "sortAllowList": []
+          },
+          "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+          "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+          "dataClassification": "security-sensitive",
+          "apiVersion": "v1",
+          "contractVersion": "api-contracts-1",
+          "operationVersion": "1",
+          "lifecycle": "experimental",
+          "compatibilityPolicy": "breaking changes require route or contract version change",
+          "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+          "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+          "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+          "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+          "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred",
+          "sourceUseDisposition": "source-derived-rewrite",
+          "implementation": "apps/api/src/server.ts"
+        }
+      }
+    },
+    "/v1/observability/readiness": {
+      "get": {
+        "operationId": "getObservabilityReadinessV1",
+        "tags": ["observability-telemetry"],
+        "summary": "GET /v1/observability/readiness",
+        "description": "operator/security-admin observability.readiness.read permission required; readiness is redacted and does not imply live monitoring",
+        "deprecated": false,
+        "security": [
+          {
+            "KeycloakBearerFuture": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/CorrelationIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TraceIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevTenantHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevActorHeader"
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "telemetry-collector response",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservabilityReadinessResponse"
+                },
+                "example": {
+                  "tenantId": "tenant-alpha",
+                  "status": "ready-local-dev-test",
+                  "collector": {
+                    "providerId": "observability-captured-local",
+                    "providerMode": "in-memory",
+                    "environmentScope": "local-dev",
+                    "healthStatus": "healthy",
+                    "readinessStatus": "healthy",
+                    "livenessStatus": "healthy",
+                    "signalCount": 1,
+                    "boundedStorageLimit": 500,
+                    "exportEnabled": false,
+                    "liveMonitoringReadinessClaim": false,
+                    "liveMetricsBackendClaim": false,
+                    "liveLogBackendClaim": false,
+                    "liveTracingBackendClaim": false,
+                    "liveAlertingClaim": false,
+                    "siemReadinessClaim": false,
+                    "safeFailureMessage": null
+                  },
+                  "providerMode": "in-memory",
+                  "liveMonitoringReadinessClaim": false,
+                  "productionReadinessClaim": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-usf-route": {
+          "routeId": "observability-readiness.get",
+          "routeClassification": "operator-only",
+          "owningDomain": "observability-telemetry",
+          "owningCapability": "telemetry-collector",
+          "requiredAction": "observability.readiness.read",
+          "tenantScope": "tenant-header-query",
+          "pdpPolicy": "operator/security-admin observability.readiness.read permission required; readiness is redacted and does not imply live monitoring",
+          "auditPolicy": "observability readiness access is PDP guarded and audit-recorded value-free",
+          "idempotencyPolicy": {
+            "required": false,
+            "header": null,
+            "scope": "not-side-effecting",
+            "window": "not-applicable",
+            "replayPolicy": "not-applicable",
+            "conflictPolicy": "not-applicable",
+            "exception": "safe-read"
+          },
+          "paginationPolicy": {
+            "type": "none",
+            "cursorScope": "not-applicable",
+            "defaultLimit": null,
+            "maxLimit": null,
+            "filterAllowList": [],
+            "sortAllowList": []
+          },
+          "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+          "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+          "dataClassification": "security-sensitive",
+          "apiVersion": "v1",
+          "contractVersion": "api-contracts-1",
+          "operationVersion": "1",
+          "lifecycle": "experimental",
+          "compatibilityPolicy": "breaking changes require route or contract version change",
+          "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+          "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+          "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+          "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+          "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred",
+          "sourceUseDisposition": "source-derived-rewrite",
+          "implementation": "apps/api/src/server.ts"
+        }
+      }
+    },
+    "/v1/observability/signals": {
+      "get": {
+        "operationId": "listObservabilitySignalsV1",
+        "tags": ["observability-telemetry"],
+        "summary": "GET /v1/observability/signals",
+        "description": "operator/security-admin observability.signal.read permission required; tenant query cannot cross tenant boundaries",
+        "deprecated": false,
+        "security": [
+          {
+            "KeycloakBearerFuture": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/CorrelationIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TraceIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevTenantHeader"
+          },
+          {
+            "$ref": "#/components/parameters/DevActorHeader"
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "signalCategory",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "severity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Synthetic safe query field."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Page size bounded by the route pagination policy."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque tenant-scoped cursor."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "telemetry-collector response",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservabilitySignalsResponse"
+                },
+                "example": {
+                  "tenantId": "tenant-alpha",
+                  "signals": [
+                    {
+                      "signalId": "sig-alpha",
+                      "signalName": "api.request.count",
+                      "signalCategory": "metric",
+                      "signalClassification": "performance",
+                      "severity": "info",
+                      "tenantId": "tenant-alpha",
+                      "actorId": "actor-alpha",
+                      "serviceActorId": null,
+                      "routeId": "tenant-context.get",
+                      "operationId": "getTenantContext",
+                      "capability": "tenant-context",
+                      "providerId": null,
+                      "jobId": null,
+                      "workflowId": null,
+                      "notificationId": null,
+                      "fileId": null,
+                      "auditEventId": null,
+                      "correlationId": "corr-alpha",
+                      "causationId": null,
+                      "requestId": "req-alpha",
+                      "traceId": "trace-alpha",
+                      "spanId": "span-alpha",
+                      "parentSpanId": null,
+                      "environmentScope": "local-dev",
+                      "providerMode": "in-memory",
+                      "dataClassification": "confidential",
+                      "tenantScope": "tenant-scoped",
+                      "actorScope": "actor-scoped",
+                      "providerScope": "none",
+                      "redactionPolicy": "redact-before-persistence-and-api-exposure",
+                      "cardinalityPolicy": "metric-label-allow-list-and-high-cardinality-deny",
+                      "retentionPolicy": "local-dev-test-30-days",
+                      "accessPolicy": "pdp-protected-for-non-public-observability-access",
+                      "createdAt": "2026-01-01T00:00:00.000Z"
+                    }
+                  ],
+                  "nextCursor": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe standard error envelope",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier"
+              },
+              "X-Correlation-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Correlation identifier"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Sensitive responses use no-store"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-usf-route": {
+          "routeId": "observability-signals.list",
+          "routeClassification": "operator-only",
+          "owningDomain": "observability-telemetry",
+          "owningCapability": "telemetry-collector",
+          "requiredAction": "observability.signal.read",
+          "tenantScope": "tenant-header-query",
+          "pdpPolicy": "operator/security-admin observability.signal.read permission required; tenant query cannot cross tenant boundaries",
+          "auditPolicy": "observability signal access is PDP guarded and audit-recorded value-free",
+          "idempotencyPolicy": {
+            "required": false,
+            "header": null,
+            "scope": "not-side-effecting",
+            "window": "not-applicable",
+            "replayPolicy": "not-applicable",
+            "conflictPolicy": "not-applicable",
+            "exception": "safe-read"
+          },
+          "paginationPolicy": {
+            "type": "cursor",
+            "cursorScope": "tenant-scoped-opaque-cursor",
+            "defaultLimit": 50,
+            "maxLimit": 200,
+            "filterAllowList": ["signalCategory", "severity"],
+            "sortAllowList": ["createdAt", "eventId", "fileId", "jobId", "notificationId"]
           },
           "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
           "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
@@ -7976,6 +8432,786 @@
                   "type": "string"
                 },
                 "updatedAt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "ObservabilityCollectorStatusView": {
+        "type": "object",
+        "required": [
+          "providerId",
+          "providerMode",
+          "environmentScope",
+          "healthStatus",
+          "readinessStatus",
+          "livenessStatus",
+          "signalCount",
+          "boundedStorageLimit",
+          "exportEnabled",
+          "liveMonitoringReadinessClaim",
+          "liveMetricsBackendClaim",
+          "liveLogBackendClaim",
+          "liveTracingBackendClaim",
+          "liveAlertingClaim",
+          "siemReadinessClaim",
+          "safeFailureMessage"
+        ],
+        "properties": {
+          "providerId": {
+            "const": "observability-captured-local",
+            "type": "string"
+          },
+          "providerMode": {
+            "anyOf": [
+              {
+                "const": "in-memory",
+                "type": "string"
+              },
+              {
+                "const": "local-test",
+                "type": "string"
+              }
+            ]
+          },
+          "environmentScope": {
+            "const": "local-dev",
+            "type": "string"
+          },
+          "healthStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "readinessStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "livenessStatus": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "signalCount": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "boundedStorageLimit": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "exportEnabled": {
+            "const": false,
+            "type": "boolean"
+          },
+          "liveMonitoringReadinessClaim": {
+            "const": false,
+            "type": "boolean"
+          },
+          "liveMetricsBackendClaim": {
+            "const": false,
+            "type": "boolean"
+          },
+          "liveLogBackendClaim": {
+            "const": false,
+            "type": "boolean"
+          },
+          "liveTracingBackendClaim": {
+            "const": false,
+            "type": "boolean"
+          },
+          "liveAlertingClaim": {
+            "const": false,
+            "type": "boolean"
+          },
+          "siemReadinessClaim": {
+            "const": false,
+            "type": "boolean"
+          },
+          "safeFailureMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "ObservabilityReadinessResponse": {
+        "type": "object",
+        "required": [
+          "tenantId",
+          "status",
+          "collector",
+          "providerMode",
+          "liveMonitoringReadinessClaim",
+          "productionReadinessClaim"
+        ],
+        "properties": {
+          "tenantId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "collector": {
+            "type": "object",
+            "required": [
+              "providerId",
+              "providerMode",
+              "environmentScope",
+              "healthStatus",
+              "readinessStatus",
+              "livenessStatus",
+              "signalCount",
+              "boundedStorageLimit",
+              "exportEnabled",
+              "liveMonitoringReadinessClaim",
+              "liveMetricsBackendClaim",
+              "liveLogBackendClaim",
+              "liveTracingBackendClaim",
+              "liveAlertingClaim",
+              "siemReadinessClaim",
+              "safeFailureMessage"
+            ],
+            "properties": {
+              "providerId": {
+                "const": "observability-captured-local",
+                "type": "string"
+              },
+              "providerMode": {
+                "anyOf": [
+                  {
+                    "const": "in-memory",
+                    "type": "string"
+                  },
+                  {
+                    "const": "local-test",
+                    "type": "string"
+                  }
+                ]
+              },
+              "environmentScope": {
+                "const": "local-dev",
+                "type": "string"
+              },
+              "healthStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "readinessStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "livenessStatus": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "signalCount": {
+                "minimum": 0,
+                "type": "number"
+              },
+              "boundedStorageLimit": {
+                "minimum": 1,
+                "type": "number"
+              },
+              "exportEnabled": {
+                "const": false,
+                "type": "boolean"
+              },
+              "liveMonitoringReadinessClaim": {
+                "const": false,
+                "type": "boolean"
+              },
+              "liveMetricsBackendClaim": {
+                "const": false,
+                "type": "boolean"
+              },
+              "liveLogBackendClaim": {
+                "const": false,
+                "type": "boolean"
+              },
+              "liveTracingBackendClaim": {
+                "const": false,
+                "type": "boolean"
+              },
+              "liveAlertingClaim": {
+                "const": false,
+                "type": "boolean"
+              },
+              "siemReadinessClaim": {
+                "const": false,
+                "type": "boolean"
+              },
+              "safeFailureMessage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "providerMode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "liveMonitoringReadinessClaim": {
+            "const": false,
+            "type": "boolean"
+          },
+          "productionReadinessClaim": {
+            "const": false,
+            "type": "boolean"
+          }
+        }
+      },
+      "ObservabilitySignalView": {
+        "type": "object",
+        "required": [
+          "signalId",
+          "signalName",
+          "signalCategory",
+          "signalClassification",
+          "severity",
+          "tenantId",
+          "actorId",
+          "serviceActorId",
+          "routeId",
+          "operationId",
+          "capability",
+          "providerId",
+          "jobId",
+          "workflowId",
+          "notificationId",
+          "fileId",
+          "auditEventId",
+          "correlationId",
+          "causationId",
+          "requestId",
+          "traceId",
+          "spanId",
+          "parentSpanId",
+          "environmentScope",
+          "providerMode",
+          "dataClassification",
+          "tenantScope",
+          "actorScope",
+          "providerScope",
+          "redactionPolicy",
+          "cardinalityPolicy",
+          "retentionPolicy",
+          "accessPolicy",
+          "createdAt"
+        ],
+        "properties": {
+          "signalId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "signalName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "signalCategory": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "signalClassification": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "severity": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "tenantId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "actorId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "serviceActorId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "routeId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "operationId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "capability": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "providerId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "jobId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "workflowId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notificationId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fileId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "auditEventId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "correlationId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "causationId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requestId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "traceId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "spanId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parentSpanId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "environmentScope": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerMode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "dataClassification": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "tenantScope": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "actorScope": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerScope": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "redactionPolicy": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cardinalityPolicy": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "retentionPolicy": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "accessPolicy": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "createdAt": {
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      },
+      "ObservabilitySignalsResponse": {
+        "type": "object",
+        "required": ["tenantId", "signals", "nextCursor"],
+        "properties": {
+          "tenantId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "signals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "signalId",
+                "signalName",
+                "signalCategory",
+                "signalClassification",
+                "severity",
+                "tenantId",
+                "actorId",
+                "serviceActorId",
+                "routeId",
+                "operationId",
+                "capability",
+                "providerId",
+                "jobId",
+                "workflowId",
+                "notificationId",
+                "fileId",
+                "auditEventId",
+                "correlationId",
+                "causationId",
+                "requestId",
+                "traceId",
+                "spanId",
+                "parentSpanId",
+                "environmentScope",
+                "providerMode",
+                "dataClassification",
+                "tenantScope",
+                "actorScope",
+                "providerScope",
+                "redactionPolicy",
+                "cardinalityPolicy",
+                "retentionPolicy",
+                "accessPolicy",
+                "createdAt"
+              ],
+              "properties": {
+                "signalId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "signalName": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "signalCategory": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "signalClassification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "severity": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "tenantId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "actorId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "serviceActorId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "routeId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "operationId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "capability": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "jobId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "workflowId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "notificationId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "fileId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "auditEventId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "correlationId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "causationId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "requestId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "traceId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "spanId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "parentSpanId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "environmentScope": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerMode": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "dataClassification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "tenantScope": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "actorScope": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerScope": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "redactionPolicy": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "cardinalityPolicy": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "retentionPolicy": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "accessPolicy": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "createdAt": {
+                  "minLength": 1,
                   "type": "string"
                 }
               }

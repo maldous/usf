@@ -401,6 +401,7 @@ export const API_ROUTE_CONTRACTS: readonly ApiRouteContract[] = Object.freeze([
   ...auditRoutes(),
   ...configRoutes(),
   ...providerRoutes(),
+  ...observabilityRoutes(),
   ...fileRoutes(),
   ...jobRoutes(),
   ...notificationRoutes(),
@@ -701,6 +702,129 @@ function providerRoutes(): readonly ApiRouteContract[] {
       dataClassification: "security-sensitive",
       exampleResponse: { tenantId: "tenant-alpha", provider: providerStatusExample() },
     }),
+  ]);
+}
+
+function observabilityCollectorExample() {
+  return {
+    providerId: "observability-captured-local",
+    providerMode: "in-memory",
+    environmentScope: "local-dev",
+    healthStatus: "healthy",
+    readinessStatus: "healthy",
+    livenessStatus: "healthy",
+    signalCount: 1,
+    boundedStorageLimit: 500,
+    exportEnabled: false,
+    liveMonitoringReadinessClaim: false,
+    liveMetricsBackendClaim: false,
+    liveLogBackendClaim: false,
+    liveTracingBackendClaim: false,
+    liveAlertingClaim: false,
+    siemReadinessClaim: false,
+    safeFailureMessage: null,
+  };
+}
+
+function observabilitySignalExample() {
+  return {
+    signalId: "sig-alpha",
+    signalName: "api.request.count",
+    signalCategory: "metric",
+    signalClassification: "performance",
+    severity: "info",
+    tenantId: "tenant-alpha",
+    actorId: "actor-alpha",
+    serviceActorId: null,
+    routeId: "tenant-context.get",
+    operationId: "getTenantContext",
+    capability: "tenant-context",
+    providerId: null,
+    jobId: null,
+    workflowId: null,
+    notificationId: null,
+    fileId: null,
+    auditEventId: null,
+    correlationId: "corr-alpha",
+    causationId: null,
+    requestId: "req-alpha",
+    traceId: "trace-alpha",
+    spanId: "span-alpha",
+    parentSpanId: null,
+    environmentScope: "local-dev",
+    providerMode: "in-memory",
+    dataClassification: "confidential",
+    tenantScope: "tenant-scoped",
+    actorScope: "actor-scoped",
+    providerScope: "none",
+    redactionPolicy: "redact-before-persistence-and-api-exposure",
+    cardinalityPolicy: "metric-label-allow-list-and-high-cardinality-deny",
+    retentionPolicy: "local-dev-test-30-days",
+    accessPolicy: "pdp-protected-for-non-public-observability-access",
+    createdAt: "2026-01-01T00:00:00.000Z",
+  };
+}
+
+function observabilityRoutes(): readonly ApiRouteContract[] {
+  return Object.freeze([
+    route(
+      "observability-readiness.get",
+      "GET",
+      "/v1/observability/readiness",
+      "getObservabilityReadinessV1",
+      {
+        domain: "observability-telemetry",
+        capability: "telemetry-collector",
+        action: "observability.readiness.read",
+        classification: "operator-only",
+        tenantScope: "tenant-header-query",
+        requestSchema: "TenantContextQuery",
+        responses: {
+          "200": "ObservabilityReadinessResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+        },
+        audit: "observability readiness access is PDP guarded and audit-recorded value-free",
+        pdp: "operator/security-admin observability.readiness.read permission required; readiness is redacted and does not imply live monitoring",
+        dataClassification: "security-sensitive",
+        exampleResponse: {
+          tenantId: "tenant-alpha",
+          status: "ready-local-dev-test",
+          collector: observabilityCollectorExample(),
+          providerMode: "in-memory",
+          liveMonitoringReadinessClaim: false,
+          productionReadinessClaim: false,
+        },
+      },
+    ),
+    route(
+      "observability-signals.list",
+      "GET",
+      "/v1/observability/signals",
+      "listObservabilitySignalsV1",
+      {
+        domain: "observability-telemetry",
+        capability: "telemetry-collector",
+        action: "observability.signal.read",
+        classification: "operator-only",
+        tenantScope: "tenant-header-query",
+        requestSchema: "ObservabilitySignalsQuery",
+        responses: {
+          "200": "ObservabilitySignalsResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+        },
+        pagination: cursorPagination(["signalCategory", "severity"]),
+        audit: "observability signal access is PDP guarded and audit-recorded value-free",
+        pdp: "operator/security-admin observability.signal.read permission required; tenant query cannot cross tenant boundaries",
+        dataClassification: "security-sensitive",
+        exampleResponse: {
+          tenantId: "tenant-alpha",
+          signals: [observabilitySignalExample()],
+          nextCursor: null,
+        },
+      },
+    ),
   ]);
 }
 

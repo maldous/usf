@@ -13,6 +13,13 @@ import type {
   FileStatusValue,
   IdentityClaims,
   JobRecord,
+  TelemetryHealthInput,
+  TelemetryMetricInput,
+  TelemetryOperationalEventInput,
+  TelemetrySignalPage,
+  TelemetrySpanInput,
+  TelemetryStructuredLogInput,
+  TelemetryCollectorStatusView,
   NotificationChannel,
   NotificationClassification,
   NotificationDeliveryStatus,
@@ -110,7 +117,20 @@ export interface SecretStore {
   readSecret(input: { tenantId: string; name: string }): Promise<string | undefined>;
 }
 
-export interface ObservabilitySink {
+export interface TelemetryPort {
+  recordMetric(input: TelemetryMetricInput): void;
+  recordTraceSpan(input: TelemetrySpanInput): void;
+  recordStructuredLog(input: TelemetryStructuredLogInput): void;
+  recordOperationalEvent(input: TelemetryOperationalEventInput): void;
+  recordSecuritySignal(input: TelemetryOperationalEventInput): void;
+  recordHealthSignal(input: TelemetryHealthInput): void;
+  recordReadinessSignal(input: TelemetryHealthInput): void;
+  recordLivenessSignal(input: TelemetryHealthInput): void;
+  query(input: { tenantId: string; limit?: number; cursor?: string }): TelemetrySignalPage;
+  safeStatusView(): TelemetryCollectorStatusView;
+}
+
+export interface ObservabilitySink extends TelemetryPort {
   record(input: { tenantId: string; signal: string; attributes: Record<string, string> }): void;
   list(tenantId: string): readonly string[];
 }

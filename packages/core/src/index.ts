@@ -408,6 +408,23 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "security.stale_session_used": { category: "security", severity: "high", reserved: true },
   "security.revoked_membership_used": { category: "security", severity: "high", reserved: true },
   "security.token_replay_suspected": { category: "security", severity: "critical", reserved: true },
+  // Observability/telemetry access (parity-observability-telemetry, USF-133).
+  // Telemetry is not audit: these audit events record privileged observability
+  // access or readiness checks only, and their metadata is value-free.
+  "observability.read": { category: "system", severity: "info" },
+  "observability.readiness.checked": { category: "system", severity: "info" },
+  "observability.security_signal.read": { category: "security", severity: "warning" },
+  "observability.export.requested": { category: "system", severity: "warning", reserved: true },
+  "observability.configure.changed": {
+    category: "configuration",
+    severity: "warning",
+    reserved: true,
+  },
+  "observability.alert.configure.changed": {
+    category: "configuration",
+    severity: "warning",
+    reserved: true,
+  },
 });
 
 // Metadata keys (matched case-insensitively as substrings) that MUST NEVER appear
@@ -3124,6 +3141,378 @@ export function safeFailureMessage(raw: string): string {
   return tokens
     .map((t) => (isSecretLikeKey(t) || looksLikeSecretValue(t) ? CONFIG_REDACTED : t))
     .join("");
+}
+
+// ---------------------------------------------------------------------------
+// Observability / telemetry model (parity-observability-telemetry, USF-133).
+//
+// Telemetry is a tenant-safe operational evidence surface, not audit evidence and
+// not a live monitoring claim. This model is intentionally backend-neutral and
+// local/dev/test oriented; provider export is disabled unless separately
+// authorised. Metrics fail closed on unsafe labels; logs, spans, and events are
+// normalised before capture.
+// ---------------------------------------------------------------------------
+
+export const TELEMETRY_SIGNAL_CATEGORIES = Object.freeze([
+  "metric",
+  "trace",
+  "span",
+  "structured-log",
+  "operational-event",
+  "health-signal",
+  "readiness-signal",
+  "liveness-signal",
+  "security-signal",
+  "audit-linked-signal",
+  "provider-status-signal",
+] as const);
+export type TelemetrySignalCategory = (typeof TELEMETRY_SIGNAL_CATEGORIES)[number];
+
+export const OBSERVABILITY_SIGNAL_CLASSIFICATIONS = Object.freeze([
+  "operational",
+  "security",
+  "privacy-sensitive",
+  "tenant-sensitive",
+  "audit-linked",
+  "provider-status",
+  "performance",
+  "availability",
+  "debug",
+  "test",
+] as const);
+export type ObservabilitySignalClassification =
+  (typeof OBSERVABILITY_SIGNAL_CLASSIFICATIONS)[number];
+
+export const OBSERVABILITY_SEVERITIES = Object.freeze([
+  "debug",
+  "info",
+  "notice",
+  "warning",
+  "error",
+  "critical",
+  "security",
+] as const);
+export type ObservabilitySeverity = (typeof OBSERVABILITY_SEVERITIES)[number];
+
+export const METRIC_TYPES = Object.freeze(["counter", "gauge", "histogram", "summary"] as const);
+export type MetricType = (typeof METRIC_TYPES)[number];
+
+export const OBSERVABILITY_FORBIDDEN_PATTERNS = Object.freeze([
+  "password",
+  "secret",
+  "token",
+  "api_key",
+  "authorization",
+  "cookie",
+  "private_key",
+  "connection_string",
+  "credential",
+  "jwt",
+  "bearer",
+  "object_key",
+  "recipient_address",
+  "raw_email",
+  "raw_phone",
+  "provider_response",
+  "stack_trace",
+] as const);
+
+export const OBSERVABILITY_ALLOWED_LABELS = Object.freeze([
+  "tenant_id",
+  "route_id",
+  "operation_id",
+  "capability",
+  "provider_id",
+  "job_id",
+  "workflow_id",
+  "notification_id",
+  "file_id",
+  "audit_event_id",
+  "signal_name",
+  "signal_category",
+  "severity",
+  "status",
+  "method",
+  "route",
+  "status_code",
+  "reason_code",
+  "environment_scope",
+  "provider_mode",
+  "metric_type",
+  "unit",
+] as const);
+export type ObservabilityAllowedLabel = (typeof OBSERVABILITY_ALLOWED_LABELS)[number];
+
+const HIGH_CARDINALITY_LABELS = Object.freeze([
+  "user_id",
+  "actor_email",
+  "email",
+  "recipient",
+  "recipient_address",
+  "object_key",
+  "raw_id",
+  "stack_trace",
+  "provider_response",
+] as const);
+
+export class TelemetryValidationError extends Error {
+  readonly reasonCode: string;
+
+  constructor(reasonCode: string, message: string) {
+    super(message);
+    this.name = "TelemetryValidationError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export interface TelemetryContext {
+  readonly tenantId?: string;
+  readonly actorId?: string;
+  readonly serviceActorId?: string;
+  readonly routeId?: string;
+  readonly operationId?: string;
+  readonly capability?: string;
+  readonly providerId?: string;
+  readonly jobId?: string;
+  readonly workflowId?: string;
+  readonly notificationId?: string;
+  readonly fileId?: string;
+  readonly auditEventId?: string;
+  readonly correlationId?: string;
+  readonly causationId?: string | null;
+  readonly requestId?: string;
+  readonly traceId?: string;
+  readonly spanId?: string;
+  readonly parentSpanId?: string | null;
+}
+
+export interface TelemetrySignalBase {
+  readonly signalId: string;
+  readonly signalName: string;
+  readonly signalCategory: TelemetrySignalCategory;
+  readonly signalClassification: ObservabilitySignalClassification;
+  readonly severity: ObservabilitySeverity;
+  readonly tenantId: string;
+  readonly actorId: string | null;
+  readonly serviceActorId: string | null;
+  readonly routeId: string | null;
+  readonly operationId: string | null;
+  readonly capability: string | null;
+  readonly providerId: string | null;
+  readonly jobId: string | null;
+  readonly workflowId: string | null;
+  readonly notificationId: string | null;
+  readonly fileId: string | null;
+  readonly auditEventId: string | null;
+  readonly correlationId: string;
+  readonly causationId: string | null;
+  readonly requestId: string;
+  readonly traceId: string;
+  readonly spanId: string | null;
+  readonly parentSpanId: string | null;
+  readonly environmentScope: "local-dev" | "local-composed-test" | "ci" | "staging" | "production";
+  readonly providerMode: ProviderAdapterMode;
+  readonly dataClassification: DataSensitivity;
+  readonly tenantScope: "tenant-scoped" | "cross-tenant-aggregate" | "none";
+  readonly actorScope: "actor-scoped" | "service-actor" | "none";
+  readonly providerScope: "provider-scoped" | "none";
+  readonly redactionPolicy: string;
+  readonly cardinalityPolicy: string;
+  readonly retentionPolicy: string;
+  readonly accessPolicy: string;
+  readonly createdAt: string;
+}
+
+export interface TelemetryMetricInput {
+  readonly metricName: string;
+  readonly metricType: MetricType;
+  readonly value: number;
+  readonly unit: string;
+  readonly description: string;
+  readonly owner: string;
+  readonly labels?: Readonly<Record<string, string>>;
+  readonly context: TelemetryContext;
+  readonly classification?: ObservabilitySignalClassification;
+  readonly dataClassification?: DataSensitivity;
+  readonly retentionPolicy?: string;
+  readonly sloRelated?: boolean;
+}
+
+export interface TelemetrySpanInput {
+  readonly spanName: string;
+  readonly spanKind: "server" | "client" | "internal" | "producer" | "consumer";
+  readonly startTime: string;
+  readonly endTime: string;
+  readonly durationMs: number;
+  readonly status: "ok" | "error" | "unset";
+  readonly safeAttributes?: Readonly<Record<string, string>>;
+  readonly context: TelemetryContext;
+  readonly classification?: ObservabilitySignalClassification;
+  readonly dataClassification?: DataSensitivity;
+}
+
+export interface TelemetryStructuredLogInput {
+  readonly eventName: string;
+  readonly severity: ObservabilitySeverity;
+  readonly messageTemplate: string;
+  readonly safeMessage: string;
+  readonly reasonCode: string;
+  readonly attributes?: Readonly<Record<string, string>>;
+  readonly context: TelemetryContext;
+  readonly classification?: ObservabilitySignalClassification;
+  readonly dataClassification?: DataSensitivity;
+}
+
+export interface TelemetryOperationalEventInput {
+  readonly eventName: string;
+  readonly severity: ObservabilitySeverity;
+  readonly reasonCode: string;
+  readonly safeSummary: string;
+  readonly attributes?: Readonly<Record<string, string>>;
+  readonly context: TelemetryContext;
+  readonly classification?: ObservabilitySignalClassification;
+  readonly category?: Extract<
+    TelemetrySignalCategory,
+    "operational-event" | "security-signal" | "audit-linked-signal" | "provider-status-signal"
+  >;
+  readonly dataClassification?: DataSensitivity;
+}
+
+export interface TelemetryHealthInput {
+  readonly signalName: string;
+  readonly status:
+    "healthy" | "degraded" | "unavailable" | "disabled" | "not-configured" | "deferred" | "unknown";
+  readonly component: string;
+  readonly safeSummary: string;
+  readonly context: TelemetryContext;
+  readonly category?: Extract<
+    TelemetrySignalCategory,
+    "health-signal" | "readiness-signal" | "liveness-signal"
+  >;
+  readonly classification?: ObservabilitySignalClassification;
+  readonly dataClassification?: DataSensitivity;
+}
+
+export type TelemetrySignal =
+  | (TelemetrySignalBase & {
+      readonly signalCategory: "metric";
+      readonly metricName: string;
+      readonly metricType: MetricType;
+      readonly value: number;
+      readonly unit: string;
+      readonly description: string;
+      readonly owner: string;
+      readonly labels: Readonly<Record<string, string>>;
+      readonly sloRelated: boolean;
+    })
+  | (TelemetrySignalBase & {
+      readonly signalCategory: "span";
+      readonly spanName: string;
+      readonly spanKind: TelemetrySpanInput["spanKind"];
+      readonly startTime: string;
+      readonly endTime: string;
+      readonly durationMs: number;
+      readonly status: TelemetrySpanInput["status"];
+      readonly safeAttributes: Readonly<Record<string, string>>;
+    })
+  | (TelemetrySignalBase & {
+      readonly signalCategory: "structured-log";
+      readonly eventName: string;
+      readonly messageTemplate: string;
+      readonly safeMessage: string;
+      readonly reasonCode: string;
+      readonly attributes: Readonly<Record<string, string>>;
+    })
+  | (TelemetrySignalBase & {
+      readonly signalCategory:
+        "operational-event" | "security-signal" | "audit-linked-signal" | "provider-status-signal";
+      readonly eventName: string;
+      readonly reasonCode: string;
+      readonly safeSummary: string;
+      readonly attributes: Readonly<Record<string, string>>;
+    })
+  | (TelemetrySignalBase & {
+      readonly signalCategory: "health-signal" | "readiness-signal" | "liveness-signal";
+      readonly status: TelemetryHealthInput["status"];
+      readonly component: string;
+      readonly safeSummary: string;
+    });
+
+export interface TelemetrySignalPage {
+  readonly tenantId: string;
+  readonly signals: readonly TelemetrySignal[];
+  readonly nextCursor: string | null;
+}
+
+export interface TelemetryCollectorStatusView {
+  readonly providerId: "observability-captured-local";
+  readonly providerMode: "in-memory" | "local-test";
+  readonly environmentScope: "local-dev";
+  readonly healthStatus: "healthy" | "degraded" | "unavailable" | "disabled";
+  readonly readinessStatus: "healthy" | "degraded" | "deferred" | "disabled" | "unavailable";
+  readonly livenessStatus: "healthy";
+  readonly signalCount: number;
+  readonly boundedStorageLimit: number;
+  readonly exportEnabled: false;
+  readonly liveMonitoringReadinessClaim: false;
+  readonly liveMetricsBackendClaim: false;
+  readonly liveLogBackendClaim: false;
+  readonly liveTracingBackendClaim: false;
+  readonly liveAlertingClaim: false;
+  readonly siemReadinessClaim: false;
+  readonly safeFailureMessage: string | null;
+}
+
+export function telemetryKeyLooksSensitive(key: string): boolean {
+  const lowered = key.toLowerCase();
+  return (
+    isSecretLikeKey(key) ||
+    OBSERVABILITY_FORBIDDEN_PATTERNS.some((pattern) => lowered.includes(pattern))
+  );
+}
+
+export function telemetryValueLooksSensitive(value: string): boolean {
+  const trimmed = value.trim();
+  return (
+    looksLikeSecretValue(trimmed) ||
+    /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(trimmed) ||
+    /\b\d{3}[-.]\d{3}[-.]\d{4}\b/.test(trimmed) ||
+    /(?:object|bucket)[-/][A-Za-z0-9_.-]{8,}/i.test(trimmed) ||
+    /stack trace|provider response|raw payload/i.test(trimmed)
+  );
+}
+
+export function safeTelemetryValue(value: string): string {
+  const safe = safeFailureMessage(value);
+  return telemetryValueLooksSensitive(safe) ? CONFIG_REDACTED : safe;
+}
+
+export function redactTelemetryAttributes(
+  attributes: Readonly<Record<string, string>> = {},
+): Readonly<Record<string, string>> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(attributes)) {
+    if (telemetryKeyLooksSensitive(key)) {
+      out[`redacted_attribute_${Object.keys(out).length}`] = CONFIG_REDACTED;
+      continue;
+    }
+    out[key] = safeTelemetryValue(value);
+  }
+  return Object.freeze(out);
+}
+
+export function validateMetricLabels(labels: Readonly<Record<string, string>> = {}): void {
+  for (const [key, value] of Object.entries(labels)) {
+    if (!OBSERVABILITY_ALLOWED_LABELS.includes(key as ObservabilityAllowedLabel)) {
+      throw new TelemetryValidationError("metric-label-not-allow-listed", "metric label denied");
+    }
+    if ((HIGH_CARDINALITY_LABELS as readonly string[]).includes(key)) {
+      throw new TelemetryValidationError("metric-label-high-cardinality", "metric label denied");
+    }
+    if (telemetryKeyLooksSensitive(key) || telemetryValueLooksSensitive(value)) {
+      throw new TelemetryValidationError("metric-label-sensitive", "metric label denied");
+    }
+  }
 }
 
 /** Redacts a job payload for evidence/audit/API: secret-like keys and secret-shaped
