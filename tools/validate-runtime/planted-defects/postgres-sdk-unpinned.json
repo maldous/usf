@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-016",
+  "packageDependencyPatches": [
+    {
+      "section": "dependencies",
+      "name": "pg",
+      "value": "^8.22.0"
+    }
+  ]
+}

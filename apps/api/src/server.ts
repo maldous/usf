@@ -195,6 +195,10 @@ async function ensurePermission(
   resourceId: string,
   resourceTenantId = context.tenantId,
 ): Promise<string | null> {
+  const refreshDenied = await refreshMembershipAuthority(runtime, context);
+  if (refreshDenied) {
+    return refreshDenied;
+  }
   const decision = await runtime.authorizer.authorize({
     context,
     action,
@@ -204,6 +208,18 @@ async function ensurePermission(
     },
   });
   return decision.effect === "permit" ? null : decision.reasonCode;
+}
+
+async function refreshMembershipAuthority(
+  runtime: DevRuntime,
+  context: TenantContext,
+): Promise<string | null> {
+  try {
+    await runtime.refreshMembershipAuthority(context);
+    return null;
+  } catch {
+    return "membership-provider-unavailable";
+  }
 }
 
 function requireIdempotencyKey(request: FastifyRequest): string | null {
@@ -391,6 +407,7 @@ function runtimeStatus(runtime: DevRuntime) {
     deferredBoundaries: [...runtime.deferredBoundaries],
     composedProviderBindings: [...runtime.composedProviderBindings],
     deferredProviderBindings: [...runtime.deferredProviderBindings],
+    databaseProviderEvidence: runtime.databaseProviderEvidence(),
   };
 }
 
@@ -780,6 +797,11 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
         requestContext: { correlation_id: stableId("corr", [context.tenantId, context.actorId]) },
         ...(body.breakGlassGrantId ? { breakGlassGrantId: body.breakGlassGrantId } : {}),
       };
+      const refreshDenied = await refreshMembershipAuthority(runtime, context);
+      if (refreshDenied) {
+        reply.code(403);
+        return { error: "Not authorized", reasonCode: refreshDenied };
+      }
       const decision = await runtime.authorizer.authorize(authzRequest);
       if (decision.effect === "permit") {
         return {

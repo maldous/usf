@@ -2,19 +2,11 @@
   "id": "runtime-proof.runtime-application-compose-parity",
   "kind": "runtime-proof",
   "title": "Runtime Application Compose Provider Binding Proof Manifest",
-  "description": "Bounded USF-183 runtime proof manifest for API and worker dev runtime execution with an SDK-backed Mailpit composed provider binding, explicit service catalogue traceability, narrowed deferred provider bindings, teardown obligations, evidence boundaries, and explicit non-claims.",
+  "description": "Bounded USF-183 runtime proof manifest for API and worker dev runtime execution with SDK-backed Postgres and Mailpit composed provider bindings, explicit service catalogue traceability, narrowed deferred provider bindings, teardown obligations, evidence boundaries, and explicit non-claims.",
   "authorityLevel": "runtime-proof-evidence",
   "lifecycleState": "draft",
-  "ontologyConcepts": [
-    "Proof",
-    "Command",
-    "Evidence"
-  ],
-  "taxonomyRefs": [
-    "proof-classification",
-    "provider-classification",
-    "environment-classification"
-  ],
+  "ontologyConcepts": ["Proof", "Command", "Evidence"],
+  "taxonomyRefs": ["proof-classification", "provider-classification", "environment-classification"],
   "vocabularyRefs": [
     "proof-levels",
     "provider-modes",
@@ -123,20 +115,22 @@
           "health route reports dev-compose-backed runtime mode",
           "health route reports local-composed-real-service provider mode",
           "readiness route reports service catalogue authority",
+          "readiness route reports the active Postgres provider binding",
           "readiness route reports the active Mailpit provider binding",
           "OpenAPI route exposes tenant-context",
+          "permission route loads tenant membership through the PostgresTenantMembershipRepository adapter boundary",
           "tenant mismatch fails closed",
           "authorization failure fails closed",
           "tenant-context request captures audit evidence",
           "notification API records providerMode composed-test and Mailpit providerRef",
           "remaining provider-binding deferrals are reported explicitly"
         ],
-        "auditEvidence": "tenant-context and notification API audit evidence is checked while the canonical dev Compose boundary is running",
+        "auditEvidence": "tenant-context, database-backed permission, and notification API audit evidence is checked while the canonical dev Compose boundary is running",
         "tenantBoundary": "tenant mismatch request returns a closed failure status while Compose is running",
         "accessBoundary": "authorization failure request returns a closed failure status while Compose is running",
         "secretBoundary": "runtime uses only synthetic local seed data and no external provider credentials",
         "syntheticDataBoundary": "runtime proof sends only synthetic tenant, actor, and job data",
-        "providerBindingEvidence": "API proof verifies /healthz, /readyz, and notification API safe views report the active Mailpit composed provider binding without raw endpoint or credential output."
+        "providerBindingEvidence": "API proof verifies /healthz and /readyz report active Postgres and Mailpit composed provider bindings, permission checks refresh tenant membership through PostgresTenantMembershipRepository, and notification API safe views report Mailpit without raw endpoint or credential output."
       },
       "workerProof": {
         "entryPoint": "apps/work/src/main.ts",
@@ -149,22 +143,23 @@
           "worker cross-tenant job read fails closed",
           "worker authorization failure fails closed",
           "worker job lifecycle produces audit evidence",
+          "worker performs a PostgresTenantMembershipRepository SDK-backed write and readback",
           "worker notification delivery uses MailpitNotificationProvider",
           "Mailpit provider proof performs SDK-backed readiness, write, readback, and cleanup",
           "remaining provider-binding deferrals are reported explicitly"
         ],
-        "auditEvidence": "worker proof requires job lifecycle, denial, provider configuration, and notification delivery audit evidence while the canonical dev Compose boundary is running",
+        "auditEvidence": "worker proof requires job lifecycle, denial, provider configuration, Postgres repository, and notification delivery audit evidence while the canonical dev Compose boundary is running",
         "tenantBoundary": "cross-tenant worker job read fails closed while Compose is running",
         "accessBoundary": "unauthorized worker job submission fails closed while Compose is running",
         "secretBoundary": "worker proof uses no real secrets or external provider credentials",
         "syntheticDataBoundary": "worker proof submits synthetic tenant, actor, and job payload data only",
-        "providerBindingEvidence": "Worker proof verifies MailpitNotificationProvider uses mailpit-api for getInfo, sendMessage, getMessageSummary, and deleteMessages against the composed Mailpit service."
+        "providerBindingEvidence": "Worker proof verifies PostgresTenantMembershipRepository uses pg through the adapter boundary for tenant-safe write/readback and MailpitNotificationProvider uses mailpit-api for getInfo, sendMessage, getMessageSummary, and deleteMessages against composed services."
       },
       "composeBoundary": {
         "required": true,
         "target": "compose/compose.dev.generated.yaml",
         "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-        "providerBinding": "mailpit-notification-provider-resolved-with-explicit-deferrals"
+        "providerBinding": "postgres-and-mailpit-provider-bindings-resolved-with-explicit-deferrals"
       },
       "serviceCatalogueDependency": "spec/instances/compose-service/service-catalogue.json",
       "evidenceGrade": "b",
@@ -186,7 +181,6 @@
         "test-readiness"
       ],
       "deferredBoundaryRefs": [
-        "runtime-database-provider-binding",
         "runtime-event-bus-provider-binding",
         "runtime-object-storage-provider-binding",
         "runtime-identity-provider-binding",
@@ -197,11 +191,8 @@
         "childProcesses": "API and worker child processes are stopped in finally paths with SIGTERM then SIGKILL fallback.",
         "composeResources": "The runtime proof starts docker compose with a unique project name and always runs docker compose down with volume and orphan cleanup."
       },
-      "providerBindingRefs": [
-        "mailpit-notification-provider"
-      ],
+      "providerBindingRefs": ["runtime-database-provider-binding", "mailpit-notification-provider"],
       "deferredProviderBindingRefs": [
-        "runtime-database-provider-binding",
         "runtime-event-bus-provider-binding",
         "runtime-object-storage-provider-binding",
         "runtime-identity-provider-binding",
@@ -214,12 +205,8 @@
     {
       "bindingId": "mailpit-notification-provider",
       "bindingStatus": "active",
-      "serviceCatalogueServiceIds": [
-        "mailpit"
-      ],
-      "providerRegistryIds": [
-        "notification-delivery-mailpit-composed-test"
-      ],
+      "serviceCatalogueServiceIds": ["mailpit"],
+      "providerRegistryIds": ["notification-delivery-mailpit-composed-test"],
       "providerMode": "composed-test",
       "providerClass": "local-composed-real-service",
       "adapterName": "MailpitNotificationProvider",
@@ -238,40 +225,30 @@
     },
     {
       "bindingId": "runtime-database-provider-binding",
-      "bindingStatus": "compose-boundary-only",
-      "serviceCatalogueServiceIds": [
-        "postgres"
-      ],
-      "providerRegistryIds": [
-        "database-postgres-composed-test"
-      ],
+      "bindingStatus": "active",
+      "serviceCatalogueServiceIds": ["postgres"],
+      "providerRegistryIds": ["database-postgres-composed-test"],
       "providerMode": "composed-test",
-      "providerClass": "not-applicable",
-      "adapterName": null,
-      "portName": "RlsSession",
+      "providerClass": "local-composed-real-service",
+      "adapterName": "PostgresTenantMembershipRepository",
+      "portName": "TenantScopedRepository,TenantMembershipDirectory",
       "endpointRef": "endpoint://compose/postgres",
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "providerRegistryEvidence": "Provider registry tracks database-postgres-composed-test but runtime adapter binding remains explicitly unresolved for this proof.",
-      "apiProofEvidence": "No API composed-provider behavior is claimed for this binding.",
-      "workerProofEvidence": "No worker composed-provider behavior is claimed for this binding.",
-      "deferredReason": "Runtime repository adapter binding remains deferred; DB/RLS proof exists outside API/worker runtime assembly.",
-      "followUpIssueRefs": [
-        "USF-139"
-      ],
-      "claimBoundary": "No composed runtime provider binding claim for this dependency."
+      "sdkPackage": "pg",
+      "sdkVersion": "8.22.0",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "new-with-rationale",
+      "providerRegistryEvidence": "packages/core/src/index.ts records database-postgres-composed-test with PostgresTenantMembershipRepository, composed-test mode, endpoint_ref posture, tenant-scoped permission grants, and healthy bounded local composed-test status.",
+      "apiProofEvidence": "runtime:proof:compose prepares the composed Postgres schema through adapters/db, then verifies API permission checks refresh tenant membership through PostgresTenantMembershipRepository before PDP evaluation.",
+      "workerProofEvidence": "runtime:proof:compose verifies worker proof executes a tenant-safe PostgresTenantMembershipRepository write and readback through pg with value-free evidence.",
+      "deferredReason": null,
+      "followUpIssueRefs": [],
+      "claimBoundary": "Bounded local composed-test tenant-membership repository proof only; no stronger database, staging, production, live-provider, SOC, ISO, full-dev, or full-parity claim."
     },
     {
       "bindingId": "runtime-event-bus-provider-binding",
       "bindingStatus": "no-runtime-port",
-      "serviceCatalogueServiceIds": [
-        "nats"
-      ],
-      "providerRegistryIds": [
-        "event-bus-nats-composed-test"
-      ],
+      "serviceCatalogueServiceIds": ["nats"],
+      "providerRegistryIds": ["event-bus-nats-composed-test"],
       "providerMode": "composed-test",
       "providerClass": "not-applicable",
       "adapterName": null,
@@ -285,20 +262,14 @@
       "apiProofEvidence": "No API composed-provider behavior is claimed for this binding.",
       "workerProofEvidence": "No worker composed-provider behavior is claimed for this binding.",
       "deferredReason": "API and worker runtime proof does not yet use a composed event-bus adapter.",
-      "followUpIssueRefs": [
-        "USF-151"
-      ],
+      "followUpIssueRefs": ["USF-151"],
       "claimBoundary": "No composed runtime provider binding claim for this dependency."
     },
     {
       "bindingId": "runtime-object-storage-provider-binding",
       "bindingStatus": "no-runtime-port",
-      "serviceCatalogueServiceIds": [
-        "minio"
-      ],
-      "providerRegistryIds": [
-        "object-storage-minio-composed-test"
-      ],
+      "serviceCatalogueServiceIds": ["minio"],
+      "providerRegistryIds": ["object-storage-minio-composed-test"],
       "providerMode": "composed-test",
       "providerClass": "not-applicable",
       "adapterName": null,
@@ -312,21 +283,14 @@
       "apiProofEvidence": "No API composed-provider behavior is claimed for this binding.",
       "workerProofEvidence": "No worker composed-provider behavior is claimed for this binding.",
       "deferredReason": "File/object runtime adapter remains in-memory until composed object-store proof.",
-      "followUpIssueRefs": [
-        "USF-147"
-      ],
+      "followUpIssueRefs": ["USF-147"],
       "claimBoundary": "No composed runtime provider binding claim for this dependency."
     },
     {
       "bindingId": "runtime-identity-provider-binding",
       "bindingStatus": "compose-boundary-only",
-      "serviceCatalogueServiceIds": [
-        "keycloak",
-        "keycloak-db"
-      ],
-      "providerRegistryIds": [
-        "identity-keycloak-composed-test"
-      ],
+      "serviceCatalogueServiceIds": ["keycloak", "keycloak-db"],
+      "providerRegistryIds": ["identity-keycloak-composed-test"],
       "providerMode": "composed-test",
       "providerClass": "not-applicable",
       "adapterName": null,
@@ -340,17 +304,13 @@
       "apiProofEvidence": "No API composed-provider behavior is claimed for this binding.",
       "workerProofEvidence": "No worker composed-provider behavior is claimed for this binding.",
       "deferredReason": "Runtime dev claims remain hermetic; Keycloak composed verifier proof is separate from API/worker binding.",
-      "followUpIssueRefs": [
-        "USF-149"
-      ],
+      "followUpIssueRefs": ["USF-149"],
       "claimBoundary": "No composed runtime provider binding claim for this dependency."
     },
     {
       "bindingId": "runtime-secret-provider-binding",
       "bindingStatus": "no-runtime-port",
-      "serviceCatalogueServiceIds": [
-        "openbao"
-      ],
+      "serviceCatalogueServiceIds": ["openbao"],
       "providerRegistryIds": [],
       "providerMode": "composed-test",
       "providerClass": "not-applicable",
@@ -365,21 +325,14 @@
       "apiProofEvidence": "No API composed-provider behavior is claimed for this binding.",
       "workerProofEvidence": "No worker composed-provider behavior is claimed for this binding.",
       "deferredReason": "Runtime secret resolver remains synthetic local; composed secret manager binding is deferred.",
-      "followUpIssueRefs": [
-        "USF-145"
-      ],
+      "followUpIssueRefs": ["USF-145"],
       "claimBoundary": "No composed runtime provider binding claim for this dependency."
     },
     {
       "bindingId": "profile-gated-workflow-provider",
       "bindingStatus": "profile-gated",
-      "serviceCatalogueServiceIds": [
-        "temporal",
-        "temporal-ui"
-      ],
-      "providerRegistryIds": [
-        "workflow-engine-temporal-composed-test"
-      ],
+      "serviceCatalogueServiceIds": ["temporal", "temporal-ui"],
+      "providerRegistryIds": ["workflow-engine-temporal-composed-test"],
       "providerMode": "composed-test",
       "providerClass": "not-applicable",
       "adapterName": null,
@@ -393,28 +346,44 @@
       "apiProofEvidence": "No API composed-provider behavior is claimed for this binding.",
       "workerProofEvidence": "No worker composed-provider behavior is claimed for this binding.",
       "deferredReason": "Workflow-provider runtime binding remains profile-gated and requires separate proof.",
-      "followUpIssueRefs": [
-        "USF-151"
-      ],
+      "followUpIssueRefs": ["USF-151"],
       "claimBoundary": "No composed runtime provider binding claim for this dependency."
     }
   ],
-  "providerSdkBoundary": {
-    "selectedPackage": "mailpit-api",
-    "selectedVersion": "2.1.0",
-    "officialOrDefactoStatus": "Dedicated Mailpit REST API TypeScript client selected for the Mailpit composed service because no official Mailpit Node SDK is present in the repo.",
-    "maintenanceEvidence": "npm registry metadata inspected on 2026-06-30 reported latest version 2.1.0, Node engine >=18.0.0, MIT license, GitHub repository, and publish/update activity in June 2026.",
-    "securityPosture": "Zero runtime dependency package; proof output stores only endpoint_ref, hashes, and value-free provider summaries.",
-    "typescriptSupport": "Published package includes TypeScript declaration files and ESM/CJS exports compatible with the repo TypeScript moduleResolution posture.",
-    "localComposeCompatibility": "Mailpit API client targets the loopback-bound Mailpit HTTP API in compose.dev.generated.yaml and uses no external network egress or real credentials.",
-    "alternativesRejected": [
-      "Raw HTTP was rejected because provider clients must use an SDK or client boundary when one is suitable.",
-      "Nodemailer was rejected for this proof because it is a generic SMTP client and would not provide Mailpit service readback and cleanup through a service-specific client.",
-      "mailpit-ws was rejected because real-time WebSocket events are not required for deterministic API and worker provider proof."
-    ],
-    "approvedImportBoundary": "adapters/mail/src/index.ts",
-    "dependencyPinning": "exact-version-pinned"
-  },
+  "providerSdkBoundary": [
+    {
+      "selectedPackage": "mailpit-api",
+      "selectedVersion": "2.1.0",
+      "officialOrDefactoStatus": "Dedicated Mailpit REST API TypeScript client selected for the Mailpit composed service because no official Mailpit Node SDK is present in the repo.",
+      "maintenanceEvidence": "npm registry metadata inspected on 2026-06-30 reported latest version 2.1.0, Node engine >=18.0.0, MIT license, GitHub repository, and publish/update activity in June 2026.",
+      "securityPosture": "Zero runtime dependency package; proof output stores only endpoint_ref, hashes, and value-free provider summaries.",
+      "typescriptSupport": "Published package includes TypeScript declaration files and ESM/CJS exports compatible with the repo TypeScript moduleResolution posture.",
+      "localComposeCompatibility": "Mailpit API client targets the loopback-bound Mailpit HTTP API in compose.dev.generated.yaml and uses no external network egress or real credentials.",
+      "alternativesRejected": [
+        "Raw HTTP was rejected because provider clients must use an SDK or client boundary when one is suitable.",
+        "Nodemailer was rejected for this proof because it is a generic SMTP client and would not provide Mailpit service readback and cleanup through a service-specific client.",
+        "mailpit-ws was rejected because real-time WebSocket events are not required for deterministic API and worker provider proof."
+      ],
+      "approvedImportBoundary": "adapters/mail/src/index.ts",
+      "dependencyPinning": "exact-version-pinned"
+    },
+    {
+      "selectedPackage": "pg",
+      "selectedVersion": "8.22.0",
+      "officialOrDefactoStatus": "node-postgres pg is the maintained de-facto standard PostgreSQL client for Node.js and is the Kysely PostgresDialect client boundary used for this local composed proof.",
+      "maintenanceEvidence": "npm registry metadata inspected on 2026-06-30 reported latest version 8.22.0, MIT license, Node engine >=16.0.0, GitHub repository, and publish/update activity in June 2026.",
+      "securityPosture": "Adapter output stores endpoint_ref, hashes, row counts, and value-free provider summaries only; raw connection strings, passwords, endpoints, stack traces, and SDK error payloads are not emitted.",
+      "typescriptSupport": "pg is used with exact-pinned @types/pg 8.20.0 for the repo TypeScript 6 posture; SDK imports remain inside adapters/db/src/index.ts.",
+      "localComposeCompatibility": "pg connects to the loopback-bound Postgres service in compose.dev.generated.yaml with local placeholder credentials and no external network egress.",
+      "alternativesRejected": [
+        "Raw TCP/socket protocol calls were rejected because a maintained client library exists.",
+        "Shelling out to psql was rejected for runtime provider proof because the composed adapter must use an SDK/client boundary.",
+        "postgres.js was rejected because the repo already uses Kysely and Kysely's documented PostgresDialect integrates directly with pg."
+      ],
+      "approvedImportBoundary": "adapters/db/src/index.ts",
+      "dependencyPinning": "exact-version-pinned"
+    }
+  ],
   "proofCommands": [
     {
       "packageScript": "runtime:validate",
@@ -466,30 +435,10 @@
   ],
   "deferredBoundaries": [
     {
-      "id": "runtime-database-provider-binding",
-      "mode": "dev-compose-backed",
-      "boundary": "Runtime repository adapter binding remains deferred; DB/RLS proof exists outside API/worker runtime assembly.",
-      "followUpIssueRefs": [
-        "USF-139"
-      ],
-      "claimsProhibitedUntilResolved": [
-        "production-readiness",
-        "staging-readiness",
-        "live-provider-readiness",
-        "soc-readiness",
-        "iso27001-certification",
-        "full-dev-readiness",
-        "full-react-parity",
-        "test-readiness"
-      ]
-    },
-    {
       "id": "runtime-event-bus-provider-binding",
       "mode": "dev-compose-backed",
       "boundary": "API and worker runtime proof does not yet use a composed event-bus adapter.",
-      "followUpIssueRefs": [
-        "USF-151"
-      ],
+      "followUpIssueRefs": ["USF-151"],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -505,9 +454,7 @@
       "id": "runtime-object-storage-provider-binding",
       "mode": "dev-compose-backed",
       "boundary": "File/object runtime adapter remains in-memory until composed object-store proof.",
-      "followUpIssueRefs": [
-        "USF-147"
-      ],
+      "followUpIssueRefs": ["USF-147"],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -523,9 +470,7 @@
       "id": "runtime-identity-provider-binding",
       "mode": "dev-compose-backed",
       "boundary": "Runtime dev claims remain hermetic; Keycloak composed verifier proof is separate from API/worker binding.",
-      "followUpIssueRefs": [
-        "USF-149"
-      ],
+      "followUpIssueRefs": ["USF-149"],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -541,9 +486,7 @@
       "id": "runtime-secret-provider-binding",
       "mode": "dev-compose-backed",
       "boundary": "Runtime secret resolver remains synthetic local; composed secret manager binding is deferred.",
-      "followUpIssueRefs": [
-        "USF-145"
-      ],
+      "followUpIssueRefs": ["USF-145"],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -559,9 +502,7 @@
       "id": "profile-gated-workflow-provider",
       "mode": "dev-compose-backed",
       "boundary": "Workflow-provider runtime binding remains profile-gated and requires separate proof.",
-      "followUpIssueRefs": [
-        "USF-151"
-      ],
+      "followUpIssueRefs": ["USF-151"],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -575,18 +516,18 @@
     }
   ],
   "enterpriseEvidenceSupport": {
-    "runtimeAssetEvidence": "API and worker runtime assets are named by entry point and command; Mailpit provider asset traceability is recorded in the provider binding matrix.",
-    "ownerLinkage": "Owner, risk owner, and control owner trace through the service catalogue entries and provider registry entries for platform API, worker, Mailpit, and deferred composed dependencies.",
-    "auditEventProduction": "Proof code requires API tenant-context evidence, notification provider configuration evidence, worker job lifecycle evidence, and worker notification delivery evidence.",
+    "runtimeAssetEvidence": "API and worker runtime assets are named by entry point and command; Postgres and Mailpit provider asset traceability is recorded in the provider binding matrix.",
+    "ownerLinkage": "Owner, risk owner, and control owner trace through the service catalogue entries and provider registry entries for platform API, worker, Postgres, Mailpit, and deferred composed dependencies.",
+    "auditEventProduction": "Proof code requires API tenant-context evidence, Postgres-backed permission evidence, notification provider configuration evidence, worker job lifecycle evidence, worker Postgres repository evidence, and worker notification delivery evidence.",
     "healthReadinessEvidence": "Proof code requires health, readiness, and OpenAPI route exposure for the API runtime.",
     "tenantIsolationEvidence": "Proof code requires API tenant mismatch and worker cross-tenant job read failures.",
     "accessControlEvidence": "Proof code requires API and worker authorization failures to fail closed.",
-    "secretBoundaryEvidence": "Mailpit composed proof uses no real credentials; safe evidence records endpoint_ref only and hashes provider message identifiers.",
+    "secretBoundaryEvidence": "Postgres and Mailpit composed proofs use only local placeholder credentials or no credentials; safe evidence records endpoint_ref only plus hashes, row counts, and value-free provider summaries.",
     "syntheticDataEvidence": "Proof code uses synthetic tenant, actor, and job payload data only.",
-    "operationalTeardownEvidence": "Proof code tears down child processes, Compose resources, and Mailpit synthetic messages through adapter cleanup.",
+    "operationalTeardownEvidence": "Proof code tears down child processes, Compose resources, Postgres volumes, and Mailpit synthetic messages through adapter cleanup.",
     "incidentResponseEvidenceBoundary": "No incident response readiness is claimed; future incident workflow evidence remains separate.",
     "changePromotionEvidenceBoundary": "Change and promotion evidence is limited to schema validation, runtime validator output, local proof execution, git history, PR checks, and merge record.",
-    "serviceCatalogueTraceability": "Compose-backed proof links to spec/instances/compose-service/service-catalogue.json, compose/compose.dev.generated.yaml, provider registry ids, and Mailpit service id.",
+    "serviceCatalogueTraceability": "Compose-backed proof links to spec/instances/compose-service/service-catalogue.json, compose/compose.dev.generated.yaml, provider registry ids, Postgres service id, and Mailpit service id.",
     "statementOfApplicabilitySupport": "Fields support future Statement of Applicability evidence organisation only and do not claim certification."
   },
   "nonClaims": [

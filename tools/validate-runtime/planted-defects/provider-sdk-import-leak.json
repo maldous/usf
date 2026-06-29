@@ -3,8 +3,8 @@
   "sourceReplacements": [
     {
       "path": "apps/api/src/runtime.ts",
-      "old": "import type { NotificationProvider } from \"@foundation/ports\";",
-      "new": "import { MailpitClient } from \"mailpit-api\";\nimport type { NotificationProvider } from \"@foundation/ports\";"
+      "old": "import type { NotificationProvider, TenantMembershipDirectory } from \"@foundation/ports\";",
+      "new": "import { MailpitClient } from \"mailpit-api\";\nimport type { NotificationProvider, TenantMembershipDirectory } from \"@foundation/ports\";"
     }
   ]
 }

@@ -1,6 +1,4 @@
 {
   "expectedRule": "USF-RUNTIME-005",
-  "removePackageScripts": [
-    "runtime:proof:compose"
-  ]
+  "removePackageScripts": ["runtime:proof:compose"]
 }

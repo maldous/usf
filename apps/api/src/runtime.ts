@@ -1,4 +1,14 @@
 import { InMemoryEventBus } from "@foundation/adapter-bus";
+import {
+  POSTGRES_PROVIDER_REGISTRY_ID,
+  POSTGRES_RUNTIME_PROVIDER_BINDING_ID,
+  POSTGRES_SERVICE_CATALOGUE_ID,
+  PG_SDK_PACKAGE,
+  PG_SDK_VERSION,
+  PostgresTenantMembershipDirectory,
+  createPostgresTenantMembershipDirectory,
+  type PostgresComposedMembershipEvidence,
+} from "@foundation/adapter-db";
 import { InMemoryGuardrailStore } from "@foundation/adapter-guardrails";
 import { InMemoryIdentityProvider } from "@foundation/adapter-idp";
 import {
@@ -50,7 +60,7 @@ import {
   type NotificationProviderConfig,
   type TenantContext,
 } from "@foundation/core";
-import type { NotificationProvider } from "@foundation/ports";
+import type { NotificationProvider, TenantMembershipDirectory } from "@foundation/ports";
 
 export const DEV_IN_MEMORY_PROVIDER_MODE_LABEL = "dev in-memory";
 export const DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL = "local-composed-real-service";
@@ -95,6 +105,27 @@ export interface RuntimeProviderBinding {
 export const DEV_COMPOSE_ACTIVE_PROVIDER_BINDINGS: readonly RuntimeProviderBinding[] =
   Object.freeze([
     Object.freeze({
+      bindingId: POSTGRES_RUNTIME_PROVIDER_BINDING_ID,
+      bindingStatus: "active",
+      serviceCatalogueServiceIds: Object.freeze([POSTGRES_SERVICE_CATALOGUE_ID]),
+      providerRegistryIds: Object.freeze([POSTGRES_PROVIDER_REGISTRY_ID]),
+      adapterName: "PostgresTenantMembershipRepository",
+      portName: "TenantScopedRepository,TenantMembershipDirectory",
+      providerMode: "composed-test",
+      providerClass: "local-composed-real-service",
+      serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
+      composeTarget: DEV_COMPOSE_TARGET,
+      endpointRef: "endpoint://compose/postgres",
+      sdkPackage: PG_SDK_PACKAGE,
+      sdkVersion: PG_SDK_VERSION,
+      sdkBoundary: "adapter-package-only",
+      proofSurfaces: Object.freeze(["api", "worker"] as const),
+      deferredReason: null,
+      followUpIssueRefs: Object.freeze([]),
+      claimBoundary:
+        "Bounded local composed-test tenant-membership repository proof only; no stronger database readiness claim.",
+    }),
+    Object.freeze({
       bindingId: "mailpit-notification-provider",
       bindingStatus: "active",
       serviceCatalogueServiceIds: Object.freeze([MAILPIT_SERVICE_CATALOGUE_ID]),
@@ -119,27 +150,6 @@ export const DEV_COMPOSE_ACTIVE_PROVIDER_BINDINGS: readonly RuntimeProviderBindi
 
 export const DEV_COMPOSE_DEFERRED_PROVIDER_BINDINGS: readonly RuntimeProviderBinding[] =
   Object.freeze([
-    Object.freeze({
-      bindingId: "postgres-runtime-repository-provider",
-      bindingStatus: "compose-boundary-only",
-      serviceCatalogueServiceIds: Object.freeze(["postgres"]),
-      providerRegistryIds: Object.freeze(["database-postgres-composed-test"]),
-      adapterName: null,
-      portName: "RlsSession",
-      providerMode: "composed-test",
-      providerClass: "not-applicable",
-      serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
-      composeTarget: DEV_COMPOSE_TARGET,
-      endpointRef: "endpoint://compose/postgres",
-      sdkPackage: null,
-      sdkVersion: null,
-      sdkBoundary: "not-applicable",
-      proofSurfaces: Object.freeze([]),
-      deferredReason:
-        "Runtime repository adapter binding remains deferred; DB/RLS proof exists outside API/worker runtime assembly.",
-      followUpIssueRefs: Object.freeze(["USF-139"]),
-      claimBoundary: "No runtime database provider binding claim.",
-    }),
     Object.freeze({
       bindingId: "nats-event-bus-provider",
       bindingStatus: "no-runtime-port",
@@ -247,7 +257,7 @@ export const DEV_COMPOSE_DEFERRED_PROVIDER_BINDINGS: readonly RuntimeProviderBin
   ]);
 
 export const DEV_COMPOSE_BACKED_DEFERRED_BOUNDARIES = Object.freeze([
-  "Mailpit notification provider binding is active in dev-compose-backed mode; database, event-bus, object-storage, identity, workflow, and secret-provider runtime bindings remain explicitly deferred or boundary-only.",
+  "Postgres tenant-membership repository and Mailpit notification provider bindings are active in dev-compose-backed mode; event-bus, object-storage, identity, workflow, and secret-provider runtime bindings remain explicitly deferred or boundary-only.",
   "Profile-gated workflow-provider and operator services remain catalogue-tracked boundaries and are not started by the default runtime proof.",
 ]);
 
@@ -262,6 +272,20 @@ export interface DevRuntime {
   readonly providers: Readonly<Record<string, string>>;
   readonly composedProviderBindings: readonly RuntimeProviderBinding[];
   readonly deferredProviderBindings: readonly RuntimeProviderBinding[];
+  readonly databaseProviderEvidence: () => PostgresComposedMembershipEvidence | null;
+  readonly refreshMembershipAuthority: (
+    context: TenantContext,
+  ) => Promise<PostgresComposedMembershipEvidence | null>;
+  readonly proveDatabaseProviderRoundTrip: (
+    context: TenantContext,
+    value: {
+      readonly tenantId: string;
+      readonly actorId: string;
+      readonly email: string;
+      readonly roles: readonly string[];
+    },
+  ) => Promise<PostgresComposedMembershipEvidence | null>;
+  readonly close: () => Promise<void>;
   readonly notificationProviderConfig: NotificationProviderConfig;
   readonly auditLedger: InMemoryAuditLedger;
   readonly authService: AuthService;
@@ -275,7 +299,7 @@ export interface DevRuntime {
   readonly notificationProvider: NotificationProvider;
   readonly observability: CapturedObservabilitySink;
   readonly secrets: InMemorySecretStore;
-  readonly membershipDirectory: InMemoryTenantMembershipDirectory;
+  readonly membershipDirectory: TenantMembershipDirectory;
   readonly breakGlass: BreakGlassRegistry;
   readonly pdp: PolicyDecisionPoint;
   readonly authorizer: Authorizer;
@@ -288,7 +312,7 @@ export interface DevRuntime {
   readonly guardrails: InMemoryGuardrailStore;
 }
 
-export const DEV_TENANT_ID = "dev-tenant";
+export const DEV_TENANT_ID = "11111111-1111-4111-8111-111111111111";
 export const DEV_ACTOR_ID = "dev-actor";
 export const DEV_SECURITY_ACTOR_ID = "dev-security-actor";
 
@@ -324,15 +348,18 @@ export function createDevRuntime(
   const guardrails = new InMemoryGuardrailStore();
   guardrails.upsertPolicy(defaultJobCreateGuardrailPolicy());
 
-  const membershipDirectory = new InMemoryTenantMembershipDirectory();
-  membershipDirectory.upsert({
+  const membershipDirectory =
+    runtimeMode === "dev-compose-backed"
+      ? createPostgresTenantMembershipDirectory()
+      : new InMemoryTenantMembershipDirectory();
+  seedRuntimeMembership(membershipDirectory, {
     membershipId: "membership_dev",
     tenantId: DEV_TENANT_ID,
     actorId: DEV_ACTOR_ID,
     status: "active",
     roles: ["tenant-admin"],
   });
-  membershipDirectory.upsert({
+  seedRuntimeMembership(membershipDirectory, {
     membershipId: "membership_dev_security",
     tenantId: DEV_TENANT_ID,
     actorId: DEV_SECURITY_ACTOR_ID,
@@ -400,12 +427,37 @@ export function createDevRuntime(
       runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_BACKED_DEFERRED_BOUNDARIES : [],
     providers:
       runtimeMode === "dev-compose-backed"
-        ? Object.freeze({ ...devProviderPlan, mail: "mailpit-composed-test" })
+        ? Object.freeze({
+            ...devProviderPlan,
+            database: "postgres-composed-test",
+            mail: "mailpit-composed-test",
+          })
         : devProviderPlan,
     composedProviderBindings:
       runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_ACTIVE_PROVIDER_BINDINGS : [],
     deferredProviderBindings:
       runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_DEFERRED_PROVIDER_BINDINGS : [],
+    databaseProviderEvidence: () =>
+      membershipDirectory instanceof PostgresTenantMembershipDirectory
+        ? (membershipDirectory.lastEvidence ?? null)
+        : null,
+    refreshMembershipAuthority: async (context) => {
+      if (membershipDirectory instanceof PostgresTenantMembershipDirectory) {
+        return membershipDirectory.refreshTenant(context);
+      }
+      return null;
+    },
+    proveDatabaseProviderRoundTrip: async (context, value) => {
+      if (membershipDirectory instanceof PostgresTenantMembershipDirectory) {
+        return membershipDirectory.proveRoundTrip(context, value);
+      }
+      return null;
+    },
+    close: async () => {
+      if (membershipDirectory instanceof PostgresTenantMembershipDirectory) {
+        await membershipDirectory.close();
+      }
+    },
     notificationProviderConfig,
     auditLedger,
     authService: createAuthService({ auditLedger, identityProvider }),
@@ -431,6 +483,25 @@ export function createDevRuntime(
     fileService,
     guardrails,
   };
+}
+
+function seedRuntimeMembership(
+  directory: TenantMembershipDirectory,
+  membership: {
+    readonly membershipId: string;
+    readonly tenantId: string;
+    readonly actorId: string;
+    readonly status: "active";
+    readonly roles: readonly string[];
+  },
+): void {
+  if (directory instanceof InMemoryTenantMembershipDirectory) {
+    directory.upsert(membership);
+    return;
+  }
+  if (directory instanceof PostgresTenantMembershipDirectory) {
+    directory.seedLocalMembership(membership);
+  }
 }
 
 export function providerModeLabelForRuntime(mode: DevRuntimeMode): DevProviderModeLabel {

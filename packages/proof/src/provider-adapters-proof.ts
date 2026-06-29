@@ -171,6 +171,8 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
     /from\s+["']mailpit-api["']/.test(mailAdapter),
     "Mailpit SDK import missing from mail adapter boundary",
   );
+  const dbAdapter = readFileSync(join(root, "adapters/db/src/index.ts"), "utf8");
+  assert(/from\s+["']pg["']/.test(dbAdapter), "pg SDK import missing from db adapter boundary");
   const mailpitProvider = PROVIDER_REGISTRY.find(
     (provider) => provider.providerId === "notification-delivery-mailpit-composed-test",
   );
@@ -181,6 +183,17 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
       mailpitProvider.readinessStatus === "healthy" &&
       mailpitProvider.endpointRef === "endpoint://compose/mailpit",
     "Mailpit composed provider registry entry is not SDK-backed and catalogue-linked",
+  );
+  const postgresProvider = PROVIDER_REGISTRY.find(
+    (provider) => provider.providerId === "database-postgres-composed-test",
+  );
+  assert(postgresProvider, "Postgres composed provider registry entry missing");
+  assert(
+    postgresProvider.adapterName === "PostgresTenantMembershipRepository" &&
+      postgresProvider.providerMode === "composed-test" &&
+      postgresProvider.readinessStatus === "healthy" &&
+      postgresProvider.endpointRef === "endpoint://compose/postgres",
+    "Postgres composed provider registry entry is not SDK-backed and catalogue-linked",
   );
   checks.push("provider SDK imports remain inside adapter package boundaries");
 

@@ -7404,7 +7404,8 @@
           "composeTarget",
           "deferredBoundaries",
           "composedProviderBindings",
-          "deferredProviderBindings"
+          "deferredProviderBindings",
+          "databaseProviderEvidence"
         ],
         "properties": {
           "status": {
@@ -7783,6 +7784,119 @@
                 }
               }
             }
+          },
+          "databaseProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "serviceCatalogueServiceId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkPackage",
+                  "sdkVersion",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "writeChecked",
+                  "readbackChecked",
+                  "tenantIsolationChecked",
+                  "cleanupBoundary",
+                  "safeProviderSummary",
+                  "tenantIdHash",
+                  "actorIdHash",
+                  "membershipCount"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "const": "database-postgres-composed-test",
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "const": "database-postgres-composed-test",
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "const": "postgres",
+                    "type": "string"
+                  },
+                  "bindingId": {
+                    "const": "runtime-database-provider-binding",
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "anyOf": [
+                      {
+                        "const": "PostgresTenantMembershipRepository",
+                        "type": "string"
+                      },
+                      {
+                        "const": "PostgresTenantMembershipDirectory",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "sdkPackage": {
+                    "const": "pg",
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "const": "8.22.0",
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "const": "compose-down-volume-removal",
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "const": "postgres-composed-provider",
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "membershipCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },
@@ -10277,6 +10391,7 @@
           "deferredBoundaries",
           "composedProviderBindings",
           "deferredProviderBindings",
+          "databaseProviderEvidence",
           "providers"
         ],
         "properties": {
@@ -10656,6 +10771,119 @@
                 }
               }
             }
+          },
+          "databaseProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "serviceCatalogueServiceId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkPackage",
+                  "sdkVersion",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "writeChecked",
+                  "readbackChecked",
+                  "tenantIsolationChecked",
+                  "cleanupBoundary",
+                  "safeProviderSummary",
+                  "tenantIdHash",
+                  "actorIdHash",
+                  "membershipCount"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "const": "database-postgres-composed-test",
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "const": "database-postgres-composed-test",
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "const": "postgres",
+                    "type": "string"
+                  },
+                  "bindingId": {
+                    "const": "runtime-database-provider-binding",
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "anyOf": [
+                      {
+                        "const": "PostgresTenantMembershipRepository",
+                        "type": "string"
+                      },
+                      {
+                        "const": "PostgresTenantMembershipDirectory",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "sdkPackage": {
+                    "const": "pg",
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "const": "8.22.0",
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "const": "compose-down-volume-removal",
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "const": "postgres-composed-provider",
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "membershipCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "providers": {
             "type": "object",

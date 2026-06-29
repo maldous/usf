@@ -69,9 +69,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "prom/alertmanager:v0.27.0",
-      "react_ports": [
-        "${ALERTMANAGER_PORT:-9093}:9093"
-      ],
+      "react_ports": ["${ALERTMANAGER_PORT:-9093}:9093"],
       "react_service": "alertmanager",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -96,9 +94,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/alloy:v1.5.1",
-      "react_ports": [
-        "${ALLOY_PORT:-12345}:12345"
-      ],
+      "react_ports": ["${ALLOY_PORT:-12345}:12345"],
       "react_service": "alloy",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -122,9 +118,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "clamav/clamav:stable",
-      "react_ports": [
-        "${CLAMAV_PORT:-3310}:3310"
-      ],
+      "react_ports": ["${CLAMAV_PORT:-3310}:3310"],
       "react_service": "clamav",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -148,10 +142,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "clickhouse/clickhouse-server:24.12",
-      "react_ports": [
-        "${CLICKHOUSE_HTTP_PORT:-8124}:8123",
-        "${CLICKHOUSE_NATIVE_PORT:-9002}:9000"
-      ],
+      "react_ports": ["${CLICKHOUSE_HTTP_PORT:-8124}:8123", "${CLICKHOUSE_NATIVE_PORT:-9002}:9000"],
       "react_service": "clickhouse",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -201,9 +192,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/grafana:11.4.0",
-      "react_ports": [
-        "${GRAFANA_PORT:-3200}:3000"
-      ],
+      "react_ports": ["${GRAFANA_PORT:-3200}:3000"],
       "react_service": "grafana",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -227,9 +216,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "quay.io/keycloak/keycloak:26.2",
-      "react_ports": [
-        "${KEYCLOAK_PORT:-8090}:8080"
-      ],
+      "react_ports": ["${KEYCLOAK_PORT:-8090}:8080"],
       "react_service": "keycloak",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -277,9 +264,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "localstack/localstack:4.0.4",
-      "react_ports": [
-        "${LOCALSTACK_PORT:-4566}:4566"
-      ],
+      "react_ports": ["${LOCALSTACK_PORT:-4566}:4566"],
       "react_service": "localstack",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -304,9 +289,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/loki:3.3.2",
-      "react_ports": [
-        "${LOKI_PORT:-3100}:3100"
-      ],
+      "react_ports": ["${LOKI_PORT:-3100}:3100"],
       "react_service": "loki",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -330,10 +313,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "axllent/mailpit:v1.21.0",
-      "react_ports": [
-        "${MAILPIT_SMTP_PORT:-1025}:1025",
-        "${MAILPIT_UI_PORT:-8025}:8025"
-      ],
+      "react_ports": ["${MAILPIT_SMTP_PORT:-1025}:1025", "${MAILPIT_UI_PORT:-8025}:8025"],
       "react_service": "mailpit",
       "selection_class": "selected",
       "tracking_recommendation": "covered for bounded Mailpit runtime provider binding; broader notification/live provider posture remains non-claimed",
@@ -357,9 +337,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "getmeili/meilisearch:v1.10",
-      "react_ports": [
-        "${MEILISEARCH_PORT:-7700}:7700"
-      ],
+      "react_ports": ["${MEILISEARCH_PORT:-7700}:7700"],
       "react_service": "meilisearch",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -383,10 +361,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "minio/minio:RELEASE.2024-12-18T13-15-44Z",
-      "react_ports": [
-        "${MINIO_API_PORT:-9000}:9000",
-        "${MINIO_CONSOLE_PORT:-9001}:9001"
-      ],
+      "react_ports": ["${MINIO_API_PORT:-9000}:9000", "${MINIO_CONSOLE_PORT:-9001}:9001"],
       "react_service": "minio",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -413,9 +388,7 @@
       },
       "react_compose_file": "../react/compose.yaml",
       "react_image": null,
-      "react_ports": [
-        "${MOCK_OIDC_PORT:-9080}:8080"
-      ],
+      "react_ports": ["${MOCK_OIDC_PORT:-9080}:8080"],
       "react_service": "mock-oidc",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -439,9 +412,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "openbao/openbao:2.2.0",
-      "react_ports": [
-        "${OPENBAO_PORT:-8200}:8200"
-      ],
+      "react_ports": ["${OPENBAO_PORT:-8200}:8200"],
       "react_service": "openbao",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -495,9 +466,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "dpage/pgadmin4:8.14",
-      "react_ports": [
-        "${PGADMIN_PORT:-5050}:80"
-      ],
+      "react_ports": ["${PGADMIN_PORT:-5050}:80"],
       "react_service": "pgadmin",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -540,7 +509,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "B",
-      "gap_or_decision": "USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for the Mailpit composed provider binding without copying React runtime code or claiming service/container equivalence.",
+      "gap_or_decision": "USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for Postgres and Mailpit composed provider bindings without copying React runtime code or claiming service/container equivalence.",
       "legacy_service_category": "runtime-api",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": {
@@ -549,9 +518,7 @@
       },
       "react_compose_file": "../react/compose.yaml",
       "react_image": null,
-      "react_ports": [
-        "${PLATFORM_API_PORT:-3001}:3001"
-      ],
+      "react_ports": ["${PLATFORM_API_PORT:-3001}:3001"],
       "react_service": "platform-api",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -569,15 +536,13 @@
       "criticality": "critical",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "A",
-      "gap_or_decision": "USF compose includes PostgreSQL and DB/RLS proofs.",
+      "gap_or_decision": "USF compose includes PostgreSQL, DB/RLS proofs, and USF-183 bounded SDK-backed runtime tenant-membership provider evidence.",
       "legacy_service_category": "database",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "postgres:16.6-alpine",
-      "react_ports": [
-        "${POSTGRES_PORT:-5433}:5432"
-      ],
+      "react_ports": ["${POSTGRES_PORT:-5433}:5432"],
       "react_service": "postgres",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -602,9 +567,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "prom/prometheus:v2.54.1",
-      "react_ports": [
-        "${PROMETHEUS_PORT:-9090}:9090"
-      ],
+      "react_ports": ["${PROMETHEUS_PORT:-9090}:9090"],
       "react_service": "prometheus",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -631,9 +594,7 @@
       },
       "react_compose_file": "../react/compose.yaml",
       "react_image": null,
-      "react_ports": [
-        "${WEB_HTTP_PORT:-80}:80"
-      ],
+      "react_ports": ["${WEB_HTTP_PORT:-80}:80"],
       "react_service": "react-app",
       "selection_class": "future-ui",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -657,9 +618,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "redis:7.4.2-alpine",
-      "react_ports": [
-        "${REDIS_PORT:-6379}:6379"
-      ],
+      "react_ports": ["${REDIS_PORT:-6379}:6379"],
       "react_service": "redis",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -1134,9 +1093,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "ghcr.io/getsentry/sentry:26.5.2",
-      "react_ports": [
-        "9060:9000"
-      ],
+      "react_ports": ["9060:9000"],
       "react_service": "sentry-web",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -1209,9 +1166,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "sonarqube:25.9.0.112764-community",
-      "react_ports": [
-        "${SONAR_PORT:-9064}:9000"
-      ],
+      "react_ports": ["${SONAR_PORT:-9064}:9000"],
       "react_service": "sonarqube",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -1236,9 +1191,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/tempo:2.6.0",
-      "react_ports": [
-        "${TEMPO_HTTP_PORT:-3201}:3200"
-      ],
+      "react_ports": ["${TEMPO_HTTP_PORT:-3201}:3200"],
       "react_service": "tempo",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -1262,9 +1215,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "temporalio/auto-setup:1.25.1",
-      "react_ports": [
-        "${TEMPORAL_PORT:-7233}:7233"
-      ],
+      "react_ports": ["${TEMPORAL_PORT:-7233}:7233"],
       "react_service": "temporal",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -1313,9 +1264,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "temporalio/ui:2.35.0",
-      "react_ports": [
-        "${TEMPORAL_UI_PORT:-8088}:8080"
-      ],
+      "react_ports": ["${TEMPORAL_UI_PORT:-8088}:8080"],
       "react_service": "temporal-ui",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -1340,9 +1289,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "ghcr.io/windmill-labs/windmill:1.734",
-      "react_ports": [
-        "${WINDMILL_PORT:-8000}:8000"
-      ],
+      "react_ports": ["${WINDMILL_PORT:-8000}:8000"],
       "react_service": "windmill",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -1408,7 +1355,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-181 proves bounded apps/work execution; USF-183 proves worker Mailpit notification provider binding, but this is not Windmill operator automation parity.",
+      "gap_or_decision": "USF-181 proves bounded apps/work execution; USF-183 proves worker Postgres and Mailpit provider bindings, but this is not Windmill operator automation parity.",
       "legacy_service_category": "operator-automation-worker",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1438,9 +1385,7 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "wiremock/wiremock:3.13.2-2-alpine",
-      "react_ports": [
-        "${WIREMOCK_PORT:-8089}:8080"
-      ],
+      "react_ports": ["${WIREMOCK_PORT:-8089}:8080"],
       "react_service": "wiremock",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "apps/work/src/worker.ts",
+      "old": "import type { TenantContext } from \"@foundation/core\";",
+      "new": "import { Pool } from \"pg\";\nimport type { TenantContext } from \"@foundation/core\";"
+    }
+  ]
+}

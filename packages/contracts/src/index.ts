@@ -28,6 +28,33 @@ const RuntimeProviderBindingSchema = Type.Object({
   followUpIssueRefs: Type.Array(Type.String({ minLength: 1 })),
   claimBoundary: Type.String({ minLength: 1 }),
 });
+const RuntimeDatabaseProviderEvidenceSchema = Type.Union([
+  Type.Object({
+    providerRef: Type.Literal("database-postgres-composed-test"),
+    providerMode: Type.Literal("composed-test"),
+    providerRegistryId: Type.Literal("database-postgres-composed-test"),
+    serviceCatalogueServiceId: Type.Literal("postgres"),
+    bindingId: Type.Literal("runtime-database-provider-binding"),
+    adapterName: Type.Union([
+      Type.Literal("PostgresTenantMembershipRepository"),
+      Type.Literal("PostgresTenantMembershipDirectory"),
+    ]),
+    sdkPackage: Type.Literal("pg"),
+    sdkVersion: Type.Literal("8.22.0"),
+    sdkBoundary: Type.Literal("adapter-package-only"),
+    endpointRef: Type.String({ minLength: 1 }),
+    readinessChecked: Type.Boolean(),
+    writeChecked: Type.Boolean(),
+    readbackChecked: Type.Boolean(),
+    tenantIsolationChecked: Type.Boolean(),
+    cleanupBoundary: Type.Literal("compose-down-volume-removal"),
+    safeProviderSummary: Type.Literal("postgres-composed-provider"),
+    tenantIdHash: Type.String({ minLength: 1 }),
+    actorIdHash: Type.String({ minLength: 1 }),
+    membershipCount: Type.Number({ minimum: 0 }),
+  }),
+  Type.Null(),
+]);
 
 export const HealthResponseSchema = Type.Object({
   status: Type.Literal("ok"),
@@ -41,6 +68,7 @@ export const HealthResponseSchema = Type.Object({
   deferredBoundaries: Type.Array(Type.String()),
   composedProviderBindings: Type.Array(RuntimeProviderBindingSchema),
   deferredProviderBindings: Type.Array(RuntimeProviderBindingSchema),
+  databaseProviderEvidence: RuntimeDatabaseProviderEvidenceSchema,
 });
 
 export const ReadyResponseSchema = Type.Object({
@@ -55,6 +83,7 @@ export const ReadyResponseSchema = Type.Object({
   deferredBoundaries: Type.Array(Type.String()),
   composedProviderBindings: Type.Array(RuntimeProviderBindingSchema),
   deferredProviderBindings: Type.Array(RuntimeProviderBindingSchema),
+  databaseProviderEvidence: RuntimeDatabaseProviderEvidenceSchema,
   providers: Type.Record(Type.String(), Type.String()),
 });
 
