@@ -426,6 +426,7 @@ function route(
     responses: Readonly<Record<string, string>>;
     idempotency?: ApiRouteContract["idempotencyPolicy"];
     pagination?: ApiRouteContract["paginationPolicy"];
+    rateLimitPolicy?: string;
     audit: string;
     pdp: string;
     dataClassification?: ApiRouteContract["dataClassification"];
@@ -452,7 +453,8 @@ function route(
     auditPolicy: input.audit,
     idempotencyPolicy: input.idempotency ?? noIdempotency("safe-read"),
     paginationPolicy: input.pagination ?? noPagination,
-    rateLimitPolicy: "local-dev-test quotas represented; live enforcement deferred",
+    rateLimitPolicy:
+      input.rateLimitPolicy ?? "local-dev-test quotas represented; live enforcement deferred",
     correlationPolicy: defaultCorrelation,
     dataClassification: input.dataClassification ?? "confidential",
     requestSchema: input.requestSchema,
@@ -964,9 +966,12 @@ function jobRoutes(): readonly ApiRouteContract[] {
         "400": "ApiErrorResponse",
         "403": "ApiErrorResponse",
         "409": "ApiErrorResponse",
+        "429": "ApiErrorResponse",
       },
       idempotency: idempotencyRequired("tenant+actor+route+jobType"),
-      audit: "job.create audited by job service",
+      rateLimitPolicy:
+        "enforced local-dev-test guardrail api.jobs.create.local; single-node in-memory only; live WAF/edge/gateway enforcement deferred",
+      audit: "job.create audited by job service; guardrail denials emit value-free guardrail audit",
       pdp: "job service calls PDP",
       exampleRequest: {
         tenantId: "tenant-alpha",

@@ -1990,6 +1990,7 @@ AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "adapters/mail",
     "adapters/secrets",
     "adapters/obs",
+    "adapters/guardrails",
     "packages/core",
     "packages/ports",
     "packages/contracts",

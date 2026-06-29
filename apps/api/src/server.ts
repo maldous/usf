@@ -48,10 +48,12 @@ import {
   TenantMismatchError,
   createAuditRecord,
   findProvider,
+  opaqueHash,
   providerStatusViews,
   stableId,
   toSafeJobView,
   toSafeProviderStatus,
+  type GuardrailDecision,
   type TelemetrySignal,
   type AuditCategory,
   type AuditEventOutcome,
@@ -76,7 +78,7 @@ import type { AuditAccessContext } from "@foundation/capability-audit";
 import type { AuditQueryCriteria } from "@foundation/ports";
 import { buildOpenApiDocument } from "@foundation/openapi";
 import { randomUUID } from "node:crypto";
-import Fastify, { type FastifyInstance, type FastifyRequest } from "fastify";
+import Fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
 import { DEV_PROVIDER_MODE_LABEL, createDevRuntime, type DevRuntime } from "./runtime.ts";
 
 export interface BuildApiOptions {
@@ -117,6 +119,7 @@ function apiError(
   reasonCode: string,
   safeMessage: string,
   details: ReadonlyArray<{ path: string; code: string; safe_message: string }> = [],
+  retryAfter: string | null = null,
 ) {
   const ids = idsFor(request);
   return {
@@ -132,7 +135,7 @@ function apiError(
     trace_id: ids.traceId,
     ...(details.length ? { details: [...details] } : {}),
     documentation_ref: null,
-    retry_after: null,
+    retry_after: retryAfter,
   };
 }
 
@@ -232,6 +235,145 @@ function accessFrom(request: FastifyRequest): AuditAccessContext {
     correlationId,
     ...(traceId ? { traceId } : {}),
   };
+}
+
+function guardrailErrorCode(decision: GuardrailDecision): string {
+  if (decision.httpStatus === 429) return "rate_limit_exceeded";
+  if (decision.httpStatus === 409) return "quota_conflict";
+  if (decision.httpStatus === 503) return "backpressure_applied";
+  return "policy_denied";
+}
+
+function guardrailAuditEventType(decision: GuardrailDecision): string {
+  if (decision.reasonCode === "policy-unknown-denied") return "guardrail.policy.unknown_denied";
+  if (decision.reasonCode === "quota-exceeded") return "guardrail.quota.exceeded";
+  if (decision.reasonCode === "backpressure-applied") return "guardrail.backpressure.applied";
+  if (decision.reasonCode === "policy-denied") return "guardrail.admission.denied";
+  return "guardrail.limit.exceeded";
+}
+
+function guardrailSignalName(decision: GuardrailDecision): string {
+  if (decision.reasonCode === "quota-exceeded") return "quota.exceeded";
+  if (decision.reasonCode === "backpressure-applied") return "backpressure.applied";
+  if (decision.reasonCode === "policy-unknown-denied") return "guardrail.policy.unknown_denied";
+  if (decision.reasonCode === "policy-denied") return "admission.denied";
+  return "rate_limit.exceeded";
+}
+
+async function recordGuardrailDenial(
+  runtime: DevRuntime,
+  context: TenantContext,
+  request: FastifyRequest,
+  decision: GuardrailDecision,
+): Promise<void> {
+  const ids = idsFor(request);
+  runtime.observability.recordSecuritySignal({
+    eventName: guardrailSignalName(decision),
+    severity: "security",
+    reasonCode: decision.reasonCode,
+    safeSummary: decision.safeMessage,
+    attributes: {
+      policy_id: decision.policyId,
+      policy_type: decision.policyType,
+      scope: decision.scope,
+      route_id: decision.routeId ?? "unknown",
+      operation_id: decision.operationId ?? "unknown",
+    },
+    context: {
+      tenantId: context.tenantId,
+      actorId: context.actorId,
+      routeId: decision.routeId ?? "unknown",
+      operationId: decision.operationId ?? "unknown",
+      capability: "guardrails",
+      requestId: ids.requestId,
+      correlationId: ids.correlationId,
+      traceId: ids.traceId ?? ids.correlationId,
+    },
+  });
+  await runtime.auditRecorder.record({
+    eventId: stableId("audit", [ids.requestId, decision.decisionId, "guardrail"]),
+    eventType: guardrailAuditEventType(decision),
+    tenantId: context.tenantId,
+    actorId: context.actorId,
+    action: "guardrail.policy.evaluated",
+    outcome: "denied",
+    subjectType: "actor",
+    subjectId: decision.subjectRef,
+    resourceType: "guardrail-policy",
+    resourceId: decision.policyId,
+    reasonCode: decision.reasonCode,
+    safeMessage: decision.safeMessage,
+    decisionId: decision.decisionId,
+    correlationId: ids.correlationId,
+    requestId: ids.requestId,
+    traceId: ids.traceId,
+    dataClassification: "security-sensitive",
+    retentionPolicy: "guardrail-local-dev-test",
+    metadata: {
+      policy_type: decision.policyType,
+      scope: decision.scope,
+      route_id: decision.routeId ?? "unknown",
+      operation_id: decision.operationId ?? "unknown",
+      http_status: String(decision.httpStatus),
+      remaining: String(decision.remaining),
+    },
+  });
+}
+
+async function enforceRouteGuardrail(
+  runtime: DevRuntime,
+  context: TenantContext,
+  request: FastifyRequest,
+  reply: FastifyReply,
+  input: {
+    readonly policyId: string;
+    readonly routeId: string;
+    readonly operationId: string;
+    readonly resourceType: string;
+    readonly idempotencyKey?: string | null;
+  },
+): Promise<unknown | null> {
+  const ids = idsFor(request);
+  const fingerprint = JSON.stringify({
+    method: request.method,
+    url: request.url,
+    body: request.body ?? null,
+  });
+  const decision = runtime.guardrails.evaluate({
+    policyId: input.policyId,
+    tenantId: context.tenantId,
+    subjectRef: context.actorId,
+    actorId: context.actorId,
+    routeId: input.routeId,
+    operationId: input.operationId,
+    resourceType: input.resourceType,
+    idempotencyKey: input.idempotencyKey ?? null,
+    requestFingerprint: opaqueHash(fingerprint),
+    correlationId: ids.correlationId,
+    requestId: ids.requestId,
+    traceId: ids.traceId,
+  });
+  if (
+    decision.decision === "allow" ||
+    decision.decision === "monitor-only" ||
+    decision.decision === "shadow-deny"
+  ) {
+    return null;
+  }
+  if (decision.retryAfter) {
+    reply.header("retry-after", decision.retryAfter);
+  }
+  await recordGuardrailDenial(runtime, context, request, decision);
+  reply.code(decision.httpStatus);
+  return apiError(
+    request,
+    decision.httpStatus,
+    guardrailErrorCode(decision),
+    decision.reasonCode,
+    decision.safeMessage,
+    [],
+    decision.retryAfter,
+  );
 }
 
 function runtimeStatus(runtime: DevRuntime) {
@@ -1761,6 +1903,7 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
           400: ErrorResponseSchema,
           403: ForbiddenResponseSchema,
           409: ErrorResponseSchema,
+          429: ErrorResponseSchema,
         },
       },
     },
@@ -1782,6 +1925,14 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
       }
       return idempotent(request, reply, context, "jobs.create", async () => {
         const idempotencyKey = requireIdempotencyKey(request);
+        const guardrail = await enforceRouteGuardrail(runtime, context, request, reply, {
+          policyId: "api.jobs.create.local",
+          routeId: "jobs.create",
+          operationId: "postJobCreateV1",
+          resourceType: "job",
+          idempotencyKey,
+        });
+        if (guardrail) return guardrail;
         const outcome = await runtime.jobService.submit({
           context,
           classification: body.classification as JobClassification,

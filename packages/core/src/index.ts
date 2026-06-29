@@ -209,6 +209,7 @@ export const AUDIT_CATEGORIES = Object.freeze([
   "file",
   "notification",
   "job",
+  "guardrail",
   "integration",
   "security",
   "admin",
@@ -338,6 +339,18 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "workflow.approval.approved": { category: "job", severity: "warning" },
   "workflow.approval.rejected": { category: "job", severity: "warning" },
   "workflow.admin.override": { category: "job", severity: "high", reserved: true },
+  // Guardrails / rate limits / abuse controls (parity-rate-limits-abuse, USF-160).
+  // Emitted by this slice as value-free control evidence: no raw payload, raw IP,
+  // credential, token, object key, recipient address, provider internals, or stack trace.
+  "guardrail.policy.created": { category: "guardrail", severity: "notice", reserved: true },
+  "guardrail.policy.changed": { category: "guardrail", severity: "warning", reserved: true },
+  "guardrail.policy.evaluated": { category: "guardrail", severity: "info" },
+  "guardrail.limit.exceeded": { category: "guardrail", severity: "warning" },
+  "guardrail.quota.exceeded": { category: "guardrail", severity: "warning" },
+  "guardrail.admission.denied": { category: "guardrail", severity: "warning" },
+  "guardrail.backpressure.applied": { category: "guardrail", severity: "warning" },
+  "guardrail.abuse.suspected": { category: "security", severity: "high", reserved: true },
+  "guardrail.policy.unknown_denied": { category: "security", severity: "warning" },
   "security.denied": { category: "security", severity: "high" },
   "system.error": { category: "system", severity: "high" },
   // Audit-of-audit access (reading/exporting/verifying audit evidence is itself audited).
@@ -449,6 +462,10 @@ export const BLOCKED_METADATA_KEYS = Object.freeze([
   "session_token",
   "access_key",
   "client_secret",
+  "provider_response",
+  "raw_payload",
+  "raw_response",
+  "stack_trace",
   "ssn",
 ] as const);
 
@@ -4561,4 +4578,411 @@ export function createNotificationDeliveryEvidence(input: {
     templateHash: input.notification.templateHash,
     recordedAt: input.recordedAt ?? new Date().toISOString(),
   });
+}
+
+// ---------------------------------------------------------------------------
+// Guardrails / rate limits / abuse controls (parity-rate-limits-abuse, USF-160).
+//
+// Guardrails are security and availability controls. They never grant
+// authorization and authorization success never bypasses them. This model is
+// local/dev/test enforceable with no live WAF, edge, CDN, bot, fraud, or abuse
+// provider readiness claim.
+// ---------------------------------------------------------------------------
+
+export const GUARDRAIL_POLICY_TYPES = Object.freeze([
+  "rate-limit",
+  "quota",
+  "throttle",
+  "admission-control",
+  "concurrency-limit",
+  "burst-limit",
+  "backpressure",
+  "abuse-detection",
+  "suppression",
+  "circuit-breaker",
+] as const);
+export type GuardrailPolicyType = (typeof GUARDRAIL_POLICY_TYPES)[number];
+
+export const GUARDRAIL_CLASSIFICATIONS = Object.freeze([
+  "availability-protection",
+  "abuse-prevention",
+  "tenant-fairness",
+  "cost-control",
+  "provider-protection",
+  "security-protection",
+  "data-exfiltration-protection",
+  "bulk-operation-protection",
+  "operational-safety",
+  "test-only",
+] as const);
+export type GuardrailClassification = (typeof GUARDRAIL_CLASSIFICATIONS)[number];
+
+export const GUARDRAIL_SCOPES = Object.freeze([
+  "global",
+  "tenant",
+  "actor",
+  "service-actor",
+  "session",
+  "route",
+  "operation",
+  "resource",
+  "provider",
+  "job",
+  "workflow",
+  "notification",
+  "file",
+  "audit-export",
+  "config-change",
+  "identity-action",
+  "ip-derived",
+] as const);
+export type GuardrailScope = (typeof GUARDRAIL_SCOPES)[number];
+
+export const GUARDRAIL_LIFECYCLES = Object.freeze([
+  "draft",
+  "active",
+  "disabled",
+  "shadow",
+  "monitor-only",
+  "deprecated",
+  "revoked",
+] as const);
+export type GuardrailLifecycle = (typeof GUARDRAIL_LIFECYCLES)[number];
+
+export const GUARDRAIL_DECISIONS = Object.freeze([
+  "allow",
+  "deny",
+  "delay",
+  "throttle",
+  "degrade",
+  "monitor-only",
+  "shadow-deny",
+] as const);
+export type GuardrailDecisionOutcome = (typeof GUARDRAIL_DECISIONS)[number];
+
+export const GUARDRAIL_DISTRIBUTED_ENFORCEMENT_POSTURES = Object.freeze([
+  "single-node-in-memory",
+  "local-test",
+  "composed-test",
+  "distributed-deferred",
+  "live-edge-deferred",
+] as const);
+export type GuardrailDistributedEnforcementPosture =
+  (typeof GUARDRAIL_DISTRIBUTED_ENFORCEMENT_POSTURES)[number];
+
+export const GUARDRAIL_RISK_LEVELS = Object.freeze([
+  "low",
+  "medium",
+  "high",
+  "critical",
+  "regulated",
+  "security-sensitive",
+] as const);
+export type GuardrailRiskLevel = (typeof GUARDRAIL_RISK_LEVELS)[number];
+
+export const GUARDRAIL_FORBIDDEN_PATTERNS = Object.freeze([
+  ...OBSERVABILITY_FORBIDDEN_PATTERNS,
+  "raw_ip",
+  "raw_actor",
+  "live_waf",
+  "live_edge",
+  "live_gateway",
+  "fraud_provider",
+  "bot_provider",
+] as const);
+
+export class GuardrailValidationError extends Error {
+  readonly reasonCode: string;
+
+  constructor(reasonCode: string, message: string) {
+    super(message);
+    this.name = "GuardrailValidationError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export interface GuardrailPolicy {
+  readonly policyId: string;
+  readonly policyType: GuardrailPolicyType;
+  readonly classification: GuardrailClassification;
+  readonly scope: GuardrailScope;
+  readonly scopeRef: string;
+  readonly tenantId: string | null;
+  readonly actorId: string | null;
+  readonly serviceActorId: string | null;
+  readonly routeId: string | null;
+  readonly operationId: string | null;
+  readonly resourceType: string | null;
+  readonly providerId: string | null;
+  readonly limit: number;
+  readonly windowSeconds: number;
+  readonly burstLimit: number | null;
+  readonly lifecycle: GuardrailLifecycle;
+  readonly policyOwner: string;
+  readonly owningCapability: string;
+  readonly riskLevel: GuardrailRiskLevel;
+  readonly createdBy: string;
+  readonly approvedBy: string | null;
+  readonly lastReviewedAt: string | null;
+  readonly reviewExpiresAt: string | null;
+  readonly changeReason: string;
+  readonly retryAfterPolicy: "safe-window-reset" | "none";
+  readonly denialPolicy:
+    "rate-limit-exceeded" | "policy-denied" | "quota-conflict" | "backpressure-applied";
+  readonly telemetryPolicy: string;
+  readonly auditPolicy: string;
+  readonly environmentScope: "local-dev" | "local-composed-test" | "ci" | "staging" | "production";
+  readonly dataClassification: DataSensitivity;
+  readonly distributedEnforcement: GuardrailDistributedEnforcementPosture;
+  readonly liveWafReadinessClaim: false;
+  readonly liveEdgeReadinessClaim: false;
+  readonly productionReadinessClaim: false;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface GuardrailEvaluationInput {
+  readonly policyId: string;
+  readonly tenantId: string;
+  readonly subjectRef: string;
+  readonly actorId?: string | null;
+  readonly serviceActorId?: string | null;
+  readonly routeId?: string | null;
+  readonly operationId?: string | null;
+  readonly resourceType?: string | null;
+  readonly providerId?: string | null;
+  readonly quantity?: number;
+  readonly idempotencyKey?: string | null;
+  readonly requestFingerprint?: string | null;
+  readonly correlationId?: string | null;
+  readonly requestId?: string | null;
+  readonly traceId?: string | null;
+  readonly nowMs?: number;
+}
+
+export interface GuardrailDecision {
+  readonly decisionId: string;
+  readonly policyId: string;
+  readonly policyType: GuardrailPolicyType;
+  readonly scope: GuardrailScope;
+  readonly scopeRef: string;
+  readonly subjectRef: string;
+  readonly tenantId: string;
+  readonly actorId: string | null;
+  readonly serviceActorId: string | null;
+  readonly routeId: string | null;
+  readonly operationId: string | null;
+  readonly resourceType: string | null;
+  readonly providerId: string | null;
+  readonly decision: GuardrailDecisionOutcome;
+  readonly httpStatus: 200 | 403 | 409 | 429 | 503;
+  readonly reasonCode: string;
+  readonly safeMessage: string;
+  readonly limit: number;
+  readonly remaining: number;
+  readonly resetAt: string;
+  readonly retryAfter: string | null;
+  readonly correlationId: string | null;
+  readonly requestId: string | null;
+  readonly traceId: string | null;
+  readonly createdAt: string;
+}
+
+export interface GuardrailPolicyUsage {
+  readonly policyId: string;
+  readonly tenantId: string;
+  readonly subjectRefHash: string;
+  readonly windowStart: string;
+  readonly windowEnd: string;
+  readonly used: number;
+  readonly limit: number;
+  readonly remaining: number;
+}
+
+export function assertGuardrailPolicyType(value: string): GuardrailPolicyType {
+  if (!GUARDRAIL_POLICY_TYPES.includes(value as GuardrailPolicyType)) {
+    throw new GuardrailValidationError("unknown-policy-type", "guardrail policy type denied");
+  }
+  return value as GuardrailPolicyType;
+}
+
+export function assertGuardrailClassification(value: string): GuardrailClassification {
+  if (!GUARDRAIL_CLASSIFICATIONS.includes(value as GuardrailClassification)) {
+    throw new GuardrailValidationError(
+      "unknown-policy-classification",
+      "guardrail classification denied",
+    );
+  }
+  return value as GuardrailClassification;
+}
+
+export function assertGuardrailScope(value: string): GuardrailScope {
+  if (!GUARDRAIL_SCOPES.includes(value as GuardrailScope)) {
+    throw new GuardrailValidationError("unknown-policy-scope", "guardrail scope denied");
+  }
+  return value as GuardrailScope;
+}
+
+export function assertGuardrailLifecycle(value: string): GuardrailLifecycle {
+  if (!GUARDRAIL_LIFECYCLES.includes(value as GuardrailLifecycle)) {
+    throw new GuardrailValidationError("unknown-policy-lifecycle", "guardrail lifecycle denied");
+  }
+  return value as GuardrailLifecycle;
+}
+
+export function guardrailTextLooksSensitive(value: string): boolean {
+  const lowered = value.toLowerCase();
+  return (
+    telemetryValueLooksSensitive(value) ||
+    GUARDRAIL_FORBIDDEN_PATTERNS.some((pattern) => lowered.includes(pattern))
+  );
+}
+
+export function safeGuardrailMessage(value: string): string {
+  const safe = safeTelemetryValue(value);
+  return guardrailTextLooksSensitive(safe) ? "guardrail decision" : safe;
+}
+
+export function guardrailHttpStatus(input: {
+  readonly policyType: GuardrailPolicyType;
+  readonly reasonCode: string;
+  readonly classification?: GuardrailClassification;
+}): 403 | 409 | 429 | 503 {
+  if (
+    input.reasonCode === "policy-unknown-denied" ||
+    input.reasonCode === "scope-unknown-denied" ||
+    input.reasonCode === "policy-not-enforcing-fail-closed"
+  ) {
+    return 403;
+  }
+  if (input.reasonCode === "idempotency-conflict") return 409;
+  if (input.policyType === "backpressure" || input.reasonCode === "backpressure-applied") {
+    return 503;
+  }
+  if (input.policyType === "quota") return 409;
+  if (input.policyType === "abuse-detection" || input.classification === "security-protection") {
+    return 403;
+  }
+  return 429;
+}
+
+export function validateGuardrailPolicy(policy: GuardrailPolicy): GuardrailPolicy {
+  assertNonEmpty(policy.policyId, "guardrail.policyId");
+  assertGuardrailPolicyType(policy.policyType);
+  assertGuardrailClassification(policy.classification);
+  assertGuardrailScope(policy.scope);
+  assertGuardrailLifecycle(policy.lifecycle);
+  if (!GUARDRAIL_RISK_LEVELS.includes(policy.riskLevel)) {
+    throw new GuardrailValidationError("unknown-risk-level", "guardrail risk level denied");
+  }
+  if (policy.limit < 0 || !Number.isFinite(policy.limit)) {
+    throw new GuardrailValidationError("invalid-limit", "guardrail limit denied");
+  }
+  if (policy.windowSeconds <= 0 || !Number.isFinite(policy.windowSeconds)) {
+    throw new GuardrailValidationError("invalid-window", "guardrail window denied");
+  }
+  if (
+    policy.distributedEnforcement === "single-node-in-memory" &&
+    (policy.liveWafReadinessClaim ||
+      policy.liveEdgeReadinessClaim ||
+      policy.productionReadinessClaim)
+  ) {
+    throw new GuardrailValidationError(
+      "in-memory-live-readiness-overclaim",
+      "guardrail readiness claim denied",
+    );
+  }
+  for (const [key, value] of Object.entries(policy)) {
+    if (typeof value === "string" && guardrailTextLooksSensitive(value)) {
+      throw new GuardrailValidationError(
+        "policy-config-sensitive-value",
+        `guardrail policy field denied: ${key}`,
+      );
+    }
+  }
+  return Object.freeze({ ...policy });
+}
+
+export function createGuardrailDecision(input: {
+  readonly policy: GuardrailPolicy;
+  readonly evaluation: GuardrailEvaluationInput;
+  readonly decision: GuardrailDecisionOutcome;
+  readonly reasonCode: string;
+  readonly used: number;
+  readonly resetAtMs: number;
+  readonly nowMs: number;
+}): GuardrailDecision {
+  const remaining = Math.max(input.policy.limit - input.used, 0);
+  const retryAfterAllowed =
+    input.policy.retryAfterPolicy === "safe-window-reset" &&
+    (input.reasonCode === "rate-limit-exceeded" ||
+      input.reasonCode === "backpressure-applied" ||
+      input.decision === "throttle" ||
+      input.decision === "delay");
+  const retryAfterSeconds = retryAfterAllowed
+    ? Math.max(Math.ceil((input.resetAtMs - input.nowMs) / 1000), 0)
+    : null;
+  const status =
+    input.decision === "allow" ||
+    input.decision === "monitor-only" ||
+    input.decision === "shadow-deny"
+      ? 200
+      : guardrailHttpStatus({
+          policyType: input.policy.policyType,
+          reasonCode: input.reasonCode,
+          classification: input.policy.classification,
+        });
+  const subjectRefHash = `subj_${opaqueHash(input.evaluation.subjectRef).slice(0, 24)}`;
+  return Object.freeze({
+    decisionId: stableId("guardrail", [
+      input.policy.policyId,
+      input.evaluation.tenantId,
+      subjectRefHash,
+      String(input.nowMs),
+      input.reasonCode,
+    ]),
+    policyId: input.policy.policyId,
+    policyType: input.policy.policyType,
+    scope: input.policy.scope,
+    scopeRef: input.policy.scopeRef,
+    subjectRef: subjectRefHash,
+    tenantId: input.evaluation.tenantId,
+    actorId: input.evaluation.actorId ?? null,
+    serviceActorId: input.evaluation.serviceActorId ?? null,
+    routeId: input.evaluation.routeId ?? input.policy.routeId,
+    operationId: input.evaluation.operationId ?? input.policy.operationId,
+    resourceType: input.evaluation.resourceType ?? input.policy.resourceType,
+    providerId: input.evaluation.providerId ?? input.policy.providerId,
+    decision: input.decision,
+    httpStatus: status,
+    reasonCode: safeTelemetryValue(input.reasonCode),
+    safeMessage: safeGuardrailMessage(reasonCodeToSafeGuardrailMessage(input.reasonCode)),
+    limit: input.policy.limit,
+    remaining,
+    resetAt: new Date(input.resetAtMs).toISOString(),
+    retryAfter: retryAfterSeconds == null ? null : String(retryAfterSeconds),
+    correlationId: input.evaluation.correlationId ?? null,
+    requestId: input.evaluation.requestId ?? null,
+    traceId: input.evaluation.traceId ?? null,
+    createdAt: new Date(input.nowMs).toISOString(),
+  });
+}
+
+export function reasonCodeToSafeGuardrailMessage(reasonCode: string): string {
+  switch (reasonCode) {
+    case "rate-limit-exceeded":
+      return "Rate limit exceeded";
+    case "quota-exceeded":
+      return "Quota exceeded";
+    case "backpressure-applied":
+      return "Service cannot safely accept more work";
+    case "policy-unknown-denied":
+    case "scope-unknown-denied":
+    case "policy-not-enforcing-fail-closed":
+      return "Request blocked by policy";
+    case "idempotency-conflict":
+      return "Idempotency conflict";
+    default:
+      return "Request blocked by guardrail";
+  }
 }

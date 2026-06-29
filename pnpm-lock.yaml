@@ -50,6 +50,8 @@ importers:
 
   adapters/db: {}
 
+  adapters/guardrails: {}
+
   adapters/idp: {}
 
   adapters/mail: {}
