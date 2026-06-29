@@ -176,7 +176,37 @@ Implemented local/dev/test guardrail rows are carried by USF-160. Deferred distr
 | future API/ops surfaces | deferred | `/v1/guardrails/*` posture defined and deferred | operator-only PDP-protected runtime surfaces |
 | React UI/Playwright guardrail behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/API/proof tests | UI/UX assertions remain out of scope |
 
-Domain count: **13 foundation domains, all `partial`** for the full-parity bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full-parity scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine parity choice) and carried into their domain children.
+### Import / Export / Bulk Operations Subdomain Classification
+
+Implemented local/dev/test import/export/bulk rows are carried by USF-162. Production import/export readiness, legal/regulatory/eDiscovery export depth, live external transfer, broad HTTP surfaces, and deep parser/rollback/runtime depth remain deferred in USF-163.
+
+| Item | usf_status | Evidence | Deferred depth |
+| --- | --- | --- | --- |
+| import operations | migrated | `ImportExportPort`, `InMemoryImportExportStore`, `createBulkOperationService`, import quarantine tests, `make bulk-proof` | transactional resumable DB applier |
+| export operations | migrated | high-risk export preview/approval hash tests and classified export evidence | broad exporter/runtime package generation |
+| bulk create/update/delete | partial | operation type/status/classification model and bulk-create guardrail proof | destructive rollback/compensation runtime |
+| audit export | partial | audit-sensitive export/evidence package posture | operator-only audit export HTTP route and package generation |
+| evidence package export | migrated | `EvidencePackageManifest`, manifest/content/source hashes, file IDs, audit IDs, legal hold, retention tests | richer chain-of-custody workflows |
+| file-backed import/export | migrated | file_id endpoints, checksum, scan/quarantine posture, object-key non-leakage tests | DB-backed import/export metadata store |
+| job-backed execution | migrated | tenant-scoped import-export-job with concrete service actor and safe payload refs | resumable transactional job worker depth |
+| validation/dry-run/preview | partial | safe validation errors, deterministic preview hash, mismatched preview denial | full dry-run impact engine and approvals |
+| row/item outcomes | migrated | item outcome hashes and safe errors | large item-outcome storage/pagination |
+| partial success | partial | partial status/count model | threshold automation and compensation |
+| rollback/compensation posture | partial | destructive operation construction requires rollback/compensation/rationale | rollback execution proof |
+| idempotency | migrated | explicit idempotency required; duplicate submission deduped | durable idempotency window persistence |
+| guardrails | migrated | concrete bulk guardrail denial path with safe reason and telemetry/audit | broader per-resource quota rollout |
+| PDP authorization | migrated | bulk/import/export/evidence actions go through PDP; cross-tenant reads are non-enumerating | SoD approval workflows |
+| audit/evidence | migrated | value-free bulk lifecycle audit events and proof | export package audit chain enrichment |
+| observability/security signals | migrated | denial, completion, large-export, validation/quarantine, and package signals | live SIEM/alerting deferred |
+| retention/legal hold/purge | partial | retention and legal hold fields represented and tested | privileged purge workflow |
+| privacy/data minimisation | migrated | safe views, hashes, counts, no raw rows/object keys/secrets | deeper field-level export policy |
+| file format safety | partial | CSV formula injection blocked; unsupported format/oversize/encoding/archive traversal helpers | parser/decompression engine depth |
+| schema versioning/mapping | partial | schema/mapping IDs, versions, hashes represented | schema registry and mapping runtime |
+| API/OpenAPI surfaces | deferred | standard defines safe future route posture | bounded HTTP/OpenAPI implementation |
+| provider/external transfer posture | deferred | provider source/destination types recognized as live-external-deferred | external transfer adapters and secret-ref proof |
+| React UI/Playwright import/export behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/proof tests | UI/UX assertions remain out of scope |
+
+Domain count: **14 foundation domains, all `partial`** for the full-parity bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full-parity scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine parity choice) and carried into their domain children.
 
 ## 4. UI/UX scope (out of foundation scope)
 

@@ -1,0 +1,26 @@
+# Parity Import/Export/Bulk Source-Use Disposition Matrix
+
+This matrix records source-use treatment for the USF-162 import/export/bulk parity slice. Historical React files are lineage and behavioural evidence only. No React runtime/application code was copied, and no USF target path mirrors a React path.
+
+| Target file | Treatment | Source-use basis | Rationale |
+| --- | --- | --- | --- |
+| docs/architecture/import-export-and-bulk-operations-standard.md | source-derived-rewrite | React data portability, data governance, storage, retention, legal hold, and API route lineage plus USF-162 enterprise controls | Defines governed data movement semantics, classifications, file format safety, dry-run/preview, evidence package, idempotency, guardrails, audit, observability, and deferred live/regulatory depth. |
+| docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for import/export/bulk. |
+| packages/core/src/index.ts | source-derived-rewrite | React portable tenant export/import, data governance, row validation, retention, and evidence package behaviour | Adds bulk operation types, classifications, statuses, endpoint refs, format safety, validation errors, item outcomes, evidence package manifests, hashes, idempotency, and audit event taxonomy. |
+| packages/ports/src/index.ts | source-derived-rewrite | React repository/port boundary and bulk import/export behaviour evidence | Adds ImportExportPort so capabilities depend on ports rather than concrete stores. |
+| adapters/bulk/package.json | new-with-rationale | USF adapter workspace pattern | Workspace metadata for the in-memory import/export adapter. |
+| adapters/bulk/src/index.ts | source-derived-rewrite | React resumable import/export store and proof behaviour rewritten for USF | Implements tenant-scoped in-memory operation metadata, idempotency lookup, opaque cursors, and item outcomes without raw rows. |
+| capabilities/bulk/package.json | new-with-rationale | USF capability workspace pattern | Workspace metadata for the bulk capability. |
+| capabilities/bulk/src/index.ts | source-derived-rewrite | React data portability use-case, route authorization, bulk job, and evidence behaviours rewritten for USF | Implements PDP-protected, guardrail-aware, file/job/audit/telemetry-linked bulk service with redacted safe views. |
+| packages/proof/src/import-export-bulk-proof.ts | source-derived-rewrite | React data-portability runtime proof and Postgres portable import applier proof lineage | Hermetic proof for tenant-safe import/export/bulk semantics without production, legal, regulatory, or live-provider readiness claims. |
+| packages/proof/src/index.ts | evidence-only-support | Proof package pattern | Exports the import/export/bulk proof. |
+| tests/capabilities/import-export-bulk.test.ts | source-derived-rewrite | React data-portability, data-governance, storage, retention, and API route tests rewritten as foundation tests | Tests tenant isolation, PDP denial, idempotency, dry-run/preview, validation safety, file quarantine, guardrails, jobs, audit, signals, and evidence package hashes. |
+| tests/packages/proof.test.ts | evidence-only-support | Proof package test pattern | Runs import/export/bulk proof in-process. |
+| tools/validate-parity/validate-bulk.py | source-derived-rewrite | Existing parity validator pattern plus import/export/bulk validator expectations | Static parity validator for import/export/bulk invariants and overclaim prevention. |
+| tools/validate-parity/bulk-planted-defects/*.json | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk import/export/bulk validator rules fire. |
+| docs/architecture/react-parity-scope-classification-matrix.json | evidence-only-support | USF parity matrix | Adds import/export/bulk rows with truthful migrated, partial, deferred, and rewritten-from-UI classifications. |
+| docs/architecture/react-parity-scope-classification-matrix.md | evidence-only-support | Human-readable parity matrix | Adds import/export/bulk classification section. |
+
+## Deferred Source-Use Notes
+
+The React portable encrypted archive implementation and Postgres tenant import applier remain lineage only for this slice. USF implements controlled metadata, safety, and local/dev/test proof now; production archive formats, transactional resumable DB appliers, broad HTTP routes, live external transfers, legal/eDiscovery/regulatory export workflows, and parser/decompression engines require separate authority.

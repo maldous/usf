@@ -1,0 +1,479 @@
+{
+  "mode": "pr",
+  "schemaCount": 24,
+  "findings": []
+}
+{
+  "mode": "all",
+  "schemaCount": 24,
+  "findings": []
+}
+corepack pnpm parity
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+corepack pnpm install --frozen-lockfile
+Scope: all 28 workspace projects
+Already up to date
+Done in 326ms using pnpm v11.9.0
+corepack pnpm verify
+Checking formatting...
+All matched files use Prettier code style!
+
+ RUN  v4.1.9 /home/user/src/usf
+
+
+ Test Files  30 passed (30)
+      Tests  197 passed (197)
+   Start at  12:38:13
+   Duration  2.51s (transform 4.26s, setup 0ms, import 6.44s, tests 8.18s, environment 3ms)
+
+{"status":"pass","check":"openapi-contract"}
+{"status":"pass","check":"generated-db-types-and-migration-manifest"}
+USF V2 dev-smoke passed
+API: http://127.0.0.1:3961
+Health: http://127.0.0.1:3961/healthz
+OpenAPI: http://127.0.0.1:3961/openapi.json
+Provider mode: dev in-memory
+Tenant accepted: 200
+Tenant mismatch: 400
+Audit events captured: 1
+{
+  "status": "pass",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveExternalProviderClaim": false,
+  "productionLiveClaim": false
+}
+{
+  "status": "pass",
+  "proof": "config-secrets",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveSecretManagerClaim": false,
+  "liveExternalProviderClaim": false,
+  "productionLiveClaim": false,
+  "registrySize": 9,
+  "checks": 13,
+  "checkLabels": [
+    "required config with no value in any permitted layer fails closed",
+    "invalid config value fails closed (type validation)",
+    "a tenant layer cannot weaken a security-control config (override policy)",
+    "config precedence is deterministic (higher-trust layer wins)",
+    "unknown config key fails closed",
+    "config output is redacted (secret-shaped value + secret-ref key); refs are opaque pointers",
+    "secret resolves to an authorised internal caller; value never enters audit evidence",
+    "secret-shaped invalid value is rejected without echoing it in the error",
+    "secrets are tenant-isolated (tenant B cannot resolve tenant A's secret)",
+    "feature flags evaluate deterministically with a safe default for unknown/missing",
+    "revoked/expired/unknown secret state fails closed",
+    "secret resolution is PDP-protected (tenant-member denied, recorded)",
+    "provider credentials are secret references; redaction backstop masks secret-like keys"
+  ]
+}
+{
+  "status": "pass",
+  "proof": "auth-identity-keycloak-broker",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveExternalProviderClaim": false,
+  "liveKeycloakClaim": false,
+  "brokeredUpstreamAcceptedDirectly": false,
+  "productionLiveClaim": false,
+  "keycloakSoleIssuer": true,
+  "checks": 28,
+  "checkLabels": [
+    "valid Keycloak-issued token accepted; stable subject+realm+assurance+opaque provenance",
+    "non-Keycloak issuer: denied (issuer-not-keycloak)",
+    "brokered-upstream issuer presented directly: denied (brokered-upstream-issuer-presented-directly)",
+    "audience mismatch: denied (audience-mismatch)",
+    "invalid signature: denied (invalid-signature)",
+    "expired token: denied (expired)",
+    "not-before in future: denied (not-yet-valid)",
+    "issued in the future: denied (issued-in-future)",
+    "alg none: denied (unsupported-algorithm)",
+    "alg HS256 (symmetric): denied (unsupported-algorithm)",
+    "unknown signing key (kid): denied (unknown-key)",
+    "malformed token: denied (malformed-token)",
+    "same subject in a different Keycloak realm maps to a different external subject",
+    "valid token -> stable actor (actor-alice) + active session created",
+    "duplicate email across two Keycloak subjects does NOT merge actors",
+    "email change is an attribute update, not a new actor (same realm+subject -> same actor)",
+    "disabled identity fails closed (identity-disabled)",
+    "unknown brokered identity fails closed (no silent JIT actor creation)",
+    "fresh session validates active",
+    "absolute session expiry fails closed",
+    "idle session expiry fails closed",
+    "revoked session fails closed (audited)",
+    "logout invalidates the session (audited)",
+    "actor with active membership selects its tenant (PDP permit)",
+    "tenant without active membership is denied — Keycloak claim/role/group/broker alias alone does NOT authorize",
+    "denied tenant selection leaks no tenant context",
+    "cross-tenant SSO: an actor with two active memberships selects either tenant (explicit memberships only)",
+    "auth events recorded value-free (22 events, no token/cookie/secret)"
+  ]
+}
+{
+  "status": "pass",
+  "proof": "jobs-workflows",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveExternalProviderClaim": false,
+  "liveTemporalClaim": false,
+  "liveWindmillClaim": false,
+  "liveQueueClaim": false,
+  "productionLiveClaim": false,
+  "checks": 21,
+  "checkLabels": [
+    "classified job created by an authorized actor (PDP permit)",
+    "job.create without PDP permission is denied (audited job.denied)",
+    "system job runs under a concrete service actor (not a global bypass)",
+    "idempotency suppresses a duplicate job submission (same key -> same job)",
+    "retry is bounded (maxRetries=2) then dead-letters with evidence",
+    "failure message redacts secret-looking values (dsn, secret)",
+    "provider credentials are redacted in job payloads (secret_ref only; no raw secret)",
+    "tenant A cannot cancel a tenant B job (PDP tenant-boundary)",
+    "job read/list are PDP-gated and tenant-scoped (cross-tenant read denied)",
+    "cross-tenant orchestration is tenant-by-tenant (service actor needs a membership per tenant)",
+    "a cancelled job is never claimed or run",
+    "an expired job is never claimed or run",
+    "lease is exclusive while held and safely re-acquired after expiry",
+    "schedule fires deterministically once per window (double tick deduped)",
+    "unknown/non-UTC schedule policy fails closed",
+    "a successful job completes (job.completed)",
+    "approval requester cannot self-approve (separation of duties)",
+    "a separate authorized approver can approve (audited)",
+    "workflow is tenant-bound (cross-tenant access denied)",
+    "job/workflow lifecycle audited (39 events across 13 types)",
+    "audit evidence is value-free (no secret/payload/credential leakage)"
+  ]
+}
+{
+  "status": "pass",
+  "proof": "notifications-messaging",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "checks": [
+    "provider config uses a SecretReference and in-memory provider mode",
+    "typed approved template records version and hash",
+    "classified tenant-scoped notification intent created",
+    "notification.send without PDP permission denied",
+    "missing template variable fails closed",
+    "delivery job idempotency suppresses duplicate submission",
+    "delivery evidence is value-free and sent status is audited",
+    "marketing notification requires consent where represented",
+    "suppressed recipient blocks non-mandatory notification",
+    "bounded retry ends in dead-letter evidence with redacted failure",
+    "tenant A cannot read tenant B notification",
+    "notification lifecycle audit is value-free",
+    "live external provider mode is explicitly deferred"
+  ],
+  "notificationClassifications": [
+    "security",
+    "authentication",
+    "authorization",
+    "transactional",
+    "workflow",
+    "operational",
+    "system",
+    "file",
+    "identity",
+    "configuration",
+    "audit",
+    "maintenance",
+    "marketing",
+    "bulk",
+    "test"
+  ],
+  "channels": [
+    "email",
+    "sms",
+    "push",
+    "in-app",
+    "webhook",
+    "provider-internal",
+    "test"
+  ],
+  "providerModes": [
+    "in-memory",
+    "local-test",
+    "mock",
+    "live-external-deferred"
+  ],
+  "liveExternalProviderClaim": false,
+  "liveEmailProviderClaim": false,
+  "liveSmsProviderClaim": false,
+  "livePushProviderClaim": false,
+  "liveSmtpClaim": false,
+  "productionLiveClaim": false,
+  "deliverabilityCertificationClaim": false,
+  "iso27001CertificationClaim": false
+}
+{
+  "status": "pass",
+  "proof": "api-contracts",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "publicApiReadinessClaim": false,
+  "externalSdkReadinessClaim": false,
+  "productionLiveClaim": false,
+  "routeCount": 32,
+  "operationCount": 32,
+  "checks": [
+    "OpenAPI validates, operation IDs are unique, and examples are synthetic/safe",
+    "all route contracts map to implemented Fastify routes and capabilities",
+    "missing tenant context denied with safe error envelope",
+    "protected route without permission denied by PDP",
+    "tenant mismatch denied without cross-tenant enumeration",
+    "side-effecting route idempotency works and conflicts deterministically",
+    "pagination cursor is opaque enough for tenant-safe local proof",
+    "notifications API uses safe views and idempotent delivery job enqueue"
+  ]
+}
+{
+  "status": "pass",
+  "proof": "provider-adapters-modes",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveProviderReadinessClaim": false,
+  "liveExternalProviderReadinessClaim": false,
+  "productionLiveClaim": false,
+  "supplierApprovalClaim": false,
+  "iso27001CertificationClaim": false,
+  "socCertificationClaim": false,
+  "providerCount": 24,
+  "categoryCount": 15,
+  "modes": [
+    "in-memory",
+    "local-test",
+    "mock",
+    "composed-test",
+    "live-external-deferred",
+    "live-external-authorised",
+    "disabled",
+    "unavailable"
+  ],
+  "checks": [
+    "provider registry validates explicit category, mode, owner, config, and SecretReference posture",
+    "all required provider categories are represented truthfully",
+    "provider mode hard boundary covers local/test/deferred/disabled/unavailable without live-authorised entries",
+    "provider status safe view redacts credentials, endpoints, raw failures, and stack traces",
+    "disabled, unavailable, and live-external-deferred providers fail closed for use",
+    "unknown provider modes and unauthorised live providers fail validation",
+    "provider audit event is value-free and redacted",
+    "capabilities, core, ports, and API routes do not import unauthorised provider SDKs"
+  ]
+}
+{
+  "status": "pass",
+  "proof": "observability-telemetry",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveMonitoringReadinessClaim": false,
+  "liveMetricsBackendClaim": false,
+  "liveLogBackendClaim": false,
+  "liveTracingBackendClaim": false,
+  "liveAlertingClaim": false,
+  "siemReadinessClaim": false,
+  "socReadinessClaim": false,
+  "iso27001CertificationClaim": false,
+  "productionLiveClaim": false,
+  "signalCount": 11,
+  "checks": [
+    "metric labels are allow-listed",
+    "high-cardinality labels are rejected",
+    "secret-looking metric labels are rejected",
+    "spans and structured logs are redacted before persistence",
+    "tenant telemetry queries are isolated",
+    "context propagation fields are present",
+    "health readiness and liveness are distinct",
+    "deferred and disabled provider modes do not imply live readiness",
+    "security signal is emitted for denied authorization posture",
+    "no live monitoring SIEM alerting or production readiness claim is made"
+  ]
+}
+{
+  "status": "pass",
+  "proof": "rate-limits-abuse-controls",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "enforcementPosture": "single-node-in-memory-local-dev-test",
+  "liveWafReadinessClaim": false,
+  "liveEdgeReadinessClaim": false,
+  "liveGatewayReadinessClaim": false,
+  "liveAbuseProviderReadinessClaim": false,
+  "socReadinessClaim": false,
+  "iso27001CertificationClaim": false,
+  "productionLiveClaim": false,
+  "policyCount": 3,
+  "signalCount": 1,
+  "checks": [
+    "rate limit allows within window and denies over limit",
+    "retry-after is calculated only for safe retryable denials",
+    "unknown policy and unknown scope fail closed",
+    "secret-looking policy config is rejected",
+    "tenant quotas are isolated and non-enumerating",
+    "idempotent replay does not double-count usage",
+    "provider backpressure is represented without live enforcement claims",
+    "guardrail telemetry is tenant-safe",
+    "guardrail audit evidence is value-free and redacted",
+    "in-memory enforcement does not claim distributed or production readiness"
+  ]
+}
+{
+  "status": "pass",
+  "proof": "import-export-bulk",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "bulkProcessingPosture": "local-dev-test-in-memory",
+  "productionImportExportReadinessClaim": false,
+  "regulatoryExportReadinessClaim": false,
+  "legalExportReadinessClaim": false,
+  "eDiscoveryReadinessClaim": false,
+  "liveExternalProviderReadinessClaim": false,
+  "productionLiveClaim": false,
+  "operationCount": 3,
+  "jobCount": 1,
+  "auditEventCount": 7,
+  "signalCount": 6,
+  "checks": [
+    "tenant-scoped import/export metadata is isolated",
+    "PDP-gated create/read/start paths are enforced",
+    "explicit idempotency suppresses duplicate side effects",
+    "file-backed import uses file_id and clean scan posture",
+    "CSV formula injection is blocked",
+    "deterministic preview hash is recorded",
+    "job-backed execution uses a concrete service actor",
+    "guardrail denial is safe and value-free",
+    "evidence package manifest/content hashes and audit linkage are represented",
+    "audit and observability outputs are tenant-safe and redacted"
+  ]
+}
+{
+  "mode": "all",
+  "schemaCount": 24,
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}

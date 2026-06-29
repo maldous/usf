@@ -4,6 +4,7 @@ import {
   runBootstrapProof,
   runDevSmoke,
   runJobsWorkflowsProof,
+  runImportExportBulkProof,
   runObservabilityTelemetryProof,
   runProviderAdaptersProof,
   runRateLimitsAbuseControlsProof,
@@ -107,6 +108,22 @@ describe("rate-limits/abuse-controls proof", () => {
       liveEdgeReadinessClaim: false,
       liveGatewayReadinessClaim: false,
       liveAbuseProviderReadinessClaim: false,
+      productionLiveClaim: false,
+    });
+  });
+});
+
+describe("import/export/bulk proof", () => {
+  it("proves tenant-safe governed data movement without production or regulatory export claims", async () => {
+    await expect(runImportExportBulkProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      bulkProcessingPosture: "local-dev-test-in-memory",
+      productionImportExportReadinessClaim: false,
+      regulatoryExportReadinessClaim: false,
+      legalExportReadinessClaim: false,
+      eDiscoveryReadinessClaim: false,
+      liveExternalProviderReadinessClaim: false,
       productionLiveClaim: false,
     });
   });

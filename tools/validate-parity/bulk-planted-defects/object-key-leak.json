@@ -1,0 +1,11 @@
+{
+  "id": "bulk-object-key-leak",
+  "expectedRuleId": "USF-BULK-007",
+  "edits": [
+    {
+      "target": "packages/proof/src/import-export-bulk-proof.ts",
+      "old": "checks: Object.freeze([",
+      "new": "leakMarker: \"object_key\",\\n    checks: Object.freeze(["
+    }
+  ]
+}
