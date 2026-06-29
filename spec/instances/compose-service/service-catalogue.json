@@ -62,6 +62,17 @@
     "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
     "compose.yaml"
   ],
+  "approvedLocalSecretPlaceholders": [
+    "admin_password",
+    "dev-root-token",
+    "foundation_app_password",
+    "keycloak_password",
+    "minio_password",
+    "postgres://windmill:windmill_password@windmill-postgres:5432/windmill",
+    "sonar_password",
+    "temporal_password",
+    "windmill_password"
+  ],
   "services": [
     {
       "serviceId": "postgres",
@@ -10176,8 +10187,23 @@
   "generatedComposeTargets": [
     {
       "environmentScope": "dev",
+      "path": "compose.yaml",
+      "purpose": "Generated default Compose target for dev-compatible local bootstrap."
+    },
+    {
+      "environmentScope": "dev",
+      "path": "compose/compose.yaml",
+      "purpose": "Generated default Compose target copy under the grouped Compose directory."
+    },
+    {
+      "environmentScope": "dev",
       "path": "compose.dev.generated.yaml",
       "purpose": "Generated Compose target for dev."
+    },
+    {
+      "environmentScope": "dev",
+      "path": "compose/compose.dev.generated.yaml",
+      "purpose": "Generated Compose target copy for dev under the grouped Compose directory."
     },
     {
       "environmentScope": "test",
@@ -10185,14 +10211,29 @@
       "purpose": "Generated Compose target for test."
     },
     {
+      "environmentScope": "test",
+      "path": "compose/compose.test.generated.yaml",
+      "purpose": "Generated Compose target copy for test under the grouped Compose directory."
+    },
+    {
       "environmentScope": "staging",
       "path": "compose.staging.generated.yaml",
       "purpose": "Generated Compose target for staging."
     },
     {
+      "environmentScope": "staging",
+      "path": "compose/compose.staging.generated.yaml",
+      "purpose": "Generated Compose target copy for staging under the grouped Compose directory."
+    },
+    {
       "environmentScope": "production",
       "path": "compose.production.generated.yaml",
       "purpose": "Generated Compose target for production."
+    },
+    {
+      "environmentScope": "production",
+      "path": "compose/compose.production.generated.yaml",
+      "purpose": "Generated Compose target copy for production under the grouped Compose directory."
     }
   ]
 }

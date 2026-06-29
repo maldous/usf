@@ -170,7 +170,7 @@ POST_START_ALLOWED_ROOTS = {
     "tests",
 }
 
-START_RECORD_DIR = ".codex/runs"
+START_RECORD_DIRS = [".codex/runs", "docs/architecture"]
 START_RECORD_NAME = "bootstrap-start.json"
 
 REQUIRED_TOOLCHAIN_GOVERNANCE_MARKERS = [
@@ -239,17 +239,18 @@ def repo_paths():
 
 def bootstrap_start_records():
     records = []
-    if not os.path.isdir(START_RECORD_DIR):
-        return records
-    for base, dirs, files in os.walk(START_RECORD_DIR):
-        dirs[:] = [d for d in dirs if d != "__pycache__"]
-        if START_RECORD_NAME not in files:
+    for start_record_dir in START_RECORD_DIRS:
+        if not os.path.isdir(start_record_dir):
             continue
-        path = os.path.join(base, START_RECORD_NAME).replace("\\", "/").removeprefix("./")
-        try:
-            records.append({"path": path, "record": read_json(path)})
-        except Exception as exc:
-            records.append({"path": path, "error": str(exc)})
+        for base, dirs, files in os.walk(start_record_dir):
+            dirs[:] = [d for d in dirs if d != "__pycache__"]
+            if START_RECORD_NAME not in files:
+                continue
+            path = os.path.join(base, START_RECORD_NAME).replace("\\", "/").removeprefix("./")
+            try:
+                records.append({"path": path, "record": read_json(path)})
+            except Exception as exc:
+                records.append({"path": path, "error": str(exc)})
     return records
 
 

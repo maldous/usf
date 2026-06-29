@@ -216,11 +216,27 @@ def validate_port_policy(catalogue: dict[str, Any], findings: list[dict[str, str
 
 
 SECRET_NAME = re.compile(r"(^|_)(PASSWORD|TOKEN|SECRET|PWD)($|_)", re.I)
-SECRET_VALUE = re.compile(r"(_password|dev-root-token|secret-value|password@|://[^:@/]+:[^@/]+@)", re.I)
-LOCAL_SECRET_PLACEHOLDER = re.compile(r"(_password|dev-root-token|password@|:windmill_password@|:sonar_password@)", re.I)
+CREDENTIAL_URL_VALUE = re.compile(r"://[^:@/]+:[^@/]+@", re.I)
+SHORT_PORT_SYNTAX = re.compile(
+    r"""(?mx)
+    ^\s*-\s*
+    (?P<quote>["'])?
+    (?:
+        \d{1,5}:\d{1,5}
+        |
+        (?:\d{1,3}\.){3}\d{1,3}:\d{1,5}:\d{1,5}
+        |
+        \[[0-9A-Fa-f:]+\]:\d{1,5}:\d{1,5}
+    )
+    (?:/(?:tcp|udp))?
+    (?P=quote)?
+    \s*$
+    """
+)
 
 
 def validate_secret_placeholders(catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
+    approved_placeholders = set(catalogue.get("approvedLocalSecretPlaceholders", []))
     for service in catalogue["services"]:
         compose = service.get("composeService")
         if not compose:
@@ -228,8 +244,8 @@ def validate_secret_placeholders(catalogue: dict[str, Any], findings: list[dict[
         for entry in compose["environment"]:
             name = entry["name"]
             value = entry["value"]
-            if SECRET_NAME.search(name) or SECRET_VALUE.search(value):
-                if not LOCAL_SECRET_PLACEHOLDER.search(value):
+            if SECRET_NAME.search(name) or CREDENTIAL_URL_VALUE.search(value):
+                if value not in approved_placeholders:
                     add(findings, "USF-COMPOSE-028", f"{service['serviceId']}:{name}", "secret-like value is not an approved local bootstrap placeholder")
 
 
@@ -383,7 +399,7 @@ def validate_generated(
         if actual != expected:
             add(findings, "USF-COMPOSE-014", str(path.relative_to(ROOT)))
         if actual is not None and target_name in {"dev", "test", "staging"}:
-            if re.search(r"(?m)^\s+-\s+[\"']?\d+(?::\d+)+", actual):
+            if SHORT_PORT_SYNTAX.search(actual):
                 add(findings, "USF-COMPOSE-026", str(path.relative_to(ROOT)))
             actual_names = _compose_service_names_from_text(actual)
             authorised = catalogue_service_names(catalogue, target_name)
@@ -393,6 +409,15 @@ def validate_generated(
                 if service_name in actual_names:
                     for dependency in sorted(dependencies - actual_names):
                         add(findings, "USF-COMPOSE-029", f"{target_name}:{service_name}->{dependency}")
+        if actual_overrides and target_name in actual_overrides:
+            continue
+        for additional_path in generate_compose.ADDITIONAL_TARGETS.get(target_name, []):
+            additional_actual = additional_path.read_text(encoding="utf-8") if additional_path.exists() else None
+            if additional_actual != expected:
+                add(findings, "USF-COMPOSE-014", str(additional_path.relative_to(ROOT)))
+            if additional_actual is not None and target_name in {"dev", "test", "staging"}:
+                if SHORT_PORT_SYNTAX.search(additional_actual):
+                    add(findings, "USF-COMPOSE-026", str(additional_path.relative_to(ROOT)))
 
 
 def apply_patch_defect(catalogue: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:

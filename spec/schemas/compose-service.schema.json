@@ -18,6 +18,7 @@
     "environmentDefinitions",
     "reactComposeServiceCount",
     "sourceRefs",
+    "approvedLocalSecretPlaceholders",
     "services",
     "generatedComposeTargets"
   ],
@@ -1178,6 +1179,9 @@
       "minimum": 1
     },
     "sourceRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "approvedLocalSecretPlaceholders": {
       "$ref": "#/$defs/stringList"
     },
     "services": {

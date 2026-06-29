@@ -74,6 +74,20 @@ The default USF generated Compose strategy is not-concurrent:
 Validators MUST reject duplicate fixed ports across environments if a port claims
 concurrent safety without an offset or dynamic allocation policy.
 
+Semantic duplicate and profile-combination validation is mandatory and host-state
+independent. Runtime host-port availability checks are a local preflight, not part
+of ordinary semantic validation:
+
+- `compose:validate` validates catalogue and generated-file policy only;
+- `compose:ports:dev` runs before the default dev smoke command because that path
+  is about to start local Compose;
+- `compose:ports:test`, `compose:ports:staging`, and `compose:ports:profiles`
+  remain explicit preflight targets unless those environments or profiles are
+  actually about to be started.
+
+This avoids failing general verification because an optional profile port, or a
+port for an environment not being started, is occupied on a developer host.
+
 ## Production Exposure
 
 Production generated Compose is a policy and requirements representation. It MUST
@@ -88,9 +102,14 @@ requirements MUST record exposure boundaries rather than silently omitting ports
 ## Secret Handling
 
 Generated local Compose MAY contain explicit local-only bootstrap placeholders when
-the validator recognises them as placeholders and no production readiness is
-claimed. These placeholders are not secret authority and MUST NOT be copied into
-evidence logs as live secrets.
+the Compose service catalogue lists the exact value in its finite
+`approvedLocalSecretPlaceholders` set and no production readiness is claimed.
+Substring matches are not accepted. Values such as `prod_password`,
+`real_password`, credential-bearing DSNs not in the finite set, or arbitrary token
+strings fail validation.
+
+These placeholders are not secret authority and MUST NOT be copied into evidence
+logs as live secrets.
 
 Production, evidence, generated reports, and production requirement records MUST
 NOT contain raw secret values outside an explicitly allowed placeholder mechanism.
