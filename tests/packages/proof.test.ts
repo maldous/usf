@@ -4,6 +4,7 @@ import {
   runBootstrapProof,
   runDevSmoke,
   runJobsWorkflowsProof,
+  runObservabilityTelemetryProof,
   runProviderAdaptersProof,
 } from "@foundation/proof";
 import { describe, expect, it } from "vitest";
@@ -75,6 +76,22 @@ describe("provider adapters/modes proof", () => {
       liveExternalProviderReadinessClaim: false,
       productionLiveClaim: false,
       supplierApprovalClaim: false,
+    });
+  });
+});
+
+describe("observability/telemetry proof", () => {
+  it("proves redacted tenant-safe telemetry without live monitoring claims", async () => {
+    await expect(runObservabilityTelemetryProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      liveMonitoringReadinessClaim: false,
+      liveMetricsBackendClaim: false,
+      liveLogBackendClaim: false,
+      liveTracingBackendClaim: false,
+      liveAlertingClaim: false,
+      siemReadinessClaim: false,
+      productionLiveClaim: false,
     });
   });
 });

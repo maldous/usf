@@ -224,6 +224,77 @@ export const ProviderDetailResponseSchema = Type.Object({
   provider: ProviderRegistryStatusViewSchema,
 });
 
+export const ObservabilityCollectorStatusViewSchema = Type.Object({
+  providerId: Type.Literal("observability-captured-local"),
+  providerMode: Type.Union([Type.Literal("in-memory"), Type.Literal("local-test")]),
+  environmentScope: Type.Literal("local-dev"),
+  healthStatus: Type.String({ minLength: 1 }),
+  readinessStatus: Type.String({ minLength: 1 }),
+  livenessStatus: Type.String({ minLength: 1 }),
+  signalCount: Type.Number({ minimum: 0 }),
+  boundedStorageLimit: Type.Number({ minimum: 1 }),
+  exportEnabled: Type.Literal(false),
+  liveMonitoringReadinessClaim: Type.Literal(false),
+  liveMetricsBackendClaim: Type.Literal(false),
+  liveLogBackendClaim: Type.Literal(false),
+  liveTracingBackendClaim: Type.Literal(false),
+  liveAlertingClaim: Type.Literal(false),
+  siemReadinessClaim: Type.Literal(false),
+  safeFailureMessage: NullableString,
+});
+
+export const ObservabilitySignalViewSchema = Type.Object({
+  signalId: Type.String({ minLength: 1 }),
+  signalName: Type.String({ minLength: 1 }),
+  signalCategory: Type.String({ minLength: 1 }),
+  signalClassification: Type.String({ minLength: 1 }),
+  severity: Type.String({ minLength: 1 }),
+  tenantId: Type.String({ minLength: 1 }),
+  actorId: NullableString,
+  serviceActorId: NullableString,
+  routeId: NullableString,
+  operationId: NullableString,
+  capability: NullableString,
+  providerId: NullableString,
+  jobId: NullableString,
+  workflowId: NullableString,
+  notificationId: NullableString,
+  fileId: NullableString,
+  auditEventId: NullableString,
+  correlationId: Type.String({ minLength: 1 }),
+  causationId: NullableString,
+  requestId: Type.String({ minLength: 1 }),
+  traceId: Type.String({ minLength: 1 }),
+  spanId: NullableString,
+  parentSpanId: NullableString,
+  environmentScope: Type.String({ minLength: 1 }),
+  providerMode: Type.String({ minLength: 1 }),
+  dataClassification: Type.String({ minLength: 1 }),
+  tenantScope: Type.String({ minLength: 1 }),
+  actorScope: Type.String({ minLength: 1 }),
+  providerScope: Type.String({ minLength: 1 }),
+  redactionPolicy: Type.String({ minLength: 1 }),
+  cardinalityPolicy: Type.String({ minLength: 1 }),
+  retentionPolicy: Type.String({ minLength: 1 }),
+  accessPolicy: Type.String({ minLength: 1 }),
+  createdAt: Type.String({ minLength: 1 }),
+});
+
+export const ObservabilityReadinessResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  status: Type.String({ minLength: 1 }),
+  collector: ObservabilityCollectorStatusViewSchema,
+  providerMode: Type.String({ minLength: 1 }),
+  liveMonitoringReadinessClaim: Type.Literal(false),
+  productionReadinessClaim: Type.Literal(false),
+});
+
+export const ObservabilitySignalsResponseSchema = Type.Object({
+  tenantId: Type.String({ minLength: 1 }),
+  signals: Type.Array(ObservabilitySignalViewSchema),
+  nextCursor: NullableString,
+});
+
 // Files/storage surfaces (parity-files-storage, USF-146). Tenant-scoped, PDP-protected,
 // RLS-backed (DB substrate), redacted least-disclosure, non-enumerating. The view
 // carries NO object key, bucket, provider ref, original filename, or credentials.

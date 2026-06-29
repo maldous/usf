@@ -1,0 +1,11 @@
+{
+  "id": "observability.missing-deferred-blocker",
+  "expectedRuleId": "USF-OBSERVABILITY-008",
+  "edits": [
+    {
+      "target": "matrix",
+      "old": "observability.alerting-incident-dashboard-live-depth",
+      "new": "observability.alerting-incident-dashboard-live-depth-defect"
+    }
+  ]
+}

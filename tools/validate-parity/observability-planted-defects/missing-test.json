@@ -1,0 +1,11 @@
+{
+  "id": "observability.missing-test",
+  "expectedRuleId": "USF-OBSERVABILITY-005",
+  "edits": [
+    {
+      "target": "tests/capabilities/observability-telemetry.test.ts",
+      "old": "tenant A cannot query tenant B telemetry",
+      "new": "tenant telemetry defect"
+    }
+  ]
+}

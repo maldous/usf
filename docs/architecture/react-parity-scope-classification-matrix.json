@@ -1975,27 +1975,251 @@
       "evidence": "Deferred depth is explicitly tracked in USF-157. The current slice makes no live provider, production, supplier approval, DR, gateway-live, SOC, ISO, or regulatory certification claim.",
       "retry_condition": "USF-157 receives an authorised implementation directive and proves the deferred live/risk/resilience controls without overclaiming."
     },
-    {
-      "react_item_id": "observability",
-      "category": "observability",
-      "react_paths": [
-        "packages/observability"
-      ],
-      "behaviour_summary": "OTEL traces, Prometheus metrics, Loki logs, Tempo, Grafana, Sentry, alerting/incidents, request instrumentation.",
-      "usf_status": "partial",
-      "usf_paths": [
-        "adapters/obs"
-      ],
-      "usf_tests": [],
-      "usf_proofs": [],
-      "semantic_authority": "known",
-      "source_use_disposition": "replace",
-      "blocker": "USF-133",
-      "blocking_foundation_readiness": true,
-      "domain_authorised": false,
-      "evidence": "spec/instances/semantic-contract/metrics-and-traces.json; minimal at bootstrap.",
-      "retry_condition": "Per-domain implementation directive authorises parity-observability; instrumentation + signals migrated with USF tests."
-    },
+  {
+    "react_item_id": "observability",
+    "category": "observability",
+    "react_paths": [
+      "docs/adr/0020-define-observability-diagnostics-and-runtime-introspection-primitives.md",
+      "docs/adr/0062-observability-alerting-and-incident-architecture.md",
+      "docs/evidence/observability",
+      "apps/platform-api/src/usecases/observability.ts",
+      "apps/platform-api/src/usecases/tenant-observability.ts",
+      "apps/platform-api/src/usecases/logs.ts",
+      "apps/platform-api/src/adapters/in-memory-observability-repository.ts",
+      "apps/platform-api/tests/unit/observability.test.ts",
+      "apps/platform-api/scripts/observability-signals-runtime-proof.ts",
+      "e2e/discovery/browser-bff-trace.spec.ts"
+    ],
+    "behaviour_summary": "Controlled local/dev/test observability and telemetry surface: metrics, traces/spans, structured logs, operational/security signals, health/readiness/liveness, correlation propagation, redaction, tenant-safe operational insight, provider-mode posture, and future ops/API readiness.",
+    "usf_status": "partial",
+    "usf_paths": [
+      "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+      "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+      "packages/core/src/index.ts",
+      "packages/ports/src/index.ts",
+      "adapters/obs/src/index.ts",
+      "capabilities/tenant/src/authorization-policy.ts",
+      "apps/api/src/server.ts",
+      "packages/contracts/src/index.ts",
+      "packages/contracts/src/api-surface.ts",
+      "packages/openapi/src/index.ts",
+      "packages/openapi/openapi.json",
+      "packages/proof/src/observability-telemetry-proof.ts",
+      "tools/validate-parity/validate-observability.py"
+    ],
+    "usf_tests": [
+      "tests/capabilities/observability-telemetry.test.ts",
+      "tests/apps/api-contracts.test.ts",
+      "tests/packages/proof.test.ts"
+    ],
+    "usf_proofs": [
+      "make observability-proof",
+      "make parity (validate-observability USF-OBSERVABILITY-* with planted defects)"
+    ],
+    "semantic_authority": "known",
+    "source_use_disposition": "replace",
+    "linear_issue": "USF-158",
+    "blocker": "USF-159",
+    "blocking_foundation_readiness": true,
+    "domain_authorised": true,
+    "evidence": "USF-158 implements the local/dev/test observability telemetry slice: controlled signal model, bounded in-memory collector, safe metric label validation, span/log/event redaction, context propagation through the tenant-context API path, PDP-protected redacted observability routes, value-free audit of observability access, make observability-proof, and validate-observability. No live monitoring, SIEM, alerting, SOC, ISO, dashboard, incident-response, or production readiness claim is made.",
+    "retry_condition": "USF-159 completes deferred live observability backend, export, alerting, dashboard, incident, retention, SLI/SLO, and cross-tenant aggregate depth under explicit authority."
+  },
+  {
+    "react_item_id": "observability.metrics-cardinality",
+    "category": "observability",
+    "react_paths": [
+      "apps/platform-api/src/adapters/prometheus-metrics.ts",
+      "apps/platform-api/tests/unit/prometheus-metrics.test.ts",
+      "apps/platform-api/scripts/prometheus-metrics-runtime-proof.ts",
+      "docs/evidence/observability/alloy-label-policy-and-test-ingestion.md"
+    ],
+    "behaviour_summary": "Metrics use stable names, explicit types and units, allow-listed labels, tenant-safe label posture, and high-cardinality/sensitive-value rejection.",
+    "usf_status": "migrated",
+    "usf_paths": [
+      "packages/core/src/index.ts",
+      "adapters/obs/src/index.ts",
+      "tests/capabilities/observability-telemetry.test.ts",
+      "packages/proof/src/observability-telemetry-proof.ts"
+    ],
+    "usf_tests": [
+      "tests/capabilities/observability-telemetry.test.ts"
+    ],
+    "usf_proofs": [
+      "make observability-proof"
+    ],
+    "semantic_authority": "known",
+    "source_use_disposition": "replace",
+    "linear_issue": "USF-158",
+    "blocker": "USF-158",
+    "blocking_foundation_readiness": false,
+    "domain_authorised": true,
+    "evidence": "METRIC_TYPES, OBSERVABILITY_ALLOWED_LABELS, validateMetricLabels, collector metric capture, tests, and proof enforce allow-listed labels and reject high-cardinality or secret-looking metric labels.",
+    "retry_condition": "No retry needed for local/dev/test metric label governance."
+  },
+  {
+    "react_item_id": "observability.traces-logs-redaction",
+    "category": "observability",
+    "react_paths": [
+      "docs/adr/0020-define-observability-diagnostics-and-runtime-introspection-primitives.md",
+      "apps/platform-api/src/usecases/logs.ts",
+      "apps/platform-api/tests/unit/logs-usecase.test.ts",
+      "apps/platform-api/scripts/observability-metrics-traces-closure-runtime-proof.ts"
+    ],
+    "behaviour_summary": "Traces/spans and structured logs carry safe context and message templates while blocking secrets, tokens, object keys, raw recipient addresses, raw provider responses, and stack traces.",
+    "usf_status": "migrated",
+    "usf_paths": [
+      "packages/core/src/index.ts",
+      "adapters/obs/src/index.ts",
+      "tests/capabilities/observability-telemetry.test.ts",
+      "packages/proof/src/observability-telemetry-proof.ts"
+    ],
+    "usf_tests": [
+      "tests/capabilities/observability-telemetry.test.ts"
+    ],
+    "usf_proofs": [
+      "make observability-proof"
+    ],
+    "semantic_authority": "known",
+    "source_use_disposition": "replace",
+    "linear_issue": "USF-158",
+    "blocker": "USF-158",
+    "blocking_foundation_readiness": false,
+    "domain_authorised": true,
+    "evidence": "Telemetry spans and structured logs are redacted before persistence; tests and proof scan for token, cookie, credential, object-key, recipient-address, provider-response, and stack-trace leaks.",
+    "retry_condition": "No retry needed for local/dev/test trace/log redaction proof."
+  },
+  {
+    "react_item_id": "observability.context-tenant-isolation",
+    "category": "observability",
+    "react_paths": [
+      "e2e/discovery/browser-bff-trace.spec.ts",
+      "tools/e2e/correlation-headers.test.mjs",
+      "docs/evidence/observability/tenant-observability-readiness.md"
+    ],
+    "behaviour_summary": "Request, correlation, trace, tenant, actor, route, operation, job, provider, notification, file, and audit context propagates without creating authorization or leaking tenant data.",
+    "usf_status": "migrated",
+    "usf_paths": [
+      "apps/api/src/server.ts",
+      "adapters/obs/src/index.ts",
+      "tests/apps/api-contracts.test.ts",
+      "tests/capabilities/observability-telemetry.test.ts"
+    ],
+    "usf_tests": [
+      "tests/apps/api-contracts.test.ts",
+      "tests/capabilities/observability-telemetry.test.ts"
+    ],
+    "usf_proofs": [
+      "make observability-proof"
+    ],
+    "semantic_authority": "known",
+    "source_use_disposition": "replace",
+    "linear_issue": "USF-158",
+    "blocker": "USF-158",
+    "blocking_foundation_readiness": false,
+    "domain_authorised": true,
+    "evidence": "Tenant-context API emits safe metric/span signals with propagated request/correlation/trace IDs; tenant telemetry queries are tenant-scoped; tenant mismatch emits safe security signal where represented.",
+    "retry_condition": "No retry needed for implemented local/dev/test context propagation and tenant isolation."
+  },
+  {
+    "react_item_id": "observability.health-readiness-liveness-provider-modes",
+    "category": "observability",
+    "react_paths": [
+      "apps/platform-api/scripts/observability-readiness-route-runtime-proof.ts",
+      "apps/platform-api/scripts/provider-observability-contract-runtime-proof.ts",
+      "docs/evidence/observability/tenant-observability-readiness.md"
+    ],
+    "behaviour_summary": "Health, readiness, liveness, capability readiness, and provider-mode observability are distinct; deferred and disabled providers do not imply live readiness.",
+    "usf_status": "migrated",
+    "usf_paths": [
+      "packages/core/src/index.ts",
+      "adapters/obs/src/index.ts",
+      "packages/proof/src/observability-telemetry-proof.ts",
+      "docs/architecture/provider-adapters-and-modes-standard.md"
+    ],
+    "usf_tests": [
+      "tests/capabilities/observability-telemetry.test.ts"
+    ],
+    "usf_proofs": [
+      "make observability-proof",
+      "make providers-proof"
+    ],
+    "semantic_authority": "known",
+    "source_use_disposition": "replace",
+    "linear_issue": "USF-158",
+    "blocker": "USF-158",
+    "blocking_foundation_readiness": false,
+    "domain_authorised": true,
+    "evidence": "Collector status exposes health/readiness/liveness separately with liveMonitoringReadinessClaim=false; observability composed provider remains deferred; disabled providers fail closed.",
+    "retry_condition": "No retry needed for implemented local/dev/test provider-mode observability proof."
+  },
+  {
+    "react_item_id": "observability.api-ops-surfaces",
+    "category": "route",
+    "react_paths": [
+      "apps/platform-api/src/usecases/observability.ts",
+      "apps/platform-api/src/usecases/tenant-observability.ts",
+      "apps/react-enterprise-app/src/features/admin-observability",
+      "apps/react-enterprise-app/src/routes/admin/observability.tsx"
+    ],
+    "behaviour_summary": "Future ops/API observability surfaces are PDP-protected, tenant-guarded, OpenAPI-covered, redacted, non-enumerating, and do not expose raw logs or unrestricted telemetry.",
+    "usf_status": "migrated",
+    "usf_paths": [
+      "apps/api/src/server.ts",
+      "packages/contracts/src/index.ts",
+      "packages/contracts/src/api-surface.ts",
+      "packages/openapi/src/index.ts",
+      "packages/openapi/openapi.json",
+      "tests/apps/api-contracts.test.ts"
+    ],
+    "usf_tests": [
+      "tests/apps/api-contracts.test.ts",
+      "tests/packages/openapi.test.ts"
+    ],
+    "usf_proofs": [
+      "make api-proof",
+      "make observability-proof"
+    ],
+    "semantic_authority": "known",
+    "source_use_disposition": "replace",
+    "linear_issue": "USF-158",
+    "blocker": "USF-158",
+    "blocking_foundation_readiness": false,
+    "domain_authorised": true,
+    "evidence": "GET /v1/observability/readiness and GET /v1/observability/signals are operator-only, PDP protected, tenant guarded, redacted, paginated where applicable, OpenAPI covered, and tested. Raw logs/traces/metrics export and dashboards remain deferred.",
+    "retry_condition": "No retry needed for implemented local/dev/test observability API surfaces."
+  },
+  {
+    "react_item_id": "observability.alerting-incident-dashboard-live-depth",
+    "category": "observability",
+    "react_paths": [
+      "docs/adr/0062-observability-alerting-and-incident-architecture.md",
+      "apps/platform-api/scripts/alerting-runtime-proof.ts",
+      "apps/platform-api/scripts/incident-foundation-runtime-proof.ts",
+      "apps/platform-api/scripts/dashboards-runtime-proof.ts",
+      "compose.yaml"
+    ],
+    "behaviour_summary": "Live telemetry backends, SIEM/export, alert delivery, incident workflow, dashboards, retention purge, SLI/SLO measurement, cross-tenant aggregates, and external observability providers are represented as posture but deferred.",
+    "usf_status": "deferred",
+    "usf_paths": [
+      "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+      "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md"
+    ],
+    "usf_tests": [
+      "tests/capabilities/observability-telemetry.test.ts"
+    ],
+    "usf_proofs": [
+      "make observability-proof"
+    ],
+    "semantic_authority": "known",
+    "source_use_disposition": "replace",
+    "linear_issue": "USF-158",
+    "blocker": "USF-159",
+    "blocking_foundation_readiness": true,
+    "domain_authorised": true,
+    "evidence": "USF-159 tracks deferred depth. This slice records posture and validators but makes no live monitoring, live metrics/log/tracing backend, SIEM, live alerting, dashboard, incident-response, SOC, ISO, or production readiness claim.",
+    "retry_condition": "USF-159 receives an authorised implementation directive and proves the deferred live/backend/deep operational controls without overclaiming."
+  },
     {
       "react_item_id": "developer-commands-proof",
       "category": "command",

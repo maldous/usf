@@ -1,0 +1,11 @@
+{
+  "id": "observability.live-readiness-overclaim",
+  "expectedRuleId": "USF-OBSERVABILITY-009",
+  "edits": [
+    {
+      "target": "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+      "old": "In-memory telemetry does not imply live monitoring.",
+      "new": "Live monitoring readiness is proven by in-memory telemetry."
+    }
+  ]
+}

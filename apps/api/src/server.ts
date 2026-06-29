@@ -29,6 +29,8 @@ import {
   NotificationTemplateResponseSchema,
   NotificationViewSchema,
   NotificationsListResponseSchema,
+  ObservabilityReadinessResponseSchema,
+  ObservabilitySignalsResponseSchema,
   PermissionsResponseSchema,
   ProviderDetailResponseSchema,
   ProviderStatusResponseSchema,
@@ -50,6 +52,7 @@ import {
   stableId,
   toSafeJobView,
   toSafeProviderStatus,
+  type TelemetrySignal,
   type AuditCategory,
   type AuditEventOutcome,
   type AuthorizationRequest,
@@ -237,6 +240,45 @@ function runtimeStatus(runtime: DevRuntime) {
     providerMode: DEV_PROVIDER_MODE_LABEL,
     providerClass: runtime.providerClass,
     environment: runtime.environment,
+  };
+}
+
+function toSafeTelemetrySignalView(signal: TelemetrySignal) {
+  return {
+    signalId: signal.signalId,
+    signalName: signal.signalName,
+    signalCategory: signal.signalCategory,
+    signalClassification: signal.signalClassification,
+    severity: signal.severity,
+    tenantId: signal.tenantId,
+    actorId: signal.actorId,
+    serviceActorId: signal.serviceActorId,
+    routeId: signal.routeId,
+    operationId: signal.operationId,
+    capability: signal.capability,
+    providerId: signal.providerId,
+    jobId: signal.jobId,
+    workflowId: signal.workflowId,
+    notificationId: signal.notificationId,
+    fileId: signal.fileId,
+    auditEventId: signal.auditEventId,
+    correlationId: signal.correlationId,
+    causationId: signal.causationId,
+    requestId: signal.requestId,
+    traceId: signal.traceId,
+    spanId: signal.spanId,
+    parentSpanId: signal.parentSpanId,
+    environmentScope: signal.environmentScope,
+    providerMode: signal.providerMode,
+    dataClassification: signal.dataClassification,
+    tenantScope: signal.tenantScope,
+    actorScope: signal.actorScope,
+    providerScope: signal.providerScope,
+    redactionPolicy: signal.redactionPolicy,
+    cardinalityPolicy: signal.cardinalityPolicy,
+    retentionPolicy: signal.retentionPolicy,
+    accessPolicy: signal.accessPolicy,
+    createdAt: signal.createdAt,
   };
 }
 
@@ -472,10 +514,56 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
           subject: "tenant.context.accepted",
           payload: { actorId: context.actorId },
         });
-        runtime.observability.record({
-          tenantId: context.tenantId,
-          signal: "tenant.context.accepted",
-          attributes: { actorId: context.actorId },
+        const ids = idsFor(request);
+        runtime.observability.recordMetric({
+          metricName: "api.request.count",
+          metricType: "counter",
+          value: 1,
+          unit: "request",
+          description: "Local dev/test API request count",
+          owner: "platform-observability",
+          labels: {
+            route_id: "tenant-context.get",
+            operation_id: "getTenantContext",
+            capability: "tenant-context",
+            method: "GET",
+            route: "/v1/tenant-context",
+            status_code: "200",
+            environment_scope: "local-dev",
+            provider_mode: "in-memory",
+          },
+          context: {
+            tenantId: context.tenantId,
+            actorId: context.actorId,
+            routeId: "tenant-context.get",
+            operationId: "getTenantContext",
+            capability: "tenant-context",
+            correlationId: ids.correlationId,
+            requestId: ids.requestId,
+            traceId: ids.traceId ?? ids.correlationId,
+          },
+        });
+        runtime.observability.recordTraceSpan({
+          spanName: "tenant-context.accepted",
+          spanKind: "server",
+          startTime: new Date().toISOString(),
+          endTime: new Date().toISOString(),
+          durationMs: 1,
+          status: "ok",
+          safeAttributes: {
+            route_id: "tenant-context.get",
+            capability: "tenant-context",
+          },
+          context: {
+            tenantId: context.tenantId,
+            actorId: context.actorId,
+            routeId: "tenant-context.get",
+            operationId: "getTenantContext",
+            capability: "tenant-context",
+            correlationId: ids.correlationId,
+            requestId: ids.requestId,
+            traceId: ids.traceId ?? ids.correlationId,
+          },
         });
         return {
           tenantId: context.tenantId,
@@ -1085,6 +1173,274 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
       return {
         tenantId: context.tenantId,
         provider: toSafeProviderStatus(provider),
+      };
+    },
+  );
+
+  // Observability telemetry surfaces (parity-observability-telemetry). These are
+  // operator/security-admin local/dev/test views over redacted in-memory signals.
+  // They are not live monitoring, SIEM, alerting, dashboard, or production status.
+  app.get<{ Querystring: { tenantId?: string } }>(
+    "/v1/observability/readiness",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: { tenantId: { type: "string" } },
+          required: ["tenantId"],
+        },
+        response: {
+          200: ObservabilityReadinessResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = tenantContextFromRequest(request);
+      } catch {
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing or invalid tenant context",
+        );
+      }
+      try {
+        requireRequestTenant(context, request.query.tenantId ?? "");
+      } catch (error) {
+        if (error instanceof TenantMismatchError) {
+          runtime.observability.recordSecuritySignal({
+            eventName: "tenant.context.mismatch",
+            severity: "security",
+            reasonCode: "tenant-context-mismatch",
+            safeSummary: "tenant context mismatch",
+            context: {
+              tenantId: context.tenantId,
+              actorId: context.actorId,
+              routeId: "observability-readiness.get",
+              operationId: "getObservabilityReadinessV1",
+              capability: "telemetry-collector",
+              requestId: idsFor(request).requestId,
+              correlationId: idsFor(request).correlationId,
+              traceId: idsFor(request).traceId ?? idsFor(request).correlationId,
+            },
+          });
+          return tenantMismatch(request, reply);
+        }
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing tenant context",
+        );
+      }
+      const deny = await ensurePermission(
+        runtime,
+        context,
+        "observability.readiness.read",
+        "telemetry-collector",
+        "observability-captured-local",
+      );
+      const ids = idsFor(request);
+      if (deny) {
+        runtime.observability.recordSecuritySignal({
+          eventName: "authorization.denied",
+          severity: "security",
+          reasonCode: deny,
+          safeSummary: "observability readiness denied",
+          context: {
+            tenantId: context.tenantId,
+            actorId: context.actorId,
+            routeId: "observability-readiness.get",
+            operationId: "getObservabilityReadinessV1",
+            capability: "telemetry-collector",
+            requestId: ids.requestId,
+            correlationId: ids.correlationId,
+            traceId: ids.traceId ?? ids.correlationId,
+          },
+        });
+        return sendError(request, reply, 403, "forbidden", deny, "Not authorized");
+      }
+      runtime.observability.recordReadinessSignal({
+        signalName: "observability.readiness",
+        status: "healthy",
+        component: "telemetry-collector",
+        safeSummary: "local dev/test telemetry collector ready",
+        context: {
+          tenantId: context.tenantId,
+          actorId: context.actorId,
+          routeId: "observability-readiness.get",
+          operationId: "getObservabilityReadinessV1",
+          capability: "telemetry-collector",
+          providerId: "observability-captured-local",
+          requestId: ids.requestId,
+          correlationId: ids.correlationId,
+          traceId: ids.traceId ?? ids.correlationId,
+        },
+      });
+      await runtime.auditRecorder.record({
+        eventId: stableId("audit", [ids.requestId, "observability-readiness"]),
+        eventType: "observability.readiness.checked",
+        tenantId: context.tenantId,
+        actorId: context.actorId,
+        action: "observability.readiness.read",
+        outcome: "success",
+        resourceType: "telemetry-collector",
+        resourceId: "observability-captured-local",
+        reasonCode: "observability-readiness-read",
+        safeMessage: "observability readiness checked",
+        correlationId: ids.correlationId,
+        requestId: ids.requestId,
+        traceId: ids.traceId,
+        metadata: {
+          provider_mode: "in-memory",
+          signal_count: runtime.observability.safeStatusView().signalCount,
+        },
+      });
+      const status = runtime.observability.safeStatusView();
+      return {
+        tenantId: context.tenantId,
+        status: "ready-local-dev-test",
+        collector: status,
+        providerMode: status.providerMode,
+        liveMonitoringReadinessClaim: false,
+        productionReadinessClaim: false,
+      };
+    },
+  );
+
+  app.get<{
+    Querystring: {
+      tenantId?: string;
+      signalCategory?: string;
+      severity?: string;
+      limit?: string;
+      cursor?: string;
+    };
+  }>(
+    "/v1/observability/signals",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            tenantId: { type: "string" },
+            signalCategory: { type: "string" },
+            severity: { type: "string" },
+            limit: { type: "string" },
+            cursor: { type: "string" },
+          },
+          required: ["tenantId"],
+        },
+        response: {
+          200: ObservabilitySignalsResponseSchema,
+          400: ErrorResponseSchema,
+          403: ForbiddenResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      let context: TenantContext;
+      try {
+        context = tenantContextFromRequest(request);
+      } catch {
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing or invalid tenant context",
+        );
+      }
+      try {
+        requireRequestTenant(context, request.query.tenantId ?? "");
+      } catch (error) {
+        if (error instanceof TenantMismatchError) {
+          return tenantMismatch(request, reply);
+        }
+        return sendError(
+          request,
+          reply,
+          400,
+          "tenant_context_missing",
+          "tenant-context-missing",
+          "missing tenant context",
+        );
+      }
+      const deny = await ensurePermission(
+        runtime,
+        context,
+        "observability.signal.read",
+        "telemetry-collector",
+        "observability-captured-local",
+      );
+      const ids = idsFor(request);
+      if (deny) {
+        runtime.observability.recordSecuritySignal({
+          eventName: "authorization.denied",
+          severity: "security",
+          reasonCode: deny,
+          safeSummary: "observability signal read denied",
+          context: {
+            tenantId: context.tenantId,
+            actorId: context.actorId,
+            routeId: "observability-signals.list",
+            operationId: "listObservabilitySignalsV1",
+            capability: "telemetry-collector",
+            requestId: ids.requestId,
+            correlationId: ids.correlationId,
+            traceId: ids.traceId ?? ids.correlationId,
+          },
+        });
+        return sendError(request, reply, 403, "forbidden", deny, "Not authorized");
+      }
+      await runtime.auditRecorder.record({
+        eventId: stableId("audit", [ids.requestId, "observability-signals"]),
+        eventType: "observability.read",
+        tenantId: context.tenantId,
+        actorId: context.actorId,
+        action: "observability.signal.read",
+        outcome: "success",
+        resourceType: "telemetry-collector",
+        resourceId: "observability-captured-local",
+        reasonCode: "observability-signal-read",
+        safeMessage: "observability signals read",
+        correlationId: ids.correlationId,
+        requestId: ids.requestId,
+        traceId: ids.traceId,
+        metadata: {
+          signal_category: request.query.signalCategory ?? "all",
+          severity: request.query.severity ?? "all",
+        },
+      });
+      const queryInput: { tenantId: string; limit?: number; cursor?: string } = {
+        tenantId: context.tenantId,
+      };
+      if (request.query.limit) {
+        queryInput.limit = Number(request.query.limit);
+      }
+      if (request.query.cursor) {
+        queryInput.cursor = request.query.cursor;
+      }
+      const page = runtime.observability.query(queryInput);
+      const filtered = page.signals.filter(
+        (signal) =>
+          (!request.query.signalCategory ||
+            signal.signalCategory === request.query.signalCategory) &&
+          (!request.query.severity || signal.severity === request.query.severity),
+      );
+      return {
+        tenantId: context.tenantId,
+        signals: filtered.map(toSafeTelemetrySignalView),
+        nextCursor: page.nextCursor,
       };
     },
   );
