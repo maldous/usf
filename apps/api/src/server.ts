@@ -40,7 +40,6 @@ import {
   TenantContextResponseSchema,
 } from "@foundation/contracts";
 import {
-  DEFAULT_NOTIFICATION_BACKOFF,
   FileValidationError,
   JOB_CLASSIFICATIONS,
   NOTIFICATION_CLASSIFICATIONS,
@@ -79,7 +78,11 @@ import type { AuditQueryCriteria } from "@foundation/ports";
 import { buildOpenApiDocument } from "@foundation/openapi";
 import { randomUUID } from "node:crypto";
 import Fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
-import { createDevRuntime, type DevRuntime } from "./runtime.ts";
+import {
+  configureRuntimeNotificationProvider,
+  createDevRuntime,
+  type DevRuntime,
+} from "./runtime.ts";
 
 export interface BuildApiOptions {
   readonly runtime?: DevRuntime;
@@ -386,6 +389,8 @@ function runtimeStatus(runtime: DevRuntime) {
     serviceCatalogueAuthority: runtime.serviceCatalogueAuthority,
     composeTarget: runtime.composeTarget,
     deferredBoundaries: [...runtime.deferredBoundaries],
+    composedProviderBindings: [...runtime.composedProviderBindings],
+    deferredProviderBindings: [...runtime.deferredProviderBindings],
   };
 }
 
@@ -434,36 +439,7 @@ async function ensureNotificationProvider(runtime: DevRuntime, context: TenantCo
   if (NOTIFICATION_PROVIDER_CONFIGURED.has(runtime)) {
     return;
   }
-  const result = await runtime.notificationCapability.configureProvider(context, {
-    providerRef: "notify-in-memory",
-    providerType: "in-memory",
-    providerMode: "in-memory",
-    channel: "test",
-    endpoint: null,
-    allowedHosts: Object.freeze([]),
-    allowedSchemes: Object.freeze([]),
-    tlsRequired: false,
-    credentialRef: {
-      secretRef: "secret://dev-tenant/mail-api-key",
-      secretProvider: "in-memory",
-      scope: "tenant",
-      version: "1",
-      status: "active",
-      rotationPolicy: "local-dev-test-only",
-      lastRotatedAt: null,
-      nextRotationDueAt: null,
-      owner: "platform",
-    },
-    senderIdentityRef: "sender:test",
-    rateLimitPolicy: "local-dev-test-no-live-provider",
-    retryPolicy: DEFAULT_NOTIFICATION_BACKOFF,
-    timeoutPolicy: "local-dev-test",
-    circuitBreakerPolicy: "local-dev-test",
-    egressPolicy: "no-live-egress",
-  });
-  if (!result.ok) {
-    throw new Error("notification provider configuration failed");
-  }
+  await configureRuntimeNotificationProvider(runtime, context);
   NOTIFICATION_PROVIDER_CONFIGURED.add(runtime);
 }
 
@@ -652,7 +628,7 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
             metadata: {
               providerMode: runtime.providerModeLabel,
               runtimeMode: runtime.runtimeMode,
-              providerClass: context.providerMode,
+              providerClass: runtime.providerClass,
             },
           }),
         );
@@ -677,7 +653,7 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
             route: "/v1/tenant-context",
             status_code: "200",
             environment_scope: "local-dev",
-            provider_mode: "in-memory",
+            provider_mode: runtime.providerModeLabel,
           },
           context: {
             tenantId: context.tenantId,
@@ -718,7 +694,7 @@ export function buildApi(options: BuildApiOptions = {}): FastifyInstance {
           roles: [...context.roles],
           runtimeMode: runtime.runtimeMode,
           providerMode: runtime.providerModeLabel,
-          providerClass: context.providerMode,
+          providerClass: runtime.providerClass,
           environment: context.environment,
           auditEvents: runtime.auditLedger.list(context.tenantId).length,
         };

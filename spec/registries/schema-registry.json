@@ -1739,8 +1739,8 @@
         "Command",
         "Evidence"
       ],
-      "purpose": "Validates bounded runtime proof manifests for API and worker proof modes, service-catalogue linkage, proof commands, evidence boundaries, deferred boundaries, and explicit non-claims.",
-      "requiredBecause": "USF-181 runtime proof must be machine-readable and fail closed without upgrading in-memory or compose-boundary evidence into broader readiness claims.",
+      "purpose": "Validates bounded runtime proof manifests for API and worker proof modes, service-catalogue linkage, proof commands, provider binding matrices, SDK boundary evidence, evidence boundaries, deferred boundaries, and explicit non-claims.",
+      "requiredBecause": "USF-183 runtime provider-binding proof must be machine-readable and fail closed without upgrading in-memory, compose-boundary, or single-provider evidence into broader readiness claims.",
       "sourceInputs": [
         "spec/instances/compose-service/service-catalogue.json",
         "apps/api/src/main.ts",
@@ -1756,6 +1756,8 @@
       "vocabularyRefs": [
         "proof-levels",
         "provider-modes",
+        "runtime-provider-classes",
+        "runtime-provider-binding-classes",
         "environment-classes",
         "evidence-kinds"
       ],
@@ -1769,7 +1771,11 @@
         "API and worker proof commands present",
         "compose-backed mode linked to service catalogue authority",
         "deferred provider-binding boundary explicit",
-        "prohibited readiness claims absent"
+        "prohibited readiness claims absent",
+        "compose-backed provider binding matrix present",
+        "Mailpit composed provider binding has API and worker evidence",
+        "provider SDK imports remain in the authorised adapter boundary",
+        "provider proof metadata uses endpoint refs and no raw credentials"
       ],
       "authorityRole": "runtime-proof-evidence",
       "driftRisks": [
@@ -1778,7 +1784,8 @@
       ],
       "aiGuidance": "Runtime proof manifests support bounded evidence only. Do not upgrade provider mode or readiness claims beyond observed proof output.",
       "deferredDetails": [
-        "Current compose-backed proof starts the Compose boundary but records provider adapter binding as deferred."
+        "Mailpit notification provider binding is resolved for bounded local composed proof.",
+        "Database, event-bus, object-storage, identity, workflow, and secret-provider runtime bindings remain explicit deferred or boundary-only entries until separately proven."
       ]
     },
     {
@@ -2599,7 +2606,7 @@
       "id": "json-schema",
       "status": "adopted",
       "affectsSchemas": "JSON Schema is the mechanism for validating all USF JSON artefacts; every schema is a JSON Schema with explicit $schema and $id.",
-      "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring §26 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).",
+      "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring \u00a726 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).",
       "validatorImplications": "Validators run JSON Schema validation and fail closed on invalidity.",
       "aiGuidance": "Validate generated JSON against its schema before claiming completion."
     },
@@ -2985,7 +2992,7 @@
       "satisfied": true
     },
     {
-      "criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring §26 Amendment A).",
+      "criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring \u00a726 Amendment A).",
       "satisfied": true
     },
     {

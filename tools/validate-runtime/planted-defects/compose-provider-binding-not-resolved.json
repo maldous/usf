@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-011",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/0/bindingStatus",
+      "value": "compose-boundary-only"
+    }
+  ]
+}

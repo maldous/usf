@@ -85,11 +85,13 @@ function assertNoUnauthorisedProviderSdkImports(root: string): void {
   const scanned = [
     join(root, "packages/core/src/index.ts"),
     join(root, "packages/ports/src/index.ts"),
+    join(root, "apps/api/src/runtime.ts"),
     join(root, "apps/api/src/server.ts"),
+    join(root, "apps/work/src/worker.ts"),
     ...filesUnder(join(root, "capabilities")),
   ];
   const forbiddenImport =
-    /from\s+["'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio|nats|keycloak-js)["']/;
+    /from\s+["'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio|nats|keycloak-js)["']/;
   for (const path of scanned) {
     const text = readFileSync(path, "utf8");
     assert(!forbiddenImport.test(text), `unauthorised provider SDK import in ${path}`);
@@ -122,6 +124,7 @@ function mutatedProvider(
 
 export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofResult> {
   const checks: string[] = [];
+  const root = repoRoot();
   const validation = validateProviderRegistry();
   assert(
     validation.ok,
@@ -161,6 +164,25 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
   checks.push(
     "provider status safe view redacts credentials, endpoints, raw failures, and stack traces",
   );
+
+  assertNoUnauthorisedProviderSdkImports(root);
+  const mailAdapter = readFileSync(join(root, "adapters/mail/src/index.ts"), "utf8");
+  assert(
+    /from\s+["']mailpit-api["']/.test(mailAdapter),
+    "Mailpit SDK import missing from mail adapter boundary",
+  );
+  const mailpitProvider = PROVIDER_REGISTRY.find(
+    (provider) => provider.providerId === "notification-delivery-mailpit-composed-test",
+  );
+  assert(mailpitProvider, "Mailpit composed provider registry entry missing");
+  assert(
+    mailpitProvider.adapterName === "MailpitNotificationProvider" &&
+      mailpitProvider.providerMode === "composed-test" &&
+      mailpitProvider.readinessStatus === "healthy" &&
+      mailpitProvider.endpointRef === "endpoint://compose/mailpit",
+    "Mailpit composed provider registry entry is not SDK-backed and catalogue-linked",
+  );
+  checks.push("provider SDK imports remain inside adapter package boundaries");
 
   const deferred = PROVIDER_REGISTRY.find(
     (provider) => provider.providerMode === "live-external-deferred",
@@ -224,9 +246,6 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
   );
   assert(!auditText.includes("bearer proof-token"), "audit leaked raw provider failure");
   checks.push("provider audit event is value-free and redacted");
-
-  assertNoUnauthorisedProviderSdkImports(repoRoot());
-  checks.push("capabilities, core, ports, and API routes do not import unauthorised provider SDKs");
 
   return Object.freeze({
     status: "pass",

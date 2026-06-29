@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "apps/api/src/runtime.ts",
+      "old": "import type { NotificationProvider } from \"@foundation/ports\";",
+      "new": "import { MailpitClient } from \"mailpit-api\";\nimport type { NotificationProvider } from \"@foundation/ports\";"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { MailpitClient } from "mailpit-api";
 import {
   type NotificationProviderConfig,
   type NotificationProviderMode,
@@ -42,6 +43,26 @@ export interface CapturedNotificationDelivery {
   readonly payloadClassification: string;
   readonly subjectHash: string;
   readonly bodyHash: string;
+}
+
+export interface MailpitComposedDeliveryEvidence {
+  readonly providerRef: "notification-delivery-mailpit-composed-test";
+  readonly providerMode: "composed-test";
+  readonly providerRegistryId: "notification-delivery-mailpit-composed-test";
+  readonly serviceCatalogueServiceId: "mailpit";
+  readonly adapterName: "MailpitNotificationProvider";
+  readonly sdkPackage: "mailpit-api";
+  readonly sdkVersion: "2.1.0";
+  readonly sdkBoundary: "adapter-package-only";
+  readonly endpointRef: "endpoint://compose/mailpit";
+  readonly readinessChecked: boolean;
+  readonly writeChecked: boolean;
+  readonly readbackChecked: boolean;
+  readonly cleanupAttempted: boolean;
+  readonly cleanupSucceeded: boolean;
+  readonly safeProviderSummary: "mailpit-composed-provider";
+  readonly providerMessageIdHash: string | null;
+  readonly recipientAddressHash: string;
 }
 
 export class InMemoryNotificationProvider implements NotificationProvider {
@@ -135,6 +156,151 @@ export class InMemoryNotificationProvider implements NotificationProvider {
   }
 }
 
+export class MailpitNotificationProvider implements NotificationProvider {
+  #config: NotificationProviderConfig | undefined;
+  #client: MailpitClient | undefined;
+  #lastEvidence: MailpitComposedDeliveryEvidence | undefined;
+
+  get providerMode(): NotificationProviderMode {
+    return this.#config?.providerMode ?? "composed-test";
+  }
+
+  get lastDeliveryEvidence(): MailpitComposedDeliveryEvidence | undefined {
+    return this.#lastEvidence;
+  }
+
+  configure(config: NotificationProviderConfig): void {
+    const validated = validateNotificationProviderConfig(config);
+    if (validated.providerMode !== "composed-test") {
+      throw new Error("mailpit provider requires composed-test provider mode");
+    }
+    if (validated.providerRef !== "notification-delivery-mailpit-composed-test") {
+      throw new Error("mailpit provider ref mismatch");
+    }
+    if (validated.endpoint === null) {
+      throw new Error("mailpit endpoint ref configuration missing");
+    }
+    if (validated.credentialRef !== null) {
+      throw new Error("mailpit composed proof must not configure credentials");
+    }
+    this.#config = validated;
+    this.#client = new MailpitClient(validated.endpoint);
+    this.#lastEvidence = undefined;
+  }
+
+  async send(input: NotificationProviderSendInput): Promise<NotificationProviderSendResult> {
+    const config = this.#config;
+    const client = this.#client;
+    if (!config || !client) {
+      return mailpitFailure("provider-config-missing", "mailpit provider config missing", false);
+    }
+    if (input.providerMode !== config.providerMode || input.providerRef !== config.providerRef) {
+      return mailpitFailure("provider-config-mismatch", "mailpit provider config mismatch", false);
+    }
+
+    let confirmationId: string | null = null;
+    let readinessChecked = false;
+    let cleanupAttempted = false;
+    let cleanupSucceeded = false;
+    try {
+      await client.getInfo();
+      readinessChecked = true;
+      const syntheticRecipient = syntheticMailpitRecipient(input.recipientAddressHash);
+      const sent = await client.sendMessage({
+        From: { Email: "runtime-proof@example.test", Name: "USF Runtime Proof" },
+        To: [{ Email: syntheticRecipient }],
+        Subject: input.subject,
+        Text: input.body,
+        Headers: {
+          "X-USF-Provider-Ref": input.providerRef,
+          "X-USF-Delivery-Id": input.deliveryId,
+          "X-USF-Synthetic-Data": "true",
+        },
+        Tags: ["usf-runtime-proof", input.tenantId],
+      });
+      confirmationId = sent.ID;
+      const summary = await client.getMessageSummary(confirmationId);
+      if (summary.ID !== confirmationId) {
+        throw new Error("mailpit readback mismatch");
+      }
+      cleanupAttempted = true;
+      await client.deleteMessages({ IDs: [confirmationId] });
+      cleanupSucceeded = true;
+
+      const providerMessageIdHash = safeContentHash(confirmationId);
+      this.#lastEvidence = Object.freeze({
+        providerRef: "notification-delivery-mailpit-composed-test",
+        providerMode: "composed-test",
+        providerRegistryId: "notification-delivery-mailpit-composed-test",
+        serviceCatalogueServiceId: "mailpit",
+        adapterName: "MailpitNotificationProvider",
+        sdkPackage: "mailpit-api",
+        sdkVersion: "2.1.0",
+        sdkBoundary: "adapter-package-only",
+        endpointRef: "endpoint://compose/mailpit",
+        readinessChecked: true,
+        writeChecked: true,
+        readbackChecked: true,
+        cleanupAttempted,
+        cleanupSucceeded,
+        safeProviderSummary: "mailpit-composed-provider",
+        providerMessageIdHash,
+        recipientAddressHash: input.recipientAddressHash,
+      });
+      return {
+        ok: true,
+        deliveryStatus: "sent",
+        providerMessageId: `mailpit_${providerMessageIdHash}`,
+        safeProviderSummary: "mailpit-composed-provider",
+      };
+    } catch {
+      this.#lastEvidence = Object.freeze({
+        providerRef: "notification-delivery-mailpit-composed-test",
+        providerMode: "composed-test",
+        providerRegistryId: "notification-delivery-mailpit-composed-test",
+        serviceCatalogueServiceId: "mailpit",
+        adapterName: "MailpitNotificationProvider",
+        sdkPackage: "mailpit-api",
+        sdkVersion: "2.1.0",
+        sdkBoundary: "adapter-package-only",
+        endpointRef: "endpoint://compose/mailpit",
+        readinessChecked,
+        writeChecked: confirmationId !== null,
+        readbackChecked: false,
+        cleanupAttempted,
+        cleanupSucceeded,
+        safeProviderSummary: "mailpit-composed-provider",
+        providerMessageIdHash: confirmationId ? safeContentHash(confirmationId) : null,
+        recipientAddressHash: input.recipientAddressHash,
+      });
+      return mailpitFailure(
+        "mailpit-composed-provider-error",
+        "mailpit composed provider call failed safely",
+        true,
+      );
+    }
+  }
+}
+
 function safeContentHash(value: string): string {
   return `sha256_${createHash("sha256").update(value).digest("hex").slice(0, 24)}`;
+}
+
+function syntheticMailpitRecipient(recipientAddressHash: string): string {
+  const localPart = createHash("sha256").update(recipientAddressHash).digest("hex").slice(0, 24);
+  return `recipient-${localPart}@example.test`;
+}
+
+function mailpitFailure(
+  failureReasonCode: string,
+  message: string,
+  retryable: boolean,
+): NotificationProviderSendResult {
+  return {
+    ok: false,
+    deliveryStatus: "failed",
+    failureReasonCode,
+    safeFailureMessage: safeFailureMessage(message),
+    retryable,
+  };
 }

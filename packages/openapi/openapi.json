@@ -7402,7 +7402,9 @@
           "environment",
           "serviceCatalogueAuthority",
           "composeTarget",
-          "deferredBoundaries"
+          "deferredBoundaries",
+          "composedProviderBindings",
+          "deferredProviderBindings"
         ],
         "properties": {
           "status": {
@@ -7426,12 +7428,28 @@
             ]
           },
           "providerMode": {
-            "const": "dev in-memory",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "dev in-memory",
+                "type": "string"
+              },
+              {
+                "const": "local-composed-real-service",
+                "type": "string"
+              }
+            ]
           },
           "providerClass": {
-            "const": "hermetic-mock",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "hermetic-mock",
+                "type": "string"
+              },
+              {
+                "const": "local-composed-real-service",
+                "type": "string"
+              }
+            ]
           },
           "environment": {
             "const": "local",
@@ -7456,6 +7474,314 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "composedProviderBindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "bindingId",
+                "bindingStatus",
+                "serviceCatalogueServiceIds",
+                "providerRegistryIds",
+                "adapterName",
+                "portName",
+                "providerMode",
+                "providerClass",
+                "serviceCatalogueAuthority",
+                "composeTarget",
+                "endpointRef",
+                "sdkPackage",
+                "sdkVersion",
+                "sdkBoundary",
+                "proofSurfaces",
+                "deferredReason",
+                "followUpIssueRefs",
+                "claimBoundary"
+              ],
+              "properties": {
+                "bindingId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "bindingStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueServiceIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "providerRegistryIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "adapterName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "portName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerMode": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerClass": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueAuthority": {
+                  "const": "spec/instances/compose-service/service-catalogue.json",
+                  "type": "string"
+                },
+                "composeTarget": {
+                  "const": "compose/compose.dev.generated.yaml",
+                  "type": "string"
+                },
+                "endpointRef": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkPackage": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkVersion": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "proofSurfaces": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "deferredReason": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "followUpIssueRefs": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "claimBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "deferredProviderBindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "bindingId",
+                "bindingStatus",
+                "serviceCatalogueServiceIds",
+                "providerRegistryIds",
+                "adapterName",
+                "portName",
+                "providerMode",
+                "providerClass",
+                "serviceCatalogueAuthority",
+                "composeTarget",
+                "endpointRef",
+                "sdkPackage",
+                "sdkVersion",
+                "sdkBoundary",
+                "proofSurfaces",
+                "deferredReason",
+                "followUpIssueRefs",
+                "claimBoundary"
+              ],
+              "properties": {
+                "bindingId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "bindingStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueServiceIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "providerRegistryIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "adapterName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "portName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerMode": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerClass": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueAuthority": {
+                  "const": "spec/instances/compose-service/service-catalogue.json",
+                  "type": "string"
+                },
+                "composeTarget": {
+                  "const": "compose/compose.dev.generated.yaml",
+                  "type": "string"
+                },
+                "endpointRef": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkPackage": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkVersion": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "proofSurfaces": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "deferredReason": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "followUpIssueRefs": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "claimBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              }
             }
           }
         }
@@ -9949,6 +10275,8 @@
           "serviceCatalogueAuthority",
           "composeTarget",
           "deferredBoundaries",
+          "composedProviderBindings",
+          "deferredProviderBindings",
           "providers"
         ],
         "properties": {
@@ -9973,12 +10301,28 @@
             ]
           },
           "providerMode": {
-            "const": "dev in-memory",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "dev in-memory",
+                "type": "string"
+              },
+              {
+                "const": "local-composed-real-service",
+                "type": "string"
+              }
+            ]
           },
           "providerClass": {
-            "const": "hermetic-mock",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "hermetic-mock",
+                "type": "string"
+              },
+              {
+                "const": "local-composed-real-service",
+                "type": "string"
+              }
+            ]
           },
           "environment": {
             "const": "local",
@@ -10003,6 +10347,314 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "composedProviderBindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "bindingId",
+                "bindingStatus",
+                "serviceCatalogueServiceIds",
+                "providerRegistryIds",
+                "adapterName",
+                "portName",
+                "providerMode",
+                "providerClass",
+                "serviceCatalogueAuthority",
+                "composeTarget",
+                "endpointRef",
+                "sdkPackage",
+                "sdkVersion",
+                "sdkBoundary",
+                "proofSurfaces",
+                "deferredReason",
+                "followUpIssueRefs",
+                "claimBoundary"
+              ],
+              "properties": {
+                "bindingId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "bindingStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueServiceIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "providerRegistryIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "adapterName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "portName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerMode": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerClass": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueAuthority": {
+                  "const": "spec/instances/compose-service/service-catalogue.json",
+                  "type": "string"
+                },
+                "composeTarget": {
+                  "const": "compose/compose.dev.generated.yaml",
+                  "type": "string"
+                },
+                "endpointRef": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkPackage": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkVersion": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "proofSurfaces": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "deferredReason": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "followUpIssueRefs": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "claimBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "deferredProviderBindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "bindingId",
+                "bindingStatus",
+                "serviceCatalogueServiceIds",
+                "providerRegistryIds",
+                "adapterName",
+                "portName",
+                "providerMode",
+                "providerClass",
+                "serviceCatalogueAuthority",
+                "composeTarget",
+                "endpointRef",
+                "sdkPackage",
+                "sdkVersion",
+                "sdkBoundary",
+                "proofSurfaces",
+                "deferredReason",
+                "followUpIssueRefs",
+                "claimBoundary"
+              ],
+              "properties": {
+                "bindingId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "bindingStatus": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueServiceIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "providerRegistryIds": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "adapterName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "portName": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerMode": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "providerClass": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "serviceCatalogueAuthority": {
+                  "const": "spec/instances/compose-service/service-catalogue.json",
+                  "type": "string"
+                },
+                "composeTarget": {
+                  "const": "compose/compose.dev.generated.yaml",
+                  "type": "string"
+                },
+                "endpointRef": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkPackage": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkVersion": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sdkBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "proofSurfaces": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "deferredReason": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "followUpIssueRefs": {
+                  "type": "array",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "claimBoundary": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              }
             }
           },
           "providers": {
@@ -10065,12 +10717,28 @@
             ]
           },
           "providerMode": {
-            "const": "dev in-memory",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "dev in-memory",
+                "type": "string"
+              },
+              {
+                "const": "local-composed-real-service",
+                "type": "string"
+              }
+            ]
           },
           "providerClass": {
-            "const": "hermetic-mock",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "hermetic-mock",
+                "type": "string"
+              },
+              {
+                "const": "local-composed-real-service",
+                "type": "string"
+              }
+            ]
           },
           "environment": {
             "const": "local",

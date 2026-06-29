@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-015",
+  "sourceReplacements": [
+    {
+      "path": "packages/core/src/index.ts",
+      "old": "MailpitNotificationProvider",
+      "new": "Mailpit composed substrate"
+    }
+  ]
+}

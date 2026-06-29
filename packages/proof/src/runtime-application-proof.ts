@@ -2,7 +2,17 @@ import { spawn, type ChildProcessByStdio } from "node:child_process";
 import { once } from "node:events";
 import type { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
-import type { DevRuntimeMode } from "@foundation/app-api/runtime";
+import {
+  DEV_ACTOR_ID,
+  DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL,
+  DEV_IN_MEMORY_PROVIDER_MODE_LABEL,
+  DEV_TENANT_ID,
+  MAILPIT_PROVIDER_REGISTRY_ID,
+  type DevProviderClass,
+  type DevProviderModeLabel,
+  type DevRuntimeMode,
+} from "@foundation/app-api/runtime";
+import type { MailpitComposedDeliveryEvidence } from "@foundation/adapter-mail";
 
 type ProofProcess = ChildProcessByStdio<null, Readable, Readable>;
 
@@ -24,11 +34,15 @@ interface ApiProofSummary {
   readonly health: string;
   readonly openapi: string;
   readonly runtimeMode: DevRuntimeMode;
-  readonly providerMode: "dev in-memory";
-  readonly providerClass: "hermetic-mock";
+  readonly providerMode: DevProviderModeLabel;
+  readonly providerClass: DevProviderClass;
   readonly tenantAcceptedStatus: number;
   readonly tenantMismatchStatus: number;
   readonly authorizationFailureStatus: number;
+  readonly notificationProviderMode: "in-memory" | "composed-test";
+  readonly notificationProviderRef: "notify-in-memory" | typeof MAILPIT_PROVIDER_REGISTRY_ID;
+  readonly notificationQueuedStatus: number;
+  readonly composedProviderBindingsActive: number;
   readonly auditEvents: number;
   readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY;
   readonly composeTarget: typeof COMPOSE_TARGET | null;
@@ -38,11 +52,15 @@ interface ApiProofSummary {
 interface WorkerProofSummary {
   readonly workerRuntime: "apps/work";
   readonly runtimeMode: DevRuntimeMode;
-  readonly providerMode: "dev in-memory";
+  readonly providerMode: DevProviderModeLabel;
   readonly tenantId: string;
   readonly actorId: string;
   readonly jobId: string;
   readonly jobStatus: string;
+  readonly notificationProviderMode: "in-memory" | "composed-test";
+  readonly notificationDeliveryStatus: "sent";
+  readonly notificationProviderMessageIdPresent: boolean;
+  readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
   readonly auditEvents: number;
   readonly tenantBoundaryDenied: true;
   readonly authorizationDenied: true;
@@ -52,10 +70,10 @@ interface WorkerProofSummary {
 }
 
 export interface RuntimeProofSummary {
-  readonly issueId: "USF-181";
+  readonly issueId: "USF-183";
   readonly parentIssueId: "USF-133";
   readonly mode: DevRuntimeMode;
-  readonly providerMode: "dev in-memory";
+  readonly providerMode: DevProviderModeLabel;
   readonly api: ApiProofSummary;
   readonly worker: WorkerProofSummary;
   readonly composeBoundary:
@@ -78,6 +96,7 @@ export interface RuntimeProofSummary {
   readonly secretBoundary: "local synthetic secret seed only; no real secrets or external credentials";
   readonly prohibitedClaimsObserved: readonly [];
   readonly deferredBoundaries: readonly string[];
+  readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
 }
 
 function startProcess(
@@ -225,6 +244,100 @@ async function waitForHealth(baseUrl: string): Promise<void> {
   throw new Error(`dev API health did not become ready: ${String(lastError)}`);
 }
 
+async function runApiNotificationProof(
+  baseUrl: string,
+  mode: DevRuntimeMode,
+): Promise<{
+  readonly providerMode: "in-memory" | "composed-test";
+  readonly providerRef: "notify-in-memory" | typeof MAILPIT_PROVIDER_REGISTRY_ID;
+  readonly queuedStatus: number;
+}> {
+  const headers = {
+    "content-type": "application/json",
+    "x-dev-tenant-id": DEV_TENANT_ID,
+    "x-dev-actor-id": DEV_ACTOR_ID,
+    "x-dev-roles": "tenant-admin",
+  };
+  const template = await fetchJson(`${baseUrl}/v1/notification-templates`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      tenantId: DEV_TENANT_ID,
+      templateId: `runtime-proof-api-template-${mode}`,
+      templateKey: "runtime-proof-api",
+      templateVersion: "1",
+      templateClassification: "test",
+      subjectTemplate: "USF runtime proof notification",
+      bodyTemplate: "Synthetic runtime proof notification body",
+      allowedVariables: [],
+    }),
+  });
+  if (template.status !== 200) {
+    throw new Error(`notification template proof failed with status ${template.status}`);
+  }
+
+  const created = await fetchJson(`${baseUrl}/v1/notifications`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      tenantId: DEV_TENANT_ID,
+      recipient: {
+        recipientId: "runtime-proof-api-recipient",
+        recipientActorId: DEV_ACTOR_ID,
+        recipientTenantId: DEV_TENANT_ID,
+        recipientType: "test",
+        addressRef: "runtime-proof-api-recipient@example.test",
+        addressType: "test",
+        addressVerified: true,
+        addressStatus: "active",
+        addressSource: "runtime-proof",
+        addressLastVerifiedAt: new Date().toISOString(),
+      },
+      channel: "test",
+      classification: "test",
+      templateId: `runtime-proof-api-template-${mode}`,
+      correlationId: `runtime-proof-api-${mode}`,
+    }),
+  });
+  assertObject(created.body, "notification create");
+  assertObject(created.body.notification, "notification create body");
+  const expectedProviderMode = expectedNotificationProviderMode(mode);
+  const expectedProviderRef = expectedNotificationProviderRef(mode);
+  if (
+    created.status !== 200 ||
+    created.body.notification.providerMode !== expectedProviderMode ||
+    created.body.notification.providerRef !== expectedProviderRef
+  ) {
+    throw new Error("notification API did not use the expected runtime provider binding");
+  }
+
+  const notificationId = String(created.body.notification.notificationId);
+  const queued = await fetchJson(
+    `${baseUrl}/v1/notifications/${encodeURIComponent(notificationId)}/send`,
+    {
+      method: "POST",
+      headers: { ...headers, "idempotency-key": `runtime-proof-api-send-${mode}` },
+      body: JSON.stringify({ tenantId: DEV_TENANT_ID }),
+    },
+  );
+  assertObject(queued.body, "notification send");
+  assertObject(queued.body.notification, "notification send body");
+  if (
+    queued.status !== 200 ||
+    queued.body.notification.providerMode !== expectedProviderMode ||
+    queued.body.notification.providerRef !== expectedProviderRef ||
+    queued.body.notification.deliveryStatus !== "queued"
+  ) {
+    throw new Error("notification API send proof did not preserve provider binding metadata");
+  }
+
+  return {
+    providerMode: expectedProviderMode,
+    providerRef: expectedProviderRef,
+    queuedStatus: queued.status,
+  };
+}
+
 function assertObject(value: unknown, label: string): asserts value is Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`${label} did not return a JSON object`);
@@ -236,11 +349,23 @@ function assertWorkerSummary(value: unknown): asserts value is WorkerProofSummar
   if (value.workerRuntime !== "apps/work") {
     throw new Error("worker proof summary did not identify apps/work");
   }
-  if (value.providerMode !== "dev in-memory") {
-    throw new Error("worker proof summary did not report in-memory provider mode");
+  if (
+    value.providerMode !== DEV_IN_MEMORY_PROVIDER_MODE_LABEL &&
+    value.providerMode !== DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL
+  ) {
+    throw new Error("worker proof summary did not report an approved runtime provider mode");
   }
   if (value.jobStatus !== "succeeded") {
     throw new Error("worker proof summary did not report a succeeded job");
+  }
+  if (
+    value.notificationProviderMode !== "in-memory" &&
+    value.notificationProviderMode !== "composed-test"
+  ) {
+    throw new Error("worker proof summary did not report a notification provider mode");
+  }
+  if (value.notificationDeliveryStatus !== "sent" || !value.notificationProviderMessageIdPresent) {
+    throw new Error("worker proof summary did not report notification delivery evidence");
   }
   if (typeof value.auditEvents !== "number" || value.auditEvents < 5) {
     throw new Error("worker proof summary did not report audit evidence");
@@ -248,6 +373,26 @@ function assertWorkerSummary(value: unknown): asserts value is WorkerProofSummar
   if (value.tenantBoundaryDenied !== true || value.authorizationDenied !== true) {
     throw new Error("worker proof summary did not record fail-closed boundaries");
   }
+}
+
+function expectedRuntimeProviderMode(mode: DevRuntimeMode): DevProviderModeLabel {
+  return mode === "dev-compose-backed"
+    ? DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL
+    : DEV_IN_MEMORY_PROVIDER_MODE_LABEL;
+}
+
+function expectedRuntimeProviderClass(mode: DevRuntimeMode): DevProviderClass {
+  return mode === "dev-compose-backed" ? "local-composed-real-service" : "hermetic-mock";
+}
+
+function expectedNotificationProviderMode(mode: DevRuntimeMode): "in-memory" | "composed-test" {
+  return mode === "dev-compose-backed" ? "composed-test" : "in-memory";
+}
+
+function expectedNotificationProviderRef(
+  mode: DevRuntimeMode,
+): "notify-in-memory" | typeof MAILPIT_PROVIDER_REGISTRY_ID {
+  return mode === "dev-compose-backed" ? MAILPIT_PROVIDER_REGISTRY_ID : "notify-in-memory";
 }
 
 function assertNoProhibitedClaims(value: unknown): void {
@@ -273,8 +418,11 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
     if (health.status !== 200 || health.body.runtimeMode !== mode) {
       throw new Error(`/healthz did not report runtime mode ${mode}`);
     }
-    if (health.body.providerMode !== "dev in-memory") {
-      throw new Error("/healthz did not report in-memory provider mode");
+    if (
+      health.body.providerMode !== expectedRuntimeProviderMode(mode) ||
+      health.body.providerClass !== expectedRuntimeProviderClass(mode)
+    ) {
+      throw new Error("/healthz did not report the expected provider binding mode");
     }
 
     const ready = await fetchJson(`${baseUrl}/readyz`);
@@ -284,6 +432,21 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
     }
     if (ready.body.serviceCatalogueAuthority !== SERVICE_CATALOGUE_AUTHORITY) {
       throw new Error("/readyz did not report the service catalogue authority");
+    }
+    const composedProviderBindings = Array.isArray(ready.body.composedProviderBindings)
+      ? ready.body.composedProviderBindings
+      : [];
+    if (mode === "dev-compose-backed") {
+      const hasMailpitBinding = composedProviderBindings.some(
+        (binding) =>
+          binding &&
+          typeof binding === "object" &&
+          "bindingId" in binding &&
+          binding.bindingId === "mailpit-notification-provider",
+      );
+      if (!hasMailpitBinding) {
+        throw new Error("/readyz did not report the active Mailpit composed provider binding");
+      }
     }
 
     const openapi = await fetchJson(`${baseUrl}/openapi.json`);
@@ -340,16 +503,22 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       throw new Error("authorization failure path did not fail closed");
     }
 
+    const notification = await runApiNotificationProof(baseUrl, mode);
+
     const summary: ApiProofSummary = {
       api: baseUrl,
       health: `${baseUrl}/healthz`,
       openapi: `${baseUrl}/openapi.json`,
       runtimeMode: mode,
-      providerMode: "dev in-memory",
-      providerClass: "hermetic-mock",
+      providerMode: expectedRuntimeProviderMode(mode),
+      providerClass: expectedRuntimeProviderClass(mode),
       tenantAcceptedStatus: accepted.status,
       tenantMismatchStatus: mismatch.status,
       authorizationFailureStatus: authorizationFailure.status,
+      notificationProviderMode: notification.providerMode,
+      notificationProviderRef: notification.providerRef,
+      notificationQueuedStatus: notification.queuedStatus,
+      composedProviderBindingsActive: composedProviderBindings.length,
       auditEvents,
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY,
       composeTarget: mode === "dev-compose-backed" ? COMPOSE_TARGET : null,
@@ -364,6 +533,9 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       tenantAcceptedStatus: summary.tenantAcceptedStatus,
       tenantMismatchStatus: summary.tenantMismatchStatus,
       authorizationFailureStatus: summary.authorizationFailureStatus,
+      notificationProviderMode: summary.notificationProviderMode,
+      notificationQueuedStatus: summary.notificationQueuedStatus,
+      composedProviderBindingsActive: summary.composedProviderBindingsActive,
       auditEvents: summary.auditEvents,
     });
     return summary;
@@ -379,10 +551,37 @@ async function runWorkerProof(mode: DevRuntimeMode): Promise<WorkerProofSummary>
     if (summary.runtimeMode !== mode) {
       throw new Error(`worker proof did not report runtime mode ${mode}`);
     }
+    if (
+      summary.providerMode !== expectedRuntimeProviderMode(mode) ||
+      summary.notificationProviderMode !== expectedNotificationProviderMode(mode)
+    ) {
+      throw new Error("worker proof did not report expected provider binding mode");
+    }
+    if (mode === "dev-compose-backed") {
+      if (summary.composedProviderEvidence.length === 0) {
+        throw new Error("worker compose proof did not report composed provider evidence");
+      }
+      for (const evidence of summary.composedProviderEvidence) {
+        if (
+          evidence.providerRef !== MAILPIT_PROVIDER_REGISTRY_ID ||
+          evidence.serviceCatalogueServiceId !== "mailpit" ||
+          evidence.sdkPackage !== "mailpit-api" ||
+          evidence.sdkBoundary !== "adapter-package-only" ||
+          !evidence.readinessChecked ||
+          !evidence.writeChecked ||
+          !evidence.readbackChecked ||
+          !evidence.cleanupSucceeded
+        ) {
+          throw new Error("worker compose proof reported incomplete Mailpit provider evidence");
+        }
+      }
+    }
     assertNoProhibitedClaims({
       runtimeMode: summary.runtimeMode,
       providerMode: summary.providerMode,
+      notificationProviderMode: summary.notificationProviderMode,
       jobStatus: summary.jobStatus,
+      notificationDeliveryStatus: summary.notificationDeliveryStatus,
       auditEvents: summary.auditEvents,
       tenantBoundaryDenied: summary.tenantBoundaryDenied,
       authorizationDenied: summary.authorizationDenied,
@@ -492,11 +691,21 @@ async function runModeProof(
   if (mode === "dev-compose-backed" && deferredBoundaries.length === 0) {
     throw new Error("compose-backed proof did not record a deferred provider-binding boundary");
   }
+  if (
+    mode === "dev-compose-backed" &&
+    (api.providerMode === DEV_IN_MEMORY_PROVIDER_MODE_LABEL ||
+      worker.providerMode === DEV_IN_MEMORY_PROVIDER_MODE_LABEL ||
+      api.notificationProviderMode !== "composed-test" ||
+      worker.notificationProviderMode !== "composed-test" ||
+      worker.composedProviderEvidence.length === 0)
+  ) {
+    throw new Error("compose-backed proof did not prove a real composed provider binding");
+  }
   return {
-    issueId: "USF-181",
+    issueId: "USF-183",
     parentIssueId: "USF-133",
     mode,
-    providerMode: "dev in-memory",
+    providerMode: expectedRuntimeProviderMode(mode),
     api,
     worker,
     composeBoundary:
@@ -520,6 +729,7 @@ async function runModeProof(
     secretBoundary: "local synthetic secret seed only; no real secrets or external credentials",
     prohibitedClaimsObserved: [],
     deferredBoundaries,
+    composedProviderEvidence: worker.composedProviderEvidence,
   };
 }
 
@@ -543,6 +753,9 @@ function printSummary(summary: RuntimeProofSummary): void {
   console.log(`API runtime mode: ${summary.api.runtimeMode}`);
   console.log(`Worker runtime mode: ${summary.worker.runtimeMode}`);
   console.log(`Provider mode: ${summary.providerMode}`);
+  console.log(`API notification provider mode: ${summary.api.notificationProviderMode}`);
+  console.log(`Worker notification provider mode: ${summary.worker.notificationProviderMode}`);
+  console.log(`Composed provider evidence count: ${summary.composedProviderEvidence.length}`);
   console.log(`API audit events captured: ${summary.api.auditEvents}`);
   console.log(`Worker audit events captured: ${summary.worker.auditEvents}`);
   console.log(`Compose boundary started: ${summary.composeBoundary.started ? "yes" : "no"}`);
