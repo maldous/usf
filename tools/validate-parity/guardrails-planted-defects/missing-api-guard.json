@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.missing-api-guard",
+  "expectedRuleId": "USF-GUARDRAILS-004",
+  "edits": [
+    {
+      "target": "apps/api/src/server.ts",
+      "old": "enforceRouteGuardrail",
+      "new": "skipRouteGuardrail"
+    }
+  ]
+}

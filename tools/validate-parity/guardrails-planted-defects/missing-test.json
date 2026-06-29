@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.missing-test",
+  "expectedRuleId": "USF-GUARDRAILS-006",
+  "edits": [
+    {
+      "target": "tests/capabilities/rate-limits-abuse-controls.test.ts",
+      "old": "tenant quota accounting isolated",
+      "new": "tenant quota accounting defect"
+    }
+  ]
+}

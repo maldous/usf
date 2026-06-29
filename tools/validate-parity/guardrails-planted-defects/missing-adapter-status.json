@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.missing-adapter-status",
+  "expectedRuleId": "USF-GUARDRAILS-003",
+  "edits": [
+    {
+      "target": "adapters/guardrails/src/index.ts",
+      "old": "safeStatusView(): ReturnType<GuardrailPort[\"safeStatusView\"]>",
+      "new": "statusViewUnsafe(): ReturnType<GuardrailPort[\"safeStatusView\"]>"
+    }
+  ]
+}
