@@ -5251,6 +5251,484 @@
         "Do not substitute aliases or invented values for Compose service policy fields."
       ],
       "deferredDetails": []
+    },
+    {
+      "id": "compose-bind-scopes",
+      "title": "Compose Bind Scopes",
+      "status": "active",
+      "description": "Compose Bind Scopes controlled values for Compose port exposure and hardening.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for Compose port exposure policy.",
+      "sourceInputs": [
+        "user directive: semantic port exposure governance and generated Compose hardening"
+      ],
+      "values": [
+        {
+          "id": "loopback-only",
+          "label": "Loopback Only",
+          "description": "Compose port exposure value loopback-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "internal-network-only",
+          "label": "Internal Network Only",
+          "description": "Compose port exposure value internal-network-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "host-lan",
+          "label": "Host Lan",
+          "description": "Compose port exposure value host-lan.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "public",
+          "label": "Public",
+          "description": "Compose port exposure value public.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "external-provider",
+          "label": "External Provider",
+          "description": "Compose port exposure value external-provider.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "cloud-provider",
+          "label": "Cloud Provider",
+          "description": "Compose port exposure value cloud-provider.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "prohibited",
+          "label": "Prohibited",
+          "description": "Compose port exposure value prohibited.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose port exposure value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Uncontrolled port exposure can create host conflicts, broaden bind scope, or imply readiness not proven."
+      ],
+      "aiGuidance": [
+        "Do not publish host ports unless a structured port policy authorizes them.",
+        "Do not infer production readiness from local published ports."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-exposure-classes",
+      "title": "Compose Exposure Classes",
+      "status": "active",
+      "description": "Compose Exposure Classes controlled values for Compose port exposure and hardening.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for Compose port exposure policy.",
+      "sourceInputs": [
+        "user directive: semantic port exposure governance and generated Compose hardening"
+      ],
+      "values": [
+        {
+          "id": "runtime-api",
+          "label": "Runtime Api",
+          "description": "Compose port exposure value runtime-api.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "database",
+          "label": "Database",
+          "description": "Compose port exposure value database.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "cache",
+          "label": "Cache",
+          "description": "Compose port exposure value cache.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "object-storage",
+          "label": "Object Storage",
+          "description": "Compose port exposure value object-storage.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "identity",
+          "label": "Identity",
+          "description": "Compose port exposure value identity.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "secrets",
+          "label": "Secrets",
+          "description": "Compose port exposure value secrets.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "observability",
+          "label": "Observability",
+          "description": "Compose port exposure value observability.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "assurance",
+          "label": "Assurance",
+          "description": "Compose port exposure value assurance.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "operator-admin",
+          "label": "Operator Admin",
+          "description": "Compose port exposure value operator-admin.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "gateway",
+          "label": "Gateway",
+          "description": "Compose port exposure value gateway.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "provider-emulation",
+          "label": "Provider Emulation",
+          "description": "Compose port exposure value provider-emulation.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "provider-mock",
+          "label": "Provider Mock",
+          "description": "Compose port exposure value provider-mock.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "notification-test",
+          "label": "Notification Test",
+          "description": "Compose port exposure value notification-test.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "webhook-test",
+          "label": "Webhook Test",
+          "description": "Compose port exposure value webhook-test.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "workflow-runtime",
+          "label": "Workflow Runtime",
+          "description": "Compose port exposure value workflow-runtime.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "workflow-ui",
+          "label": "Workflow Ui",
+          "description": "Compose port exposure value workflow-ui.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "scanning",
+          "label": "Scanning",
+          "description": "Compose port exposure value scanning.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "external-requirement-only",
+          "label": "External Requirement Only",
+          "description": "Compose port exposure value external-requirement-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Uncontrolled port exposure can create host conflicts, broaden bind scope, or imply readiness not proven."
+      ],
+      "aiGuidance": [
+        "Do not publish host ports unless a structured port policy authorizes them.",
+        "Do not infer production readiness from local published ports."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-concurrent-environment-policies",
+      "title": "Compose Concurrent Environment Policies",
+      "status": "active",
+      "description": "Compose Concurrent Environment Policies controlled values for Compose port exposure and hardening.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for Compose port exposure policy.",
+      "sourceInputs": [
+        "user directive: semantic port exposure governance and generated Compose hardening"
+      ],
+      "values": [
+        {
+          "id": "single-environment-only",
+          "label": "Single Environment Only",
+          "description": "Compose port exposure value single-environment-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "concurrent-safe",
+          "label": "Concurrent Safe",
+          "description": "Compose port exposure value concurrent-safe.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "offset-required",
+          "label": "Offset Required",
+          "description": "Compose port exposure value offset-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "dynamic-required",
+          "label": "Dynamic Required",
+          "description": "Compose port exposure value dynamic-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "prohibited",
+          "label": "Prohibited",
+          "description": "Compose port exposure value prohibited.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "external-provider-only",
+          "label": "External Provider Only",
+          "description": "Compose port exposure value external-provider-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Uncontrolled port exposure can create host conflicts, broaden bind scope, or imply readiness not proven."
+      ],
+      "aiGuidance": [
+        "Do not publish host ports unless a structured port policy authorizes them.",
+        "Do not infer production readiness from local published ports."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-port-allocation-modes",
+      "title": "Compose Port Allocation Modes",
+      "status": "active",
+      "description": "Compose Port Allocation Modes controlled values for Compose port exposure and hardening.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for Compose port exposure policy.",
+      "sourceInputs": [
+        "user directive: semantic port exposure governance and generated Compose hardening"
+      ],
+      "values": [
+        {
+          "id": "fixed",
+          "label": "Fixed",
+          "description": "Compose port exposure value fixed.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "environment-offset",
+          "label": "Environment Offset",
+          "description": "Compose port exposure value environment-offset.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "dynamic",
+          "label": "Dynamic",
+          "description": "Compose port exposure value dynamic.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "external-managed",
+          "label": "External Managed",
+          "description": "Compose port exposure value external-managed.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "cloud-provider",
+          "label": "Cloud Provider",
+          "description": "Compose port exposure value cloud-provider.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        },
+        {
+          "id": "not-published",
+          "label": "Not Published",
+          "description": "Compose port exposure value not-published.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF Compose port exposure hardening directive.",
+          "aiGuidance": "Use only according to the Compose port exposure schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Uncontrolled port exposure can create host conflicts, broaden bind scope, or imply readiness not proven."
+      ],
+      "aiGuidance": [
+        "Do not publish host ports unless a structured port policy authorizes them.",
+        "Do not infer production readiness from local published ports."
+      ],
+      "deferredDetails": []
     }
   ],
   "forbiddenValues": [

@@ -1,0 +1,13 @@
+{
+  "expectedRuleId": "USF-COMPOSE-027",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "ports.0.readinessClaimsAllowed": [
+          "production-readiness"
+        ]
+      }
+    }
+  ]
+}

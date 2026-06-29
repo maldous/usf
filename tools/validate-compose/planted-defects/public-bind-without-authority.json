@@ -1,0 +1,12 @@
+{
+  "expectedRuleId": "USF-COMPOSE-022",
+  "servicePatches": [
+    {
+      "serviceId": "grafana",
+      "values": {
+        "ports.0.hostIp": "0.0.0.0",
+        "ports.0.bindScope": "public"
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import argparse
 import copy
 import importlib.util
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -17,7 +18,7 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[2]
 CATALOGUE_PATH = ROOT / "spec/instances/compose-service/service-catalogue.json"
 SCHEMA_PATH = ROOT / "spec/schemas/compose-service.schema.json"
-REACT_COMPOSE_PATH = ROOT.parent / "react" / "compose.yaml"
+REACT_COMPOSE_EVIDENCE_PATH = ROOT / "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
 PLANTED_DEFECT_DIR = ROOT / "tools/validate-compose/planted-defects"
 
 GENERATOR_PATH = ROOT / "tools/generate-compose/generate-compose.py"
@@ -45,6 +46,19 @@ RULES = {
     "USF-COMPOSE-014": "Generated Compose is stale",
     "USF-COMPOSE-015": "Compose topology contradicts classification",
     "USF-COMPOSE-016": "Catalogue JSON Schema validation failed",
+    "USF-COMPOSE-017": "Duplicate published host port within environment",
+    "USF-COMPOSE-018": "Duplicate published host port across concurrently-runnable environments",
+    "USF-COMPOSE-019": "Profile-combination port conflict",
+    "USF-COMPOSE-020": "Published port lacks structured semantic port policy",
+    "USF-COMPOSE-021": "Published port lacks explicit host_ip or bindScope",
+    "USF-COMPOSE-022": "Non-loopback bind lacks explicit accepted authority",
+    "USF-COMPOSE-023": "Operator/admin port lacks access, auth, or audit policy",
+    "USF-COMPOSE-024": "Production external/cloud requirement lacks exposure boundary",
+    "USF-COMPOSE-025": "Service exposes host port but environment policy is not generated for that port",
+    "USF-COMPOSE-026": "Raw string port syntax is generated without structured derivation",
+    "USF-COMPOSE-027": "Exposed port lacks readiness claim boundary",
+    "USF-COMPOSE-028": "Exposed service with secrets/admin/runtime-state lacks hardening metadata",
+    "USF-COMPOSE-029": "Generated Compose dependency is absent from the same target",
 }
 
 
@@ -64,22 +78,20 @@ def add(finding_list: list[dict[str, str]], rule_id: str, subject: str, message:
     )
 
 
-def react_services(path: Path = REACT_COMPOSE_PATH) -> set[str]:
-    services: set[str] = set()
-    in_services = False
-    with path.open(encoding="utf-8") as fh:
-        for raw in fh:
-            line = raw.rstrip("\n")
-            if line == "services:":
-                in_services = True
-                continue
-            if in_services and line and not line.startswith(" ") and not line.startswith("#"):
-                break
-            if in_services and line.startswith("  ") and not line.startswith("    "):
-                key = line.strip().rstrip(":")
-                if key and not key.startswith("#"):
-                    services.add(key)
-    return services
+def react_services(path: Path = REACT_COMPOSE_EVIDENCE_PATH) -> set[str]:
+    evidence = load_json(path)
+    services = evidence.get("services", [])
+    if not isinstance(services, list):
+        raise ValueError(f"{path} does not contain a services array")
+    names = {
+        row["react_service"]
+        for row in services
+        if isinstance(row, dict) and isinstance(row.get("react_service"), str)
+    }
+    expected_count = evidence.get("react_service_count")
+    if expected_count != len(names):
+        raise ValueError(f"{path} react_service_count={expected_count} but discovered {len(names)} unique names")
+    return names
 
 
 def generated_service_names(catalogue: dict[str, Any], environment: str) -> set[str]:
@@ -94,6 +106,131 @@ def catalogue_service_names(catalogue: dict[str, Any], environment: str) -> set[
         if policy["generated"] and service.get("composeService"):
             names.add(service["composeService"]["serviceName"])
     return names
+
+
+def generated_dependencies(catalogue: dict[str, Any], environment: str) -> dict[str, set[str]]:
+    dependencies: dict[str, set[str]] = {}
+    for service in catalogue["services"]:
+        policy = service["environmentPolicies"][environment]
+        compose = service.get("composeService")
+        if not policy["generated"] or not compose:
+            continue
+        service_name = compose["serviceName"]
+        dependencies[service_name] = {dependency["serviceName"] for dependency in compose["dependsOn"]}
+    return dependencies
+
+
+def semantic_ports_for_environment(catalogue: dict[str, Any], environment: str) -> list[dict[str, Any]]:
+    ports: list[dict[str, Any]] = []
+    for service in catalogue["services"]:
+        policy = service["environmentPolicies"][environment]
+        for port in service["ports"]:
+            if environment not in port["environmentScopes"]:
+                continue
+            item = dict(port)
+            item["serviceId"] = service["serviceId"]
+            item["serviceKind"] = service["serviceKind"]
+            item["environment"] = environment
+            item["serviceGenerated"] = bool(policy["generated"])
+            item["environmentPolicy"] = policy
+            ports.append(item)
+    return ports
+
+
+def port_key(port: dict[str, Any]) -> tuple[str, int, str]:
+    return (port["hostIp"], int(port["publishedPort"]), port["protocol"])
+
+
+def validate_port_policy(catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
+    by_environment: dict[str, list[dict[str, Any]]] = {
+        env: semantic_ports_for_environment(catalogue, env)
+        for env in ["dev", "test", "staging"]
+    }
+
+    for environment, ports in by_environment.items():
+        seen: dict[tuple[str, int, str], list[dict[str, Any]]] = {}
+        for port in ports:
+            seen.setdefault(port_key(port), []).append(port)
+
+            if not port["serviceGenerated"]:
+                add(findings, "USF-COMPOSE-025", f"{environment}:{port['serviceId']}:{port['name']}")
+            if port.get("portAllocationMode") != "not-published" and (
+                not port.get("hostIp") or not port.get("bindScope")
+            ):
+                add(findings, "USF-COMPOSE-021", f"{environment}:{port['serviceId']}:{port['name']}")
+            if port.get("hostIp") != "127.0.0.1" or port.get("bindScope") != "loopback-only":
+                if not port.get("internetExposureAllowed"):
+                    add(findings, "USF-COMPOSE-022", f"{environment}:{port['serviceId']}:{port['name']}")
+            if port.get("exposureClass") in {"operator-admin", "assurance", "gateway", "workflow-ui", "identity", "secrets"}:
+                if not port.get("accessPolicy") or not port.get("authRequired") or not port.get("auditRequired"):
+                    add(findings, "USF-COMPOSE-023", f"{environment}:{port['serviceId']}:{port['name']}")
+            if not port.get("readinessClaimsProhibited"):
+                add(findings, "USF-COMPOSE-027", f"{environment}:{port['serviceId']}:{port['name']}")
+            prohibited_claims = set(port.get("readinessClaimsAllowed", [])) & {
+                "production-readiness",
+                "staging-readiness",
+                "live-provider-readiness",
+                "iso27001-certification",
+                "soc-readiness",
+            }
+            if prohibited_claims:
+                add(findings, "USF-COMPOSE-027", f"{environment}:{port['serviceId']}:{port['name']}", f"prohibited allowed claims: {sorted(prohibited_claims)}")
+            if port["serviceKind"] in {"database", "cache", "object-storage", "secret-store", "operator-admin", "operator-automation"}:
+                for field in ["controlPurpose", "riskOwner", "dataClassification", "retentionLoggingPosture", "evidenceProduced"]:
+                    if not port.get(field):
+                        add(findings, "USF-COMPOSE-028", f"{environment}:{port['serviceId']}:{port['name']}:{field}")
+
+        for key, duplicates in seen.items():
+            if len(duplicates) > 1:
+                add(findings, "USF-COMPOSE-017", f"{environment}:{key}", ", ".join(f"{p['serviceId']}:{p['name']}" for p in duplicates))
+
+        by_profile: dict[tuple[str, int, str, str], list[dict[str, Any]]] = {}
+        for port in ports:
+            profiles = port.get("profileScope") or ["<default>"]
+            for profile in profiles:
+                by_profile.setdefault((*port_key(port), profile), []).append(port)
+        for key, duplicates in by_profile.items():
+            if len(duplicates) > 1:
+                add(findings, "USF-COMPOSE-019", f"{environment}:{key}", ", ".join(f"{p['serviceId']}:{p['name']}" for p in duplicates))
+
+    cross: dict[tuple[str, int, str], list[dict[str, Any]]] = {}
+    for ports in by_environment.values():
+        for port in ports:
+            cross.setdefault(port_key(port), []).append(port)
+    for key, ports in cross.items():
+        environments = {port["environment"] for port in ports}
+        if len(environments) <= 1:
+            continue
+        if any(port["concurrentEnvironmentPolicy"] != "single-environment-only" for port in ports):
+            add(findings, "USF-COMPOSE-018", str(key), ", ".join(f"{p['environment']}:{p['serviceId']}:{p['name']}" for p in ports))
+
+    for service in catalogue["services"]:
+        production = service["environmentPolicies"]["production"]
+        if production["required"] is not False and production["realisationMode"] in {"external-managed", "cloud-provider"}:
+            for field in ["productionExposureBoundary", "environmentScopeMechanism", "projectBoundary", "accessBoundary"]:
+                if production.get(field) in {None, "", "none", "not-applicable"}:
+                    add(findings, "USF-COMPOSE-024", f"{service['serviceId']}:production:{field}")
+        compose = service.get("composeService")
+        if compose and compose.get("ports"):
+            add(findings, "USF-COMPOSE-020", service["serviceId"], "composeService.ports must be empty; service.ports is authoritative")
+
+
+SECRET_NAME = re.compile(r"(^|_)(PASSWORD|TOKEN|SECRET|PWD)($|_)", re.I)
+SECRET_VALUE = re.compile(r"(_password|dev-root-token|secret-value|password@|://[^:@/]+:[^@/]+@)", re.I)
+LOCAL_SECRET_PLACEHOLDER = re.compile(r"(_password|dev-root-token|password@|:windmill_password@|:sonar_password@)", re.I)
+
+
+def validate_secret_placeholders(catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
+    for service in catalogue["services"]:
+        compose = service.get("composeService")
+        if not compose:
+            continue
+        for entry in compose["environment"]:
+            name = entry["name"]
+            value = entry["value"]
+            if SECRET_NAME.search(name) or SECRET_VALUE.search(value):
+                if not LOCAL_SECRET_PLACEHOLDER.search(value):
+                    add(findings, "USF-COMPOSE-028", f"{service['serviceId']}:{name}", "secret-like value is not an approved local bootstrap placeholder")
 
 
 def validate_schema(catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
@@ -118,6 +255,9 @@ def validate_catalogue(catalogue: dict[str, Any], findings: list[dict[str, str]]
         authorised = catalogue_service_names(catalogue, environment)
         for name in sorted(compose_names - authorised):
             add(findings, "USF-COMPOSE-002", f"{environment}:{name}")
+        for service_name, dependencies in generated_dependencies(catalogue, environment).items():
+            for dependency in sorted(dependencies - compose_names):
+                add(findings, "USF-COMPOSE-029", f"{environment}:{service_name}->{dependency}")
 
     dev_names = generated_service_names(catalogue, "dev")
     for service in catalogue["services"]:
@@ -169,8 +309,16 @@ def validate_catalogue(catalogue: dict[str, Any], findings: list[dict[str, str]]
             add(findings, "USF-COMPOSE-009", service_id)
 
         for env_name, policy in policies.items():
-            if policy["sharingModel"] == "shared-control-plane" and "environment" not in policy["proofObligation"]:
-                add(findings, "USF-COMPOSE-010", f"{service_id}:{env_name}")
+            if policy["sharingModel"] == "shared-control-plane":
+                for field in [
+                    "environmentScopeMechanism",
+                    "projectBoundary",
+                    "tenantBoundary",
+                    "accessBoundary",
+                    "productionExposureBoundary",
+                ]:
+                    if policy.get(field) in {None, "", "none", "not-applicable"}:
+                        add(findings, "USF-COMPOSE-010", f"{service_id}:{env_name}:{field}")
             if (
                 service["serviceKind"] in {"database", "cache", "search-provider", "object-storage", "analytics-store"}
                 and policy["sharingModel"] == "shared-control-plane"
@@ -202,6 +350,8 @@ def validate_catalogue(catalogue: dict[str, Any], findings: list[dict[str, str]]
                 add(findings, "USF-COMPOSE-015", service_id, "profile-gated service has no compose profile")
             if compose["image"].endswith(":latest"):
                 add(findings, "USF-COMPOSE-015", service_id, "image tag latest is prohibited")
+    validate_port_policy(catalogue, findings)
+    validate_secret_placeholders(catalogue, findings)
 
 
 def _compose_service_names_from_text(text: str) -> set[str]:
@@ -233,10 +383,16 @@ def validate_generated(
         if actual != expected:
             add(findings, "USF-COMPOSE-014", str(path.relative_to(ROOT)))
         if actual is not None and target_name in {"dev", "test", "staging"}:
+            if re.search(r"(?m)^\s+-\s+[\"']?\d+(?::\d+)+", actual):
+                add(findings, "USF-COMPOSE-026", str(path.relative_to(ROOT)))
             actual_names = _compose_service_names_from_text(actual)
             authorised = catalogue_service_names(catalogue, target_name)
             for name in sorted(actual_names - authorised):
                 add(findings, "USF-COMPOSE-002", f"{target_name}:{name}")
+            for service_name, dependencies in generated_dependencies(catalogue, target_name).items():
+                if service_name in actual_names:
+                    for dependency in sorted(dependencies - actual_names):
+                        add(findings, "USF-COMPOSE-029", f"{target_name}:{service_name}->{dependency}")
 
 
 def apply_patch_defect(catalogue: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
@@ -249,8 +405,12 @@ def apply_patch_defect(catalogue: dict[str, Any], defect: dict[str, Any]) -> dic
             target = service
             parts = key.split(".")
             for part in parts[:-1]:
-                target = target[part]
-            target[parts[-1]] = value
+                target = target[int(part)] if isinstance(target, list) else target[part]
+            last = parts[-1]
+            if isinstance(target, list):
+                target[int(last)] = value
+            else:
+                target[last] = value
     if "generatedComposeTargets" in defect:
         data["generatedComposeTargets"] = defect["generatedComposeTargets"]
     return data
@@ -279,7 +439,7 @@ def run(mode: str) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     if mode in {"schema", "all"}:
         validate_schema(catalogue, findings)
-    if mode in {"catalogue", "policy", "all"}:
+    if mode in {"catalogue", "policy", "hardening", "security", "all"}:
         validate_catalogue(catalogue, findings)
     if mode in {"generated", "all"}:
         validate_generated(catalogue, findings)
@@ -290,7 +450,12 @@ def run(mode: str) -> list[dict[str, str]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", nargs="?", default="all", choices=["schema", "catalogue", "policy", "generated", "selftest", "all"])
+    parser.add_argument(
+        "mode",
+        nargs="?",
+        default="all",
+        choices=["schema", "catalogue", "policy", "hardening", "security", "generated", "selftest", "all"],
+    )
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     findings = run(args.mode)

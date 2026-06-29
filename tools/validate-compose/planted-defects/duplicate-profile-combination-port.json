@@ -1,0 +1,14 @@
+{
+  "expectedRuleId": "USF-COMPOSE-019",
+  "servicePatches": [
+    {
+      "serviceId": "wiremock",
+      "values": {
+        "ports.0.publishedPort": 4566,
+        "ports.0.profileScope": [
+          "provider-emulation"
+        ]
+      }
+    }
+  ]
+}

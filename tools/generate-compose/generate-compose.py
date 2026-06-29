@@ -89,11 +89,46 @@ def _entries_to_mapping(entries: list[dict[str, str]]) -> dict[str, str]:
     return {entry["name"]: entry["value"] for entry in entries}
 
 
-def _depends_to_mapping(entries: list[dict[str, str]]) -> dict[str, dict[str, str]]:
-    return {entry["serviceName"]: {"condition": entry["condition"]} for entry in entries}
+def _depends_to_mapping(
+    entries: list[dict[str, str]],
+    generated_service_names: set[str],
+) -> dict[str, dict[str, str]]:
+    return {
+        entry["serviceName"]: {"condition": entry["condition"]}
+        for entry in entries
+        if entry["serviceName"] in generated_service_names
+    }
 
 
-def _service_for_environment(service: dict[str, Any], environment: str) -> dict[str, Any] | None:
+def _port_for_compose(port: dict[str, Any]) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "name": port["name"],
+        "target": port["containerPort"],
+        "published": str(port["publishedPort"]),
+        "host_ip": port["hostIp"],
+        "protocol": port["protocol"],
+    }
+    if port.get("appProtocol"):
+        result["app_protocol"] = port["appProtocol"]
+    return result
+
+
+def _ports_for_environment(service: dict[str, Any], environment: str) -> list[dict[str, Any]]:
+    ports = []
+    for port in service["ports"]:
+        if environment not in port["environmentScopes"]:
+            continue
+        if port["portAllocationMode"] == "not-published":
+            continue
+        ports.append(_port_for_compose(port))
+    return ports
+
+
+def _service_for_environment(
+    service: dict[str, Any],
+    environment: str,
+    generated_service_names: set[str],
+) -> dict[str, Any] | None:
     policy = service["environmentPolicies"][environment]
     if not policy["generated"]:
         return None
@@ -106,12 +141,15 @@ def _service_for_environment(service: dict[str, Any], environment: str) -> dict[
         result["command"] = compose["command"]
     if compose["environment"]:
         result["environment"] = _entries_to_mapping(compose["environment"])
-    if compose["ports"]:
-        result["ports"] = compose["ports"]
+    ports = _ports_for_environment(service, environment)
+    if ports:
+        result["ports"] = ports
     if compose["volumes"]:
         result["volumes"] = compose["volumes"]
     if compose["dependsOn"]:
-        result["depends_on"] = _depends_to_mapping(compose["dependsOn"])
+        depends_on = _depends_to_mapping(compose["dependsOn"], generated_service_names)
+        if depends_on:
+            result["depends_on"] = depends_on
     if compose["healthcheck"]:
         result["healthcheck"] = compose["healthcheck"]
     profiles = policy["composeProfiles"] or compose["profiles"]
@@ -127,9 +165,15 @@ def compose_model(catalogue: dict[str, Any], environment: str) -> dict[str, Any]
     networks: dict[str, Any] = {}
     external_requirements: list[dict[str, str]] = []
 
+    target_services = {
+        service["composeService"]["serviceName"]
+        for service in catalogue["services"]
+        if service["environmentPolicies"][target_env]["generated"] and service.get("composeService")
+    }
+
     for service in catalogue["services"]:
         policy = service["environmentPolicies"][target_env]
-        compose = _service_for_environment(service, target_env)
+        compose = _service_for_environment(service, target_env, target_services)
         if compose:
             service_name = service["composeService"]["serviceName"]
             services[service_name] = compose
@@ -145,6 +189,11 @@ def compose_model(catalogue: dict[str, Any], environment: str) -> dict[str, Any]
                     "serviceId": service["serviceId"],
                     "realisationMode": policy["realisationMode"],
                     "deploymentForm": policy["deploymentForm"],
+                    "environmentScopeMechanism": policy["environmentScopeMechanism"],
+                    "projectBoundary": policy["projectBoundary"],
+                    "tenantBoundary": policy["tenantBoundary"],
+                    "accessBoundary": policy["accessBoundary"],
+                    "productionExposureBoundary": policy["productionExposureBoundary"],
                     "proofObligation": policy["proofObligation"],
                 }
             )

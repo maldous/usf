@@ -12,7 +12,13 @@ services:
       POSTGRES_USER: foundation_app
       POSTGRES_PASSWORD: foundation_app_password
     ports:
-      - 5433:5432
+      -
+        name: postgres
+        target: 5432
+        published: 5433
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: postgresql
     healthcheck:
       test:
         - CMD-SHELL
@@ -45,7 +51,13 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin_password
     ports:
-      - 8090:8080
+      -
+        name: keycloak-http
+        target: 8080
+        published: 8090
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     depends_on:
       keycloak-db:
         condition: service_healthy
@@ -54,7 +66,13 @@ services:
     command:
       - -js
     ports:
-      - 4222:4222
+      -
+        name: nats
+        target: 4222
+        published: 4222
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: nats
   temporal:
     image: temporalio/auto-setup:1.25.2
     environment:
@@ -64,7 +82,13 @@ services:
       POSTGRES_PWD: foundation_app_password
       POSTGRES_SEEDS: postgres
     ports:
-      - 7233:7233
+      -
+        name: temporal-grpc
+        target: 7233
+        published: 7233
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: grpc
     depends_on:
       postgres:
         condition: service_healthy
@@ -79,8 +103,20 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minio_password
     ports:
-      - 9000:9000
-      - 9001:9001
+      -
+        name: s3-api
+        target: 9000
+        published: 9000
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+      -
+        name: minio-console
+        target: 9001
+        published: 9001
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     healthcheck:
       test:
         - CMD
@@ -99,14 +135,32 @@ services:
     environment:
       BAO_DEV_ROOT_TOKEN_ID: dev-root-token
     ports:
-      - 8200:8200
+      -
+        name: bao-api
+        target: 8200
+        published: 8200
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.114.0
     command:
       - "--config=/etc/otelcol-contrib/config.yaml"
     ports:
-      - 4317:4317
-      - 4318:4318
+      -
+        name: otel-collector
+        target: 4317
+        published: 4317
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: tcp
+      -
+        name: otel-collector-4318
+        target: 4318
+        published: 4318
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: tcp
     volumes:
       - ./adapters/obs/config/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
   prometheus:
@@ -114,7 +168,13 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
     ports:
-      - 9090:9090
+      -
+        name: prometheus
+        target: 9090
+        published: 9090
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     volumes:
       - ./adapters/obs/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
   grafana:
@@ -122,13 +182,25 @@ services:
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin_password
     ports:
-      - 3000:3000
+      -
+        name: grafana
+        target: 3000
+        published: 3000
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
   loki:
     image: grafana/loki:3.3.2
     command:
       - "-config.file=/etc/loki/config.yaml"
     ports:
-      - 3100:3100
+      -
+        name: loki
+        target: 3100
+        published: 3100
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     volumes:
       - ./adapters/obs/config/loki.yaml:/etc/loki/config.yaml:ro
   tempo:
@@ -136,22 +208,52 @@ services:
     command:
       - "-config.file=/etc/tempo/config.yaml"
     ports:
-      - 3200:3200
+      -
+        name: tempo
+        target: 3200
+        published: 3200
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     volumes:
       - ./adapters/obs/config/tempo.yaml:/etc/tempo/config.yaml:ro
   mailpit:
     image: axllent/mailpit:v1.21.0
     ports:
-      - 1025:1025
-      - 8025:8025
+      -
+        name: smtp
+        target: 1025
+        published: 1025
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: smtp
+      -
+        name: mailpit-ui
+        target: 8025
+        published: 8025
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
   webhook-sink:
     image: mendhak/http-https-echo:35
     ports:
-      - 18088:8080
+      -
+        name: webhook-sink
+        target: 8080
+        published: 18088
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
   redis:
     image: redis:7.4.2-alpine
     ports:
-      - 6379:6379
+      -
+        name: redis
+        target: 6379
+        published: 6379
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: redis
     profiles:
       - runtime-providers
   meilisearch:
@@ -159,14 +261,32 @@ services:
     environment:
       MEILI_NO_ANALYTICS: "true"
     ports:
-      - 7700:7700
+      -
+        name: meilisearch
+        target: 7700
+        published: 7700
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     profiles:
       - runtime-providers
   clickhouse:
     image: clickhouse/clickhouse-server:24.12
     ports:
-      - 18123:8123
-      - 19000:9000
+      -
+        name: clickhouse-http
+        target: 8123
+        published: 18123
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+      -
+        name: clickhouse-native
+        target: 9000
+        published: 19000
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: tcp
     profiles:
       - runtime-providers
   pgadmin:
@@ -175,9 +295,30 @@ services:
       PGADMIN_DEFAULT_EMAIL: "admin@example.test"
       PGADMIN_DEFAULT_PASSWORD: admin_password
     ports:
-      - 5050:80
+      -
+        name: pgadmin-http
+        target: 80
+        published: 5050
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     profiles:
       - operator-tools
+  sonar-postgres:
+    image: postgres:16.6-alpine
+    environment:
+      POSTGRES_DB: sonar
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar_password
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "pg_isready -U sonar -d sonar"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - assurance
   sonarqube:
     image: sonarqube:25.9.0.112764-community
     environment:
@@ -185,7 +326,13 @@ services:
       SONAR_JDBC_USERNAME: sonar
       SONAR_JDBC_PASSWORD: sonar_password
     ports:
-      - 9002:9000
+      -
+        name: sonarqube-http
+        target: 9000
+        published: 9002
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     depends_on:
       sonar-postgres:
         condition: service_healthy
@@ -194,13 +341,25 @@ services:
   alertmanager:
     image: prom/alertmanager:v0.27.0
     ports:
-      - 9093:9093
+      -
+        name: alertmanager-http
+        target: 9093
+        published: 9093
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     profiles:
       - observability
   alloy:
     image: grafana/alloy:v1.5.1
     ports:
-      - 12345:12345
+      -
+        name: alloy-http
+        target: 12345
+        published: 12345
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     profiles:
       - observability
   windmill-postgres:
@@ -221,7 +380,13 @@ services:
       DATABASE_URL: "postgres://windmill:windmill_password@windmill-postgres:5432/windmill"
       REDIS_URL: redis://windmill-redis:6379
     ports:
-      - 8001:8000
+      -
+        name: windmill-http
+        target: 8000
+        published: 8001
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     depends_on:
       windmill-postgres:
         condition: service_started
@@ -263,7 +428,13 @@ services:
     environment:
       TEMPORAL_ADDRESS: temporal:7233
     ports:
-      - 8088:8080
+      -
+        name: temporal-ui
+        target: 8080
+        published: 8088
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     depends_on:
       temporal:
         condition: service_started
@@ -280,10 +451,23 @@ services:
   external-caddy:
     image: caddy:2-alpine
     ports:
-      - 8081:80
-      - 8443:443
+      -
+        name: gateway-http
+        target: 80
+        published: 8081
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+      -
+        name: gateway-https
+        target: 443
+        published: 8443
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: https
     profiles:
       - gateway
 volumes:
   postgres-data: {}
   keycloak-db-data: {}
+  sonar-postgres-data: {}

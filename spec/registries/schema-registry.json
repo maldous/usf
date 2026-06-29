@@ -2490,7 +2490,11 @@
         "compose-deployment-forms",
         "compose-classification-states",
         "compose-service-kinds",
-        "compose-human-decision-states"
+        "compose-human-decision-states",
+        "compose-bind-scopes",
+        "compose-exposure-classes",
+        "compose-concurrent-environment-policies",
+        "compose-port-allocation-modes"
       ],
       "expectedConsumers": [
         "validators",

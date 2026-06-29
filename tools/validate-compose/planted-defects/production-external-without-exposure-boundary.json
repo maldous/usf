@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-024",
+  "servicePatches": [
+    {
+      "serviceId": "keycloak",
+      "values": {
+        "environmentPolicies.production.productionExposureBoundary": ""
+      }
+    }
+  ]
+}

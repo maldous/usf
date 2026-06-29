@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-018",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "ports.0.concurrentEnvironmentPolicy": "concurrent-safe"
+      }
+    }
+  ]
+}
