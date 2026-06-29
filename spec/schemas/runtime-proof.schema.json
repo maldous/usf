@@ -1,0 +1,576 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:runtime-proof",
+  "title": "USF Runtime Proof Manifest Schema",
+  "description": "Draft JSON Schema for bounded runtime proof manifests. Runtime proof manifests record executable API and worker proof modes, service-catalogue linkage, proof commands, teardown obligations, evidence boundaries, deferred boundaries, and explicit non-claims. They support runtime-proof evidence organisation without claiming staging, production, live-provider, SOC, ISO/IEC 27001 certification, full dev readiness, or full React parity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "kind",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "issueId",
+    "parentIssueId",
+    "serviceCatalogueDependency",
+    "composeTarget",
+    "runtimeModes",
+    "proofCommands",
+    "syntheticDataBoundary",
+    "accessBoundary",
+    "auditEvidenceBoundary",
+    "secretBoundary",
+    "tenantBoundary",
+    "evidenceGrade",
+    "readinessTier",
+    "allowedClaims",
+    "prohibitedClaims",
+    "deferredBoundaries",
+    "enterpriseEvidenceSupport",
+    "nonClaims"
+  ],
+  "$defs": {
+    "kebab": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "runtimeMode": {
+      "type": "string",
+      "enum": [
+        "dev-in-memory",
+        "dev-compose-backed"
+      ]
+    },
+    "evidenceGrade": {
+      "type": "string",
+      "enum": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "f"
+      ]
+    },
+    "readinessTier": {
+      "type": "string",
+      "enum": [
+        "bounded-dev-runtime-proof",
+        "deferred-compose-provider-binding"
+      ]
+    },
+    "prohibitedClaim": {
+      "type": "string",
+      "enum": [
+        "production-readiness",
+        "staging-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "full-dev-readiness",
+        "full-react-parity",
+        "test-readiness"
+      ]
+    },
+    "allowedClaim": {
+      "type": "string",
+      "enum": [
+        "bounded-api-runtime-proof",
+        "bounded-worker-runtime-proof",
+        "bounded-compose-boundary-proof",
+        "dev-foundation-evidence-support"
+      ]
+    },
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "proofSurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entryPoint",
+        "packageScript",
+        "makeTarget",
+        "assertions",
+        "auditEvidence",
+        "tenantBoundary",
+        "accessBoundary",
+        "secretBoundary",
+        "syntheticDataBoundary"
+      ],
+      "properties": {
+        "entryPoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packageScript": {
+          "type": "string",
+          "minLength": 1
+        },
+        "makeTarget": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assertions": {
+          "$ref": "#/$defs/nonEmptyStrings"
+        },
+        "auditEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tenantBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accessBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "secretBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "syntheticDataBoundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "runtimeModeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "providerMode",
+        "providerClass",
+        "environment",
+        "apiProof",
+        "workerProof",
+        "composeBoundary",
+        "serviceCatalogueDependency",
+        "evidenceGrade",
+        "readinessTier",
+        "allowedClaims",
+        "prohibitedClaims",
+        "deferredBoundaryRefs",
+        "teardown"
+      ],
+      "properties": {
+        "mode": {
+          "$ref": "#/$defs/runtimeMode"
+        },
+        "providerMode": {
+          "type": "string",
+          "const": "dev in-memory"
+        },
+        "providerClass": {
+          "type": "string",
+          "const": "hermetic-mock"
+        },
+        "environment": {
+          "type": "string",
+          "const": "local"
+        },
+        "apiProof": {
+          "$ref": "#/$defs/proofSurface"
+        },
+        "workerProof": {
+          "$ref": "#/$defs/proofSurface"
+        },
+        "composeBoundary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "target",
+            "serviceCataloguePath",
+            "providerBinding"
+          ],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "target": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "serviceCataloguePath": {
+              "type": "string",
+              "const": "spec/instances/compose-service/service-catalogue.json"
+            },
+            "providerBinding": {
+              "type": "string",
+              "enum": [
+                "not-applicable",
+                "runtime-started-with-compose-boundary-provider-binding-deferred"
+              ]
+            }
+          }
+        },
+        "serviceCatalogueDependency": {
+          "type": "string",
+          "const": "spec/instances/compose-service/service-catalogue.json"
+        },
+        "evidenceGrade": {
+          "$ref": "#/$defs/evidenceGrade"
+        },
+        "readinessTier": {
+          "$ref": "#/$defs/readinessTier"
+        },
+        "allowedClaims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/allowedClaim"
+          },
+          "uniqueItems": true
+        },
+        "prohibitedClaims": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/prohibitedClaim"
+          },
+          "uniqueItems": true
+        },
+        "deferredBoundaryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kebab"
+          },
+          "uniqueItems": true
+        },
+        "teardown": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "childProcesses",
+            "composeResources"
+          ],
+          "properties": {
+            "childProcesses": {
+              "type": "string",
+              "minLength": 1
+            },
+            "composeResources": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "const": "runtime-proof"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "runtime-proof-evidence"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "$ref": "#/$defs/nonEmptyStrings"
+    },
+    "taxonomyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "vocabularyRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/kebab"
+      },
+      "uniqueItems": true
+    },
+    "aiGuidance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "issueId": {
+      "type": "string",
+      "const": "USF-181"
+    },
+    "parentIssueId": {
+      "type": "string",
+      "const": "USF-133"
+    },
+    "previousIssueId": {
+      "type": "string",
+      "const": "USF-168"
+    },
+    "serviceCatalogueDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "authority"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "const": "spec/instances/compose-service/service-catalogue.json"
+        },
+        "authority": {
+          "type": "string",
+          "const": "semantic-service-catalogue-authority"
+        }
+      }
+    },
+    "composeTarget": {
+      "type": "string",
+      "const": "compose/compose.dev.generated.yaml"
+    },
+    "runtimeModes": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/runtimeModeRecord"
+      }
+    },
+    "proofCommands": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "packageScript",
+          "makeTarget",
+          "invocation",
+          "mode"
+        ],
+        "properties": {
+          "packageScript": {
+            "type": "string",
+            "minLength": 1
+          },
+          "makeTarget": {
+            "type": "string",
+            "minLength": 1
+          },
+          "invocation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "validator",
+              "all",
+              "dev-in-memory",
+              "dev-compose-backed"
+            ]
+          }
+        }
+      }
+    },
+    "syntheticDataBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "accessBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "auditEvidenceBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "secretBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tenantBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidenceGrade": {
+      "$ref": "#/$defs/evidenceGrade"
+    },
+    "readinessTier": {
+      "$ref": "#/$defs/readinessTier"
+    },
+    "allowedClaims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/allowedClaim"
+      },
+      "uniqueItems": true
+    },
+    "prohibitedClaims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/prohibitedClaim"
+      },
+      "uniqueItems": true
+    },
+    "deferredBoundaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "mode",
+          "boundary",
+          "claimsProhibitedUntilResolved"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/kebab"
+          },
+          "mode": {
+            "$ref": "#/$defs/runtimeMode"
+          },
+          "boundary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "followUpIssueRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "claimsProhibitedUntilResolved": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/prohibitedClaim"
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "enterpriseEvidenceSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtimeAssetEvidence",
+        "ownerLinkage",
+        "auditEventProduction",
+        "healthReadinessEvidence",
+        "tenantIsolationEvidence",
+        "accessControlEvidence",
+        "secretBoundaryEvidence",
+        "syntheticDataEvidence",
+        "operationalTeardownEvidence",
+        "incidentResponseEvidenceBoundary",
+        "changePromotionEvidenceBoundary",
+        "serviceCatalogueTraceability",
+        "statementOfApplicabilitySupport"
+      ],
+      "properties": {
+        "runtimeAssetEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownerLinkage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "auditEventProduction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "healthReadinessEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tenantIsolationEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accessControlEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "secretBoundaryEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "syntheticDataEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operationalTeardownEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "incidentResponseEvidenceBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "changePromotionEvidenceBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "serviceCatalogueTraceability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statementOfApplicabilitySupport": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "nonClaims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/prohibitedClaim"
+      },
+      "uniqueItems": true
+    }
+  }
+}

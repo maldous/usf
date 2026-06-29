@@ -43,11 +43,25 @@ import { NotificationCapability } from "@foundation/capability-notify";
 import type { GuardrailPolicy } from "@foundation/core";
 
 export const DEV_PROVIDER_MODE_LABEL = "dev in-memory";
+export const DEV_RUNTIME_MODES = ["dev-in-memory", "dev-compose-backed"] as const;
+export type DevRuntimeMode = (typeof DEV_RUNTIME_MODES)[number];
+
+export const SERVICE_CATALOGUE_AUTHORITY_PATH =
+  "spec/instances/compose-service/service-catalogue.json";
+export const DEV_COMPOSE_TARGET = "compose/compose.dev.generated.yaml";
+export const DEV_COMPOSE_BACKED_DEFERRED_BOUNDARIES = Object.freeze([
+  "API and worker runtimes are started while the canonical dev Compose boundary is healthy, but runtime adapters remain in-memory until composed provider bindings are implemented.",
+  "Profile-gated workflow-provider and operator services remain catalogue-tracked boundaries and are not started by the default runtime proof.",
+]);
 
 export interface DevRuntime {
+  readonly runtimeMode: DevRuntimeMode;
   readonly providerModeLabel: typeof DEV_PROVIDER_MODE_LABEL;
   readonly providerClass: "hermetic-mock";
   readonly environment: "local";
+  readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY_PATH;
+  readonly composeTarget: typeof DEV_COMPOSE_TARGET | null;
+  readonly deferredBoundaries: readonly string[];
   readonly providers: Readonly<Record<string, string>>;
   readonly auditLedger: InMemoryAuditLedger;
   readonly authService: AuthService;
@@ -78,7 +92,22 @@ export const DEV_TENANT_ID = "dev-tenant";
 export const DEV_ACTOR_ID = "dev-actor";
 export const DEV_SECURITY_ACTOR_ID = "dev-security-actor";
 
-export function createDevRuntime(): DevRuntime {
+export function isDevRuntimeMode(value: string): value is DevRuntimeMode {
+  return (DEV_RUNTIME_MODES as readonly string[]).includes(value);
+}
+
+export function runtimeModeFromEnv(env: NodeJS.ProcessEnv = process.env): DevRuntimeMode {
+  const mode = env.USF_DEV_RUNTIME_MODE ?? "dev-in-memory";
+  if (isDevRuntimeMode(mode)) {
+    return mode;
+  }
+  throw new Error(`unsupported USF_DEV_RUNTIME_MODE: ${mode}`);
+}
+
+export function createDevRuntime(
+  options: { readonly runtimeMode?: DevRuntimeMode } = {},
+): DevRuntime {
+  const runtimeMode = options.runtimeMode ?? runtimeModeFromEnv();
   const auditLedger = new InMemoryAuditLedger();
   const identityProvider = new InMemoryIdentityProvider();
   const eventBus = new InMemoryEventBus();
@@ -155,9 +184,14 @@ export function createDevRuntime(): DevRuntime {
   });
 
   return {
+    runtimeMode,
     providerModeLabel: DEV_PROVIDER_MODE_LABEL,
     providerClass: "hermetic-mock",
     environment: "local",
+    serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
+    composeTarget: runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_TARGET : null,
+    deferredBoundaries:
+      runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_BACKED_DEFERRED_BOUNDARIES : [],
     providers: devProviderPlan,
     auditLedger,
     authService: createAuthService({ auditLedger, identityProvider }),

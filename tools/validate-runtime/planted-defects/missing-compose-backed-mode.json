@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-002",
+  "manifestPatches": [
+    {
+      "op": "remove",
+      "path": "/runtimeModes/1"
+    }
+  ]
+}

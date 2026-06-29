@@ -194,6 +194,7 @@ ENUM_BINDINGS = {
     ("proof-evidence", "/$defs/proofLevel"): "proof-levels",
     ("proof-evidence", "/$defs/providerMode"): "provider-modes",
     ("proof-evidence", "/$defs/environment"): "environment-classes",
+    ("runtime-proof", "/$defs/evidenceGrade"): "compose-evidence-grades",
     ("provider-mode", "/$defs/providerMode"): "provider-modes",
     ("provider-mode", "/$defs/environment"): "environment-classes",
     ("schema-registry", "/$defs/schemaClass"): "schema-classes",

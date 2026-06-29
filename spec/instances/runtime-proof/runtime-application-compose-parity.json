@@ -1,0 +1,297 @@
+{
+  "id": "runtime-proof.runtime-application-compose-parity",
+  "kind": "runtime-proof",
+  "title": "Runtime Application Compose Parity Proof Manifest",
+  "description": "Bounded USF-181 runtime proof manifest for API and worker dev runtime execution in in-memory and compose-backed modes. It records executable proof commands, service catalogue traceability, evidence boundaries, deferred provider-binding boundaries, and explicit non-claims.",
+  "authorityLevel": "runtime-proof-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Proof",
+    "Command",
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "proof-classification",
+    "provider-classification",
+    "environment-classification"
+  ],
+  "vocabularyRefs": [
+    "proof-levels",
+    "provider-modes",
+    "environment-classes",
+    "evidence-kinds"
+  ],
+  "aiGuidance": "This manifest supports bounded USF-181 runtime proof only. It does not claim full dev readiness, full React parity, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, or ISO/IEC 27001 certification.",
+  "issueId": "USF-181",
+  "parentIssueId": "USF-133",
+  "previousIssueId": "USF-168",
+  "serviceCatalogueDependency": {
+    "path": "spec/instances/compose-service/service-catalogue.json",
+    "authority": "semantic-service-catalogue-authority"
+  },
+  "composeTarget": "compose/compose.dev.generated.yaml",
+  "runtimeModes": [
+    {
+      "mode": "dev-in-memory",
+      "providerMode": "dev in-memory",
+      "providerClass": "hermetic-mock",
+      "environment": "local",
+      "apiProof": {
+        "entryPoint": "apps/api/src/main.ts",
+        "packageScript": "runtime:proof:in-memory",
+        "makeTarget": "runtime-proof-in-memory",
+        "assertions": [
+          "API binds to loopback on an ephemeral port",
+          "health route reports dev-in-memory runtime mode",
+          "readiness route reports service catalogue authority",
+          "OpenAPI route exposes tenant-context",
+          "tenant mismatch fails closed",
+          "authorization failure fails closed",
+          "tenant-context request captures audit evidence"
+        ],
+        "auditEvidence": "tenant-context audit record count is checked in the API runtime proof",
+        "tenantBoundary": "tenant mismatch request returns a closed failure status",
+        "accessBoundary": "authorization failure request returns a closed failure status",
+        "secretBoundary": "runtime uses only synthetic local seed data and no external provider credentials",
+        "syntheticDataBoundary": "runtime proof sends only synthetic tenant, actor, and job data"
+      },
+      "workerProof": {
+        "entryPoint": "apps/work/src/main.ts",
+        "packageScript": "runtime:proof:in-memory",
+        "makeTarget": "runtime-proof-in-memory",
+        "assertions": [
+          "worker run-once proof starts through the worker entry point",
+          "worker submits and executes a synthetic tenant maintenance job",
+          "worker cross-tenant job read fails closed",
+          "worker authorization failure fails closed",
+          "worker job lifecycle produces audit evidence"
+        ],
+        "auditEvidence": "worker proof requires job lifecycle and denial audit events",
+        "tenantBoundary": "cross-tenant worker job read fails closed",
+        "accessBoundary": "unauthorized worker job submission fails closed",
+        "secretBoundary": "worker proof uses no real secrets or external provider credentials",
+        "syntheticDataBoundary": "worker proof submits synthetic tenant, actor, and job payload data only"
+      },
+      "composeBoundary": {
+        "required": false,
+        "target": null,
+        "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+        "providerBinding": "not-applicable"
+      },
+      "serviceCatalogueDependency": "spec/instances/compose-service/service-catalogue.json",
+      "evidenceGrade": "b",
+      "readinessTier": "bounded-dev-runtime-proof",
+      "allowedClaims": [
+        "bounded-api-runtime-proof",
+        "bounded-worker-runtime-proof",
+        "dev-foundation-evidence-support"
+      ],
+      "prohibitedClaims": [
+        "production-readiness",
+        "staging-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "full-dev-readiness",
+        "full-react-parity",
+        "test-readiness"
+      ],
+      "deferredBoundaryRefs": [],
+      "teardown": {
+        "childProcesses": "API and worker child processes are stopped in finally paths with SIGTERM then SIGKILL fallback.",
+        "composeResources": "No Compose resources are started for dev-in-memory mode."
+      }
+    },
+    {
+      "mode": "dev-compose-backed",
+      "providerMode": "dev in-memory",
+      "providerClass": "hermetic-mock",
+      "environment": "local",
+      "apiProof": {
+        "entryPoint": "apps/api/src/main.ts",
+        "packageScript": "runtime:proof:compose",
+        "makeTarget": "runtime-proof-compose",
+        "assertions": [
+          "canonical dev Compose target starts and waits before API proof",
+          "API binds to loopback on an ephemeral port",
+          "health route reports dev-compose-backed runtime mode",
+          "readiness route reports service catalogue authority",
+          "OpenAPI route exposes tenant-context",
+          "tenant mismatch fails closed",
+          "authorization failure fails closed",
+          "tenant-context request captures audit evidence",
+          "deferred provider-binding boundary is reported"
+        ],
+        "auditEvidence": "tenant-context audit record count is checked while the canonical dev Compose boundary is running",
+        "tenantBoundary": "tenant mismatch request returns a closed failure status while Compose is running",
+        "accessBoundary": "authorization failure request returns a closed failure status while Compose is running",
+        "secretBoundary": "runtime uses only synthetic local seed data and no external provider credentials",
+        "syntheticDataBoundary": "runtime proof sends only synthetic tenant, actor, and job data"
+      },
+      "workerProof": {
+        "entryPoint": "apps/work/src/main.ts",
+        "packageScript": "runtime:proof:compose",
+        "makeTarget": "runtime-proof-compose",
+        "assertions": [
+          "canonical dev Compose target starts and waits before worker proof",
+          "worker run-once proof starts through the worker entry point",
+          "worker submits and executes a synthetic tenant maintenance job",
+          "worker cross-tenant job read fails closed",
+          "worker authorization failure fails closed",
+          "worker job lifecycle produces audit evidence",
+          "deferred provider-binding boundary is reported"
+        ],
+        "auditEvidence": "worker proof requires job lifecycle and denial audit events while the canonical dev Compose boundary is running",
+        "tenantBoundary": "cross-tenant worker job read fails closed while Compose is running",
+        "accessBoundary": "unauthorized worker job submission fails closed while Compose is running",
+        "secretBoundary": "worker proof uses no real secrets or external provider credentials",
+        "syntheticDataBoundary": "worker proof submits synthetic tenant, actor, and job payload data only"
+      },
+      "composeBoundary": {
+        "required": true,
+        "target": "compose/compose.dev.generated.yaml",
+        "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+        "providerBinding": "runtime-started-with-compose-boundary-provider-binding-deferred"
+      },
+      "serviceCatalogueDependency": "spec/instances/compose-service/service-catalogue.json",
+      "evidenceGrade": "c",
+      "readinessTier": "deferred-compose-provider-binding",
+      "allowedClaims": [
+        "bounded-api-runtime-proof",
+        "bounded-worker-runtime-proof",
+        "bounded-compose-boundary-proof",
+        "dev-foundation-evidence-support"
+      ],
+      "prohibitedClaims": [
+        "production-readiness",
+        "staging-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "full-dev-readiness",
+        "full-react-parity",
+        "test-readiness"
+      ],
+      "deferredBoundaryRefs": [
+        "compose-provider-binding",
+        "profile-gated-workflow-provider"
+      ],
+      "teardown": {
+        "childProcesses": "API and worker child processes are stopped in finally paths with SIGTERM then SIGKILL fallback.",
+        "composeResources": "The runtime proof starts docker compose with a unique project name and always runs docker compose down with volume and orphan cleanup."
+      }
+    }
+  ],
+  "proofCommands": [
+    {
+      "packageScript": "runtime:validate",
+      "makeTarget": "runtime-validate",
+      "invocation": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "mode": "validator"
+    },
+    {
+      "packageScript": "runtime:proof",
+      "makeTarget": "runtime-proof",
+      "invocation": "tsx packages/proof/src/runtime-application-proof.ts all",
+      "mode": "all"
+    },
+    {
+      "packageScript": "runtime:proof:in-memory",
+      "makeTarget": "runtime-proof-in-memory",
+      "invocation": "tsx packages/proof/src/runtime-application-proof.ts in-memory",
+      "mode": "dev-in-memory"
+    },
+    {
+      "packageScript": "runtime:proof:compose",
+      "makeTarget": "runtime-proof-compose",
+      "invocation": "tsx packages/proof/src/runtime-application-proof.ts compose",
+      "mode": "dev-compose-backed"
+    }
+  ],
+  "syntheticDataBoundary": "Runtime proof sends synthetic tenant ids, actor ids, and job payload markers only.",
+  "accessBoundary": "API and worker proofs verify fail-closed authorization paths and bind API host exposure to loopback.",
+  "auditEvidenceBoundary": "API proof verifies tenant-context audit evidence; worker proof verifies job lifecycle and denial audit evidence.",
+  "secretBoundary": "Runtime proof does not use real secrets, production data, or external provider credentials.",
+  "tenantBoundary": "API tenant mismatch and worker cross-tenant job read fail closed.",
+  "evidenceGrade": "b",
+  "readinessTier": "bounded-dev-runtime-proof",
+  "allowedClaims": [
+    "bounded-api-runtime-proof",
+    "bounded-worker-runtime-proof",
+    "bounded-compose-boundary-proof",
+    "dev-foundation-evidence-support"
+  ],
+  "prohibitedClaims": [
+    "production-readiness",
+    "staging-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "full-dev-readiness",
+    "full-react-parity",
+    "test-readiness"
+  ],
+  "deferredBoundaries": [
+    {
+      "id": "compose-provider-binding",
+      "mode": "dev-compose-backed",
+      "boundary": "The canonical dev Compose service boundary is started and waited, but API and worker provider adapters remain in-memory until explicit composed provider bindings are implemented and proven.",
+      "followUpIssueRefs": [
+        "USF-133"
+      ],
+      "claimsProhibitedUntilResolved": [
+        "test-readiness",
+        "production-readiness",
+        "staging-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "full-dev-readiness",
+        "full-react-parity"
+      ]
+    },
+    {
+      "id": "profile-gated-workflow-provider",
+      "mode": "dev-compose-backed",
+      "boundary": "Profile-gated workflow-provider services remain service-catalogue-tracked and are not required by the default dev runtime proof until a specific provider proof authorizes them.",
+      "followUpIssueRefs": [
+        "USF-133"
+      ],
+      "claimsProhibitedUntilResolved": [
+        "test-readiness",
+        "production-readiness",
+        "staging-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "full-dev-readiness",
+        "full-react-parity"
+      ]
+    }
+  ],
+  "enterpriseEvidenceSupport": {
+    "runtimeAssetEvidence": "API and worker runtime assets are named by entry point and command in this manifest.",
+    "ownerLinkage": "Owner, risk owner, and control owner trace through the service catalogue entries for platform API, worker, and composed dependencies.",
+    "auditEventProduction": "Proof code requires API tenant-context audit evidence and worker job lifecycle audit evidence.",
+    "healthReadinessEvidence": "Proof code requires health, readiness, and OpenAPI route exposure for the API runtime.",
+    "tenantIsolationEvidence": "Proof code requires API tenant mismatch and worker cross-tenant job read failures.",
+    "accessControlEvidence": "Proof code requires API and worker authorization failures to fail closed.",
+    "secretBoundaryEvidence": "Proof code uses synthetic local secret seed data only and no external credentials.",
+    "syntheticDataEvidence": "Proof code uses synthetic tenant, actor, and job payload data only.",
+    "operationalTeardownEvidence": "Proof code tears down child processes and Compose resources in finally paths.",
+    "incidentResponseEvidenceBoundary": "No incident response readiness is claimed; future incident workflow evidence remains separate.",
+    "changePromotionEvidenceBoundary": "Change and promotion evidence is limited to schema validation, runtime validator output, local proof execution, git history, PR checks, and merge record.",
+    "serviceCatalogueTraceability": "Compose-backed proof links to spec/instances/compose-service/service-catalogue.json and compose/compose.dev.generated.yaml.",
+    "statementOfApplicabilitySupport": "Fields support future Statement of Applicability evidence organisation only and do not claim certification."
+  },
+  "nonClaims": [
+    "production-readiness",
+    "staging-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "full-dev-readiness",
+    "full-react-parity",
+    "test-readiness"
+  ]
+}

@@ -540,7 +540,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "B",
-      "gap_or_decision": "USF rewrote foundation API semantics without copying React runtime code.",
+      "gap_or_decision": "USF-181 proves bounded API dev runtime execution in in-memory and compose-boundary modes without copying React runtime code or claiming service/container equivalence.",
       "legacy_service_category": "runtime-api",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": {
@@ -1408,7 +1408,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF worker is not Windmill automation parity.",
+      "gap_or_decision": "USF-181 proves bounded apps/work execution in in-memory and compose-boundary modes; this is not Windmill operator automation parity.",
       "legacy_service_category": "operator-automation-worker",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,

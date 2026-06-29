@@ -62,7 +62,7 @@ Evidence grades: A=5, B=11, C=7, D=7.
 | infra-cloud | Cloud/edge infra | deferred | C | P2 | future environment blockers | No live cloud/edge/deployment readiness claimed. |
 | ui-runtime | UI/UX app | not-applicable | C | non-blocking | USF-134 | UI/UX is future non-foundation scope. |
 | i18n-runtime | Internationalisation | deferred | C | P2 | future UI/API blocker | Need decide if foundation requires i18n contracts before UI work. |
-| dev-commands | Developer command parity | partial | B | P1 | USF-133 follow-up | Commands exist, but Sonar/Sentry/compose-universal command parity remains incomplete. |
+| dev-commands | Developer command parity | partial | B | P1 | USF-133 follow-up | Runtime proof commands now cover bounded API/worker in-memory and compose-boundary proof; Sonar/Sentry/compose-universal command parity remains incomplete. |
 | service-catalog-cmdb | Service catalogue/CMDB | partial | C | P0 | USF-168 / `spec/instances/compose-service/service-catalogue.json` | Semantic service catalogue authority now exists and is validator-enforced, but it does not close USF-133 or prove broader readiness. |
 | data-flow-trust-boundaries | Data flows/trust boundaries | partial | C | P0 | new tracker recommended | Need complete data-flow/trust-boundary review for missing optional services. |
 
@@ -71,6 +71,32 @@ Evidence grades: A=5, B=11, C=7, D=7.
 The dedicated compose matrix is a review catalogue, not the durable CMDB. The semantic service catalogue is `spec/instances/compose-service/service-catalogue.json`, governed by `spec/schemas/compose-service.schema.json` and `tools/validate-compose/validate-compose.py`. It records service purpose, owner, risk owner, control owner, environment disposition, data classification, readiness tier, evidence grade, access/audit/secret/backup/retention posture, tenant and operator boundaries, ISO/IEC 27001-supporting evidence posture, enterprise feature support posture, and explicit readiness non-claims.
 
 This service catalogue remains bounded to service disposition and generated Compose derivation. It does not claim full React parity readiness, full dev readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, or enterprise production readiness.
+
+## Runtime Application Proof Interpretation
+
+USF-181 adds a bounded runtime proof manifest at
+`spec/instances/runtime-proof/runtime-application-compose-parity.json`, governed by
+`spec/schemas/runtime-proof.schema.json` and enforced by
+`tools/validate-runtime/validate-runtime.py`.
+
+The proof model has two explicit modes:
+
+- `dev-in-memory` proves API and worker execution through the USF entry points with
+  in-memory providers, synthetic data, tenant and authorization fail-closed behaviour, and
+  audit evidence.
+- `dev-compose-backed` starts the canonical dev Compose target before API and worker proof
+  execution and reports `runtimeMode: dev-compose-backed`.
+
+The compose-backed mode is not service-equivalent to React's platform API container or
+Windmill worker service. Current API and worker provider adapters remain in-memory, and
+composed provider binding is an explicit deferred boundary under USF-133.
+
+This update supports runtime asset evidence, audit evidence, health/readiness evidence,
+tenant isolation evidence, fail-closed access-control evidence, secret and synthetic-data
+boundaries, operational teardown evidence, service-catalogue traceability, and future
+Statement of Applicability evidence organisation only. It does not claim ISO/IEC 27001
+certification, SOC readiness, staging readiness, production readiness, live-provider
+readiness, full dev readiness, test readiness, or full React parity.
 
 ## Control Mapping
 

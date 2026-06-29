@@ -7393,7 +7393,17 @@
       },
       "HealthResponse": {
         "type": "object",
-        "required": ["status", "service", "providerMode", "providerClass", "environment"],
+        "required": [
+          "status",
+          "service",
+          "runtimeMode",
+          "providerMode",
+          "providerClass",
+          "environment",
+          "serviceCatalogueAuthority",
+          "composeTarget",
+          "deferredBoundaries"
+        ],
         "properties": {
           "status": {
             "const": "ok",
@@ -7402,6 +7412,18 @@
           "service": {
             "const": "foundation-api",
             "type": "string"
+          },
+          "runtimeMode": {
+            "anyOf": [
+              {
+                "const": "dev-in-memory",
+                "type": "string"
+              },
+              {
+                "const": "dev-compose-backed",
+                "type": "string"
+              }
+            ]
           },
           "providerMode": {
             "const": "dev in-memory",
@@ -7414,6 +7436,27 @@
           "environment": {
             "const": "local",
             "type": "string"
+          },
+          "serviceCatalogueAuthority": {
+            "const": "spec/instances/compose-service/service-catalogue.json",
+            "type": "string"
+          },
+          "composeTarget": {
+            "anyOf": [
+              {
+                "const": "compose/compose.dev.generated.yaml",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deferredBoundaries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -9899,9 +9942,13 @@
         "required": [
           "status",
           "service",
+          "runtimeMode",
           "providerMode",
           "providerClass",
           "environment",
+          "serviceCatalogueAuthority",
+          "composeTarget",
+          "deferredBoundaries",
           "providers"
         ],
         "properties": {
@@ -9912,6 +9959,18 @@
           "service": {
             "const": "foundation-api",
             "type": "string"
+          },
+          "runtimeMode": {
+            "anyOf": [
+              {
+                "const": "dev-in-memory",
+                "type": "string"
+              },
+              {
+                "const": "dev-compose-backed",
+                "type": "string"
+              }
+            ]
           },
           "providerMode": {
             "const": "dev in-memory",
@@ -9924,6 +9983,27 @@
           "environment": {
             "const": "local",
             "type": "string"
+          },
+          "serviceCatalogueAuthority": {
+            "const": "spec/instances/compose-service/service-catalogue.json",
+            "type": "string"
+          },
+          "composeTarget": {
+            "anyOf": [
+              {
+                "const": "compose/compose.dev.generated.yaml",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deferredBoundaries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "providers": {
             "type": "object",
@@ -9951,6 +10031,7 @@
           "tenantId",
           "actorId",
           "roles",
+          "runtimeMode",
           "providerMode",
           "providerClass",
           "environment",
@@ -9970,6 +10051,18 @@
             "items": {
               "type": "string"
             }
+          },
+          "runtimeMode": {
+            "anyOf": [
+              {
+                "const": "dev-in-memory",
+                "type": "string"
+              },
+              {
+                "const": "dev-compose-backed",
+                "type": "string"
+              }
+            ]
           },
           "providerMode": {
             "const": "dev in-memory",
