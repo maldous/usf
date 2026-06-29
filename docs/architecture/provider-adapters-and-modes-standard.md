@@ -39,7 +39,7 @@ Unregistered providers fail validation. Critical providers require stronger revi
 
 ## Categories
 
-Required categories are `database`, `cache`, `object-storage`, `file-scan`, `identity`, `config`, `secrets`, `audit-ledger`, `event-bus`, `workflow-engine`, `operational-job-engine`, `notification-delivery`, `api-gateway`, `observability`, and `search-index`.
+Required categories are `database`, `cache`, `object-storage`, `file-scan`, `identity`, `config`, `secrets`, `audit-ledger`, `event-bus`, `workflow-engine`, `operational-job-engine`, `notification-delivery`, `api-gateway`, `observability`, `search-index`, `full-text-search`, `autocomplete`, and `vector-search`.
 
 Out-of-scope categories are represented as disabled, unavailable, or deferred where needed. Representation is not implementation.
 

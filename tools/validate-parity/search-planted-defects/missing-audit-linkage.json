@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-SEARCH-008",
+  "override": {
+    "removeText": [
+      {
+        "path": "capabilities/search/src/index.ts",
+        "text": "guardrails.evaluate"
+      }
+    ]
+  }
+}

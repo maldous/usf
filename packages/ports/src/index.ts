@@ -34,6 +34,11 @@ import type {
   PolicyDecision,
   SecretReference,
   Session,
+  SearchFacetBucket,
+  SearchIndexDocument,
+  SearchQueryPage,
+  SearchQueryPlan,
+  SearchQueryPolicy,
   TenantContext,
   TenantMembership,
   VerifiedKeycloakToken,
@@ -176,6 +181,36 @@ export interface ImportExportPort {
   ): BulkOperationRecord | undefined;
   appendItemOutcome(context: TenantContext, operationId: string, outcome: BulkItemOutcome): void;
   itemOutcomes(context: TenantContext, operationId: string): readonly BulkItemOutcome[];
+}
+
+// Tenant-safe search/index port (parity-search-indexing, USF-164). The index is a
+// discovery projection, not source authority. It stores classified safe projections
+// only; capability code performs PDP/guardrail/source-revalidation before exposing
+// results. Implementations in this slice are in-memory/local dev/test only.
+export interface SearchIndexPort {
+  index(document: SearchIndexDocument): SearchIndexDocument;
+  delete(context: TenantContext, indexDocumentId: string): boolean;
+  get(context: TenantContext, indexDocumentId: string): SearchIndexDocument | undefined;
+  query(context: TenantContext, plan: SearchQueryPlan, policy: SearchQueryPolicy): SearchQueryPage;
+  facet(
+    context: TenantContext,
+    plan: SearchQueryPlan,
+    policy: SearchQueryPolicy,
+  ): readonly SearchFacetBucket[];
+  reindexTenant(input: { tenantId: string; serviceActorId: string; idempotencyKey: string }): {
+    readonly reindexed: number;
+    readonly idempotent: boolean;
+  };
+  safeStatusView(): {
+    readonly providerMode: "in-memory" | "local-test";
+    readonly indexLifecycle: "active" | "degraded" | "disabled";
+    readonly documentCount: number;
+    readonly liveSearchReadinessClaim: false;
+    readonly liveVectorReadinessClaim: false;
+    readonly aiRagReadinessClaim: false;
+    readonly publicSearchApiReadinessClaim: false;
+    readonly productionReadinessClaim: false;
+  };
 }
 
 export interface ObservabilitySink extends TelemetryPort {

@@ -60,6 +60,8 @@ importers:
 
   adapters/obs: {}
 
+  adapters/search: {}
+
   adapters/secrets: {}
 
   adapters/store: {}
@@ -83,6 +85,8 @@ importers:
   capabilities/jobs: {}
 
   capabilities/notify: {}
+
+  capabilities/search: {}
 
   capabilities/tenant: {}
 

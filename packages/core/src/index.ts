@@ -211,6 +211,7 @@ export const AUDIT_CATEGORIES = Object.freeze([
   "job",
   "guardrail",
   "bulk-operation",
+  "search",
   "integration",
   "security",
   "admin",
@@ -461,6 +462,16 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
     severity: "warning",
     reserved: true,
   },
+  "search.query.executed": { category: "search", severity: "info" },
+  "search.query.denied": { category: "search", severity: "warning" },
+  "search.result.access_denied": { category: "search", severity: "warning" },
+  "search.index.updated": { category: "search", severity: "info" },
+  "search.index.deleted": { category: "search", severity: "notice" },
+  "search.reindex.started": { category: "search", severity: "notice" },
+  "search.reindex.completed": { category: "search", severity: "info" },
+  "search.reindex.failed": { category: "search", severity: "warning" },
+  "search.provider.denied": { category: "search", severity: "warning", reserved: true },
+  "search.autocomplete.denied": { category: "search", severity: "warning" },
 });
 
 // Metadata keys (matched case-insensitively as substrings) that MUST NEVER appear
@@ -1029,6 +1040,9 @@ export const PROVIDER_CATEGORIES = Object.freeze([
   "api-gateway",
   "observability",
   "search-index",
+  "full-text-search",
+  "autocomplete",
+  "vector-search",
 ] as const);
 export type ProviderCategory = (typeof PROVIDER_CATEGORIES)[number];
 
@@ -1883,6 +1897,35 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = Object.freeze
     lifecycleState: "suspended",
   }),
   makeProvider({
+    providerId: "search-index-in-memory",
+    providerName: "In-memory search index",
+    providerCategory: "search-index",
+    providerMode: "in-memory",
+    owningCapability: "search-indexing",
+    portName: "SearchIndexPort",
+    adapterName: "InMemorySearchIndex",
+    businessPurpose: "Hermetic tenant-safe search/index proof for local/dev/test.",
+    dataClassification: "restricted",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["tenant data access", "data discovery", "file/object handling"],
+    permissionGrants: [
+      {
+        providerAction: "query-safe-projection",
+        providerPermission: "read",
+        credentialScope: "no-credential-required",
+        allowedResourceScope: "tenant-scoped-safe-index-documents",
+        tenantScope: "tenant-scoped",
+      },
+      {
+        providerAction: "reindex-tenant",
+        providerPermission: "write",
+        credentialScope: "no-credential-required",
+        allowedResourceScope: "tenant-scoped-index-documents",
+        tenantScope: "tenant-scoped",
+      },
+    ],
+  }),
+  makeProvider({
     providerId: "search-index-disabled",
     providerName: "Search index provider disabled placeholder",
     providerCategory: "search-index",
@@ -1899,6 +1942,71 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = Object.freeze
     safeFailureMessage: "search index provider disabled",
     riskClassification: "medium",
     lifecycleState: "suspended",
+  }),
+  makeProvider({
+    providerId: "full-text-search-live-deferred",
+    providerName: "External full-text search provider class",
+    providerCategory: "full-text-search",
+    providerMode: "live-external-deferred",
+    owningCapability: "search-indexing",
+    portName: "SearchIndexPort",
+    adapterName: "External full-text provider deferred",
+    businessPurpose: "Recognised full-text search provider class; not implemented or live-ready.",
+    dataClassification: "restricted",
+    healthStatus: "deferred",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "regulated",
+    riskDrivers: [
+      "tenant data access",
+      "regulated data handling",
+      "egress to external network",
+      "availability dependency",
+    ],
+    transportPosture: { tlsRequired: true, certificateValidationRequired: true },
+    supplierPosture: { subprocessorStatus: "future-review-required" },
+  }),
+  makeProvider({
+    providerId: "autocomplete-live-deferred",
+    providerName: "Autocomplete provider class",
+    providerCategory: "autocomplete",
+    providerMode: "live-external-deferred",
+    owningCapability: "search-indexing",
+    portName: "SearchIndexPort",
+    adapterName: "Autocomplete provider deferred",
+    businessPurpose:
+      "Recognised autocomplete/typeahead provider class; not implemented or live-ready.",
+    dataClassification: "restricted",
+    healthStatus: "deferred",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "security-sensitive",
+    riskDrivers: ["tenant data access", "egress to external network", "data discovery"],
+    supplierPosture: { subprocessorStatus: "future-review-required" },
+  }),
+  makeProvider({
+    providerId: "vector-search-live-deferred",
+    providerName: "Vector search and embedding provider class",
+    providerCategory: "vector-search",
+    providerMode: "live-external-deferred",
+    owningCapability: "search-indexing",
+    portName: "SearchIndexPort",
+    adapterName: "Vector search provider deferred",
+    businessPurpose:
+      "Recognised vector/embedding/AI retrieval provider class; not implemented or live-ready.",
+    dataClassification: "restricted",
+    healthStatus: "deferred",
+    readinessStatus: "deferred",
+    capabilityStatus: "deferred",
+    riskClassification: "regulated",
+    riskDrivers: [
+      "tenant data access",
+      "regulated data handling",
+      "egress to external network",
+      "availability dependency",
+    ],
+    transportPosture: { tlsRequired: true, certificateValidationRequired: true },
+    supplierPosture: { subprocessorStatus: "future-review-required" },
   }),
 ]);
 
@@ -5772,5 +5880,665 @@ export function toSafeBulkOperationView(operation: BulkOperationRecord): SafeBul
     legalHold: operation.legalHold,
     createdAt: operation.createdAt,
     updatedAt: operation.updatedAt,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Tenant-safe search / indexing / discovery model (parity-search-indexing,
+// USF-164).
+//
+// Search is a controlled discovery surface, not the source of authority. Index
+// documents are classified, tenant-scoped safe projections; query results must be
+// source-revalidated or safe-by-construction. This model is local/dev/test proof
+// only and makes no live search provider, vector database, AI/RAG, public search
+// API, or production readiness claim.
+// ---------------------------------------------------------------------------
+
+export const SEARCHABLE_RESOURCE_CLASSIFICATIONS = Object.freeze([
+  "public",
+  "tenant-data",
+  "confidential",
+  "restricted",
+  "security-sensitive",
+  "audit-sensitive",
+  "regulated",
+  "file-derived",
+  "identity-derived",
+  "configuration-derived",
+  "notification-derived",
+  "job-derived",
+  "provider-derived",
+  "system-internal",
+  "test-only",
+] as const);
+export type SearchableResourceClassification = (typeof SEARCHABLE_RESOURCE_CLASSIFICATIONS)[number];
+
+export const SEARCH_INDEX_LIFECYCLE_STATES = Object.freeze([
+  "draft",
+  "building",
+  "active",
+  "stale",
+  "degraded",
+  "disabled",
+  "rebuilding",
+  "failed",
+  "retired",
+  "purged",
+] as const);
+export type SearchIndexLifecycleState = (typeof SEARCH_INDEX_LIFECYCLE_STATES)[number];
+
+export const SEARCH_RESOURCE_TYPES = Object.freeze([
+  "tenant-record",
+  "file",
+  "audit-event",
+  "notification",
+  "job",
+  "provider",
+  "configuration",
+  "identity",
+  "bulk-operation",
+  "test-resource",
+] as const);
+export type SearchResourceType = (typeof SEARCH_RESOURCE_TYPES)[number];
+
+export const SEARCH_SOURCE_REVALIDATION_POLICIES = Object.freeze([
+  "safe-projection-only",
+  "source-revalidated",
+  "hybrid",
+] as const);
+export type SearchSourceRevalidationPolicy = (typeof SEARCH_SOURCE_REVALIDATION_POLICIES)[number];
+
+export const SEARCH_FIELD_CLASSIFICATIONS = Object.freeze([
+  "public",
+  "internal",
+  "confidential",
+  "restricted",
+  "security-sensitive",
+] as const);
+export type SearchFieldClassification = (typeof SEARCH_FIELD_CLASSIFICATIONS)[number];
+
+export const SEARCH_FORBIDDEN_PATTERNS = Object.freeze([
+  ...OBSERVABILITY_FORBIDDEN_PATTERNS,
+  "raw_query",
+  "raw_result",
+  "raw_index",
+  "raw_snippet",
+  "provider_payload",
+  "embedding",
+  "vector",
+  "rag_context",
+] as const);
+
+export const SEARCH_DEFAULT_MAX_QUERY_LENGTH = 200;
+export const SEARCH_DEFAULT_MAX_TERMS = 12;
+export const SEARCH_DEFAULT_LIMIT = 10;
+export const SEARCH_MAX_LIMIT = 50;
+
+export class SearchPolicyError extends Error {
+  readonly reasonCode: string;
+
+  constructor(reasonCode: string, message: string) {
+    super(message);
+    this.name = "SearchPolicyError";
+    this.reasonCode = reasonCode;
+  }
+}
+
+export interface SearchIndexDocument {
+  readonly indexDocumentId: string;
+  readonly resourceType: string;
+  readonly resourceId: string;
+  readonly tenantId: string | null;
+  readonly classification: SearchableResourceClassification;
+  readonly sourceRef: string;
+  readonly sourceVersion: string;
+  readonly sourceHash: string;
+  readonly schemaVersion: string;
+  readonly indexVersion: string;
+  readonly indexedFields: readonly string[];
+  readonly redactedFields: readonly string[];
+  readonly searchableFields: readonly string[];
+  readonly sortableFields: readonly string[];
+  readonly filterableFields: readonly string[];
+  readonly facetableFields: readonly string[];
+  readonly fieldValues: Readonly<Record<string, string>>;
+  readonly fieldClassifications: Readonly<Record<string, SearchFieldClassification>>;
+  readonly title: string;
+  readonly snippet: string | null;
+  readonly requiredAction: string | null;
+  readonly sourceRevalidationPolicy: SearchSourceRevalidationPolicy;
+  readonly lifecycleState: SearchIndexLifecycleState;
+  readonly sourceFileId: string | null;
+  readonly fileStatus: FileStatusValue | null;
+  readonly fileScanStatus: FileScanStatusValue | null;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+  readonly indexedAt: string;
+  readonly expiresAt: string | null;
+  readonly staleAt: string | null;
+  readonly deletedAt: string | null;
+  readonly purgedAt: string | null;
+  readonly legalHold: boolean;
+  readonly retentionPolicy: string;
+}
+
+export interface SafeSearchResult {
+  readonly indexDocumentId: string;
+  readonly resourceType: string;
+  readonly resourceId: string;
+  readonly tenantId: string | null;
+  readonly classification: SearchableResourceClassification;
+  readonly title: string;
+  readonly snippet: string | null;
+  readonly score: number;
+  readonly fields: Readonly<Record<string, string>>;
+  readonly sourceVersion: string;
+  readonly indexVersion: string;
+  readonly lifecycleState: SearchIndexLifecycleState;
+  readonly stale: boolean;
+}
+
+export interface SearchFacetBucket {
+  readonly field: string;
+  readonly valueHash: string;
+  readonly count: number;
+}
+
+export interface SearchQueryPolicy {
+  readonly filterAllowList: readonly string[];
+  readonly sortAllowList: readonly string[];
+  readonly facetAllowList: readonly string[];
+  readonly searchableFieldAllowList: readonly string[];
+  readonly defaultLimit: number;
+  readonly maxLimit: number;
+  readonly maxQueryLength: number;
+  readonly maxTerms: number;
+  readonly countsEnabled: boolean;
+  readonly facetsEnabled: boolean;
+  readonly autocompleteEnabled: boolean;
+  readonly autocompleteMinLength: number;
+  readonly cursorTtlSeconds: number;
+  readonly rawQueryAuditAllowed: false;
+}
+
+export interface SearchQueryRequest {
+  readonly tenantId: string;
+  readonly queryText: string;
+  readonly filters?: Readonly<Record<string, string>>;
+  readonly sort?: { readonly field: string; readonly direction: "asc" | "desc" } | null;
+  readonly facets?: readonly string[];
+  readonly limit?: number;
+  readonly cursor?: string | null;
+  readonly now?: string;
+}
+
+export interface SearchQueryPlan {
+  readonly tenantId: string;
+  readonly queryText: string;
+  readonly queryHash: string;
+  readonly filters: Readonly<Record<string, string>>;
+  readonly sort: { readonly field: string; readonly direction: "asc" | "desc" } | null;
+  readonly facets: readonly string[];
+  readonly limit: number;
+  readonly offset: number;
+  readonly cursorScopeHash: string;
+  readonly nowMs: number;
+}
+
+export interface SearchQueryPage {
+  readonly results: readonly SafeSearchResult[];
+  readonly facets: readonly SearchFacetBucket[];
+  readonly total: number | null;
+  readonly nextCursor: string | null;
+  readonly queryHash: string;
+}
+
+export function assertSearchableResourceClassification(
+  value: string,
+): SearchableResourceClassification {
+  if (!SEARCHABLE_RESOURCE_CLASSIFICATIONS.includes(value as SearchableResourceClassification)) {
+    throw new SearchPolicyError("unknown-search-classification", "search classification denied");
+  }
+  return value as SearchableResourceClassification;
+}
+
+export function assertSearchLifecycleState(value: string): SearchIndexLifecycleState {
+  if (!SEARCH_INDEX_LIFECYCLE_STATES.includes(value as SearchIndexLifecycleState)) {
+    throw new SearchPolicyError("unknown-index-lifecycle", "search lifecycle denied");
+  }
+  return value as SearchIndexLifecycleState;
+}
+
+export function assertSearchResourceType(value: string): SearchResourceType {
+  const safeType = assertSafeSearchText(value, "search.resourceType");
+  if (!SEARCH_RESOURCE_TYPES.includes(safeType as SearchResourceType)) {
+    throw new SearchPolicyError("unknown-resource-type", "search resource type denied");
+  }
+  return safeType as SearchResourceType;
+}
+
+export function assertSearchSourceRevalidationPolicy(
+  value: string,
+): SearchSourceRevalidationPolicy {
+  if (!SEARCH_SOURCE_REVALIDATION_POLICIES.includes(value as SearchSourceRevalidationPolicy)) {
+    throw new SearchPolicyError("unknown-source-revalidation-policy", "search policy denied");
+  }
+  return value as SearchSourceRevalidationPolicy;
+}
+
+export function searchTextLooksSensitive(value: string): boolean {
+  const lowered = value.toLowerCase();
+  return (
+    telemetryValueLooksSensitive(value) ||
+    SEARCH_FORBIDDEN_PATTERNS.some((pattern) => lowered.includes(pattern))
+  );
+}
+
+export function safeSearchValue(value: string): string {
+  const safe = safeTelemetryValue(value);
+  return searchTextLooksSensitive(safe) ? CONFIG_REDACTED : safe;
+}
+
+function assertSafeSearchKey(key: string): string {
+  const safeKey = assertNonEmpty(key, "search.field");
+  if (searchTextLooksSensitive(safeKey)) {
+    throw new SearchPolicyError("search-field-sensitive", "search field denied");
+  }
+  return safeKey;
+}
+
+function assertSafeSearchText(value: string, field: string): string {
+  const safe = assertNonEmpty(value, field);
+  if (searchTextLooksSensitive(safe)) {
+    throw new SearchPolicyError("search-value-sensitive", "search value denied");
+  }
+  return safe;
+}
+
+function safeSearchFieldValue(value: string): string {
+  if (searchTextLooksSensitive(value)) {
+    throw new SearchPolicyError("search-value-sensitive", "search value denied");
+  }
+  return value.length > 512 ? `${value.slice(0, 512)}...[truncated]` : value;
+}
+
+function isIndexableFileSource(input: {
+  readonly fileStatus: FileStatusValue | null;
+  readonly fileScanStatus: FileScanStatusValue | null;
+}): boolean {
+  const fileStatus = input.fileStatus;
+  const scan = input.fileScanStatus;
+  if (
+    fileStatus &&
+    ["blocked", "deleted", "purged", "quarantined", "failed"].includes(fileStatus)
+  ) {
+    return false;
+  }
+  if (scan && !["clean", "not-required"].includes(scan)) {
+    return false;
+  }
+  return true;
+}
+
+export function createSearchIndexDocument(input: {
+  readonly indexDocumentId: string;
+  readonly resourceType: string;
+  readonly resourceId: string;
+  readonly tenantId?: string | null;
+  readonly classification: string;
+  readonly sourceRef: string;
+  readonly sourceVersion: string;
+  readonly schemaVersion?: string;
+  readonly indexVersion?: string;
+  readonly fieldValues: Readonly<Record<string, string>>;
+  readonly fieldClassifications?: Readonly<Record<string, SearchFieldClassification>>;
+  readonly title: string;
+  readonly snippet?: string | null;
+  readonly requiredAction?: string | null;
+  readonly sourceRevalidationPolicy?: string;
+  readonly lifecycleState?: string;
+  readonly sourceFileId?: string | null;
+  readonly fileStatus?: FileStatusValue | null;
+  readonly fileScanStatus?: FileScanStatusValue | null;
+  readonly now?: string;
+  readonly expiresAt?: string | null;
+  readonly staleAt?: string | null;
+  readonly deletedAt?: string | null;
+  readonly purgedAt?: string | null;
+  readonly legalHold?: boolean;
+  readonly retentionPolicy?: string;
+  readonly redactedFields?: readonly string[];
+  readonly sortableFields?: readonly string[];
+  readonly filterableFields?: readonly string[];
+  readonly facetableFields?: readonly string[];
+  readonly searchableFields?: readonly string[];
+}): SearchIndexDocument {
+  const classification = assertSearchableResourceClassification(input.classification);
+  const tenantId = input.tenantId ?? null;
+  if (!tenantId && !["public", "system-internal"].includes(classification)) {
+    throw new SearchPolicyError("tenant-required", "search tenant context required");
+  }
+  const resourceType = assertSearchResourceType(input.resourceType);
+  const resourceId = assertSafeSearchText(input.resourceId, "search.resourceId");
+  const indexDocumentId = assertSafeSearchText(input.indexDocumentId, "search.indexDocumentId");
+  const safeSourceRef = assertSafeSearchText(input.sourceRef, "search.sourceRef");
+  const sourceFileId = input.sourceFileId ?? null;
+  const fileStatus = input.fileStatus ?? null;
+  const fileScanStatus = input.fileScanStatus ?? null;
+  if (
+    (classification === "file-derived" || sourceFileId) &&
+    !isIndexableFileSource({ fileStatus, fileScanStatus })
+  ) {
+    throw new SearchPolicyError("file-source-not-indexable", "search source denied");
+  }
+  const now = input.now ?? new Date().toISOString();
+  const fieldValues: Record<string, string> = {};
+  const fieldClassifications: Record<string, SearchFieldClassification> = {};
+  const redacted = new Set((input.redactedFields ?? []).map(assertSafeSearchKey));
+  for (const [key, value] of Object.entries(input.fieldValues)) {
+    const safeKey = assertSafeSearchKey(key);
+    const classificationForField =
+      input.fieldClassifications?.[safeKey] ?? (redacted.has(safeKey) ? "restricted" : "internal");
+    if (!SEARCH_FIELD_CLASSIFICATIONS.includes(classificationForField)) {
+      throw new SearchPolicyError("unknown-field-classification", "search field denied");
+    }
+    fieldClassifications[safeKey] = classificationForField;
+    fieldValues[safeKey] = safeSearchFieldValue(String(value));
+  }
+  const indexedFields = Object.keys(fieldValues).sort();
+  const searchableFields = (input.searchableFields ?? indexedFields).map(assertSafeSearchKey);
+  const sortableFields = (input.sortableFields ?? []).map(assertSafeSearchKey);
+  const filterableFields = (input.filterableFields ?? []).map(assertSafeSearchKey);
+  const facetableFields = (input.facetableFields ?? []).map(assertSafeSearchKey);
+  return Object.freeze({
+    indexDocumentId,
+    resourceType,
+    resourceId,
+    tenantId,
+    classification,
+    sourceRef: safeSourceRef,
+    sourceVersion: safeSearchValue(assertNonEmpty(input.sourceVersion, "search.sourceVersion")),
+    sourceHash: sha256Hex(`${safeSourceRef}:${input.sourceVersion}:${JSON.stringify(fieldValues)}`),
+    schemaVersion: safeSearchValue(input.schemaVersion ?? "search-schema-1"),
+    indexVersion: safeSearchValue(input.indexVersion ?? "search-index-1"),
+    indexedFields: Object.freeze(indexedFields),
+    redactedFields: Object.freeze([...redacted].sort()),
+    searchableFields: Object.freeze(searchableFields),
+    sortableFields: Object.freeze(sortableFields),
+    filterableFields: Object.freeze(filterableFields),
+    facetableFields: Object.freeze(facetableFields),
+    fieldValues: Object.freeze(fieldValues),
+    fieldClassifications: Object.freeze(fieldClassifications),
+    title: safeSearchFieldValue(input.title),
+    snippet: input.snippet ? safeSearchFieldValue(input.snippet) : null,
+    requiredAction: input.requiredAction ? safeSearchValue(input.requiredAction) : null,
+    sourceRevalidationPolicy: assertSearchSourceRevalidationPolicy(
+      input.sourceRevalidationPolicy ?? "safe-projection-only",
+    ),
+    lifecycleState: assertSearchLifecycleState(input.lifecycleState ?? "active"),
+    sourceFileId: sourceFileId ? safeSearchValue(sourceFileId) : null,
+    fileStatus,
+    fileScanStatus,
+    createdAt: now,
+    updatedAt: now,
+    indexedAt: now,
+    expiresAt: input.expiresAt ?? null,
+    staleAt: input.staleAt ?? null,
+    deletedAt: input.deletedAt ?? null,
+    purgedAt: input.purgedAt ?? null,
+    legalHold: input.legalHold ?? false,
+    retentionPolicy: safeSearchValue(
+      input.retentionPolicy ?? "classification-aware-local-dev-test",
+    ),
+  });
+}
+
+export function searchDocumentIsStale(document: SearchIndexDocument, now = new Date()): boolean {
+  if (document.lifecycleState === "stale" || document.lifecycleState === "degraded") return true;
+  if (document.staleAt && Date.parse(document.staleAt) <= now.getTime()) return true;
+  if (document.expiresAt && Date.parse(document.expiresAt) <= now.getTime()) return true;
+  return false;
+}
+
+export function searchDocumentIsDeletedOrPurged(document: SearchIndexDocument): boolean {
+  return (
+    document.lifecycleState === "purged" ||
+    document.deletedAt !== null ||
+    document.purgedAt !== null ||
+    document.fileStatus === "deleted" ||
+    document.fileStatus === "purged"
+  );
+}
+
+export function toSafeSearchResult(
+  document: SearchIndexDocument,
+  score: number,
+  now = new Date(),
+): SafeSearchResult {
+  const fields: Record<string, string> = {};
+  const redacted = new Set(document.redactedFields);
+  for (const [key, value] of Object.entries(document.fieldValues)) {
+    const fieldClassification = document.fieldClassifications[key] ?? "internal";
+    if (
+      redacted.has(key) ||
+      fieldClassification === "restricted" ||
+      fieldClassification === "security-sensitive"
+    ) {
+      continue;
+    }
+    fields[key] = safeSearchValue(value);
+  }
+  return Object.freeze({
+    indexDocumentId: document.indexDocumentId,
+    resourceType: document.resourceType,
+    resourceId: document.resourceId,
+    tenantId: document.tenantId,
+    classification: document.classification,
+    title: safeSearchValue(document.title),
+    snippet:
+      document.classification === "restricted" || document.classification === "security-sensitive"
+        ? null
+        : document.snippet === null
+          ? null
+          : safeSearchValue(document.snippet),
+    score,
+    fields: Object.freeze(fields),
+    sourceVersion: document.sourceVersion,
+    indexVersion: document.indexVersion,
+    lifecycleState: document.lifecycleState,
+    stale: searchDocumentIsStale(document, now),
+  });
+}
+
+export function createSearchQueryPolicy(input: Partial<SearchQueryPolicy> = {}): SearchQueryPolicy {
+  return Object.freeze({
+    filterAllowList: Object.freeze([...(input.filterAllowList ?? [])]),
+    sortAllowList: Object.freeze([...(input.sortAllowList ?? [])]),
+    facetAllowList: Object.freeze([...(input.facetAllowList ?? [])]),
+    searchableFieldAllowList: Object.freeze([...(input.searchableFieldAllowList ?? [])]),
+    defaultLimit: Math.min(
+      Math.max(input.defaultLimit ?? SEARCH_DEFAULT_LIMIT, 1),
+      SEARCH_MAX_LIMIT,
+    ),
+    maxLimit: Math.min(Math.max(input.maxLimit ?? SEARCH_MAX_LIMIT, 1), SEARCH_MAX_LIMIT),
+    maxQueryLength: Math.max(input.maxQueryLength ?? SEARCH_DEFAULT_MAX_QUERY_LENGTH, 1),
+    maxTerms: Math.max(input.maxTerms ?? SEARCH_DEFAULT_MAX_TERMS, 1),
+    countsEnabled: input.countsEnabled ?? true,
+    facetsEnabled: input.facetsEnabled ?? false,
+    autocompleteEnabled: input.autocompleteEnabled ?? false,
+    autocompleteMinLength: Math.max(input.autocompleteMinLength ?? 3, 1),
+    cursorTtlSeconds: Math.max(input.cursorTtlSeconds ?? 900, 60),
+    rawQueryAuditAllowed: false,
+  });
+}
+
+function normaliseSearchQueryText(queryText: string, policy: SearchQueryPolicy): string {
+  const q = assertNonEmpty(queryText, "search.queryText");
+  if (q.length > policy.maxQueryLength) {
+    throw new SearchPolicyError("query-too-long", "search query denied");
+  }
+  if (q.startsWith("*") || q.includes(".*") || /^\/.*\/[a-z]*$/i.test(q)) {
+    throw new SearchPolicyError("query-operator-denied", "search query denied");
+  }
+  if (searchTextLooksSensitive(q)) {
+    throw new SearchPolicyError("query-sensitive", "search query denied");
+  }
+  const terms = q.split(/\s+/).filter(Boolean);
+  if (terms.length > policy.maxTerms) {
+    throw new SearchPolicyError("too-many-query-terms", "search query denied");
+  }
+  return q;
+}
+
+export function createSearchQueryHash(input: {
+  readonly tenantId: string;
+  readonly queryText: string;
+  readonly filters: Readonly<Record<string, string>>;
+  readonly sort: { readonly field: string; readonly direction: "asc" | "desc" } | null;
+  readonly facets: readonly string[];
+}): string {
+  return `search_${opaqueHash(
+    JSON.stringify({
+      tenantId: input.tenantId,
+      queryText: input.queryText,
+      filters: input.filters,
+      sort: input.sort,
+      facets: input.facets,
+    }),
+  ).slice(0, 32)}`;
+}
+
+function assertAllowListedSearchField(
+  field: string,
+  allowed: readonly string[],
+  reasonCode: string,
+): string {
+  const safeField = assertSafeSearchKey(field);
+  if (!allowed.includes(safeField)) {
+    throw new SearchPolicyError(reasonCode, "search field denied");
+  }
+  return safeField;
+}
+
+function cursorScopeHash(input: {
+  readonly tenantId: string;
+  readonly queryHash: string;
+  readonly limit: number;
+}): string {
+  return opaqueHash(`search-cursor:${input.tenantId}:${input.queryHash}:${input.limit}`).slice(
+    0,
+    32,
+  );
+}
+
+export function createSearchCursor(input: {
+  readonly tenantId: string;
+  readonly queryHash: string;
+  readonly limit: number;
+  readonly offset: number;
+  readonly issuedAtMs: number;
+  readonly ttlSeconds: number;
+}): string {
+  const scope = cursorScopeHash(input);
+  const expiresAtMs = input.issuedAtMs + input.ttlSeconds * 1000;
+  const integrity = opaqueHash(`${scope}:${input.offset}:${expiresAtMs}`).slice(0, 32);
+  return Buffer.from(
+    JSON.stringify({ s: scope, n: input.offset, e: expiresAtMs, i: integrity }),
+    "utf8",
+  ).toString("base64url");
+}
+
+export function decodeSearchCursor(input: {
+  readonly cursor: string | null | undefined;
+  readonly tenantId: string;
+  readonly queryHash: string;
+  readonly limit: number;
+  readonly nowMs: number;
+}): number {
+  if (!input.cursor) return 0;
+  try {
+    const parsed = JSON.parse(Buffer.from(input.cursor, "base64url").toString("utf8")) as {
+      s?: unknown;
+      n?: unknown;
+      e?: unknown;
+      i?: unknown;
+    };
+    const scope = cursorScopeHash({
+      tenantId: input.tenantId,
+      queryHash: input.queryHash,
+      limit: input.limit,
+    });
+    if (
+      parsed.s !== scope ||
+      typeof parsed.n !== "number" ||
+      typeof parsed.e !== "number" ||
+      typeof parsed.i !== "string" ||
+      parsed.e <= input.nowMs ||
+      parsed.i !== opaqueHash(`${scope}:${parsed.n}:${parsed.e}`).slice(0, 32)
+    ) {
+      throw new SearchPolicyError("cursor-invalid", "search cursor denied");
+    }
+    return Math.max(0, parsed.n);
+  } catch (error) {
+    if (error instanceof SearchPolicyError) throw error;
+    throw new SearchPolicyError("cursor-invalid", "search cursor denied");
+  }
+}
+
+export function validateSearchQueryRequest(
+  input: SearchQueryRequest,
+  policy: SearchQueryPolicy = createSearchQueryPolicy(),
+): SearchQueryPlan {
+  const tenantId = assertNonEmpty(input.tenantId, "search.tenantId");
+  const queryText = normaliseSearchQueryText(input.queryText, policy);
+  const filters: Record<string, string> = {};
+  for (const [field, value] of Object.entries(input.filters ?? {})) {
+    const allowed = assertAllowListedSearchField(
+      field,
+      policy.filterAllowList,
+      "filter-not-allowed",
+    );
+    filters[allowed] = safeSearchFieldValue(value);
+  }
+  const sort = input.sort
+    ? Object.freeze({
+        field: assertAllowListedSearchField(
+          input.sort.field,
+          policy.sortAllowList,
+          "sort-not-allowed",
+        ),
+        direction: input.sort.direction,
+      })
+    : null;
+  const facets = Object.freeze(
+    (input.facets ?? []).map((field) =>
+      assertAllowListedSearchField(field, policy.facetAllowList, "facet-not-allowed"),
+    ),
+  );
+  if (facets.length > 0 && !policy.facetsEnabled) {
+    throw new SearchPolicyError("facet-disabled", "search facet denied");
+  }
+  const maxLimit = Math.min(policy.maxLimit, SEARCH_MAX_LIMIT);
+  const limit = Math.min(Math.max(input.limit ?? policy.defaultLimit, 1), maxLimit);
+  const queryHash = createSearchQueryHash({ tenantId, queryText, filters, sort, facets });
+  const nowMs = input.now ? Date.parse(input.now) : Date.now();
+  const offset = decodeSearchCursor({
+    cursor: input.cursor,
+    tenantId,
+    queryHash,
+    limit,
+    nowMs,
+  });
+  return Object.freeze({
+    tenantId,
+    queryText,
+    queryHash,
+    filters: Object.freeze(filters),
+    sort,
+    facets,
+    limit,
+    offset,
+    cursorScopeHash: cursorScopeHash({ tenantId, queryHash, limit }),
+    nowMs,
   });
 }

@@ -1,0 +1,112 @@
+[
+  {
+    "usf_item_id": "usf-no-current-search-capability",
+    "category": "missing",
+    "usf_paths": [],
+    "behaviour_summary": "No current dedicated search capability, port, adapter, proof, or tests exist in USF before this slice.",
+    "status": "missing",
+    "notes": "Implementation needed."
+  },
+  {
+    "usf_item_id": "usf-db-rls-foundation",
+    "category": "covered",
+    "usf_paths": [
+      "adapters/db/migrations/0001-bootstrap.sql",
+      "adapters/db/migrations/0002-enterprise-persistence-metadata.sql"
+    ],
+    "behaviour_summary": "DB/RLS foundation and tenant context are already implemented; search persistent index storage is deferred.",
+    "status": "covered",
+    "notes": "Use tenant context and avoid new DB migration in this slice."
+  },
+  {
+    "usf_item_id": "usf-pdp-capability-pattern",
+    "category": "covered",
+    "usf_paths": [
+      "packages/ports/src/index.ts",
+      "capabilities/tenant/src/pdp.ts",
+      "capabilities/bulk/src/index.ts"
+    ],
+    "behaviour_summary": "Capabilities use PolicyDecisionPoint and tenant context rather than identity claims alone.",
+    "status": "covered",
+    "notes": "Search service should call PDP for query, read, index, delete, reindex, facet, autocomplete."
+  },
+  {
+    "usf_item_id": "usf-audit-evidence-foundation",
+    "category": "covered",
+    "usf_paths": [
+      "capabilities/audit/src/index.ts",
+      "packages/core/src/index.ts"
+    ],
+    "behaviour_summary": "Audit event model supports value-free tenant-scoped evidence and metadata.",
+    "status": "covered",
+    "notes": "Add search event types to core taxonomy and emit via AuditRecorder."
+  },
+  {
+    "usf_item_id": "usf-jobs-reindex-foundation",
+    "category": "covered",
+    "usf_paths": [
+      "capabilities/jobs/src/index.ts",
+      "adapters/wf/src/index.ts",
+      "packages/ports/src/index.ts"
+    ],
+    "behaviour_summary": "Operational job port and service actor model are available for tenant-scoped reindex work.",
+    "status": "covered",
+    "notes": "Search reindex should submit a tenant-scoped operational job."
+  },
+  {
+    "usf_item_id": "usf-files-derived-content-foundation",
+    "category": "partial",
+    "usf_paths": [
+      "capabilities/files/src/index.ts",
+      "adapters/store/src/index.ts"
+    ],
+    "behaviour_summary": "File metadata includes classification, scan/quarantine, legal hold, retention, and object-key-safe views.",
+    "status": "partial",
+    "notes": "Search should refuse quarantined/pending/infected/deleted/purged file-derived documents; live extraction/OCR deferred."
+  },
+  {
+    "usf_item_id": "usf-observability-signals-foundation",
+    "category": "covered",
+    "usf_paths": [
+      "adapters/obs/src/index.ts",
+      "packages/core/src/index.ts"
+    ],
+    "behaviour_summary": "Telemetry supports tenant-safe security signals and redaction.",
+    "status": "covered",
+    "notes": "Use for search query denied, stale result denied, high-volume/pagination scraping posture."
+  },
+  {
+    "usf_item_id": "usf-guardrails-foundation",
+    "category": "covered",
+    "usf_paths": [
+      "adapters/guardrails/src/index.ts",
+      "packages/core/src/index.ts"
+    ],
+    "behaviour_summary": "Guardrail policies/evaluation provide local/dev/test fail-closed quota and rate limit decisions.",
+    "status": "covered",
+    "notes": "Use for query and reindex guardrail posture."
+  },
+  {
+    "usf_item_id": "usf-provider-registry-search-entry",
+    "category": "partial",
+    "usf_paths": [
+      "packages/core/src/index.ts",
+      "docs/architecture/provider-adapters-and-modes-standard.md"
+    ],
+    "behaviour_summary": "Provider registry already contains search provider category entry; new search slice should make posture explicit.",
+    "status": "partial",
+    "notes": "Need validate no live search/vector/AI claim."
+  },
+  {
+    "usf_item_id": "usf-api-contracts-foundation",
+    "category": "covered",
+    "usf_paths": [
+      "packages/contracts/src/index.ts",
+      "packages/openapi/src/index.ts",
+      "docs/architecture/api-and-contract-surface-standard.md"
+    ],
+    "behaviour_summary": "API/contracts standard exists; broad search HTTP route can be deferred while capability contracts are defined.",
+    "status": "covered",
+    "notes": "Update posture docs and possibly contracts if low-risk."
+  }
+]

@@ -206,7 +206,37 @@ Implemented local/dev/test import/export/bulk rows are carried by USF-162. Produ
 | provider/external transfer posture | deferred | provider source/destination types recognized as live-external-deferred | external transfer adapters and secret-ref proof |
 | React UI/Playwright import/export behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/proof tests | UI/UX assertions remain out of scope |
 
-Domain count: **14 foundation domains, all `partial`** for the full-parity bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full-parity scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine parity choice) and carried into their domain children.
+### Search / Indexing / Discovery Subdomain Classification
+
+Implemented local/dev/test search/indexing rows are carried by USF-164. Persistent DB-backed search indexes, broad HTTP routes, saved queries, live external full-text/autocomplete/vector providers, OCR/extraction, AI/RAG, public search API readiness, and production search readiness remain deferred depth.
+
+| Item | usf_status | Evidence | Deferred depth |
+| --- | --- | --- | --- |
+| search/indexing semantic model | migrated | `docs/architecture/search-indexing-and-discovery-standard.md`, core model, `make search-proof` | n/a |
+| searchable resource classifications | migrated | public, tenant-data, confidential, restricted, security-sensitive, audit-sensitive, regulated, file-derived, identity-derived, configuration-derived, notification-derived, job-derived, provider-derived, system-internal, test-only fail closed on unknown | future schema catalog alignment |
+| index document governance | migrated | `SearchIndexDocument`, source/version/hash, lifecycle, field allowlists, redacted fields, retention/legal hold fields | persistent DB-backed index |
+| source-of-truth revalidation | partial | safe-projection/source-revalidated/hybrid policies represented; stale results denied | deeper DB/capability revalidation against each domain |
+| query safety | migrated | bounded query length/terms, no raw query audit, operator denial tests | richer query language remains deferred |
+| filtering/sorting/facets/counts | migrated | allow-list validation and tenant-scoped count/facet tests | advanced scoring/facet analytics |
+| pagination/cursor safety | migrated | opaque tenant/query/limit-bound cursors with integrity and expiry | durable cursor state |
+| autocomplete/typeahead safety | deferred | standard defines disabled-by-default posture | runtime autocomplete routes/providers |
+| ranking/relevance posture | partial | safe-field scoring only in in-memory adapter | provider-specific relevance tuning |
+| field visibility/snippets | migrated | restricted/security-sensitive fields redacted and snippets suppressed for sensitive results | field-level policy expansion |
+| file-derived/extracted content | partial | clean file-derived document accepted; quarantined/deleted sources denied/hidden | OCR/extraction provider and indexing pipeline |
+| vector/embedding/AI/RAG posture | deferred | provider registry represents vector provider class as live-external-deferred | vector DB, embeddings, semantic/RAG retrieval |
+| index lifecycle | migrated | draft/building/active/stale/degraded/disabled/rebuilding/failed/retired/purged represented | operational lifecycle controller |
+| reindex jobs | migrated | tenant-scoped idempotent reindex job with concrete service actor and audit | distributed/bulk reindex execution |
+| search provider posture | partial | in-memory search provider and deferred full-text/autocomplete/vector provider entries | live external search authority and proof |
+| data residency/index location | deferred | standard defines local/dev/test and deferred external residency/egress posture | live provider residency controls |
+| retention/deletion/purge/legal hold | partial | fields represented; deleted/purged hidden | purge/legal-hold workflows |
+| saved searches/query history | deferred | query hashes only; raw query history not persisted | privacy-governed saved-query store |
+| search audit/audit-of-access | migrated | query executed/denied, result access denied, index update/delete, reindex started/completed/failed events | audit-of-search-read API surface |
+| observability/abuse signals | migrated | query denied, high-volume query, stale result denied signals where represented | SIEM/alerting and broader detection |
+| guardrails/exfiltration controls | partial | concrete guardrail denial path for search query | autocomplete/high-volume/pagination scraping rollout |
+| API/OpenAPI safety | deferred | future route posture documented; capability/proof tests cover foundation behaviour | bounded HTTP/OpenAPI search surfaces |
+| React UI/Playwright search behaviours | foundation-behaviour-rewritten-from-ui-test | React search route/permission behaviours rewritten as capability/proof tests | UI/UX assertions remain out of scope |
+
+Domain count: **15 foundation domains, all `partial`** for the full-parity bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full-parity scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine parity choice) and carried into their domain children.
 
 ## 4. UI/UX scope (out of foundation scope)
 

@@ -8,6 +8,7 @@ import {
   runObservabilityTelemetryProof,
   runProviderAdaptersProof,
   runRateLimitsAbuseControlsProof,
+  runSearchIndexingProof,
 } from "@foundation/proof";
 import { describe, expect, it } from "vitest";
 
@@ -124,6 +125,21 @@ describe("import/export/bulk proof", () => {
       legalExportReadinessClaim: false,
       eDiscoveryReadinessClaim: false,
       liveExternalProviderReadinessClaim: false,
+      productionLiveClaim: false,
+    });
+  });
+});
+
+describe("search/indexing proof", () => {
+  it("proves tenant-safe redacted search without live search or AI readiness claims", async () => {
+    await expect(runSearchIndexingProof()).resolves.toMatchObject({
+      status: "pass",
+      providerMode: "hermetic-mock",
+      searchProviderPosture: "in-memory-local-dev-test",
+      liveSearchProviderReadinessClaim: false,
+      liveVectorDatabaseReadinessClaim: false,
+      aiRagReadinessClaim: false,
+      publicSearchApiReadinessClaim: false,
       productionLiveClaim: false,
     });
   });
