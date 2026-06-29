@@ -1,0 +1,630 @@
+{
+  "authority_note": "Review matrix only; it does not update semantic authority, accepted ADRs, validators, or runtime proof evidence.",
+  "capabilities": [
+    {
+      "blocking_level": "none",
+      "capability_group": "database and tenancy persistence",
+      "capability_id": "db-rls-migrations",
+      "capability_name": "DB/RLS/migrations",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Postgres, migrations, RLS proof lineage",
+      "readiness_impact": "Deferred depth remains for backup/restore and broader DB operations.",
+      "tracking_carrier_or_recommendation": "USF-138/USF-139",
+      "usf_evidence_summary": "USF DB/RLS slice, make db-proof",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "tenant isolation, RBAC, ABAC, break-glass",
+      "capability_id": "tenant-authz-pdp",
+      "capability_name": "Tenant/PDP authorization",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Tenant/RBAC/ABAC lineage",
+      "readiness_impact": "Core PDP migrated; ABAC depth remains deferred.",
+      "tracking_carrier_or_recommendation": "USF-140/USF-141",
+      "usf_evidence_summary": "USF PDP, make authz-proof",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "audit ledger, tamper evidence, retrieval",
+      "capability_id": "audit-evidence",
+      "capability_name": "Audit/evidence",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Audit event and evidence lineage",
+      "readiness_impact": "Durable bus and external evidence integrations remain deferred.",
+      "tracking_carrier_or_recommendation": "USF-142/USF-143",
+      "usf_evidence_summary": "USF audit proof",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "typed config and secret references",
+      "capability_id": "config-secrets",
+      "capability_name": "Config/secrets",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Config/runtime secret lineage",
+      "readiness_impact": "OpenBao is local; live secret-manager readiness not claimed.",
+      "tracking_carrier_or_recommendation": "USF-144/USF-145",
+      "usf_evidence_summary": "USF config proof",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "file metadata, object storage, scan posture",
+      "capability_id": "files-storage",
+      "capability_name": "Files/storage",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "MinIO/object storage and file lineage",
+      "readiness_impact": "ClamAV composed scanner and richer DLP remain deferred.",
+      "tracking_carrier_or_recommendation": "USF-146/USF-147",
+      "usf_evidence_summary": "USF files proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "Keycloak-brokered auth and stable actor mapping",
+      "capability_id": "auth-identity",
+      "capability_name": "Auth/session/identity",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Keycloak/mock OIDC/session lineage",
+      "readiness_impact": "Privileged SSO administration depth remains deferred.",
+      "tracking_carrier_or_recommendation": "USF-148/USF-149",
+      "usf_evidence_summary": "USF auth proof",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "durable jobs, workflows, retries, dead-letter",
+      "capability_id": "jobs-workflows",
+      "capability_name": "Jobs/workflows",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Temporal and Windmill lineage",
+      "readiness_impact": "Temporal local is present; Windmill operator automation is not equivalent.",
+      "tracking_carrier_or_recommendation": "USF-150/USF-151",
+      "usf_evidence_summary": "USF jobs proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "controlled communications and delivery evidence",
+      "capability_id": "notifications",
+      "capability_name": "Notifications/messaging",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Mailpit/Brevo/template lineage",
+      "readiness_impact": "Live providers and broader delivery feedback remain deferred.",
+      "tracking_carrier_or_recommendation": "USF-152/USF-153",
+      "usf_evidence_summary": "USF notify proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "route contracts and safe envelopes",
+      "capability_id": "api-contracts",
+      "capability_name": "API/OpenAPI/contracts",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "REST/GraphQL/OpenAPI lineage",
+      "readiness_impact": "OpenAPI/local REST covered; GraphQL/browser-client parity requires decision.",
+      "tracking_carrier_or_recommendation": "USF-154/USF-155",
+      "usf_evidence_summary": "USF API proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "provider registry, modes, readiness",
+      "capability_id": "providers",
+      "capability_name": "Provider adapters/modes",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Provider adapter packages and compose lineage",
+      "readiness_impact": "Several live/composed providers remain deferred or decision-bound.",
+      "tracking_carrier_or_recommendation": "USF-156/USF-157",
+      "usf_evidence_summary": "USF providers proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "metrics, traces, logs, signals",
+      "capability_id": "observability",
+      "capability_name": "Observability/telemetry",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "OTEL/Prometheus/Loki/Tempo/Grafana/Sentry lineage",
+      "readiness_impact": "Sentry/Alertmanager/Alloy not equivalent; live monitoring not claimed.",
+      "tracking_carrier_or_recommendation": "USF-158/USF-159",
+      "usf_evidence_summary": "USF observability proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "quotas, throttles, abuse controls",
+      "capability_id": "guardrails",
+      "capability_name": "Rate limits/guardrails",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Rate limit/quota lineage",
+      "readiness_impact": "Distributed and edge enforcement deferred.",
+      "tracking_carrier_or_recommendation": "USF-160/USF-161",
+      "usf_evidence_summary": "USF guardrails proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "bulk operations and evidence packages",
+      "capability_id": "import-export-bulk",
+      "capability_name": "Import/export/bulk",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Import/export/batch lineage",
+      "readiness_impact": "Production migration/export readiness not claimed.",
+      "tracking_carrier_or_recommendation": "USF-162/USF-163",
+      "usf_evidence_summary": "USF bulk proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "tenant-safe search and reindex",
+      "capability_id": "search-indexing",
+      "capability_name": "Search/indexing/discovery",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Meilisearch/search/index lineage",
+      "readiness_impact": "In-memory index proof is not Meilisearch/vector/live provider parity.",
+      "tracking_carrier_or_recommendation": "USF-164",
+      "usf_evidence_summary": "USF search proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "resource mutation, relationships, retention",
+      "capability_id": "resource-lifecycle",
+      "capability_name": "Resource lifecycle",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Record/resource/entity lineage",
+      "readiness_impact": "Broad HTTP resource surfaces and eDiscovery depth remain deferred.",
+      "tracking_carrier_or_recommendation": "USF-165",
+      "usf_evidence_summary": "USF resources proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "GraphQL API runtime and browser client",
+      "capability_id": "graphql-surface",
+      "capability_name": "GraphQL/contracts/client",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "contracts-graphql, graphql-api-runtime, graphql-browser-client",
+      "readiness_impact": "Decide whether REST/OpenAPI foundation is sufficient or GraphQL compatibility is required.",
+      "tracking_carrier_or_recommendation": "draft decision required",
+      "usf_evidence_summary": "No equivalent GraphQL runtime claimed",
+      "usf_status": "requires-human-decision"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "ClickHouse-backed analytics and event exploration",
+      "capability_id": "analytics-event-store",
+      "capability_name": "Analytics/event store",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "ClickHouse and contracts-analytics lineage",
+      "readiness_impact": "Decide whether ClickHouse/event-store service is part of universal dev foundation.",
+      "tracking_carrier_or_recommendation": "draft decision required",
+      "usf_evidence_summary": "No composed ClickHouse in USF",
+      "usf_status": "requires-human-decision"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "self-hosted Sentry stack",
+      "capability_id": "error-monitoring",
+      "capability_name": "Error monitoring",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "Sentry adapter and 20 compose services",
+      "readiness_impact": "Decide whether Sentry service parity is required or observability proof suffices.",
+      "tracking_carrier_or_recommendation": "draft decision required",
+      "usf_evidence_summary": "Local telemetry only",
+      "usf_status": "requires-human-decision"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "SonarQube quality gate and SSO posture",
+      "capability_id": "quality-gate",
+      "capability_name": "Quality gate/static analysis",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "SonarQube compose profile and tooling-ci lineage",
+      "readiness_impact": "Decide whether SonarQube remains required for universal dev foundation.",
+      "tracking_carrier_or_recommendation": "draft decision required",
+      "usf_evidence_summary": "make verify only",
+      "usf_status": "requires-human-decision"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "pgBackRest and restore drill posture",
+      "capability_id": "backup-restore",
+      "capability_name": "Backup/restore",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "pgbackrest compose service lineage",
+      "readiness_impact": "Backup/restore service proof remains absent.",
+      "tracking_carrier_or_recommendation": "new blocker recommended",
+      "usf_evidence_summary": "DB proof only",
+      "usf_status": "deferred"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "pgAdmin, MinIO console, Temporal UI, Grafana, Sonar, Sentry, Windmill",
+      "capability_id": "operator-admin-surfaces",
+      "capability_name": "Operator/admin surfaces",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "Compose admin services and forward-auth comments",
+      "readiness_impact": "Need explicit operator surface set and auth model before close.",
+      "tracking_carrier_or_recommendation": "draft decision required",
+      "usf_evidence_summary": "Partial local services, missing access proof",
+      "usf_status": "requires-human-decision"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "LocalStack and WireMock provider doubles",
+      "capability_id": "external-mocks",
+      "capability_name": "External provider mocks",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "localstack/wiremock lineage",
+      "readiness_impact": "Need decide mock provider coverage and behavioural contract.",
+      "tracking_carrier_or_recommendation": "draft decision required",
+      "usf_evidence_summary": "webhook-sink/provider modes only",
+      "usf_status": "requires-human-decision"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "ClamAV scan/quarantine execution",
+      "capability_id": "file-scanning",
+      "capability_name": "File scanning",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "clamav service lineage",
+      "readiness_impact": "Composed scanner proof absent.",
+      "tracking_carrier_or_recommendation": "new blocker recommended",
+      "usf_evidence_summary": "scan posture only",
+      "usf_status": "deferred"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "Windmill automation control plane",
+      "capability_id": "workflow-automation",
+      "capability_name": "Operator automation",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "Windmill services and worker lineage",
+      "readiness_impact": "Windmill is not substituted by Temporal/jobs alone.",
+      "tracking_carrier_or_recommendation": "draft decision required",
+      "usf_evidence_summary": "jobs/workflows proof only",
+      "usf_status": "requires-human-decision"
+    },
+    {
+      "blocking_level": "P2",
+      "capability_group": "AWS/Cloudflare/Terraform packages",
+      "capability_id": "infra-cloud",
+      "capability_name": "Cloud/edge infra",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "infra-aws, infra-cloudflare, tooling-terraform",
+      "readiness_impact": "No live cloud/edge/deployment readiness claimed.",
+      "tracking_carrier_or_recommendation": "future environment blockers",
+      "usf_evidence_summary": "Out of local foundation scope",
+      "usf_status": "deferred"
+    },
+    {
+      "blocking_level": "non-blocking",
+      "capability_group": "React SPA and design system",
+      "capability_id": "ui-runtime",
+      "capability_name": "UI/UX app",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "react-app and ui-design-system lineage",
+      "readiness_impact": "UI/UX is future non-foundation scope.",
+      "tracking_carrier_or_recommendation": "USF-134",
+      "usf_evidence_summary": "USF-134 future UI",
+      "usf_status": "not-applicable"
+    },
+    {
+      "blocking_level": "P2",
+      "capability_group": "i18n runtime and locale resources",
+      "capability_id": "i18n-runtime",
+      "capability_name": "Internationalisation",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "i18n-runtime package lineage",
+      "readiness_impact": "Need decide if foundation requires i18n contracts before UI work.",
+      "tracking_carrier_or_recommendation": "future UI/API blocker",
+      "usf_evidence_summary": "Future UI/API posture only",
+      "usf_status": "deferred"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "Make/script proof ladder",
+      "capability_id": "dev-commands",
+      "capability_name": "Developer command parity",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "React package scripts and Makefile lineage",
+      "readiness_impact": "Commands exist, but Sonar/Sentry/compose-universal command parity remains incomplete.",
+      "tracking_carrier_or_recommendation": "USF-133 follow-up",
+      "usf_evidence_summary": "USF make proof ladder",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P0",
+      "capability_group": "service ownership, criticality, data flows",
+      "capability_id": "service-catalog-cmdb",
+      "capability_name": "Service catalogue/CMDB",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "React compose and todo enterprise requirements",
+      "readiness_impact": "Need durable service catalogue or accepted matrix before close.",
+      "tracking_carrier_or_recommendation": "new tracker recommended",
+      "usf_evidence_summary": "This review matrix only",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P0",
+      "capability_group": "tenant data, provider egress, admin access",
+      "capability_id": "data-flow-trust-boundaries",
+      "capability_name": "Data flows/trust boundaries",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "React compose comments and packages",
+      "readiness_impact": "Need complete data-flow/trust-boundary review for missing optional services.",
+      "tracking_carrier_or_recommendation": "new tracker recommended",
+      "usf_evidence_summary": "Standards only",
+      "usf_status": "partial"
+    }
+  ],
+  "capability_count": 30,
+  "evidence_grade_counts": {
+    "A": 5,
+    "B": 11,
+    "C": 7,
+    "D": 7
+  },
+  "id": "complete-react-to-usf-functionality-parity-matrix",
+  "react_head": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+  "readiness_assessments": {
+    "dev_compose_minimal_ready": "conditionally-ready-for-current-USF-compose-substrate; not universal React service parity",
+    "dev_compose_universal_ready": "not-ready; multiple React compose services are deferred, substituted, or decision-bound",
+    "dev_in_memory_ready": "conditionally-ready-for-authorised-local-proof-slices-only; not full React parity readiness",
+    "usf_133_close_ready": "not-ready"
+  },
+  "run_id": "20260629T053504Z-a285187",
+  "status": "review-draft",
+  "status_counts": {
+    "deferred": 4,
+    "migrated": 5,
+    "not-applicable": 1,
+    "partial": 13,
+    "requires-human-decision": 7
+  },
+  "usf_head": "a285187b177a922ff422858c1bf8f180336f1dff"
+}

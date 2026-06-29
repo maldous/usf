@@ -1,0 +1,313 @@
+{
+  "compose_service_count": 14,
+  "compose_services": [
+    "grafana",
+    "keycloak",
+    "keycloak-db",
+    "loki",
+    "mailpit",
+    "minio",
+    "nats",
+    "openbao",
+    "otel-collector",
+    "postgres",
+    "prometheus",
+    "tempo",
+    "temporal",
+    "webhook-sink"
+  ],
+  "first_party_package_count": 32,
+  "first_party_packages": [
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-bulk",
+      "path": "./adapters/bulk/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-bus",
+      "path": "./adapters/bus/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-db",
+      "path": "./adapters/db/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-guardrails",
+      "path": "./adapters/guardrails/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-idp",
+      "path": "./adapters/idp/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-mail",
+      "path": "./adapters/mail/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-obs",
+      "path": "./adapters/obs/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-resources",
+      "path": "./adapters/resources/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-search",
+      "path": "./adapters/search/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-secrets",
+      "path": "./adapters/secrets/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-store",
+      "path": "./adapters/store/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/adapter-wf",
+      "path": "./adapters/wf/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/app-api",
+      "path": "./apps/api/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/app-work",
+      "path": "./apps/work/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-audit",
+      "path": "./capabilities/audit/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-auth",
+      "path": "./capabilities/auth/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-bulk",
+      "path": "./capabilities/bulk/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-config",
+      "path": "./capabilities/config/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-files",
+      "path": "./capabilities/files/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-jobs",
+      "path": "./capabilities/jobs/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-notify",
+      "path": "./capabilities/notify/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-resources",
+      "path": "./capabilities/resources/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-search",
+      "path": "./capabilities/search/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/capability-tenant",
+      "path": "./capabilities/tenant/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [
+        "@sinclair/typebox",
+        "fastify",
+        "kysely"
+      ],
+      "devDependencies": [
+        "@eslint/js",
+        "@types/node",
+        "eslint",
+        "globals",
+        "prettier",
+        "tsx",
+        "typescript",
+        "typescript-eslint",
+        "vitest"
+      ],
+      "name": "foundation-bootstrap",
+      "path": "./package.json",
+      "scripts": [
+        "compose:config",
+        "compose:smoke",
+        "db:types:check",
+        "dev",
+        "dev:smoke",
+        "dev:work",
+        "format:check",
+        "format:write",
+        "lint",
+        "openapi:check",
+        "parity",
+        "proof:api",
+        "proof:audit",
+        "proof:auth",
+        "proof:authz",
+        "proof:bootstrap",
+        "proof:bulk",
+        "proof:config",
+        "proof:db",
+        "proof:files",
+        "proof:guardrails",
+        "proof:jobs",
+        "proof:notify",
+        "proof:observability",
+        "proof:providers",
+        "proof:resources",
+        "proof:search",
+        "repo:validate",
+        "test",
+        "test-compose",
+        "typecheck",
+        "verify"
+      ]
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/contracts",
+      "path": "./packages/contracts/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/core",
+      "path": "./packages/core/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/openapi",
+      "path": "./packages/openapi/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/ports",
+      "path": "./packages/ports/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/proof",
+      "path": "./packages/proof/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/source",
+      "path": "./packages/source/package.json",
+      "scripts": []
+    },
+    {
+      "dependencies": [],
+      "devDependencies": [],
+      "name": "@foundation/test",
+      "path": "./packages/test/package.json",
+      "scripts": []
+    }
+  ],
+  "id": "usf-whole-platform-inventory",
+  "proof_commands_observed": [
+    "make db-proof",
+    "make authz-proof",
+    "make audit-proof",
+    "make config-proof",
+    "make files-proof",
+    "make auth-proof",
+    "make jobs-proof",
+    "make notify-proof",
+    "make api-proof",
+    "make providers-proof",
+    "make observability-proof",
+    "make guardrails-proof",
+    "make bulk-proof",
+    "make search-proof",
+    "make resources-proof"
+  ],
+  "run_id": "20260629T053504Z-a285187",
+  "usf_head": "a285187b177a922ff422858c1bf8f180336f1dff"
+}
