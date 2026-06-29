@@ -4,7 +4,11 @@ Universal Service Foundation (USF) is a governed enterprise platform foundation 
 
 USF is built around a simple premise: serious platforms should be defined by durable semantics, enforced by validators, supported by evidence, and implemented behind contracts. Source code matters, but it does not get to invent product truth by accident.
 
+![Universal Service Foundation overview](docs/assets/readme/image1.png)
+
 ## Why USF Exists
+
+![Why USF exists](docs/assets/readme/image2.png)
 
 Enterprise software teams repeatedly pay for the same foundation: identity, tenant isolation, authorization, audit, configuration, files, workflows, notifications, search, observability, operational proof, provider adapters, and environment policy.
 
@@ -16,9 +20,11 @@ The foundation is semantic-first. Capabilities, contracts, provider modes, envir
 
 ## Product Differentiators
 
+![USF product differentiators](docs/assets/readme/image3.png)
+
 ### Semantic-First Platform Governance
 
-![Semantic-first platform governance](docs/assets/readme/image1.png)
+![Semantic-first platform governance](docs/assets/readme/image4.png)
 
 USF treats platform meaning as a first-class product surface. Capabilities, interfaces, events, workflows, provider modes, environments, commands, configuration, audit, and observability are defined before they are relied on.
 
@@ -26,7 +32,7 @@ This gives teams a stable source of truth for what the platform is supposed to d
 
 ### Evidence-Backed Readiness
 
-![Evidence-backed readiness](docs/assets/readme/image3.png)
+![Evidence-backed readiness](docs/assets/readme/image5.png)
 
 USF separates claims from evidence. A proof records the provider mode, environment, observed level, emitted evidence, collected evidence, and freshness assumptions behind a claim.
 
@@ -34,7 +40,7 @@ That distinction matters. A hermetic proof is valuable, but it is not live-provi
 
 ### AI-Safe by Design
 
-![Authority model and AI-safe change](docs/assets/readme/image2.png)
+![AI-safe by design](docs/assets/readme/image6.png)
 
 USF is designed for a world where AI agents participate in implementation, review, migration, and operations.
 
@@ -44,7 +50,7 @@ That makes AI assistance more bounded, auditable, and useful.
 
 ### Provider-Portable Architecture
 
-![Provider-portable architecture](docs/assets/readme/image5.png)
+![Provider-portable architecture](docs/assets/readme/image7.png)
 
 USF distinguishes provider contracts from provider implementations. Ports, adapters, provider modes, and environments are modelled separately, so a capability can be proven on hermetic or composed-local substrates while preserving the boundary required for external-provider readiness.
 
@@ -52,7 +58,7 @@ This makes the foundation adaptable without weakening internal proof.
 
 ### Validator-Enforced Drift Control
 
-![Validator-enforced drift control](docs/assets/readme/image6.png)
+![Validator-enforced drift control](docs/assets/readme/image8.png)
 
 USF uses validators as enforcement, not decoration. The validator layer is responsible for checking schema validity, reference resolution, vocabulary usage, source disposition, provider-mode honesty, environment honesty, evidence completeness, and readiness overclaiming.
 
@@ -60,13 +66,15 @@ The goal is not just to document architecture. The goal is to make drift detecta
 
 ### Source-Aware Without Being Source-Subordinate
 
-![Source-aware extraction](docs/assets/readme/image7.png)
+![Source-aware extraction](docs/assets/readme/image9.png)
 
 USF carries forward hard-won operational and semantic knowledge from its historical source evidence, but the historical repository is not the future authority.
 
 Source lineage is preserved through references and dispositions. Behaviour is promoted into USF through semantic contracts, decisions, validators, and proof expectations rather than blind copying.
 
 ## Strengths
+
+![USF strengths](docs/assets/readme/image10.png)
 
 - **Governed by authority order:** semantics, ADRs, validators, proof evidence, source implementation, historical evidence, and generated reports each have a defined role.
 - **Built for enterprise foundations:** tenant isolation, authorization, audit, configuration, workflows, provider adapters, observability, evidence, and operational commands are treated as platform concerns.
@@ -75,6 +83,8 @@ Source lineage is preserved through references and dispositions. Behaviour is pr
 - **Built for disciplined extraction and evolution:** implementation can change behind preserved contracts, while semantics, ADRs, validators, and proof expectations keep the platform coherent.
 
 ## What Makes USF Unique
+
+![What makes USF unique](docs/assets/readme/image11.png)
 
 USF is not another application scaffold, service template, or framework wrapper.
 
@@ -90,7 +100,7 @@ That combination creates a different kind of asset:
 
 ## Market Position
 
-![Market position](docs/assets/readme/image8.png)
+![USF market position](docs/assets/readme/image12.png)
 
 USF sits at the intersection of enterprise platform engineering, internal developer platforms, regulated software delivery, and AI-assisted engineering governance.
 
@@ -105,7 +115,7 @@ It is especially relevant for organizations that need:
 
 ## Repository Orientation
 
-![Repository orientation](docs/assets/readme/image4.png)
+![Repository orientation](docs/assets/readme/image13.png)
 
 The repository is organized around governed artefact classes:
 
@@ -117,6 +127,8 @@ The repository is organized around governed artefact classes:
 - `apps/`, `capabilities/`, `adapters/`, and `packages/` contain the extracted implementation surface.
 
 ## Operating Principle
+
+![USF operating principle](docs/assets/readme/image14.png)
 
 USF makes one bet: the future of serious software is not just faster generation. It is governed generation.
 
