@@ -1,8 +1,0 @@
-corepack pnpm dev
-$ tsx apps/api/src/main.ts
-USF V2 dev runtime started
-API: http://127.0.0.1:31317
-Health: http://127.0.0.1:31317/healthz
-OpenAPI: http://127.0.0.1:31317/openapi.json
-Provider mode: dev in-memory
-make: *** [Makefile:11: dev] Terminated
