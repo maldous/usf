@@ -18,17 +18,23 @@ The foundation is semantic-first. Capabilities, contracts, provider modes, envir
 
 ### Semantic-First Platform Governance
 
+![Semantic-first platform governance](docs/assets/readme/image1.png)
+
 USF treats platform meaning as a first-class product surface. Capabilities, interfaces, events, workflows, provider modes, environments, commands, configuration, audit, and observability are defined before they are relied on.
 
 This gives teams a stable source of truth for what the platform is supposed to do, not merely a snapshot of what the current code happens to do.
 
 ### Evidence-Backed Readiness
 
+![Evidence-backed readiness](docs/assets/readme/image3.png)
+
 USF separates claims from evidence. A proof records the provider mode, environment, observed level, emitted evidence, collected evidence, and freshness assumptions behind a claim.
 
 That distinction matters. A hermetic proof is valuable, but it is not live-provider evidence. A production-shaped environment is useful, but it is not the same as production-live operation. A generated report is helpful, but it never outranks the artefacts it summarizes.
 
 ### AI-Safe by Design
+
+![Authority model and AI-safe change](docs/assets/readme/image2.png)
 
 USF is designed for a world where AI agents participate in implementation, review, migration, and operations.
 
@@ -90,6 +96,8 @@ It is especially relevant for organizations that need:
 - a clean target architecture derived from proven source evidence.
 
 ## Repository Orientation
+
+![Repository orientation](docs/assets/readme/image4.png)
 
 The repository is organized around governed artefact classes:
 
