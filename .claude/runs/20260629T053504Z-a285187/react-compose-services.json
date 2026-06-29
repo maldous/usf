@@ -1,0 +1,1014 @@
+{
+  "compose_files": [
+    {
+      "path": "../react/compose.yaml",
+      "service_count": 54,
+      "services": [
+        "alertmanager",
+        "alloy",
+        "clamav",
+        "clickhouse",
+        "external-caddy",
+        "grafana",
+        "keycloak",
+        "keycloak-postgres",
+        "localstack",
+        "loki",
+        "mailpit",
+        "meilisearch",
+        "minio",
+        "mock-oidc",
+        "openbao",
+        "otel-collector",
+        "pgadmin",
+        "pgbackrest",
+        "platform-api",
+        "postgres",
+        "prometheus",
+        "react-app",
+        "redis",
+        "sentry-cleanup",
+        "sentry-clickhouse",
+        "sentry-events-consumer",
+        "sentry-kafka",
+        "sentry-kafka-init",
+        "sentry-memcached",
+        "sentry-migrate",
+        "sentry-post-process-forwarder",
+        "sentry-postgres",
+        "sentry-redis",
+        "sentry-relay",
+        "sentry-snuba-api",
+        "sentry-snuba-errors",
+        "sentry-snuba-migrate",
+        "sentry-snuba-replacer",
+        "sentry-taskbroker",
+        "sentry-taskscheduler",
+        "sentry-taskworker",
+        "sentry-web",
+        "sonar-oidc-plugin",
+        "sonar-postgres",
+        "sonarqube",
+        "tempo",
+        "temporal",
+        "temporal-postgres",
+        "temporal-ui",
+        "windmill",
+        "windmill-postgres",
+        "windmill-redis",
+        "windmill-worker",
+        "wiremock"
+      ]
+    }
+  ],
+  "root": "../react",
+  "services": [
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "prom/alertmanager:v0.27.0",
+      "ports": [
+        "${ALERTMANAGER_PORT:-9093}:9093"
+      ],
+      "profiles": [
+        "observability-provider"
+      ],
+      "service": "alertmanager"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "loki": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "grafana/alloy:v1.5.1",
+      "ports": [
+        "${ALLOY_PORT:-12345}:12345"
+      ],
+      "profiles": [
+        "observability"
+      ],
+      "service": "alloy"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "clamav/clamav:stable",
+      "ports": [
+        "${CLAMAV_PORT:-3310}:3310"
+      ],
+      "profiles": [
+        "antivirus-provider"
+      ],
+      "service": "clamav"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "clickhouse/clickhouse-server:24.12",
+      "ports": [
+        "${CLICKHOUSE_HTTP_PORT:-8124}:8123",
+        "${CLICKHOUSE_NATIVE_PORT:-9002}:9000"
+      ],
+      "profiles": null,
+      "service": "clickhouse"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "caddy:2-alpine",
+      "ports": null,
+      "profiles": [
+        "external-web"
+      ],
+      "service": "external-caddy"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "loki": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "grafana/grafana:11.4.0",
+      "ports": [
+        "${GRAFANA_PORT:-3200}:3000"
+      ],
+      "profiles": [
+        "observability"
+      ],
+      "service": "grafana"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "keycloak-postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "quay.io/keycloak/keycloak:26.2",
+      "ports": [
+        "${KEYCLOAK_PORT:-8090}:8080"
+      ],
+      "profiles": [
+        "identity"
+      ],
+      "service": "keycloak"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16.6-alpine",
+      "ports": null,
+      "profiles": [
+        "identity"
+      ],
+      "service": "keycloak-postgres"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "localstack/localstack:4.0.4",
+      "ports": [
+        "${LOCALSTACK_PORT:-4566}:4566"
+      ],
+      "profiles": [
+        "cloud-mocks"
+      ],
+      "service": "localstack"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "grafana/loki:3.3.2",
+      "ports": [
+        "${LOKI_PORT:-3100}:3100"
+      ],
+      "profiles": [
+        "observability"
+      ],
+      "service": "loki"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "axllent/mailpit:v1.21.0",
+      "ports": [
+        "${MAILPIT_SMTP_PORT:-1025}:1025",
+        "${MAILPIT_UI_PORT:-8025}:8025"
+      ],
+      "profiles": null,
+      "service": "mailpit"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "getmeili/meilisearch:v1.10",
+      "ports": [
+        "${MEILISEARCH_PORT:-7700}:7700"
+      ],
+      "profiles": [
+        "search-provider"
+      ],
+      "service": "meilisearch"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "minio/minio:RELEASE.2024-12-18T13-15-44Z",
+      "ports": [
+        "${MINIO_API_PORT:-9000}:9000",
+        "${MINIO_CONSOLE_PORT:-9001}:9001"
+      ],
+      "profiles": null,
+      "service": "minio"
+    },
+    {
+      "build": {
+        "context": "./services/mock-oidc",
+        "dockerfile": "Dockerfile"
+      },
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": null,
+      "ports": [
+        "${MOCK_OIDC_PORT:-9080}:8080"
+      ],
+      "profiles": [
+        "identity-mocks"
+      ],
+      "service": "mock-oidc"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "openbao/openbao:2.2.0",
+      "ports": [
+        "${OPENBAO_PORT:-8200}:8200"
+      ],
+      "profiles": [
+        "secrets"
+      ],
+      "service": "openbao"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "otel/opentelemetry-collector-contrib:0.114.0",
+      "ports": [
+        "${OTEL_GRPC_PORT:-4317}:4317",
+        "${OTEL_HTTP_PORT:-4318}:4318",
+        "${OTEL_HEALTH_PORT:-13133}:13133"
+      ],
+      "profiles": null,
+      "service": "otel-collector"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "dpage/pgadmin4:8.14",
+      "ports": [
+        "${PGADMIN_PORT:-5050}:80"
+      ],
+      "profiles": null,
+      "service": "pgadmin"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "minio": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "woblerr/docker-pgbackrest:alpine",
+      "ports": null,
+      "profiles": [
+        "pitr-provider"
+      ],
+      "service": "pgbackrest"
+    },
+    {
+      "build": {
+        "context": ".",
+        "dockerfile": "apps/platform-api/Dockerfile"
+      },
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "postgres": {
+          "condition": "service_healthy"
+        },
+        "redis": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": null,
+      "ports": [
+        "${PLATFORM_API_PORT:-3001}:3001"
+      ],
+      "profiles": [
+        "web"
+      ],
+      "service": "platform-api"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16.6-alpine",
+      "ports": [
+        "${POSTGRES_PORT:-5433}:5432"
+      ],
+      "profiles": null,
+      "service": "postgres"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "prom/prometheus:v2.54.1",
+      "ports": [
+        "${PROMETHEUS_PORT:-9090}:9090"
+      ],
+      "profiles": [
+        "observability-provider"
+      ],
+      "service": "prometheus"
+    },
+    {
+      "build": {
+        "context": ".",
+        "dockerfile": "apps/react-enterprise-app/Dockerfile"
+      },
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "platform-api": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": null,
+      "ports": [
+        "${WEB_HTTP_PORT:-80}:80"
+      ],
+      "profiles": [
+        "web"
+      ],
+      "service": "react-app"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "redis:7.4.2-alpine",
+      "ports": [
+        "${REDIS_PORT:-6379}:6379"
+      ],
+      "profiles": null,
+      "service": "redis"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-migrate": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/sentry:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-cleanup"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "clickhouse/clickhouse-server:24.12-alpine",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-clickhouse"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-kafka-init": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-migrate": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/sentry:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-events-consumer"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "confluentinc/cp-kafka:7.6.6",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-kafka"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "confluentinc/cp-kafka:7.6.6",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-kafka-init"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "memcached:1.6.26-alpine",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-memcached"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-postgres": {
+          "condition": "service_healthy"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/sentry:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-migrate"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-kafka-init": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-migrate": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/sentry:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-post-process-forwarder"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16-alpine",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-postgres"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "redis:7-alpine",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-redis"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-web": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/relay:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-relay"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        },
+        "sentry-snuba-migrate": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/snuba:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-snuba-api"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-kafka-init": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        },
+        "sentry-snuba-migrate": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/snuba:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-snuba-errors"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-clickhouse": {
+          "condition": "service_healthy"
+        },
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/snuba:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-snuba-migrate"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-kafka-init": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        },
+        "sentry-snuba-migrate": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/snuba:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-snuba-replacer"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-kafka": {
+          "condition": "service_healthy"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/taskbroker:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-taskbroker"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-migrate": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        },
+        "sentry-taskbroker": {
+          "condition": "service_started"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/sentry:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-taskscheduler"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-migrate": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        },
+        "sentry-taskbroker": {
+          "condition": "service_started"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/getsentry/sentry:26.5.2",
+      "ports": null,
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-taskworker"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sentry-memcached": {
+          "condition": "service_started"
+        },
+        "sentry-migrate": {
+          "condition": "service_completed_successfully"
+        },
+        "sentry-redis": {
+          "condition": "service_healthy"
+        },
+        "sentry-snuba-api": {
+          "condition": "service_started"
+        },
+        "sentry-snuba-migrate": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "ghcr.io/getsentry/sentry:26.5.2",
+      "ports": [
+        "9060:9000"
+      ],
+      "profiles": [
+        "external-sentry"
+      ],
+      "service": "sentry-web"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "curlimages/curl:8.11.1",
+      "ports": null,
+      "profiles": [
+        "external-sonar"
+      ],
+      "service": "sonar-oidc-plugin"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16.6-alpine",
+      "ports": null,
+      "profiles": [
+        "external-sonar"
+      ],
+      "service": "sonar-postgres"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "sonar-oidc-plugin": {
+          "condition": "service_completed_successfully"
+        },
+        "sonar-postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "sonarqube:25.9.0.112764-community",
+      "ports": [
+        "${SONAR_PORT:-9064}:9000"
+      ],
+      "profiles": [
+        "external-sonar"
+      ],
+      "service": "sonarqube"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "grafana/tempo:2.6.0",
+      "ports": [
+        "${TEMPO_HTTP_PORT:-3201}:3200"
+      ],
+      "profiles": [
+        "observability",
+        "observability-provider"
+      ],
+      "service": "tempo"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "temporal-postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "temporalio/auto-setup:1.25.1",
+      "ports": [
+        "${TEMPORAL_PORT:-7233}:7233"
+      ],
+      "profiles": [
+        "workflow-provider"
+      ],
+      "service": "temporal"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16.6-alpine",
+      "ports": null,
+      "profiles": [
+        "workflow-provider"
+      ],
+      "service": "temporal-postgres"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "temporal": {
+          "condition": "service_started"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "temporalio/ui:2.35.0",
+      "ports": [
+        "${TEMPORAL_UI_PORT:-8088}:8080"
+      ],
+      "profiles": [
+        "workflow-provider"
+      ],
+      "service": "temporal-ui"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "windmill-postgres": {
+          "condition": "service_healthy"
+        },
+        "windmill-redis": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "ghcr.io/windmill-labs/windmill:1.734",
+      "ports": [
+        "${WINDMILL_PORT:-8000}:8000"
+      ],
+      "profiles": [
+        "workflow-provider"
+      ],
+      "service": "windmill"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16.6-alpine",
+      "ports": null,
+      "profiles": [
+        "workflow-provider"
+      ],
+      "service": "windmill-postgres"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "redis:7.4.2-alpine",
+      "ports": null,
+      "profiles": [
+        "workflow-provider"
+      ],
+      "service": "windmill-redis"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": {
+        "windmill": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "ghcr.io/windmill-labs/windmill:1.734",
+      "ports": null,
+      "profiles": [
+        "workflow-provider"
+      ],
+      "service": "windmill-worker"
+    },
+    {
+      "build": null,
+      "compose_file": "../react/compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": true,
+      "image": "wiremock/wiremock:3.13.2-2-alpine",
+      "ports": [
+        "${WIREMOCK_PORT:-8089}:8080"
+      ],
+      "profiles": [
+        "external-mocks"
+      ],
+      "service": "wiremock"
+    }
+  ]
+}

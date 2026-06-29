@@ -1,0 +1,13 @@
+{
+  "expectedRuleId": "USF-COMPOSE-009",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "environmentPolicies.production.realisationMode": "composed-local",
+        "environmentPolicies.production.deploymentForm": "composed",
+        "environmentPolicies.production.generated": false
+      }
+    }
+  ]
+}

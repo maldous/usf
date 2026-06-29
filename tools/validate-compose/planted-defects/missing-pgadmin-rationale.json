@@ -1,0 +1,12 @@
+{
+  "expectedRuleId": "USF-COMPOSE-005",
+  "servicePatches": [
+    {
+      "serviceId": "pgadmin",
+      "values": {
+        "environmentPolicies.dev.generated": false,
+        "nonEquivalenceBoundaries": []
+      }
+    }
+  ]
+}

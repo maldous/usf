@@ -1,0 +1,12 @@
+{
+  "expectedRuleId": "USF-COMPOSE-014",
+  "checkGenerated": true,
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "composeService.image": "postgres:16.7-alpine"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "expectedRuleId": "USF-COMPOSE-007",
+  "servicePatches": [
+    {
+      "serviceId": "redis",
+      "values": {
+        "environmentPolicies.test.realisationMode": "in-memory",
+        "environmentPolicies.test.deploymentForm": "in-memory"
+      }
+    }
+  ]
+}

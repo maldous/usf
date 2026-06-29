@@ -1,0 +1,969 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:compose-service",
+  "title": "USF Compose Service Classification Schema",
+  "description": "Draft JSON Schema for semantic Compose service classification, environment-specific realisation, deployment form, and generated Compose targets. The catalogue records every historical React Compose service as evidence and derives dev, test, staging, and production Compose realisations without treating generated Compose as authority. lifecycleState draft; not active.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "environmentDefinitions",
+    "reactComposeServiceCount",
+    "sourceRefs",
+    "services",
+    "generatedComposeTargets"
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "possiblyEmptyStringList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 0
+      },
+      "uniqueItems": true
+    },
+    "requiredState": {
+      "enum": [
+        true,
+        false,
+        "conditional",
+        "deferred",
+        "out-of-scope"
+      ]
+    },
+    "realisationMode": {
+      "type": "string",
+      "enum": [
+        "in-memory",
+        "composed-local",
+        "composed-shared-control-plane",
+        "composed-environment-isolated",
+        "external-managed",
+        "cloud-provider",
+        "mock-provider",
+        "emulated-provider",
+        "operator-only",
+        "assurance-only",
+        "prohibited",
+        "deferred"
+      ]
+    },
+    "environmentScope": {
+      "type": "string",
+      "enum": [
+        "dev",
+        "test",
+        "staging",
+        "production"
+      ]
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": [
+        "ephemeral-per-run",
+        "reset-per-run",
+        "reset-per-deploy",
+        "persistent-per-environment",
+        "shared-long-lived-control-plane",
+        "external-provider-managed"
+      ]
+    },
+    "dataBoundary": {
+      "type": "string",
+      "enum": [
+        "none",
+        "metadata-only",
+        "synthetic-data",
+        "environment-runtime-data",
+        "persistent-staging-data",
+        "production-data",
+        "redacted-production-derived-data"
+      ]
+    },
+    "sharingModel": {
+      "type": "string",
+      "enum": [
+        "in-process",
+        "environment-isolated",
+        "shared-control-plane",
+        "shared-engine-environment-scoped-data",
+        "external-provider",
+        "cloud-native-resource"
+      ]
+    },
+    "serviceAuthorityLevel": {
+      "type": "string",
+      "enum": [
+        "observes",
+        "analyses",
+        "gates-promotion",
+        "routes-traffic",
+        "grants-access",
+        "stores-state",
+        "mutates-state",
+        "executes-code",
+        "scans-content",
+        "emulates-provider",
+        "administers-system"
+      ]
+    },
+    "accessModel": {
+      "type": "string",
+      "enum": [
+        "no-human-access",
+        "developer-access",
+        "operator-access",
+        "admin-only",
+        "break-glass-only",
+        "external-provider-console"
+      ]
+    },
+    "substitutionPolicy": {
+      "type": "string",
+      "enum": [
+        "in-memory-allowed",
+        "fake-allowed",
+        "mock-allowed",
+        "real-product-required",
+        "exact-product-required",
+        "managed-equivalent-allowed",
+        "cloud-provider-allowed",
+        "no-substitute-allowed"
+      ]
+    },
+    "composePolicy": {
+      "type": "string",
+      "enum": [
+        "generate-service",
+        "generate-profile-gated-service",
+        "generate-shared-control-plane-service",
+        "generate-environment-isolated-service",
+        "do-not-generate-external-reference-only",
+        "do-not-generate-in-memory-substitute",
+        "do-not-generate-deferred"
+      ]
+    },
+    "deploymentForm": {
+      "type": "string",
+      "enum": [
+        "composed",
+        "shared",
+        "external-managed",
+        "cloud-native",
+        "in-memory",
+        "mocked",
+        "emulated",
+        "operator-only",
+        "assurance-only",
+        "prohibited",
+        "deferred"
+      ]
+    },
+    "classificationState": {
+      "type": "string",
+      "enum": [
+        "implemented",
+        "required-for-dev-compose",
+        "required-for-test-compose",
+        "required-for-staging-compose",
+        "production-external-provider",
+        "production-cloud-provider",
+        "in-memory-dev-substitute",
+        "shared-control-plane",
+        "environment-isolated-runtime",
+        "profile-gated",
+        "deferred",
+        "out-of-foundation-scope",
+        "historical-implementation-detail",
+        "requires-human-decision"
+      ]
+    },
+    "serviceKind": {
+      "type": "string",
+      "enum": [
+        "database",
+        "identity-provider",
+        "identity-backing-store",
+        "event-bus",
+        "workflow-runtime",
+        "workflow-backing-store",
+        "workflow-operator-ui",
+        "object-storage",
+        "secret-store",
+        "observability-collector",
+        "observability-control-plane",
+        "observability-backing-service",
+        "notification-sink",
+        "webhook-sink",
+        "assurance-control-plane",
+        "assurance-backing-store",
+        "operator-admin",
+        "cache",
+        "search-provider",
+        "provider-emulator",
+        "provider-mock",
+        "file-scanner",
+        "gateway",
+        "operator-automation",
+        "operator-automation-worker",
+        "backup-restore",
+        "analytics-store",
+        "application-runtime",
+        "implementation-ui",
+        "implementation-backing-service"
+      ]
+    },
+    "humanDecisionState": {
+      "type": "string",
+      "enum": [
+        "accepted",
+        "not-required",
+        "deferred",
+        "requires-human-decision"
+      ]
+    },
+    "sourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceKind",
+        "sourcePath",
+        "evidenceRole",
+        "notes"
+      ],
+      "properties": {
+        "sourceKind": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourcePath": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceRole": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serviceId",
+        "relationship",
+        "requiredIn"
+      ],
+      "properties": {
+        "serviceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "relationship": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "requiredIn": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/environmentScope"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "volume": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "purpose",
+        "dataBoundary",
+        "lifecycle",
+        "composeVolumeName"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "dataBoundary": {
+          "$ref": "#/$defs/dataBoundary"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle"
+        },
+        "composeVolumeName": {
+          "type": "string",
+          "minLength": 0
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "purpose",
+        "composeNetworkName"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "composeNetworkName": {
+          "type": "string",
+          "minLength": 0
+        }
+      }
+    },
+    "port": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "containerPort",
+        "publishedPort",
+        "purpose",
+        "accessModel"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "containerPort": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "publishedPort": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "accessModel": {
+          "$ref": "#/$defs/accessModel"
+        }
+      }
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "present",
+        "model",
+        "notes"
+      ],
+      "properties": {
+        "present": {
+          "type": "boolean"
+        },
+        "model": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logs",
+        "metrics",
+        "traces",
+        "auditRequired",
+        "notes"
+      ],
+      "properties": {
+        "logs": {
+          "type": "boolean"
+        },
+        "metrics": {
+          "type": "boolean"
+        },
+        "traces": {
+          "type": "boolean"
+        },
+        "auditRequired": {
+          "type": "boolean"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "backupRestore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "model",
+        "notes"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "model": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environmentScope",
+        "path",
+        "purpose"
+      ],
+      "properties": {
+        "environmentScope": {
+          "$ref": "#/$defs/environmentScope"
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "healthcheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "test",
+        "interval",
+        "timeout",
+        "retries"
+      ],
+      "properties": {
+        "test": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": false
+        },
+        "interval": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "timeout": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "retries": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "composeDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serviceName",
+        "condition"
+      ],
+      "properties": {
+        "serviceName": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "condition": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "composeService": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serviceName",
+        "image",
+        "profiles",
+        "command",
+        "environment",
+        "ports",
+        "volumes",
+        "dependsOn",
+        "healthcheck"
+      ],
+      "properties": {
+        "serviceName": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "image": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "profiles": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "command": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": false
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entry"
+          },
+          "uniqueItems": true
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/composeDependency"
+          },
+          "uniqueItems": true
+        },
+        "healthcheck": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/healthcheck"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "environmentPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environmentScope",
+        "required",
+        "realisationMode",
+        "deploymentForm",
+        "lifecycle",
+        "dataBoundary",
+        "sharingModel",
+        "substitutionPolicy",
+        "composePolicy",
+        "composeProfiles",
+        "generated",
+        "seedReset",
+        "proofObligation",
+        "selectedComposeTarget",
+        "rationale"
+      ],
+      "properties": {
+        "environmentScope": {
+          "$ref": "#/$defs/environmentScope"
+        },
+        "required": {
+          "$ref": "#/$defs/requiredState"
+        },
+        "realisationMode": {
+          "$ref": "#/$defs/realisationMode"
+        },
+        "deploymentForm": {
+          "$ref": "#/$defs/deploymentForm"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle"
+        },
+        "dataBoundary": {
+          "$ref": "#/$defs/dataBoundary"
+        },
+        "sharingModel": {
+          "$ref": "#/$defs/sharingModel"
+        },
+        "substitutionPolicy": {
+          "$ref": "#/$defs/substitutionPolicy"
+        },
+        "composePolicy": {
+          "$ref": "#/$defs/composePolicy"
+        },
+        "composeProfiles": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "generated": {
+          "type": "boolean"
+        },
+        "seedReset": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "proofObligation": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "selectedComposeTarget": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "environmentPolicies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dev",
+        "test",
+        "staging",
+        "production"
+      ],
+      "properties": {
+        "dev": {
+          "$ref": "#/$defs/environmentPolicy"
+        },
+        "test": {
+          "$ref": "#/$defs/environmentPolicy"
+        },
+        "staging": {
+          "$ref": "#/$defs/environmentPolicy"
+        },
+        "production": {
+          "$ref": "#/$defs/environmentPolicy"
+        }
+      }
+    },
+    "environmentDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environmentScope",
+        "purpose",
+        "defaultModel",
+        "requirement"
+      ],
+      "properties": {
+        "environmentScope": {
+          "$ref": "#/$defs/environmentScope"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "defaultModel": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "requirement": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serviceId",
+        "displayName",
+        "semanticRoles",
+        "serviceKind",
+        "requirementState",
+        "classificationStates",
+        "serviceAuthorityLevels",
+        "accessModel",
+        "sourceEvidence",
+        "reactComposeServiceNames",
+        "reactParityRows",
+        "usfCapabilityRefs",
+        "environmentPolicies",
+        "composeProfiles",
+        "dependencies",
+        "volumes",
+        "networks",
+        "ports",
+        "secrets",
+        "configs",
+        "healthchecks",
+        "readinessChecks",
+        "identityBoundary",
+        "secretBoundary",
+        "adminSurface",
+        "operatorSurface",
+        "observability",
+        "backupRestore",
+        "seedReset",
+        "failureImpact",
+        "proofRequirements",
+        "nonEquivalenceBoundaries",
+        "deferredDepth",
+        "outOfScopeRationale",
+        "humanDecisionState",
+        "generatedComposeTargets"
+      ],
+      "properties": {
+        "serviceId": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "displayName": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "semanticRoles": {
+          "$ref": "#/$defs/stringList"
+        },
+        "serviceKind": {
+          "$ref": "#/$defs/serviceKind"
+        },
+        "requirementState": {
+          "$ref": "#/$defs/requiredState"
+        },
+        "classificationStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/classificationState"
+          },
+          "uniqueItems": true
+        },
+        "serviceAuthorityLevels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/serviceAuthorityLevel"
+          },
+          "uniqueItems": true
+        },
+        "accessModel": {
+          "$ref": "#/$defs/accessModel"
+        },
+        "sourceEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceEvidence"
+          },
+          "uniqueItems": true
+        },
+        "reactComposeServiceNames": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "reactParityRows": {
+          "$ref": "#/$defs/stringList"
+        },
+        "usfCapabilityRefs": {
+          "$ref": "#/$defs/stringList"
+        },
+        "environmentPolicies": {
+          "$ref": "#/$defs/environmentPolicies"
+        },
+        "composeProfiles": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependency"
+          },
+          "uniqueItems": true
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/volume"
+          },
+          "uniqueItems": true
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/network"
+          },
+          "uniqueItems": true
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/port"
+          },
+          "uniqueItems": true
+        },
+        "secrets": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "configs": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "healthchecks": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "readinessChecks": {
+          "$ref": "#/$defs/stringList"
+        },
+        "identityBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "secretBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "adminSurface": {
+          "$ref": "#/$defs/boundary"
+        },
+        "operatorSurface": {
+          "$ref": "#/$defs/boundary"
+        },
+        "observability": {
+          "$ref": "#/$defs/observability"
+        },
+        "backupRestore": {
+          "$ref": "#/$defs/backupRestore"
+        },
+        "seedReset": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "failureImpact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "proofRequirements": {
+          "$ref": "#/$defs/stringList"
+        },
+        "nonEquivalenceBoundaries": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "deferredDepth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outOfScopeRationale": {
+          "type": "string",
+          "minLength": 0
+        },
+        "humanDecisionState": {
+          "$ref": "#/$defs/humanDecisionState"
+        },
+        "generatedComposeTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/target"
+          },
+          "uniqueItems": true
+        },
+        "composeService": {
+          "$ref": "#/$defs/composeService"
+        }
+      }
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "const": "compose-service.service-catalogue"
+    },
+    "title": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "$ref": "#/$defs/stringList"
+    },
+    "taxonomyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "vocabularyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "aiGuidance": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "environmentDefinitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/environmentDefinition"
+      },
+      "uniqueItems": true,
+      "minItems": 4
+    },
+    "reactComposeServiceCount": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sourceRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/service"
+      },
+      "uniqueItems": true
+    },
+    "generatedComposeTargets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/target"
+      },
+      "uniqueItems": true
+    }
+  }
+}

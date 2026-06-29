@@ -1,0 +1,882 @@
+final validation started 2026-06-29T05:48:39Z
+corepack pnpm parity
+$ python3 tools/validate-parity/validate-parity.py all --json && python3 tools/validate-parity/validate-db.py all --json && python3 tools/validate-parity/validate-authz.py all --json && python3 tools/validate-parity/validate-audit.py all --json && python3 tools/validate-parity/validate-config.py all --json && python3 tools/validate-parity/validate-files.py all --json && python3 tools/validate-parity/validate-auth.py all --json && python3 tools/validate-parity/validate-jobs.py all --json && python3 tools/validate-parity/validate-notify.py all --json && python3 tools/validate-parity/validate-api.py all --json && python3 tools/validate-parity/validate-providers.py all --json && python3 tools/validate-parity/validate-observability.py all --json && python3 tools/validate-parity/validate-guardrails.py all --json && python3 tools/validate-parity/validate-bulk.py all --json && python3 tools/validate-parity/validate-search.py all --json && python3 tools/validate-parity/validate-resources.py all --json
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "ok": true,
+  "findings": [],
+  "rules": {
+    "USF-SEARCH-001": [
+      "blocking",
+      "search semantic model missing"
+    ],
+    "USF-SEARCH-002": [
+      "blocking",
+      "search standard or source-use matrix missing"
+    ],
+    "USF-SEARCH-003": [
+      "blocking",
+      "search port/adapter/service boundary missing"
+    ],
+    "USF-SEARCH-004": [
+      "blocking",
+      "search proof or command wiring missing"
+    ],
+    "USF-SEARCH-005": [
+      "blocking",
+      "search tests missing required behaviours"
+    ],
+    "USF-SEARCH-006": [
+      "blocking",
+      "search parity/source-use rows missing"
+    ],
+    "USF-SEARCH-007": [
+      "blocking",
+      "search redaction or overclaim violation"
+    ],
+    "USF-SEARCH-008": [
+      "blocking",
+      "search audit/observability/guardrail linkage missing"
+    ],
+    "USF-SEARCH-SELFTEST": [
+      "blocking",
+      "planted search defect did not raise its expected rule"
+    ]
+  }
+}
+{
+  "ok": true,
+  "findings": [],
+  "rules": {
+    "USF-RESOURCES-001": [
+      "blocking",
+      "resource lifecycle semantic model missing"
+    ],
+    "USF-RESOURCES-002": [
+      "blocking",
+      "resource lifecycle standard or source-use matrix missing"
+    ],
+    "USF-RESOURCES-003": [
+      "blocking",
+      "resource lifecycle port/adapter/service boundary missing"
+    ],
+    "USF-RESOURCES-004": [
+      "blocking",
+      "resource lifecycle proof or command wiring missing"
+    ],
+    "USF-RESOURCES-005": [
+      "blocking",
+      "resource lifecycle tests missing required behaviours"
+    ],
+    "USF-RESOURCES-006": [
+      "blocking",
+      "resource lifecycle parity/source-use rows missing"
+    ],
+    "USF-RESOURCES-007": [
+      "blocking",
+      "resource lifecycle redaction or overclaim violation"
+    ],
+    "USF-RESOURCES-008": [
+      "blocking",
+      "resource lifecycle audit/observability/guardrail/search linkage missing"
+    ],
+    "USF-RESOURCES-SELFTEST": [
+      "blocking",
+      "planted resource lifecycle defect did not raise its expected rule"
+    ]
+  }
+}
+corepack pnpm install --frozen-lockfile
+Scope: all 32 workspace projects
+Already up to date
+Done in 330ms using pnpm v11.9.0
+corepack pnpm verify
+$ corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm openapi:check && corepack pnpm db:types:check && corepack pnpm dev:smoke && corepack pnpm compose:config && corepack pnpm compose:smoke && corepack pnpm proof:bootstrap && corepack pnpm proof:config && corepack pnpm proof:auth && corepack pnpm proof:jobs && corepack pnpm proof:notify && corepack pnpm proof:api && corepack pnpm proof:providers && corepack pnpm proof:observability && corepack pnpm proof:guardrails && corepack pnpm proof:bulk && corepack pnpm proof:search && corepack pnpm proof:resources && corepack pnpm repo:validate && corepack pnpm parity
+$ prettier --check "{apps,capabilities,adapters,packages,tests}/**/*.{ts,json,yaml,yml}" package.json pnpm-workspace.yaml tsconfig.json tsconfig.base.json eslint.config.js vitest.config.ts compose.yaml .prettierrc.json .codex/runs/20260627T235923Z-f80da39/bootstrap-start.json
+Checking formatting...
+All matched files use Prettier code style!
+$ eslint .
+$ tsc --noEmit
+$ vitest run
+
+ RUN  v4.1.9 /home/user/src/usf
+
+
+ Test Files  32 passed (32)
+      Tests  214 passed (214)
+   Start at  15:48:51
+   Duration  2.38s (transform 3.56s, setup 0ms, import 5.89s, tests 7.10s, environment 3ms)
+
+$ tsx packages/openapi/src/check.ts
+{"status":"pass","check":"openapi-contract"}
+$ tsx adapters/db/src/check-generated-types.ts
+{"status":"pass","check":"generated-db-types-and-migration-manifest"}
+$ tsx packages/proof/src/dev-smoke.ts
+USF V2 dev-smoke passed
+API: http://127.0.0.1:28221
+Health: http://127.0.0.1:28221/healthz
+OpenAPI: http://127.0.0.1:28221/openapi.json
+Provider mode: dev in-memory
+Tenant accepted: 200
+Tenant mismatch: 400
+Audit events captured: 1
+$ docker compose -f compose.yaml config --quiet
+$ bash -lc 'docker compose -f compose.yaml up -d --wait --wait-timeout 240; status=$?; docker compose -f compose.yaml down --remove-orphans; exit $status'
+ Network foundation-bootstrap_default Creating
+ Network foundation-bootstrap_default Created
+ Container foundation-bootstrap-grafana-1 Creating
+ Container foundation-bootstrap-mailpit-1 Creating
+ Container foundation-bootstrap-minio-1 Creating
+ Container foundation-bootstrap-tempo-1 Creating
+ Container foundation-bootstrap-prometheus-1 Creating
+ Container foundation-bootstrap-otel-collector-1 Creating
+ Container foundation-bootstrap-loki-1 Creating
+ Container foundation-bootstrap-webhook-sink-1 Creating
+ Container foundation-bootstrap-openbao-1 Creating
+ Container foundation-bootstrap-nats-1 Creating
+ Container foundation-bootstrap-postgres-1 Creating
+ Container foundation-bootstrap-keycloak-db-1 Creating
+ Container foundation-bootstrap-otel-collector-1 Created
+ Container foundation-bootstrap-minio-1 Created
+ Container foundation-bootstrap-mailpit-1 Created
+ Container foundation-bootstrap-openbao-1 Created
+ Container foundation-bootstrap-prometheus-1 Created
+ Container foundation-bootstrap-loki-1 Created
+ Container foundation-bootstrap-tempo-1 Created
+ Container foundation-bootstrap-webhook-sink-1 Created
+ Container foundation-bootstrap-postgres-1 Created
+ Container foundation-bootstrap-keycloak-db-1 Created
+ Container foundation-bootstrap-temporal-1 Creating
+ Container foundation-bootstrap-keycloak-1 Creating
+ Container foundation-bootstrap-nats-1 Created
+ Container foundation-bootstrap-grafana-1 Created
+ Container foundation-bootstrap-temporal-1 Created
+ Container foundation-bootstrap-keycloak-1 Created
+ Container foundation-bootstrap-loki-1 Starting
+ Container foundation-bootstrap-minio-1 Starting
+ Container foundation-bootstrap-tempo-1 Starting
+ Container foundation-bootstrap-openbao-1 Starting
+ Container foundation-bootstrap-mailpit-1 Starting
+ Container foundation-bootstrap-prometheus-1 Starting
+ Container foundation-bootstrap-grafana-1 Starting
+ Container foundation-bootstrap-webhook-sink-1 Starting
+ Container foundation-bootstrap-postgres-1 Starting
+ Container foundation-bootstrap-keycloak-db-1 Starting
+ Container foundation-bootstrap-nats-1 Starting
+ Container foundation-bootstrap-otel-collector-1 Starting
+ Container foundation-bootstrap-minio-1 Started
+ Container foundation-bootstrap-openbao-1 Started
+ Container foundation-bootstrap-loki-1 Started
+ Container foundation-bootstrap-tempo-1 Started
+ Container foundation-bootstrap-otel-collector-1 Started
+ Container foundation-bootstrap-postgres-1 Started
+ Container foundation-bootstrap-postgres-1 Waiting
+ Container foundation-bootstrap-mailpit-1 Started
+ Container foundation-bootstrap-webhook-sink-1 Started
+ Container foundation-bootstrap-keycloak-db-1 Started
+ Container foundation-bootstrap-keycloak-db-1 Waiting
+ Container foundation-bootstrap-prometheus-1 Started
+ Container foundation-bootstrap-nats-1 Started
+ Container foundation-bootstrap-grafana-1 Started
+ Container foundation-bootstrap-postgres-1 Healthy
+ Container foundation-bootstrap-temporal-1 Starting
+ Container foundation-bootstrap-keycloak-db-1 Healthy
+ Container foundation-bootstrap-keycloak-1 Starting
+ Container foundation-bootstrap-temporal-1 Started
+ Container foundation-bootstrap-keycloak-1 Started
+ Container foundation-bootstrap-keycloak-db-1 Waiting
+ Container foundation-bootstrap-nats-1 Waiting
+ Container foundation-bootstrap-postgres-1 Waiting
+ Container foundation-bootstrap-mailpit-1 Waiting
+ Container foundation-bootstrap-webhook-sink-1 Waiting
+ Container foundation-bootstrap-openbao-1 Waiting
+ Container foundation-bootstrap-keycloak-1 Waiting
+ Container foundation-bootstrap-minio-1 Waiting
+ Container foundation-bootstrap-grafana-1 Waiting
+ Container foundation-bootstrap-otel-collector-1 Waiting
+ Container foundation-bootstrap-loki-1 Waiting
+ Container foundation-bootstrap-tempo-1 Waiting
+ Container foundation-bootstrap-temporal-1 Waiting
+ Container foundation-bootstrap-prometheus-1 Waiting
+ Container foundation-bootstrap-postgres-1 Healthy
+ Container foundation-bootstrap-nats-1 Healthy
+ Container foundation-bootstrap-keycloak-1 Healthy
+ Container foundation-bootstrap-webhook-sink-1 Healthy
+ Container foundation-bootstrap-prometheus-1 Healthy
+ Container foundation-bootstrap-openbao-1 Healthy
+ Container foundation-bootstrap-otel-collector-1 Healthy
+ Container foundation-bootstrap-temporal-1 Healthy
+ Container foundation-bootstrap-tempo-1 Healthy
+ Container foundation-bootstrap-loki-1 Healthy
+ Container foundation-bootstrap-minio-1 Healthy
+ Container foundation-bootstrap-keycloak-db-1 Healthy
+ Container foundation-bootstrap-grafana-1 Healthy
+ Container foundation-bootstrap-mailpit-1 Healthy
+ Container foundation-bootstrap-openbao-1 Stopping
+ Container foundation-bootstrap-grafana-1 Stopping
+ Container foundation-bootstrap-loki-1 Stopping
+ Container foundation-bootstrap-nats-1 Stopping
+ Container foundation-bootstrap-keycloak-1 Stopping
+ Container foundation-bootstrap-otel-collector-1 Stopping
+ Container foundation-bootstrap-prometheus-1 Stopping
+ Container foundation-bootstrap-temporal-1 Stopping
+ Container foundation-bootstrap-webhook-sink-1 Stopping
+ Container foundation-bootstrap-minio-1 Stopping
+ Container foundation-bootstrap-tempo-1 Stopping
+ Container foundation-bootstrap-mailpit-1 Stopping
+ Container foundation-bootstrap-otel-collector-1 Stopped
+ Container foundation-bootstrap-otel-collector-1 Removing
+ Container foundation-bootstrap-otel-collector-1 Removed
+ Container foundation-bootstrap-nats-1 Stopped
+ Container foundation-bootstrap-nats-1 Removing
+ Container foundation-bootstrap-nats-1 Removed
+ Container foundation-bootstrap-webhook-sink-1 Stopped
+ Container foundation-bootstrap-webhook-sink-1 Removing
+ Container foundation-bootstrap-webhook-sink-1 Removed
+ Container foundation-bootstrap-prometheus-1 Stopped
+ Container foundation-bootstrap-prometheus-1 Removing
+ Container foundation-bootstrap-prometheus-1 Removed
+ Container foundation-bootstrap-minio-1 Stopped
+ Container foundation-bootstrap-minio-1 Removing
+ Container foundation-bootstrap-minio-1 Removed
+ Container foundation-bootstrap-grafana-1 Stopped
+ Container foundation-bootstrap-grafana-1 Removing
+ Container foundation-bootstrap-grafana-1 Removed
+ Container foundation-bootstrap-openbao-1 Stopped
+ Container foundation-bootstrap-openbao-1 Removing
+ Container foundation-bootstrap-openbao-1 Removed
+ Container foundation-bootstrap-mailpit-1 Stopped
+ Container foundation-bootstrap-mailpit-1 Removing
+ Container foundation-bootstrap-mailpit-1 Removed
+ Container foundation-bootstrap-temporal-1 Stopped
+ Container foundation-bootstrap-temporal-1 Removing
+ Container foundation-bootstrap-temporal-1 Removed
+ Container foundation-bootstrap-postgres-1 Stopping
+ Container foundation-bootstrap-postgres-1 Stopped
+ Container foundation-bootstrap-postgres-1 Removing
+ Container foundation-bootstrap-postgres-1 Removed
+ Container foundation-bootstrap-tempo-1 Stopped
+ Container foundation-bootstrap-tempo-1 Removing
+ Container foundation-bootstrap-tempo-1 Removed
+ Container foundation-bootstrap-loki-1 Stopped
+ Container foundation-bootstrap-loki-1 Removing
+ Container foundation-bootstrap-loki-1 Removed
+ Container foundation-bootstrap-keycloak-1 Stopped
+ Container foundation-bootstrap-keycloak-1 Removing
+ Container foundation-bootstrap-keycloak-1 Removed
+ Container foundation-bootstrap-keycloak-db-1 Stopping
+ Container foundation-bootstrap-keycloak-db-1 Stopped
+ Container foundation-bootstrap-keycloak-db-1 Removing
+ Container foundation-bootstrap-keycloak-db-1 Removed
+ Network foundation-bootstrap_default Removing
+ Network foundation-bootstrap_default Removed
+$ tsx packages/proof/src/bootstrap-proof.ts
+{
+  "status": "pass",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveExternalProviderClaim": false,
+  "productionLiveClaim": false
+}
+$ tsx packages/proof/src/config-secrets-proof.ts
+{
+  "status": "pass",
+  "proof": "config-secrets",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveSecretManagerClaim": false,
+  "liveExternalProviderClaim": false,
+  "productionLiveClaim": false,
+  "registrySize": 9,
+  "checks": 13,
+  "checkLabels": [
+    "required config with no value in any permitted layer fails closed",
+    "invalid config value fails closed (type validation)",
+    "a tenant layer cannot weaken a security-control config (override policy)",
+    "config precedence is deterministic (higher-trust layer wins)",
+    "unknown config key fails closed",
+    "config output is redacted (secret-shaped value + secret-ref key); refs are opaque pointers",
+    "secret resolves to an authorised internal caller; value never enters audit evidence",
+    "secret-shaped invalid value is rejected without echoing it in the error",
+    "secrets are tenant-isolated (tenant B cannot resolve tenant A's secret)",
+    "feature flags evaluate deterministically with a safe default for unknown/missing",
+    "revoked/expired/unknown secret state fails closed",
+    "secret resolution is PDP-protected (tenant-member denied, recorded)",
+    "provider credentials are secret references; redaction backstop masks secret-like keys"
+  ]
+}
+$ tsx packages/proof/src/auth-identity-proof.ts
+{
+  "status": "pass",
+  "proof": "auth-identity-keycloak-broker",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveExternalProviderClaim": false,
+  "liveKeycloakClaim": false,
+  "brokeredUpstreamAcceptedDirectly": false,
+  "productionLiveClaim": false,
+  "keycloakSoleIssuer": true,
+  "checks": 28,
+  "checkLabels": [
+    "valid Keycloak-issued token accepted; stable subject+realm+assurance+opaque provenance",
+    "non-Keycloak issuer: denied (issuer-not-keycloak)",
+    "brokered-upstream issuer presented directly: denied (brokered-upstream-issuer-presented-directly)",
+    "audience mismatch: denied (audience-mismatch)",
+    "invalid signature: denied (invalid-signature)",
+    "expired token: denied (expired)",
+    "not-before in future: denied (not-yet-valid)",
+    "issued in the future: denied (issued-in-future)",
+    "alg none: denied (unsupported-algorithm)",
+    "alg HS256 (symmetric): denied (unsupported-algorithm)",
+    "unknown signing key (kid): denied (unknown-key)",
+    "malformed token: denied (malformed-token)",
+    "same subject in a different Keycloak realm maps to a different external subject",
+    "valid token -> stable actor (actor-alice) + active session created",
+    "duplicate email across two Keycloak subjects does NOT merge actors",
+    "email change is an attribute update, not a new actor (same realm+subject -> same actor)",
+    "disabled identity fails closed (identity-disabled)",
+    "unknown brokered identity fails closed (no silent JIT actor creation)",
+    "fresh session validates active",
+    "absolute session expiry fails closed",
+    "idle session expiry fails closed",
+    "revoked session fails closed (audited)",
+    "logout invalidates the session (audited)",
+    "actor with active membership selects its tenant (PDP permit)",
+    "tenant without active membership is denied — Keycloak claim/role/group/broker alias alone does NOT authorize",
+    "denied tenant selection leaks no tenant context",
+    "cross-tenant SSO: an actor with two active memberships selects either tenant (explicit memberships only)",
+    "auth events recorded value-free (22 events, no token/cookie/secret)"
+  ]
+}
+$ tsx packages/proof/src/jobs-workflows-proof.ts
+{
+  "status": "pass",
+  "proof": "jobs-workflows",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveExternalProviderClaim": false,
+  "liveTemporalClaim": false,
+  "liveWindmillClaim": false,
+  "liveQueueClaim": false,
+  "productionLiveClaim": false,
+  "checks": 21,
+  "checkLabels": [
+    "classified job created by an authorized actor (PDP permit)",
+    "job.create without PDP permission is denied (audited job.denied)",
+    "system job runs under a concrete service actor (not a global bypass)",
+    "idempotency suppresses a duplicate job submission (same key -> same job)",
+    "retry is bounded (maxRetries=2) then dead-letters with evidence",
+    "failure message redacts secret-looking values (dsn, secret)",
+    "provider credentials are redacted in job payloads (secret_ref only; no raw secret)",
+    "tenant A cannot cancel a tenant B job (PDP tenant-boundary)",
+    "job read/list are PDP-gated and tenant-scoped (cross-tenant read denied)",
+    "cross-tenant orchestration is tenant-by-tenant (service actor needs a membership per tenant)",
+    "a cancelled job is never claimed or run",
+    "an expired job is never claimed or run",
+    "lease is exclusive while held and safely re-acquired after expiry",
+    "schedule fires deterministically once per window (double tick deduped)",
+    "unknown/non-UTC schedule policy fails closed",
+    "a successful job completes (job.completed)",
+    "approval requester cannot self-approve (separation of duties)",
+    "a separate authorized approver can approve (audited)",
+    "workflow is tenant-bound (cross-tenant access denied)",
+    "job/workflow lifecycle audited (39 events across 13 types)",
+    "audit evidence is value-free (no secret/payload/credential leakage)"
+  ]
+}
+$ tsx packages/proof/src/notifications-messaging-proof.ts
+{
+  "status": "pass",
+  "proof": "notifications-messaging",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "checks": [
+    "provider config uses a SecretReference and in-memory provider mode",
+    "typed approved template records version and hash",
+    "classified tenant-scoped notification intent created",
+    "notification.send without PDP permission denied",
+    "missing template variable fails closed",
+    "delivery job idempotency suppresses duplicate submission",
+    "delivery evidence is value-free and sent status is audited",
+    "marketing notification requires consent where represented",
+    "suppressed recipient blocks non-mandatory notification",
+    "bounded retry ends in dead-letter evidence with redacted failure",
+    "tenant A cannot read tenant B notification",
+    "notification lifecycle audit is value-free",
+    "live external provider mode is explicitly deferred"
+  ],
+  "notificationClassifications": [
+    "security",
+    "authentication",
+    "authorization",
+    "transactional",
+    "workflow",
+    "operational",
+    "system",
+    "file",
+    "identity",
+    "configuration",
+    "audit",
+    "maintenance",
+    "marketing",
+    "bulk",
+    "test"
+  ],
+  "channels": [
+    "email",
+    "sms",
+    "push",
+    "in-app",
+    "webhook",
+    "provider-internal",
+    "test"
+  ],
+  "providerModes": [
+    "in-memory",
+    "local-test",
+    "mock",
+    "live-external-deferred"
+  ],
+  "liveExternalProviderClaim": false,
+  "liveEmailProviderClaim": false,
+  "liveSmsProviderClaim": false,
+  "livePushProviderClaim": false,
+  "liveSmtpClaim": false,
+  "productionLiveClaim": false,
+  "deliverabilityCertificationClaim": false,
+  "iso27001CertificationClaim": false
+}
+$ tsx packages/proof/src/api-contracts-proof.ts
+{
+  "status": "pass",
+  "proof": "api-contracts",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "publicApiReadinessClaim": false,
+  "externalSdkReadinessClaim": false,
+  "productionLiveClaim": false,
+  "routeCount": 32,
+  "operationCount": 32,
+  "checks": [
+    "OpenAPI validates, operation IDs are unique, and examples are synthetic/safe",
+    "all route contracts map to implemented Fastify routes and capabilities",
+    "missing tenant context denied with safe error envelope",
+    "protected route without permission denied by PDP",
+    "tenant mismatch denied without cross-tenant enumeration",
+    "side-effecting route idempotency works and conflicts deterministically",
+    "pagination cursor is opaque enough for tenant-safe local proof",
+    "notifications API uses safe views and idempotent delivery job enqueue"
+  ]
+}
+$ tsx packages/proof/src/provider-adapters-proof.ts
+{
+  "status": "pass",
+  "proof": "provider-adapters-modes",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveProviderReadinessClaim": false,
+  "liveExternalProviderReadinessClaim": false,
+  "productionLiveClaim": false,
+  "supplierApprovalClaim": false,
+  "iso27001CertificationClaim": false,
+  "socCertificationClaim": false,
+  "providerCount": 28,
+  "categoryCount": 18,
+  "modes": [
+    "in-memory",
+    "local-test",
+    "mock",
+    "composed-test",
+    "live-external-deferred",
+    "live-external-authorised",
+    "disabled",
+    "unavailable"
+  ],
+  "checks": [
+    "provider registry validates explicit category, mode, owner, config, and SecretReference posture",
+    "all required provider categories are represented truthfully",
+    "provider mode hard boundary covers local/test/deferred/disabled/unavailable without live-authorised entries",
+    "provider status safe view redacts credentials, endpoints, raw failures, and stack traces",
+    "disabled, unavailable, and live-external-deferred providers fail closed for use",
+    "unknown provider modes and unauthorised live providers fail validation",
+    "provider audit event is value-free and redacted",
+    "capabilities, core, ports, and API routes do not import unauthorised provider SDKs"
+  ]
+}
+$ tsx packages/proof/src/observability-telemetry-proof.ts
+{
+  "status": "pass",
+  "proof": "observability-telemetry",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "liveMonitoringReadinessClaim": false,
+  "liveMetricsBackendClaim": false,
+  "liveLogBackendClaim": false,
+  "liveTracingBackendClaim": false,
+  "liveAlertingClaim": false,
+  "siemReadinessClaim": false,
+  "socReadinessClaim": false,
+  "iso27001CertificationClaim": false,
+  "productionLiveClaim": false,
+  "signalCount": 11,
+  "checks": [
+    "metric labels are allow-listed",
+    "high-cardinality labels are rejected",
+    "secret-looking metric labels are rejected",
+    "spans and structured logs are redacted before persistence",
+    "tenant telemetry queries are isolated",
+    "context propagation fields are present",
+    "health readiness and liveness are distinct",
+    "deferred and disabled provider modes do not imply live readiness",
+    "security signal is emitted for denied authorization posture",
+    "no live monitoring SIEM alerting or production readiness claim is made"
+  ]
+}
+$ tsx packages/proof/src/rate-limits-abuse-controls-proof.ts
+{
+  "status": "pass",
+  "proof": "rate-limits-abuse-controls",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "enforcementPosture": "single-node-in-memory-local-dev-test",
+  "liveWafReadinessClaim": false,
+  "liveEdgeReadinessClaim": false,
+  "liveGatewayReadinessClaim": false,
+  "liveAbuseProviderReadinessClaim": false,
+  "socReadinessClaim": false,
+  "iso27001CertificationClaim": false,
+  "productionLiveClaim": false,
+  "policyCount": 3,
+  "signalCount": 1,
+  "checks": [
+    "rate limit allows within window and denies over limit",
+    "retry-after is calculated only for safe retryable denials",
+    "unknown policy and unknown scope fail closed",
+    "secret-looking policy config is rejected",
+    "tenant quotas are isolated and non-enumerating",
+    "idempotent replay does not double-count usage",
+    "provider backpressure is represented without live enforcement claims",
+    "guardrail telemetry is tenant-safe",
+    "guardrail audit evidence is value-free and redacted",
+    "in-memory enforcement does not claim distributed or production readiness"
+  ]
+}
+$ tsx packages/proof/src/import-export-bulk-proof.ts
+{
+  "status": "pass",
+  "proof": "import-export-bulk",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "bulkProcessingPosture": "local-dev-test-in-memory",
+  "productionImportExportReadinessClaim": false,
+  "regulatoryExportReadinessClaim": false,
+  "legalExportReadinessClaim": false,
+  "eDiscoveryReadinessClaim": false,
+  "liveExternalProviderReadinessClaim": false,
+  "productionLiveClaim": false,
+  "operationCount": 3,
+  "jobCount": 1,
+  "auditEventCount": 7,
+  "signalCount": 6,
+  "checks": [
+    "tenant-scoped import/export metadata is isolated",
+    "PDP-gated create/read/start paths are enforced",
+    "explicit idempotency suppresses duplicate side effects",
+    "file-backed import uses file_id and clean scan posture",
+    "CSV formula injection is blocked",
+    "deterministic preview hash is recorded",
+    "job-backed execution uses a concrete service actor",
+    "guardrail denial is safe and value-free",
+    "evidence package manifest/content hashes and audit linkage are represented",
+    "audit and observability outputs are tenant-safe and redacted"
+  ]
+}
+$ tsx packages/proof/src/search-indexing-proof.ts
+{
+  "status": "pass",
+  "proof": "search-indexing",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "searchProviderPosture": "in-memory-local-dev-test",
+  "liveSearchProviderReadinessClaim": false,
+  "liveVectorDatabaseReadinessClaim": false,
+  "aiRagReadinessClaim": false,
+  "publicSearchApiReadinessClaim": false,
+  "productionLiveClaim": false,
+  "indexedDocumentCount": 5,
+  "auditEventCount": 13,
+  "signalCount": 3,
+  "checks": [
+    "tenant-scoped indexing",
+    "tenant count/facet/result redaction",
+    "opaque tenant-bound cursor",
+    "PDP denial",
+    "guardrail denial",
+    "file-derived scan gate",
+    "stale result denied",
+    "tenant-scoped idempotent reindex job",
+    "non-leakage and no live readiness claims"
+  ]
+}
+$ tsx packages/proof/src/resource-lifecycle-proof.ts
+{
+  "status": "pass",
+  "proof": "resource-lifecycle-relationships",
+  "providerMode": "hermetic-mock",
+  "environment": "hermetic",
+  "proofLevelObserved": "behaviour-proven",
+  "resourceProviderPosture": "in-memory-local-dev-test",
+  "productionRecordManagementReadinessClaim": false,
+  "legalRecordManagementReadinessClaim": false,
+  "regulatoryRecordReadinessClaim": false,
+  "eDiscoveryReadinessClaim": false,
+  "productionLiveClaim": false,
+  "resourceCount": 5,
+  "relationshipCount": 1,
+  "auditEventCount": 20,
+  "signalCount": 12,
+  "checks": [
+    "tenant isolation for read/list and non-enumerating cross-tenant lookup",
+    "PDP denial for resource action",
+    "unknown resource type and classification fail closed",
+    "schema-bound mutation rejects unknown immutable hidden and restricted misuse",
+    "version etag conflict and idempotent replay proof",
+    "lifecycle transition and separation-of-duties approval proof",
+    "soft delete hides search projection",
+    "retention legal-hold purge posture",
+    "relationship integrity acyclic graph and referential purge block",
+    "guardrail-protected bulk-managed resource posture",
+    "audit observability redaction and no readiness overclaim"
+  ]
+}
+$ python3 tools/validate-spec/validate-spec.py all --json && python3 tools/validate-bootstrap/validate-bootstrap.py all --json
+{
+  "mode": "all",
+  "schemaCount": 24,
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+$ python3 tools/validate-parity/validate-parity.py all --json && python3 tools/validate-parity/validate-db.py all --json && python3 tools/validate-parity/validate-authz.py all --json && python3 tools/validate-parity/validate-audit.py all --json && python3 tools/validate-parity/validate-config.py all --json && python3 tools/validate-parity/validate-files.py all --json && python3 tools/validate-parity/validate-auth.py all --json && python3 tools/validate-parity/validate-jobs.py all --json && python3 tools/validate-parity/validate-notify.py all --json && python3 tools/validate-parity/validate-api.py all --json && python3 tools/validate-parity/validate-providers.py all --json && python3 tools/validate-parity/validate-observability.py all --json && python3 tools/validate-parity/validate-guardrails.py all --json && python3 tools/validate-parity/validate-bulk.py all --json && python3 tools/validate-parity/validate-search.py all --json && python3 tools/validate-parity/validate-resources.py all --json
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "status": "pass",
+  "findings": []
+}
+{
+  "ok": true,
+  "findings": [],
+  "rules": {
+    "USF-SEARCH-001": [
+      "blocking",
+      "search semantic model missing"
+    ],
+    "USF-SEARCH-002": [
+      "blocking",
+      "search standard or source-use matrix missing"
+    ],
+    "USF-SEARCH-003": [
+      "blocking",
+      "search port/adapter/service boundary missing"
+    ],
+    "USF-SEARCH-004": [
+      "blocking",
+      "search proof or command wiring missing"
+    ],
+    "USF-SEARCH-005": [
+      "blocking",
+      "search tests missing required behaviours"
+    ],
+    "USF-SEARCH-006": [
+      "blocking",
+      "search parity/source-use rows missing"
+    ],
+    "USF-SEARCH-007": [
+      "blocking",
+      "search redaction or overclaim violation"
+    ],
+    "USF-SEARCH-008": [
+      "blocking",
+      "search audit/observability/guardrail linkage missing"
+    ],
+    "USF-SEARCH-SELFTEST": [
+      "blocking",
+      "planted search defect did not raise its expected rule"
+    ]
+  }
+}
+{
+  "ok": true,
+  "findings": [],
+  "rules": {
+    "USF-RESOURCES-001": [
+      "blocking",
+      "resource lifecycle semantic model missing"
+    ],
+    "USF-RESOURCES-002": [
+      "blocking",
+      "resource lifecycle standard or source-use matrix missing"
+    ],
+    "USF-RESOURCES-003": [
+      "blocking",
+      "resource lifecycle port/adapter/service boundary missing"
+    ],
+    "USF-RESOURCES-004": [
+      "blocking",
+      "resource lifecycle proof or command wiring missing"
+    ],
+    "USF-RESOURCES-005": [
+      "blocking",
+      "resource lifecycle tests missing required behaviours"
+    ],
+    "USF-RESOURCES-006": [
+      "blocking",
+      "resource lifecycle parity/source-use rows missing"
+    ],
+    "USF-RESOURCES-007": [
+      "blocking",
+      "resource lifecycle redaction or overclaim violation"
+    ],
+    "USF-RESOURCES-008": [
+      "blocking",
+      "resource lifecycle audit/observability/guardrail/search linkage missing"
+    ],
+    "USF-RESOURCES-SELFTEST": [
+      "blocking",
+      "planted resource lifecycle defect did not raise its expected rule"
+    ]
+  }
+}
+{
+  "mode": "all",
+  "schemaCount": 24,
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+{
+  "mode": "all",
+  "findings": []
+}
+final validation finished 2026-06-29T05:50:14Z

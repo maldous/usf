@@ -1,0 +1,81 @@
+# Complete React-to-USF Compose Service Parity Matrix
+
+Document type: Architecture / whole-platform compose service parity review.
+Status: Review draft, docs-only.
+Run: 20260629T053504Z-a285187.
+React HEAD: a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767.
+USF HEAD: a285187b177a922ff422858c1bf8f180336f1dff.
+
+This matrix treats ../react as historical evidence only. It does not claim full React parity readiness, production readiness, live provider readiness, public API readiness, SOC readiness, ISO certification, or regulatory readiness. It does not move v2-bootstrap.
+
+## Summary
+
+React compose services discovered: 54.
+USF compose services discovered: 14.
+USF compose services: grafana, keycloak, keycloak-db, loki, mailpit, minio, nats, openbao, otel-collector, postgres, prometheus, tempo, temporal, webhook-sink.
+
+Status counts: covered-by-usf-runtime=2, deferred=4, implemented=11, implemented-equivalent=1, out-of-foundation-scope=1, requires-human-decision=33, substituted-partial=2.
+Evidence grades: A=12, B=3, C=6, D=33.
+
+## Service Rows
+
+| React service | Category | USF accounting | USF service/substitute | Grade | Criticality | Gap or decision |
+| --- | --- | --- | --- | --- | --- | --- |
+| alertmanager | observability-alerting | deferred | observability alert posture only | C | high | USF defines alert posture without live/local alert routing service. |
+| alloy | observability-agent | deferred | otel-collector direct config | C | medium | USF composes OTEL but no Grafana Alloy agent equivalent. |
+| clamav | file-scan | deferred | files scan posture only | C | high | USF records scan/quarantine posture but lacks composed scanner proof. |
+| clickhouse | analytics-event-store | requires-human-decision | observability/bulk standards only | D | high | USF has no ClickHouse compose service; decide whether analytics/event-store parity is required before USF-133 close. |
+| external-caddy | gateway-operator-access | requires-human-decision | API security posture only | D | high | USF does not compose Caddy/forward-auth operator gateway. |
+| grafana | observability | implemented | grafana | A | medium | USF composes Grafana; dashboard readiness is not claimed. |
+| keycloak | identity | implemented | keycloak | A | critical | USF composes Keycloak and has auth proof. |
+| keycloak-postgres | identity backing store | implemented-equivalent | keycloak-db | A | high | USF composes a Keycloak database as keycloak-db. |
+| localstack | cloud-mock | requires-human-decision | provider live-deferred posture | D | medium | USF has provider modes but no LocalStack equivalent. |
+| loki | observability | implemented | loki | A | medium | USF composes Loki; live log readiness is not claimed. |
+| mailpit | notification-test | implemented | mailpit | A | medium | USF composes Mailpit and notification proof remains local/test only. |
+| meilisearch | search-index | requires-human-decision | in-memory search adapter | D | medium | USF search proof is in-memory/local; no live or composed search provider readiness is claimed. |
+| minio | object-storage | implemented | minio | A | high | USF composes MinIO; console access posture still needs operator-surface review. |
+| mock-oidc | identity-test | covered-by-usf-runtime | adapters/idp | B | medium | USF has hermetic IDP tests and Keycloak-brokered auth proof; no compose mock-oidc service. |
+| openbao | secrets | implemented | openbao | A | high | USF composes OpenBao but does not claim live secret-manager readiness. |
+| otel-collector | observability | implemented | otel-collector | A | high | USF composes OTEL collector and keeps live monitoring deferred. |
+| pgadmin | operator-admin | requires-human-decision | none | D | medium | USF has DB proof but no operator/admin pgAdmin surface or SSO gate proof. |
+| pgbackrest | backup-restore | deferred | DB proof only | C | critical | USF has DB/RLS proof but no composed backup/restore service proof. |
+| platform-api | runtime-api | covered-by-usf-runtime | apps/api | B | high | USF rewrote foundation API semantics without copying React runtime code. |
+| postgres | database | implemented | postgres | A | critical | USF compose includes PostgreSQL and DB/RLS proofs. |
+| prometheus | observability | implemented | prometheus | A | medium | USF composes Prometheus for local proof posture only. |
+| react-app | ui-runtime | out-of-foundation-scope | USF-134 future UI | C | medium | UI/UX remains future and non-foundation-blocking. |
+| redis | cache-eventing | requires-human-decision | nats plus in-memory stores | D | high | USF composes NATS and in-memory stores, but Redis adapter parity is not an equivalent service decision. |
+| sentry-cleanup | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-clickhouse | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-events-consumer | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-kafka | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-kafka-init | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-memcached | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-migrate | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-post-process-forwarder | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-postgres | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-redis | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-relay | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-snuba-api | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-snuba-errors | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-snuba-migrate | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-snuba-replacer | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-taskbroker | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-taskscheduler | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-taskworker | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sentry-web | error-monitoring | requires-human-decision | observability telemetry only | D | high | USF observability is not equivalent to self-hosted Sentry service parity. |
+| sonar-oidc-plugin | quality-gate-auth | requires-human-decision | none | D | medium | USF has no SonarQube SSO/operator clickthrough posture. |
+| sonar-postgres | quality-gate-backing | requires-human-decision | make verify only | D | medium | USF has proof gates but no SonarQube service backing store. |
+| sonarqube | quality-gate | requires-human-decision | make verify | D | high | USF make verify is not a SonarQube service equivalent. |
+| tempo | observability | implemented | tempo | A | medium | USF composes Tempo; live trace readiness is not claimed. |
+| temporal | workflow-engine | implemented | temporal | A | high | USF composes Temporal and jobs proof is local/dev/test. |
+| temporal-postgres | workflow backing store | substituted-partial | postgres | B | high | USF uses shared Postgres for Temporal; not a separate parity service. |
+| temporal-ui | operator-admin | requires-human-decision | temporal service only | D | medium | USF composes Temporal but not Temporal UI. |
+| windmill | operator-automation | requires-human-decision | jobs/workflows standard | D | high | USF jobs/workflows does not include Windmill operator automation. |
+| windmill-postgres | operator-automation-backing | requires-human-decision | none | D | medium | No USF composed Windmill persistence. |
+| windmill-redis | operator-automation-backing | requires-human-decision | none | D | medium | No USF composed Windmill Redis. |
+| windmill-worker | operator-automation-worker | requires-human-decision | apps/work plus jobs proof | D | high | USF worker is not Windmill automation parity. |
+| wiremock | external-http-mock | substituted-partial | webhook-sink | C | medium | USF webhook sink is not a WireMock behavioural equivalent. |
+
+## Interpretation
+
+A grade A row is directly implemented or equivalently composed in the current USF local/dev/test substrate. A grade B row is semantically covered by an authorised USF runtime/proof but is not service-equivalent. A grade C row is documented as deferred. A grade D row requires a human decision or exact blocker before USF-133 can close. A grade F row would be unclassified; this review found no unclassified compose service after the curated pass.

@@ -1,0 +1,218 @@
+{
+  "compose_files": [
+    {
+      "path": "./compose.yaml",
+      "service_count": 14,
+      "services": [
+        "grafana",
+        "keycloak",
+        "keycloak-db",
+        "loki",
+        "mailpit",
+        "minio",
+        "nats",
+        "openbao",
+        "otel-collector",
+        "postgres",
+        "prometheus",
+        "tempo",
+        "temporal",
+        "webhook-sink"
+      ]
+    }
+  ],
+  "root": ".",
+  "services": [
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "grafana/grafana:11.4.0",
+      "ports": [
+        "3000:3000"
+      ],
+      "profiles": null,
+      "service": "grafana"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": {
+        "keycloak-db": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "quay.io/keycloak/keycloak:26.2.5",
+      "ports": [
+        "8090:8080"
+      ],
+      "profiles": null,
+      "service": "keycloak"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16.6-alpine",
+      "ports": null,
+      "profiles": null,
+      "service": "keycloak-db"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "grafana/loki:3.3.2",
+      "ports": [
+        "3100:3100"
+      ],
+      "profiles": null,
+      "service": "loki"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "axllent/mailpit:v1.21.0",
+      "ports": [
+        "1025:1025",
+        "8025:8025"
+      ],
+      "profiles": null,
+      "service": "mailpit"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "minio/minio:RELEASE.2024-12-18T13-15-44Z",
+      "ports": [
+        "9000:9000",
+        "9001:9001"
+      ],
+      "profiles": null,
+      "service": "minio"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "nats:2.10.26-alpine",
+      "ports": [
+        "4222:4222"
+      ],
+      "profiles": null,
+      "service": "nats"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "openbao/openbao:2.2.0",
+      "ports": [
+        "8200:8200"
+      ],
+      "profiles": null,
+      "service": "openbao"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "otel/opentelemetry-collector-contrib:0.114.0",
+      "ports": [
+        "4317:4317",
+        "4318:4318"
+      ],
+      "profiles": null,
+      "service": "otel-collector"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": true,
+      "has_healthcheck": true,
+      "image": "postgres:16.6-alpine",
+      "ports": [
+        "5433:5432"
+      ],
+      "profiles": null,
+      "service": "postgres"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "prom/prometheus:v3.0.1",
+      "ports": [
+        "9090:9090"
+      ],
+      "profiles": null,
+      "service": "prometheus"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "grafana/tempo:2.6.1",
+      "ports": [
+        "3200:3200"
+      ],
+      "profiles": null,
+      "service": "tempo"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": {
+        "postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "has_environment": true,
+      "has_healthcheck": false,
+      "image": "temporalio/auto-setup:1.25.2",
+      "ports": [
+        "7233:7233"
+      ],
+      "profiles": null,
+      "service": "temporal"
+    },
+    {
+      "build": null,
+      "compose_file": "./compose.yaml",
+      "depends_on": null,
+      "has_environment": false,
+      "has_healthcheck": false,
+      "image": "mendhak/http-https-echo:35",
+      "ports": [
+        "18088:8080"
+      ],
+      "profiles": null,
+      "service": "webhook-sink"
+    }
+  ]
+}

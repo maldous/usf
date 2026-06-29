@@ -1,0 +1,12 @@
+{
+  "expectedRuleId": "USF-COMPOSE-011",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "environmentPolicies.dev.sharingModel": "shared-control-plane",
+        "environmentPolicies.dev.dataBoundary": "environment-runtime-data"
+      }
+    }
+  ]
+}
