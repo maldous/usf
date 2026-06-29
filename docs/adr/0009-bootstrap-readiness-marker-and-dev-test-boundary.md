@@ -55,7 +55,7 @@ Separating the marker from USF-39 start authority prevents accidental implementa
 
 ## Source References
 
-- `compose.yaml`
+- `compose/compose.yaml`
 - `make/compose.mk`
 - `docs/adr/0071-composed-provider-readiness.md`
 - `docs/adr/0073-composed-service-sso-via-keycloak-oidc.md`

@@ -60,7 +60,7 @@
   "reactComposeServiceCount": 54,
   "sourceRefs": [
     "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
-    "compose.yaml"
+    "compose/compose.yaml"
   ],
   "approvedLocalSecretPlaceholders": [
     "admin_password",
@@ -127,7 +127,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate postgres",
           "projectBoundary": "dev Compose project boundary for postgres",
@@ -149,7 +149,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate postgres",
           "projectBoundary": "test Compose project boundary for postgres",
@@ -171,7 +171,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate postgres",
           "projectBoundary": "staging Compose project boundary for postgres",
@@ -325,17 +325,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -424,7 +424,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate keycloak-db",
           "projectBoundary": "dev Compose project boundary for keycloak-db",
@@ -446,7 +446,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate keycloak-db",
           "projectBoundary": "test Compose project boundary for keycloak-db",
@@ -468,7 +468,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate keycloak-db",
           "projectBoundary": "staging Compose project boundary for keycloak-db",
@@ -559,17 +559,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -659,7 +659,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate keycloak",
           "projectBoundary": "dev Compose project boundary for keycloak",
@@ -681,7 +681,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate keycloak",
           "projectBoundary": "test Compose project boundary for keycloak",
@@ -703,7 +703,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate keycloak",
           "projectBoundary": "staging Compose project boundary for keycloak",
@@ -849,17 +849,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -930,7 +930,7 @@
       "sourceEvidence": [
         {
           "sourceKind": "current-compose",
-          "sourcePath": "compose.yaml",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
@@ -957,7 +957,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate nats",
           "projectBoundary": "dev Compose project boundary for nats",
@@ -979,7 +979,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate nats",
           "projectBoundary": "test Compose project boundary for nats",
@@ -1001,7 +1001,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate nats",
           "projectBoundary": "staging Compose project boundary for nats",
@@ -1147,17 +1147,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -1229,7 +1229,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate temporal",
           "projectBoundary": "dev Compose project boundary for temporal",
@@ -1251,7 +1251,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate temporal",
           "projectBoundary": "test Compose project boundary for temporal",
@@ -1273,7 +1273,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate temporal",
           "projectBoundary": "staging Compose project boundary for temporal",
@@ -1421,17 +1421,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -1526,7 +1526,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate minio",
           "projectBoundary": "dev Compose project boundary for minio",
@@ -1548,7 +1548,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate minio",
           "projectBoundary": "test Compose project boundary for minio",
@@ -1570,7 +1570,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate minio",
           "projectBoundary": "staging Compose project boundary for minio",
@@ -1778,17 +1778,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -1883,7 +1883,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate openbao",
           "projectBoundary": "dev Compose project boundary for openbao",
@@ -1905,7 +1905,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate openbao",
           "projectBoundary": "test Compose project boundary for openbao",
@@ -1927,7 +1927,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate openbao",
           "projectBoundary": "staging Compose project boundary for openbao",
@@ -2073,17 +2073,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -2160,7 +2160,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate otel-collector",
           "projectBoundary": "dev Compose project boundary for otel-collector",
@@ -2182,7 +2182,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate otel-collector",
           "projectBoundary": "test Compose project boundary for otel-collector",
@@ -2204,7 +2204,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate otel-collector",
           "projectBoundary": "staging Compose project boundary for otel-collector",
@@ -2412,17 +2412,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -2436,7 +2436,7 @@
         "environment": [],
         "ports": [],
         "volumes": [
-          "./adapters/obs/config/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro"
+          "../adapters/obs/config/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro"
         ],
         "dependsOn": [],
         "healthcheck": null
@@ -2494,7 +2494,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate prometheus",
           "projectBoundary": "dev Compose project boundary for prometheus",
@@ -2516,7 +2516,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate prometheus",
           "projectBoundary": "test Compose project boundary for prometheus",
@@ -2538,7 +2538,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate prometheus",
           "projectBoundary": "staging Compose project boundary for prometheus",
@@ -2684,17 +2684,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -2708,7 +2708,7 @@
         "environment": [],
         "ports": [],
         "volumes": [
-          "./adapters/obs/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro"
+          "../adapters/obs/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro"
         ],
         "dependsOn": [],
         "healthcheck": null
@@ -2766,7 +2766,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate grafana",
           "projectBoundary": "dev Compose project boundary for grafana",
@@ -2788,7 +2788,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate grafana",
           "projectBoundary": "test Compose project boundary for grafana",
@@ -2810,7 +2810,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate grafana",
           "projectBoundary": "staging Compose project boundary for grafana",
@@ -2956,17 +2956,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -3039,7 +3039,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate loki",
           "projectBoundary": "dev Compose project boundary for loki",
@@ -3061,7 +3061,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate loki",
           "projectBoundary": "test Compose project boundary for loki",
@@ -3083,7 +3083,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate loki",
           "projectBoundary": "staging Compose project boundary for loki",
@@ -3229,17 +3229,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -3253,7 +3253,7 @@
         "environment": [],
         "ports": [],
         "volumes": [
-          "./adapters/obs/config/loki.yaml:/etc/loki/config.yaml:ro"
+          "../adapters/obs/config/loki.yaml:/etc/loki/config.yaml:ro"
         ],
         "dependsOn": [],
         "healthcheck": null
@@ -3311,7 +3311,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate tempo",
           "projectBoundary": "dev Compose project boundary for tempo",
@@ -3333,7 +3333,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate tempo",
           "projectBoundary": "test Compose project boundary for tempo",
@@ -3355,7 +3355,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate tempo",
           "projectBoundary": "staging Compose project boundary for tempo",
@@ -3501,17 +3501,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -3525,7 +3525,7 @@
         "environment": [],
         "ports": [],
         "volumes": [
-          "./adapters/obs/config/tempo.yaml:/etc/tempo/config.yaml:ro"
+          "../adapters/obs/config/tempo.yaml:/etc/tempo/config.yaml:ro"
         ],
         "dependsOn": [],
         "healthcheck": null
@@ -3582,7 +3582,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate mailpit",
           "projectBoundary": "dev Compose project boundary for mailpit",
@@ -3604,7 +3604,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate mailpit",
           "projectBoundary": "test Compose project boundary for mailpit",
@@ -3626,7 +3626,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate mailpit",
           "projectBoundary": "staging Compose project boundary for mailpit",
@@ -3834,17 +3834,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -3881,7 +3881,7 @@
       "sourceEvidence": [
         {
           "sourceKind": "current-compose",
-          "sourcePath": "compose.yaml",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
@@ -3908,7 +3908,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate webhook-sink",
           "projectBoundary": "dev Compose project boundary for webhook-sink",
@@ -3930,7 +3930,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate webhook-sink",
           "projectBoundary": "test Compose project boundary for webhook-sink",
@@ -3952,7 +3952,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate webhook-sink",
           "projectBoundary": "staging Compose project boundary for webhook-sink",
@@ -4098,17 +4098,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -4200,7 +4200,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate redis",
           "projectBoundary": "test Compose project boundary for redis",
@@ -4224,7 +4224,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate redis",
           "projectBoundary": "staging Compose project boundary for redis",
@@ -4377,12 +4377,12 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -4476,7 +4476,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate meilisearch",
           "projectBoundary": "test Compose project boundary for meilisearch",
@@ -4500,7 +4500,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate meilisearch",
           "projectBoundary": "staging Compose project boundary for meilisearch",
@@ -4653,12 +4653,12 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -4757,7 +4757,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate clickhouse",
           "projectBoundary": "test Compose project boundary for clickhouse",
@@ -4781,7 +4781,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate clickhouse",
           "projectBoundary": "staging Compose project boundary for clickhouse",
@@ -4997,12 +4997,12 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -5072,7 +5072,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate pgadmin",
           "projectBoundary": "dev Compose project boundary for pgadmin",
@@ -5096,7 +5096,7 @@
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "test shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Shared control plane selected with environment/project separation.",
           "environmentScopeMechanism": "test project/environment key in the shared pgadmin control plane",
           "projectBoundary": "test project or space isolates pgadmin metadata and assurance evidence",
@@ -5120,7 +5120,7 @@
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "staging shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Shared control plane selected with environment/project separation.",
           "environmentScopeMechanism": "staging project/environment key in the shared pgadmin control plane",
           "projectBoundary": "staging project or space isolates pgadmin metadata and assurance evidence",
@@ -5274,17 +5274,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -5365,7 +5365,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate sonar-postgres",
           "projectBoundary": "dev Compose project boundary for sonar-postgres",
@@ -5389,7 +5389,7 @@
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "test shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated because generated SonarQube depends on this metadata store in the same Compose target.",
           "environmentScopeMechanism": "test project/environment key in the shared sonar-postgres control plane",
           "projectBoundary": "test project or space isolates sonar-postgres metadata and assurance evidence",
@@ -5413,7 +5413,7 @@
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "staging shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated because generated SonarQube depends on this metadata store in the same Compose target.",
           "environmentScopeMechanism": "staging project/environment key in the shared sonar-postgres control plane",
           "projectBoundary": "staging project or space isolates sonar-postgres metadata and assurance evidence",
@@ -5506,17 +5506,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -5606,7 +5606,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate sonar-oidc-plugin",
           "projectBoundary": "dev Compose project boundary for sonar-oidc-plugin",
@@ -5737,7 +5737,7 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         }
       ],
@@ -5811,7 +5811,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate sonarqube",
           "projectBoundary": "dev Compose project boundary for sonarqube",
@@ -5835,7 +5835,7 @@
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "test shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Shared control plane selected with environment/project separation.",
           "environmentScopeMechanism": "test project/environment key in the shared sonarqube control plane",
           "projectBoundary": "test project or space isolates sonarqube metadata and assurance evidence",
@@ -5859,7 +5859,7 @@
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "staging shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Shared control plane selected with environment/project separation.",
           "environmentScopeMechanism": "staging project/environment key in the shared sonarqube control plane",
           "projectBoundary": "staging project or space isolates sonarqube metadata and assurance evidence",
@@ -6013,17 +6013,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -6287,7 +6287,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev emulation must not be treated as live provider readiness.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Provider emulation is bounded.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate localstack",
           "projectBoundary": "dev Compose project boundary for localstack",
@@ -6311,7 +6311,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test emulation must not be treated as live provider readiness.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Provider emulation is bounded.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate localstack",
           "projectBoundary": "test Compose project boundary for localstack",
@@ -6486,12 +6486,12 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         }
       ],
@@ -6565,7 +6565,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev mock must not be treated as live provider readiness.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Provider mock is bounded.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate wiremock",
           "projectBoundary": "dev Compose project boundary for wiremock",
@@ -6589,7 +6589,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test mock must not be treated as live provider readiness.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Provider mock is bounded.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate wiremock",
           "projectBoundary": "test Compose project boundary for wiremock",
@@ -6764,12 +6764,12 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         }
       ],
@@ -6841,7 +6841,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate alertmanager",
           "projectBoundary": "dev Compose project boundary for alertmanager",
@@ -6865,7 +6865,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate alertmanager",
           "projectBoundary": "test Compose project boundary for alertmanager",
@@ -6889,7 +6889,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate alertmanager",
           "projectBoundary": "staging Compose project boundary for alertmanager",
@@ -7041,17 +7041,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -7121,7 +7121,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate alloy",
           "projectBoundary": "dev Compose project boundary for alloy",
@@ -7145,7 +7145,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate alloy",
           "projectBoundary": "test Compose project boundary for alloy",
@@ -7169,7 +7169,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate alloy",
           "projectBoundary": "staging Compose project boundary for alloy",
@@ -7321,17 +7321,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -7402,7 +7402,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate windmill-postgres",
           "projectBoundary": "dev Compose project boundary for windmill-postgres",
@@ -7426,7 +7426,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate windmill-postgres",
           "projectBoundary": "test Compose project boundary for windmill-postgres",
@@ -7450,7 +7450,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate windmill-postgres",
           "projectBoundary": "staging Compose project boundary for windmill-postgres",
@@ -7535,17 +7535,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -7629,7 +7629,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate windmill-redis",
           "projectBoundary": "dev Compose project boundary for windmill-redis",
@@ -7653,7 +7653,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate windmill-redis",
           "projectBoundary": "test Compose project boundary for windmill-redis",
@@ -7677,7 +7677,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate windmill-redis",
           "projectBoundary": "staging Compose project boundary for windmill-redis",
@@ -7762,17 +7762,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -7846,7 +7846,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate windmill",
           "projectBoundary": "dev Compose project boundary for windmill",
@@ -7870,7 +7870,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate windmill",
           "projectBoundary": "test Compose project boundary for windmill",
@@ -7894,7 +7894,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate windmill",
           "projectBoundary": "staging Compose project boundary for windmill",
@@ -8048,17 +8048,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -8148,7 +8148,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate windmill-worker",
           "projectBoundary": "dev Compose project boundary for windmill-worker",
@@ -8172,7 +8172,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate windmill-worker",
           "projectBoundary": "test Compose project boundary for windmill-worker",
@@ -8196,7 +8196,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate windmill-worker",
           "projectBoundary": "staging Compose project boundary for windmill-worker",
@@ -8281,17 +8281,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -8380,7 +8380,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate temporal-postgres",
           "projectBoundary": "dev Compose project boundary for temporal-postgres",
@@ -8404,7 +8404,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate temporal-postgres",
           "projectBoundary": "test Compose project boundary for temporal-postgres",
@@ -8428,7 +8428,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate temporal-postgres",
           "projectBoundary": "staging Compose project boundary for temporal-postgres",
@@ -8515,17 +8515,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -8615,7 +8615,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate temporal-ui",
           "projectBoundary": "dev Compose project boundary for temporal-ui",
@@ -8639,7 +8639,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate temporal-ui",
           "projectBoundary": "test Compose project boundary for temporal-ui",
@@ -8663,7 +8663,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate temporal-ui",
           "projectBoundary": "staging Compose project boundary for temporal-ui",
@@ -8815,17 +8815,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -8907,7 +8907,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate pgbackrest",
           "projectBoundary": "dev Compose project boundary for pgbackrest",
@@ -8931,7 +8931,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate pgbackrest",
           "projectBoundary": "test Compose project boundary for pgbackrest",
@@ -8955,7 +8955,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate pgbackrest",
           "projectBoundary": "staging Compose project boundary for pgbackrest",
@@ -9040,17 +9040,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -9122,7 +9122,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate clamav",
           "projectBoundary": "dev Compose project boundary for clamav",
@@ -9146,7 +9146,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate clamav",
           "projectBoundary": "test Compose project boundary for clamav",
@@ -9170,7 +9170,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate clamav",
           "projectBoundary": "staging Compose project boundary for clamav",
@@ -9257,17 +9257,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -9537,7 +9537,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.dev.generated.yaml",
+          "selectedComposeTarget": "compose/compose.dev.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "dev generated Compose target and Compose project isolate caddy",
           "projectBoundary": "dev Compose project boundary for caddy",
@@ -9561,7 +9561,7 @@
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.test.generated.yaml",
+          "selectedComposeTarget": "compose/compose.test.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "test generated Compose target and Compose project isolate caddy",
           "projectBoundary": "test Compose project boundary for caddy",
@@ -9585,7 +9585,7 @@
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
-          "selectedComposeTarget": "compose.staging.generated.yaml",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
           "rationale": "Generated composed service is required.",
           "environmentScopeMechanism": "staging generated Compose target and Compose project isolate caddy",
           "projectBoundary": "staging Compose project boundary for caddy",
@@ -9803,17 +9803,17 @@
       "generatedComposeTargets": [
         {
           "environmentScope": "dev",
-          "path": "compose.dev.generated.yaml",
+          "path": "compose/compose.dev.generated.yaml",
           "purpose": "Generated Compose target for dev."
         },
         {
           "environmentScope": "test",
-          "path": "compose.test.generated.yaml",
+          "path": "compose/compose.test.generated.yaml",
           "purpose": "Generated Compose target for test."
         },
         {
           "environmentScope": "staging",
-          "path": "compose.staging.generated.yaml",
+          "path": "compose/compose.staging.generated.yaml",
           "purpose": "Generated Compose target for staging."
         }
       ],
@@ -10187,53 +10187,28 @@
   "generatedComposeTargets": [
     {
       "environmentScope": "dev",
-      "path": "compose.yaml",
+      "path": "compose/compose.yaml",
       "purpose": "Generated default Compose target for dev-compatible local bootstrap."
     },
     {
       "environmentScope": "dev",
-      "path": "compose/compose.yaml",
-      "purpose": "Generated default Compose target copy under the grouped Compose directory."
-    },
-    {
-      "environmentScope": "dev",
-      "path": "compose.dev.generated.yaml",
-      "purpose": "Generated Compose target for dev."
-    },
-    {
-      "environmentScope": "dev",
       "path": "compose/compose.dev.generated.yaml",
-      "purpose": "Generated Compose target copy for dev under the grouped Compose directory."
-    },
-    {
-      "environmentScope": "test",
-      "path": "compose.test.generated.yaml",
-      "purpose": "Generated Compose target for test."
+      "purpose": "Generated Compose target for dev."
     },
     {
       "environmentScope": "test",
       "path": "compose/compose.test.generated.yaml",
-      "purpose": "Generated Compose target copy for test under the grouped Compose directory."
-    },
-    {
-      "environmentScope": "staging",
-      "path": "compose.staging.generated.yaml",
-      "purpose": "Generated Compose target for staging."
+      "purpose": "Generated Compose target for test."
     },
     {
       "environmentScope": "staging",
       "path": "compose/compose.staging.generated.yaml",
-      "purpose": "Generated Compose target copy for staging under the grouped Compose directory."
-    },
-    {
-      "environmentScope": "production",
-      "path": "compose.production.generated.yaml",
-      "purpose": "Generated Compose target for production."
+      "purpose": "Generated Compose target for staging."
     },
     {
       "environmentScope": "production",
       "path": "compose/compose.production.generated.yaml",
-      "purpose": "Generated Compose target copy for production under the grouped Compose directory."
+      "purpose": "Generated Compose target for production."
     }
   ]
 }

@@ -12,7 +12,7 @@ describe("provider substrate", () => {
   });
 
   it("declares test Compose OSS providers without floating latest images", () => {
-    const compose = readFileSync("compose.yaml", "utf8");
+    const compose = readFileSync("compose/compose.yaml", "utf8");
     for (const provider of testComposeProviders) {
       expect(compose).toContain(`${provider}:`);
     }

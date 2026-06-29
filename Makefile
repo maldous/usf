@@ -68,16 +68,16 @@ parity:
 	corepack pnpm parity
 
 db-proof:
-	docker compose -f compose.yaml up -d --wait postgres
-	bash -c 'corepack pnpm proof:db; s=$$?; docker compose -f compose.yaml down -v --remove-orphans; exit $$s'
+	docker compose -f compose/compose.yaml up -d --wait postgres
+	bash -c 'corepack pnpm proof:db; s=$$?; docker compose -f compose/compose.yaml down -v --remove-orphans; exit $$s'
 
 authz-proof:
-	docker compose -f compose.yaml up -d --wait postgres
-	bash -c 'corepack pnpm proof:authz; s=$$?; docker compose -f compose.yaml down -v --remove-orphans; exit $$s'
+	docker compose -f compose/compose.yaml up -d --wait postgres
+	bash -c 'corepack pnpm proof:authz; s=$$?; docker compose -f compose/compose.yaml down -v --remove-orphans; exit $$s'
 
 audit-proof:
-	docker compose -f compose.yaml up -d --wait postgres
-	bash -c 'corepack pnpm proof:audit; s=$$?; docker compose -f compose.yaml down -v --remove-orphans; exit $$s'
+	docker compose -f compose/compose.yaml up -d --wait postgres
+	bash -c 'corepack pnpm proof:audit; s=$$?; docker compose -f compose/compose.yaml down -v --remove-orphans; exit $$s'
 
 config-proof:
 	corepack pnpm proof:config
@@ -113,8 +113,8 @@ resources-proof:
 	corepack pnpm proof:resources
 
 files-proof:
-	docker compose -f compose.yaml up -d --wait postgres
-	bash -c 'corepack pnpm proof:files; s=$$?; docker compose -f compose.yaml down -v --remove-orphans; exit $$s'
+	docker compose -f compose/compose.yaml up -d --wait postgres
+	bash -c 'corepack pnpm proof:files; s=$$?; docker compose -f compose/compose.yaml down -v --remove-orphans; exit $$s'
 
 verify: install
 	corepack pnpm verify

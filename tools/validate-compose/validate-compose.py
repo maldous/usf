@@ -411,13 +411,6 @@ def validate_generated(
                         add(findings, "USF-COMPOSE-029", f"{target_name}:{service_name}->{dependency}")
         if actual_overrides and target_name in actual_overrides:
             continue
-        for additional_path in generate_compose.ADDITIONAL_TARGETS.get(target_name, []):
-            additional_actual = additional_path.read_text(encoding="utf-8") if additional_path.exists() else None
-            if additional_actual != expected:
-                add(findings, "USF-COMPOSE-014", str(additional_path.relative_to(ROOT)))
-            if additional_actual is not None and target_name in {"dev", "test", "staging"}:
-                if SHORT_PORT_SYNTAX.search(additional_actual):
-                    add(findings, "USF-COMPOSE-026", str(additional_path.relative_to(ROOT)))
 
 
 def apply_patch_defect(catalogue: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:

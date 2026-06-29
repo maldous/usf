@@ -45,7 +45,7 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 | `vitest.config.ts`    | new-with-rationale   | Bootstrap governance test gate decision                       | Local unit/proof test runner configuration.                                 |
 | `.prettierrc.json`    | new-with-rationale   | Bootstrap governance formatting gate decision                 | Deterministic formatting configuration.                                     |
 | `Makefile`            | new-with-rationale   | Bootstrap governance Make orchestration decision              | Single local verification command.                                          |
-| `compose.yaml`        | source-derived-adapt | ADR 0009 React Compose lineage and bootstrap provider targets | Freshly authored Compose substrate inventory for local test providers.      |
+| `compose/compose.yaml` | source-derived-adapt | ADR 0009 React Compose lineage and bootstrap provider targets | Freshly authored Compose substrate inventory for local test providers.      |
 
 ## Implementation Target Files
 

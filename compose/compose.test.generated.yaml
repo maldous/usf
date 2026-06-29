@@ -162,7 +162,7 @@ services:
         protocol: tcp
         app_protocol: tcp
     volumes:
-      - ./adapters/obs/config/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
+      - ../adapters/obs/config/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
   prometheus:
     image: prom/prometheus:v3.0.1
     command:
@@ -176,7 +176,7 @@ services:
         protocol: tcp
         app_protocol: http
     volumes:
-      - ./adapters/obs/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+      - ../adapters/obs/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
   grafana:
     image: grafana/grafana:11.4.0
     environment:
@@ -202,7 +202,7 @@ services:
         protocol: tcp
         app_protocol: http
     volumes:
-      - ./adapters/obs/config/loki.yaml:/etc/loki/config.yaml:ro
+      - ../adapters/obs/config/loki.yaml:/etc/loki/config.yaml:ro
   tempo:
     image: grafana/tempo:2.6.1
     command:
@@ -216,7 +216,7 @@ services:
         protocol: tcp
         app_protocol: http
     volumes:
-      - ./adapters/obs/config/tempo.yaml:/etc/tempo/config.yaml:ro
+      - ../adapters/obs/config/tempo.yaml:/etc/tempo/config.yaml:ro
   mailpit:
     image: axllent/mailpit:v1.21.0
     ports:
