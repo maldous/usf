@@ -5729,6 +5729,1414 @@
         "Do not infer production readiness from local published ports."
       ],
       "deferredDetails": []
+    },
+    {
+      "id": "compose-readiness-tiers",
+      "title": "Compose Readiness Tiers",
+      "status": "active",
+      "description": "Service-level readiness tier values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "catalogue-only",
+          "label": "Catalogue Only",
+          "description": "Compose service catalogue value catalogue-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-substrate-catalogued",
+          "label": "Local Substrate Catalogued",
+          "description": "Compose service catalogue value local-substrate-catalogued.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "compose-target-catalogued",
+          "label": "Compose Target Catalogued",
+          "description": "Compose service catalogue value compose-target-catalogued.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "external-requirement-catalogued",
+          "label": "External Requirement Catalogued",
+          "description": "Compose service catalogue value external-requirement-catalogued.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "out-of-scope",
+          "label": "Out Of Scope",
+          "description": "Compose service catalogue value out-of-scope.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-evidence-grades",
+      "title": "Compose Evidence Grades",
+      "status": "active",
+      "description": "Service-level evidence grade values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "a",
+          "label": "A",
+          "description": "Compose service catalogue evidence grade a.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive; lowercase is the canonical machine value.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "description": "Compose service catalogue evidence grade b.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive; lowercase is the canonical machine value.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "description": "Compose service catalogue evidence grade c.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive; lowercase is the canonical machine value.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "description": "Compose service catalogue evidence grade d.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive; lowercase is the canonical machine value.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "f",
+          "label": "F",
+          "description": "Compose service catalogue evidence grade f.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive; lowercase is the canonical machine value.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-service-data-classifications",
+      "title": "Compose Service Data Classifications",
+      "status": "active",
+      "description": "Service-level data classification values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "none",
+          "label": "None",
+          "description": "Compose service catalogue value none.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "synthetic-data",
+          "label": "Synthetic Data",
+          "description": "Compose service catalogue value synthetic-data.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "environment-runtime-data",
+          "label": "Environment Runtime Data",
+          "description": "Compose service catalogue value environment-runtime-data.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "operator-metadata",
+          "label": "Operator Metadata",
+          "description": "Compose service catalogue value operator-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "telemetry-metadata",
+          "label": "Telemetry Metadata",
+          "description": "Compose service catalogue value telemetry-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "identity-metadata",
+          "label": "Identity Metadata",
+          "description": "Compose service catalogue value identity-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "secret-metadata",
+          "label": "Secret Metadata",
+          "description": "Compose service catalogue value secret-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "secret-reference-metadata",
+          "label": "Secret Reference Metadata",
+          "description": "Compose service catalogue value secret-reference-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "assurance-metadata",
+          "label": "Assurance Metadata",
+          "description": "Compose service catalogue value assurance-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "workflow-metadata",
+          "label": "Workflow Metadata",
+          "description": "Compose service catalogue value workflow-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "routing-metadata",
+          "label": "Routing Metadata",
+          "description": "Compose service catalogue value routing-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "provider-metadata",
+          "label": "Provider Metadata",
+          "description": "Compose service catalogue value provider-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "content-metadata",
+          "label": "Content Metadata",
+          "description": "Compose service catalogue value content-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "backup-metadata",
+          "label": "Backup Metadata",
+          "description": "Compose service catalogue value backup-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "source-code-metadata",
+          "label": "Source Code Metadata",
+          "description": "Compose service catalogue value source-code-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "historical-runtime-metadata",
+          "label": "Historical Runtime Metadata",
+          "description": "Compose service catalogue value historical-runtime-metadata.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "production-data",
+          "label": "Production Data",
+          "description": "Compose service catalogue value production-data.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-environment-dispositions",
+      "title": "Compose Environment Dispositions",
+      "status": "active",
+      "description": "Service-level environment disposition values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "environment-specific",
+          "label": "Environment Specific",
+          "description": "Compose service catalogue value environment-specific.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "shared-cross-environment-control-plane",
+          "label": "Shared Cross Environment Control Plane",
+          "description": "Compose service catalogue value shared-cross-environment-control-plane.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "dev-only",
+          "label": "Dev Only",
+          "description": "Compose service catalogue value dev-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "external-managed",
+          "label": "External Managed",
+          "description": "Compose service catalogue value external-managed.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "cloud-provider",
+          "label": "Cloud Provider",
+          "description": "Compose service catalogue value cloud-provider.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "out-of-scope",
+          "label": "Out Of Scope",
+          "description": "Compose service catalogue value out-of-scope.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "mixed",
+          "label": "Mixed",
+          "description": "Compose service catalogue value mixed.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-asset-inventory-classes",
+      "title": "Compose Asset Inventory Classes",
+      "status": "active",
+      "description": "CMDB-style asset inventory classes for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "runtime-service",
+          "label": "Runtime Service",
+          "description": "Compose service catalogue value runtime-service.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "data-store",
+          "label": "Data Store",
+          "description": "Compose service catalogue value data-store.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "control-plane",
+          "label": "Control Plane",
+          "description": "Compose service catalogue value control-plane.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "operator-surface",
+          "label": "Operator Surface",
+          "description": "Compose service catalogue value operator-surface.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "provider-emulator",
+          "label": "Provider Emulator",
+          "description": "Compose service catalogue value provider-emulator.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "provider-mock",
+          "label": "Provider Mock",
+          "description": "Compose service catalogue value provider-mock.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "backup-restore",
+          "label": "Backup Restore",
+          "description": "Compose service catalogue value backup-restore.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "gateway",
+          "label": "Gateway",
+          "description": "Compose service catalogue value gateway.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "out-of-scope-historical",
+          "label": "Out Of Scope Historical",
+          "description": "Compose service catalogue value out-of-scope-historical.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred-provider",
+          "label": "Deferred Provider",
+          "description": "Compose service catalogue value deferred-provider.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-access-postures",
+      "title": "Compose Access Postures",
+      "status": "active",
+      "description": "Service-level access posture values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "no-human-access",
+          "label": "No Human Access",
+          "description": "Compose service catalogue value no-human-access.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "developer-loopback",
+          "label": "Developer Loopback",
+          "description": "Compose service catalogue value developer-loopback.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "operator-authenticated",
+          "label": "Operator Authenticated",
+          "description": "Compose service catalogue value operator-authenticated.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "admin-authenticated",
+          "label": "Admin Authenticated",
+          "description": "Compose service catalogue value admin-authenticated.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "break-glass-only",
+          "label": "Break Glass Only",
+          "description": "Compose service catalogue value break-glass-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "external-provider-console",
+          "label": "External Provider Console",
+          "description": "Compose service catalogue value external-provider-console.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-audit-postures",
+      "title": "Compose Audit Postures",
+      "status": "active",
+      "description": "Service-level audit posture values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "not-required",
+          "label": "Not Required",
+          "description": "Compose service catalogue value not-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-operational-logs",
+          "label": "Local Operational Logs",
+          "description": "Compose service catalogue value local-operational-logs.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "operator-action-audit-required",
+          "label": "Operator Action Audit Required",
+          "description": "Compose service catalogue value operator-action-audit-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "access-and-change-audit-required",
+          "label": "Access And Change Audit Required",
+          "description": "Compose service catalogue value access-and-change-audit-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "external-provider-audit-required",
+          "label": "External Provider Audit Required",
+          "description": "Compose service catalogue value external-provider-audit-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-secret-postures",
+      "title": "Compose Secret Postures",
+      "status": "active",
+      "description": "Service-level secret and credential posture values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "no-secrets",
+          "label": "No Secrets",
+          "description": "Compose service catalogue value no-secrets.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-placeholder-only",
+          "label": "Local Placeholder Only",
+          "description": "Compose service catalogue value local-placeholder-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "secret-reference-required",
+          "label": "Secret Reference Required",
+          "description": "Compose service catalogue value secret-reference-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "provider-managed-secret",
+          "label": "Provider Managed Secret",
+          "description": "Compose service catalogue value provider-managed-secret.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "raw-secret-prohibited",
+          "label": "Raw Secret Prohibited",
+          "description": "Compose service catalogue value raw-secret-prohibited.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-backup-restore-postures",
+      "title": "Compose Backup Restore Postures",
+      "status": "active",
+      "description": "Service-level backup and restore posture values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "not-required",
+          "label": "Not Required",
+          "description": "Compose service catalogue value not-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-reset-only",
+          "label": "Local Reset Only",
+          "description": "Compose service catalogue value local-reset-only.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "environment-backup-required",
+          "label": "Environment Backup Required",
+          "description": "Compose service catalogue value environment-backup-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "restore-proof-required",
+          "label": "Restore Proof Required",
+          "description": "Compose service catalogue value restore-proof-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "provider-managed",
+          "label": "Provider Managed",
+          "description": "Compose service catalogue value provider-managed.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-retention-postures",
+      "title": "Compose Retention Postures",
+      "status": "active",
+      "description": "Service-level retention and logging posture values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "not-required",
+          "label": "Not Required",
+          "description": "Compose service catalogue value not-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-ephemeral",
+          "label": "Local Ephemeral",
+          "description": "Compose service catalogue value local-ephemeral.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-operational-logs",
+          "label": "Local Operational Logs",
+          "description": "Compose service catalogue value local-operational-logs.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "environment-retention-required",
+          "label": "Environment Retention Required",
+          "description": "Compose service catalogue value environment-retention-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "provider-managed-retention",
+          "label": "Provider Managed Retention",
+          "description": "Compose service catalogue value provider-managed-retention.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-provider-boundary-dispositions",
+      "title": "Compose Provider Boundary Dispositions",
+      "status": "active",
+      "description": "Service-level provider boundary disposition values for the Compose service catalogue.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "not-applicable",
+          "label": "Not Applicable",
+          "description": "Compose service catalogue value not-applicable.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-composed",
+          "label": "Local Composed",
+          "description": "Compose service catalogue value local-composed.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "shared-control-plane",
+          "label": "Shared Control Plane",
+          "description": "Compose service catalogue value shared-control-plane.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "external-managed",
+          "label": "External Managed",
+          "description": "Compose service catalogue value external-managed.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "cloud-provider",
+          "label": "Cloud Provider",
+          "description": "Compose service catalogue value cloud-provider.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "out-of-scope",
+          "label": "Out Of Scope",
+          "description": "Compose service catalogue value out-of-scope.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "prohibited",
+          "label": "Prohibited",
+          "description": "Compose service catalogue value prohibited.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-auth-requirements",
+      "title": "Compose Auth Requirements",
+      "status": "active",
+      "description": "Service-level authentication requirement values for operator and admin surfaces.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "not-required",
+          "label": "Not Required",
+          "description": "Compose service catalogue value not-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-developer-access",
+          "label": "Local Developer Access",
+          "description": "Compose service catalogue value local-developer-access.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "operator-auth-required",
+          "label": "Operator Auth Required",
+          "description": "Compose service catalogue value operator-auth-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "admin-auth-required",
+          "label": "Admin Auth Required",
+          "description": "Compose service catalogue value admin-auth-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "external-provider-auth-required",
+          "label": "External Provider Auth Required",
+          "description": "Compose service catalogue value external-provider-auth-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-audit-requirements",
+      "title": "Compose Audit Requirements",
+      "status": "active",
+      "description": "Service-level audit requirement values for operator and admin surfaces.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "not-required",
+          "label": "Not Required",
+          "description": "Compose service catalogue value not-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "local-operational-logs",
+          "label": "Local Operational Logs",
+          "description": "Compose service catalogue value local-operational-logs.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "operator-action-audit-required",
+          "label": "Operator Action Audit Required",
+          "description": "Compose service catalogue value operator-action-audit-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "access-and-change-audit-required",
+          "label": "Access And Change Audit Required",
+          "description": "Compose service catalogue value access-and-change-audit-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "external-provider-audit-required",
+          "label": "External Provider Audit Required",
+          "description": "Compose service catalogue value external-provider-audit-required.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "compose-break-glass-relevance",
+      "title": "Compose Break Glass Relevance",
+      "status": "active",
+      "description": "Service-level break-glass relevance values for operator and admin surfaces.",
+      "governedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Service",
+        "Environment",
+        "Provider",
+        "Proof"
+      ],
+      "expectedSchemaConsumers": [
+        "compose-service.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-compose/validate-compose.py enforces this value set for service-level Compose catalogue governance.",
+      "sourceInputs": [
+        "USF-168 service catalogue hardening directive"
+      ],
+      "values": [
+        {
+          "id": "not-applicable",
+          "label": "Not Applicable",
+          "description": "Compose service catalogue value not-applicable.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "operator-relevant",
+          "label": "Operator Relevant",
+          "description": "Compose service catalogue value operator-relevant.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "admin-relevant",
+          "label": "Admin Relevant",
+          "description": "Compose service catalogue value admin-relevant.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "prohibited-without-future-authority",
+          "label": "Prohibited Without Future Authority",
+          "description": "Compose service catalogue value prohibited-without-future-authority.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        },
+        {
+          "id": "deferred",
+          "label": "Deferred",
+          "description": "Compose service catalogue value deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "sourceNotes": "USF-168 service catalogue hardening directive.",
+          "aiGuidance": "Use only according to the Compose service schema and validator policy."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Service catalogue metadata drifts from controlled values.",
+        "Readiness or compliance claims are inferred from local Compose metadata."
+      ],
+      "aiGuidance": [
+        "Use these values to classify service catalogue governance metadata only.",
+        "Do not infer staging, production, live-provider, SOC, or ISO certification readiness from these values."
+      ],
+      "deferredDetails": []
     }
   ],
   "forbiddenValues": [

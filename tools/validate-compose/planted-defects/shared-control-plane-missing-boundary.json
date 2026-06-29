@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-033",
+  "servicePatches": [
+    {
+      "serviceId": "pgadmin",
+      "values": {
+        "sharedControlPlaneJustification": "not-applicable"
+      }
+    }
+  ]
+}

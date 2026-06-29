@@ -2464,7 +2464,7 @@
         "Proof",
         "Source Reference"
       ],
-      "purpose": "Validates semantic Compose service requirements, per-environment realisation policies, and generated Compose targets.",
+      "purpose": "Validates semantic Compose service requirements, service-level CMDB-style governance metadata, per-environment realisation policies, and generated Compose targets.",
       "requiredBecause": "Every historical React Compose service must be classified before generated Compose can be treated as derivative output.",
       "sourceInputs": [
         "../react/compose.yaml",
@@ -2494,7 +2494,21 @@
         "compose-bind-scopes",
         "compose-exposure-classes",
         "compose-concurrent-environment-policies",
-        "compose-port-allocation-modes"
+        "compose-port-allocation-modes",
+        "compose-readiness-tiers",
+        "compose-evidence-grades",
+        "compose-service-data-classifications",
+        "compose-environment-dispositions",
+        "compose-asset-inventory-classes",
+        "compose-access-postures",
+        "compose-audit-postures",
+        "compose-secret-postures",
+        "compose-backup-restore-postures",
+        "compose-retention-postures",
+        "compose-provider-boundary-dispositions",
+        "compose-auth-requirements",
+        "compose-audit-requirements",
+        "compose-break-glass-relevance"
       ],
       "expectedConsumers": [
         "validators",
@@ -2507,7 +2521,11 @@
         "generated Compose files match catalogue",
         "environment realisation does not overclaim provider readiness",
         "production external or cloud realisation is explicit",
-        "shared control planes have environment/project boundaries"
+        "shared control planes have environment/project boundaries",
+        "service-level owner, risk, control, evidence, and claim-boundary metadata is complete",
+        "shared control planes have service-level justification and owner/access/audit/data boundaries",
+        "operator/admin surfaces have service-level auth, audit, break-glass, and operator-boundary metadata",
+        "external, cloud, deferred, and out-of-scope service dispositions record missing evidence and prohibited claims"
       ],
       "authorityRole": "semantic-definition",
       "driftRisks": [
@@ -2526,7 +2544,7 @@
       "id": "json-schema",
       "status": "adopted",
       "affectsSchemas": "JSON Schema is the mechanism for validating all USF JSON artefacts; every schema is a JSON Schema with explicit $schema and $id.",
-      "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring \u00a726 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).",
+      "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring §26 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).",
       "validatorImplications": "Validators run JSON Schema validation and fail closed on invalidity.",
       "aiGuidance": "Validate generated JSON against its schema before claiming completion."
     },
@@ -2912,7 +2930,7 @@
       "satisfied": true
     },
     {
-      "criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring \u00a726 Amendment A).",
+      "criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring §26 Amendment A).",
       "satisfied": true
     },
     {

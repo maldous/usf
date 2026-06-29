@@ -158,6 +158,20 @@ ENUM_BINDINGS = {
     ("compose-service", "/$defs/exposureClass"): "compose-exposure-classes",
     ("compose-service", "/$defs/concurrentEnvironmentPolicy"): "compose-concurrent-environment-policies",
     ("compose-service", "/$defs/portAllocationMode"): "compose-port-allocation-modes",
+    ("compose-service", "/$defs/readinessTier"): "compose-readiness-tiers",
+    ("compose-service", "/$defs/evidenceGrade"): "compose-evidence-grades",
+    ("compose-service", "/$defs/serviceDataClassification"): "compose-service-data-classifications",
+    ("compose-service", "/$defs/environmentDisposition"): "compose-environment-dispositions",
+    ("compose-service", "/$defs/assetInventoryClass"): "compose-asset-inventory-classes",
+    ("compose-service", "/$defs/accessPosture"): "compose-access-postures",
+    ("compose-service", "/$defs/auditPosture"): "compose-audit-postures",
+    ("compose-service", "/$defs/secretPosture"): "compose-secret-postures",
+    ("compose-service", "/$defs/backupRestorePosture"): "compose-backup-restore-postures",
+    ("compose-service", "/$defs/retentionPosture"): "compose-retention-postures",
+    ("compose-service", "/$defs/providerBoundaryDisposition"): "compose-provider-boundary-dispositions",
+    ("compose-service", "/$defs/authRequirement"): "compose-auth-requirements",
+    ("compose-service", "/$defs/auditRequirement"): "compose-audit-requirements",
+    ("compose-service", "/$defs/breakGlassRelevance"): "compose-break-glass-relevance",
     ("configuration", "/$defs/configurationKind"): "configuration-kinds",
     ("configuration", "/$defs/providerMode"): "provider-modes",
     ("configuration", "/$defs/environment"): "environment-classes",
@@ -202,7 +216,10 @@ ENUM_BINDINGS = {
     ("workflow", "/$defs/eventWorkflowKind"): "event-workflow-kinds",
 }
 # Unbound enums that are intentionally local (not vocabulary-backed); suppress the backstop.
-ENUM_LOCAL_ALLOW = {("adr", "/properties/decisionStatus")}
+ENUM_LOCAL_ALLOW = {
+    ("adr", "/properties/decisionStatus"),
+    ("compose-service", "/$defs/requiredState"),
+}
 
 RULES = {
     "USF-PARSE-001":    ("blocking", "Invalid JSON / unreadable file"),

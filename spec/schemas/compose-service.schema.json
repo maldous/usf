@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:compose-service",
   "title": "USF Compose Service Classification Schema",
-  "description": "Draft JSON Schema for semantic Compose service classification, environment-specific realisation, deployment form, and generated Compose targets. The catalogue records every historical React Compose service as evidence and derives dev, test, staging, and production Compose realisations without treating generated Compose as authority. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for semantic Compose service classification, service-level CMDB-style governance metadata, environment-specific realisation, deployment form, and generated Compose targets. The catalogue records every historical React Compose service as evidence and derives dev, test, staging, and production Compose realisations without treating generated Compose as authority. lifecycleState draft; not active.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -491,7 +491,7 @@
           "$ref": "#/$defs/nonEmptyString"
         },
         "dataClassification": {
-          "$ref": "#/$defs/nonEmptyString"
+          "$ref": "#/$defs/serviceDataClassification"
         },
         "adminSurface": {
           "type": "boolean"
@@ -883,6 +883,35 @@
       "required": [
         "serviceId",
         "displayName",
+        "serviceOwner",
+        "riskOwner",
+        "controlOwner",
+        "purpose",
+        "environmentDisposition",
+        "providerBoundary",
+        "dataClassification",
+        "dataBoundary",
+        "readinessTier",
+        "evidenceGrade",
+        "controlPurpose",
+        "assetInventoryClass",
+        "accessPosture",
+        "authRequirement",
+        "auditPosture",
+        "auditRequirement",
+        "secretPosture",
+        "backupRestorePosture",
+        "retentionPosture",
+        "tenantBoundary",
+        "operationalOwnerBoundary",
+        "operatorAccessBoundary",
+        "sharedControlPlaneJustification",
+        "breakGlassRelevance",
+        "missingEvidence",
+        "iso27001Support",
+        "enterpriseFeatureSupport",
+        "readinessClaimsAllowed",
+        "readinessClaimsProhibited",
         "semanticRoles",
         "serviceKind",
         "requirementState",
@@ -1064,6 +1093,93 @@
         },
         "composeService": {
           "$ref": "#/$defs/composeService"
+        },
+        "serviceOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "controlOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "environmentDisposition": {
+          "$ref": "#/$defs/environmentDisposition"
+        },
+        "providerBoundary": {
+          "$ref": "#/$defs/providerBoundary"
+        },
+        "dataClassification": {
+          "$ref": "#/$defs/serviceDataClassification"
+        },
+        "dataBoundary": {
+          "$ref": "#/$defs/dataBoundary"
+        },
+        "readinessTier": {
+          "$ref": "#/$defs/readinessTier"
+        },
+        "evidenceGrade": {
+          "$ref": "#/$defs/evidenceGrade"
+        },
+        "controlPurpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "assetInventoryClass": {
+          "$ref": "#/$defs/assetInventoryClass"
+        },
+        "accessPosture": {
+          "$ref": "#/$defs/accessPosture"
+        },
+        "authRequirement": {
+          "$ref": "#/$defs/authRequirement"
+        },
+        "auditPosture": {
+          "$ref": "#/$defs/auditPosture"
+        },
+        "auditRequirement": {
+          "$ref": "#/$defs/auditRequirement"
+        },
+        "secretPosture": {
+          "$ref": "#/$defs/secretPosture"
+        },
+        "backupRestorePosture": {
+          "$ref": "#/$defs/backupRestorePosture"
+        },
+        "retentionPosture": {
+          "$ref": "#/$defs/retentionPosture"
+        },
+        "tenantBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "operationalOwnerBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "operatorAccessBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sharedControlPlaneJustification": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "breakGlassRelevance": {
+          "$ref": "#/$defs/breakGlassRelevance"
+        },
+        "missingEvidence": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "iso27001Support": {
+          "$ref": "#/$defs/iso27001Support"
+        },
+        "enterpriseFeatureSupport": {
+          "$ref": "#/$defs/enterpriseFeatureSupport"
+        },
+        "readinessClaimsAllowed": {
+          "$ref": "#/$defs/possiblyEmptyStringList"
+        },
+        "readinessClaimsProhibited": {
+          "$ref": "#/$defs/stringList"
         }
       }
     },
@@ -1124,6 +1240,291 @@
         "cloud-provider",
         "not-published"
       ]
+    },
+    "readinessTier": {
+      "type": "string",
+      "enum": [
+        "catalogue-only",
+        "local-substrate-catalogued",
+        "compose-target-catalogued",
+        "external-requirement-catalogued",
+        "deferred",
+        "out-of-scope"
+      ]
+    },
+    "evidenceGrade": {
+      "type": "string",
+      "enum": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "f"
+      ]
+    },
+    "serviceDataClassification": {
+      "type": "string",
+      "enum": [
+        "none",
+        "synthetic-data",
+        "environment-runtime-data",
+        "operator-metadata",
+        "telemetry-metadata",
+        "identity-metadata",
+        "secret-metadata",
+        "secret-reference-metadata",
+        "assurance-metadata",
+        "workflow-metadata",
+        "routing-metadata",
+        "provider-metadata",
+        "content-metadata",
+        "backup-metadata",
+        "source-code-metadata",
+        "historical-runtime-metadata",
+        "production-data"
+      ]
+    },
+    "environmentDisposition": {
+      "type": "string",
+      "enum": [
+        "environment-specific",
+        "shared-cross-environment-control-plane",
+        "dev-only",
+        "external-managed",
+        "cloud-provider",
+        "deferred",
+        "out-of-scope",
+        "mixed"
+      ]
+    },
+    "assetInventoryClass": {
+      "type": "string",
+      "enum": [
+        "runtime-service",
+        "data-store",
+        "control-plane",
+        "operator-surface",
+        "provider-emulator",
+        "provider-mock",
+        "backup-restore",
+        "gateway",
+        "out-of-scope-historical",
+        "deferred-provider"
+      ]
+    },
+    "accessPosture": {
+      "type": "string",
+      "enum": [
+        "no-human-access",
+        "developer-loopback",
+        "operator-authenticated",
+        "admin-authenticated",
+        "break-glass-only",
+        "external-provider-console",
+        "deferred"
+      ]
+    },
+    "auditPosture": {
+      "type": "string",
+      "enum": [
+        "not-required",
+        "local-operational-logs",
+        "operator-action-audit-required",
+        "access-and-change-audit-required",
+        "external-provider-audit-required",
+        "deferred"
+      ]
+    },
+    "secretPosture": {
+      "type": "string",
+      "enum": [
+        "no-secrets",
+        "local-placeholder-only",
+        "secret-reference-required",
+        "provider-managed-secret",
+        "raw-secret-prohibited",
+        "deferred"
+      ]
+    },
+    "backupRestorePosture": {
+      "type": "string",
+      "enum": [
+        "not-required",
+        "local-reset-only",
+        "environment-backup-required",
+        "restore-proof-required",
+        "provider-managed",
+        "deferred"
+      ]
+    },
+    "retentionPosture": {
+      "type": "string",
+      "enum": [
+        "not-required",
+        "local-ephemeral",
+        "local-operational-logs",
+        "environment-retention-required",
+        "provider-managed-retention",
+        "deferred"
+      ]
+    },
+    "providerBoundaryDisposition": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "local-composed",
+        "shared-control-plane",
+        "external-managed",
+        "cloud-provider",
+        "deferred",
+        "out-of-scope",
+        "prohibited"
+      ]
+    },
+    "authRequirement": {
+      "type": "string",
+      "enum": [
+        "not-required",
+        "local-developer-access",
+        "operator-auth-required",
+        "admin-auth-required",
+        "external-provider-auth-required",
+        "deferred"
+      ]
+    },
+    "auditRequirement": {
+      "type": "string",
+      "enum": [
+        "not-required",
+        "local-operational-logs",
+        "operator-action-audit-required",
+        "access-and-change-audit-required",
+        "external-provider-audit-required",
+        "deferred"
+      ]
+    },
+    "breakGlassRelevance": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "operator-relevant",
+        "admin-relevant",
+        "prohibited-without-future-authority",
+        "deferred"
+      ]
+    },
+    "providerBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "supplierBoundary",
+        "evidenceBoundary",
+        "notes"
+      ],
+      "properties": {
+        "disposition": {
+          "$ref": "#/$defs/providerBoundaryDisposition"
+        },
+        "supplierBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "iso27001Support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statementOfApplicabilitySupport",
+        "supportAreas",
+        "supportStatement",
+        "certificationClaimed",
+        "nonClaim"
+      ],
+      "properties": {
+        "statementOfApplicabilitySupport": {
+          "type": "boolean"
+        },
+        "supportAreas": {
+          "$ref": "#/$defs/stringList"
+        },
+        "supportStatement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "certificationClaimed": {
+          "type": "boolean",
+          "const": false
+        },
+        "nonClaim": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "enterpriseFeatureSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assetInventory",
+        "riskOwnership",
+        "controlOwnership",
+        "accessControlBoundary",
+        "privilegedAccessBoundary",
+        "auditEvidence",
+        "backupRestoreResilience",
+        "supplierProviderBoundary",
+        "secretCredentialBoundary",
+        "changePromotionEvidence",
+        "incidentResponseEvidence",
+        "statementOfApplicabilitySupport",
+        "certificationOrReadinessClaims"
+      ],
+      "properties": {
+        "assetInventory": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskOwnership": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "controlOwnership": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "accessControlBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "privilegedAccessBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "auditEvidence": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "backupRestoreResilience": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "supplierProviderBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "secretCredentialBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "changePromotionEvidence": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "incidentResponseEvidence": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "statementOfApplicabilitySupport": {
+          "type": "boolean"
+        },
+        "certificationOrReadinessClaims": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
     }
   },
   "properties": {
