@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-014",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/0/endpointRef",
+      "value": "http://127.0.0.1:8025"
+    }
+  ]
+}

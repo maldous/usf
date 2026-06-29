@@ -37,6 +37,7 @@
     "proof:notify": "tsx packages/proof/src/notifications-messaging-proof.ts",
     "proof:api": "tsx packages/proof/src/api-contracts-proof.ts",
     "proof:providers": "tsx packages/proof/src/provider-adapters-proof.ts",
+    "providers-proof": "pnpm proof:providers",
     "proof:observability": "tsx packages/proof/src/observability-telemetry-proof.ts",
     "proof:guardrails": "tsx packages/proof/src/rate-limits-abuse-controls-proof.ts",
     "proof:bulk": "tsx packages/proof/src/import-export-bulk-proof.ts",
@@ -64,7 +65,8 @@
   "dependencies": {
     "@sinclair/typebox": "0.34.49",
     "fastify": "5.8.5",
-    "kysely": "0.29.2"
+    "kysely": "0.29.2",
+    "mailpit-api": "2.1.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

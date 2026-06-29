@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-016",
+  "packageDependencyPatches": [
+    {
+      "section": "dependencies",
+      "name": "mailpit-api",
+      "value": "^2.1.0"
+    }
+  ]
+}

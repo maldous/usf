@@ -1271,6 +1271,132 @@
       ]
     },
     {
+      "id": "runtime-provider-classes",
+      "title": "Runtime Provider Classes",
+      "status": "active",
+      "description": "Runtime status provider class values exposed by bounded runtime proof modes.",
+      "governedTaxonomies": [
+        "provider-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Provider",
+        "Provider Mode",
+        "Adapter",
+        "Port"
+      ],
+      "expectedSchemaConsumers": [
+        "runtime-proof.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-runtime/validate-runtime.py and tools/validate-spec/validate-spec.py enforce runtime provider class values without treating provider class as provider mode.",
+      "sourceInputs": [
+        "USF-181 runtime proof manifest",
+        "USF-183 runtime compose provider binding directive"
+      ],
+      "values": [
+        {
+          "id": "hermetic-mock",
+          "label": "Hermetic Mock",
+          "description": "Runtime is bound only to local in-memory or fixture-backed provider behaviour.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "requiresEvidence": true,
+          "sourceNotes": "USF-181 dev-in-memory proof mode.",
+          "aiGuidance": "Valid for bounded in-memory runtime proof only; MUST NOT be treated as live-provider or production readiness."
+        },
+        {
+          "id": "local-composed-real-service",
+          "label": "Local Composed Real Service",
+          "description": "Runtime has at least one proven adapter binding to a local composed service under the service catalogue boundary.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "requiresEvidence": true,
+          "sourceNotes": "USF-183 Mailpit composed-provider binding proof.",
+          "aiGuidance": "Valid for bounded local Compose provider binding proof only; MUST NOT imply staging, production, live-provider, SOC, or ISO/IEC 27001 certification readiness."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Treating runtime provider class as the provider registry mode.",
+        "Inferring broader readiness from a local composed provider binding.",
+        "Using a provider class without proof evidence."
+      ],
+      "aiGuidance": [
+        "Record runtime provider class separately from provider registry mode.",
+        "Require runtime proof evidence before using local-composed-real-service.",
+        "Do not infer staging, production, live-provider, SOC, or ISO/IEC 27001 certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
+      "id": "runtime-provider-binding-classes",
+      "title": "Runtime Provider Binding Classes",
+      "status": "active",
+      "description": "Provider class values for individual runtime provider binding matrix rows, including explicit non-applicable rows for deferred or boundary-only services.",
+      "governedTaxonomies": [
+        "provider-classification"
+      ],
+      "governedOntologyConcepts": [
+        "Provider",
+        "Provider Mode",
+        "Adapter",
+        "Port"
+      ],
+      "expectedSchemaConsumers": [
+        "runtime-proof.schema.json"
+      ],
+      "expectedValidatorUse": "tools/validate-runtime/validate-runtime.py enforces active bindings separately from boundary-only, profile-gated, no-runtime-port, and unsupported-deferred rows.",
+      "sourceInputs": [
+        "USF-181 runtime proof manifest",
+        "USF-183 runtime compose provider binding directive"
+      ],
+      "values": [
+        {
+          "id": "hermetic-mock",
+          "label": "Hermetic Mock",
+          "description": "Binding row represents local in-memory or fixture-backed provider behaviour.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "requiresEvidence": true,
+          "sourceNotes": "USF-181 dev-in-memory proof mode.",
+          "aiGuidance": "Use only where the binding row is explicitly hermetic and no composed-provider binding is claimed."
+        },
+        {
+          "id": "local-composed-real-service",
+          "label": "Local Composed Real Service",
+          "description": "Binding row represents a proven adapter binding to a local composed service.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "requiresEvidence": true,
+          "sourceNotes": "USF-183 Mailpit composed-provider binding proof.",
+          "aiGuidance": "Use only for rows with service-catalogue linkage, provider registry linkage, SDK boundary evidence, and API or worker proof evidence."
+        },
+        {
+          "id": "not-applicable",
+          "label": "Not Applicable",
+          "description": "Binding row is not an active runtime provider binding because it is boundary-only, profile-gated, lacks a runtime port, or remains explicitly deferred.",
+          "lifecycle": "canonical",
+          "canonical": true,
+          "requiresEvidence": true,
+          "sourceNotes": "USF-183 deferred provider binding matrix rows.",
+          "aiGuidance": "Use only with an explicit deferred reason and follow-up or boundary explanation; MUST NOT be used to imply a resolved provider binding."
+        }
+      ],
+      "aliases": [],
+      "forbiddenValues": [],
+      "driftRisks": [
+        "Using not-applicable to hide an unsupported binding.",
+        "Treating boundary-only Compose services as runtime provider bindings.",
+        "Inferring readiness from an unresolved binding row."
+      ],
+      "aiGuidance": [
+        "Use local-composed-real-service only when the proof exercises the adapter against the composed service.",
+        "Use not-applicable only with explicit deferred or boundary-only evidence.",
+        "Do not infer staging, production, live-provider, SOC, or ISO/IEC 27001 certification readiness from these values."
+      ],
+      "deferredDetails": []
+    },
+    {
       "id": "environment-classes",
       "title": "Environment Classes",
       "status": "active",

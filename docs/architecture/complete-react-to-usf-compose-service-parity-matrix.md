@@ -31,7 +31,7 @@ Evidence grades: A=12, B=3, C=6, D=33.
 | keycloak-postgres | identity backing store | implemented-equivalent | keycloak-db | A | high | USF composes a Keycloak database as keycloak-db. |
 | localstack | cloud-mock | requires-human-decision | provider live-deferred posture | D | medium | USF has provider modes but no LocalStack equivalent. |
 | loki | observability | implemented | loki | A | medium | USF composes Loki; live log readiness is not claimed. |
-| mailpit | notification-test | implemented | mailpit | A | medium | USF composes Mailpit and notification proof remains local/test only. |
+| mailpit | notification-test | implemented | mailpit | A | medium | USF composes Mailpit and USF-183 proves bounded SDK-backed Mailpit notification provider binding for API/worker runtime proof; local/test only. |
 | meilisearch | search-index | requires-human-decision | in-memory search adapter | D | medium | USF search proof is in-memory/local; no live or composed search provider readiness is claimed. |
 | minio | object-storage | implemented | minio | A | high | USF composes MinIO; console access posture still needs operator-surface review. |
 | mock-oidc | identity-test | covered-by-usf-runtime | adapters/idp | B | medium | USF has hermetic IDP tests and Keycloak-brokered auth proof; no compose mock-oidc service. |
@@ -39,7 +39,7 @@ Evidence grades: A=12, B=3, C=6, D=33.
 | otel-collector | observability | implemented | otel-collector | A | high | USF composes OTEL collector and keeps live monitoring deferred. |
 | pgadmin | operator-admin | requires-human-decision | none | D | medium | USF has DB proof but no operator/admin pgAdmin surface or SSO gate proof. |
 | pgbackrest | backup-restore | deferred | DB proof only | C | critical | USF has DB/RLS proof but no composed backup/restore service proof. |
-| platform-api | runtime-api | covered-by-usf-runtime | apps/api | B | high | USF-181 proves bounded API dev runtime execution in in-memory and compose-boundary modes without copying React runtime code or claiming service/container equivalence. |
+| platform-api | runtime-api | covered-by-usf-runtime | apps/api | B | high | USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for the Mailpit composed provider binding without copying React runtime code or claiming service/container equivalence. |
 | postgres | database | implemented | postgres | A | critical | USF compose includes PostgreSQL and DB/RLS proofs. |
 | prometheus | observability | implemented | prometheus | A | medium | USF composes Prometheus for local proof posture only. |
 | react-app | ui-runtime | out-of-foundation-scope | USF-134 future UI | C | medium | UI/UX remains future and non-foundation-blocking. |
@@ -73,18 +73,21 @@ Evidence grades: A=12, B=3, C=6, D=33.
 | windmill | operator-automation | requires-human-decision | jobs/workflows standard | D | high | USF jobs/workflows does not include Windmill operator automation. |
 | windmill-postgres | operator-automation-backing | requires-human-decision | none | D | medium | No USF composed Windmill persistence. |
 | windmill-redis | operator-automation-backing | requires-human-decision | none | D | medium | No USF composed Windmill Redis. |
-| windmill-worker | operator-automation-worker | requires-human-decision | apps/work plus jobs proof | D | high | USF-181 proves bounded apps/work execution in in-memory and compose-boundary modes; this is not Windmill operator automation parity. |
+| windmill-worker | operator-automation-worker | requires-human-decision | apps/work plus jobs proof | D | high | USF-181 proves bounded apps/work execution; USF-183 proves worker Mailpit notification provider binding, but this is not Windmill operator automation parity. |
 | wiremock | external-http-mock | substituted-partial | webhook-sink | C | medium | USF webhook sink is not a WireMock behavioural equivalent. |
 
 ## Interpretation
 
 A grade A row is directly implemented or equivalently composed in the current USF local/dev/test substrate. A grade B row is semantically covered by an authorised USF runtime/proof but is not service-equivalent. A grade C row is documented as deferred. A grade D row requires a human decision or exact blocker before USF-133 can close. A grade F row would be unclassified; this review found no unclassified compose service after the curated pass.
 
-USF-181 adds bounded runtime proof for `apps/api` and `apps/work` through
+USF-181 adds bounded runtime proof for `apps/api` and `apps/work`; USF-183 adds the
+bounded Mailpit notification provider binding proof. These are recorded through
 `spec/instances/runtime-proof/runtime-application-compose-parity.json` and
 `tools/validate-runtime/validate-runtime.py`. The compose-backed proof starts
-`compose/compose.dev.generated.yaml` before API and worker proof execution, but current
-provider adapters remain in-memory and composed provider binding is explicitly deferred.
+`compose/compose.dev.generated.yaml` before API and worker proof execution, reports
+`local-composed-real-service`, and proves Mailpit through `MailpitNotificationProvider`.
+PostgreSQL runtime repository, NATS, MinIO, Keycloak runtime identity, OpenBao, and
+Temporal provider bindings remain explicit deferrals or boundary-only records.
 This does not change any grade D service into service equivalence and does not claim full
 dev readiness, full React parity, test readiness, staging readiness, production readiness,
 live-provider readiness, SOC readiness, or ISO/IEC 27001 certification.

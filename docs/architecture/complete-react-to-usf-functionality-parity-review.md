@@ -62,7 +62,7 @@ Evidence grades: A=5, B=11, C=7, D=7.
 | infra-cloud | Cloud/edge infra | deferred | C | P2 | future environment blockers | No live cloud/edge/deployment readiness claimed. |
 | ui-runtime | UI/UX app | not-applicable | C | non-blocking | USF-134 | UI/UX is future non-foundation scope. |
 | i18n-runtime | Internationalisation | deferred | C | P2 | future UI/API blocker | Need decide if foundation requires i18n contracts before UI work. |
-| dev-commands | Developer command parity | partial | B | P1 | USF-133 follow-up | Runtime proof commands now cover bounded API/worker in-memory and compose-boundary proof; Sonar/Sentry/compose-universal command parity remains incomplete. |
+| dev-commands | Developer command parity | partial | B | P1 | USF-133 follow-up | Runtime proof commands now cover bounded API/worker in-memory proof and compose-backed Mailpit provider binding proof; Sonar/Sentry/compose-universal and remaining provider-binding command parity remain incomplete. |
 | service-catalog-cmdb | Service catalogue/CMDB | partial | C | P0 | USF-168 / `spec/instances/compose-service/service-catalogue.json` | Semantic service catalogue authority now exists and is validator-enforced, but it does not close USF-133 or prove broader readiness. |
 | data-flow-trust-boundaries | Data flows/trust boundaries | partial | C | P0 | new tracker recommended | Need complete data-flow/trust-boundary review for missing optional services. |
 
@@ -74,7 +74,7 @@ This service catalogue remains bounded to service disposition and generated Comp
 
 ## Runtime Application Proof Interpretation
 
-USF-181 adds a bounded runtime proof manifest at
+USF-181 adds a bounded runtime proof manifest, updated by USF-183, at
 `spec/instances/runtime-proof/runtime-application-compose-parity.json`, governed by
 `spec/schemas/runtime-proof.schema.json` and enforced by
 `tools/validate-runtime/validate-runtime.py`.
@@ -85,18 +85,23 @@ The proof model has two explicit modes:
   in-memory providers, synthetic data, tenant and authorization fail-closed behaviour, and
   audit evidence.
 - `dev-compose-backed` starts the canonical dev Compose target before API and worker proof
-  execution and reports `runtimeMode: dev-compose-backed`.
+  execution, reports `runtimeMode: dev-compose-backed`, reports provider mode
+  `local-composed-real-service`, verifies safe API binding metadata for Mailpit, and
+  executes worker Mailpit notification delivery through an SDK-backed adapter.
 
 The compose-backed mode is not service-equivalent to React's platform API container or
-Windmill worker service. Current API and worker provider adapters remain in-memory, and
-composed provider binding is an explicit deferred boundary under USF-133.
+Windmill worker service. USF-183 resolves only the Mailpit notification provider binding.
+PostgreSQL runtime repository, NATS, MinIO, Keycloak runtime identity, OpenBao, and
+Temporal provider bindings remain explicit deferrals or boundary-only entries under
+USF-133.
 
 This update supports runtime asset evidence, audit evidence, health/readiness evidence,
 tenant isolation evidence, fail-closed access-control evidence, secret and synthetic-data
-boundaries, operational teardown evidence, service-catalogue traceability, and future
-Statement of Applicability evidence organisation only. It does not claim ISO/IEC 27001
-certification, SOC readiness, staging readiness, production readiness, live-provider
-readiness, full dev readiness, test readiness, or full React parity.
+boundaries, operational teardown evidence, SDK import-boundary evidence, provider registry
+traceability, service-catalogue traceability, and future Statement of Applicability
+evidence organisation only. It does not claim ISO/IEC 27001 certification, SOC readiness,
+staging readiness, production readiness, live-provider readiness, full dev readiness, test
+readiness, or full React parity.
 
 ## Control Mapping
 

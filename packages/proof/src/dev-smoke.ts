@@ -22,7 +22,7 @@ export async function runDevSmoke(): Promise<SmokeSummary> {
     health: result.api.health,
     openapi: result.api.openapi,
     runtimeMode: "dev-in-memory",
-    providerMode: result.providerMode,
+    providerMode: "dev in-memory",
     tenantAcceptedStatus: result.api.tenantAcceptedStatus,
     tenantMismatchStatus: result.api.tenantMismatchStatus,
     authorizationFailureStatus: result.api.authorizationFailureStatus,

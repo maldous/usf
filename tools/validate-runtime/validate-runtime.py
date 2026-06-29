@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """USF runtime proof manifest validator.
 
-This validator enforces USF-181 runtime proof semantics. It does not execute
-runtime code and does not create evidence. It fails closed when the bounded API
-and worker runtime proof model is missing, when compose-backed proof is silently
-represented as in-memory proof, when proof commands are not wired, when service
-catalogue traceability is absent, when teardown representation is missing, or
-when a prohibited readiness/compliance/parity claim is allowed.
+This validator enforces USF-181/USF-183 runtime proof semantics. It does not
+execute runtime code and does not create evidence. It fails closed when the
+bounded API and worker runtime proof model is missing, when compose-backed proof
+is silently represented as in-memory proof, when Mailpit provider binding
+evidence is missing, when SDK imports escape the adapter boundary, when proof
+commands are not wired, when service catalogue traceability is absent, when
+teardown representation is missing, or when a prohibited readiness/compliance/
+parity claim is allowed.
 """
 
 from __future__ import annotations
@@ -37,6 +39,12 @@ RULES = {
     "USF-RUNTIME-008": ("blocking", "runtime proof code or manifest lacks teardown representation"),
     "USF-RUNTIME-009": ("blocking", "runtime proof evidence boundaries are missing"),
     "USF-RUNTIME-010": ("blocking", "compose-backed deferred boundary is missing"),
+    "USF-RUNTIME-011": ("blocking", "compose-backed provider binding is not resolved for required Mailpit proof"),
+    "USF-RUNTIME-012": ("blocking", "runtime provider binding matrix is missing or inconsistent"),
+    "USF-RUNTIME-013": ("blocking", "provider SDK import escaped the authorised adapter boundary"),
+    "USF-RUNTIME-014": ("blocking", "provider proof metadata exposes raw endpoint or credential material"),
+    "USF-RUNTIME-015": ("blocking", "provider registry linkage for composed binding is missing"),
+    "USF-RUNTIME-016": ("blocking", "provider SDK dependency is not exact-version pinned"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -46,9 +54,18 @@ SCHEMA_PATH = Path("spec/schemas/runtime-proof.schema.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
+RUNTIME_SOURCE_PATH = Path("apps/api/src/runtime.ts")
+WORKER_SOURCE_PATH = Path("apps/work/src/worker.ts")
+ADAPTER_MAIL_SOURCE_PATH = Path("adapters/mail/src/index.ts")
+PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
 PLANTED_DEFECT_DIR = Path("tools/validate-runtime/planted-defects")
+MAILPIT_BINDING_ID = "mailpit-notification-provider"
+MAILPIT_PROVIDER_ID = "notification-delivery-mailpit-composed-test"
+MAILPIT_SERVICE_ID = "mailpit"
+MAILPIT_SDK_PACKAGE = "mailpit-api"
+MAILPIT_SDK_VERSION = "2.1.0"
 
 REQUIRED_MODES = {"dev-in-memory", "dev-compose-backed"}
 REQUIRED_BOUNDARY_FIELDS = {
@@ -92,6 +109,20 @@ SOURCE_TEARDOWN_MARKERS = (
     "PORT: \"0\"",
     "USF_WORKER_RUN_ONCE",
 )
+PROVIDER_SDK_IMPORT_RE = re.compile(
+    r"from\s+[\"'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio|nats|keycloak-js)[\"']"
+)
+FORBIDDEN_SDK_IMPORT_PATHS = (
+    Path("packages/core/src/index.ts"),
+    Path("packages/ports/src/index.ts"),
+    Path("apps/api/src/runtime.ts"),
+    Path("apps/api/src/server.ts"),
+    Path("apps/work/src/worker.ts"),
+)
+PROVIDER_SAFE_METADATA_FORBIDDEN_RE = re.compile(
+    r"https?://|secret://|bearer\s+|private_key|connection_string|postgres(?:ql)?://|redis://|amqp://|password|token",
+    re.IGNORECASE,
+)
 
 
 class Findings:
@@ -120,6 +151,20 @@ def read_json(path: Path) -> Any:
 
 def read_text(path: Path) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
+
+
+def state_text(state: dict[str, Any], path: Path) -> str:
+    override = state.get("sourceOverrides", {}).get(str(path))
+    if isinstance(override, str):
+        return override
+    return read_text(path)
+
+
+def ts_files_under(path: Path) -> list[Path]:
+    root = ROOT / path
+    if not root.exists():
+        return []
+    return [p.relative_to(ROOT) for p in sorted(root.rglob("*.ts"))]
 
 
 def make_targets(makefile_text: str) -> set[str]:
@@ -174,18 +219,28 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
+    for dep_name in defect.get("removePackageDependencies", []):
+        package.get("dependencies", {}).pop(dep_name, None)
+    for patch in defect.get("packageDependencyPatches", []):
+        package.setdefault(patch.get("section", "dependencies"), {})[patch["name"]] = patch["value"]
     makefile = read_text(MAKEFILE_PATH)
     for target in defect.get("removeMakeTargets", []):
         makefile = re.sub(rf"^{re.escape(target)}:\n(?:\t.*\n)*", "", makefile, flags=re.MULTILINE)
     proof_source = read_text(PROOF_SOURCE_PATH)
     for replacement in defect.get("proofSourceReplacements", []):
         proof_source = proof_source.replace(replacement["old"], replacement["new"])
+    source_overrides: dict[str, str] = {}
+    for replacement in defect.get("sourceReplacements", []):
+        source_overrides[replacement["path"]] = read_text(Path(replacement["path"])).replace(
+            replacement["old"], replacement["new"]
+        )
     return {
         "manifest": manifest,
         "schema": read_json(SCHEMA_PATH),
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
+        "sourceOverrides": source_overrides,
     }
 
 
@@ -229,11 +284,14 @@ def check_compose_mode(F: Findings, state: dict[str, Any]) -> None:
     if (
         boundary.get("required") is not True
         or boundary.get("target") != COMPOSE_TARGET
-        or boundary.get("providerBinding") != "runtime-started-with-compose-boundary-provider-binding-deferred"
+        or boundary.get("providerBinding")
+        != "mailpit-notification-provider-resolved-with-explicit-deferrals"
     ):
-        F.add("USF-RUNTIME-003", "dev-compose-backed", "compose-backed mode lacks explicit compose boundary and deferred provider binding")
-    if compose.get("providerMode") == "dev in-memory" and not compose.get("deferredBoundaryRefs"):
-        F.add("USF-RUNTIME-003", "dev-compose-backed", "in-memory provider mode requires explicit deferred boundary refs")
+        F.add("USF-RUNTIME-003", "dev-compose-backed", "compose-backed mode lacks resolved provider binding boundary")
+    if compose.get("providerMode") == "dev in-memory":
+        F.add("USF-RUNTIME-003", "dev-compose-backed", "compose-backed mode must not report dev in-memory provider mode")
+    if compose.get("providerClass") == "hermetic-mock":
+        F.add("USF-RUNTIME-003", "dev-compose-backed", "compose-backed mode must not report hermetic provider class")
 
 
 def check_proof_surfaces(F: Findings, state: dict[str, Any]) -> None:
@@ -343,7 +401,14 @@ def check_boundaries(F: Findings, state: dict[str, Any]) -> None:
             surface = record.get(surface_name)
             if not isinstance(surface, dict):
                 continue
-            for field in ("auditEvidence", "tenantBoundary", "accessBoundary", "secretBoundary", "syntheticDataBoundary"):
+            for field in (
+                "auditEvidence",
+                "tenantBoundary",
+                "accessBoundary",
+                "secretBoundary",
+                "syntheticDataBoundary",
+                "providerBindingEvidence",
+            ):
                 if not surface.get(field):
                     F.add("USF-RUNTIME-009", f"{mode}:{surface_name}", f"missing proof boundary: {field}")
 
@@ -371,13 +436,147 @@ def check_deferred_boundaries(F: Findings, state: dict[str, Any]) -> None:
             F.add("USF-RUNTIME-010", item.get("id", "deferred-boundary"), "deferred boundary lacks prohibited claims")
 
 
+def binding_records(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    records: dict[str, dict[str, Any]] = {}
+    for record in manifest.get("providerBindingMatrix", []):
+        if isinstance(record, dict) and isinstance(record.get("bindingId"), str):
+            records[record["bindingId"]] = record
+    return records
+
+
+def check_provider_bindings(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["manifest"]
+    bindings = binding_records(manifest)
+    compose = mode_records(manifest).get("dev-compose-backed")
+    active = bindings.get(MAILPIT_BINDING_ID)
+    if not active:
+        F.add("USF-RUNTIME-011", "providerBindingMatrix", "Mailpit active binding is missing")
+        return
+    expected = {
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "providerClass": "local-composed-real-service",
+        "adapterName": "MailpitNotificationProvider",
+        "portName": "NotificationProvider",
+        "sdkPackage": MAILPIT_SDK_PACKAGE,
+        "sdkVersion": MAILPIT_SDK_VERSION,
+        "sdkBoundary": "adapter-package-only",
+    }
+    for field, value in expected.items():
+        if active.get(field) != value:
+            F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, f"{field} must be {value}")
+    if MAILPIT_SERVICE_ID not in active.get("serviceCatalogueServiceIds", []):
+        F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, "service catalogue Mailpit id missing")
+    if MAILPIT_PROVIDER_ID not in active.get("providerRegistryIds", []):
+        F.add("USF-RUNTIME-011", MAILPIT_BINDING_ID, "provider registry id missing")
+    if not active.get("apiProofEvidence") or not active.get("workerProofEvidence"):
+        F.add("USF-RUNTIME-012", MAILPIT_BINDING_ID, "active binding lacks API or worker proof evidence")
+    if compose:
+        if MAILPIT_BINDING_ID not in compose.get("providerBindingRefs", []):
+            F.add("USF-RUNTIME-012", "dev-compose-backed", "compose mode does not reference active Mailpit binding")
+        deferred_refs = set(compose.get("deferredProviderBindingRefs", []))
+        deferred_ids = {k for k, v in bindings.items() if v.get("bindingStatus") != "active"}
+        missing = sorted(deferred_refs - deferred_ids)
+        if missing:
+            F.add("USF-RUNTIME-012", "dev-compose-backed", f"deferred provider binding refs missing: {', '.join(missing)}")
+    proof_source = state["proofSource"]
+    for marker in (
+        "composedProviderEvidence",
+        "notificationProviderMode",
+        "mailpit-api",
+        "Mailpit provider evidence",
+    ):
+        if marker not in proof_source:
+            F.add("USF-RUNTIME-012", str(PROOF_SOURCE_PATH), f"proof source missing provider evidence marker: {marker}")
+
+
+def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
+    adapter_text = state_text(state, ADAPTER_MAIL_SOURCE_PATH)
+    if f'from "{MAILPIT_SDK_PACKAGE}"' not in adapter_text and f"from '{MAILPIT_SDK_PACKAGE}'" not in adapter_text:
+        F.add("USF-RUNTIME-013", str(ADAPTER_MAIL_SOURCE_PATH), "Mailpit SDK import is missing from adapter boundary")
+    forbidden_paths = list(FORBIDDEN_SDK_IMPORT_PATHS)
+    forbidden_paths.extend(ts_files_under(Path("capabilities")))
+    for path in forbidden_paths:
+        text = state_text(state, path)
+        if PROVIDER_SDK_IMPORT_RE.search(text):
+            F.add("USF-RUNTIME-013", str(path), "provider SDK import is not allowed in this layer")
+
+
+def check_provider_safe_metadata(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["manifest"]
+    for binding in manifest.get("providerBindingMatrix", []):
+        if not isinstance(binding, dict):
+            continue
+        safe_payload = {
+            "endpointRef": binding.get("endpointRef"),
+            "apiProofEvidence": binding.get("apiProofEvidence"),
+            "workerProofEvidence": binding.get("workerProofEvidence"),
+            "providerRegistryEvidence": binding.get("providerRegistryEvidence"),
+            "claimBoundary": binding.get("claimBoundary"),
+        }
+        text = json.dumps(safe_payload, sort_keys=True)
+        if PROVIDER_SAFE_METADATA_FORBIDDEN_RE.search(text):
+            F.add("USF-RUNTIME-014", binding.get("bindingId", "provider-binding"), "provider proof metadata exposes raw endpoint or credential material")
+
+
+def check_provider_registry_linkage(F: Findings, state: dict[str, Any]) -> None:
+    registry_source = state_text(state, PROVIDER_REGISTRY_SOURCE_PATH)
+    required_markers = (
+        MAILPIT_PROVIDER_ID,
+        "MailpitNotificationProvider",
+        "endpoint://compose/mailpit",
+        "approved-for-composed-test",
+    )
+    for marker in required_markers:
+        if marker not in registry_source:
+            F.add("USF-RUNTIME-015", str(PROVIDER_REGISTRY_SOURCE_PATH), f"provider registry missing marker: {marker}")
+    runtime_source = state_text(state, RUNTIME_SOURCE_PATH)
+    for marker in (MAILPIT_BINDING_ID, MAILPIT_PROVIDER_ID, MAILPIT_SERVICE_ID):
+        if marker not in runtime_source:
+            F.add("USF-RUNTIME-015", str(RUNTIME_SOURCE_PATH), f"runtime binding source missing marker: {marker}")
+
+
+def check_dependency_pinning(F: Findings, state: dict[str, Any]) -> None:
+    deps = state["package"].get("dependencies", {})
+    version = deps.get(MAILPIT_SDK_PACKAGE)
+    if version != MAILPIT_SDK_VERSION:
+        F.add("USF-RUNTIME-016", f"package.json:{MAILPIT_SDK_PACKAGE}", "mailpit-api must be exact-version pinned to 2.1.0")
+
+
 def run_checks(mode: str, state: dict[str, Any]) -> Findings:
     F = Findings()
     selected = {
-        "manifest": [check_manifest, check_compose_mode, check_proof_surfaces, check_claims, check_service_catalogue_linkage, check_boundaries, check_deferred_boundaries],
+        "manifest": [
+            check_manifest,
+            check_compose_mode,
+            check_proof_surfaces,
+            check_claims,
+            check_service_catalogue_linkage,
+            check_boundaries,
+            check_deferred_boundaries,
+            check_provider_bindings,
+            check_provider_safe_metadata,
+            check_provider_registry_linkage,
+            check_dependency_pinning,
+        ],
         "commands": [check_command_wiring],
-        "source": [check_teardown],
-        "all": [check_manifest, check_compose_mode, check_proof_surfaces, check_command_wiring, check_claims, check_service_catalogue_linkage, check_teardown, check_boundaries, check_deferred_boundaries],
+        "source": [check_teardown, check_provider_sdk_boundary],
+        "all": [
+            check_manifest,
+            check_compose_mode,
+            check_proof_surfaces,
+            check_command_wiring,
+            check_claims,
+            check_service_catalogue_linkage,
+            check_teardown,
+            check_boundaries,
+            check_deferred_boundaries,
+            check_provider_bindings,
+            check_provider_sdk_boundary,
+            check_provider_safe_metadata,
+            check_provider_registry_linkage,
+            check_dependency_pinning,
+        ],
     }[mode]
     for check in selected:
         check(F, state)

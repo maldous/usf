@@ -1,11 +1,12 @@
 # Runtime Application Compose Parity
 
 Document type: Architecture / runtime proof boundary.
-Status: Draft / USF-181.
+Status: Draft / USF-181, updated by USF-183.
 Authority level: Runtime proof interpretation; subordinate to the Charter, Authority Model,
 service catalogue, schemas, validators, and executed proof output.
 
-This note documents the bounded USF API and worker runtime proof required by USF-181.
+This note documents the bounded USF API and worker runtime proof required by USF-181 and
+the Mailpit provider-binding follow-up completed by USF-183.
 Linear tracks the work only. The semantic service catalogue authority remains
 `spec/instances/compose-service/service-catalogue.json`; generated Compose files remain
 derivative.
@@ -17,11 +18,13 @@ USF-181 defines two machine-checkable runtime modes:
 | Mode | API proof | Worker proof | Compose boundary | Provider mode |
 |---|---|---|---|---|
 | `dev-in-memory` | `runtime:proof:in-memory` starts `apps/api/src/main.ts` on loopback with an ephemeral port and verifies health, readiness, OpenAPI, tenant mismatch, authorization denial, and audit evidence. | `runtime:proof:in-memory` starts `apps/work/src/main.ts` in run-once proof mode and verifies synthetic tenant job execution, tenant-boundary denial, authorization denial, and audit evidence. | Not required. | `dev in-memory`; provider class `hermetic-mock`. |
-| `dev-compose-backed` | `runtime:proof:compose` starts the canonical dev Compose target first, then starts the API proof against that running boundary. | `runtime:proof:compose` starts the canonical dev Compose target first, then starts the worker proof against that running boundary. | `compose/compose.dev.generated.yaml`, traced to the service catalogue. | `dev in-memory`; provider adapter binding to composed services is explicitly deferred. |
+| `dev-compose-backed` | `runtime:proof:compose` starts the canonical dev Compose target first, then starts the API proof against that running boundary and verifies Mailpit provider binding metadata in safe API views. | `runtime:proof:compose` starts the canonical dev Compose target first, then starts the worker proof and executes SDK-backed Mailpit readiness, write, readback, and cleanup through the notification provider adapter. | `compose/compose.dev.generated.yaml`, traced to the service catalogue. | `local-composed-real-service`; Mailpit uses provider mode `composed-test`, with remaining provider bindings explicitly deferred. |
 
 The compose-backed proof is intentionally not a silent alias for in-memory proof: runtime
-responses report `runtimeMode: dev-compose-backed`, the proof starts and tears down the
-canonical dev Compose target, and the manifest records the provider-binding deferral.
+responses report `runtimeMode: dev-compose-backed`, provider mode
+`local-composed-real-service`, and an active Mailpit provider binding. The proof starts and
+tears down the canonical dev Compose target and records unresolved provider bindings
+separately.
 
 ## Manifest And Validator
 
@@ -39,7 +42,11 @@ The runtime proof manifest is
 - compose-backed proof lacks service-catalogue linkage;
 - proof code or manifest lacks teardown representation;
 - audit, tenant, secret, access, and synthetic-data boundaries are missing;
-- compose-backed deferred boundaries are missing.
+- compose-backed deferred boundaries are missing;
+- provider binding matrix or Mailpit binding evidence is missing;
+- provider SDK imports escape the authorised adapter boundary;
+- provider proof metadata exposes raw endpoint or credential material;
+- provider registry linkage or exact SDK pinning is missing.
 
 Planted defects under `tools/validate-runtime/planted-defects/` exercise each rule class.
 
@@ -57,16 +64,16 @@ Audit evidence is bounded to the proof process:
 - Audit output supports future evidence organisation only; it does not create a SOC,
 ISO/IEC 27001, staging, production, or live-provider claim.
 
-## Deferred Boundary
+## Provider Binding Boundary
 
-Current API and worker adapters remain in-memory in both modes. The compose-backed proof
-proves the canonical dev Compose boundary can be started before API and worker runtime
-execution, but it does not prove provider adapter binding to PostgreSQL, NATS, Temporal,
-OpenBao, MinIO, or other composed services.
+USF-183 resolves the notification provider binding to Mailpit for bounded local composed
+proof. The implementation and SDK selection are documented in
+`docs/architecture/runtime-compose-provider-binding.md`.
 
-That deferred provider-binding boundary is recorded in the manifest and carried by the
-open parent USF-133. Profile-gated workflow-provider and operator services remain
-service-catalogue-tracked and require separate proof or decision before broader closure.
+The manifest records the remaining deferred or boundary-only provider bindings for
+PostgreSQL, NATS, MinIO, Keycloak, OpenBao, and Temporal. Those entries are carried by the
+open parent USF-133 and the named follow-up issues; they are not upgraded by the Mailpit
+proof.
 
 ## Enterprise And ISO-Supporting Posture
 

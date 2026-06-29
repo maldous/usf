@@ -1,27 +1,60 @@
 import { Type } from "@sinclair/typebox";
 
+const RuntimeProviderModeSchema = Type.Union([
+  Type.Literal("dev in-memory"),
+  Type.Literal("local-composed-real-service"),
+]);
+const RuntimeProviderClassSchema = Type.Union([
+  Type.Literal("hermetic-mock"),
+  Type.Literal("local-composed-real-service"),
+]);
+const RuntimeProviderBindingSchema = Type.Object({
+  bindingId: Type.String({ minLength: 1 }),
+  bindingStatus: Type.String({ minLength: 1 }),
+  serviceCatalogueServiceIds: Type.Array(Type.String({ minLength: 1 })),
+  providerRegistryIds: Type.Array(Type.String({ minLength: 1 })),
+  adapterName: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
+  portName: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
+  providerMode: Type.String({ minLength: 1 }),
+  providerClass: Type.String({ minLength: 1 }),
+  serviceCatalogueAuthority: Type.Literal("spec/instances/compose-service/service-catalogue.json"),
+  composeTarget: Type.Literal("compose/compose.dev.generated.yaml"),
+  endpointRef: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
+  sdkPackage: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
+  sdkVersion: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
+  sdkBoundary: Type.String({ minLength: 1 }),
+  proofSurfaces: Type.Array(Type.String({ minLength: 1 })),
+  deferredReason: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
+  followUpIssueRefs: Type.Array(Type.String({ minLength: 1 })),
+  claimBoundary: Type.String({ minLength: 1 }),
+});
+
 export const HealthResponseSchema = Type.Object({
   status: Type.Literal("ok"),
   service: Type.Literal("foundation-api"),
   runtimeMode: Type.Union([Type.Literal("dev-in-memory"), Type.Literal("dev-compose-backed")]),
-  providerMode: Type.Literal("dev in-memory"),
-  providerClass: Type.Literal("hermetic-mock"),
+  providerMode: RuntimeProviderModeSchema,
+  providerClass: RuntimeProviderClassSchema,
   environment: Type.Literal("local"),
   serviceCatalogueAuthority: Type.Literal("spec/instances/compose-service/service-catalogue.json"),
   composeTarget: Type.Union([Type.Literal("compose/compose.dev.generated.yaml"), Type.Null()]),
   deferredBoundaries: Type.Array(Type.String()),
+  composedProviderBindings: Type.Array(RuntimeProviderBindingSchema),
+  deferredProviderBindings: Type.Array(RuntimeProviderBindingSchema),
 });
 
 export const ReadyResponseSchema = Type.Object({
   status: Type.Literal("ready"),
   service: Type.Literal("foundation-api"),
   runtimeMode: Type.Union([Type.Literal("dev-in-memory"), Type.Literal("dev-compose-backed")]),
-  providerMode: Type.Literal("dev in-memory"),
-  providerClass: Type.Literal("hermetic-mock"),
+  providerMode: RuntimeProviderModeSchema,
+  providerClass: RuntimeProviderClassSchema,
   environment: Type.Literal("local"),
   serviceCatalogueAuthority: Type.Literal("spec/instances/compose-service/service-catalogue.json"),
   composeTarget: Type.Union([Type.Literal("compose/compose.dev.generated.yaml"), Type.Null()]),
   deferredBoundaries: Type.Array(Type.String()),
+  composedProviderBindings: Type.Array(RuntimeProviderBindingSchema),
+  deferredProviderBindings: Type.Array(RuntimeProviderBindingSchema),
   providers: Type.Record(Type.String(), Type.String()),
 });
 
@@ -45,8 +78,8 @@ export const TenantContextResponseSchema = Type.Object({
   actorId: Type.String({ minLength: 1 }),
   roles: Type.Array(Type.String()),
   runtimeMode: Type.Union([Type.Literal("dev-in-memory"), Type.Literal("dev-compose-backed")]),
-  providerMode: Type.Literal("dev in-memory"),
-  providerClass: Type.Literal("hermetic-mock"),
+  providerMode: RuntimeProviderModeSchema,
+  providerClass: RuntimeProviderClassSchema,
   environment: Type.Literal("local"),
   auditEvents: Type.Number({ minimum: 1 }),
 });
