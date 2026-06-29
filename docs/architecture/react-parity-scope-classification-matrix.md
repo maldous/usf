@@ -122,6 +122,32 @@ Implemented local/dev/test provider rows are carried by USF-156. Deferred live/r
 | React UI/Playwright provider behaviours | foundation-behaviour-rewritten-from-ui-test | provider admin/status behaviours rewritten as capability/API/proof tests | UI/UX remains separate |
 | live provider, DR, gateway, cache/search depth | deferred | USF-157 tracks live/risk/resilience depth | explicit directive required before implementation |
 
+### Observability / Telemetry Subdomain Classification
+
+Implemented local/dev/test observability rows are carried by USF-158. Deferred live backend and deep operational observability depth is carried by USF-159.
+
+| Item | usf_status | Evidence | Deferred depth |
+| --- | --- | --- | --- |
+| observability domain | partial | controlled signal model, bounded in-memory collector, API route signal emission, PDP-protected observability routes, `make observability-proof`, and `validate-observability` | live backend/export/alert/dashboard/incident depth tracked in USF-159 |
+| metrics | migrated | metric type model, allow-listed labels, secret/high-cardinality rejection tests and proof | live Prometheus/OpenTelemetry export |
+| traces/spans | migrated | safe span attributes, propagated request/correlation/trace IDs, redaction proof | live trace backend and distributed propagation depth |
+| structured logs | migrated | safe message templates and redacted attributes | live log backend and retention pipeline |
+| operational events | migrated | local collector event records with safe context | broad per-capability event emission depth |
+| security signals | migrated | authorization.denied and tenant mismatch security-signal posture represented and tested | SIEM/export/detection rule integration |
+| health/readiness/liveness | migrated | collector status separates liveness, health, readiness, and live claim flags | deeper capability readiness aggregation |
+| correlation propagation | migrated | tenant-context API path emits metric/span with request, correlation, and trace IDs | cross-service/composed tracing |
+| tenant-safe labels | migrated | tenant-scoped query isolation and label allow-list tests | cross-tenant aggregate analytics |
+| cardinality governance | migrated | high-cardinality and unknown metric labels fail closed | approval workflow for exceptional labels |
+| redaction | migrated | tokens, credentials, object keys, recipient addresses, raw provider responses, and stack traces absent from telemetry output | deeper sink/export leak scanning |
+| retention/disposal | partial | retention fields and posture represented in signal model and standard | purge workflow, legal hold, retention scheduler |
+| access control | migrated | observability actions added to PDP and routes require security-admin permissions | granular log/trace/security-signal roles |
+| provider mode observability | migrated | in-memory collector, composed-test provider deferred, no live monitoring claim | live-external-authorised observability provider authority path |
+| alerting posture | deferred | standard defines alert posture without live delivery claim | alert delivery, dedupe, suppression, escalation |
+| incident evidence posture | deferred | standard defines incident linkage without readiness claim | incident workflow and runbook integration |
+| dashboard posture | deferred | standard defines dashboard posture without UI implementation | dashboard runtime/future ops UI |
+| future API/ops surfaces | partial | `/v1/observability/readiness` and `/v1/observability/signals` implemented safely | raw log/trace/metric export routes deferred |
+| React UI/Playwright observability behaviours | foundation-behaviour-rewritten-from-ui-test | request instrumentation and tenant observability behaviours rewritten as API/capability/proof tests | UI/UX assertions remain out of scope |
+
 Domain count: **12 foundation domains, all `partial`** for the full-parity bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full-parity scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine parity choice) and carried into their domain children.
 
 ## 4. UI/UX scope (out of foundation scope)

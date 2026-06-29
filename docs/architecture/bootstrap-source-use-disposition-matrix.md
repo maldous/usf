@@ -166,6 +166,28 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 | `tools/validate-parity/validate-providers.py` | source-derived-rewrite | Existing parity validator pattern and provider validator expectations | Static parity validator for provider/adapters/modes invariants. |
 | `tools/validate-parity/provider-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk provider validator rules fire. |
 
+## Parity Observability/Telemetry Additions
+
+| Target file | Treatment | Source-use basis | Rationale |
+| ----------- | --------- | ---------------- | --------- |
+| `docs/architecture/observability-telemetry-and-operational-evidence-standard.md` | source-derived-rewrite | React observability ADRs, tenant readiness evidence, metrics/traces/logs proof lineage, and USF-158 enterprise controls | Defines observability as a controlled local/dev/test evidence surface with signal classification, tenant safety, redaction, access control, provider modes, and deferred live depth. |
+| `docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the observability/telemetry slice. |
+| `packages/core/src/index.ts` | source-derived-rewrite | React observability semantics, redaction, request context, metric cardinality, and proof lineage | Adds telemetry categories, classifications, metric types, context fields, redaction helpers, validation errors, and observability audit event taxonomy. |
+| `packages/ports/src/index.ts` | source-derived-rewrite | React port/adapter boundary and observability primitive lineage | Adds TelemetryPort methods while preserving ObservabilitySink compatibility. |
+| `adapters/obs/src/index.ts` | source-derived-rewrite | React in-memory observability repository and local proof lineage | Implements the bounded in-memory telemetry collector with safe metrics, spans, logs, events, health/readiness/liveness, tenant query isolation, and redacted status view. |
+| `capabilities/tenant/src/authorization-policy.ts` | source-derived-rewrite | React operator/admin observability guard lineage and USF PDP authority | Adds explicit observability read/export/configure/alert permissions. |
+| `apps/api/src/server.ts` | source-derived-rewrite | React request instrumentation, tenant readiness, and observability route lineage | Emits safe tenant-context metric/span signals and exposes operator-only redacted observability readiness/signals surfaces. |
+| `packages/contracts/src/index.ts` | source-derived-rewrite | React OpenAPI/schema and safe telemetry surface lineage | Adds redacted observability collector status, signal view, readiness, and signals response schemas. |
+| `packages/contracts/src/api-surface.ts` | source-derived-rewrite | React API/contract/observability route lineage | Adds observability route metadata covering classification, capability mapping, tenant/PDP posture, pagination, audit, examples, and no-live-readiness boundary. |
+| `packages/openapi/src/index.ts` | source-derived-rewrite | React OpenAPI drift gate lineage | Registers observability schemas and query fields in generated OpenAPI. |
+| `packages/openapi/openapi.json` | evidence-only-support | Generated OpenAPI contract output from USF metadata | Committed local/dev/test OpenAPI contract with observability surfaces and no live monitoring claim. |
+| `packages/proof/src/observability-telemetry-proof.ts` | source-derived-rewrite | React observability runtime proofs rewritten as foundation proof | Hermetic proof for redaction, tenant isolation, metric labels, context propagation, health/readiness/liveness, provider mode posture, and no live monitoring claims. |
+| `tests/capabilities/observability-telemetry.test.ts` | source-derived-rewrite | React observability tests rewritten as foundation tests | Tests metric label governance, redaction, tenant query isolation, health/readiness separation, provider mode posture, and security signals. |
+| `tests/apps/api-contracts.test.ts` | source-derived-rewrite | React request instrumentation and tenant observability route behaviours rewritten as API tests | Tests PDP-protected observability API surfaces, redaction, tenant safety, and correlation/request/trace propagation. |
+| `tests/packages/proof.test.ts` | evidence-only-support | Proof package test pattern | Runs observability proof in-process. |
+| `tools/validate-parity/validate-observability.py` | source-derived-rewrite | Existing parity validator pattern and observability validator expectations | Static parity validator for observability/telemetry invariants. |
+| `tools/validate-parity/observability-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk observability validator rules fire. |
+
 ## Boundary Confirmation
 
 No file in this matrix is copied from `../react`; no target path mirrors a historical source path; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.
