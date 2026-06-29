@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-008",
+  "servicePatches": [
+    {
+      "serviceId": "postgres",
+      "values": {
+        "environmentPolicies.staging.seedReset": "reset-per-run"
+      }
+    }
+  ]
+}

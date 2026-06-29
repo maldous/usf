@@ -1,0 +1,12 @@
+{
+  "expectedRuleId": "USF-COMPOSE-004",
+  "servicePatches": [
+    {
+      "serviceId": "sonarqube",
+      "values": {
+        "environmentPolicies.dev.generated": false,
+        "nonEquivalenceBoundaries": []
+      }
+    }
+  ]
+}

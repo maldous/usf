@@ -34,11 +34,36 @@
     "idPrefixNote": "This artefact uses the global artefact-ID namespace 'usf.' (id 'usf.schema-registry'), consistent with the taxonomy ('usf.taxonomy-catalog') and vocabulary ('usf.vocabulary-catalog') catalogues. The 'usf.' prefix is a deliberate globally-scoped machine-readable identifier namespace and is NOT a redundant-usf violation: the redundant-usf prohibition applies to repository path segments, package and implementation names, and unnecessary repeated local names, not to global artefact IDs that may be consumed outside the repository context. Schema file names and paths (e.g. spec/schemas/schema-registry.schema.json) remain unprefixed because they are paths, not global IDs."
   },
   "currentRepositoryState": {
-    "taxonomyCatalogue": {"path": "spec/taxonomies/taxonomy-catalog.json", "exists": true, "parsed": true, "role": "Classification authority (taxonomy). Source of schema family taxonomy alignment and classification references."},
-    "vocabularyCatalogue": {"path": "spec/vocabularies/vocabulary-catalog.json", "exists": true, "parsed": true, "role": "Controlled-value authority (vocabulary). Source of schema classes, schema lifecycle states, authority levels, and all enum value sets schemas must reference."},
-    "schemaDirectory": {"path": "spec/schemas/", "exists": true, "authoredSchemaFilesPresent": true, "placeholderOnly": false, "note": "Contains 23 authored schema files, one per registry entry, all lifecycleState draft. No schema is active: active promotion additionally requires a formal active/enforcing validator posture. The current validator exists as draft/advisory CI enforcement (tools/validate-spec/validate-spec.py) and does not promote schemas to active."},
-    "registryDirectory": {"path": "spec/registries/", "exists": true, "firstAuthoredRegistryArtefact": true, "note": "Contained only .gitkeep before this artefact."},
-    "placeholderPolicy": {".gitkeep": "A git placeholder to retain an empty directory.", "isSemanticEvidence": false, "rule": "Placeholders MUST NOT be treated as authored artefacts."},
+    "taxonomyCatalogue": {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "exists": true,
+      "parsed": true,
+      "role": "Classification authority (taxonomy). Source of schema family taxonomy alignment and classification references."
+    },
+    "vocabularyCatalogue": {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "exists": true,
+      "parsed": true,
+      "role": "Controlled-value authority (vocabulary). Source of schema classes, schema lifecycle states, authority levels, and all enum value sets schemas must reference."
+    },
+    "schemaDirectory": {
+      "path": "spec/schemas/",
+      "exists": true,
+      "authoredSchemaFilesPresent": true,
+      "placeholderOnly": false,
+      "note": "Contains 23 authored schema files, one per registry entry, all lifecycleState draft. No schema is active: active promotion additionally requires a formal active/enforcing validator posture. The current validator exists as draft/advisory CI enforcement (tools/validate-spec/validate-spec.py) and does not promote schemas to active."
+    },
+    "registryDirectory": {
+      "path": "spec/registries/",
+      "exists": true,
+      "firstAuthoredRegistryArtefact": true,
+      "note": "Contained only .gitkeep before this artefact."
+    },
+    "placeholderPolicy": {
+      ".gitkeep": "A git placeholder to retain an empty directory.",
+      "isSemanticEvidence": false,
+      "rule": "Placeholders MUST NOT be treated as authored artefacts."
+    },
     "activeSchemaPolicy": "Schema files now exist for all 23 entries and are JSON Schema Draft 2020-12 meta-schema valid, so entries are lifecycleState draft. The draft/advisory validator tools/validate-spec/validate-spec.py is CI-enforced for the current corpus but does not activate schemas. No schema may be marked active until the validator posture is formally promoted to active/validator-enforced maturity.",
     "observation": "State observed during authoring; no wall-clock timestamp recorded because freshness of governance artefacts is tracked by commit."
   },
@@ -73,48 +98,412 @@
     "idNamespacePolicy": "Global, machine-readable artefact IDs MAY use the 'usf.' namespace (e.g. usf.schema-registry, usf.taxonomy-catalog, usf.vocabulary-catalog) because they may be consumed outside the repository context. The 'usf.' namespace on a global artefact ID is NOT a redundant-usf violation. The redundant-usf prohibition applies to repository path segments, package and implementation names, and unnecessary repeated local names and value IDs, never to deliberate globally scoped artefact-ID namespaces.",
     "lifecycleInPathRule": "Schema paths MUST NOT encode lifecycle state.",
     "historicalNamesRule": "Historical names from ../react MAY appear only as source references, aliases, or quoted evidence; never as canonical schema IDs, paths, or families.",
-    "forbiddenCanonicalTerms": ["v2", "legacy", "old", "new", "temp", "transitional", "redundant-usf"],
-    "allowedExceptions": ["historical source paths", "quoted source evidence", "source notes", "explicit historical aliases", "explanation of forbidden names", "the 'usf.' global artefact-ID namespace on machine-readable global identifiers (not a path segment or local value ID)"],
-    "notAllowed": ["canonical schema IDs using forbidden terms", "canonical schema paths using forbidden terms", "canonical schema families using forbidden terms", "new target architecture paths using forbidden terms"]
+    "forbiddenCanonicalTerms": [
+      "v2",
+      "legacy",
+      "old",
+      "new",
+      "temp",
+      "transitional",
+      "redundant-usf"
+    ],
+    "allowedExceptions": [
+      "historical source paths",
+      "quoted source evidence",
+      "source notes",
+      "explicit historical aliases",
+      "explanation of forbidden names",
+      "the 'usf.' global artefact-ID namespace on machine-readable global identifiers (not a path segment or local value ID)"
+    ],
+    "notAllowed": [
+      "canonical schema IDs using forbidden terms",
+      "canonical schema paths using forbidden terms",
+      "canonical schema families using forbidden terms",
+      "new target architecture paths using forbidden terms"
+    ]
   },
   "schemaClasses": [
-    {"id": "governance-schema", "sourceValueSet": "schema-classes", "description": "Shapes governance and constitutional-adjacent artefacts (e.g. AI governance records).", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "governance reviewers"], "validationPurpose": "Enforce that governance artefacts carry required references and AI-alignment metadata.", "aiGuidance": "High authority; never weaken governance constraints."},
-    {"id": "semantic-schema", "sourceValueSet": "schema-classes", "description": "Shapes rank-1 semantic contracts and capability/data semantics.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "implementers"], "validationPurpose": "Enforce that semantic definitions are complete and evidence-backed.", "aiGuidance": "Defines intended behaviour; code conforms to it."},
-    {"id": "evidence-schema", "sourceValueSet": "schema-classes", "description": "Shapes evidence envelopes across evidence kinds.", "authorityRole": "runtime-proof-evidence", "expectedConsumers": ["validators", "evidence collectors", "report generators"], "validationPurpose": "Enforce typed evidence with source, provider mode, environment, and freshness.", "aiGuidance": "Keep raw evidence; never overclaim readiness."},
-    {"id": "source-reference-schema", "sourceValueSet": "schema-classes", "description": "Shapes references to historical/current source evidence and source dispositions.", "authorityRole": "historical-source-evidence", "expectedConsumers": ["validators", "import tooling", "AI agents"], "validationPurpose": "Enforce that every source reference resolves and carries a disposition.", "aiGuidance": "Lineage only; never live authority."},
-    {"id": "registry-schema", "sourceValueSet": "schema-classes", "description": "Shapes registries and index/cross-reference artefacts.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents"], "validationPurpose": "Enforce registry structure and reference resolution.", "aiGuidance": "Indexes; does not assert implementation or proof."},
-    {"id": "taxonomy-schema", "sourceValueSet": "schema-classes", "description": "Shapes taxonomy catalogues and future taxonomy files.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents"], "validationPurpose": "Enforce taxonomy family/taxonomy structure and classification modes.", "aiGuidance": "Classifies; does not enumerate controlled values."},
-    {"id": "vocabulary-schema", "sourceValueSet": "schema-classes", "description": "Shapes vocabulary catalogues and future vocabulary files.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents"], "validationPurpose": "Enforce value-set structure, alias resolution, and forbidden-value rules.", "aiGuidance": "Source of exact allowed values."},
-    {"id": "adr-schema", "sourceValueSet": "schema-classes", "description": "Shapes ADRs.", "authorityRole": "adr", "expectedConsumers": ["validators", "AI agents", "decision reviewers"], "validationPurpose": "Enforce ADR references, invariants, forbidden-drift, and AI-alignment rules.", "aiGuidance": "Binding decisions; never generic prose."},
-    {"id": "validator-report-schema", "sourceValueSet": "schema-classes", "description": "Shapes validator reports (generated reports).", "authorityRole": "generated-report", "expectedConsumers": ["validators", "CI", "AI agents"], "validationPurpose": "Enforce severities, statuses, evidence references, and that unknown/stale are not pass.", "aiGuidance": "Lowest authority; references evidence; never canonical."},
-    {"id": "proof-schema", "sourceValueSet": "schema-classes", "description": "Shapes proof evidence records.", "authorityRole": "runtime-proof-evidence", "expectedConsumers": ["validators", "proof collectors"], "validationPurpose": "Enforce proof claim/execution/evidence consistency, provider mode, environment, and fail-closed on missing evidence.", "aiGuidance": "Evidence of fact; never relabel upward."},
-    {"id": "provider-schema", "sourceValueSet": "schema-classes", "description": "Shapes provider and provider-mode declarations.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents"], "validationPurpose": "Enforce provider mode honesty; prevent hermetic-mock satisfying live-external-provider.", "aiGuidance": "Record provider mode; never infer it."},
-    {"id": "environment-schema", "sourceValueSet": "schema-classes", "description": "Shapes environment-class declarations.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents"], "validationPurpose": "Enforce environment honesty; prevent production-shaped satisfying production-live.", "aiGuidance": "Keep environment distinct from provider mode."},
-    {"id": "command-schema", "sourceValueSet": "schema-classes", "description": "Shapes command artefacts (Make targets, scripts, CLI, proof/validation/import/build/runtime/report commands).", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "operators"], "validationPurpose": "Enforce purpose/inputs/outputs/environment scope/failure semantics.", "aiGuidance": "Commands are semantic assets, not incidental scripts."},
-    {"id": "configuration-schema", "sourceValueSet": "schema-classes", "description": "Shapes configuration artefacts (env vars, files, keys, secrets, provider/environment/proof/runtime/compose config).", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "operators"], "validationPurpose": "Enforce secret classification and provider/environment/proof relevance.", "aiGuidance": "Regenerate from manifests; never leak secret values."},
-    {"id": "interface-schema", "sourceValueSet": "schema-classes", "description": "Shapes interface contracts (API routes, commands, queries, event handlers, ports, adapters, internal/external contracts).", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "implementers"], "validationPurpose": "Enforce contract-first interfaces; support runtime drift detection.", "aiGuidance": "Do not infer interfaces from handlers when a contract exists."},
-    {"id": "event-schema", "sourceValueSet": "schema-classes", "description": "Shapes event/message contracts.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "implementers"], "validationPurpose": "Enforce schema, idempotency, ordering, DLQ, retention.", "aiGuidance": "Define the event contract before emitting an event."},
-    {"id": "workflow-schema", "sourceValueSet": "schema-classes", "description": "Shapes workflow contracts and cross-capability interactions.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "implementers"], "validationPurpose": "Enforce ordering, consistency, compensation, and failure paths.", "aiGuidance": "Declare compensation and failure paths explicitly."},
-    {"id": "observability-schema", "sourceValueSet": "schema-classes", "description": "Shapes observability signal definitions.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "operators"], "validationPurpose": "Enforce controlled observability vocabulary and coverage.", "aiGuidance": "Removal requires semantic review, not a refactor."},
-    {"id": "audit-schema", "sourceValueSet": "schema-classes", "description": "Shapes audit event definitions.", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "security reviewers"], "validationPurpose": "Enforce audit coverage for security-sensitive and state-changing actions.", "aiGuidance": "Every mutating/privileged action needs a defined audit semantic."},
-    {"id": "ui-semantic-schema", "sourceValueSet": "schema-classes", "description": "Shapes UI semantic models (behaviour, not visual design).", "authorityRole": "semantic-definition", "expectedConsumers": ["validators", "AI agents", "UI generators"], "validationPurpose": "Enforce journeys/states/validation/permissions/accessibility mapped to capabilities and proofs.", "aiGuidance": "Visual redesign is not semantic deletion."},
-    {"id": "import-manifest-schema", "sourceValueSet": "schema-classes", "description": "Shapes controlled import manifests from ../react.", "authorityRole": "historical-source-evidence", "expectedConsumers": ["validators", "import tooling", "AI agents"], "validationPurpose": "Enforce that every imported source element has a disposition; prevent silent source loss.", "aiGuidance": "No source element disappears without a disposition."}
+    {
+      "id": "governance-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes governance and constitutional-adjacent artefacts (e.g. AI governance records).",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "governance reviewers"
+      ],
+      "validationPurpose": "Enforce that governance artefacts carry required references and AI-alignment metadata.",
+      "aiGuidance": "High authority; never weaken governance constraints."
+    },
+    {
+      "id": "semantic-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes rank-1 semantic contracts and capability/data semantics.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationPurpose": "Enforce that semantic definitions are complete and evidence-backed.",
+      "aiGuidance": "Defines intended behaviour; code conforms to it."
+    },
+    {
+      "id": "evidence-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes evidence envelopes across evidence kinds.",
+      "authorityRole": "runtime-proof-evidence",
+      "expectedConsumers": [
+        "validators",
+        "evidence collectors",
+        "report generators"
+      ],
+      "validationPurpose": "Enforce typed evidence with source, provider mode, environment, and freshness.",
+      "aiGuidance": "Keep raw evidence; never overclaim readiness."
+    },
+    {
+      "id": "source-reference-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes references to historical/current source evidence and source dispositions.",
+      "authorityRole": "historical-source-evidence",
+      "expectedConsumers": [
+        "validators",
+        "import tooling",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce that every source reference resolves and carries a disposition.",
+      "aiGuidance": "Lineage only; never live authority."
+    },
+    {
+      "id": "registry-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes registries and index/cross-reference artefacts.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce registry structure and reference resolution.",
+      "aiGuidance": "Indexes; does not assert implementation or proof."
+    },
+    {
+      "id": "taxonomy-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes taxonomy catalogues and future taxonomy files.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce taxonomy family/taxonomy structure and classification modes.",
+      "aiGuidance": "Classifies; does not enumerate controlled values."
+    },
+    {
+      "id": "vocabulary-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes vocabulary catalogues and future vocabulary files.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce value-set structure, alias resolution, and forbidden-value rules.",
+      "aiGuidance": "Source of exact allowed values."
+    },
+    {
+      "id": "adr-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes ADRs.",
+      "authorityRole": "adr",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "decision reviewers"
+      ],
+      "validationPurpose": "Enforce ADR references, invariants, forbidden-drift, and AI-alignment rules.",
+      "aiGuidance": "Binding decisions; never generic prose."
+    },
+    {
+      "id": "validator-report-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes validator reports (generated reports).",
+      "authorityRole": "generated-report",
+      "expectedConsumers": [
+        "validators",
+        "CI",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce severities, statuses, evidence references, and that unknown/stale are not pass.",
+      "aiGuidance": "Lowest authority; references evidence; never canonical."
+    },
+    {
+      "id": "proof-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes proof evidence records.",
+      "authorityRole": "runtime-proof-evidence",
+      "expectedConsumers": [
+        "validators",
+        "proof collectors"
+      ],
+      "validationPurpose": "Enforce proof claim/execution/evidence consistency, provider mode, environment, and fail-closed on missing evidence.",
+      "aiGuidance": "Evidence of fact; never relabel upward."
+    },
+    {
+      "id": "provider-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes provider and provider-mode declarations.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce provider mode honesty; prevent hermetic-mock satisfying live-external-provider.",
+      "aiGuidance": "Record provider mode; never infer it."
+    },
+    {
+      "id": "environment-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes environment-class declarations.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce environment honesty; prevent production-shaped satisfying production-live.",
+      "aiGuidance": "Keep environment distinct from provider mode."
+    },
+    {
+      "id": "command-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes command artefacts (Make targets, scripts, CLI, proof/validation/import/build/runtime/report commands).",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "operators"
+      ],
+      "validationPurpose": "Enforce purpose/inputs/outputs/environment scope/failure semantics.",
+      "aiGuidance": "Commands are semantic assets, not incidental scripts."
+    },
+    {
+      "id": "configuration-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes configuration artefacts (env vars, files, keys, secrets, provider/environment/proof/runtime/compose config).",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "operators"
+      ],
+      "validationPurpose": "Enforce secret classification and provider/environment/proof relevance.",
+      "aiGuidance": "Regenerate from manifests; never leak secret values."
+    },
+    {
+      "id": "interface-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes interface contracts (API routes, commands, queries, event handlers, ports, adapters, internal/external contracts).",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationPurpose": "Enforce contract-first interfaces; support runtime drift detection.",
+      "aiGuidance": "Do not infer interfaces from handlers when a contract exists."
+    },
+    {
+      "id": "event-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes event/message contracts.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationPurpose": "Enforce schema, idempotency, ordering, DLQ, retention.",
+      "aiGuidance": "Define the event contract before emitting an event."
+    },
+    {
+      "id": "workflow-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes workflow contracts and cross-capability interactions.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationPurpose": "Enforce ordering, consistency, compensation, and failure paths.",
+      "aiGuidance": "Declare compensation and failure paths explicitly."
+    },
+    {
+      "id": "observability-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes observability signal definitions.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "operators"
+      ],
+      "validationPurpose": "Enforce controlled observability vocabulary and coverage.",
+      "aiGuidance": "Removal requires semantic review, not a refactor."
+    },
+    {
+      "id": "audit-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes audit event definitions.",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "security reviewers"
+      ],
+      "validationPurpose": "Enforce audit coverage for security-sensitive and state-changing actions.",
+      "aiGuidance": "Every mutating/privileged action needs a defined audit semantic."
+    },
+    {
+      "id": "ui-semantic-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes UI semantic models (behaviour, not visual design).",
+      "authorityRole": "semantic-definition",
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "UI generators"
+      ],
+      "validationPurpose": "Enforce journeys/states/validation/permissions/accessibility mapped to capabilities and proofs.",
+      "aiGuidance": "Visual redesign is not semantic deletion."
+    },
+    {
+      "id": "import-manifest-schema",
+      "sourceValueSet": "schema-classes",
+      "description": "Shapes controlled import manifests from ../react.",
+      "authorityRole": "historical-source-evidence",
+      "expectedConsumers": [
+        "validators",
+        "import tooling",
+        "AI agents"
+      ],
+      "validationPurpose": "Enforce that every imported source element has a disposition; prevent silent source loss.",
+      "aiGuidance": "No source element disappears without a disposition."
+    }
   ],
   "schemaLifecycleStates": [
-    {"id": "proposed", "sourceValueSet": "schema-lifecycle-states", "meaning": "The schema idea is identified but not yet committed for creation.", "allowedUse": "Discussion and planning.", "validatorExpectation": "Not enforced.", "aiGuidance": "Do not reference as if available.", "referencesAllowed": true, "schemaFileRequired": false},
-    {"id": "planned", "sourceValueSet": "schema-lifecycle-states", "meaning": "A registry entry exists; the schema file may not exist yet.", "allowedUse": "May be referenced as planned.", "validatorExpectation": "MUST NOT be enforced as if present.", "aiGuidance": "Reference as planned; do not validate against it.", "referencesAllowed": true, "schemaFileRequired": false},
-    {"id": "draft", "sourceValueSet": "schema-lifecycle-states", "meaning": "The schema file exists but is not yet enforcing.", "allowedUse": "Trial validation.", "validatorExpectation": "Advisory until promoted.", "aiGuidance": "Validate cautiously; expect change.", "referencesAllowed": true, "schemaFileRequired": true},
-    {"id": "active", "sourceValueSet": "schema-lifecycle-states", "meaning": "The schema file exists and is validator-checkable and enforcing.", "allowedUse": "Authoritative validation.", "validatorExpectation": "Enforced; fail closed on violation.", "aiGuidance": "Mark active only when the file exists and validators can check it.", "referencesAllowed": true, "schemaFileRequired": true},
-    {"id": "deprecated", "sourceValueSet": "schema-lifecycle-states", "meaning": "Superseded; retained for compatibility.", "allowedUse": "Read-only; prefer replacement.", "validatorExpectation": "Flag usage; suggest replacement.", "aiGuidance": "Migrate to the replacement; replacement metadata required.", "referencesAllowed": true, "schemaFileRequired": true},
-    {"id": "retired", "sourceValueSet": "schema-lifecycle-states", "meaning": "No longer in use; retained only as lineage.", "allowedUse": "None for new work.", "validatorExpectation": "Reject for new artefacts.", "aiGuidance": "Do not validate against; disposition required.", "referencesAllowed": false, "schemaFileRequired": false},
-    {"id": "replaced", "sourceValueSet": "schema-lifecycle-states", "meaning": "Superseded by a specific successor schema.", "allowedUse": "Follow replacedBy.", "validatorExpectation": "Resolve to successor.", "aiGuidance": "Replacement metadata required.", "referencesAllowed": true, "schemaFileRequired": false},
-    {"id": "deferred", "sourceValueSet": "schema-lifecycle-states", "meaning": "Intentionally not created yet.", "allowedUse": "Reference as deferred only.", "validatorExpectation": "Not enforced until authored.", "aiGuidance": "Record dependency; do not invent.", "referencesAllowed": true, "schemaFileRequired": false}
+    {
+      "id": "proposed",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "The schema idea is identified but not yet committed for creation.",
+      "allowedUse": "Discussion and planning.",
+      "validatorExpectation": "Not enforced.",
+      "aiGuidance": "Do not reference as if available.",
+      "referencesAllowed": true,
+      "schemaFileRequired": false
+    },
+    {
+      "id": "planned",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "A registry entry exists; the schema file may not exist yet.",
+      "allowedUse": "May be referenced as planned.",
+      "validatorExpectation": "MUST NOT be enforced as if present.",
+      "aiGuidance": "Reference as planned; do not validate against it.",
+      "referencesAllowed": true,
+      "schemaFileRequired": false
+    },
+    {
+      "id": "draft",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "The schema file exists but is not yet enforcing.",
+      "allowedUse": "Trial validation.",
+      "validatorExpectation": "Advisory until promoted.",
+      "aiGuidance": "Validate cautiously; expect change.",
+      "referencesAllowed": true,
+      "schemaFileRequired": true
+    },
+    {
+      "id": "active",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "The schema file exists and is validator-checkable and enforcing.",
+      "allowedUse": "Authoritative validation.",
+      "validatorExpectation": "Enforced; fail closed on violation.",
+      "aiGuidance": "Mark active only when the file exists and validators can check it.",
+      "referencesAllowed": true,
+      "schemaFileRequired": true
+    },
+    {
+      "id": "deprecated",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "Superseded; retained for compatibility.",
+      "allowedUse": "Read-only; prefer replacement.",
+      "validatorExpectation": "Flag usage; suggest replacement.",
+      "aiGuidance": "Migrate to the replacement; replacement metadata required.",
+      "referencesAllowed": true,
+      "schemaFileRequired": true
+    },
+    {
+      "id": "retired",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "No longer in use; retained only as lineage.",
+      "allowedUse": "None for new work.",
+      "validatorExpectation": "Reject for new artefacts.",
+      "aiGuidance": "Do not validate against; disposition required.",
+      "referencesAllowed": false,
+      "schemaFileRequired": false
+    },
+    {
+      "id": "replaced",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "Superseded by a specific successor schema.",
+      "allowedUse": "Follow replacedBy.",
+      "validatorExpectation": "Resolve to successor.",
+      "aiGuidance": "Replacement metadata required.",
+      "referencesAllowed": true,
+      "schemaFileRequired": false
+    },
+    {
+      "id": "deferred",
+      "sourceValueSet": "schema-lifecycle-states",
+      "meaning": "Intentionally not created yet.",
+      "allowedUse": "Reference as deferred only.",
+      "validatorExpectation": "Not enforced until authored.",
+      "aiGuidance": "Record dependency; do not invent.",
+      "referencesAllowed": true,
+      "schemaFileRequired": false
+    }
   ],
   "commonRequirements": {
     "note": "Requirements every future schema SHOULD follow unless its registry entry records an explicit exception. The common schema is not created here.",
-    "requiredJsonSchemaMetadata": ["valid JSON Schema", "explicit $schema", "explicit $id", "title", "description", "type", "required", "properties", "additionalProperties policy", "version metadata"],
-    "requiredGovernanceMetadata": ["authority metadata (authority-levels)", "lifecycle metadata (lifecycle-states or schema-lifecycle-states)", "ontology concept references"],
-    "conditionalReferences": ["taxonomy references where applicable", "vocabulary references where applicable", "source evidence references where applicable", "ADR references where applicable", "validator references where applicable", "proof/evidence references where applicable", "provider mode fields where provider-dependent", "environment fields where environment-dependent", "staleness/freshness fields where evidence-dependent", "generated report source references where generated"],
+    "requiredJsonSchemaMetadata": [
+      "valid JSON Schema",
+      "explicit $schema",
+      "explicit $id",
+      "title",
+      "description",
+      "type",
+      "required",
+      "properties",
+      "additionalProperties policy",
+      "version metadata"
+    ],
+    "requiredGovernanceMetadata": [
+      "authority metadata (authority-levels)",
+      "lifecycle metadata (lifecycle-states or schema-lifecycle-states)",
+      "ontology concept references"
+    ],
+    "conditionalReferences": [
+      "taxonomy references where applicable",
+      "vocabulary references where applicable",
+      "source evidence references where applicable",
+      "ADR references where applicable",
+      "validator references where applicable",
+      "proof/evidence references where applicable",
+      "provider mode fields where provider-dependent",
+      "environment fields where environment-dependent",
+      "staleness/freshness fields where evidence-dependent",
+      "generated report source references where generated"
+    ],
     "prohibitions": [
       "No silent free-text categories where controlled vocabulary is available.",
       "No schema enum may contradict the vocabulary catalogue.",
@@ -129,29 +518,335 @@
   "commonEnvelope": {
     "note": "A standard conceptual metadata pattern for governed artefacts. Not every schema requires every field; deviations MUST be explicit in the relevant schema entry. Source-lineage fields are mandatory for artefacts derived from ../react; providerMode and environment are mandatory where evidence/proof/provider claims depend on them.",
     "fields": [
-      {"field": "id", "purpose": "Stable unique identity.", "expectedTypeConceptual": "string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Unique within scope; stable.", "aiGuidance": "Never reuse or recycle ids."},
-      {"field": "kind", "purpose": "Artefact kind.", "expectedTypeConceptual": "enum string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": ["artefact-classification"], "relatedVocabularyValueSets": ["artefact-kinds"], "validatorExpectation": "Value from artefact-kinds.", "aiGuidance": "Use the canonical artefact kind."},
-      {"field": "title", "purpose": "Human-readable name.", "expectedTypeConceptual": "string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Present.", "aiGuidance": "Concise and stable."},
-      {"field": "description", "purpose": "What the artefact is.", "expectedTypeConceptual": "string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Present.", "aiGuidance": "No marketing language."},
-      {"field": "status", "purpose": "Composite status (e.g. draft-foundational).", "expectedTypeConceptual": "string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": ["lifecycle-states"], "validatorExpectation": "Lifecycle component from lifecycle-states.", "aiGuidance": "Do not overclaim readiness in status."},
-      {"field": "version", "purpose": "Artefact version.", "expectedTypeConceptual": "semver string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Monotonic.", "aiGuidance": "Bump on semantic change."},
-      {"field": "authorityLevel", "purpose": "Authority tier of the artefact.", "expectedTypeConceptual": "enum string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": ["authority-classification"], "relatedVocabularyValueSets": ["authority-levels"], "validatorExpectation": "Value from authority-levels.", "aiGuidance": "Never override a higher authority with a lower one."},
-      {"field": "lifecycleState", "purpose": "Lifecycle state.", "expectedTypeConceptual": "enum string", "requiredByDefault": true, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": ["lifecycle-states", "schema-lifecycle-states"], "validatorExpectation": "Value from lifecycle-states (or schema-lifecycle-states for schemas).", "aiGuidance": "Active requires the artefact to exist and be checkable."},
-      {"field": "ontologyConcepts", "purpose": "Governed ontology concepts.", "expectedTypeConceptual": "array of concept names", "requiredByDefault": true, "relatedOntologyConcepts": ["Registry"], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Resolve each value to a named ontology concept.", "aiGuidance": "Never invent a concept."},
-      {"field": "taxonomyRefs", "purpose": "Governing taxonomy classifications.", "expectedTypeConceptual": "array of taxonomy ids", "requiredByDefault": false, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Each value contained in taxonomyRefs must resolve to a taxonomy catalogue id; this field may reference any taxonomy defined in the taxonomy catalogue.", "aiGuidance": "Classify before naming."},
-      {"field": "vocabularyRefs", "purpose": "Controlled value sets used.", "expectedTypeConceptual": "array of value-set ids", "requiredByDefault": false, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Each value contained in vocabularyRefs must resolve to a vocabulary value-set id; this field may reference any value set defined in the vocabulary catalogue.", "aiGuidance": "Reference value sets; do not duplicate enums."},
-      {"field": "sourceRefs", "purpose": "References to source evidence.", "expectedTypeConceptual": "array of source references", "requiredByDefault": "conditional: mandatory if derived from ../react", "relatedOntologyConcepts": ["Source Reference"], "relatedTaxonomyRefs": ["source-evidence-classification", "source-role-classification"], "relatedVocabularyValueSets": ["source-kinds", "source-roles"], "validatorExpectation": "Resolve; carry disposition.", "aiGuidance": "Preserve lineage."},
-      {"field": "adrRefs", "purpose": "Governing ADRs.", "expectedTypeConceptual": "array of ADR ids", "requiredByDefault": false, "relatedOntologyConcepts": ["ADR"], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": ["artefact-kinds"], "validatorExpectation": "Resolve to ADR corpus.", "aiGuidance": "Behaviour changes need a governing ADR."},
-      {"field": "validatorRefs", "purpose": "Enforcing validator rules.", "expectedTypeConceptual": "array of validator ids", "requiredByDefault": false, "relatedOntologyConcepts": ["Validator"], "relatedTaxonomyRefs": ["validation-reporting-classification"], "relatedVocabularyValueSets": [], "validatorExpectation": "Resolve once validators exist.", "aiGuidance": "Validators enforce; they do not define semantics."},
-      {"field": "proofRefs", "purpose": "Backing proofs.", "expectedTypeConceptual": "array of proof references", "requiredByDefault": false, "relatedOntologyConcepts": ["Proof", "Proof Level"], "relatedTaxonomyRefs": ["proof-classification"], "relatedVocabularyValueSets": ["proof-levels"], "validatorExpectation": "Claimed level <= observed.", "aiGuidance": "Never relabel proof upward."},
-      {"field": "evidenceRefs", "purpose": "Supporting evidence.", "expectedTypeConceptual": "array of evidence references", "requiredByDefault": false, "relatedOntologyConcepts": ["Evidence"], "relatedTaxonomyRefs": ["evidence-classification"], "relatedVocabularyValueSets": ["evidence-kinds"], "validatorExpectation": "Resolve; fresh.", "aiGuidance": "Missing evidence fails closed."},
-      {"field": "providerMode", "purpose": "Provider class used.", "expectedTypeConceptual": "enum string", "requiredByDefault": "conditional: mandatory where provider-dependent", "relatedOntologyConcepts": ["Provider Mode"], "relatedTaxonomyRefs": ["provider-classification"], "relatedVocabularyValueSets": ["provider-modes"], "validatorExpectation": "Value from provider-modes; hermetic-mock not live.", "aiGuidance": "Record, never infer."},
-      {"field": "environment", "purpose": "Execution environment.", "expectedTypeConceptual": "enum string", "requiredByDefault": "conditional: mandatory where environment-dependent", "relatedOntologyConcepts": ["Environment"], "relatedTaxonomyRefs": ["environment-classification"], "relatedVocabularyValueSets": ["environment-classes"], "validatorExpectation": "Value from environment-classes; production-shaped not production-live.", "aiGuidance": "Keep distinct from provider mode."},
-      {"field": "createdFrom", "purpose": "Source element(s) the artefact derives from.", "expectedTypeConceptual": "array of source references", "requiredByDefault": "conditional: mandatory if derived from ../react", "relatedOntologyConcepts": ["Source Reference", "Disposition"], "relatedTaxonomyRefs": ["source-evidence-classification"], "relatedVocabularyValueSets": ["source-kinds", "disposition-values"], "validatorExpectation": "Resolve; carry disposition.", "aiGuidance": "Source path does not dictate target path."},
-      {"field": "disposition", "purpose": "Treatment of the source element.", "expectedTypeConceptual": "enum string", "requiredByDefault": "conditional: mandatory for imported source", "relatedOntologyConcepts": ["Disposition"], "relatedTaxonomyRefs": ["source-role-classification"], "relatedVocabularyValueSets": ["disposition-values"], "validatorExpectation": "Value from disposition-values.", "aiGuidance": "No element disappears without a disposition."},
-      {"field": "rationale", "purpose": "Why the artefact/decision exists.", "expectedTypeConceptual": "string", "requiredByDefault": false, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Present for decisions.", "aiGuidance": "Evidence-based, not vibes."},
-      {"field": "driftPolicy", "purpose": "What co-updates a change requires.", "expectedTypeConceptual": "string or object", "requiredByDefault": false, "relatedOntologyConcepts": [], "relatedTaxonomyRefs": [], "relatedVocabularyValueSets": [], "validatorExpectation": "Coupled updates enforced.", "aiGuidance": "Behaviour change updates semantics+ADR+proof+validators."},
-      {"field": "aiGuidance", "purpose": "Constraints for AI agents.", "expectedTypeConceptual": "string or array", "requiredByDefault": false, "relatedOntologyConcepts": ["AI Agent"], "relatedTaxonomyRefs": ["ai-governance-classification"], "relatedVocabularyValueSets": ["ai-governance-kinds"], "validatorExpectation": "Present for high-risk artefacts.", "aiGuidance": "Stop or fail on unresolved authority conflict."}
+      {
+        "field": "id",
+        "purpose": "Stable unique identity.",
+        "expectedTypeConceptual": "string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Unique within scope; stable.",
+        "aiGuidance": "Never reuse or recycle ids."
+      },
+      {
+        "field": "kind",
+        "purpose": "Artefact kind.",
+        "expectedTypeConceptual": "enum string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [
+          "artefact-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "artefact-kinds"
+        ],
+        "validatorExpectation": "Value from artefact-kinds.",
+        "aiGuidance": "Use the canonical artefact kind."
+      },
+      {
+        "field": "title",
+        "purpose": "Human-readable name.",
+        "expectedTypeConceptual": "string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Present.",
+        "aiGuidance": "Concise and stable."
+      },
+      {
+        "field": "description",
+        "purpose": "What the artefact is.",
+        "expectedTypeConceptual": "string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Present.",
+        "aiGuidance": "No marketing language."
+      },
+      {
+        "field": "status",
+        "purpose": "Composite status (e.g. draft-foundational).",
+        "expectedTypeConceptual": "string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [
+          "lifecycle-states"
+        ],
+        "validatorExpectation": "Lifecycle component from lifecycle-states.",
+        "aiGuidance": "Do not overclaim readiness in status."
+      },
+      {
+        "field": "version",
+        "purpose": "Artefact version.",
+        "expectedTypeConceptual": "semver string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Monotonic.",
+        "aiGuidance": "Bump on semantic change."
+      },
+      {
+        "field": "authorityLevel",
+        "purpose": "Authority tier of the artefact.",
+        "expectedTypeConceptual": "enum string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [
+          "authority-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "authority-levels"
+        ],
+        "validatorExpectation": "Value from authority-levels.",
+        "aiGuidance": "Never override a higher authority with a lower one."
+      },
+      {
+        "field": "lifecycleState",
+        "purpose": "Lifecycle state.",
+        "expectedTypeConceptual": "enum string",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [
+          "lifecycle-states",
+          "schema-lifecycle-states"
+        ],
+        "validatorExpectation": "Value from lifecycle-states (or schema-lifecycle-states for schemas).",
+        "aiGuidance": "Active requires the artefact to exist and be checkable."
+      },
+      {
+        "field": "ontologyConcepts",
+        "purpose": "Governed ontology concepts.",
+        "expectedTypeConceptual": "array of concept names",
+        "requiredByDefault": true,
+        "relatedOntologyConcepts": [
+          "Registry"
+        ],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Resolve each value to a named ontology concept.",
+        "aiGuidance": "Never invent a concept."
+      },
+      {
+        "field": "taxonomyRefs",
+        "purpose": "Governing taxonomy classifications.",
+        "expectedTypeConceptual": "array of taxonomy ids",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Each value contained in taxonomyRefs must resolve to a taxonomy catalogue id; this field may reference any taxonomy defined in the taxonomy catalogue.",
+        "aiGuidance": "Classify before naming."
+      },
+      {
+        "field": "vocabularyRefs",
+        "purpose": "Controlled value sets used.",
+        "expectedTypeConceptual": "array of value-set ids",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Each value contained in vocabularyRefs must resolve to a vocabulary value-set id; this field may reference any value set defined in the vocabulary catalogue.",
+        "aiGuidance": "Reference value sets; do not duplicate enums."
+      },
+      {
+        "field": "sourceRefs",
+        "purpose": "References to source evidence.",
+        "expectedTypeConceptual": "array of source references",
+        "requiredByDefault": "conditional: mandatory if derived from ../react",
+        "relatedOntologyConcepts": [
+          "Source Reference"
+        ],
+        "relatedTaxonomyRefs": [
+          "source-evidence-classification",
+          "source-role-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "source-kinds",
+          "source-roles"
+        ],
+        "validatorExpectation": "Resolve; carry disposition.",
+        "aiGuidance": "Preserve lineage."
+      },
+      {
+        "field": "adrRefs",
+        "purpose": "Governing ADRs.",
+        "expectedTypeConceptual": "array of ADR ids",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [
+          "ADR"
+        ],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [
+          "artefact-kinds"
+        ],
+        "validatorExpectation": "Resolve to ADR corpus.",
+        "aiGuidance": "Behaviour changes need a governing ADR."
+      },
+      {
+        "field": "validatorRefs",
+        "purpose": "Enforcing validator rules.",
+        "expectedTypeConceptual": "array of validator ids",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [
+          "Validator"
+        ],
+        "relatedTaxonomyRefs": [
+          "validation-reporting-classification"
+        ],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Resolve once validators exist.",
+        "aiGuidance": "Validators enforce; they do not define semantics."
+      },
+      {
+        "field": "proofRefs",
+        "purpose": "Backing proofs.",
+        "expectedTypeConceptual": "array of proof references",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [
+          "Proof",
+          "Proof Level"
+        ],
+        "relatedTaxonomyRefs": [
+          "proof-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "proof-levels"
+        ],
+        "validatorExpectation": "Claimed level <= observed.",
+        "aiGuidance": "Never relabel proof upward."
+      },
+      {
+        "field": "evidenceRefs",
+        "purpose": "Supporting evidence.",
+        "expectedTypeConceptual": "array of evidence references",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [
+          "Evidence"
+        ],
+        "relatedTaxonomyRefs": [
+          "evidence-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "evidence-kinds"
+        ],
+        "validatorExpectation": "Resolve; fresh.",
+        "aiGuidance": "Missing evidence fails closed."
+      },
+      {
+        "field": "providerMode",
+        "purpose": "Provider class used.",
+        "expectedTypeConceptual": "enum string",
+        "requiredByDefault": "conditional: mandatory where provider-dependent",
+        "relatedOntologyConcepts": [
+          "Provider Mode"
+        ],
+        "relatedTaxonomyRefs": [
+          "provider-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "provider-modes"
+        ],
+        "validatorExpectation": "Value from provider-modes; hermetic-mock not live.",
+        "aiGuidance": "Record, never infer."
+      },
+      {
+        "field": "environment",
+        "purpose": "Execution environment.",
+        "expectedTypeConceptual": "enum string",
+        "requiredByDefault": "conditional: mandatory where environment-dependent",
+        "relatedOntologyConcepts": [
+          "Environment"
+        ],
+        "relatedTaxonomyRefs": [
+          "environment-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "environment-classes"
+        ],
+        "validatorExpectation": "Value from environment-classes; production-shaped not production-live.",
+        "aiGuidance": "Keep distinct from provider mode."
+      },
+      {
+        "field": "createdFrom",
+        "purpose": "Source element(s) the artefact derives from.",
+        "expectedTypeConceptual": "array of source references",
+        "requiredByDefault": "conditional: mandatory if derived from ../react",
+        "relatedOntologyConcepts": [
+          "Source Reference",
+          "Disposition"
+        ],
+        "relatedTaxonomyRefs": [
+          "source-evidence-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "source-kinds",
+          "disposition-values"
+        ],
+        "validatorExpectation": "Resolve; carry disposition.",
+        "aiGuidance": "Source path does not dictate target path."
+      },
+      {
+        "field": "disposition",
+        "purpose": "Treatment of the source element.",
+        "expectedTypeConceptual": "enum string",
+        "requiredByDefault": "conditional: mandatory for imported source",
+        "relatedOntologyConcepts": [
+          "Disposition"
+        ],
+        "relatedTaxonomyRefs": [
+          "source-role-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "disposition-values"
+        ],
+        "validatorExpectation": "Value from disposition-values.",
+        "aiGuidance": "No element disappears without a disposition."
+      },
+      {
+        "field": "rationale",
+        "purpose": "Why the artefact/decision exists.",
+        "expectedTypeConceptual": "string",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Present for decisions.",
+        "aiGuidance": "Evidence-based, not vibes."
+      },
+      {
+        "field": "driftPolicy",
+        "purpose": "What co-updates a change requires.",
+        "expectedTypeConceptual": "string or object",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [],
+        "relatedTaxonomyRefs": [],
+        "relatedVocabularyValueSets": [],
+        "validatorExpectation": "Coupled updates enforced.",
+        "aiGuidance": "Behaviour change updates semantics+ADR+proof+validators."
+      },
+      {
+        "field": "aiGuidance",
+        "purpose": "Constraints for AI agents.",
+        "expectedTypeConceptual": "string or array",
+        "requiredByDefault": false,
+        "relatedOntologyConcepts": [
+          "AI Agent"
+        ],
+        "relatedTaxonomyRefs": [
+          "ai-governance-classification"
+        ],
+        "relatedVocabularyValueSets": [
+          "ai-governance-kinds"
+        ],
+        "validatorExpectation": "Present for high-risk artefacts.",
+        "aiGuidance": "Stop or fail on unresolved authority conflict."
+      }
     ],
     "rules": [
       "Not every schema will require every common envelope field.",
@@ -163,83 +858,1839 @@
     ]
   },
   "schemaFamilies": [
-    {"id": "foundation-governance", "purpose": "Constitutional and governance artefacts that establish authority and identity.", "relatedOntologyConcepts": ["Foundation", "ADR", "Validator", "AI Agent"], "relatedTaxonomyFamilies": ["authority-and-governance"], "relatedTaxonomies": ["authority-classification", "artefact-classification"], "relatedVocabularyValueSets": ["authority-levels", "artefact-kinds"], "expectedSchemas": [], "reactSourceLearnings": ["../react treats validators as enforcement, proofs as evidence, code as implementation of canonical semantic artefacts."], "futureValidatorExpectations": "Governance artefacts carry authority and lineage metadata.", "aiGuidance": "Constitutional docs are currently markdown-governed; a governance schema is deferred. Never weaken constitutional constraints."},
-    {"id": "ontology-and-semantics", "purpose": "Rank-1 semantic contracts and capability semantics.", "relatedOntologyConcepts": ["Capability", "Semantic Contract", "Port", "Interface", "Configuration", "Data Model"], "relatedTaxonomyFamilies": ["semantic-architecture"], "relatedTaxonomies": ["semantic-architecture-classification"], "relatedVocabularyValueSets": ["authority-levels", "lifecycle-states", "capability-domains"], "expectedSchemas": ["semantic-contract.schema.json"], "reactSourceLearnings": ["../react v1-capability-closure.json (75 capabilities, 10 facets) and capability-*.json templates ground semantic contracts."], "futureValidatorExpectations": "A capability is proven only when every facet cites authoritative evidence.", "aiGuidance": "Read semantics before source; never invent a facet."},
-    {"id": "taxonomy-and-vocabulary", "purpose": "Classification systems and controlled value sets.", "relatedOntologyConcepts": ["Registry"], "relatedTaxonomyFamilies": ["authority-and-governance"], "relatedTaxonomies": ["artefact-classification"], "relatedVocabularyValueSets": ["artefact-kinds", "classification-modes", "lifecycle-states"], "expectedSchemas": ["taxonomy.schema.json", "vocabulary.schema.json"], "reactSourceLearnings": ["../react validator normalises no aliases and fails closed; USF records aliases explicitly so normalisation is controlled."], "futureValidatorExpectations": "Taxonomy classification modes and vocabulary aliases validate against their schemas.", "aiGuidance": "Taxonomy classifies; vocabulary enumerates; do not collapse them."},
-    {"id": "registry", "purpose": "Registries and index/cross-reference artefacts.", "relatedOntologyConcepts": ["Registry"], "relatedTaxonomyFamilies": ["authority-and-governance"], "relatedTaxonomies": ["artefact-classification"], "relatedVocabularyValueSets": ["artefact-kinds", "schema-classes", "schema-lifecycle-states", "authority-levels"], "expectedSchemas": ["schema-registry.schema.json"], "reactSourceLearnings": ["../react universal-service-foundation-registry.json is data-only and asserts no implementation; registries index, they do not prove."], "futureValidatorExpectations": "The registry validates against schema-registry.schema.json (self-validation).", "aiGuidance": "Registers before referencing; indexing is not assertion."},
-    {"id": "source-lineage", "purpose": "References to historical and current source evidence.", "relatedOntologyConcepts": ["Source Reference", "Disposition", "Evidence"], "relatedTaxonomyFamilies": ["source-lineage"], "relatedTaxonomies": ["source-evidence-classification", "source-role-classification"], "relatedVocabularyValueSets": ["source-kinds", "source-roles", "disposition-values"], "expectedSchemas": ["source-reference.schema.json"], "reactSourceLearnings": ["../react v1-file-inventory.json (~1673 files) and v1-to-v2-path-map.json show every source element must be mapped; nothing disappears without a disposition."], "futureValidatorExpectations": "Every source reference resolves and carries a disposition.", "aiGuidance": "Classify as evidence before import; never treat source as future authority."},
-    {"id": "evidence-and-proof", "purpose": "Evidence envelopes and proof evidence.", "relatedOntologyConcepts": ["Evidence", "Proof", "Proof Level", "Generated Report"], "relatedTaxonomyFamilies": ["evidence-and-proof"], "relatedTaxonomies": ["evidence-classification", "proof-classification"], "relatedVocabularyValueSets": ["evidence-kinds", "proof-levels", "provider-modes", "environment-classes", "report-statuses"], "expectedSchemas": ["evidence-envelope.schema.json", "proof-evidence.schema.json"], "reactSourceLearnings": ["../react capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4) and the 172 proof-evidence records: emitted evidence preserved through collection; missing evidence fails closed; claimed <= observed."], "futureValidatorExpectations": "Proof fails closed on missing emitted/collected evidence; readiness does not exceed observed evidence.", "aiGuidance": "Proof is evidence of fact, not a definition of intent."},
-    {"id": "provider-and-environment", "purpose": "Provider mode and environment declarations as separate dimensions.", "relatedOntologyConcepts": ["Provider", "Provider Mode", "Environment", "Adapter", "Port"], "relatedTaxonomyFamilies": ["provider-and-environment"], "relatedTaxonomies": ["provider-classification", "environment-classification"], "relatedVocabularyValueSets": ["provider-modes", "environment-classes"], "expectedSchemas": ["provider-mode.schema.json", "environment.schema.json"], "reactSourceLearnings": ["../react provider classes and USF_PROVIDER_MODE; e2e profiles split hermetic (internal/identity) from live (external/prod); environment-readiness-gates forbid mocks in prod."], "futureValidatorExpectations": "hermetic-mock cannot satisfy live-external-provider; production-shaped cannot satisfy production-live.", "aiGuidance": "Never infer a stronger provider mode or environment than the substrate used."},
-    {"id": "command-and-configuration", "purpose": "Commands and configuration as governed semantic assets.", "relatedOntologyConcepts": ["Command", "Configuration"], "relatedTaxonomyFamilies": ["command-and-configuration"], "relatedTaxonomies": ["command-classification", "configuration-classification"], "relatedVocabularyValueSets": ["command-kinds", "configuration-kinds"], "expectedSchemas": ["command.schema.json", "configuration.schema.json"], "reactSourceLearnings": ["../react Makefile/make/*.mk, 212 npm scripts incl ~110 proof:* scripts, v2-command-map.json (377 commands), and v1-config-contract-catalogue.json (64 typed keys) show commands/config are semantic assets, not incidental files."], "futureValidatorExpectations": "Commands declare purpose/scope/evidence/failure; config declares secret class and provider/environment/proof relevance.", "aiGuidance": "Disposition before deleting or renaming a command or config key."},
-    {"id": "interface-event-workflow", "purpose": "Callable contracts, events, and workflows.", "relatedOntologyConcepts": ["Interface", "Event", "Workflow", "Service", "Port"], "relatedTaxonomyFamilies": ["interface-event-workflow"], "relatedTaxonomies": ["interface-classification", "event-workflow-classification"], "relatedVocabularyValueSets": ["interface-kinds", "event-workflow-kinds"], "expectedSchemas": ["interface-contract.schema.json", "event-contract.schema.json", "workflow.schema.json"], "reactSourceLearnings": ["../react operational-semantics.json (~235 routes), event-semantics.json (10 events; idempotency/ordering/DLQ/retention), cross-capability-interactions.json (8 interaction types) must become contract-governed, not source-path-governed."], "futureValidatorExpectations": "Interfaces/events have contracts before implementation; runtime drift is detectable.", "aiGuidance": "Do not infer interfaces or events from code when a contract exists."},
-    {"id": "data-and-migration", "purpose": "Data models, persistence contracts, migrations, and backup/restore.", "relatedOntologyConcepts": ["Data Model", "Migration", "Backup / Restore"], "relatedTaxonomyFamilies": ["data-and-migration"], "relatedTaxonomies": ["data-migration-classification"], "relatedVocabularyValueSets": ["data-migration-kinds", "evidence-kinds"], "expectedSchemas": ["data-migration.schema.json"], "reactSourceLearnings": ["../react data-and-migration-plan.json: PostgreSQL schema-per-tenant, RLS, forward-only checksum-immutable migrations, backup/restore evidence; backup/restore proof must preserve emitted and collected evidence."], "futureValidatorExpectations": "Migrations forward-only and checksum-immutable; tenancy isolation preserved; backup/restore evidence checkable.", "aiGuidance": "Never edit a committed migration; preserve tenancy invariants."},
-    {"id": "observability-and-audit", "purpose": "Observability signals and audit events as semantic assets.", "relatedOntologyConcepts": ["Observability Signal", "Audit Event"], "relatedTaxonomyFamilies": ["observability-and-audit"], "relatedTaxonomies": ["observability-audit-classification"], "relatedVocabularyValueSets": ["observability-signal-kinds", "audit-event-kinds"], "expectedSchemas": ["observability-signal.schema.json", "audit-event.schema.json"], "reactSourceLearnings": ["../react operational-semantics observabilitySignals/metrics/logs/traces/auditAction; assurance bars 0 routes without tracing/logging/metrics and 0 mutations without audit; Loki/Tempo/Sentry correlation."], "futureValidatorExpectations": "Controlled observability vocabulary; audit required for security-sensitive and state-changing actions.", "aiGuidance": "Removal of a signal or audit event requires semantic review, not a refactor."},
-    {"id": "ui-semantics", "purpose": "User-facing meaning independent of visual design.", "relatedOntologyConcepts": ["UI Semantic Model", "Capability"], "relatedTaxonomyFamilies": ["ui-semantics"], "relatedTaxonomies": ["ui-semantic-classification"], "relatedVocabularyValueSets": ["ui-semantic-kinds"], "expectedSchemas": ["ui-semantic-model.schema.json"], "reactSourceLearnings": ["../react ui-capability-model.json (28 capabilities, 12 personas) and ui-definition.schema.json; the generator must never read old JSX; UI source is semantic evidence, not final design authority."], "futureValidatorExpectations": "Journeys map to capabilities and proofs; accessibility preserved.", "aiGuidance": "Visual redesign is not semantic deletion."},
-    {"id": "adr-and-decision", "purpose": "Normative architectural decision records.", "relatedOntologyConcepts": ["ADR", "Semantic Contract"], "relatedTaxonomyFamilies": ["authority-and-governance"], "relatedTaxonomies": ["authority-classification", "ai-governance-classification"], "relatedVocabularyValueSets": ["authority-levels", "artefact-kinds", "ai-governance-kinds"], "expectedSchemas": ["adr.schema.json"], "reactSourceLearnings": ["../react v2-decision-catalog.json (74 accepted) + v2-decision-lineage.json (74 evidence-backed); untraced decisions are rejected (rule R13); a roadmap carries no governance force."], "futureValidatorExpectations": "Every ADR reference resolves; decisions carry invariants, forbidden-drift, and AI-alignment rules.", "aiGuidance": "ADRs are binding; never generic prose."},
-    {"id": "validation-and-reporting", "purpose": "Validators and generated reports.", "relatedOntologyConcepts": ["Validator", "Generated Report"], "relatedTaxonomyFamilies": ["validation-and-reporting"], "relatedTaxonomies": ["validation-reporting-classification"], "relatedVocabularyValueSets": ["validation-severities", "report-statuses", "authority-levels"], "expectedSchemas": ["validator-report.schema.json"], "reactSourceLearnings": ["../react tools/v2-readiness fails closed, normalises no aliases, writes no runtime file, exit codes 0/1/2; reports are reported separately from formal proof so closure is not mistaken for proof."], "futureValidatorExpectations": "unknown/stale never satisfy pass; reports reference evidence and are rank-7.", "aiGuidance": "Never weaken a rule to pass; never treat a report as canonical."},
-    {"id": "import-and-disposition", "purpose": "Controlled import of ../react source elements with explicit disposition.", "relatedOntologyConcepts": ["Source Reference", "Disposition"], "relatedTaxonomyFamilies": ["source-lineage"], "relatedTaxonomies": ["source-evidence-classification", "source-role-classification"], "relatedVocabularyValueSets": ["source-kinds", "source-roles", "disposition-values"], "expectedSchemas": ["source-disposition.schema.json", "import-manifest.schema.json"], "reactSourceLearnings": ["../react file-disposition vocabulary (9 values), command dispositions (carry/merge/retire), test migrationType (4) show every element needs a controlled disposition; bijection rule R10 ensures no silent loss."], "futureValidatorExpectations": "Every imported element has a disposition; import is incomplete without one.", "aiGuidance": "Disposition every source element; source path does not dictate target path."},
-    {"id": "ai-governance", "purpose": "AI-agent-relevant artefacts and actions as governed, not informal.", "relatedOntologyConcepts": ["AI Agent"], "relatedTaxonomyFamilies": ["ai-governance"], "relatedTaxonomies": ["ai-governance-classification"], "relatedVocabularyValueSets": ["ai-governance-kinds"], "expectedSchemas": ["ai-governance.schema.json"], "reactSourceLearnings": ["USF charter section 7, authority-model section 6, standards-profile section 20, ontology sections 14-15 define AI alignment rules, forbidden inferences, and stop conditions."], "futureValidatorExpectations": "AI-generated artefacts carry rationale and references; stop conditions are explicit.", "aiGuidance": "An AI agent holds no authority; stop or fail on unresolved authority conflict."},
-    {"id": "bootstrap-mapping", "purpose": "Semantic-to-implementation bootstrap mappings for future target topology, provider expectations, tests, proof gates, deferrals, and blockers.", "relatedOntologyConcepts": ["Semantic Contract", "Source Reference", "Disposition", "Provider", "Environment", "Proof"], "relatedTaxonomyFamilies": ["semantic-architecture", "source-lineage"], "relatedTaxonomies": ["semantic-architecture-classification", "source-role-classification"], "relatedVocabularyValueSets": ["authority-levels", "lifecycle-states", "provider-modes", "environment-classes", "proof-levels", "disposition-values"], "expectedSchemas": ["bootstrap-mapping.schema.json"], "reactSourceLearnings": ["../react source, proof scripts, tests, compose/config, and semantic artefacts remain lineage only and must be mapped before implementation extraction."], "futureValidatorExpectations": "One mapping per semantic contract; generated aggregate indexes and Markdown summaries must match the authoritative mapping corpus; staging/production/live proof remains explicitly deferred.", "aiGuidance": "Mappings are bootstrap planning authority only; they create no implementation files and claim no production readiness."}
+    {
+      "id": "foundation-governance",
+      "purpose": "Constitutional and governance artefacts that establish authority and identity.",
+      "relatedOntologyConcepts": [
+        "Foundation",
+        "ADR",
+        "Validator",
+        "AI Agent"
+      ],
+      "relatedTaxonomyFamilies": [
+        "authority-and-governance"
+      ],
+      "relatedTaxonomies": [
+        "authority-classification",
+        "artefact-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "authority-levels",
+        "artefact-kinds"
+      ],
+      "expectedSchemas": [],
+      "reactSourceLearnings": [
+        "../react treats validators as enforcement, proofs as evidence, code as implementation of canonical semantic artefacts."
+      ],
+      "futureValidatorExpectations": "Governance artefacts carry authority and lineage metadata.",
+      "aiGuidance": "Constitutional docs are currently markdown-governed; a governance schema is deferred. Never weaken constitutional constraints."
+    },
+    {
+      "id": "ontology-and-semantics",
+      "purpose": "Rank-1 semantic contracts and capability semantics.",
+      "relatedOntologyConcepts": [
+        "Capability",
+        "Semantic Contract",
+        "Port",
+        "Interface",
+        "Configuration",
+        "Data Model"
+      ],
+      "relatedTaxonomyFamilies": [
+        "semantic-architecture"
+      ],
+      "relatedTaxonomies": [
+        "semantic-architecture-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "authority-levels",
+        "lifecycle-states",
+        "capability-domains"
+      ],
+      "expectedSchemas": [
+        "semantic-contract.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react v1-capability-closure.json (75 capabilities, 10 facets) and capability-*.json templates ground semantic contracts."
+      ],
+      "futureValidatorExpectations": "A capability is proven only when every facet cites authoritative evidence.",
+      "aiGuidance": "Read semantics before source; never invent a facet."
+    },
+    {
+      "id": "taxonomy-and-vocabulary",
+      "purpose": "Classification systems and controlled value sets.",
+      "relatedOntologyConcepts": [
+        "Registry"
+      ],
+      "relatedTaxonomyFamilies": [
+        "authority-and-governance"
+      ],
+      "relatedTaxonomies": [
+        "artefact-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "artefact-kinds",
+        "classification-modes",
+        "lifecycle-states"
+      ],
+      "expectedSchemas": [
+        "taxonomy.schema.json",
+        "vocabulary.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react validator normalises no aliases and fails closed; USF records aliases explicitly so normalisation is controlled."
+      ],
+      "futureValidatorExpectations": "Taxonomy classification modes and vocabulary aliases validate against their schemas.",
+      "aiGuidance": "Taxonomy classifies; vocabulary enumerates; do not collapse them."
+    },
+    {
+      "id": "registry",
+      "purpose": "Registries and index/cross-reference artefacts.",
+      "relatedOntologyConcepts": [
+        "Registry"
+      ],
+      "relatedTaxonomyFamilies": [
+        "authority-and-governance"
+      ],
+      "relatedTaxonomies": [
+        "artefact-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "artefact-kinds",
+        "schema-classes",
+        "schema-lifecycle-states",
+        "authority-levels"
+      ],
+      "expectedSchemas": [
+        "schema-registry.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react universal-service-foundation-registry.json is data-only and asserts no implementation; registries index, they do not prove."
+      ],
+      "futureValidatorExpectations": "The registry validates against schema-registry.schema.json (self-validation).",
+      "aiGuidance": "Registers before referencing; indexing is not assertion."
+    },
+    {
+      "id": "source-lineage",
+      "purpose": "References to historical and current source evidence.",
+      "relatedOntologyConcepts": [
+        "Source Reference",
+        "Disposition",
+        "Evidence"
+      ],
+      "relatedTaxonomyFamilies": [
+        "source-lineage"
+      ],
+      "relatedTaxonomies": [
+        "source-evidence-classification",
+        "source-role-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "source-kinds",
+        "source-roles",
+        "disposition-values"
+      ],
+      "expectedSchemas": [
+        "source-reference.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react v1-file-inventory.json (~1673 files) and v1-to-v2-path-map.json show every source element must be mapped; nothing disappears without a disposition."
+      ],
+      "futureValidatorExpectations": "Every source reference resolves and carries a disposition.",
+      "aiGuidance": "Classify as evidence before import; never treat source as future authority."
+    },
+    {
+      "id": "evidence-and-proof",
+      "purpose": "Evidence envelopes and proof evidence.",
+      "relatedOntologyConcepts": [
+        "Evidence",
+        "Proof",
+        "Proof Level",
+        "Generated Report"
+      ],
+      "relatedTaxonomyFamilies": [
+        "evidence-and-proof"
+      ],
+      "relatedTaxonomies": [
+        "evidence-classification",
+        "proof-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "evidence-kinds",
+        "proof-levels",
+        "provider-modes",
+        "environment-classes",
+        "report-statuses"
+      ],
+      "expectedSchemas": [
+        "evidence-envelope.schema.json",
+        "proof-evidence.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4) and the 172 proof-evidence records: emitted evidence preserved through collection; missing evidence fails closed; claimed <= observed."
+      ],
+      "futureValidatorExpectations": "Proof fails closed on missing emitted/collected evidence; readiness does not exceed observed evidence.",
+      "aiGuidance": "Proof is evidence of fact, not a definition of intent."
+    },
+    {
+      "id": "provider-and-environment",
+      "purpose": "Provider mode and environment declarations as separate dimensions.",
+      "relatedOntologyConcepts": [
+        "Provider",
+        "Provider Mode",
+        "Environment",
+        "Adapter",
+        "Port"
+      ],
+      "relatedTaxonomyFamilies": [
+        "provider-and-environment"
+      ],
+      "relatedTaxonomies": [
+        "provider-classification",
+        "environment-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "provider-modes",
+        "environment-classes"
+      ],
+      "expectedSchemas": [
+        "provider-mode.schema.json",
+        "environment.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react provider classes and USF_PROVIDER_MODE; e2e profiles split hermetic (internal/identity) from live (external/prod); environment-readiness-gates forbid mocks in prod."
+      ],
+      "futureValidatorExpectations": "hermetic-mock cannot satisfy live-external-provider; production-shaped cannot satisfy production-live.",
+      "aiGuidance": "Never infer a stronger provider mode or environment than the substrate used."
+    },
+    {
+      "id": "command-and-configuration",
+      "purpose": "Commands and configuration as governed semantic assets.",
+      "relatedOntologyConcepts": [
+        "Command",
+        "Configuration"
+      ],
+      "relatedTaxonomyFamilies": [
+        "command-and-configuration"
+      ],
+      "relatedTaxonomies": [
+        "command-classification",
+        "configuration-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "command-kinds",
+        "configuration-kinds"
+      ],
+      "expectedSchemas": [
+        "command.schema.json",
+        "configuration.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react Makefile/make/*.mk, 212 npm scripts incl ~110 proof:* scripts, v2-command-map.json (377 commands), and v1-config-contract-catalogue.json (64 typed keys) show commands/config are semantic assets, not incidental files."
+      ],
+      "futureValidatorExpectations": "Commands declare purpose/scope/evidence/failure; config declares secret class and provider/environment/proof relevance.",
+      "aiGuidance": "Disposition before deleting or renaming a command or config key."
+    },
+    {
+      "id": "interface-event-workflow",
+      "purpose": "Callable contracts, events, and workflows.",
+      "relatedOntologyConcepts": [
+        "Interface",
+        "Event",
+        "Workflow",
+        "Service",
+        "Port"
+      ],
+      "relatedTaxonomyFamilies": [
+        "interface-event-workflow"
+      ],
+      "relatedTaxonomies": [
+        "interface-classification",
+        "event-workflow-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "interface-kinds",
+        "event-workflow-kinds"
+      ],
+      "expectedSchemas": [
+        "interface-contract.schema.json",
+        "event-contract.schema.json",
+        "workflow.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react operational-semantics.json (~235 routes), event-semantics.json (10 events; idempotency/ordering/DLQ/retention), cross-capability-interactions.json (8 interaction types) must become contract-governed, not source-path-governed."
+      ],
+      "futureValidatorExpectations": "Interfaces/events have contracts before implementation; runtime drift is detectable.",
+      "aiGuidance": "Do not infer interfaces or events from code when a contract exists."
+    },
+    {
+      "id": "data-and-migration",
+      "purpose": "Data models, persistence contracts, migrations, and backup/restore.",
+      "relatedOntologyConcepts": [
+        "Data Model",
+        "Migration",
+        "Backup / Restore"
+      ],
+      "relatedTaxonomyFamilies": [
+        "data-and-migration"
+      ],
+      "relatedTaxonomies": [
+        "data-migration-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "data-migration-kinds",
+        "evidence-kinds"
+      ],
+      "expectedSchemas": [
+        "data-migration.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react data-and-migration-plan.json: PostgreSQL schema-per-tenant, RLS, forward-only checksum-immutable migrations, backup/restore evidence; backup/restore proof must preserve emitted and collected evidence."
+      ],
+      "futureValidatorExpectations": "Migrations forward-only and checksum-immutable; tenancy isolation preserved; backup/restore evidence checkable.",
+      "aiGuidance": "Never edit a committed migration; preserve tenancy invariants."
+    },
+    {
+      "id": "observability-and-audit",
+      "purpose": "Observability signals and audit events as semantic assets.",
+      "relatedOntologyConcepts": [
+        "Observability Signal",
+        "Audit Event"
+      ],
+      "relatedTaxonomyFamilies": [
+        "observability-and-audit"
+      ],
+      "relatedTaxonomies": [
+        "observability-audit-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "observability-signal-kinds",
+        "audit-event-kinds"
+      ],
+      "expectedSchemas": [
+        "observability-signal.schema.json",
+        "audit-event.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react operational-semantics observabilitySignals/metrics/logs/traces/auditAction; assurance bars 0 routes without tracing/logging/metrics and 0 mutations without audit; Loki/Tempo/Sentry correlation."
+      ],
+      "futureValidatorExpectations": "Controlled observability vocabulary; audit required for security-sensitive and state-changing actions.",
+      "aiGuidance": "Removal of a signal or audit event requires semantic review, not a refactor."
+    },
+    {
+      "id": "ui-semantics",
+      "purpose": "User-facing meaning independent of visual design.",
+      "relatedOntologyConcepts": [
+        "UI Semantic Model",
+        "Capability"
+      ],
+      "relatedTaxonomyFamilies": [
+        "ui-semantics"
+      ],
+      "relatedTaxonomies": [
+        "ui-semantic-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "ui-semantic-kinds"
+      ],
+      "expectedSchemas": [
+        "ui-semantic-model.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react ui-capability-model.json (28 capabilities, 12 personas) and ui-definition.schema.json; the generator must never read old JSX; UI source is semantic evidence, not final design authority."
+      ],
+      "futureValidatorExpectations": "Journeys map to capabilities and proofs; accessibility preserved.",
+      "aiGuidance": "Visual redesign is not semantic deletion."
+    },
+    {
+      "id": "adr-and-decision",
+      "purpose": "Normative architectural decision records.",
+      "relatedOntologyConcepts": [
+        "ADR",
+        "Semantic Contract"
+      ],
+      "relatedTaxonomyFamilies": [
+        "authority-and-governance"
+      ],
+      "relatedTaxonomies": [
+        "authority-classification",
+        "ai-governance-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "authority-levels",
+        "artefact-kinds",
+        "ai-governance-kinds"
+      ],
+      "expectedSchemas": [
+        "adr.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react v2-decision-catalog.json (74 accepted) + v2-decision-lineage.json (74 evidence-backed); untraced decisions are rejected (rule R13); a roadmap carries no governance force."
+      ],
+      "futureValidatorExpectations": "Every ADR reference resolves; decisions carry invariants, forbidden-drift, and AI-alignment rules.",
+      "aiGuidance": "ADRs are binding; never generic prose."
+    },
+    {
+      "id": "validation-and-reporting",
+      "purpose": "Validators and generated reports.",
+      "relatedOntologyConcepts": [
+        "Validator",
+        "Generated Report"
+      ],
+      "relatedTaxonomyFamilies": [
+        "validation-and-reporting"
+      ],
+      "relatedTaxonomies": [
+        "validation-reporting-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "validation-severities",
+        "report-statuses",
+        "authority-levels"
+      ],
+      "expectedSchemas": [
+        "validator-report.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react tools/v2-readiness fails closed, normalises no aliases, writes no runtime file, exit codes 0/1/2; reports are reported separately from formal proof so closure is not mistaken for proof."
+      ],
+      "futureValidatorExpectations": "unknown/stale never satisfy pass; reports reference evidence and are rank-7.",
+      "aiGuidance": "Never weaken a rule to pass; never treat a report as canonical."
+    },
+    {
+      "id": "import-and-disposition",
+      "purpose": "Controlled import of ../react source elements with explicit disposition.",
+      "relatedOntologyConcepts": [
+        "Source Reference",
+        "Disposition"
+      ],
+      "relatedTaxonomyFamilies": [
+        "source-lineage"
+      ],
+      "relatedTaxonomies": [
+        "source-evidence-classification",
+        "source-role-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "source-kinds",
+        "source-roles",
+        "disposition-values"
+      ],
+      "expectedSchemas": [
+        "source-disposition.schema.json",
+        "import-manifest.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react file-disposition vocabulary (9 values), command dispositions (carry/merge/retire), test migrationType (4) show every element needs a controlled disposition; bijection rule R10 ensures no silent loss."
+      ],
+      "futureValidatorExpectations": "Every imported element has a disposition; import is incomplete without one.",
+      "aiGuidance": "Disposition every source element; source path does not dictate target path."
+    },
+    {
+      "id": "ai-governance",
+      "purpose": "AI-agent-relevant artefacts and actions as governed, not informal.",
+      "relatedOntologyConcepts": [
+        "AI Agent"
+      ],
+      "relatedTaxonomyFamilies": [
+        "ai-governance"
+      ],
+      "relatedTaxonomies": [
+        "ai-governance-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "ai-governance-kinds"
+      ],
+      "expectedSchemas": [
+        "ai-governance.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "USF charter section 7, authority-model section 6, standards-profile section 20, ontology sections 14-15 define AI alignment rules, forbidden inferences, and stop conditions."
+      ],
+      "futureValidatorExpectations": "AI-generated artefacts carry rationale and references; stop conditions are explicit.",
+      "aiGuidance": "An AI agent holds no authority; stop or fail on unresolved authority conflict."
+    },
+    {
+      "id": "bootstrap-mapping",
+      "purpose": "Semantic-to-implementation bootstrap mappings for future target topology, provider expectations, tests, proof gates, deferrals, and blockers.",
+      "relatedOntologyConcepts": [
+        "Semantic Contract",
+        "Source Reference",
+        "Disposition",
+        "Provider",
+        "Environment",
+        "Proof"
+      ],
+      "relatedTaxonomyFamilies": [
+        "semantic-architecture",
+        "source-lineage"
+      ],
+      "relatedTaxonomies": [
+        "semantic-architecture-classification",
+        "source-role-classification"
+      ],
+      "relatedVocabularyValueSets": [
+        "authority-levels",
+        "lifecycle-states",
+        "provider-modes",
+        "environment-classes",
+        "proof-levels",
+        "disposition-values"
+      ],
+      "expectedSchemas": [
+        "bootstrap-mapping.schema.json"
+      ],
+      "reactSourceLearnings": [
+        "../react source, proof scripts, tests, compose/config, and semantic artefacts remain lineage only and must be mapped before implementation extraction."
+      ],
+      "futureValidatorExpectations": "One mapping per semantic contract; generated aggregate indexes and Markdown summaries must match the authoritative mapping corpus; staging/production/live proof remains explicitly deferred.",
+      "aiGuidance": "Mappings are bootstrap planning authority only; they create no implementation files and claim no production readiness."
+    }
   ],
   "schemas": [
-    {"id": "schema-registry.schema.json", "title": "Schema Registry Schema", "path": "spec/schemas/schema-registry.schema.json", "class": "registry-schema", "family": "registry", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Registry", "Validator"], "purpose": "Validates this schema registry itself.", "requiredBecause": "The registry is rank-1 governance and must be self-validating to be externally auditable.", "sourceInputs": ["spec/registries/schema-registry.json", "../react universal-service-foundation-registry.json (data-only registry precedent)"], "taxonomyRefs": ["artefact-classification"], "vocabularyRefs": ["artefact-kinds", "schema-classes", "schema-lifecycle-states", "authority-levels"], "expectedConsumers": ["validators", "AI agents"], "validationResponsibilities": ["unique schema ids/paths", "classes from schema-classes", "lifecycle from schema-lifecycle-states", "authorityRole from authority-levels", "no forbidden canonical names", "no schema active without a file"], "authorityRole": "semantic-definition", "driftRisks": ["Registry drifting from vocabulary/taxonomy."], "aiGuidance": "Validate the registry before trusting any schema entry.", "deferredDetails": ["Self-validation wiring (the dialect is resolved as Draft 2020-12 by docs/architecture/schema-authoring-standard.md)."]},
-    {"id": "taxonomy.schema.json", "title": "Taxonomy Schema", "path": "spec/schemas/taxonomy.schema.json", "class": "taxonomy-schema", "family": "taxonomy-and-vocabulary", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Semantic Contract", "Registry"], "purpose": "Validates the taxonomy catalogue and future taxonomy files.", "requiredBecause": "Taxonomy is rank-1 classification authority and must be shape-validated.", "sourceInputs": ["spec/taxonomies/taxonomy-catalog.json"], "taxonomyRefs": ["artefact-classification"], "vocabularyRefs": ["artefact-kinds", "classification-modes", "lifecycle-states"], "expectedConsumers": ["validators", "AI agents"], "validationResponsibilities": ["unique family/taxonomy ids", "every taxonomy in a known family", "classificationMode from classification-modes", "governed ontology concepts present"], "authorityRole": "semantic-definition", "driftRisks": ["Taxonomy categories drifting into vocabulary values."], "aiGuidance": "Taxonomy classifies; it does not enumerate controlled values.", "deferredDetails": ["Taxonomy is part of the rank-1 semantic-definition corpus: it is grounded in the ontology concepts Semantic Contract (a normative statement of classification structure) and Registry (a resolution index). The ontology defines no separate Taxonomy concept; these two existing concepts ground it accurately, so no ontology change is required."]},
-    {"id": "vocabulary.schema.json", "title": "Vocabulary Schema", "path": "spec/schemas/vocabulary.schema.json", "class": "vocabulary-schema", "family": "taxonomy-and-vocabulary", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Semantic Contract", "Registry"], "purpose": "Validates the vocabulary catalogue and future vocabulary files.", "requiredBecause": "Vocabulary is rank-1 controlled-value authority and must be shape-validated.", "sourceInputs": ["spec/vocabularies/vocabulary-catalog.json"], "taxonomyRefs": ["artefact-classification"], "vocabularyRefs": ["artefact-kinds", "classification-modes", "lifecycle-states"], "expectedConsumers": ["validators", "AI agents"], "validationResponsibilities": ["unique value-set ids", "unique values per set", "aliases resolve to canonical", "forbidden values not canonical", "every value has lifecycle and AI guidance"], "authorityRole": "semantic-definition", "driftRisks": ["Aliases drifting; forbidden values appearing as canonical."], "aiGuidance": "Vocabulary is the source of exact allowed values.", "deferredDetails": ["Vocabulary is part of the rank-1 semantic-definition corpus: it is grounded in the ontology concepts Semantic Contract (a normative statement of allowed values) and Registry (a controlled-value index). The ontology defines no separate Vocabulary concept; these two existing concepts ground it accurately, so no ontology change is required."]},
-    {"id": "semantic-contract.schema.json", "title": "Semantic Contract Schema", "path": "spec/schemas/semantic-contract.schema.json", "class": "semantic-schema", "family": "ontology-and-semantics", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Semantic Contract", "Capability", "Port", "Interface", "Configuration", "Data Model"], "purpose": "Validates semantic contracts (capability facets and other rank-1 contracts).", "requiredBecause": "Semantic contracts are the primary authority; they must be complete and evidence-backed.", "sourceInputs": ["../react v1-capability-closure.json (75 capabilities, 10 facets)", "../react capability-*.json facet templates"], "taxonomyRefs": ["semantic-architecture-classification", "authority-classification"], "vocabularyRefs": ["authority-levels", "lifecycle-states", "capability-domains"], "expectedConsumers": ["validators", "AI agents", "implementers"], "validationResponsibilities": ["all required facets present", "each facet cites authoritative evidence", "drop to gap if backing missing"], "authorityRole": "semantic-definition", "driftRisks": ["A capability marked proven without facet backing."], "aiGuidance": "Read the contract before its implementation; never invent a facet.", "deferredDetails": ["capability-domains value set exists in vocabulary as deferred; canonical values are not yet authored."]},
-    {"id": "source-reference.schema.json", "title": "Source Reference Schema", "path": "spec/schemas/source-reference.schema.json", "class": "source-reference-schema", "family": "source-lineage", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Source Reference", "Evidence"], "purpose": "Validates references to ../react and later source evidence.", "requiredBecause": "Lineage must be traceable and resolvable.", "sourceInputs": ["../react v1-file-inventory.json", "../react v1-to-v2-path-map.json", "../react sourceFileRefs fields"], "taxonomyRefs": ["source-evidence-classification", "source-role-classification"], "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"], "expectedConsumers": ["validators", "import tooling", "AI agents"], "validationResponsibilities": ["reference resolves to a real path/commit", "declares source kind and role", "carries a disposition"], "authorityRole": "historical-source-evidence", "driftRisks": ["Broken or fabricated lineage."], "aiGuidance": "Cite lineage; never treat the reference as live authority.", "deferredDetails": ["Exact source registry fields."]},
-    {"id": "source-disposition.schema.json", "title": "Source Disposition Schema", "path": "spec/schemas/source-disposition.schema.json", "class": "source-reference-schema", "family": "import-and-disposition", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Disposition", "Source Reference"], "purpose": "Validates the treatment of imported, deferred, transformed, rejected, or retired source elements.", "requiredBecause": "No source element may disappear without a disposition.", "sourceInputs": ["../react file disposition vocabulary (9 values)", "../react command/test dispositions"], "taxonomyRefs": ["source-role-classification"], "vocabularyRefs": ["disposition-values", "source-kinds", "source-roles"], "expectedConsumers": ["validators", "import tooling", "AI agents"], "validationResponsibilities": ["disposition from disposition-values", "rationale present", "links to source reference"], "authorityRole": "semantic-definition", "driftRisks": ["Silent source loss."], "aiGuidance": "Disposition is a recorded decision, not silence; it does not imply implementation acceptance.", "deferredDetails": ["Whether regenerate and promote-to-conformance warrant distinct canonical disposition values."]},
-    {"id": "evidence-envelope.schema.json", "title": "Evidence Envelope Schema", "path": "spec/schemas/evidence-envelope.schema.json", "class": "evidence-schema", "family": "evidence-and-proof", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Evidence", "Generated Report"], "purpose": "Validates the common evidence envelope across evidence kinds.", "requiredBecause": "Evidence must be typed, source-referenced, and freshness-checkable.", "sourceInputs": ["../react docs/evidence (267 files; machine + human)", "../react usf-audit/proof-evidence-index.json"], "taxonomyRefs": ["evidence-classification"], "vocabularyRefs": ["evidence-kinds", "provider-modes", "environment-classes", "report-statuses"], "expectedConsumers": ["validators", "evidence collectors", "report generators"], "validationResponsibilities": ["evidence kind from evidence-kinds", "source reference present", "provider mode and environment where relevant", "freshness/staleness", "no overclaim"], "authorityRole": "runtime-proof-evidence", "driftRisks": ["Hiding missing raw evidence behind a report."], "aiGuidance": "Never conflate kinds; missing evidence fails closed.", "deferredDetails": ["Exact evidence envelope schema."]},
-    {"id": "proof-evidence.schema.json", "title": "Proof Evidence Schema", "path": "spec/schemas/proof-evidence.schema.json", "class": "proof-schema", "family": "evidence-and-proof", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Proof", "Proof Level", "Evidence"], "purpose": "Validates proof claim, execution, emitted evidence, collected evidence, provider mode, environment, and readiness claim consistency.", "requiredBecause": "Proof must be honest: claimed level <= observed; missing evidence fails closed.", "sourceInputs": ["../react capability-proof-definition.json (L0-L6; liveProviderMinimumLevel 4)", "../react usf-audit/proof-evidence (172 records)"], "taxonomyRefs": ["proof-classification", "provider-classification", "environment-classification"], "vocabularyRefs": ["proof-levels", "provider-modes", "environment-classes", "evidence-kinds", "report-statuses"], "expectedConsumers": ["validators", "proof collectors"], "validationResponsibilities": ["proof level from proof-levels", "claimed <= observed", "provider mode and environment present", "fail closed on missing emitted/collected evidence", "hermetic-mock not live"], "authorityRole": "runtime-proof-evidence", "driftRisks": ["Overclaiming proof level; relabelling hermetic as live."], "aiGuidance": "Proof level is not readiness status; never relabel upward.", "deferredDetails": ["Exact proof evidence schema; proof-level vocabulary finalisation."]},
-    {"id": "provider-mode.schema.json", "title": "Provider Mode Schema", "path": "spec/schemas/provider-mode.schema.json", "class": "provider-schema", "family": "provider-and-environment", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Provider", "Provider Mode", "Adapter", "Port"], "purpose": "Validates provider mode declarations and prevents hermetic/live confusion.", "requiredBecause": "Provider mode is proof-relevant and must be explicit and honest.", "sourceInputs": ["../react runtime-provider-inventory.json (~69 providers)", "../react in-memory-to-real parity reports", "../react services/mock-oidc"], "taxonomyRefs": ["provider-classification"], "vocabularyRefs": ["provider-modes", "environment-classes"], "expectedConsumers": ["validators", "AI agents"], "validationResponsibilities": ["provider mode from provider-modes", "hermetic-mock MUST NOT satisfy live-external-provider", "adapter identifies port and provider mode"], "authorityRole": "semantic-definition", "driftRisks": ["Mislabelling hermetic as live."], "aiGuidance": "mock IdP is valid hermetic proof but never live external proof.", "deferredDetails": ["Whether to add a no-provider value for non-runtime capabilities."]},
-    {"id": "environment.schema.json", "title": "Environment Schema", "path": "spec/schemas/environment.schema.json", "class": "environment-schema", "family": "provider-and-environment", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Environment", "Provider Mode"], "purpose": "Validates environment class declarations and prevents production-shaped/production-live confusion.", "requiredBecause": "Environment is proof-relevant and must be explicit.", "sourceInputs": ["../react environment-readiness-gates.json (4 gates)", "../react environment-capability-matrix.json (70x4)", "../react e2e profiles"], "taxonomyRefs": ["environment-classification"], "vocabularyRefs": ["environment-classes", "provider-modes"], "expectedConsumers": ["validators", "AI agents"], "validationResponsibilities": ["environment from environment-classes", "production-shaped MUST NOT satisfy production-live", "environment does not upgrade provider mode"], "authorityRole": "semantic-definition", "driftRisks": ["Treating an environment name as a readiness claim."], "aiGuidance": "Keep environment distinct from provider mode.", "deferredDetails": ["Confirm exact historical stage-to-class mapping during import."]},
-    {"id": "command.schema.json", "title": "Command Schema", "path": "spec/schemas/command.schema.json", "class": "command-schema", "family": "command-and-configuration", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Command"], "purpose": "Validates Make targets, package scripts, CLI commands, validation/proof/import/build/runtime/report-generation commands.", "requiredBecause": "Commands are semantic assets, not incidental scripts.", "sourceInputs": ["../react Makefile and make/*.mk", "../react package.json (212 scripts)", "../react v2-command-map.json (377 commands)"], "taxonomyRefs": ["command-classification"], "vocabularyRefs": ["command-kinds", "environment-classes", "report-statuses"], "expectedConsumers": ["validators", "AI agents", "operators"], "validationResponsibilities": ["command kind from command-kinds", "purpose/inputs/outputs/environment scope/failure semantics present", "no delete/rename without disposition"], "authorityRole": "semantic-definition", "driftRisks": ["Silent command loss/rename."], "aiGuidance": "Disposition before deleting or renaming a command.", "deferredDetails": ["Exact command catalogue import from ../react."]},
-    {"id": "configuration.schema.json", "title": "Configuration Schema", "path": "spec/schemas/configuration.schema.json", "class": "configuration-schema", "family": "command-and-configuration", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Configuration"], "purpose": "Validates env vars, config files, config keys, secret-bearing settings, provider/environment/proof/runtime/compose configuration.", "requiredBecause": "Configuration is a governed semantic asset; secret handling must be explicit.", "sourceInputs": ["../react v1-config-contract-catalogue.json (64 keys)", "../react config/environments manifests", "../react compose.yaml"], "taxonomyRefs": ["configuration-classification"], "vocabularyRefs": ["configuration-kinds", "provider-modes", "environment-classes"], "expectedConsumers": ["validators", "AI agents", "operators"], "validationResponsibilities": ["config kind from configuration-kinds", "secret classification", "provider/environment/proof relevance", "generated config not hand-edited"], "authorityRole": "semantic-definition", "driftRisks": ["Hand-editing generated config; misclassifying a secret."], "aiGuidance": "Regenerate from manifests; never leak secret values.", "deferredDetails": ["Exact configuration catalogue import from ../react."]},
-    {"id": "interface-contract.schema.json", "title": "Interface Contract Schema", "path": "spec/schemas/interface-contract.schema.json", "class": "interface-schema", "family": "interface-event-workflow", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Interface", "Service", "Port"], "purpose": "Validates API routes, commands, queries, event handlers, service boundaries, CLI interfaces, provider ports, adapter interfaces, internal and external contracts.", "requiredBecause": "Interfaces must be contract-first or contract-reconciled, not implementation-guessed.", "sourceInputs": ["../react operational-semantics.json (~235 routes)", "../react OpenAPI drift hard gate"], "taxonomyRefs": ["interface-classification"], "vocabularyRefs": ["interface-kinds"], "expectedConsumers": ["validators", "AI agents", "implementers"], "validationResponsibilities": ["interface kind from interface-kinds", "resolves to a semantic contract", "runtime drift detectable"], "authorityRole": "semantic-definition", "driftRisks": ["Inferring an interface from handlers."], "aiGuidance": "Define or reconcile the contract first.", "deferredDetails": ["OpenAPI artefact decision."]},
-    {"id": "event-contract.schema.json", "title": "Event Contract Schema", "path": "spec/schemas/event-contract.schema.json", "class": "event-schema", "family": "interface-event-workflow", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Event"], "purpose": "Validates event/message contracts and event semantics.", "requiredBecause": "Events must have contracts (schema, idempotency, ordering, DLQ, retention) before emission.", "sourceInputs": ["../react event-semantics.json (10 events; canonical vs test-only)"], "taxonomyRefs": ["event-workflow-classification"], "vocabularyRefs": ["event-workflow-kinds"], "expectedConsumers": ["validators", "AI agents", "implementers"], "validationResponsibilities": ["event kind from event-workflow-kinds", "schema/idempotency/ordering/DLQ/retention present"], "authorityRole": "semantic-definition", "driftRisks": ["Inventing events in code."], "aiGuidance": "Define the event contract before emitting an event.", "deferredDetails": ["AsyncAPI artefact decision; interaction-type sub-vocabulary."]},
-    {"id": "workflow.schema.json", "title": "Workflow Schema", "path": "spec/schemas/workflow.schema.json", "class": "workflow-schema", "family": "interface-event-workflow", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Workflow", "Event"], "purpose": "Validates workflows, cross-capability interactions, state transitions, async/sync operations, failure paths, and compensation paths.", "requiredBecause": "Workflow ordering, consistency, and compensation are contract-level semantics.", "sourceInputs": ["../react cross-capability-interactions.json (8 interaction types)", "../react temporal/windmill workflow providers"], "taxonomyRefs": ["event-workflow-classification"], "vocabularyRefs": ["event-workflow-kinds"], "expectedConsumers": ["validators", "AI agents", "implementers"], "validationResponsibilities": ["workflow kind from event-workflow-kinds", "failure-path and compensation-path explicit"], "authorityRole": "semantic-definition", "driftRisks": ["Losing compensation/ordering semantics in a refactor."], "aiGuidance": "Declare compensation and failure paths explicitly.", "deferredDetails": ["Exact event/workflow contract import from ../react."]},
-    {"id": "data-migration.schema.json", "title": "Data and Migration Schema", "path": "spec/schemas/data-migration.schema.json", "class": "semantic-schema", "family": "data-and-migration", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Data Model", "Migration", "Backup / Restore"], "purpose": "Validates data models, persistence contracts, identifiers, relationships, migrations, seed data, fixtures, backup evidence, restore evidence, and retention/deletion concerns.", "requiredBecause": "Migrations are forward-only and checksum-immutable; tenancy isolation must be preserved; backup/restore evidence must be preserved. Classed as semantic-schema because data models, migrations, and backup/restore are rank-1 semantic contracts (data semantics), which the semantic-schema class explicitly covers; no dedicated data-schema vocabulary class is needed.", "sourceInputs": ["../react data-and-migration-plan.json (schema-per-tenant; RLS; migration chain 001..034 then 035+; backupRestore; destructiveOpControls)"], "taxonomyRefs": ["data-migration-classification"], "vocabularyRefs": ["data-migration-kinds", "evidence-kinds"], "expectedConsumers": ["validators", "AI agents", "implementers"], "validationResponsibilities": ["data kind from data-migration-kinds", "migration immutability", "tenancy isolation", "backup/restore emitted evidence preserved"], "authorityRole": "semantic-definition", "driftRisks": ["Editing a committed migration; tenant data leakage."], "aiGuidance": "Never edit a committed migration; preserve tenancy invariants.", "deferredDetails": ["Exact data/migration/backup/restore import from ../react."]},
-    {"id": "observability-signal.schema.json", "title": "Observability Signal Schema", "path": "spec/schemas/observability-signal.schema.json", "class": "observability-schema", "family": "observability-and-audit", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Observability Signal"], "purpose": "Validates logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, and correlation identifiers.", "requiredBecause": "Observability is a semantic asset that supports proof, debugging, and drift detection.", "sourceInputs": ["../react operational-semantics observabilitySignals/metrics/logs/traces", "../react Loki/Tempo/Sentry correlation"], "taxonomyRefs": ["observability-audit-classification"], "vocabularyRefs": ["observability-signal-kinds"], "expectedConsumers": ["validators", "AI agents", "operators"], "validationResponsibilities": ["signal kind from observability-signal-kinds", "controlled vocabulary", "coverage"], "authorityRole": "semantic-definition", "driftRisks": ["Removing a signal as a refactor."], "aiGuidance": "Removal requires semantic review.", "deferredDetails": ["OpenTelemetry attribute vocabulary mapping."]},
-    {"id": "audit-event.schema.json", "title": "Audit Event Schema", "path": "spec/schemas/audit-event.schema.json", "class": "audit-schema", "family": "observability-and-audit", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Audit Event"], "purpose": "Validates audit events, security-sensitive audits, state-changing audits, and accountability records.", "requiredBecause": "Audit is required for security-sensitive and state-changing operations.", "sourceInputs": ["../react auditAction field", "../react assurance bar 0 mutations without audit", "../react docs/evidence/audit"], "taxonomyRefs": ["observability-audit-classification"], "vocabularyRefs": ["audit-event-kinds"], "expectedConsumers": ["validators", "AI agents", "security reviewers"], "validationResponsibilities": ["audit kind from audit-event-kinds", "coverage for mutating/privileged actions"], "authorityRole": "semantic-definition", "driftRisks": ["Removing an audit event as a refactor."], "aiGuidance": "Every mutating/privileged action needs a defined audit semantic.", "deferredDetails": ["Exact observability/audit import from ../react."]},
-    {"id": "ui-semantic-model.schema.json", "title": "UI Semantic Model Schema", "path": "spec/schemas/ui-semantic-model.schema.json", "class": "ui-semantic-schema", "family": "ui-semantics", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["UI Semantic Model", "Capability"], "purpose": "Validates UI surfaces, pages, journeys, states, validation, errors, permissions, accessibility concerns, user actions, command/query mappings, and e2e proof mappings.", "requiredBecause": "UI behaviour and proof expectations must be preserved so the visual layer can be regenerated without inventing behaviour.", "sourceInputs": ["../react ui-capability-model.json (28 capabilities, 12 personas)", "../react ui-definition.schema.json"], "taxonomyRefs": ["ui-semantic-classification"], "vocabularyRefs": ["ui-semantic-kinds"], "expectedConsumers": ["validators", "AI agents", "UI generators"], "validationResponsibilities": ["ui kind from ui-semantic-kinds", "journeys map to capabilities and proofs", "accessibility preserved"], "authorityRole": "semantic-definition", "driftRisks": ["Treating a UI component as a capability; deleting a journey as a restyle."], "aiGuidance": "Visual redesign is not semantic deletion; derive from behaviour, not JSX.", "deferredDetails": ["Exact UI semantic import from ../react."]},
-    {"id": "adr.schema.json", "title": "ADR Schema", "path": "spec/schemas/adr.schema.json", "class": "adr-schema", "family": "adr-and-decision", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["ADR", "Semantic Contract"], "purpose": "Validates ADR structure: semantic refs, source refs, proof refs, validator refs, invariants, permitted changes, forbidden drift, consequences, and AI-alignment rules.", "requiredBecause": "ADRs are rank-2 binding decisions and must be traceable, not generic prose.", "sourceInputs": ["../react v2-decision-catalog.json (74 accepted)", "../react v2-decision-lineage.json (74 evidence-backed)", "rule R13"], "taxonomyRefs": ["authority-classification", "ai-governance-classification"], "vocabularyRefs": ["authority-levels", "artefact-kinds", "ai-governance-kinds"], "expectedConsumers": ["validators", "AI agents", "decision reviewers"], "validationResponsibilities": ["accepted status", "all references resolve", "invariants/forbidden-drift/AI-alignment present"], "authorityRole": "adr", "driftRisks": ["Untraced or prose-only decisions."], "aiGuidance": "ADRs are binding; record decisions as ADRs with references.", "deferredDetails": ["Exact ADR schema and template."]},
-    {"id": "validator-report.schema.json", "title": "Validator Report Schema", "path": "spec/schemas/validator-report.schema.json", "class": "validator-report-schema", "family": "validation-and-reporting", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Validator", "Generated Report"], "purpose": "Validates validator report shape: severities, statuses, stale/unknown/pass distinctions, evidence references, and blocking/advisory findings.", "requiredBecause": "Reports are rank-7; unknown/stale must never satisfy pass and reports must reference evidence.", "sourceInputs": ["../react tools/v2-readiness finding shape {ruleId, severity, subject, message}; exit codes 0/1/2", "../react usf-audit reports"], "taxonomyRefs": ["validation-reporting-classification"], "vocabularyRefs": ["validation-severities", "report-statuses", "authority-levels"], "expectedConsumers": ["validators", "CI", "AI agents"], "validationResponsibilities": ["severity from validation-severities", "status from report-statuses", "unknown/stale not pass", "references evidence", "staleness detectable"], "authorityRole": "generated-report", "driftRisks": ["Believing a stale report; downgrading blocking to advisory."], "aiGuidance": "Never treat a report as canonical; regenerate from current state.", "deferredDetails": ["Exact validator report schema."]},
-    {"id": "import-manifest.schema.json", "title": "Import Manifest Schema", "path": "spec/schemas/import-manifest.schema.json", "class": "import-manifest-schema", "family": "import-and-disposition", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Source Reference", "Disposition"], "purpose": "Validates controlled import manifests from ../react.", "requiredBecause": "Imports must be complete and traceable; no source element disappears without a disposition.", "sourceInputs": ["../react v1-to-v2-path-map.json", "../react v1-file-inventory.json", "bijection rule R10"], "taxonomyRefs": ["source-evidence-classification", "source-role-classification"], "vocabularyRefs": ["source-kinds", "source-roles", "disposition-values"], "expectedConsumers": ["validators", "import tooling", "AI agents"], "validationResponsibilities": ["every element has a disposition", "source kind/role present", "no silent loss"], "authorityRole": "historical-source-evidence", "driftRisks": ["Silent source loss; source path dictating target path."], "aiGuidance": "Source path does not dictate target schema/path; disposition every element.", "deferredDetails": ["Exact source import manifest mapping from ../react."]},
-    {"id": "ai-governance.schema.json", "title": "AI Governance Schema", "path": "spec/schemas/ai-governance.schema.json", "class": "governance-schema", "family": "ai-governance", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["AI Agent"], "purpose": "Validates AI instructions, AI-generated artefacts, AI-reviewed artefacts, AI alignment rules, forbidden inferences, authority conflicts, drift risks, and required stop conditions.", "requiredBecause": "AI work is governed, not informal; AI agents hold no authority.", "sourceInputs": ["docs/architecture/charter.md section 7", "docs/architecture/authority-model.md section 6", "docs/architecture/standards-profile.md section 20", "docs/architecture/ontology.md sections 14-15"], "taxonomyRefs": ["ai-governance-classification"], "vocabularyRefs": ["ai-governance-kinds"], "expectedConsumers": ["validators", "AI agents", "governance reviewers"], "validationResponsibilities": ["ai kind from ai-governance-kinds", "rationale and references present", "stop conditions explicit"], "authorityRole": "semantic-definition", "driftRisks": ["Treating AI output as authoritative without checks."], "aiGuidance": "Stop or fail on unresolved authority conflict; never self-grant authority.", "deferredDetails": []},
-    {"id": "bootstrap-mapping.schema.json", "title": "Bootstrap Mapping Schema", "path": "spec/schemas/bootstrap-mapping.schema.json", "class": "semantic-schema", "family": "bootstrap-mapping", "lifecycleState": "draft", "status": "draft", "governsOntologyConcepts": ["Semantic Contract", "Source Reference", "Disposition", "Provider", "Environment", "Proof"], "purpose": "Validates canonical semantic-to-implementation bootstrap mappings for each semantic contract before implementation extraction.", "requiredBecause": "Bootstrap readiness requires one machine-readable mapping per semantic contract covering target topology, source lineage, expected tests, proof gates, deferrals, and blockers without creating implementation scaffold.", "sourceInputs": [".codex/goals/v2-bootstrap.md", "docs/architecture/implementation-extraction-directive.md", "docs/architecture/target-implementation-topology-plan.md", "docs/architecture/semantic-source-use-closure-ledger.md"], "taxonomyRefs": ["semantic-architecture-classification", "source-role-classification"], "vocabularyRefs": ["authority-levels", "lifecycle-states", "provider-modes", "environment-classes", "proof-levels", "disposition-values"], "expectedConsumers": ["validators", "AI agents", "governance reviewers"], "validationResponsibilities": ["one mapping per semantic contract", "mapping schema validity", "source lineage present and resolvable", "expected dev/test proof gates present", "staging/production/live proof explicitly deferred", "persistent object expectations classified", "generated index and Markdown summary freshness"], "authorityRole": "semantic-definition", "driftRisks": ["Implementation starts from hidden assumptions instead of a reviewed mapping.", "A generated index or Markdown summary drifts from authoritative mapping JSON.", "Staging or production proof is silently claimed from local/test mappings."], "aiGuidance": "Use per-contract mappings as bootstrap planning authority only. Do not create implementation paths, start USF-39, or infer production readiness from these mappings.", "deferredDetails": ["Exact target files remain blocked until per-slice topology and source-use gates are reviewed."]}
+    {
+      "id": "schema-registry.schema.json",
+      "title": "Schema Registry Schema",
+      "path": "spec/schemas/schema-registry.schema.json",
+      "class": "registry-schema",
+      "family": "registry",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Registry",
+        "Validator"
+      ],
+      "purpose": "Validates this schema registry itself.",
+      "requiredBecause": "The registry is rank-1 governance and must be self-validating to be externally auditable.",
+      "sourceInputs": [
+        "spec/registries/schema-registry.json",
+        "../react universal-service-foundation-registry.json (data-only registry precedent)"
+      ],
+      "taxonomyRefs": [
+        "artefact-classification"
+      ],
+      "vocabularyRefs": [
+        "artefact-kinds",
+        "schema-classes",
+        "schema-lifecycle-states",
+        "authority-levels"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "unique schema ids/paths",
+        "classes from schema-classes",
+        "lifecycle from schema-lifecycle-states",
+        "authorityRole from authority-levels",
+        "no forbidden canonical names",
+        "no schema active without a file"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Registry drifting from vocabulary/taxonomy."
+      ],
+      "aiGuidance": "Validate the registry before trusting any schema entry.",
+      "deferredDetails": [
+        "Self-validation wiring (the dialect is resolved as Draft 2020-12 by docs/architecture/schema-authoring-standard.md)."
+      ]
+    },
+    {
+      "id": "taxonomy.schema.json",
+      "title": "Taxonomy Schema",
+      "path": "spec/schemas/taxonomy.schema.json",
+      "class": "taxonomy-schema",
+      "family": "taxonomy-and-vocabulary",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Semantic Contract",
+        "Registry"
+      ],
+      "purpose": "Validates the taxonomy catalogue and future taxonomy files.",
+      "requiredBecause": "Taxonomy is rank-1 classification authority and must be shape-validated.",
+      "sourceInputs": [
+        "spec/taxonomies/taxonomy-catalog.json"
+      ],
+      "taxonomyRefs": [
+        "artefact-classification"
+      ],
+      "vocabularyRefs": [
+        "artefact-kinds",
+        "classification-modes",
+        "lifecycle-states"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "unique family/taxonomy ids",
+        "every taxonomy in a known family",
+        "classificationMode from classification-modes",
+        "governed ontology concepts present"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Taxonomy categories drifting into vocabulary values."
+      ],
+      "aiGuidance": "Taxonomy classifies; it does not enumerate controlled values.",
+      "deferredDetails": [
+        "Taxonomy is part of the rank-1 semantic-definition corpus: it is grounded in the ontology concepts Semantic Contract (a normative statement of classification structure) and Registry (a resolution index). The ontology defines no separate Taxonomy concept; these two existing concepts ground it accurately, so no ontology change is required."
+      ]
+    },
+    {
+      "id": "vocabulary.schema.json",
+      "title": "Vocabulary Schema",
+      "path": "spec/schemas/vocabulary.schema.json",
+      "class": "vocabulary-schema",
+      "family": "taxonomy-and-vocabulary",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Semantic Contract",
+        "Registry"
+      ],
+      "purpose": "Validates the vocabulary catalogue and future vocabulary files.",
+      "requiredBecause": "Vocabulary is rank-1 controlled-value authority and must be shape-validated.",
+      "sourceInputs": [
+        "spec/vocabularies/vocabulary-catalog.json"
+      ],
+      "taxonomyRefs": [
+        "artefact-classification"
+      ],
+      "vocabularyRefs": [
+        "artefact-kinds",
+        "classification-modes",
+        "lifecycle-states"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "unique value-set ids",
+        "unique values per set",
+        "aliases resolve to canonical",
+        "forbidden values not canonical",
+        "every value has lifecycle and AI guidance"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Aliases drifting; forbidden values appearing as canonical."
+      ],
+      "aiGuidance": "Vocabulary is the source of exact allowed values.",
+      "deferredDetails": [
+        "Vocabulary is part of the rank-1 semantic-definition corpus: it is grounded in the ontology concepts Semantic Contract (a normative statement of allowed values) and Registry (a controlled-value index). The ontology defines no separate Vocabulary concept; these two existing concepts ground it accurately, so no ontology change is required."
+      ]
+    },
+    {
+      "id": "semantic-contract.schema.json",
+      "title": "Semantic Contract Schema",
+      "path": "spec/schemas/semantic-contract.schema.json",
+      "class": "semantic-schema",
+      "family": "ontology-and-semantics",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Semantic Contract",
+        "Capability",
+        "Port",
+        "Interface",
+        "Configuration",
+        "Data Model"
+      ],
+      "purpose": "Validates semantic contracts (capability facets and other rank-1 contracts).",
+      "requiredBecause": "Semantic contracts are the primary authority; they must be complete and evidence-backed.",
+      "sourceInputs": [
+        "../react v1-capability-closure.json (75 capabilities, 10 facets)",
+        "../react capability-*.json facet templates"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification",
+        "authority-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "capability-domains"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationResponsibilities": [
+        "all required facets present",
+        "each facet cites authoritative evidence",
+        "drop to gap if backing missing"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "A capability marked proven without facet backing."
+      ],
+      "aiGuidance": "Read the contract before its implementation; never invent a facet.",
+      "deferredDetails": [
+        "capability-domains value set exists in vocabulary as deferred; canonical values are not yet authored."
+      ]
+    },
+    {
+      "id": "source-reference.schema.json",
+      "title": "Source Reference Schema",
+      "path": "spec/schemas/source-reference.schema.json",
+      "class": "source-reference-schema",
+      "family": "source-lineage",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Source Reference",
+        "Evidence"
+      ],
+      "purpose": "Validates references to ../react and later source evidence.",
+      "requiredBecause": "Lineage must be traceable and resolvable.",
+      "sourceInputs": [
+        "../react v1-file-inventory.json",
+        "../react v1-to-v2-path-map.json",
+        "../react sourceFileRefs fields"
+      ],
+      "taxonomyRefs": [
+        "source-evidence-classification",
+        "source-role-classification"
+      ],
+      "vocabularyRefs": [
+        "source-kinds",
+        "source-roles",
+        "disposition-values"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "import tooling",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "reference resolves to a real path/commit",
+        "declares source kind and role",
+        "carries a disposition"
+      ],
+      "authorityRole": "historical-source-evidence",
+      "driftRisks": [
+        "Broken or fabricated lineage."
+      ],
+      "aiGuidance": "Cite lineage; never treat the reference as live authority.",
+      "deferredDetails": [
+        "Exact source registry fields."
+      ]
+    },
+    {
+      "id": "source-disposition.schema.json",
+      "title": "Source Disposition Schema",
+      "path": "spec/schemas/source-disposition.schema.json",
+      "class": "source-reference-schema",
+      "family": "import-and-disposition",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Disposition",
+        "Source Reference"
+      ],
+      "purpose": "Validates the treatment of imported, deferred, transformed, rejected, or retired source elements.",
+      "requiredBecause": "No source element may disappear without a disposition.",
+      "sourceInputs": [
+        "../react file disposition vocabulary (9 values)",
+        "../react command/test dispositions"
+      ],
+      "taxonomyRefs": [
+        "source-role-classification"
+      ],
+      "vocabularyRefs": [
+        "disposition-values",
+        "source-kinds",
+        "source-roles"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "import tooling",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "disposition from disposition-values",
+        "rationale present",
+        "links to source reference"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Silent source loss."
+      ],
+      "aiGuidance": "Disposition is a recorded decision, not silence; it does not imply implementation acceptance.",
+      "deferredDetails": [
+        "Whether regenerate and promote-to-conformance warrant distinct canonical disposition values."
+      ]
+    },
+    {
+      "id": "evidence-envelope.schema.json",
+      "title": "Evidence Envelope Schema",
+      "path": "spec/schemas/evidence-envelope.schema.json",
+      "class": "evidence-schema",
+      "family": "evidence-and-proof",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Evidence",
+        "Generated Report"
+      ],
+      "purpose": "Validates the common evidence envelope across evidence kinds.",
+      "requiredBecause": "Evidence must be typed, source-referenced, and freshness-checkable.",
+      "sourceInputs": [
+        "../react docs/evidence (267 files; machine + human)",
+        "../react usf-audit/proof-evidence-index.json"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification"
+      ],
+      "vocabularyRefs": [
+        "evidence-kinds",
+        "provider-modes",
+        "environment-classes",
+        "report-statuses"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "evidence collectors",
+        "report generators"
+      ],
+      "validationResponsibilities": [
+        "evidence kind from evidence-kinds",
+        "source reference present",
+        "provider mode and environment where relevant",
+        "freshness/staleness",
+        "no overclaim"
+      ],
+      "authorityRole": "runtime-proof-evidence",
+      "driftRisks": [
+        "Hiding missing raw evidence behind a report."
+      ],
+      "aiGuidance": "Never conflate kinds; missing evidence fails closed.",
+      "deferredDetails": [
+        "Exact evidence envelope schema."
+      ]
+    },
+    {
+      "id": "proof-evidence.schema.json",
+      "title": "Proof Evidence Schema",
+      "path": "spec/schemas/proof-evidence.schema.json",
+      "class": "proof-schema",
+      "family": "evidence-and-proof",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Proof",
+        "Proof Level",
+        "Evidence"
+      ],
+      "purpose": "Validates proof claim, execution, emitted evidence, collected evidence, provider mode, environment, and readiness claim consistency.",
+      "requiredBecause": "Proof must be honest: claimed level <= observed; missing evidence fails closed.",
+      "sourceInputs": [
+        "../react capability-proof-definition.json (L0-L6; liveProviderMinimumLevel 4)",
+        "../react usf-audit/proof-evidence (172 records)"
+      ],
+      "taxonomyRefs": [
+        "proof-classification",
+        "provider-classification",
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "proof-levels",
+        "provider-modes",
+        "environment-classes",
+        "evidence-kinds",
+        "report-statuses"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "proof collectors"
+      ],
+      "validationResponsibilities": [
+        "proof level from proof-levels",
+        "claimed <= observed",
+        "provider mode and environment present",
+        "fail closed on missing emitted/collected evidence",
+        "hermetic-mock not live"
+      ],
+      "authorityRole": "runtime-proof-evidence",
+      "driftRisks": [
+        "Overclaiming proof level; relabelling hermetic as live."
+      ],
+      "aiGuidance": "Proof level is not readiness status; never relabel upward.",
+      "deferredDetails": [
+        "Exact proof evidence schema; proof-level vocabulary finalisation."
+      ]
+    },
+    {
+      "id": "provider-mode.schema.json",
+      "title": "Provider Mode Schema",
+      "path": "spec/schemas/provider-mode.schema.json",
+      "class": "provider-schema",
+      "family": "provider-and-environment",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Provider",
+        "Provider Mode",
+        "Adapter",
+        "Port"
+      ],
+      "purpose": "Validates provider mode declarations and prevents hermetic/live confusion.",
+      "requiredBecause": "Provider mode is proof-relevant and must be explicit and honest.",
+      "sourceInputs": [
+        "../react runtime-provider-inventory.json (~69 providers)",
+        "../react in-memory-to-real parity reports",
+        "../react services/mock-oidc"
+      ],
+      "taxonomyRefs": [
+        "provider-classification"
+      ],
+      "vocabularyRefs": [
+        "provider-modes",
+        "environment-classes"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "provider mode from provider-modes",
+        "hermetic-mock MUST NOT satisfy live-external-provider",
+        "adapter identifies port and provider mode"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Mislabelling hermetic as live."
+      ],
+      "aiGuidance": "mock IdP is valid hermetic proof but never live external proof.",
+      "deferredDetails": [
+        "Whether to add a no-provider value for non-runtime capabilities."
+      ]
+    },
+    {
+      "id": "environment.schema.json",
+      "title": "Environment Schema",
+      "path": "spec/schemas/environment.schema.json",
+      "class": "environment-schema",
+      "family": "provider-and-environment",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Environment",
+        "Provider Mode"
+      ],
+      "purpose": "Validates environment class declarations and prevents production-shaped/production-live confusion.",
+      "requiredBecause": "Environment is proof-relevant and must be explicit.",
+      "sourceInputs": [
+        "../react environment-readiness-gates.json (4 gates)",
+        "../react environment-capability-matrix.json (70x4)",
+        "../react e2e profiles"
+      ],
+      "taxonomyRefs": [
+        "environment-classification"
+      ],
+      "vocabularyRefs": [
+        "environment-classes",
+        "provider-modes"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "environment from environment-classes",
+        "production-shaped MUST NOT satisfy production-live",
+        "environment does not upgrade provider mode"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Treating an environment name as a readiness claim."
+      ],
+      "aiGuidance": "Keep environment distinct from provider mode.",
+      "deferredDetails": [
+        "Confirm exact historical stage-to-class mapping during import."
+      ]
+    },
+    {
+      "id": "command.schema.json",
+      "title": "Command Schema",
+      "path": "spec/schemas/command.schema.json",
+      "class": "command-schema",
+      "family": "command-and-configuration",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Command"
+      ],
+      "purpose": "Validates Make targets, package scripts, CLI commands, validation/proof/import/build/runtime/report-generation commands.",
+      "requiredBecause": "Commands are semantic assets, not incidental scripts.",
+      "sourceInputs": [
+        "../react Makefile and make/*.mk",
+        "../react package.json (212 scripts)",
+        "../react v2-command-map.json (377 commands)"
+      ],
+      "taxonomyRefs": [
+        "command-classification"
+      ],
+      "vocabularyRefs": [
+        "command-kinds",
+        "environment-classes",
+        "report-statuses"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "operators"
+      ],
+      "validationResponsibilities": [
+        "command kind from command-kinds",
+        "purpose/inputs/outputs/environment scope/failure semantics present",
+        "no delete/rename without disposition"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Silent command loss/rename."
+      ],
+      "aiGuidance": "Disposition before deleting or renaming a command.",
+      "deferredDetails": [
+        "Exact command catalogue import from ../react."
+      ]
+    },
+    {
+      "id": "configuration.schema.json",
+      "title": "Configuration Schema",
+      "path": "spec/schemas/configuration.schema.json",
+      "class": "configuration-schema",
+      "family": "command-and-configuration",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Configuration"
+      ],
+      "purpose": "Validates env vars, config files, config keys, secret-bearing settings, provider/environment/proof/runtime/compose configuration.",
+      "requiredBecause": "Configuration is a governed semantic asset; secret handling must be explicit.",
+      "sourceInputs": [
+        "../react v1-config-contract-catalogue.json (64 keys)",
+        "../react config/environments manifests",
+        "../react compose.yaml"
+      ],
+      "taxonomyRefs": [
+        "configuration-classification"
+      ],
+      "vocabularyRefs": [
+        "configuration-kinds",
+        "provider-modes",
+        "environment-classes"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "operators"
+      ],
+      "validationResponsibilities": [
+        "config kind from configuration-kinds",
+        "secret classification",
+        "provider/environment/proof relevance",
+        "generated config not hand-edited"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Hand-editing generated config; misclassifying a secret."
+      ],
+      "aiGuidance": "Regenerate from manifests; never leak secret values.",
+      "deferredDetails": [
+        "Exact configuration catalogue import from ../react."
+      ]
+    },
+    {
+      "id": "interface-contract.schema.json",
+      "title": "Interface Contract Schema",
+      "path": "spec/schemas/interface-contract.schema.json",
+      "class": "interface-schema",
+      "family": "interface-event-workflow",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Interface",
+        "Service",
+        "Port"
+      ],
+      "purpose": "Validates API routes, commands, queries, event handlers, service boundaries, CLI interfaces, provider ports, adapter interfaces, internal and external contracts.",
+      "requiredBecause": "Interfaces must be contract-first or contract-reconciled, not implementation-guessed.",
+      "sourceInputs": [
+        "../react operational-semantics.json (~235 routes)",
+        "../react OpenAPI drift hard gate"
+      ],
+      "taxonomyRefs": [
+        "interface-classification"
+      ],
+      "vocabularyRefs": [
+        "interface-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationResponsibilities": [
+        "interface kind from interface-kinds",
+        "resolves to a semantic contract",
+        "runtime drift detectable"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Inferring an interface from handlers."
+      ],
+      "aiGuidance": "Define or reconcile the contract first.",
+      "deferredDetails": [
+        "OpenAPI artefact decision."
+      ]
+    },
+    {
+      "id": "event-contract.schema.json",
+      "title": "Event Contract Schema",
+      "path": "spec/schemas/event-contract.schema.json",
+      "class": "event-schema",
+      "family": "interface-event-workflow",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Event"
+      ],
+      "purpose": "Validates event/message contracts and event semantics.",
+      "requiredBecause": "Events must have contracts (schema, idempotency, ordering, DLQ, retention) before emission.",
+      "sourceInputs": [
+        "../react event-semantics.json (10 events; canonical vs test-only)"
+      ],
+      "taxonomyRefs": [
+        "event-workflow-classification"
+      ],
+      "vocabularyRefs": [
+        "event-workflow-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationResponsibilities": [
+        "event kind from event-workflow-kinds",
+        "schema/idempotency/ordering/DLQ/retention present"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Inventing events in code."
+      ],
+      "aiGuidance": "Define the event contract before emitting an event.",
+      "deferredDetails": [
+        "AsyncAPI artefact decision; interaction-type sub-vocabulary."
+      ]
+    },
+    {
+      "id": "workflow.schema.json",
+      "title": "Workflow Schema",
+      "path": "spec/schemas/workflow.schema.json",
+      "class": "workflow-schema",
+      "family": "interface-event-workflow",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Workflow",
+        "Event"
+      ],
+      "purpose": "Validates workflows, cross-capability interactions, state transitions, async/sync operations, failure paths, and compensation paths.",
+      "requiredBecause": "Workflow ordering, consistency, and compensation are contract-level semantics.",
+      "sourceInputs": [
+        "../react cross-capability-interactions.json (8 interaction types)",
+        "../react temporal/windmill workflow providers"
+      ],
+      "taxonomyRefs": [
+        "event-workflow-classification"
+      ],
+      "vocabularyRefs": [
+        "event-workflow-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationResponsibilities": [
+        "workflow kind from event-workflow-kinds",
+        "failure-path and compensation-path explicit"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Losing compensation/ordering semantics in a refactor."
+      ],
+      "aiGuidance": "Declare compensation and failure paths explicitly.",
+      "deferredDetails": [
+        "Exact event/workflow contract import from ../react."
+      ]
+    },
+    {
+      "id": "data-migration.schema.json",
+      "title": "Data and Migration Schema",
+      "path": "spec/schemas/data-migration.schema.json",
+      "class": "semantic-schema",
+      "family": "data-and-migration",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Data Model",
+        "Migration",
+        "Backup / Restore"
+      ],
+      "purpose": "Validates data models, persistence contracts, identifiers, relationships, migrations, seed data, fixtures, backup evidence, restore evidence, and retention/deletion concerns.",
+      "requiredBecause": "Migrations are forward-only and checksum-immutable; tenancy isolation must be preserved; backup/restore evidence must be preserved. Classed as semantic-schema because data models, migrations, and backup/restore are rank-1 semantic contracts (data semantics), which the semantic-schema class explicitly covers; no dedicated data-schema vocabulary class is needed.",
+      "sourceInputs": [
+        "../react data-and-migration-plan.json (schema-per-tenant; RLS; migration chain 001..034 then 035+; backupRestore; destructiveOpControls)"
+      ],
+      "taxonomyRefs": [
+        "data-migration-classification"
+      ],
+      "vocabularyRefs": [
+        "data-migration-kinds",
+        "evidence-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "implementers"
+      ],
+      "validationResponsibilities": [
+        "data kind from data-migration-kinds",
+        "migration immutability",
+        "tenancy isolation",
+        "backup/restore emitted evidence preserved"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Editing a committed migration; tenant data leakage."
+      ],
+      "aiGuidance": "Never edit a committed migration; preserve tenancy invariants.",
+      "deferredDetails": [
+        "Exact data/migration/backup/restore import from ../react."
+      ]
+    },
+    {
+      "id": "observability-signal.schema.json",
+      "title": "Observability Signal Schema",
+      "path": "spec/schemas/observability-signal.schema.json",
+      "class": "observability-schema",
+      "family": "observability-and-audit",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Observability Signal"
+      ],
+      "purpose": "Validates logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, and correlation identifiers.",
+      "requiredBecause": "Observability is a semantic asset that supports proof, debugging, and drift detection.",
+      "sourceInputs": [
+        "../react operational-semantics observabilitySignals/metrics/logs/traces",
+        "../react Loki/Tempo/Sentry correlation"
+      ],
+      "taxonomyRefs": [
+        "observability-audit-classification"
+      ],
+      "vocabularyRefs": [
+        "observability-signal-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "operators"
+      ],
+      "validationResponsibilities": [
+        "signal kind from observability-signal-kinds",
+        "controlled vocabulary",
+        "coverage"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Removing a signal as a refactor."
+      ],
+      "aiGuidance": "Removal requires semantic review.",
+      "deferredDetails": [
+        "OpenTelemetry attribute vocabulary mapping."
+      ]
+    },
+    {
+      "id": "audit-event.schema.json",
+      "title": "Audit Event Schema",
+      "path": "spec/schemas/audit-event.schema.json",
+      "class": "audit-schema",
+      "family": "observability-and-audit",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Audit Event"
+      ],
+      "purpose": "Validates audit events, security-sensitive audits, state-changing audits, and accountability records.",
+      "requiredBecause": "Audit is required for security-sensitive and state-changing operations.",
+      "sourceInputs": [
+        "../react auditAction field",
+        "../react assurance bar 0 mutations without audit",
+        "../react docs/evidence/audit"
+      ],
+      "taxonomyRefs": [
+        "observability-audit-classification"
+      ],
+      "vocabularyRefs": [
+        "audit-event-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "security reviewers"
+      ],
+      "validationResponsibilities": [
+        "audit kind from audit-event-kinds",
+        "coverage for mutating/privileged actions"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Removing an audit event as a refactor."
+      ],
+      "aiGuidance": "Every mutating/privileged action needs a defined audit semantic.",
+      "deferredDetails": [
+        "Exact observability/audit import from ../react."
+      ]
+    },
+    {
+      "id": "ui-semantic-model.schema.json",
+      "title": "UI Semantic Model Schema",
+      "path": "spec/schemas/ui-semantic-model.schema.json",
+      "class": "ui-semantic-schema",
+      "family": "ui-semantics",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "UI Semantic Model",
+        "Capability"
+      ],
+      "purpose": "Validates UI surfaces, pages, journeys, states, validation, errors, permissions, accessibility concerns, user actions, command/query mappings, and e2e proof mappings.",
+      "requiredBecause": "UI behaviour and proof expectations must be preserved so the visual layer can be regenerated without inventing behaviour.",
+      "sourceInputs": [
+        "../react ui-capability-model.json (28 capabilities, 12 personas)",
+        "../react ui-definition.schema.json"
+      ],
+      "taxonomyRefs": [
+        "ui-semantic-classification"
+      ],
+      "vocabularyRefs": [
+        "ui-semantic-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "UI generators"
+      ],
+      "validationResponsibilities": [
+        "ui kind from ui-semantic-kinds",
+        "journeys map to capabilities and proofs",
+        "accessibility preserved"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Treating a UI component as a capability; deleting a journey as a restyle."
+      ],
+      "aiGuidance": "Visual redesign is not semantic deletion; derive from behaviour, not JSX.",
+      "deferredDetails": [
+        "Exact UI semantic import from ../react."
+      ]
+    },
+    {
+      "id": "adr.schema.json",
+      "title": "ADR Schema",
+      "path": "spec/schemas/adr.schema.json",
+      "class": "adr-schema",
+      "family": "adr-and-decision",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "ADR",
+        "Semantic Contract"
+      ],
+      "purpose": "Validates ADR structure: semantic refs, source refs, proof refs, validator refs, invariants, permitted changes, forbidden drift, consequences, and AI-alignment rules.",
+      "requiredBecause": "ADRs are rank-2 binding decisions and must be traceable, not generic prose.",
+      "sourceInputs": [
+        "../react v2-decision-catalog.json (74 accepted)",
+        "../react v2-decision-lineage.json (74 evidence-backed)",
+        "rule R13"
+      ],
+      "taxonomyRefs": [
+        "authority-classification",
+        "ai-governance-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "artefact-kinds",
+        "ai-governance-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "decision reviewers"
+      ],
+      "validationResponsibilities": [
+        "accepted status",
+        "all references resolve",
+        "invariants/forbidden-drift/AI-alignment present"
+      ],
+      "authorityRole": "adr",
+      "driftRisks": [
+        "Untraced or prose-only decisions."
+      ],
+      "aiGuidance": "ADRs are binding; record decisions as ADRs with references.",
+      "deferredDetails": [
+        "Exact ADR schema and template."
+      ]
+    },
+    {
+      "id": "validator-report.schema.json",
+      "title": "Validator Report Schema",
+      "path": "spec/schemas/validator-report.schema.json",
+      "class": "validator-report-schema",
+      "family": "validation-and-reporting",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Validator",
+        "Generated Report"
+      ],
+      "purpose": "Validates validator report shape: severities, statuses, stale/unknown/pass distinctions, evidence references, and blocking/advisory findings.",
+      "requiredBecause": "Reports are rank-7; unknown/stale must never satisfy pass and reports must reference evidence.",
+      "sourceInputs": [
+        "../react tools/v2-readiness finding shape {ruleId, severity, subject, message}; exit codes 0/1/2",
+        "../react usf-audit reports"
+      ],
+      "taxonomyRefs": [
+        "validation-reporting-classification"
+      ],
+      "vocabularyRefs": [
+        "validation-severities",
+        "report-statuses",
+        "authority-levels"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "CI",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "severity from validation-severities",
+        "status from report-statuses",
+        "unknown/stale not pass",
+        "references evidence",
+        "staleness detectable"
+      ],
+      "authorityRole": "generated-report",
+      "driftRisks": [
+        "Believing a stale report; downgrading blocking to advisory."
+      ],
+      "aiGuidance": "Never treat a report as canonical; regenerate from current state.",
+      "deferredDetails": [
+        "Exact validator report schema."
+      ]
+    },
+    {
+      "id": "import-manifest.schema.json",
+      "title": "Import Manifest Schema",
+      "path": "spec/schemas/import-manifest.schema.json",
+      "class": "import-manifest-schema",
+      "family": "import-and-disposition",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Source Reference",
+        "Disposition"
+      ],
+      "purpose": "Validates controlled import manifests from ../react.",
+      "requiredBecause": "Imports must be complete and traceable; no source element disappears without a disposition.",
+      "sourceInputs": [
+        "../react v1-to-v2-path-map.json",
+        "../react v1-file-inventory.json",
+        "bijection rule R10"
+      ],
+      "taxonomyRefs": [
+        "source-evidence-classification",
+        "source-role-classification"
+      ],
+      "vocabularyRefs": [
+        "source-kinds",
+        "source-roles",
+        "disposition-values"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "import tooling",
+        "AI agents"
+      ],
+      "validationResponsibilities": [
+        "every element has a disposition",
+        "source kind/role present",
+        "no silent loss"
+      ],
+      "authorityRole": "historical-source-evidence",
+      "driftRisks": [
+        "Silent source loss; source path dictating target path."
+      ],
+      "aiGuidance": "Source path does not dictate target schema/path; disposition every element.",
+      "deferredDetails": [
+        "Exact source import manifest mapping from ../react."
+      ]
+    },
+    {
+      "id": "ai-governance.schema.json",
+      "title": "AI Governance Schema",
+      "path": "spec/schemas/ai-governance.schema.json",
+      "class": "governance-schema",
+      "family": "ai-governance",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "AI Agent"
+      ],
+      "purpose": "Validates AI instructions, AI-generated artefacts, AI-reviewed artefacts, AI alignment rules, forbidden inferences, authority conflicts, drift risks, and required stop conditions.",
+      "requiredBecause": "AI work is governed, not informal; AI agents hold no authority.",
+      "sourceInputs": [
+        "docs/architecture/charter.md section 7",
+        "docs/architecture/authority-model.md section 6",
+        "docs/architecture/standards-profile.md section 20",
+        "docs/architecture/ontology.md sections 14-15"
+      ],
+      "taxonomyRefs": [
+        "ai-governance-classification"
+      ],
+      "vocabularyRefs": [
+        "ai-governance-kinds"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "governance reviewers"
+      ],
+      "validationResponsibilities": [
+        "ai kind from ai-governance-kinds",
+        "rationale and references present",
+        "stop conditions explicit"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Treating AI output as authoritative without checks."
+      ],
+      "aiGuidance": "Stop or fail on unresolved authority conflict; never self-grant authority.",
+      "deferredDetails": []
+    },
+    {
+      "id": "bootstrap-mapping.schema.json",
+      "title": "Bootstrap Mapping Schema",
+      "path": "spec/schemas/bootstrap-mapping.schema.json",
+      "class": "semantic-schema",
+      "family": "bootstrap-mapping",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Semantic Contract",
+        "Source Reference",
+        "Disposition",
+        "Provider",
+        "Environment",
+        "Proof"
+      ],
+      "purpose": "Validates canonical semantic-to-implementation bootstrap mappings for each semantic contract before implementation extraction.",
+      "requiredBecause": "Bootstrap readiness requires one machine-readable mapping per semantic contract covering target topology, source lineage, expected tests, proof gates, deferrals, and blockers without creating implementation scaffold.",
+      "sourceInputs": [
+        ".codex/goals/v2-bootstrap.md",
+        "docs/architecture/implementation-extraction-directive.md",
+        "docs/architecture/target-implementation-topology-plan.md",
+        "docs/architecture/semantic-source-use-closure-ledger.md"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification",
+        "source-role-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "provider-modes",
+        "environment-classes",
+        "proof-levels",
+        "disposition-values"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "governance reviewers"
+      ],
+      "validationResponsibilities": [
+        "one mapping per semantic contract",
+        "mapping schema validity",
+        "source lineage present and resolvable",
+        "expected dev/test proof gates present",
+        "staging/production/live proof explicitly deferred",
+        "persistent object expectations classified",
+        "generated index and Markdown summary freshness"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Implementation starts from hidden assumptions instead of a reviewed mapping.",
+        "A generated index or Markdown summary drifts from authoritative mapping JSON.",
+        "Staging or production proof is silently claimed from local/test mappings."
+      ],
+      "aiGuidance": "Use per-contract mappings as bootstrap planning authority only. Do not create implementation paths, start USF-39, or infer production readiness from these mappings.",
+      "deferredDetails": [
+        "Exact target files remain blocked until per-slice topology and source-use gates are reviewed."
+      ]
+    },
+    {
+      "id": "compose-service.schema.json",
+      "title": "Compose Service Classification Schema",
+      "path": "spec/schemas/compose-service.schema.json",
+      "class": "semantic-schema",
+      "family": "provider-and-environment",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Service",
+        "Provider",
+        "Environment",
+        "Proof",
+        "Source Reference"
+      ],
+      "purpose": "Validates semantic Compose service requirements, per-environment realisation policies, and generated Compose targets.",
+      "requiredBecause": "Every historical React Compose service must be classified before generated Compose can be treated as derivative output.",
+      "sourceInputs": [
+        "../react/compose.yaml",
+        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
+        "user directive: schema-driven Compose service classification and generation"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification",
+        "source-role-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "compose-realisation-modes",
+        "compose-environment-scopes",
+        "compose-lifecycles",
+        "compose-data-boundaries",
+        "compose-sharing-models",
+        "compose-service-authority-levels",
+        "compose-access-models",
+        "compose-substitution-policies",
+        "compose-policies",
+        "compose-deployment-forms",
+        "compose-classification-states",
+        "compose-service-kinds",
+        "compose-human-decision-states"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "Compose generator",
+        "AI agents",
+        "governance reviewers"
+      ],
+      "validationResponsibilities": [
+        "every React Compose service classified",
+        "generated Compose files match catalogue",
+        "environment realisation does not overclaim provider readiness",
+        "production external or cloud realisation is explicit",
+        "shared control planes have environment/project boundaries"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Manually edited Compose can bypass semantic classification.",
+        "Production services can disappear if externalisation is not explicit.",
+        "Development substitutions can be mistaken for test or staging proof."
+      ],
+      "aiGuidance": "Treat the Compose service catalogue as authority and generated Compose as derivative. Do not infer live readiness from generated Compose.",
+      "deferredDetails": [
+        "Schema remains draft until the validator and generator are exercised in review."
+      ]
+    }
   ],
   "externalStandards": [
-    {"id": "json-schema", "status": "adopted", "affectsSchemas": "JSON Schema is the mechanism for validating all USF JSON artefacts; every schema is a JSON Schema with explicit $schema and $id.", "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring §26 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).", "validatorImplications": "Validators run JSON Schema validation and fail closed on invalidity.", "aiGuidance": "Validate generated JSON against its schema before claiming completion."},
-    {"id": "bcp14-rfc2119-rfc8174", "status": "adopted", "affectsSchemas": "Normative language governs human-readable standards and ADRs; it does not by itself define JSON shape.", "willNotClaimYet": "No claim that uppercase keywords define machine validation.", "validatorImplications": "Optional keyword-usage lint for normative documents.", "aiGuidance": "Read uppercase keywords as binding."},
-    {"id": "openapi-style", "status": "adapted", "affectsSchemas": "Guides interface-contract.schema.json design (contract-first/contract-reconciled).", "willNotClaimYet": "USF does not claim full OpenAPI compliance until concrete OpenAPI artefacts exist.", "validatorImplications": "Once adopted, contract-vs-runtime drift becomes checkable.", "aiGuidance": "Do not infer API contracts from handlers when a contract exists."},
-    {"id": "asyncapi-style", "status": "adapted", "affectsSchemas": "Guides event-contract.schema.json and workflow.schema.json design.", "willNotClaimYet": "USF does not claim full AsyncAPI compliance until concrete artefacts exist.", "validatorImplications": "Event payloads/policies checkable against the contract.", "aiGuidance": "Define event contracts before emission."},
-    {"id": "opentelemetry-style", "status": "adapted", "affectsSchemas": "Guides observability-signal.schema.json naming and shape via a USF-defined controlled vocabulary.", "willNotClaimYet": "USF does not claim full OpenTelemetry compliance until concrete attribute schemas exist.", "validatorImplications": "Observability names drawn from the controlled vocabulary.", "aiGuidance": "Do not rename or remove signals as an incidental refactor."},
-    {"id": "adr-practice", "status": "adapted", "affectsSchemas": "Guides adr.schema.json expectations (normative decision records, not notes).", "willNotClaimYet": "No claim of a specific external ADR tool.", "validatorImplications": "ADR references must resolve; untraced decisions fail.", "aiGuidance": "Record decisions as traceable ADRs."},
-    {"id": "c4-style", "status": "inspired-by", "affectsSchemas": "Inspires architecture-view thinking; no schema is required for views now.", "willNotClaimYet": "No claim of formal C4 compliance.", "validatorImplications": "If views are generated later, they must reconcile with semantics.", "aiGuidance": "Use view thinking to organise understanding; views are explanatory."}
+    {
+      "id": "json-schema",
+      "status": "adopted",
+      "affectsSchemas": "JSON Schema is the mechanism for validating all USF JSON artefacts; every schema is a JSON Schema with explicit $schema and $id.",
+      "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring \u00a726 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).",
+      "validatorImplications": "Validators run JSON Schema validation and fail closed on invalidity.",
+      "aiGuidance": "Validate generated JSON against its schema before claiming completion."
+    },
+    {
+      "id": "bcp14-rfc2119-rfc8174",
+      "status": "adopted",
+      "affectsSchemas": "Normative language governs human-readable standards and ADRs; it does not by itself define JSON shape.",
+      "willNotClaimYet": "No claim that uppercase keywords define machine validation.",
+      "validatorImplications": "Optional keyword-usage lint for normative documents.",
+      "aiGuidance": "Read uppercase keywords as binding."
+    },
+    {
+      "id": "openapi-style",
+      "status": "adapted",
+      "affectsSchemas": "Guides interface-contract.schema.json design (contract-first/contract-reconciled).",
+      "willNotClaimYet": "USF does not claim full OpenAPI compliance until concrete OpenAPI artefacts exist.",
+      "validatorImplications": "Once adopted, contract-vs-runtime drift becomes checkable.",
+      "aiGuidance": "Do not infer API contracts from handlers when a contract exists."
+    },
+    {
+      "id": "asyncapi-style",
+      "status": "adapted",
+      "affectsSchemas": "Guides event-contract.schema.json and workflow.schema.json design.",
+      "willNotClaimYet": "USF does not claim full AsyncAPI compliance until concrete artefacts exist.",
+      "validatorImplications": "Event payloads/policies checkable against the contract.",
+      "aiGuidance": "Define event contracts before emission."
+    },
+    {
+      "id": "opentelemetry-style",
+      "status": "adapted",
+      "affectsSchemas": "Guides observability-signal.schema.json naming and shape via a USF-defined controlled vocabulary.",
+      "willNotClaimYet": "USF does not claim full OpenTelemetry compliance until concrete attribute schemas exist.",
+      "validatorImplications": "Observability names drawn from the controlled vocabulary.",
+      "aiGuidance": "Do not rename or remove signals as an incidental refactor."
+    },
+    {
+      "id": "adr-practice",
+      "status": "adapted",
+      "affectsSchemas": "Guides adr.schema.json expectations (normative decision records, not notes).",
+      "willNotClaimYet": "No claim of a specific external ADR tool.",
+      "validatorImplications": "ADR references must resolve; untraced decisions fail.",
+      "aiGuidance": "Record decisions as traceable ADRs."
+    },
+    {
+      "id": "c4-style",
+      "status": "inspired-by",
+      "affectsSchemas": "Inspires architecture-view thinking; no schema is required for views now.",
+      "willNotClaimYet": "No claim of formal C4 compliance.",
+      "validatorImplications": "If views are generated later, they must reconcile with semantics.",
+      "aiGuidance": "Use view thinking to organise understanding; views are explanatory."
+    }
   ],
   "reactSourceLearnings": [
-    {"id": "source-files-evidence", "learning": "Source files are semantic evidence.", "schemaImpact": "source-reference.schema.json, semantic-contract.schema.json"},
-    {"id": "make-targets-evidence", "learning": "Make targets are semantic command evidence.", "schemaImpact": "command.schema.json"},
-    {"id": "package-scripts-evidence", "learning": "Package scripts are command evidence.", "schemaImpact": "command.schema.json"},
-    {"id": "env-config-evidence", "learning": "Env/config files are configuration evidence.", "schemaImpact": "configuration.schema.json"},
-    {"id": "compose-evidence", "learning": "Compose services are runtime/environment/provider/configuration evidence.", "schemaImpact": "provider-mode.schema.json, environment.schema.json, configuration.schema.json"},
-    {"id": "tests-e2e-evidence", "learning": "Tests and e2e journeys are behavioural/UI/proof evidence where applicable.", "schemaImpact": "proof-evidence.schema.json, ui-semantic-model.schema.json"},
-    {"id": "proof-scripts-separate", "learning": "Proof scripts are separate from generated reports.", "schemaImpact": "proof-evidence.schema.json vs validator-report.schema.json"},
-    {"id": "reports-lower-authority", "learning": "Generated reports are lower authority than raw evidence and semantic artefacts.", "schemaImpact": "validator-report.schema.json authorityRole generated-report"},
-    {"id": "readiness-not-exceed-evidence", "learning": "Readiness claims must not exceed observed evidence.", "schemaImpact": "proof-evidence.schema.json, evidence-envelope.schema.json"},
-    {"id": "preserve-emitted-evidence", "learning": "Emitted proof evidence must be preserved through collection and reporting.", "schemaImpact": "proof-evidence.schema.json, evidence-envelope.schema.json"},
-    {"id": "missing-evidence-fails-closed", "learning": "Missing collected evidence must fail closed.", "schemaImpact": "proof-evidence.schema.json, validator-report.schema.json"},
-    {"id": "provider-mode-explicit", "learning": "Provider mode must be explicit.", "schemaImpact": "provider-mode.schema.json, proof-evidence.schema.json"},
-    {"id": "environment-explicit", "learning": "Environment must be explicit.", "schemaImpact": "environment.schema.json, proof-evidence.schema.json"},
-    {"id": "shaped-not-live", "learning": "Production-shaped is not production-live.", "schemaImpact": "environment.schema.json"},
-    {"id": "hermetic-not-live", "learning": "Hermetic mock proof is valid for internal proof but not live external proof.", "schemaImpact": "provider-mode.schema.json, proof-evidence.schema.json"},
-    {"id": "no-silent-source-loss", "learning": "No source element should disappear without disposition.", "schemaImpact": "source-disposition.schema.json, import-manifest.schema.json"},
-    {"id": "path-not-architecture", "learning": "Source path does not dictate target schema path.", "schemaImpact": "namingConventions, import-manifest.schema.json"},
-    {"id": "reports-traceable", "learning": "Generated readiness summaries must remain traceable to underlying evidence.", "schemaImpact": "validator-report.schema.json"},
-    {"id": "ui-not-design-authority", "learning": "UI source is semantic evidence but not necessarily future design authority.", "schemaImpact": "ui-semantic-model.schema.json"},
-    {"id": "contracts-not-source-path", "learning": "Operational semantics, event semantics, and cross-capability interactions must become contract-governed rather than source-path-governed.", "schemaImpact": "interface-contract.schema.json, event-contract.schema.json, workflow.schema.json"},
-    {"id": "backup-restore-evidence", "learning": "Backup/restore evidence requires explicit schema support because proof claims must preserve emitted and collected evidence.", "schemaImpact": "data-migration.schema.json, proof-evidence.schema.json"},
-    {"id": "commands-config-semantic-assets", "learning": "Commands/configuration from Makefile, package scripts, env files, config directories, and compose files must be treated as semantic assets.", "schemaImpact": "command.schema.json, configuration.schema.json"},
-    {"id": "validators-fail-closed", "learning": "Validators must fail closed on missing evidence rather than silently downgrading or passing claims.", "schemaImpact": "validator-report.schema.json, proof-evidence.schema.json"}
+    {
+      "id": "source-files-evidence",
+      "learning": "Source files are semantic evidence.",
+      "schemaImpact": "source-reference.schema.json, semantic-contract.schema.json"
+    },
+    {
+      "id": "make-targets-evidence",
+      "learning": "Make targets are semantic command evidence.",
+      "schemaImpact": "command.schema.json"
+    },
+    {
+      "id": "package-scripts-evidence",
+      "learning": "Package scripts are command evidence.",
+      "schemaImpact": "command.schema.json"
+    },
+    {
+      "id": "env-config-evidence",
+      "learning": "Env/config files are configuration evidence.",
+      "schemaImpact": "configuration.schema.json"
+    },
+    {
+      "id": "compose-evidence",
+      "learning": "Compose services are runtime/environment/provider/configuration evidence.",
+      "schemaImpact": "provider-mode.schema.json, environment.schema.json, configuration.schema.json"
+    },
+    {
+      "id": "tests-e2e-evidence",
+      "learning": "Tests and e2e journeys are behavioural/UI/proof evidence where applicable.",
+      "schemaImpact": "proof-evidence.schema.json, ui-semantic-model.schema.json"
+    },
+    {
+      "id": "proof-scripts-separate",
+      "learning": "Proof scripts are separate from generated reports.",
+      "schemaImpact": "proof-evidence.schema.json vs validator-report.schema.json"
+    },
+    {
+      "id": "reports-lower-authority",
+      "learning": "Generated reports are lower authority than raw evidence and semantic artefacts.",
+      "schemaImpact": "validator-report.schema.json authorityRole generated-report"
+    },
+    {
+      "id": "readiness-not-exceed-evidence",
+      "learning": "Readiness claims must not exceed observed evidence.",
+      "schemaImpact": "proof-evidence.schema.json, evidence-envelope.schema.json"
+    },
+    {
+      "id": "preserve-emitted-evidence",
+      "learning": "Emitted proof evidence must be preserved through collection and reporting.",
+      "schemaImpact": "proof-evidence.schema.json, evidence-envelope.schema.json"
+    },
+    {
+      "id": "missing-evidence-fails-closed",
+      "learning": "Missing collected evidence must fail closed.",
+      "schemaImpact": "proof-evidence.schema.json, validator-report.schema.json"
+    },
+    {
+      "id": "provider-mode-explicit",
+      "learning": "Provider mode must be explicit.",
+      "schemaImpact": "provider-mode.schema.json, proof-evidence.schema.json"
+    },
+    {
+      "id": "environment-explicit",
+      "learning": "Environment must be explicit.",
+      "schemaImpact": "environment.schema.json, proof-evidence.schema.json"
+    },
+    {
+      "id": "shaped-not-live",
+      "learning": "Production-shaped is not production-live.",
+      "schemaImpact": "environment.schema.json"
+    },
+    {
+      "id": "hermetic-not-live",
+      "learning": "Hermetic mock proof is valid for internal proof but not live external proof.",
+      "schemaImpact": "provider-mode.schema.json, proof-evidence.schema.json"
+    },
+    {
+      "id": "no-silent-source-loss",
+      "learning": "No source element should disappear without disposition.",
+      "schemaImpact": "source-disposition.schema.json, import-manifest.schema.json"
+    },
+    {
+      "id": "path-not-architecture",
+      "learning": "Source path does not dictate target schema path.",
+      "schemaImpact": "namingConventions, import-manifest.schema.json"
+    },
+    {
+      "id": "reports-traceable",
+      "learning": "Generated readiness summaries must remain traceable to underlying evidence.",
+      "schemaImpact": "validator-report.schema.json"
+    },
+    {
+      "id": "ui-not-design-authority",
+      "learning": "UI source is semantic evidence but not necessarily future design authority.",
+      "schemaImpact": "ui-semantic-model.schema.json"
+    },
+    {
+      "id": "contracts-not-source-path",
+      "learning": "Operational semantics, event semantics, and cross-capability interactions must become contract-governed rather than source-path-governed.",
+      "schemaImpact": "interface-contract.schema.json, event-contract.schema.json, workflow.schema.json"
+    },
+    {
+      "id": "backup-restore-evidence",
+      "learning": "Backup/restore evidence requires explicit schema support because proof claims must preserve emitted and collected evidence.",
+      "schemaImpact": "data-migration.schema.json, proof-evidence.schema.json"
+    },
+    {
+      "id": "commands-config-semantic-assets",
+      "learning": "Commands/configuration from Makefile, package scripts, env files, config directories, and compose files must be treated as semantic assets.",
+      "schemaImpact": "command.schema.json, configuration.schema.json"
+    },
+    {
+      "id": "validators-fail-closed",
+      "learning": "Validators must fail closed on missing evidence rather than silently downgrading or passing claims.",
+      "schemaImpact": "validator-report.schema.json, proof-evidence.schema.json"
+    }
   ],
   "validationExpectations": [
     "Registry file must parse as JSON.",
@@ -282,57 +2733,207 @@
     "Do not create implementation directories or runtime code as part of schema registry work."
   ],
   "deferredWork": [
-    {"item": "JSON Schema validator package/tooling selection (the dialect is resolved as Draft 2020-12 by docs/architecture/schema-authoring-standard.md).", "safety": "resolved: jsonschema==4.10.3 advisory; active maturity deferred"},
-    {"item": "Actual schema file creation (all 23 planned schemas).", "safety": "resolved-at-draft-level; active maturity deferred"},
-    {"item": "Schema-registry schema self-validation (schema-registry.schema.json).", "safety": "resolved-at-draft-level; active maturity deferred"},
-    {"item": "Schema validator implementation.", "safety": "resolved-at-draft-advisory-level; active maturity still deferred"},
-    {"item": "Schema-to-taxonomy validation.", "safety": "resolved-at-draft-advisory-level; active maturity still deferred"},
-    {"item": "Schema-to-vocabulary validation.", "safety": "resolved-at-draft-advisory-level; active maturity still deferred"},
-    {"item": "Schema-to-ontology validation.", "safety": "resolved-at-draft-advisory-level; active maturity still deferred"},
-    {"item": "Source reference schema implementation.", "safety": "resolved-at-draft-level; active maturity deferred"},
-    {"item": "Evidence envelope schema implementation.", "safety": "resolved-at-draft-level; active maturity deferred"},
-    {"item": "Proof evidence schema implementation.", "safety": "resolved-at-draft-level; active maturity deferred"},
-    {"item": "ADR schema implementation.", "safety": "resolved-at-draft-level; ADR canon + active maturity deferred"},
-    {"item": "Validator report schema implementation.", "safety": "resolved-at-draft-level; active maturity deferred"},
-    {"item": "Import manifest schema implementation.", "safety": "resolved-at-draft-level; import map + active maturity deferred"},
-    {"item": "OpenAPI/AsyncAPI artefact decisions.", "safety": "safe"},
-    {"item": "OpenTelemetry attribute vocabulary decisions.", "safety": "safe"},
-    {"item": "Exact source import manifest mapping from ../react.", "safety": "safe"},
-    {"item": "Exact command catalogue import from ../react.", "safety": "safe"},
-    {"item": "Exact configuration catalogue import from ../react.", "safety": "safe"},
-    {"item": "Exact UI semantic import from ../react.", "safety": "safe"},
-    {"item": "Exact event/workflow contract import from ../react.", "safety": "safe"},
-    {"item": "Exact data/migration/backup/restore import from ../react.", "safety": "safe"},
-    {"item": "Exact observability/audit import from ../react.", "safety": "safe"},
-    {"item": "Canonical capability-domain values (value set exists in vocabulary as deferred; values are not yet authored).", "safety": "safe"}
+    {
+      "item": "JSON Schema validator package/tooling selection (the dialect is resolved as Draft 2020-12 by docs/architecture/schema-authoring-standard.md).",
+      "safety": "resolved: jsonschema==4.10.3 advisory; active maturity deferred"
+    },
+    {
+      "item": "Actual schema file creation (all 23 planned schemas).",
+      "safety": "resolved-at-draft-level; active maturity deferred"
+    },
+    {
+      "item": "Schema-registry schema self-validation (schema-registry.schema.json).",
+      "safety": "resolved-at-draft-level; active maturity deferred"
+    },
+    {
+      "item": "Schema validator implementation.",
+      "safety": "resolved-at-draft-advisory-level; active maturity still deferred"
+    },
+    {
+      "item": "Schema-to-taxonomy validation.",
+      "safety": "resolved-at-draft-advisory-level; active maturity still deferred"
+    },
+    {
+      "item": "Schema-to-vocabulary validation.",
+      "safety": "resolved-at-draft-advisory-level; active maturity still deferred"
+    },
+    {
+      "item": "Schema-to-ontology validation.",
+      "safety": "resolved-at-draft-advisory-level; active maturity still deferred"
+    },
+    {
+      "item": "Source reference schema implementation.",
+      "safety": "resolved-at-draft-level; active maturity deferred"
+    },
+    {
+      "item": "Evidence envelope schema implementation.",
+      "safety": "resolved-at-draft-level; active maturity deferred"
+    },
+    {
+      "item": "Proof evidence schema implementation.",
+      "safety": "resolved-at-draft-level; active maturity deferred"
+    },
+    {
+      "item": "ADR schema implementation.",
+      "safety": "resolved-at-draft-level; ADR canon + active maturity deferred"
+    },
+    {
+      "item": "Validator report schema implementation.",
+      "safety": "resolved-at-draft-level; active maturity deferred"
+    },
+    {
+      "item": "Import manifest schema implementation.",
+      "safety": "resolved-at-draft-level; import map + active maturity deferred"
+    },
+    {
+      "item": "OpenAPI/AsyncAPI artefact decisions.",
+      "safety": "safe"
+    },
+    {
+      "item": "OpenTelemetry attribute vocabulary decisions.",
+      "safety": "safe"
+    },
+    {
+      "item": "Exact source import manifest mapping from ../react.",
+      "safety": "safe"
+    },
+    {
+      "item": "Exact command catalogue import from ../react.",
+      "safety": "safe"
+    },
+    {
+      "item": "Exact configuration catalogue import from ../react.",
+      "safety": "safe"
+    },
+    {
+      "item": "Exact UI semantic import from ../react.",
+      "safety": "safe"
+    },
+    {
+      "item": "Exact event/workflow contract import from ../react.",
+      "safety": "safe"
+    },
+    {
+      "item": "Exact data/migration/backup/restore import from ../react.",
+      "safety": "safe"
+    },
+    {
+      "item": "Exact observability/audit import from ../react.",
+      "safety": "safe"
+    },
+    {
+      "item": "Canonical capability-domain values (value set exists in vocabulary as deferred; values are not yet authored).",
+      "safety": "safe"
+    }
   ],
   "acceptanceCriteria": [
-    {"criterion": "Valid JSON.", "satisfied": true},
-    {"criterion": "Creates only spec/registries/schema-registry.json.", "satisfied": true},
-    {"criterion": "Consistent with charter.", "satisfied": true},
-    {"criterion": "Consistent with authority model.", "satisfied": true},
-    {"criterion": "Consistent with standards profile.", "satisfied": true},
-    {"criterion": "Consistent with ontology.", "satisfied": true},
-    {"criterion": "Consistent with taxonomy catalogue.", "satisfied": true},
-    {"criterion": "Consistent with vocabulary catalogue.", "satisfied": true},
-    {"criterion": "Grounded in ../react.", "satisfied": true},
-    {"criterion": "Distinguishes planned schemas from existing schemas.", "satisfied": true},
-    {"criterion": "Defines common requirements.", "satisfied": true},
-    {"criterion": "Defines common envelope.", "satisfied": true},
-    {"criterion": "Defines schema classes.", "satisfied": true},
-    {"criterion": "Defines lifecycle states.", "satisfied": true},
-    {"criterion": "Defines schema families.", "satisfied": true},
-    {"criterion": "Defines planned schema entries.", "satisfied": true},
-    {"criterion": "Captures React source learnings.", "satisfied": true},
-    {"criterion": "Includes external standard posture without overclaiming.", "satisfied": true},
-    {"criterion": "Includes future validation expectations.", "satisfied": true},
-    {"criterion": "Includes AI agent rules.", "satisfied": true},
-    {"criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring §26 Amendment A).", "satisfied": true},
-    {"criterion": "Does not create taxonomy or vocabulary files.", "satisfied": true},
-    {"criterion": "Does not import runtime/application code.", "satisfied": true},
-    {"criterion": "Does not create implementation directories.", "satisfied": true},
-    {"criterion": "Does not mark planned schemas as active.", "satisfied": true},
-    {"criterion": "Does not use forbidden canonical names.", "satisfied": true},
-    {"criterion": "Does not treat generated reports as schema authority.", "satisfied": true}
+    {
+      "criterion": "Valid JSON.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Creates only spec/registries/schema-registry.json.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Consistent with charter.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Consistent with authority model.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Consistent with standards profile.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Consistent with ontology.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Consistent with taxonomy catalogue.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Consistent with vocabulary catalogue.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Grounded in ../react.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Distinguishes planned schemas from existing schemas.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Defines common requirements.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Defines common envelope.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Defines schema classes.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Defines lifecycle states.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Defines schema families.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Defines planned schema entries.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Captures React source learnings.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Includes external standard posture without overclaiming.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Includes future validation expectations.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Includes AI agent rules.",
+      "satisfied": true
+    },
+    {
+      "criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring \u00a726 Amendment A).",
+      "satisfied": true
+    },
+    {
+      "criterion": "Does not create taxonomy or vocabulary files.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Does not import runtime/application code.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Does not create implementation directories.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Does not mark planned schemas as active.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Does not use forbidden canonical names.",
+      "satisfied": true
+    },
+    {
+      "criterion": "Does not treat generated reports as schema authority.",
+      "satisfied": true
+    }
   ]
 }

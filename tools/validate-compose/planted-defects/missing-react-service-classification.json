@@ -1,0 +1,6 @@
+{
+  "expectedRuleId": "USF-COMPOSE-001",
+  "removeServices": [
+    "postgres"
+  ]
+}
