@@ -22,7 +22,7 @@ Dev-compose-universal-ready assessment: not ready. Missing, substituted, or deci
 ## Review Basis
 
 - React compose inventory: 54 services from ../react/compose.yaml.
-- USF compose inventory: 14 services from compose.yaml.
+- USF compose inventory: 14 services from compose/compose.yaml.
 - React first-party package inventory: 129 package manifests excluding node_modules.
 - USF first-party package inventory: 32 package manifests.
 - Baseline validation: passed before this docs-only review; see .claude/runs/20260629T053504Z-a285187/baseline-validation.log.

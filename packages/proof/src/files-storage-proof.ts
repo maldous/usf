@@ -16,7 +16,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-const COMPOSE = ["compose", "-f", "compose.yaml", "exec", "-T", "postgres", "psql"];
+const COMPOSE = ["compose", "-f", "compose/compose.yaml", "exec", "-T", "postgres", "psql"];
 const DB = "foundation";
 const SUPER = "foundation_app";
 const APP_ROLE = "foundation_runtime";
