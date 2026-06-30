@@ -76,6 +76,7 @@ MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH = Path("docs/architecture/mock-provider-subs
 BACKUP_RESTORE_PROVIDER_MATRIX_PATH = Path("docs/architecture/backup-restore-provider-disposition-matrix.json")
 PGBACKREST_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json")
 OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH = Path("docs/architecture/operator-workflow-provider-disposition-matrix.json")
+WINDMILL_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/windmill-operator-automation-proof-blocker-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -395,6 +396,7 @@ BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
 OPERATOR_WORKFLOW_PROVIDER_REQUIRED_ISSUES = {
     "USF-178",
     "USF-203",
+    "USF-212",
     "USF-189",
     "USF-184",
     "USF-192",
@@ -410,6 +412,27 @@ OPERATOR_WORKFLOW_PROVIDER_REQUIRED_EVIDENCE_REFS = {
     "usf-178-resilience-operator-workflow-provider",
     "usf-178-incident-vulnerability-operator-workflow-provider",
     "usf-178-privacy-operator-workflow-provider",
+}
+WINDMILL_PROOF_BLOCKER_REQUIRED_ISSUES = {
+    "USF-178",
+    "USF-203",
+    "USF-212",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-169",
+    "USF-180",
+    "USF-133",
+}
+WINDMILL_PROOF_BLOCKER_REQUIRED_EVIDENCE_REFS = {
+    "usf-203-soa-windmill-proof-blocker",
+    "usf-203-evidence-windmill-proof-blocker",
+    "usf-203-threat-windmill-proof-blocker",
+    "usf-203-access-windmill-proof-blocker",
+    "usf-203-resilience-windmill-proof-blocker",
+    "usf-203-incident-vulnerability-windmill-proof-blocker",
+    "usf-203-privacy-windmill-proof-blocker",
+    "sdk-usf-203-windmill-client-blocked",
 }
 OPERATOR_WORKFLOW_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "operator-automation-readiness",
@@ -714,6 +737,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 operator_workflow_provider_matrix,
                 defect["operatorWorkflowProviderMatrixPatches"],
             )
+    windmill_proof_blocker_matrix: Any = None
+    if not defect.get("removeWindmillProofBlockerMatrix"):
+        windmill_proof_blocker_matrix = read_json(WINDMILL_PROOF_BLOCKER_MATRIX_PATH)
+        if defect.get("windmillProofBlockerMatrixPatches"):
+            windmill_proof_blocker_matrix = apply_manifest_patches(
+                windmill_proof_blocker_matrix,
+                defect["windmillProofBlockerMatrixPatches"],
+            )
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
@@ -745,6 +776,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "backupRestoreProviderMatrix": backup_restore_provider_matrix,
         "pgbackrestProofBlockerMatrix": pgbackrest_proof_blocker_matrix,
         "operatorWorkflowProviderMatrix": operator_workflow_provider_matrix,
+        "windmillProofBlockerMatrix": windmill_proof_blocker_matrix,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -3227,6 +3259,152 @@ def check_operator_workflow_provider_disposition(F: Findings, state: dict[str, A
     for stale in ("until USF-178 closes", "followUpIssue=USF-178", "\"followUpIssue\": \"USF-178\"", "linkedFollowUpIssue=USF-178"):
         if stale in matrix_text:
             F.add("USF-RUNTIME-029", "operator-workflow-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+    blocker = state.get("windmillProofBlockerMatrix")
+    if not isinstance(blocker, dict):
+        F.add("USF-RUNTIME-029", str(WINDMILL_PROOF_BLOCKER_MATRIX_PATH), "Windmill proof blocker matrix is missing")
+        return
+
+    expected_blocker_top = {
+        "sourceIssue": "USF-203",
+        "predecessorIssue": "USF-178",
+        "followUpIssue": "USF-212",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "providerRegistryId": "operational-job-engine-windmill-deferred",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_blocker_top.items():
+        if blocker.get(key) != expected:
+            F.add("USF-RUNTIME-029", f"windmillProofBlocker.{key}", f"expected {expected!r}")
+
+    if WINDMILL_PROOF_BLOCKER_REQUIRED_ISSUES - set(blocker.get("issueLinks", [])):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.issueLinks", "Windmill blocker issue links are incomplete")
+    if set(blocker.get("serviceIds", [])) != expected_service_ids:
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.serviceIds", "Windmill blocker service ids are incomplete")
+    if OPERATOR_WORKFLOW_PROVIDER_PROHIBITED_CLAIMS - set(blocker.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.readinessClaimsProhibited", "Windmill blocker prohibited claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(blocker.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.readinessClaimsAllowed", "Windmill blocker allows a prohibited readiness claim")
+    if not {"operator-automation-readiness", "windmill-readiness", "usf-133-closure"} <= set(blocker.get("nonClaims", [])):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.nonClaims", "Windmill blocker non-claims are incomplete")
+
+    decision = blocker.get("reclassificationDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted-blocked-reclassification":
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.reclassificationDecision", "blocked reclassification decision is required")
+    elif decision.get("decisionIsWorkComplete") is not False or decision.get("blockedFollowUpIssue") != "USF-212":
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.reclassificationDecision", "blocked reclassification must point to USF-212 without claiming work complete")
+
+    blockers = blocker.get("observedBlockers", {})
+    if not isinstance(blockers, dict):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.observedBlockers", "observed blockers are required")
+    else:
+        expected_blockers = {
+            "composeServicesGenerated": True,
+            "imageLocalInspectSucceeded": True,
+            "healthcheckPresent": False,
+            "readinessRetryTargetPresent": False,
+            "authAdminBootstrapAuthorityPresent": False,
+            "credentialBoundaryPresent": False,
+            "sdkClientSelectionPresent": False,
+            "proofSafeWorkflowSeedPresent": False,
+            "operatorApprovalWorkflowProofPresent": False,
+            "privilegedOperationBoundaryProofPresent": False,
+            "tenantBoundaryProofPresent": False,
+            "secretBoundaryProofPresent": False,
+            "auditEvidenceProofPresent": False,
+            "retentionCleanupProofPresent": False,
+            "timeoutPolicyPresent": False,
+            "safeTeardownBoundaryPresent": False,
+            "rawConnectionValueRetained": False,
+            "rawTokenOrCredentialRetained": False,
+        }
+        for key, expected in expected_blockers.items():
+            observed = blockers.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-029", f"windmillProofBlocker.observedBlockers.{key}", f"expected {expected!r}")
+
+    blocker_disposition = blocker.get("operatorWorkflowProviderDisposition", {})
+    if not isinstance(blocker_disposition, dict):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.operatorWorkflowProviderDisposition", "blocked disposition is required")
+    else:
+        expected_blocked_disposition = {
+            "disposition": "blocked-with-owner-and-follow-up",
+            "windmillServiceSemanticProofPresent": False,
+            "operatorAccessProofPresent": False,
+            "approvalWorkflowProofPresent": False,
+            "privilegedOperationBoundaryProofPresent": False,
+            "tenantBoundaryProofPresent": False,
+            "secretBoundaryProofPresent": False,
+            "auditEvidenceProofPresent": False,
+            "retentionProofPresent": False,
+            "cleanupProofPresent": False,
+            "failureBehaviourProofPresent": False,
+            "timeoutRetryProofPresent": False,
+            "operatorAutomationReadinessClaim": False,
+            "windmillReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "providerRegistryId": "operational-job-engine-windmill-deferred",
+            "followUpIssue": "USF-212",
+            "owner": "platform-workflow-foundation",
+            "riskOwner": "platform-workflow-risk-owner",
+            "controlOwner": "platform-workflow-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_blocked_disposition.items():
+            observed = blocker_disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-029", f"windmillProofBlocker.operatorWorkflowProviderDisposition.{key}", f"expected {expected!r}")
+        if set(blocker_disposition.get("serviceCatalogueServiceIds", [])) != expected_service_ids:
+            F.add("USF-RUNTIME-029", "windmillProofBlocker.operatorWorkflowProviderDisposition.serviceCatalogueServiceIds", "Windmill service catalogue ids are incomplete")
+        for field in ("riskStatement", "treatment", "blockedEvidence"):
+            if blocker_disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-029", f"windmillProofBlocker.operatorWorkflowProviderDisposition.{field}", "blocked field is required")
+
+    sdk_boundary = blocker.get("sdkClientProtocolBoundary", {})
+    if not isinstance(sdk_boundary, dict):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.sdkClientProtocolBoundary", "SDK/client boundary is required")
+    elif (
+        sdk_boundary.get("selectionStatus") != "blocked-until-USF-212"
+        or sdk_boundary.get("sdkPackage") is not None
+        or sdk_boundary.get("sdkVersion") is not None
+        or sdk_boundary.get("protocolException") is not False
+        or "USF-212" not in str(sdk_boundary.get("selectionAllowedOnlyAfter", ""))
+        or len(sdk_boundary.get("alternativesRejected", [])) < 3
+    ):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.sdkClientProtocolBoundary", "SDK/client boundary must remain blocked with rationale and alternatives")
+
+    operational_blocker = blocker.get("operationalEvidencePosture", {})
+    if not isinstance(operational_blocker, dict):
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.operationalEvidencePosture", "blocked operational posture is required")
+    else:
+        expected_blocked_operational = {
+            "readinessRetry": "blocked-until-USF-212-defines-readiness-target",
+            "timeout": "blocked-until-USF-212-configures-proof-boundary",
+            "failClosed": "USF-203-blocks-readiness-claim",
+            "safeTeardown": "blocked-until-USF-212-configures-workflow-teardown",
+            "operatorWorkflowExecution": "blocked-until-USF-212",
+            "accessReview": "blocked-until-USF-212",
+            "breakGlass": "not-claimed",
+            "redaction": "no-provider-payload-or-credential-retained",
+        }
+        for key, expected in expected_blocked_operational.items():
+            if operational_blocker.get(key) != expected:
+                F.add("USF-RUNTIME-029", f"windmillProofBlocker.operationalEvidencePosture.{key}", f"expected {expected!r}")
+        for field in ("structuredLogging", "tracingCorrelation", "metrics", "auditEvents", "retention", "secretBoundary"):
+            if field not in operational_blocker:
+                F.add("USF-RUNTIME-029", f"windmillProofBlocker.operationalEvidencePosture.{field}", "blocked operational field is required")
+
+    blocker_evidence = set(blocker.get("enterpriseEvidenceRefs", []))
+    if blocker_evidence != WINDMILL_PROOF_BLOCKER_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-029", "windmillProofBlocker.enterpriseEvidenceRefs", "Windmill blocker enterprise evidence refs are incomplete")
+
+    if binding and "USF-212" not in binding.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "runtime manifest must link USF-212 blocker")
+    if deferred and "USF-212" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-029", "deferredBoundaries.usf-189-workflow-automation-provider-deferred", "runtime deferred boundary must link USF-212 blocker")
 
 
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:

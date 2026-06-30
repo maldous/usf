@@ -1,0 +1,16 @@
+{
+  "name": "usf-203-windmill-sdk-selection-premature",
+  "expectedRule": "USF-RUNTIME-029",
+  "windmillProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/sdkClientProtocolBoundary/selectionStatus",
+      "value": "selected"
+    },
+    {
+      "op": "replace",
+      "path": "/sdkClientProtocolBoundary/sdkPackage",
+      "value": "windmill-client"
+    }
+  ]
+}

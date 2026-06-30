@@ -1,0 +1,5 @@
+{
+  "name": "usf-203-windmill-blocker-matrix-missing",
+  "expectedRule": "USF-RUNTIME-029",
+  "removeWindmillProofBlockerMatrix": true
+}

@@ -4193,6 +4193,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-203-soa-windmill-proof-blocker",
+      "mappedType": "source-issue-windmill-proof-blocker",
+      "controlPurpose": "Map USF-203 as the Windmill operator automation proof blocker reclassification, separating catalogue and Temporal workflow evidence from Windmill operator automation proof.",
+      "riskTreated": "effectivenessState=blocked-with-owner-and-follow-up; riskStatement=current Windmill catalogue and generated Compose presence could be mistaken for operator automation proof; threatFailureScenario=Temporal application workflow proof, worker runtime proof, or image availability is treated as Windmill access, approval, privileged operation, tenant, secret, audit, retention, cleanup, timeout, retry, or fail-closed evidence; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=block proof until USF-212 establishes local bootstrap, auth/admin setup, SDK/client boundary, readiness target, workflow seed, timeout, retry, cleanup, and teardown proof; reviewDate=2026-09-30; followUpIssue=USF-212",
+      "assetServiceAffected": "Windmill operator automation provider boundary",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "effectivenessState=blocked-with-owner-and-follow-up; sourceIssue=USF-203; predecessorIssue=USF-178; followUpIssue=USF-212; imageLocalInspectSucceeded=true; windmillServiceSemanticProof=false; operatorAutomationProof=false; no readiness claim",
+      "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-203 records a blocked reclassification because the generated Windmill service lacks healthcheck authority, readiness retry target, auth/admin bootstrap authority, token or credential boundary, SDK/client selection, proof-safe workflow seed setup, timeout, cleanup, and teardown proof wiring; owner=platform-workflow-foundation; reviewDate=2026-09-30; followUpIssue=USF-212; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -5762,6 +5788,32 @@
       ],
       "prOrMergeSha": "d4cd42edcc319923da29cd9929e545f163bf4be9",
       "retentionPosture": "Retain committed blocker matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain backup artifacts, restore payloads, database dumps, file payloads, raw provider output, credentials, tokens, raw endpoints, connection strings, stack traces, or production data."
+    },
+    {
+      "id": "usf-203-evidence-windmill-proof-blocker",
+      "proofResult": "windmill-operator-automation-proof-blocker-reclassification",
+      "whatWasProven": "USF-203 records that the current Windmill generated Compose boundary cannot truthfully prove operator automation semantics because auth/admin bootstrap, SDK/client selection, proof-safe workflow seed setup, readiness retry target, tenant boundary, secret boundary, audit evidence, retention, cleanup, timeout, retry, and teardown proof wiring are absent. It links the unblocker to USF-212 and preserves non-claims.",
+      "whatWasNotProven": "This does not prove Windmill readiness, operator automation readiness, workflow automation readiness, privileged operation readiness, provider compatibility readiness, full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, USF-133 closure, Windmill access, approval workflow, privileged operation boundary, tenant boundary preservation, secret boundary, audit evidence, retention execution, cleanup, failure handling, timeout, retry, safe teardown, supplier boundary, incident posture, privacy posture, or live provider evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "blocked-with-owner-and-follow-up",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#windmill",
+      "adapterProviderId": "operational-job-engine-windmill-deferred",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "41d2eefb5ec3609c7e4fef49f17a3c5e99cdad03",
+      "issueLinks": [
+        "USF-203",
+        "USF-212",
+        "USF-178",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-169",
+        "USF-180",
+        "USF-133"
+      ],
+      "prOrMergeSha": "41d2eefb5ec3609c7e4fef49f17a3c5e99cdad03",
+      "retentionPosture": "Retain committed blocker matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain workflow payloads, provider responses, raw provider output, credentials, tokens, raw endpoints, connection strings, stack traces, external data, production data, or operator secrets."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -7181,6 +7233,34 @@
       "failClosedBehaviour": "USF-RUNTIME-028 fails when the USF-202 blocker matrix is missing or unsafe, enterprise refs are incomplete, USF-211 is missing, image pull failure is not fail-closed, repository or Postgres proof wiring is marked present, runtime manifest lacks USF-211 linkage, or readiness claims are enabled.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no backup artifact, restore drill, provider payload, database dump, file payload, audit operation event, or service evidence is claimed.",
       "residualRisk": "riskStatement=pgBackRest backup and restore service semantics remain blocked after USF-202; impact=critical; likelihood=medium; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; controlOwner=platform-data-control-owner; treatment=unblock configured proof boundary in USF-211; reviewDate=2026-09-30; followUpIssue=USF-211; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json"
+    },
+    {
+      "id": "usf-203-threat-windmill-proof-blocker",
+      "targetType": "source-issue-windmill-proof-blocker",
+      "target": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+      "trustBoundary": "USF-203 repository evidence may record a blocked Windmill proof boundary only; actual Windmill auth/admin bootstrap, SDK/client interaction, operator workflow execution, access approval, privileged operation, tenant, secret, audit, retention, cleanup, failure handling, timeout, retry, and teardown semantics remain outside this proof and are tracked by USF-212.",
+      "tenantBoundary": "Tenant isolation and operator workflow tenant scoping remain unproven until USF-212 or later proof records tenant-safe Windmill evidence; USF-203 records the blocker only.",
+      "credentialBoundary": "No Windmill credentials, tokens, raw endpoints, connection strings, workflow payloads, provider payloads, raw Docker output, raw SDK errors, or stack traces are retained by USF-203.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production data, tenant data, workflow payloads, provider responses, credentials, tokens, raw provider output, or raw Docker output",
+      "abuseCases": [
+        "USF-203 marked Done as Windmill readiness",
+        "Temporal application workflow proof marked Windmill operator automation proof",
+        "generated service presence marked operator workflow approval proof",
+        "local image availability marked SDK/client proof",
+        "USF-212 follow-up missing",
+        "runtime manifest omits USF-212 blocker linkage"
+      ],
+      "failureModes": [
+        "blocker matrix missing",
+        "USF-212 follow-up missing",
+        "bootstrap authority marked present without proof",
+        "SDK/client selected without authority",
+        "runtime manifest continues to defer only to USF-203",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-029 fails when the USF-203 Windmill blocker matrix is missing or unsafe, enterprise refs are incomplete, USF-212 is missing, bootstrap authority or SDK/client selection is falsely marked present, runtime manifest lacks USF-212 linkage, or readiness claims are enabled.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no Windmill workflow execution, operator approval, provider payload, audit operation event, or service evidence is claimed.",
+      "residualRisk": "riskStatement=Windmill operator automation service semantics remain blocked after USF-203; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=unblock configured proof boundary in USF-212; reviewDate=2026-09-30; followUpIssue=USF-212; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/windmill-operator-automation-proof-blocker-matrix.json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7391,6 +7471,22 @@
       "typescriptRuntimeCompatibility": "No TypeScript SDK or runtime dependency is added by USF-202.",
       "forbiddenLayerImportCheck": "USF-202 adds no SDK or CLI implementation imports; validators reject proof claims without configured proof boundary.",
       "updateDeprecationOwner": "platform-data-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-203-windmill-client-blocked",
+      "serviceId": "windmill",
+      "adapterId": "Windmill proof boundary blocked",
+      "providerId": "operational-job-engine-windmill-deferred",
+      "packageName": "not-selected-blocked-until-USF-212",
+      "version": "not-applicable-no-sdk-client-cli-or-protocol-boundary-selected",
+      "selectionRationale": "USF-203 does not select or exercise a Windmill SDK, client, CLI, or protocol boundary because the repository lacks authorised auth/admin bootstrap, proof-safe workflow seed setup, and credential boundary for local Windmill operations.",
+      "officialOrDeFactoStatus": "blocked-before-sdk-client-cli-or-protocol-selection",
+      "licencePosture": "No npm dependency, client package, CLI package, or container replacement is added by USF-203; USF-212 must document license posture for any selected SDK, client, CLI, protocol exception, image, package, or build boundary.",
+      "maintenancePosture": "USF-212 must select a maintained pinned SDK, client, CLI, protocol exception, image, or packaging approach before Windmill operator automation proof can run.",
+      "securityAdvisoryPosture": "USF-212 must record advisory posture before stronger Windmill operator automation or provider claims.",
+      "typescriptRuntimeCompatibility": "No TypeScript SDK or runtime dependency is added by USF-203.",
+      "forbiddenLayerImportCheck": "USF-203 adds no SDK, client, CLI, protocol, or implementation imports; validators reject proof claims without configured proof boundary.",
+      "updateDeprecationOwner": "platform-workflow-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -9079,6 +9175,51 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-203-access-windmill-proof-blocker",
+      "targetType": "source-issue-windmill-proof-blocker",
+      "target": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-203",
+        "followUpIssue=USF-212",
+        "riskStatement=Windmill proof blocker could be mistaken for privileged operator automation access readiness",
+        "threatFailureScenario=operator access approval or privileged workflow execution is claimed from generated service metadata or Temporal proof only",
+        "affectedAssetService=Windmill operator automation provider boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=block proof and require USF-212 configured local proof boundary before access claims",
+        "reviewDate=2026-09-30",
+        "accessModel=no-human-access-claimed-by-USF-203",
+        "authRequirement=not proven in USF-203",
+        "authorizationBoundary=not proven in USF-203",
+        "breakGlassRelevance=not proven in USF-203",
+        "auditRequirement=not proven in USF-203",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=not proven in USF-203",
+        "matrix=docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Privileged operator workflow access is blocked until USF-212 establishes configured Windmill proof wiring and access evidence; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-212",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -10558,6 +10699,46 @@
       "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-202; USF-211",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "backup artifact, restore drill, RPO/RTO, DR, retention, secret exclusion, audit, cleanup, timeout, retry, and failure evidence are blocked until USF-211; owner=platform-data-foundation; reviewDate=2026-09-30; followUpIssue=USF-211; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-203-resilience-windmill-proof-blocker",
+      "targetType": "source-issue-windmill-proof-blocker",
+      "target": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-203",
+        "followUpIssue=USF-212",
+        "backupRequirement=not-claimed-for-Windmill-until-USF-212",
+        "restoreProofRequirement=not-claimed-for-Windmill-until-USF-212",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=Temporal application workflow proof or generated Windmill service metadata treated as operator automation service proof",
+        "cleanupTeardownProof=blocked-until-USF-212",
+        "deferredDrBoundary=explicit-non-claim",
+        "readinessRetry=blocked-until-USF-212",
+        "timeout=blocked-until-USF-212",
+        "failClosed=USF-203-blocks-readiness-claim",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "reviewDate=2026-09-30",
+        "matrix=docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Windmill execution, retention, cleanup, timeout, retry, teardown, and resilience evidence are blocked until USF-212; owner=platform-workflow-foundation; reviewDate=2026-09-30; followUpIssue=USF-212; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -12679,6 +12860,50 @@
       "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-202; USF-211",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Incident, vulnerability, advisory, dependency update, alerting, and corrective-action evidence are blocked until USF-211; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-211",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-203-incident-vulnerability-windmill-proof-blocker",
+      "targetType": "source-issue-windmill-proof-blocker",
+      "target": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-203",
+        "followUpIssue=USF-212",
+        "riskStatement=Windmill incident alerting vulnerability dependency and corrective-action evidence could be overclaimed from catalogue metadata image availability or Temporal proof",
+        "threatFailureScenario=operator automation failure or vulnerable Windmill image is treated as addressed by catalogue metadata",
+        "affectedAssetService=Windmill operator automation provider boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=block proof until USF-212 records maintained client or protocol boundary and advisory posture",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=not proven in USF-203",
+        "alertingPosture=not proven in USF-203",
+        "escalationOwner=platform-workflow-foundation",
+        "vulnerabilityAdvisoryReview=required-in-USF-212",
+        "dependencyUpdatePosture=required-in-USF-212",
+        "correctiveActionEvidenceBoundary=repository metadata PR and validator output only",
+        "postIncidentEvidenceBoundary=not proven in USF-203",
+        "matrix=docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Incident, vulnerability, advisory, dependency update, alerting, and corrective-action evidence are blocked until USF-212; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-212",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -14938,6 +15163,52 @@
       "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-202; USF-211",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Privacy and data minimisation operating evidence remains blocked until USF-211; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-211; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-203-privacy-windmill-proof-blocker",
+      "targetType": "source-issue-windmill-proof-blocker",
+      "target": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-203",
+        "followUpIssue=USF-212",
+        "riskStatement=Windmill workflow payloads provider responses tenant data credentials raw errors or operator secrets could be retained or exposed if proof proceeds without configured boundary",
+        "threatFailureScenario=raw workflow data provider output or credentials are committed as proof evidence or implied by catalogue metadata",
+        "affectedAssetService=Windmill operator automation provider boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record value-free blocker metadata only and require USF-212 configured proof boundary before data handling proof",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=workflow-metadata-and-internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-workflow-payloads-or-provider-responses",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-workflow-payloads-provider-responses-raw-errors-raw-endpoints-credentials-tokens-or-operator-secrets-committed-by-USF-203",
+        "matrix=docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Privacy and data minimisation operating evidence remains blocked until USF-212; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-212; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
