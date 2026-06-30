@@ -5,8 +5,10 @@ This validator enforces the repository-level enterprise evidence model used by
 implementation lanes. It validates shape, SoA-support coverage, proof evidence
 register pins, threat/abuse posture, SDK governance, observability evidence
 standards, access/resilience/incident/privacy posture, done-state governance,
-and Lane 1 closure-matrix linkage. It does not execute proof commands and does
-not claim ISO/SOC/staging/production/live-provider/full-dev/full-parity readiness.
+Lane 1 closure-matrix linkage, Lane 4 observability operations evidence, and
+Lane 3 assurance control-plane disposition. It does not execute proof commands
+and does not claim ISO/SOC/staging/production/live-provider/full-dev/full-parity
+readiness.
 """
 
 from __future__ import annotations
@@ -46,6 +48,8 @@ RULES = {
     "USF-ENTERPRISE-009": ("blocking", "access resilience incident or privacy posture is incomplete"),
     "USF-ENTERPRISE-010": ("blocking", "Lane 4 observability operations evidence is incomplete"),
     "USF-ENTERPRISE-011": ("blocking", "Lane 6 enterprise safety-control evidence is incomplete"),
+    "USF-ENTERPRISE-012": ("blocking", "Lane 3 assurance control-plane disposition is incomplete"),
+    "USF-ENTERPRISE-013": ("blocking", "Lane 3 assurance control-plane readiness or certification is overclaimed"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -139,6 +143,91 @@ LANE4_OBSERVABILITY_TOKENS = {
     "alertingWorkflow=deferred-with-owner",
     "dashboardWorkflow=deferred-with-owner",
     "incidentBoundary=explicit-local-evidence-only",
+}
+ASSURANCE_EFFECTIVENESS_STATES = {
+    "defined-only",
+    "implemented",
+    "proven-local",
+    "operating-evidence-present",
+    "deferred-with-owner",
+    "out-of-scope-with-rationale",
+}
+ASSURANCE_REQUIRED_RISK_FIELDS = {
+    "riskStatement",
+    "threatFailureScenario",
+    "affectedAssetService",
+    "impact",
+    "likelihood",
+    "owner",
+    "treatment",
+    "reviewDate",
+    "followUpIssue",
+}
+ASSURANCE_EXCEPTION_FIELDS = {
+    "exceptionOwner",
+    "exceptionReason",
+    "compensatingControl",
+    "exceptionExpiry",
+    "exceptionValidationCommand",
+    "exceptionFollowUpIssue",
+}
+ASSURANCE_OVERCLAIM_MARKERS = {
+    "certificationClaim=",
+    "certificationClaimed=",
+    "iso27001CertificationClaim=true",
+    "socReadinessClaim=true",
+    "fullDevReadinessClaim=true",
+    "testReadinessClaim=true",
+    "stagingReadinessClaim=true",
+    "productionReadinessClaim=true",
+    "deploymentReadinessClaim=true",
+    "liveProviderReadinessClaim=true",
+    "enterpriseProductionReadinessClaim=true",
+    "fullReactParityClaim=true",
+}
+ASSURANCE_CONTROL_PLANES = {
+    "sentry-error-monitoring": {
+        "expectedState": "deferred-with-owner",
+        "issue": "USF-170",
+        "closureServiceId": "sentry",
+        "rows": {
+            "soaSupportMappings": "usf-187-sentry-error-monitoring-soa",
+            "evidenceRegister": "usf-187-sentry-error-monitoring-evidence",
+            "threatModelAbuseCaseRegister": "usf-187-sentry-error-monitoring-threat",
+            "accessReviewPrivilegedOperationPosture": "usf-187-sentry-error-monitoring-access",
+            "backupRestoreResiliencePosture": "usf-187-sentry-error-monitoring-risk-treatment",
+            "incidentVulnerabilityManagementEvidence": "usf-187-sentry-error-monitoring-incident-vulnerability",
+            "privacyDataMinimisationPosture": "usf-187-sentry-error-monitoring-privacy",
+        },
+    },
+    "sonarqube-static-analysis": {
+        "expectedState": "deferred-with-owner",
+        "issue": "USF-171",
+        "closureServiceId": "sonarqube",
+        "rows": {
+            "soaSupportMappings": "usf-187-sonarqube-static-analysis-soa",
+            "evidenceRegister": "usf-187-sonarqube-static-analysis-evidence",
+            "threatModelAbuseCaseRegister": "usf-187-sonarqube-static-analysis-threat",
+            "accessReviewPrivilegedOperationPosture": "usf-187-sonarqube-static-analysis-access",
+            "backupRestoreResiliencePosture": "usf-187-sonarqube-static-analysis-risk-treatment",
+            "incidentVulnerabilityManagementEvidence": "usf-187-sonarqube-static-analysis-incident-vulnerability",
+            "privacyDataMinimisationPosture": "usf-187-sonarqube-static-analysis-privacy",
+        },
+    },
+    "security-scanning": {
+        "expectedState": "defined-only",
+        "issue": "USF-171",
+        "closureServiceId": None,
+        "rows": {
+            "soaSupportMappings": "usf-187-security-scanning-soa",
+            "evidenceRegister": "usf-187-security-scanning-evidence",
+            "threatModelAbuseCaseRegister": "usf-187-security-scanning-threat",
+            "accessReviewPrivilegedOperationPosture": "usf-187-security-scanning-access",
+            "backupRestoreResiliencePosture": "usf-187-security-scanning-risk-treatment",
+            "incidentVulnerabilityManagementEvidence": "usf-187-security-scanning-incident-vulnerability",
+            "privacyDataMinimisationPosture": "usf-187-security-scanning-privacy",
+        },
+    },
 }
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 PINNED_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+){1,3}(?:[-+][0-9A-Za-z.-]+)?$")
@@ -265,6 +354,26 @@ def rows_by_id(rows: Any) -> dict[str, dict[str, Any]]:
         if isinstance(row, dict) and isinstance(row.get("id"), str):
             out[row["id"]] = row
     return out
+
+
+def row_texts(row: dict[str, Any]) -> list[str]:
+    texts: list[str] = []
+    for value in row.values():
+        if isinstance(value, str):
+            texts.append(value)
+        elif isinstance(value, list):
+            texts.extend(str(item) for item in value if isinstance(item, str))
+    return texts
+
+
+def text_has_field(texts: list[str], field: str) -> bool:
+    needle = f"{field}="
+    return any(text.startswith(needle) or f"; {needle}" in text for text in texts)
+
+
+def text_has_exact_field(texts: list[str], field: str, value: str) -> bool:
+    needle = f"{field}={value}"
+    return any(text.startswith(needle) or f"; {needle}" in text for text in texts)
 
 
 def binding_service_ids(binding: dict[str, Any]) -> list[str]:
@@ -410,6 +519,28 @@ def apply_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[st
                     row.pop(key, None)
                 for key, value in patch.get("set", {}).items():
                     row[key] = value
+    for patch in defect.get("posturePatch", []):
+        section = patch.get("section")
+        if not isinstance(section, str) or not isinstance(out.get(section), list):
+            continue
+        for row in out.get(section, []):
+            if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            if patch.get("dropNonClaims"):
+                dropped = set(patch.get("dropNonClaims", []))
+                row["nonClaims"] = [item for item in row.get("nonClaims", []) if item not in dropped]
+            if patch.get("removePosturePrefix"):
+                prefixes = tuple(str(item) for item in patch.get("removePosturePrefix", []))
+                row["posture"] = [
+                    item for item in row.get("posture", []) if not str(item).startswith(prefixes)
+                ]
+            if patch.get("appendPosture"):
+                row.setdefault("posture", [])
+                row["posture"].extend(str(item) for item in patch.get("appendPosture", []))
     for key, value in defect.get("doneStateSet", {}).items():
         out.setdefault("doneStateGovernance", {})[key] = value
     for patch in defect.get("laneRequirementPatch", []):
@@ -801,6 +932,126 @@ def check_lane4_observability(F: Findings, state: dict[str, Any]) -> None:
             F.add("USF-ENTERPRISE-010", f"observabilityEvidenceStandard.prohibitedFields.{field}", "missing Lane 4 prohibited field")
 
 
+def check_assurance_control_plane_disposition(F: Findings, state: dict[str, Any]) -> None:
+    model = state["model"]
+    matrix = state.get("closureMatrix")
+    section_rows = {
+        section: rows_by_id(model.get(section))
+        for section in {
+            "soaSupportMappings",
+            "evidenceRegister",
+            "threatModelAbuseCaseRegister",
+            "accessReviewPrivilegedOperationPosture",
+            "backupRestoreResiliencePosture",
+            "incidentVulnerabilityManagementEvidence",
+            "privacyDataMinimisationPosture",
+        }
+    }
+
+    for control_id, config in ASSURANCE_CONTROL_PLANES.items():
+        rows = config["rows"]
+        expected_state = config["expectedState"]
+        source_issue = config["issue"]
+
+        for section, row_id in rows.items():
+            row = section_rows.get(section, {}).get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-012", row_id, f"missing Lane 3 {control_id} row in {section}")
+                continue
+            texts = row_texts(row)
+            if any(marker in text for marker in ASSURANCE_OVERCLAIM_MARKERS for text in texts):
+                F.add("USF-ENTERPRISE-013", row_id, "assurance row contains an explicit readiness or certification claim marker")
+
+            if section in {
+                "soaSupportMappings",
+                "accessReviewPrivilegedOperationPosture",
+                "backupRestoreResiliencePosture",
+                "incidentVulnerabilityManagementEvidence",
+                "privacyDataMinimisationPosture",
+            }:
+                non_claims = set(row.get("nonClaims", []))
+                missing_non_claims = REQUIRED_NON_CLAIMS - non_claims
+                if missing_non_claims:
+                    F.add("USF-ENTERPRISE-013", row_id, f"assurance row missing non-claims: {sorted(missing_non_claims)}")
+                if not row.get("validationCommand"):
+                    F.add("USF-ENTERPRISE-012", row_id, "assurance row lacks validation command")
+
+            if section == "soaSupportMappings":
+                if not row.get("owner") or not row.get("riskOwner") or not row.get("controlOwner"):
+                    F.add("USF-ENTERPRISE-012", row_id, "SoA row lacks owner, risk owner, or control owner")
+                if not row.get("assetServiceAffected"):
+                    F.add("USF-ENTERPRISE-012", row_id, "SoA row lacks affected asset/service")
+                texts = row_texts(row)
+                for field in ASSURANCE_REQUIRED_RISK_FIELDS - {"affectedAssetService"}:
+                    if not text_has_field(texts, field):
+                        F.add("USF-ENTERPRISE-012", row_id, f"SoA row lacks {field}")
+                if not text_has_field(texts, "effectivenessState"):
+                    F.add("USF-ENTERPRISE-012", row_id, "SoA row lacks effectiveness state")
+                elif not text_has_exact_field(texts, "effectivenessState", expected_state):
+                    F.add("USF-ENTERPRISE-013", row_id, f"SoA row must remain effectivenessState={expected_state}")
+            elif section == "evidenceRegister":
+                issue_links = row.get("issueLinks", [])
+                if "USF-187" not in issue_links or source_issue not in issue_links:
+                    F.add("USF-ENTERPRISE-012", row_id, "evidence row lacks lane and source issue links")
+                if not row.get("whatWasNotProven"):
+                    F.add("USF-ENTERPRISE-013", row_id, "evidence row must state what was not proven")
+                provider_mode = str(row.get("providerMode", "")).lower()
+                if not any(marker in provider_mode for marker in ("not", "no-", "disposition")):
+                    F.add("USF-ENTERPRISE-013", row_id, "evidence row provider mode must not imply live provider readiness")
+            elif section == "threatModelAbuseCaseRegister":
+                residual = [str(row.get("residualRisk", ""))]
+                for field in ("riskStatement", "impact", "likelihood", "owner", "treatment", "reviewDate", "followUpIssue"):
+                    if not text_has_field(residual, field):
+                        F.add("USF-ENTERPRISE-012", row_id, f"threat residual risk lacks {field}")
+            else:
+                posture = [str(item) for item in row.get("posture", []) if isinstance(item, str)]
+                for field in ASSURANCE_REQUIRED_RISK_FIELDS:
+                    if not text_has_field(posture, field):
+                        F.add("USF-ENTERPRISE-012", row_id, f"posture lacks {field}")
+                if not text_has_field(posture, "effectivenessState"):
+                    F.add("USF-ENTERPRISE-012", row_id, "posture lacks effectiveness state")
+                elif not text_has_exact_field(posture, "effectivenessState", expected_state):
+                    F.add("USF-ENTERPRISE-013", row_id, f"posture must remain effectivenessState={expected_state}")
+                states = [
+                    item.split("=", 1)[1]
+                    for item in posture
+                    if item.startswith("effectivenessState=") and "=" in item
+                ]
+                if any(state not in ASSURANCE_EFFECTIVENESS_STATES for state in states):
+                    F.add("USF-ENTERPRISE-012", row_id, "posture has an unknown effectiveness state")
+                if not text_has_field(posture, "exception"):
+                    F.add("USF-ENTERPRISE-012", row_id, "posture lacks exception disposition")
+                if text_has_exact_field(posture, "exception", "active"):
+                    for field in ASSURANCE_EXCEPTION_FIELDS:
+                        if not text_has_field(posture, field):
+                            F.add("USF-ENTERPRISE-012", row_id, f"active exception lacks {field}")
+
+        closure_service_id = config.get("closureServiceId")
+        if matrix is not None and closure_service_id:
+            closure_row = next(
+                (
+                    row
+                    for row in matrix.get("rows", [])
+                    if isinstance(row, dict) and row.get("service_id") == closure_service_id
+                ),
+                None,
+            )
+            if not closure_row:
+                F.add("USF-ENTERPRISE-012", closure_service_id, "closure matrix lacks assurance service row")
+            else:
+                evidence = closure_row.get("closure_evidence", {})
+                refs = set(evidence.get("enterprise_evidence_refs", []))
+                expected_refs = {rows["soaSupportMappings"], rows["evidenceRegister"]}
+                missing_refs = expected_refs - refs
+                if missing_refs:
+                    F.add("USF-ENTERPRISE-012", closure_service_id, f"closure matrix lacks Lane 3 refs: {sorted(missing_refs)}")
+                tracking = set(evidence.get("tracking_issues", []))
+                if "USF-187" not in tracking or source_issue not in tracking:
+                    F.add("USF-ENTERPRISE-012", closure_service_id, "closure matrix lacks Lane 3/source tracking issues")
+                if evidence.get("closure_blocking") is not True:
+                    F.add("USF-ENTERPRISE-013", closure_service_id, "assurance control-plane closure must remain blocking")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -816,6 +1067,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_lane6_safety_controls(F, state)
     check_closure_matrix_linkage(F, state)
     check_lane4_observability(F, state)
+    check_assurance_control_plane_disposition(F, state)
     return F
 
 

@@ -1545,20 +1545,30 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "usf-187-sonarqube-static-analysis-evidence",
+          "python3 tools/validate-enterprise/validate-enterprise.py all --json"
         ],
         "tracking_issues": [
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-171",
+          "USF-187",
+          "USF-184",
+          "USF-192",
+          "USF-133"
         ],
         "non_equivalence_boundaries": [
-          "Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history."
+          "Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history.",
+          "Lane 3 preserves the split between mandatory local deterministic verification and deferred SonarQube service proof; local validators are not equivalent to SonarQube service-operating evidence.",
+          "SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness."
         ],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
-          "future operator console SSO/clickthrough and privileged access proof"
+          "future operator console SSO/clickthrough and privileged access proof",
+          "USF-171 service-semantic proof for SonarQube unresolved issues, quality gate scope, security hotspots, exceptions, and operator console access remains deferred."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1586,7 +1596,14 @@
           "soa-deferred-boundary-sonarqube",
           "access-posture-sonarqube",
           "resilience-posture-sonarqube",
-          "incident-vulnerability-sonarqube"
+          "incident-vulnerability-sonarqube",
+          "usf-187-sonarqube-static-analysis-soa",
+          "usf-187-sonarqube-static-analysis-evidence",
+          "usf-187-sonarqube-static-analysis-threat",
+          "usf-187-sonarqube-static-analysis-access",
+          "usf-187-sonarqube-static-analysis-risk-treatment",
+          "usf-187-sonarqube-static-analysis-incident-vulnerability",
+          "usf-187-sonarqube-static-analysis-privacy"
         ]
       }
     },
@@ -2610,20 +2627,31 @@
         "react_parity_refs": [
           "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sentry"
         ],
-        "proof_evidence_refs": [],
+        "proof_evidence_refs": [
+          "usf-187-sentry-error-monitoring-evidence",
+          "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+        ],
         "tracking_issues": [
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-170",
+          "USF-187",
+          "USF-184",
+          "USF-192",
+          "USF-133"
         ],
         "non_equivalence_boundaries": [
           "React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
-          "Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance."
+          "Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance.",
+          "Lane 3 records Sentry as a profile-gated shared error-assurance control plane only where Sentry semantics are claimed; local logs are not equivalent to Sentry service semantics.",
+          "Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness."
         ],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
-          "future operator console SSO/clickthrough and privileged access proof"
+          "future operator console SSO/clickthrough and privileged access proof",
+          "USF-170 service-semantic proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator console access remains deferred."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2650,7 +2678,14 @@
           "soa-deferred-boundary-sentry",
           "access-posture-sentry",
           "resilience-posture-sentry",
-          "incident-vulnerability-sentry"
+          "incident-vulnerability-sentry",
+          "usf-187-sentry-error-monitoring-soa",
+          "usf-187-sentry-error-monitoring-evidence",
+          "usf-187-sentry-error-monitoring-threat",
+          "usf-187-sentry-error-monitoring-access",
+          "usf-187-sentry-error-monitoring-risk-treatment",
+          "usf-187-sentry-error-monitoring-incident-vulnerability",
+          "usf-187-sentry-error-monitoring-privacy"
         ]
       }
     },

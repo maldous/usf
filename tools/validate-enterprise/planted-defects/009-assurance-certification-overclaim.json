@@ -1,0 +1,20 @@
+{
+  "description": "Lane 3 assurance control-plane posture overclaims implementation and ISO certification.",
+  "expectedRule": "USF-ENTERPRISE-013",
+  "posturePatch": [
+    {
+      "section": "accessReviewPrivilegedOperationPosture",
+      "id": "usf-187-security-scanning-access",
+      "removePosturePrefix": [
+        "effectivenessState="
+      ],
+      "appendPosture": [
+        "effectivenessState=implemented",
+        "certificationClaim=iso27001"
+      ],
+      "dropNonClaims": [
+        "iso27001-certification"
+      ]
+    }
+  ]
+}

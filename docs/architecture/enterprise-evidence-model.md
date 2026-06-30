@@ -67,6 +67,28 @@ planted defects.
 
 No lane may claim full dev readiness or close USF-133 independently.
 
+## Lane 3 Assurance Control Planes
+
+USF-187 records shared assurance control-plane posture for Sentry/error monitoring,
+SonarQube/static analysis, and security scanning with Lane-owned `usf-187` evidence ids.
+Each control-plane bundle records owner, risk owner, control owner, effectiveness state,
+risk statement, threat/failure scenario, affected asset/service, impact, likelihood, treatment,
+review date, follow-up issue, validation command, deferred boundary, rollback boundary,
+incident/vulnerability posture, privacy/data minimisation posture, and explicit non-claims.
+
+The Lane 3 validator coverage is:
+
+- USF-ENTERPRISE-011: missing assurance control-plane disposition, missing effectiveness state,
+  missing risk/treatment metadata, missing source issue linkage, or missing closure-matrix
+  evidence linkage.
+- USF-ENTERPRISE-012: unsupported assurance readiness, implementation, operating-evidence,
+  SOC, ISO/IEC 27001 certification, live-provider, deployment, production, test, full-dev,
+  enterprise-production, or full React parity overclaim.
+
+The model remains evidence organisation only. Sentry runtime event capture/redaction/retention,
+SonarQube service quality-gate proof, and security scanner operating evidence remain deferred
+unless later merged evidence closes the linked follow-up issues.
+
 ## Non-Claims
 
 This model supports future enterprise evidence organisation and ISO/IEC 27001-style Statement of

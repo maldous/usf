@@ -1,0 +1,5 @@
+{
+  "description": "Lane 3 assurance control-plane disposition is hidden by removing a required Sentry/error monitoring SoA row.",
+  "expectedRule": "USF-ENTERPRISE-012",
+  "removeSoaMapping": "usf-187-sentry-error-monitoring-soa"
+}
