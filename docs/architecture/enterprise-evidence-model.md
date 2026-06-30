@@ -47,6 +47,24 @@ explicitly out of scope.
 Lane 1 is the only coordinator-approved implementation lane at this point. Lanes 2 through 7
 remain blocked until the coordinator gate records human approval.
 
+## Parallel Lane Readiness
+
+Lane 1 creates the shared closure and enterprise evidence gate for later lane work. Future lanes
+may run in parallel only after explicit coordinator approval. Each lane must own its evidence rows,
+stable evidence ids, PR links, merge SHAs, validation commands, issue links, deferred boundaries,
+and non-claims; one lane must not mark another lane complete.
+
+Cross-lane dependencies must be linked explicitly in Linear and in the evidence model rather than
+implied by shared validation. Future lanes can attach rows to the existing enterprise evidence
+model without redefining the model, but shared files are expected merge-conflict hotspots:
+`spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json`,
+`spec/schemas/enterprise-evidence.schema.json`, `tools/validate-enterprise/validate-enterprise.py`,
+`tools/validate-parity/validate-parity.py`, `package.json`, `Makefile`, and architecture/gap
+register docs. Changes to shared validators or schemas must preserve existing Lane 1 checks and
+planted defects.
+
+No lane may claim full dev readiness or close USF-133 independently.
+
 ## Non-Claims
 
 This model supports future enterprise evidence organisation and ISO/IEC 27001-style Statement of
