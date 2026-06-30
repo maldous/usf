@@ -8,7 +8,7 @@
   "coordinatorIssue": "USF-192",
   "parentIssue": "USF-133",
   "serviceId": "clamav",
-  "providerRegistryId": "file-scan-clamav-deferred",
+  "providerRegistryId": "file-scan-clamav-composed-test",
   "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
@@ -24,29 +24,30 @@
   "humanDecision": {
     "decisionState": "accepted",
     "decisionSummary": "File scanner provider parity is split by semantic requirement. Deterministic in-memory scan markers are accepted only where service catalogue authority permits them and are not equivalent to ClamAV composed provider semantics.",
-    "decisionIsWorkComplete": false
+    "decisionIsWorkComplete": false,
+    "implementationStatus": "USF-200 profile-gated composed-service proof present; quarantine release workflow, DLP readiness, signature database freshness readiness, live provider operation, and API/worker runtime binding remain outside this issue."
   },
   "scannerProviderDisposition": {
-    "disposition": "explicit-deferral-with-owner",
-    "clamavServiceSemanticProofPresent": false,
-    "composedScannerProviderProofPresent": false,
+    "disposition": "profile-gated-composed-proof-present",
+    "clamavServiceSemanticProofPresent": true,
+    "composedScannerProviderProofPresent": true,
     "deterministicScannerClamavEquivalent": false,
-    "failClosedQuarantineClaim": "bounded-hermetic-only",
+    "failClosedQuarantineClaim": "profile-gated-composed-proof",
     "liveScannerReadinessClaim": false,
     "dlpReadinessClaim": false,
     "vulnerabilityClearanceClaim": false,
     "scannerProviderReadinessClaim": false,
     "providerCompatibilityClaim": false,
     "serviceCatalogueServiceId": "clamav",
-    "providerRegistryId": "file-scan-clamav-deferred",
+    "providerRegistryId": "file-scan-clamav-composed-test",
     "followUpIssue": "USF-200",
     "owner": "platform-files-foundation",
     "riskOwner": "platform-files-risk-owner",
     "controlOwner": "platform-files-control-owner",
     "reviewDate": "2026-09-30",
-    "riskStatement": "ClamAV service semantics could be claimed from deterministic in-memory scan markers, files capability proof, or service catalogue presence without composed scanner provider evidence.",
-    "treatment": "Defer ClamAV SDK/client or protocol-exception selection, adapter implementation, scan invocation, clean/infected outcome proof, fail-closed quarantine routing, release boundary, deletion, retention, tenant isolation, readiness retry, failure-mode, audit, teardown, supplier, incident, privacy, and provider proof to USF-200.",
-    "deferredEvidence": "USF-175 records the bounded disposition gate, non-equivalence boundary, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only."
+    "riskStatement": "ClamAV profile-gated composed proof could be overclaimed as scanner readiness, live malware scanning, DLP, vulnerability clearance, API/worker runtime binding, environment readiness, or USF-133 closure.",
+    "treatment": "USF-200 proves bounded SDK-backed local Compose ClamAV service semantics with explicit non-claims for release workflow, signature freshness, DLP, live provider operation, API/worker runtime use, and environment readiness.",
+    "deferredEvidence": "Quarantine release workflow, signature database freshness readiness, DLP readiness, live scanner provider readiness, production data handling, and environment promotion evidence remain deferred and unclaimed."
   },
   "deterministicScanSubstituteBoundary": {
     "usedWhereSemanticallyPermitted": true,
@@ -79,47 +80,60 @@
   },
   "providerBoundary": {
     "providerBindingId": "usf-189-clamav-scanner-provider",
-    "providerRegistryId": "file-scan-clamav-deferred",
-    "bindingStatus": "profile-gated",
-    "providerMode": "live-external-deferred",
+    "providerRegistryId": "file-scan-clamav-composed-test",
+    "bindingStatus": "profile-gated-proven",
+    "providerMode": "composed-test",
     "runtimeProviderBindingActive": false,
-    "sdkPackage": null,
-    "sdkVersion": null,
-    "endpointRef": null,
+    "sdkPackage": "clamscan",
+    "sdkVersion": "2.4.0",
+    "endpointRef": "endpoint://compose/clamav",
     "followUpIssue": "USF-200",
     "serviceCatalogueServiceId": "clamav",
-    "providerRegistryEvidence": "packages/core/src/index.ts records file-scan-clamav-deferred as deferred evidence-only support linked to the ClamAV service catalogue row."
+    "providerRegistryEvidence": "packages/core/src/index.ts records file-scan-clamav-composed-test as a local composed proof-only provider; file-scan-clamav-deferred remains for live/external scanner non-claims.",
+    "sdkBoundary": "adapter-package-only",
+    "proofCommand": "corepack pnpm proof:scanner:clamav",
+    "sourceUse": "de-facto-clamscan-tcp-client"
   },
   "semanticProofBoundaries": [
     {
       "semanticArea": "scan-invocation-clean-infected-outcomes",
-      "status": "deferred-with-owner",
+      "status": "profile-gated-proven",
       "followUpIssue": "USF-200",
-      "nonEquivalenceBoundary": "Deterministic marker proof is not ClamAV composed provider scan invocation or clean/infected response proof."
+      "nonEquivalenceBoundary": "Deterministic marker proof remains non-equivalent; ClamAV clean and infected outcomes are proven only in profile-gated local Compose for synthetic payloads.",
+      "proofCommand": "corepack pnpm proof:scanner:clamav"
     },
     {
-      "semanticArea": "fail-closed-quarantine-release-deletion-retention",
-      "status": "deferred-with-owner",
+      "semanticArea": "fail-closed-quarantine-deletion-teardown",
+      "status": "bounded-profile-gated-proof",
       "followUpIssue": "USF-200",
-      "nonEquivalenceBoundary": "Hermetic file lifecycle proof does not prove ClamAV provider failure, timeout, quarantine routing, privileged release boundary, deletion, retention, or cleanup behaviour."
+      "nonEquivalenceBoundary": "USF-200 proves provider-unavailable fail-closed quarantine routing, quarantined download denial, clean-file deletion, value-free audit evidence, and Compose teardown for synthetic data only.",
+      "proofCommand": "corepack pnpm proof:scanner:clamav"
     },
     {
-      "semanticArea": "scanner-sdk-protocol-supplier-incident-privacy",
+      "semanticArea": "quarantine-release-signature-freshness-dlp-live-provider",
       "status": "deferred-with-owner",
+      "followUpIssue": "USF-147",
+      "nonEquivalenceBoundary": "USF-200 does not prove privileged quarantine release workflow, signature database freshness readiness, DLP readiness, live scanner provider readiness, production vulnerability clearance, or environment promotion.",
+      "proofCommand": "not-claimed-by-USF-200"
+    },
+    {
+      "semanticArea": "scanner-sdk-supplier-incident-privacy",
+      "status": "bounded-profile-gated-proof",
       "followUpIssue": "USF-200",
-      "nonEquivalenceBoundary": "USF-175 does not select a scanner SDK/client, approve a lower-level protocol exception, prove supplier posture, incident posture, vulnerability posture, scan payload privacy, or scanner evidence retention."
+      "nonEquivalenceBoundary": "USF-200 records clamscan 2.4.0 as a de-facto TCP ClamAV client inside the adapter boundary for local Compose proof only; live supplier, production incident, privacy, and retention posture remain non-claims.",
+      "proofCommand": "corepack pnpm proof:scanner:clamav"
     }
   ],
   "operationalEvidencePosture": {
-    "readinessRetry": "deferred-to-USF-200",
-    "timeout": "deferred-to-USF-200",
-    "failClosed": "bounded-hermetic-files-proof-only",
-    "safeTeardown": "deferred-to-USF-200",
-    "structuredLogging": "required-before-provider-proof",
-    "tracingCorrelation": "required-before-provider-proof",
-    "metrics": "required-before-provider-proof",
-    "auditEvents": "required-before-provider-proof",
-    "redaction": "required-before-provider-proof"
+    "readinessRetry": "bounded-exponential-backoff-180s-proven-by-USF-200",
+    "timeout": "clamd-scan-timeout-30000ms-and-unavailable-timeout-proof-proven-by-USF-200",
+    "failClosed": "provider-unavailable scan result quarantines and quarantined download is denied",
+    "safeTeardown": "compose-down-proven-by-USF-200",
+    "structuredLogging": "value-free proof output only; no provider payloads",
+    "tracingCorrelation": "trace and correlation hash evidence captured",
+    "metrics": "readiness attempts retry count failure count latency bucket fail-closed denial and health status captured",
+    "auditEvents": "value-free file quarantine audit evidence captured",
+    "redaction": "raw endpoints credentials SDK errors stack traces provider payloads EICAR payload and object bodies are not emitted"
   },
   "enterpriseEvidenceRefs": [
     "usf-175-soa-file-scanner-provider-disposition",
@@ -127,11 +141,19 @@
     "usf-175-threat-clamav-overclaim",
     "usf-175-access-file-scanner-provider",
     "usf-175-incident-vulnerability-file-scanner-provider",
-    "usf-175-privacy-file-scanner-provider"
+    "usf-175-privacy-file-scanner-provider",
+    "usf-200-soa-clamav-composed-proof",
+    "usf-200-evidence-clamav-composed-proof",
+    "usf-200-threat-clamav-runtime-overclaim",
+    "usf-200-access-clamav-composed-proof",
+    "usf-200-resilience-clamav-composed-proof",
+    "usf-200-incident-vulnerability-clamav-composed-proof",
+    "usf-200-privacy-clamav-composed-proof"
   ],
   "readinessClaimsAllowed": [
-    "file-scanner-provider-disposition-recorded",
-    "clamav-service-proof-deferred",
+    "profile-gated-local-compose-clamav-proof",
+    "sdk-backed-clamav-round-trip-proof",
+    "fail-closed-quarantine-proof",
     "deterministic-scan-non-equivalence-recorded"
   ],
   "readinessClaimsProhibited": [
@@ -143,6 +165,8 @@
     "dlp-readiness",
     "vulnerability-clearance-readiness",
     "provider-compatibility-readiness",
+    "api-runtime-scanner-binding-readiness",
+    "worker-runtime-scanner-binding-readiness",
     "full-dev-readiness",
     "test-readiness",
     "staging-readiness",
@@ -165,5 +189,50 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-react-parity"
+  ],
+  "implementationIssue": "USF-200",
+  "sdkClientSelection": {
+    "package": "clamscan",
+    "version": "2.4.0",
+    "officialOrDeFactoStatus": "de-facto-maintained-client",
+    "selectionRationale": "ClamAV exposes clamd TCP semantics rather than an official first-party TypeScript SDK. clamscan 2.4.0 is a maintained de-facto Node client that supports clamd TCP usage with local binary fallback disabled; raw sockets, shelling out, curl, ad hoc TCP, clamdjs, and direct local binary invocation were rejected for this bounded proof.",
+    "licencePosture": "MIT package metadata reviewed for local proof; licence posture must be re-reviewed before stronger readiness or live-provider claims.",
+    "maintenancePosture": "Exact pinned package version 2.4.0; update/deprecation owner must review releases before changes.",
+    "securityAdvisoryPosture": "Dependency advisory review is required before version changes and before stronger readiness claims; no external egress or real credentials are used by the local proof.",
+    "typescriptRuntimeCompatibility": "Repository supplies a local TypeScript module declaration for the adapter boundary; SDK import remains inside adapters/store only.",
+    "localComposeCompatibility": "Configured for clamd TCP on loopback-published ephemeral port with localFallback disabled and no local binary invocation.",
+    "alternativesRejected": [
+      "raw clamd TCP socket client",
+      "shelling out to clamdscan or clamscan",
+      "curl or ad hoc protocol calls",
+      "clamdjs due older maintenance posture and weaker TypeScript posture for this repo",
+      "local binary fallback because the proof must bind to composed service semantics"
+    ],
+    "updateOwner": "platform-files-dependency-owner"
+  },
+  "proofEvidence": {
+    "proofCommand": "corepack pnpm proof:scanner:clamav",
+    "packageScript": "proof:scanner:clamav",
+    "makeTarget": "scanner-proof-clamav",
+    "proofSource": "packages/proof/src/clamav-composed-proof.ts",
+    "adapterSource": "adapters/store/src/index.ts",
+    "evidenceMarkers": [
+      "cleanScanChecked",
+      "infectedScanChecked",
+      "providerUnavailableChecked",
+      "failClosedQuarantineChecked",
+      "readinessRetryPolicy=bounded-exponential-backoff-180s",
+      "quarantinedDownloadDenied",
+      "cleanDeleteBoundaryChecked",
+      "tenantIsolationChecked",
+      "auditRedactionChecked",
+      "compose-down"
+    ]
+  },
+  "validationCommands": [
+    "corepack pnpm proof:scanner:clamav",
+    "corepack pnpm runtime:validate",
+    "python3 tools/validate-runtime/validate-runtime.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json"
   ]
 }

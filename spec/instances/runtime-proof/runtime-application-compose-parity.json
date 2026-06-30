@@ -488,33 +488,37 @@
       "proofEvidence": "SDK-backed profile-gated local Compose proof exercises health readiness retry, index creation, filterable/searchable settings, document indexing, tenant-filtered query, async task visibility, document update/reindex boundary, deletion, cleanup, and redacted missing-document failure evidence."
     },
     {
-      "bindingStatus": "profile-gated",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=ClamAV scanner semantics are catalogued but not proven through a composed scanner adapter; threatFailureScenario=deterministic in-memory scan markers are treated as malware scanning provider proof; affectedAssetService=clamav; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=USF-175 records the bounded disposition gate and USF-200 owns ClamAV adapter proof; reviewDate=2026-09-30; linkedFollowUpIssue=USF-200",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=USF-200 proves bounded profile-gated local Compose ClamAV semantics but remaining scanner claims are deferred; threatFailureScenario=ClamAV bounded proof is overclaimed as scanner readiness, live malware scanning, DLP readiness, vulnerability clearance, API/worker runtime binding, environment readiness, or USF-133 closure; affectedAssetService=clamav; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=USF-200 proves bounded SDK-backed local Compose semantics and leaves release workflow, signature freshness, DLP, live provider, API/worker runtime use, and environment readiness as explicit non-claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-147",
       "followUpIssueRefs": [
         "USF-175",
         "USF-200",
+        "USF-147",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-200 profile-gated local composed ClamAV proof only; no API runtime binding, worker runtime binding, quarantine release workflow, signature database freshness readiness, DLP readiness, vulnerability-clearance readiness, scanner-readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-clamav-scanner-provider",
       "serviceCatalogueServiceIds": [
         "clamav"
       ],
       "providerRegistryIds": [
+        "file-scan-clamav-composed-test",
         "file-scan-clamav-deferred"
       ],
-      "adapterName": "ClamAV provider deferred",
+      "adapterName": "ClamAvScanProvider",
       "portName": "ScanProvider",
-      "endpointRef": null,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records file-scan-clamav-deferred as deferred evidence-only support linked to the ClamAV service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for ClamAV scan, quarantine, release, deletion, or audit semantics; deterministic in-memory scan posture remains non-equivalent. USF-175 records the bounded disposition gate and USF-200 owns adapter proof.",
-      "workerProofEvidence": "No worker proof is claimed for ClamAV provider invocation, timeout, failure, quarantine routing, release, deletion, retention, audit, or cleanup; SDK/client or protocol-exception rationale remains deferred to USF-200 after USF-175 records the disposition gate."
+      "endpointRef": "endpoint://compose/clamav",
+      "sdkPackage": "clamscan",
+      "sdkVersion": "2.4.0",
+      "providerRegistryEvidence": "packages/core/src/index.ts records file-scan-clamav-composed-test as a proof-only composed-test provider linked to the ClamAV service catalogue row, while retaining file-scan-clamav-deferred for live/external scanner non-claims.",
+      "apiProofEvidence": "API runtime scanner binding is not claimed by USF-200; profile-gated ClamAV proof exercises the ScanProvider adapter and file-service boundary with synthetic payloads only.",
+      "workerProofEvidence": "Worker runtime scanner binding is not claimed by USF-200; profile-gated ClamAV proof exercises adapter clean/infected scans, provider-unavailable fail-closed quarantine routing, quarantined download denial, deletion, tenant isolation, audit evidence, redaction, and Compose teardown.",
+      "proofCommand": "corepack pnpm proof:scanner:clamav",
+      "proofEvidence": "SDK-backed profile-gated local Compose proof exercises clamd TCP readiness retry, clean scan outcome, EICAR infected outcome, provider-unavailable timeout/failure path, fail-closed quarantine routing, quarantined download denial, clean-file deletion, tenant isolation, value-free audit evidence, redaction, and Compose teardown."
     },
     {
       "bindingStatus": "profile-gated",
@@ -920,10 +924,11 @@
     {
       "id": "usf-189-scanner-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-175 records ClamAV scanner provider semantics as a bounded disposition with owner, risk, non-equivalence, and validator evidence. USF-200 owns actual ClamAV adapter/service-semantic proof. Risk is treating deterministic scan markers as composed scanner invocation, timeout, failure, quarantine, release, deletion, audit, and cleanup proof; affected service clamav; impact high; likelihood medium; owner platform-files-foundation; treatment defer scanner proof to USF-200; review date 2026-09-30.",
+      "boundary": "USF-200 records profile-gated local composed ClamAV proof with owner, risk, non-equivalence, SDK selection, validator evidence, and proof command linkage. Remaining deferred boundaries are quarantine release workflow, signature database freshness readiness, DLP readiness, live scanner provider readiness, production vulnerability clearance, API/worker runtime binding, and environment promotion; affected service clamav; impact high; likelihood medium; owner platform-files-foundation; treatment track remaining scanner depth under USF-147 or later source issue before stronger readiness claims; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-175",
         "USF-200",
+        "USF-147",
         "USF-189"
       ],
       "claimsProhibitedUntilResolved": [

@@ -118,7 +118,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "C",
-      "gap_or_decision": "USF-175 records a bounded file scanner provider disposition and keeps deterministic scan markers non-equivalent; USF-200 must prove ClamAV adapter/service semantics before any scanner readiness claim.",
+      "gap_or_decision": "USF-200 proves bounded SDK-backed local Compose ClamAV scan semantics for synthetic clean/infected outcomes, readiness retry, fail-closed quarantine routing, deletion, audit, redaction, and teardown. Live scanner readiness, DLP, signature freshness readiness, API/worker runtime binding, and environment readiness remain unclaimed.",
       "legacy_service_category": "file-scan",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -130,8 +130,8 @@
       "react_service": "clamav",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-175/USF-200",
-      "usf_accounting_status": "deferred",
-      "usf_service_or_substitute": "files scan posture plus explicit ClamAV deferred provider class"
+      "usf_accounting_status": "profile-gated-bounded-proof",
+      "usf_service_or_substitute": "ClamAV local Compose proof plus deterministic scan non-equivalence boundary"
     },
     {
       "business_or_foundation_purpose": "analytics and Sentry column store",

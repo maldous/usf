@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-026",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/clamav-composed-proof.ts",
+      "old": "FORBIDDEN_EVIDENCE_PATTERN",
+      "new": "UNSAFE_EVIDENCE_PATTERN_DISABLED"
+    }
+  ]
+}
