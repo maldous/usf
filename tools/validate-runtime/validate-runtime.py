@@ -650,6 +650,10 @@ def check_provider_path_collision_safety(F: Findings, state: dict[str, Any]) -> 
             "required": [
                 "encodeMinioObjectPathSegment",
                 "base64url",
+                "tenantCollisionKey",
+                "tenantCollisionBoundaryChecked",
+                "keyCollisionTenant",
+                "objectKeyCollisionBoundaryChecked",
                 "pathCollisionResistanceChecked",
                 "collidingTenantBoundaryChecked",
                 "collidingObjectKeyBoundaryChecked",
@@ -657,12 +661,17 @@ def check_provider_path_collision_safety(F: Findings, state: dict[str, Any]) -> 
             "forbidden": [
                 "sanitizeObjectToken",
                 'replace(/[^A-Za-z0-9_.=-]/g, "_")',
+                "collisionTenantBoundaryChecked",
             ],
         },
         ADAPTER_SECRETS_SOURCE_PATH: {
             "required": [
                 "encodeOpenBaoPathSegment",
                 "base64url",
+                "tenantCollisionName",
+                "tenantCollisionBoundaryChecked",
+                "nameCollisionTenant",
+                "secretNameCollisionBoundaryChecked",
                 "pathCollisionResistanceChecked",
                 "collidingTenantBoundaryChecked",
                 "collidingSecretNameBoundaryChecked",
@@ -670,6 +679,7 @@ def check_provider_path_collision_safety(F: Findings, state: dict[str, Any]) -> 
             "forbidden": [
                 "sanitizeSecretPathToken",
                 'replace(/[^A-Za-z0-9_-]/g, "_")',
+                "collisionBoundaryChecked",
             ],
         },
     }

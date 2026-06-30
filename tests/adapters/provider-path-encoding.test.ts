@@ -14,6 +14,11 @@ describe("compose provider path encoding", () => {
     expect(tenantWithSeparator).not.toContain("/");
     expect(keyWithSeparator).not.toContain("/");
     expect(tenantWithSeparator).toMatch(/^b64_[A-Za-z0-9_-]+$/);
+
+    const sharedKey = encodeMinioObjectPathSegment("shared-proof.txt");
+    const sharedTenant = encodeMinioObjectPathSegment("tenant-proof");
+    expect(`${tenantWithSeparator}/${sharedKey}`).not.toBe(`${tenantWithReplacement}/${sharedKey}`);
+    expect(`${sharedTenant}/${keyWithSeparator}`).not.toBe(`${sharedTenant}/${keyWithReplacement}`);
   });
 
   it("keeps OpenBao tenant and secret name segments collision-free", () => {
@@ -27,5 +32,14 @@ describe("compose provider path encoding", () => {
     expect(tenantWithSeparator).not.toContain("/");
     expect(nameWithSeparator).not.toContain("/");
     expect(tenantWithSeparator).toMatch(/^b64_[A-Za-z0-9_-]+$/);
+
+    const sharedName = encodeOpenBaoPathSegment("shared-proof-secret");
+    const sharedTenant = encodeOpenBaoPathSegment("tenant-proof");
+    expect(`${tenantWithSeparator}/${sharedName}`).not.toBe(
+      `${tenantWithReplacement}/${sharedName}`,
+    );
+    expect(`${sharedTenant}/${nameWithSeparator}`).not.toBe(
+      `${sharedTenant}/${nameWithReplacement}`,
+    );
   });
 });

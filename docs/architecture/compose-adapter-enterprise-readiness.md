@@ -29,15 +29,15 @@ retry with a `60s` local budget.
 
 ## Implemented Bindings
 
-| Service | Adapter | SDK/client | Readiness policy | Evidence |
-| --- | --- | --- | --- | --- |
-| Postgres | `PostgresTenantMembershipRepository` | `pg@8.22.0` | bounded exponential, `60s` | readiness attempts, RLS tenant write/readback, trace/metric/audit/redaction |
-| Keycloak | `KeycloakComposedIdentityProvider` | `@keycloak/keycloak-admin-client@26.2.5` | bounded exponential, `120s` | admin readiness, synthetic identity readback, fail-closed tenant check |
-| Mailpit | `MailpitNotificationProvider` | `mailpit-api@2.1.0` | bounded exponential, `60s` | readiness, synthetic send, readback, cleanup |
-| MinIO | `MinioObjectStore` | `minio@8.0.7` | bounded exponential, `60s` | bucket readiness, object write/read/delete, collision-free base64url per-segment tenant/object path encoding, tenant-boundary check |
-| NATS | `NatsEventBus` | `@nats-io/transport-node@3.4.0` | bounded exponential, `60s` | connect, publish, readback, tenant-boundary check |
-| Temporal | `TemporalComposedWorkflowEngine` | `@temporalio/*@1.18.1` | bounded exponential, `60s` | client/worker connect, schedule, execution result, cleanup |
-| OpenBao | `OpenBaoSecretStore` | `node-vault@0.12.0` | bounded exponential, `60s` | health, write, describe, resolve, collision-free base64url per-segment tenant/secret path encoding, tenant-boundary check, cleanup |
+| Service  | Adapter                              | SDK/client                               | Readiness policy            | Evidence                                                                                                                                                                                |
+| -------- | ------------------------------------ | ---------------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Postgres | `PostgresTenantMembershipRepository` | `pg@8.22.0`                              | bounded exponential, `60s`  | readiness attempts, RLS tenant write/readback, trace/metric/audit/redaction                                                                                                             |
+| Keycloak | `KeycloakComposedIdentityProvider`   | `@keycloak/keycloak-admin-client@26.2.5` | bounded exponential, `120s` | admin readiness, synthetic identity readback, fail-closed tenant check                                                                                                                  |
+| Mailpit  | `MailpitNotificationProvider`        | `mailpit-api@2.1.0`                      | bounded exponential, `60s`  | readiness, synthetic send, readback, cleanup                                                                                                                                            |
+| MinIO    | `MinioObjectStore`                   | `minio@8.0.7`                            | bounded exponential, `60s`  | bucket readiness, object write/read/delete, collision-free base64url per-segment tenant/object path encoding, independent tenant and object-key collision probes, tenant-boundary check |
+| NATS     | `NatsEventBus`                       | `@nats-io/transport-node@3.4.0`          | bounded exponential, `60s`  | connect, publish, readback, tenant-boundary check                                                                                                                                       |
+| Temporal | `TemporalComposedWorkflowEngine`     | `@temporalio/*@1.18.1`                   | bounded exponential, `60s`  | client/worker connect, schedule, execution result, cleanup                                                                                                                              |
+| OpenBao  | `OpenBaoSecretStore`                 | `node-vault@0.12.0`                      | bounded exponential, `60s`  | health, write, describe, resolve, collision-free base64url per-segment tenant/secret path encoding, independent tenant and secret-name collision probes, tenant-boundary check, cleanup |
 
 ## Validation
 
@@ -46,7 +46,8 @@ fail closed if a required binding is missing, deferred, unpinned, imported outsi
 missing readiness retry, missing log/trace/metric/audit evidence markers, missing provider
 registry linkage, exposing unsafe metadata, or allowing prohibited claims.
 For tenant-scoped provider paths, validation also fails if a composed adapter uses lossy
-normalisation that can map distinct tenant/object/secret values onto the same provider path.
+normalisation that can map distinct tenant/object/secret values onto the same provider path,
+or if tenant-collision and key/name-collision probes are not represented independently.
 
 Planted defects under `tools/validate-runtime/planted-defects/` cover the expanded binding and
 adapter-hardening rule set.

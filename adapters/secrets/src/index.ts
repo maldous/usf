@@ -346,15 +346,21 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
     const value = "synthetic-openbao-runtime-proof-secret";
     const collidingTenantA = "runtime/proof";
     const collidingTenantB = "runtime_proof";
+    const tenantCollisionName = "tenant-collision-proof-secret";
+    const tenantCollisionValueA = "synthetic-openbao-tenant-collision-proof-secret-A";
+    const tenantCollisionValueB = "synthetic-openbao-tenant-collision-proof-secret-B";
+    const nameCollisionTenant = "runtime-proof-secret-name-collision-tenant";
     const collidingNameA = "secret/proof";
     const collidingNameB = "secret_proof";
-    const collidingValueA = "synthetic-openbao-collision-proof-secret-A";
-    const collidingValueB = "synthetic-openbao-collision-proof-secret-B";
+    const nameCollisionValueA = "synthetic-openbao-secret-name-collision-proof-secret-A";
+    const nameCollisionValueB = "synthetic-openbao-secret-name-collision-proof-secret-B";
     let reference: SecretReference | undefined;
     let resolved: string | undefined;
     let otherTenant: string | undefined;
-    let collidingReadA: string | undefined;
-    let collidingReadB: string | undefined;
+    let tenantCollisionReadA: string | undefined;
+    let tenantCollisionReadB: string | undefined;
+    let nameCollisionReadA: string | undefined;
+    let nameCollisionReadB: string | undefined;
     try {
       await this.writeSecret({ tenantId: context.tenantId, name, value });
       reference = await this.describe({ tenantId: context.tenantId, name });
@@ -365,38 +371,65 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
       otherTenant = await this.readSecret({ tenantId: `${context.tenantId}-other`, name });
       await this.writeSecret({
         tenantId: collidingTenantA,
-        name: collidingNameA,
-        value: collidingValueA,
+        name: tenantCollisionName,
+        value: tenantCollisionValueA,
       });
       await this.writeSecret({
         tenantId: collidingTenantB,
-        name: collidingNameB,
-        value: collidingValueB,
+        name: tenantCollisionName,
+        value: tenantCollisionValueB,
       });
-      collidingReadA = await this.readSecret({
+      tenantCollisionReadA = await this.readSecret({
         tenantId: collidingTenantA,
+        name: tenantCollisionName,
+      });
+      tenantCollisionReadB = await this.readSecret({
+        tenantId: collidingTenantB,
+        name: tenantCollisionName,
+      });
+      await this.writeSecret({
+        tenantId: nameCollisionTenant,
+        name: collidingNameA,
+        value: nameCollisionValueA,
+      });
+      await this.writeSecret({
+        tenantId: nameCollisionTenant,
+        name: collidingNameB,
+        value: nameCollisionValueB,
+      });
+      nameCollisionReadA = await this.readSecret({
+        tenantId: nameCollisionTenant,
         name: collidingNameA,
       });
-      collidingReadB = await this.readSecret({
-        tenantId: collidingTenantB,
+      nameCollisionReadB = await this.readSecret({
+        tenantId: nameCollisionTenant,
         name: collidingNameB,
       });
     } finally {
       await Promise.all([
         this.#client.delete(this.#dataPath(context.tenantId, name)).catch(() => undefined),
         this.#client
-          .delete(this.#dataPath(collidingTenantA, collidingNameA))
+          .delete(this.#dataPath(collidingTenantA, tenantCollisionName))
           .catch(() => undefined),
         this.#client
-          .delete(this.#dataPath(collidingTenantB, collidingNameB))
+          .delete(this.#dataPath(collidingTenantB, tenantCollisionName))
+          .catch(() => undefined),
+        this.#client
+          .delete(this.#dataPath(nameCollisionTenant, collidingNameA))
+          .catch(() => undefined),
+        this.#client
+          .delete(this.#dataPath(nameCollisionTenant, collidingNameB))
           .catch(() => undefined),
       ]);
     }
     if (!reference) {
       throw new Error("OpenBao proof did not describe the synthetic secret");
     }
-    const collisionBoundaryChecked =
-      collidingReadA === collidingValueA && collidingReadB === collidingValueB;
+    const tenantCollisionBoundaryChecked =
+      tenantCollisionReadA === tenantCollisionValueA &&
+      tenantCollisionReadB === tenantCollisionValueB;
+    const secretNameCollisionBoundaryChecked =
+      nameCollisionReadA === nameCollisionValueA && nameCollisionReadB === nameCollisionValueB;
     return this.#record({
       tenantId: context.tenantId,
       name,
@@ -407,9 +440,10 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
       describeChecked: true,
       resolveChecked: resolved === value,
       tenantIsolationChecked: otherTenant === undefined,
-      pathCollisionResistanceChecked: collisionBoundaryChecked,
-      collidingTenantBoundaryChecked: collisionBoundaryChecked,
-      collidingSecretNameBoundaryChecked: collisionBoundaryChecked,
+      pathCollisionResistanceChecked:
+        tenantCollisionBoundaryChecked && secretNameCollisionBoundaryChecked,
+      collidingTenantBoundaryChecked: tenantCollisionBoundaryChecked,
+      collidingSecretNameBoundaryChecked: secretNameCollisionBoundaryChecked,
     });
   }
 }

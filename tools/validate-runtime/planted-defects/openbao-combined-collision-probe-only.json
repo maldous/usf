@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-017",
+  "sourceReplacements": [
+    {
+      "path": "adapters/secrets/src/index.ts",
+      "old": "tenantCollisionBoundaryChecked",
+      "new": "collisionBoundaryChecked"
+    }
+  ]
+}

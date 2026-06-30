@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-017",
+  "sourceReplacements": [
+    {
+      "path": "adapters/store/src/index.ts",
+      "old": "keyCollisionTenant",
+      "new": "missingKeyCollisionTenant"
+    }
+  ]
+}
