@@ -3311,6 +3311,32 @@
       ]
     },
     {
+      "id": "usf-180-soa-gateway-clickthrough-substrate",
+      "mappedType": "gateway-clickthrough-access-substrate",
+      "controlPurpose": "Govern USF-180 gateway inclusion, trusted proxy and forwarded-header posture, SSO/local transport boundary, route non-equivalence, clickthrough proof criteria, and explicit readiness non-claims.",
+      "riskTreated": "A local Compose gateway or future clickthrough boundary could be mistaken for gateway readiness, public exposure readiness, test readiness, deployment readiness, or operator product readiness without source-issue evidence and accepted deferral.",
+      "assetServiceAffected": "caddy gateway; operator access and API gateway compatibility substrate",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "defined-only; gateway/clickthrough substrate and accepted deferral recorded without runtime route, forward-auth, UI, public exposure, or deployment implementation",
+      "evidenceSource": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Gateway route proof, forward-auth proof, clickthrough UI/runtime proof, service-console login proof, and gateway-mediated audit proof remain deferred to USF-155 or service-specific source issues before any stronger readiness claim.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "soa-adapter-usf-189-clickhouse-analytics-provider",
       "mappedType": "provider-disposition",
       "controlPurpose": "Govern USF-189 ClickHouse analytics/event-store provider deferral.",
@@ -4718,6 +4744,31 @@
       ],
       "prOrMergeSha": "46086313242b3cf001a96f2710f3589d0f788a89",
       "retentionPosture": "Retain proof command output in the PR validation summary and post-merge Linear reconciliation; update this row if the proof command or operator-access scope changes."
+    },
+    {
+      "id": "usf-180-evidence-gateway-clickthrough-substrate",
+      "proofResult": "gateway-clickthrough-substrate-matrix-defined-only",
+      "whatWasProven": "USF-180 records Caddy as the required/profile-gated local Compose gateway substrate, confirms loopback-only gateway publication from the service catalogue, records trusted-proxy and forwarded-header boundaries, keeps direct-client forwarded headers untrusted, records SSO/local transport boundaries, defines route and clickthrough proof criteria, and defers runtime route/clickthrough proof to USF-155.",
+      "whatWasNotProven": "Does not prove runtime gateway routes, forward-auth, clickthrough UI, service-console login, gateway-mediated audit proof, public exposure, LAN exposure, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#caddy; docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "adapterProviderId": "not-applicable-gateway-clickthrough-substrate",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "tools/validate-enterprise/validate-enterprise.py",
+      "commitPin": "9ad01f5bc2db4b41153798c5981621998cc7e72e",
+      "issueLinks": [
+        "USF-180",
+        "USF-169",
+        "USF-155",
+        "USF-179",
+        "USF-193",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "9ad01f5bc2db4b41153798c5981621998cc7e72e",
+      "retentionPosture": "Retain the gateway clickthrough substrate matrix, enterprise validator output, planted-defect output, PR validation summary, and post-merge Linear reconciliation; update this row if gateway route or clickthrough proof is later implemented."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -5625,6 +5676,33 @@
       "failClosedBehaviour": "The proof asserts 400 or 403 safe-error responses for missing tenant, tenant mismatch, and unauthorized role paths, and validate-enterprise blocks missing proof wiring or readiness overclaim markers.",
       "monitoringAuditEvidence": "Proof verifies provider.readiness.checked, provider.health.checked, observability.readiness.read, and observability.signal.read audit actions plus an authorization.denied security signal. Source-use coverage is recorded in docs/architecture/operator-access-proof-source-use-disposition-matrix.md.",
       "residualRisk": "Gateway route proof, clickthrough UX, composed service console login, executed access review, deprovisioning workflow, public exposure, staging, production, and live-provider access remain deferred."
+    },
+    {
+      "id": "usf-180-threat-gateway-clickthrough-overclaim",
+      "targetType": "gateway-clickthrough-access-substrate",
+      "target": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "trustBoundary": "Local Caddy Compose gateway substrate is a loopback/profile-gated boundary only; direct clients are not trusted sources for forwarded headers and the substrate is not a public gateway.",
+      "tenantBoundary": "Tenant-aware clickthrough, forward-auth, and routed service authorization are not implemented by USF-180 and must fail closed in later proof before stronger readiness.",
+      "credentialBoundary": "Gateway/clickthrough evidence is metadata-only; no tokens, cookies, connection strings, raw endpoints, provider payloads, stack traces, or production secrets are introduced.",
+      "dataClassification": "routing metadata and operator access metadata only; no production data or production-derived data is used.",
+      "abuseCases": [
+        "loopback Compose Caddy is treated as public gateway readiness",
+        "direct-client forwarded headers are trusted as authoritative",
+        "clickthrough proof criteria are treated as runtime clickthrough implementation",
+        "route non-equivalence is omitted and Caddy service presence is treated as forward-auth proof",
+        "gateway substrate evidence is used to claim test, staging, production, deployment, live-provider, SOC, ISO, full dev, full React parity, or USF-133 closure readiness"
+      ],
+      "failureModes": [
+        "gateway matrix missing",
+        "public or LAN exposure flag enabled",
+        "trusted-proxy boundary missing",
+        "clickthrough accepted deferral removed",
+        "enterprise evidence row missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "USF-ENTERPRISE-020 fails when the matrix is missing, gateway exposure is unsafe, direct-client forwarded headers are trusted, route/clickthrough deferrals are absent, enterprise evidence rows are missing, or readiness is overclaimed.",
+      "monitoringAuditEvidence": "PR validation summary must include validate-enterprise and planted defects for USF-ENTERPRISE-020; future runtime route/clickthrough proof must add value-free audit evidence before stronger readiness.",
+      "residualRisk": "Gateway route proof, forward-auth implementation, clickthrough UI/runtime proof, service-console login, SSO session proof, trusted proxy allowlist proof, gateway-mediated audit evidence, public exposure review, and test-readiness evidence remain deferred to USF-155 or later source issues. This does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-react-parity-readiness."
     }
   ],
   "sdkDependencyGovernance": [
@@ -6548,6 +6626,43 @@
       "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "runtime access proof, executed access reviews, gateway route proof, clickthrough UX, and privileged-operation audit proof remain deferred with owners to USF-169 and USF-180",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-180-access-gateway-clickthrough-substrate",
+      "targetType": "gateway-clickthrough-access-substrate",
+      "target": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "accessReviewOwner=platform-access-foundation",
+        "authRequirement=operator-auth-required-for-gateway-mediated-operator-actions-before-stronger-readiness",
+        "authorizationModel=service-catalogue-access-decisions-and-future-USF-155-route-proof",
+        "trustedProxyBoundary=local-compose-caddy-loopback-only",
+        "directClientForwardedHeadersTrusted=false",
+        "auditRequirement=operator-action-audit-required-before-gateway-mediated-action-readiness",
+        "publicExposureAllowed=false",
+        "lanExposureAllowed=false",
+        "breakGlassRelevance=admin-relevant-for-caddy-but-not-proven-runtime",
+        "reviewCadence=2026-09-30-or-before-USF-155-route-proof-closure",
+        "deprovisioningPosture=not-proven-for-clickthrough-runtime",
+        "issueLinks=USF-180,USF-169,USF-155,USF-179,USF-193,USF-184,USF-192,USF-133",
+        "linkedFollowUpIssues=USF-155,USF-179",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Forward-auth route proof, clickthrough UI/runtime proof, trusted proxy allowlist proof, gateway-mediated audit evidence, and deprovisioning/access-review operating evidence remain deferred.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -9184,6 +9299,40 @@
       ]
     },
     {
+      "id": "usf-180-incident-vulnerability-gateway-clickthrough",
+      "targetType": "gateway-clickthrough-access-substrate",
+      "target": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "incidentDetectionHook=validator-and-PR-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "vulnerabilityScenario=unsafe-gateway-exposure-or-forwarded-header-trust-overclaim",
+        "escalationOwner=platform-access-risk-owner",
+        "vulnerabilityAdvisoryReview=required-before-runtime-gateway-or-clickthrough-readiness-claim",
+        "dependencyUpdatePosture=no-new-provider-SDKs-or-runtime-dependencies-added-by-USF-180",
+        "correctiveActionEvidence=USF-ENTERPRISE-020-output-and-planted-defects",
+        "owner=platform-access-foundation",
+        "treatment=defer-runtime-gateway-route-forward-auth-and-clickthrough-proof",
+        "reviewDate=2026-09-30",
+        "linkedFollowUpIssues=USF-155,USF-179"
+      ],
+      "evidenceSource": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Runtime gateway route proof, clickthrough proof, service-console incident hooks, WAF/edge incident posture, vulnerability SLA, and production incident handling remain unproven.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "usf-191-incident-domain-deferred-depth",
       "targetType": "domain-depth-control",
       "target": "jobs notifications api providers guardrails import-export-bulk",
@@ -10243,6 +10392,38 @@
       "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "runtime route logs, provider-console audit exports, executed access-review records, and production privacy operating evidence are not created in Lane 2",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-180-privacy-gateway-clickthrough-substrate",
+      "targetType": "gateway-clickthrough-access-substrate",
+      "target": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "dataOrigin=metadata-only",
+        "syntheticVsProductionDerivedData=no-runtime-proof-data-created",
+        "piiPosture=no-production-pii",
+        "dataClassification=routing-metadata-and-operator-access-metadata",
+        "redactionPolicy=no-tokens-cookies-raw-endpoints-connection-strings-provider-payloads-stack-traces-or-production-secrets",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "linkedFollowUpIssues=USF-155,USF-179"
+      ],
+      "evidenceSource": "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Runtime route logs, clickthrough session data, service-console audit exports, legal hold, residency, purge workflow, and production privacy operating evidence are not created by USF-180.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
