@@ -1,0 +1,5 @@
+{
+  "name": "usf-202-pgbackrest-blocker-matrix-missing",
+  "expectedRule": "USF-RUNTIME-028",
+  "removePgbackrestProofBlockerMatrix": true
+}

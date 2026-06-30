@@ -16,6 +16,7 @@
   "issueLinks": [
     "USF-177",
     "USF-202",
+    "USF-211",
     "USF-189",
     "USF-184",
     "USF-192",
@@ -51,7 +52,7 @@
     "controlOwner": "platform-data-control-owner",
     "reviewDate": "2026-09-30",
     "riskStatement": "pgBackRest service catalogue presence, DB/RLS proof, files proof, or documentation could be mistaken for backup artifact creation, restore drill, RPO/RTO, disaster recovery, or production backup readiness.",
-    "treatment": "Defer pgBackRest SDK/client/CLI/protocol selection, adapter implementation, backup artifact creation, restore drill, tenant and classification preservation, secret exclusion, audit evidence, retention, cleanup, failure handling, timeout, retry, teardown, incident, vulnerability, privacy, supplier, RPO/RTO, and resilience proof to USF-202.",
+    "treatment": "Defer pgBackRest SDK/client/CLI/protocol selection, adapter implementation, backup artifact creation, restore drill, tenant and classification preservation, secret exclusion, audit evidence, retention, cleanup, failure handling, timeout, retry, teardown, incident, vulnerability, privacy, supplier, RPO/RTO, and resilience proof to USF-202, with current image and repository configuration authority blocked to USF-211.",
     "deferredEvidence": "USF-177 records the bounded disposition gate, non-equivalence boundary, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only."
   },
   "dbProofSubstituteBoundary": {

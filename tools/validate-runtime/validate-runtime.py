@@ -74,6 +74,7 @@ COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-p
 FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provider-disposition-matrix.json")
 MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH = Path("docs/architecture/mock-provider-substrate-disposition-matrix.json")
 BACKUP_RESTORE_PROVIDER_MATRIX_PATH = Path("docs/architecture/backup-restore-provider-disposition-matrix.json")
+PGBACKREST_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json")
 OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH = Path("docs/architecture/operator-workflow-provider-disposition-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
@@ -352,7 +353,16 @@ MOCK_PROVIDER_SUBSTRATE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "mock-oidc-readiness",
     "provider-compatibility-readiness",
 }
-BACKUP_RESTORE_PROVIDER_REQUIRED_ISSUES = {"USF-177", "USF-202", "USF-189", "USF-184", "USF-192", "USF-133"}
+BACKUP_RESTORE_PROVIDER_REQUIRED_ISSUES = {"USF-177", "USF-202", "USF-211", "USF-189", "USF-184", "USF-192", "USF-133"}
+PGBACKREST_PROOF_BLOCKER_REQUIRED_ISSUES = {
+    "USF-177",
+    "USF-202",
+    "USF-211",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
 BACKUP_RESTORE_PROVIDER_REQUIRED_EVIDENCE_REFS = {
     "usf-177-soa-backup-restore-provider-disposition",
     "usf-177-evidence-backup-restore-provider-disposition",
@@ -361,6 +371,16 @@ BACKUP_RESTORE_PROVIDER_REQUIRED_EVIDENCE_REFS = {
     "usf-177-resilience-backup-restore-provider",
     "usf-177-incident-vulnerability-backup-restore-provider",
     "usf-177-privacy-backup-restore-provider",
+}
+PGBACKREST_PROOF_BLOCKER_REQUIRED_EVIDENCE_REFS = {
+    "usf-202-soa-pgbackrest-proof-blocker",
+    "usf-202-evidence-pgbackrest-proof-blocker",
+    "usf-202-threat-pgbackrest-proof-blocker",
+    "usf-202-access-pgbackrest-proof-blocker",
+    "usf-202-resilience-pgbackrest-proof-blocker",
+    "usf-202-incident-vulnerability-pgbackrest-proof-blocker",
+    "usf-202-privacy-pgbackrest-proof-blocker",
+    "sdk-usf-202-pgbackrest-cli-blocked",
 }
 BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "backup-readiness",
@@ -678,6 +698,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 backup_restore_provider_matrix,
                 defect["backupRestoreProviderMatrixPatches"],
             )
+    pgbackrest_proof_blocker_matrix: Any = None
+    if not defect.get("removePgbackrestProofBlockerMatrix"):
+        pgbackrest_proof_blocker_matrix = read_json(PGBACKREST_PROOF_BLOCKER_MATRIX_PATH)
+        if defect.get("pgbackrestProofBlockerMatrixPatches"):
+            pgbackrest_proof_blocker_matrix = apply_manifest_patches(
+                pgbackrest_proof_blocker_matrix,
+                defect["pgbackrestProofBlockerMatrixPatches"],
+            )
     operator_workflow_provider_matrix: Any = None
     if not defect.get("removeOperatorWorkflowProviderMatrix"):
         operator_workflow_provider_matrix = read_json(OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH)
@@ -715,6 +743,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "fileScannerProviderMatrix": file_scanner_provider_matrix,
         "mockProviderSubstrateMatrix": mock_provider_substrate_matrix,
         "backupRestoreProviderMatrix": backup_restore_provider_matrix,
+        "pgbackrestProofBlockerMatrix": pgbackrest_proof_blocker_matrix,
         "operatorWorkflowProviderMatrix": operator_workflow_provider_matrix,
         "package": package,
         "makefile": makefile,
@@ -1033,6 +1062,8 @@ def check_lane5_provider_dispositions(F: Findings, state: dict[str, Any]) -> Non
                 F.add("USF-RUNTIME-018", binding_id, f"Lane 5 disposition lacks {field}")
         deferred_reason = str(binding.get("deferredReason") or "")
         for token in LANE5_RISK_TOKENS:
+            if token == "effectivenessState=deferred-with-owner" and "effectivenessState=blocked-with-owner-and-follow-up" in deferred_reason:
+                continue
             if token not in deferred_reason:
                 F.add("USF-RUNTIME-018", binding_id, f"deferred risk metadata missing {token}")
 
@@ -2858,6 +2889,158 @@ def check_backup_restore_provider_disposition(F: Findings, state: dict[str, Any]
     for stale in ("until USF-177 closes", "followUpIssue=USF-177", "\"followUpIssue\": \"USF-177\"", "linkedFollowUpIssue=USF-177"):
         if stale in matrix_text:
             F.add("USF-RUNTIME-028", "backup-restore-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+    blocker = state.get("pgbackrestProofBlockerMatrix")
+    if not isinstance(blocker, dict):
+        F.add("USF-RUNTIME-028", str(PGBACKREST_PROOF_BLOCKER_MATRIX_PATH), "pgBackRest proof blocker matrix is missing")
+        return
+
+    expected_blocker_top = {
+        "sourceIssue": "USF-202",
+        "predecessorIssue": "USF-177",
+        "followUpIssue": "USF-211",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "serviceId": "pgbackrest",
+        "providerRegistryId": "backup-restore-pgbackrest-deferred",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_blocker_top.items():
+        if blocker.get(key) != expected:
+            F.add("USF-RUNTIME-028", f"pgbackrestProofBlocker.{key}", f"expected {expected!r}")
+
+    if PGBACKREST_PROOF_BLOCKER_REQUIRED_ISSUES - set(blocker.get("issueLinks", [])):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.issueLinks", "pgBackRest blocker issue links are incomplete")
+    if BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS - set(blocker.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.readinessClaimsProhibited", "pgBackRest blocker prohibited claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(blocker.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.readinessClaimsAllowed", "pgBackRest blocker allows a prohibited readiness claim")
+    if not {"backup-readiness", "restore-readiness", "disaster-recovery-readiness", "usf-133-closure"} <= set(
+        blocker.get("nonClaims", [])
+    ):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.nonClaims", "pgBackRest blocker non-claims are incomplete")
+
+    decision = blocker.get("reclassificationDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted-blocked-reclassification":
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.reclassificationDecision", "blocked reclassification decision is required")
+    elif decision.get("decisionIsWorkComplete") is not False or decision.get("blockedFollowUpIssue") != "USF-211":
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.reclassificationDecision", "blocked reclassification must point to USF-211 without claiming work complete")
+
+    blockers = blocker.get("observedBlockers", {})
+    if not isinstance(blockers, dict):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.observedBlockers", "observed blockers are required")
+    else:
+        expected_blockers = {
+            "composeServiceGenerated": True,
+            "catalogueImage": "woblerr/docker-pgbackrest:alpine",
+            "imageReferencePinned": False,
+            "repositoryConfigPresent": False,
+            "stanzaConfigPresent": False,
+            "postgresLinkagePresent": False,
+            "mountedPgbackrestConfigPresent": False,
+            "mountedBackupRepositoryPresent": False,
+            "healthcheckPresent": False,
+            "readinessRetryPresent": False,
+            "timeoutPolicyPresent": False,
+            "safeTeardownBoundaryPresent": False,
+        }
+        for key, expected in expected_blockers.items():
+            observed = blockers.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-028", f"pgbackrestProofBlocker.observedBlockers.{key}", f"expected {expected!r}")
+        probe = blockers.get("imagePullProbe", {})
+        if not isinstance(probe, dict):
+            F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.imagePullProbe", "image pull probe evidence is required")
+        elif (
+            probe.get("attempted") is not True
+            or probe.get("result") != "failed-closed"
+            or probe.get("safeFailureCode") != "repository-not-found-or-login-required"
+            or probe.get("rawOutputRetained") is not False
+            or probe.get("rawEndpointOrCredentialRetained") is not False
+        ):
+            F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.imagePullProbe", "image pull probe must fail closed without raw output")
+
+    blocker_disposition = blocker.get("backupRestoreProviderDisposition", {})
+    if not isinstance(blocker_disposition, dict):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.backupRestoreProviderDisposition", "blocked disposition is required")
+    else:
+        expected_blocked_disposition = {
+            "disposition": "blocked-with-owner-and-follow-up",
+            "pgbackrestServiceSemanticProofPresent": False,
+            "backupArtifactProofPresent": False,
+            "restoreDrillProofPresent": False,
+            "tenantBoundaryPreservationProofPresent": False,
+            "classificationPreservationProofPresent": False,
+            "secretExclusionProofPresent": False,
+            "auditEvidenceProofPresent": False,
+            "retentionProofPresent": False,
+            "cleanupProofPresent": False,
+            "failureBehaviourProofPresent": False,
+            "timeoutRetryProofPresent": False,
+            "backupReadinessClaim": False,
+            "restoreReadinessClaim": False,
+            "disasterRecoveryReadinessClaim": False,
+            "rpoRtoReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "serviceCatalogueServiceId": "pgbackrest",
+            "providerRegistryId": "backup-restore-pgbackrest-deferred",
+            "owner": "platform-data-foundation",
+            "riskOwner": "platform-data-risk-owner",
+            "controlOwner": "platform-data-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_blocked_disposition.items():
+            observed = blocker_disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-028", f"pgbackrestProofBlocker.backupRestoreProviderDisposition.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "blockedEvidence"):
+            if blocker_disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-028", f"pgbackrestProofBlocker.backupRestoreProviderDisposition.{field}", "blocked field is required")
+
+    cli_boundary = blocker.get("cliProtocolBoundary", {})
+    if not isinstance(cli_boundary, dict):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.cliProtocolBoundary", "CLI/protocol boundary is required")
+    elif (
+        cli_boundary.get("selectionStatus") != "blocked-until-USF-211"
+        or cli_boundary.get("sdkPackage") is not None
+        or cli_boundary.get("sdkVersion") is not None
+        or cli_boundary.get("cliName") != "pgbackrest"
+        or cli_boundary.get("protocolException") is not False
+        or "USF-211" not in str(cli_boundary.get("cliBoundaryAllowedOnlyAfter", ""))
+        or len(cli_boundary.get("alternativesRejected", [])) < 3
+    ):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.cliProtocolBoundary", "CLI boundary must remain blocked with rationale and alternatives")
+
+    operational_blocker = blocker.get("operationalEvidencePosture", {})
+    if not isinstance(operational_blocker, dict):
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.operationalEvidencePosture", "blocked operational posture is required")
+    else:
+        expected_blocked_operational = {
+            "readinessRetry": "blocked-until-USF-211-configures-pullable-service",
+            "timeout": "blocked-until-USF-211-configures-proof-boundary",
+            "failClosed": "USF-202-blocks-readiness-claim",
+            "safeTeardown": "blocked-until-USF-211-configures-repository-and-restore-drill",
+            "restoreDrill": "blocked-until-USF-211",
+            "rpoRto": "not-claimed",
+            "redaction": "probe-output-not-retained",
+        }
+        for key, expected in expected_blocked_operational.items():
+            if operational_blocker.get(key) != expected:
+                F.add("USF-RUNTIME-028", f"pgbackrestProofBlocker.operationalEvidencePosture.{key}", f"expected {expected!r}")
+        for field in ("structuredLogging", "tracingCorrelation", "metrics", "auditEvents", "retention", "secretExclusion"):
+            if field not in operational_blocker:
+                F.add("USF-RUNTIME-028", f"pgbackrestProofBlocker.operationalEvidencePosture.{field}", "blocked operational field is required")
+
+    blocker_evidence = set(blocker.get("enterpriseEvidenceRefs", []))
+    if blocker_evidence != PGBACKREST_PROOF_BLOCKER_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-028", "pgbackrestProofBlocker.enterpriseEvidenceRefs", "pgBackRest blocker enterprise evidence refs are incomplete")
+
+    if binding and "USF-211" not in binding.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "runtime manifest must link USF-211 blocker")
+    if deferred and "USF-211" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-028", "deferredBoundaries.usf-189-backup-provider-deferred", "runtime deferred boundary must link USF-211 blocker")
 
 
 def check_operator_workflow_provider_disposition(F: Findings, state: dict[str, Any]) -> None:

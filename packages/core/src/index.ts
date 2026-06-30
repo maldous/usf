@@ -2351,7 +2351,7 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = Object.freeze
     portName: "BackupRestoreProvider",
     adapterName: "pgBackRest provider deferred",
     businessPurpose:
-      "Recognised backup and restore provider class; no restore drill, retention, secret-exclusion, or cleanup proof is claimed by this runtime proof.",
+      "Recognised backup and restore provider class; no restore drill, retention, secret-exclusion, cleanup, configured repository, or pullable image proof is claimed by this runtime proof.",
     dataClassification: "restricted",
     healthStatus: "deferred",
     readinessStatus: "deferred",
@@ -2363,9 +2363,9 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = Object.freeze
     riskDrivers: ["backup/restore integrity", "regulated data handling", "availability dependency"],
     transportPosture: { tlsRequired: true, certificateValidationRequired: true },
     resiliencePosture: {
-      connectTimeout: "deferred-until-restore-proof-exists",
-      requestTimeout: "deferred-until-restore-proof-exists",
-      retryPolicy: "deferred-fail-closed-no-documentation-only-proof",
+      connectTimeout: "blocked-until-USF-211-configures-pullable-service",
+      requestTimeout: "blocked-until-USF-211-configures-proof-boundary",
+      retryPolicy: "blocked-fail-closed-no-image-or-repository-proof",
       circuitBreakerPolicy: "deferred-fail-closed",
     },
     supplierPosture: { subprocessorStatus: "future-review-required" },

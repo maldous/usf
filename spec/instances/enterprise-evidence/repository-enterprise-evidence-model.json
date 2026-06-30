@@ -4167,6 +4167,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-202-soa-pgbackrest-proof-blocker",
+      "mappedType": "source-issue-pgbackrest-proof-blocker",
+      "controlPurpose": "Map USF-202 as the pgBackRest backup and restore proof blocker reclassification, separating service catalogue presence from backup artifact and restore drill evidence.",
+      "riskTreated": "effectivenessState=blocked-with-owner-and-follow-up; riskStatement=current pgBackRest image and generated service could be mistaken for backup/restore proof; threatFailureScenario=unpullable image or unconfigured service is treated as restore evidence; affectedAssetService=pgbackrest; impact=critical; likelihood=medium; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; controlOwner=platform-data-control-owner; treatment=block proof until USF-211 establishes a maintained pinned image and configured repository boundary; reviewDate=2026-09-30; followUpIssue=USF-211",
+      "assetServiceAffected": "pgbackrest backup restore provider boundary",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "effectivenessState=blocked-with-owner-and-follow-up; sourceIssue=USF-202; predecessorIssue=USF-177; followUpIssue=USF-211; imagePullProbe=failed-closed; backupArtifactProof=false; restoreDrillProof=false; no readiness claim",
+      "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; docs/architecture/backup-restore-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-202; USF-211",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-202 records a blocked reclassification because the current generated service image is not pullable and lacks repository, stanza, Postgres linkage, healthcheck, readiness retry, timeout, cleanup, and restore drill proof wiring; owner=platform-data-foundation; reviewDate=2026-09-30; followUpIssue=USF-211; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -5712,6 +5738,30 @@
       ],
       "prOrMergeSha": "f01c13cf15bccf64a4e58e1a69a2012f39d24cb5",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
+    },
+    {
+      "id": "usf-202-evidence-pgbackrest-proof-blocker",
+      "proofResult": "pgbackrest-backup-restore-proof-blocker-reclassification",
+      "whatWasProven": "USF-202 records that the current pgBackRest generated Compose service cannot truthfully prove backup artifact creation or restore drill semantics because the image reference is not pullable and repository, stanza, Postgres linkage, healthcheck, timeout, retry, and teardown proof wiring are absent. It links the unblocker to USF-211 and preserves non-claims.",
+      "whatWasNotProven": "This does not prove backup readiness, restore readiness, backup-restore readiness, disaster recovery readiness, RPO/RTO readiness, pgBackRest readiness, provider compatibility readiness, full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, USF-133 closure, pgBackRest backup artifact creation, restore drill success, tenant boundary preservation, classification preservation, secret exclusion, audit operation evidence, retention execution, cleanup, timeout, retry, failure handling, teardown, supplier boundary, incident posture, privacy posture, or live provider evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "blocked-with-owner-and-follow-up",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#pgbackrest",
+      "adapterProviderId": "backup-restore-pgbackrest-deferred",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "d4cd42edcc319923da29cd9929e545f163bf4be9",
+      "issueLinks": [
+        "USF-202",
+        "USF-211",
+        "USF-177",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "d4cd42edcc319923da29cd9929e545f163bf4be9",
+      "retentionPosture": "Retain committed blocker matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain backup artifacts, restore payloads, database dumps, file payloads, raw provider output, credentials, tokens, raw endpoints, connection strings, stack traces, or production data."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -7103,6 +7153,34 @@
       "failClosedBehaviour": "USF-RUNTIME-027 fails missing matrix, manifest linkage, proof command, Make target, adapter/proof markers, enterprise evidence refs, follow-up issues, non-claims, and unsafe readiness claims; proof:mock-substrate exits nonzero on readiness, capture, redaction, unavailable, or teardown failure.",
       "monitoringAuditEvidence": "validator output, proof JSON, planted defects, PR summary, and Linear linkage only; evidence remains value-free with hashed correlation, tenant, delivery, trace, and body references plus safe outcome fields.",
       "residualRisk": "riskStatement=remaining mock-provider substrate service semantics and delivery/live-provider compatibility remain deferred; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=defer LocalStack to USF-208 WireMock to USF-209 mock OIDC to USF-210 and delivery compatibility to USF-153; reviewDate=2026-09-30; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+    },
+    {
+      "id": "usf-202-threat-pgbackrest-proof-blocker",
+      "targetType": "source-issue-pgbackrest-proof-blocker",
+      "target": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+      "trustBoundary": "USF-202 repository evidence may record a blocked pgBackRest proof boundary only; actual backup artifact creation, restore drill, RPO/RTO, failure handling, audit operation evidence, supplier, and disaster recovery semantics remain outside this proof and are tracked by USF-211.",
+      "tenantBoundary": "Tenant isolation and classification preservation across backup and restore remain unproven until USF-211 or later proof records tenant-safe restore evidence; USF-202 records the blocker only.",
+      "credentialBoundary": "No pgBackRest credentials, raw endpoints, backup artifacts, restore payloads, database dumps, file payloads, provider payloads, connection strings, tokens, raw Docker output, or stack traces are retained by USF-202.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production data, tenant data, backup artifacts, restore payloads, database dumps, file payloads, raw provider responses, or raw Docker output",
+      "abuseCases": [
+        "USF-202 marked Done as backup readiness",
+        "unpullable image marked pgBackRest readiness",
+        "generated service presence marked restore drill proof",
+        "DB/RLS or files proof marked backup artifact proof",
+        "USF-211 follow-up missing",
+        "runtime manifest omits USF-211 blocker linkage"
+      ],
+      "failureModes": [
+        "blocker matrix missing",
+        "USF-211 follow-up missing",
+        "image pull failure not recorded fail-closed",
+        "repository configuration marked present without proof",
+        "runtime manifest continues to defer only to USF-202",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-028 fails when the USF-202 blocker matrix is missing or unsafe, enterprise refs are incomplete, USF-211 is missing, image pull failure is not fail-closed, repository or Postgres proof wiring is marked present, runtime manifest lacks USF-211 linkage, or readiness claims are enabled.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no backup artifact, restore drill, provider payload, database dump, file payload, audit operation event, or service evidence is claimed.",
+      "residualRisk": "riskStatement=pgBackRest backup and restore service semantics remain blocked after USF-202; impact=critical; likelihood=medium; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; controlOwner=platform-data-control-owner; treatment=unblock configured proof boundary in USF-211; reviewDate=2026-09-30; followUpIssue=USF-211; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7297,6 +7375,22 @@
       "typescriptRuntimeCompatibility": "Uses Node runtime fetch and AbortController through the adapter boundary under existing TypeScript/Node posture; no SDK imports are introduced.",
       "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py enforces adapter-boundary markers and proof command evidence; no SDK/protocol code is imported into core, ports, capabilities, API routes, worker orchestration, or PDP.",
       "updateDeprecationOwner": "platform-integration-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-202-pgbackrest-cli-blocked",
+      "serviceId": "pgbackrest",
+      "adapterId": "pgBackRest proof boundary blocked",
+      "providerId": "backup-restore-pgbackrest-deferred",
+      "packageName": "not-selected-blocked-until-USF-211",
+      "version": "not-applicable-no-sdk-or-cli-boundary-selected",
+      "selectionRationale": "pgBackRest is primarily operated through its CLI, but USF-202 does not select or exercise a CLI boundary because the current generated service image is not pullable and no configured repository or Postgres linkage exists.",
+      "officialOrDeFactoStatus": "blocked-before-sdk-or-cli-selection",
+      "licencePosture": "No npm dependency or container replacement is added by USF-202; USF-211 must document license posture for any selected image, package, or build boundary.",
+      "maintenancePosture": "USF-211 must select a maintained pinned image or packaging approach before backup/restore proof can run.",
+      "securityAdvisoryPosture": "USF-211 must record advisory posture before stronger backup/restore or provider claims.",
+      "typescriptRuntimeCompatibility": "No TypeScript SDK or runtime dependency is added by USF-202.",
+      "forbiddenLayerImportCheck": "USF-202 adds no SDK or CLI implementation imports; validators reject proof claims without configured proof boundary.",
+      "updateDeprecationOwner": "platform-data-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -8940,6 +9034,51 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-202-access-pgbackrest-proof-blocker",
+      "targetType": "source-issue-pgbackrest-proof-blocker",
+      "target": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-202",
+        "followUpIssue=USF-211",
+        "riskStatement=pgBackRest proof blocker could be mistaken for privileged backup operator access readiness",
+        "threatFailureScenario=operator backup restore or repository access is claimed from generated service metadata only",
+        "affectedAssetService=pgbackrest backup restore provider boundary",
+        "impact=critical",
+        "likelihood=medium",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "treatment=block proof and require USF-211 configured local proof boundary before access claims",
+        "reviewDate=2026-09-30",
+        "accessModel=no-human-access-claimed-by-USF-202",
+        "authRequirement=not proven in USF-202",
+        "authorizationBoundary=not proven in USF-202",
+        "breakGlassRelevance=not proven in USF-202",
+        "auditRequirement=not proven in USF-202",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=not proven in USF-202",
+        "matrix=docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-202; USF-211",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Privileged backup/restore operation access is blocked until USF-211 establishes configured proof wiring and access evidence; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-211",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -10379,6 +10518,46 @@
       "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Backup restore DR RPO RTO durable delivery replay provider callback retry queues and production recovery evidence remain unproven; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-153; exception=protocol-boundary-no-maintained-sdk",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-202-resilience-pgbackrest-proof-blocker",
+      "targetType": "source-issue-pgbackrest-proof-blocker",
+      "target": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-202",
+        "followUpIssue=USF-211",
+        "backupRequirement=restore-proof-required",
+        "restoreProofRequirement=blocked-until-USF-211",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=unpullable-or-unconfigured-pgbackrest-service-treated-as-restore-proof",
+        "cleanupTeardownProof=blocked-until-USF-211",
+        "deferredDrBoundary=explicit-non-claim",
+        "readinessRetry=blocked-until-USF-211",
+        "timeout=blocked-until-USF-211",
+        "failClosed=USF-202-blocks-readiness-claim",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "reviewDate=2026-09-30",
+        "matrix=docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-202; USF-211",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "backup artifact, restore drill, RPO/RTO, DR, retention, secret exclusion, audit, cleanup, timeout, retry, and failure evidence are blocked until USF-211; owner=platform-data-foundation; reviewDate=2026-09-30; followUpIssue=USF-211; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -12456,6 +12635,50 @@
       "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Production incident detection alerting escalation rehearsal corrective action operation vulnerability SLA evidence LocalStack WireMock mock OIDC and delivery provider vulnerability posture remain unproven; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-210,USF-153; exception=protocol-boundary-no-maintained-sdk",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-202-incident-vulnerability-pgbackrest-proof-blocker",
+      "targetType": "source-issue-pgbackrest-proof-blocker",
+      "target": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-202",
+        "followUpIssue=USF-211",
+        "riskStatement=inaccessible or unconfigured pgBackRest service could hide backup failure vulnerability or incident evidence gaps",
+        "threatFailureScenario=failed backup restore or vulnerable backup image is treated as addressed by catalogue metadata",
+        "affectedAssetService=pgbackrest backup restore provider boundary",
+        "impact=critical",
+        "likelihood=medium",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "treatment=block proof until USF-211 records maintained image configuration and advisory posture",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=not proven in USF-202",
+        "alertingPosture=not proven in USF-202",
+        "escalationOwner=platform-data-foundation",
+        "vulnerabilityAdvisoryReview=required-in-USF-211",
+        "dependencyUpdatePosture=required-in-USF-211",
+        "correctiveActionEvidenceBoundary=repository metadata PR and validator output only",
+        "postIncidentEvidenceBoundary=not proven in USF-202",
+        "matrix=docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-202; USF-211",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Incident, vulnerability, advisory, dependency update, alerting, and corrective-action evidence are blocked until USF-211; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-211",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -14669,6 +14892,52 @@
       "evidenceSource": "package.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts",
       "validationCommand": "corepack pnpm proof:mock-substrate",
       "deferredReason": "Production data, live provider privacy, notification delivery privacy, callback/replay privacy, data residency, legal hold, custom retention, LocalStack, WireMock, and mock OIDC privacy evidence remain unproven; followUpIssues=USF-208,USF-209,USF-210,USF-153",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-202-privacy-pgbackrest-proof-blocker",
+      "targetType": "source-issue-pgbackrest-proof-blocker",
+      "target": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+      "posture": [
+        "effectivenessState=blocked-with-owner-and-follow-up",
+        "sourceIssue=USF-202",
+        "followUpIssue=USF-211",
+        "riskStatement=backup artifacts restore payloads database dumps file payloads tenant data credentials or provider responses could be retained or exposed if proof proceeds without configured boundary",
+        "threatFailureScenario=raw backup data or restore output is committed as proof evidence or implied by catalogue metadata",
+        "affectedAssetService=pgbackrest backup restore provider boundary",
+        "impact=critical",
+        "likelihood=medium",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "treatment=record value-free blocker metadata only and require USF-211 configured proof boundary before data handling proof",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=backup-metadata-and-internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-backup-artifacts-or-restore-payloads",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-backup-artifacts-restore-payloads-database-dumps-file-payloads-provider-responses-raw-errors-or-raw-endpoints-committed-by-USF-202",
+        "matrix=docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-202; USF-211",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Privacy and data minimisation operating evidence remains blocked until USF-211; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-211; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

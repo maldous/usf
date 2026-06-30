@@ -1,0 +1,24 @@
+{
+  "name": "usf-202-pgbackrest-runtime-link-missing",
+  "expectedRule": "USF-RUNTIME-028",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/14/followUpIssueRefs",
+      "value": [
+        "USF-177",
+        "USF-202",
+        "USF-189"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/deferredBoundaries/5/followUpIssueRefs",
+      "value": [
+        "USF-177",
+        "USF-202",
+        "USF-189"
+      ]
+    }
+  ]
+}

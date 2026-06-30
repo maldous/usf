@@ -619,10 +619,11 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=pgBackRest backup/restore semantics are catalogued but no backup artifact, restore drill, retention, secret-exclusion, audit, or cleanup proof exists; threatFailureScenario=documented backup intent is treated as restore evidence; affectedAssetService=pgbackrest; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=defer backup/restore service-semantic proof to USF-202 while USF-177 records the bounded disposition gate; reviewDate=2026-09-30; linkedFollowUpIssue=USF-202",
+      "deferredReason": "effectivenessState=blocked-with-owner-and-follow-up; riskStatement=pgBackRest backup/restore semantics are catalogued but no backup artifact, restore drill, retention, secret-exclusion, audit, or cleanup proof exists; threatFailureScenario=documented backup intent or an unpullable unconfigured image is treated as restore evidence; affectedAssetService=pgbackrest; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=defer maintained pinned image and configured repository proof wiring to USF-211 while USF-202 records the blocked reclassification and USF-177 records the bounded disposition gate; reviewDate=2026-09-30; linkedFollowUpIssue=USF-211",
       "followUpIssueRefs": [
         "USF-177",
         "USF-202",
+        "USF-211",
         "USF-189"
       ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
@@ -639,8 +640,8 @@
       "sdkPackage": null,
       "sdkVersion": null,
       "providerRegistryEvidence": "packages/core/src/index.ts records backup-restore-pgbackrest-deferred as deferred evidence-only support linked to the pgBackRest service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for backup creation, restore invocation, restore success, retention, RPO/RTO, or secret-exclusion semantics; USF-177 records the disposition gate and USF-202 owns proof.",
-      "workerProofEvidence": "No worker proof is claimed for pgBackRest backup artifact creation, restore drill, failure handling, timeout, audit, or teardown semantics; this remains deferred to USF-202."
+      "apiProofEvidence": "No API proof is claimed for backup creation, restore invocation, restore success, retention, RPO/RTO, or secret-exclusion semantics; USF-177 records the disposition gate, USF-202 records the blocked reclassification, and USF-211 owns the image/repository proof unblocker.",
+      "workerProofEvidence": "No worker proof is claimed for pgBackRest backup artifact creation, restore drill, failure handling, timeout, audit, or teardown semantics; this remains blocked until USF-211 provides a pullable configured proof boundary."
     },
     {
       "bindingStatus": "profile-gated",
@@ -980,10 +981,11 @@
     {
       "id": "usf-189-backup-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-177 records pgBackRest backup/restore provider semantics as deferred-with-owner; risk is treating documentation, DB/RLS proof, files proof, or fixture evidence as backup artifact and restore drill proof; affected service pgbackrest; impact critical; likelihood medium; owner platform-data-foundation; treatment defer backup/restore service-semantic proof to USF-202; review date 2026-09-30.",
+      "boundary": "USF-177 records pgBackRest backup/restore provider semantics as deferred-with-owner and USF-202 records a blocked reclassification because the current image is not pullable and the generated service lacks repository, stanza, Postgres linkage, healthcheck, timeout, retry, and teardown proof wiring; risk is treating documentation, DB/RLS proof, files proof, fixture evidence, or image presence as backup artifact and restore drill proof; affected service pgbackrest; impact critical; likelihood medium; owner platform-data-foundation; treatment defer image and configured repository proof boundary to USF-211; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-177",
         "USF-202",
+        "USF-211",
         "USF-189"
       ],
       "claimsProhibitedUntilResolved": [

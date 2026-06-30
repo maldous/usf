@@ -1,0 +1,16 @@
+{
+  "name": "usf-202-pgbackrest-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-028",
+  "pgbackrestProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed",
+      "value": [
+        "blocked-reclassification",
+        "proof-blocker-documentation",
+        "follow-up-linkage",
+        "production-readiness"
+      ]
+    }
+  ]
+}
