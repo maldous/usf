@@ -551,34 +551,38 @@
       "workerProofEvidence": "No worker proof is claimed for LocalStack cloud-emulator semantics; USF-201 keeps LocalStack deferred to USF-208 for tenant, audit, cleanup, no-egress, and failure-mode proof."
     },
     {
-      "bindingStatus": "profile-gated",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=WireMock HTTP mock semantics are catalogued but not proven through configured runtime fixture proof; threatFailureScenario=fixture capture is overclaimed as live external provider compatibility; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-201 splits WireMock HTTP provider mock service proof to USF-209 after proving only webhook-sink capture; reviewDate=2026-09-30; linkedFollowUpIssue=USF-209",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=proven-local; riskStatement=USF-209 proves bounded profile-gated local Compose WireMock configured mock semantics while LocalStack, live external provider compatibility, provider contract certification, API runtime binding, worker runtime binding, staging readiness, production readiness, and complete mock-provider substrate readiness remain outside scope; threatFailureScenario=WireMock fixture proof is overclaimed as live provider compatibility or provider contract certification; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-209 proves SDK-backed local composed WireMock semantics and leaves LocalStack to USF-208 plus live/provider readiness as explicit non-claims; reviewDate=2026-09-30; linkedSourceIssue=USF-209; linkedFollowUpIssue=USF-208",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
         "USF-209",
+        "USF-208",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
-      "bindingId": "usf-189-wiremock-http-mock-provider",
+      "claimBoundary": "USF-209 profile-gated local composed WireMock proof only; configured request matching, response templating, negative matching, request journal, cleanup, unavailable fail-closed, no-egress, redaction, audit-shaped evidence, and SDK-backed admin-client evidence are proven. Prohibited claims: production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, test-readiness, deployment-readiness, enterprise-production-readiness, provider contract certification, live external provider compatibility, and USF-133 closure. This is not live external provider compatibility.",
+      "bindingId": "usf-209-wiremock-http-mock-provider",
       "serviceCatalogueServiceIds": [
         "wiremock"
       ],
       "providerRegistryIds": [
+        "provider-mock-wiremock-composed-test",
         "provider-mock-wiremock-deferred"
       ],
-      "adapterName": "WireMock provider deferred",
+      "adapterName": "WireMockHttpProviderMock",
       "portName": "HttpProviderMock",
-      "endpointRef": null,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records provider-mock-wiremock-deferred as deferred evidence-only support linked to the WireMock service catalogue row; USF-209 owns future WireMock fixture/client proof.",
-      "apiProofEvidence": "No API proof is claimed for WireMock external HTTP provider contract semantics; USF-201 keeps WireMock deferred to USF-209 for service proof and contract fixture boundaries.",
-      "workerProofEvidence": "No worker proof is claimed for WireMock external HTTP provider contract semantics; USF-201 keeps WireMock deferred to USF-209 for synthetic data, redaction, cleanup, audit, and failure-mode proof."
+      "endpointRef": "endpoint://compose/wiremock",
+      "sdkPackage": "wiremock-captain",
+      "sdkVersion": "4.1.3",
+      "providerRegistryEvidence": "packages/core/src/index.ts records provider-mock-wiremock-composed-test as a proof-only composed-test provider linked to the WireMock service catalogue row, while retaining provider-mock-wiremock-deferred for live/external provider and provider-contract-certification non-claims.",
+      "apiProofEvidence": "No API runtime WireMock provider use is claimed by USF-209; profile-gated proof exercises the adapter package SDK boundary directly against the local Compose WireMock service.",
+      "workerProofEvidence": "No worker runtime WireMock provider use is claimed by USF-209; profile-gated proof exercises SDK-backed mapping registration, deterministic matching, response templating, negative matching, request-journal evidence, cleanup, unavailable fail-closed behaviour, no-egress, synthetic data, redaction, value-free audit-shaped evidence, and Compose teardown.",
+      "proofCommand": "corepack pnpm proof:wiremock",
+      "proofEvidence": "SDK-backed profile-gated local Compose proof starts WireMock with provider-mocks profile and loopback ephemeral host exposure, waits with bounded readiness retry through wiremock-captain, registers a synthetic tenant-safe fixture, verifies deterministic matching, deterministic request matching, response templating, negative matching, request-journal evidence, cleanup, unavailable fail-closed behaviour, redaction, and Compose teardown."
     },
     {
       "bindingStatus": "profile-gated-proven",
@@ -959,13 +963,10 @@
     {
       "id": "usf-189-mock-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-176 records mock-provider substrate disposition. USF-201 proves bounded webhook-sink capture only and splits remaining mock-provider substrate service semantics to USF-208 for LocalStack and USF-209 for WireMock. USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without claiming mock OIDC service equivalence or live IdP compatibility. Risk remains that hermetic mocks, local emulators, fixtures, webhook capture, or identity proof are treated as live provider compatibility, notification delivery, cloud-provider proof, no-egress proof, complete local mock substrate readiness, SSO readiness, or mock OIDC readiness; owner platform-integration-foundation; review date 2026-09-30.",
+      "boundary": "USF-176 records mock-provider substrate disposition. USF-201 proves bounded webhook-sink capture, USF-209 proves bounded WireMock configured HTTP mock semantics, and USF-208 remains open for LocalStack. USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without claiming mock OIDC service equivalence or live IdP compatibility. Risk remains that hermetic mocks, local emulators, fixtures, webhook capture, identity proof, or WireMock fixture proof are treated as live provider compatibility, notification delivery, cloud-provider proof, no-egress proof beyond the proven local boundaries, complete local mock substrate readiness, SSO readiness, provider contract certification, or mock provider readiness; owner platform-integration-foundation; review date 2026-09-30. Lane traceability remains USF-189.",
       "followUpIssueRefs": [
-        "USF-176",
         "USF-201",
-        "USF-208",
-        "USF-209",
-        "USF-189"
+        "USF-208"
       ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",

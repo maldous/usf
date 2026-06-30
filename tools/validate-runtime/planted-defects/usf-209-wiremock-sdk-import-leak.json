@@ -1,0 +1,11 @@
+{
+  "name": "usf-209-wiremock-sdk-import-leak",
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "apps/api/src/runtime.ts",
+      "old": "import {\n",
+      "new": "import { WireMock } from \"wiremock-captain\";\nimport {\n"
+    }
+  ]
+}

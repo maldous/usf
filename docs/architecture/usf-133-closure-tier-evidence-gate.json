@@ -530,15 +530,15 @@
       ],
       "enterpriseExceptionRef": "exception-service-sonarqube"
     },
-  {
-    "serviceId": "mock-oidc",
-    "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mock-oidc",
-    "enterpriseEvidenceSource": "closure-matrix-row",
-    "serviceCatalogueOwnerSource": "service-catalogue-row",
-    "sourceIssueRefs": [
-      "USF-185",
-      "USF-210"
-    ],
+    {
+      "serviceId": "mock-oidc",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mock-oidc",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185",
+        "USF-210"
+      ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "enterprise-readiness",
@@ -577,18 +577,25 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-176",
+        "USF-201",
+        "USF-209"
       ],
-      "assuranceMaturityLevel": "documented",
+      "assuranceMaturityLevel": "integration-proven",
+      "proofEvidenceRefs": [
+        "corepack pnpm proof:wiremock",
+        "packages/proof/src/wiremock-composed-proof.ts",
+        "adapters/mail/src/index.ts",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
       "promotionImpact": [
-        "dev-readiness",
-        "test-readiness",
         "staging-readiness",
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "enterpriseExceptionRef": "exception-service-wiremock"
+      "enterpriseExceptionRef": "exception-service-wiremock-bounded-non-claims"
     },
     {
       "serviceId": "alertmanager",
@@ -1956,15 +1963,15 @@
     },
     {
       "id": "exception-service-mock-oidc",
-    "targetType": "service",
-    "targetId": "mock-oidc",
-    "disposition": "covered-by-usf-runtime",
-    "reason": "USF-210 records historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence; this does not prove standalone mock OIDC service equivalence, live IdP compatibility, SSO readiness, or production identity-provider readiness.",
-    "owner": "platform-identity-foundation",
-    "riskOwner": "platform-identity-risk-owner",
-    "controlOwner": "platform-identity-control-owner",
-    "treatmentPath": "selected-tier-supersession-with-non-equivalence-boundary",
-    "followUpIssue": "USF-210",
+      "targetType": "service",
+      "targetId": "mock-oidc",
+      "disposition": "covered-by-usf-runtime",
+      "reason": "USF-210 records historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence; this does not prove standalone mock OIDC service equivalence, live IdP compatibility, SSO readiness, or production identity-provider readiness.",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "treatmentPath": "selected-tier-supersession-with-non-equivalence-boundary",
+      "followUpIssue": "USF-210",
       "reviewDate": "2026-09-30",
       "blockerStatus": "visible-non-equivalence-boundary",
       "promotionImpact": [
@@ -2033,29 +2040,27 @@
       ]
     },
     {
-      "id": "exception-service-wiremock",
+      "id": "exception-service-wiremock-bounded-non-claims",
       "targetType": "service",
       "targetId": "wiremock",
-      "disposition": "substituted-partial",
-      "reason": "current runtime proof stronger than catalogue classification for this service; WireMock proves configured mock behaviour only.",
+      "disposition": "implemented-bounded-with-non-equivalence",
+      "reason": "USF-209 proves configured WireMock local Compose mock behaviour only; live external provider compatibility, provider contract certification, staging readiness, production readiness, and enterprise readiness remain outside this proof.",
       "owner": "platform-provider-foundation",
       "riskOwner": "platform-provider-risk-owner",
       "controlOwner": "platform-provider-control-owner",
-      "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "treatmentPath": "mitigate-and-defer-stronger-claims",
+      "followUpIssue": "USF-208",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "does-not-block-selected-wiremock-service-proof; blocks live-provider-and-promotion-claims",
       "promotionImpact": [
-        "dev-readiness",
-        "test-readiness",
         "staging-readiness",
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
       "preventsPromotion": {
-        "dev-readiness": true,
-        "test-readiness": true,
+        "dev-readiness": false,
+        "test-readiness": false,
         "staging-readiness": true,
         "production-readiness": true,
         "enterprise-readiness": true,

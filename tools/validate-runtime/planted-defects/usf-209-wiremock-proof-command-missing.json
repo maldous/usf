@@ -1,0 +1,10 @@
+{
+  "name": "usf-209-wiremock-proof-command-missing",
+  "expectedRule": "USF-RUNTIME-027",
+  "removePackageScripts": [
+    "proof:wiremock"
+  ],
+  "removeMakeTargets": [
+    "wiremock-proof"
+  ]
+}

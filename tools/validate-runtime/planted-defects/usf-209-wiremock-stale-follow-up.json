@@ -1,0 +1,25 @@
+{
+  "name": "usf-209-wiremock-stale-follow-up",
+  "expectedRule": "USF-RUNTIME-027",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/deferredBoundaries/4/followUpIssueRefs",
+      "value": [
+        "USF-201",
+        "USF-208",
+        "USF-209"
+      ]
+    }
+  ],
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/mockProviderSubstrateDisposition/followUpIssues",
+      "value": [
+        "USF-208",
+        "USF-209"
+      ]
+    }
+  ]
+}

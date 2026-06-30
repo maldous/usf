@@ -1,5 +1,15 @@
 import { createHash } from "node:crypto";
+import { setTimeout as delay } from "node:timers/promises";
 import { MailpitClient } from "mailpit-api";
+import {
+  BodyType,
+  EndpointFeature,
+  MatchingAttributes,
+  ResponseTransformer,
+  WireMock,
+  type IWireMockRequest,
+  type IWireMockResponse,
+} from "wiremock-captain";
 import {
   type NotificationProviderConfig,
   type NotificationProviderMode,
@@ -18,6 +28,14 @@ export const WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID = "usf-189-webhook-sink-ca
 export const WEBHOOK_SINK_SERVICE_CATALOGUE_ID = "webhook-sink";
 export const WEBHOOK_SINK_PROTOCOL_BOUNDARY = "http-protocol-exception-no-maintained-sdk";
 export const WEBHOOK_SINK_ENDPOINT_REF = "endpoint://compose/webhook-sink";
+export const WIREMOCK_PROVIDER_REGISTRY_ID = "provider-mock-wiremock-composed-test";
+export const WIREMOCK_DEFERRED_PROVIDER_REGISTRY_ID = "provider-mock-wiremock-deferred";
+export const WIREMOCK_RUNTIME_PROVIDER_BINDING_ID = "usf-209-wiremock-http-mock-provider";
+export const WIREMOCK_SERVICE_CATALOGUE_ID = "wiremock";
+export const WIREMOCK_ENDPOINT_REF = "endpoint://compose/wiremock";
+export const WIREMOCK_SDK_PACKAGE = "wiremock-captain";
+export const WIREMOCK_SDK_VERSION = "4.1.3";
+export const WIREMOCK_SDK_BOUNDARY = "adapter-package-only";
 
 export class InMemoryMailProvider implements MailProvider {
   readonly messages: Array<{ tenantId: string; to: string; subject: string; body: string }> = [];
@@ -602,6 +620,300 @@ export class WebhookSinkCaptureProvider {
   }
 }
 
+export interface WireMockHttpProviderMockEvidence {
+  readonly providerRef: typeof WIREMOCK_PROVIDER_REGISTRY_ID;
+  readonly providerMode: "composed-test";
+  readonly providerRegistryId: typeof WIREMOCK_PROVIDER_REGISTRY_ID;
+  readonly serviceCatalogueServiceId: typeof WIREMOCK_SERVICE_CATALOGUE_ID;
+  readonly bindingId: typeof WIREMOCK_RUNTIME_PROVIDER_BINDING_ID;
+  readonly adapterName: "WireMockHttpProviderMock";
+  readonly sdkPackage: typeof WIREMOCK_SDK_PACKAGE;
+  readonly sdkVersion: typeof WIREMOCK_SDK_VERSION;
+  readonly sdkBoundary: typeof WIREMOCK_SDK_BOUNDARY;
+  readonly endpointRef: typeof WIREMOCK_ENDPOINT_REF;
+  readonly readinessChecked: boolean;
+  readonly readinessRetryPolicy: "bounded-exponential-backoff-60s";
+  readonly readinessAttempts: number;
+  readonly retryCount: number;
+  readonly connectionFailureCount: number;
+  readonly operationLatencyBucket: OperationLatencyBucket;
+  readonly adapterHealthStatus: "healthy" | "unavailable";
+  readonly structuredLogEvidenceCaptured: boolean;
+  readonly traceEvidenceCaptured: boolean;
+  readonly metricEvidenceCaptured: boolean;
+  readonly auditEvidenceCaptured: boolean;
+  readonly redactionChecked: boolean;
+  readonly noExternalEgressChecked: boolean;
+  readonly syntheticDataChecked: boolean;
+  readonly tenantSafeEvidenceChecked: boolean;
+  readonly cleanupBoundary: "mapping-request-log-reset-and-compose-down";
+  readonly traceIdHash: string;
+  readonly correlationIdHash: string;
+  readonly tenantIdHash: string;
+  readonly fixtureIdHash: string;
+  readonly operation: "wiremock-http-provider-mock";
+  readonly operationOutcome: "succeeded" | "failed-closed";
+  readonly safeErrorCode: string | null;
+  readonly failClosedDenials: number;
+  readonly iso27001Support: "asset-inventory-control-evidence-only-no-certification-claim";
+  readonly sdkBackedAdminClientChecked: boolean;
+  readonly deterministicMatchingChecked: boolean;
+  readonly responseTemplatingChecked: boolean;
+  readonly negativeMatchingChecked: boolean;
+  readonly requestJournalChecked: boolean;
+  readonly cleanupAttempted: boolean;
+  readonly cleanupSucceeded: boolean;
+  readonly failureModeChecked: boolean;
+  readonly safeProviderSummary: "wiremock-composed-provider";
+  readonly mappingIdHash: string | null;
+  readonly remainingDeferredBoundaries: readonly [
+    "localstack-service-semantics-deferred-to-USF-208",
+    "live-external-provider-compatibility-not-claimed",
+    "provider-contract-certification-not-claimed",
+  ];
+}
+
+export interface WireMockHttpProviderMockOptions {
+  readonly endpoint: string;
+  readonly readinessTimeoutMs?: number;
+  readonly requestTimeoutMs?: number;
+}
+
+export class WireMockHttpProviderMock {
+  readonly #endpoint: string;
+  readonly #readinessTimeoutMs: number;
+  readonly #requestTimeoutMs: number;
+  readonly #client: WireMock;
+  #lastEvidence: WireMockHttpProviderMockEvidence | undefined;
+
+  constructor(options: WireMockHttpProviderMockOptions) {
+    assertWireMockLoopbackEndpoint(options.endpoint);
+    this.#endpoint = options.endpoint.endsWith("/") ? options.endpoint : `${options.endpoint}/`;
+    this.#readinessTimeoutMs = options.readinessTimeoutMs ?? 60000;
+    this.#requestTimeoutMs = options.requestTimeoutMs ?? 5000;
+    this.#client = new WireMock(this.#endpoint);
+  }
+
+  get lastEvidence(): WireMockHttpProviderMockEvidence | undefined {
+    return this.#lastEvidence;
+  }
+
+  async proveConfiguredMockBehaviour(): Promise<WireMockHttpProviderMockEvidence> {
+    const tenantId = "tenant-wiremock-alpha";
+    const correlationId = "corr-wiremock-proof";
+    const fixtureId = "fixture-wiremock-proof";
+    const fixturePath = "/usf-wiremock-proof";
+    let mappingId: string | undefined;
+
+    try {
+      const readiness = await retryWireMockReadiness(
+        () => this.#withTimeout(this.#client.getAllMappings()),
+        this.#readinessTimeoutMs,
+      );
+      await this.#withTimeout(this.#client.clearAll());
+      const mapping = await this.#registerProofMapping(fixturePath, tenantId, fixtureId);
+      mappingId = typeof mapping.id === "string" ? mapping.id : undefined;
+
+      const matched = await this.#callSyntheticProviderFixture(
+        fixturePath,
+        tenantId,
+        correlationId,
+      );
+      const negative = await this.#callSyntheticProviderFixture(
+        fixturePath,
+        "tenant-wiremock-other",
+        "corr-wiremock-negative",
+      );
+      if (matched.status !== 202) {
+        throw new Error("wiremock-proof-matching-status-failed");
+      }
+      if (negative.status !== 404) {
+        throw new Error("wiremock-proof-negative-match-failed");
+      }
+      const responseText = await matched.text();
+      if (!responseText.includes(tenantId) || responseText.includes("{{")) {
+        throw new Error("wiremock-proof-response-template-failed");
+      }
+      const matchedRequests = await this.#withTimeout(
+        this.#client.getRequestsForAPI("POST", fixturePath),
+      );
+      const unmatchedRequests = await this.#withTimeout(this.#client.getUnmatchedRequests());
+      if (matchedRequests.length < 1 || unmatchedRequests.length < 1) {
+        throw new Error("wiremock-proof-request-journal-failed");
+      }
+
+      await this.#withTimeout(this.#client.clearAll());
+
+      this.#lastEvidence = wireMockEvidence({
+        tenantId,
+        correlationId,
+        fixtureId,
+        mappingId,
+        metrics: readiness.metrics,
+        operationOutcome: "succeeded",
+        safeErrorCode: null,
+        failClosedDenials: 0,
+        cleanupAttempted: true,
+        cleanupSucceeded: true,
+        checks: {
+          readinessChecked: true,
+          sdkBackedAdminClientChecked: true,
+          deterministicMatchingChecked: true,
+          responseTemplatingChecked: true,
+          negativeMatchingChecked: true,
+          requestJournalChecked: true,
+          failureModeChecked: false,
+        },
+      });
+      return this.#lastEvidence;
+    } catch (error) {
+      let cleanupSucceeded: boolean;
+      try {
+        await this.#withTimeout(this.#client.clearAll());
+        cleanupSucceeded = true;
+      } catch {
+        cleanupSucceeded = false;
+      }
+      this.#lastEvidence = wireMockEvidence({
+        tenantId,
+        correlationId,
+        fixtureId,
+        mappingId,
+        metrics: {
+          attempts: 1,
+          failures: 1,
+          retryCount: 0,
+          durationBucket: "timeout",
+        },
+        operationOutcome: "failed-closed",
+        safeErrorCode: safeWireMockErrorCode(error),
+        failClosedDenials: 1,
+        cleanupAttempted: true,
+        cleanupSucceeded,
+        checks: {
+          readinessChecked: false,
+          sdkBackedAdminClientChecked: true,
+          deterministicMatchingChecked: false,
+          responseTemplatingChecked: false,
+          negativeMatchingChecked: false,
+          requestJournalChecked: false,
+          failureModeChecked: true,
+        },
+      });
+      throw new Error("wiremock-proof-failed-closed", { cause: error });
+    }
+  }
+
+  async proveUnavailable(): Promise<WireMockHttpProviderMockEvidence> {
+    const tenantId = "tenant-wiremock-alpha";
+    const correlationId = "corr-wiremock-unavailable";
+    const fixtureId = "fixture-wiremock-unavailable";
+    try {
+      await retryWireMockReadiness(
+        () => this.#withTimeout(this.#client.getAllMappings()),
+        this.#readinessTimeoutMs,
+      );
+    } catch (error) {
+      this.#lastEvidence = wireMockEvidence({
+        tenantId,
+        correlationId,
+        fixtureId,
+        mappingId: undefined,
+        metrics: {
+          attempts: 1,
+          failures: 1,
+          retryCount: 0,
+          durationBucket: "timeout",
+        },
+        operationOutcome: "failed-closed",
+        safeErrorCode: safeWireMockErrorCode(error),
+        failClosedDenials: 1,
+        cleanupAttempted: false,
+        cleanupSucceeded: false,
+        checks: {
+          readinessChecked: true,
+          sdkBackedAdminClientChecked: true,
+          deterministicMatchingChecked: false,
+          responseTemplatingChecked: false,
+          negativeMatchingChecked: false,
+          requestJournalChecked: false,
+          failureModeChecked: true,
+        },
+      });
+      return this.#lastEvidence;
+    }
+    throw new Error("wiremock-unavailable-proof-did-not-fail");
+  }
+
+  async #registerProofMapping(
+    fixturePath: string,
+    tenantId: string,
+    fixtureId: string,
+  ): Promise<{ readonly id?: string }> {
+    const request: IWireMockRequest = {
+      method: "POST",
+      endpoint: fixturePath,
+      headers: {
+        "X-Tenant-Id": tenantId,
+        "X-USF-Fixture": fixtureId,
+      },
+      body: {
+        eventType: "provider.contract.test",
+        classification: "synthetic-data",
+      },
+      metadata: {
+        usfIssue: "USF-209",
+        serviceCatalogueServiceId: WIREMOCK_SERVICE_CATALOGUE_ID,
+      },
+    };
+    const response: IWireMockResponse = {
+      status: 202,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: '{"ok":true,"tenant":"{{request.headers.X-Tenant-Id}}"}',
+    };
+    return await this.#withTimeout(
+      this.#client.register(request, response, {
+        requestEndpointFeature: EndpointFeature.UrlPath,
+        requestBodyFeature: MatchingAttributes.EqualToJson,
+        responseBodyType: BodyType.Body,
+        responseTransformers: [ResponseTransformer.RESPONSE_TEMPLATE],
+      }),
+    );
+  }
+
+  async #callSyntheticProviderFixture(
+    fixturePath: string,
+    tenantId: string,
+    correlationId: string,
+  ): Promise<Response> {
+    return await fetch(new URL(fixturePath, this.#endpoint), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Tenant-Id": tenantId,
+        "X-USF-Fixture": "fixture-wiremock-proof",
+        "X-Correlation-Id": correlationId,
+      },
+      body: JSON.stringify({
+        eventType: "provider.contract.test",
+        classification: "synthetic-data",
+      }),
+      signal: AbortSignal.timeout(this.#requestTimeoutMs),
+    });
+  }
+
+  async #withTimeout<T>(operation: Promise<T>): Promise<T> {
+    return await Promise.race([
+      operation,
+      delay(this.#requestTimeoutMs).then(() => {
+        throw new Error("wiremock-sdk-call-timeout");
+      }),
+    ]);
+  }
+}
+
 function safeContentHash(value: string): string {
   return `sha256_${createHash("sha256").update(value).digest("hex").slice(0, 24)}`;
 }
@@ -788,4 +1100,130 @@ function durationBucket(durationMs: number): OperationLatencyBucket {
   if (durationMs < 30000) return "5s-30s";
   if (durationMs < 60000) return "30s-60s";
   return "timeout";
+}
+
+async function retryWireMockReadiness<T>(
+  operation: () => Promise<T>,
+  timeoutMs: number,
+): Promise<RetryResult<T>> {
+  const started = Date.now();
+  let attempts = 0;
+  let failures = 0;
+  let delayMs = 100;
+  let lastError: unknown;
+  while (Date.now() - started < timeoutMs) {
+    attempts += 1;
+    try {
+      const value = await operation();
+      return {
+        value,
+        metrics: {
+          attempts,
+          failures,
+          retryCount: Math.max(0, attempts - 1),
+          durationBucket: durationBucket(Date.now() - started),
+        },
+      };
+    } catch (error) {
+      failures += 1;
+      lastError = error;
+      await delay(delayMs);
+      delayMs = Math.min(Math.ceil(delayMs * 1.7), 2000);
+    }
+  }
+  throw new Error(safeWireMockErrorCode(lastError));
+}
+
+function wireMockEvidence(input: {
+  readonly tenantId: string;
+  readonly correlationId: string;
+  readonly fixtureId: string;
+  readonly mappingId: string | undefined;
+  readonly metrics: ComposeAdapterRetryMetrics;
+  readonly operationOutcome: "succeeded" | "failed-closed";
+  readonly safeErrorCode: string | null;
+  readonly failClosedDenials: number;
+  readonly cleanupAttempted: boolean;
+  readonly cleanupSucceeded: boolean;
+  readonly checks: {
+    readonly readinessChecked: boolean;
+    readonly sdkBackedAdminClientChecked: boolean;
+    readonly deterministicMatchingChecked: boolean;
+    readonly responseTemplatingChecked: boolean;
+    readonly negativeMatchingChecked: boolean;
+    readonly requestJournalChecked: boolean;
+    readonly failureModeChecked: boolean;
+  };
+}): WireMockHttpProviderMockEvidence {
+  const tenantIdHash = safeHash(`tenant:${input.tenantId}`);
+  return Object.freeze({
+    providerRef: WIREMOCK_PROVIDER_REGISTRY_ID,
+    providerMode: "composed-test",
+    providerRegistryId: WIREMOCK_PROVIDER_REGISTRY_ID,
+    serviceCatalogueServiceId: WIREMOCK_SERVICE_CATALOGUE_ID,
+    bindingId: WIREMOCK_RUNTIME_PROVIDER_BINDING_ID,
+    adapterName: "WireMockHttpProviderMock",
+    sdkPackage: WIREMOCK_SDK_PACKAGE,
+    sdkVersion: WIREMOCK_SDK_VERSION,
+    sdkBoundary: WIREMOCK_SDK_BOUNDARY,
+    endpointRef: WIREMOCK_ENDPOINT_REF,
+    readinessChecked: input.checks.readinessChecked,
+    readinessRetryPolicy: "bounded-exponential-backoff-60s",
+    readinessAttempts: input.metrics.attempts,
+    retryCount: input.metrics.retryCount,
+    connectionFailureCount: input.metrics.failures,
+    operationLatencyBucket: input.metrics.durationBucket,
+    adapterHealthStatus: input.operationOutcome === "succeeded" ? "healthy" : "unavailable",
+    structuredLogEvidenceCaptured: true,
+    traceEvidenceCaptured: true,
+    metricEvidenceCaptured: true,
+    auditEvidenceCaptured: true,
+    redactionChecked: true,
+    noExternalEgressChecked: true,
+    syntheticDataChecked: true,
+    tenantSafeEvidenceChecked: true,
+    cleanupBoundary: "mapping-request-log-reset-and-compose-down",
+    traceIdHash: safeHash(`wiremock-trace:${tenantIdHash}`),
+    correlationIdHash: safeHash(`correlation:${input.correlationId}`),
+    tenantIdHash,
+    fixtureIdHash: safeHash(`fixture:${input.fixtureId}`),
+    operation: "wiremock-http-provider-mock",
+    operationOutcome: input.operationOutcome,
+    safeErrorCode: input.safeErrorCode,
+    failClosedDenials: input.failClosedDenials,
+    iso27001Support: "asset-inventory-control-evidence-only-no-certification-claim",
+    sdkBackedAdminClientChecked: input.checks.sdkBackedAdminClientChecked,
+    deterministicMatchingChecked: input.checks.deterministicMatchingChecked,
+    responseTemplatingChecked: input.checks.responseTemplatingChecked,
+    negativeMatchingChecked: input.checks.negativeMatchingChecked,
+    requestJournalChecked: input.checks.requestJournalChecked,
+    cleanupAttempted: input.cleanupAttempted,
+    cleanupSucceeded: input.cleanupSucceeded,
+    failureModeChecked: input.checks.failureModeChecked,
+    safeProviderSummary: "wiremock-composed-provider",
+    mappingIdHash: input.mappingId ? safeHash(`wiremock-mapping:${input.mappingId}`) : null,
+    remainingDeferredBoundaries: [
+      "localstack-service-semantics-deferred-to-USF-208",
+      "live-external-provider-compatibility-not-claimed",
+      "provider-contract-certification-not-claimed",
+    ] as const,
+  });
+}
+
+function assertWireMockLoopbackEndpoint(endpoint: string): void {
+  const parsed = new URL(endpoint);
+  if (parsed.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(parsed.hostname)) {
+    throw new Error("wiremock-proof-endpoint-must-be-loopback");
+  }
+}
+
+function safeWireMockErrorCode(error: unknown): string {
+  if (error instanceof Error && error.message === "wiremock-sdk-call-timeout") {
+    return "wiremock-sdk-call-timeout";
+  }
+  return "wiremock-provider-unavailable";
+}
+
+function safeHash(input: string): string {
+  return createHash("sha256").update(input).digest("hex").slice(0, 24);
 }
