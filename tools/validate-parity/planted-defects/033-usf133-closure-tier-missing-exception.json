@@ -1,0 +1,9 @@
+{
+  "description": "USF-133 closure-tier evidence gate lacks an enterprise exception for an unresolved service row.",
+  "expectedRule": "USF-PARITY-033",
+  "mutation": {
+    "closureTierRemoveException": {
+      "id": "exception-service-redis"
+    }
+  }
+}

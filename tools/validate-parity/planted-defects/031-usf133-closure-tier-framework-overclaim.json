@@ -1,0 +1,12 @@
+{
+  "description": "USF-133 closure-tier evidence gate claims external framework compliance.",
+  "expectedRule": "USF-PARITY-031",
+  "mutation": {
+    "closureTierPatchFramework": {
+      "frameworkId": "nist-csf-govern-risk-security-outcomes",
+      "set": {
+        "complianceClaimed": true
+      }
+    }
+  }
+}

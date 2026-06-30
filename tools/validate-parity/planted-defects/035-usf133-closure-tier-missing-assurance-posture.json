@@ -1,0 +1,10 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits a security and privacy by design coverage row.",
+  "expectedRule": "USF-PARITY-035",
+  "mutation": {
+    "closureTierRemovePostureRow": {
+      "section": "securityPrivacyByDesignCoverage",
+      "area": "tenant-isolation"
+    }
+  }
+}

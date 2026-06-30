@@ -45,6 +45,20 @@ The gate links service and capability rows to SoA-support evidence. This is evid
 
 This does not claim ISO/IEC 27001 certification, SOC readiness, production readiness, staging readiness, deployment readiness, live-provider readiness, full dev readiness, test readiness, enterprise production readiness, or full React parity.
 
+## Enterprise Assurance Addendum
+
+The machine-readable gate also records enterprise assessment posture so later source issues can append evidence without redefining the gate:
+
+- external framework alignment for ISO/IEC 27001-supporting ISMS evidence posture, NIST CSF-style governance/risk/security outcome mapping, NIST SSDF-style secure software development evidence, and OWASP ASVS-style application security verification categories;
+- an assurance maturity model: not assessed, designed, documented, implemented, tested, integration-proven, operationally rehearsed, and production-approved;
+- an enterprise exception register for deferred, substituted, out-of-scope, and closure-blocking rows;
+- promotion-impact fields for unresolved rows across dev, test, staging, production, enterprise, and ISO-supporting evidence completeness;
+- security and privacy by design coverage, operational excellence coverage, secure SDLC coverage, and enterprise customer feature posture;
+- a future readiness evidence package shape containing environment, commit SHA, PR, issue, evidence id, validation commands, risk decision, exception list, approver, review expiry, and non-claims;
+- negative assurance that records what is not proven and fails closure if partial evidence implies readiness.
+
+USF-193 remains the formal tracker for the environment promotion standard and readiness gate definitions. PR #133 does not define dev/test/staging/production promotion rules; it only ensures the USF-133 closure-tier gate can consume those definitions later and cannot overclaim before they exist.
+
 ## Status Integrity
 
 USF-166 does not close USF-133 by itself. USF-167 remains blocked until USF-166 is merged and reconciled. USF-182 remains a source issue until its own acceptance criteria are satisfied.
@@ -62,6 +76,9 @@ Before any source issue moves to Done, the coordinator must re-read the issue ac
 - proof commands or validators are missing or not wired into `parity` / `verify`;
 - USF-133 closure or source issue Done is implied before merged evidence exists;
 - prohibited readiness or certification claims are allowed.
+- external framework alignment claims compliance, certification, SOC readiness, production readiness, ASVS conformance, or other readiness;
+- assurance maturity is missing or overclaims production approval;
+- exception, promotion-impact, security/privacy, operational, secure SDLC, enterprise feature, evidence package, or negative assurance rows are missing.
 
 Planted defects under `tools/validate-parity/planted-defects/` exercise each new validator class.
 

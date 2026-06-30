@@ -1,0 +1,9 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits an enterprise customer feature posture row.",
+  "expectedRule": "USF-PARITY-036",
+  "mutation": {
+    "closureTierRemoveEnterpriseFeature": {
+      "feature": "sso-saml-oidc"
+    }
+  }
+}

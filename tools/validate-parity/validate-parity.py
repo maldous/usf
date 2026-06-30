@@ -66,6 +66,14 @@ RULES = {
     "USF-PARITY-028": ("blocking", "USF-133 closure is falsely claimed or implied"),
     "USF-PARITY-029": ("blocking", "source issue Done state is falsely claimed or implied"),
     "USF-PARITY-030": ("blocking", "USF-133 closure-tier readiness or certification is overclaimed"),
+    "USF-PARITY-031": ("blocking", "USF-133 closure-tier external framework alignment is missing or overclaimed"),
+    "USF-PARITY-032": ("blocking", "USF-133 closure-tier assurance maturity is missing or overclaimed"),
+    "USF-PARITY-033": ("blocking", "USF-133 closure-tier enterprise exception register is incomplete"),
+    "USF-PARITY-034": ("blocking", "USF-133 closure-tier promotion impact is missing"),
+    "USF-PARITY-035": ("blocking", "USF-133 closure-tier security privacy operations or SDLC posture is incomplete"),
+    "USF-PARITY-036": ("blocking", "USF-133 closure-tier enterprise customer feature posture is incomplete"),
+    "USF-PARITY-037": ("blocking", "USF-133 closure-tier future evidence package shape is incomplete"),
+    "USF-PARITY-038": ("blocking", "USF-133 closure-tier negative assurance is incomplete or overclaimed"),
     "USF-PARITY-SELFTEST": ("blocking", "planted parity defect did not raise its expected rule"),
 }
 
@@ -164,6 +172,102 @@ USF133_REQUIRED_VALIDATORS = {
     "validate-enterprise",
     "validate-runtime",
     "validate-compose",
+}
+USF133_ASSURANCE_MATURITY_LEVELS = {
+    "not-assessed",
+    "designed",
+    "documented",
+    "implemented",
+    "tested",
+    "integration-proven",
+    "operationally-rehearsed",
+    "production-approved",
+}
+USF133_EVIDENCE_REQUIRED_MATURITY_LEVELS = {
+    "tested",
+    "integration-proven",
+    "operationally-rehearsed",
+    "production-approved",
+}
+USF133_PROMOTION_IMPACT_VALUES = {
+    "dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "enterprise-readiness",
+    "iso-supporting-evidence-completeness",
+}
+USF133_EXTERNAL_FRAMEWORKS = {
+    "iso27001-isms-support",
+    "nist-csf-govern-risk-security-outcomes",
+    "nist-ssdf-secure-software-development-evidence",
+    "owasp-asvs-application-security-categories",
+}
+USF133_SECURITY_PRIVACY_AREAS = {
+    "tenant-isolation",
+    "authorization",
+    "privileged-access",
+    "auditability",
+    "encryption-secret-posture",
+    "data-classification",
+    "retention-purge",
+    "privacy-data-minimisation",
+    "data-residency",
+    "supplier-subprocessor-boundary",
+}
+USF133_OPERATIONAL_EXCELLENCE_AREAS = {
+    "observability",
+    "slo-sla-posture",
+    "alerting",
+    "incident-response",
+    "backup-restore",
+    "dr-rpo-rto",
+    "migration-rollback",
+    "runbook-ownership",
+    "support-escalation",
+    "customer-impact-assessment",
+}
+USF133_SECURE_SDLC_AREAS = {
+    "code-review-evidence",
+    "threat-model-evidence",
+    "dependency-pinning",
+    "sbom-posture",
+    "sast-scanning",
+    "dependency-scanning",
+    "container-scanning",
+    "secret-scanning",
+    "vulnerability-exceptions",
+    "patch-sla",
+    "release-approval",
+    "artifact-provenance-signing",
+}
+USF133_ENTERPRISE_CUSTOMER_FEATURES = {
+    "sso-saml-oidc",
+    "scim-user-lifecycle",
+    "rbac-abac",
+    "audit-log-export",
+    "tenant-admin-controls",
+    "support-access-approval",
+    "ip-allowlisting-private-networking",
+    "customer-managed-keys",
+    "custom-retention",
+    "data-export-deletion",
+    "webhook-signing",
+    "admin-activity-reporting",
+}
+USF133_FEATURE_POSTURE_STATUSES = {"proven", "deferred", "blocked", "out-of-scope", "not-applicable"}
+USF133_EVIDENCE_PACKAGE_FIELDS = {
+    "environment",
+    "commitSha",
+    "prRef",
+    "issueId",
+    "evidenceId",
+    "validationCommands",
+    "riskDecision",
+    "exceptionList",
+    "approver",
+    "reviewExpiry",
+    "nonClaims",
 }
 USF133_REQUIRED_GATE_INPUTS = {
     "serviceCatalogue": COMPOSE_CATALOGUE_PATH,
@@ -653,6 +757,47 @@ def _valid_merge_sha(value):
     return isinstance(value, str) and len(value) == 40 and all(ch in "0123456789abcdef" for ch in value)
 
 
+def _check_maturity(F, subject, row):
+    level = row.get("assuranceMaturityLevel")
+    if level not in USF133_ASSURANCE_MATURITY_LEVELS:
+        F.add("USF-PARITY-032", subject, f"invalid or missing assuranceMaturityLevel: {level!r}")
+        return
+    if level == "production-approved":
+        F.add("USF-PARITY-032", subject, "USF-166 must not claim production-approved maturity")
+    if level in USF133_EVIDENCE_REQUIRED_MATURITY_LEVELS and not (
+        row.get("evidenceSource")
+        or row.get("sourceRef")
+        or row.get("validationCommand")
+        or _non_empty_list(row.get("validationCommands"))
+        or _non_empty_list(row.get("proofEvidenceRefs"))
+    ):
+        F.add("USF-PARITY-032", subject, f"{level} maturity requires explicit evidence linkage")
+
+
+def _check_promotion_impact(F, subject, row):
+    impact = row.get("promotionImpact")
+    if not _non_empty_list(impact):
+        F.add("USF-PARITY-034", subject, "unresolved row lacks promotionImpact")
+        return
+    unknown = set(impact) - USF133_PROMOTION_IMPACT_VALUES
+    if unknown:
+        F.add("USF-PARITY-034", subject, f"unknown promotion impact values: {sorted(unknown)}")
+
+
+def _check_enterprise_posture_rows(F, gate, key, expected, rule_id):
+    rows = _rows_by_id(gate.get(key), "area")
+    if set(rows) != expected:
+        F.add(rule_id, key, f"missing={sorted(expected - set(rows))} extra={sorted(set(rows) - expected)}")
+    for area, row in rows.items():
+        if row.get("status") not in {"bounded", "deferred", "blocked", "out-of-scope", "not-applicable"}:
+            F.add(rule_id, f"{key}:{area}", f"invalid status {row.get('status')!r}")
+        if not row.get("evidenceSource") or not str(row.get("followUpIssue", "")).startswith("USF-"):
+            F.add(rule_id, f"{key}:{area}", "posture row requires evidenceSource and USF follow-up issue")
+        _check_maturity(F, f"{key}:{area}", row)
+        if PROHIBITED_READINESS_CLAIMS - _set_or_empty(row.get("nonClaims")):
+            F.add(rule_id, f"{key}:{area}", "posture row non-claims are incomplete")
+
+
 def check_usf133_closure_tier_gate(F, state):
     gate = state.get("usf133ClosureTierGate")
     closure_matrix = state.get("composeClosureMatrix")
@@ -698,6 +843,34 @@ def check_usf133_closure_tier_gate(F, state):
     if missing_claims:
         F.add("USF-PARITY-030", "readinessClaimsProhibited", f"missing prohibited claims: {sorted(missing_claims)}")
 
+    frameworks = _rows_by_id(gate.get("externalFrameworkAlignment"), "frameworkId")
+    if set(frameworks) != USF133_EXTERNAL_FRAMEWORKS:
+        F.add(
+            "USF-PARITY-031",
+            "externalFrameworkAlignment",
+            f"missing={sorted(USF133_EXTERNAL_FRAMEWORKS - set(frameworks))} extra={sorted(set(frameworks) - USF133_EXTERNAL_FRAMEWORKS)}",
+        )
+    for framework_id, framework in frameworks.items():
+        for field in ("complianceClaimed", "certificationClaimed", "readinessClaimed"):
+            if framework.get(field) is not False:
+                F.add("USF-PARITY-031", f"framework:{framework_id}.{field}", "external framework alignment must not claim compliance, certification, or readiness")
+        if not _non_empty_list(framework.get("mappedEvidenceSections")):
+            F.add("USF-PARITY-031", f"framework:{framework_id}", "framework row lacks mapped evidence sections")
+        if PROHIBITED_READINESS_CLAIMS - _set_or_empty(framework.get("nonClaims")):
+            F.add("USF-PARITY-031", f"framework:{framework_id}", "framework row non-claims are incomplete")
+
+    maturity_model = gate.get("assuranceMaturityModel", {})
+    if _set_or_empty(maturity_model.get("allowedLevels")) != USF133_ASSURANCE_MATURITY_LEVELS:
+        F.add("USF-PARITY-032", "assuranceMaturityModel.allowedLevels", "assurance maturity level set is incomplete")
+    if maturity_model.get("productionApprovedAllowedInUsf166") is not False:
+        F.add("USF-PARITY-032", "assuranceMaturityModel.productionApprovedAllowedInUsf166", "USF-166 must not allow production-approved maturity")
+
+    env_dependency = gate.get("environmentPromotionStandardDependency", {})
+    if env_dependency.get("issueId") != "USF-193" or env_dependency.get("implementedByThisPr") is not False:
+        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "USF-193 must remain the unimplemented formal environment promotion tracker for PR #133")
+    if env_dependency.get("requiredForPr133Acceptance") is not False or env_dependency.get("requiredBeforeReadinessClaim") is not True:
+        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "USF-193 is not required for PR #133 acceptance but is required before readiness claims")
+
     freshness_policy = gate.get("evidenceFreshnessPolicy", {})
     for key in ("staleEvidenceSatisfiesClosure", "unmergedEvidenceSatisfiesClosure", "pendingPrEvidenceSatisfiesUsf133Closure"):
         if freshness_policy.get(key) is not False:
@@ -706,6 +879,7 @@ def check_usf133_closure_tier_gate(F, state):
         F.add("USF-PARITY-023", "evidenceFreshnessPolicy.rejectedFreshnessValues", "stale and unknown freshness must be rejected")
     for evidence in gate.get("mergedEvidenceInputs", []):
         subject = evidence.get("evidenceId", "mergedEvidenceInputs")
+        _check_maturity(F, subject, evidence)
         for field in ("prRef", "mergeShaRef", "issueRefs", "evidenceId", "sourceRef", "freshness"):
             if not evidence.get(field):
                 F.add("USF-PARITY-023", subject, f"missing {field}")
@@ -714,11 +888,13 @@ def check_usf133_closure_tier_gate(F, state):
         if evidence.get("freshness") in {"stale", "unknown"}:
             F.add("USF-PARITY-023", subject, "stale or unknown evidence cannot satisfy closure")
     this_pr = gate.get("thisPrEvidence", {})
+    _check_maturity(F, "thisPrEvidence", this_pr)
     if this_pr.get("freshness") != "pending-pr-merge" or this_pr.get("satisfiesUsf133Closure") is not False:
         F.add("USF-PARITY-028", "thisPrEvidence", "unmerged USF-166 evidence must not satisfy USF-133 closure")
 
     closure_rows = _closure_row_map(closure_matrix)
     service_refs = _rows_by_id(gate.get("requiredServiceDispositionRefs"), "serviceId")
+    exception_rows = _rows_by_id(gate.get("enterpriseExceptionRegister"), "id")
     if set(service_refs) != set(closure_rows):
         F.add(
             "USF-PARITY-024",
@@ -736,8 +912,18 @@ def check_usf133_closure_tier_gate(F, state):
             F.add("USF-PARITY-024", f"service:{service_id}", "service reference must inherit enterprise and owner metadata from governed rows")
         if not _has_usf_issue_list(ref.get("sourceIssueRefs")):
             F.add("USF-PARITY-024", f"service:{service_id}", "service reference lacks USF source issue refs")
+        _check_maturity(F, f"service:{service_id}", ref)
         evidence = closure_row.get("closure_evidence", {})
         disposition = evidence.get("closure_disposition")
+        requires_exception = (
+            evidence.get("closure_blocking") is True
+            or disposition in {"deferred", "requires-human-decision", "substituted-partial", "out-of-foundation-scope", "covered-by-usf-runtime"}
+        )
+        if requires_exception:
+            _check_promotion_impact(F, f"service:{service_id}", ref)
+            exception_ref = ref.get("enterpriseExceptionRef")
+            if not exception_ref or exception_ref not in exception_rows:
+                F.add("USF-PARITY-033", f"service:{service_id}", "unresolved service row lacks enterprise exception ref")
         if disposition in COMPOSE_BLOCKING_DISPOSITIONS:
             issues = evidence.get("tracking_issues")
             if not _has_usf_issue_list(issues):
@@ -755,6 +941,7 @@ def check_usf133_closure_tier_gate(F, state):
     for capability_id, capability in sorted(capabilities.items()):
         if capability.get("status") not in USF133_CAPABILITY_STATUSES:
             F.add("USF-PARITY-024", f"capability:{capability_id}", f"invalid capability status {capability.get('status')!r}")
+        _check_maturity(F, f"capability:{capability_id}", capability)
         for field in ("owner", "riskOwner", "controlOwner", "evidenceSource"):
             if not str(capability.get(field) or "").strip():
                 F.add("USF-PARITY-024", f"capability:{capability_id}", f"missing {field}")
@@ -768,6 +955,11 @@ def check_usf133_closure_tier_gate(F, state):
                 F.add("USF-PARITY-024", f"capability:{capability_id}", f"missing risk treatment {field}")
         if not str(risk.get("followUpIssue", "")).startswith("USF-"):
             F.add("USF-PARITY-024", f"capability:{capability_id}", "risk treatment follow-up issue must be a USF issue")
+        if capability.get("status") in {"deferred", "blocked", "out-of-scope"}:
+            _check_promotion_impact(F, f"capability:{capability_id}", capability)
+            exception_ref = capability.get("enterpriseExceptionRef")
+            if not exception_ref or exception_ref not in exception_rows:
+                F.add("USF-PARITY-033", f"capability:{capability_id}", "deferred capability lacks enterprise exception ref")
 
     feature_rows = _rows_by_id(gate.get("enterpriseFeatureCompletenessMatrix"), "feature")
     if set(feature_rows) != USF133_REQUIRED_CAPABILITIES:
@@ -776,6 +968,60 @@ def check_usf133_closure_tier_gate(F, state):
         capability = capabilities.get(row.get("capabilityRef"))
         if not capability or row.get("status") != capability.get("status"):
             F.add("USF-PARITY-024", f"feature:{feature}", "feature row must point at matching capability status")
+
+    if not exception_rows:
+        F.add("USF-PARITY-033", "enterpriseExceptionRegister", "enterprise exception register is required")
+    for exception_id, exception in sorted(exception_rows.items()):
+        for field in ("targetType", "targetId", "reason", "owner", "riskOwner", "controlOwner", "treatmentPath", "followUpIssue", "reviewDate", "blockerStatus"):
+            if not str(exception.get(field) or "").strip():
+                F.add("USF-PARITY-033", exception_id, f"missing exception {field}")
+        if not str(exception.get("followUpIssue", "")).startswith("USF-"):
+            F.add("USF-PARITY-033", exception_id, "exception followUpIssue must be a USF issue")
+        _check_promotion_impact(F, exception_id, exception)
+        if not isinstance(exception.get("preventsPromotion"), dict):
+            F.add("USF-PARITY-034", exception_id, "exception lacks preventsPromotion map")
+        if PROHIBITED_READINESS_CLAIMS - _set_or_empty(exception.get("nonClaims")):
+            F.add("USF-PARITY-033", exception_id, "exception non-claims are incomplete")
+
+    _check_enterprise_posture_rows(F, gate, "securityPrivacyByDesignCoverage", USF133_SECURITY_PRIVACY_AREAS, "USF-PARITY-035")
+    _check_enterprise_posture_rows(F, gate, "operationalExcellenceCoverage", USF133_OPERATIONAL_EXCELLENCE_AREAS, "USF-PARITY-035")
+    _check_enterprise_posture_rows(F, gate, "secureSdlcPosture", USF133_SECURE_SDLC_AREAS, "USF-PARITY-035")
+
+    enterprise_features = _rows_by_id(gate.get("enterpriseCustomerFeaturePosture"), "feature")
+    if set(enterprise_features) != USF133_ENTERPRISE_CUSTOMER_FEATURES:
+        F.add(
+            "USF-PARITY-036",
+            "enterpriseCustomerFeaturePosture",
+            f"missing={sorted(USF133_ENTERPRISE_CUSTOMER_FEATURES - set(enterprise_features))} extra={sorted(set(enterprise_features) - USF133_ENTERPRISE_CUSTOMER_FEATURES)}",
+        )
+    for feature, row in enterprise_features.items():
+        if row.get("status") not in USF133_FEATURE_POSTURE_STATUSES:
+            F.add("USF-PARITY-036", f"enterpriseFeature:{feature}", f"invalid status {row.get('status')!r}")
+        if row.get("implementedByUsf166") is not False:
+            F.add("USF-PARITY-036", f"enterpriseFeature:{feature}", "USF-166 must not implement enterprise customer features")
+        if not str(row.get("followUpIssue", "")).startswith("USF-"):
+            F.add("USF-PARITY-036", f"enterpriseFeature:{feature}", "enterprise feature lacks follow-up issue")
+        _check_promotion_impact(F, f"enterpriseFeature:{feature}", row)
+        if PROHIBITED_READINESS_CLAIMS - _set_or_empty(row.get("nonClaims")):
+            F.add("USF-PARITY-036", f"enterpriseFeature:{feature}", "enterprise feature non-claims are incomplete")
+
+    package_shape = gate.get("futureReadinessEvidencePackageShape", {})
+    missing_package_fields = USF133_EVIDENCE_PACKAGE_FIELDS - _set_or_empty(package_shape.get("requiredFields"))
+    if missing_package_fields:
+        F.add("USF-PARITY-037", "futureReadinessEvidencePackageShape.requiredFields", f"missing fields: {sorted(missing_package_fields)}")
+    for key in ("requiresExceptionRegister", "requiresNonClaims", "requiresApprovalForHigherReadiness"):
+        if package_shape.get(key) is not True:
+            F.add("USF-PARITY-037", f"futureReadinessEvidencePackageShape.{key}", "future readiness evidence package shape must preserve this requirement")
+
+    negative = gate.get("negativeAssurance", {})
+    fail_claims = _set_or_empty(negative.get("failIfImpliedClaims"))
+    if USF133_GATE_PROHIBITED_CLAIMS - fail_claims:
+        F.add("USF-PARITY-038", "negativeAssurance.failIfImpliedClaims", "negative assurance must include every closure/readiness prohibited claim")
+    for extra in ("asvs-conformance", "nist-csf-compliance", "nist-ssdf-conformance"):
+        if extra not in fail_claims:
+            F.add("USF-PARITY-038", "negativeAssurance.failIfImpliedClaims", f"missing external assurance non-claim: {extra}")
+    if negative.get("partialEvidenceCannotSatisfyClosure") is not True:
+        F.add("USF-PARITY-038", "negativeAssurance.partialEvidenceCannotSatisfyClosure", "partial evidence must not satisfy closure")
 
     package = read_json(PACKAGE_JSON_PATH) if os.path.exists(PACKAGE_JSON_PATH) else {}
     scripts = package.get("scripts", {}) if isinstance(package, dict) else {}
@@ -896,6 +1142,58 @@ def apply_mutation(base_state, mutation):
     if "closureTierSetClaims" in mutation:
         for k, v in mutation["closureTierSetClaims"].items():
             usf133_closure_tier_gate[k] = v
+    if "closureTierPatchFramework" in mutation:
+        patch = mutation["closureTierPatchFramework"]
+        row = next(
+            r for r in usf133_closure_tier_gate.get("externalFrameworkAlignment", [])
+            if r.get("frameworkId") == patch["frameworkId"]
+        )
+        for k, v in patch.get("set", {}).items():
+            row[k] = v
+        for k in patch.get("drop", []):
+            row.pop(k, None)
+    if "closureTierPatchServiceRef" in mutation:
+        patch = mutation["closureTierPatchServiceRef"]
+        row = next(
+            r for r in usf133_closure_tier_gate.get("requiredServiceDispositionRefs", [])
+            if r.get("serviceId") == patch["serviceId"]
+        )
+        for k, v in patch.get("set", {}).items():
+            row[k] = v
+        for k in patch.get("drop", []):
+            row.pop(k, None)
+    if "closureTierRemoveException" in mutation:
+        exception_id = mutation["closureTierRemoveException"].get("id")
+        usf133_closure_tier_gate["enterpriseExceptionRegister"] = [
+            row for row in usf133_closure_tier_gate.get("enterpriseExceptionRegister", [])
+            if row.get("id") != exception_id
+        ]
+    if "closureTierRemovePostureRow" in mutation:
+        patch = mutation["closureTierRemovePostureRow"]
+        section = patch["section"]
+        area = patch["area"]
+        usf133_closure_tier_gate[section] = [
+            row for row in usf133_closure_tier_gate.get(section, [])
+            if row.get("area") != area
+        ]
+    if "closureTierRemoveEnterpriseFeature" in mutation:
+        feature = mutation["closureTierRemoveEnterpriseFeature"].get("feature")
+        usf133_closure_tier_gate["enterpriseCustomerFeaturePosture"] = [
+            row for row in usf133_closure_tier_gate.get("enterpriseCustomerFeaturePosture", [])
+            if row.get("feature") != feature
+        ]
+    if "closureTierPatchEvidencePackageShape" in mutation:
+        shape = usf133_closure_tier_gate.setdefault("futureReadinessEvidencePackageShape", {})
+        for k, v in mutation["closureTierPatchEvidencePackageShape"].get("set", {}).items():
+            shape[k] = v
+        for k in mutation["closureTierPatchEvidencePackageShape"].get("drop", []):
+            shape.pop(k, None)
+    if "closureTierPatchNegativeAssurance" in mutation:
+        negative = usf133_closure_tier_gate.setdefault("negativeAssurance", {})
+        for k, v in mutation["closureTierPatchNegativeAssurance"].get("set", {}).items():
+            negative[k] = v
+        for k in mutation["closureTierPatchNegativeAssurance"].get("drop", []):
+            negative.pop(k, None)
     if "domainsSetAll" in mutation:
         for row in matrix.get("domains", []):
             for k, v in mutation["domainsSetAll"].items():

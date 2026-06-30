@@ -1,0 +1,12 @@
+{
+  "description": "USF-133 closure-tier evidence gate claims production-approved maturity.",
+  "expectedRule": "USF-PARITY-032",
+  "mutation": {
+    "closureTierPatchServiceRef": {
+      "serviceId": "redis",
+      "set": {
+        "assuranceMaturityLevel": "production-approved"
+      }
+    }
+  }
+}
