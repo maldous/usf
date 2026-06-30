@@ -35,6 +35,7 @@ Windmill are lineage/composed-test provider concerns; no live provider readiness
 | `capabilities/jobs/src/job-service.ts` | source-derived-rewrite | `../react` job-runner / queue / scheduled-job / DLQ lineage (evidence only) | Operational job service: classification, tenant-scope, concrete service actor, PDP authz, bounded retry + deterministic backoff, idempotency, dead-letter with evidence, deterministic scheduling, value-redacted failure, audit. Depends only on USF ports. |
 | `capabilities/jobs/src/workflow-service.ts` | source-derived-rewrite | `../react` durable workflow / approval-chain lineage (evidence only) | Durable workflow + approval service: versioned, tenant-bound, PDP-authorized, separation-of-duties approvals, audited lifecycle. |
 | `packages/proof/src/jobs-workflows-proof.ts` | new-with-rationale | evidence-only-support | Hermetic behaviour proof of the full job/workflow matrix. `make jobs-proof`. |
+| `adapters/wf/src/temporal-workflows.ts` | new-with-rationale | evidence-only-support | Minimal synthetic workflow definition for the adapter-bound Temporal local/dev/test proof. No capability or orchestration code imports the Temporal SDK. |
 | `tests/adapters/operational-job-store.test.ts` | new-with-rationale | evidence-only-support | Unit tests of lease exclusivity/re-acquire, claim eligibility, idempotency, tenant isolation. |
 | `tests/capabilities/jobs-workflows.test.ts` | source-derived-rewrite | `../react` job/workflow test lineage (evidence only) | Capability tests for authz, idempotency, retry/dead-letter, redaction, cancellation, approval SoD. No Playwright. |
 
@@ -42,14 +43,15 @@ Extended (already source-dispositioned by prior parity matrices; no path change)
 `packages/core/src/index.ts` (job/workflow types, failure taxonomy, backoff, service-actor,
 schedule, redaction, audit event types), `packages/ports/src/index.ts` (`OperationalJobPort`,
 `DurableWorkflowPort`), `adapters/wf/src/index.ts` (in-memory job store + durable workflow
-adapters), `capabilities/jobs/src/index.ts` (service exports), and
+adapters plus the adapter-bound Temporal composed-test provider),
+`capabilities/jobs/src/index.ts` (service exports), and
 `capabilities/tenant/src/authorization-policy.ts` (job/workflow actions + service-worker role).
 
 ## Sub-Domain Classification
 
 | Jobs/workflows concern | Status | Where | Notes |
 |---|---|---|---|
-| Durable workflow port (ADR 0011) | migrated | `packages/ports`, `adapters/wf` | `DurableWorkflowPort` + in-memory adapter; Temporal deferred |
+| Durable workflow port (ADR 0011) | migrated | `packages/ports`, `adapters/wf` | `DurableWorkflowPort` + in-memory adapter; Temporal local composed-test binding proven by USF-183; live Temporal remains deferred. |
 | Operational job port (ADR 0011) | migrated | `packages/ports`, `adapters/wf` | `OperationalJobPort` + in-memory adapter; Windmill deferred |
 | Job/workflow classification | migrated | `packages/core` | 13 classifications; unclassified fails validation |
 | Tenant-scoped execution | migrated | `capabilities/jobs` | tenant context required; cross-tenant denied (PDP) |
@@ -71,7 +73,7 @@ adapters), `capabilities/jobs/src/index.ts` (service exports), and
 | Dry-run / preview / approved-impact gates | deferred | standard doc | model defined; runtime deferred |
 | Backup / restore / replay of job state | deferred | standard doc | classified; runtime deferred |
 | Observability hooks (queue depth, latency, lag) | deferred | standard doc | signals defined; live metrics/alerting deferred |
-| Live Temporal / Windmill / external queue / worker cluster | deferred | — | blocker; hermetic/in-memory only in this slice |
+| Live Temporal / Windmill / external queue / worker cluster | deferred | — | blocker; USF-183 proves only local composed-test Temporal binding through the adapter boundary. |
 
 ## React UI/Playwright Job Behaviours
 

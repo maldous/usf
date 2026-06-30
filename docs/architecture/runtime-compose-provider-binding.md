@@ -5,95 +5,65 @@ Status: Draft / USF-183.
 Authority level: Runtime proof interpretation; subordinate to the Charter, Authority Model,
 service catalogue, schemas, validators, and executed proof output.
 
-USF-183 continues the USF-181 compose-provider deferral by proving bounded SDK-backed
-Postgres tenant-membership repository and Mailpit notification provider bindings. The
-semantic service catalogue authority remains
-`spec/instances/compose-service/service-catalogue.json`; generated Compose files remain
-derivative. Remaining provider bindings stay explicit deferrals unless separately removed
-from scope by human-approved narrowing and linked follow-up work.
+USF-183 resolves the USF-181 compose-provider deferral for the service-catalogue-required
+runtime provider bindings that have USF runtime ports. The semantic service catalogue
+authority remains `spec/instances/compose-service/service-catalogue.json`; generated Compose
+files are derivative.
 
 ## Binding Scope
 
 `dev-in-memory` remains hermetic and reports provider mode `dev in-memory`.
 
-`dev-compose-backed` now reports provider mode `local-composed-real-service` and binds the
-tenant-membership repository/directory boundary to composed Postgres and the notification
-provider port to composed Mailpit:
+`dev-compose-backed` reports provider mode `local-composed-real-service` and proves these
+SDK-backed adapter bindings:
 
-| Binding                               | Service catalogue id | Provider registry id                          | Adapter                              | SDK boundary                                                | Proof                                                                                                                              |
-| ------------------------------------- | -------------------- | --------------------------------------------- | ------------------------------------ | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Postgres tenant-membership repository | `postgres`           | `database-postgres-composed-test`             | `PostgresTenantMembershipRepository` | `pg` imported only by `adapters/db/src/index.ts`            | API permission path refreshes tenant membership from Postgres before PDP evaluation; worker executes SDK-backed write and readback |
-| Mailpit notification provider         | `mailpit`            | `notification-delivery-mailpit-composed-test` | `MailpitNotificationProvider`        | `mailpit-api` imported only by `adapters/mail/src/index.ts` | API safe-view binding evidence; worker SDK-backed readiness, write, readback, and cleanup evidence                                 |
+| Binding | Service catalogue id | Provider registry id | Adapter | SDK boundary | Proof |
+| --- | --- | --- | --- | --- | --- |
+| Postgres tenant-membership repository | `postgres` | `database-postgres-composed-test` | `PostgresTenantMembershipRepository` | `pg` in `adapters/db/src/index.ts` | API permission path refreshes tenant membership before synchronous PDP evaluation; worker write/readback |
+| Mailpit notification provider | `mailpit` | `notification-delivery-mailpit-composed-test` | `MailpitNotificationProvider` | `mailpit-api` in `adapters/mail/src/index.ts` | Worker readiness, send, readback, and cleanup; API queues with composed provider metadata only |
+| NATS event bus | `nats` | `event-bus-nats-composed-test` | `NatsEventBus` | `@nats-io/transport-node` in `adapters/bus/src/index.ts` | API publish evidence; worker publish/readback and tenant-boundary evidence |
+| MinIO object store | `minio` | `object-storage-minio-composed-test` | `MinioObjectStore` | `minio` in `adapters/store/src/index.ts` | API object write/read; worker write/read/delete and tenant-boundary evidence |
+| Keycloak identity provider | `keycloak`, `keycloak-db` | `identity-keycloak-composed-test` | `KeycloakComposedIdentityProvider` | `@keycloak/keycloak-admin-client` in `adapters/idp/src/index.ts` | API synthetic login; worker synthetic identity readback and fail-closed tenant check |
+| OpenBao secret provider | `openbao` | `secret-store-openbao-composed-test` | `OpenBaoSecretStore` | `node-vault` in `adapters/secrets/src/index.ts` | Worker synthetic secret write, describe, resolve, tenant-boundary check, and cleanup |
+| Temporal workflow provider | `temporal` | `workflow-engine-temporal-composed-test` | `TemporalComposedWorkflowEngine` | `@temporalio/client`, `@temporalio/worker`, `@temporalio/workflow` in `adapters/wf/src/index.ts` | Worker workflow schedule, one-shot worker execution, result readback, fail-closed input check, and connection cleanup |
 
-Remaining composed dependencies are explicit deferrals or boundary-only records in
-`spec/instances/runtime-proof/runtime-application-compose-parity.json`:
+Other composed services such as observability backends, operator consoles, quality gates,
+mock-provider substrates, backup/restore services, scanner services, gateway surfaces, and
+automation consoles are not runtime provider bindings in USF-183. They remain tracked under
+USF-133 readiness disposition and do not receive readiness claims from this proof.
 
-| Binding                            | Status                                    | Follow-up |
-| ---------------------------------- | ----------------------------------------- | --------- |
-| NATS event-bus binding             | no runtime adapter proof                  | USF-151   |
-| MinIO object-store binding         | no runtime adapter proof                  | USF-147   |
-| Keycloak runtime identity binding  | compose-boundary-only                     | USF-149   |
-| OpenBao secret-provider binding    | no provider registry row or adapter proof | USF-145   |
-| Temporal workflow provider binding | profile-gated                             | USF-151   |
+## Readiness And Evidence
+
+Every implemented adapter has service-specific bounded readiness retry and fails closed if
+readiness cannot be proven. Keycloak has a longer `120s` readiness budget; the other runtime
+provider adapters use bounded exponential backoff with a `60s` readiness budget. Adapter
+evidence distinguishes container startup, service readiness, adapter connection, runtime use,
+operation outcome, retry counts, latency buckets, safe error codes, and cleanup.
+
+Evidence is value-free. It records endpoint refs, hashes, counters, duration buckets, and safe
+provider summaries only. It does not expose raw endpoints, connection strings, credentials,
+tokens, provider payloads, stack traces, or SDK error payloads.
 
 ## SDK Selection
 
-`mailpit-api` version `2.1.0` is exact-version pinned. Registry metadata inspected on
-2026-06-30 identified it as a maintained zero-dependency TypeScript Mailpit REST API client
-with Node >=18 support, MIT licensing, ESM/CJS exports, and bundled declarations. It is used
-because it provides service-specific Mailpit operations for readiness, synthetic message
-write, readback, and cleanup.
+Selected SDK/client packages are exact-version pinned in `package.json`. SDK usage is confined
+to adapter packages. Core, ports, capabilities, API route handlers, API runtime assembly, worker
+orchestration, and PDP code do not import provider SDKs.
 
-Rejected alternatives:
-
-- Raw HTTP or socket code: rejected because provider bindings must use an approved client boundary when one exists.
-- Nodemailer: rejected for this proof because it is a generic SMTP client and does not provide Mailpit service readback and cleanup through the same service-specific client.
-- `mailpit-ws`: rejected because deterministic provider proof does not need real-time event streaming.
-
-The runtime validator and provider proof fail if `mailpit-api` is imported by core, ports,
-capabilities, API routes, API runtime assembly, or worker orchestration.
-
-`pg` version `8.22.0` is exact-version pinned with `@types/pg` version `8.20.0` for
-TypeScript. Registry metadata inspected on 2026-06-30 identified `pg` as the maintained
-de-facto standard Node PostgreSQL client with MIT licensing, Node >=16 support, GitHub
-repository metadata, and publish/update activity in June 2026. It is used through
-Kysely's Postgres dialect inside `adapters/db/src/index.ts` only.
-
-Rejected alternatives:
-
-- Raw TCP/socket or hand-rolled protocol calls: rejected because a maintained client exists.
-- Shelling out to `psql`: rejected for runtime provider proof because the adapter binding must use a client boundary.
-- `postgres.js`: rejected because the repo already has Kysely as the database query boundary and Kysely integrates directly with `pg`.
-
-The runtime validator and provider proof fail if `pg` is imported by core, ports,
-capabilities, API routes, API runtime assembly, or worker orchestration.
-
-## Evidence Boundary
-
-`runtime:proof:compose` starts `compose/compose.dev.generated.yaml`, waits for the Compose
-boundary, prepares the Postgres schema and synthetic seed data through the DB adapter, starts
-the API and worker runtimes, and tears everything down. The API proof checks that
-health/readiness expose active Postgres and Mailpit bindings, then calls a permission-protected
-route that refreshes membership through `PostgresTenantMembershipRepository` before PDP
-evaluation. Notification API safe views record provider mode `composed-test` with provider ref
-`notification-delivery-mailpit-composed-test`.
-
-The worker proof executes actual adapter round trips through both composed providers:
-Postgres tenant-safe membership write/readback through `pg`, and Mailpit SDK readiness check,
-synthetic message write, SDK readback, and SDK cleanup. Evidence records endpoint refs,
-hashes, row counts, and value-free summaries only. It does not expose raw endpoints,
-connection strings, credentials, tokens, provider response payloads, stack traces, or message
-bodies.
+The SDK rationale is recorded in
+`spec/instances/runtime-proof/runtime-application-compose-parity.json` under
+`providerSdkBoundary`. Raw protocol calls, shell commands, direct socket code, and ad hoc HTTP
+clients were rejected where a suitable SDK/client exists.
 
 ## Enterprise And ISO-Supporting Posture
 
-This adds future evidence organisation support for provider asset inventory traceability,
+The proof adds future evidence organisation support for provider asset inventory traceability,
 owner/risk/control linkage, access-control evidence, tenant isolation evidence, audit event
 production, secret-reference posture, credential redaction, local transport boundary,
 change/promotion evidence, provider teardown evidence, incident-response evidence boundary,
 supplier/subprocessor boundary for later external providers, and Statement of Applicability
 support fields only.
 
-It does not claim ISO/IEC 27001 certification, SOC readiness, enterprise production
-readiness, staging readiness, production readiness, live-provider readiness, full dev
-readiness, test readiness, or full React parity.
+It does not claim ISO/IEC 27001 certification, SOC readiness, enterprise production readiness,
+staging readiness, production readiness, live-provider readiness, full dev readiness, test
+readiness, or full React parity.

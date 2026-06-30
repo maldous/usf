@@ -3,8 +3,8 @@
   "manifestPatches": [
     {
       "op": "replace",
-      "path": "/runtimeModes/1/deferredBoundaryRefs",
-      "value": []
+      "path": "/deferredBoundaries",
+      "value": {}
     }
   ]
 }

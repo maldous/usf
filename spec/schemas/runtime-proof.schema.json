@@ -325,7 +325,8 @@
                 "not-applicable",
                 "runtime-started-with-compose-boundary-provider-binding-deferred",
                 "mailpit-notification-provider-resolved-with-explicit-deferrals",
-                "postgres-and-mailpit-provider-bindings-resolved-with-explicit-deferrals"
+                "postgres-and-mailpit-provider-bindings-resolved-with-explicit-deferrals",
+                "all-required-compose-provider-bindings-resolved"
               ]
             }
           }
@@ -500,7 +501,7 @@
     },
     "providerSdkBoundary": {
       "type": "array",
-      "minItems": 2,
+      "minItems": 7,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -519,7 +520,17 @@
         "properties": {
           "selectedPackage": {
             "type": "string",
-            "enum": ["mailpit-api", "pg"]
+            "enum": [
+              "@keycloak/keycloak-admin-client",
+              "@nats-io/transport-node",
+              "@temporalio/client",
+              "@temporalio/worker",
+              "@temporalio/workflow",
+              "mailpit-api",
+              "minio",
+              "node-vault",
+              "pg"
+            ]
           },
           "selectedVersion": {
             "type": "string",
@@ -550,7 +561,15 @@
           },
           "approvedImportBoundary": {
             "type": "string",
-            "enum": ["adapters/mail/src/index.ts", "adapters/db/src/index.ts"]
+            "enum": [
+              "adapters/bus/src/index.ts",
+              "adapters/db/src/index.ts",
+              "adapters/idp/src/index.ts",
+              "adapters/mail/src/index.ts",
+              "adapters/secrets/src/index.ts",
+              "adapters/store/src/index.ts",
+              "adapters/wf/src/index.ts"
+            ]
           },
           "dependencyPinning": {
             "type": "string",

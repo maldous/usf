@@ -15,7 +15,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 | P0-001 | USF-133 closure bar is undefined between in-memory, minimal compose, and universal compose            | Human must accept the target readiness tier before USF-133 can close.                                                                                                                                                                                                                                                                                                                | USF-133 remains open; no readiness claim.                                                                                                                                                                                                              |
 | P0-002 | Universal React compose services are not all implemented, equivalently substituted, or Linear-tracked | Create exact child blockers or human decisions for every grade C/D service row.                                                                                                                                                                                                                                                                                                      | No universal dev foundation claim.                                                                                                                                                                                                                     |
 | P0-003 | Durable service catalogue/CMDB posture needed semantic authority and enforcement                      | `spec/instances/compose-service/service-catalogue.json` is now the semantic service catalogue authority, with service-level owner/risk/control/evidence/non-claim metadata governed by `spec/schemas/compose-service.schema.json` and `tools/validate-compose/validate-compose.py`.                                                                                                  | This addresses the catalogue-asset gap only; it does not close USF-133 or claim full dev, test, staging, production, SOC, ISO, or live-provider readiness.                                                                                             |
-| P0-004 | API and worker runtime proof needed explicit in-memory and compose-backed modes                       | USF-181 adds bounded API/worker proof. USF-183 updates `spec/instances/runtime-proof/runtime-application-compose-parity.json`, `runtime:proof:*`, and `tools/validate-runtime/validate-runtime.py` so compose-backed mode proves SDK-backed Postgres tenant-membership and Mailpit notification provider bindings and records the remaining provider bindings as explicit deferrals. | This addresses bounded runtime, Postgres tenant-membership provider binding, and Mailpit provider-binding proof only; it does not close USF-133 or claim full dev, test, staging, production, SOC, ISO, live-provider, or full React parity readiness. |
+| P0-004 | API and worker runtime proof needed explicit in-memory and compose-backed modes                       | USF-181 adds bounded API/worker proof. USF-183 updates `spec/instances/runtime-proof/runtime-application-compose-parity.json`, `runtime:proof:*`, and `tools/validate-runtime/validate-runtime.py` so compose-backed mode proves SDK-backed Postgres, Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal runtime provider bindings with readiness retry, value-free evidence, and adapter-boundary validation. | This addresses bounded runtime provider binding proof only; it does not close USF-133 or claim full dev, test, staging, production, SOC, ISO, live-provider, operator-surface, or full React parity readiness. |
 
 ## P1 Blockers Before Universal Dev Foundation Claim
 
@@ -64,7 +64,7 @@ Recommended draft-only Linear work, if accepted by a human in a later apply-mode
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | React parity: universal compose service disposition closure | Create exact trackers for all grade C/D compose service rows and close or defer them truthfully.                                                                                                                                                                                       | P0                         |
 | React parity: service catalogue and trust-boundary review   | Keep the semantic service catalogue current as service decisions change; use validators to prevent metadata, evidence, and non-claim drift.                                                                                                                                            | P0 follow-up governance    |
-| React parity: remaining composed provider bindings          | USF-183 proves the Postgres tenant-membership and Mailpit notification provider bindings; NATS, MinIO, Keycloak runtime identity, OpenBao, and Temporal provider bindings remain deferred or boundary-only unless human-approved scope narrowing removes them from USF-183 acceptance. | P0 follow-up under USF-133 |
+| React parity: non-runtime composed service disposition      | USF-183 proves the service-catalogue-required runtime provider bindings that have USF runtime ports. Operator surfaces, backup/restore, scanner, observability backend, quality-gate, mock-provider, gateway, and automation service disposition still require USF-133 decisions. | P0 follow-up under USF-133 |
 | React parity: operational service decisions                 | Resolve Sentry, SonarQube, ClickHouse, Redis, Meilisearch, ClamAV, LocalStack, WireMock, Windmill, pgAdmin, pgBackRest.                                                                                                                                                                | P1                         |
 | React parity: operator/admin surface posture                | Define admin console set, authn/authz, tenant safety, and future ops UI boundaries.                                                                                                                                                                                                    | P1                         |
 | React parity: alerting, dashboard, incident posture depth   | Resolve Alertmanager, Alloy, dashboards, alert routing, and incident evidence depth.                                                                                                                                                                                                   | P2                         |
@@ -102,19 +102,16 @@ USF-181 adds two proof modes, updated by USF-183:
   provider class, verify health/readiness/OpenAPI, tenant and authorization fail-closed
   behaviour, synthetic worker job execution, audit evidence, secret boundary, and
   synthetic-data boundary.
-- `dev-compose-backed`: the canonical dev Compose target starts first, prepares
-  Postgres through `adapters/db`, then the API and worker runtime proofs run with
-  `runtimeMode` set to `dev-compose-backed` and provider mode
-  `local-composed-real-service`. USF-183 binds the Postgres tenant-membership
-  repository/directory boundary through exact-pinned `pg` in `adapters/db` and binds
-  the notification provider port to composed Mailpit through exact-pinned `mailpit-api`
-  in `adapters/mail`. API proof verifies safe provider binding metadata and a
-  Postgres-backed permission path; worker proof performs SDK-backed Postgres write/readback
-  and Mailpit readiness, write, readback, and cleanup.
+- `dev-compose-backed`: the canonical dev Compose target starts first, then the API and
+  worker runtime proofs run with `runtimeMode` set to `dev-compose-backed` and provider
+  mode `local-composed-real-service`. USF-183 binds Postgres, Keycloak, Mailpit, MinIO,
+  NATS, OpenBao, and Temporal through exact-pinned SDK/client boundaries inside adapter
+  packages. API proof exercises Postgres, NATS, MinIO, and Keycloak where API routes
+  surface those ports; worker proof exercises all seven implemented provider bindings.
 
-Remaining provider bindings are not upgraded by USF-183. NATS event bus, MinIO object
-storage, Keycloak runtime identity, OpenBao secret provider, and Temporal workflow provider
-bindings remain explicit deferrals or boundary-only rows in the runtime proof manifest.
+Remaining gaps are outside the USF-183 runtime-provider binding claim. Operator/admin
+surfaces, backup/restore, scanner, observability backend, quality-gate, mock-provider,
+gateway, and automation service disposition remain under USF-133 closure decisions.
 
 The runtime proof supports future enterprise evidence organisation for runtime assets,
 owner/risk/control traceability through the service catalogue, audit evidence, health and

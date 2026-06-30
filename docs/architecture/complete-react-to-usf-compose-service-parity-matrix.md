@@ -39,7 +39,7 @@ Evidence grades: A=12, B=3, C=6, D=33.
 | otel-collector                | observability               | implemented             | otel-collector                    | A     | high        | USF composes OTEL collector and keeps live monitoring deferred.                                                                                                                                                    |
 | pgadmin                       | operator-admin              | requires-human-decision | none                              | D     | medium      | USF has DB proof but no operator/admin pgAdmin surface or SSO gate proof.                                                                                                                                          |
 | pgbackrest                    | backup-restore              | deferred                | DB proof only                     | C     | critical    | USF has DB/RLS proof but no composed backup/restore service proof.                                                                                                                                                 |
-| platform-api                  | runtime-api                 | covered-by-usf-runtime  | apps/api                          | B     | high        | USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for Postgres and Mailpit composed provider bindings without copying React runtime code or claiming service/container equivalence. |
+| platform-api                  | runtime-api                 | covered-by-usf-runtime  | apps/api                          | B     | high        | USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for Postgres, NATS, MinIO, and Keycloak composed provider bindings without copying React runtime code or claiming service/container equivalence. |
 | postgres                      | database                    | implemented             | postgres                          | A     | critical    | USF compose includes PostgreSQL, DB/RLS proofs, and USF-183 bounded SDK-backed runtime tenant-membership provider evidence.                                                                                        |
 | prometheus                    | observability               | implemented             | prometheus                        | A     | medium      | USF composes Prometheus for local proof posture only.                                                                                                                                                              |
 | react-app                     | ui-runtime                  | out-of-foundation-scope | USF-134 future UI                 | C     | medium      | UI/UX remains future and non-foundation-blocking.                                                                                                                                                                  |
@@ -73,7 +73,7 @@ Evidence grades: A=12, B=3, C=6, D=33.
 | windmill                      | operator-automation         | requires-human-decision | jobs/workflows standard           | D     | high        | USF jobs/workflows does not include Windmill operator automation.                                                                                                                                                  |
 | windmill-postgres             | operator-automation-backing | requires-human-decision | none                              | D     | medium      | No USF composed Windmill persistence.                                                                                                                                                                              |
 | windmill-redis                | operator-automation-backing | requires-human-decision | none                              | D     | medium      | No USF composed Windmill Redis.                                                                                                                                                                                    |
-| windmill-worker               | operator-automation-worker  | requires-human-decision | apps/work plus jobs proof         | D     | high        | USF-181 proves bounded apps/work execution; USF-183 proves worker Postgres and Mailpit provider bindings, but this is not Windmill operator automation parity.                                                     |
+| windmill-worker               | operator-automation-worker  | requires-human-decision | apps/work plus jobs proof         | D     | high        | USF-181 proves bounded apps/work execution; USF-183 proves worker Postgres, Mailpit, NATS, MinIO, Keycloak, OpenBao, and Temporal provider bindings, but this is not Windmill operator automation parity.          |
 | wiremock                      | external-http-mock          | substituted-partial     | webhook-sink                      | C     | medium      | USF webhook sink is not a WireMock behavioural equivalent.                                                                                                                                                         |
 
 ## Interpretation
@@ -81,14 +81,15 @@ Evidence grades: A=12, B=3, C=6, D=33.
 A grade A row is directly implemented or equivalently composed in the current USF local/dev/test substrate. A grade B row is semantically covered by an authorised USF runtime/proof but is not service-equivalent. A grade C row is documented as deferred. A grade D row requires a human decision or exact blocker before USF-133 can close. A grade F row would be unclassified; this review found no unclassified compose service after the curated pass.
 
 USF-181 adds bounded runtime proof for `apps/api` and `apps/work`; USF-183 adds bounded
-Postgres tenant-membership and Mailpit notification provider binding proof. These are recorded through
-`spec/instances/runtime-proof/runtime-application-compose-parity.json` and
-`tools/validate-runtime/validate-runtime.py`. The compose-backed proof starts
+Postgres, Mailpit, NATS, MinIO, Keycloak, OpenBao, and Temporal provider binding proof.
+These are recorded through `spec/instances/runtime-proof/runtime-application-compose-parity.json`
+and `tools/validate-runtime/validate-runtime.py`. The compose-backed proof starts
 `compose/compose.dev.generated.yaml` before API and worker proof execution, reports
-`local-composed-real-service`, proves Postgres through `PostgresTenantMembershipRepository`,
-and proves Mailpit through `MailpitNotificationProvider`. NATS, MinIO, Keycloak runtime
-identity, OpenBao, and Temporal provider bindings remain explicit deferrals or boundary-only
-records unless human-approved scope narrowing removes them from USF-183 acceptance.
+`local-composed-real-service`, and proves every service-catalogue-required runtime
+provider binding that has an authorised USF runtime port. Operator/admin surfaces,
+backup/restore services, scanners, observability backends, gateway surfaces, quality-gate
+services, and Windmill automation remain outside this bounded runtime provider-binding
+claim and still require USF-133 decisions.
 This does not change any grade D service into service equivalence and does not claim full
 dev readiness, full React parity, test readiness, staging readiness, production readiness,
 live-provider readiness, SOC readiness, or ISO/IEC 27001 certification.

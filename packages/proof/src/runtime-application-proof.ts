@@ -21,7 +21,42 @@ import {
   preparePostgresRuntimeProofDatabase,
   type PostgresComposedMembershipEvidence,
 } from "@foundation/adapter-db";
+import {
+  NATS_PROVIDER_REGISTRY_ID,
+  NATS_RUNTIME_PROVIDER_BINDING_ID,
+  NATS_SDK_PACKAGE,
+  NATS_SDK_VERSION,
+  type NatsComposedEventBusEvidence,
+} from "@foundation/adapter-bus";
+import {
+  KEYCLOAK_ADMIN_SDK_PACKAGE,
+  KEYCLOAK_ADMIN_SDK_VERSION,
+  KEYCLOAK_PROVIDER_REGISTRY_ID,
+  KEYCLOAK_RUNTIME_PROVIDER_BINDING_ID,
+  type KeycloakComposedIdentityEvidence,
+} from "@foundation/adapter-idp";
 import type { MailpitComposedDeliveryEvidence } from "@foundation/adapter-mail";
+import {
+  OPENBAO_PROVIDER_REGISTRY_ID,
+  OPENBAO_SDK_PACKAGE,
+  OPENBAO_SDK_VERSION,
+  OPENBAO_SECRET_BINDING_ID,
+  type OpenBaoSecretEvidence,
+} from "@foundation/adapter-secrets";
+import {
+  MINIO_PROVIDER_REGISTRY_ID,
+  MINIO_RUNTIME_PROVIDER_BINDING_ID,
+  MINIO_SDK_PACKAGE,
+  MINIO_SDK_VERSION,
+  type MinioComposedObjectStoreEvidence,
+} from "@foundation/adapter-store";
+import {
+  TEMPORAL_CLIENT_SDK_PACKAGE,
+  TEMPORAL_CLIENT_SDK_VERSION,
+  TEMPORAL_PROVIDER_REGISTRY_ID,
+  TEMPORAL_RUNTIME_PROVIDER_BINDING_ID,
+  type TemporalComposedWorkflowEvidence,
+} from "@foundation/adapter-wf";
 
 type ProofProcess = ChildProcessByStdio<null, Readable, Readable>;
 
@@ -39,6 +74,14 @@ const PROHIBITED_CLAIM_PATTERNS = [
   /\bfull[- ]react[- ]parity\b/i,
 ];
 
+type RuntimeComposedProviderEvidence =
+  | MailpitComposedDeliveryEvidence
+  | NatsComposedEventBusEvidence
+  | MinioComposedObjectStoreEvidence
+  | KeycloakComposedIdentityEvidence
+  | OpenBaoSecretEvidence
+  | TemporalComposedWorkflowEvidence;
+
 interface ApiProofSummary {
   readonly api: string;
   readonly health: string;
@@ -55,6 +98,9 @@ interface ApiProofSummary {
   readonly composedProviderBindingsActive: number;
   readonly databasePermissionStatus: number | null;
   readonly databaseProviderEvidence: PostgresComposedMembershipEvidence | null;
+  readonly eventBusProviderEvidence: NatsComposedEventBusEvidence | null;
+  readonly objectStoreProviderEvidence: MinioComposedObjectStoreEvidence | null;
+  readonly identityProviderEvidence: KeycloakComposedIdentityEvidence | null;
   readonly auditEvents: number;
   readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY;
   readonly composeTarget: typeof COMPOSE_TARGET | null;
@@ -74,6 +120,11 @@ interface WorkerProofSummary {
   readonly notificationProviderMessageIdPresent: boolean;
   readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
   readonly databaseProviderEvidence: readonly PostgresComposedMembershipEvidence[];
+  readonly eventBusProviderEvidence: readonly NatsComposedEventBusEvidence[];
+  readonly objectStoreProviderEvidence: readonly MinioComposedObjectStoreEvidence[];
+  readonly identityProviderEvidence: readonly KeycloakComposedIdentityEvidence[];
+  readonly secretProviderEvidence: readonly OpenBaoSecretEvidence[];
+  readonly workflowProviderEvidence: readonly TemporalComposedWorkflowEvidence[];
   readonly auditEvents: number;
   readonly tenantBoundaryDenied: true;
   readonly authorizationDenied: true;
@@ -109,7 +160,7 @@ export interface RuntimeProofSummary {
   readonly secretBoundary: "local synthetic secret seed only; no real secrets or external credentials";
   readonly prohibitedClaimsObserved: readonly [];
   readonly deferredBoundaries: readonly string[];
-  readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
+  readonly composedProviderEvidence: readonly RuntimeComposedProviderEvidence[];
   readonly databaseProviderEvidence: readonly PostgresComposedMembershipEvidence[];
 }
 
@@ -390,6 +441,17 @@ function assertWorkerSummary(value: unknown): asserts value is WorkerProofSummar
   if (!Array.isArray(value.databaseProviderEvidence)) {
     throw new Error("worker proof summary did not report database provider evidence shape");
   }
+  for (const key of [
+    "eventBusProviderEvidence",
+    "objectStoreProviderEvidence",
+    "identityProviderEvidence",
+    "secretProviderEvidence",
+    "workflowProviderEvidence",
+  ]) {
+    if (!Array.isArray(value[key])) {
+      throw new Error(`worker proof summary did not report ${key} shape`);
+    }
+  }
 }
 
 function expectedRuntimeProviderMode(mode: DevRuntimeMode): DevProviderModeLabel {
@@ -426,17 +488,278 @@ function assertPostgresEvidence(
     value.sdkBoundary !== "adapter-package-only" ||
     value.endpointRef !== "endpoint://compose/postgres" ||
     value.readinessChecked !== true ||
+    value.readinessRetryPolicy !== "bounded-exponential-backoff-60s" ||
+    typeof value.readinessAttempts !== "number" ||
+    value.readinessAttempts < 1 ||
+    typeof value.retryCount !== "number" ||
+    value.retryCount < 0 ||
+    typeof value.connectionFailureCount !== "number" ||
+    value.connectionFailureCount < 0 ||
+    typeof value.operationLatencyBucket !== "string" ||
+    value.adapterHealthStatus !== "healthy" ||
+    value.structuredLogEvidenceCaptured !== true ||
+    value.traceEvidenceCaptured !== true ||
+    value.metricEvidenceCaptured !== true ||
+    value.auditEvidenceCaptured !== true ||
+    value.redactionChecked !== true ||
+    !isSafeHashString(value.traceIdHash) ||
+    !isSafeHashString(value.correlationIdHash) ||
+    typeof value.operation !== "string" ||
+    value.operationOutcome !== "succeeded" ||
+    value.safeErrorCode !== null ||
+    typeof value.failClosedDenials !== "number" ||
+    value.failClosedDenials < 0 ||
+    value.iso27001Support !== "asset-inventory-control-evidence-only-no-certification-claim" ||
     value.readbackChecked !== true ||
     value.tenantIsolationChecked !== true ||
     value.safeProviderSummary !== "postgres-composed-provider"
   ) {
     throw new Error(`${surface} postgres provider evidence is incomplete`);
   }
+  assertNoRawProviderMaterial(value, `${surface} postgres provider evidence`);
   if (surface === "worker" && value.writeChecked !== true) {
     throw new Error("worker postgres provider evidence did not prove write behavior");
   }
   if (typeof value.membershipCount !== "number" || value.membershipCount < 1) {
     throw new Error(`${surface} postgres provider evidence did not report memberships`);
+  }
+}
+
+function assertNoRawProviderMaterial(value: unknown, label: string): void {
+  const text = JSON.stringify(value).toLowerCase();
+  for (const forbidden of [
+    "http://",
+    "https://",
+    "postgres://",
+    "postgresql://",
+    "nats://",
+    "redis://",
+    "bearer ",
+    "admin_password",
+    "dev-root-token",
+    "minio_password",
+    "minioadmin",
+    "127.0.0.1",
+    "localhost",
+    "connection_string",
+    "stack trace",
+    "stacktrace",
+  ]) {
+    if (text.includes(forbidden)) {
+      throw new Error(`${label} leaked raw provider material: ${forbidden}`);
+    }
+  }
+}
+
+function assertProviderEvidenceBase(
+  value: unknown,
+  label: string,
+  expected: {
+    readonly providerRegistryId: string;
+    readonly bindingId: string;
+    readonly adapterName: string;
+    readonly endpointRef: string;
+    readonly safeProviderSummary: string;
+    readonly readinessRetryPolicy?: string;
+  },
+): asserts value is Record<string, unknown> {
+  assertObject(value, label);
+  const defects = [
+    value.providerMode === "composed-test" ? null : "providerMode",
+    value.providerRef === expected.providerRegistryId ? null : "providerRef",
+    value.providerRegistryId === expected.providerRegistryId ? null : "providerRegistryId",
+    value.bindingId === expected.bindingId ? null : "bindingId",
+    value.adapterName === expected.adapterName ? null : "adapterName",
+    value.sdkBoundary === "adapter-package-only" ? null : "sdkBoundary",
+    value.endpointRef === expected.endpointRef ? null : "endpointRef",
+    value.safeProviderSummary === expected.safeProviderSummary ? null : "safeProviderSummary",
+    value.readinessChecked === true ? null : "readinessChecked",
+    expected.readinessRetryPolicy === undefined ||
+    value.readinessRetryPolicy === expected.readinessRetryPolicy
+      ? null
+      : "readinessRetryPolicy",
+    typeof value.readinessAttempts === "number" && value.readinessAttempts >= 1
+      ? null
+      : "readinessAttempts",
+    typeof value.retryCount === "number" && value.retryCount >= 0 ? null : "retryCount",
+    typeof value.connectionFailureCount === "number" && value.connectionFailureCount >= 0
+      ? null
+      : "connectionFailureCount",
+    typeof value.operationLatencyBucket === "string" ? null : "operationLatencyBucket",
+    value.adapterHealthStatus === "healthy" ? null : "adapterHealthStatus",
+    value.structuredLogEvidenceCaptured === true ? null : "structuredLogEvidenceCaptured",
+    value.traceEvidenceCaptured === true ? null : "traceEvidenceCaptured",
+    value.metricEvidenceCaptured === true ? null : "metricEvidenceCaptured",
+    value.auditEvidenceCaptured === true ? null : "auditEvidenceCaptured",
+    value.redactionChecked === true ? null : "redactionChecked",
+    isSafeHashString(value.traceIdHash) ? null : "traceIdHash",
+    isSafeHashString(value.correlationIdHash) ? null : "correlationIdHash",
+    typeof value.operation === "string" ? null : "operation",
+    value.operationOutcome === "succeeded" ? null : "operationOutcome",
+    value.safeErrorCode === null ? null : "safeErrorCode",
+    typeof value.failClosedDenials === "number" && value.failClosedDenials >= 0
+      ? null
+      : "failClosedDenials",
+    value.iso27001Support === "asset-inventory-control-evidence-only-no-certification-claim"
+      ? null
+      : "iso27001Support",
+  ].filter((item): item is string => item !== null);
+  if (defects.length > 0) {
+    throw new Error(`${label} base evidence is incomplete: ${defects.join(", ")}`);
+  }
+  assertNoRawProviderMaterial(value, label);
+}
+
+function assertMailpitEvidence(
+  value: unknown,
+  surface: "api" | "worker",
+): asserts value is MailpitComposedDeliveryEvidence {
+  assertProviderEvidenceBase(value, `${surface} Mailpit provider evidence`, {
+    providerRegistryId: MAILPIT_PROVIDER_REGISTRY_ID,
+    bindingId: "mailpit-notification-provider",
+    adapterName: "MailpitNotificationProvider",
+    endpointRef: "endpoint://compose/mailpit",
+    safeProviderSummary: "mailpit-composed-provider",
+    readinessRetryPolicy: "bounded-exponential-backoff-60s",
+  });
+  if (
+    value.serviceCatalogueServiceId !== "mailpit" ||
+    value.sdkPackage !== "mailpit-api" ||
+    value.sdkVersion !== "2.1.0" ||
+    value.writeChecked !== true ||
+    value.readbackChecked !== true ||
+    value.cleanupAttempted !== true ||
+    value.cleanupSucceeded !== true
+  ) {
+    throw new Error(`${surface} Mailpit provider evidence did not prove notification delivery`);
+  }
+}
+
+function isSafeHashString(value: unknown): value is string {
+  return typeof value === "string" && /^[a-f0-9]{48,64}$|^sha256_[a-f0-9]{24,64}$/.test(value);
+}
+
+function assertNatsEvidence(
+  value: unknown,
+  surface: "api" | "worker",
+): asserts value is NatsComposedEventBusEvidence {
+  assertProviderEvidenceBase(value, `${surface} NATS provider evidence`, {
+    providerRegistryId: NATS_PROVIDER_REGISTRY_ID,
+    bindingId: NATS_RUNTIME_PROVIDER_BINDING_ID,
+    adapterName: "NatsEventBus",
+    endpointRef: "endpoint://compose/nats",
+    safeProviderSummary: "nats-composed-provider",
+    readinessRetryPolicy: "bounded-exponential-backoff-60s",
+  });
+  if (
+    value.sdkPackage !== NATS_SDK_PACKAGE ||
+    value.sdkVersion !== NATS_SDK_VERSION ||
+    value.publishChecked !== true ||
+    (surface === "worker" &&
+      (value.readbackChecked !== true || value.tenantIsolationChecked !== true))
+  ) {
+    throw new Error(`${surface} NATS provider evidence did not prove publish/readback`);
+  }
+}
+
+function assertMinioEvidence(
+  value: unknown,
+  surface: "api" | "worker",
+): asserts value is MinioComposedObjectStoreEvidence {
+  assertProviderEvidenceBase(value, `${surface} MinIO provider evidence`, {
+    providerRegistryId: MINIO_PROVIDER_REGISTRY_ID,
+    bindingId: MINIO_RUNTIME_PROVIDER_BINDING_ID,
+    adapterName: "MinioObjectStore",
+    endpointRef: "endpoint://compose/minio",
+    safeProviderSummary: "minio-composed-provider",
+    readinessRetryPolicy: "bounded-exponential-backoff-60s",
+  });
+  if (
+    value.sdkPackage !== MINIO_SDK_PACKAGE ||
+    value.sdkVersion !== MINIO_SDK_VERSION ||
+    value.writeChecked !== true ||
+    value.readbackChecked !== true ||
+    (surface === "worker" &&
+      (value.deleteChecked !== true || value.tenantIsolationChecked !== true))
+  ) {
+    throw new Error(`${surface} MinIO provider evidence did not prove object round trip`);
+  }
+}
+
+function assertKeycloakEvidence(
+  value: unknown,
+  surface: "api" | "worker",
+): asserts value is KeycloakComposedIdentityEvidence {
+  assertProviderEvidenceBase(value, `${surface} Keycloak provider evidence`, {
+    providerRegistryId: KEYCLOAK_PROVIDER_REGISTRY_ID,
+    bindingId: KEYCLOAK_RUNTIME_PROVIDER_BINDING_ID,
+    adapterName: "KeycloakComposedIdentityProvider",
+    endpointRef: "endpoint://compose/keycloak",
+    safeProviderSummary: "keycloak-composed-provider",
+    readinessRetryPolicy: "bounded-exponential-backoff-120s-keycloak",
+  });
+  if (
+    value.sdkPackage !== KEYCLOAK_ADMIN_SDK_PACKAGE ||
+    value.sdkVersion !== KEYCLOAK_ADMIN_SDK_VERSION ||
+    value.realmChecked !== true ||
+    value.syntheticIdentityChecked !== true ||
+    value.readbackChecked !== true ||
+    (surface === "worker" &&
+      (value.tenantBoundaryChecked !== true || value.failClosedChecked !== true))
+  ) {
+    throw new Error(`${surface} Keycloak provider evidence did not prove identity round trip`);
+  }
+}
+
+function assertOpenBaoEvidence(
+  value: unknown,
+  surface: "api" | "worker",
+): asserts value is OpenBaoSecretEvidence {
+  assertProviderEvidenceBase(value, `${surface} OpenBao provider evidence`, {
+    providerRegistryId: OPENBAO_PROVIDER_REGISTRY_ID,
+    bindingId: OPENBAO_SECRET_BINDING_ID,
+    adapterName: "OpenBaoSecretStore",
+    endpointRef: "endpoint://compose/openbao",
+    safeProviderSummary: "openbao-composed-secret-provider",
+    readinessRetryPolicy: "bounded-exponential-backoff-60s",
+  });
+  if (
+    value.sdkPackage !== OPENBAO_SDK_PACKAGE ||
+    value.sdkVersion !== OPENBAO_SDK_VERSION ||
+    value.writeChecked !== true ||
+    value.describeChecked !== true ||
+    value.resolveChecked !== true ||
+    value.tenantIsolationChecked !== true
+  ) {
+    throw new Error(`${surface} OpenBao provider evidence did not prove secret round trip`);
+  }
+}
+
+function assertTemporalEvidence(
+  value: unknown,
+  surface: "api" | "worker",
+): asserts value is TemporalComposedWorkflowEvidence {
+  assertProviderEvidenceBase(value, `${surface} Temporal provider evidence`, {
+    providerRegistryId: TEMPORAL_PROVIDER_REGISTRY_ID,
+    bindingId: TEMPORAL_RUNTIME_PROVIDER_BINDING_ID,
+    adapterName: "TemporalComposedWorkflowEngine",
+    endpointRef: "endpoint://compose/temporal",
+    safeProviderSummary: "temporal-composed-provider",
+    readinessRetryPolicy: "bounded-exponential-backoff-60s",
+  });
+  if (
+    value.clientSdkPackage !== TEMPORAL_CLIENT_SDK_PACKAGE ||
+    value.clientSdkVersion !== TEMPORAL_CLIENT_SDK_VERSION ||
+    value.workerStarted !== true ||
+    value.workflowScheduled !== true ||
+    value.executionCompleted !== true ||
+    value.readbackChecked !== true ||
+    value.tenantBoundaryChecked !== true ||
+    value.failClosedChecked !== true ||
+    value.cleanupAttempted !== true ||
+    value.cleanupSucceeded !== true
+  ) {
+    throw new Error(`${surface} Temporal provider evidence did not prove workflow execution`);
   }
 }
 
@@ -482,6 +805,27 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       ? ready.body.composedProviderBindings
       : [];
     if (mode === "dev-compose-backed") {
+      const requiredBindings = new Set([
+        POSTGRES_RUNTIME_PROVIDER_BINDING_ID,
+        "mailpit-notification-provider",
+        NATS_RUNTIME_PROVIDER_BINDING_ID,
+        MINIO_RUNTIME_PROVIDER_BINDING_ID,
+        KEYCLOAK_RUNTIME_PROVIDER_BINDING_ID,
+        OPENBAO_SECRET_BINDING_ID,
+        TEMPORAL_RUNTIME_PROVIDER_BINDING_ID,
+      ]);
+      for (const bindingId of requiredBindings) {
+        const present = composedProviderBindings.some(
+          (binding) =>
+            binding &&
+            typeof binding === "object" &&
+            "bindingId" in binding &&
+            binding.bindingId === bindingId,
+        );
+        if (!present) {
+          throw new Error(`/readyz did not report active composed provider binding ${bindingId}`);
+        }
+      }
       const hasPostgresBinding = composedProviderBindings.some(
         (binding) =>
           binding &&
@@ -501,6 +845,12 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       }
       if (!hasMailpitBinding) {
         throw new Error("/readyz did not report the active Mailpit composed provider binding");
+      }
+      const deferredProviderBindings = Array.isArray(ready.body.deferredProviderBindings)
+        ? ready.body.deferredProviderBindings
+        : [];
+      if (deferredProviderBindings.length !== 0) {
+        throw new Error("/readyz still reported deferred provider bindings");
       }
     }
 
@@ -528,6 +878,9 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       throw new Error("valid tenant request did not capture an audit event");
     }
 
+    let eventBusProviderEvidence: NatsComposedEventBusEvidence | null = null;
+    let objectStoreProviderEvidence: MinioComposedObjectStoreEvidence | null = null;
+    let identityProviderEvidence: KeycloakComposedIdentityEvidence | null = null;
     const mismatch = await fetchJson(`${baseUrl}/v1/tenant-context?tenantId=${otherTenantId}`, {
       headers: {
         "x-dev-tenant-id": tenantId,
@@ -561,6 +914,77 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
     let databasePermissionStatus: number | null = null;
     let databaseProviderEvidence: PostgresComposedMembershipEvidence | null = null;
     if (mode === "dev-compose-backed") {
+      const readyAfterTenantContext = await fetchJson(`${baseUrl}/readyz`);
+      assertObject(readyAfterTenantContext.body, "ready after tenant context");
+      assertNatsEvidence(readyAfterTenantContext.body.eventBusProviderEvidence, "api");
+      eventBusProviderEvidence = readyAfterTenantContext.body.eventBusProviderEvidence;
+
+      const login = await fetchJson(`${baseUrl}/auth/login`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          tenantId: DEV_TENANT_ID,
+          email: "runtime-proof-api-keycloak@example.test",
+        }),
+      });
+      assertObject(login.body, "login proof");
+      if (
+        login.status !== 200 ||
+        login.body.providerMode !== "local-composed-real-service" ||
+        login.body.tenantId !== DEV_TENANT_ID
+      ) {
+        throw new Error(
+          `Keycloak API login proof did not use composed identity provider: status=${login.status} body=${JSON.stringify(login.body)}`,
+        );
+      }
+      const readyAfterLogin = await fetchJson(`${baseUrl}/readyz`);
+      assertObject(readyAfterLogin.body, "ready after identity provider read");
+      assertKeycloakEvidence(readyAfterLogin.body.identityProviderEvidence, "api");
+      identityProviderEvidence = readyAfterLogin.body.identityProviderEvidence;
+
+      const fileId = `runtime-proof-api-file-${mode}`;
+      const fileBody = "synthetic minio API runtime proof payload";
+      const fileUpload = await fetchJson(`${baseUrl}/v1/files`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-dev-tenant-id": DEV_TENANT_ID,
+          "x-dev-actor-id": DEV_ACTOR_ID,
+          "x-dev-roles": "tenant-admin",
+        },
+        body: JSON.stringify({
+          tenantId: DEV_TENANT_ID,
+          fileId,
+          filename: "runtime-proof.txt",
+          contentType: "text/plain",
+          sizeBytes: Buffer.byteLength(fileBody),
+          body: fileBody,
+          classification: "confidential",
+        }),
+      });
+      if (fileUpload.status !== 200) {
+        throw new Error(`MinIO API upload proof failed with status ${fileUpload.status}`);
+      }
+      const fileDownload = await fetchJson(
+        `${baseUrl}/v1/files/${encodeURIComponent(fileId)}/download?tenantId=${DEV_TENANT_ID}`,
+        {
+          method: "POST",
+          headers: {
+            "x-dev-tenant-id": DEV_TENANT_ID,
+            "x-dev-actor-id": DEV_ACTOR_ID,
+            "x-dev-roles": "tenant-admin",
+          },
+        },
+      );
+      assertObject(fileDownload.body, "file download proof");
+      if (fileDownload.status !== 200 || fileDownload.body.body !== fileBody) {
+        throw new Error("MinIO API download proof did not read back the synthetic object");
+      }
+      const readyAfterFile = await fetchJson(`${baseUrl}/readyz`);
+      assertObject(readyAfterFile.body, "ready after object-store read");
+      assertMinioEvidence(readyAfterFile.body.objectStoreProviderEvidence, "api");
+      objectStoreProviderEvidence = readyAfterFile.body.objectStoreProviderEvidence;
+
       const permissions = await fetchJson(
         `${baseUrl}/v1/authz/permissions?tenantId=${DEV_TENANT_ID}`,
         {
@@ -602,6 +1026,9 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       composedProviderBindingsActive: composedProviderBindings.length,
       databasePermissionStatus,
       databaseProviderEvidence,
+      eventBusProviderEvidence,
+      objectStoreProviderEvidence,
+      identityProviderEvidence,
       auditEvents,
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY,
       composeTarget: mode === "dev-compose-backed" ? COMPOSE_TARGET : null,
@@ -646,24 +1073,43 @@ async function runWorkerProof(mode: DevRuntimeMode): Promise<WorkerProofSummary>
         throw new Error("worker compose proof did not report composed provider evidence");
       }
       for (const evidence of summary.composedProviderEvidence) {
-        if (
-          evidence.providerRef !== MAILPIT_PROVIDER_REGISTRY_ID ||
-          evidence.serviceCatalogueServiceId !== "mailpit" ||
-          evidence.sdkPackage !== "mailpit-api" ||
-          evidence.sdkBoundary !== "adapter-package-only" ||
-          !evidence.readinessChecked ||
-          !evidence.writeChecked ||
-          !evidence.readbackChecked ||
-          !evidence.cleanupSucceeded
-        ) {
-          throw new Error("worker compose proof reported incomplete Mailpit provider evidence");
-        }
+        assertMailpitEvidence(evidence, "worker");
       }
       if (summary.databaseProviderEvidence.length === 0) {
         throw new Error("worker compose proof did not report Postgres provider evidence");
       }
       for (const evidence of summary.databaseProviderEvidence) {
         assertPostgresEvidence(evidence, "worker");
+      }
+      if (summary.eventBusProviderEvidence.length === 0) {
+        throw new Error("worker compose proof did not report NATS provider evidence");
+      }
+      for (const evidence of summary.eventBusProviderEvidence) {
+        assertNatsEvidence(evidence, "worker");
+      }
+      if (summary.objectStoreProviderEvidence.length === 0) {
+        throw new Error("worker compose proof did not report MinIO provider evidence");
+      }
+      for (const evidence of summary.objectStoreProviderEvidence) {
+        assertMinioEvidence(evidence, "worker");
+      }
+      if (summary.identityProviderEvidence.length === 0) {
+        throw new Error("worker compose proof did not report Keycloak provider evidence");
+      }
+      for (const evidence of summary.identityProviderEvidence) {
+        assertKeycloakEvidence(evidence, "worker");
+      }
+      if (summary.secretProviderEvidence.length === 0) {
+        throw new Error("worker compose proof did not report OpenBao provider evidence");
+      }
+      for (const evidence of summary.secretProviderEvidence) {
+        assertOpenBaoEvidence(evidence, "worker");
+      }
+      if (summary.workflowProviderEvidence.length === 0) {
+        throw new Error("worker compose proof did not report Temporal provider evidence");
+      }
+      for (const evidence of summary.workflowProviderEvidence) {
+        assertTemporalEvidence(evidence, "worker");
       }
     }
     assertNoProhibitedClaims({
@@ -673,6 +1119,11 @@ async function runWorkerProof(mode: DevRuntimeMode): Promise<WorkerProofSummary>
       jobStatus: summary.jobStatus,
       notificationDeliveryStatus: summary.notificationDeliveryStatus,
       databaseProviderEvidence: summary.databaseProviderEvidence.length,
+      eventBusProviderEvidence: summary.eventBusProviderEvidence.length,
+      objectStoreProviderEvidence: summary.objectStoreProviderEvidence.length,
+      identityProviderEvidence: summary.identityProviderEvidence.length,
+      secretProviderEvidence: summary.secretProviderEvidence.length,
+      workflowProviderEvidence: summary.workflowProviderEvidence.length,
       auditEvents: summary.auditEvents,
       tenantBoundaryDenied: summary.tenantBoundaryDenied,
       authorizationDenied: summary.authorizationDenied,
@@ -779,8 +1230,8 @@ async function runModeProof(
   const deferredBoundaries = [
     ...new Set([...api.deferredBoundaries, ...worker.deferredBoundaries]),
   ];
-  if (mode === "dev-compose-backed" && deferredBoundaries.length === 0) {
-    throw new Error("compose-backed proof did not record a deferred provider-binding boundary");
+  if (mode === "dev-compose-backed" && deferredBoundaries.length !== 0) {
+    throw new Error("compose-backed proof still recorded a deferred provider-binding boundary");
   }
   if (
     mode === "dev-compose-backed" &&
@@ -790,7 +1241,15 @@ async function runModeProof(
       worker.notificationProviderMode !== "composed-test" ||
       worker.composedProviderEvidence.length === 0 ||
       api.databaseProviderEvidence === null ||
-      worker.databaseProviderEvidence.length === 0)
+      api.eventBusProviderEvidence === null ||
+      api.objectStoreProviderEvidence === null ||
+      api.identityProviderEvidence === null ||
+      worker.databaseProviderEvidence.length === 0 ||
+      worker.eventBusProviderEvidence.length === 0 ||
+      worker.objectStoreProviderEvidence.length === 0 ||
+      worker.identityProviderEvidence.length === 0 ||
+      worker.secretProviderEvidence.length === 0 ||
+      worker.workflowProviderEvidence.length === 0)
   ) {
     throw new Error("compose-backed proof did not prove a real composed provider binding");
   }
@@ -822,7 +1281,17 @@ async function runModeProof(
     secretBoundary: "local synthetic secret seed only; no real secrets or external credentials",
     prohibitedClaimsObserved: [],
     deferredBoundaries,
-    composedProviderEvidence: worker.composedProviderEvidence,
+    composedProviderEvidence: [
+      ...worker.composedProviderEvidence,
+      ...(api.eventBusProviderEvidence ? [api.eventBusProviderEvidence] : []),
+      ...(api.objectStoreProviderEvidence ? [api.objectStoreProviderEvidence] : []),
+      ...(api.identityProviderEvidence ? [api.identityProviderEvidence] : []),
+      ...worker.eventBusProviderEvidence,
+      ...worker.objectStoreProviderEvidence,
+      ...worker.identityProviderEvidence,
+      ...worker.secretProviderEvidence,
+      ...worker.workflowProviderEvidence,
+    ],
     databaseProviderEvidence: [
       ...(api.databaseProviderEvidence ? [api.databaseProviderEvidence] : []),
       ...worker.databaseProviderEvidence,
@@ -855,7 +1324,9 @@ function printSummary(summary: RuntimeProofSummary): void {
   console.log(`Provider mode: ${summary.providerMode}`);
   console.log(`API notification provider mode: ${summary.api.notificationProviderMode}`);
   console.log(`Worker notification provider mode: ${summary.worker.notificationProviderMode}`);
-  console.log(`Composed provider evidence count: ${summary.composedProviderEvidence.length}`);
+  console.log(
+    `Composed non-database provider evidence count: ${summary.composedProviderEvidence.length}`,
+  );
   console.log(`Postgres provider evidence count: ${summary.databaseProviderEvidence.length}`);
   console.log(`API audit events captured: ${summary.api.auditEvents}`);
   console.log(`Worker audit events captured: ${summary.worker.auditEvents}`);

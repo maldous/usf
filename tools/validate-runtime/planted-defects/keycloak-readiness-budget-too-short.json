@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "adapters/idp/src/index.ts",
+      "old": "bounded-exponential-backoff-120s-keycloak",
+      "new": "bounded-exponential-backoff-60s"
+    }
+  ]
+}

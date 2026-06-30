@@ -91,7 +91,7 @@ function assertNoUnauthorisedProviderSdkImports(root: string): void {
     ...filesUnder(join(root, "capabilities")),
   ];
   const forbiddenImport =
-    /from\s+["'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio|nats|keycloak-js)["']/;
+    /(?:from\s+|import\()["'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio\/[^"']+|@nats-io\/transport-node|nats|keycloak-js|@keycloak\/keycloak-admin-client|node-vault)["']/;
   for (const path of scanned) {
     const text = readFileSync(path, "utf8");
     assert(!forbiddenImport.test(text), `unauthorised provider SDK import in ${path}`);
@@ -166,35 +166,81 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
   );
 
   assertNoUnauthorisedProviderSdkImports(root);
-  const mailAdapter = readFileSync(join(root, "adapters/mail/src/index.ts"), "utf8");
-  assert(
-    /from\s+["']mailpit-api["']/.test(mailAdapter),
-    "Mailpit SDK import missing from mail adapter boundary",
-  );
-  const dbAdapter = readFileSync(join(root, "adapters/db/src/index.ts"), "utf8");
-  assert(/from\s+["']pg["']/.test(dbAdapter), "pg SDK import missing from db adapter boundary");
-  const mailpitProvider = PROVIDER_REGISTRY.find(
-    (provider) => provider.providerId === "notification-delivery-mailpit-composed-test",
-  );
-  assert(mailpitProvider, "Mailpit composed provider registry entry missing");
-  assert(
-    mailpitProvider.adapterName === "MailpitNotificationProvider" &&
-      mailpitProvider.providerMode === "composed-test" &&
-      mailpitProvider.readinessStatus === "healthy" &&
-      mailpitProvider.endpointRef === "endpoint://compose/mailpit",
-    "Mailpit composed provider registry entry is not SDK-backed and catalogue-linked",
-  );
-  const postgresProvider = PROVIDER_REGISTRY.find(
-    (provider) => provider.providerId === "database-postgres-composed-test",
-  );
-  assert(postgresProvider, "Postgres composed provider registry entry missing");
-  assert(
-    postgresProvider.adapterName === "PostgresTenantMembershipRepository" &&
-      postgresProvider.providerMode === "composed-test" &&
-      postgresProvider.readinessStatus === "healthy" &&
-      postgresProvider.endpointRef === "endpoint://compose/postgres",
-    "Postgres composed provider registry entry is not SDK-backed and catalogue-linked",
-  );
+  for (const expected of [
+    {
+      providerId: "database-postgres-composed-test",
+      adapterName: "PostgresTenantMembershipRepository",
+      endpointRef: "endpoint://compose/postgres",
+      adapterPath: "adapters/db/src/index.ts",
+      sdkMarkers: ["pg"],
+    },
+    {
+      providerId: "notification-delivery-mailpit-composed-test",
+      adapterName: "MailpitNotificationProvider",
+      endpointRef: "endpoint://compose/mailpit",
+      adapterPath: "adapters/mail/src/index.ts",
+      sdkMarkers: ["mailpit-api"],
+    },
+    {
+      providerId: "event-bus-nats-composed-test",
+      adapterName: "NatsEventBus",
+      endpointRef: "endpoint://compose/nats",
+      adapterPath: "adapters/bus/src/index.ts",
+      sdkMarkers: ["@nats-io/transport-node"],
+    },
+    {
+      providerId: "object-storage-minio-composed-test",
+      adapterName: "MinioObjectStore",
+      endpointRef: "endpoint://compose/minio",
+      adapterPath: "adapters/store/src/index.ts",
+      sdkMarkers: ["minio"],
+    },
+    {
+      providerId: "identity-keycloak-composed-test",
+      adapterName: "KeycloakComposedIdentityProvider",
+      endpointRef: "endpoint://compose/keycloak",
+      adapterPath: "adapters/idp/src/index.ts",
+      sdkMarkers: ["@keycloak/keycloak-admin-client"],
+    },
+    {
+      providerId: "secret-store-openbao-composed-test",
+      adapterName: "OpenBaoSecretStore",
+      endpointRef: "endpoint://compose/openbao",
+      adapterPath: "adapters/secrets/src/index.ts",
+      sdkMarkers: ["node-vault"],
+    },
+    {
+      providerId: "workflow-engine-temporal-composed-test",
+      adapterName: "TemporalComposedWorkflowEngine",
+      endpointRef: "endpoint://compose/temporal",
+      adapterPath: "adapters/wf/src/index.ts",
+      sdkMarkers: ["@temporalio/client", "@temporalio/worker", "@temporalio/workflow"],
+    },
+  ] as const) {
+    const adapterText = readFileSync(join(root, expected.adapterPath), "utf8");
+    for (const marker of expected.sdkMarkers) {
+      assert(adapterText.includes(marker), `${marker} SDK marker missing from adapter boundary`);
+    }
+    for (const marker of [
+      "readinessRetryPolicy",
+      "structuredLogEvidenceCaptured",
+      "traceEvidenceCaptured",
+      "metricEvidenceCaptured",
+      "auditEvidenceCaptured",
+      "redactionChecked",
+    ]) {
+      assert(adapterText.includes(marker), `${expected.adapterName} missing ${marker}`);
+    }
+    const provider = PROVIDER_REGISTRY.find((entry) => entry.providerId === expected.providerId);
+    assert(provider, `${expected.providerId} composed provider registry entry missing`);
+    assert(
+      provider.adapterName === expected.adapterName &&
+        provider.providerMode === "composed-test" &&
+        provider.readinessStatus === "healthy" &&
+        provider.endpointRef === expected.endpointRef,
+      `${expected.providerId} composed provider registry entry is not SDK-backed and catalogue-linked`,
+    );
+  }
   checks.push("provider SDK imports remain inside adapter package boundaries");
 
   const deferred = PROVIDER_REGISTRY.find(

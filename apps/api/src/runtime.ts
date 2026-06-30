@@ -1,4 +1,13 @@
-import { InMemoryEventBus } from "@foundation/adapter-bus";
+import {
+  InMemoryEventBus,
+  NATS_PROVIDER_REGISTRY_ID,
+  NATS_RUNTIME_PROVIDER_BINDING_ID,
+  NATS_SDK_PACKAGE,
+  NATS_SDK_VERSION,
+  NATS_SERVICE_CATALOGUE_ID,
+  NatsEventBus,
+  type NatsComposedEventBusEvidence,
+} from "@foundation/adapter-bus";
 import {
   POSTGRES_PROVIDER_REGISTRY_ID,
   POSTGRES_RUNTIME_PROVIDER_BINDING_ID,
@@ -10,20 +19,55 @@ import {
   type PostgresComposedMembershipEvidence,
 } from "@foundation/adapter-db";
 import { InMemoryGuardrailStore } from "@foundation/adapter-guardrails";
-import { InMemoryIdentityProvider } from "@foundation/adapter-idp";
+import {
+  InMemoryIdentityProvider,
+  KEYCLOAK_ADMIN_SDK_PACKAGE,
+  KEYCLOAK_ADMIN_SDK_VERSION,
+  KEYCLOAK_PROVIDER_REGISTRY_ID,
+  KEYCLOAK_RUNTIME_PROVIDER_BINDING_ID,
+  KEYCLOAK_SERVICE_CATALOGUE_IDS,
+  KeycloakComposedIdentityProvider,
+  type KeycloakComposedIdentityEvidence,
+} from "@foundation/adapter-idp";
 import {
   InMemoryNotificationProvider,
   MailpitNotificationProvider,
   type MailpitComposedDeliveryEvidence,
 } from "@foundation/adapter-mail";
 import { CapturedObservabilitySink } from "@foundation/adapter-obs";
-import { InMemorySecretStore } from "@foundation/adapter-secrets";
+import {
+  InMemorySecretStore,
+  OPENBAO_PROVIDER_REGISTRY_ID,
+  OPENBAO_SDK_PACKAGE,
+  OPENBAO_SDK_VERSION,
+  OPENBAO_SECRET_BINDING_ID,
+  OPENBAO_SERVICE_CATALOGUE_ID,
+  OpenBaoSecretStore,
+  type OpenBaoSecretEvidence,
+} from "@foundation/adapter-secrets";
 import {
   InMemoryFileMetadataStore,
   InMemoryObjectStore,
   InMemoryScanProvider,
+  MINIO_PROVIDER_REGISTRY_ID,
+  MINIO_RUNTIME_PROVIDER_BINDING_ID,
+  MINIO_SDK_PACKAGE,
+  MINIO_SDK_VERSION,
+  MINIO_SERVICE_CATALOGUE_ID,
+  MinioObjectStore,
+  type MinioComposedObjectStoreEvidence,
 } from "@foundation/adapter-store";
-import { InMemoryOperationalJobStore, InMemoryWorkflowEngine } from "@foundation/adapter-wf";
+import {
+  InMemoryOperationalJobStore,
+  InMemoryWorkflowEngine,
+  TEMPORAL_CLIENT_SDK_PACKAGE,
+  TEMPORAL_CLIENT_SDK_VERSION,
+  TEMPORAL_PROVIDER_REGISTRY_ID,
+  TEMPORAL_RUNTIME_PROVIDER_BINDING_ID,
+  TEMPORAL_SERVICE_CATALOGUE_ID,
+  TemporalComposedWorkflowEngine,
+  type TemporalComposedWorkflowEvidence,
+} from "@foundation/adapter-wf";
 import {
   InMemoryAuditEventStore,
   InMemoryAuditLedger,
@@ -40,7 +84,15 @@ import {
   createPolicyDecisionPoint,
   type Authorizer,
 } from "@foundation/capability-tenant";
-import type { PolicyDecisionPoint } from "@foundation/ports";
+import type {
+  EventBus,
+  IdentityProvider,
+  ObjectStore,
+  PolicyDecisionPoint,
+  SecretResolver,
+  SecretStore,
+  WorkflowEngine,
+} from "@foundation/ports";
 import {
   InMemoryConfigLayerProvider,
   InMemoryConfigProvider,
@@ -146,120 +198,117 @@ export const DEV_COMPOSE_ACTIVE_PROVIDER_BINDINGS: readonly RuntimeProviderBindi
       claimBoundary:
         "Bounded local composed-test notification sink proof only; no stronger readiness claim.",
     }),
-  ]);
-
-export const DEV_COMPOSE_DEFERRED_PROVIDER_BINDINGS: readonly RuntimeProviderBinding[] =
-  Object.freeze([
     Object.freeze({
-      bindingId: "nats-event-bus-provider",
-      bindingStatus: "no-runtime-port",
-      serviceCatalogueServiceIds: Object.freeze(["nats"]),
-      providerRegistryIds: Object.freeze(["event-bus-nats-composed-test"]),
-      adapterName: null,
+      bindingId: NATS_RUNTIME_PROVIDER_BINDING_ID,
+      bindingStatus: "active",
+      serviceCatalogueServiceIds: Object.freeze([NATS_SERVICE_CATALOGUE_ID]),
+      providerRegistryIds: Object.freeze([NATS_PROVIDER_REGISTRY_ID]),
+      adapterName: "NatsEventBus",
       portName: "EventBus",
       providerMode: "composed-test",
-      providerClass: "not-applicable",
+      providerClass: "local-composed-real-service",
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
       composeTarget: DEV_COMPOSE_TARGET,
       endpointRef: "endpoint://compose/nats",
-      sdkPackage: null,
-      sdkVersion: null,
-      sdkBoundary: "not-applicable",
-      proofSurfaces: Object.freeze([]),
-      deferredReason: "API and worker runtime proof does not yet use a composed event-bus adapter.",
-      followUpIssueRefs: Object.freeze(["USF-151"]),
-      claimBoundary: "No composed event-bus runtime binding claim.",
+      sdkPackage: NATS_SDK_PACKAGE,
+      sdkVersion: NATS_SDK_VERSION,
+      sdkBoundary: "adapter-package-only",
+      proofSurfaces: Object.freeze(["api", "worker"] as const),
+      deferredReason: null,
+      followUpIssueRefs: Object.freeze([]),
+      claimBoundary:
+        "Bounded local composed-test event-bus proof only; no live messaging or production readiness claim.",
     }),
     Object.freeze({
-      bindingId: "minio-object-storage-provider",
-      bindingStatus: "no-runtime-port",
-      serviceCatalogueServiceIds: Object.freeze(["minio"]),
-      providerRegistryIds: Object.freeze(["object-storage-minio-composed-test"]),
-      adapterName: null,
+      bindingId: MINIO_RUNTIME_PROVIDER_BINDING_ID,
+      bindingStatus: "active",
+      serviceCatalogueServiceIds: Object.freeze([MINIO_SERVICE_CATALOGUE_ID]),
+      providerRegistryIds: Object.freeze([MINIO_PROVIDER_REGISTRY_ID]),
+      adapterName: "MinioObjectStore",
       portName: "ObjectStore",
       providerMode: "composed-test",
-      providerClass: "not-applicable",
+      providerClass: "local-composed-real-service",
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
       composeTarget: DEV_COMPOSE_TARGET,
       endpointRef: "endpoint://compose/minio",
-      sdkPackage: null,
-      sdkVersion: null,
-      sdkBoundary: "not-applicable",
-      proofSurfaces: Object.freeze([]),
-      deferredReason:
-        "File/object runtime adapter remains in-memory until composed object-store proof.",
-      followUpIssueRefs: Object.freeze(["USF-147"]),
-      claimBoundary: "No composed object-storage runtime binding claim.",
+      sdkPackage: MINIO_SDK_PACKAGE,
+      sdkVersion: MINIO_SDK_VERSION,
+      sdkBoundary: "adapter-package-only",
+      proofSurfaces: Object.freeze(["api", "worker"] as const),
+      deferredReason: null,
+      followUpIssueRefs: Object.freeze([]),
+      claimBoundary:
+        "Bounded local composed-test object-store proof only; no durable storage, backup, staging, or production readiness claim.",
     }),
     Object.freeze({
-      bindingId: "keycloak-identity-provider",
-      bindingStatus: "compose-boundary-only",
-      serviceCatalogueServiceIds: Object.freeze(["keycloak", "keycloak-db"]),
-      providerRegistryIds: Object.freeze(["identity-keycloak-composed-test"]),
-      adapterName: null,
+      bindingId: KEYCLOAK_RUNTIME_PROVIDER_BINDING_ID,
+      bindingStatus: "active",
+      serviceCatalogueServiceIds: KEYCLOAK_SERVICE_CATALOGUE_IDS,
+      providerRegistryIds: Object.freeze([KEYCLOAK_PROVIDER_REGISTRY_ID]),
+      adapterName: "KeycloakComposedIdentityProvider",
       portName: "IdentityProvider",
       providerMode: "composed-test",
-      providerClass: "not-applicable",
+      providerClass: "local-composed-real-service",
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
       composeTarget: DEV_COMPOSE_TARGET,
       endpointRef: "endpoint://compose/keycloak",
-      sdkPackage: null,
-      sdkVersion: null,
-      sdkBoundary: "not-applicable",
-      proofSurfaces: Object.freeze([]),
-      deferredReason:
-        "Runtime dev claims remain hermetic; Keycloak composed verifier proof is separate from API/worker binding.",
-      followUpIssueRefs: Object.freeze(["USF-149"]),
-      claimBoundary: "No composed identity runtime binding claim.",
+      sdkPackage: KEYCLOAK_ADMIN_SDK_PACKAGE,
+      sdkVersion: KEYCLOAK_ADMIN_SDK_VERSION,
+      sdkBoundary: "adapter-package-only",
+      proofSurfaces: Object.freeze(["api", "worker"] as const),
+      deferredReason: null,
+      followUpIssueRefs: Object.freeze([]),
+      claimBoundary:
+        "Bounded local composed-test identity-provider proof only; no live SSO, staging, production, SOC, or ISO claim.",
     }),
     Object.freeze({
-      bindingId: "temporal-workflow-provider",
-      bindingStatus: "profile-gated",
-      serviceCatalogueServiceIds: Object.freeze(["temporal", "temporal-ui"]),
-      providerRegistryIds: Object.freeze(["workflow-engine-temporal-composed-test"]),
-      adapterName: null,
-      portName: "WorkflowEngine",
+      bindingId: OPENBAO_SECRET_BINDING_ID,
+      bindingStatus: "active",
+      serviceCatalogueServiceIds: Object.freeze([OPENBAO_SERVICE_CATALOGUE_ID]),
+      providerRegistryIds: Object.freeze([OPENBAO_PROVIDER_REGISTRY_ID]),
+      adapterName: "OpenBaoSecretStore",
+      portName: "SecretResolver,SecretStore",
       providerMode: "composed-test",
-      providerClass: "not-applicable",
-      serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
-      composeTarget: DEV_COMPOSE_TARGET,
-      endpointRef: "endpoint://compose/temporal",
-      sdkPackage: null,
-      sdkVersion: null,
-      sdkBoundary: "not-applicable",
-      proofSurfaces: Object.freeze([]),
-      deferredReason:
-        "Workflow-provider runtime binding remains profile-gated and requires separate proof.",
-      followUpIssueRefs: Object.freeze(["USF-151"]),
-      claimBoundary: "No composed workflow runtime binding claim.",
-    }),
-    Object.freeze({
-      bindingId: "openbao-secret-provider",
-      bindingStatus: "no-runtime-port",
-      serviceCatalogueServiceIds: Object.freeze(["openbao"]),
-      providerRegistryIds: Object.freeze([]),
-      adapterName: null,
-      portName: "SecretResolver",
-      providerMode: "composed-test",
-      providerClass: "not-applicable",
+      providerClass: "local-composed-real-service",
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
       composeTarget: DEV_COMPOSE_TARGET,
       endpointRef: "endpoint://compose/openbao",
-      sdkPackage: null,
-      sdkVersion: null,
-      sdkBoundary: "not-applicable",
-      proofSurfaces: Object.freeze([]),
-      deferredReason:
-        "Runtime secret resolver remains synthetic local; no composed OpenBao provider registry row or adapter binding exists yet.",
-      followUpIssueRefs: Object.freeze(["USF-145"]),
-      claimBoundary: "No composed secret-provider runtime binding claim.",
+      sdkPackage: OPENBAO_SDK_PACKAGE,
+      sdkVersion: OPENBAO_SDK_VERSION,
+      sdkBoundary: "adapter-package-only",
+      proofSurfaces: Object.freeze(["api", "worker"] as const),
+      deferredReason: null,
+      followUpIssueRefs: Object.freeze([]),
+      claimBoundary:
+        "Bounded local composed-test secret-provider proof only; no live secret-manager, KMS, staging, or production readiness claim.",
+    }),
+    Object.freeze({
+      bindingId: TEMPORAL_RUNTIME_PROVIDER_BINDING_ID,
+      bindingStatus: "active",
+      serviceCatalogueServiceIds: Object.freeze([TEMPORAL_SERVICE_CATALOGUE_ID]),
+      providerRegistryIds: Object.freeze([TEMPORAL_PROVIDER_REGISTRY_ID]),
+      adapterName: "TemporalComposedWorkflowEngine",
+      portName: "WorkflowEngine",
+      providerMode: "composed-test",
+      providerClass: "local-composed-real-service",
+      serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
+      composeTarget: DEV_COMPOSE_TARGET,
+      endpointRef: "endpoint://compose/temporal",
+      sdkPackage: TEMPORAL_CLIENT_SDK_PACKAGE,
+      sdkVersion: TEMPORAL_CLIENT_SDK_VERSION,
+      sdkBoundary: "adapter-package-only",
+      proofSurfaces: Object.freeze(["api", "worker"] as const),
+      deferredReason: null,
+      followUpIssueRefs: Object.freeze([]),
+      claimBoundary:
+        "Bounded local composed-test workflow-provider proof only; no live workflow, staging, production, or enterprise readiness claim.",
     }),
   ]);
 
-export const DEV_COMPOSE_BACKED_DEFERRED_BOUNDARIES = Object.freeze([
-  "Postgres tenant-membership repository and Mailpit notification provider bindings are active in dev-compose-backed mode; event-bus, object-storage, identity, workflow, and secret-provider runtime bindings remain explicitly deferred or boundary-only.",
-  "Profile-gated workflow-provider and operator services remain catalogue-tracked boundaries and are not started by the default runtime proof.",
-]);
+export const DEV_COMPOSE_DEFERRED_PROVIDER_BINDINGS: readonly RuntimeProviderBinding[] =
+  Object.freeze([]);
+
+export const DEV_COMPOSE_BACKED_DEFERRED_BOUNDARIES: readonly string[] = Object.freeze([]);
 
 export interface DevRuntime {
   readonly runtimeMode: DevRuntimeMode;
@@ -273,6 +322,12 @@ export interface DevRuntime {
   readonly composedProviderBindings: readonly RuntimeProviderBinding[];
   readonly deferredProviderBindings: readonly RuntimeProviderBinding[];
   readonly databaseProviderEvidence: () => PostgresComposedMembershipEvidence | null;
+  readonly eventBusProviderEvidence: () => NatsComposedEventBusEvidence | null;
+  readonly objectStoreProviderEvidence: () => MinioComposedObjectStoreEvidence | null;
+  readonly identityProviderEvidence: () => KeycloakComposedIdentityEvidence | null;
+  readonly secretProviderEvidence: () => OpenBaoSecretEvidence | null;
+  readonly workflowProviderEvidence: () => TemporalComposedWorkflowEvidence | null;
+  readonly notificationProviderEvidence: () => MailpitComposedDeliveryEvidence | null;
   readonly refreshMembershipAuthority: (
     context: TenantContext,
   ) => Promise<PostgresComposedMembershipEvidence | null>;
@@ -285,12 +340,27 @@ export interface DevRuntime {
       readonly roles: readonly string[];
     },
   ) => Promise<PostgresComposedMembershipEvidence | null>;
+  readonly proveEventBusProviderRoundTrip: (
+    context: TenantContext,
+  ) => Promise<NatsComposedEventBusEvidence | null>;
+  readonly proveObjectStoreProviderRoundTrip: (
+    context: TenantContext,
+  ) => Promise<MinioComposedObjectStoreEvidence | null>;
+  readonly proveIdentityProviderRoundTrip: (
+    context: TenantContext,
+  ) => Promise<KeycloakComposedIdentityEvidence | null>;
+  readonly proveSecretProviderRoundTrip: (
+    context: TenantContext,
+  ) => Promise<OpenBaoSecretEvidence | null>;
+  readonly proveWorkflowProviderRoundTrip: (
+    context: TenantContext,
+  ) => Promise<TemporalComposedWorkflowEvidence | null>;
   readonly close: () => Promise<void>;
   readonly notificationProviderConfig: NotificationProviderConfig;
   readonly auditLedger: InMemoryAuditLedger;
   readonly authService: AuthService;
   readonly config: InMemoryConfigProvider;
-  readonly eventBus: InMemoryEventBus;
+  readonly eventBus: EventBus;
   readonly fileCapability: FileCapability;
   readonly jobCapability: JobCapability;
   readonly jobService: JobService;
@@ -298,7 +368,7 @@ export interface DevRuntime {
   readonly notificationCapability: NotificationCapability;
   readonly notificationProvider: NotificationProvider;
   readonly observability: CapturedObservabilitySink;
-  readonly secrets: InMemorySecretStore;
+  readonly secrets: SecretStore & SecretResolver;
   readonly membershipDirectory: TenantMembershipDirectory;
   readonly breakGlass: BreakGlassRegistry;
   readonly pdp: PolicyDecisionPoint;
@@ -333,18 +403,27 @@ export function createDevRuntime(
 ): DevRuntime {
   const runtimeMode = options.runtimeMode ?? runtimeModeFromEnv();
   const auditLedger = new InMemoryAuditLedger();
-  const identityProvider = new InMemoryIdentityProvider();
-  const eventBus = new InMemoryEventBus();
+  const identityProvider: IdentityProvider =
+    runtimeMode === "dev-compose-backed"
+      ? new KeycloakComposedIdentityProvider()
+      : new InMemoryIdentityProvider();
+  const eventBus: EventBus =
+    runtimeMode === "dev-compose-backed" ? new NatsEventBus() : new InMemoryEventBus();
   const config = new InMemoryConfigProvider();
-  const workflowEngine = new InMemoryWorkflowEngine();
+  const workflowEngine: WorkflowEngine =
+    runtimeMode === "dev-compose-backed"
+      ? new TemporalComposedWorkflowEngine()
+      : new InMemoryWorkflowEngine();
   const jobStore = new InMemoryOperationalJobStore();
-  const objectStore = new InMemoryObjectStore();
+  const objectStore: ObjectStore =
+    runtimeMode === "dev-compose-backed" ? new MinioObjectStore() : new InMemoryObjectStore();
   const notificationProvider =
     runtimeMode === "dev-compose-backed"
       ? new MailpitNotificationProvider()
       : new InMemoryNotificationProvider();
   const observability = new CapturedObservabilitySink();
-  const secrets = new InMemorySecretStore();
+  const secrets: SecretStore & SecretResolver =
+    runtimeMode === "dev-compose-backed" ? new OpenBaoSecretStore() : new InMemorySecretStore();
   const guardrails = new InMemoryGuardrailStore();
   guardrails.upsertPolicy(defaultJobCreateGuardrailPolicy());
 
@@ -383,12 +462,14 @@ export function createDevRuntime(
     pdp,
     audit: auditRecorder,
   });
-  // Dev-only seed secret (a synthetic local value, never a real credential).
-  void secrets.writeSecret({
-    tenantId: DEV_TENANT_ID,
-    name: "mail-api-key",
-    value: "dev-local-only",
-  });
+  if (secrets instanceof InMemorySecretStore) {
+    // Dev-only seed secret (a synthetic local value, never a real credential).
+    void secrets.writeSecret({
+      tenantId: DEV_TENANT_ID,
+      name: "mail-api-key",
+      value: "dev-local-only",
+    });
+  }
   const secretService = createSecretService({ resolver: secrets, pdp, audit: auditRecorder });
 
   const fileMetadataStore = new InMemoryFileMetadataStore();
@@ -430,6 +511,11 @@ export function createDevRuntime(
         ? Object.freeze({
             ...devProviderPlan,
             database: "postgres-composed-test",
+            idp: "keycloak-composed-test",
+            bus: "nats-composed-test",
+            workflow: "temporal-composed-test",
+            objectStore: "minio-composed-test",
+            secrets: "openbao-composed-test",
             mail: "mailpit-composed-test",
           })
         : devProviderPlan,
@@ -440,6 +526,24 @@ export function createDevRuntime(
     databaseProviderEvidence: () =>
       membershipDirectory instanceof PostgresTenantMembershipDirectory
         ? (membershipDirectory.lastEvidence ?? null)
+        : null,
+    eventBusProviderEvidence: () =>
+      eventBus instanceof NatsEventBus ? (eventBus.lastEvidence ?? null) : null,
+    objectStoreProviderEvidence: () =>
+      objectStore instanceof MinioObjectStore ? (objectStore.lastEvidence ?? null) : null,
+    identityProviderEvidence: () =>
+      identityProvider instanceof KeycloakComposedIdentityProvider
+        ? (identityProvider.lastEvidence ?? null)
+        : null,
+    secretProviderEvidence: () =>
+      secrets instanceof OpenBaoSecretStore ? (secrets.lastEvidence ?? null) : null,
+    workflowProviderEvidence: () =>
+      workflowEngine instanceof TemporalComposedWorkflowEngine
+        ? (workflowEngine.lastEvidence ?? null)
+        : null,
+    notificationProviderEvidence: () =>
+      notificationProvider instanceof MailpitNotificationProvider
+        ? (notificationProvider.lastDeliveryEvidence ?? null)
         : null,
     refreshMembershipAuthority: async (context) => {
       if (membershipDirectory instanceof PostgresTenantMembershipDirectory) {
@@ -453,9 +557,42 @@ export function createDevRuntime(
       }
       return null;
     },
+    proveEventBusProviderRoundTrip: async (context) => {
+      if (eventBus instanceof NatsEventBus) {
+        return eventBus.proveRoundTrip(context);
+      }
+      return null;
+    },
+    proveObjectStoreProviderRoundTrip: async (context) => {
+      if (objectStore instanceof MinioObjectStore) {
+        return objectStore.proveRoundTrip(context);
+      }
+      return null;
+    },
+    proveIdentityProviderRoundTrip: async (context) => {
+      if (identityProvider instanceof KeycloakComposedIdentityProvider) {
+        return identityProvider.proveRoundTrip(context);
+      }
+      return null;
+    },
+    proveSecretProviderRoundTrip: async (context) => {
+      if (secrets instanceof OpenBaoSecretStore) {
+        return secrets.proveRoundTrip(context);
+      }
+      return null;
+    },
+    proveWorkflowProviderRoundTrip: async (context) => {
+      if (workflowEngine instanceof TemporalComposedWorkflowEngine) {
+        return workflowEngine.proveRoundTrip(context);
+      }
+      return null;
+    },
     close: async () => {
       if (membershipDirectory instanceof PostgresTenantMembershipDirectory) {
         await membershipDirectory.close();
+      }
+      if (eventBus instanceof NatsEventBus) {
+        await eventBus.close();
       }
     },
     notificationProviderConfig,
