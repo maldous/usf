@@ -1,0 +1,11 @@
+{
+  "id": "observability.missing-operations-redaction-posture",
+  "expectedRuleId": "USF-OBSERVABILITY-011",
+  "edits": [
+    {
+      "target": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "old": "\"rawSecret\",",
+      "new": "\"rawSecretDefect\","
+    }
+  ]
+}

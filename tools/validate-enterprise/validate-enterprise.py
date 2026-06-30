@@ -44,6 +44,7 @@ RULES = {
     "USF-ENTERPRISE-007": ("blocking", "done-state governance is unsafe or overclaimed"),
     "USF-ENTERPRISE-008": ("blocking", "Lane 1 service disposition closure matrix lacks enterprise linkage"),
     "USF-ENTERPRISE-009": ("blocking", "access resilience incident or privacy posture is incomplete"),
+    "USF-ENTERPRISE-010": ("blocking", "Lane 4 observability operations evidence is incomplete"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -81,6 +82,11 @@ REQUIRED_OBSERVABILITY_FIELDS = {
     "retryCount",
     "durationBucket",
     "safeReasonCode",
+    "signalKind",
+    "incidentBoundary",
+    "redactionStatus",
+    "tenantLabelPosture",
+    "dashboardBoundary",
 }
 PROHIBITED_OBSERVABILITY_FIELDS = {
     "secret",
@@ -92,6 +98,46 @@ PROHIBITED_OBSERVABILITY_FIELDS = {
     "providerPayload",
     "password",
     "privateKey",
+    "rawSecret",
+    "rawToken",
+    "rawLogMessage",
+    "unsafeLogMessage",
+    "tenantName",
+    "userEmail",
+    "rawObjectKey",
+}
+LANE4_REQUIRED_ROWS = {
+    "soaSupportMappings": {"usf-188-soa-observability-operations-control"},
+    "evidenceRegister": {"usf-188-evidence-observability-operations-posture"},
+    "threatModelAbuseCaseRegister": {"usf-188-threat-observability-operations"},
+    "accessReviewPrivilegedOperationPosture": {"usf-188-access-observability-operator-surfaces"},
+    "backupRestoreResiliencePosture": {"usf-188-resilience-observability-evidence-retention"},
+    "incidentVulnerabilityManagementEvidence": {"usf-188-incident-observability-operations-boundary"},
+    "privacyDataMinimisationPosture": {"usf-188-privacy-observability-tenant-safe-redaction"},
+}
+LANE4_REQUIRED_POSTURE_TOKENS = {
+    "effectivenessState=",
+    "riskStatement=",
+    "threatFailureScenario=",
+    "affectedAssetService=",
+    "impact=",
+    "likelihood=",
+    "owner=",
+    "treatment=",
+    "reviewDate=2026-09-30",
+    "followUpIssue=USF-159",
+}
+LANE4_OBSERVABILITY_TOKENS = {
+    "loggingPosture=defined-only",
+    "tracingPosture=defined-only",
+    "metricsPosture=defined-only",
+    "correlationIdPosture=defined-only",
+    "tenantSafeRedactionPosture=defined-only",
+    "rawSecretLeakage=blocked",
+    "unsafeLogBoundary=message-template-only",
+    "alertingWorkflow=deferred-with-owner",
+    "dashboardWorkflow=deferred-with-owner",
+    "incidentBoundary=explicit-local-evidence-only",
 }
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 PINNED_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+){1,3}(?:[-+][0-9A-Za-z.-]+)?$")
@@ -243,6 +289,12 @@ def apply_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[st
         out.get("observabilityEvidenceStandard", {}).setdefault("requiredFields", [])
         out["observabilityEvidenceStandard"]["requiredFields"] = [
             item for item in out["observabilityEvidenceStandard"]["requiredFields"] if item != field
+        ]
+    if defect.get("observabilityDropProhibitedField"):
+        field = defect["observabilityDropProhibitedField"]
+        out.get("observabilityEvidenceStandard", {}).setdefault("prohibitedFields", [])
+        out["observabilityEvidenceStandard"]["prohibitedFields"] = [
+            item for item in out["observabilityEvidenceStandard"]["prohibitedFields"] if item != field
         ]
     for patch in defect.get("evidencePatch", []):
         for row in out.get("evidenceRegister", []):
@@ -525,6 +577,42 @@ def check_closure_matrix_linkage(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-ENTERPRISE-007", str(CLOSURE_MATRIX_PATH), f"closure claimed with unresolved rows: {unresolved[:8]}")
 
 
+def check_lane4_observability(F: Findings, state: dict[str, Any]) -> None:
+    model = state["model"]
+    model_text = json.dumps(model, sort_keys=True)
+    for section, required_ids in LANE4_REQUIRED_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in required_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-010", row_id, f"missing Lane 4 row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            for token in LANE4_REQUIRED_POSTURE_TOKENS:
+                if token not in row_text:
+                    F.add("USF-ENTERPRISE-010", row_id, f"missing required deferred-control token {token}")
+            if "nonClaims" in row:
+                if REQUIRED_NON_CLAIMS - set(row.get("nonClaims", [])):
+                    F.add("USF-ENTERPRISE-010", row_id, "Lane 4 row non-claims are incomplete")
+            else:
+                row_text_lower = row_text.lower()
+                missing_non_claims = [claim for claim in REQUIRED_NON_CLAIMS if claim not in row_text_lower]
+                if missing_non_claims:
+                    F.add("USF-ENTERPRISE-010", row_id, f"Lane 4 row text lacks non-claim tokens: {missing_non_claims}")
+    for token in LANE4_OBSERVABILITY_TOKENS:
+        if token not in model_text:
+            F.add("USF-ENTERPRISE-010", "usf-188-observability-posture", f"missing {token}")
+    standard = model.get("observabilityEvidenceStandard", {})
+    required = set(standard.get("requiredFields", []))
+    prohibited = set(standard.get("prohibitedFields", []))
+    for field in ("signalKind", "incidentBoundary", "redactionStatus", "tenantLabelPosture", "dashboardBoundary"):
+        if field not in required:
+            F.add("USF-ENTERPRISE-010", f"observabilityEvidenceStandard.requiredFields.{field}", "missing Lane 4 required field")
+    for field in ("rawSecret", "rawToken", "rawLogMessage", "unsafeLogMessage", "tenantName", "userEmail", "rawObjectKey"):
+        if field not in prohibited:
+            F.add("USF-ENTERPRISE-010", f"observabilityEvidenceStandard.prohibitedFields.{field}", "missing Lane 4 prohibited field")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -538,6 +626,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_observability_standard(F, state)
     check_posture_registers(F, state)
     check_closure_matrix_linkage(F, state)
+    check_lane4_observability(F, state)
     return F
 
 

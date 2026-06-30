@@ -24,6 +24,9 @@ RULES = {
     "USF-OBSERVABILITY-007": ("blocking", "observability PDP/audit posture missing"),
     "USF-OBSERVABILITY-008": ("blocking", "observability parity matrix rows lack authorisation/backing"),
     "USF-OBSERVABILITY-009": ("blocking", "observability live/SIEM/alerting/SOC/ISO/production overclaim"),
+    "USF-OBSERVABILITY-010": ("blocking", "Lane 4 operations telemetry posture missing"),
+    "USF-OBSERVABILITY-011": ("blocking", "Lane 4 redaction or unsafe log boundary missing"),
+    "USF-OBSERVABILITY-012": ("blocking", "Lane 4 alert dashboard or incident boundary missing"),
     "USF-OBSERVABILITY-SELFTEST": ("blocking", "planted observability defect did not raise its expected rule"),
 }
 
@@ -44,6 +47,8 @@ PROOF_TESTS = "tests/packages/proof.test.ts"
 STANDARD = "docs/architecture/observability-telemetry-and-operational-evidence-standard.md"
 SOURCE_USE = "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md"
 BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
+OPERATIONS_SIGNAL = "spec/instances/observability-signal/observability-operations-posture.json"
+ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
@@ -67,6 +72,8 @@ SOURCE_FILES = (
     STANDARD,
     SOURCE_USE,
     BOOTSTRAP_SOURCE_USE,
+    OPERATIONS_SIGNAL,
+    ENTERPRISE_MODEL,
     PACKAGE,
     MAKEFILE,
 )
@@ -138,6 +145,13 @@ def read_json(path):
         return None
 
 
+def parse_json_text(text):
+    try:
+        return json.loads(text)
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     files = {path: read_text(path) for path in SOURCE_FILES}
@@ -145,7 +159,15 @@ def build_state(overrides=None):
         files[path] = text
     matrix = overrides.get("matrix", read_json(MATRIX))
     openapi = overrides.get("openapi", read_json(OPENAPI_JSON))
-    return {"files": files, "matrix": matrix, "openapi": openapi}
+    operations_signal = overrides.get("operations_signal", parse_json_text(files.get(OPERATIONS_SIGNAL, "")))
+    enterprise_model = overrides.get("enterprise_model", parse_json_text(files.get(ENTERPRISE_MODEL, "")))
+    return {
+        "files": files,
+        "matrix": matrix,
+        "openapi": openapi,
+        "operations_signal": operations_signal,
+        "enterprise_model": enterprise_model,
+    }
 
 
 def observability_rows(matrix):
@@ -182,6 +204,8 @@ def run_checks(F, state=None):
     standard = files[STANDARD]
     source_use = files[SOURCE_USE]
     bootstrap_source_use = files[BOOTSTRAP_SOURCE_USE]
+    operations_signal = state.get("operations_signal")
+    enterprise_model = state.get("enterprise_model")
     package = files[PACKAGE]
     makefile = files[MAKEFILE]
     matrix = state["matrix"]
@@ -323,6 +347,10 @@ def run_checks(F, state=None):
     for phrase in [
         "live monitoring readiness is proven",
         "live alerting readiness is proven",
+        "dashboard readiness is proven",
+        "alert delivery readiness is proven",
+        "incident-response readiness is proven",
+        "live incident readiness is proven",
         "siem readiness is proven",
         "soc readiness is proven",
         "iso certified",
@@ -332,12 +360,84 @@ def run_checks(F, state=None):
         if phrase in overclaim_sources.lower():
             F.add("USF-OBSERVABILITY-009", "observability-overclaim", f"overclaim phrase present: {phrase}")
 
+    if not isinstance(operations_signal, dict):
+        F.add("USF-OBSERVABILITY-010", OPERATIONS_SIGNAL, "Lane 4 operations signal metadata missing or invalid")
+        operations_signal = {}
+    if operations_signal.get("id") != "observability.observability-operations-posture":
+        F.add("USF-OBSERVABILITY-010", OPERATIONS_SIGNAL, "Lane 4 operations signal id missing")
+    if operations_signal.get("signalKind") != "runtime-proof-output" or operations_signal.get("name") != "runtime-proof-output":
+        F.add("USF-OBSERVABILITY-010", OPERATIONS_SIGNAL, "Lane 4 metadata must use runtime-proof-output signal")
+    operations_text = json.dumps(operations_signal, sort_keys=True).lower()
+    if "usf-188-evidence-observability-operations-posture" not in operations_text:
+        F.add("USF-OBSERVABILITY-010", OPERATIONS_SIGNAL, "Lane 4 evidence reference missing")
+    proof_refs = set(operations_signal.get("proofRefs", []))
+    if "usf.proof-evidence.observability-signals-runtime-proof" not in proof_refs:
+        F.add("USF-OBSERVABILITY-010", OPERATIONS_SIGNAL, "historical observability proof boundary missing")
+    for token in ("logging", "tracing", "metrics", "correlation", "alerting", "dashboard", "incident"):
+        if token not in operations_text:
+            F.add("USF-OBSERVABILITY-010", OPERATIONS_SIGNAL, f"operations metadata missing {token}")
+
+    if not isinstance(enterprise_model, dict):
+        F.add("USF-OBSERVABILITY-010", ENTERPRISE_MODEL, "enterprise model missing or invalid")
+        enterprise_model = {}
+    enterprise_text = json.dumps(enterprise_model, sort_keys=True).lower()
+    for row_id in (
+        "usf-188-soa-observability-operations-control",
+        "usf-188-evidence-observability-operations-posture",
+        "usf-188-threat-observability-operations",
+        "usf-188-access-observability-operator-surfaces",
+        "usf-188-resilience-observability-evidence-retention",
+        "usf-188-incident-observability-operations-boundary",
+        "usf-188-privacy-observability-tenant-safe-redaction",
+    ):
+        if row_id not in enterprise_text:
+            F.add("USF-OBSERVABILITY-010", ENTERPRISE_MODEL, f"enterprise row missing {row_id}")
+
+    standard_enterprise = enterprise_model.get("observabilityEvidenceStandard", {})
+    required_fields = set(standard_enterprise.get("requiredFields", []))
+    prohibited_fields = set(standard_enterprise.get("prohibitedFields", []))
+    for field in ("signalKind", "incidentBoundary", "redactionStatus", "tenantLabelPosture", "dashboardBoundary"):
+        if field not in required_fields:
+            F.add("USF-OBSERVABILITY-010", f"observabilityEvidenceStandard.requiredFields.{field}", "missing Lane 4 required telemetry field")
+    for field in ("rawSecret", "rawToken", "rawLogMessage", "unsafeLogMessage", "tenantName", "userEmail", "rawObjectKey"):
+        if field not in prohibited_fields:
+            F.add("USF-OBSERVABILITY-011", f"observabilityEvidenceStandard.prohibitedFields.{field}", "missing Lane 4 prohibited leakage field")
+    for token in (
+        "rawsecretleakage=blocked",
+        "unsafelogboundary=message-template-only",
+        "tenantsafelabels=allow-listed",
+        "redactionstatus=tenant-safe-required",
+    ):
+        if token not in enterprise_text:
+            F.add("USF-OBSERVABILITY-011", ENTERPRISE_MODEL, f"redaction or unsafe-log token missing {token}")
+
+    for token in (
+        "alertingworkflow=deferred-with-owner",
+        "dashboardworkflow=deferred-with-owner",
+        "incidentboundary=explicit-local-evidence-only",
+        "followupissue=usf-159",
+        "reviewdate=2026-09-30",
+    ):
+        if token not in enterprise_text:
+            F.add("USF-OBSERVABILITY-012", ENTERPRISE_MODEL, f"alert/dashboard/incident boundary token missing {token}")
+    for token in (
+        "Lane 4 Observability Operations Posture",
+        "alertingWorkflow=deferred-with-owner",
+        "dashboardReadinessClaim=false",
+        "incidentBoundary=explicit-local-evidence-only",
+        "Unsafe logs fail validation",
+    ):
+        if token not in standard:
+            F.add("USF-OBSERVABILITY-012", STANDARD, f"Lane 4 standard token missing {token}")
+
 
 def apply_defect(state, defect):
     mutated = {
         "files": dict(state["files"]),
         "matrix": json.loads(json.dumps(state["matrix"])),
         "openapi": json.loads(json.dumps(state["openapi"])),
+        "operations_signal": json.loads(json.dumps(state["operations_signal"])),
+        "enterprise_model": json.loads(json.dumps(state["enterprise_model"])),
     }
     for edit in defect.get("edits", []):
         target = edit["target"]
@@ -359,6 +459,8 @@ def apply_defect(state, defect):
             if old not in text:
                 raise AssertionError(f"old text not found in {target} for defect {defect.get('id')}")
             mutated["files"][target] = text.replace(old, new, 1)
+    mutated["operations_signal"] = parse_json_text(mutated["files"].get(OPERATIONS_SIGNAL, ""))
+    mutated["enterprise_model"] = parse_json_text(mutated["files"].get(ENTERPRISE_MODEL, ""))
     return mutated
 
 

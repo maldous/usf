@@ -1,0 +1,6 @@
+{
+  "id": "enterprise.lane4-missing-observability-soa",
+  "description": "Lane 4 observability operations SoA-support row is missing.",
+  "expectedRule": "USF-ENTERPRISE-010",
+  "removeSoaMapping": "usf-188-soa-observability-operations-control"
+}

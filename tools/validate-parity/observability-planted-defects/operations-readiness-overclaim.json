@@ -1,0 +1,11 @@
+{
+  "id": "observability.operations-readiness-overclaim",
+  "expectedRuleId": "USF-OBSERVABILITY-009",
+  "edits": [
+    {
+      "target": "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+      "old": "dashboardReadinessClaim=false",
+      "new": "Dashboard readiness is proven by Lane 4 metadata."
+    }
+  ]
+}

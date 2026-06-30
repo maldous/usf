@@ -2919,6 +2919,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-188-soa-observability-operations-control",
+      "mappedType": "lane-control",
+      "controlPurpose": "Lane 4 maps observability logging, tracing, metrics, alerting, dashboards, incident evidence, correlation id, and tenant-safe redaction posture to SoA-support evidence. effectivenessState=defined-only.",
+      "riskTreated": "riskStatement=unsafe or missing telemetry could hide operational failure; threatFailureScenario=missing telemetry, raw secret leakage, unsafe logs, or missing incident boundary blocks trustworthy operation; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "assetServiceAffected": "observability-operations",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; loggingPosture=defined-only; tracingPosture=defined-only; metricsPosture=defined-only; correlationIdPosture=defined-only; tenantSafeRedactionPosture=defined-only; alertingWorkflow=deferred-with-owner; dashboardWorkflow=deferred-with-owner; incidentBoundary=explicit-local-evidence-only",
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -3402,6 +3428,29 @@
       ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain committed model and validator output in PR evidence; update merge SHA after merge in Linear."
+    },
+    {
+      "id": "usf-188-evidence-observability-operations-posture",
+      "proofResult": "observability-operations-posture-metadata",
+      "whatWasProven": "Lane 4 repository metadata and validators define observability operations posture for logging, tracing, metrics, correlation id, tenant-safe redaction, alerting deferral, dashboard deferral, and incident evidence boundary. effectivenessState=defined-only.",
+      "whatWasNotProven": "No live alert delivery, dashboard runtime, incident-response workflow, SIEM export, staging, production, live-provider, SOC, ISO, full dev, enterprise production, or full React parity readiness is proven. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness. effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "hermetic-lineage-and-defined-only-posture",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#otel-collector,prometheus,grafana,loki,tempo,alertmanager,alloy,sentry",
+      "adapterProviderId": "observability-operations-posture",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "commandPin": "python3 tools/validate-parity/validate-observability.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-188",
+        "USF-179",
+        "USF-159",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed metadata and PR validation summary. effectStateAlias=effectivenessState=defined-only; rawSecretLeakage=blocked; unsafeLogBoundary=message-template-only; tenantSafeLabels=allow-listed; redactionStatus=tenant-safe-required; effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -3740,6 +3789,32 @@
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
       "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+    },
+    {
+      "id": "usf-188-threat-observability-operations",
+      "targetType": "lane-control",
+      "target": "observability-operations",
+      "trustBoundary": "local repository metadata and validator boundary for observability operations; no live provider or operator workflow runtime is claimed",
+      "tenantBoundary": "tenantSafeLabels=allow-listed; tenant identifiers may be canonical safe attributes only and tenant names, user emails, raw object keys, and raw provider identifiers are prohibited",
+      "credentialBoundary": "rawSecretLeakage=blocked; rawToken=blocked; rawLogMessage=blocked; unsafeLogBoundary=message-template-only; provider credentials remain secret-reference based",
+      "dataClassification": "telemetry-metadata and synthetic local proof metadata only",
+      "abuseCases": [
+        "missing telemetry causes operational blind spots",
+        "raw secret leakage through logs or telemetry fields",
+        "unsafe logs carry raw payloads or stack traces",
+        "cross-tenant label leakage through metrics or traces",
+        "dashboard or incident readiness is overclaimed from metadata only"
+      ],
+      "failureModes": [
+        "logging posture absent",
+        "tracing correlation missing",
+        "metrics labels unsafe",
+        "alert routing deferred without owner",
+        "incident boundary absent"
+      ],
+      "failClosedBehaviour": "validators fail when telemetry metadata, prohibited leakage fields, redaction tokens, or incident boundaries are missing",
+      "monitoringAuditEvidence": "loggingPosture=defined-only; tracingPosture=defined-only; metricsPosture=defined-only; correlationIdPosture=defined-only; alertingWorkflow=deferred-with-owner; dashboardWorkflow=deferred-with-owner; incidentBoundary=explicit-local-evidence-only",
+      "residualRisk": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness"
     }
   ],
   "sdkDependencyGovernance": [
@@ -3899,7 +3974,12 @@
       "outcome",
       "retryCount",
       "durationBucket",
-      "safeReasonCode"
+      "safeReasonCode",
+      "signalKind",
+      "incidentBoundary",
+      "redactionStatus",
+      "tenantLabelPosture",
+      "dashboardBoundary"
     ],
     "prohibitedFields": [
       "secret",
@@ -3910,11 +3990,18 @@
       "rawSdkError",
       "providerPayload",
       "password",
-      "privateKey"
+      "privateKey",
+      "rawSecret",
+      "rawToken",
+      "rawLogMessage",
+      "unsafeLogMessage",
+      "tenantName",
+      "userEmail",
+      "rawObjectKey"
     ],
-    "auditEvidenceRequirement": "Security-relevant provider operations must emit value-free audit evidence with safe reason codes and correlation identifiers.",
-    "tracingEvidenceRequirement": "Adapter boundary must record span-like metadata without requiring a live tracing backend or production telemetry claim.",
-    "metricsEvidenceRequirement": "Local/dev/test metrics must record attempts, failures, retries, latency buckets, fail-closed denials, cleanup outcome, and health status without tenant values or secrets."
+    "auditEvidenceRequirement": "Security-relevant provider operations must emit value-free audit evidence with safe reason codes and correlation identifiers. Lane 4 incident and alert posture must retain incidentBoundary and correlation identifiers without treating telemetry as audit authority.",
+    "tracingEvidenceRequirement": "Adapter boundary must record span-like metadata without requiring a live tracing backend or production telemetry claim. Lane 4 correlation-id posture must connect logging, tracing, metrics, proof, audit, and incident evidence where represented.",
+    "metricsEvidenceRequirement": "Local/dev/test metrics must record attempts, failures, retries, latency buckets, fail-closed denials, cleanup outcome, and health status without tenant values or secrets. Lane 4 tenant-safe label posture must reject rawSecret, rawToken, rawLogMessage, unsafeLogMessage, tenantName, userEmail, and rawObjectKey fields."
   },
   "accessReviewPrivilegedOperationPosture": [
     {
@@ -4426,6 +4513,43 @@
       "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "control-plane backing service access posture recorded for enterprise evidence organization",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-188-access-observability-operator-surfaces",
+      "targetType": "operator-surface",
+      "target": "observability-operations",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "accessBoundary=operator-only-future-workflow",
+        "alertmanagerAccess=deferred-to-USF-159-and-operator-access-issues",
+        "grafanaDashboardAccess=deferred-to-USF-159-and-USF-169-USF-180",
+        "dashboardReadinessClaim=false",
+        "auditRequirement=operator-access-audit-required-before-readiness-claim",
+        "riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, incident workflow, and retention purge are not proven",
+        "threatFailureScenario=operator misses or misreads operational evidence because telemetry, redaction, or incident boundary evidence is absent",
+        "affectedAssetService=observability-operations",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-observability-foundation",
+        "treatment=defer-with-owner-and-validator-boundary",
+        "reviewDate=2026-09-30",
+        "followUpIssue=USF-159"
+      ],
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -5408,6 +5532,43 @@
       "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "missingEvidence=current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-188-resilience-observability-evidence-retention",
+      "targetType": "lane-control",
+      "target": "observability-operations",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "retentionBoundary=metadata-and-validation-summary-only",
+        "telemetryRetentionPurge=deferred-to-USF-159",
+        "sliSloMeasurement=deferred-to-USF-159",
+        "rollbackBoundary=no-runtime-change",
+        "changeManagementEvidence=PR-plus-validator-output",
+        "riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, incident workflow, and retention purge are not proven",
+        "threatFailureScenario=operator misses or misreads operational evidence because telemetry, redaction, or incident boundary evidence is absent",
+        "affectedAssetService=observability-operations",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-observability-foundation",
+        "treatment=defer-with-owner-and-validator-boundary",
+        "reviewDate=2026-09-30",
+        "followUpIssue=USF-159"
+      ],
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -6486,6 +6647,43 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-188-incident-observability-operations-boundary",
+      "targetType": "lane-control",
+      "target": "observability-operations",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "incidentBoundary=explicit-local-evidence-only",
+        "incidentDetectionHook=defined-only",
+        "alertingWorkflow=deferred-with-owner",
+        "dashboardWorkflow=deferred-with-owner",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness",
+        "riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, incident workflow, and retention purge are not proven",
+        "threatFailureScenario=operator misses or misreads operational evidence because telemetry, redaction, or incident boundary evidence is absent",
+        "affectedAssetService=observability-operations",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-observability-foundation",
+        "treatment=defer-with-owner-and-validator-boundary",
+        "reviewDate=2026-09-30",
+        "followUpIssue=USF-159"
+      ],
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -7260,6 +7458,44 @@
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "not-deferred",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-188-privacy-observability-tenant-safe-redaction",
+      "targetType": "lane-control",
+      "target": "observability-operations",
+      "posture": [
+        "effectivenessState=defined-only",
+        "dataOrigin=metadata-and-synthetic-proof-lineage-only",
+        "redactionStatus=tenant-safe-required",
+        "tenantSafeLabels=allow-listed",
+        "rawSecretLeakage=blocked",
+        "unsafeLogBoundary=message-template-only",
+        "piiPosture=no-production-pii",
+        "riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, incident workflow, and retention purge are not proven",
+        "threatFailureScenario=operator misses or misreads operational evidence because telemetry, redaction, or incident boundary evidence is absent",
+        "affectedAssetService=observability-operations",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-observability-foundation",
+        "treatment=defer-with-owner-and-validator-boundary",
+        "reviewDate=2026-09-30",
+        "followUpIssue=USF-159"
+      ],
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

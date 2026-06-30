@@ -26,6 +26,21 @@ Linear child issue: USF-158.
 | `tools/validate-parity/observability-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk observability validator rules fire. |
 | `package.json` | new-with-rationale | Proof and parity command wiring | Adds proof:observability, validate-observability, and verify wiring. |
 | `Makefile` | new-with-rationale | Proof target pattern | Adds make observability-proof. |
+| `spec/instances/observability-signal/observability-operations-posture.json` | source-derived-metadata | React ADR-0062, tenant observability readiness evidence, alerting and incident runtime proof lineage | Records Lane 4 logging, tracing, metrics, correlation, alerting, dashboard, incident, and redaction posture using the existing observability-signal schema without claiming live operations readiness. |
+| `spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json` | lane-owned-append | Lane 1 enterprise evidence model plus USF-188/USF-179/USF-159 requirements | Appends `usf-188` enterprise evidence rows for SoA support, evidence register, threat/abuse posture, access posture, resilience/retention posture, incident/vulnerability posture, privacy posture, risk treatment, deferral boundaries, and non-claims. |
+| `tools/validate-enterprise/validate-enterprise.py` | lane-scoped-validator-extension | Lane 1 enterprise validator pattern | Adds Lane 4 enterprise evidence checks for effectiveness state, deferred owner/risk/treatment metadata, redaction/leakage posture, and alert/dashboard/incident boundaries. |
+
+## Lane 4 Operations Additions
+
+Lane 4 uses historical React observability evidence as lineage only:
+
+- `../react/docs/adr/0062-observability-alerting-and-incident-architecture.md` for the split between built-in alert/incident foundation and deferred composed backends/on-call/status-page providers.
+- `../react/docs/evidence/observability/tenant-observability-readiness.md` for tenant-safe query, label guard, dashboard reachability, and no-fake-readiness posture.
+- `../react/apps/platform-api/scripts/alerting-runtime-proof.ts` and `../react/apps/platform-api/scripts/incident-foundation-runtime-proof.ts` for alert/incident proof expectations and no secret-bearing-column checks.
+
+Lane 4 does not copy React runtime/application code. The USF deliverable is metadata, evidence
+organisation, validator coverage, planted defects, and explicit deferral of alert delivery,
+dashboard runtime, and incident workflow readiness.
 
 ## Lineage Classification
 

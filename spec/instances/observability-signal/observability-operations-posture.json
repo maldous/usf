@@ -1,0 +1,53 @@
+{
+  "id": "observability.observability-operations-posture",
+  "signalKind": "runtime-proof-output",
+  "name": "runtime-proof-output",
+  "source": "semantic-contract.observability-built-in-alerting-and-incidents",
+  "title": "Observability Operations Posture Metadata",
+  "description": "Draft Lane 4 metadata for logging, tracing, metrics, correlation identifiers, alerting posture, dashboard posture, incident evidence posture, and tenant-safe redaction. This metadata uses the existing observability-signal schema and records explicit deferral boundaries with enterprise evidence row usf-188-evidence-observability-operations-posture, without claiming live alerting, dashboard, incident-response, SIEM, staging, production, SOC, ISO, full dev, or full React parity readiness.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Observability Signal",
+    "Evidence",
+    "Proof"
+  ],
+  "taxonomyRefs": [
+    "observability-audit-classification"
+  ],
+  "vocabularyRefs": [
+    "observability-signal-kinds",
+    "observability-signal-names",
+    "observability-attribute-names"
+  ],
+  "aiGuidance": "Treat this as Lane 4 evidence metadata only. Do not infer live monitoring, alert delivery, dashboard runtime, incident-response readiness, production readiness, SOC readiness, ISO certification, full dev readiness, or full React parity from this instance.",
+  "purpose": "Record validator-checkable posture for logging, tracing, metrics, correlation id propagation, tenant-safe redaction, alerting deferral, dashboard deferral, and incident evidence boundaries under USF-188.",
+  "semanticContractRef": "semantic-contract.observability-built-in-alerting-and-incidents",
+  "evidenceRefs": [
+    "evidence.runtime-proof.observability-signals-runtime-proof",
+    "evidence.normalised.observability-signals-runtime-proof-lineage"
+  ],
+  "proofRefs": [
+    "usf.proof-evidence.observability-signals-runtime-proof"
+  ],
+  "retention": "Retain as draft repository metadata until USF-159 implements or reclassifies alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO measurement, and live provider evidence.",
+  "correlation": "correlation-id, request-id, trace-id, proof-id, tenant-id, service-name, deployment-environment, provider-mode, and capability-id connect Lane 4 logging, tracing, metrics, audit, proof, and incident posture. Missing correlation evidence fails validation where Lane 4 claims depend on it.",
+  "attributes": [
+    "service-name",
+    "deployment-environment",
+    "provider-mode",
+    "tenant-id",
+    "trace-id",
+    "request-id",
+    "proof-id",
+    "capability-id"
+  ],
+  "sourceRefs": [
+    "semantic-contract.observability-built-in-alerting-and-incidents",
+    "evidence.runtime-proof.observability-signals-runtime-proof",
+    "evidence.normalised.observability-signals-runtime-proof-lineage",
+    "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+    "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+    "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+  ]
+}
