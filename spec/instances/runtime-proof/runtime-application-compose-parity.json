@@ -426,34 +426,37 @@
       "workerProofEvidence": "No worker proof is claimed for ClickHouse analytics/event-store semantics; SDK/client selection, readiness retry, supplier, incident, privacy, and backup evidence remain deferred to USF-206 after USF-172 records the bounded disposition and USF-197 records the proof boundary."
     },
     {
-      "bindingStatus": "unsupported-deferred",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Redis cache provider semantics are catalogued but not proven and must not be substituted by NATS or process memory; threatFailureScenario=cache expiration, eviction, persistence, retry, tenant, queue-adjacent, and audit guarantees are overclaimed from NATS or in-memory evidence; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-173 records bounded cache/eventing disposition, USF-198 records the proof boundary, and USF-207 owns actual adapter proof; reviewDate=2026-09-30; linkedFollowUpIssue=USF-207",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=proven-local; riskStatement=Redis cache provider proof could be overclaimed beyond bounded local Compose synthetic cache operations; threatFailureScenario=Redis TTL, tenant namespace, provider failure, audit, cleanup, or live/provider-managed behaviour is treated as broader readiness; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-207 proves bounded SDK-backed local Compose cache write read delete TTL cleanup and fail-closed behaviour while keeping live cache and environment readiness non-claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-207",
       "followUpIssueRefs": [
         "USF-173",
         "USF-198",
         "USF-207",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-207 bounded local Compose proof only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-redis-cache-provider",
       "serviceCatalogueServiceIds": [
         "redis"
       ],
       "providerRegistryIds": [
+        "cache-redis-composed-test",
         "cache-redis-deferred"
       ],
-      "adapterName": "Redis provider deferred",
+      "adapterName": "RedisComposedCacheAdapter",
       "portName": "CacheProvider",
-      "endpointRef": null,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-deferred as deferred evidence-only support linked to the Redis service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for Redis cache semantics; expiration, eviction, persistence, retry, tenant isolation, access, audit, and teardown evidence remain deferred to USF-207 after USF-173 records the cache/eventing non-equivalence boundary and USF-198 records the proof boundary.",
-      "workerProofEvidence": "NATS event-bus proof is not Redis cache proof; no worker proof is claimed for Redis cache semantics until USF-207 records a Redis adapter boundary, SDK/client rationale, readiness retry, and cleanup evidence after the USF-198 proof boundary."
+      "endpointRef": "endpoint://compose/redis",
+      "sdkPackage": "redis",
+      "sdkVersion": "6.0.1",
+      "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-composed-test as the bounded local Compose Redis provider and cache-redis-deferred as the remaining live/provider-managed boundary linked to the Redis service catalogue row.",
+      "apiProofEvidence": "No API runtime cache route binding is claimed; USF-207 is profile-gated provider proof only and does not silently treat API in-memory behaviour or event-bus evidence as Redis cache runtime use.",
+      "workerProofEvidence": "No worker runtime cache binding is claimed; USF-207 is profile-gated provider proof only and does not silently treat worker in-memory behaviour or event-bus evidence as Redis cache runtime use.",
+      "proofCommand": "corepack pnpm proof:cache:redis",
+      "proofEvidence": "USF-207 proof:cache:redis starts Redis from the runtime-providers profile, binds loopback ephemeral host exposure, uses RedisComposedCacheAdapter with the official redis SDK, proves readiness retry, tenant-safe hashed key namespace, synthetic write/read/delete, TTL expiration, cleanup, unavailable fail-closed behaviour, redaction, trace, metric, and audit-shaped evidence."
     },
     {
       "bindingStatus": "profile-gated-proven",
@@ -902,7 +905,7 @@
     {
       "id": "usf-189-cache-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-173 records cache and eventing as separate semantic service roles; USF-198 records the Redis proof boundary; Redis cache provider semantics remain deferred-with-owner because NATS and process memory are not cache expiration, eviction, persistence, tenant key isolation, queue-adjacent, access, audit, or teardown proof. Affected service redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer Redis adapter proof to USF-207; review date 2026-09-30.",
+      "boundary": "USF-207 resolves bounded local Compose Redis adapter proof for synthetic tenant-safe write read delete TTL cleanup and unavailable fail-closed behaviour. Remaining boundary is live cache provider readiness, environment promotion readiness, provider-managed supplier evidence, API runtime cache binding, and worker runtime cache binding. Affected service redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment preserve non-claims and require separate source issues before stronger claims; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-173",
         "USF-198",

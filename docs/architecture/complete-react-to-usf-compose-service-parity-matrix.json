@@ -650,8 +650,8 @@
       ],
       "criticality": "high",
       "data_classification": "tenant-sensitive",
-      "evidence_grade": "D",
-      "gap_or_decision": "USF-173 records cache and eventing as separate semantic roles: NATS bounded proof covers event-bus semantics only, in-memory stores are non-equivalent, USF-198 records the proof boundary, and USF-207 must prove Redis adapter/service semantics before any Redis or cache readiness claim.",
+      "evidence_grade": "C",
+      "gap_or_decision": "USF-173 records cache and eventing as separate semantic roles. USF-207 now proves bounded SDK-backed local Compose Redis cache semantics for synthetic tenant-safe write/read/delete, TTL expiration, readiness retry, timeout, cleanup, unavailable fail-closed behaviour, redaction, metrics/tracing, and audit-shaped evidence. NATS event-bus proof and in-memory proof remain non-equivalent, and API/worker runtime cache binding, live/provider-managed Redis, environment readiness, and provider-compatibility readiness remain unclaimed.",
       "legacy_service_category": "cache-eventing",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -661,10 +661,10 @@
         "${REDIS_PORT:-6379}:6379"
       ],
       "react_service": "redis",
-      "selection_class": "optional-proven",
+      "selection_class": "profile-gated-proven",
       "tracking_recommendation": "USF-173/USF-198/USF-207",
-      "usf_accounting_status": "deferred",
-      "usf_service_or_substitute": "NATS event-bus proof plus explicit Redis deferred provider class"
+      "usf_accounting_status": "profile-gated-bounded-proof",
+      "usf_service_or_substitute": "Redis local Compose SDK-backed proof plus NATS event-bus proof; non-equivalence boundary retained"
     },
     {
       "business_or_foundation_purpose": "Sentry error-monitoring component",

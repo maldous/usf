@@ -4375,6 +4375,58 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-207-soa-redis-composed-proof",
+      "mappedType": "source-issue-redis-composed-cache-proof",
+      "controlPurpose": "Map USF-207 as bounded local Compose Redis cache proof with adapter-contained official Redis SDK governance and explicit non-equivalence for cache readiness, live/provider-managed Redis, and environment promotion claims.",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=Redis local Compose proof could be overclaimed as cache readiness, live/provider-managed Redis compatibility, API runtime cache binding, worker runtime cache binding, or environment promotion readiness; threatFailureScenario=proof command success is used as readiness evidence beyond its bounded local Compose provider boundary; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=prove bounded local SDK-backed cache operations and preserve stronger non-claims; reviewDate=2026-09-30; followUpIssue=none",
+      "assetServiceAffected": "redis",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-207; serviceCatalogueRow=redis; providerRegistryId=cache-redis-composed-test; deferredProviderRegistryId=cache-redis-deferred; sdkPackage=redis; sdkVersion=6.0.1; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed; liveProviderManagedRedis=not-claimed; environmentReadiness=not-claimed",
+      "evidenceSource": "adapters/bus/src/index.ts; packages/proof/src/redis-composed-proof.ts; docs/architecture/cache-eventing-service-disposition-matrix.json; docs/architecture/redis-cache-service-semantic-proof-boundary.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/core/src/index.ts; package.json; Makefile",
+      "validationCommand": "corepack pnpm proof:cache:redis; python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "API runtime cache binding, worker runtime cache binding, live/provider-managed Redis supplier credential and environment promotion evidence, backup/restore readiness, production alerting, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-cache-redis",
+      "mappedType": "proof-command",
+      "controlPurpose": "Govern proof command evidence posture for proof:cache:redis.",
+      "riskTreated": "Proof output could be mistaken for Redis readiness, cache readiness, API runtime cache binding, worker runtime cache binding, live/provider-managed Redis compatibility, or environment readiness unless command scope and non-claims are explicit.",
+      "assetServiceAffected": "proof:cache:redis",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:cache:redis; sourceIssue=USF-207; redis=profile-gated-local-compose-cache-proof; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed; liveProviderManagedRedis=not-claimed",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/redis-composed-proof.ts; adapters/bus/src/index.ts; docs/architecture/cache-eventing-service-disposition-matrix.json",
+      "validationCommand": "corepack pnpm proof:cache:redis",
+      "deferredReason": "Redis readiness, cache readiness, API runtime cache binding, worker runtime cache binding, live/provider-managed Redis compatibility, environment readiness, backup/restore readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -6096,6 +6148,54 @@
       ],
       "prOrMergeSha": "fef52f7e3179db5899bf89f9ff2a88e946065ff8",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
+    },
+    {
+      "id": "usf-207-evidence-redis-composed-proof",
+      "proofResult": "redis-composed-cache-provider-proof",
+      "whatWasProven": "USF-207 adds a bounded local Compose proof for Redis cache semantics through the official redis SDK inside adapters/bus. The proof exercises readiness retry, synthetic tenant-safe key namespace, write/read/delete, TTL expiration, cleanup, unavailable provider fail-closed behaviour, no-egress posture, redaction, metrics, trace, audit-shaped evidence, and Compose teardown.",
+      "whatWasNotProven": "This does not prove Redis readiness, cache readiness, API runtime cache binding, worker runtime cache binding, live/provider-managed Redis compatibility, environment promotion readiness, backup/restore readiness, production alerting, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#redis",
+      "adapterProviderId": "cache-redis-composed-test",
+      "validationCommand": "corepack pnpm proof:cache:redis",
+      "commandPin": "tsx packages/proof/src/redis-composed-proof.ts",
+      "commitPin": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
+      "issueLinks": [
+        "USF-207",
+        "USF-198",
+        "USF-173",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
+      "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, Redis keys, values, endpoints, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
+    },
+    {
+      "id": "evidence-proof-proof-cache-redis",
+      "proofResult": "proof:cache:redis",
+      "whatWasProven": "Package script proof:cache:redis is the command-pinned proof surface for bounded local Compose Redis cache semantics using the adapter-contained official redis SDK. It starts Redis from the runtime-providers profile with loopback ephemeral host exposure, waits with bounded readiness retry, exercises synthetic tenant-safe write/read/delete, TTL expiration, cleanup, unavailable fail-closed behaviour, redaction, metric trace audit-shaped evidence, and Compose teardown.",
+      "whatWasNotProven": "This does not prove Redis readiness, cache readiness, API runtime cache binding, worker runtime cache binding, live/provider-managed Redis compatibility, environment promotion readiness, backup/restore readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#redis",
+      "adapterProviderId": "cache-redis-composed-test",
+      "validationCommand": "corepack pnpm proof:cache:redis",
+      "commandPin": "tsx packages/proof/src/redis-composed-proof.ts",
+      "commitPin": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
+      "issueLinks": [
+        "USF-207",
+        "USF-198",
+        "USF-173",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -7640,6 +7740,32 @@
       "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, SDK round trips, cleanup, redaction, no-egress, or unavailable fail-closed evidence is not proven.",
       "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw payloads.",
       "residualRisk": "Live cloud-provider compatibility, supplier assurance, cloud IAM posture, API runtime binding, worker runtime binding, environment promotion, SOC readiness, ISO certification, and USF-133 closure remain non-claims."
+    },
+    {
+      "id": "usf-207-threat-redis-cache-overclaim",
+      "targetType": "provider-proof",
+      "target": "redis",
+      "trustBoundary": "local Compose Redis container behind loopback ephemeral host exposure and adapter-contained official redis SDK client boundary",
+      "tenantBoundary": "synthetic tenant id only; adapter hashes tenant and key namespace segments and proof records safe hashes without raw identifiers or values",
+      "credentialBoundary": "no Redis credential is used; no raw endpoint, token, connection string, SDK error payload, stack trace, Redis key, or value is emitted",
+      "dataClassification": "synthetic-tenant-test-data",
+      "abuseCases": [
+        "Redis local proof is overclaimed as Redis readiness or cache readiness.",
+        "NATS event-bus or in-memory proof is treated as Redis provider proof.",
+        "Redis SDK use escapes the adapter/provider-integration boundary.",
+        "Proof output leaks raw endpoints, keys, values, provider errors, or credentials.",
+        "Unavailable Redis endpoint is treated as pass instead of fail-closed evidence."
+      ],
+      "failureModes": [
+        "Redis container starts but PING/readiness is not available.",
+        "TTL expiration or cleanup fails.",
+        "Tenant namespace isolation is not preserved.",
+        "Unavailable provider endpoint does not fail closed.",
+        "Proof output contains raw endpoint, connection string, key, value, SDK error payload, or stack trace."
+      ],
+      "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, SDK round trip, TTL expiration, cleanup, redaction, no-egress, tenant namespace, or unavailable fail-closed evidence is not proven.",
+      "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw Redis payloads.",
+      "residualRisk": "API runtime cache binding, worker runtime cache binding, live/provider-managed Redis compatibility, supplier assurance, environment promotion, backup/restore readiness, production alerting, SOC readiness, ISO certification, and USF-133 closure remain non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -7978,6 +8104,22 @@
       "typescriptRuntimeCompatibility": "Package ships TypeScript declarations and supports repository TypeScript runtime proof execution through tsx on Node >=24.16.0.",
       "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and tools/validate-parity/validate-providers.py reject AWS SDK imports outside the adapter boundary.",
       "updateDeprecationOwner": "platform-integration-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-189-redis-cache-provider-redis",
+      "serviceId": "redis",
+      "adapterId": "RedisComposedCacheAdapter",
+      "providerId": "cache-redis-composed-test",
+      "packageName": "redis",
+      "version": "6.0.1",
+      "selectionRationale": "redis is the official Node Redis client maintained by the Redis/node-redis project and is used for bounded local Compose proof of Redis cache write read delete TTL cleanup and unavailable fail-closed behaviour. ioredis was not selected because an official maintained client satisfies the local proof boundary.",
+      "officialOrDeFactoStatus": "official-node-redis-client",
+      "licencePosture": "MIT package according to npm metadata reviewed for USF-207; exact version pinned in package.json and pnpm-lock.yaml.",
+      "maintenancePosture": "Redis/node-redis is actively maintained by Redis; package version 6.0.1 supports Node >=20 and is compatible with repository Node >=24.16.0. Update/deprecation owner must review before stronger readiness claims or dependency upgrades.",
+      "securityAdvisoryPosture": "No known advisory is claimed by this row; dependency advisory review remains required before stronger readiness, promotion, or live-provider claims.",
+      "typescriptRuntimeCompatibility": "Package ships TypeScript declarations and supports repository TypeScript runtime proof execution through tsx on Node >=24.16.0.",
+      "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py rejects Redis SDK imports outside the adapter/proof/provider-integration boundary.",
+      "updateDeprecationOwner": "platform-workflow-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -9815,6 +9957,36 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-207-access-redis-composed-proof",
+      "targetType": "provider-proof",
+      "target": "redis",
+      "posture": [
+        "accessModel=profile-gated-local-compose-proof-only",
+        "authnAuthzBoundary=not-public-no-operator-surface-claimed",
+        "leastPrivilegePosture=adapter-contained-official-redis-sdk-against-local-compose-only",
+        "breakGlassRelevance=not-claimed",
+        "auditEvidence=value-free-proof-audit-evidence-captured",
+        "reviewCadence=2026-09-30",
+        "deprovisioningPosture=redis-key-delete-and-compose-down-finally-removes-proof-container-and-network",
+        "sourceIssue=USF-207"
+      ],
+      "evidenceSource": "packages/proof/src/redis-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:cache:redis",
+      "deferredReason": "No public/operator access, live Redis access, staging access, production access, provider-managed credential posture, or cache readiness access posture is claimed.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -11437,6 +11609,38 @@
       "evidenceSource": "packages/proof/src/localstack-composed-proof.ts; adapters/resources/src/index.ts",
       "validationCommand": "corepack pnpm proof:localstack",
       "deferredReason": "Backup/restore and DR are not claimed for the ephemeral LocalStack proof; live cloud-provider operation and environment promotion remain separate.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-207-resilience-redis-composed-proof",
+      "targetType": "provider-proof",
+      "target": "redis",
+      "posture": [
+        "effectivenessState=proven-local",
+        "backupRequirement=not-claimed-for-ephemeral-cache-proof",
+        "restoreProofStatus=not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=failed-ttl-expiration-cleanup-readiness-or-unavailable-fail-closed-proof",
+        "cleanupTeardownProof=redis-delete-and-compose-down-finally",
+        "drBoundary=not-claimed",
+        "sourceIssue=USF-207",
+        "changeManagementEvidence=PR-validation-summary-and-runtime-validator",
+        "rollbackDeferredBoundary=disable-proof-script-or-revert-redis-adapter-if-regression"
+      ],
+      "evidenceSource": "packages/proof/src/redis-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:cache:redis",
+      "deferredReason": "Backup/restore and DR are not claimed for the ephemeral Redis cache proof; provider-managed Redis operation, persistence assurance, and environment promotion remain separate.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -13729,6 +13933,48 @@
       "evidenceSource": "package.json; pnpm-lock.yaml; tools/validate-runtime/validate-runtime.py; tools/validate-runtime/planted-defects; packages/proof/src/localstack-composed-proof.ts; adapters/resources/src/index.ts",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "No production incident readiness, live provider vulnerability SLA, production alerting, SOC readiness, ISO certification, customer assurance claim, or cloud-provider certification claim is made.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-207-incident-vulnerability-redis-composed-proof",
+      "targetType": "provider-proof",
+      "target": "redis",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-207",
+        "riskStatement=Redis local proof could be treated as incident alerting vulnerability or live cache provider readiness",
+        "threatFailureScenario=local proof health SDK metadata or Redis evidence is overclaimed as production monitoring incident vulnerability provider certification or live cache evidence",
+        "affectedAssetService=redis",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record local proof health SDK governance redaction and validator output while preserving non-claims",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=proof-failure-on-readiness-sdk-round-trip-ttl-cleanup-redaction-unavailable-or-teardown-evidence",
+        "alertingPosture=local-validation-failure-only-no-production-alerting-claim",
+        "escalationOwner=platform-workflow-foundation",
+        "vulnerabilityAdvisoryReview=redis-6.0.1-advisory-review-required-before-stronger-readiness-claim",
+        "dependencyUpdatePosture=platform-workflow-dependency-owner-reviews-deprecation-and-advisories",
+        "correctiveActionEvidenceBoundary=runtime-validator-planted-defects-and-PR-validation-summary-only",
+        "postIncidentEvidenceBoundary=not-production-incident-ready",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "package.json; pnpm-lock.yaml; tools/validate-runtime/validate-runtime.py; tools/validate-runtime/planted-defects; packages/proof/src/redis-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "No production incident readiness, live cache vulnerability SLA, production alerting, SOC readiness, ISO certification, customer assurance claim, or provider-managed Redis certification claim is made.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16238,6 +16484,69 @@
       "evidenceSource": "package.json; packages/proof/src/localstack-composed-proof.ts; adapters/resources/src/index.ts",
       "validationCommand": "corepack pnpm proof:localstack",
       "deferredReason": "Production data, live cloud-provider privacy, data residency, legal hold, custom retention, cloud IAM, and environment privacy evidence remain unproven or non-claimed; followUpIssue=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-207-privacy-redis-composed-proof",
+      "targetType": "source-issue-proof",
+      "target": "USF-207",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "syntheticVsProductionDerived=synthetic-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-tenant-test-data",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=delete-redis-keys-and-compose-down-finally",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-207",
+        "validationCommand=corepack pnpm proof:cache:redis"
+      ],
+      "evidenceSource": "docs/architecture/cache-eventing-service-disposition-matrix.json; packages/proof/src/redis-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:cache:redis",
+      "deferredReason": "Production data, live Redis privacy, customer data residency, legal hold, custom retention, production retention, provider-managed credentials, and environment privacy evidence remain unproven or non-claimed.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-cache-redis",
+      "targetType": "proof",
+      "target": "proof:cache:redis",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-tenant-test-data",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-207",
+        "validationCommand=corepack pnpm proof:cache:redis"
+      ],
+      "evidenceSource": "package.json; packages/proof/src/redis-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:cache:redis",
+      "deferredReason": "Production data, live Redis privacy, data residency, legal hold, custom retention, provider-managed credentials, and environment privacy evidence remain unproven or non-claimed; followUpIssue=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

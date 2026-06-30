@@ -1,14 +1,14 @@
 {
   "id": "usf-198-redis-cache-service-semantic-proof-boundary",
-  "title": "USF-198 Redis Cache Service Semantic Proof Boundary",
-  "sourceIssue": "USF-198",
-  "followUpIssue": "USF-207",
+  "title": "USF-207 Redis Composed Cache Service Semantic Proof Boundary",
+  "sourceIssue": "USF-207",
+  "followUpIssue": null,
   "sourceDispositionIssue": "USF-173",
   "laneIssue": "USF-189",
   "dashboardIssue": "USF-184",
   "coordinatorIssue": "USF-192",
   "parentIssue": "USF-133",
-  "status": "reclassified-deferred-with-owner",
+  "status": "profile-gated-bounded-proof-present",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
@@ -22,6 +22,7 @@
     "usf-189-redis-cache-provider"
   ],
   "providerRegistryIds": [
+    "cache-redis-composed-test",
     "cache-redis-deferred"
   ],
   "issueLinks": [
@@ -34,16 +35,20 @@
     "USF-133"
   ],
   "reclassification": {
-    "from": "explicit-deferral-with-owner",
-    "to": "explicit-deferred-service-proof",
+    "from": "explicit-deferred-service-proof",
+    "to": "profile-gated-bounded-local-compose-proof",
     "decisionAcceptedDoesNotMeanWorkComplete": true,
-    "serviceSemanticProofImplemented": false,
+    "serviceSemanticProofImplemented": true,
     "redisServiceReadinessClaim": false,
     "cacheReadinessClaim": false,
     "providerCompatibilityClaim": false,
     "natsEquivalentToRedisService": false,
     "inMemoryCacheEquivalentToRedisService": false,
     "repositoryEvidence": [
+      "adapters/bus/src/index.ts#RedisComposedCacheAdapter",
+      "packages/proof/src/redis-composed-proof.ts",
+      "package.json#proof:cache:redis",
+      "Makefile#redis-cache-proof",
       "docs/architecture/cache-eventing-service-disposition-matrix.json",
       "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json#redis",
       "docs/architecture/compose-service-disposition-closure-matrix.json#redis",
@@ -53,45 +58,42 @@
     ]
   },
   "remainingProofBoundary": {
-    "issue": "USF-207",
+    "issue": "none-for-USF-207-bounded-proof",
     "owner": "platform-workflow-foundation",
     "riskOwner": "platform-workflow-risk-owner",
     "controlOwner": "platform-workflow-control-owner",
-    "riskStatement": "Redis-compatible cache semantics could be overclaimed from service-catalogue, generated Compose, NATS event-bus proof, runtime manifest, or in-memory cache evidence without deterministic adapter-level write/read, TTL, tenant, audit, teardown, and provider failure proof.",
-    "treatment": "defer actual Redis composed cache adapter proof to USF-207 while preserving non-equivalence and readiness non-claims",
+    "riskStatement": "Bounded local Redis proof could be overclaimed as Redis readiness, cache readiness, environment promotion readiness, live/provider-managed cache compatibility, API runtime cache binding, or worker runtime cache binding.",
+    "treatment": "USF-207 resolves only bounded local Compose SDK-backed Redis cache proof; separate source issues are required before broader readiness or runtime integration claims.",
     "reviewDate": "2026-09-30",
     "requiredEvidence": [
-      "official or maintained de-facto Redis SDK/client selection rationale",
-      "exact-version pinned SDK/client dependency if implemented",
-      "adapter-bound SDK/client import evidence",
-      "Redis service readiness and bounded retry evidence",
-      "tenant-safe set/get/delete or equivalent write/read evidence",
-      "expiration or TTL evidence",
-      "retry, timeout, fail-closed, and provider failure-mode evidence",
-      "audit event evidence for cache operations",
-      "teardown and cleanup evidence",
-      "supplier, secret, privacy, backup, incident, vulnerability, retention, and resilience posture evidence"
+      "environment-specific Redis readiness and promotion gates before any dev/test/staging/production readiness claim",
+      "live/provider-managed Redis supplier and credential evidence before any live-provider claim",
+      "API runtime cache-port integration proof before any API Redis runtime-use claim",
+      "worker runtime cache-port integration proof before any worker Redis runtime-use claim",
+      "backup/restore and DR proof before any resilience readiness claim",
+      "operator access and production alerting proof before any operational readiness claim"
     ]
   },
   "cacheProviderBoundary": {
-    "writeReadStatus": "deferred-to-USF-207",
-    "expirationTtlStatus": "deferred-to-USF-207",
-    "retryTimeoutStatus": "deferred-to-USF-207",
-    "failClosedStatus": "deferred-to-USF-207",
-    "auditEvidenceStatus": "deferred-to-USF-207",
-    "readinessRetryStatus": "deferred-to-USF-207",
-    "teardownCleanupStatus": "deferred-to-USF-207",
-    "providerFailureHandlingStatus": "deferred-to-USF-207",
+    "writeReadStatus": "proven-by-USF-207-profile-gated-local-compose",
+    "expirationTtlStatus": "proven-by-USF-207-profile-gated-local-compose",
+    "retryTimeoutStatus": "proven-by-USF-207-profile-gated-local-compose",
+    "failClosedStatus": "proven-by-USF-207-profile-gated-local-compose",
+    "auditEvidenceStatus": "value-free-audit-shaped-evidence-proven-by-USF-207",
+    "readinessRetryStatus": "bounded-exponential-backoff-60s-proven-by-USF-207",
+    "teardownCleanupStatus": "redis-key-delete-and-compose-down-proven-by-USF-207",
+    "providerFailureHandlingStatus": "unavailable-provider-fail-closed-proven-by-USF-207",
     "owner": "platform-workflow-foundation",
     "riskOwner": "platform-workflow-risk-owner",
     "controlOwner": "platform-workflow-control-owner",
     "reviewDate": "2026-09-30"
   },
   "sdkProviderBoundary": {
-    "sdkSelectionStatus": "deferred-to-USF-207",
-    "sdkPackage": null,
-    "sdkVersion": null,
-    "sdkBoundary": "adapter-package-only-when-implemented",
+    "sdkSelectionStatus": "official-sdk-selected-and-pinned",
+    "sdkPackage": "redis",
+    "sdkVersion": "6.0.1",
+    "sdkBoundary": "adapter-package-only",
+    "sdkSelectionRationale": "redis is the official Node Redis client maintained by the Redis/node-redis project, ships TypeScript declarations, supports repository Node >=24.16.0 through package engine >=20, is MIT licensed, and is compatible with local Compose Redis proof. ioredis was not selected because an official maintained client satisfies the proof boundary.",
     "forbiddenLayerImports": [
       "core",
       "ports",
@@ -100,17 +102,17 @@
       "worker-orchestration",
       "pdp"
     ],
-    "secretBoundary": "No Redis credential, raw endpoint, token, provider payload, SDK error payload, connection string, or stack trace is introduced by USF-198.",
-    "supplierBoundary": "Generated Compose metadata, NATS event-bus proof, and in-memory cache proof are not supplier or live-provider evidence."
+    "secretBoundary": "No Redis credential, raw endpoint, token, provider payload, SDK error payload, connection string, or stack trace is emitted by proof evidence; endpoint is represented as endpoint://compose/redis.",
+    "supplierBoundary": "Local Compose Redis and official SDK proof are local evidence only; no live/provider-managed supplier readiness or subprocessor claim is made."
   },
   "natsAndInMemoryGate": {
     "repositoryValidationRequired": true,
     "redisServiceEquivalent": false,
-    "substitutionNonEquivalenceBoundary": "Deterministic NATS event-bus proof and in-memory cache evidence may prove local semantic paths only where the relevant catalogue and proof row permit them. They are not equivalent to Redis cache key-space behaviour, expiration, eviction, persistence, cross-process runtime visibility, SDK/client boundary, provider failure modes, or wire-protocol behaviour.",
+    "substitutionNonEquivalenceBoundary": "NATS event-bus proof and in-memory cache evidence remain separate from Redis cache proof. USF-207 proves Redis cache semantics directly, but it does not make NATS or process memory a substitute for Redis provider behaviour.",
     "commands": [
+      "corepack pnpm proof:cache:redis",
       "corepack pnpm runtime:proof",
       "corepack pnpm providers-proof",
-      "corepack pnpm parity",
       "python3 tools/validate-runtime/validate-runtime.py all --json",
       "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     ]
@@ -121,11 +123,20 @@
     "usf-198-threat-redis-cache-overclaim",
     "usf-198-access-redis-cache-proof-boundary",
     "usf-198-incident-vulnerability-redis-cache-proof-boundary",
-    "usf-198-privacy-redis-cache-proof-boundary"
+    "usf-198-privacy-redis-cache-proof-boundary",
+    "usf-207-soa-redis-composed-proof",
+    "usf-207-evidence-redis-composed-proof",
+    "usf-207-threat-redis-cache-overclaim",
+    "usf-207-access-redis-composed-proof",
+    "usf-207-resilience-redis-composed-proof",
+    "usf-207-incident-vulnerability-redis-composed-proof",
+    "usf-207-privacy-redis-composed-proof",
+    "sdk-usf-189-redis-cache-provider-redis"
   ],
   "readinessClaimsAllowed": [
-    "redis-cache-service-proof-boundary-recorded",
-    "redis-cache-service-proof-deferred-to-USF-207",
+    "redis-cache-profile-gated-local-compose-proof-recorded",
+    "redis-sdk-boundary-recorded",
+    "redis-ttl-cleanup-fail-closed-evidence-recorded",
     "nats-and-in-memory-non-equivalence-recorded"
   ],
   "readinessClaimsProhibited": [
@@ -159,5 +170,16 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-react-parity"
-  ]
+  ],
+  "operationalEvidencePosture": {
+    "readinessRetry": "bounded-exponential-backoff-60s-proven-by-USF-207",
+    "timeout": "redis-command-timeout-2000ms-and-unavailable-timeout-250ms-proven-by-USF-207",
+    "safeTeardown": "redis-key-delete-and-compose-down-proven-by-USF-207",
+    "failClosed": "unavailable-provider-fail-closed-safe-error-code-proven-by-USF-207",
+    "structuredLogging": "value-free-structured-log-evidence-captured",
+    "tracingCorrelation": "safe-hashed-trace-and-correlation-evidence-captured",
+    "metrics": "readiness-attempt-retry-failure-latency-health-metrics-captured",
+    "auditEvents": "value-free-cache-operation-audit-shaped-evidence-captured",
+    "redaction": "raw-endpoint-credential-key-value-sdk-error-and-stack-trace-redaction-checked"
+  }
 }

@@ -1,0 +1,11 @@
+{
+  "name": "usf-207-redis-redaction-missing",
+  "expectedRule": "USF-RUNTIME-031",
+  "sourceReplacements": [
+    {
+      "path": "adapters/bus/src/index.ts",
+      "old": "redactionChecked",
+      "new": "redactionUnchecked"
+    }
+  ]
+}

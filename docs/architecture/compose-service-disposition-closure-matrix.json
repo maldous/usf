@@ -1087,14 +1087,14 @@
         "redis"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "profile-gated-bounded-proof"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
       "provider_boundary_disposition": "cloud-provider",
       "readiness_tier": "compose-target-catalogued",
-      "evidence_grade": "d",
+      "evidence_grade": "c",
       "profile_gated": true,
       "generated_in_targets": [
         "test",
@@ -1109,6 +1109,7 @@
           "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#redis"
         ],
         "proof_evidence_refs": [
+          "corepack pnpm proof:cache:redis",
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json",
           "docs/architecture/cache-eventing-service-disposition-matrix.json",
@@ -1127,21 +1128,21 @@
         "non_equivalence_boundaries": [
           "USF-173 records cache and event-bus as separate semantic roles; NATS bounded event-bus proof is not Redis cache, expiration, eviction, persistence, key-space, distributed runtime state, queue-adjacent, retry, fail-closed, audit, or wire-protocol proof.",
           "Dev in-memory cache is not equivalent to Redis eviction, persistence, expiration, distributed key-space, SDK/client, provider failure-mode, or wire-protocol behaviour.",
-          "USF-198 records the Redis proof boundary and USF-207 must prove Redis-compatible adapter/service semantics before any Redis, cache-provider, distributed runtime state, queue-adjacent, or live cache readiness claim."
+          "USF-207 proves only bounded local Compose Redis cache operations with synthetic data; API/worker runtime cache binding, live/provider-managed Redis, environment readiness, provider compatibility, and broader cache readiness remain unclaimed."
         ],
         "missing_evidence": [
-          "USF-207 Redis cache service-semantic adapter proof",
-          "Redis SDK/client selection and adapter boundary evidence",
-          "tenant-safe set/get/delete or equivalent write/read evidence",
-          "expiration or TTL, retry, timeout, fail-closed, audit, teardown, and provider failure-mode evidence",
-          "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, retention, privacy, backup, and resilience evidence for provider-managed operation"
+          "API runtime cache-port integration proof remains unclaimed",
+          "worker runtime cache-port integration proof remains unclaimed",
+          "live external/provider-managed service evidence remains unclaimed",
+          "supplier, access, audit, secret, incident, retention, privacy, backup, and resilience evidence for provider-managed operation remains unclaimed"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "redis-profile-gated-local-compose-proof",
+          "redis-sdk-boundary-recorded"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -1174,12 +1175,20 @@
           "usf-198-threat-redis-cache-overclaim",
           "usf-198-access-redis-cache-proof-boundary",
           "usf-198-incident-vulnerability-redis-cache-proof-boundary",
-          "usf-198-privacy-redis-cache-proof-boundary"
+          "usf-198-privacy-redis-cache-proof-boundary",
+          "usf-207-soa-redis-composed-proof",
+          "usf-207-evidence-redis-composed-proof",
+          "usf-207-threat-redis-cache-overclaim",
+          "usf-207-access-redis-composed-proof",
+          "usf-207-resilience-redis-composed-proof",
+          "usf-207-incident-vulnerability-redis-composed-proof",
+          "usf-207-privacy-redis-composed-proof",
+          "sdk-usf-189-redis-cache-provider-redis"
         ],
         "tracking_issue_rationale": {
           "USF-173": "cache and eventing service disposition proof",
           "USF-198": "Redis cache proof boundary",
-          "USF-207": "Redis composed cache adapter proof"
+          "USF-207": "Redis composed cache adapter proof: SDK-backed local Compose write/read/delete, TTL, retry, timeout, fail-closed, audit, redaction, and cleanup evidence"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

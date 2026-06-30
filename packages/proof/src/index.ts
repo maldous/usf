@@ -17,4 +17,5 @@ export { runSearchIndexingProof } from "./search-indexing-proof.ts";
 export { runMeilisearchComposedProof } from "./meilisearch-composed-proof.ts";
 export { runClamAvComposedProof } from "./clamav-composed-proof.ts";
 export { runMockProviderSubstrateProof } from "./mock-provider-substrate-proof.ts";
+export { runRedisComposedProof } from "./redis-composed-proof.ts";
 export { runResourceLifecycleProof } from "./resource-lifecycle-proof.ts";
