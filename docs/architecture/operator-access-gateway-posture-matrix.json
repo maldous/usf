@@ -28,12 +28,12 @@
     "auditPosture": "operator-action-audit-required for gateway-mediated operator/admin actions before stronger readiness"
   },
   "clickthroughBoundary": "No UI or clickthrough implementation is created by USF-186. Future clickthrough must inherit gateway authn/authz and audit posture before test or operator readiness.",
-  "proofPosture": "Machine-checkable matrix and catalogue evidence only; no runtime operator access proof, public exposure proof, live-provider proof, SOC evidence, ISO certification, or broader readiness claim.",
+  "proofPosture": "USF-169 adds hermetic API operator-access proof for provider posture and observability posture surfaces via corepack pnpm proof:operator-access. The proof exercises missing tenant, tenant mismatch, PDP denial, security-admin permit, redacted provider views, observability readiness/signals, audit evidence, and security signals. Composed service console login, gateway clickthrough UX, executed periodic access reviews, public exposure, staging, production, and live-provider operator access remain unproven and deferred.",
   "changeManagementEvidence": {
     "changeRecord": "USF-186 PR evidence and validator output",
-    "validation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "validation": "python3 tools/validate-enterprise/validate-enterprise.py all --json; corepack pnpm proof:operator-access",
     "rollbackBoundary": "Revert the matrix and validator rule; no runtime, UI, provider, or public route state is created by this lane.",
-    "deferredBoundary": "Gateway route proof, operator clickthrough UX, access-review execution evidence, and privileged-operation audit proof remain follow-up work under USF-169 and USF-180."
+    "deferredBoundary": "Gateway route proof, operator clickthrough UX, composed service console login, executed periodic access reviews, deprovisioning workflow evidence, and public/LAN/staging/production/live-provider operator access remain deferred."
   },
   "controlEvidenceRefs": [
     {
@@ -41,6 +41,12 @@
       "controls": ["operator-access-decision-required", "gateway-loopback-only-default", "authn-authz-required", "operator-action-audit-required", "owner-required", "readiness-overclaim-denied"],
       "evidence": ["docs/architecture/operator-access-gateway-posture-matrix.json", "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "tools/validate-enterprise/validate-enterprise.py"],
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    },
+    {
+      "id": "usf-169-control-evidence-api-operator-access-proof",
+      "controls": ["operator-api-pdp-required", "operator-api-tenant-context-required", "operator-api-audit-required", "operator-api-redaction-required", "operator-api-readiness-overclaim-denied"],
+      "evidence": ["packages/proof/src/operator-access-proof.ts", "package.json", "tools/validate-enterprise/validate-enterprise.py"],
+      "validationCommand": "corepack pnpm proof:operator-access"
     }
   ],
   "exceptions": [],

@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-019",
+  "description": "operator access proof package command is missing",
+  "packageScriptDrop": ["proof:operator-access"]
+}

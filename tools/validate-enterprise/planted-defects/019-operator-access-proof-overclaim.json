@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-019",
+  "description": "operator access proof source overclaims public exposure readiness",
+  "operatorAccessProofTextAppend": "\npublicExposureClaim: true\n"
+}
