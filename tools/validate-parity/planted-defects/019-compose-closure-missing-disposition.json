@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-019",
+  "description": "compose service closure evidence lacks a machine-checkable disposition",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "postgres",
+      "dropEvidence": [
+        "closure_disposition"
+      ]
+    }
+  }
+}

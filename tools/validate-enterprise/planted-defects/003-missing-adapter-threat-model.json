@@ -1,0 +1,5 @@
+{
+  "description": "A composed adapter lacks threat and abuse-case posture.",
+  "expectedRule": "USF-ENTERPRISE-004",
+  "removeThreatModel": "threat-adapter-minio-object-storage-provider"
+}

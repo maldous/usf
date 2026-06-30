@@ -1789,6 +1789,76 @@
       ]
     },
     {
+      "id": "enterprise-evidence.schema.json",
+      "title": "Enterprise Evidence Model Schema",
+      "path": "spec/schemas/enterprise-evidence.schema.json",
+      "class": "evidence-schema",
+      "family": "evidence-and-proof",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Evidence",
+        "Proof",
+        "Service",
+        "Provider",
+        "Adapter",
+        "Validator",
+        "Observability Signal",
+        "Audit Event",
+        "Backup / Restore"
+      ],
+      "purpose": "Validates repository-level enterprise evidence organisation for Statement of Applicability support, proof evidence registers, threat and abuse-case posture, SDK dependency governance, observability evidence standards, access review posture, backup and restore posture, incident and vulnerability evidence, privacy and data minimisation, done-state governance, lane evidence requirements, and explicit non-claims.",
+      "requiredBecause": "Every approved implementation lane must update a shared evidence model before closure or readiness claims can be considered, and validation passing alone must not imply Done.",
+      "sourceInputs": [
+        "spec/instances/compose-service/service-catalogue.json",
+        "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+        "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
+        "docs/architecture/compose-service-disposition-closure-matrix.json",
+        "package.json"
+      ],
+      "taxonomyRefs": [
+        "evidence-classification",
+        "proof-classification",
+        "provider-classification",
+        "semantic-architecture-classification",
+        "observability-audit-classification",
+        "validation-reporting-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "evidence-kinds",
+        "proof-levels",
+        "provider-modes",
+        "compose-service-kinds",
+        "compose-data-boundaries",
+        "compose-evidence-grades",
+        "compose-readiness-tiers",
+        "validation-severities"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "proof collectors",
+        "AI agents",
+        "governance reviewers"
+      ],
+      "validationResponsibilities": [
+        "Statement of Applicability support mappings cover every service, adapter, proof, validator, and deferred boundary.",
+        "Proof evidence register rows have stable evidence ids, command pins, commit pins, issue links, service catalogue linkage, and retention posture.",
+        "Threat, abuse-case, privacy, incident, access review, and backup/restore postures are present for relevant services, adapters, proofs, and lanes.",
+        "Compose adapter SDK dependencies record exact versions, selection rationale, licence posture, maintenance posture, security advisory posture, compatibility, forbidden-layer import checks, and update ownership.",
+        "Adapter log, trace, metric, and audit evidence standards require tenant-safe fields and prohibit secrets, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, and provider payloads.",
+        "Done-state governance preserves non-claims and rejects closure when acceptance evidence or follow-up issue links are missing."
+      ],
+      "authorityRole": "runtime-proof-evidence",
+      "driftRisks": [
+        "A lane adds implementation or proof without enterprise evidence metadata.",
+        "Validation passing is treated as Done without acceptance-criteria evidence.",
+        "Statement of Applicability support is misread as ISO/IEC 27001 certification or SOC readiness."
+      ],
+      "aiGuidance": "Use this model as evidence organisation and validator input only. Do not claim certification, staging, production, live-provider, full dev, or full React parity readiness from these rows."
+    },
+    {
       "id": "provider-mode.schema.json",
       "title": "Provider Mode Schema",
       "path": "spec/schemas/provider-mode.schema.json",

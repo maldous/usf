@@ -53,10 +53,19 @@ RULES = {
     "USF-PARITY-015": ("blocking", "mixed UI/foundation test classified wholly UI-only"),
     "USF-PARITY-016": ("blocking", "capability needed by a future UI lacks a surface"),
     "USF-PARITY-017": ("blocking", "foundation adds UI/React/browser artefacts without authority"),
+    "USF-PARITY-018": ("blocking", "compose service disposition closure matrix is missing or invalid"),
+    "USF-PARITY-019": ("blocking", "compose service row lacks machine-checkable closure disposition evidence"),
+    "USF-PARITY-020": ("blocking", "unresolved compose service disposition lacks follow-up or out-of-scope rationale"),
+    "USF-PARITY-021": ("blocking", "compose service disposition asserts unsupported proof or false equivalence"),
+    "USF-PARITY-022": ("blocking", "compose service disposition closure or readiness is overclaimed"),
     "USF-PARITY-SELFTEST": ("blocking", "planted parity defect did not raise its expected rule"),
 }
 
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+COMPOSE_CLOSURE_MATRIX_PATH = "docs/architecture/compose-service-disposition-closure-matrix.json"
+COMPOSE_PARITY_MATRIX_PATH = "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
+COMPOSE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
+ENTERPRISE_EVIDENCE_MODEL_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 SHAPE_PATH = "tools/validate-parity/parity-matrix-shape.json"
 SELFTEST_DIR = "tools/validate-parity/planted-defects"
 
@@ -82,6 +91,36 @@ RUNTIME_CATEGORIES = {
 DISPOSITION_VALUES = {"preserve", "replace", "refactor", "retire", "rename", "split", "merge"}
 COPY_MARKERS = ("copy", "mirror", "verbatim", "as-is")
 CARRIER_PATTERN = "USF-"
+COMPOSE_CLOSURE_DISPOSITIONS = {
+    "implemented",
+    "implemented-equivalent",
+    "covered-by-usf-runtime",
+    "substituted-partial",
+    "deferred",
+    "requires-human-decision",
+    "out-of-foundation-scope",
+}
+COMPOSE_IMPLEMENTED_DISPOSITIONS = {"implemented", "implemented-equivalent", "covered-by-usf-runtime"}
+COMPOSE_BLOCKING_DISPOSITIONS = {"deferred", "requires-human-decision", "substituted-partial"}
+COMPOSE_NON_EQUIVALENT_DISPOSITIONS = {
+    "covered-by-usf-runtime",
+    "substituted-partial",
+    "deferred",
+    "requires-human-decision",
+    "out-of-foundation-scope",
+}
+PROHIBITED_READINESS_CLAIMS = {
+    "full-react-parity-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+}
 
 # UI/browser artefact markers that the UI-agnostic foundation must not contain
 # without separate authority. Scanned over tracked first-party files only.
@@ -132,6 +171,13 @@ def read_json(path):
         return json.load(handle)
 
 
+def read_json_or_error(path):
+    try:
+        return read_json(path), None
+    except Exception as exc:  # noqa: BLE001
+        return None, str(exc)
+
+
 def tracked_paths():
     completed = subprocess.run(
         ["git", "ls-files"], cwd=ROOT, capture_output=True, text=True, check=False
@@ -150,14 +196,45 @@ def load_matrix():
         return None, str(exc)
 
 
+def load_optional_json(path):
+    if not os.path.exists(path):
+        return None, "missing"
+    return read_json_or_error(path)
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     if "matrix" in overrides:
         matrix, matrix_error = overrides["matrix"], overrides.get("matrixError")
     else:
         matrix, matrix_error = load_matrix()
+    if "composeClosureMatrix" in overrides:
+        compose_closure_matrix = overrides["composeClosureMatrix"]
+        compose_closure_error = overrides.get("composeClosureMatrixError")
+    else:
+        compose_closure_matrix, compose_closure_error = load_optional_json(COMPOSE_CLOSURE_MATRIX_PATH)
+    if "composeParityMatrix" in overrides:
+        compose_parity_matrix = overrides["composeParityMatrix"]
+        compose_parity_error = overrides.get("composeParityMatrixError")
+    else:
+        compose_parity_matrix, compose_parity_error = load_optional_json(COMPOSE_PARITY_MATRIX_PATH)
+    if "composeCatalogue" in overrides:
+        compose_catalogue = overrides["composeCatalogue"]
+        compose_catalogue_error = overrides.get("composeCatalogueError")
+    else:
+        compose_catalogue, compose_catalogue_error = load_optional_json(COMPOSE_CATALOGUE_PATH)
     paths = set(overrides.get("paths", tracked_paths()))
-    return {"matrix": matrix, "matrixError": matrix_error, "paths": paths}
+    return {
+        "matrix": matrix,
+        "matrixError": matrix_error,
+        "composeClosureMatrix": compose_closure_matrix,
+        "composeClosureMatrixError": compose_closure_error,
+        "composeParityMatrix": compose_parity_matrix,
+        "composeParityMatrixError": compose_parity_error,
+        "composeCatalogue": compose_catalogue,
+        "composeCatalogueError": compose_catalogue_error,
+        "paths": paths,
+    }
 
 
 def carrier_valid(row, allowed):
@@ -303,16 +380,220 @@ def check_no_unauthorised_ui_artefacts(F, state):
         F.add("USF-PARITY-017", path, "UI/React/browser artefact present in the UI-agnostic foundation without separate authority")
 
 
+def _catalogue_service_map(catalogue):
+    if not isinstance(catalogue, dict):
+        return {}
+    return {
+        service.get("serviceId"): service
+        for service in catalogue.get("services", [])
+        if isinstance(service, dict) and service.get("serviceId")
+    }
+
+
+def _react_service_map(compose_parity_matrix):
+    if not isinstance(compose_parity_matrix, dict):
+        return {}
+    return {
+        row.get("react_service"): row
+        for row in compose_parity_matrix.get("services", [])
+        if isinstance(row, dict) and row.get("react_service")
+    }
+
+
+def _closure_row_map(closure_matrix):
+    if not isinstance(closure_matrix, dict):
+        return {}
+    return {
+        row.get("service_id"): row
+        for row in closure_matrix.get("rows", [])
+        if isinstance(row, dict) and row.get("service_id")
+    }
+
+
+def _service_is_closure_relevant(service):
+    if not isinstance(service, dict):
+        return False
+    if service.get("requirementState") in {True, "conditional", "deferred", "out-of-scope"}:
+        return True
+    if service.get("environmentDisposition") in {
+        "shared-cross-environment-control-plane",
+        "external-managed",
+        "cloud-provider",
+        "deferred",
+        "out-of-scope",
+    }:
+        return True
+    if (service.get("providerBoundary") or {}).get("disposition") in {
+        "shared-control-plane",
+        "external-managed",
+        "cloud-provider",
+        "deferred",
+        "out-of-scope",
+    }:
+        return True
+    if service.get("composeProfiles"):
+        return True
+    return any(
+        policy.get("composePolicy") == "generate-profile-gated-service"
+        for policy in (service.get("environmentPolicies") or {}).values()
+        if isinstance(policy, dict)
+    )
+
+
+def _non_empty_list(value):
+    return isinstance(value, list) and any(str(item).strip() for item in value)
+
+
+def _set_or_empty(value):
+    return set(value) if isinstance(value, list) else set()
+
+
+def check_compose_service_closure(F, state):
+    closure_matrix = state.get("composeClosureMatrix")
+    compose_parity_matrix = state.get("composeParityMatrix")
+    catalogue = state.get("composeCatalogue")
+
+    if not isinstance(closure_matrix, dict):
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, f"cannot load closure matrix: {state.get('composeClosureMatrixError')}")
+        return
+    if not isinstance(compose_parity_matrix, dict):
+        F.add("USF-PARITY-018", COMPOSE_PARITY_MATRIX_PATH, f"cannot load compose parity matrix: {state.get('composeParityMatrixError')}")
+        return
+    if not isinstance(catalogue, dict):
+        F.add("USF-PARITY-018", COMPOSE_CATALOGUE_PATH, f"cannot load compose service catalogue: {state.get('composeCatalogueError')}")
+        return
+
+    if closure_matrix.get("service_catalogue_authority") != COMPOSE_CATALOGUE_PATH:
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix does not point at the semantic service catalogue authority")
+    if closure_matrix.get("enterprise_evidence_model") != ENTERPRISE_EVIDENCE_MODEL_PATH:
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix does not point at the enterprise evidence model")
+    if not closure_matrix.get("done_state_governance_ref"):
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix lacks done-state governance reference")
+    if closure_matrix.get("parent_issue") != "USF-133" or closure_matrix.get("lane_issue") != "USF-185":
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix is not scoped to USF-185 under USF-133")
+    missing_non_claims = PROHIBITED_READINESS_CLAIMS - _set_or_empty(closure_matrix.get("non_claims"))
+    if missing_non_claims:
+        F.add("USF-PARITY-022", COMPOSE_CLOSURE_MATRIX_PATH, f"missing non-claims: {sorted(missing_non_claims)}")
+    if _set_or_empty(closure_matrix.get("closure_blocking_dispositions")) != COMPOSE_BLOCKING_DISPOSITIONS:
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure_blocking_dispositions do not match validator policy")
+
+    service_map = _catalogue_service_map(catalogue)
+    react_map = _react_service_map(compose_parity_matrix)
+    closure_rows = _closure_row_map(closure_matrix)
+
+    if len(closure_rows) != len(closure_matrix.get("rows", [])):
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix contains duplicate or invalid service_id rows")
+
+    unresolved_services = []
+    for service_id, service in sorted(service_map.items()):
+        if not _service_is_closure_relevant(service):
+            continue
+        row = closure_rows.get(service_id)
+        if row is None:
+            F.add("USF-PARITY-019", f"service:{service_id}", "closure-relevant service lacks a closure matrix row")
+            continue
+        evidence = row.get("closure_evidence")
+        if not isinstance(evidence, dict):
+            F.add("USF-PARITY-019", f"service:{service_id}", "closure matrix row lacks closure_evidence")
+            continue
+
+        disposition = evidence.get("closure_disposition")
+        if disposition not in COMPOSE_CLOSURE_DISPOSITIONS:
+            F.add("USF-PARITY-019", f"service:{service_id}", f"invalid closure disposition: {disposition}")
+        if evidence.get("service_catalogue_authority") is not True:
+            F.add("USF-PARITY-019", f"service:{service_id}", "service catalogue authority flag is not true")
+        expected_ref = f"{COMPOSE_CATALOGUE_PATH}#{service_id}"
+        if evidence.get("service_catalogue_ref") != expected_ref:
+            F.add("USF-PARITY-019", f"service:{service_id}", "service catalogue ref does not match service_id")
+        if not _non_empty_list(evidence.get("react_parity_refs")):
+            F.add("USF-PARITY-019", f"service:{service_id}", "react parity refs are missing")
+        enterprise_refs = evidence.get("enterprise_evidence_refs")
+        if not _non_empty_list(enterprise_refs):
+            F.add("USF-PARITY-019", f"service:{service_id}", "enterprise evidence refs are missing")
+        else:
+            required_enterprise_refs = {
+                f"soa-service-{service_id}",
+                "evidence-lane1-service-disposition-closure-matrix",
+                "threat-lane-usf-185",
+            }
+            missing_enterprise_refs = required_enterprise_refs - set(enterprise_refs)
+            if missing_enterprise_refs:
+                F.add("USF-PARITY-019", f"service:{service_id}", f"missing enterprise evidence refs: {sorted(missing_enterprise_refs)}")
+
+        react_names = set(service.get("reactComposeServiceNames") or [])
+        matrix_names = set(row.get("react_compose_service_names") or [])
+        if react_names != matrix_names:
+            F.add("USF-PARITY-019", f"service:{service_id}", "closure matrix react service names do not match service catalogue")
+        for react_name in sorted(react_names):
+            react_row = react_map.get(react_name)
+            if not react_row:
+                F.add("USF-PARITY-018", f"service:{service_id}:{react_name}", "react compose service is missing from parity matrix")
+                continue
+            status = react_row.get("usf_accounting_status")
+            if status in COMPOSE_CLOSURE_DISPOSITIONS and disposition != status:
+                F.add("USF-PARITY-021", f"service:{service_id}:{react_name}", f"matrix status {status} cannot be represented as {disposition}")
+            if status in {"requires-human-decision", "deferred", "substituted-partial"} and disposition not in COMPOSE_BLOCKING_DISPOSITIONS:
+                F.add("USF-PARITY-021", f"service:{service_id}:{react_name}", f"matrix status {status} cannot be closed as {disposition}")
+            if status == "out-of-foundation-scope" and disposition != "out-of-foundation-scope":
+                F.add("USF-PARITY-021", f"service:{service_id}:{react_name}", "out-of-scope row was not preserved")
+
+        if disposition in COMPOSE_IMPLEMENTED_DISPOSITIONS and not _non_empty_list(evidence.get("proof_evidence_refs")):
+            F.add("USF-PARITY-021", f"service:{service_id}", "implemented or proof-covered disposition lacks proof evidence refs")
+        if disposition in COMPOSE_NON_EQUIVALENT_DISPOSITIONS:
+            has_boundary = _non_empty_list(evidence.get("non_equivalence_boundaries"))
+            has_out_scope = bool(str(evidence.get("accepted_out_of_scope_rationale") or "").strip())
+            has_missing = _non_empty_list(evidence.get("missing_evidence"))
+            if disposition == "out-of-foundation-scope":
+                if not has_out_scope:
+                    F.add("USF-PARITY-020", f"service:{service_id}", "out-of-scope disposition lacks accepted rationale")
+            elif disposition in {"covered-by-usf-runtime", "substituted-partial"}:
+                if not has_boundary:
+                    F.add("USF-PARITY-021", f"service:{service_id}", "substitute or runtime-covered disposition lacks non-equivalence boundary")
+            elif not (has_boundary or has_missing):
+                F.add("USF-PARITY-020", f"service:{service_id}", "unresolved disposition lacks missing evidence or non-equivalence boundary")
+
+        if disposition in COMPOSE_BLOCKING_DISPOSITIONS:
+            unresolved_services.append(service_id)
+            if evidence.get("closure_blocking") is not True:
+                F.add("USF-PARITY-021", f"service:{service_id}", "blocking disposition is not marked closure_blocking")
+            issues = evidence.get("tracking_issues")
+            if not _non_empty_list(issues) or not all(str(issue).startswith("USF-") for issue in issues):
+                F.add("USF-PARITY-020", f"service:{service_id}", "blocking disposition lacks linked USF follow-up issue")
+        elif evidence.get("closure_blocking") is True:
+            F.add("USF-PARITY-021", f"service:{service_id}", "resolved disposition is marked closure_blocking")
+
+        allowed_claims = _set_or_empty(evidence.get("readiness_claims_allowed"))
+        if allowed_claims & PROHIBITED_READINESS_CLAIMS:
+            F.add("USF-PARITY-022", f"service:{service_id}", f"prohibited readiness claim allowed: {sorted(allowed_claims & PROHIBITED_READINESS_CLAIMS)}")
+        prohibited_claims = _set_or_empty(evidence.get("readiness_claims_prohibited"))
+        missing_prohibited = PROHIBITED_READINESS_CLAIMS - prohibited_claims
+        if missing_prohibited:
+            F.add("USF-PARITY-022", f"service:{service_id}", f"missing prohibited readiness claims: {sorted(missing_prohibited)}")
+
+    if closure_matrix.get("closure_claimed") is True and unresolved_services:
+        F.add(
+            "USF-PARITY-022",
+            COMPOSE_CLOSURE_MATRIX_PATH,
+            f"closure_claimed is true while unresolved service dispositions remain: {', '.join(unresolved_services)}",
+        )
+
+
 def run_checks(F, state=None):
     state = state or build_state()
     if not check_shape(F, state):
         return
     check_rows(F, state)
     check_no_unauthorised_ui_artefacts(F, state)
+    check_compose_service_closure(F, state)
 
 
-def apply_mutation(base_matrix, base_paths, mutation):
+def apply_mutation(base_state, mutation):
+    base_matrix = base_state["matrix"]
+    base_paths = base_state["paths"]
     matrix = copy.deepcopy(base_matrix) if base_matrix is not None else None
+    compose_closure_matrix = copy.deepcopy(base_state.get("composeClosureMatrix"))
+    compose_parity_matrix = copy.deepcopy(base_state.get("composeParityMatrix"))
+    compose_catalogue = copy.deepcopy(base_state.get("composeCatalogue"))
     paths = set(base_paths)
     overrides = {}
     if mutation.get("removeMatrix"):
@@ -320,9 +601,15 @@ def apply_mutation(base_matrix, base_paths, mutation):
         overrides["matrixError"] = "missing"
         overrides["paths"] = paths
         return overrides
+    if mutation.get("removeComposeClosureMatrix"):
+        overrides["composeClosureMatrix"] = None
+        overrides["composeClosureMatrixError"] = "missing"
     if "setTop" in mutation:
         for k, v in mutation["setTop"].items():
             matrix[k] = v
+    if "composeClosureSetTop" in mutation:
+        for k, v in mutation["composeClosureSetTop"].items():
+            compose_closure_matrix[k] = v
     if "domainsSetAll" in mutation:
         for row in matrix.get("domains", []):
             for k, v in mutation["domainsSetAll"].items():
@@ -338,7 +625,34 @@ def apply_mutation(base_matrix, base_paths, mutation):
                 row.pop(k, None)
     if "addPath" in mutation:
         paths.add(mutation["addPath"])
+    if "composeClosureRowPatch" in mutation:
+        patch = mutation["composeClosureRowPatch"]
+        if "service_id" in patch:
+            row = next(
+                r for r in compose_closure_matrix.get("rows", [])
+                if r.get("service_id") == patch["service_id"]
+            )
+        else:
+            row = compose_closure_matrix.get("rows", [])[patch.get("index", 0)]
+        for k, v in patch.get("set", {}).items():
+            row[k] = v
+        for k in patch.get("drop", []):
+            row.pop(k, None)
+        evidence = row.setdefault("closure_evidence", {})
+        for k, v in patch.get("setEvidence", {}).items():
+            evidence[k] = v
+        for k in patch.get("dropEvidence", []):
+            evidence.pop(k, None)
+    if "removeComposeClosureRow" in mutation:
+        service_id = mutation["removeComposeClosureRow"].get("service_id")
+        compose_closure_matrix["rows"] = [
+            row for row in compose_closure_matrix.get("rows", [])
+            if row.get("service_id") != service_id
+        ]
     overrides["matrix"] = matrix
+    overrides["composeClosureMatrix"] = compose_closure_matrix
+    overrides["composeParityMatrix"] = compose_parity_matrix
+    overrides["composeCatalogue"] = compose_catalogue
     overrides["paths"] = paths
     return overrides
 
@@ -363,7 +677,7 @@ def run_selftest(F):
     fixtures = load_selftest_fixtures(F)
     for path, fixture in fixtures:
         expected = fixture.get("expectedRule")
-        overrides = apply_mutation(base["matrix"], base["paths"], fixture.get("mutation", {}))
+        overrides = apply_mutation(base, fixture.get("mutation", {}))
         local = Findings()
         run_checks(local, build_state(overrides))
         got = {item["ruleId"] for item in local.items}

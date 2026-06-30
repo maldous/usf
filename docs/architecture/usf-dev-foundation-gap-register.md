@@ -77,11 +77,13 @@ This orchestration pass is planning and issue hygiene only. It does not authoris
 
 ## Validator Recommendations
 
-- Add a validator that checks every React compose service has a row in complete-react-to-usf-compose-service-parity-matrix.json.
-- Add a closure-only validator mode that fails USF-133 closure if any service has evidence grade D or F without a Linear tracker or accepted human decision.
-- Add a validator that rejects local/in-memory substitute rows claiming composed or live equivalence.
+- `tools/validate-compose/validate-compose.py` checks every React compose service has a service-catalogue classification and generated Compose remains derivative.
+- `docs/architecture/compose-service-disposition-closure-matrix.json` records Lane 1 service-disposition closure evidence for each semantic service-catalogue row.
+- `tools/validate-parity/validate-parity.py` now fails service-disposition closure evidence when a closure-relevant service row is missing, a disposition is absent, an unresolved row lacks linked follow-up issues, proof evidence is missing, runtime proof is falsely treated as Compose service equivalence, or closure/readiness is overclaimed.
+- `spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json` records repository-level enterprise evidence organisation for SoA-support mappings, evidence-register rows, threat/abuse posture, SDK dependency governance, observability evidence standards, access review posture, resilience posture, incident/vulnerability evidence, privacy/data minimisation, done-state governance, and non-claims.
+- `tools/validate-enterprise/validate-enterprise.py` fails lane work when enterprise evidence model coverage, commit/command/issue-linked evidence, SDK governance, threat posture, observability evidence standards, posture registers, done-state governance, or Lane 1 closure-matrix enterprise linkage is missing.
 - Add a validator that rejects readiness overclaims in complete review artifacts.
-- Add planted defects for missing service row, false equivalence, live readiness overclaim, and v2-bootstrap movement in docs-only review.
+- Planted defects cover missing service row, missing disposition, false closure, missing follow-up issue, missing proof evidence, false runtime-to-Compose equivalence, missing enterprise evidence linkage, missing SoA-support coverage, missing commit-pinned evidence, missing threat posture, SDK governance drift, observability evidence drift, done-state overclaim, and readiness overclaim.
 
 ## No-Claim Boundary
 

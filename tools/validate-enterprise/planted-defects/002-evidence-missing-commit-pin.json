@@ -1,0 +1,12 @@
+{
+  "description": "A proof evidence row lacks its commit pin.",
+  "expectedRule": "USF-ENTERPRISE-003",
+  "evidencePatch": [
+    {
+      "id": "evidence-proof-runtime-proof-compose",
+      "set": {
+        "commitPin": "pending"
+      }
+    }
+  ]
+}

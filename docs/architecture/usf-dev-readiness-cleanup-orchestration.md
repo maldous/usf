@@ -21,7 +21,15 @@ Cleanup runs in two passes:
 
 Implementation must not start until the coordinator evidence pack confirms that lane cleanup is
 complete, source issues are executable, child issues are linked where needed, acceptance criteria
-are evidence-based, validation is honest, boundaries are preserved, and lane prompts are ready.
+are evidence-based, validation is honest, boundaries are preserved, lane prompts are ready, and the
+repository-level enterprise evidence model is updated for the lane.
+
+`spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json` is the shared
+enterprise evidence model for all lanes. `tools/validate-enterprise/validate-enterprise.py` enforces
+SoA-support mapping, evidence register rows, threat/abuse posture, SDK dependency governance,
+observability evidence standards, access review posture, resilience posture, incident and
+vulnerability evidence, privacy/data minimisation, done-state governance, and explicit non-claims.
+This model is evidence organisation only and does not claim certification or readiness.
 
 ## Lane Map
 
@@ -85,6 +93,20 @@ The coordinator evidence pack must confirm:
 - Explicit non-claims.
 - Statement that implementation must not start until coordinator approval is recorded.
 
+## Parallel Lane Readiness
+
+Lane 1 creates the shared service-disposition closure and enterprise evidence gate. Future lanes
+may run in parallel only after explicit coordinator approval for those lanes. Each approved lane
+must own its evidence rows and must not mark another lane complete. Cross-lane dependencies must be
+linked explicitly through Linear and evidence references rather than implied by shared validation.
+
+Shared files that future lanes may need to touch include
+`spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json`,
+`spec/schemas/enterprise-evidence.schema.json`, `tools/validate-enterprise/validate-enterprise.py`,
+`tools/validate-parity/validate-parity.py`, `package.json`, `Makefile`, and the architecture/gap
+register docs. These files are expected merge-conflict hotspots; future changes must preserve
+existing Lane 1 checks, planted defects, done-state governance, and non-claims.
+
 ## Validation Plan
 
 The cleanup pass should run the available repository validation ladder that is safe for docs and
@@ -117,6 +139,8 @@ Lane prompts must be issued only after coordinator approval. Each lane prompt mu
 - Required proof and validator changes.
 - Required planted defects where validators change.
 - Professional and enterprise evidence posture.
+- Enterprise evidence model updates for affected services, adapters, proofs, validators, deferred
+  boundaries, and lane posture.
 - Prohibited claims.
 - Validation commands.
 - Handoff requirements back to the coordinator.

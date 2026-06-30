@@ -1,0 +1,2872 @@
+{
+  "id": "compose-service-disposition-closure-matrix",
+  "authority_note": "Machine-checkable closure evidence only. spec/instances/compose-service/service-catalogue.json remains the semantic service catalogue authority. This matrix does not claim USF-133 closure or readiness.",
+  "parent_issue": "USF-133",
+  "lane_issue": "USF-185",
+  "coordinator_issue": "USF-192",
+  "dashboard_issue": "USF-184",
+  "source_issues": [
+    "USF-166",
+    "USF-167",
+    "USF-182"
+  ],
+  "service_catalogue_authority": "spec/instances/compose-service/service-catalogue.json",
+  "react_compose_parity_matrix": "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+  "closure_claimed": false,
+  "closure_blocking_dispositions": [
+    "deferred",
+    "requires-human-decision",
+    "substituted-partial"
+  ],
+  "non_claims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ],
+  "closure_disposition_counts": {
+    "covered-by-usf-runtime": 2,
+    "deferred": 4,
+    "implemented": 13,
+    "implemented-equivalent": 1,
+    "out-of-foundation-scope": 1,
+    "requires-human-decision": 15,
+    "substituted-partial": 2
+  },
+  "rows": [
+    {
+      "service_id": "postgres",
+      "display_name": "Postgres",
+      "service_kind": "database",
+      "react_compose_service_names": [
+        "postgres"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#postgres",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#postgres"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-postgres",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-postgres",
+          "resilience-posture-postgres",
+          "incident-vulnerability-postgres"
+        ]
+      }
+    },
+    {
+      "service_id": "keycloak-db",
+      "display_name": "Keycloak Database",
+      "service_kind": "identity-backing-store",
+      "react_compose_service_names": [
+        "keycloak-postgres"
+      ],
+      "source_accounting_statuses": [
+        "implemented-equivalent"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented-equivalent",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#keycloak-db",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak-db"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-keycloak-db",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-keycloak-db",
+          "resilience-posture-keycloak-db",
+          "incident-vulnerability-keycloak-db"
+        ]
+      }
+    },
+    {
+      "service_id": "keycloak",
+      "display_name": "Keycloak",
+      "service_kind": "identity-provider",
+      "react_compose_service_names": [
+        "keycloak"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#keycloak",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-keycloak",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-keycloak",
+          "access-posture-keycloak",
+          "resilience-posture-keycloak",
+          "incident-vulnerability-keycloak"
+        ]
+      }
+    },
+    {
+      "service_id": "nats",
+      "display_name": "NATS",
+      "service_kind": "event-bus",
+      "react_compose_service_names": [],
+      "source_accounting_statuses": [],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "c",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#nats",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#nats"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-nats",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-nats",
+          "resilience-posture-nats",
+          "incident-vulnerability-nats"
+        ]
+      }
+    },
+    {
+      "service_id": "temporal",
+      "display_name": "Temporal",
+      "service_kind": "workflow-runtime",
+      "react_compose_service_names": [
+        "temporal"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Temporal is application workflow runtime infrastructure and is not a Windmill substitute."
+        ],
+        "missing_evidence": [
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-temporal",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-temporal",
+          "resilience-posture-temporal",
+          "incident-vulnerability-temporal"
+        ]
+      }
+    },
+    {
+      "service_id": "minio",
+      "display_name": "MinIO",
+      "service_kind": "object-storage",
+      "react_compose_service_names": [
+        "minio"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#minio",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#minio"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-minio",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-minio",
+          "access-posture-minio",
+          "resilience-posture-minio",
+          "incident-vulnerability-minio"
+        ]
+      }
+    },
+    {
+      "service_id": "openbao",
+      "display_name": "OpenBao",
+      "service_kind": "secret-store",
+      "react_compose_service_names": [
+        "openbao"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#openbao",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#openbao"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-openbao",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-openbao",
+          "access-posture-openbao",
+          "resilience-posture-openbao",
+          "incident-vulnerability-openbao"
+        ]
+      }
+    },
+    {
+      "service_id": "otel-collector",
+      "display_name": "OpenTelemetry Collector",
+      "service_kind": "observability-collector",
+      "react_compose_service_names": [
+        "otel-collector"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#otel-collector",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#otel-collector"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-otel-collector",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-otel-collector",
+          "resilience-posture-otel-collector",
+          "incident-vulnerability-otel-collector"
+        ]
+      }
+    },
+    {
+      "service_id": "prometheus",
+      "display_name": "Prometheus",
+      "service_kind": "observability-control-plane",
+      "react_compose_service_names": [
+        "prometheus"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#prometheus",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#prometheus"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-prometheus",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-prometheus",
+          "access-posture-prometheus",
+          "resilience-posture-prometheus",
+          "incident-vulnerability-prometheus"
+        ]
+      }
+    },
+    {
+      "service_id": "grafana",
+      "display_name": "Grafana",
+      "service_kind": "observability-control-plane",
+      "react_compose_service_names": [
+        "grafana"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#grafana",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#grafana"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-grafana",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-grafana",
+          "access-posture-grafana",
+          "resilience-posture-grafana",
+          "incident-vulnerability-grafana"
+        ]
+      }
+    },
+    {
+      "service_id": "loki",
+      "display_name": "Loki",
+      "service_kind": "observability-control-plane",
+      "react_compose_service_names": [
+        "loki"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#loki",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#loki"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-loki",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-loki",
+          "access-posture-loki",
+          "resilience-posture-loki",
+          "incident-vulnerability-loki"
+        ]
+      }
+    },
+    {
+      "service_id": "tempo",
+      "display_name": "Tempo",
+      "service_kind": "observability-control-plane",
+      "react_compose_service_names": [
+        "tempo"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#tempo",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#tempo"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-tempo",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-tempo",
+          "access-posture-tempo",
+          "resilience-posture-tempo",
+          "incident-vulnerability-tempo"
+        ]
+      }
+    },
+    {
+      "service_id": "mailpit",
+      "display_name": "Mailpit",
+      "service_kind": "notification-sink",
+      "react_compose_service_names": [
+        "mailpit"
+      ],
+      "source_accounting_statuses": [
+        "implemented"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "a",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#mailpit",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mailpit"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-mailpit",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-mailpit",
+          "access-posture-mailpit",
+          "resilience-posture-mailpit",
+          "incident-vulnerability-mailpit"
+        ]
+      }
+    },
+    {
+      "service_id": "webhook-sink",
+      "display_name": "Webhook Sink",
+      "service_kind": "webhook-sink",
+      "react_compose_service_names": [],
+      "source_accounting_statuses": [],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "c",
+      "profile_gated": false,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#webhook-sink",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#webhook-sink"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "spec/instances/compose-service/service-catalogue.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-webhook-sink",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-webhook-sink",
+          "resilience-posture-webhook-sink",
+          "incident-vulnerability-webhook-sink"
+        ]
+      }
+    },
+    {
+      "service_id": "redis",
+      "display_name": "Redis",
+      "service_kind": "cache",
+      "react_compose_service_names": [
+        "redis"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#redis",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#redis"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Dev in-memory cache is not equivalent to Redis eviction, persistence, or wire protocol behaviour."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-redis",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-redis",
+          "resilience-posture-redis",
+          "incident-vulnerability-redis"
+        ]
+      }
+    },
+    {
+      "service_id": "meilisearch",
+      "display_name": "Meilisearch",
+      "service_kind": "search-provider",
+      "react_compose_service_names": [
+        "meilisearch"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#meilisearch",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#meilisearch"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Dev in-memory search is not equivalent to Meilisearch ranking, indexing, or persistence."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-meilisearch",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-meilisearch",
+          "resilience-posture-meilisearch",
+          "incident-vulnerability-meilisearch"
+        ]
+      }
+    },
+    {
+      "service_id": "clickhouse",
+      "display_name": "ClickHouse",
+      "service_kind": "analytics-store",
+      "react_compose_service_names": [
+        "clickhouse"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#clickhouse",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clickhouse"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-clickhouse",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-clickhouse",
+          "resilience-posture-clickhouse",
+          "incident-vulnerability-clickhouse"
+        ]
+      }
+    },
+    {
+      "service_id": "pgadmin",
+      "display_name": "pgAdmin",
+      "service_kind": "operator-admin",
+      "react_compose_service_names": [
+        "pgadmin"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "shared-cross-environment-control-plane",
+      "provider_boundary_disposition": "shared-control-plane",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgadmin",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgadmin"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "pgAdmin database inspection/admin workflow is not equivalent to application-level database tests."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future operator console SSO/clickthrough and privileged access proof"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-pgadmin",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-pgadmin",
+          "access-posture-pgadmin",
+          "resilience-posture-pgadmin",
+          "incident-vulnerability-pgadmin"
+        ]
+      }
+    },
+    {
+      "service_id": "sonar-postgres",
+      "display_name": "SonarQube Postgres",
+      "service_kind": "assurance-backing-store",
+      "react_compose_service_names": [
+        "sonar-postgres"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "shared-cross-environment-control-plane",
+      "provider_boundary_disposition": "shared-control-plane",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-postgres",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-postgres"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-sonar-postgres",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-sonar-postgres",
+          "resilience-posture-sonar-postgres",
+          "incident-vulnerability-sonar-postgres"
+        ]
+      }
+    },
+    {
+      "service_id": "sonar-oidc-plugin",
+      "display_name": "SonarQube OIDC Plugin Fetcher",
+      "service_kind": "assurance-backing-store",
+      "react_compose_service_names": [
+        "sonar-oidc-plugin"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "shared-cross-environment-control-plane",
+      "provider_boundary_disposition": "shared-control-plane",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-oidc-plugin",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-oidc-plugin"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Plugin fetch mechanics are deployment details, not independent semantic authority."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-sonar-oidc-plugin",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-sonar-oidc-plugin",
+          "resilience-posture-sonar-oidc-plugin",
+          "incident-vulnerability-sonar-oidc-plugin"
+        ]
+      }
+    },
+    {
+      "service_id": "sonarqube",
+      "display_name": "SonarQube",
+      "service_kind": "assurance-control-plane",
+      "react_compose_service_names": [
+        "sonarqube"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "shared-cross-environment-control-plane",
+      "provider_boundary_disposition": "shared-control-plane",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonarqube",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonarqube"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future operator console SSO/clickthrough and privileged access proof"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-sonarqube",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-sonarqube",
+          "access-posture-sonarqube",
+          "resilience-posture-sonarqube",
+          "incident-vulnerability-sonarqube"
+        ]
+      }
+    },
+    {
+      "service_id": "mock-oidc",
+      "display_name": "Mock OIDC",
+      "service_kind": "provider-mock",
+      "react_compose_service_names": [
+        "mock-oidc"
+      ],
+      "source_accounting_statuses": [
+        "covered-by-usf-runtime"
+      ],
+      "requirement_state": "deferred",
+      "human_decision_state": "requires-human-decision",
+      "environment_disposition": "deferred",
+      "provider_boundary_disposition": "deferred",
+      "readiness_tier": "deferred",
+      "evidence_grade": "b",
+      "profile_gated": false,
+      "generated_in_targets": [],
+      "closure_evidence": {
+        "closure_disposition": "covered-by-usf-runtime",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#mock-oidc",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mock-oidc"
+        ],
+        "proof_evidence_refs": [
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Mock OIDC cannot prove live external identity provider readiness."
+        ],
+        "missing_evidence": [
+          "accepted implementation/proof decision for deferred service depth"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "deferred-boundary-recorded"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-mock-oidc",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-mock-oidc",
+          "incident-vulnerability-mock-oidc"
+        ]
+      }
+    },
+    {
+      "service_id": "localstack",
+      "display_name": "LocalStack",
+      "service_kind": "provider-emulator",
+      "react_compose_service_names": [
+        "localstack"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "prohibited",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#localstack",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#localstack"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "LocalStack emulation is not live external provider evidence."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-localstack",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-localstack",
+          "resilience-posture-localstack",
+          "incident-vulnerability-localstack"
+        ]
+      }
+    },
+    {
+      "service_id": "wiremock",
+      "display_name": "WireMock",
+      "service_kind": "provider-mock",
+      "react_compose_service_names": [
+        "wiremock"
+      ],
+      "source_accounting_statuses": [
+        "substituted-partial"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "prohibited",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "c",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "substituted-partial",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#wiremock",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#wiremock"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "WireMock proves configured mock behaviour only."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-wiremock",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-wiremock",
+          "resilience-posture-wiremock",
+          "incident-vulnerability-wiremock"
+        ]
+      }
+    },
+    {
+      "service_id": "alertmanager",
+      "display_name": "Alertmanager",
+      "service_kind": "observability-control-plane",
+      "react_compose_service_names": [
+        "alertmanager"
+      ],
+      "source_accounting_statuses": [
+        "deferred"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "c",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "deferred",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#alertmanager",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alertmanager"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-alertmanager",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-alertmanager",
+          "access-posture-alertmanager",
+          "resilience-posture-alertmanager",
+          "incident-vulnerability-alertmanager"
+        ]
+      }
+    },
+    {
+      "service_id": "alloy",
+      "display_name": "Grafana Alloy",
+      "service_kind": "observability-collector",
+      "react_compose_service_names": [
+        "alloy"
+      ],
+      "source_accounting_statuses": [
+        "deferred"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "c",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "deferred",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#alloy",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alloy"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-alloy",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-alloy",
+          "resilience-posture-alloy",
+          "incident-vulnerability-alloy"
+        ]
+      }
+    },
+    {
+      "service_id": "windmill-postgres",
+      "display_name": "Windmill Postgres",
+      "service_kind": "workflow-backing-store",
+      "react_compose_service_names": [
+        "windmill-postgres"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-postgres",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-postgres"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-windmill-postgres",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-windmill-postgres",
+          "resilience-posture-windmill-postgres",
+          "incident-vulnerability-windmill-postgres"
+        ]
+      }
+    },
+    {
+      "service_id": "windmill-redis",
+      "display_name": "Windmill Redis",
+      "service_kind": "workflow-backing-store",
+      "react_compose_service_names": [
+        "windmill-redis"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-redis",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-redis"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-windmill-redis",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-windmill-redis",
+          "resilience-posture-windmill-redis",
+          "incident-vulnerability-windmill-redis"
+        ]
+      }
+    },
+    {
+      "service_id": "windmill",
+      "display_name": "Windmill",
+      "service_kind": "operator-automation",
+      "react_compose_service_names": [
+        "windmill"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Windmill is platform/operator automation and is not a Temporal substitute."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-windmill",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-windmill",
+          "access-posture-windmill",
+          "resilience-posture-windmill",
+          "incident-vulnerability-windmill"
+        ]
+      }
+    },
+    {
+      "service_id": "windmill-worker",
+      "display_name": "Windmill Worker",
+      "service_kind": "operator-automation-worker",
+      "react_compose_service_names": [
+        "windmill-worker"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-worker",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-worker"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-windmill-worker",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-windmill-worker",
+          "access-posture-windmill-worker",
+          "resilience-posture-windmill-worker",
+          "incident-vulnerability-windmill-worker"
+        ]
+      }
+    },
+    {
+      "service_id": "temporal-postgres",
+      "display_name": "Temporal Postgres",
+      "service_kind": "workflow-backing-store",
+      "react_compose_service_names": [
+        "temporal-postgres"
+      ],
+      "source_accounting_statuses": [
+        "substituted-partial"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "requires-human-decision",
+      "environment_disposition": "deferred",
+      "provider_boundary_disposition": "deferred",
+      "readiness_tier": "deferred",
+      "evidence_grade": "b",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "substituted-partial",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal-postgres",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-postgres"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "USF dev Temporal currently uses postgres service; separate Temporal database remains an isolation decision."
+        ],
+        "missing_evidence": [
+          "accepted implementation/proof decision for deferred service depth"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "deferred-boundary-recorded"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-temporal-postgres",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-temporal-postgres",
+          "resilience-posture-temporal-postgres",
+          "incident-vulnerability-temporal-postgres"
+        ]
+      }
+    },
+    {
+      "service_id": "temporal-ui",
+      "display_name": "Temporal UI",
+      "service_kind": "workflow-operator-ui",
+      "react_compose_service_names": [
+        "temporal-ui"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal-ui",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-ui"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-temporal-ui",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-temporal-ui",
+          "access-posture-temporal-ui",
+          "resilience-posture-temporal-ui",
+          "incident-vulnerability-temporal-ui"
+        ]
+      }
+    },
+    {
+      "service_id": "pgbackrest",
+      "display_name": "pgBackRest",
+      "service_kind": "backup-restore",
+      "react_compose_service_names": [
+        "pgbackrest"
+      ],
+      "source_accounting_statuses": [
+        "deferred"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "c",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "deferred",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgbackrest",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgbackrest"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-pgbackrest",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-pgbackrest",
+          "resilience-posture-pgbackrest",
+          "incident-vulnerability-pgbackrest"
+        ]
+      }
+    },
+    {
+      "service_id": "clamav",
+      "display_name": "ClamAV",
+      "service_kind": "file-scanner",
+      "react_compose_service_names": [
+        "clamav"
+      ],
+      "source_accounting_statuses": [
+        "deferred"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "external-managed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "c",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "deferred",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#clamav",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clamav"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Shared scanning engine is valid only when queues, files, scan results, and evidence are environment scoped."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-clamav",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-clamav",
+          "resilience-posture-clamav",
+          "incident-vulnerability-clamav"
+        ]
+      }
+    },
+    {
+      "service_id": "sentry",
+      "display_name": "Sentry",
+      "service_kind": "observability-control-plane",
+      "react_compose_service_names": [
+        "sentry-postgres",
+        "sentry-redis",
+        "sentry-clickhouse",
+        "sentry-kafka",
+        "sentry-memcached",
+        "sentry-snuba-migrate",
+        "sentry-migrate",
+        "sentry-kafka-init",
+        "sentry-relay",
+        "sentry-snuba-api",
+        "sentry-snuba-errors",
+        "sentry-snuba-replacer",
+        "sentry-web",
+        "sentry-events-consumer",
+        "sentry-post-process-forwarder",
+        "sentry-taskbroker",
+        "sentry-taskworker",
+        "sentry-taskscheduler",
+        "sentry-cleanup"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "shared-cross-environment-control-plane",
+      "provider_boundary_disposition": "shared-control-plane",
+      "readiness_tier": "catalogue-only",
+      "evidence_grade": "d",
+      "profile_gated": false,
+      "generated_in_targets": [],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sentry",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sentry"
+        ],
+        "proof_evidence_refs": [],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
+          "Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future operator console SSO/clickthrough and privileged access proof"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-sentry",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-sentry",
+          "access-posture-sentry",
+          "resilience-posture-sentry",
+          "incident-vulnerability-sentry"
+        ]
+      }
+    },
+    {
+      "service_id": "caddy",
+      "display_name": "Caddy Gateway",
+      "service_kind": "gateway",
+      "react_compose_service_names": [
+        "external-caddy"
+      ],
+      "source_accounting_statuses": [
+        "requires-human-decision"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "cloud-provider",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "d",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "dev",
+        "test",
+        "staging"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "requires-human-decision",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#caddy",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#caddy"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm compose:check-generated",
+          "python3 tools/validate-compose/validate-compose.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future operator console SSO/clickthrough and privileged access proof",
+          "live external/provider-managed service evidence",
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+        ],
+        "accepted_out_of_scope_rationale": "",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "generated-compose-derivation"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-caddy",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-caddy",
+          "access-posture-caddy",
+          "resilience-posture-caddy",
+          "incident-vulnerability-caddy"
+        ]
+      }
+    },
+    {
+      "service_id": "platform-api",
+      "display_name": "React Platform API",
+      "service_kind": "application-runtime",
+      "react_compose_service_names": [
+        "platform-api"
+      ],
+      "source_accounting_statuses": [
+        "covered-by-usf-runtime"
+      ],
+      "requirement_state": false,
+      "human_decision_state": "not-required",
+      "environment_disposition": "out-of-scope",
+      "provider_boundary_disposition": "out-of-scope",
+      "readiness_tier": "out-of-scope",
+      "evidence_grade": "b",
+      "profile_gated": false,
+      "generated_in_targets": [],
+      "closure_evidence": {
+        "closure_disposition": "covered-by-usf-runtime",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#platform-api",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#platform-api"
+        ],
+        "proof_evidence_refs": [
+          "spec/instances/compose-service/service-catalogue.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+        ],
+        "tracking_issues": [
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Historical React runtime services are not USF implementation authority."
+        ],
+        "missing_evidence": [
+          "future implementation authority if this historical service becomes in scope"
+        ],
+        "accepted_out_of_scope_rationale": "Runtime application code is outside this foundation-scope Compose classification.",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "historical-source-classification"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-platform-api",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-platform-api",
+          "incident-vulnerability-platform-api"
+        ]
+      }
+    },
+    {
+      "service_id": "react-app",
+      "display_name": "React App",
+      "service_kind": "implementation-ui",
+      "react_compose_service_names": [
+        "react-app"
+      ],
+      "source_accounting_statuses": [
+        "out-of-foundation-scope"
+      ],
+      "requirement_state": false,
+      "human_decision_state": "not-required",
+      "environment_disposition": "out-of-scope",
+      "provider_boundary_disposition": "out-of-scope",
+      "readiness_tier": "out-of-scope",
+      "evidence_grade": "c",
+      "profile_gated": false,
+      "generated_in_targets": [],
+      "closure_evidence": {
+        "closure_disposition": "out-of-foundation-scope",
+        "closure_blocking": false,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#react-app",
+        "react_parity_refs": [
+          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#react-app"
+        ],
+        "proof_evidence_refs": [],
+        "tracking_issues": [
+          "USF-133",
+          "USF-185"
+        ],
+        "non_equivalence_boundaries": [
+          "Historical React UI service is not the USF gateway or forward-auth semantic authority."
+        ],
+        "missing_evidence": [
+          "current runtime proof stronger than catalogue classification for this service",
+          "future implementation authority if this historical service becomes in scope"
+        ],
+        "accepted_out_of_scope_rationale": "Runtime UI code is outside this foundation-scope Compose classification.",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "service-disposition-classification",
+          "historical-source-classification"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-react-app",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator",
+          "soa-deferred-boundary-react-app",
+          "incident-vulnerability-react-app"
+        ]
+      }
+    }
+  ],
+  "enterprise_evidence_model": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "enterprise_evidence_validator": "tools/validate-enterprise/validate-enterprise.py all --json",
+  "done_state_governance_ref": "enterprise-evidence.repository-model#doneStateGovernance",
+  "statement_of_applicability_support_only": true
+}

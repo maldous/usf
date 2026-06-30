@@ -1,0 +1,5 @@
+{
+  "description": "Adapter observability evidence standard lacks correlation id.",
+  "expectedRule": "USF-ENTERPRISE-006",
+  "observabilityDropRequiredField": "correlationId"
+}

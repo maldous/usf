@@ -80,6 +80,30 @@ Evidence grades: A=12, B=3, C=6, D=33.
 
 A grade A row is directly implemented or equivalently composed in the current USF local/dev/test substrate. A grade B row is semantically covered by an authorised USF runtime/proof but is not service-equivalent. A grade C row is documented as deferred. A grade D row requires a human decision or exact blocker before USF-133 can close. A grade F row would be unclassified; this review found no unclassified compose service after the curated pass.
 
+## Lane 1 Closure Enforcement
+
+`docs/architecture/compose-service-disposition-closure-matrix.json` records the
+machine-checkable Lane 1 closure evidence for the service-disposition rows. The
+semantic authority remains `spec/instances/compose-service/service-catalogue.json`.
+The closure matrix is evidence-only: it links each service-catalogue row to the
+React compose parity row, proof references, unresolved follow-up issues, explicit
+non-equivalence boundaries, out-of-scope rationales, and prohibited readiness
+claims. It also links each row to the repository enterprise evidence model at
+`spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json`.
+
+`tools/validate-parity/validate-parity.py` enforces the closure matrix and fails
+closed when a closure-relevant service row is missing, a row lacks a disposition,
+a blocking row lacks a follow-up issue, implemented or runtime-covered rows lack
+proof references, runtime proof is falsely treated as Compose service equivalence,
+enterprise evidence references are missing, or service-disposition closure/readiness
+is overclaimed. Planted defects under
+`tools/validate-parity/planted-defects/` cover those rule classes.
+
+This Lane 1 evidence does not close USF-133 and does not claim full dev readiness,
+test readiness, staging readiness, production readiness, deployment readiness,
+live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise
+production readiness, or full React parity.
+
 USF-181 adds bounded runtime proof for `apps/api` and `apps/work`; USF-183 adds bounded
 Postgres, Mailpit, NATS, MinIO, Keycloak, OpenBao, and Temporal provider binding proof.
 These are recorded through `spec/instances/runtime-proof/runtime-application-compose-parity.json`
