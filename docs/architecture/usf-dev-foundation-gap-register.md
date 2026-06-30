@@ -69,6 +69,12 @@ Recommended draft-only Linear work, if accepted by a human in a later apply-mode
 | React parity: operator/admin surface posture                | Define admin console set, authn/authz, tenant safety, and future ops UI boundaries.                                                                                                                                                                                               | P1                         |
 | React parity: alerting, dashboard, incident posture depth   | Resolve Alertmanager, Alloy, dashboards, alert routing, and incident evidence depth.                                                                                                                                                                                              | P2                         |
 
+## Cleanup-To-Implementation Orchestration
+
+`docs/architecture/usf-dev-readiness-cleanup-orchestration.md` records the cleanup-to-implementation readiness pass for the remaining USF-133 lanes. It keeps decision-titled issues open, re-scopes them into executable proof, validator, documentation, matrix, and evidence work, and requires a coordinator evidence pack before implementation prompts are issued.
+
+This orchestration pass is planning and issue hygiene only. It does not authorise runtime, source, provider, schema, validator, or semantic behaviour implementation. It does not claim full dev readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, test readiness, or full React parity. It does not close USF-133.
+
 ## Validator Recommendations
 
 - Add a validator that checks every React compose service has a row in complete-react-to-usf-compose-service-parity-matrix.json.
