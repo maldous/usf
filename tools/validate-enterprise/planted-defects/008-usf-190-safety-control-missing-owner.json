@@ -1,0 +1,12 @@
+{
+  "description": "Lane 6 safety-control evidence keeps a placeholder owner.",
+  "expectedRule": "USF-ENTERPRISE-011",
+  "soaPatch": [
+    {
+      "id": "usf-190-db-enterprise-safety-control",
+      "set": {
+        "owner": "TODO"
+      }
+    }
+  ]
+}

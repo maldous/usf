@@ -45,6 +45,7 @@ RULES = {
     "USF-ENTERPRISE-008": ("blocking", "Lane 1 service disposition closure matrix lacks enterprise linkage"),
     "USF-ENTERPRISE-009": ("blocking", "access resilience incident or privacy posture is incomplete"),
     "USF-ENTERPRISE-010": ("blocking", "Lane 4 observability operations evidence is incomplete"),
+    "USF-ENTERPRISE-011": ("blocking", "Lane 6 enterprise safety-control evidence is incomplete"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -141,6 +142,92 @@ LANE4_OBSERVABILITY_TOKENS = {
 }
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 PINNED_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+){1,3}(?:[-+][0-9A-Za-z.-]+)?$")
+EFFECTIVENESS_STATES = {
+    "defined-only",
+    "implemented",
+    "proven-local",
+    "operating-evidence-present",
+    "deferred-with-owner",
+    "out-of-scope-with-rationale",
+}
+PLACEHOLDER_RE = re.compile(r"\b(?:TODO|TBD|unknown|missing|unassigned)\b", re.IGNORECASE)
+LANE6_CONTROL_ROWS = {
+    "usf-190-db-enterprise-safety-control": {
+        "expectedState": "proven-local",
+        "evidence": "evidence-usf-190-db-enterprise-safety-controls",
+        "followUp": "USF-139",
+    },
+    "usf-190-authorization-enterprise-safety-control": {
+        "expectedState": "proven-local",
+        "evidence": "evidence-usf-190-authorization-enterprise-safety-controls",
+        "followUp": "USF-141",
+    },
+    "usf-190-audit-enterprise-safety-control": {
+        "expectedState": "proven-local",
+        "evidence": "evidence-usf-190-audit-enterprise-safety-controls",
+        "followUp": "USF-143",
+    },
+    "usf-190-config-secrets-enterprise-safety-control": {
+        "expectedState": "proven-local",
+        "evidence": "evidence-usf-190-config-secrets-enterprise-safety-controls",
+        "followUp": "USF-145",
+    },
+    "usf-190-files-storage-enterprise-safety-control": {
+        "expectedState": "proven-local",
+        "evidence": "evidence-usf-190-files-storage-enterprise-safety-controls",
+        "followUp": "USF-147",
+    },
+    "usf-190-backup-retention-legal-hold-boundary": {
+        "expectedState": "deferred-with-owner",
+        "evidence": "evidence-usf-190-backup-retention-legal-hold-boundary",
+        "followUp": "USF-139,USF-147",
+    },
+    "usf-190-status-integrity-boundary": {
+        "expectedState": "defined-only",
+        "evidence": "evidence-usf-190-status-integrity-validator",
+        "followUp": "USF-192",
+    },
+}
+LANE6_EVIDENCE_ROWS = {row["evidence"] for row in LANE6_CONTROL_ROWS.values()}
+LANE6_THREAT_ROWS = {
+    "usf-190-threat-db-tenant-data-control",
+    "usf-190-threat-authorization-pdp-control",
+    "usf-190-threat-audit-evidence-control",
+    "usf-190-threat-config-secrets-control",
+    "usf-190-threat-files-storage-control",
+    "usf-190-threat-backup-retention-legal-hold-control",
+}
+LANE6_POSTURE_ROWS = {
+    "accessReviewPrivilegedOperationPosture": {
+        "usf-190-access-authorization-privileged-boundary",
+    },
+    "backupRestoreResiliencePosture": {
+        "usf-190-resilience-backup-retention-legal-hold-boundary",
+    },
+    "incidentVulnerabilityManagementEvidence": {
+        "usf-190-incident-safety-control-posture",
+    },
+    "privacyDataMinimisationPosture": {
+        "usf-190-privacy-data-classification-posture",
+    },
+}
+LANE6_DEFERRAL_TOKENS = (
+    "riskStatement=",
+    "threatFailureScenario=",
+    "affectedAssetService=",
+    "impact=",
+    "likelihood=",
+    "owner=",
+    "treatment=",
+    "reviewDate=",
+    "followUpIssue=",
+)
+LANE6_EXCEPTION_TOKENS = (
+    "exceptionOwner=",
+    "exceptionReason=",
+    "compensatingControl=",
+    "exceptionExpiry=",
+)
 
 
 class Findings:
@@ -278,11 +365,24 @@ def apply_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[st
         out["soaSupportMappings"] = [
             row for row in out.get("soaSupportMappings", []) if row.get("id") != defect["removeSoaMapping"]
         ]
+    for patch in defect.get("soaPatch", []):
+        for row in out.get("soaSupportMappings", []):
+            if row.get("id") == patch.get("id"):
+                for key in patch.get("drop", []):
+                    row.pop(key, None)
+                for key, value in patch.get("set", {}).items():
+                    row[key] = value
     if defect.get("removeThreatModel"):
         out["threatModelAbuseCaseRegister"] = [
             row
             for row in out.get("threatModelAbuseCaseRegister", [])
             if row.get("id") != defect["removeThreatModel"]
+        ]
+    if defect.get("removeEnterpriseEvidence"):
+        out["evidenceRegister"] = [
+            row
+            for row in out.get("evidenceRegister", [])
+            if row.get("id") != defect["removeEnterpriseEvidence"]
         ]
     if defect.get("observabilityDropRequiredField"):
         field = defect["observabilityDropRequiredField"]
@@ -312,6 +412,13 @@ def apply_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[st
                     row[key] = value
     for key, value in defect.get("doneStateSet", {}).items():
         out.setdefault("doneStateGovernance", {})[key] = value
+    for patch in defect.get("laneRequirementPatch", []):
+        for row in out.get("laneEvidenceRequirements", []):
+            if row.get("laneIssue") == patch.get("laneIssue"):
+                for key in patch.get("drop", []):
+                    row.pop(key, None)
+                for key, value in patch.get("set", {}).items():
+                    row[key] = value
     return out
 
 
@@ -549,6 +656,87 @@ def check_posture_registers(F: Findings, state: dict[str, Any]) -> None:
             F.add("USF-ENTERPRISE-009", binding_id, "missing adapter privacy/data minimisation posture row")
 
 
+def effectiveness_state(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    prefix = "effectivenessState="
+    for part in value.split(";"):
+        item = part.strip()
+        if item.startswith(prefix):
+            return item.removeprefix(prefix)
+    return None
+
+
+def has_placeholder(value: Any) -> bool:
+    return not isinstance(value, str) or not value.strip() or PLACEHOLDER_RE.search(value) is not None
+
+
+def check_lane6_safety_controls(F: Findings, state: dict[str, Any]) -> None:
+    model = state["model"]
+    soa = rows_by_id(model.get("soaSupportMappings"))
+    evidence = rows_by_id(model.get("evidenceRegister"))
+    threats = rows_by_id(model.get("threatModelAbuseCaseRegister"))
+
+    for row_id, expected in LANE6_CONTROL_ROWS.items():
+        row = soa.get(row_id)
+        if not row:
+            F.add("USF-ENTERPRISE-011", row_id, "missing Lane 6 safety-control SoA row")
+            continue
+        state_value = effectiveness_state(row.get("implementationStatus"))
+        if state_value not in EFFECTIVENESS_STATES:
+            F.add("USF-ENTERPRISE-011", row_id, "effectivenessState is missing or not controlled")
+        elif state_value != expected["expectedState"]:
+            F.add("USF-ENTERPRISE-011", row_id, f"expected effectivenessState={expected['expectedState']}")
+        for field in ("owner", "riskOwner", "controlOwner"):
+            if has_placeholder(row.get(field)):
+                F.add("USF-ENTERPRISE-011", row_id, f"{field} is missing or placeholder")
+        if expected["evidence"] not in str(row.get("evidenceSource", "")):
+            F.add("USF-ENTERPRISE-011", row_id, "control-to-evidence graph does not reference its evidence row")
+        if expected["followUp"] not in str(row.get("deferredReason", "")):
+            F.add("USF-ENTERPRISE-011", row_id, "deferred boundary lacks linked follow-up issue")
+        missing_deferral = [token for token in LANE6_DEFERRAL_TOKENS if token not in str(row.get("deferredReason", ""))]
+        if missing_deferral:
+            F.add("USF-ENTERPRISE-011", row_id, f"deferred boundary lacks {missing_deferral}")
+        missing_exception = [token for token in LANE6_EXCEPTION_TOKENS if token not in str(row.get("deferredReason", ""))]
+        if missing_exception:
+            F.add("USF-ENTERPRISE-011", row_id, f"exception boundary lacks {missing_exception}")
+        if REQUIRED_NON_CLAIMS - set(row.get("nonClaims", [])):
+            F.add("USF-ENTERPRISE-011", row_id, "Lane 6 control row non-claims are incomplete")
+
+    for evidence_id in LANE6_EVIDENCE_ROWS:
+        row = evidence.get(evidence_id)
+        if not row:
+            F.add("USF-ENTERPRISE-011", evidence_id, "missing Lane 6 evidence register row")
+            continue
+        if "USF-190" not in row.get("issueLinks", []):
+            F.add("USF-ENTERPRISE-011", evidence_id, "Lane 6 evidence row must link USF-190")
+        if not row.get("whatWasNotProven") or "No " not in str(row.get("whatWasNotProven")):
+            F.add("USF-ENTERPRISE-011", evidence_id, "Lane 6 evidence row must preserve explicit non-claims")
+
+    for threat_id in LANE6_THREAT_ROWS:
+        if threat_id not in threats:
+            F.add("USF-ENTERPRISE-011", threat_id, "missing Lane 6 threat or abuse-case row")
+
+    for section, required_ids in LANE6_POSTURE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in required_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-011", row_id, f"missing Lane 6 posture row in {section}")
+                continue
+            posture_text = ";".join(str(item) for item in row.get("posture", []))
+            for token in ("effectivenessState=", "dataClassification=", "changeManagementEvidence=", "rollbackDeferredBoundary="):
+                if token not in posture_text:
+                    F.add("USF-ENTERPRISE-011", row_id, f"posture row lacks {token}")
+            if REQUIRED_NON_CLAIMS - set(row.get("nonClaims", [])):
+                F.add("USF-ENTERPRISE-011", row_id, "Lane 6 posture row non-claims are incomplete")
+
+    lane_rows = {row.get("laneIssue"): row for row in model.get("laneEvidenceRequirements", [])}
+    lane = lane_rows.get("USF-190", {})
+    if str(lane.get("approvalStatus", "")).lower() in {"done", "complete", "completed", "closed"}:
+        F.add("USF-ENTERPRISE-011", "USF-190", "Lane 6 must remain open until coordinator confirms acceptance criteria")
+
+
 def check_closure_matrix_linkage(F: Findings, state: dict[str, Any]) -> None:
     matrix = state.get("closureMatrix")
     if matrix is None:
@@ -625,6 +813,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_sdk_governance(F, state)
     check_observability_standard(F, state)
     check_posture_registers(F, state)
+    check_lane6_safety_controls(F, state)
     check_closure_matrix_linkage(F, state)
     check_lane4_observability(F, state)
     return F

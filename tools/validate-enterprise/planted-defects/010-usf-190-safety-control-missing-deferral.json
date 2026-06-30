@@ -1,0 +1,12 @@
+{
+  "description": "Lane 6 deferred safety-control boundary lacks required risk and follow-up details.",
+  "expectedRule": "USF-ENTERPRISE-011",
+  "soaPatch": [
+    {
+      "id": "usf-190-backup-retention-legal-hold-boundary",
+      "set": {
+        "deferredReason": "not-deferred"
+      }
+    }
+  ]
+}

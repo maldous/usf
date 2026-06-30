@@ -2945,6 +2945,188 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-190-db-enterprise-safety-control",
+      "mappedType": "enterprise-safety-control",
+      "controlPurpose": "Map DB enterprise safety controls for tenant isolation, RLS, append-only ledgers, optimistic concurrency basis, tenant indexes, backup boundary, and data-classification posture.",
+      "riskTreated": "Local Postgres proof covers RLS and ledger controls but not full provider-managed DB enterprise readiness.",
+      "assetServiceAffected": "postgres; tenant_memberships; audit_ledger; files metadata",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; laneIssue=USF-190; currentEvidence=evidence-usf-190-db-enterprise-safety-controls; deferredBoundary=USF-139; noRuntimeCodeImported=true",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-db-enterprise-safety-controls; packages/proof/src/db-rls-isolation-proof.ts; tools/validate-parity/validate-db.py; spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=Local Postgres proof covers RLS and ledger controls but not full provider-managed DB enterprise readiness.; threatFailureScenario=Tenant key, RLS, pooling, index, backup, or aggregate drift leaks cross-tenant data or corrupts audit state.; affectedAssetService=postgres; tenant_memberships; audit_ledger; files metadata; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=Keep current local DB proof and parity validator as compensating evidence; defer remaining DB depth to USF-139.; reviewDate=2026-09-30; followUpIssue=USF-139; exceptionOwner=platform-data-foundation; exceptionReason=Lane 6 records bounded local evidence and deferred enterprise depth only; compensatingControl=parity-validator-plus-enterprise-validator-plus-explicit-non-claims; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-authorization-enterprise-safety-control",
+      "mappedType": "enterprise-safety-control",
+      "controlPurpose": "Map authorization enterprise safety controls for synchronous PDP evaluation, provider-state refresh before PDP, RLS consistency, denial audit, and provider SDK isolation.",
+      "riskTreated": "Local PDP/RLS proof covers tenant-boundary consistency but not full delegation, impersonation, session, cache, SoD, or ABAC enterprise depth.",
+      "assetServiceAffected": "PDP; tenant membership directory; authorization audit decisions",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; laneIssue=USF-190; currentEvidence=evidence-usf-190-authorization-enterprise-safety-controls; deferredBoundary=USF-141; noRuntimeCodeImported=true",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-authorization-enterprise-safety-controls; packages/proof/src/authz-rls-consistency-proof.ts; tools/validate-parity/validate-authz.py; capabilities/tenant/src/pdp.ts",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=Local PDP/RLS proof covers tenant-boundary consistency but not full delegation, impersonation, session, cache, SoD, or ABAC enterprise depth.; threatFailureScenario=Stale membership state, async PDP drift, or provider SDK coupling permits an unauthorized tenant action.; affectedAssetService=PDP; tenant membership directory; authorization audit decisions; impact=high; likelihood=medium; owner=platform-identity-foundation; treatment=Keep PDP synchronous and refresh provider state before evaluation; defer deeper authorization controls to USF-141.; reviewDate=2026-09-30; followUpIssue=USF-141; exceptionOwner=platform-identity-foundation; exceptionReason=Lane 6 records bounded local evidence and deferred enterprise depth only; compensatingControl=parity-validator-plus-enterprise-validator-plus-explicit-non-claims; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-audit-enterprise-safety-control",
+      "mappedType": "enterprise-safety-control",
+      "controlPurpose": "Map audit enterprise safety controls for canonical events, tenant-safe query, append-only hash chain, tamper detection, redaction, retention boundary, and export/SIEM deferral.",
+      "riskTreated": "Local tamper-evidence proof covers append-only and RLS but not signing key management, SIEM, export packages, or retention/disposal operation.",
+      "assetServiceAffected": "audit event model; audit_ledger; audit query service",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; laneIssue=USF-190; currentEvidence=evidence-usf-190-audit-enterprise-safety-controls; deferredBoundary=USF-143; noRuntimeCodeImported=true",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-audit-enterprise-safety-controls; packages/proof/src/audit-evidence-proof.ts; tools/validate-parity/validate-audit.py; packages/core/src/index.ts#audit-model",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=Local tamper-evidence proof covers append-only and RLS but not signing key management, SIEM, export packages, or retention/disposal operation.; threatFailureScenario=Audit row mutation, non-canonical outcome mapping, or ungoverned export undermines forensic evidence.; affectedAssetService=audit event model; audit_ledger; audit query service; impact=high; likelihood=medium; owner=platform-audit-foundation; treatment=Keep local audit validator and tamper proof as compensating evidence; defer audit enterprise depth to USF-143.; reviewDate=2026-09-30; followUpIssue=USF-143; exceptionOwner=platform-audit-foundation; exceptionReason=Lane 6 records bounded local evidence and deferred enterprise depth only; compensatingControl=parity-validator-plus-enterprise-validator-plus-explicit-non-claims; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-config-secrets-enterprise-safety-control",
+      "mappedType": "enterprise-safety-control",
+      "controlPurpose": "Map config/secrets enterprise safety controls for classified config, secret-reference-only provider credentials, redaction, PDP-guarded secret access, and OpenBao local-composed reconciliation.",
+      "riskTreated": "Hermetic config proof and local OpenBao binding do not prove live secret-manager, KMS, rotation, override workflow, or provider config-plane readiness.",
+      "assetServiceAffected": "config registry; secret references; OpenBao composed provider; provider config keys",
+      "owner": "platform-security-foundation",
+      "riskOwner": "platform-security-risk-owner",
+      "controlOwner": "platform-security-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; laneIssue=USF-190; currentEvidence=evidence-usf-190-config-secrets-enterprise-safety-controls; deferredBoundary=USF-145; noRuntimeCodeImported=true",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-config-secrets-enterprise-safety-controls; packages/proof/src/config-secrets-proof.ts; tools/validate-parity/validate-config.py; adapters/secrets/src/index.ts",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=Hermetic config proof and local OpenBao binding do not prove live secret-manager, KMS, rotation, override workflow, or provider config-plane readiness.; threatFailureScenario=Secret value leaks through config, audit, validation, errors, or provider readiness; missing rotation or stale override weakens security controls.; affectedAssetService=config registry; secret references; OpenBao composed provider; provider config keys; impact=critical; likelihood=medium; owner=platform-security-foundation; treatment=Keep secret values behind references and value-free evidence; defer rotation and live secret-manager controls to USF-145.; reviewDate=2026-09-30; followUpIssue=USF-145; exceptionOwner=platform-security-foundation; exceptionReason=Lane 6 records bounded local evidence and deferred enterprise depth only; compensatingControl=parity-validator-plus-enterprise-validator-plus-explicit-non-claims; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-files-storage-enterprise-safety-control",
+      "mappedType": "enterprise-safety-control",
+      "controlPurpose": "Map files/storage enterprise safety controls for tenant-scoped metadata, opaque object keys, upload validation, download scan gate, MinIO local proof, legal hold, and object-store deferrals.",
+      "riskTreated": "Local file metadata and MinIO proof do not prove live object-store IAM, antivirus/DLP, object lock, KMS, backup, or evidence export readiness.",
+      "assetServiceAffected": "files metadata; MinIO object store; scanner boundary; legal_hold flag",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; laneIssue=USF-190; currentEvidence=evidence-usf-190-files-storage-enterprise-safety-controls; deferredBoundary=USF-147; noRuntimeCodeImported=true",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-files-storage-enterprise-safety-controls; packages/proof/src/files-storage-proof.ts; tools/validate-parity/validate-files.py; adapters/store/src/index.ts",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=Local file metadata and MinIO proof do not prove live object-store IAM, antivirus/DLP, object lock, KMS, backup, or evidence export readiness.; threatFailureScenario=Object key, scan, legal-hold, metadata, or object-store policy drift leaks or deletes tenant files.; affectedAssetService=files metadata; MinIO object store; scanner boundary; legal_hold flag; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=Keep local file validator and composed proof as compensating evidence; defer object-store and scanner depth to USF-147.; reviewDate=2026-09-30; followUpIssue=USF-147; exceptionOwner=platform-files-foundation; exceptionReason=Lane 6 records bounded local evidence and deferred enterprise depth only; compensatingControl=parity-validator-plus-enterprise-validator-plus-explicit-non-claims; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-backup-retention-legal-hold-boundary",
+      "mappedType": "enterprise-safety-control",
+      "controlPurpose": "Record backup, restore, retention, purge, and legal-hold enterprise boundaries without upgrading local DB/files proof to backup or production resilience readiness.",
+      "riskTreated": "Current USF local proofs show legal-hold-like purge guards but do not prove scheduled backup, PITR, restore drill, retention jobs, object lifecycle, residency, or legal-hold operation.",
+      "assetServiceAffected": "postgres backups; file objects; audit evidence; retention candidates; legal hold state",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "effectivenessState=deferred-with-owner; laneIssue=USF-190; currentEvidence=evidence-usf-190-backup-retention-legal-hold-boundary; deferredBoundary=USF-139,USF-147; noRuntimeCodeImported=true",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-backup-retention-legal-hold-boundary; docs/architecture/usf-dev-foundation-gap-register.md; ../react/docs/adr/0064-backup-recovery-retention-and-legal-hold-architecture.md; packages/proof/src/db-rls-isolation-proof.ts; packages/proof/src/files-storage-proof.ts",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=Current USF local proofs show legal-hold-like purge guards but do not prove scheduled backup, PITR, restore drill, retention jobs, object lifecycle, residency, or legal-hold operation.; threatFailureScenario=Backup is unusable, restore is untested, retention deletes held records, purge ignores legal hold, or residency is bypassed.; affectedAssetService=postgres backups; file objects; audit evidence; retention candidates; legal hold state; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=Defer backup/restore/retention/legal-hold depth to USF-139 and USF-147 with explicit non-claims.; reviewDate=2026-09-30; followUpIssue=USF-139,USF-147; exceptionOwner=platform-data-foundation; exceptionReason=Lane 6 records bounded local evidence and deferred enterprise depth only; compensatingControl=parity-validator-plus-enterprise-validator-plus-explicit-non-claims; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-status-integrity-boundary",
+      "mappedType": "enterprise-safety-control",
+      "controlPurpose": "Prevent validation passing or a Lane 6 PR from becoming an unsafe Done claim before coordinator acceptance criteria are checked against merged evidence.",
+      "riskTreated": "A local validation pass could be mistaken for issue completion or broader readiness.",
+      "assetServiceAffected": "USF-190 lane status; coordinator evidence pack; enterprise validator",
+      "owner": "platform-governance-foundation",
+      "riskOwner": "platform-governance-risk-owner",
+      "controlOwner": "platform-governance-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; laneIssue=USF-190; currentEvidence=evidence-usf-190-status-integrity-validator; deferredBoundary=USF-192; noRuntimeCodeImported=true",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-status-integrity-validator; tools/validate-enterprise/validate-enterprise.py; tools/validate-enterprise/planted-defects/011-usf-190-unsafe-done-state.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=A local validation pass could be mistaken for issue completion or broader readiness.; threatFailureScenario=USF-190 is moved to Done before source issues, deferrals, evidence rows, and non-claims are confirmed by the coordinator.; affectedAssetService=USF-190 lane status; coordinator evidence pack; enterprise validator; impact=medium; likelihood=medium; owner=platform-governance-foundation; treatment=Keep USF-190 open and let coordinator USF-192 confirm acceptance criteria after PR evidence is merged.; reviewDate=2026-09-30; followUpIssue=USF-192; exceptionOwner=platform-governance-foundation; exceptionReason=Lane 6 records bounded local evidence and deferred enterprise depth only; compensatingControl=parity-validator-plus-enterprise-validator-plus-explicit-non-claims; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -3451,6 +3633,160 @@
       ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed metadata and PR validation summary. effectStateAlias=effectivenessState=defined-only; rawSecretLeakage=blocked; unsafeLogBoundary=message-template-only; tenantSafeLabels=allow-listed; redactionStatus=tenant-safe-required; effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159"
+    },
+    {
+      "id": "evidence-usf-190-db-enterprise-safety-controls",
+      "proofResult": "lane6-db-enterprise-safety-overlay",
+      "whatWasProven": "Lane 6 maps DB safety controls to existing local DB proof, runtime compose evidence, parity validator coverage, owners, deferred boundaries, and non-claims.",
+      "whatWasNotProven": "No full DB parity, provider-managed DB readiness, backup readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, or full React parity readiness is proven.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "compose-local",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres",
+      "adapterProviderId": "database-postgres-composed-test",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-190",
+        "USF-139",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed Lane 6 evidence mapping, PR validation output, and source proof references; no backup or restore readiness is claimed."
+    },
+    {
+      "id": "evidence-usf-190-authorization-enterprise-safety-controls",
+      "proofResult": "lane6-authorization-enterprise-safety-overlay",
+      "whatWasProven": "Lane 6 maps authorization safety controls to the synchronous PDP, provider-state refresh boundary, PDP/RLS proof, authz validator, owners, deferred boundaries, and non-claims.",
+      "whatWasNotProven": "No delegation, impersonation, full token/session validation, SoD, full ABAC, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, or full React parity readiness is proven.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "compose-local",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres",
+      "adapterProviderId": "database-postgres-composed-test",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-190",
+        "USF-141",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; PDP remains synchronous and USF-190 remains open."
+    },
+    {
+      "id": "evidence-usf-190-audit-enterprise-safety-controls",
+      "proofResult": "lane6-audit-enterprise-safety-overlay",
+      "whatWasProven": "Lane 6 maps audit safety controls to local audit proof, canonical application event model, parity validator coverage, owners, deferred boundaries, and non-claims.",
+      "whatWasNotProven": "No signing key management, SIEM, audit export package, retention/disposal operation, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, or full React parity readiness is proven.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "compose-local",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres",
+      "adapterProviderId": "database-postgres-composed-test",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-190",
+        "USF-143",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; audit retention/export depth remains deferred."
+    },
+    {
+      "id": "evidence-usf-190-config-secrets-enterprise-safety-controls",
+      "proofResult": "lane6-config-secrets-enterprise-safety-overlay",
+      "whatWasProven": "Lane 6 maps config/secrets safety controls to hermetic config proof, OpenBao local composed binding, config validator, owners, deferred boundaries, and non-claims.",
+      "whatWasNotProven": "No live secret-manager readiness, KMS readiness, automatic rotation, override workflow, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, or full React parity readiness is proven.",
+      "runtimeMode": "hermetic-and-dev-compose-backed",
+      "providerMode": "hermetic-mock-and-local-composed-real-service",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#openbao",
+      "adapterProviderId": "secret-store-openbao-composed-test",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-190",
+        "USF-145",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; no real secret values or live secret-manager claim."
+    },
+    {
+      "id": "evidence-usf-190-files-storage-enterprise-safety-controls",
+      "proofResult": "lane6-files-storage-enterprise-safety-overlay",
+      "whatWasProven": "Lane 6 maps files/storage safety controls to local file metadata proof, MinIO local composed binding, files validator, owners, deferred boundaries, and non-claims.",
+      "whatWasNotProven": "No live object-store readiness, antivirus/DLP readiness, object lock, KMS readiness, backup readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, or full React parity readiness is proven.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "compose-local",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#minio",
+      "adapterProviderId": "object-storage-minio-composed-test",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-190",
+        "USF-147",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; object lifecycle and evidence export remain deferred."
+    },
+    {
+      "id": "evidence-usf-190-backup-retention-legal-hold-boundary",
+      "proofResult": "lane6-backup-retention-legal-hold-boundary-overlay",
+      "whatWasProven": "Lane 6 records backup, restore, retention, purge, and legal-hold boundaries with owner, risk, treatment, review date, follow-up issues, compensating controls, and non-claims.",
+      "whatWasNotProven": "No scheduled backup, PITR, pgBackRest, restore drill, retention job, legal-hold operation, residency control, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, or full React parity readiness is proven.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres,#minio,#pgbackrest",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-190",
+        "USF-139",
+        "USF-147",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain this deferred boundary until follow-up issues replace it with proof-backed backup, restore, retention, purge, and legal-hold evidence."
+    },
+    {
+      "id": "evidence-usf-190-status-integrity-validator",
+      "proofResult": "lane6-status-integrity-validator-overlay",
+      "whatWasProven": "Lane 6 enterprise validator and planted defects reject missing owner, missing evidence, missing deferral metadata, and unsafe Done state for USF-190 evidence rows.",
+      "whatWasNotProven": "No issue completion, full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity readiness is proven.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-190",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain validator output and planted defect fixtures in PR evidence; USF-190 remains open until coordinator review."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -3815,6 +4151,150 @@
       "failClosedBehaviour": "validators fail when telemetry metadata, prohibited leakage fields, redaction tokens, or incident boundaries are missing",
       "monitoringAuditEvidence": "loggingPosture=defined-only; tracingPosture=defined-only; metricsPosture=defined-only; correlationIdPosture=defined-only; alertingWorkflow=deferred-with-owner; dashboardWorkflow=deferred-with-owner; incidentBoundary=explicit-local-evidence-only",
       "residualRisk": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness"
+    },
+    {
+      "id": "usf-190-threat-db-tenant-data-control",
+      "targetType": "enterprise-safety-control",
+      "target": "postgres and tenant-scoped persistence",
+      "trustBoundary": "Postgres local composed proof boundary; no provider-managed DB or production boundary claim",
+      "tenantBoundary": "RLS, FORCE RLS, SET LOCAL tenant context, tenant_id indexes, and membership refresh must prevent cross-tenant reads or writes",
+      "credentialBoundary": "DB credentials are local compose placeholders or secret references only; raw connection strings must not enter evidence output",
+      "dataClassification": "environment-runtime-data, audit-evidence, identity-metadata, and synthetic local proof data only",
+      "abuseCases": [
+        "cross-tenant RLS bypass",
+        "pooled connection tenant context leak",
+        "identifier enumeration through aggregates",
+        "backup or restore claim without proof"
+      ],
+      "failureModes": [
+        "missing FORCE RLS",
+        "missing tenant_id index",
+        "migration manifest drift",
+        "backup/restore boundary hidden behind local proof"
+      ],
+      "failClosedBehaviour": "validate-db, proof:db, runtime:proof:compose, and USF-ENTERPRISE-011 must fail or preserve deferral before a stronger DB claim is made",
+      "monitoringAuditEvidence": "Lane 6 evidence rows, parity validator output, and DB proof references must be reported in the PR validation summary",
+      "residualRisk": "USF-139 remains open for broader DB enterprise controls and backup readiness depth"
+    },
+    {
+      "id": "usf-190-threat-authorization-pdp-control",
+      "targetType": "enterprise-safety-control",
+      "target": "synchronous PDP and tenant membership authority",
+      "trustBoundary": "PDP stays synchronous and reads already loaded or refreshed provider state; provider SDKs stay outside PDP and tenant capability code",
+      "tenantBoundary": "tenant resource tenant must match context tenant and active membership must authorize the action",
+      "credentialBoundary": "identity provider claims are inputs only and no IdP credential is accepted as authorization evidence",
+      "dataClassification": "identity-metadata and authorization-decision metadata only",
+      "abuseCases": [
+        "async PDP state race",
+        "stale membership cache permit",
+        "IdP role treated as final authorization",
+        "break-glass reused outside scope"
+      ],
+      "failureModes": [
+        "PDP changed to await provider calls",
+        "membership not refreshed before evaluation",
+        "authorization decision not audited",
+        "provider SDK imported into capability or PDP layer"
+      ],
+      "failClosedBehaviour": "validate-authz and USF-ENTERPRISE-011 must block unsafe authorization posture while USF-141 remains open",
+      "monitoringAuditEvidence": "authorization.decision audit records and Lane 6 validator output are the bounded evidence surfaces",
+      "residualRisk": "USF-141 remains open for delegation, impersonation, token/session, cache, SoD, and ABAC depth"
+    },
+    {
+      "id": "usf-190-threat-audit-evidence-control",
+      "targetType": "enterprise-safety-control",
+      "target": "audit event model and audit ledger",
+      "trustBoundary": "audit is evidence, not logging; generated reports do not upgrade raw audit proof",
+      "tenantBoundary": "audit rows and retrieval stay tenant-scoped and fail closed without tenant context",
+      "credentialBoundary": "audit metadata redacts secret-shaped keys and values and must not carry provider payloads",
+      "dataClassification": "audit-evidence and security-sensitive metadata only",
+      "abuseCases": [
+        "audit row rewrite",
+        "non-canonical audit outcome mapping",
+        "secret dumped into metadata",
+        "audit export claimed without package evidence"
+      ],
+      "failureModes": [
+        "append-only grant regression",
+        "hash chain not reverified",
+        "audit query not PDP-protected",
+        "SIEM or signing claim without evidence"
+      ],
+      "failClosedBehaviour": "validate-audit, proof:audit, and USF-ENTERPRISE-011 must preserve local-only audit boundaries",
+      "monitoringAuditEvidence": "tamper-evidence proof references, validator output, and PR non-claims must be retained",
+      "residualRisk": "USF-143 remains open for signing, export, SIEM, retention, disposal, and multi-version reader depth"
+    },
+    {
+      "id": "usf-190-threat-config-secrets-control",
+      "targetType": "enterprise-safety-control",
+      "target": "config registry, secret references, and OpenBao local composed binding",
+      "trustBoundary": "config is a control plane and secrets are opaque references; OpenBao local composed proof is not live secret-manager readiness",
+      "tenantBoundary": "secret references and tenant config resolution stay tenant-scoped and PDP-guarded",
+      "credentialBoundary": "secret values must not appear in config output, audit metadata, errors, OpenAPI, readiness, logs, or evidence",
+      "dataClassification": "security-control config, provider-config, secret-reference, and credential-metadata",
+      "abuseCases": [
+        "provider credential embedded as config",
+        "secret value leaked in validation error",
+        "tenant override weakens security control",
+        "revoked secret silently resolves"
+      ],
+      "failureModes": [
+        "missing owner or scope",
+        "rotation absent but claimed",
+        "OpenBao unavailable treated as ready",
+        "override workflow or KMS claimed without evidence"
+      ],
+      "failClosedBehaviour": "validate-config, proof:config, runtime OpenBao binding evidence, and USF-ENTERPRISE-011 preserve deferred live-secret boundaries",
+      "monitoringAuditEvidence": "secret access audit without values and Lane 6 validator output are retained as bounded evidence",
+      "residualRisk": "USF-145 remains open for rotation, provider config plane, KMS, schema migration, and live secret-manager depth"
+    },
+    {
+      "id": "usf-190-threat-files-storage-control",
+      "targetType": "enterprise-safety-control",
+      "target": "file metadata, object store, scanner, retention, and legal hold boundaries",
+      "trustBoundary": "Postgres file metadata is authoritative; object store holds opaque blobs; MinIO local proof is not live object-store readiness",
+      "tenantBoundary": "file metadata RLS, object-key encoding, and tenant-safe object store paths must prevent cross-tenant access",
+      "credentialBoundary": "object-store credentials are local placeholders or secret refs only and must not appear in safe views or proof output",
+      "dataClassification": "environment-runtime-data, confidential file metadata, and synthetic local object payloads only",
+      "abuseCases": [
+        "object key leaks tenant or filename",
+        "download before clean scan",
+        "legal hold ignored during purge",
+        "cross-tenant object path collision"
+      ],
+      "failureModes": [
+        "metadata RLS drift",
+        "scanner unavailable treated as clean",
+        "object lock or KMS claimed without evidence",
+        "backup/export path not governed"
+      ],
+      "failClosedBehaviour": "validate-files, proof:files, runtime MinIO proof references, and USF-ENTERPRISE-011 preserve local-only and deferred boundaries",
+      "monitoringAuditEvidence": "file action audit events and Lane 6 validator output are retained as bounded evidence",
+      "residualRisk": "USF-147 remains open for scanner, DB metadata adapter, object versioning, DLP, KMS, backup, object lock, and evidence export depth"
+    },
+    {
+      "id": "usf-190-threat-backup-retention-legal-hold-control",
+      "targetType": "enterprise-safety-control",
+      "target": "backup, restore, retention, purge, and legal-hold boundary",
+      "trustBoundary": "USF local purge guards do not prove scheduled backup, PITR, restore drill, retention jobs, residency, or legal-hold operation",
+      "tenantBoundary": "held tenant rows and objects must not be deleted by retention, purge, export cleanup, or restore workflows",
+      "credentialBoundary": "backup and object-store credentials remain deferred secret references and no backup contents may be committed as evidence",
+      "dataClassification": "backup and retention metadata only; no production data or backup payload evidence in repository",
+      "abuseCases": [
+        "backup exists but restore never tested",
+        "retention deletes a held row",
+        "purge bypasses legal hold",
+        "backup written to wrong residency boundary"
+      ],
+      "failureModes": [
+        "restore proof absent",
+        "pgBackRest boundary unowned",
+        "retention evidence missing owner",
+        "unsafe Done hides deferred backup controls"
+      ],
+      "failClosedBehaviour": "USF-ENTERPRISE-011 must require owner, risk, treatment, review date, follow-up, exception expiry, and non-claims for the deferred boundary",
+      "monitoringAuditEvidence": "Lane 6 evidence rows and planted defects record the deferred boundary until follow-up issues supply stronger proof",
+      "residualRisk": "USF-139 and USF-147 remain open for backup, restore, retention, purge, legal hold, and residency proof depth"
     }
   ],
   "sdkDependencyGovernance": [
@@ -4550,6 +5030,35 @@
       "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
       "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-access-authorization-privileged-boundary",
+      "targetType": "enterprise-safety-control",
+      "target": "authorization-and-privileged-safety-controls",
+      "posture": [
+        "effectivenessState=proven-local",
+        "dataClassification=identity-metadata-and-authorization-decision-metadata",
+        "changeManagementEvidence=USF-190 PR plus validate-authz and enterprise validator output",
+        "rollbackDeferredBoundary=PDP remains synchronous and provider state must be loaded or refreshed before evaluation",
+        "reviewCadence=2026-09-30",
+        "owner=platform-identity-foundation",
+        "followUpIssue=USF-141"
+      ],
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-authorization-enterprise-safety-controls",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Delegation, impersonation, full token/session validation, cache invalidation, SoD, and ABAC expansion remain deferred to USF-141.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -5569,6 +6078,35 @@
       "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
       "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-resilience-backup-retention-legal-hold-boundary",
+      "targetType": "enterprise-safety-control",
+      "target": "backup-retention-legal-hold-boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "dataClassification=backup-metadata-retention-metadata-and-legal-hold-metadata-only",
+        "changeManagementEvidence=USF-190 PR plus enterprise validator output",
+        "rollbackDeferredBoundary=no scheduled backup, PITR, restore drill, retention job, residency, or operational legal-hold claim",
+        "backupResiliencePosture=local DB and files purge guards reconciled only as bounded proof inputs",
+        "owner=platform-data-foundation",
+        "followUpIssue=USF-139,USF-147"
+      ],
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-backup-retention-legal-hold-boundary",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Backup, restore, retention, purge, legal hold, and residency proof depth remains deferred to USF-139 and USF-147.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -6684,6 +7222,35 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-190-incident-safety-control-posture",
+      "targetType": "enterprise-safety-control",
+      "target": "db-authz-audit-config-files-safety-controls",
+      "posture": [
+        "effectivenessState=defined-only",
+        "dataClassification=metadata-only-no-production-incident-data",
+        "changeManagementEvidence=USF-190 PR validation output and validator selftests",
+        "rollbackDeferredBoundary=no live alerting, vulnerability SLA, SIEM, customer-impact, or incident-response readiness claim",
+        "incidentPosture=validator-and-PR-evidence-only",
+        "owner=platform-governance-foundation",
+        "followUpIssue=USF-139,USF-141,USF-143,USF-145,USF-147"
+      ],
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-status-integrity-validator",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Incident and vulnerability operating evidence remains deferred to the source domain issues.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -7496,6 +8063,35 @@
       "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
       "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-190-privacy-data-classification-posture",
+      "targetType": "enterprise-safety-control",
+      "target": "db-authz-audit-config-files-data-classification-and-privacy",
+      "posture": [
+        "effectivenessState=proven-local",
+        "dataClassification=synthetic-local-proof-data-value-free-metadata-and-secret-reference-only",
+        "changeManagementEvidence=USF-190 PR plus validate-db, validate-authz, validate-audit, validate-config, validate-files, and enterprise validator output",
+        "rollbackDeferredBoundary=no production data, live-provider data processing, DSR, residency, backup payload, or certification claim",
+        "privacyPosture=data-minimisation-through-safe-views-redaction-opaque-refs-and-no-committed-proof-payloads",
+        "owner=platform-privacy-foundation",
+        "followUpIssue=USF-139,USF-141,USF-143,USF-145,USF-147"
+      ],
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-190-db-enterprise-safety-controls",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Privacy operating evidence, residency, DSR, and production data processing posture remain deferred to source domain issues.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

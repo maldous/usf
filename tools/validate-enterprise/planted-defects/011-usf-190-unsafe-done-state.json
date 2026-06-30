@@ -1,0 +1,12 @@
+{
+  "description": "Lane 6 is unsafely marked complete before coordinator acceptance criteria review.",
+  "expectedRule": "USF-ENTERPRISE-011",
+  "laneRequirementPatch": [
+    {
+      "laneIssue": "USF-190",
+      "set": {
+        "approvalStatus": "done"
+      }
+    }
+  ]
+}
