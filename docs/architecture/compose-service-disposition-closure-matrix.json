@@ -1765,7 +1765,7 @@
         "covered-by-usf-runtime"
       ],
       "requirement_state": "deferred",
-      "human_decision_state": "requires-human-decision",
+      "human_decision_state": "accepted-selected-tier-reclassification",
       "environment_disposition": "deferred",
       "provider_boundary_disposition": "deferred",
       "readiness_tier": "deferred",
@@ -1787,15 +1787,15 @@
         "tracking_issues": [
           "USF-185",
           "USF-176",
-          "USF-201"
+          "USF-201",
+          "USF-210"
         ],
         "non_equivalence_boundaries": [
           "Mock OIDC cannot prove live external identity provider readiness.",
-          "USF-176 records bounded mock-provider disposition only; USF-201 owns service-semantic proof and live-provider non-equivalence remains explicit."
+          "USF-176 records bounded mock-provider disposition only; USF-201 proves webhook-sink capture only; USF-210 records selected-tier mock OIDC supersession and live-provider non-equivalence remains explicit."
         ],
         "missing_evidence": [
-          "accepted implementation/proof decision for deferred service depth",
-          "USF-201 mock-provider substrate service-semantic proof, no-egress proof, tenant safety, synthetic-data proof, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof"
+          "mock OIDC service startup, standalone issuer compatibility, live IdP compatibility, SSO readiness, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure remain unproven and non-claimed"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1827,11 +1827,19 @@
           "usf-176-threat-mock-provider-overclaim",
           "usf-176-access-mock-provider-substrate",
           "usf-176-incident-vulnerability-mock-provider-substrate",
-          "usf-176-privacy-mock-provider-substrate"
+          "usf-176-privacy-mock-provider-substrate",
+          "usf-210-soa-mock-oidc-reclassification",
+          "usf-210-evidence-mock-oidc-reclassification",
+          "usf-210-threat-mock-oidc-overclaim",
+          "usf-210-access-mock-oidc-reclassification",
+          "usf-210-resilience-mock-oidc-reclassification",
+          "usf-210-incident-vulnerability-mock-oidc-reclassification",
+          "usf-210-privacy-mock-oidc-reclassification"
         ],
         "tracking_issue_rationale": {
           "USF-176": "bounded local mock provider substrate disposition and non-equivalence gate",
-          "USF-201": "actual local mock provider substrate service semantics and adapter proof"
+          "USF-201": "bounded webhook-sink capture proof and split of remaining mock-provider substrates",
+          "USF-210": "selected-tier mock OIDC reclassification; hermetic identity and composed Keycloak proof supersede the historical mock OIDC service for current closure-tier evidence only"
         }
       }
     },

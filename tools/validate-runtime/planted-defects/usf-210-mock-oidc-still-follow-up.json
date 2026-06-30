@@ -1,0 +1,20 @@
+{
+  "name": "usf-210-mock-oidc-still-follow-up",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/mockProviderSubstrateDisposition/followUpIssues",
+      "value": [
+        "USF-208",
+        "USF-209",
+        "USF-210"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/mockSubstrateClassifications/3/followUpIssue",
+      "value": "USF-210"
+    }
+  ]
+}

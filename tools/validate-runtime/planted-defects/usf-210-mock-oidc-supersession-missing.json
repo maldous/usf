@@ -1,0 +1,16 @@
+{
+  "name": "usf-210-mock-oidc-supersession-missing",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/mockSubstrateClassifications/3/status",
+      "value": "deferred-with-owner"
+    },
+    {
+      "op": "replace",
+      "path": "/semanticProofBoundaries/3/status",
+      "value": "deferred-with-owner"
+    }
+  ]
+}

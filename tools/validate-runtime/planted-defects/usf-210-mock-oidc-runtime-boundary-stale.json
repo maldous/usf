@@ -1,0 +1,18 @@
+{
+  "name": "usf-210-mock-oidc-runtime-boundary-stale",
+  "expectedRule": "USF-RUNTIME-027",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/deferredBoundaries/4/followUpIssueRefs",
+      "value": [
+        "USF-176",
+        "USF-201",
+        "USF-208",
+        "USF-209",
+        "USF-210",
+        "USF-189"
+      ]
+    }
+  ]
+}
