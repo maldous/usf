@@ -170,7 +170,7 @@ POST_START_ALLOWED_ROOTS = {
     "tests",
 }
 
-START_RECORD_DIRS = [".codex/runs", "docs/architecture"]
+START_RECORD_DIRS = ["docs/architecture"]
 START_RECORD_NAME = "bootstrap-start.json"
 
 REQUIRED_TOOLCHAIN_GOVERNANCE_MARKERS = [

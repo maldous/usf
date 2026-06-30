@@ -23,7 +23,7 @@ This plan records the Linear tracking structure for full React functional parity
 
 Comments added: a readiness-correction comment on USF-39 (bootstrap-only scope); a UI/UX boundary clarification on USF-133; an execution-state hygiene (.codex) note on USF-133.
 
-Note on .codex: untracking .codex was attempted and reverted in this pass. Specific .codex files are load-bearing durable evidence referenced by validate-bootstrap (start record), schema-registry (bootstrap goal), and the topology and bootstrap-readiness docs, so removing .codex from tracked source breaks fail-closed validation on a tracked-only checkout. The correct relocate-then-untrack cleanup is tracked in USF-137; this planning PR is docs-only.
+Note on .codex: untracking .codex was initially blocked because durable bootstrap evidence was referenced from local agent state. USF-137 relocates the validator-load-bearing bootstrap start record to docs/architecture/bootstrap-start.json and updates the bootstrap validator, schema registry, and governance references so .codex remains local-only agent execution state rather than repository authority.
 
 ## 2. Planned per-domain children (NOT created yet — gated)
 
