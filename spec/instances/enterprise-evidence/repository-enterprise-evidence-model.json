@@ -5150,7 +5150,7 @@
       "adapterProviderId": "backup-restore-pgbackrest-deferred",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "commitPin": "fd8a4b0634ec33bee0c9b9501d3bf2316ee2fa3a",
+      "commitPin": "268cfdf23b984ca51961475f6a130525e21e65bb",
       "issueLinks": [
         "USF-177",
         "USF-202",
@@ -5159,7 +5159,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "fd8a4b0634ec33bee0c9b9501d3bf2316ee2fa3a",
+      "prOrMergeSha": "268cfdf23b984ca51961475f6a130525e21e65bb",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain backup artifacts, restore payloads, database contents, file payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
