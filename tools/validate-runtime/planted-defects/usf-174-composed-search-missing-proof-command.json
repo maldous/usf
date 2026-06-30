@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-RUNTIME-025",
+  "composedSearchProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/inMemorySubstituteBoundary/commands",
+      "value": [
+        "corepack pnpm proof:search"
+      ]
+    }
+  ]
+}

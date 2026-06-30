@@ -276,10 +276,10 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Meilisearch/search/index lineage",
-      "readiness_impact": "In-memory index proof is not Meilisearch/vector/live provider parity.",
-      "tracking_carrier_or_recommendation": "USF-164",
-      "usf_evidence_summary": "USF search proof",
-      "usf_status": "partial"
+      "readiness_impact": "USF-174 records bounded composed search provider disposition; in-memory search remains non-equivalent and Meilisearch adapter/service-semantic proof remains deferred to USF-199 before any Meilisearch, composed search, search-provider, vector, AI, or provider-compatibility readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-164/USF-174/USF-199",
+      "usf_evidence_summary": "USF in-memory search proof plus explicit Meilisearch deferred provider disposition",
+      "usf_status": "deferred"
     },
     {
       "blocking_level": "P1",

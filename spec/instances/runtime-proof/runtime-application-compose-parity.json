@@ -459,9 +459,10 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Meilisearch search provider semantics are catalogued but not proven and must not be inferred from in-memory search tests; threatFailureScenario=indexing, query, ranking, filtering, deletion, retention, and reindex behaviour is overclaimed; affectedAssetService=meilisearch; impact=medium; likelihood=medium; owner=platform-search-foundation; treatment=defer Meilisearch adapter proof and block readiness claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-174",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Meilisearch search provider semantics are catalogued but not proven and must not be inferred from in-memory search tests; threatFailureScenario=indexing, query, ranking, filtering, deletion, retention, and reindex behaviour is overclaimed; affectedAssetService=meilisearch; impact=medium; likelihood=medium; owner=platform-search-foundation; treatment=USF-174 records bounded disposition and defers Meilisearch adapter proof to USF-199; reviewDate=2026-09-30; linkedSourceIssue=USF-174; linkedFollowUpIssue=USF-199",
       "followUpIssueRefs": [
         "USF-174",
+        "USF-199",
         "USF-189"
       ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
@@ -478,8 +479,8 @@
       "sdkPackage": null,
       "sdkVersion": null,
       "providerRegistryEvidence": "packages/core/src/index.ts records full-text-search-meilisearch-deferred as deferred evidence-only support linked to the Meilisearch service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for Meilisearch search semantics; in-memory search proof remains hermetic only and is not a composed Meilisearch provider proof.",
-      "workerProofEvidence": "No worker proof is claimed for Meilisearch indexing, deletion, retention, or reindex semantics; SDK/client selection and readiness retry remain deferred to USF-174."
+      "apiProofEvidence": "No API proof is claimed for Meilisearch search semantics; in-memory search proof remains hermetic only and is not a composed Meilisearch provider proof. USF-174 records the disposition gate and USF-199 owns adapter proof.",
+      "workerProofEvidence": "No worker proof is claimed for Meilisearch indexing, deletion, retention, or reindex semantics; SDK/client selection and readiness retry remain deferred to USF-199 after USF-174 records the disposition gate."
     },
     {
       "bindingStatus": "profile-gated",
@@ -882,9 +883,10 @@
     {
       "id": "usf-189-search-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-189 records Meilisearch provider semantics as deferred-with-owner; risk is treating hermetic in-memory search as composed indexing, query, ranking, filtering, deletion, retention, or reindex proof; affected service meilisearch; impact medium; likelihood medium; owner platform-search-foundation; treatment defer adapter proof to USF-174; review date 2026-09-30.",
+      "boundary": "USF-189 records Meilisearch provider semantics as deferred-with-owner; USF-174 records the bounded disposition gate; risk is treating hermetic in-memory search as composed indexing, query, ranking, filtering, deletion, retention, or reindex proof; affected service meilisearch; impact medium; likelihood medium; owner platform-search-foundation; treatment defer adapter proof to USF-199; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-174",
+        "USF-199",
         "USF-189"
       ],
       "claimsProhibitedUntilResolved": [

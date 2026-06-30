@@ -364,7 +364,9 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-174",
+        "USF-199"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -1673,13 +1675,13 @@
       "id": "exception-service-meilisearch",
       "targetType": "service",
       "targetId": "meilisearch",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation; Dev in-memory search is not equivalent to Meilisearch ranking, indexing, or persistence.",
+      "disposition": "deferred-with-owner",
+      "reason": "USF-174 records bounded composed search provider disposition; USF-199 must prove Meilisearch adapter/service semantics for indexing, query, ranking, filtering, async indexing, deletion, retention, reindex, retry, audit, teardown, provider failure modes, supplier, access, audit, secret, incident, privacy, and resilience evidence before any Meilisearch, composed search, search-provider, vector, AI, live-provider, or provider-compatibility readiness claim. Dev in-memory search is not equivalent to Meilisearch composed provider behaviour.",
       "owner": "platform-search-foundation",
       "riskOwner": "platform-search-risk-owner",
       "controlOwner": "platform-search-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-199",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [

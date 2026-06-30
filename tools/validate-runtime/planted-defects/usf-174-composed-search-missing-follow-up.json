@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-025",
+  "composedSearchProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-174"
+    }
+  ]
+}
