@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-020",
+  "description": "USF-180 gateway and clickthrough substrate matrix is missing.",
+  "removeGatewayClickthroughMatrix": true
+}

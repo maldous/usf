@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-020",
+  "description": "USF-180 gateway substrate claims gateway readiness.",
+  "gatewayClickthroughSet": {
+    "gatewayInclusion.gatewayReadinessClaim": true
+  }
+}

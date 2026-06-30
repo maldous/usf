@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-020",
+  "description": "USF-180 gateway substrate enterprise evidence row is missing.",
+  "removeEnterpriseEvidence": "usf-180-evidence-gateway-clickthrough-substrate"
+}

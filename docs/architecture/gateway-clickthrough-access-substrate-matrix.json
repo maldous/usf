@@ -1,0 +1,125 @@
+{
+  "id": "usf-180-gateway-clickthrough-access-substrate-matrix",
+  "title": "USF-180 Gateway and Clickthrough Access Substrate Matrix",
+  "status": "draft",
+  "sourceIssue": "USF-180",
+  "parentIssue": "USF-133",
+  "serviceId": "caddy",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "operatorAccessMatrix": "docs/architecture/operator-access-gateway-posture-matrix.json",
+  "apiContractStandard": "docs/architecture/api-and-contract-surface-standard.md",
+  "environmentPromotionStandard": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "issueLinks": ["USF-180", "USF-169", "USF-155", "USF-179", "USF-193", "USF-184", "USF-192", "USF-133"],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "summary": "Strict local gateway/access substrate posture is required before any dev-readiness assessment; final UI definition and clickthrough UX remain deferred and must be handled before any test-readiness or stronger claim.",
+    "decisionIsWorkComplete": false
+  },
+  "gatewayInclusion": {
+    "includedForDevFoundationAssessment": true,
+    "serviceCatalogueServiceId": "caddy",
+    "composeProfile": "gateway",
+    "localComposeTargets": ["compose/compose.dev.generated.yaml", "compose/compose.test.generated.yaml", "compose/compose.staging.generated.yaml"],
+    "localHostPublication": "loopback-only",
+    "publicExposureAllowed": false,
+    "lanExposureAllowed": false,
+    "productionExposureAllowedByThisIssue": false,
+    "gatewayReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "evidenceBoundary": "Service catalogue and generated Compose evidence define local loopback/profile-gated gateway substrate only; no runtime route, final clickthrough UX, public exposure, staging readiness, production readiness, deployment readiness, or live-provider gateway readiness is proven."
+  },
+  "trustedProxyPolicy": {
+    "trustedProxySources": ["local-compose-caddy-loopback"],
+    "directClientForwardedHeadersTrusted": false,
+    "forwardedHostPolicy": "Forwarded host and forwarded proto metadata may be accepted only from the configured local gateway boundary; direct client supplied forwarded headers do not satisfy readiness.",
+    "forwardedForPolicy": "Client IP and forwarded-for semantics are metadata posture only; production edge identity, WAF, and client IP trust are not proven.",
+    "requiredBeforeStrongerReadiness": ["route-level forward-auth proof", "trusted proxy allowlist proof", "header spoofing denial proof", "audit evidence for gateway-mediated operator action"]
+  },
+  "ssoPosture": {
+    "localSsoReadinessClaim": false,
+    "liveSsoReadinessClaim": false,
+    "operatorAuthBoundary": "operator-auth-required and operator-action-audit-required are inherited from the service catalogue and operator-access matrix.",
+    "identityProviderBoundary": "Keycloak and external provider console SSO/clickthrough proof remain separate source issues; this matrix does not prove service-console login.",
+    "requiredBeforeTestReadiness": ["SSO decision proof or accepted deferral per routed service", "tenant-safe denial proof", "audit evidence for access decision"]
+  },
+  "localTransportBoundary": {
+    "hostIp": "127.0.0.1",
+    "httpPublishedPort": 8081,
+    "httpsPublishedPort": 8443,
+    "tlsTerminationPolicy": "TLS/local HTTPS port is catalogued for local compose only; certificate issuance, trust store, production TLS termination, mTLS, and live gateway TLS posture are not proven.",
+    "wafPolicy": "No WAF, edge, bot, rate-limit edge, or production gateway control is claimed by this issue.",
+    "requestSizeLimitPolicy": "Route-specific limits must be proven before gateway readiness; this matrix records posture only.",
+    "bodyTimeoutPolicy": "Route-specific timeout behaviour must be proven before gateway readiness; this matrix records posture only.",
+    "publicExposureAllowed": false,
+    "lanExposureAllowed": false
+  },
+  "serviceRoutingBoundary": {
+    "routeImplementationCreated": false,
+    "routeProofPresent": false,
+    "routeProofDeferredTo": ["USF-155"],
+    "routingModel": "Gateway service routing is profile-gated local Compose posture only until route-level proof is implemented under API/gateway depth work.",
+    "nonEquivalenceBoundary": "Caddy service catalogue and Docker Compose config are not equivalent to a proven forward-auth route, clickthrough URL, SSO session, or public gateway."
+  },
+  "clickthroughBoundary": {
+    "clickthroughUiImplementationPresent": false,
+    "clickthroughRuntimeProofPresent": false,
+    "acceptedDeferral": true,
+    "deferredTo": ["USF-155"],
+    "requiredBeforeTestReadiness": true,
+    "proofCriteria": [
+      "tenant-scoped access decision fails closed",
+      "unauthorized role denial is non-enumerating",
+      "clickthrough URL is generated only for an allowed service/resource",
+      "forward-auth or equivalent gateway policy matches the access decision",
+      "gateway-mediated operator action emits value-free audit evidence",
+      "no raw endpoint, token, cookie, connection string, provider payload, or stack trace is emitted"
+    ],
+    "nonEquivalenceBoundary": "A defined clickthrough boundary is not a working UI, product console, service login, forward-auth route proof, test-readiness claim, or gateway readiness claim."
+  },
+  "dependencyLinks": {
+    "operatorAccessProof": "USF-169",
+    "apiGatewayCompatibility": "USF-155",
+    "observabilityOperations": "USF-179",
+    "environmentPromotionStandard": "USF-193",
+    "dashboard": "USF-184",
+    "coordinator": "USF-192"
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-180-soa-gateway-clickthrough-substrate",
+    "usf-180-evidence-gateway-clickthrough-substrate",
+    "usf-180-threat-gateway-clickthrough-overclaim",
+    "usf-180-access-gateway-clickthrough-substrate",
+    "usf-180-incident-vulnerability-gateway-clickthrough",
+    "usf-180-privacy-gateway-clickthrough-substrate"
+  ],
+  "readinessClaimsAllowed": ["local-gateway-substrate-defined", "clickthrough-deferral-recorded", "loopback-compose-boundary-validated"],
+  "readinessClaimsProhibited": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "gateway-readiness",
+    "clickthrough-readiness",
+    "public-exposure-readiness"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ]
+}

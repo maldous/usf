@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-020",
+  "description": "USF-180 clickthrough boundary omits the accepted deferral.",
+  "gatewayClickthroughSet": {
+    "clickthroughBoundary.acceptedDeferral": false
+  }
+}
