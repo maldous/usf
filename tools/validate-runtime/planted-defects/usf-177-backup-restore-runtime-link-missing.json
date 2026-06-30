@@ -1,0 +1,14 @@
+{
+  "name": "usf-177-backup-restore-runtime-link-missing",
+  "expectedRule": "USF-RUNTIME-028",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/14/followUpIssueRefs",
+      "value": [
+        "USF-177",
+        "USF-189"
+      ]
+    }
+  ]
+}

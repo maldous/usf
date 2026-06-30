@@ -2690,13 +2690,20 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-177"
+          "USF-177",
+          "USF-202"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "DB/RLS proof and files proof are not equivalent to pgBackRest backup artifact creation, restore drill, RPO/RTO, or disaster recovery proof.",
+          "Service catalogue presence and generated Compose derivation are not backup readiness, restore readiness, production readiness, or live-provider readiness."
+        ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "pgBackRest backup artifact creation proof",
+          "restore drill proof with tenant and classification preservation",
+          "secret-exclusion evidence for backup content and logs",
+          "audit evidence for backup and restore operations",
+          "retention, cleanup, failure-mode, timeout, retry, and teardown evidence",
+          "RPO/RTO, PITR, disaster recovery, supplier, incident, vulnerability, and privacy posture proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2723,10 +2730,18 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-pgbackrest",
           "resilience-posture-pgbackrest",
-          "incident-vulnerability-pgbackrest"
+          "incident-vulnerability-pgbackrest",
+          "usf-177-soa-backup-restore-provider-disposition",
+          "usf-177-evidence-backup-restore-provider-disposition",
+          "usf-177-threat-pgbackrest-overclaim",
+          "usf-177-access-backup-restore-provider",
+          "usf-177-resilience-backup-restore-provider",
+          "usf-177-incident-vulnerability-backup-restore-provider",
+          "usf-177-privacy-backup-restore-provider"
         ],
         "tracking_issue_rationale": {
-          "USF-177": "backup restore service proof and evidence"
+          "USF-177": "bounded backup and restore service disposition gate",
+          "USF-202": "pgBackRest backup artifact, restore drill, and resilience proof follow-up"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

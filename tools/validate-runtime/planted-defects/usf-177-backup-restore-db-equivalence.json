@@ -1,0 +1,11 @@
+{
+  "name": "usf-177-backup-restore-db-equivalence",
+  "expectedRule": "USF-RUNTIME-028",
+  "backupRestoreProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/dbProofSubstituteBoundary/restoreDrillEquivalent",
+      "value": true
+    }
+  ]
+}

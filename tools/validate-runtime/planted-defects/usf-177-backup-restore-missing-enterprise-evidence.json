@@ -1,0 +1,13 @@
+{
+  "name": "usf-177-backup-restore-missing-enterprise-evidence",
+  "expectedRule": "USF-RUNTIME-028",
+  "backupRestoreProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/enterpriseEvidenceRefs",
+      "value": [
+        "usf-177-soa-backup-restore-provider-disposition"
+      ]
+    }
+  ]
+}
