@@ -234,6 +234,10 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
     if (expected.adapterName === "MinioObjectStore") {
       for (const marker of [
         "encodeMinioObjectPathSegment",
+        "tenantCollisionKey",
+        "tenantCollisionBoundaryChecked",
+        "keyCollisionTenant",
+        "objectKeyCollisionBoundaryChecked",
         "pathCollisionResistanceChecked",
         "collidingTenantBoundaryChecked",
         "collidingObjectKeyBoundaryChecked",
@@ -248,6 +252,10 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
     if (expected.adapterName === "OpenBaoSecretStore") {
       for (const marker of [
         "encodeOpenBaoPathSegment",
+        "tenantCollisionName",
+        "tenantCollisionBoundaryChecked",
+        "nameCollisionTenant",
+        "secretNameCollisionBoundaryChecked",
         "pathCollisionResistanceChecked",
         "collidingTenantBoundaryChecked",
         "collidingSecretNameBoundaryChecked",

@@ -304,50 +304,83 @@ export class MinioObjectStore implements ObjectStore {
     const body = "synthetic minio runtime proof payload";
     const collidingTenantA = "runtime/proof";
     const collidingTenantB = "runtime_proof";
+    const tenantCollisionKey = "tenant-collision-proof-object.txt";
+    const tenantCollisionBodyA = "synthetic minio tenant collision proof payload A";
+    const tenantCollisionBodyB = "synthetic minio tenant collision proof payload B";
+    const keyCollisionTenant = "runtime-proof-object-key-collision-tenant";
     const collidingKeyA = "object/proof.txt";
     const collidingKeyB = "object_proof.txt";
-    const collidingBodyA = "synthetic minio collision proof payload A";
-    const collidingBodyB = "synthetic minio collision proof payload B";
+    const keyCollisionBodyA = "synthetic minio object key collision proof payload A";
+    const keyCollisionBodyB = "synthetic minio object key collision proof payload B";
     let readback: string | undefined;
     let otherTenant: string | undefined;
-    let collidingReadA: string | undefined;
-    let collidingReadB: string | undefined;
+    let tenantCollisionReadA: string | undefined;
+    let tenantCollisionReadB: string | undefined;
+    let keyCollisionReadA: string | undefined;
+    let keyCollisionReadB: string | undefined;
     try {
       await this.putObject({ tenantId: context.tenantId, key, body });
       readback = await this.getObject({ tenantId: context.tenantId, key });
       otherTenant = await this.getObject({ tenantId: `${context.tenantId}-other`, key });
       await this.putObject({
         tenantId: collidingTenantA,
-        key: collidingKeyA,
-        body: collidingBodyA,
+        key: tenantCollisionKey,
+        body: tenantCollisionBodyA,
       });
       await this.putObject({
         tenantId: collidingTenantB,
-        key: collidingKeyB,
-        body: collidingBodyB,
+        key: tenantCollisionKey,
+        body: tenantCollisionBodyB,
       });
-      collidingReadA = await this.getObject({
+      tenantCollisionReadA = await this.getObject({
         tenantId: collidingTenantA,
+        key: tenantCollisionKey,
+      });
+      tenantCollisionReadB = await this.getObject({
+        tenantId: collidingTenantB,
+        key: tenantCollisionKey,
+      });
+      await this.putObject({
+        tenantId: keyCollisionTenant,
+        key: collidingKeyA,
+        body: keyCollisionBodyA,
+      });
+      await this.putObject({
+        tenantId: keyCollisionTenant,
+        key: collidingKeyB,
+        body: keyCollisionBodyB,
+      });
+      keyCollisionReadA = await this.getObject({
+        tenantId: keyCollisionTenant,
         key: collidingKeyA,
       });
-      collidingReadB = await this.getObject({
-        tenantId: collidingTenantB,
+      keyCollisionReadB = await this.getObject({
+        tenantId: keyCollisionTenant,
         key: collidingKeyB,
       });
     } finally {
       await Promise.all([
         this.deleteObject({ tenantId: context.tenantId, key }).catch(() => undefined),
-        this.deleteObject({ tenantId: collidingTenantA, key: collidingKeyA }).catch(
+        this.deleteObject({ tenantId: collidingTenantA, key: tenantCollisionKey }).catch(
           () => undefined,
         ),
-        this.deleteObject({ tenantId: collidingTenantB, key: collidingKeyB }).catch(
+        this.deleteObject({ tenantId: collidingTenantB, key: tenantCollisionKey }).catch(
+          () => undefined,
+        ),
+        this.deleteObject({ tenantId: keyCollisionTenant, key: collidingKeyA }).catch(
+          () => undefined,
+        ),
+        this.deleteObject({ tenantId: keyCollisionTenant, key: collidingKeyB }).catch(
           () => undefined,
         ),
       ]);
     }
     const deleted = await this.headObject({ tenantId: context.tenantId, key });
-    const collisionTenantBoundaryChecked =
-      collidingReadA === collidingBodyA && collidingReadB === collidingBodyB;
+    const tenantCollisionBoundaryChecked =
+      tenantCollisionReadA === tenantCollisionBodyA &&
+      tenantCollisionReadB === tenantCollisionBodyB;
+    const objectKeyCollisionBoundaryChecked =
+      keyCollisionReadA === keyCollisionBodyA && keyCollisionReadB === keyCollisionBodyB;
     return this.#record({
       tenantId: context.tenantId,
       key,
@@ -357,9 +390,10 @@ export class MinioObjectStore implements ObjectStore {
       readbackChecked: readback === body,
       deleteChecked: deleted.exists === false,
       tenantIsolationChecked: otherTenant === undefined,
-      pathCollisionResistanceChecked: collisionTenantBoundaryChecked,
-      collidingTenantBoundaryChecked: collisionTenantBoundaryChecked,
-      collidingObjectKeyBoundaryChecked: collisionTenantBoundaryChecked,
+      pathCollisionResistanceChecked:
+        tenantCollisionBoundaryChecked && objectKeyCollisionBoundaryChecked,
+      collidingTenantBoundaryChecked: tenantCollisionBoundaryChecked,
+      collidingObjectKeyBoundaryChecked: objectKeyCollisionBoundaryChecked,
       byteCount: Buffer.byteLength(body),
     });
   }
