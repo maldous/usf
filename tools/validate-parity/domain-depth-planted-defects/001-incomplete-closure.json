@@ -1,0 +1,5 @@
+{
+  "name": "incomplete domain depth closure is falsely claimed",
+  "expectedRule": "USF-DOMAIN-DEPTH-006",
+  "setClosureClaimed": true
+}

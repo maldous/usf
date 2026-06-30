@@ -133,6 +133,7 @@ AUTHORIZED_TOOLING = {
     "tools/validate-parity/validate-bulk.py",
     "tools/validate-parity/validate-search.py",
     "tools/validate-parity/validate-resources.py",
+    "tools/validate-parity/validate-domain-depth.py",
     "tools/validate-runtime/validate-runtime.py",
 }
 # (item 4) Explicit enum -> vocabulary value-set bindings by (schema, JSON pointer). No guessing.

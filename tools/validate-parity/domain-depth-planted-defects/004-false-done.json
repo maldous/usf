@@ -1,0 +1,7 @@
+{
+  "name": "source issue is falsely marked Done while deferred depth remains",
+  "expectedRule": "USF-DOMAIN-DEPTH-006",
+  "domainId": "usf-191-notifications",
+  "setDomainSourceIssueStatus": "Done",
+  "setDomainDoneClaimed": true
+}

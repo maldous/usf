@@ -1,0 +1,6 @@
+{
+  "name": "deferred domain depth is missing its follow-up issue",
+  "expectedRule": "USF-DOMAIN-DEPTH-004",
+  "controlId": "usf-191-jobs-live-workflow-engine-deferral",
+  "removeDeferredField": "linkedFollowUpIssue"
+}
