@@ -5,7 +5,7 @@
   "mutation": {
     "startRecords": [
       {
-        "path": ".codex/runs/fixture/bootstrap-start.json",
+        "path": "docs/architecture/fixture/bootstrap-start.json",
         "record": {
           "kind": "usf-39-bootstrap-start",
           "issue": "USF-39",

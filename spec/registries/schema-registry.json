@@ -2595,7 +2595,8 @@
       "purpose": "Validates canonical semantic-to-implementation bootstrap mappings for each semantic contract before implementation extraction.",
       "requiredBecause": "Bootstrap readiness requires one machine-readable mapping per semantic contract covering target topology, source lineage, expected tests, proof gates, deferrals, and blockers without creating implementation scaffold.",
       "sourceInputs": [
-        ".codex/goals/v2-bootstrap.md",
+        "docs/architecture/bootstrap-readiness-governance.md",
+        "docs/architecture/bootstrap-start.json",
         "docs/architecture/implementation-extraction-directive.md",
         "docs/architecture/target-implementation-topology-plan.md",
         "docs/architecture/semantic-source-use-closure-ledger.md"
