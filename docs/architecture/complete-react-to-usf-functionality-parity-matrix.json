@@ -276,10 +276,10 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Meilisearch/search/index lineage",
-      "readiness_impact": "USF-174 records bounded composed search provider disposition; in-memory search remains non-equivalent and Meilisearch adapter/service-semantic proof remains deferred to USF-199 before any Meilisearch, composed search, search-provider, vector, AI, or provider-compatibility readiness claim.",
-      "tracking_carrier_or_recommendation": "USF-164/USF-174/USF-199",
-      "usf_evidence_summary": "USF in-memory search proof plus explicit Meilisearch deferred provider disposition",
-      "usf_status": "deferred"
+      "readiness_impact": "USF-199 proves bounded SDK-backed local Compose Meilisearch service semantics for synthetic adapter-level indexing, tenant-filtered query, async task visibility, update/reindex boundary, deletion, cleanup, readiness retry, and redaction. API/worker runtime binding, ranking equivalence, vector search, AI/RAG, live-provider, environment readiness, provider-compatibility readiness, and broader search readiness remain unclaimed.",
+      "tracking_carrier_or_recommendation": "USF-164/USF-174/USF-199; future explicit runtime binding issue required before API or worker runtime search-binding claims",
+      "usf_evidence_summary": "USF in-memory search proof remains hermetic and non-equivalent; USF-199 adds bounded profile-gated Meilisearch SDK-backed local Compose adapter proof.",
+      "usf_status": "profile-gated-bounded-proof"
     },
     {
       "blocking_level": "P1",

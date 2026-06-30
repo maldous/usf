@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-025",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/meilisearch-composed-proof.ts",
+      "old": "FORBIDDEN_EVIDENCE_PATTERN",
+      "new": "UNSAFE_EVIDENCE_PATTERN"
+    }
+  ]
+}

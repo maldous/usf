@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-025",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/9/proofEvidence",
+      "value": "SDK-backed profile-gated local Compose proof exercises health readiness retry, index creation, and cleanup."
+    }
+  ]
+}

@@ -3521,16 +3521,16 @@
     {
       "id": "soa-adapter-usf-189-meilisearch-search-provider",
       "mappedType": "provider-disposition",
-      "controlPurpose": "Govern USF-189 Meilisearch search provider deferral.",
-      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=Meilisearch provider proof is absent; threatFailureScenario=in-memory search proof is overclaimed; affectedAssetService=meilisearch; impact=medium; likelihood=medium; owner=platform-search-foundation; treatment=defer to USF-174; reviewDate=2026-09-30.",
+      "controlPurpose": "Govern the USF-199 bounded Meilisearch composed search provider proof and prevent profile-gated evidence from being overclaimed as runtime, environment, live-provider, SOC, ISO, or full readiness.",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=profile-gated Meilisearch SDK proof could be overclaimed as API runtime binding, worker runtime binding, ranking equivalence, vector search, AI/RAG, live-provider, or environment readiness; threatFailureScenario=bounded adapter proof is treated as broad search readiness; affectedAssetService=meilisearch; impact=high; likelihood=medium; owner=platform-search-foundation; treatment=record bounded SDK-backed local Compose proof and explicit runtime-binding deferral; reviewDate=2026-09-30; followUpIssue=USF-199.",
       "assetServiceAffected": "meilisearch",
       "owner": "platform-search-foundation",
       "riskOwner": "platform-search-risk-owner",
       "controlOwner": "platform-search-control-owner",
-      "implementationStatus": "deferred-with-owner",
-      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "implementationStatus": "effectivenessState=proven-local; bounded=profile-gated-local-compose-proof; apiRuntimeBinding=deferred-with-owner; workerRuntimeBinding=deferred-with-owner; liveProvider=not-claimed",
+      "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts; packages/core/src/index.ts; package.json; USF-199; USF-174; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-174 follow-up required before Meilisearch search provider readiness or SDK/client selection.",
+      "deferredReason": "API and worker runtime search binding remain deferred because SearchIndexPort is synchronous while the Meilisearch SDK operations used in proof are asynchronous; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; treatment=defer runtime binding until explicit port-contract authority; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -3999,6 +3999,58 @@
       "evidenceSource": "docs/architecture/sentry-service-semantic-proof-boundary.json; docs/architecture/sentry-error-monitoring-disposition-matrix.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-196; USF-205",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "threatFailureScenario=local deterministic observability proof or generated Compose metadata is mistaken for Sentry service operating evidence; impact=high; likelihood=medium; owner=platform-observability-foundation; treatment=defer actual composed service proof to USF-205; reviewDate=2026-09-30; followUpIssue=USF-205; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-199-soa-meilisearch-composed-proof",
+      "mappedType": "source-issue-meilisearch-composed-proof",
+      "controlPurpose": "Map USF-199 as the bounded Meilisearch composed search provider semantic proof, including SDK boundary, local Compose service evidence, and explicit non-equivalence boundaries.",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=Meilisearch profile-gated proof could be mistaken for full search provider readiness or runtime API/worker binding; threatFailureScenario=proof command success is used to claim search readiness or environment promotion; affectedAssetService=meilisearch composed search provider; impact=high; likelihood=medium; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; controlOwner=platform-search-control-owner; treatment=prove bounded SDK-backed local Compose semantics and preserve explicit runtime/live/provider non-claims; reviewDate=2026-09-30; followUpIssue=USF-199",
+      "assetServiceAffected": "meilisearch composed search provider",
+      "owner": "platform-search-foundation",
+      "riskOwner": "platform-search-risk-owner",
+      "controlOwner": "platform-search-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-199; serviceCatalogueRow=meilisearch; providerRegistryId=full-text-search-meilisearch-composed-test; apiRuntimeBinding=deferred-with-owner; workerRuntimeBinding=deferred-with-owner",
+      "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts; packages/core/src/index.ts; package.json; USF-199; USF-174; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Runtime API and worker binding, ranking equivalence, vector search, AI/RAG, live provider, and environment readiness remain deferred; owner=platform-search-foundation; treatment=track as explicit non-claims in matrix and manifest; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-search-meilisearch",
+      "mappedType": "proof",
+      "controlPurpose": "Govern proof command evidence posture for proof:search:meilisearch.",
+      "riskTreated": "Proof results must remain bounded to profile-gated local Compose Meilisearch service semantics and must not imply API runtime binding, worker runtime binding, live-provider, environment, SOC, ISO, full dev, or full React parity readiness.",
+      "assetServiceAffected": "proof:search:meilisearch",
+      "owner": "platform-search-foundation",
+      "riskOwner": "platform-search-risk-owner",
+      "controlOwner": "platform-search-control-owner",
+      "implementationStatus": "proof-command-wired",
+      "evidenceSource": "package.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts",
+      "validationCommand": "corepack pnpm proof:search:meilisearch",
+      "deferredReason": "not-deferred-for-bounded-proof; runtime binding and readiness claims remain deferred in USF-199 evidence",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -5412,6 +5464,52 @@
       ],
       "prOrMergeSha": "6cd9a2583abc37143d68a0282fbeaa9c7dce8839",
       "retentionPosture": "Retain committed boundary matrix, validator rule, planted defects, validation output, and PR summary; do not retain Sentry events, issue payloads, stack traces, credentials, tokens, endpoints, connection strings, or provider payloads as readiness evidence."
+    },
+    {
+      "id": "usf-199-evidence-meilisearch-composed-proof",
+      "proofResult": "meilisearch-composed-search-provider-proof",
+      "whatWasProven": "USF-199 adds a bounded SDK-backed local Compose proof for Meilisearch using the exact-pinned meilisearch 0.58.0 JavaScript client inside the adapter boundary. The proof starts profile-gated Compose Meilisearch, waits with bounded readiness retry, creates a temporary index, configures filter/search attributes, writes synthetic tenant-scoped documents, verifies tenant-filtered query isolation, waits for async task visibility, proves update/reindex boundary, deletion, cleanup, redacted safe error evidence, value-free metrics/tracing/audit evidence, and Compose teardown.",
+      "whatWasNotProven": "This does not prove API runtime search binding, worker runtime search binding, search readiness, Meilisearch readiness, ranking equivalence, tokenization equivalence, vector search, AI/RAG, provider compatibility readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, USF-133 closure, live provider operation, production data handling, production telemetry, DR/RPO/RTO, or customer enterprise feature readiness.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#meilisearch",
+      "adapterProviderId": "full-text-search-meilisearch-composed-test",
+      "validationCommand": "corepack pnpm proof:search:meilisearch",
+      "commandPin": "tsx packages/proof/src/meilisearch-composed-proof.ts",
+      "commitPin": "b0775e02262074793c70b17ac19b47615a6a6caf",
+      "issueLinks": [
+        "USF-199",
+        "USF-174",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "b0775e02262074793c70b17ac19b47615a6a6caf",
+      "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw indexed documents, query payloads, tenant identifiers, raw endpoints, credentials, tokens, SDK errors, provider payloads, stack traces, or production data."
+    },
+    {
+      "id": "evidence-proof-proof-search-meilisearch",
+      "proofResult": "proof:search:meilisearch",
+      "whatWasProven": "Package script proof:search:meilisearch is the command-pinned proof surface for bounded SDK-backed local Compose Meilisearch adapter semantics.",
+      "whatWasNotProven": "No API runtime binding, worker runtime binding, staging, production, live-provider, SOC, ISO certification, full dev readiness, or full React parity readiness is proven.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#meilisearch",
+      "adapterProviderId": "full-text-search-meilisearch-composed-test",
+      "validationCommand": "corepack pnpm proof:search:meilisearch",
+      "commandPin": "tsx packages/proof/src/meilisearch-composed-proof.ts",
+      "commitPin": "b0775e02262074793c70b17ac19b47615a6a6caf",
+      "issueLinks": [
+        "USF-199",
+        "USF-174",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "b0775e02262074793c70b17ac19b47615a6a6caf",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -6170,23 +6268,31 @@
       "id": "threat-adapter-usf-189-meilisearch-search-provider",
       "targetType": "provider-disposition",
       "target": "usf-189-meilisearch-search-provider",
-      "trustBoundary": "deferred Meilisearch provider boundary; in-memory search remains hermetic-only",
-      "tenantBoundary": "tenant indexing, deletion, retention, ranking, filtering, and reindex proof remain unproven until USF-174",
-      "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client selection is deferred",
-      "dataClassification": "synthetic or metadata-only evidence; no production search index data",
+      "trustBoundary": "Profile-gated local Compose Meilisearch adapter proof boundary; API route handlers, worker orchestration, core, ports, live providers, and environment promotion remain outside this proof.",
+      "tenantBoundary": "Tenant search isolation is proven only for synthetic profile-gated adapter round trips using tenant-hash filtering; API and worker runtime tenant enforcement and ranking/tokenization equivalence are not claimed.",
+      "credentialBoundary": "No real credentials, API keys, raw endpoints, SDK errors, provider payloads, connection strings, indexed document payloads, query payloads, stack traces, tokens, or production secrets may be emitted.",
+      "dataClassification": "synthetic local proof data and repository governance metadata only; no production search index data, PII, customer data, raw tenant identifiers, or provider payloads",
       "abuseCases": [
-        "in-memory search overclaim",
-        "tenant search leakage",
-        "deletion or retention proof overclaim"
+        "profile-gated Meilisearch proof overclaimed as API runtime search binding",
+        "profile-gated Meilisearch proof overclaimed as worker runtime search binding",
+        "tenant-filtered query proof overclaimed as ranking, tokenization, vector search, or AI/RAG readiness",
+        "proof output leaks raw endpoint, tenant id, document payload, SDK error, token, or stack trace",
+        "temporary index cleanup or Compose teardown silently fails",
+        "in-memory search proof is treated as Meilisearch service-equivalent"
       ],
       "failureModes": [
-        "provider row missing",
-        "follow-up missing",
-        "readiness non-claim removed"
+        "matrix missing",
+        "SDK governance row missing or unpinned",
+        "proof command missing or unwired",
+        "readiness retry missing",
+        "redaction evidence missing",
+        "runtime manifest omits USF-199 linkage",
+        "API or worker runtime binding readiness claim enabled",
+        "readiness claim enabled"
       ],
-      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
-      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-174 deferral and non-claims",
-      "residualRisk": "Meilisearch adapter proof, SDK/client rationale, incident posture, privacy posture, and resilience evidence remain deferred to USF-174"
+      "failClosedBehaviour": "USF-RUNTIME-025 fails when the search matrix, runtime manifest, proof command, SDK boundary, operational evidence, enterprise evidence refs, provider registry linkage, or non-claims are missing or unsafe; proof:search:meilisearch exits nonzero on readiness, task, tenant-boundary, cleanup, redaction, or teardown failure.",
+      "monitoringAuditEvidence": "value-free proof output records correlation id, trace id, service id, provider id, adapter id, tenant hash, readiness attempts, retry count, latency bucket, health status, audit evidence captured, metrics evidence captured, trace evidence captured, and redaction status; no production telemetry claim is made.",
+      "residualRisk": "riskStatement=API and worker runtime search binding, ranking equivalence, vector search, AI/RAG, live-provider operation, production telemetry, and environment readiness remain unproven; impact=high; likelihood=medium; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; controlOwner=platform-search-control-owner; treatment=defer these claims and keep explicit non-claims; reviewDate=2026-09-30; followUpIssue=USF-199; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/composed-search-provider-disposition-matrix.json"
     },
     {
       "id": "threat-adapter-usf-189-clamav-scanner-provider",
@@ -6701,6 +6807,34 @@
       "failClosedBehaviour": "USF-ENTERPRISE-024 fails when docs/architecture/sentry-service-semantic-proof-boundary.json is missing or unsafe, enterprise rows are missing, non-claims are incomplete, USF-205 is missing, local observability proof is marked equivalent, or readiness claims are enabled.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live Sentry monitoring, alerting, event payload, incident, or operator audit evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
       "residualRisk": "riskStatement=Sentry service semantics remain unproven after USF-196; impact=high; likelihood=medium; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner; treatment=defer actual composed service proof to USF-205; reviewDate=2026-09-30; followUpIssue=USF-205; validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json; matrix=docs/architecture/sentry-service-semantic-proof-boundary.json"
+    },
+    {
+      "id": "usf-199-threat-meilisearch-runtime-overclaim",
+      "targetType": "source-issue-meilisearch-composed-proof",
+      "target": "docs/architecture/composed-search-provider-disposition-matrix.json",
+      "trustBoundary": "USF-199 repository evidence may define bounded profile-gated Meilisearch composed-service proof only; API and worker runtime binding, environment readiness, live providers, and broader search product readiness remain outside this proof.",
+      "tenantBoundary": "Synthetic tenant-hash filtering is proven at adapter proof level only; no production tenant data, API route tenant enforcement, worker tenant enforcement, or customer search isolation claim is made.",
+      "credentialBoundary": "No raw endpoints, credentials, tokens, API keys, SDK errors, provider payloads, connection strings, or stack traces are retained or emitted.",
+      "dataClassification": "synthetic local proof data and committed governance metadata only",
+      "abuseCases": [
+        "USF-199 marked Done as full search readiness",
+        "profile-gated Meilisearch proof marked API or worker runtime binding readiness",
+        "tenant-filter proof marked ranking, vector search, AI/RAG, or live provider readiness",
+        "missing SDK governance or forbidden SDK import leak",
+        "proof output includes raw endpoint, token, payload, stack trace, or SDK error"
+      ],
+      "failureModes": [
+        "proof command missing",
+        "service readiness retry missing",
+        "tenant filter isolation check missing",
+        "cleanup/teardown missing",
+        "safe error redaction missing",
+        "enterprise evidence missing",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "Runtime and enterprise validators fail missing matrix, manifest, proof command, SDK governance, operational evidence, enterprise evidence refs, non-claims, and unsafe readiness claims; proof command fails closed on adapter errors.",
+      "monitoringAuditEvidence": "validator output, proof JSON, planted defects, PR summary, and Linear linkage only; evidence remains value-free with correlation/trace hashes and safe outcome fields.",
+      "residualRisk": "riskStatement=runtime binding and broader search semantics remain deferred; impact=high; likelihood=medium; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; controlOwner=platform-search-control-owner; treatment=defer runtime binding and readiness claims; reviewDate=2026-09-30; followUpIssue=USF-199; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -6847,6 +6981,22 @@
       "typescriptRuntimeCompatibility": "Compatible with repository Node and TypeScript posture through package script validation.",
       "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and tools/validate-enterprise/validate-enterprise.py enforce adapter-boundary SDK imports.",
       "updateDeprecationOwner": "platform-runtime-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-189-meilisearch-search-provider-meilisearch",
+      "serviceId": "meilisearch",
+      "adapterId": "MeilisearchComposedSearchAdapter",
+      "providerId": "full-text-search-meilisearch-composed-test",
+      "packageName": "meilisearch",
+      "version": "0.58.0",
+      "selectionRationale": "meilisearch is the official maintained JavaScript client for Meilisearch and is used only inside the adapter boundary for profile-gated local Compose proof. Alternatives such as raw HTTP, direct sockets, shelling out to curl, or hand-rolled clients were rejected because a suitable official SDK exists.",
+      "officialOrDeFactoStatus": "official-maintained-client",
+      "licencePosture": "MIT package metadata reviewed for local proof; licence posture must be re-reviewed before stronger readiness or live-provider claims.",
+      "maintenancePosture": "Exact pinned package version 0.58.0; update/deprecation owner must review releases before changes.",
+      "securityAdvisoryPosture": "Dependency advisory review is required before version changes and before stronger readiness claims; no external egress or real credentials are used by the local proof.",
+      "typescriptRuntimeCompatibility": "Compatible with repository Node and TypeScript posture through package script validation; SDK import remains inside adapters/search only.",
+      "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and tools/validate-enterprise/validate-enterprise.py enforce adapter-boundary SDK imports and exact version pinning.",
+      "updateDeprecationOwner": "platform-search-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -8358,6 +8508,50 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-199-access-meilisearch-composed-proof",
+      "targetType": "source-issue-meilisearch-composed-proof",
+      "target": "docs/architecture/composed-search-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-199",
+        "riskStatement=Meilisearch profile-gated proof could be treated as public search or operator access readiness",
+        "threatFailureScenario=operator access, public endpoint exposure, API route access, or worker access is claimed from adapter proof only",
+        "affectedAssetService=meilisearch composed search provider",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-search-foundation",
+        "riskOwner=platform-search-risk-owner",
+        "controlOwner=platform-search-control-owner",
+        "treatment=record adapter-only proof and no public/operator exposure claim",
+        "reviewDate=2026-09-30",
+        "accessModel=adapter-proof-only-local-loopback-compose",
+        "authRequirement=not-proven-for-API-or-worker-runtime-binding",
+        "authorizationBoundary=tenant-hash-filter-check-proven-at-adapter-proof-only",
+        "breakGlassRelevance=not-applicable-to-proof-command",
+        "auditRequirement=value-free-proof-evidence-captured",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=temporary-index-cleanup-and-compose-down-only",
+        "matrix=docs/architecture/composed-search-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts; packages/core/src/index.ts; package.json; USF-199; USF-174; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "API route access, worker access, operator UI access, public exposure, and live provider access remain unproven; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; treatment=defer until explicit runtime binding authority; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -9662,6 +9856,51 @@
       "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-178; USF-203",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Windmill execution, retention, cleanup, failure, timeout, retry, teardown, access review, and resilience evidence deferred to USF-203; owner=platform-workflow-foundation; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-199-resilience-meilisearch-composed-proof",
+      "targetType": "source-issue-meilisearch-composed-proof",
+      "target": "docs/architecture/composed-search-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-199",
+        "riskStatement=Meilisearch proof could be mistaken for backup restore DR or production resilience readiness",
+        "threatFailureScenario=temporary index cleanup or readiness retry is overclaimed as backup/restore, DR, or RPO/RTO proof",
+        "affectedAssetService=meilisearch composed search provider",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-search-foundation",
+        "riskOwner=platform-search-risk-owner",
+        "controlOwner=platform-search-control-owner",
+        "treatment=prove bounded readiness retry, timeout, fail-closed behaviour, safe temporary index cleanup, and Compose teardown only",
+        "reviewDate=2026-09-30",
+        "backupRequirement=not-claimed-for-USF-199",
+        "restoreProofRequirement=required-before-readiness-claim",
+        "rpoRtoTarget=not-claimed-until-proven",
+        "corruptionFailureScenario=not-proven-by-USF-199",
+        "cleanupTeardownProof=temporary-index-delete-and-compose-down-proven",
+        "deferredDrBoundary=explicit-non-claim",
+        "readinessRetry=bounded-exponential-backoff-60s",
+        "timeout=sdk-request-timeout-2000ms-and-task-wait-timeout-15000ms",
+        "failClosed=proof-exits-nonzero-on-readiness-task-query-cleanup-or-teardown-failure",
+        "matrix=docs/architecture/composed-search-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts; packages/core/src/index.ts; package.json; USF-199; USF-174; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Backup/restore, DR, RPO/RTO, live resilience, and production recovery evidence remain unproven; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -11622,6 +11861,49 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-199-incident-vulnerability-meilisearch-composed-proof",
+      "targetType": "source-issue-meilisearch-composed-proof",
+      "target": "docs/architecture/composed-search-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-199",
+        "riskStatement=Meilisearch local proof could be treated as incident alerting vulnerability or operational readiness",
+        "threatFailureScenario=local proof health or SDK dependency metadata is overclaimed as production monitoring incident or vulnerability operation",
+        "affectedAssetService=meilisearch composed search provider",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-search-foundation",
+        "riskOwner=platform-search-risk-owner",
+        "controlOwner=platform-search-control-owner",
+        "treatment=record local proof health evidence, SDK governance, and advisory review posture only",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=value-free-proof-health-and-validator-output-only",
+        "alertingPosture=not-proven-by-USF-199",
+        "escalationOwner=platform-search-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "dependencyUpdatePosture=exact-version-pinned-with-owner-review",
+        "correctiveActionEvidenceBoundary=repository metadata PR and validator output only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-199",
+        "matrix=docs/architecture/composed-search-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts; packages/core/src/index.ts; package.json; USF-199; USF-174; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Production incident detection, alerting, escalation rehearsal, corrective action operation, and vulnerability SLA evidence remain unproven; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -12956,16 +13238,21 @@
       "targetType": "provider-disposition",
       "target": "usf-189-meilisearch-search-provider",
       "posture": [
-        "dataOrigin=metadata-only-deferral",
+        "dataOrigin=synthetic-profile-gated-local-compose-proof",
+        "syntheticVsProductionDerived=not-production-derived",
         "piiPosture=no-production-pii",
-        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
-        "retentionPurgePosture=deferred-until-USF-199",
+        "dataClassification=synthetic-internal-proof-data",
+        "redactionPolicy=value-free-proof-output-no-raw-provider-payloads-no-raw-endpoints-no-sdk-errors",
+        "retentionPurgePosture=temporary-index-delete-and-committed-metadata-only",
         "legalHoldRelevance=not-claimed",
-        "crossBorderDataResidencyBoundary=not-claimed"
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-raw-indexed-documents-query-payloads-tenant-identifiers-or-provider-payloads-committed-by-USF-199",
+        "matrix=docs/architecture/composed-search-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
       ],
-      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts; packages/core/src/index.ts; package.json; USF-199; USF-174; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-174 records bounded disposition; USF-199 required before Meilisearch provider privacy, retention, tenant, and supplier posture claims.",
+      "deferredReason": "Production data handling, API/worker runtime search data handling, data residency, legal hold, custom retention, and live provider privacy posture remain unproven; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -13593,6 +13880,81 @@
       "evidenceSource": "docs/architecture/sentry-service-semantic-proof-boundary.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-196; USF-205",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "privacy/data minimisation operating evidence deferred to USF-205; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-205; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-199-privacy-meilisearch-composed-proof",
+      "targetType": "source-issue-meilisearch-composed-proof",
+      "target": "docs/architecture/composed-search-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-199",
+        "riskStatement=Meilisearch proof could retain raw indexed documents tenant identifiers query payloads SDK errors or provider payloads if evidence is not bounded",
+        "threatFailureScenario=proof output or committed evidence leaks raw tenant data indexed document text query content endpoint credentials token stack trace or SDK error",
+        "affectedAssetService=meilisearch composed search provider",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-search-foundation",
+        "riskOwner=platform-search-risk-owner",
+        "controlOwner=platform-search-control-owner",
+        "treatment=record synthetic value-free evidence only and enforce redaction in proof and validators",
+        "reviewDate=2026-09-30",
+        "dataOrigin=synthetic-profile-gated-local-compose-proof",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-internal-proof-data",
+        "redactionPolicy=value-free-proof-output-and-no-raw-provider-payloads",
+        "retentionPurgePosture=temporary-index-delete-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-raw-indexed-documents-query-payloads-tenant-identifiers-endpoints-or-provider-payloads-committed-by-USF-199",
+        "matrix=docs/architecture/composed-search-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts; packages/core/src/index.ts; package.json; USF-199; USF-174; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Production data, live-provider privacy, data residency, legal hold, custom retention, and runtime API/worker data path privacy evidence remain unproven; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-search-meilisearch",
+      "targetType": "proof",
+      "target": "proof:search:meilisearch",
+      "posture": [
+        "dataOrigin=synthetic-profile-gated-local-compose-proof",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-internal-proof-data",
+        "redactionPolicy=value-free-proof-output",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "package.json; packages/proof/src/meilisearch-composed-proof.ts; adapters/search/src/index.ts",
+      "validationCommand": "corepack pnpm proof:search:meilisearch",
+      "deferredReason": "not-deferred-for-bounded-proof; production data and runtime API/worker data paths remain non-claims",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

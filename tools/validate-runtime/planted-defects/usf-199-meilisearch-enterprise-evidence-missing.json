@@ -1,0 +1,17 @@
+{
+  "expectedRule": "USF-RUNTIME-025",
+  "composedSearchProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/enterpriseEvidenceRefs",
+      "value": [
+        "usf-174-soa-composed-search-provider-disposition",
+        "usf-174-evidence-composed-search-provider-disposition",
+        "usf-174-threat-meilisearch-overclaim",
+        "usf-174-access-composed-search-provider",
+        "usf-174-incident-vulnerability-composed-search-provider",
+        "usf-174-privacy-composed-search-provider"
+      ]
+    }
+  ]
+}

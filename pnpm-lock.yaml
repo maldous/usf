@@ -35,6 +35,9 @@ importers:
       mailpit-api:
         specifier: 2.1.0
         version: 2.1.0
+      meilisearch:
+        specifier: 0.58.0
+        version: 0.58.0
       minio:
         specifier: 8.0.7
         version: 8.0.7
@@ -1618,6 +1621,10 @@ packages:
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
+
+  meilisearch@0.58.0:
+    resolution: {integrity: sha512-MXFlU+JVG2I3tDI4brS3UHxEv2fjOROP24TPP16c8dGHTulb1kxMgXvKP0x4ImvUcsVVJFi4QXP0JNDS/TaWaw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
 
   memfs@4.57.8:
     resolution: {integrity: sha512-bApYhn8BLpFAnAQmFfEl/NPN+8qx5Ar3V4Qt3ek23mVwBEElzV7c6XoPkb/PCG8ZFpowCEpHcPwMFTwHS7tSMA==}
@@ -3720,6 +3727,8 @@ snapshots:
   mailpit-api@2.1.0: {}
 
   math-intrinsics@1.1.0: {}
+
+  meilisearch@0.58.0: {}
 
   memfs@4.57.8(tslib@2.8.1):
     dependencies:

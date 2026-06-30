@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-025",
+  "sourceReplacements": [
+    {
+      "path": "adapters/search/src/index.ts",
+      "old": "retryMeilisearchReadiness",
+      "new": "waitMeilisearchReadiness"
+    }
+  ]
+}
