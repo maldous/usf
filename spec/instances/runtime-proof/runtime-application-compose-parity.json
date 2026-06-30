@@ -456,33 +456,36 @@
       "workerProofEvidence": "NATS event-bus proof is not Redis cache proof; no worker proof is claimed for Redis cache semantics until USF-207 records a Redis adapter boundary, SDK/client rationale, readiness retry, and cleanup evidence after the USF-198 proof boundary."
     },
     {
-      "bindingStatus": "unsupported-deferred",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Meilisearch search provider semantics are catalogued but not proven and must not be inferred from in-memory search tests; threatFailureScenario=indexing, query, ranking, filtering, deletion, retention, and reindex behaviour is overclaimed; affectedAssetService=meilisearch; impact=medium; likelihood=medium; owner=platform-search-foundation; treatment=USF-174 records bounded disposition and defers Meilisearch adapter proof to USF-199; reviewDate=2026-09-30; linkedSourceIssue=USF-174; linkedFollowUpIssue=USF-199",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=API and worker runtime search binding remain outside USF-199 because SearchIndexPort is synchronous while Meilisearch client operations are asynchronous; threatFailureScenario=profile-gated Meilisearch proof is overclaimed as API or worker runtime binding, ranking equivalence, vector search, AI search, live provider, or environment readiness; affectedAssetService=meilisearch; impact=medium; likelihood=medium; owner=platform-search-foundation; treatment=USF-199 proves profile-gated SDK-backed composed service semantics and defers API/worker runtime binding until explicit port-contract authority; reviewDate=2026-09-30; linkedSourceIssue=USF-199; linkedFollowUpIssue=USF-199",
       "followUpIssueRefs": [
         "USF-174",
         "USF-199",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-199 profile-gated local composed proof only; no API runtime binding, worker runtime binding, ranking equivalence, vector search readiness, AI search readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-meilisearch-search-provider",
       "serviceCatalogueServiceIds": [
         "meilisearch"
       ],
       "providerRegistryIds": [
+        "full-text-search-meilisearch-composed-test",
         "full-text-search-meilisearch-deferred"
       ],
-      "adapterName": "Meilisearch provider deferred",
-      "portName": "SearchIndexPort",
-      "endpointRef": null,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records full-text-search-meilisearch-deferred as deferred evidence-only support linked to the Meilisearch service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for Meilisearch search semantics; in-memory search proof remains hermetic only and is not a composed Meilisearch provider proof. USF-174 records the disposition gate and USF-199 owns adapter proof.",
-      "workerProofEvidence": "No worker proof is claimed for Meilisearch indexing, deletion, retention, or reindex semantics; SDK/client selection and readiness retry remain deferred to USF-199 after USF-174 records the disposition gate."
+      "adapterName": "MeilisearchComposedSearchAdapter",
+      "portName": "MeilisearchComposedSearchAdapter",
+      "endpointRef": "endpoint://compose/meilisearch",
+      "sdkPackage": "meilisearch",
+      "sdkVersion": "0.58.0",
+      "providerRegistryEvidence": "packages/core/src/index.ts records full-text-search-meilisearch-composed-test as a proof-only composed-test provider linked to the Meilisearch service catalogue row, while retaining full-text-search-meilisearch-deferred for live/external provider non-claims.",
+      "apiProofEvidence": "API runtime search binding is not claimed by USF-199 because the current SearchIndexPort is synchronous; profile-gated Meilisearch proof is adapter-level only until a separate port-contract authority permits runtime binding.",
+      "workerProofEvidence": "Worker runtime search binding is not claimed by USF-199 because the current SearchIndexPort is synchronous; profile-gated Meilisearch proof is adapter-level only until a separate port-contract authority permits runtime binding.",
+      "proofCommand": "corepack pnpm proof:search:meilisearch",
+      "proofEvidence": "SDK-backed profile-gated local Compose proof exercises health readiness retry, index creation, filterable/searchable settings, document indexing, tenant-filtered query, async task visibility, document update/reindex boundary, deletion, cleanup, and redacted missing-document failure evidence."
     },
     {
       "bindingStatus": "profile-gated",
@@ -893,7 +896,7 @@
     {
       "id": "usf-189-search-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-189 records Meilisearch provider semantics as deferred-with-owner; USF-174 records the bounded disposition gate; risk is treating hermetic in-memory search as composed indexing, query, ranking, filtering, deletion, retention, or reindex proof; affected service meilisearch; impact medium; likelihood medium; owner platform-search-foundation; treatment defer adapter proof to USF-199; review date 2026-09-30.",
+      "boundary": "USF-199 proves profile-gated SDK-backed local Meilisearch composed service semantics for synthetic data. Remaining boundary is API and worker runtime binding because SearchIndexPort is synchronous, plus ranking equivalence, vector search, AI/RAG, live-provider, and environment readiness non-claims; owner platform-search-foundation; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-174",
         "USF-199",
@@ -907,7 +910,11 @@
         "iso27001-certification",
         "full-dev-readiness",
         "full-react-parity",
-        "test-readiness"
+        "test-readiness",
+        "api-runtime-search-binding-readiness",
+        "worker-runtime-search-binding-readiness",
+        "vector-search-readiness",
+        "ai-search-readiness"
       ]
     },
     {

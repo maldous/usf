@@ -87,6 +87,8 @@ ADAPTER_STORE_SOURCE_PATH = Path("adapters/store/src/index.ts")
 ADAPTER_IDP_SOURCE_PATH = Path("adapters/idp/src/index.ts")
 ADAPTER_SECRETS_SOURCE_PATH = Path("adapters/secrets/src/index.ts")
 ADAPTER_WF_SOURCE_PATH = Path("adapters/wf/src/index.ts")
+ADAPTER_SEARCH_SOURCE_PATH = Path("adapters/search/src/index.ts")
+MEILISEARCH_PROOF_SOURCE_PATH = Path("packages/proof/src/meilisearch-composed-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
@@ -268,6 +270,13 @@ COMPOSED_SEARCH_PROVIDER_REQUIRED_EVIDENCE_REFS = {
     "usf-174-access-composed-search-provider",
     "usf-174-incident-vulnerability-composed-search-provider",
     "usf-174-privacy-composed-search-provider",
+    "usf-199-soa-meilisearch-composed-proof",
+    "usf-199-evidence-meilisearch-composed-proof",
+    "usf-199-threat-meilisearch-runtime-overclaim",
+    "usf-199-access-meilisearch-composed-proof",
+    "usf-199-resilience-meilisearch-composed-proof",
+    "usf-199-incident-vulnerability-meilisearch-composed-proof",
+    "usf-199-privacy-meilisearch-composed-proof",
 }
 COMPOSED_SEARCH_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "search-readiness",
@@ -381,10 +390,10 @@ LANE5_PROVIDER_DISPOSITIONS = {
     },
     "usf-189-meilisearch-search-provider": {
         "serviceIds": ["meilisearch"],
-        "providerIds": ["full-text-search-meilisearch-deferred"],
+        "providerIds": ["full-text-search-meilisearch-composed-test", "full-text-search-meilisearch-deferred"],
         "followUpIssue": "USF-199",
         "boundaryRef": "usf-189-search-provider-deferred",
-        "allowedStatuses": {"unsupported-deferred"},
+        "allowedStatuses": {"profile-gated-proven"},
     },
     "usf-189-clamav-scanner-provider": {
         "serviceIds": ["clamav"],
@@ -476,7 +485,7 @@ SOURCE_TEARDOWN_MARKERS = (
     "USF_WORKER_RUN_ONCE",
 )
 PROVIDER_SDK_IMPORT_RE = re.compile(
-    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
+    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|meilisearch|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
 )
 FORBIDDEN_SDK_IMPORT_PATHS = (
     Path("packages/core/src/index.ts"),
@@ -1762,7 +1771,7 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
         "laneIssue": "USF-189",
         "parentIssue": "USF-133",
         "serviceId": "meilisearch",
-        "providerRegistryId": "full-text-search-meilisearch-deferred",
+        "providerRegistryId": "full-text-search-meilisearch-composed-test",
         "runtimeManifest": str(MANIFEST_PATH),
         "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
         "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
@@ -1775,7 +1784,7 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
         F.add("USF-RUNTIME-025", "issueLinks", "composed search provider issue links are incomplete")
     if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
         F.add("USF-RUNTIME-025", "nonClaims", "composed search provider non-claims are incomplete")
-    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+    if COMPOSED_SEARCH_PROVIDER_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
         F.add("USF-RUNTIME-025", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
     if COMPOSED_SEARCH_PROVIDER_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
         F.add("USF-RUNTIME-025", "readinessClaimsProhibited", "composed search provider prohibited claims are incomplete")
@@ -1791,9 +1800,9 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
         F.add("USF-RUNTIME-025", "searchProviderDisposition", "search provider disposition must be an object")
     else:
         expected_disposition = {
-            "disposition": "explicit-deferral-with-owner",
-            "meilisearchServiceSemanticProofPresent": False,
-            "composedSearchProviderProofPresent": False,
+            "disposition": "profile-gated-composed-proof-present",
+            "meilisearchServiceSemanticProofPresent": True,
+            "composedSearchProviderProofPresent": True,
             "inMemoryMeilisearchEquivalent": False,
             "liveSearchReadinessClaim": False,
             "vectorSearchReadinessClaim": False,
@@ -1801,7 +1810,7 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
             "searchProviderReadinessClaim": False,
             "providerCompatibilityClaim": False,
             "serviceCatalogueServiceId": "meilisearch",
-            "providerRegistryId": "full-text-search-meilisearch-deferred",
+            "providerRegistryId": "full-text-search-meilisearch-composed-test",
             "followUpIssue": "USF-199",
             "owner": "platform-search-foundation",
             "riskOwner": "platform-search-risk-owner",
@@ -1850,28 +1859,32 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
     else:
         expected_provider = {
             "providerBindingId": "usf-189-meilisearch-search-provider",
-            "providerRegistryId": "full-text-search-meilisearch-deferred",
-            "bindingStatus": "unsupported-deferred",
-            "providerMode": "live-external-deferred",
+            "providerRegistryId": "full-text-search-meilisearch-composed-test",
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
             "runtimeProviderBindingActive": False,
-            "sdkPackage": None,
-            "sdkVersion": None,
-            "endpointRef": None,
+            "sdkPackage": "meilisearch",
+            "sdkVersion": "0.58.0",
+            "endpointRef": "endpoint://compose/meilisearch",
             "followUpIssue": "USF-199",
         }
         for key, expected in expected_provider.items():
             observed = provider_boundary.get(key)
             if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
                 F.add("USF-RUNTIME-025", f"providerBoundary.{key}", f"expected {expected!r}")
+        if provider_boundary.get("sdkBoundary") != "adapter-package-only":
+            F.add("USF-RUNTIME-025", "providerBoundary.sdkBoundary", "Meilisearch proof must stay inside the adapter package boundary")
+        if provider_boundary.get("proofCommand") != "corepack pnpm proof:search:meilisearch":
+            F.add("USF-RUNTIME-025", "providerBoundary.proofCommand", "Meilisearch proof command is missing or stale")
 
     operational = matrix.get("operationalEvidencePosture", {})
     if not isinstance(operational, dict):
         F.add("USF-RUNTIME-025", "operationalEvidencePosture", "operational evidence posture must be an object")
     else:
         expected_operational = {
-            "readinessRetry": "deferred-to-USF-199",
-            "timeout": "deferred-to-USF-199",
-            "safeTeardown": "deferred-to-USF-199",
+            "readinessRetry": "bounded-exponential-backoff-60s-proven-by-USF-199",
+            "timeout": "sdk-request-timeout-2000ms-and-task-wait-timeout-15000ms-proven-by-USF-199",
+            "safeTeardown": "temporary-index-delete-and-compose-down-proven-by-USF-199",
         }
         for key, expected in expected_operational.items():
             if operational.get(key) != expected:
@@ -1892,11 +1905,27 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
         if "USF-199" not in binding.get("followUpIssueRefs", []):
             F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider", "runtime manifest must link USF-199")
         if "USF-199" not in str(binding.get("deferredReason", "")):
-            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-199")
-        if binding.get("bindingStatus") != "unsupported-deferred" or binding.get("endpointRef") is not None:
-            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider", "Meilisearch must remain explicitly deferred without endpoint binding")
-        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
-            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider", "deferred Meilisearch must not name an SDK/client package")
+            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider.deferredReason", "runtime manifest must record USF-199 bounded proof and remaining runtime-binding deferral")
+        expected_binding = {
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkBoundary": "adapter-package-only",
+            "endpointRef": "endpoint://compose/meilisearch",
+            "sdkPackage": "meilisearch",
+            "sdkVersion": "0.58.0",
+            "proofCommand": "corepack pnpm proof:search:meilisearch",
+        }
+        for key, expected in expected_binding.items():
+            if binding.get(key) != expected:
+                F.add("USF-RUNTIME-025", f"providerBindingMatrix.usf-189-meilisearch-search-provider.{key}", f"expected {expected!r}")
+        if "full-text-search-meilisearch-composed-test" not in binding.get("providerRegistryIds", []):
+            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider.providerRegistryIds", "composed-test provider registry id is missing")
+        if "not claimed" not in str(binding.get("apiProofEvidence", "")) or "not claimed" not in str(binding.get("workerProofEvidence", "")):
+            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider", "API and worker runtime binding non-claims must remain explicit")
+        for marker in ("index creation", "tenant-filtered query", "async task visibility", "deletion", "cleanup", "redacted"):
+            if marker not in str(binding.get("proofEvidence", "")):
+                F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider.proofEvidence", f"missing proof evidence marker: {marker}")
 
     deferred = {
         item.get("id"): item
@@ -1905,6 +1934,47 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
     }.get("usf-189-search-provider-deferred")
     if not deferred or "USF-199" not in deferred.get("followUpIssueRefs", []):
         F.add("USF-RUNTIME-025", "deferredBoundaries.usf-189-search-provider-deferred", "runtime deferred boundary must link USF-199")
+    elif "API and worker runtime binding" not in str(deferred.get("boundary", "")):
+        F.add("USF-RUNTIME-025", "deferredBoundaries.usf-189-search-provider-deferred", "remaining API/worker runtime binding deferral must stay explicit")
+
+    search_adapter_source = state_text(state, ADAPTER_SEARCH_SOURCE_PATH)
+    for marker in (
+        "MeilisearchComposedSearchAdapter",
+        "retryMeilisearchReadiness",
+        "bounded-exponential-backoff-60s",
+        "safeErrorRedactionChecked",
+        "metricEvidenceCaptured",
+        "traceEvidenceCaptured",
+        "auditEvidenceCaptured",
+        "redactionChecked",
+        "tenantIsolationChecked",
+        "deleteChecked",
+        "retentionCleanupChecked",
+        "reindexBoundaryChecked",
+        "apiRuntimeUse",
+        "workerRuntimeUse",
+        "meilisearch",
+    ):
+        if marker not in search_adapter_source:
+            F.add("USF-RUNTIME-025", str(ADAPTER_SEARCH_SOURCE_PATH), f"Meilisearch adapter proof marker is missing: {marker}")
+
+    meilisearch_proof_source = state_text(state, MEILISEARCH_PROOF_SOURCE_PATH)
+    for marker in (
+        "runMeilisearchComposedProof",
+        "compose",
+        "--profile",
+        "runtime-providers",
+        "corepack pnpm proof:search:meilisearch",
+        "MeilisearchComposedSearchAdapter",
+        "composeDown",
+        "finally",
+        "FORBIDDEN_EVIDENCE_PATTERN",
+        "no-production-readiness",
+        "no-live-provider-readiness",
+        "API and worker runtime binding remain explicitly not applicable",
+    ):
+        if marker not in meilisearch_proof_source:
+            F.add("USF-RUNTIME-025", str(MEILISEARCH_PROOF_SOURCE_PATH), f"Meilisearch proof source marker is missing: {marker}")
 
     matrix_text = json.dumps(matrix, sort_keys=True)
     for stale in ("until USF-174 closes", "followUpIssue=USF-174", "\"followUpIssue\": \"USF-174\"", "linkedFollowUpIssue=USF-174"):

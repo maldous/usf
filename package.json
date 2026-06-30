@@ -44,6 +44,7 @@
     "proof:guardrails": "tsx packages/proof/src/rate-limits-abuse-controls-proof.ts",
     "proof:bulk": "tsx packages/proof/src/import-export-bulk-proof.ts",
     "proof:search": "tsx packages/proof/src/search-indexing-proof.ts",
+    "proof:search:meilisearch": "tsx packages/proof/src/meilisearch-composed-proof.ts",
     "proof:resources": "tsx packages/proof/src/resource-lifecycle-proof.ts",
     "repo:validate": "python3 tools/validate-spec/validate-spec.py all --json && python3 tools/validate-bootstrap/validate-bootstrap.py all --json && python3 tools/validate-runtime/validate-runtime.py all --json && python3 tools/validate-enterprise/validate-enterprise.py all --json",
     "parity": "python3 tools/validate-parity/validate-parity.py all --json && python3 tools/validate-parity/validate-db.py all --json && python3 tools/validate-parity/validate-authz.py all --json && python3 tools/validate-parity/validate-audit.py all --json && python3 tools/validate-parity/validate-config.py all --json && python3 tools/validate-parity/validate-files.py all --json && python3 tools/validate-parity/validate-auth.py all --json && python3 tools/validate-parity/validate-jobs.py all --json && python3 tools/validate-parity/validate-notify.py all --json && python3 tools/validate-parity/validate-api.py all --json && python3 tools/validate-parity/validate-providers.py all --json && python3 tools/validate-parity/validate-observability.py all --json && python3 tools/validate-parity/validate-guardrails.py all --json && python3 tools/validate-parity/validate-bulk.py all --json && python3 tools/validate-parity/validate-search.py all --json && python3 tools/validate-parity/validate-resources.py all --json && python3 tools/validate-parity/validate-domain-depth.py all --json && python3 tools/validate-compose/validate-compose.py all --json && python3 tools/validate-runtime/validate-runtime.py all --json && python3 tools/validate-enterprise/validate-enterprise.py all --json",
@@ -74,6 +75,7 @@
     "fastify": "5.8.5",
     "kysely": "0.29.2",
     "mailpit-api": "2.1.0",
+    "meilisearch": "0.58.0",
     "minio": "8.0.7",
     "node-vault": "0.12.0",
     "pg": "8.22.0"

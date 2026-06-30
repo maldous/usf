@@ -353,9 +353,9 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-174 records bounded composed search provider disposition; in-memory search remains non-equivalent and USF-199 must prove Meilisearch adapter/service semantics before any Meilisearch, composed search, search-provider, vector, AI, or provider-compatibility readiness claim.",
+      "gap_or_decision": "USF-199 proves bounded SDK-backed local Compose Meilisearch service semantics for synthetic adapter-level indexing, tenant-filtered query, async task visibility, update/reindex boundary, deletion, cleanup, readiness retry, and redaction. API/worker runtime binding, ranking equivalence, vector search, AI/RAG, live-provider, environment readiness, provider-compatibility readiness, and broader search readiness remain unclaimed.",
       "legacy_service_category": "search-index",
-      "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
+      "provider_mode_posture": "profile-gated local composed evidence only; API/worker runtime binding and live external readiness not claimed",
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "getmeili/meilisearch:v1.10",
@@ -364,9 +364,9 @@
       ],
       "react_service": "meilisearch",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-174/USF-199",
-      "usf_accounting_status": "deferred",
-      "usf_service_or_substitute": "in-memory search adapter plus explicit Meilisearch deferred provider class"
+      "tracking_recommendation": "USF-174/USF-199; future explicit runtime binding issue required before API or worker runtime search-binding claims",
+      "usf_accounting_status": "profile-gated-bounded-proof",
+      "usf_service_or_substitute": "Meilisearch local Compose proof plus in-memory non-equivalence boundary"
     },
     {
       "business_or_foundation_purpose": "local S3-compatible object storage and console",

@@ -76,7 +76,11 @@
         "iso27001-certification",
         "full-dev-readiness",
         "full-react-parity",
-        "test-readiness"
+        "test-readiness",
+        "api-runtime-search-binding-readiness",
+        "worker-runtime-search-binding-readiness",
+        "vector-search-readiness",
+        "ai-search-readiness"
       ]
     },
     "allowedClaim": {
@@ -188,6 +192,7 @@
             "active",
             "compose-boundary-only",
             "profile-gated",
+            "profile-gated-proven",
             "no-runtime-port",
             "unsupported-deferred"
           ]
@@ -232,7 +237,12 @@
         },
         "sourceUseDisposition": {
           "type": "string",
-          "enum": ["source-derived-rewrite", "new-with-rationale", "evidence-only-support"]
+          "enum": [
+            "source-derived-rewrite",
+            "new-with-rationale",
+            "evidence-only-support",
+            "runtime-proof-support"
+          ]
         },
         "providerRegistryEvidence": {
           "type": "string",
@@ -258,6 +268,14 @@
           "uniqueItems": true
         },
         "claimBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proofCommand": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proofEvidence": {
           "type": "string",
           "minLength": 1
         }

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "apps/api/src/server.ts",
+      "old": "import {",
+      "new": "import { Meilisearch } from \"meilisearch\";\nimport {"
+    }
+  ]
+}
