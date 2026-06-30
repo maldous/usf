@@ -1,0 +1,18 @@
+{
+  "expectedRule": "USF-PARITY-020",
+  "description": "blocking compose service disposition only links closure gate and wrapper issues",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "redis",
+      "setEvidence": {
+        "tracking_issues": [
+          "USF-166",
+          "USF-167",
+          "USF-182",
+          "USF-185"
+        ],
+        "tracking_issue_rationale": {}
+      }
+    }
+  }
+}

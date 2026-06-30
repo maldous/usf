@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-PARITY-018",
+  "description": "compose closure matrix lacks the USF-167 source execution gate",
+  "mutation": {
+    "composeClosureSetTop": {
+      "source_issue_execution_gate": ""
+    }
+  }
+}

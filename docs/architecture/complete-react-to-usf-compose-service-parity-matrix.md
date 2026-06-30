@@ -93,10 +93,12 @@ claims. It also links each row to the repository enterprise evidence model at
 
 `tools/validate-parity/validate-parity.py` enforces the closure matrix and fails
 closed when a closure-relevant service row is missing, a row lacks a disposition,
-a blocking row lacks a follow-up issue, implemented or runtime-covered rows lack
-proof references, runtime proof is falsely treated as Compose service equivalence,
-enterprise evidence references are missing, or service-disposition closure/readiness
-is overclaimed. Planted defects under
+a blocking row lacks a downstream source follow-up issue outside the closure gate
+and wrapper/meta issues, a downstream follow-up lacks rationale, implemented or
+runtime-covered rows lack proof references, runtime proof is falsely treated as
+Compose service equivalence, enterprise evidence references are missing, the USF-167
+source execution gate or USF-193 environment-promotion standard linkage is missing,
+or service-disposition closure/readiness is overclaimed. Planted defects under
 `tools/validate-parity/planted-defects/` cover those rule classes.
 
 This Lane 1 evidence does not close USF-133 and does not claim full dev readiness,
