@@ -5,8 +5,16 @@
   "description": "Bounded USF-183 runtime proof manifest for API and worker dev runtime execution with SDK-backed Postgres, Keycloak, Mailpit, MinIO, NATS, Temporal, and OpenBao composed provider bindings, plus USF-189 explicit runtime provider dispositions for analytics, cache, search, scanner, mocks, backup/restore, and workflow automation provider classes. It records service catalogue traceability, teardown obligations, enterprise evidence posture, and explicit non-claims.",
   "authorityLevel": "runtime-proof-evidence",
   "lifecycleState": "draft",
-  "ontologyConcepts": ["Proof", "Command", "Evidence"],
-  "taxonomyRefs": ["proof-classification", "provider-classification", "environment-classification"],
+  "ontologyConcepts": [
+    "Proof",
+    "Command",
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "proof-classification",
+    "provider-classification",
+    "environment-classification"
+  ],
   "vocabularyRefs": [
     "proof-levels",
     "provider-modes",
@@ -221,8 +229,12 @@
       "followUpIssueRefs": [],
       "claimBoundary": "Bounded local composed-test runtime provider proof only; no stronger readiness, live-provider, certification, or full parity claim.",
       "bindingId": "runtime-database-provider-binding",
-      "serviceCatalogueServiceIds": ["postgres"],
-      "providerRegistryIds": ["database-postgres-composed-test"],
+      "serviceCatalogueServiceIds": [
+        "postgres"
+      ],
+      "providerRegistryIds": [
+        "database-postgres-composed-test"
+      ],
       "adapterName": "PostgresTenantMembershipRepository",
       "portName": "TenantScopedRepository,TenantMembershipDirectory",
       "endpointRef": "endpoint://compose/postgres",
@@ -242,8 +254,12 @@
       "followUpIssueRefs": [],
       "claimBoundary": "Bounded local composed-test runtime provider proof only; no stronger readiness, live-provider, certification, or full parity claim.",
       "bindingId": "mailpit-notification-provider",
-      "serviceCatalogueServiceIds": ["mailpit"],
-      "providerRegistryIds": ["notification-delivery-mailpit-composed-test"],
+      "serviceCatalogueServiceIds": [
+        "mailpit"
+      ],
+      "providerRegistryIds": [
+        "notification-delivery-mailpit-composed-test"
+      ],
       "adapterName": "MailpitNotificationProvider",
       "portName": "NotificationProvider",
       "endpointRef": "endpoint://compose/mailpit",
@@ -263,8 +279,12 @@
       "followUpIssueRefs": [],
       "claimBoundary": "Bounded local composed-test runtime provider proof only; no stronger readiness, live-provider, certification, or full parity claim.",
       "bindingId": "nats-event-bus-provider",
-      "serviceCatalogueServiceIds": ["nats"],
-      "providerRegistryIds": ["event-bus-nats-composed-test"],
+      "serviceCatalogueServiceIds": [
+        "nats"
+      ],
+      "providerRegistryIds": [
+        "event-bus-nats-composed-test"
+      ],
       "adapterName": "NatsEventBus",
       "portName": "EventBus",
       "endpointRef": "endpoint://compose/nats",
@@ -284,8 +304,12 @@
       "followUpIssueRefs": [],
       "claimBoundary": "Bounded local composed-test runtime provider proof only; no stronger readiness, live-provider, certification, or full parity claim.",
       "bindingId": "minio-object-storage-provider",
-      "serviceCatalogueServiceIds": ["minio"],
-      "providerRegistryIds": ["object-storage-minio-composed-test"],
+      "serviceCatalogueServiceIds": [
+        "minio"
+      ],
+      "providerRegistryIds": [
+        "object-storage-minio-composed-test"
+      ],
       "adapterName": "MinioObjectStore",
       "portName": "ObjectStore",
       "endpointRef": "endpoint://compose/minio",
@@ -305,8 +329,13 @@
       "followUpIssueRefs": [],
       "claimBoundary": "Bounded local composed-test runtime provider proof only; no stronger readiness, live-provider, certification, or full parity claim.",
       "bindingId": "keycloak-identity-provider",
-      "serviceCatalogueServiceIds": ["keycloak", "keycloak-db"],
-      "providerRegistryIds": ["identity-keycloak-composed-test"],
+      "serviceCatalogueServiceIds": [
+        "keycloak",
+        "keycloak-db"
+      ],
+      "providerRegistryIds": [
+        "identity-keycloak-composed-test"
+      ],
       "adapterName": "KeycloakComposedIdentityProvider",
       "portName": "IdentityProvider,KeycloakVerifier",
       "endpointRef": "endpoint://compose/keycloak",
@@ -326,8 +355,12 @@
       "followUpIssueRefs": [],
       "claimBoundary": "Bounded local composed-test runtime provider proof only; no stronger readiness, live-provider, certification, or full parity claim.",
       "bindingId": "openbao-secret-provider",
-      "serviceCatalogueServiceIds": ["openbao"],
-      "providerRegistryIds": ["secret-store-openbao-composed-test"],
+      "serviceCatalogueServiceIds": [
+        "openbao"
+      ],
+      "providerRegistryIds": [
+        "secret-store-openbao-composed-test"
+      ],
       "adapterName": "OpenBaoSecretStore",
       "portName": "SecretResolver,SecretStore",
       "endpointRef": "endpoint://compose/openbao",
@@ -347,8 +380,12 @@
       "followUpIssueRefs": [],
       "claimBoundary": "Bounded local composed-test runtime provider proof only; no stronger readiness, live-provider, certification, or full parity claim.",
       "bindingId": "temporal-workflow-provider",
-      "serviceCatalogueServiceIds": ["temporal"],
-      "providerRegistryIds": ["workflow-engine-temporal-composed-test"],
+      "serviceCatalogueServiceIds": [
+        "temporal"
+      ],
+      "providerRegistryIds": [
+        "workflow-engine-temporal-composed-test"
+      ],
       "adapterName": "TemporalComposedWorkflowEngine",
       "portName": "WorkflowEngine",
       "endpointRef": "endpoint://compose/temporal",
@@ -365,11 +402,19 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=ClickHouse analytics/event-store provider semantics are catalogued but not proven; threatFailureScenario=in-memory or catalogue-only analytics is mistaken for composed event-store proof; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=USF-172 records bounded disposition and defers adapter/service-semantic proof to USF-197; reviewDate=2026-09-30; linkedFollowUpIssue=USF-197",
-      "followUpIssueRefs": ["USF-172", "USF-197", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-172",
+        "USF-197",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-clickhouse-analytics-provider",
-      "serviceCatalogueServiceIds": ["clickhouse"],
-      "providerRegistryIds": ["analytics-store-clickhouse-deferred"],
+      "serviceCatalogueServiceIds": [
+        "clickhouse"
+      ],
+      "providerRegistryIds": [
+        "analytics-store-clickhouse-deferred"
+      ],
       "adapterName": "ClickHouse provider deferred",
       "portName": "AnalyticsEventStore",
       "endpointRef": null,
@@ -385,20 +430,28 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Redis cache provider semantics are catalogued but not proven and must not be substituted by NATS or process memory; threatFailureScenario=cache expiration, retry, tenant, and audit guarantees are overclaimed from an unrelated provider; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer Redis adapter proof and block readiness claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-173",
-      "followUpIssueRefs": ["USF-173", "USF-189"],
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Redis cache provider semantics are catalogued but not proven and must not be substituted by NATS or process memory; threatFailureScenario=cache expiration, eviction, persistence, retry, tenant, queue-adjacent, and audit guarantees are overclaimed from NATS or in-memory evidence; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-173 records bounded cache/eventing disposition and defers Redis adapter proof and readiness claims to USF-198; reviewDate=2026-09-30; linkedFollowUpIssue=USF-198",
+      "followUpIssueRefs": [
+        "USF-173",
+        "USF-198",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-redis-cache-provider",
-      "serviceCatalogueServiceIds": ["redis"],
-      "providerRegistryIds": ["cache-redis-deferred"],
+      "serviceCatalogueServiceIds": [
+        "redis"
+      ],
+      "providerRegistryIds": [
+        "cache-redis-deferred"
+      ],
       "adapterName": "Redis provider deferred",
       "portName": "CacheProvider",
       "endpointRef": null,
       "sdkPackage": null,
       "sdkVersion": null,
       "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-deferred as deferred evidence-only support linked to the Redis service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for Redis cache semantics; expiration, retry, tenant isolation, access, audit, and teardown evidence remain deferred to USF-173.",
-      "workerProofEvidence": "NATS event-bus proof is not Redis cache proof; no worker proof is claimed for Redis cache semantics until a Redis adapter boundary, SDK/client rationale, readiness retry, and cleanup evidence exist."
+      "apiProofEvidence": "No API proof is claimed for Redis cache semantics; expiration, eviction, persistence, retry, tenant isolation, access, audit, and teardown evidence remain deferred to USF-198 after USF-173 records the cache/eventing non-equivalence boundary.",
+      "workerProofEvidence": "NATS event-bus proof is not Redis cache proof; no worker proof is claimed for Redis cache semantics until USF-198 records a Redis adapter boundary, SDK/client rationale, readiness retry, and cleanup evidence."
     },
     {
       "bindingStatus": "unsupported-deferred",
@@ -407,11 +460,18 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Meilisearch search provider semantics are catalogued but not proven and must not be inferred from in-memory search tests; threatFailureScenario=indexing, query, ranking, filtering, deletion, retention, and reindex behaviour is overclaimed; affectedAssetService=meilisearch; impact=medium; likelihood=medium; owner=platform-search-foundation; treatment=defer Meilisearch adapter proof and block readiness claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-174",
-      "followUpIssueRefs": ["USF-174", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-174",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-meilisearch-search-provider",
-      "serviceCatalogueServiceIds": ["meilisearch"],
-      "providerRegistryIds": ["full-text-search-meilisearch-deferred"],
+      "serviceCatalogueServiceIds": [
+        "meilisearch"
+      ],
+      "providerRegistryIds": [
+        "full-text-search-meilisearch-deferred"
+      ],
       "adapterName": "Meilisearch provider deferred",
       "portName": "SearchIndexPort",
       "endpointRef": null,
@@ -428,11 +488,18 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=ClamAV scanner semantics are catalogued but not proven through a composed scanner adapter; threatFailureScenario=deterministic in-memory scan markers are treated as malware scanning provider proof; affectedAssetService=clamav; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=defer ClamAV adapter proof and keep scan failures fail-closed; reviewDate=2026-09-30; linkedFollowUpIssue=USF-175",
-      "followUpIssueRefs": ["USF-175", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-175",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-clamav-scanner-provider",
-      "serviceCatalogueServiceIds": ["clamav"],
-      "providerRegistryIds": ["file-scan-clamav-deferred"],
+      "serviceCatalogueServiceIds": [
+        "clamav"
+      ],
+      "providerRegistryIds": [
+        "file-scan-clamav-deferred"
+      ],
       "adapterName": "ClamAV provider deferred",
       "portName": "ScanProvider",
       "endpointRef": null,
@@ -449,11 +516,18 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=LocalStack cloud-provider emulator semantics are catalogued but not proven and must not be treated as live-provider readiness; threatFailureScenario=mock cloud behaviour escapes tenant, credential, egress, cleanup, or audit boundaries; affectedAssetService=localstack; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=defer LocalStack proof and block live-provider claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-176",
-      "followUpIssueRefs": ["USF-176", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-176",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-localstack-cloud-mock-provider",
-      "serviceCatalogueServiceIds": ["localstack"],
-      "providerRegistryIds": ["provider-emulator-localstack-deferred"],
+      "serviceCatalogueServiceIds": [
+        "localstack"
+      ],
+      "providerRegistryIds": [
+        "provider-emulator-localstack-deferred"
+      ],
       "adapterName": "LocalStack provider deferred",
       "portName": "CloudProviderEmulator",
       "endpointRef": null,
@@ -470,11 +544,18 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=WireMock HTTP mock semantics are catalogued but not proven as provider contract behaviour; threatFailureScenario=fixture capture is overclaimed as live external provider compatibility; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=defer WireMock proof and block live-provider claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-176",
-      "followUpIssueRefs": ["USF-176", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-176",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-wiremock-http-mock-provider",
-      "serviceCatalogueServiceIds": ["wiremock"],
-      "providerRegistryIds": ["provider-mock-wiremock-deferred"],
+      "serviceCatalogueServiceIds": [
+        "wiremock"
+      ],
+      "providerRegistryIds": [
+        "provider-mock-wiremock-deferred"
+      ],
       "adapterName": "WireMock provider deferred",
       "portName": "HttpProviderMock",
       "endpointRef": null,
@@ -491,11 +572,18 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Webhook sink capture is catalogued as a local capture boundary but not proven as a provider adapter; threatFailureScenario=webhook capture is overclaimed as notification delivery or external provider compatibility; affectedAssetService=webhook-sink; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=defer webhook sink provider proof and block live-provider claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-176",
-      "followUpIssueRefs": ["USF-176", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-176",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-webhook-sink-capture-provider",
-      "serviceCatalogueServiceIds": ["webhook-sink"],
-      "providerRegistryIds": ["notification-delivery-webhook-sink-deferred"],
+      "serviceCatalogueServiceIds": [
+        "webhook-sink"
+      ],
+      "providerRegistryIds": [
+        "notification-delivery-webhook-sink-deferred"
+      ],
       "adapterName": "Webhook sink provider deferred",
       "portName": "WebhookCaptureProvider",
       "endpointRef": null,
@@ -512,11 +600,18 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=pgBackRest backup/restore semantics are catalogued but no backup artifact, restore drill, retention, secret-exclusion, audit, or cleanup proof exists; threatFailureScenario=documented backup intent is treated as restore evidence; affectedAssetService=pgbackrest; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=defer backup/restore proof and block resilience/readiness claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-177",
-      "followUpIssueRefs": ["USF-177", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-177",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-pgbackrest-backup-provider",
-      "serviceCatalogueServiceIds": ["pgbackrest"],
-      "providerRegistryIds": ["backup-restore-pgbackrest-deferred"],
+      "serviceCatalogueServiceIds": [
+        "pgbackrest"
+      ],
+      "providerRegistryIds": [
+        "backup-restore-pgbackrest-deferred"
+      ],
       "adapterName": "pgBackRest provider deferred",
       "portName": "BackupRestoreProvider",
       "endpointRef": null,
@@ -533,11 +628,21 @@
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Windmill operator automation semantics are catalogued but not proven and must not be substituted by Temporal application workflows; threatFailureScenario=operator automation access, approval, tenant, credential, audit, cleanup, or fail-closed boundaries are overclaimed; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer Windmill provider proof and block workflow automation readiness claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-178",
-      "followUpIssueRefs": ["USF-178", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-178",
+        "USF-189"
+      ],
       "claimBoundary": "USF-189 explicit deferral only; Temporal application workflow proof is not Windmill operator automation proof; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-windmill-automation-provider",
-      "serviceCatalogueServiceIds": ["windmill", "windmill-worker", "windmill-postgres", "windmill-redis"],
-      "providerRegistryIds": ["operational-job-engine-windmill-deferred"],
+      "serviceCatalogueServiceIds": [
+        "windmill",
+        "windmill-worker",
+        "windmill-postgres",
+        "windmill-redis"
+      ],
+      "providerRegistryIds": [
+        "operational-job-engine-windmill-deferred"
+      ],
       "adapterName": "Windmill provider deferred",
       "portName": "OperationalJobEngine",
       "endpointRef": null,
@@ -650,7 +755,9 @@
       "securityPosture": "Adapter emits endpoint_ref, hashes, safe reason codes, and value-free summaries only; raw workflow ids and SDK errors are not emitted.",
       "typescriptSupport": "Official TypeScript SDK is dynamically imported only inside adapters/wf/src/index.ts.",
       "localComposeCompatibility": "Connects to loopback-bound Temporal in compose.dev.generated.yaml with no external egress.",
-      "alternativesRejected": ["Raw gRPC calls were rejected because the official SDK exists."],
+      "alternativesRejected": [
+        "Raw gRPC calls were rejected because the official SDK exists."
+      ],
       "approvedImportBoundary": "adapters/wf/src/index.ts"
     },
     {
@@ -736,7 +843,11 @@
       "id": "usf-189-analytics-provider-deferred",
       "mode": "dev-compose-backed",
       "boundary": "USF-189 records ClickHouse analytics/event-store provider semantics as deferred-with-owner; risk is hidden provider proof or in-memory equivalence; affected service clickhouse; impact high; likelihood medium; owner platform-data-foundation; USF-172 records bounded disposition and treatment defers adapter/service-semantic proof to USF-197; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-172", "USF-197", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-172",
+        "USF-197",
+        "USF-189"
+      ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -751,8 +862,12 @@
     {
       "id": "usf-189-cache-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-189 records Redis cache provider semantics as deferred-with-owner; risk is substituting NATS or process memory for cache expiration, retry, tenant, access, audit, and teardown proof; affected service redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer adapter proof to USF-173; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-173", "USF-189"],
+      "boundary": "USF-173 records cache and eventing as separate semantic service roles; Redis cache provider semantics remain deferred-with-owner because NATS and process memory are not cache expiration, eviction, persistence, tenant key isolation, queue-adjacent, access, audit, or teardown proof. Affected service redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer Redis adapter proof to USF-198; review date 2026-09-30.",
+      "followUpIssueRefs": [
+        "USF-173",
+        "USF-198",
+        "USF-189"
+      ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -768,7 +883,10 @@
       "id": "usf-189-search-provider-deferred",
       "mode": "dev-compose-backed",
       "boundary": "USF-189 records Meilisearch provider semantics as deferred-with-owner; risk is treating hermetic in-memory search as composed indexing, query, ranking, filtering, deletion, retention, or reindex proof; affected service meilisearch; impact medium; likelihood medium; owner platform-search-foundation; treatment defer adapter proof to USF-174; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-174", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-174",
+        "USF-189"
+      ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -784,7 +902,10 @@
       "id": "usf-189-scanner-provider-deferred",
       "mode": "dev-compose-backed",
       "boundary": "USF-189 records ClamAV scanner provider semantics as deferred-with-owner; risk is treating deterministic scan markers as composed scanner invocation, timeout, failure, quarantine, release, deletion, audit, and cleanup proof; affected service clamav; impact high; likelihood medium; owner platform-files-foundation; treatment defer scanner proof to USF-175; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-175", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-175",
+        "USF-189"
+      ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -800,7 +921,10 @@
       "id": "usf-189-mock-provider-deferred",
       "mode": "dev-compose-backed",
       "boundary": "USF-189 records LocalStack, WireMock, and webhook sink provider mock semantics as deferred-with-owner; risk is treating local mocks or capture fixtures as live provider compatibility; affected services localstack, wiremock, webhook-sink; impact medium; likelihood medium; owner platform-integration-foundation; treatment defer mock-provider proof to USF-176; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-176", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-176",
+        "USF-189"
+      ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -816,7 +940,10 @@
       "id": "usf-189-backup-provider-deferred",
       "mode": "dev-compose-backed",
       "boundary": "USF-189 records pgBackRest backup/restore provider semantics as deferred-with-owner; risk is treating documentation or fixture evidence as backup artifact and restore drill proof; affected service pgbackrest; impact critical; likelihood medium; owner platform-data-foundation; treatment defer backup/restore proof to USF-177; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-177", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-177",
+        "USF-189"
+      ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",
@@ -832,7 +959,10 @@
       "id": "usf-189-workflow-automation-provider-deferred",
       "mode": "dev-compose-backed",
       "boundary": "USF-189 records Windmill operator automation provider semantics as deferred-with-owner; risk is treating Temporal application workflow proof as Windmill operator automation access, approval, tenant, credential, audit, retention, cleanup, and fail-closed proof; affected services windmill, windmill-worker, windmill-postgres, windmill-redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer workflow automation proof to USF-178; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-178", "USF-189"],
+      "followUpIssueRefs": [
+        "USF-178",
+        "USF-189"
+      ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",

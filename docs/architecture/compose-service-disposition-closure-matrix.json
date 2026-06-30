@@ -32,11 +32,11 @@
   ],
   "closure_disposition_counts": {
     "covered-by-usf-runtime": 2,
-    "deferred": 5,
+    "deferred": 6,
     "implemented": 13,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "requires-human-decision": 14,
+    "requires-human-decision": 13,
     "substituted-partial": 2
   },
   "rows": [
@@ -1086,7 +1086,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#redis",
@@ -1095,22 +1095,31 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "docs/architecture/cache-eventing-service-disposition-matrix.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "python3 tools/validate-runtime/validate-runtime.py all --json"
         ],
         "tracking_issues": [
           "USF-166",
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-173"
+          "USF-173",
+          "USF-198"
         ],
         "non_equivalence_boundaries": [
-          "Dev in-memory cache is not equivalent to Redis eviction, persistence, or wire protocol behaviour."
+          "USF-173 records cache and event-bus as separate semantic roles; NATS bounded event-bus proof is not Redis cache, expiration, eviction, persistence, key-space, distributed runtime state, queue-adjacent, retry, fail-closed, audit, or wire-protocol proof.",
+          "Dev in-memory cache is not equivalent to Redis eviction, persistence, expiration, distributed key-space, SDK/client, provider failure-mode, or wire-protocol behaviour.",
+          "USF-198 must prove Redis-compatible adapter/service semantics before any Redis, cache-provider, distributed runtime state, queue-adjacent, or live cache readiness claim."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
+          "USF-198 Redis cache service-semantic adapter proof",
+          "Redis SDK/client selection and adapter boundary evidence",
+          "tenant-safe set/get/delete or equivalent write/read evidence",
+          "expiration or TTL, retry, timeout, fail-closed, audit, teardown, and provider failure-mode evidence",
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, retention, privacy, backup, and resilience evidence for provider-managed operation"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1137,10 +1146,17 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-redis",
           "resilience-posture-redis",
-          "incident-vulnerability-redis"
+          "incident-vulnerability-redis",
+          "usf-173-soa-cache-eventing-disposition",
+          "usf-173-evidence-cache-eventing-disposition",
+          "usf-173-threat-redis-nats-overclaim",
+          "usf-173-access-cache-eventing",
+          "usf-173-incident-vulnerability-cache-eventing",
+          "usf-173-privacy-cache-eventing"
         ],
         "tracking_issue_rationale": {
-          "USF-173": "cache and eventing service disposition proof"
+          "USF-173": "cache and eventing service disposition proof",
+          "USF-198": "Redis cache adapter proof and service semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -3094,6 +3110,7 @@
     "USF-179",
     "USF-180",
     "USF-159",
-    "USF-151"
+    "USF-151",
+    "USF-198"
   ]
 }

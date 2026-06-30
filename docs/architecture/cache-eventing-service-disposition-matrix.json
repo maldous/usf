@@ -1,0 +1,201 @@
+{
+  "id": "usf-173-cache-eventing-service-disposition-matrix",
+  "title": "USF-173 Cache and Eventing Service Disposition Matrix",
+  "status": "draft",
+  "sourceIssue": "USF-173",
+  "followUpIssue": "USF-198",
+  "laneIssue": "USF-189",
+  "parentIssue": "USF-133",
+  "serviceIds": ["redis", "nats"],
+  "providerRegistryIds": ["cache-redis-deferred", "event-bus-nats-composed-test"],
+  "activeEventBusBindingId": "nats-event-bus-provider",
+  "deferredCacheBindingId": "usf-189-redis-cache-provider",
+  "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+  "issueLinks": ["USF-173", "USF-198", "USF-189", "USF-184", "USF-192", "USF-133"],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "summary": "Cache and eventing are separate semantic roles. NATS is the composed event-bus provider where event-bus semantics are claimed; Redis-compatible composed support is required where Redis, cache, distributed runtime state, queue-adjacent, expiration, or Redis-specific semantics are claimed; in-memory substitutes are accepted only where semantically permitted and non-equivalence is recorded.",
+    "decisionIsWorkComplete": false
+  },
+  "semanticRoleClassification": [
+    {
+      "role": "event-bus",
+      "serviceCatalogueServiceId": "nats",
+      "providerBindingId": "nats-event-bus-provider",
+      "providerRegistryId": "event-bus-nats-composed-test",
+      "disposition": "implemented-and-proven-bounded-local-compose",
+      "proofCommands": [
+        "corepack pnpm runtime:proof",
+        "corepack pnpm providers-proof",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "nonEquivalenceBoundary": "NATS event-bus publish/readback proof is not Redis cache, expiration, eviction, persistence, key-space, distributed runtime state, queue-adjacent, or Redis wire-protocol proof.",
+      "readinessClaim": false
+    },
+    {
+      "role": "cache",
+      "serviceCatalogueServiceId": "redis",
+      "providerBindingId": "usf-189-redis-cache-provider",
+      "providerRegistryId": "cache-redis-deferred",
+      "disposition": "explicit-deferral-with-owner",
+      "followUpIssue": "USF-198",
+      "nonEquivalenceBoundary": "Redis-compatible cache semantics require separate adapter/service proof; neither NATS nor process memory is equivalent to Redis expiration, eviction, persistence, key-space, distributed runtime state, queue-adjacent, retry, fail-closed, audit, or wire-protocol behaviour.",
+      "readinessClaim": false
+    },
+    {
+      "role": "in-memory-substitute",
+      "serviceCatalogueServiceId": "not-applicable",
+      "providerBindingId": "dev-in-memory",
+      "providerRegistryId": "dev-in-memory-providers",
+      "disposition": "allowed-only-where-semantically-permitted",
+      "nonEquivalenceBoundary": "In-memory stores may prove hermetic local semantic paths only when the relevant proof row permits them. They are not equivalent to Redis cache semantics or NATS composed event-bus provider evidence.",
+      "readinessClaim": false
+    }
+  ],
+  "cacheEventingDisposition": {
+    "disposition": "explicit-split-with-cache-deferral",
+    "cacheServiceSemanticProofPresent": false,
+    "redisServiceSemanticProofPresent": false,
+    "natsEventBusProofPresent": true,
+    "natsRedisEquivalent": false,
+    "inMemoryRedisEquivalent": false,
+    "redisReadinessClaim": false,
+    "cacheReadinessClaim": false,
+    "eventingReadinessClaim": false,
+    "serviceCatalogueServiceIds": ["redis", "nats"],
+    "redisProviderRegistryId": "cache-redis-deferred",
+    "natsProviderRegistryId": "event-bus-nats-composed-test",
+    "followUpIssue": "USF-198",
+    "owner": "platform-workflow-foundation",
+    "riskOwner": "platform-workflow-risk-owner",
+    "controlOwner": "platform-workflow-control-owner",
+    "riskStatement": "Redis cache provider semantics, expiration, eviction, persistence, tenant key isolation, queue-adjacent use, retry, audit, teardown, and provider failure modes could be overclaimed from NATS event-bus or in-memory evidence.",
+    "treatment": "record the cache/eventing semantic split in USF-173, keep NATS and in-memory evidence non-equivalent to Redis, and defer Redis service-semantic adapter proof to USF-198",
+    "reviewDate": "2026-09-30",
+    "deferredEvidence": [
+      "Redis SDK/client selection and adapter boundary evidence",
+      "tenant-safe Redis set/get/delete or equivalent write/read evidence",
+      "expiration or TTL evidence",
+      "retry, timeout, fail-closed, and readiness retry evidence",
+      "audit evidence for cache operations",
+      "teardown or cleanup evidence",
+      "supplier, secret, privacy, backup, incident, vulnerability, retention, and resilience posture evidence"
+    ]
+  },
+  "natsEventBusBoundary": {
+    "providerBindingId": "nats-event-bus-provider",
+    "providerRegistryId": "event-bus-nats-composed-test",
+    "bindingStatus": "active",
+    "providerMode": "composed-test",
+    "providerClass": "local-composed-real-service",
+    "sdkPackage": "@nats-io/transport-node",
+    "sdkVersion": "3.4.0",
+    "redisServiceEquivalent": false,
+    "proofCommands": [
+      "corepack pnpm runtime:proof",
+      "corepack pnpm providers-proof",
+      "python3 tools/validate-runtime/validate-runtime.py all --json"
+    ],
+    "scopeCovered": [
+      "bounded local composed-test event-bus publish/readback proof",
+      "runtime manifest links NATS to the nats service catalogue row",
+      "provider registry records event-bus-nats-composed-test",
+      "SDK use is confined to the adapter boundary",
+      "proof output remains synthetic and tenant-safe"
+    ],
+    "limits": [
+      "not Redis cache proof",
+      "not Redis wire-protocol proof",
+      "not Redis expiration, eviction, persistence, or key-space proof",
+      "not a live-provider readiness claim",
+      "not test, staging, production, SOC, ISO, full dev, or full React parity readiness"
+    ]
+  },
+  "redisProviderBoundary": {
+    "providerBindingId": "usf-189-redis-cache-provider",
+    "providerRegistryId": "cache-redis-deferred",
+    "bindingStatus": "unsupported-deferred",
+    "providerMode": "live-external-deferred",
+    "runtimeProviderBindingActive": false,
+    "sdkPackage": null,
+    "sdkVersion": null,
+    "endpointRef": null,
+    "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#redis",
+    "runtimeManifestBinding": "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-redis-cache-provider",
+    "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-deferred as deferred evidence-only support linked to the Redis service catalogue row.",
+    "followUpIssue": "USF-198"
+  },
+  "inMemorySubstituteBoundary": {
+    "usedWhereSemanticallyPermitted": true,
+    "redisServiceEquivalent": false,
+    "natsServiceEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "In-memory cache or event evidence may prove local hermetic paths only when the relevant proof row permits it. It is not equivalent to Redis composed cache semantics, NATS composed event-bus provider semantics, Redis/NATS SDK boundaries, provider failure modes, cross-process visibility, or live provider evidence.",
+    "commands": [
+      "corepack pnpm runtime:proof:in-memory",
+      "corepack pnpm runtime:proof",
+      "corepack pnpm providers-proof",
+      "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ],
+    "scopeCovered": [
+      "repository records Redis as an explicit deferred provider class",
+      "runtime provider manifest keeps Redis unsupported-deferred",
+      "provider registry uses evidence-only support without endpoint or SDK",
+      "validator rejects NATS or in-memory Redis equivalence and readiness overclaim",
+      "enterprise evidence rows record tenant, retention, audit, privacy, supplier, incident, and cache/eventing boundaries"
+    ],
+    "limits": [
+      "no Redis SDK/client selected",
+      "no Redis adapter implementation",
+      "no Redis tenant-safe set/get/delete proof",
+      "no Redis expiration or TTL proof",
+      "no Redis retry, fail-closed, teardown, or provider failure-mode proof",
+      "no Redis supplier or live-provider evidence",
+      "no cache readiness, eventing readiness, Redis readiness, or live eventing/cache readiness claim"
+    ]
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-173-soa-cache-eventing-disposition",
+    "usf-173-evidence-cache-eventing-disposition",
+    "usf-173-threat-redis-nats-overclaim",
+    "usf-173-access-cache-eventing",
+    "usf-173-incident-vulnerability-cache-eventing",
+    "usf-173-privacy-cache-eventing"
+  ],
+  "readinessClaimsAllowed": ["cache-eventing-disposition-recorded", "nats-event-bus-proof-linked", "redis-service-proof-deferred", "in-memory-non-equivalence-recorded"],
+  "readinessClaimsProhibited": [
+    "cache-readiness",
+    "eventing-readiness",
+    "redis-readiness",
+    "nats-readiness",
+    "live-cache-readiness",
+    "live-eventing-readiness",
+    "provider-compatibility-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ]
+}
