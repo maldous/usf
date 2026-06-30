@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-PARITY-019",
+  "description": "compose service closure matrix is missing a closure-relevant service row",
+  "mutation": {
+    "removeComposeClosureRow": {
+      "service_id": "postgres"
+    }
+  }
+}

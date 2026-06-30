@@ -1,0 +1,5 @@
+{
+  "description": "A required service lacks Statement of Applicability support mapping.",
+  "expectedRule": "USF-ENTERPRISE-002",
+  "removeSoaMapping": "soa-service-postgres"
+}

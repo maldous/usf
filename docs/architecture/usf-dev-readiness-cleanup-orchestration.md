@@ -21,7 +21,15 @@ Cleanup runs in two passes:
 
 Implementation must not start until the coordinator evidence pack confirms that lane cleanup is
 complete, source issues are executable, child issues are linked where needed, acceptance criteria
-are evidence-based, validation is honest, boundaries are preserved, and lane prompts are ready.
+are evidence-based, validation is honest, boundaries are preserved, lane prompts are ready, and the
+repository-level enterprise evidence model is updated for the lane.
+
+`spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json` is the shared
+enterprise evidence model for all lanes. `tools/validate-enterprise/validate-enterprise.py` enforces
+SoA-support mapping, evidence register rows, threat/abuse posture, SDK dependency governance,
+observability evidence standards, access review posture, resilience posture, incident and
+vulnerability evidence, privacy/data minimisation, done-state governance, and explicit non-claims.
+This model is evidence organisation only and does not claim certification or readiness.
 
 ## Lane Map
 
@@ -117,6 +125,8 @@ Lane prompts must be issued only after coordinator approval. Each lane prompt mu
 - Required proof and validator changes.
 - Required planted defects where validators change.
 - Professional and enterprise evidence posture.
+- Enterprise evidence model updates for affected services, adapters, proofs, validators, deferred
+  boundaries, and lane posture.
 - Prohibited claims.
 - Validation commands.
 - Handoff requirements back to the coordinator.

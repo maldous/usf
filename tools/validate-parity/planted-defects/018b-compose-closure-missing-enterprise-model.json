@@ -1,0 +1,9 @@
+{
+  "description": "Compose closure matrix lacks the repository enterprise evidence model reference.",
+  "expectedRule": "USF-PARITY-018",
+  "mutation": {
+    "composeClosureSetTop": {
+      "enterprise_evidence_model": "missing"
+    }
+  }
+}

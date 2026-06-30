@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-021",
+  "description": "implemented compose service disposition lacks proof evidence references",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "postgres",
+      "setEvidence": {
+        "proof_evidence_refs": []
+      }
+    }
+  }
+}

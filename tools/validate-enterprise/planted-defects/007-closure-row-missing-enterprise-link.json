@@ -1,0 +1,5 @@
+{
+  "description": "Lane 1 closure row lacks enterprise evidence linkage.",
+  "expectedRule": "USF-ENTERPRISE-008",
+  "removeClosureEnterpriseRefs": "postgres"
+}

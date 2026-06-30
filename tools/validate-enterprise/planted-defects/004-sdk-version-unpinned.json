@@ -1,0 +1,12 @@
+{
+  "description": "An SDK governance row uses a floating dependency version.",
+  "expectedRule": "USF-ENTERPRISE-005",
+  "sdkPatch": [
+    {
+      "id": "sdk-runtime-database-provider-binding-pg",
+      "set": {
+        "version": "^8.22.0"
+      }
+    }
+  ]
+}

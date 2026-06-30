@@ -114,6 +114,7 @@ AUTHORIZED_TOOLING = {
     "tools/generate-compose/generate-compose.py",
     "tools/validate-compose/check-compose-ports.py",
     "tools/validate-compose/validate-compose.py",
+    "tools/validate-enterprise/validate-enterprise.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",
     "tools/validate-parity/validate-parity.py",

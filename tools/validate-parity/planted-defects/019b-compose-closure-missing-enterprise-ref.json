@@ -1,0 +1,10 @@
+{
+  "description": "Compose closure row lacks enterprise evidence references.",
+  "expectedRule": "USF-PARITY-019",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "postgres",
+      "dropEvidence": ["enterprise_evidence_refs"]
+    }
+  }
+}

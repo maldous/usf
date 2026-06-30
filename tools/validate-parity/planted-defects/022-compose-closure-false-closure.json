@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-PARITY-022",
+  "description": "compose service closure is claimed while unresolved service dispositions remain",
+  "mutation": {
+    "composeClosureSetTop": {
+      "closure_claimed": true
+    }
+  }
+}

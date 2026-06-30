@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-020",
+  "description": "blocking compose service disposition lacks linked follow-up issues",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "clickhouse",
+      "setEvidence": {
+        "tracking_issues": []
+      }
+    }
+  }
+}

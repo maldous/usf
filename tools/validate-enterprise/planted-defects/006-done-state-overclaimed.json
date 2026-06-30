@@ -1,0 +1,7 @@
+{
+  "description": "Done-state governance is overclaimed from validation posture.",
+  "expectedRule": "USF-ENTERPRISE-007",
+  "doneStateSet": {
+    "doneClaimed": true
+  }
+}

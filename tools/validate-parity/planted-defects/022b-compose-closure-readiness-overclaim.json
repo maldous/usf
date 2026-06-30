@@ -1,0 +1,15 @@
+{
+  "expectedRule": "USF-PARITY-022",
+  "description": "compose service closure evidence allows a prohibited readiness claim",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "postgres",
+      "setEvidence": {
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "production-readiness"
+        ]
+      }
+    }
+  }
+}

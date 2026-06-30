@@ -1,0 +1,586 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:enterprise-evidence",
+  "title": "USF Enterprise Evidence Model Schema",
+  "description": "Draft JSON Schema for repository-level enterprise evidence organisation. It validates Statement of Applicability support mappings, proof evidence register rows, threat and abuse-case posture, SDK dependency governance, observability evidence standards, access review posture, backup and restore posture, incident and vulnerability evidence posture, privacy and data minimisation posture, done-state governance, lane evidence requirements, and explicit non-claims. This is evidence organisation only and does not claim ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, or full React parity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "issueLinks",
+    "serviceCatalogueAuthority",
+    "policy",
+    "soaSupportMappings",
+    "evidenceRegister",
+    "threatModelAbuseCaseRegister",
+    "sdkDependencyGovernance",
+    "observabilityEvidenceStandard",
+    "accessReviewPrivilegedOperationPosture",
+    "backupRestoreResiliencePosture",
+    "incidentVulnerabilityManagementEvidence",
+    "privacyDataMinimisationPosture",
+    "doneStateGovernance",
+    "laneEvidenceRequirements",
+    "nonClaims"
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "issueLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent",
+        "dashboard",
+        "coordinator",
+        "approvedLanes",
+        "blockedLanes"
+      ],
+      "properties": {
+        "parent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "dashboard": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "coordinator": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "approvedLanes": {
+          "$ref": "#/$defs/stringList"
+        },
+        "blockedLanes": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statementOfApplicabilitySupportOnly",
+        "implementationRequiresEnterpriseEvidence",
+        "doneRequiresEvidence",
+        "validationPassingAloneIsNotDone",
+        "runtimeImplementationAllowed"
+      ],
+      "properties": {
+        "statementOfApplicabilitySupportOnly": {
+          "type": "boolean"
+        },
+        "implementationRequiresEnterpriseEvidence": {
+          "type": "boolean"
+        },
+        "doneRequiresEvidence": {
+          "type": "boolean"
+        },
+        "validationPassingAloneIsNotDone": {
+          "type": "boolean"
+        },
+        "runtimeImplementationAllowed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "soaRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "mappedType",
+        "controlPurpose",
+        "riskTreated",
+        "assetServiceAffected",
+        "owner",
+        "riskOwner",
+        "controlOwner",
+        "implementationStatus",
+        "evidenceSource",
+        "validationCommand",
+        "deferredReason",
+        "nonClaims"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mappedType": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "controlPurpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskTreated": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "assetServiceAffected": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "owner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "controlOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "implementationStatus": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceSource": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "validationCommand": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "deferredReason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "nonClaims": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "evidenceRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "proofResult",
+        "whatWasProven",
+        "whatWasNotProven",
+        "runtimeMode",
+        "providerMode",
+        "serviceCatalogueRow",
+        "adapterProviderId",
+        "validationCommand",
+        "commandPin",
+        "commitPin",
+        "issueLinks",
+        "prOrMergeSha",
+        "retentionPosture"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "proofResult": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "whatWasProven": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "whatWasNotProven": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "runtimeMode": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "providerMode": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serviceCatalogueRow": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "adapterProviderId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "validationCommand": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "commandPin": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "commitPin": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "issueLinks": {
+          "$ref": "#/$defs/stringList"
+        },
+        "prOrMergeSha": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "retentionPosture": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "threatRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "targetType",
+        "target",
+        "trustBoundary",
+        "tenantBoundary",
+        "credentialBoundary",
+        "dataClassification",
+        "abuseCases",
+        "failureModes",
+        "failClosedBehaviour",
+        "monitoringAuditEvidence",
+        "residualRisk"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "targetType": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "trustBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "tenantBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "credentialBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "dataClassification": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "abuseCases": {
+          "$ref": "#/$defs/stringList"
+        },
+        "failureModes": {
+          "$ref": "#/$defs/stringList"
+        },
+        "failClosedBehaviour": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "monitoringAuditEvidence": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "residualRisk": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "sdkRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "serviceId",
+        "adapterId",
+        "providerId",
+        "packageName",
+        "version",
+        "selectionRationale",
+        "officialOrDeFactoStatus",
+        "licencePosture",
+        "maintenancePosture",
+        "securityAdvisoryPosture",
+        "typescriptRuntimeCompatibility",
+        "forbiddenLayerImportCheck",
+        "updateDeprecationOwner"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serviceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "adapterId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "providerId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "packageName": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "selectionRationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "officialOrDeFactoStatus": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "licencePosture": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "maintenancePosture": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "securityAdvisoryPosture": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "typescriptRuntimeCompatibility": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "forbiddenLayerImportCheck": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "updateDeprecationOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "observabilityStandard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredFields",
+        "prohibitedFields",
+        "auditEvidenceRequirement",
+        "tracingEvidenceRequirement",
+        "metricsEvidenceRequirement"
+      ],
+      "properties": {
+        "requiredFields": {
+          "$ref": "#/$defs/stringList"
+        },
+        "prohibitedFields": {
+          "$ref": "#/$defs/stringList"
+        },
+        "auditEvidenceRequirement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "tracingEvidenceRequirement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "metricsEvidenceRequirement": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "postureRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "targetType",
+        "target",
+        "posture",
+        "evidenceSource",
+        "validationCommand",
+        "deferredReason",
+        "nonClaims"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "targetType": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "posture": {
+          "$ref": "#/$defs/stringList"
+        },
+        "evidenceSource": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "validationCommand": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "deferredReason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "nonClaims": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "doneStateGovernance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "acceptanceCriteriaRequireEvidence",
+        "deferredItemsRequireFollowUp",
+        "nonClaimsMustBePreserved",
+        "serviceDispositionRowsMustBeResolved",
+        "validationPassingAloneIsNotDone",
+        "doneClaimed"
+      ],
+      "properties": {
+        "acceptanceCriteriaRequireEvidence": {
+          "type": "boolean"
+        },
+        "deferredItemsRequireFollowUp": {
+          "type": "boolean"
+        },
+        "nonClaimsMustBePreserved": {
+          "type": "boolean"
+        },
+        "serviceDispositionRowsMustBeResolved": {
+          "type": "boolean"
+        },
+        "validationPassingAloneIsNotDone": {
+          "type": "boolean"
+        },
+        "doneClaimed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "laneRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "laneIssue",
+        "approvalStatus",
+        "requiredEnterpriseEvidenceSections",
+        "implementationAllowed",
+        "validationCommand"
+      ],
+      "properties": {
+        "laneIssue": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "approvalStatus": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "requiredEnterpriseEvidenceSections": {
+          "$ref": "#/$defs/stringList"
+        },
+        "implementationAllowed": {
+          "type": "boolean"
+        },
+        "validationCommand": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  },
+  "properties": {
+    "id": {
+      "const": "enterprise-evidence.repository-model"
+    },
+    "title": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "authorityLevel": {
+      "const": "runtime-proof-evidence"
+    },
+    "lifecycleState": {
+      "const": "draft"
+    },
+    "ontologyConcepts": {
+      "$ref": "#/$defs/stringList"
+    },
+    "taxonomyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "vocabularyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "aiGuidance": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "issueLinks": {
+      "$ref": "#/$defs/issueLinks"
+    },
+    "serviceCatalogueAuthority": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "soaSupportMappings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/soaRow"
+      },
+      "uniqueItems": true
+    },
+    "evidenceRegister": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceRow"
+      },
+      "uniqueItems": true
+    },
+    "threatModelAbuseCaseRegister": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/threatRow"
+      },
+      "uniqueItems": true
+    },
+    "sdkDependencyGovernance": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sdkRow"
+      },
+      "uniqueItems": true
+    },
+    "observabilityEvidenceStandard": {
+      "$ref": "#/$defs/observabilityStandard"
+    },
+    "accessReviewPrivilegedOperationPosture": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/postureRow"
+      },
+      "uniqueItems": true
+    },
+    "backupRestoreResiliencePosture": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/postureRow"
+      },
+      "uniqueItems": true
+    },
+    "incidentVulnerabilityManagementEvidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/postureRow"
+      },
+      "uniqueItems": true
+    },
+    "privacyDataMinimisationPosture": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/postureRow"
+      },
+      "uniqueItems": true
+    },
+    "doneStateGovernance": {
+      "$ref": "#/$defs/doneStateGovernance"
+    },
+    "laneEvidenceRequirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/laneRequirement"
+      },
+      "uniqueItems": true
+    },
+    "nonClaims": {
+      "$ref": "#/$defs/stringList"
+    }
+  }
+}

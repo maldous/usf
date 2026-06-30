@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-PARITY-021",
+  "description": "runtime-covered historical platform-api row is falsely represented as implemented Compose service equivalence",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "platform-api",
+      "setEvidence": {
+        "closure_disposition": "implemented",
+        "closure_blocking": false
+      }
+    }
+  }
+}
