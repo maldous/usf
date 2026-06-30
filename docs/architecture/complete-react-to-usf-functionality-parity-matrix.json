@@ -343,6 +343,25 @@
     },
     {
       "blocking_level": "P1",
+      "capability_group": "Redis cache and composed event-bus semantics",
+      "capability_id": "cache-eventing",
+      "capability_name": "Cache/eventing",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "audit/evidence",
+        "provider-mode",
+        "secret-redaction",
+        "resilience"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "Redis compose service and cache/session/queue local dependency lineage",
+      "readiness_impact": "USF-173 records bounded cache/eventing disposition; NATS event-bus proof is not Redis cache proof, in-memory stores are non-equivalent, and Redis adapter/service-semantic proof remains deferred to USF-198 before any Redis or cache readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-173/USF-198",
+      "usf_evidence_summary": "NATS is proven only as a bounded local composed event-bus provider; Redis is catalogued as an explicit deferred provider class with no SDK, endpoint, or cache adapter proof.",
+      "usf_status": "deferred"
+    },
+    {
+      "blocking_level": "P1",
       "capability_group": "self-hosted Sentry stack",
       "capability_id": "error-monitoring",
       "capability_name": "Error monitoring",
@@ -602,12 +621,12 @@
       "usf_status": "partial"
     }
   ],
-  "capability_count": 30,
+  "capability_count": 31,
   "evidence_grade_counts": {
     "A": 5,
     "B": 11,
     "C": 7,
-    "D": 7
+    "D": 8
   },
   "id": "complete-react-to-usf-functionality-parity-matrix",
   "react_head": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
@@ -620,11 +639,11 @@
   "run_id": "20260629T053504Z-a285187",
   "status": "review-draft",
   "status_counts": {
-    "deferred": 4,
+    "deferred": 6,
     "migrated": 5,
     "not-applicable": 1,
     "partial": 13,
-    "requires-human-decision": 7
+    "requires-human-decision": 6
   },
   "usf_head": "a285187b177a922ff422858c1bf8f180336f1dff"
 }

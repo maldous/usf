@@ -52,6 +52,7 @@ RULES = {
     "USF-RUNTIME-021": ("blocking", "Lane 5 provider disposition has unsafe readiness posture"),
     "USF-RUNTIME-022": ("blocking", "Lane 5 provider disposition overclaims provider readiness"),
     "USF-RUNTIME-023": ("blocking", "analytics event-store provider disposition is incomplete or unsafe"),
+    "USF-RUNTIME-024": ("blocking", "cache and eventing service disposition is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -59,6 +60,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-parity.json")
 SCHEMA_PATH = Path("spec/schemas/runtime-proof.schema.json")
 ANALYTICS_EVENT_STORE_MATRIX_PATH = Path("docs/architecture/analytics-event-store-provider-disposition-matrix.json")
+CACHE_EVENTING_MATRIX_PATH = Path("docs/architecture/cache-eventing-service-disposition-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -202,6 +204,24 @@ ANALYTICS_EVENT_STORE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "clickhouse-readiness",
     "provider-compatibility-readiness",
 }
+CACHE_EVENTING_REQUIRED_ISSUES = {"USF-173", "USF-198", "USF-189", "USF-184", "USF-192", "USF-133"}
+CACHE_EVENTING_REQUIRED_EVIDENCE_REFS = {
+    "usf-173-soa-cache-eventing-disposition",
+    "usf-173-evidence-cache-eventing-disposition",
+    "usf-173-threat-redis-nats-overclaim",
+    "usf-173-access-cache-eventing",
+    "usf-173-incident-vulnerability-cache-eventing",
+    "usf-173-privacy-cache-eventing",
+}
+CACHE_EVENTING_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
+    "cache-readiness",
+    "eventing-readiness",
+    "redis-readiness",
+    "nats-readiness",
+    "live-cache-readiness",
+    "live-eventing-readiness",
+    "provider-compatibility-readiness",
+}
 LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clickhouse-analytics-provider": {
         "serviceIds": ["clickhouse"],
@@ -213,7 +233,7 @@ LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-redis-cache-provider": {
         "serviceIds": ["redis"],
         "providerIds": ["cache-redis-deferred"],
-        "followUpIssue": "USF-173",
+        "followUpIssue": "USF-198",
         "boundaryRef": "usf-189-cache-provider-deferred",
         "allowedStatuses": {"unsupported-deferred"},
     },
@@ -425,6 +445,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         analytics_matrix = read_json(ANALYTICS_EVENT_STORE_MATRIX_PATH)
         if defect.get("analyticsEventStoreMatrixPatches"):
             analytics_matrix = apply_manifest_patches(analytics_matrix, defect["analyticsEventStoreMatrixPatches"])
+    cache_eventing_matrix: Any = None
+    if not defect.get("removeCacheEventingMatrix"):
+        cache_eventing_matrix = read_json(CACHE_EVENTING_MATRIX_PATH)
+        if defect.get("cacheEventingMatrixPatches"):
+            cache_eventing_matrix = apply_manifest_patches(cache_eventing_matrix, defect["cacheEventingMatrixPatches"])
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
@@ -447,6 +472,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "manifest": manifest,
         "schema": read_json(SCHEMA_PATH),
         "analyticsEventStoreMatrix": analytics_matrix,
+        "cacheEventingMatrix": cache_eventing_matrix,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -989,6 +1015,233 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
             F.add("USF-RUNTIME-023", "analytics-event-store-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
 
+def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("cacheEventingMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-RUNTIME-024", str(CACHE_EVENTING_MATRIX_PATH), "cache/eventing disposition matrix is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-173",
+        "followUpIssue": "USF-198",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "activeEventBusBindingId": "nats-event-bus-provider",
+        "deferredCacheBindingId": "usf-189-redis-cache-provider",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-RUNTIME-024", key, f"expected {expected!r}")
+
+    if CACHE_EVENTING_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-024", "issueLinks", "cache/eventing issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-RUNTIME-024", "nonClaims", "cache/eventing non-claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-024", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
+    if CACHE_EVENTING_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-024", "readinessClaimsProhibited", "cache/eventing prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-RUNTIME-024", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-RUNTIME-024", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    roles = {
+        item.get("role"): item
+        for item in matrix.get("semanticRoleClassification", [])
+        if isinstance(item, dict) and isinstance(item.get("role"), str)
+    }
+    for role in ("event-bus", "cache", "in-memory-substitute"):
+        if role not in roles:
+            F.add("USF-RUNTIME-024", "semanticRoleClassification", f"missing semantic role: {role}")
+    event_role = roles.get("event-bus", {})
+    if event_role:
+        expected_event = {
+            "serviceCatalogueServiceId": "nats",
+            "providerBindingId": "nats-event-bus-provider",
+            "providerRegistryId": "event-bus-nats-composed-test",
+            "disposition": "implemented-and-proven-bounded-local-compose",
+            "readinessClaim": False,
+        }
+        for key, expected in expected_event.items():
+            observed = event_role.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-024", f"semanticRoleClassification.event-bus.{key}", f"expected {expected!r}")
+        if "not Redis" not in str(event_role.get("nonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-024", "semanticRoleClassification.event-bus.nonEquivalenceBoundary", "NATS non-equivalence to Redis must be explicit")
+    cache_role = roles.get("cache", {})
+    if cache_role:
+        expected_cache = {
+            "serviceCatalogueServiceId": "redis",
+            "providerBindingId": "usf-189-redis-cache-provider",
+            "providerRegistryId": "cache-redis-deferred",
+            "disposition": "explicit-deferral-with-owner",
+            "followUpIssue": "USF-198",
+            "readinessClaim": False,
+        }
+        for key, expected in expected_cache.items():
+            observed = cache_role.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-024", f"semanticRoleClassification.cache.{key}", f"expected {expected!r}")
+        if "neither NATS nor process memory" not in str(cache_role.get("nonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-024", "semanticRoleClassification.cache.nonEquivalenceBoundary", "Redis deferral must reject NATS and process-memory equivalence")
+    in_memory_role = roles.get("in-memory-substitute", {})
+    if in_memory_role:
+        if in_memory_role.get("disposition") != "allowed-only-where-semantically-permitted":
+            F.add("USF-RUNTIME-024", "semanticRoleClassification.in-memory-substitute.disposition", "in-memory substitute boundary is unsafe")
+        if in_memory_role.get("readinessClaim") is not False:
+            F.add("USF-RUNTIME-024", "semanticRoleClassification.in-memory-substitute.readinessClaim", "in-memory substitute must not make readiness claims")
+        if "not equivalent to Redis" not in str(in_memory_role.get("nonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-024", "semanticRoleClassification.in-memory-substitute.nonEquivalenceBoundary", "in-memory non-equivalence to Redis must be explicit")
+
+    disposition = matrix.get("cacheEventingDisposition", {})
+    if not isinstance(disposition, dict):
+        F.add("USF-RUNTIME-024", "cacheEventingDisposition", "cache/eventing disposition must be an object")
+    else:
+        expected_disposition = {
+            "disposition": "explicit-split-with-cache-deferral",
+            "cacheServiceSemanticProofPresent": False,
+            "redisServiceSemanticProofPresent": False,
+            "natsEventBusProofPresent": True,
+            "natsRedisEquivalent": False,
+            "inMemoryRedisEquivalent": False,
+            "redisReadinessClaim": False,
+            "cacheReadinessClaim": False,
+            "eventingReadinessClaim": False,
+            "redisProviderRegistryId": "cache-redis-deferred",
+            "natsProviderRegistryId": "event-bus-nats-composed-test",
+            "followUpIssue": "USF-198",
+            "owner": "platform-workflow-foundation",
+            "riskOwner": "platform-workflow-risk-owner",
+            "controlOwner": "platform-workflow-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_disposition.items():
+            observed = disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-024", f"cacheEventingDisposition.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "deferredEvidence"):
+            if disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-024", f"cacheEventingDisposition.{field}", "deferral field is required")
+
+    nats_boundary = matrix.get("natsEventBusBoundary", {})
+    if not isinstance(nats_boundary, dict):
+        F.add("USF-RUNTIME-024", "natsEventBusBoundary", "NATS boundary must be an object")
+    else:
+        expected_nats = {
+            "providerBindingId": "nats-event-bus-provider",
+            "providerRegistryId": "event-bus-nats-composed-test",
+            "bindingStatus": "active",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkPackage": "@nats-io/transport-node",
+            "sdkVersion": "3.4.0",
+            "redisServiceEquivalent": False,
+        }
+        for key, expected in expected_nats.items():
+            observed = nats_boundary.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-024", f"natsEventBusBoundary.{key}", f"expected {expected!r}")
+        commands = set(nats_boundary.get("proofCommands", []))
+        for command in (
+            "corepack pnpm runtime:proof",
+            "corepack pnpm providers-proof",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+        ):
+            if command not in commands:
+                F.add("USF-RUNTIME-024", "natsEventBusBoundary.proofCommands", f"missing {command}")
+        if len(nats_boundary.get("scopeCovered", [])) < 4 or len(nats_boundary.get("limits", [])) < 5:
+            F.add("USF-RUNTIME-024", "natsEventBusBoundary", "NATS scope and limits are incomplete")
+
+    redis_boundary = matrix.get("redisProviderBoundary", {})
+    if not isinstance(redis_boundary, dict):
+        F.add("USF-RUNTIME-024", "redisProviderBoundary", "Redis provider boundary must be an object")
+    else:
+        expected_redis = {
+            "providerBindingId": "usf-189-redis-cache-provider",
+            "providerRegistryId": "cache-redis-deferred",
+            "bindingStatus": "unsupported-deferred",
+            "providerMode": "live-external-deferred",
+            "runtimeProviderBindingActive": False,
+            "sdkPackage": None,
+            "sdkVersion": None,
+            "endpointRef": None,
+            "followUpIssue": "USF-198",
+        }
+        for key, expected in expected_redis.items():
+            observed = redis_boundary.get(key)
+            if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
+                F.add("USF-RUNTIME-024", f"redisProviderBoundary.{key}", f"expected {expected!r}")
+
+    substitute = matrix.get("inMemorySubstituteBoundary", {})
+    if not isinstance(substitute, dict):
+        F.add("USF-RUNTIME-024", "inMemorySubstituteBoundary", "substitute boundary must be an object")
+    else:
+        if substitute.get("usedWhereSemanticallyPermitted") is not True:
+            F.add("USF-RUNTIME-024", "inMemorySubstituteBoundary.usedWhereSemanticallyPermitted", "permitted in-memory use must be explicit")
+        for key in ("redisServiceEquivalent", "natsServiceEquivalent"):
+            if substitute.get(key) is not False:
+                F.add("USF-RUNTIME-024", f"inMemorySubstituteBoundary.{key}", "in-memory evidence must not be provider equivalent")
+        if "not equivalent to Redis" not in str(substitute.get("substitutionNonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-024", "inMemorySubstituteBoundary.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+        commands = set(substitute.get("commands", []))
+        for command in (
+            "corepack pnpm runtime:proof:in-memory",
+            "corepack pnpm runtime:proof",
+            "corepack pnpm providers-proof",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+        ):
+            if command not in commands:
+                F.add("USF-RUNTIME-024", "inMemorySubstituteBoundary.commands", f"missing {command}")
+        if len(substitute.get("scopeCovered", [])) < 4 or len(substitute.get("limits", [])) < 6:
+            F.add("USF-RUNTIME-024", "inMemorySubstituteBoundary", "substitute scope and limits are incomplete")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != CACHE_EVENTING_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-024", "enterpriseEvidenceRefs", "cache/eventing enterprise evidence refs are incomplete")
+
+    bindings = binding_records(state["manifest"])
+    redis_binding = bindings.get("usf-189-redis-cache-provider")
+    if not redis_binding:
+        F.add("USF-RUNTIME-024", "providerBindingMatrix", "Redis provider disposition is missing from runtime manifest")
+    else:
+        if "USF-198" not in redis_binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest must link USF-198")
+        if "USF-198" not in str(redis_binding.get("deferredReason", "")):
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-198")
+        if redis_binding.get("bindingStatus") != "unsupported-deferred" or redis_binding.get("endpointRef") is not None:
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "Redis must remain explicitly deferred without endpoint binding")
+        if redis_binding.get("sdkPackage") is not None or redis_binding.get("sdkVersion") is not None:
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "deferred Redis must not name an SDK/client package")
+
+    nats_binding = bindings.get("nats-event-bus-provider")
+    if not nats_binding:
+        F.add("USF-RUNTIME-024", "providerBindingMatrix", "NATS event-bus provider binding is missing from runtime manifest")
+    else:
+        if nats_binding.get("bindingStatus") != "active" or nats_binding.get("providerRegistryIds") != ["event-bus-nats-composed-test"]:
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.nats-event-bus-provider", "NATS event-bus proof linkage is inconsistent")
+        if nats_binding.get("sdkPackage") != "@nats-io/transport-node" or nats_binding.get("sdkVersion") != "3.4.0":
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.nats-event-bus-provider", "NATS SDK evidence is inconsistent")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-cache-provider-deferred")
+    if not deferred or "USF-198" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-024", "deferredBoundaries.usf-189-cache-provider-deferred", "runtime deferred boundary must link USF-198")
+
+    matrix_text = json.dumps(matrix, sort_keys=True)
+    for stale in ("until USF-173 closes", "followUpIssue=USF-173", "\"followUpIssue\": \"USF-173\"", "linkedFollowUpIssue=USF-173"):
+        if stale in matrix_text:
+            F.add("USF-RUNTIME-024", "cache-eventing-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     for binding_id, metadata in REQUIRED_PROVIDER_BINDINGS.items():
         adapter_path = metadata["adapterPath"]
@@ -1171,6 +1424,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_readiness_posture,
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
+            check_cache_eventing_disposition,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -1194,6 +1448,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_readiness_posture,
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
+            check_cache_eventing_disposition,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

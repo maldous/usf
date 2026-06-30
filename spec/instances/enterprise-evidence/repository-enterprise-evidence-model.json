@@ -3751,6 +3751,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-173-soa-cache-eventing-disposition",
+      "mappedType": "source-issue-cache-eventing-disposition",
+      "controlPurpose": "Map USF-173 as the bounded cache/eventing disposition gate, separating NATS event-bus proof from deferred Redis cache service-semantic proof under USF-198.",
+      "riskTreated": "riskStatement=USF-173 could be treated as Redis cache readiness or broad eventing readiness even though it records explicit semantic split, non-equivalence, and deferral only",
+      "assetServiceAffected": "redis and nats service catalogue rows plus repository cache/eventing disposition",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; sourceIssue=USF-173; followUpIssue=USF-198; treatment=record bounded cache/eventing split, require docs/architecture/cache-eventing-service-disposition-matrix.json, and defer Redis SDK/client selection, adapter implementation, tenant-safe set/get/delete, expiration/TTL, retry, audit, teardown, supplier, incident, privacy, retention, and backup proof; reviewDate=2026-09-30",
+      "evidenceSource": "docs/architecture/cache-eventing-service-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-173; USF-198",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "threatFailureScenario=NATS or in-memory evidence is mistaken for Redis cache operating evidence; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer service-semantic proof to USF-198; reviewDate=2026-09-30; followUpIssue=USF-198; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -4916,6 +4942,29 @@
       ],
       "prOrMergeSha": "9ad01f5bc2db4b41153798c5981621998cc7e72e",
       "retentionPosture": "Retain the gateway clickthrough substrate matrix, enterprise validator output, planted-defect output, PR validation summary, and post-merge Linear reconciliation; update this row if gateway route or clickthrough proof is later implemented."
+    },
+    {
+      "id": "usf-173-evidence-cache-eventing-disposition",
+      "proofResult": "cache-eventing-disposition-gate",
+      "whatWasProven": "USF-173 records a bounded cache/eventing disposition in docs/architecture/cache-eventing-service-disposition-matrix.json, links Redis service-semantic proof to USF-198, records NATS as bounded event-bus proof only, and adds validator coverage that fails missing matrix, missing follow-up, false Redis equivalence for NATS or in-memory evidence, missing enterprise evidence, missing runtime manifest linkage, and readiness overclaim.",
+      "whatWasNotProven": "This does not prove Redis readiness, cache readiness, eventing readiness, NATS readiness, provider-compatibility readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, USF-133 closure, Redis SDK/client selection, adapter implementation, tenant-safe set/get/delete, expiration/TTL, retry, fail-closed behaviour, audit operation evidence, teardown, supplier boundary, backup/restore, incident posture, privacy posture, retention posture, or live provider evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "redis-service-proof-deferred-to-USF-198-and-nats-event-bus-proof-bounded",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#redis; spec/instances/compose-service/service-catalogue.json#nats",
+      "adapterProviderId": "cache-redis-deferred; event-bus-nats-composed-test",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "e004ca5862724ce488edd5e251b2eb7c5e7893f5",
+      "issueLinks": [
+        "USF-173",
+        "USF-198",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "e004ca5862724ce488edd5e251b2eb7c5e7893f5",
+      "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Redis values, NATS payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -5929,6 +5978,34 @@
       "failClosedBehaviour": "USF-ENTERPRISE-020 fails when the matrix is missing, gateway exposure is unsafe, direct-client forwarded headers are trusted, route/clickthrough deferrals are absent, enterprise evidence rows are missing, or readiness is overclaimed.",
       "monitoringAuditEvidence": "PR validation summary must include validate-enterprise and planted defects for USF-ENTERPRISE-020; future runtime route/clickthrough proof must add value-free audit evidence before stronger readiness.",
       "residualRisk": "Gateway route proof, forward-auth implementation, clickthrough UI/runtime proof, service-console login, SSO session proof, trusted proxy allowlist proof, gateway-mediated audit evidence, public exposure review, and test-readiness evidence remain deferred to USF-155 or later source issues. This does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-react-parity-readiness."
+    },
+    {
+      "id": "usf-173-threat-redis-nats-overclaim",
+      "targetType": "source-issue-cache-eventing-disposition",
+      "target": "docs/architecture/cache-eventing-service-disposition-matrix.json",
+      "trustBoundary": "USF-173 repository evidence may define bounded cache/eventing disposition only; Redis provider behaviour, adapter calls, cache values, expiration semantics, and queue-adjacent semantics remain outside this proof and are tracked by USF-198.",
+      "tenantBoundary": "tenant cache key isolation remains unproven until USF-198 records Redis tenant-safe operation proof; USF-173 records non-equivalence only.",
+      "credentialBoundary": "no Redis credentials, raw endpoints, SDK errors, provider payloads, connection strings, NATS payloads, or tokens are introduced by USF-173.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production cache data, tenant data, event payloads, or provider payloads",
+      "abuseCases": [
+        "USF-173 marked Done as Redis readiness",
+        "NATS event-bus proof marked Redis-service-equivalent",
+        "in-memory store marked Redis-service-equivalent",
+        "missing USF-198 follow-up link",
+        "runtime manifest omits USF-198 deferral"
+      ],
+      "failureModes": [
+        "matrix missing",
+        "follow-up missing",
+        "enterprise evidence missing",
+        "NATS Redis equivalence marked true",
+        "in-memory Redis equivalence marked true",
+        "runtime manifest service proof defers back only to USF-173",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-024 fails when docs/architecture/cache-eventing-service-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-198 is missing, NATS or in-memory checks are marked Redis equivalent, runtime manifest lacks USF-198 linkage, readiness claims are enabled, or stale self-deferral remains.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live Redis cache, cache payload, expiration result, key-space, queue-adjacent behaviour, or provider evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
+      "residualRisk": "riskStatement=Redis service semantics remain unproven after USF-173; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=defer service proof to USF-198; reviewDate=2026-09-30; followUpIssue=USF-198; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/cache-eventing-service-disposition-matrix.json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7124,6 +7201,51 @@
       "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-gateway-posture-matrix.json; docs/architecture/operator-access-proof-source-use-disposition-matrix.md",
       "validationCommand": "corepack pnpm proof:operator-access",
       "deferredReason": "Executed periodic access review, break-glass operation, deprovisioning workflow, gateway route proof, and clickthrough UX remain deferred to USF-180 or service-specific source issues.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-173-access-cache-eventing",
+      "targetType": "source-issue-cache-eventing-disposition",
+      "target": "docs/architecture/cache-eventing-service-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-173",
+        "followUpIssue=USF-198",
+        "riskStatement=USF-173 could be treated as Redis operator or provider access proof without service evidence",
+        "threatFailureScenario=Redis console access, adapter credential posture, cache operation authorization, or operator audit evidence is claimed from repository validation only",
+        "affectedAssetService=redis cache/eventing disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record bounded disposition and defer Redis access and adapter proof to USF-198",
+        "reviewDate=2026-09-30",
+        "accessModel=defined-only",
+        "authRequirement=operator-auth-required-before-ui-exposure",
+        "authorizationBoundary=defined-only; USF-173 does not prove Redis cache operation authorization or operator access",
+        "breakGlassRelevance=must-be-defined-before-readiness-claim",
+        "auditRequirement=value-free-provider-operation-evidence-required-before-readiness-claim",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=required-before-operator-or-provider-readiness",
+        "matrix=docs/architecture/cache-eventing-service-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/cache-eventing-service-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-173; USF-198",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "access and provider proof deferred to USF-198; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; treatment=do not treat USF-173 as Redis access proof; reviewDate=2026-09-30; followUpIssue=USF-198; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -9885,6 +10007,49 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-173-incident-vulnerability-cache-eventing",
+      "targetType": "source-issue-cache-eventing-disposition",
+      "target": "docs/architecture/cache-eventing-service-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-173",
+        "followUpIssue=USF-198",
+        "riskStatement=Redis incident, alerting, vulnerability, and corrective-action evidence could be overclaimed from NATS or in-memory evidence",
+        "threatFailureScenario=Redis provider outage, stale cache, expiration drift, dependency advisory, or cache data incident is treated as covered by event-bus proof",
+        "affectedAssetService=redis cache/eventing disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record Redis incident and vulnerability boundaries and defer operating proof to USF-198",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=defined-only; no live Redis cache operation or provider health proof",
+        "alertingPosture=not-proven-by-USF-173",
+        "escalationOwner=platform-workflow-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "correctiveActionEvidenceBoundary=repository metadata only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-173",
+        "matrix=docs/architecture/cache-eventing-service-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/cache-eventing-service-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-173; USF-198",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "incident, alerting, vulnerability/advisory, and corrective-action evidence deferred to USF-198; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-198; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -11396,6 +11561,52 @@
       "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-proof-source-use-disposition-matrix.md",
       "validationCommand": "corepack pnpm proof:operator-access",
       "deferredReason": "No production data, public exposure, gateway clickthrough, service console session, live-provider data, legal hold, residency, or production privacy control is proven by USF-169.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-173-privacy-cache-eventing",
+      "targetType": "source-issue-cache-eventing-disposition",
+      "target": "docs/architecture/cache-eventing-service-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-173",
+        "followUpIssue=USF-198",
+        "riskStatement=Redis cache values, keys, event payloads, or tenant data could be retained or exposed without proof",
+        "threatFailureScenario=cache payload, key, event payload, or provider response is committed as evidence or retention/purge posture is implied from metadata only",
+        "affectedAssetService=redis cache/eventing disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record value-free repository metadata only and defer Redis cache data handling proof to USF-198",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-raw-provider-payloads",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-raw-cache-values-keys-event-payloads-query-results-or-provider-payloads-committed-by-USF-173",
+        "matrix=docs/architecture/cache-eventing-service-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/cache-eventing-service-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-173; USF-198",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "privacy/data minimisation operating evidence deferred to USF-198; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-198; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

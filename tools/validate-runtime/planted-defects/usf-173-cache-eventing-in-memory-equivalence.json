@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-024",
+  "cacheEventingMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/inMemorySubstituteBoundary/redisServiceEquivalent",
+      "value": true
+    }
+  ]
+}
