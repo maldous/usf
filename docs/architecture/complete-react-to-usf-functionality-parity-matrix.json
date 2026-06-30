@@ -455,7 +455,7 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "localstack/wiremock lineage",
-      "readiness_impact": "USF-201 proves bounded webhook-sink local capture only. LocalStack service semantics remain USF-208 and WireMock service semantics remain USF-209. USF-210 records historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without standalone mock OIDC service equivalence, SSO readiness, or live-provider compatibility.",
+      "readiness_impact": "USF-201 proves bounded webhook-sink local capture. USF-209 proves bounded WireMock configured HTTP mock semantics through profile-gated local Compose proof and adapter-contained SDK evidence. LocalStack service semantics remain USF-208. USF-210 records historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without standalone mock OIDC service equivalence, SSO readiness, or live-provider compatibility.",
       "tracking_carrier_or_recommendation": "USF-176/USF-201 plus USF-208/USF-209 and USF-210 selected-tier supersession",
       "usf_evidence_summary": "provider modes, webhook-sink bounded capture proof, hermetic provider proof, composed Keycloak proof evidence, USF-176 disposition matrix, USF-210 mock OIDC selected-tier reclassification, and explicit remaining LocalStack/WireMock mock-substrate follow-ups",
       "usf_status": "deferred-with-owner"

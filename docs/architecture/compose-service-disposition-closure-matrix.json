@@ -1942,30 +1942,33 @@
         "wiremock"
       ],
       "source_accounting_statuses": [
-        "substituted-partial"
+        "covered-by-usf-runtime"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
       "provider_boundary_disposition": "prohibited",
       "readiness_tier": "compose-target-catalogued",
-      "evidence_grade": "c",
+      "evidence_grade": "b",
       "profile_gated": true,
       "generated_in_targets": [
         "dev",
         "test"
       ],
       "closure_evidence": {
-        "closure_disposition": "substituted-partial",
-        "closure_blocking": true,
+        "closure_disposition": "covered-by-usf-runtime",
+        "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#wiremock",
         "react_parity_refs": [
           "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#wiremock"
         ],
         "proof_evidence_refs": [
-          "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "corepack pnpm proof:wiremock",
+          "packages/proof/src/wiremock-composed-proof.ts",
+          "adapters/mail/src/index.ts",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "python3 tools/validate-runtime/validate-runtime.py all --json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -1973,15 +1976,18 @@
           "USF-182",
           "USF-185",
           "USF-176",
-          "USF-201"
+          "USF-201",
+          "USF-209"
         ],
         "non_equivalence_boundaries": [
-          "WireMock proves configured mock behaviour only.",
-          "USF-176 records bounded mock-provider disposition only; USF-201 owns service-semantic proof and live-provider non-equivalence remains explicit."
+          "USF-209 proves configured WireMock local Compose mock behaviour only.",
+          "WireMock proof is not live external provider compatibility, provider contract certification, staging readiness, production readiness, or full mock-provider substrate readiness."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "USF-201 mock-provider substrate service-semantic proof, no-egress proof, tenant safety, synthetic-data proof, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof"
+          "LocalStack cloud-emulator proof remains tracked by USF-208.",
+          "live external/provider-managed provider compatibility evidence",
+          "provider contract certification evidence",
+          "staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure evidence remain unproven and non-claimed"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2014,11 +2020,20 @@
           "usf-176-threat-mock-provider-overclaim",
           "usf-176-access-mock-provider-substrate",
           "usf-176-incident-vulnerability-mock-provider-substrate",
-          "usf-176-privacy-mock-provider-substrate"
+          "usf-176-privacy-mock-provider-substrate",
+          "usf-209-soa-wiremock-composed-proof",
+          "usf-209-evidence-wiremock-composed-proof",
+          "usf-209-threat-wiremock-overclaim",
+          "sdk-usf-209-wiremock-http-mock-provider-wiremock-captain",
+          "usf-209-access-wiremock-composed-proof",
+          "usf-209-resilience-wiremock-composed-proof",
+          "usf-209-incident-vulnerability-wiremock-composed-proof",
+          "usf-209-privacy-wiremock-composed-proof"
         ],
         "tracking_issue_rationale": {
           "USF-176": "bounded local mock provider substrate disposition and non-equivalence gate",
-          "USF-201": "actual local mock provider substrate service semantics and adapter proof"
+          "USF-201": "bounded webhook-sink capture proof and split of remaining mock-provider substrates",
+          "USF-209": "bounded WireMock configured HTTP mock service semantics proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

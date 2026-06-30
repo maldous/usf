@@ -4120,15 +4120,15 @@
       "id": "usf-201-soa-webhook-sink-composed-proof",
       "mappedType": "source-issue-webhook-sink-composed-proof",
       "controlPurpose": "Map USF-201 as bounded local Compose webhook-sink capture proof, protocol-exception governance, and explicit non-equivalence for live provider and notification delivery claims.",
-      "riskTreated": "effectivenessState=proven-local; riskStatement=Webhook sink capture proof could be mistaken for notification delivery, provider feedback, replay, live webhook compatibility, external provider readiness, or complete mock-provider substrate readiness; threatFailureScenario=proof command success is used to claim live provider compatibility; affectedAssetService=webhook-sink capture provider; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=prove bounded local capture, defer LocalStack to USF-208 and WireMock to USF-209, and record mock OIDC selected-tier supersession in USF-210; reviewDate=2026-09-30; followUpIssue=USF-153",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=Webhook sink capture proof could be mistaken for notification delivery, provider feedback, replay, live webhook compatibility, external provider readiness, or complete mock-provider substrate readiness; threatFailureScenario=proof command success is used to claim live provider compatibility; affectedAssetService=webhook-sink capture provider; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=prove bounded local capture, defer LocalStack to USF-208, record WireMock as resolved by USF-209, and record mock OIDC selected-tier supersession in USF-210; reviewDate=2026-09-30; followUpIssue=USF-153",
       "assetServiceAffected": "webhook-sink capture provider plus localstack wiremock mock-oidc deferred mock substrates",
       "owner": "platform-integration-foundation",
       "riskOwner": "platform-integration-risk-owner",
       "controlOwner": "platform-integration-control-owner",
-      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-201; serviceCatalogueRow=webhook-sink; providerRegistryId=notification-delivery-webhook-sink-composed-test; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=superseded-for-selected-tier-by-USF-210; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed",
-      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-201; serviceCatalogueRow=webhook-sink; providerRegistryId=notification-delivery-webhook-sink-composed-test; localstack=deferred-to-USF-208; wiremock=resolved-by-USF-209; mockOidc=superseded-for-selected-tier-by-USF-210; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed",
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "LocalStack cloud-emulator proof, WireMock HTTP fixture proof, standalone mock OIDC service equivalence, notification delivery, provider callback/replay, live webhook compatibility, API runtime binding, worker runtime binding, and environment readiness remain deferred, superseded for selected tier, or non-claimed as applicable; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-153; resolvedIssue=USF-210; exception=protocol-boundary-no-maintained-sdk",
+      "deferredReason": "LocalStack cloud-emulator proof, standalone mock OIDC service equivalence, notification delivery, provider callback/replay, live webhook compatibility, API runtime binding, worker runtime binding, and environment readiness remain deferred, superseded for selected tier, or non-claimed as applicable; WireMock configured HTTP mock proof is resolved by USF-209; reviewDate=2026-09-30; followUpIssues=USF-208,USF-153; resolvedIssues=USF-209,USF-210; exception=protocol-boundary-no-maintained-sdk",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -4151,10 +4151,10 @@
       "owner": "platform-integration-foundation",
       "riskOwner": "platform-integration-risk-owner",
       "controlOwner": "platform-integration-control-owner",
-      "implementationStatus": "effectivenessState=proven-local; command=proof:mock-substrate; sourceIssue=USF-201; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=superseded-for-selected-tier-by-USF-210",
-      "evidenceSource": "package.json; Makefile; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:mock-substrate; sourceIssues=USF-201,USF-209; localstack=deferred-to-USF-208; wiremock=resolved-by-USF-209; mockOidc=superseded-for-selected-tier-by-USF-210",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/mock-provider-substrate-proof.ts; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts; adapters/mail/src/index.ts; docs/architecture/mock-provider-substrate-disposition-matrix.json",
       "validationCommand": "corepack pnpm proof:mock-substrate",
-      "deferredReason": "LocalStack, WireMock, standalone mock OIDC service equivalence, notification delivery, callback/replay, live provider compatibility, and environment readiness remain non-claims or follow-up work as applicable; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-153; resolvedIssue=USF-210",
+      "deferredReason": "LocalStack, standalone mock OIDC service equivalence, notification delivery, callback/replay, live provider compatibility, provider contract certification, and environment readiness remain non-claims or follow-up work as applicable; reviewDate=2026-09-30; followUpIssues=USF-208,USF-153; resolvedIssues=USF-209,USF-210",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -4233,6 +4233,84 @@
       "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; docs/architecture/compose-service-disposition-closure-matrix.json; docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json; docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/proof/src/auth-identity-proof.ts; adapters/idp/src/hermetic-keycloak.ts; adapters/idp/src/index.ts; USF-210; USF-201; USF-176; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Mock OIDC service startup, standalone issuer compatibility, service-equivalence proof, live IdP compatibility, SSO readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure remain unproven and non-claimed; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-209-wiremock-http-mock-provider",
+      "mappedType": "provider-adapter",
+      "controlPurpose": "Govern the USF-209 WireMock HTTP mock provider adapter boundary, SDK use, proof evidence, and non-equivalence claims.",
+      "riskTreated": "WireMock fixture proof could be mistaken for live external provider compatibility or provider contract certification unless SDK boundary, local-only evidence, and non-claims are explicit.",
+      "assetServiceAffected": "wiremock",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-209; serviceCatalogueRow=wiremock; providerRegistryId=provider-mock-wiremock-composed-test; sdkPackage=wiremock-captain; sdkVersion=4.1.3; localstack=deferred-to-USF-208; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed",
+      "evidenceSource": "adapters/mail/src/index.ts; packages/proof/src/wiremock-composed-proof.ts; docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/core/src/index.ts; package.json; Makefile",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "LocalStack cloud-emulator proof, live external provider compatibility, provider contract certification, API runtime binding, worker runtime binding, staging readiness, production readiness, full dev readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=USF-208",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-wiremock",
+      "mappedType": "proof-command",
+      "controlPurpose": "Govern proof command evidence posture for proof:wiremock.",
+      "riskTreated": "Proof output could be mistaken for complete mock provider substrate readiness or live provider compatibility unless command scope and non-claims are explicit.",
+      "assetServiceAffected": "proof:wiremock",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:wiremock; sourceIssue=USF-209; wiremock=profile-gated-local-compose-proof; localstack=deferred-to-USF-208; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts; docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "deferredReason": "LocalStack, live provider compatibility, provider contract certification, API runtime binding, worker runtime binding, environment readiness, complete mock-provider substrate readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=USF-208",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-209-soa-wiremock-composed-proof",
+      "mappedType": "source-issue-wiremock-composed-proof",
+      "controlPurpose": "Map USF-209 as bounded local Compose WireMock configured HTTP mock proof with adapter-contained SDK governance and explicit non-equivalence for live provider claims.",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=WireMock configured fixture proof could be overclaimed as live external provider compatibility, provider certification, or complete mock-provider substrate readiness; threatFailureScenario=proof command success is used as readiness evidence beyond its local Compose boundary; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=prove bounded local WireMock behaviour and defer LocalStack to USF-208; reviewDate=2026-09-30; followUpIssue=USF-208",
+      "assetServiceAffected": "wiremock plus localstack remaining mock-provider substrate boundary",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-209; serviceCatalogueRow=wiremock; providerRegistryId=provider-mock-wiremock-composed-test; sdkPackage=wiremock-captain; sdkVersion=4.1.3; localstack=deferred-to-USF-208; liveProviderCompatibility=not-claimed; providerCertification=not-claimed",
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-209; USF-208; USF-201; USF-176; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "LocalStack cloud-emulator proof remains deferred to USF-208. Live external provider compatibility, provider contract certification, API runtime binding, worker runtime binding, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=USF-208",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -5743,7 +5821,7 @@
       "id": "usf-201-evidence-webhook-sink-composed-proof",
       "proofResult": "webhook-sink-composed-capture-provider-proof",
       "whatWasProven": "USF-201 adds a bounded local Compose proof for webhook-sink capture using an adapter-contained HTTP protocol exception because no maintained SDK exists for the echo service. The proof starts the canonical test Compose webhook-sink service with loopback ephemeral host exposure, waits with bounded readiness retry, performs a synthetic capture request, verifies readback of payload classification and body hash, records value-free structured log trace metric and audit-shaped evidence, proves unavailable fail-closed behaviour, checks redaction and no external egress posture, and tears Compose down in a finally path.",
-      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, WireMock HTTP fixture semantics, mock OIDC service operation, notification delivery, provider callback or replay, deliverability, live webhook compatibility, external provider readiness, API runtime provider use, worker runtime provider use, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, mock OIDC service operation, notification delivery, provider callback or replay, deliverability, live webhook compatibility, external provider readiness, provider contract certification, API runtime provider use, worker runtime provider use, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure. WireMock configured HTTP mock proof is recorded separately by USF-209.",
       "runtimeMode": "profile-gated-local-compose-proof",
       "providerMode": "composed-test",
       "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#webhook-sink",
@@ -5768,12 +5846,12 @@
     {
       "id": "evidence-proof-proof-mock-substrate",
       "proofResult": "proof:mock-substrate",
-      "whatWasProven": "Package script proof:mock-substrate is the command-pinned proof surface for bounded local Compose webhook-sink capture semantics, unavailable fail-closed behaviour, redacted value-free evidence, no external egress posture, and Compose teardown.",
-      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, WireMock HTTP fixture semantics, mock OIDC service operation, notification delivery, provider callback or replay, live webhook compatibility, API runtime provider use, worker runtime provider use, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "whatWasProven": "Package script proof:mock-substrate is the command-pinned aggregate proof surface for bounded local Compose webhook-sink capture semantics and bounded WireMock configured HTTP mock semantics, including readiness retry, synthetic local proof data, unavailable fail-closed behaviour, redacted value-free evidence, no external egress posture, and Compose teardown.",
+      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, mock OIDC service operation, notification delivery, provider callback or replay, live webhook or external provider compatibility, provider contract certification, API runtime provider use, worker runtime provider use, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
       "runtimeMode": "profile-gated-local-compose-proof",
       "providerMode": "composed-test",
-      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#webhook-sink",
-      "adapterProviderId": "notification-delivery-webhook-sink-composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#webhook-sink; spec/instances/compose-service/service-catalogue.json#wiremock",
+      "adapterProviderId": "notification-delivery-webhook-sink-composed-test; provider-mock-wiremock-composed-test",
       "validationCommand": "corepack pnpm proof:mock-substrate",
       "commandPin": "tsx packages/proof/src/mock-provider-substrate-proof.ts",
       "commitPin": "f01c13cf15bccf64a4e58e1a69a2012f39d24cb5",
@@ -5864,6 +5942,56 @@
       ],
       "prOrMergeSha": "542b98e8248729744558f10e3488e8bad4b96b6c",
       "retentionPosture": "Retain committed matrices, runtime manifest metadata, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain tokens, identity payloads, provider responses, raw endpoints, credentials, stack traces, tenant data, production data, or live IdP artefacts."
+    },
+    {
+      "id": "evidence-proof-proof-wiremock",
+      "proofResult": "proof:wiremock",
+      "whatWasProven": "Package script proof:wiremock is the command-pinned proof surface for bounded local Compose WireMock configured HTTP mock semantics using the adapter-contained wiremock-captain SDK boundary. It starts WireMock with provider-mocks profile and loopback ephemeral host exposure, waits with bounded readiness retry, registers a synthetic tenant-safe fixture, verifies deterministic matching, response templating, negative matching, request-journal evidence, cleanup, unavailable fail-closed behaviour, redaction, and Compose teardown.",
+      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, live external provider compatibility, provider contract certification, API runtime provider use, worker runtime provider use, complete mock-provider substrate readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#wiremock",
+      "adapterProviderId": "provider-mock-wiremock-composed-test",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "commandPin": "tsx packages/proof/src/wiremock-composed-proof.ts",
+      "commitPin": "b7327189924fe647123507f6011519f8a8e47288",
+      "issueLinks": [
+        "USF-209",
+        "USF-201",
+        "USF-208",
+        "USF-176",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "b7327189924fe647123507f6011519f8a8e47288",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
+    },
+    {
+      "id": "usf-209-evidence-wiremock-composed-proof",
+      "proofResult": "wiremock-composed-http-provider-mock-proof",
+      "whatWasProven": "USF-209 adds a bounded local Compose proof for WireMock configured HTTP mock semantics through wiremock-captain inside adapters/mail. The proof exercises readiness, SDK-backed mapping registration and request journal inspection, deterministic matching, response templating, negative matching, synthetic tenant-safe request data, cleanup, unavailable fail-closed behaviour, redaction, no external egress posture, and Compose teardown.",
+      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, live external provider compatibility, provider contract certification, API runtime provider use, worker runtime provider use, complete mock-provider substrate readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#wiremock",
+      "adapterProviderId": "provider-mock-wiremock-composed-test",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "commandPin": "tsx packages/proof/src/wiremock-composed-proof.ts",
+      "commitPin": "b7327189924fe647123507f6011519f8a8e47288",
+      "issueLinks": [
+        "USF-209",
+        "USF-201",
+        "USF-208",
+        "USF-176",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "b7327189924fe647123507f6011519f8a8e47288",
+      "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, raw endpoints, request bodies, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -7338,6 +7466,52 @@
       "failClosedBehaviour": "USF-RUNTIME-027 fails when mock OIDC is still deferred to USF-210, selected-tier supersession is missing, superseding evidence refs are incomplete, enterprise evidence refs are missing, runtime manifest linkage is stale, proof metadata still records mock OIDC as a deferred service, or prohibited readiness/certification claims are enabled.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live IdP operation, identity payload, token, provider response, or service runtime evidence is claimed.",
       "residualRisk": "riskStatement=standalone mock OIDC service semantics remain unproven and would require a new source issue if future closure-tier scope changes; impact=medium; likelihood=medium; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; controlOwner=platform-identity-control-owner; treatment=accept selected-tier supersession with non-equivalence and no live/SSO/readiness claim; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+    },
+    {
+      "id": "threat-adapter-usf-209-wiremock-http-mock-provider",
+      "targetType": "provider-adapter",
+      "target": "usf-209-wiremock-http-mock-provider",
+      "trustBoundary": "local Compose WireMock container behind loopback ephemeral host exposure and adapter-contained SDK boundary",
+      "tenantBoundary": "synthetic tenant id only; proof records safe hashes and tenant-safe context without production data",
+      "credentialBoundary": "no real credentials; endpoint reference is redacted as endpoint://compose/wiremock",
+      "dataClassification": "synthetic-tenant-test-data",
+      "abuseCases": [
+        "Fixture proof is overclaimed as live external provider compatibility.",
+        "WireMock mappings leak request payloads, raw endpoints, stack traces, or tenant identifiers.",
+        "SDK admin-client use escapes the adapter/provider-integration boundary.",
+        "Unmatched or unavailable provider behaviour is treated as a pass instead of fail-closed evidence."
+      ],
+      "failureModes": [
+        "WireMock container starts but admin API is not ready.",
+        "Mapping registration fails or request journal does not record the synthetic request.",
+        "Configured fixture cleanup fails.",
+        "Unavailable provider path returns unsafe or unredacted evidence."
+      ],
+      "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, matching, request journal evidence, cleanup, redaction, or unavailable fail-closed evidence is not proven.",
+      "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw payloads.",
+      "residualRisk": "LocalStack and live external provider compatibility remain deferred/non-claimed; stronger environment promotion remains blocked by separate issues."
+    },
+    {
+      "id": "usf-209-threat-wiremock-overclaim",
+      "targetType": "source-issue",
+      "target": "USF-209",
+      "trustBoundary": "profile-gated local Compose proof boundary",
+      "tenantBoundary": "synthetic tenant-safe fixture data only",
+      "credentialBoundary": "no real credentials; redacted endpoint reference only",
+      "dataClassification": "synthetic-tenant-test-data",
+      "abuseCases": [
+        "USF-209 proof is used to claim full mock-provider substrate readiness.",
+        "Configured WireMock fixture proof is treated as provider contract certification or live external readiness.",
+        "WireMock evidence is used to imply LocalStack cloud-emulator proof."
+      ],
+      "failureModes": [
+        "Proof command passes while non-claims are omitted from manifest or matrix.",
+        "USF-209 remains listed as a deferred follow-up after proof is merged.",
+        "SDK or endpoint metadata leaks into forbidden layers or safe status output."
+      ],
+      "failClosedBehaviour": "Runtime validator fails if proof markers, SDK boundary, non-claims, redaction posture, or stale deferral removal are missing.",
+      "monitoringAuditEvidence": "Runtime proof records value-free structured log, trace, metric, and audit-shaped evidence plus validator and planted-defect coverage.",
+      "residualRisk": "LocalStack remains tracked by USF-208 and all readiness/certification/live-provider claims remain prohibited."
     }
   ],
   "sdkDependencyGovernance": [
@@ -7580,6 +7754,22 @@
       "typescriptRuntimeCompatibility": "No TypeScript SDK or runtime dependency is added by USF-210.",
       "forbiddenLayerImportCheck": "USF-210 adds no SDK, client, CLI, protocol, or implementation imports; USF-RUNTIME-027 rejects selected-tier overclaim and stale mock OIDC follow-up semantics.",
       "updateDeprecationOwner": "platform-identity-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-209-wiremock-http-mock-provider-wiremock-captain",
+      "serviceId": "wiremock",
+      "adapterId": "WireMockHttpProviderMock",
+      "providerId": "provider-mock-wiremock-composed-test",
+      "packageName": "wiremock-captain",
+      "version": "4.1.3",
+      "selectionRationale": "wiremock-captain is a maintained de-facto TypeScript/JavaScript WireMock client suitable for local Compose admin operations. It is used only inside adapters/mail to configure and inspect WireMock mappings and request journal evidence; the synthetic downstream HTTP request remains the request-under-test inside the same adapter boundary.",
+      "officialOrDeFactoStatus": "de-facto-standard-client; not officially affiliated with WireMock",
+      "licencePosture": "MIT package according to npm package metadata reviewed for USF-209; exact version pinned in package.json and pnpm-lock.yaml.",
+      "maintenancePosture": "npm metadata shows active maintenance for 4.1.3; update/deprecation owner must review before stronger readiness claims or dependency upgrades.",
+      "securityAdvisoryPosture": "No known advisory is claimed by this row; dependency advisory review remains required before stronger readiness or promotion claims.",
+      "typescriptRuntimeCompatibility": "Package ships TypeScript declarations and supports Node >=22.11.0, compatible with repository Node >=24.16.0.",
+      "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and tools/validate-parity/validate-providers.py reject wiremock-captain imports outside the adapter boundary.",
+      "updateDeprecationOwner": "platform-integration-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -9357,6 +9547,36 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-209-access-wiremock-composed-proof",
+      "targetType": "provider-proof",
+      "target": "wiremock",
+      "posture": [
+        "accessModel=profile-gated-local-compose-proof-only",
+        "authnAuthzBoundary=not-public-no-operator-surface-claimed",
+        "leastPrivilegePosture=adapter-contained-wiremock-admin-client-against-local-compose-only",
+        "breakGlassRelevance=not-claimed",
+        "auditEvidence=value-free-proof-audit-evidence-captured",
+        "reviewCadence=2026-09-30",
+        "deprovisioningPosture=compose-down-finally-removes-proof-container-and-network",
+        "sourceIssue=USF-209"
+      ],
+      "evidenceSource": "packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "deferredReason": "No public/operator access, live provider access, staging access, production access, or provider certification access posture is claimed; followUpIssue=USF-208 for remaining mock-provider substrate work.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -10915,6 +11135,38 @@
       "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-210",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Standalone mock OIDC service readiness, retry, timeout, teardown, backup, restore, DR, RPO/RTO, and production recovery evidence remain unproven; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-209-resilience-wiremock-composed-proof",
+      "targetType": "provider-proof",
+      "target": "wiremock",
+      "posture": [
+        "effectivenessState=proven-local",
+        "backupRequirement=not-applicable-for-ephemeral-fixture-proof",
+        "restoreProofStatus=not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=stale-or-unmatched-mapping-fails-proof",
+        "cleanupTeardownProof=compose-down-finally-plus-clearAll-mappings",
+        "drBoundary=not-claimed",
+        "sourceIssue=USF-209",
+        "changeManagementEvidence=PR-validation-summary-and-runtime-validator",
+        "rollbackDeferredBoundary=disable-proof-script-or-revert-provider-mock-adapter-if-regression"
+      ],
+      "evidenceSource": "packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "deferredReason": "Backup/restore and DR are not claimed for the ephemeral WireMock proof; LocalStack remains deferred to USF-208 and environment promotion remains separate.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -13135,6 +13387,48 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-209-incident-vulnerability-wiremock-composed-proof",
+      "targetType": "provider-proof",
+      "target": "wiremock",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-209",
+        "riskStatement=WireMock local proof could be treated as incident alerting vulnerability or live provider readiness while LocalStack and live provider compatibility remain unproven",
+        "threatFailureScenario=local proof health SDK metadata or request journal evidence is overclaimed as production monitoring incident vulnerability or provider certification evidence",
+        "affectedAssetService=wiremock",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=record local proof health SDK governance redaction and validator output while preserving non-claims",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=proof-failure-on-readiness-mapping-journal-cleanup-redaction-unavailable-or-teardown-evidence",
+        "alertingPosture=local-validation-failure-only-no-production-alerting-claim",
+        "escalationOwner=platform-integration-foundation",
+        "vulnerabilityAdvisoryReview=wiremock-captain-4.1.3-advisory-review-required-before-stronger-readiness-claim",
+        "dependencyUpdatePosture=platform-integration-dependency-owner-reviews-deprecation-and-advisories",
+        "correctiveActionEvidenceBoundary=runtime-validator-planted-defects-and-PR-validation-summary-only",
+        "postIncidentEvidenceBoundary=not-production-incident-ready",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "package.json; pnpm-lock.yaml; tools/validate-runtime/validate-runtime.py; tools/validate-runtime/planted-defects; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "No production incident readiness, live provider vulnerability SLA, production alerting, SOC readiness, ISO certification, customer assurance claim, or provider certification claim is made; LocalStack remains USF-208.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -15333,9 +15627,9 @@
         "sourceIssue=USF-201",
         "validationCommand=corepack pnpm proof:mock-substrate"
       ],
-      "evidenceSource": "package.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts",
+      "evidenceSource": "package.json; packages/proof/src/mock-provider-substrate-proof.ts; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts; adapters/mail/src/index.ts",
       "validationCommand": "corepack pnpm proof:mock-substrate",
-      "deferredReason": "Production data, live provider privacy, notification delivery privacy, callback/replay privacy, data residency, legal hold, custom retention, LocalStack, WireMock, and standalone mock OIDC privacy evidence remain unproven or non-claimed; followUpIssues=USF-208,USF-209,USF-153; resolvedIssue=USF-210",
+      "deferredReason": "Production data, live provider privacy, notification delivery privacy, callback/replay privacy, data residency, legal hold, custom retention, LocalStack, and standalone mock OIDC privacy evidence remain unproven or non-claimed; followUpIssues=USF-208,USF-153; resolvedIssues=USF-209,USF-210",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -15473,6 +15767,98 @@
       "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-210",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Production data, live IdP privacy, SSO provider privacy, token handling, tenant identity data, data residency, legal hold, custom retention, and standalone mock OIDC privacy evidence remain unproven; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-209-wiremock-http-mock-provider",
+      "targetType": "provider-adapter",
+      "target": "usf-209-wiremock-http-mock-provider",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-tenant-test-data",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=clearAll-mappings-and-compose-down-finally",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-209",
+        "validationCommand=corepack pnpm proof:wiremock"
+      ],
+      "evidenceSource": "adapters/mail/src/index.ts; packages/proof/src/wiremock-composed-proof.ts",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "deferredReason": "Production data, live provider privacy, customer data residency, legal hold, custom retention, LocalStack, and environment privacy evidence remain unproven or non-claimed; followUpIssue=USF-208",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-wiremock",
+      "targetType": "proof",
+      "target": "proof:wiremock",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-209",
+        "validationCommand=corepack pnpm proof:wiremock"
+      ],
+      "evidenceSource": "package.json; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "deferredReason": "Production data, live provider privacy, data residency, legal hold, custom retention, LocalStack, and environment privacy evidence remain unproven or non-claimed; followUpIssue=USF-208",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-209-privacy-wiremock-composed-proof",
+      "targetType": "source-issue-proof",
+      "target": "USF-209",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-tenant-test-data",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=clearAll-mappings-compose-down-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-209",
+        "validationCommand=corepack pnpm proof:wiremock"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; packages/proof/src/wiremock-composed-proof.ts; adapters/mail/src/index.ts",
+      "validationCommand": "corepack pnpm proof:wiremock",
+      "deferredReason": "Production data, live provider privacy, provider certification privacy, customer data residency, legal hold, custom retention, LocalStack, and environment privacy evidence remain unproven or non-claimed; followUpIssue=USF-208",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

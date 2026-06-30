@@ -4,41 +4,39 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
-  WEBHOOK_SINK_ENDPOINT_REF,
-  WEBHOOK_SINK_PROTOCOL_BOUNDARY,
-  WEBHOOK_SINK_PROVIDER_REGISTRY_ID,
-  WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID,
-  WEBHOOK_SINK_SERVICE_CATALOGUE_ID,
-  WebhookSinkCaptureProvider,
-  type WebhookSinkCaptureEvidence,
+  WIREMOCK_ENDPOINT_REF,
+  WIREMOCK_PROVIDER_REGISTRY_ID,
+  WIREMOCK_RUNTIME_PROVIDER_BINDING_ID,
+  WIREMOCK_SDK_PACKAGE,
+  WIREMOCK_SDK_VERSION,
+  WIREMOCK_SERVICE_CATALOGUE_ID,
+  WireMockHttpProviderMock,
+  type WireMockHttpProviderMockEvidence,
 } from "@foundation/adapter-mail";
-import { runWireMockComposedProof } from "./wiremock-composed-proof.ts";
 
-interface MockProviderSubstrateProofResult {
+interface WireMockComposedProofResult {
   readonly status: "pass";
-  readonly proof: "mock-provider-substrate-webhook-sink";
-  readonly issueId: "USF-201";
+  readonly proof: "wiremock-http-provider-mock-composed";
+  readonly issueId: "USF-209";
   readonly parentIssueId: "USF-133";
+  readonly predecessorIssueId: "USF-201";
   readonly providerMode: "composed-test";
   readonly environment: "local-test-profile-gated";
   readonly composeTarget: "compose/compose.test.generated.yaml";
-  readonly composeService: "webhook-sink";
-  readonly proofCommand: "corepack pnpm proof:mock-substrate";
-  readonly implementedServiceIds: readonly ["webhook-sink", "wiremock"];
+  readonly composeService: "wiremock";
+  readonly proofCommand: "corepack pnpm proof:wiremock";
+  readonly implementedServiceIds: readonly ["wiremock"];
   readonly deferredServiceIds: readonly ["localstack"];
-  readonly supersededServiceIds: readonly ["mock-oidc"];
   readonly followUpIssueRefs: readonly ["USF-208"];
-  readonly resolvedIssueRefs: readonly ["USF-209", "USF-210"];
-  readonly serviceCatalogueServiceId: typeof WEBHOOK_SINK_SERVICE_CATALOGUE_ID;
-  readonly providerRegistryId: typeof WEBHOOK_SINK_PROVIDER_REGISTRY_ID;
-  readonly bindingId: typeof WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID;
-  readonly sdkPackage: null;
-  readonly sdkVersion: null;
-  readonly protocolBoundary: typeof WEBHOOK_SINK_PROTOCOL_BOUNDARY;
-  readonly endpointRef: typeof WEBHOOK_SINK_ENDPOINT_REF;
-  readonly evidence: WebhookSinkCaptureEvidence;
-  readonly unavailableEvidence: WebhookSinkCaptureEvidence;
-  readonly wiremockProofStatus: "pass";
+  readonly resolvedIssueRefs: readonly ["USF-209"];
+  readonly serviceCatalogueServiceId: typeof WIREMOCK_SERVICE_CATALOGUE_ID;
+  readonly providerRegistryId: typeof WIREMOCK_PROVIDER_REGISTRY_ID;
+  readonly bindingId: typeof WIREMOCK_RUNTIME_PROVIDER_BINDING_ID;
+  readonly sdkPackage: typeof WIREMOCK_SDK_PACKAGE;
+  readonly sdkVersion: typeof WIREMOCK_SDK_VERSION;
+  readonly endpointRef: typeof WIREMOCK_ENDPOINT_REF;
+  readonly evidence: WireMockHttpProviderMockEvidence;
+  readonly unavailableEvidence: WireMockHttpProviderMockEvidence;
   readonly providerUnavailableChecked: true;
   readonly checks: readonly string[];
   readonly prohibitedClaimsObserved: readonly [];
@@ -59,10 +57,10 @@ interface MockProviderSubstrateProofResult {
 }
 
 const COMPOSE_TARGET = "compose/compose.test.generated.yaml";
-const COMPOSE_SERVICE = "webhook-sink";
-const PROOF_COMMAND = "corepack pnpm proof:mock-substrate";
+const COMPOSE_SERVICE = "wiremock";
+const PROOF_COMMAND = "corepack pnpm proof:wiremock";
 const FORBIDDEN_EVIDENCE_PATTERN =
-  /https?:\/\/|127\.0\.0\.1|0\.0\.0\.0|localhost|token|password|secret|stack|connection_string|synthetic webhook proof body/i;
+  /https?:\/\/|127\.0\.0\.1|0\.0\.0\.0|localhost|token|password|secret|connection_string|stackTrace|at\s+\w+\s+\(|tenant-wiremock|fixture-wiremock|corr-wiremock/i;
 const PROHIBITED_CLAIMS_OBSERVED = [] as const;
 const NON_CLAIMS = [
   "no-full-dev-readiness",
@@ -107,14 +105,14 @@ function runProcess(command: string, args: readonly string[]): Promise<string> {
 }
 
 async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
-  const dir = await mkdtemp(join(tmpdir(), "usf-webhook-sink-proof-"));
+  const dir = await mkdtemp(join(tmpdir(), "usf-wiremock-proof-"));
   const path = join(dir, "compose.override.yaml");
   await writeFile(
     path,
     [
       "services:",
-      "  webhook-sink:",
-      "    ports:",
+      "  wiremock:",
+      "    ports: !override",
       "      - target: 8080",
       '        published: "0"',
       "        host_ip: 127.0.0.1",
@@ -133,6 +131,8 @@ function composeArgs(projectName: string, overridePath: string): string[] {
 async function composeUp(projectName: string, overridePath: string): Promise<void> {
   await runProcess("docker", [
     ...composeArgs(projectName, overridePath),
+    "--profile",
+    "provider-mocks",
     "up",
     "-d",
     COMPOSE_SERVICE,
@@ -148,7 +148,7 @@ async function composePort(projectName: string, overridePath: string): Promise<n
   ]);
   const match = output.trim().match(/:(\d+)$/);
   if (!match) {
-    throw new Error("webhook-sink-proof-port-discovery-failed");
+    throw new Error("wiremock-proof-port-discovery-failed");
   }
   return Number(match[1]);
 }
@@ -165,128 +165,119 @@ async function composeDown(projectName: string, overridePath: string): Promise<v
   }
 }
 
-async function proveUnavailable(): Promise<WebhookSinkCaptureEvidence> {
-  const provider = new WebhookSinkCaptureProvider({
+async function proveUnavailable(): Promise<WireMockHttpProviderMockEvidence> {
+  const provider = new WireMockHttpProviderMock({
     endpoint: "http://127.0.0.1:9",
     readinessTimeoutMs: 1000,
     requestTimeoutMs: 250,
   });
-  const result = await provider.capture({
-    tenantId: "tenant-webhook-alpha",
-    deliveryId: "delivery-webhook-unavailable",
-    eventType: "notification.webhook.unavailable",
-    payloadClassification: "synthetic-data",
-    body: "synthetic unavailable webhook body",
-    correlationId: "corr-webhook-unavailable",
-  });
-  assert(!result.ok, "unavailable webhook sink proof did not fail closed");
-  assert(provider.lastCaptureEvidence, "unavailable webhook sink evidence missing");
-  return provider.lastCaptureEvidence;
+  const evidence = await provider.proveUnavailable();
+  assert(evidence.operationOutcome === "failed-closed", "unavailable WireMock did not fail closed");
+  assert(evidence.failClosedDenials === 1, "unavailable WireMock denial missing");
+  return evidence;
 }
 
 function assertSafeEvidence(evidence: unknown): void {
   const text = JSON.stringify(evidence);
   if (FORBIDDEN_EVIDENCE_PATTERN.test(text)) {
-    throw new Error("webhook-sink-proof-unsafe-evidence");
+    throw new Error("wiremock-proof-unsafe-evidence");
   }
 }
 
-export async function runMockProviderSubstrateProof(): Promise<MockProviderSubstrateProofResult> {
-  const projectName = `usf-webhook-sink-proof-${process.pid}`;
+export async function runWireMockComposedProof(): Promise<WireMockComposedProofResult> {
+  const projectName = `usf-wiremock-proof-${process.pid}`;
   const override = await writeComposeOverride();
-  let evidence: WebhookSinkCaptureEvidence | undefined;
-  let unavailableEvidence: WebhookSinkCaptureEvidence | undefined;
-  let wiremockProofStatus: "pass" | undefined;
+  let evidence: WireMockHttpProviderMockEvidence | undefined;
+  let unavailableEvidence: WireMockHttpProviderMockEvidence | undefined;
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
-    const provider = new WebhookSinkCaptureProvider({
+    const provider = new WireMockHttpProviderMock({
       endpoint: `http://127.0.0.1:${port}`,
     });
-    evidence = await provider.proveRoundTrip();
+    evidence = await provider.proveConfiguredMockBehaviour();
     unavailableEvidence = await proveUnavailable();
-    const wiremockProof = await runWireMockComposedProof();
-    wiremockProofStatus = wiremockProof.status;
   } finally {
     await composeDown(projectName, override.path);
     await rm(override.dir, { recursive: true, force: true });
   }
 
-  if (!evidence || !unavailableEvidence || !wiremockProofStatus) {
-    throw new Error("webhook-sink-proof-missing-evidence");
+  if (!evidence || !unavailableEvidence) {
+    throw new Error("wiremock-proof-missing-evidence");
   }
-  assert(evidence.readinessChecked, "webhook sink readiness was not checked");
-  assert(evidence.captureRequestChecked, "webhook sink capture request was not checked");
-  assert(evidence.captureReadbackChecked, "webhook sink capture readback was not checked");
-  assert(evidence.noExternalEgressChecked, "webhook sink no-egress boundary was not checked");
-  assert(evidence.syntheticDataChecked, "webhook sink synthetic-data boundary was not checked");
-  assert(evidence.tenantSafeEvidenceChecked, "webhook sink tenant-safe evidence missing");
-  assert(evidence.redactionChecked, "webhook sink redaction evidence missing");
-  assert(unavailableEvidence.operationOutcome === "failed-closed", "failure did not fail closed");
-  assert(unavailableEvidence.failClosedDenials === 1, "failure did not record fail-closed denial");
+  assert(evidence.sdkBackedAdminClientChecked, "WireMock SDK-backed admin client missing");
+  assert(evidence.readinessChecked, "WireMock readiness was not checked");
+  assert(evidence.deterministicMatchingChecked, "WireMock deterministic matching missing");
+  assert(evidence.responseTemplatingChecked, "WireMock response templating missing");
+  assert(evidence.negativeMatchingChecked, "WireMock negative matching missing");
+  assert(evidence.requestJournalChecked, "WireMock request journal missing");
+  assert(evidence.cleanupAttempted && evidence.cleanupSucceeded, "WireMock cleanup missing");
+  assert(evidence.noExternalEgressChecked, "WireMock no-egress boundary missing");
+  assert(evidence.syntheticDataChecked, "WireMock synthetic-data boundary missing");
+  assert(evidence.tenantSafeEvidenceChecked, "WireMock tenant-safe evidence missing");
+  assert(evidence.redactionChecked, "WireMock redaction evidence missing");
+  assert(
+    unavailableEvidence.operationOutcome === "failed-closed",
+    "WireMock failure did not fail closed",
+  );
   assertSafeEvidence(evidence);
   assertSafeEvidence(unavailableEvidence);
 
   return Object.freeze({
     status: "pass",
-    proof: "mock-provider-substrate-webhook-sink",
-    issueId: "USF-201",
+    proof: "wiremock-http-provider-mock-composed",
+    issueId: "USF-209",
     parentIssueId: "USF-133",
+    predecessorIssueId: "USF-201",
     providerMode: "composed-test",
     environment: "local-test-profile-gated",
     composeTarget: COMPOSE_TARGET,
     composeService: COMPOSE_SERVICE,
     proofCommand: PROOF_COMMAND,
-    implementedServiceIds: ["webhook-sink", "wiremock"] as const,
+    implementedServiceIds: ["wiremock"] as const,
     deferredServiceIds: ["localstack"] as const,
-    supersededServiceIds: ["mock-oidc"] as const,
     followUpIssueRefs: ["USF-208"] as const,
-    resolvedIssueRefs: ["USF-209", "USF-210"] as const,
-    serviceCatalogueServiceId: WEBHOOK_SINK_SERVICE_CATALOGUE_ID,
-    providerRegistryId: WEBHOOK_SINK_PROVIDER_REGISTRY_ID,
-    bindingId: WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID,
-    sdkPackage: null,
-    sdkVersion: null,
-    protocolBoundary: WEBHOOK_SINK_PROTOCOL_BOUNDARY,
-    endpointRef: WEBHOOK_SINK_ENDPOINT_REF,
+    resolvedIssueRefs: ["USF-209"] as const,
+    serviceCatalogueServiceId: WIREMOCK_SERVICE_CATALOGUE_ID,
+    providerRegistryId: WIREMOCK_PROVIDER_REGISTRY_ID,
+    bindingId: WIREMOCK_RUNTIME_PROVIDER_BINDING_ID,
+    sdkPackage: WIREMOCK_SDK_PACKAGE,
+    sdkVersion: WIREMOCK_SDK_VERSION,
+    endpointRef: WIREMOCK_ENDPOINT_REF,
     evidence,
     unavailableEvidence,
-    wiremockProofStatus,
     providerUnavailableChecked: true,
     checks: [
-      "webhook sink container started from canonical test Compose with ephemeral loopback port",
-      "webhook sink readiness used bounded retry",
-      "adapter connected through the adapter package protocol-exception boundary",
-      "synthetic webhook capture performed a POST round trip",
-      "webhook echo readback verified without preserving raw payload or endpoint evidence",
+      "WireMock container started from canonical test Compose with provider-mocks profile",
+      "WireMock host exposure used an ephemeral loopback port",
+      "WireMock readiness used bounded retry through wiremock-captain",
+      "wiremock-captain registered a synthetic tenant-safe fixture",
+      "deterministic request matching was exercised",
+      "response templating was exercised without retaining raw provider payload evidence",
+      "negative matching and request-journal evidence were checked",
       "unavailable endpoint failed closed with safe reason code",
-      "tenant, synthetic-data, no-egress, audit, metric, trace, and redaction evidence captured",
-      "WireMock composed proof passed through adapter-contained wiremock-captain boundary",
+      "tenant, synthetic-data, no-egress, audit, metric, trace, cleanup, and redaction evidence captured",
       "LocalStack remains deferred to USF-208",
-      "mock OIDC is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence",
       "no prohibited readiness or certification claim emitted",
     ],
     prohibitedClaimsObserved: PROHIBITED_CLAIMS_OBSERVED,
     deferredBoundaries: [
       "localstack-service-semantics-deferred-to-USF-208",
-      "wiremock-service-semantics-resolved-by-USF-209",
-      "mock-oidc-service-semantics-superseded-for-selected-closure-tier-by-USF-210",
-      "webhook-delivery-notification-provider-not-claimed",
-      "provider-feedback-replay-not-claimed",
-      "live-webhook-compatibility-not-claimed",
+      "live-external-provider-compatibility-not-claimed",
+      "provider-contract-certification-not-claimed",
+      "staging-production-provider-readiness-not-claimed",
     ],
     nonClaims: NON_CLAIMS,
   });
 }
 
-if (process.argv[1]?.endsWith("mock-provider-substrate-proof.ts")) {
-  runMockProviderSubstrateProof()
+if (process.argv[1]?.endsWith("wiremock-composed-proof.ts")) {
+  runWireMockComposedProof()
     .then((result) => {
       console.log(JSON.stringify(result, null, 2));
     })
     .catch((error: unknown) => {
-      const safeMessage =
-        error instanceof Error ? error.message : "mock provider substrate proof failed";
+      const safeMessage = error instanceof Error ? error.message : "wiremock proof failed";
       console.error(JSON.stringify({ status: "fail", error: safeMessage }, null, 2));
       process.exitCode = 1;
     });

@@ -1,0 +1,11 @@
+{
+  "name": "usf-209-wiremock-proof-evidence-incomplete",
+  "expectedRule": "USF-RUNTIME-027",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/12/proofEvidence",
+      "value": "WireMock container starts and responds."
+    }
+  ]
+}
