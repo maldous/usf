@@ -4707,7 +4707,7 @@
       "adapterProviderId": "not-applicable-api-operator-access-proof",
       "validationCommand": "corepack pnpm proof:operator-access",
       "commandPin": "tsx packages/proof/src/operator-access-proof.ts",
-      "commitPin": "2c461b1ceaac8832fe370ae736028b98340929d7",
+      "commitPin": "46086313242b3cf001a96f2710f3589d0f788a89",
       "issueLinks": [
         "USF-169",
         "USF-180",
@@ -4716,7 +4716,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "2c461b1ceaac8832fe370ae736028b98340929d7",
+      "prOrMergeSha": "46086313242b3cf001a96f2710f3589d0f788a89",
       "retentionPosture": "Retain proof command output in the PR validation summary and post-merge Linear reconciliation; update this row if the proof command or operator-access scope changes."
     }
   ],
