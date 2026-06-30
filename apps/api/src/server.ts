@@ -408,6 +408,12 @@ function runtimeStatus(runtime: DevRuntime) {
     composedProviderBindings: [...runtime.composedProviderBindings],
     deferredProviderBindings: [...runtime.deferredProviderBindings],
     databaseProviderEvidence: runtime.databaseProviderEvidence(),
+    eventBusProviderEvidence: runtime.eventBusProviderEvidence(),
+    objectStoreProviderEvidence: runtime.objectStoreProviderEvidence(),
+    identityProviderEvidence: runtime.identityProviderEvidence(),
+    secretProviderEvidence: runtime.secretProviderEvidence(),
+    workflowProviderEvidence: runtime.workflowProviderEvidence(),
+    notificationProviderEvidence: runtime.notificationProviderEvidence(),
   };
 }
 

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "adapters/store/src/index.ts",
+      "old": "retryMinioReadiness",
+      "new": "minioReadinessOnce"
+    }
+  ]
+}

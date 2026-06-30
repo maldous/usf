@@ -11,7 +11,12 @@ import {
   type DevRuntimeMode,
 } from "@foundation/app-api/runtime";
 import type { PostgresComposedMembershipEvidence } from "@foundation/adapter-db";
+import type { NatsComposedEventBusEvidence } from "@foundation/adapter-bus";
+import type { KeycloakComposedIdentityEvidence } from "@foundation/adapter-idp";
 import type { MailpitComposedDeliveryEvidence } from "@foundation/adapter-mail";
+import type { OpenBaoSecretEvidence } from "@foundation/adapter-secrets";
+import type { MinioComposedObjectStoreEvidence } from "@foundation/adapter-store";
+import type { TemporalComposedWorkflowEvidence } from "@foundation/adapter-wf";
 import type { TenantContext } from "@foundation/core";
 
 interface WorkerNotificationProof {
@@ -35,6 +40,11 @@ export interface WorkerSmokeSummary {
   readonly notificationProviderMessageIdPresent: boolean;
   readonly composedProviderEvidence: readonly MailpitComposedDeliveryEvidence[];
   readonly databaseProviderEvidence: readonly PostgresComposedMembershipEvidence[];
+  readonly eventBusProviderEvidence: readonly NatsComposedEventBusEvidence[];
+  readonly objectStoreProviderEvidence: readonly MinioComposedObjectStoreEvidence[];
+  readonly identityProviderEvidence: readonly KeycloakComposedIdentityEvidence[];
+  readonly secretProviderEvidence: readonly OpenBaoSecretEvidence[];
+  readonly workflowProviderEvidence: readonly TemporalComposedWorkflowEvidence[];
   readonly auditEvents: number;
   readonly tenantBoundaryDenied: true;
   readonly authorizationDenied: true;
@@ -60,6 +70,11 @@ export async function runWorkerSmoke(
       email: "runtime-proof-worker-db-actor@example.test",
       roles: ["tenant-member"],
     });
+    const eventBusEvidence = await runtime.proveEventBusProviderRoundTrip(context);
+    const objectStoreEvidence = await runtime.proveObjectStoreProviderRoundTrip(context);
+    const identityEvidence = await runtime.proveIdentityProviderRoundTrip(context);
+    const secretEvidence = await runtime.proveSecretProviderRoundTrip(context);
+    const workflowEvidence = await runtime.proveWorkflowProviderRoundTrip(context);
 
     const submitted = await runtime.jobService.submit({
       context,
@@ -133,6 +148,11 @@ export async function runWorkerSmoke(
       notificationProviderMessageIdPresent: notification.providerMessageIdPresent,
       composedProviderEvidence: notification.composedProviderEvidence,
       databaseProviderEvidence: databaseEvidence ? Object.freeze([databaseEvidence]) : [],
+      eventBusProviderEvidence: eventBusEvidence ? Object.freeze([eventBusEvidence]) : [],
+      objectStoreProviderEvidence: objectStoreEvidence ? Object.freeze([objectStoreEvidence]) : [],
+      identityProviderEvidence: identityEvidence ? Object.freeze([identityEvidence]) : [],
+      secretProviderEvidence: secretEvidence ? Object.freeze([secretEvidence]) : [],
+      workflowProviderEvidence: workflowEvidence ? Object.freeze([workflowEvidence]) : [],
       auditEvents: audit.events.length,
       tenantBoundaryDenied: true,
       authorizationDenied: true,

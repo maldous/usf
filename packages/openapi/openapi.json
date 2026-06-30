@@ -7405,7 +7405,13 @@
           "deferredBoundaries",
           "composedProviderBindings",
           "deferredProviderBindings",
-          "databaseProviderEvidence"
+          "databaseProviderEvidence",
+          "eventBusProviderEvidence",
+          "objectStoreProviderEvidence",
+          "identityProviderEvidence",
+          "secretProviderEvidence",
+          "workflowProviderEvidence",
+          "notificationProviderEvidence"
         ],
         "properties": {
           "status": {
@@ -7801,6 +7807,24 @@
                   "sdkBoundary",
                   "endpointRef",
                   "readinessChecked",
+                  "readinessRetryPolicy",
+                  "readinessAttempts",
+                  "retryCount",
+                  "connectionFailureCount",
+                  "operationLatencyBucket",
+                  "adapterHealthStatus",
+                  "structuredLogEvidenceCaptured",
+                  "traceEvidenceCaptured",
+                  "metricEvidenceCaptured",
+                  "auditEvidenceCaptured",
+                  "redactionChecked",
+                  "traceIdHash",
+                  "correlationIdHash",
+                  "operation",
+                  "operationOutcome",
+                  "safeErrorCode",
+                  "failClosedDenials",
+                  "iso27001Support",
                   "writeChecked",
                   "readbackChecked",
                   "tenantIsolationChecked",
@@ -7862,6 +7886,108 @@
                   "readinessChecked": {
                     "type": "boolean"
                   },
+                  "readinessRetryPolicy": {
+                    "const": "bounded-exponential-backoff-60s",
+                    "type": "string"
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "const": "healthy",
+                    "type": "string"
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "anyOf": [
+                      {
+                        "const": "membership-write",
+                        "type": "string"
+                      },
+                      {
+                        "const": "membership-read",
+                        "type": "string"
+                      },
+                      {
+                        "const": "membership-round-trip",
+                        "type": "string"
+                      },
+                      {
+                        "const": "schema-prepare",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "operationOutcome": {
+                    "const": "succeeded",
+                    "type": "string"
+                  },
+                  "safeErrorCode": {
+                    "type": "null"
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
                   "writeChecked": {
                     "type": "boolean"
                   },
@@ -7890,6 +8016,2208 @@
                   "membershipCount": {
                     "minimum": 0,
                     "type": "number"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "eventBusProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "objectStoreProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "identityProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "secretProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "workflowProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notificationProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 }
               },
@@ -10392,6 +12720,12 @@
           "composedProviderBindings",
           "deferredProviderBindings",
           "databaseProviderEvidence",
+          "eventBusProviderEvidence",
+          "objectStoreProviderEvidence",
+          "identityProviderEvidence",
+          "secretProviderEvidence",
+          "workflowProviderEvidence",
+          "notificationProviderEvidence",
           "providers"
         ],
         "properties": {
@@ -10788,6 +13122,24 @@
                   "sdkBoundary",
                   "endpointRef",
                   "readinessChecked",
+                  "readinessRetryPolicy",
+                  "readinessAttempts",
+                  "retryCount",
+                  "connectionFailureCount",
+                  "operationLatencyBucket",
+                  "adapterHealthStatus",
+                  "structuredLogEvidenceCaptured",
+                  "traceEvidenceCaptured",
+                  "metricEvidenceCaptured",
+                  "auditEvidenceCaptured",
+                  "redactionChecked",
+                  "traceIdHash",
+                  "correlationIdHash",
+                  "operation",
+                  "operationOutcome",
+                  "safeErrorCode",
+                  "failClosedDenials",
+                  "iso27001Support",
                   "writeChecked",
                   "readbackChecked",
                   "tenantIsolationChecked",
@@ -10849,6 +13201,108 @@
                   "readinessChecked": {
                     "type": "boolean"
                   },
+                  "readinessRetryPolicy": {
+                    "const": "bounded-exponential-backoff-60s",
+                    "type": "string"
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "const": "healthy",
+                    "type": "string"
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "anyOf": [
+                      {
+                        "const": "membership-write",
+                        "type": "string"
+                      },
+                      {
+                        "const": "membership-read",
+                        "type": "string"
+                      },
+                      {
+                        "const": "membership-round-trip",
+                        "type": "string"
+                      },
+                      {
+                        "const": "schema-prepare",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "operationOutcome": {
+                    "const": "succeeded",
+                    "type": "string"
+                  },
+                  "safeErrorCode": {
+                    "type": "null"
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
                   "writeChecked": {
                     "type": "boolean"
                   },
@@ -10877,6 +13331,2208 @@
                   "membershipCount": {
                     "minimum": 0,
                     "type": "number"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "eventBusProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "objectStoreProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "identityProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "secretProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "workflowProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notificationProviderEvidence": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "providerRef",
+                  "providerMode",
+                  "providerRegistryId",
+                  "bindingId",
+                  "adapterName",
+                  "sdkBoundary",
+                  "endpointRef",
+                  "readinessChecked",
+                  "safeProviderSummary"
+                ],
+                "properties": {
+                  "providerRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "providerMode": {
+                    "const": "composed-test",
+                    "type": "string"
+                  },
+                  "providerRegistryId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serviceCatalogueServiceIds": {
+                    "type": "array",
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "bindingId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "adapterName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "clientSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workerSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkPackage": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowSdkVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sdkBoundary": {
+                    "const": "adapter-package-only",
+                    "type": "string"
+                  },
+                  "endpointRef": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "readinessChecked": {
+                    "type": "boolean"
+                  },
+                  "readinessRetryPolicy": {
+                    "anyOf": [
+                      {
+                        "const": "bounded-exponential-backoff-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "bounded-exponential-backoff-120s-keycloak",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "readinessAttempts": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "retryCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "connectionFailureCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operationLatencyBucket": {
+                    "anyOf": [
+                      {
+                        "const": "lt-1s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "1s-5s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "5s-30s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-60s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "30s-120s",
+                        "type": "string"
+                      },
+                      {
+                        "const": "timeout",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "adapterHealthStatus": {
+                    "anyOf": [
+                      {
+                        "const": "healthy",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unavailable",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "structuredLogEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "traceEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "metricEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "auditEvidenceCaptured": {
+                    "type": "boolean"
+                  },
+                  "redactionChecked": {
+                    "type": "boolean"
+                  },
+                  "traceIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "correlationIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operation": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "operationOutcome": {
+                    "anyOf": [
+                      {
+                        "const": "succeeded",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed-closed",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "safeErrorCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "failClosedDenials": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "iso27001Support": {
+                    "const": "asset-inventory-control-evidence-only-no-certification-claim",
+                    "type": "string"
+                  },
+                  "publishChecked": {
+                    "type": "boolean"
+                  },
+                  "writeChecked": {
+                    "type": "boolean"
+                  },
+                  "readbackChecked": {
+                    "type": "boolean"
+                  },
+                  "deleteChecked": {
+                    "type": "boolean"
+                  },
+                  "describeChecked": {
+                    "type": "boolean"
+                  },
+                  "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "realmChecked": {
+                    "type": "boolean"
+                  },
+                  "syntheticIdentityChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantIsolationChecked": {
+                    "type": "boolean"
+                  },
+                  "tenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "failClosedChecked": {
+                    "type": "boolean"
+                  },
+                  "workerStarted": {
+                    "type": "boolean"
+                  },
+                  "workflowScheduled": {
+                    "type": "boolean"
+                  },
+                  "executionCompleted": {
+                    "type": "boolean"
+                  },
+                  "cleanupAttempted": {
+                    "type": "boolean"
+                  },
+                  "cleanupSucceeded": {
+                    "type": "boolean"
+                  },
+                  "cleanupBoundary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "safeProviderSummary": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tenantIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "subjectHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "actorIdHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "emailHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "realmHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "storageObjectRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "secretRefHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowNameHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workflowIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "runIdHash": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "taskQueueHash": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "messageCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "byteCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "failureReasonCode": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "safeFailureMessage": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 }
               },

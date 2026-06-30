@@ -4,6 +4,8 @@ packages:
   - "adapters/*"
   - "packages/*"
 allowBuilds:
+  "@swc/core": true
   esbuild: true
+  protobufjs: true
 minimumReleaseAgeExclude:
   - prettier@3.9.1

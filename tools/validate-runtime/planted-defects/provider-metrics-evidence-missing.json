@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "adapters/bus/src/index.ts",
+      "old": "metricEvidenceCaptured",
+      "new": "metricEvidenceOmitted"
+    }
+  ]
+}
