@@ -5003,7 +5003,7 @@
       "adapterProviderId": "full-text-search-meilisearch-deferred",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "commitPin": "c2baa47cd17833b114e9dd94e9b78d4c53eb168f",
+      "commitPin": "4da8952a690adb7291e20228870933c59d1ce2c8",
       "issueLinks": [
         "USF-174",
         "USF-199",
@@ -5012,7 +5012,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "c2baa47cd17833b114e9dd94e9b78d4c53eb168f",
+      "prOrMergeSha": "4da8952a690adb7291e20228870933c59d1ce2c8",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Meilisearch documents, query payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
