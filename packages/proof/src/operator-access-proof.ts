@@ -160,7 +160,10 @@ export async function runOperatorAccessProof(): Promise<OperatorAccessProofResul
       url: `/v1/observability/readiness?tenantId=${DEV_TENANT_ID}`,
       headers: tenantAdminHeaders,
     });
-    assert(deniedReadiness.statusCode === 403, "tenant-admin must not read observability readiness");
+    assert(
+      deniedReadiness.statusCode === 403,
+      "tenant-admin must not read observability readiness",
+    );
     assertSafeError(deniedReadiness.json(), 403);
     const securitySignals = runtime.observability.list(DEV_TENANT_ID);
     assert(

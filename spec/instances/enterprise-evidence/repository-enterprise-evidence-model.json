@@ -3632,7 +3632,7 @@
       "riskOwner": "platform-access-risk-owner",
       "controlOwner": "platform-access-control-owner",
       "implementationStatus": "effectivenessState=proven-local; runtimeMode=hermetic; providerMode=hermetic-mock; operatorConsoleRuntimeReadinessClaim=false; gatewayReadinessClaim=false; clickthroughReadinessClaim=false; publicExposureClaim=false; productionLiveClaim=false",
-      "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-gateway-posture-matrix.json",
+      "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-gateway-posture-matrix.json; docs/architecture/operator-access-proof-source-use-disposition-matrix.md",
       "validationCommand": "corepack pnpm proof:operator-access",
       "deferredReason": "Composed service console login, gateway route proof, clickthrough UX, executed periodic access reviews, deprovisioning workflow evidence, public or LAN exposure proof, staging, production, and live-provider operator access remain deferred to USF-180 or service-specific source issues.",
       "nonClaims": [
@@ -4703,7 +4703,7 @@
       "whatWasNotProven": "Does not prove composed service console login, gateway route proof, clickthrough UX, executed periodic access reviews, deprovisioning workflow evidence, public exposure, LAN exposure, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure.",
       "runtimeMode": "hermetic",
       "providerMode": "hermetic-mock",
-      "serviceCatalogueRow": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "serviceCatalogueRow": "docs/architecture/operator-access-gateway-posture-matrix.json; docs/architecture/operator-access-proof-source-use-disposition-matrix.md",
       "adapterProviderId": "not-applicable-api-operator-access-proof",
       "validationCommand": "corepack pnpm proof:operator-access",
       "commandPin": "tsx packages/proof/src/operator-access-proof.ts",
@@ -5623,7 +5623,7 @@
         "non-claim booleans are changed to true"
       ],
       "failClosedBehaviour": "The proof asserts 400 or 403 safe-error responses for missing tenant, tenant mismatch, and unauthorized role paths, and validate-enterprise blocks missing proof wiring or readiness overclaim markers.",
-      "monitoringAuditEvidence": "Proof verifies provider.readiness.checked, provider.health.checked, observability.readiness.read, and observability.signal.read audit actions plus an authorization.denied security signal.",
+      "monitoringAuditEvidence": "Proof verifies provider.readiness.checked, provider.health.checked, observability.readiness.read, and observability.signal.read audit actions plus an authorization.denied security signal. Source-use coverage is recorded in docs/architecture/operator-access-proof-source-use-disposition-matrix.md.",
       "residualRisk": "Gateway route proof, clickthrough UX, composed service console login, executed access review, deprovisioning workflow, public exposure, staging, production, and live-provider access remain deferred."
     }
   ],
@@ -6645,7 +6645,7 @@
         "linkedFollowUpIssues=USF-180",
         "no-public-exposure-claim"
       ],
-      "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-gateway-posture-matrix.json",
+      "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-gateway-posture-matrix.json; docs/architecture/operator-access-proof-source-use-disposition-matrix.md",
       "validationCommand": "corepack pnpm proof:operator-access",
       "deferredReason": "Executed periodic access review, break-glass operation, deprovisioning workflow, gateway route proof, and clickthrough UX remain deferred to USF-180 or service-specific source issues.",
       "nonClaims": [
@@ -10583,7 +10583,7 @@
         "crossBorderDataResidencyBoundary=not-claimed",
         "tenantBoundary=synthetic-tenant-context-and-tenant-mismatch-fail-closed-proof"
       ],
-      "evidenceSource": "packages/proof/src/operator-access-proof.ts",
+      "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-proof-source-use-disposition-matrix.md",
       "validationCommand": "corepack pnpm proof:operator-access",
       "deferredReason": "No production data, public exposure, gateway clickthrough, service console session, live-provider data, legal hold, residency, or production privacy control is proven by USF-169.",
       "nonClaims": [
