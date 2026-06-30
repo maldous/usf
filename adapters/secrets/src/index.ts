@@ -50,6 +50,10 @@ export interface OpenBaoSecretEvidence {
   readonly describeChecked: boolean;
   readonly resolveChecked: boolean;
   readonly tenantIsolationChecked: boolean;
+  readonly pathEncoding: "base64url-per-segment";
+  readonly pathCollisionResistanceChecked: boolean;
+  readonly collidingTenantBoundaryChecked: boolean;
+  readonly collidingSecretNameBoundaryChecked: boolean;
   readonly cleanupBoundary: "kv-v2-delete-and-compose-down";
   readonly safeProviderSummary: "openbao-composed-secret-provider";
   readonly tenantIdHash: string;
@@ -147,11 +151,11 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
         endpoint: options.endpoint ?? "http://127.0.0.1:8200",
         token: options.token ?? "dev-root-token",
       });
-    this.#mount = sanitizeSecretPathToken(options.mount ?? "secret");
+    this.#mount = normaliseOpenBaoMount(options.mount ?? "secret");
   }
 
   #dataPath(tenantId: string, name: string): string {
-    return `${this.#mount}/data/usf-runtime-proof/${sanitizeSecretPathToken(tenantId)}/${sanitizeSecretPathToken(name)}`;
+    return `${this.#mount}/data/usf-runtime-proof/${encodeOpenBaoPathSegment(tenantId)}/${encodeOpenBaoPathSegment(name)}`;
   }
 
   #secretRef(tenantId: string, name: string): string {
@@ -189,6 +193,9 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
     readonly describeChecked: boolean;
     readonly resolveChecked: boolean;
     readonly tenantIsolationChecked: boolean;
+    readonly pathCollisionResistanceChecked?: boolean;
+    readonly collidingTenantBoundaryChecked?: boolean;
+    readonly collidingSecretNameBoundaryChecked?: boolean;
   }): OpenBaoSecretEvidence {
     const evidence: OpenBaoSecretEvidence = Object.freeze({
       providerRef: OPENBAO_PROVIDER_REGISTRY_ID,
@@ -224,6 +231,10 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
       describeChecked: input.describeChecked,
       resolveChecked: input.resolveChecked,
       tenantIsolationChecked: input.tenantIsolationChecked,
+      pathEncoding: "base64url-per-segment",
+      pathCollisionResistanceChecked: input.pathCollisionResistanceChecked ?? false,
+      collidingTenantBoundaryChecked: input.collidingTenantBoundaryChecked ?? false,
+      collidingSecretNameBoundaryChecked: input.collidingSecretNameBoundaryChecked ?? false,
       cleanupBoundary: "kv-v2-delete-and-compose-down",
       safeProviderSummary: "openbao-composed-secret-provider",
       tenantIdHash: opaqueHash(`openbao-tenant:${input.tenantId}`),
@@ -333,16 +344,59 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
   }): Promise<OpenBaoSecretEvidence> {
     const name = "runtime-proof-secret";
     const value = "synthetic-openbao-runtime-proof-secret";
-    await this.writeSecret({ tenantId: context.tenantId, name, value });
-    const reference = await this.describe({ tenantId: context.tenantId, name });
+    const collidingTenantA = "runtime/proof";
+    const collidingTenantB = "runtime_proof";
+    const collidingNameA = "secret/proof";
+    const collidingNameB = "secret_proof";
+    const collidingValueA = "synthetic-openbao-collision-proof-secret-A";
+    const collidingValueB = "synthetic-openbao-collision-proof-secret-B";
+    let reference: SecretReference | undefined;
+    let resolved: string | undefined;
+    let otherTenant: string | undefined;
+    let collidingReadA: string | undefined;
+    let collidingReadB: string | undefined;
+    try {
+      await this.writeSecret({ tenantId: context.tenantId, name, value });
+      reference = await this.describe({ tenantId: context.tenantId, name });
+      if (!reference) {
+        throw new Error("OpenBao proof did not describe the synthetic secret");
+      }
+      resolved = await this.resolveSecretValue(reference);
+      otherTenant = await this.readSecret({ tenantId: `${context.tenantId}-other`, name });
+      await this.writeSecret({
+        tenantId: collidingTenantA,
+        name: collidingNameA,
+        value: collidingValueA,
+      });
+      await this.writeSecret({
+        tenantId: collidingTenantB,
+        name: collidingNameB,
+        value: collidingValueB,
+      });
+      collidingReadA = await this.readSecret({
+        tenantId: collidingTenantA,
+        name: collidingNameA,
+      });
+      collidingReadB = await this.readSecret({
+        tenantId: collidingTenantB,
+        name: collidingNameB,
+      });
+    } finally {
+      await Promise.all([
+        this.#client.delete(this.#dataPath(context.tenantId, name)).catch(() => undefined),
+        this.#client
+          .delete(this.#dataPath(collidingTenantA, collidingNameA))
+          .catch(() => undefined),
+        this.#client
+          .delete(this.#dataPath(collidingTenantB, collidingNameB))
+          .catch(() => undefined),
+      ]);
+    }
     if (!reference) {
       throw new Error("OpenBao proof did not describe the synthetic secret");
     }
-    const resolved = await this.resolveSecretValue(reference);
-    const otherTenant = await this.readSecret({ tenantId: `${context.tenantId}-other`, name });
-    await this.#client.delete(this.#dataPath(context.tenantId, name)).catch(() => {
-      // Local proof cleanup is best-effort; Compose teardown is the final cleanup boundary.
-    });
+    const collisionBoundaryChecked =
+      collidingReadA === collidingValueA && collidingReadB === collidingValueB;
     return this.#record({
       tenantId: context.tenantId,
       name,
@@ -353,6 +407,9 @@ export class OpenBaoSecretStore implements SecretStore, SecretResolver {
       describeChecked: true,
       resolveChecked: resolved === value,
       tenantIsolationChecked: otherTenant === undefined,
+      pathCollisionResistanceChecked: collisionBoundaryChecked,
+      collidingTenantBoundaryChecked: collisionBoundaryChecked,
+      collidingSecretNameBoundaryChecked: collisionBoundaryChecked,
     });
   }
 }
@@ -367,9 +424,16 @@ function extractOpenBaoSecretValue(value: unknown): string | undefined {
   return typeof candidate === "string" ? candidate : undefined;
 }
 
-function sanitizeSecretPathToken(value: string): string {
-  const sanitized = value.replace(/[^A-Za-z0-9_-]/g, "_").slice(0, 96);
-  return sanitized || "value";
+function normaliseOpenBaoMount(value: string): string {
+  const mount = value.replace(/^\/+|\/+$/g, "");
+  if (!/^[A-Za-z0-9_-]+$/.test(mount)) {
+    throw new Error("OpenBao mount must be a non-empty safe mount segment");
+  }
+  return mount;
+}
+
+export function encodeOpenBaoPathSegment(value: string): string {
+  return `b64_${Buffer.from(value, "utf8").toString("base64url")}`;
 }
 
 async function retryOpenBaoReadiness<T>(

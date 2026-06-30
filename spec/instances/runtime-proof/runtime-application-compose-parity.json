@@ -285,7 +285,7 @@
       "sdkVersion": "8.0.7",
       "providerRegistryEvidence": "packages/core/src/index.ts records object-storage-minio-composed-test with MinioObjectStore, composed-test mode, endpoint_ref posture, and healthy bounded local composed-test status.",
       "apiProofEvidence": "runtime:proof:compose verifies API file upload and download write/read synthetic objects through MinioObjectStore using the minio SDK.",
-      "workerProofEvidence": "runtime:proof:compose verifies worker MinIO object write/read/delete and tenant-isolation evidence through MinioObjectStore using the minio SDK."
+      "workerProofEvidence": "runtime:proof:compose verifies worker MinIO object write/read/delete, collision-free base64url per-segment tenant/object path encoding, colliding tenant/object key boundary evidence, and tenant-isolation evidence through MinioObjectStore using the minio SDK."
     },
     {
       "bindingStatus": "active",
@@ -327,7 +327,7 @@
       "sdkVersion": "0.12.0",
       "providerRegistryEvidence": "packages/core/src/index.ts records secret-store-openbao-composed-test with OpenBaoSecretStore, composed-test mode, endpoint_ref posture, and healthy bounded local composed-test status.",
       "apiProofEvidence": "No API route consumes OpenBao in USF-183; the active binding is not claimed through an API route and is exercised by worker proof.",
-      "workerProofEvidence": "runtime:proof:compose verifies worker OpenBao secret write, describe, resolve, tenant isolation, and cleanup through OpenBaoSecretStore using node-vault."
+      "workerProofEvidence": "runtime:proof:compose verifies worker OpenBao secret write, describe, resolve, collision-free base64url per-segment tenant/secret path encoding, colliding tenant/secret name boundary evidence, tenant isolation, and cleanup through OpenBaoSecretStore using node-vault."
     },
     {
       "bindingStatus": "active",
@@ -540,7 +540,7 @@
     "ownerLinkage": "Owner, risk owner, and control owner trace through the service catalogue entries and provider registry entries for platform API, worker, Postgres, Mailpit, and deferred composed dependencies.",
     "auditEventProduction": "Proof code requires API tenant-context evidence plus value-free provider evidence for Postgres, Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal; worker proof also verifies job lifecycle and denial audit evidence.",
     "healthReadinessEvidence": "Proof code requires health, readiness, and OpenAPI route exposure for the API runtime.",
-    "tenantIsolationEvidence": "Proof code requires API tenant mismatch and worker cross-tenant job read failures.",
+    "tenantIsolationEvidence": "Proof code requires API tenant mismatch, worker cross-tenant job read failures, and composed MinIO/OpenBao collision-free tenant path encoding evidence.",
     "accessControlEvidence": "Proof code requires API and worker authorization failures to fail closed.",
     "secretBoundaryEvidence": "Composed proofs use local placeholders or no credentials; safe evidence records endpoint_ref, hashes, counters, duration buckets, safe reason codes, and value-free summaries only.",
     "syntheticDataEvidence": "Proof code uses synthetic tenant, actor, and job payload data only.",

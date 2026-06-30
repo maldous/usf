@@ -22,9 +22,9 @@ SDK-backed adapter bindings:
 | Postgres tenant-membership repository | `postgres` | `database-postgres-composed-test` | `PostgresTenantMembershipRepository` | `pg` in `adapters/db/src/index.ts` | API permission path refreshes tenant membership before synchronous PDP evaluation; worker write/readback |
 | Mailpit notification provider | `mailpit` | `notification-delivery-mailpit-composed-test` | `MailpitNotificationProvider` | `mailpit-api` in `adapters/mail/src/index.ts` | Worker readiness, send, readback, and cleanup; API queues with composed provider metadata only |
 | NATS event bus | `nats` | `event-bus-nats-composed-test` | `NatsEventBus` | `@nats-io/transport-node` in `adapters/bus/src/index.ts` | API publish evidence; worker publish/readback and tenant-boundary evidence |
-| MinIO object store | `minio` | `object-storage-minio-composed-test` | `MinioObjectStore` | `minio` in `adapters/store/src/index.ts` | API object write/read; worker write/read/delete and tenant-boundary evidence |
+| MinIO object store | `minio` | `object-storage-minio-composed-test` | `MinioObjectStore` | `minio` in `adapters/store/src/index.ts` | API object write/read; worker write/read/delete, collision-free base64url per-segment tenant/object path encoding, and tenant-boundary evidence |
 | Keycloak identity provider | `keycloak`, `keycloak-db` | `identity-keycloak-composed-test` | `KeycloakComposedIdentityProvider` | `@keycloak/keycloak-admin-client` in `adapters/idp/src/index.ts` | API synthetic login; worker synthetic identity readback and fail-closed tenant check |
-| OpenBao secret provider | `openbao` | `secret-store-openbao-composed-test` | `OpenBaoSecretStore` | `node-vault` in `adapters/secrets/src/index.ts` | Worker synthetic secret write, describe, resolve, tenant-boundary check, and cleanup |
+| OpenBao secret provider | `openbao` | `secret-store-openbao-composed-test` | `OpenBaoSecretStore` | `node-vault` in `adapters/secrets/src/index.ts` | Worker synthetic secret write, describe, resolve, collision-free base64url per-segment tenant/secret path encoding, tenant-boundary check, and cleanup |
 | Temporal workflow provider | `temporal` | `workflow-engine-temporal-composed-test` | `TemporalComposedWorkflowEngine` | `@temporalio/client`, `@temporalio/worker`, `@temporalio/workflow` in `adapters/wf/src/index.ts` | Worker workflow schedule, one-shot worker execution, result readback, fail-closed input check, and connection cleanup |
 
 Other composed services such as observability backends, operator consoles, quality gates,
@@ -39,6 +39,12 @@ readiness cannot be proven. Keycloak has a longer `120s` readiness budget; the o
 provider adapters use bounded exponential backoff with a `60s` readiness budget. Adapter
 evidence distinguishes container startup, service readiness, adapter connection, runtime use,
 operation outcome, retry counts, latency buckets, safe error codes, and cleanup.
+
+Tenant-scoped provider paths are required to be collision-free. MinIO object keys and OpenBao
+KV paths encode each tenant/object/secret segment with deterministic base64url encoding before
+the segment is placed into the provider path. The composed worker proof includes colliding
+source values such as slash-separated and underscore-separated tenant IDs and verifies distinct
+readback before cleanup.
 
 Evidence is value-free. It records endpoint refs, hashes, counters, duration buckets, and safe
 provider summaries only. It does not expose raw endpoints, connection strings, credentials,

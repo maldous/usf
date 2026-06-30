@@ -231,6 +231,34 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
     ]) {
       assert(adapterText.includes(marker), `${expected.adapterName} missing ${marker}`);
     }
+    if (expected.adapterName === "MinioObjectStore") {
+      for (const marker of [
+        "encodeMinioObjectPathSegment",
+        "pathCollisionResistanceChecked",
+        "collidingTenantBoundaryChecked",
+        "collidingObjectKeyBoundaryChecked",
+      ]) {
+        assert(adapterText.includes(marker), `${expected.adapterName} missing ${marker}`);
+      }
+      assert(
+        !adapterText.includes("sanitizeObjectToken"),
+        "MinioObjectStore uses lossy path normalisation",
+      );
+    }
+    if (expected.adapterName === "OpenBaoSecretStore") {
+      for (const marker of [
+        "encodeOpenBaoPathSegment",
+        "pathCollisionResistanceChecked",
+        "collidingTenantBoundaryChecked",
+        "collidingSecretNameBoundaryChecked",
+      ]) {
+        assert(adapterText.includes(marker), `${expected.adapterName} missing ${marker}`);
+      }
+      assert(
+        !adapterText.includes("sanitizeSecretPathToken"),
+        "OpenBaoSecretStore uses lossy path normalisation",
+      );
+    }
     const provider = PROVIDER_REGISTRY.find((entry) => entry.providerId === expected.providerId);
     assert(provider, `${expected.providerId} composed provider registry entry missing`);
     assert(

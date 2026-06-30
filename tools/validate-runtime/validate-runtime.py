@@ -45,6 +45,7 @@ RULES = {
     "USF-RUNTIME-014": ("blocking", "provider proof metadata exposes raw endpoint or credential material"),
     "USF-RUNTIME-015": ("blocking", "provider registry linkage for composed binding is missing"),
     "USF-RUNTIME-016": ("blocking", "provider SDK dependency is not exact-version pinned"),
+    "USF-RUNTIME-017": ("blocking", "tenant-scoped provider paths lack collision-free encoding evidence"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -643,6 +644,54 @@ def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
             F.add("USF-RUNTIME-013", str(path), "provider SDK import is not allowed in this layer")
 
 
+def check_provider_path_collision_safety(F: Findings, state: dict[str, Any]) -> None:
+    adapter_requirements = {
+        ADAPTER_STORE_SOURCE_PATH: {
+            "required": [
+                "encodeMinioObjectPathSegment",
+                "base64url",
+                "pathCollisionResistanceChecked",
+                "collidingTenantBoundaryChecked",
+                "collidingObjectKeyBoundaryChecked",
+            ],
+            "forbidden": [
+                "sanitizeObjectToken",
+                'replace(/[^A-Za-z0-9_.=-]/g, "_")',
+            ],
+        },
+        ADAPTER_SECRETS_SOURCE_PATH: {
+            "required": [
+                "encodeOpenBaoPathSegment",
+                "base64url",
+                "pathCollisionResistanceChecked",
+                "collidingTenantBoundaryChecked",
+                "collidingSecretNameBoundaryChecked",
+            ],
+            "forbidden": [
+                "sanitizeSecretPathToken",
+                'replace(/[^A-Za-z0-9_-]/g, "_")',
+            ],
+        },
+    }
+    for path, requirements in adapter_requirements.items():
+        text = state_text(state, path)
+        for marker in requirements["required"]:
+            if marker not in text:
+                F.add("USF-RUNTIME-017", str(path), f"missing collision-free path marker: {marker}")
+        for marker in requirements["forbidden"]:
+            if marker in text:
+                F.add("USF-RUNTIME-017", str(path), f"lossy tenant path normalisation marker present: {marker}")
+    proof_source = state["proofSource"]
+    for marker in (
+        "pathCollisionResistanceChecked",
+        "collidingTenantBoundaryChecked",
+        "collidingObjectKeyBoundaryChecked",
+        "collidingSecretNameBoundaryChecked",
+    ):
+        if marker not in proof_source:
+            F.add("USF-RUNTIME-017", str(PROOF_SOURCE_PATH), f"proof source missing collision evidence marker: {marker}")
+
+
 def check_provider_safe_metadata(F: Findings, state: dict[str, Any]) -> None:
     manifest = state["manifest"]
     for binding in manifest.get("providerBindingMatrix", []):
@@ -724,7 +773,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_dependency_pinning,
         ],
         "commands": [check_command_wiring],
-        "source": [check_teardown, check_provider_sdk_boundary],
+        "source": [check_teardown, check_provider_sdk_boundary, check_provider_path_collision_safety],
         "all": [
             check_manifest,
             check_compose_mode,
@@ -737,6 +786,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_deferred_boundaries,
             check_provider_bindings,
             check_provider_sdk_boundary,
+            check_provider_path_collision_safety,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,

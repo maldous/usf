@@ -34,4 +34,10 @@ No React runtime/application code is copied. No USF path mirrors a React path. G
 | future API/provider status surfaces | readiness/status API lineage | `/v1/providers`, `/v1/providers/{id}` | migrated | PDP-protected, OpenAPI-covered, redacted | health/readiness subroutes if authorised |
 | React UI/Playwright provider behaviours | provider status/admin UI and E2E lineage | API/capability/proof tests | foundation-behaviour-rewritten-from-ui-test | no Playwright added; provider behaviours covered by foundation tests | UI/UX remains separate |
 
+## Implementation Target File Additions
+
+| Target file | Treatment | Source-use basis | Rationale |
+| --- | --- | --- | --- |
+| `tests/adapters/provider-path-encoding.test.ts` | new-with-rationale | evidence-only-support | Hermetic test proving MinIO and OpenBao composed-provider tenant path segments use collision-free base64url encoding rather than lossy normalisation. |
+
 Boundary: provider modes and environment classes remain separate. `composed-test` is not production readiness. `live-external-deferred` is not live readiness. No live-external-authorised provider is registered in this slice.
