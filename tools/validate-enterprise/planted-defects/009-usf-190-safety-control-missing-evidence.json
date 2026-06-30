@@ -1,0 +1,5 @@
+{
+  "description": "Lane 6 safety-control evidence register row is missing.",
+  "expectedRule": "USF-ENTERPRISE-011",
+  "removeEnterpriseEvidence": "evidence-usf-190-config-secrets-enterprise-safety-controls"
+}
