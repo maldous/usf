@@ -1,0 +1,9 @@
+{
+  "description": "USF-133 closure-tier evidence gate falsely claims parent closure.",
+  "expectedRule": "USF-PARITY-028",
+  "mutation": {
+    "closureTierSetSelectedTier": {
+      "usf133ClosureClaimed": true
+    }
+  }
+}

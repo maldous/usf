@@ -1,0 +1,12 @@
+{
+  "description": "USF-133 closure-tier evidence gate allows a prohibited readiness claim.",
+  "expectedRule": "USF-PARITY-030",
+  "mutation": {
+    "closureTierSetClaims": {
+      "readinessClaimsAllowed": [
+        "closure-tier-evidence-gate-defined",
+        "production-readiness"
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits a required validator linkage.",
+  "expectedRule": "USF-PARITY-026",
+  "mutation": {
+    "closureTierRemoveValidator": {
+      "id": "validate-enterprise"
+    }
+  }
+}

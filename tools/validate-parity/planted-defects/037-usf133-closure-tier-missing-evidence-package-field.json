@@ -1,0 +1,11 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits future readiness evidence package requirements.",
+  "expectedRule": "USF-PARITY-037",
+  "mutation": {
+    "closureTierPatchEvidencePackageShape": {
+      "set": {
+        "requiresApprovalForHigherReadiness": false
+      }
+    }
+  }
+}

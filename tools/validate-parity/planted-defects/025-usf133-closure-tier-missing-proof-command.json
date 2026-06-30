@@ -1,0 +1,9 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits a required proof command.",
+  "expectedRule": "USF-PARITY-025",
+  "mutation": {
+    "closureTierRemoveProofCommand": {
+      "id": "validate-spec-pr"
+    }
+  }
+}

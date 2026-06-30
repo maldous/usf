@@ -1,0 +1,11 @@
+{
+  "description": "USF-133 closure-tier evidence gate permits partial evidence to satisfy closure.",
+  "expectedRule": "USF-PARITY-038",
+  "mutation": {
+    "closureTierPatchNegativeAssurance": {
+      "set": {
+        "partialEvidenceCannotSatisfyClosure": false
+      }
+    }
+  }
+}

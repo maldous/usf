@@ -1,0 +1,12 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits promotion impact for an unresolved service row.",
+  "expectedRule": "USF-PARITY-034",
+  "mutation": {
+    "closureTierPatchServiceRef": {
+      "serviceId": "redis",
+      "drop": [
+        "promotionImpact"
+      ]
+    }
+  }
+}

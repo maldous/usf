@@ -1,0 +1,9 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits a required service disposition reference.",
+  "expectedRule": "USF-PARITY-024",
+  "mutation": {
+    "removeClosureTierServiceRef": {
+      "serviceId": "redis"
+    }
+  }
+}

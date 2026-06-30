@@ -1,0 +1,3809 @@
+{
+  "id": "usf-133-closure-tier-evidence-gate",
+  "title": "USF-133 Closure Tier Evidence Gate",
+  "authorityNote": "Repository evidence gate for USF-166. Linear tracks work only and does not define USF semantic authority.",
+  "issueId": "USF-166",
+  "parentIssueId": "USF-133",
+  "laneWrapperIssueId": "USF-185",
+  "dashboardIssueId": "USF-184",
+  "coordinatorIssueId": "USF-192",
+  "blockedDownstreamIssueIds": [
+    "USF-167"
+  ],
+  "sourceIssueIds": [
+    "USF-166",
+    "USF-167",
+    "USF-182"
+  ],
+  "selectedClosureTier": {
+    "id": "bounded-source-issue-evidence-gate",
+    "kind": "risk-based-closure-tier",
+    "decisionAcceptedDoesNotMeanWorkComplete": true,
+    "usf133ClosureClaimed": false,
+    "sourceIssueDoneByImplication": false,
+    "laneWrapperDoneMeansSourceIssueDone": false,
+    "allows": [
+      "evidence-backed source issue closure consideration after merge and post-merge reconciliation",
+      "bounded service/capability disposition classification",
+      "bounded validator-enforced non-claim evidence organization",
+      "source/deferred issue sequencing for unresolved rows"
+    ],
+    "prohibits": [
+      "USF-133 closure by implication",
+      "source issue Done by lane wrapper completion",
+      "decision accepted equals work complete",
+      "substitute equivalence without non-equivalence boundary",
+      "deferred work without owner, risk treatment, review date, and follow-up issue"
+    ]
+  },
+  "authorityInputs": {
+    "serviceCatalogue": "spec/instances/compose-service/service-catalogue.json",
+    "serviceDispositionClosureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+    "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+    "gapRegister": "docs/architecture/usf-dev-foundation-gap-register.md",
+    "cleanupOrchestration": "docs/architecture/usf-dev-readiness-cleanup-orchestration.md"
+  },
+  "evidenceFreshnessPolicy": {
+    "staleEvidenceSatisfiesClosure": false,
+    "unmergedEvidenceSatisfiesClosure": false,
+    "pendingPrEvidenceSatisfiesUsf133Closure": false,
+    "requiredFields": [
+      "prRef",
+      "mergeShaRef",
+      "validationCommand",
+      "issueId",
+      "evidenceId",
+      "sourceRef",
+      "freshness"
+    ],
+    "acceptedFreshnessValues": [
+      "current",
+      "deferred",
+      "blocked",
+      "pending-pr-merge"
+    ],
+    "rejectedFreshnessValues": [
+      "stale",
+      "unknown"
+    ]
+  },
+  "mergedEvidenceInputs": [
+    {
+      "prRef": "#124",
+      "mergeShaRef": "394e672c698963064244fccd9c357c0c31e1ad8e",
+      "issueRefs": [
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "evidenceId": "cleanup-orchestration-lane-map",
+      "sourceRef": "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    },
+    {
+      "prRef": "#125",
+      "mergeShaRef": "ad68834d8c10d58d6e295eae699cfffdd80c2343",
+      "issueRefs": [
+        "USF-185",
+        "USF-166",
+        "USF-167",
+        "USF-182"
+      ],
+      "evidenceId": "evidence-lane1-service-disposition-closure-matrix",
+      "sourceRef": "docs/architecture/compose-service-disposition-closure-matrix.json",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    },
+    {
+      "prRef": "#127",
+      "mergeShaRef": "151728b95623403b2a9da6e82aff79f0a31a4a47",
+      "issueRefs": [
+        "USF-190"
+      ],
+      "evidenceId": "evidence-usf-190-status-integrity-validator",
+      "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    },
+    {
+      "prRef": "#128",
+      "mergeShaRef": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
+      "issueRefs": [
+        "USF-188"
+      ],
+      "evidenceId": "usf-188-evidence-observability-operations-posture",
+      "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    },
+    {
+      "prRef": "#129",
+      "mergeShaRef": "6e43503ab611262be0f79b22675beb27be864ed9",
+      "issueRefs": [
+        "USF-187"
+      ],
+      "evidenceId": "usf-187-sentry-error-monitoring-evidence",
+      "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    },
+    {
+      "prRef": "#130",
+      "mergeShaRef": "bca1e865c8988ca8e7506f94f244622155fa6fc1",
+      "issueRefs": [
+        "USF-186"
+      ],
+      "evidenceId": "usf-186-evidence-operator-access-gateway-matrix",
+      "sourceRef": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    },
+    {
+      "prRef": "#131",
+      "mergeShaRef": "fcc9c182a9234fd19cdf58b32020bad64342808c",
+      "issueRefs": [
+        "USF-191"
+      ],
+      "evidenceId": "usf-191-evidence-domain-depth-validator",
+      "sourceRef": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    },
+    {
+      "prRef": "#132",
+      "mergeShaRef": "f5251b1bc48ece0586fb694a188130fb7a99f1c8",
+      "issueRefs": [
+        "USF-189"
+      ],
+      "evidenceId": "evidence-usf-189-runtime-provider-disposition-validator",
+      "sourceRef": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "freshness": "current",
+      "assuranceMaturityLevel": "documented",
+      "riskDecision": "merged-input-evidence-only",
+      "reviewExpiry": "2026-09-30"
+    }
+  ],
+  "thisPrEvidence": {
+    "prRef": "pending-usf-166-pr",
+    "mergeShaRef": "pending-post-merge-reconciliation",
+    "issueRefs": [
+      "USF-166",
+      "USF-167",
+      "USF-182",
+      "USF-184",
+      "USF-185",
+      "USF-192",
+      "USF-133"
+    ],
+    "evidenceId": "evidence-usf-166-closure-tier-evidence-gate",
+    "sourceRef": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+    "freshness": "pending-pr-merge",
+    "satisfiesUsf133Closure": false,
+    "assuranceMaturityLevel": "documented",
+    "riskDecision": "pending-post-merge-reconciliation",
+    "reviewExpiry": "2026-09-30"
+  },
+  "requiredServiceDispositionRefs": [
+    {
+      "serviceId": "postgres",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#postgres",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "keycloak-db",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#keycloak-db",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "keycloak",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#keycloak",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "nats",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#nats",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "temporal",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "minio",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#minio",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "openbao",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#openbao",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "otel-collector",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#otel-collector",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "prometheus",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#prometheus",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "grafana",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#grafana",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "loki",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#loki",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "tempo",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#tempo",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "mailpit",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mailpit",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "webhook-sink",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#webhook-sink",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": []
+    },
+    {
+      "serviceId": "redis",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#redis",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-redis"
+    },
+    {
+      "serviceId": "meilisearch",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#meilisearch",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-meilisearch"
+    },
+    {
+      "serviceId": "clickhouse",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#clickhouse",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-clickhouse"
+    },
+    {
+      "serviceId": "pgadmin",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#pgadmin",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-pgadmin"
+    },
+    {
+      "serviceId": "sonar-postgres",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sonar-postgres",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-sonar-postgres"
+    },
+    {
+      "serviceId": "sonar-oidc-plugin",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sonar-oidc-plugin",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-sonar-oidc-plugin"
+    },
+    {
+      "serviceId": "sonarqube",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sonarqube",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185",
+        "USF-171",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-sonarqube"
+    },
+    {
+      "serviceId": "mock-oidc",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mock-oidc",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-mock-oidc"
+    },
+    {
+      "serviceId": "localstack",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#localstack",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-localstack"
+    },
+    {
+      "serviceId": "wiremock",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#wiremock",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-wiremock"
+    },
+    {
+      "serviceId": "alertmanager",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#alertmanager",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-alertmanager"
+    },
+    {
+      "serviceId": "alloy",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#alloy",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-alloy"
+    },
+    {
+      "serviceId": "windmill-postgres",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-postgres",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-windmill-postgres"
+    },
+    {
+      "serviceId": "windmill-redis",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-redis",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-windmill-redis"
+    },
+    {
+      "serviceId": "windmill",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-windmill"
+    },
+    {
+      "serviceId": "windmill-worker",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-worker",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-windmill-worker"
+    },
+    {
+      "serviceId": "temporal-postgres",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal-postgres",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-temporal-postgres"
+    },
+    {
+      "serviceId": "temporal-ui",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal-ui",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-temporal-ui"
+    },
+    {
+      "serviceId": "pgbackrest",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#pgbackrest",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-pgbackrest"
+    },
+    {
+      "serviceId": "clamav",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#clamav",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-clamav"
+    },
+    {
+      "serviceId": "sentry",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sentry",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185",
+        "USF-170",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-sentry"
+    },
+    {
+      "serviceId": "caddy",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#caddy",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-caddy"
+    },
+    {
+      "serviceId": "platform-api",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#platform-api",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-platform-api"
+    },
+    {
+      "serviceId": "react-app",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#react-app",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-133",
+        "USF-185"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-react-app"
+    }
+  ],
+  "requiredCapabilityDispositionRefs": [
+    {
+      "capabilityId": "tenant-isolation",
+      "status": "bounded",
+      "owner": "platform-runtime-foundation",
+      "riskOwner": "platform-runtime-risk-owner",
+      "controlOwner": "platform-runtime-control-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-189"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-167",
+        "riskStatement": "Runtime tenant isolation evidence is bounded to current local proof and does not close every service/capability row."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "authorization",
+      "status": "bounded",
+      "owner": "platform-security-foundation",
+      "riskOwner": "platform-security-risk-owner",
+      "controlOwner": "platform-security-control-owner",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "validationCommands": [
+        "corepack pnpm proof:authz",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-190",
+        "USF-141"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-141",
+        "riskStatement": "Authorization proof is bounded and requires source issue evidence before stronger claims."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "audit-evidence",
+      "status": "bounded",
+      "owner": "platform-security-foundation",
+      "riskOwner": "platform-security-risk-owner",
+      "controlOwner": "platform-security-control-owner",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "validationCommands": [
+        "corepack pnpm proof:audit",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-190",
+        "USF-143"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-143",
+        "riskStatement": "Audit evidence is local and bounded until source acceptance proves required retention and operating depth."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "config-secrets",
+      "status": "bounded",
+      "owner": "platform-security-foundation",
+      "riskOwner": "platform-security-risk-owner",
+      "controlOwner": "platform-security-control-owner",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "validationCommands": [
+        "corepack pnpm proof:config",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-190",
+        "USF-145"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-145",
+        "riskStatement": "Secret boundary proof is local and does not prove live-provider secret management."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "data-classification",
+      "status": "bounded",
+      "owner": "platform-governance-foundation",
+      "riskOwner": "platform-governance-risk-owner",
+      "controlOwner": "platform-governance-control-owner",
+      "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
+      "validationCommands": [
+        "python3 tools/validate-compose/validate-compose.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-168",
+        "USF-185"
+      ],
+      "riskTreatment": {
+        "treatment": "mitigate",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-167",
+        "riskStatement": "Classification metadata is present but does not complete every downstream proof."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "retention-purge",
+      "status": "deferred",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "validationCommands": [
+        "python3 tools/validate-parity/validate-domain-depth.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-191",
+        "USF-161"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-161",
+        "riskStatement": "Retention, purge, and legal-hold behaviour remain source-depth work."
+      },
+      "assuranceMaturityLevel": "designed",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-capability-retention-purge"
+    },
+    {
+      "capabilityId": "backup-restore",
+      "status": "deferred",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommands": [
+        "corepack pnpm providers-proof",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-189",
+        "USF-177"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-177",
+        "riskStatement": "pgBackRest and restore evidence remain deferred and no backup/restore readiness is claimed."
+      },
+      "assuranceMaturityLevel": "designed",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-capability-backup-restore"
+    },
+    {
+      "capabilityId": "incident-response",
+      "status": "deferred",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-188",
+        "USF-159"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-159",
+        "riskStatement": "Incident workflow evidence is posture-only until alerting/dashboard/incident operating proof exists."
+      },
+      "assuranceMaturityLevel": "designed",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-capability-incident-response"
+    },
+    {
+      "capabilityId": "vulnerability-dependency-posture",
+      "status": "bounded",
+      "owner": "platform-security-foundation",
+      "riskOwner": "platform-security-risk-owner",
+      "controlOwner": "platform-security-control-owner",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-187",
+        "USF-171"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-171",
+        "riskStatement": "Local deterministic validation is not equivalent to SonarQube/static-analysis service operating evidence."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "observability",
+      "status": "bounded",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "validationCommands": [
+        "corepack pnpm proof:observability",
+        "python3 tools/validate-parity/validate-observability.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-188",
+        "USF-159"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-159",
+        "riskStatement": "Telemetry evidence is bounded and no live alerting/dashboard readiness is claimed."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "operator-admin-access",
+      "status": "bounded",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-186",
+        "USF-169",
+        "USF-180"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-169",
+        "riskStatement": "Operator/admin access posture is matrixed but runtime access review and clickthrough proof remain deferred."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "capabilityId": "provider-supplier-boundaries",
+      "status": "deferred",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-167"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-167",
+        "riskStatement": "Supplier/live-provider boundary evidence remains outside the current local foundation proof."
+      },
+      "assuranceMaturityLevel": "designed",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-capability-provider-supplier-boundaries"
+    },
+    {
+      "capabilityId": "privacy-data-minimisation",
+      "status": "bounded",
+      "owner": "platform-governance-foundation",
+      "riskOwner": "platform-governance-risk-owner",
+      "controlOwner": "platform-governance-control-owner",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "sourceIssueRefs": [
+        "USF-190",
+        "USF-191"
+      ],
+      "riskTreatment": {
+        "treatment": "defer",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-161",
+        "riskStatement": "Proof data is synthetic and value-free, but retention/purge/legal-hold depth remains deferred."
+      },
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    }
+  ],
+  "proofCommands": [
+    {
+      "id": "verify",
+      "command": "corepack pnpm verify",
+      "packageScript": "verify",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "parity",
+      "command": "corepack pnpm parity",
+      "packageScript": "parity",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "validate-spec-all",
+      "command": "python3 tools/validate-spec/validate-spec.py all --json",
+      "packageScript": "",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "validate-spec-pr",
+      "command": "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "packageScript": "",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "validate-bootstrap",
+      "command": "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+      "packageScript": "",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "validate-parity",
+      "command": "python3 tools/validate-parity/validate-parity.py all --json",
+      "packageScript": "parity",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "validate-enterprise",
+      "command": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "packageScript": "enterprise:validate",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "validate-runtime",
+      "command": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "packageScript": "runtime:validate",
+      "wiredIntoClosureGate": true
+    },
+    {
+      "id": "validate-compose",
+      "command": "python3 tools/validate-compose/validate-compose.py all --json",
+      "packageScript": "compose:validate",
+      "wiredIntoClosureGate": true
+    }
+  ],
+  "validators": [
+    {
+      "id": "validate-parity",
+      "path": "tools/validate-parity/validate-parity.py",
+      "packageScript": "parity",
+      "verifyPath": "corepack pnpm verify -> corepack pnpm parity",
+      "required": true
+    },
+    {
+      "id": "validate-enterprise",
+      "path": "tools/validate-enterprise/validate-enterprise.py",
+      "packageScript": "enterprise:validate",
+      "verifyPath": "corepack pnpm verify -> corepack pnpm parity -> validate-enterprise",
+      "required": true
+    },
+    {
+      "id": "validate-runtime",
+      "path": "tools/validate-runtime/validate-runtime.py",
+      "packageScript": "runtime:validate",
+      "verifyPath": "corepack pnpm verify -> runtime:validate",
+      "required": true
+    },
+    {
+      "id": "validate-compose",
+      "path": "tools/validate-compose/validate-compose.py",
+      "packageScript": "compose:validate",
+      "verifyPath": "corepack pnpm parity -> validate-compose",
+      "required": true
+    }
+  ],
+  "statusIntegrity": {
+    "usf133ClosureAllowed": false,
+    "usf133ClosureClaimed": false,
+    "usf166DoneClaimed": false,
+    "usf167DoneClaimed": false,
+    "usf182DoneClaimed": false,
+    "laneWrapperDoneStatesSatisfySourceIssues": false,
+    "validationPassingAloneIsDone": false,
+    "postMergeReconciliationRequired": true,
+    "downstreamUsf167BlockedUntilUsf166MergedAndReconciled": true
+  },
+  "enterpriseFeatureCompletenessMatrix": [
+    {
+      "feature": "tenant-isolation",
+      "status": "bounded",
+      "capabilityRef": "tenant-isolation"
+    },
+    {
+      "feature": "authorization",
+      "status": "bounded",
+      "capabilityRef": "authorization"
+    },
+    {
+      "feature": "audit-evidence",
+      "status": "bounded",
+      "capabilityRef": "audit-evidence"
+    },
+    {
+      "feature": "config-secrets",
+      "status": "bounded",
+      "capabilityRef": "config-secrets"
+    },
+    {
+      "feature": "data-classification",
+      "status": "bounded",
+      "capabilityRef": "data-classification"
+    },
+    {
+      "feature": "retention-purge",
+      "status": "deferred",
+      "capabilityRef": "retention-purge"
+    },
+    {
+      "feature": "backup-restore",
+      "status": "deferred",
+      "capabilityRef": "backup-restore"
+    },
+    {
+      "feature": "incident-response",
+      "status": "deferred",
+      "capabilityRef": "incident-response"
+    },
+    {
+      "feature": "vulnerability-dependency-posture",
+      "status": "bounded",
+      "capabilityRef": "vulnerability-dependency-posture"
+    },
+    {
+      "feature": "observability",
+      "status": "bounded",
+      "capabilityRef": "observability"
+    },
+    {
+      "feature": "operator-admin-access",
+      "status": "bounded",
+      "capabilityRef": "operator-admin-access"
+    },
+    {
+      "feature": "provider-supplier-boundaries",
+      "status": "deferred",
+      "capabilityRef": "provider-supplier-boundaries"
+    },
+    {
+      "feature": "privacy-data-minimisation",
+      "status": "bounded",
+      "capabilityRef": "privacy-data-minimisation"
+    }
+  ],
+  "operationalReadinessPosture": {
+    "readinessChecks": "bounded-local-proof-or-deferred-per-service-row",
+    "retryTimeoutBehaviour": "bounded-local-proof-or-deferred-per-service-row",
+    "failClosedMode": "bounded-local-proof-or-deferred-per-service-row",
+    "safeTeardown": "bounded-local-proof-or-deferred-per-service-row",
+    "structuredLogging": "bounded-local-proof-or-deferred-per-service-row",
+    "tracingCorrelation": "bounded-local-proof-or-deferred-per-service-row",
+    "metrics": "bounded-local-proof-or-deferred-per-service-row",
+    "auditEvents": "bounded-local-proof-or-deferred-per-service-row",
+    "redaction": "bounded-local-proof-or-deferred-per-service-row"
+  },
+  "parallelWorkSafety": {
+    "laneOrSourceScopedEvidenceRows": true,
+    "appendEvidenceRowsDoNotOverwrite": true,
+    "preserveExistingEvidenceIds": true,
+    "crossLaneDependenciesLinkedExplicitly": true,
+    "sharedFilesLikelyToConflict": [
+      "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "docs/architecture/usf-dev-foundation-gap-register.md",
+      "docs/architecture/compose-service-disposition-closure-matrix.json",
+      "tools/validate-parity/validate-parity.py",
+      "tools/validate-enterprise/validate-enterprise.py"
+    ]
+  },
+  "readinessClaimsAllowed": [
+    "closure-tier-evidence-gate-defined",
+    "source-issue-status-integrity-validation",
+    "service-disposition-evidence-organization",
+    "enterprise-evidence-organization-support"
+  ],
+  "readinessClaimsProhibited": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ],
+  "plantedDefectRequirements": [
+    "missing closure-tier evidence",
+    "missing required service disposition",
+    "missing proof command",
+    "missing validator linkage",
+    "missing non-equivalence boundary",
+    "false closure of USF-133",
+    "false Done state for source issue",
+    "readiness overclaim"
+  ],
+  "externalFrameworkAlignment": [
+    {
+      "frameworkId": "iso27001-isms-support",
+      "frameworkName": "ISO/IEC 27001 ISMS evidence posture",
+      "posture": "supporting-evidence-organization-only",
+      "evidencePurpose": "Organize owner, risk, control, evidence, exception, and non-claim fields for future Statement of Applicability support.",
+      "mappedEvidenceSections": [
+        "soaSupportMappings",
+        "evidenceRegister",
+        "enterpriseExceptionRegister",
+        "negativeAssurance"
+      ],
+      "complianceClaimed": false,
+      "certificationClaimed": false,
+      "readinessClaimed": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "frameworkId": "nist-csf-govern-risk-security-outcomes",
+      "frameworkName": "NIST CSF-style governance, risk, and security outcome mapping",
+      "posture": "inspired-outcome-mapping-only",
+      "evidencePurpose": "Record governance, risk treatment, protection, detection, response, and recovery evidence posture without claiming NIST CSF compliance.",
+      "mappedEvidenceSections": [
+        "requiredCapabilityDispositionRefs",
+        "securityPrivacyByDesignCoverage",
+        "operationalExcellenceCoverage"
+      ],
+      "complianceClaimed": false,
+      "certificationClaimed": false,
+      "readinessClaimed": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "frameworkId": "nist-ssdf-secure-software-development-evidence",
+      "frameworkName": "NIST SSDF-style secure software development evidence",
+      "posture": "inspired-secure-sdlc-evidence-only",
+      "evidencePurpose": "Track code review, threat model, dependency, scanning, vulnerability exception, release approval, and provenance posture without claiming SSDF conformance.",
+      "mappedEvidenceSections": [
+        "secureSdlcPosture",
+        "enterpriseExceptionRegister",
+        "futureReadinessEvidencePackageShape"
+      ],
+      "complianceClaimed": false,
+      "certificationClaimed": false,
+      "readinessClaimed": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "frameworkId": "owasp-asvs-application-security-categories",
+      "frameworkName": "OWASP ASVS-style application security verification categories",
+      "posture": "category-mapping-only",
+      "evidencePurpose": "Keep application security verification categories visible for future assessment without claiming ASVS conformance.",
+      "mappedEvidenceSections": [
+        "securityPrivacyByDesignCoverage",
+        "secureSdlcPosture",
+        "enterpriseCustomerFeaturePosture"
+      ],
+      "complianceClaimed": false,
+      "certificationClaimed": false,
+      "readinessClaimed": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "assuranceMaturityModel": {
+    "allowedLevels": [
+      "not-assessed",
+      "designed",
+      "documented",
+      "implemented",
+      "tested",
+      "integration-proven",
+      "operationally-rehearsed",
+      "production-approved"
+    ],
+    "defaultForUnprovenRows": "documented",
+    "higherLevelsRequireEvidence": [
+      "tested",
+      "integration-proven",
+      "operationally-rehearsed",
+      "production-approved"
+    ],
+    "productionApprovedAllowedInUsf166": false,
+    "validationRule": "USF-PARITY-032",
+    "nonClaims": [
+      "full-dev-readiness",
+      "test-readiness",
+      "staging-readiness",
+      "production-readiness",
+      "deployment-readiness",
+      "live-provider-readiness",
+      "soc-readiness",
+      "iso27001-certification",
+      "enterprise-production-readiness",
+      "full-react-parity-readiness",
+      "usf-133-closure"
+    ]
+  },
+  "environmentPromotionStandardDependency": {
+    "issueId": "USF-193",
+    "status": "formal-tracker-open",
+    "purpose": "USF-193 will define the canonical dev/test/staging/production promotion standard. PR #133 only records that the closure-tier gate can consume it later.",
+    "requiredForPr133Acceptance": false,
+    "requiredBeforeReadinessClaim": true,
+    "implementedByThisPr": false,
+    "nonClaims": [
+      "full-dev-readiness",
+      "test-readiness",
+      "staging-readiness",
+      "production-readiness",
+      "deployment-readiness",
+      "live-provider-readiness",
+      "soc-readiness",
+      "iso27001-certification",
+      "enterprise-production-readiness",
+      "full-react-parity-readiness",
+      "usf-133-closure"
+    ]
+  },
+  "enterpriseExceptionRegister": [
+    {
+      "id": "exception-service-redis",
+      "targetType": "service",
+      "targetId": "redis",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation; Dev in-memory cache is not equivalent to Redis eviction, persistence, or wire protocol behaviour.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-meilisearch",
+      "targetType": "service",
+      "targetId": "meilisearch",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation; Dev in-memory search is not equivalent to Meilisearch ranking, indexing, or persistence.",
+      "owner": "platform-search-foundation",
+      "riskOwner": "platform-search-risk-owner",
+      "controlOwner": "platform-search-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-clickhouse",
+      "targetType": "service",
+      "targetId": "clickhouse",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-pgadmin",
+      "targetType": "service",
+      "targetId": "pgadmin",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; pgAdmin database inspection/admin workflow is not equivalent to application-level database tests.",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-sonar-postgres",
+      "targetType": "service",
+      "targetId": "sonar-postgres",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-sonar-oidc-plugin",
+      "targetType": "service",
+      "targetId": "sonar-oidc-plugin",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; Plugin fetch mechanics are deployment details, not independent semantic authority.",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-sonarqube",
+      "targetType": "service",
+      "targetId": "sonarqube",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; USF-171 service-semantic proof for SonarQube unresolved issues, quality gate scope, security hotspots, exceptions, and operator console access remains deferred.; Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history.; Lane 3 preserves the split between mandatory local deterministic verification and deferred SonarQube service proof; local validators are not equivalent to SonarQube service-operating evidence.; SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-mock-oidc",
+      "targetType": "service",
+      "targetId": "mock-oidc",
+      "disposition": "covered-by-usf-runtime",
+      "reason": "accepted implementation/proof decision for deferred service depth; Mock OIDC cannot prove live external identity provider readiness.",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "treatmentPath": "document-non-equivalence-boundary",
+      "followUpIssue": "USF-185",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "visible-non-equivalence-boundary",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-localstack",
+      "targetType": "service",
+      "targetId": "localstack",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; LocalStack emulation is not live external provider evidence.",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-wiremock",
+      "targetType": "service",
+      "targetId": "wiremock",
+      "disposition": "substituted-partial",
+      "reason": "current runtime proof stronger than catalogue classification for this service; WireMock proves configured mock behaviour only.",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-alertmanager",
+      "targetType": "service",
+      "targetId": "alertmanager",
+      "disposition": "deferred",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-alloy",
+      "targetType": "service",
+      "targetId": "alloy",
+      "disposition": "deferred",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-windmill-postgres",
+      "targetType": "service",
+      "targetId": "windmill-postgres",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-windmill-redis",
+      "targetType": "service",
+      "targetId": "windmill-redis",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-windmill",
+      "targetType": "service",
+      "targetId": "windmill",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation; Windmill is platform/operator automation and is not a Temporal substitute.",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-windmill-worker",
+      "targetType": "service",
+      "targetId": "windmill-worker",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-temporal-postgres",
+      "targetType": "service",
+      "targetId": "temporal-postgres",
+      "disposition": "substituted-partial",
+      "reason": "accepted implementation/proof decision for deferred service depth; USF dev Temporal currently uses postgres service; separate Temporal database remains an isolation decision.",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-temporal-ui",
+      "targetType": "service",
+      "targetId": "temporal-ui",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-pgbackrest",
+      "targetType": "service",
+      "targetId": "pgbackrest",
+      "disposition": "deferred",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-clamav",
+      "targetType": "service",
+      "targetId": "clamav",
+      "disposition": "deferred",
+      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation; Shared scanning engine is valid only when queues, files, scan results, and evidence are environment scoped.",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-sentry",
+      "targetType": "service",
+      "targetId": "sentry",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; USF-170 service-semantic proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator console access remains deferred.; React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.; Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance.; Lane 3 records Sentry as a profile-gated shared error-assurance control plane only where Sentry semantics are claimed; local logs are not equivalent to Sentry service semantics.; Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-caddy",
+      "targetType": "service",
+      "targetId": "caddy",
+      "disposition": "requires-human-decision",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-166",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-platform-api",
+      "targetType": "service",
+      "targetId": "platform-api",
+      "disposition": "covered-by-usf-runtime",
+      "reason": "future implementation authority if this historical service becomes in scope; Historical React runtime services are not USF implementation authority.; Runtime application code is outside this foundation-scope Compose classification.",
+      "owner": "platform-architecture-foundation",
+      "riskOwner": "platform-architecture-risk-owner",
+      "controlOwner": "platform-architecture-control-owner",
+      "treatmentPath": "document-non-equivalence-boundary",
+      "followUpIssue": "USF-185",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "visible-non-equivalence-boundary",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-react-app",
+      "targetType": "service",
+      "targetId": "react-app",
+      "disposition": "out-of-foundation-scope",
+      "reason": "current runtime proof stronger than catalogue classification for this service; future implementation authority if this historical service becomes in scope; Historical React UI service is not the USF gateway or forward-auth semantic authority.; Runtime UI code is outside this foundation-scope Compose classification.",
+      "owner": "platform-architecture-foundation",
+      "riskOwner": "platform-architecture-risk-owner",
+      "controlOwner": "platform-architecture-control-owner",
+      "treatmentPath": "document-non-equivalence-boundary",
+      "followUpIssue": "USF-133",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "visible-non-equivalence-boundary",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-capability-retention-purge",
+      "targetType": "capability",
+      "targetId": "retention-purge",
+      "disposition": "deferred",
+      "reason": "Retention, purge, and legal-hold behaviour remain source-depth work.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-161",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-capability-backup-restore",
+      "targetType": "capability",
+      "targetId": "backup-restore",
+      "disposition": "deferred",
+      "reason": "pgBackRest and restore evidence remain deferred and no backup/restore readiness is claimed.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-177",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-capability-incident-response",
+      "targetType": "capability",
+      "targetId": "incident-response",
+      "disposition": "deferred",
+      "reason": "Incident workflow evidence is posture-only until alerting/dashboard/incident operating proof exists.",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-159",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-capability-provider-supplier-boundaries",
+      "targetType": "capability",
+      "targetId": "provider-supplier-boundaries",
+      "disposition": "deferred",
+      "reason": "Supplier/live-provider boundary evidence remains outside the current local foundation proof.",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "treatmentPath": "defer",
+      "followUpIssue": "USF-167",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "blocks-usf-133-closure-tier",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "dev-readiness": true,
+        "test-readiness": true,
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "securityPrivacyByDesignCoverage": [
+    {
+      "area": "tenant-isolation",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "followUpIssue": "USF-189",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "authorization",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-141",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "privileged-access",
+      "status": "bounded",
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "followUpIssue": "USF-169",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "auditability",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-143",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "encryption-secret-posture",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-145",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "data-classification",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
+      "followUpIssue": "USF-168",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "retention-purge",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "followUpIssue": "USF-161",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "privacy-data-minimisation",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-190",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "data-residency",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "supplier-subprocessor-boundary",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "operationalExcellenceCoverage": [
+    {
+      "area": "observability",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "followUpIssue": "USF-159",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "slo-sla-posture",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "alerting",
+      "status": "deferred",
+      "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
+      "followUpIssue": "USF-159",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "incident-response",
+      "status": "deferred",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-159",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "backup-restore",
+      "status": "deferred",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "followUpIssue": "USF-177",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "dr-rpo-rto",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "migration-rollback",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "runbook-ownership",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "support-escalation",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "customer-impact-assessment",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "secureSdlcPosture": [
+    {
+      "area": "code-review-evidence",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "threat-model-evidence",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-190",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "dependency-pinning",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-189",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "sbom-posture",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "sast-scanning",
+      "status": "deferred",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-171",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "dependency-scanning",
+      "status": "bounded",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-171",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "container-scanning",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "secret-scanning",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "vulnerability-exceptions",
+      "status": "deferred",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "followUpIssue": "USF-171",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "patch-sla",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "release-approval",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "area": "artifact-provenance-signing",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "assuranceMaturityLevel": "documented",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "enterpriseCustomerFeaturePosture": [
+    {
+      "feature": "sso-saml-oidc",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "scim-user-lifecycle",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "rbac-abac",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "audit-log-export",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "tenant-admin-controls",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "support-access-approval",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "ip-allowlisting-private-networking",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "customer-managed-keys",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "custom-retention",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "data-export-deletion",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "webhook-signing",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "feature": "admin-activity-reporting",
+      "status": "deferred",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "production-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "implementedByUsf166": false,
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "futureReadinessEvidencePackageShape": {
+    "requiredFields": [
+      "environment",
+      "commitSha",
+      "prRef",
+      "issueId",
+      "evidenceId",
+      "validationCommands",
+      "riskDecision",
+      "exceptionList",
+      "approver",
+      "reviewExpiry",
+      "nonClaims"
+    ],
+    "requiresExceptionRegister": true,
+    "requiresNonClaims": true,
+    "requiresApprovalForHigherReadiness": true,
+    "validationRule": "USF-PARITY-037"
+  },
+  "negativeAssurance": {
+    "notProven": [
+      "USF-133 closure",
+      "full dev readiness",
+      "test readiness",
+      "staging readiness",
+      "production readiness",
+      "deployment readiness",
+      "live-provider readiness",
+      "SOC readiness",
+      "ISO/IEC 27001 certification",
+      "enterprise production readiness",
+      "full React parity",
+      "OWASP ASVS conformance",
+      "NIST CSF compliance",
+      "NIST SSDF conformance"
+    ],
+    "failIfImpliedClaims": [
+      "usf-133-closure",
+      "full-dev-readiness",
+      "test-readiness",
+      "staging-readiness",
+      "production-readiness",
+      "deployment-readiness",
+      "live-provider-readiness",
+      "soc-readiness",
+      "iso27001-certification",
+      "enterprise-production-readiness",
+      "full-react-parity-readiness",
+      "asvs-conformance",
+      "nist-csf-compliance",
+      "nist-ssdf-conformance"
+    ],
+    "partialEvidenceCannotSatisfyClosure": true,
+    "validationRule": "USF-PARITY-038"
+  }
+}

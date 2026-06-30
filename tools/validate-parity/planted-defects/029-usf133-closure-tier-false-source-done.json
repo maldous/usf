@@ -1,0 +1,9 @@
+{
+  "description": "USF-133 closure-tier evidence gate falsely claims a source issue Done state.",
+  "expectedRule": "USF-PARITY-029",
+  "mutation": {
+    "closureTierSetStatusIntegrity": {
+      "usf166DoneClaimed": true
+    }
+  }
+}
