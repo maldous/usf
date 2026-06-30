@@ -1,0 +1,9 @@
+{
+  "id": "024-sentry-boundary-readiness-overclaim",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "sentryBoundarySet": {
+    "readinessClaimsAllowed": [
+      "sentry-readiness"
+    ]
+  }
+}

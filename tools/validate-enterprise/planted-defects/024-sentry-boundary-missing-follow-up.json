@@ -1,0 +1,8 @@
+{
+  "id": "024-sentry-boundary-missing-follow-up",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "sentryBoundarySet": {
+    "followUpIssue": "USF-196",
+    "remainingProofBoundary.issue": "USF-196"
+  }
+}

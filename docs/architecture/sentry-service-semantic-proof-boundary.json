@@ -1,0 +1,161 @@
+{
+  "id": "usf-196-sentry-service-semantic-proof-boundary",
+  "title": "USF-196 Sentry Service Semantic Proof Boundary",
+  "sourceIssue": "USF-196",
+  "followUpIssue": "USF-205",
+  "sourceDispositionIssue": "USF-170",
+  "laneIssue": "USF-187",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "parentIssue": "USF-133",
+  "status": "reclassified-deferred-with-owner",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "sentryErrorMonitoringDispositionMatrix": "docs/architecture/sentry-error-monitoring-disposition-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "serviceIds": [
+    "sentry"
+  ],
+  "reactServiceIds": [
+    "sentry-cleanup",
+    "sentry-clickhouse",
+    "sentry-events-consumer",
+    "sentry-kafka",
+    "sentry-kafka-init",
+    "sentry-memcached",
+    "sentry-migrate",
+    "sentry-post-process-forwarder",
+    "sentry-postgres",
+    "sentry-redis",
+    "sentry-relay",
+    "sentry-snuba-api",
+    "sentry-snuba-errors",
+    "sentry-snuba-migrate",
+    "sentry-snuba-replacer",
+    "sentry-taskbroker",
+    "sentry-taskscheduler",
+    "sentry-taskworker",
+    "sentry-web"
+  ],
+  "issueLinks": [
+    "USF-196",
+    "USF-205",
+    "USF-170",
+    "USF-187",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "reclassification": {
+    "from": "requires-human-decision",
+    "to": "explicit-deferred-service-proof",
+    "decisionAcceptedDoesNotMeanWorkComplete": true,
+    "serviceSemanticProofImplemented": false,
+    "sentryServiceReadinessClaim": false,
+    "liveMonitoringReadinessClaim": false,
+    "incidentReadinessClaim": false,
+    "alertingReadinessClaim": false,
+    "localObservabilityEquivalentToSentryService": false,
+    "repositoryEvidence": [
+      "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json#sentry",
+      "docs/architecture/compose-service-disposition-closure-matrix.json#sentry",
+      "docs/architecture/sentry-error-monitoring-disposition-matrix.json",
+      "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "tools/validate-enterprise/validate-enterprise.py"
+    ]
+  },
+  "remainingProofBoundary": {
+    "issue": "USF-205",
+    "owner": "platform-observability-foundation",
+    "riskOwner": "platform-observability-risk-owner",
+    "controlOwner": "platform-observability-control-owner",
+    "riskStatement": "Sentry service semantics could be overclaimed from generated Compose metadata or local deterministic observability proof without deterministic composed event capture, issue lifecycle, alert handoff, incident evidence, and operator-console proof.",
+    "treatment": "defer actual Sentry composed event capture and operator-console proof to USF-205 while preserving non-equivalence and readiness non-claims",
+    "reviewDate": "2026-09-30",
+    "requiredEvidence": [
+      "profile-gated Sentry service readiness proof",
+      "event capture and ingestion evidence",
+      "redaction and tenant-safe label evidence",
+      "retention and purge evidence",
+      "alert handoff evidence",
+      "incident evidence boundary",
+      "operator console access and audit evidence",
+      "secret, supplier, and privacy boundary evidence"
+    ]
+  },
+  "eventMonitoringBoundary": {
+    "eventCaptureStatus": "deferred-to-USF-205",
+    "redactionStatus": "deferred-to-USF-205",
+    "tenantSafeLabelStatus": "deferred-to-USF-205",
+    "retentionStatus": "deferred-to-USF-205",
+    "alertHandoffStatus": "deferred-to-USF-205",
+    "incidentEvidenceStatus": "deferred-to-USF-205",
+    "owner": "platform-observability-foundation",
+    "riskOwner": "platform-observability-risk-owner",
+    "controlOwner": "platform-observability-control-owner",
+    "reviewDate": "2026-09-30"
+  },
+  "operatorAccessAuditRetentionSupplierBoundary": {
+    "operatorAccessBoundary": "Sentry operator console access is not proven by USF-196 and remains deferred to USF-205.",
+    "authRequirement": "operator-auth-required-before-console-readiness",
+    "auditRequirement": "operator-action-audit-required-before-console-readiness",
+    "retentionBoundary": "No Sentry events, issue payloads, stack traces, alert payloads, or incident records are retained as readiness evidence by USF-196.",
+    "secretBoundary": "No Sentry DSN, token, raw endpoint, provider payload, event payload, stack trace, or connection string is introduced by USF-196.",
+    "supplierBoundary": "Local generated Compose service metadata and local observability proof are not supplier or live-provider evidence.",
+    "incidentBoundary": "No production incident, alert handoff, escalation, vulnerability-response, or corrective-action workflow is proven by USF-196."
+  },
+  "localObservabilityGate": {
+    "repositoryValidationRequired": true,
+    "sentryServiceEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "Repository observability proof and validation commands remain mandatory local deterministic verification evidence, but they are not equivalent to Sentry event ingestion, issue lifecycle, dashboards, alert handoff, incident workflows, retention, or operator-console operations.",
+    "commands": [
+      "corepack pnpm verify",
+      "corepack pnpm parity",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ]
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-196-soa-sentry-proof-boundary",
+    "usf-196-evidence-sentry-proof-boundary",
+    "usf-196-threat-sentry-overclaim",
+    "usf-196-access-sentry-proof-boundary",
+    "usf-196-incident-vulnerability-sentry-proof-boundary",
+    "usf-196-privacy-sentry-proof-boundary"
+  ],
+  "readinessClaimsAllowed": [
+    "sentry-service-proof-boundary-recorded",
+    "sentry-service-proof-deferred-to-USF-205",
+    "local-observability-non-equivalence-recorded"
+  ],
+  "readinessClaimsProhibited": [
+    "sentry-readiness",
+    "error-monitoring-readiness",
+    "live-monitoring-readiness",
+    "incident-readiness",
+    "alerting-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ]
+}

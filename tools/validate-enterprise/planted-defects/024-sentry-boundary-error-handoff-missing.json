@@ -1,0 +1,15 @@
+{
+  "id": "024-sentry-boundary-error-handoff-missing",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "sentryErrorSet": {
+    "remainingProofIssue": "USF-196",
+    "issueLinks": [
+      "USF-170",
+      "USF-196",
+      "USF-187",
+      "USF-184",
+      "USF-192",
+      "USF-133"
+    ]
+  }
+}

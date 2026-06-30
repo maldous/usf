@@ -38,6 +38,7 @@ GATEWAY_CLICKTHROUGH_MATRIX_PATH = Path("docs/architecture/gateway-clickthrough-
 STATIC_ANALYSIS_MATRIX_PATH = Path("docs/architecture/static-analysis-quality-gate-disposition-matrix.json")
 SONARQUBE_PROOF_BOUNDARY_PATH = Path("docs/architecture/sonarqube-service-semantic-proof-boundary.json")
 SENTRY_ERROR_MATRIX_PATH = Path("docs/architecture/sentry-error-monitoring-disposition-matrix.json")
+SENTRY_PROOF_BOUNDARY_PATH = Path("docs/architecture/sentry-service-semantic-proof-boundary.json")
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 PACKAGE_PATH = Path("package.json")
@@ -67,6 +68,7 @@ RULES = {
     "USF-ENTERPRISE-021": ("blocking", "static-analysis quality-gate disposition is incomplete or unsafe"),
     "USF-ENTERPRISE-022": ("blocking", "Sentry error-monitoring disposition is incomplete or unsafe"),
     "USF-ENTERPRISE-023": ("blocking", "SonarQube service proof boundary is incomplete or unsafe"),
+    "USF-ENTERPRISE-024": ("blocking", "Sentry service proof boundary is incomplete or unsafe"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -457,6 +459,25 @@ SENTRY_ERROR_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "incident-readiness",
     "alerting-readiness",
 }
+SENTRY_BOUNDARY_REQUIRED_EVIDENCE_ROWS = {
+    "soaSupportMappings": {"usf-196-soa-sentry-proof-boundary"},
+    "evidenceRegister": {"usf-196-evidence-sentry-proof-boundary"},
+    "threatModelAbuseCaseRegister": {"usf-196-threat-sentry-overclaim"},
+    "accessReviewPrivilegedOperationPosture": {"usf-196-access-sentry-proof-boundary"},
+    "incidentVulnerabilityManagementEvidence": {"usf-196-incident-vulnerability-sentry-proof-boundary"},
+    "privacyDataMinimisationPosture": {"usf-196-privacy-sentry-proof-boundary"},
+}
+SENTRY_BOUNDARY_REQUIRED_ISSUES = {
+    "USF-196",
+    "USF-205",
+    "USF-170",
+    "USF-187",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
+SENTRY_BOUNDARY_REQUIRED_SERVICES = {"sentry"}
+SENTRY_BOUNDARY_PROHIBITED_CLAIMS = SENTRY_ERROR_PROHIBITED_CLAIMS | {"usf-133-closure"}
 
 
 def missing_required_non_claims(row: dict[str, Any]) -> set[str]:
@@ -644,6 +665,9 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         read_json(SONARQUBE_PROOF_BOUNDARY_PATH) if (ROOT / SONARQUBE_PROOF_BOUNDARY_PATH).exists() else None
     )
     sentry_error_matrix = read_json(SENTRY_ERROR_MATRIX_PATH) if (ROOT / SENTRY_ERROR_MATRIX_PATH).exists() else None
+    sentry_proof_boundary = (
+        read_json(SENTRY_PROOF_BOUNDARY_PATH) if (ROOT / SENTRY_PROOF_BOUNDARY_PATH).exists() else None
+    )
     environment_promotion = (
         read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
     )
@@ -674,6 +698,10 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         sentry_error_matrix = None
     elif sentry_error_matrix is not None:
         sentry_error_matrix = apply_sentry_error_defect(sentry_error_matrix, defect)
+    if defect.get("removeSentryBoundary"):
+        sentry_proof_boundary = None
+    elif sentry_proof_boundary is not None:
+        sentry_proof_boundary = apply_sentry_boundary_defect(sentry_proof_boundary, defect)
     if environment_promotion is not None:
         environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
     package = apply_package_defect(package, defect)
@@ -691,6 +719,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "staticAnalysisMatrix": static_analysis_matrix,
         "sonarqubeProofBoundary": sonarqube_proof_boundary,
         "sentryErrorMatrix": sentry_error_matrix,
+        "sentryProofBoundary": sentry_proof_boundary,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
     }
@@ -889,6 +918,15 @@ def apply_sentry_error_defect(matrix: dict[str, Any], defect: dict[str, Any]) ->
     for key, value in defect.get("sentryErrorSet", {}).items():
         set_nested_value(out, key, value)
     for key in defect.get("sentryErrorDrop", []):
+        drop_nested_value(out, key)
+    return out
+
+
+def apply_sentry_boundary_defect(boundary: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(boundary)
+    for key, value in defect.get("sentryBoundarySet", {}).items():
+        set_nested_value(out, key, value)
+    for key in defect.get("sentryBoundaryDrop", []):
         drop_nested_value(out, key)
     return out
 
@@ -2526,6 +2564,172 @@ def check_sentry_error_monitoring_disposition(F: Findings, state: dict[str, Any]
             F.add("USF-ENTERPRISE-022", "enterprise-evidence-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
 
+def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> None:
+    boundary = state.get("sentryProofBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-ENTERPRISE-024", str(SENTRY_PROOF_BOUNDARY_PATH), "Sentry proof boundary is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-196",
+        "followUpIssue": "USF-205",
+        "sourceDispositionIssue": "USF-170",
+        "laneIssue": "USF-187",
+        "parentIssue": "USF-133",
+        "status": "reclassified-deferred-with-owner",
+        "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
+        "closureMatrix": str(CLOSURE_MATRIX_PATH),
+        "sentryErrorMonitoringDispositionMatrix": str(SENTRY_ERROR_MATRIX_PATH),
+        "enterpriseEvidenceModel": str(MODEL_PATH),
+        "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if boundary.get(key) != expected:
+            F.add("USF-ENTERPRISE-024", key, f"expected {expected!r}")
+
+    if set(boundary.get("serviceIds", [])) != SENTRY_BOUNDARY_REQUIRED_SERVICES:
+        F.add("USF-ENTERPRISE-024", "serviceIds", "Sentry boundary service ids are incomplete")
+    if len(boundary.get("reactServiceIds", [])) < 10:
+        F.add("USF-ENTERPRISE-024", "reactServiceIds", "Sentry boundary must list React Sentry service cluster rows")
+    if SENTRY_BOUNDARY_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-024", "issueLinks", "Sentry boundary issue links are incomplete")
+    if REQUIRED_NON_CLAIMS - set(boundary.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-024", "nonClaims", "Sentry boundary non-claims are incomplete")
+    if SENTRY_BOUNDARY_PROHIBITED_CLAIMS - set(boundary.get("readinessClaimsProhibited", [])):
+        F.add("USF-ENTERPRISE-024", "readinessClaimsProhibited", "Sentry boundary prohibited claims are incomplete")
+    if SENTRY_BOUNDARY_PROHIBITED_CLAIMS & set(boundary.get("readinessClaimsAllowed", [])):
+        F.add("USF-ENTERPRISE-024", "readinessClaimsAllowed", "Sentry boundary allows a prohibited readiness claim")
+
+    reclassification = boundary.get("reclassification", {})
+    if not isinstance(reclassification, dict):
+        F.add("USF-ENTERPRISE-024", "reclassification", "Sentry reclassification must be an object")
+    else:
+        expected_reclassification = {
+            "from": "requires-human-decision",
+            "to": "explicit-deferred-service-proof",
+            "decisionAcceptedDoesNotMeanWorkComplete": True,
+            "serviceSemanticProofImplemented": False,
+            "sentryServiceReadinessClaim": False,
+            "liveMonitoringReadinessClaim": False,
+            "incidentReadinessClaim": False,
+            "alertingReadinessClaim": False,
+            "localObservabilityEquivalentToSentryService": False,
+        }
+        for key, expected in expected_reclassification.items():
+            observed = reclassification.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-ENTERPRISE-024", f"reclassification.{key}", f"expected {expected!r}")
+        if len(reclassification.get("repositoryEvidence", [])) < 5:
+            F.add("USF-ENTERPRISE-024", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
+
+    remaining = boundary.get("remainingProofBoundary", {})
+    if not isinstance(remaining, dict):
+        F.add("USF-ENTERPRISE-024", "remainingProofBoundary", "remaining proof boundary must be an object")
+    else:
+        expected_remaining = {
+            "issue": "USF-205",
+            "owner": "platform-observability-foundation",
+            "riskOwner": "platform-observability-risk-owner",
+            "controlOwner": "platform-observability-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_remaining.items():
+            if remaining.get(key) != expected:
+                F.add("USF-ENTERPRISE-024", f"remainingProofBoundary.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "requiredEvidence"):
+            if remaining.get(field) in (None, "", []):
+                F.add("USF-ENTERPRISE-024", f"remainingProofBoundary.{field}", "remaining proof field is required")
+        if len(remaining.get("requiredEvidence", [])) < 6:
+            F.add("USF-ENTERPRISE-024", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
+
+    event_boundary = boundary.get("eventMonitoringBoundary", {})
+    for field in (
+        "eventCaptureStatus",
+        "redactionStatus",
+        "tenantSafeLabelStatus",
+        "retentionStatus",
+        "alertHandoffStatus",
+        "incidentEvidenceStatus",
+    ):
+        if event_boundary.get(field) != "deferred-to-USF-205":
+            F.add("USF-ENTERPRISE-024", f"eventMonitoringBoundary.{field}", "event monitoring boundary must defer to USF-205")
+    for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
+        if not event_boundary.get(field):
+            F.add("USF-ENTERPRISE-024", f"eventMonitoringBoundary.{field}", "event monitoring owner metadata is required")
+
+    operator = boundary.get("operatorAccessAuditRetentionSupplierBoundary", {})
+    for field in (
+        "operatorAccessBoundary",
+        "authRequirement",
+        "auditRequirement",
+        "retentionBoundary",
+        "secretBoundary",
+        "supplierBoundary",
+        "incidentBoundary",
+    ):
+        if not operator.get(field):
+            F.add("USF-ENTERPRISE-024", f"operatorAccessAuditRetentionSupplierBoundary.{field}", "operator boundary field is required")
+
+    local_gate = boundary.get("localObservabilityGate", {})
+    if local_gate.get("repositoryValidationRequired") is not True:
+        F.add("USF-ENTERPRISE-024", "localObservabilityGate.repositoryValidationRequired", "repository validation must remain required")
+    if local_gate.get("sentryServiceEquivalent") is not False:
+        F.add("USF-ENTERPRISE-024", "localObservabilityGate.sentryServiceEquivalent", "local observability proof must not be Sentry service equivalent")
+    if not local_gate.get("substitutionNonEquivalenceBoundary"):
+        F.add("USF-ENTERPRISE-024", "localObservabilityGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+    if "python3 tools/validate-enterprise/validate-enterprise.py all --json" not in set(local_gate.get("commands", [])):
+        F.add("USF-ENTERPRISE-024", "localObservabilityGate.commands", "enterprise validation command is required")
+
+    declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
+    required_evidence = set().union(*SENTRY_BOUNDARY_REQUIRED_EVIDENCE_ROWS.values())
+    if declared_evidence != required_evidence:
+        F.add("USF-ENTERPRISE-024", "enterpriseEvidenceRefs", "Sentry boundary enterprise evidence refs are incomplete")
+
+    closure_rows = {
+        row.get("service_id"): row.get("closure_evidence", {})
+        for row in (state.get("closureMatrix") or {}).get("rows", [])
+        if isinstance(row, dict)
+    }
+    evidence = closure_rows.get("sentry")
+    if not evidence:
+        F.add("USF-ENTERPRISE-024", "closureMatrix.sentry", "Sentry service closure row is missing")
+    else:
+        if evidence.get("closure_disposition") != "deferred" or evidence.get("closure_blocking") is not True:
+            F.add("USF-ENTERPRISE-024", "closureMatrix.sentry", "Sentry service row must remain deferred and closure-blocking")
+        if not {"USF-196", "USF-205"}.issubset(set(evidence.get("tracking_issues", []))):
+            F.add("USF-ENTERPRISE-024", "closureMatrix.sentry.tracking_issues", "Sentry service row must link USF-196 and USF-205")
+        if SENTRY_ERROR_PROHIBITED_CLAIMS - set(evidence.get("readiness_claims_prohibited", [])):
+            F.add("USF-ENTERPRISE-024", "closureMatrix.sentry.readiness_claims_prohibited", "Sentry closure row prohibited claims are incomplete")
+
+    sentry_matrix = state.get("sentryErrorMatrix") or {}
+    if sentry_matrix.get("remainingProofIssue") != "USF-205":
+        F.add("USF-ENTERPRISE-024", "sentryErrorMatrix.remainingProofIssue", "Sentry matrix must carry USF-205 as remaining proof")
+    if "USF-205" not in set(sentry_matrix.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-024", "sentryErrorMatrix.issueLinks", "Sentry matrix must link USF-205")
+
+    model = state["model"]
+    for section, row_ids in SENTRY_BOUNDARY_REQUIRED_EVIDENCE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in row_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-024", row_id, f"missing USF-196 enterprise row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-024", row_id, "USF-196 enterprise row non-claims are incomplete")
+            if "USF-196" not in row_text or "USF-205" not in row_text or str(SENTRY_PROOF_BOUNDARY_PATH) not in row_text:
+                F.add("USF-ENTERPRISE-024", row_id, "USF-196 enterprise row lacks issue, follow-up, or boundary linkage")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-024", row_id, "USF-196 enterprise row lacks validation command")
+            if section == "evidenceRegister":
+                for issue in SENTRY_BOUNDARY_REQUIRED_ISSUES:
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-024", row_id, f"evidence row lacks {issue}")
+                if "not prove" not in str(row.get("whatWasNotProven", "")).lower():
+                    F.add("USF-ENTERPRISE-024", row_id, "evidence row must preserve explicit non-proof boundary")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -2549,6 +2753,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_static_analysis_quality_gate_disposition(F, state)
     check_sonarqube_service_proof_boundary(F, state)
     check_sentry_error_monitoring_disposition(F, state)
+    check_sentry_service_proof_boundary(F, state)
     return F
 
 

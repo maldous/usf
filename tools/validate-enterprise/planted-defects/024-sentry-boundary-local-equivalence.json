@@ -1,0 +1,8 @@
+{
+  "id": "024-sentry-boundary-local-equivalence",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "sentryBoundarySet": {
+    "reclassification.localObservabilityEquivalentToSentryService": true,
+    "localObservabilityGate.sentryServiceEquivalent": true
+  }
+}

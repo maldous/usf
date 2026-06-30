@@ -2926,7 +2926,7 @@
         "sentry-cleanup"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2937,7 +2937,7 @@
       "profile_gated": false,
       "generated_in_targets": [],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sentry",
@@ -2946,7 +2946,8 @@
         ],
         "proof_evidence_refs": [
           "usf-187-sentry-error-monitoring-evidence",
-          "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+          "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+          "docs/architecture/sentry-service-semantic-proof-boundary.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2958,23 +2959,29 @@
           "USF-187",
           "USF-184",
           "USF-192",
-          "USF-133"
+          "USF-133",
+          "USF-205"
         ],
         "non_equivalence_boundaries": [
           "React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
           "Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance.",
           "Lane 3 records Sentry as a profile-gated shared error-assurance control plane only where Sentry semantics are claimed; local logs are not equivalent to Sentry service semantics.",
-          "Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness."
+          "Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+          "USF-196 records local observability proof as non-equivalent to Sentry service readiness, event ingestion, issue lifecycle, alert handoff, incident workflow, retention, and operator-console evidence.",
+          "Actual Sentry service proof remains deferred to USF-205 and must not be inferred from USF-170, USF-196, generated Compose metadata, or local observability validation."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
+          "USF-205 service-semantic proof for Sentry service readiness, event capture, redaction, tenant-safe labels, retention, alert handoff, incident evidence, and operator console access remains deferred after USF-196 records the bounded proof boundary.",
           "future operator console SSO/clickthrough and privileged access proof",
-          "USF-196 service-semantic proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator console access remains deferred."
+          "live monitoring, supplier, and production incident evidence remain unproven"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
-          "service-disposition-classification"
+          "service-disposition-classification",
+          "sentry-service-proof-boundary-recorded",
+          "sentry-service-proof-deferred-to-USF-205",
+          "local-observability-non-equivalence-recorded"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -2986,7 +2993,13 @@
           "live-provider-readiness",
           "soc-readiness",
           "iso27001-certification",
-          "enterprise-production-readiness"
+          "enterprise-production-readiness",
+          "sentry-readiness",
+          "error-monitoring-readiness",
+          "live-monitoring-readiness",
+          "incident-readiness",
+          "alerting-readiness",
+          "usf-133-closure"
         ],
         "enterprise_evidence_refs": [
           "soa-service-sentry",
@@ -3005,11 +3018,18 @@
           "usf-187-sentry-error-monitoring-incident-vulnerability",
           "usf-187-sentry-error-monitoring-privacy",
           "usf-170-soa-sentry-error-monitoring-disposition",
-          "usf-170-evidence-sentry-error-monitoring-disposition"
+          "usf-170-evidence-sentry-error-monitoring-disposition",
+          "usf-196-soa-sentry-proof-boundary",
+          "usf-196-evidence-sentry-proof-boundary",
+          "usf-196-threat-sentry-overclaim",
+          "usf-196-access-sentry-proof-boundary",
+          "usf-196-incident-vulnerability-sentry-proof-boundary",
+          "usf-196-privacy-sentry-proof-boundary"
         ],
         "tracking_issue_rationale": {
           "USF-170": "bounded Sentry error-monitoring disposition proof and evidence",
-          "USF-196": "Sentry service-semantic proof and operator access depth"
+          "USF-196": "bounded Sentry service-semantic proof boundary and non-equivalence evidence",
+          "USF-205": "actual Sentry composed event capture and operator console proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
