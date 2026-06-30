@@ -44,8 +44,10 @@ acceptance criterion has linked merged evidence, deferred items have linked foll
 non-claims are preserved, and service-disposition rows are closed, deferred with follow-up, or
 explicitly out of scope.
 
-Lane 1 is the only coordinator-approved implementation lane at this point. Lanes 2 through 7
-remain blocked until the coordinator gate records human approval.
+Lane 1 is complete. Lanes 2 through 7 are coordinator-approved for implementation after the
+human approval recorded on USF-192. Approval is bounded by each lane issue and the Lane 1
+enterprise, closure, and evidence gates. USF-133 closure remains blocked until all lane evidence is
+merged and reconciled.
 
 ## Parallel Lane Readiness
 

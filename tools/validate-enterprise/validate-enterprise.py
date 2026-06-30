@@ -60,7 +60,7 @@ REQUIRED_NON_CLAIMS = {
     "full-react-parity-readiness",
 }
 REQUIRED_LANES = {"USF-185", "USF-186", "USF-187", "USF-188", "USF-189", "USF-190", "USF-191"}
-APPROVED_LANES = {"USF-185"}
+APPROVED_LANES = REQUIRED_LANES
 BLOCKED_LANES = REQUIRED_LANES - APPROVED_LANES
 VALIDATOR_ROWS = {
     "validate-spec": "tools/validate-spec/validate-spec.py",
@@ -327,7 +327,7 @@ def check_policy_and_non_claims(F: Findings, state: dict[str, Any]) -> None:
     for lane in APPROVED_LANES:
         row = lane_rows.get(lane, {})
         if row.get("implementationAllowed") is not True:
-            F.add("USF-ENTERPRISE-007", lane, "Lane 1 should be the only implementation-allowed lane")
+            F.add("USF-ENTERPRISE-007", lane, "approved lanes must be implementation-allowed")
     for lane in BLOCKED_LANES:
         row = lane_rows.get(lane, {})
         if row.get("implementationAllowed") is not False:
