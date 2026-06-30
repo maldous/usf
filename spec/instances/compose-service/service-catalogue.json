@@ -8311,7 +8311,7 @@
       ],
       "composeService": {
         "serviceName": "localstack",
-        "image": "localstack/localstack:4.0.4",
+        "image": "localstack/localstack:4.8.1",
         "profiles": [
           "provider-emulation"
         ],

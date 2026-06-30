@@ -3,39 +3,42 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
-  WIREMOCK_ENDPOINT_REF,
-  WIREMOCK_PROVIDER_REGISTRY_ID,
-  WIREMOCK_RUNTIME_PROVIDER_BINDING_ID,
-  WIREMOCK_SDK_PACKAGE,
-  WIREMOCK_SDK_VERSION,
-  WIREMOCK_SERVICE_CATALOGUE_ID,
-  WireMockHttpProviderMock,
-  type WireMockHttpProviderMockEvidence,
-} from "@foundation/adapter-mail";
+  LOCALSTACK_ENDPOINT_REF,
+  LOCALSTACK_PROVIDER_REGISTRY_ID,
+  LOCALSTACK_RUNTIME_PROVIDER_BINDING_ID,
+  LOCALSTACK_SDK_PACKAGES,
+  LOCALSTACK_SDK_VERSION,
+  LOCALSTACK_SERVICE_CATALOGUE_ID,
+  LocalStackCloudEmulatorProofAdapter,
+  type LocalStackCloudEmulatorEvidence,
+} from "@foundation/adapter-resources";
 
-interface WireMockComposedProofResult {
+interface LocalStackComposedProofResult {
   readonly status: "pass";
-  readonly proof: "wiremock-http-provider-mock-composed";
-  readonly issueId: "USF-209";
+  readonly proof: "localstack-cloud-emulator-composed";
+  readonly issueId: "USF-208";
   readonly parentIssueId: "USF-133";
-  readonly predecessorIssueId: "USF-201";
+  readonly predecessorIssueIds: readonly ["USF-201", "USF-209", "USF-210"];
   readonly providerMode: "composed-test";
   readonly environment: "local-test-profile-gated";
   readonly composeTarget: "compose/compose.test.generated.yaml";
-  readonly composeService: "wiremock";
-  readonly proofCommand: "corepack pnpm proof:wiremock";
-  readonly implementedServiceIds: readonly ["wiremock"];
+  readonly composeProfile: "provider-emulation";
+  readonly composeService: "localstack";
+  readonly proofCommand: "corepack pnpm proof:localstack";
+  readonly implementedServiceIds: readonly ["localstack"];
   readonly deferredServiceIds: readonly [];
   readonly followUpIssueRefs: readonly [];
-  readonly resolvedIssueRefs: readonly ["USF-209"];
-  readonly serviceCatalogueServiceId: typeof WIREMOCK_SERVICE_CATALOGUE_ID;
-  readonly providerRegistryId: typeof WIREMOCK_PROVIDER_REGISTRY_ID;
-  readonly bindingId: typeof WIREMOCK_RUNTIME_PROVIDER_BINDING_ID;
-  readonly sdkPackage: typeof WIREMOCK_SDK_PACKAGE;
-  readonly sdkVersion: typeof WIREMOCK_SDK_VERSION;
-  readonly endpointRef: typeof WIREMOCK_ENDPOINT_REF;
-  readonly evidence: WireMockHttpProviderMockEvidence;
-  readonly unavailableEvidence: WireMockHttpProviderMockEvidence;
+  readonly resolvedIssueRefs: readonly ["USF-208"];
+  readonly serviceCatalogueServiceId: typeof LOCALSTACK_SERVICE_CATALOGUE_ID;
+  readonly providerRegistryId: typeof LOCALSTACK_PROVIDER_REGISTRY_ID;
+  readonly bindingId: typeof LOCALSTACK_RUNTIME_PROVIDER_BINDING_ID;
+  readonly sdkPackages: typeof LOCALSTACK_SDK_PACKAGES;
+  readonly sdkVersion: typeof LOCALSTACK_SDK_VERSION;
+  readonly sdkBoundary: "adapter-package-only";
+  readonly endpointRef: typeof LOCALSTACK_ENDPOINT_REF;
+  readonly sourceUse: "official-aws-sdk-v3-localstack-compatible-clients";
+  readonly evidence: LocalStackCloudEmulatorEvidence;
+  readonly unavailableEvidence: LocalStackCloudEmulatorEvidence;
   readonly providerUnavailableChecked: true;
   readonly checks: readonly string[];
   readonly prohibitedClaimsObserved: readonly [];
@@ -56,10 +59,11 @@ interface WireMockComposedProofResult {
 }
 
 const COMPOSE_TARGET = "compose/compose.test.generated.yaml";
-const COMPOSE_SERVICE = "wiremock";
-const PROOF_COMMAND = "corepack pnpm proof:wiremock";
+const COMPOSE_PROFILE = "provider-emulation";
+const COMPOSE_SERVICE = "localstack";
+const PROOF_COMMAND = "corepack pnpm proof:localstack";
 const FORBIDDEN_EVIDENCE_PATTERN =
-  /https?:\/\/|127\.0\.0\.1|0\.0\.0\.0|localhost|token|password|secret|connection_string|stackTrace|at\s+\w+\s+\(|tenant-wiremock|fixture-wiremock|corr-wiremock/i;
+  /https?:\/\/|127\.0\.0\.1|0\.0\.0\.0|localhost|accessKeyId|secretAccessKey|connection_string|stackTrace|at\s+\w+\s+\(|tenant-localstack|corr-localstack|usf-localstack-proof|synthetic-localstack-secret-value|synthetic localstack proof object|synthetic localstack sqs proof|synthetic localstack sns proof/i;
 const PROHIBITED_CLAIMS_OBSERVED = [] as const;
 const NON_CLAIMS = [
   "no-full-dev-readiness",
@@ -117,15 +121,15 @@ function runProcess(command: string, args: readonly string[], timeoutMs = 180000
 }
 
 async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
-  const dir = await mkdtemp(join(tmpdir(), "usf-wiremock-proof-"));
+  const dir = await mkdtemp(join(tmpdir(), "usf-localstack-proof-"));
   const path = join(dir, "compose.override.yaml");
   await writeFile(
     path,
     [
       "services:",
-      "  wiremock:",
+      "  localstack:",
       "    ports: !override",
-      "      - target: 8080",
+      "      - target: 4566",
       '        published: "0"',
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
@@ -144,7 +148,7 @@ async function composeUp(projectName: string, overridePath: string): Promise<voi
   await runProcess("docker", [
     ...composeArgs(projectName, overridePath),
     "--profile",
-    "provider-mocks",
+    COMPOSE_PROFILE,
     "up",
     "-d",
     COMPOSE_SERVICE,
@@ -156,11 +160,11 @@ async function composePort(projectName: string, overridePath: string): Promise<n
     ...composeArgs(projectName, overridePath),
     "port",
     COMPOSE_SERVICE,
-    "8080",
+    "4566",
   ]);
   const match = output.trim().match(/:(\d+)$/);
   if (!match) {
-    throw new Error("wiremock-proof-port-discovery-failed");
+    throw new Error("localstack-proof-port-discovery-failed");
   }
   return Number(match[1]);
 }
@@ -171,7 +175,7 @@ async function composeDown(projectName: string, overridePath: string): Promise<v
     [
       ...composeArgs(projectName, overridePath),
       "--profile",
-      "provider-mocks",
+      COMPOSE_PROFILE,
       "down",
       "--remove-orphans",
     ],
@@ -179,37 +183,40 @@ async function composeDown(projectName: string, overridePath: string): Promise<v
   );
 }
 
-async function proveUnavailable(): Promise<WireMockHttpProviderMockEvidence> {
-  const provider = new WireMockHttpProviderMock({
+async function proveUnavailable(): Promise<LocalStackCloudEmulatorEvidence> {
+  const provider = new LocalStackCloudEmulatorProofAdapter({
     endpoint: "http://127.0.0.1:9",
     readinessTimeoutMs: 1000,
     requestTimeoutMs: 250,
   });
   const evidence = await provider.proveUnavailable();
-  assert(evidence.operationOutcome === "failed-closed", "unavailable WireMock did not fail closed");
-  assert(evidence.failClosedDenials === 1, "unavailable WireMock denial missing");
+  assert(
+    evidence.operationOutcome === "failed-closed",
+    "unavailable LocalStack did not fail closed",
+  );
+  assert(evidence.failClosedDenials === 1, "unavailable LocalStack denial missing");
   return evidence;
 }
 
 function assertSafeEvidence(evidence: unknown): void {
   const text = JSON.stringify(evidence);
   if (FORBIDDEN_EVIDENCE_PATTERN.test(text)) {
-    throw new Error("wiremock-proof-unsafe-evidence");
+    throw new Error("localstack-proof-unsafe-evidence");
   }
 }
 
-export async function runWireMockComposedProof(): Promise<WireMockComposedProofResult> {
-  const projectName = `usf-wiremock-proof-${process.pid}`;
+export async function runLocalStackComposedProof(): Promise<LocalStackComposedProofResult> {
+  const projectName = `usf-localstack-proof-${process.pid}`;
   const override = await writeComposeOverride();
-  let evidence: WireMockHttpProviderMockEvidence | undefined;
-  let unavailableEvidence: WireMockHttpProviderMockEvidence | undefined;
+  let evidence: LocalStackCloudEmulatorEvidence | undefined;
+  let unavailableEvidence: LocalStackCloudEmulatorEvidence | undefined;
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
-    const provider = new WireMockHttpProviderMock({
+    const provider = new LocalStackCloudEmulatorProofAdapter({
       endpoint: `http://127.0.0.1:${port}`,
     });
-    evidence = await provider.proveConfiguredMockBehaviour();
+    evidence = await provider.proveConfiguredCloudEmulatorBehaviour();
     unavailableEvidence = await proveUnavailable();
   } finally {
     try {
@@ -220,80 +227,90 @@ export async function runWireMockComposedProof(): Promise<WireMockComposedProofR
   }
 
   if (!evidence || !unavailableEvidence) {
-    throw new Error("wiremock-proof-missing-evidence");
+    throw new Error("localstack-proof-missing-evidence");
   }
-  assert(evidence.sdkBackedAdminClientChecked, "WireMock SDK-backed admin client missing");
-  assert(evidence.readinessChecked, "WireMock readiness was not checked");
-  assert(evidence.deterministicMatchingChecked, "WireMock deterministic matching missing");
-  assert(evidence.responseTemplatingChecked, "WireMock response templating missing");
-  assert(evidence.negativeMatchingChecked, "WireMock negative matching missing");
-  assert(evidence.requestJournalChecked, "WireMock request journal missing");
-  assert(evidence.cleanupAttempted && evidence.cleanupSucceeded, "WireMock cleanup missing");
-  assert(evidence.noExternalEgressChecked, "WireMock no-egress boundary missing");
-  assert(evidence.syntheticDataChecked, "WireMock synthetic-data boundary missing");
-  assert(evidence.tenantSafeEvidenceChecked, "WireMock tenant-safe evidence missing");
-  assert(evidence.redactionChecked, "WireMock redaction evidence missing");
+  assert(evidence.readinessChecked, "LocalStack readiness was not checked");
+  assert(
+    evidence.readinessRetryPolicy === "bounded-exponential-backoff-60s",
+    "readiness retry missing",
+  );
+  assert(evidence.s3RoundTripChecked, "LocalStack S3 round trip missing");
+  assert(evidence.sqsRoundTripChecked, "LocalStack SQS round trip missing");
+  assert(evidence.snsPublishChecked, "LocalStack SNS publish missing");
+  assert(evidence.secretsManagerRoundTripChecked, "LocalStack Secrets Manager round trip missing");
+  assert(evidence.cleanupAttempted && evidence.cleanupSucceeded, "LocalStack cleanup missing");
+  assert(evidence.noExternalEgressChecked, "LocalStack no-egress boundary missing");
+  assert(evidence.syntheticDataChecked, "LocalStack synthetic-data boundary missing");
+  assert(evidence.tenantSafeEvidenceChecked, "LocalStack tenant-safe evidence missing");
+  assert(evidence.redactionChecked, "LocalStack redaction evidence missing");
+  assert(evidence.auditEvidenceCaptured, "LocalStack audit evidence missing");
+  assert(evidence.metricEvidenceCaptured, "LocalStack metric evidence missing");
+  assert(evidence.traceEvidenceCaptured, "LocalStack trace evidence missing");
   assert(
     unavailableEvidence.operationOutcome === "failed-closed",
-    "WireMock failure did not fail closed",
+    "LocalStack failure did not fail closed",
   );
   assertSafeEvidence(evidence);
   assertSafeEvidence(unavailableEvidence);
 
   return Object.freeze({
     status: "pass",
-    proof: "wiremock-http-provider-mock-composed",
-    issueId: "USF-209",
+    proof: "localstack-cloud-emulator-composed",
+    issueId: "USF-208",
     parentIssueId: "USF-133",
-    predecessorIssueId: "USF-201",
+    predecessorIssueIds: ["USF-201", "USF-209", "USF-210"] as const,
     providerMode: "composed-test",
     environment: "local-test-profile-gated",
     composeTarget: COMPOSE_TARGET,
+    composeProfile: COMPOSE_PROFILE,
     composeService: COMPOSE_SERVICE,
     proofCommand: PROOF_COMMAND,
-    implementedServiceIds: ["wiremock"] as const,
+    implementedServiceIds: ["localstack"] as const,
     deferredServiceIds: [] as const,
     followUpIssueRefs: [] as const,
-    resolvedIssueRefs: ["USF-209"] as const,
-    serviceCatalogueServiceId: WIREMOCK_SERVICE_CATALOGUE_ID,
-    providerRegistryId: WIREMOCK_PROVIDER_REGISTRY_ID,
-    bindingId: WIREMOCK_RUNTIME_PROVIDER_BINDING_ID,
-    sdkPackage: WIREMOCK_SDK_PACKAGE,
-    sdkVersion: WIREMOCK_SDK_VERSION,
-    endpointRef: WIREMOCK_ENDPOINT_REF,
+    resolvedIssueRefs: ["USF-208"] as const,
+    serviceCatalogueServiceId: LOCALSTACK_SERVICE_CATALOGUE_ID,
+    providerRegistryId: LOCALSTACK_PROVIDER_REGISTRY_ID,
+    bindingId: LOCALSTACK_RUNTIME_PROVIDER_BINDING_ID,
+    sdkPackages: LOCALSTACK_SDK_PACKAGES,
+    sdkVersion: LOCALSTACK_SDK_VERSION,
+    sdkBoundary: "adapter-package-only",
+    endpointRef: LOCALSTACK_ENDPOINT_REF,
+    sourceUse: "official-aws-sdk-v3-localstack-compatible-clients",
     evidence,
     unavailableEvidence,
     providerUnavailableChecked: true,
     checks: [
-      "WireMock container started from canonical test Compose with provider-mocks profile",
-      "WireMock host exposure used an ephemeral loopback port",
-      "WireMock readiness used bounded retry through wiremock-captain",
-      "wiremock-captain registered a synthetic tenant-safe fixture",
-      "deterministic request matching was exercised",
-      "response templating was exercised without retaining raw provider payload evidence",
-      "negative matching and request-journal evidence were checked",
+      "LocalStack container started from canonical test Compose with provider-emulation profile",
+      "LocalStack host exposure used an ephemeral loopback port",
+      "LocalStack readiness used bounded SDK-backed S3 ListBuckets retry",
+      "official AWS SDK v3 S3 client performed synthetic bucket object write read and cleanup",
+      "official AWS SDK v3 SQS client performed synthetic queue send receive and cleanup",
+      "official AWS SDK v3 SNS client performed synthetic topic publish and cleanup",
+      "official AWS SDK v3 Secrets Manager client performed synthetic secret write read and cleanup",
       "unavailable endpoint failed closed with safe reason code",
       "tenant, synthetic-data, no-egress, audit, metric, trace, cleanup, and redaction evidence captured",
-      "LocalStack service semantics are outside this WireMock proof and are resolved separately by USF-208",
+      "no live cloud-provider compatibility or provider certification claim emitted",
       "no prohibited readiness or certification claim emitted",
     ],
     prohibitedClaimsObserved: PROHIBITED_CLAIMS_OBSERVED,
     deferredBoundaries: [
-      "live-external-provider-compatibility-not-claimed",
+      "live-cloud-provider-compatibility-not-claimed",
       "provider-contract-certification-not-claimed",
+      "api-worker-runtime-binding-not-claimed",
       "staging-production-provider-readiness-not-claimed",
     ],
     nonClaims: NON_CLAIMS,
   });
 }
 
-if (process.argv[1]?.endsWith("wiremock-composed-proof.ts")) {
-  runWireMockComposedProof()
+if (process.argv[1]?.endsWith("localstack-composed-proof.ts")) {
+  runLocalStackComposedProof()
     .then((result) => {
       console.log(JSON.stringify(result, null, 2));
     })
     .catch((error: unknown) => {
-      const safeMessage = error instanceof Error ? error.message : "wiremock proof failed";
+      const safeMessage = error instanceof Error ? error.message : "localstack proof failed";
       console.error(JSON.stringify({ status: "fail", error: safeMessage }, null, 2));
       process.exitCode = 1;
     });

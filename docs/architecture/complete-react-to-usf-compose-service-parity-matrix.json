@@ -2,9 +2,9 @@
   "authority_note": "Review evidence only. ../react is historical lineage and not future live authority. Generated matrices do not define USF semantic authority.",
   "evidence_grade_counts": {
     "A": 12,
-    "B": 4,
+    "B": 5,
     "C": 5,
-    "D": 33
+    "D": 32
   },
   "id": "complete-react-to-usf-compose-service-parity-matrix",
   "missing_or_decision_services": [
@@ -13,7 +13,6 @@
     "clamav",
     "clickhouse",
     "external-caddy",
-    "localstack",
     "meilisearch",
     "pgadmin",
     "pgbackrest",
@@ -271,8 +270,8 @@
       ],
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
-      "evidence_grade": "D",
-      "gap_or_decision": "USF-201 proves bounded webhook-sink capture only; USF-208 owns actual LocalStack service-semantic proof. LocalStack emulation is not live cloud-provider readiness.",
+      "evidence_grade": "B",
+      "gap_or_decision": "USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through official AWS SDK v3 clients against local Compose. This is not live cloud-provider compatibility, provider contract certification, staging readiness, production readiness, full dev readiness, full React parity, or USF-133 closure.",
       "legacy_service_category": "cloud-mock",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -283,9 +282,9 @@
       ],
       "react_service": "localstack",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-176 bounded disposition gate; USF-208 service proof follow-up before any LocalStack or mock-provider completeness claim",
-      "usf_accounting_status": "requires-human-decision",
-      "usf_service_or_substitute": "provider live-deferred posture plus USF-176/USF-201/USF-208 evidence boundary"
+      "tracking_recommendation": "USF-208 bounded service proof merged; any live cloud-provider compatibility, provider contract certification, or environment-promotion readiness claim remains separate.",
+      "usf_accounting_status": "covered-by-usf-runtime",
+      "usf_service_or_substitute": "LocalStack composed-test proof plus USF-208 non-equivalence boundary"
     },
     {
       "business_or_foundation_purpose": "local log backend",
@@ -1444,26 +1443,29 @@
       ],
       "react_service": "wiremock",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-209 bounded service proof merged; USF-208 LocalStack remains the mock-provider substrate follow-up before any mock-provider completeness claim.",
+      "tracking_recommendation": "USF-209 bounded service proof merged; USF-208 bounded LocalStack proof now records the remaining local cloud-emulator service-semantic evidence without any live-provider or readiness claim.",
       "usf_accounting_status": "covered-by-usf-runtime",
       "usf_service_or_substitute": "WireMock composed-test proof plus USF-209 non-equivalence boundary"
     }
   ],
   "status": "review-draft",
   "status_counts": {
-    "covered-by-usf-runtime": 3,
-    "deferred": 7,
+    "blocked": 1,
+    "covered-by-usf-runtime": 4,
+    "deferred": 30,
     "implemented": 11,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "requires-human-decision": 30,
+    "profile-gated-bounded-proof": 2,
+    "requires-human-decision": 3,
     "substituted-partial": 1
   },
-  "usf_compose_service_count": 14,
+  "usf_compose_service_count": 16,
   "usf_compose_services": [
     "grafana",
     "keycloak",
     "keycloak-db",
+    "localstack",
     "loki",
     "mailpit",
     "minio",
@@ -1474,13 +1476,13 @@
     "prometheus",
     "tempo",
     "temporal",
-    "webhook-sink"
+    "webhook-sink",
+    "wiremock"
   ],
   "usf_head": "a285187b177a922ff422858c1bf8f180336f1dff",
   "weakly_classified_services": [
     "clickhouse",
     "external-caddy",
-    "localstack",
     "meilisearch",
     "pgadmin",
     "redis",

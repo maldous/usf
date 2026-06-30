@@ -1,0 +1,11 @@
+{
+  "name": "usf-208-localstack-sdk-import-leak",
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "packages/core/src/index.ts",
+      "old": "import { createHash, createHmac } from \"node:crypto\";",
+      "new": "import { createHash, createHmac } from \"node:crypto\";\nimport { S3Client } from \"@aws-sdk/client-s3\";"
+    }
+  ]
+}

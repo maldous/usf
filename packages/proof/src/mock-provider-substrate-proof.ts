@@ -1,5 +1,4 @@
 import { spawn } from "node:child_process";
-import { once } from "node:events";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -12,6 +11,7 @@ import {
   WebhookSinkCaptureProvider,
   type WebhookSinkCaptureEvidence,
 } from "@foundation/adapter-mail";
+import { runLocalStackComposedProof } from "./localstack-composed-proof.ts";
 import { runWireMockComposedProof } from "./wiremock-composed-proof.ts";
 
 interface MockProviderSubstrateProofResult {
@@ -24,11 +24,11 @@ interface MockProviderSubstrateProofResult {
   readonly composeTarget: "compose/compose.test.generated.yaml";
   readonly composeService: "webhook-sink";
   readonly proofCommand: "corepack pnpm proof:mock-substrate";
-  readonly implementedServiceIds: readonly ["webhook-sink", "wiremock"];
-  readonly deferredServiceIds: readonly ["localstack"];
+  readonly implementedServiceIds: readonly ["webhook-sink", "wiremock", "localstack"];
+  readonly deferredServiceIds: readonly [];
   readonly supersededServiceIds: readonly ["mock-oidc"];
-  readonly followUpIssueRefs: readonly ["USF-208"];
-  readonly resolvedIssueRefs: readonly ["USF-209", "USF-210"];
+  readonly followUpIssueRefs: readonly [];
+  readonly resolvedIssueRefs: readonly ["USF-208", "USF-209", "USF-210"];
   readonly serviceCatalogueServiceId: typeof WEBHOOK_SINK_SERVICE_CATALOGUE_ID;
   readonly providerRegistryId: typeof WEBHOOK_SINK_PROVIDER_REGISTRY_ID;
   readonly bindingId: typeof WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID;
@@ -39,6 +39,7 @@ interface MockProviderSubstrateProofResult {
   readonly evidence: WebhookSinkCaptureEvidence;
   readonly unavailableEvidence: WebhookSinkCaptureEvidence;
   readonly wiremockProofStatus: "pass";
+  readonly localstackProofStatus: "pass";
   readonly providerUnavailableChecked: true;
   readonly checks: readonly string[];
   readonly prohibitedClaimsObserved: readonly [];
@@ -82,7 +83,7 @@ function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
-function runProcess(command: string, args: readonly string[]): Promise<string> {
+function runProcess(command: string, args: readonly string[], timeoutMs = 180000): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = spawn(command, [...args], {
       cwd: process.cwd(),
@@ -90,6 +91,13 @@ function runProcess(command: string, args: readonly string[]): Promise<string> {
     });
     let stdout = "";
     let stderr = "";
+    let timedOut = false;
+    const forceKillTimer = { current: undefined as ReturnType<typeof setTimeout> | undefined };
+    const timeout = setTimeout(() => {
+      timedOut = true;
+      child.kill("SIGTERM");
+      forceKillTimer.current = setTimeout(() => child.kill("SIGKILL"), 5000);
+    }, timeoutMs);
     child.stdout.on("data", (chunk: Buffer) => {
       stdout += chunk.toString("utf8");
     });
@@ -97,10 +105,16 @@ function runProcess(command: string, args: readonly string[]): Promise<string> {
       stderr += chunk.toString("utf8");
     });
     child.once("exit", (code, signal) => {
+      clearTimeout(timeout);
+      if (forceKillTimer.current) clearTimeout(forceKillTimer.current);
       if (code === 0) {
         resolve(stdout);
       } else {
-        reject(new Error(`${command} failed code=${code} signal=${signal}: ${stderr}`));
+        reject(
+          new Error(
+            `${command} failed code=${code} signal=${signal}${timedOut ? " timedOut=true" : ""}: ${stderr}`,
+          ),
+        );
       }
     });
   });
@@ -154,15 +168,11 @@ async function composePort(projectName: string, overridePath: string): Promise<n
 }
 
 async function composeDown(projectName: string, overridePath: string): Promise<void> {
-  const child = spawn(
+  await runProcess(
     "docker",
     [...composeArgs(projectName, overridePath), "down", "--remove-orphans"],
-    { cwd: process.cwd(), stdio: ["ignore", "ignore", "ignore"] },
+    60000,
   );
-  await Promise.race([once(child, "exit"), new Promise((resolve) => setTimeout(resolve, 15000))]);
-  if (child.exitCode === null && child.signalCode === null) {
-    child.kill("SIGKILL");
-  }
 }
 
 async function proveUnavailable(): Promise<WebhookSinkCaptureEvidence> {
@@ -197,6 +207,7 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
   let evidence: WebhookSinkCaptureEvidence | undefined;
   let unavailableEvidence: WebhookSinkCaptureEvidence | undefined;
   let wiremockProofStatus: "pass" | undefined;
+  let localstackProofStatus: "pass" | undefined;
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
@@ -207,12 +218,17 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
     unavailableEvidence = await proveUnavailable();
     const wiremockProof = await runWireMockComposedProof();
     wiremockProofStatus = wiremockProof.status;
+    const localstackProof = await runLocalStackComposedProof();
+    localstackProofStatus = localstackProof.status;
   } finally {
-    await composeDown(projectName, override.path);
-    await rm(override.dir, { recursive: true, force: true });
+    try {
+      await composeDown(projectName, override.path);
+    } finally {
+      await rm(override.dir, { recursive: true, force: true });
+    }
   }
 
-  if (!evidence || !unavailableEvidence || !wiremockProofStatus) {
+  if (!evidence || !unavailableEvidence || !wiremockProofStatus || !localstackProofStatus) {
     throw new Error("webhook-sink-proof-missing-evidence");
   }
   assert(evidence.readinessChecked, "webhook sink readiness was not checked");
@@ -237,11 +253,11 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
     composeTarget: COMPOSE_TARGET,
     composeService: COMPOSE_SERVICE,
     proofCommand: PROOF_COMMAND,
-    implementedServiceIds: ["webhook-sink", "wiremock"] as const,
-    deferredServiceIds: ["localstack"] as const,
+    implementedServiceIds: ["webhook-sink", "wiremock", "localstack"] as const,
+    deferredServiceIds: [] as const,
     supersededServiceIds: ["mock-oidc"] as const,
-    followUpIssueRefs: ["USF-208"] as const,
-    resolvedIssueRefs: ["USF-209", "USF-210"] as const,
+    followUpIssueRefs: [] as const,
+    resolvedIssueRefs: ["USF-208", "USF-209", "USF-210"] as const,
     serviceCatalogueServiceId: WEBHOOK_SINK_SERVICE_CATALOGUE_ID,
     providerRegistryId: WEBHOOK_SINK_PROVIDER_REGISTRY_ID,
     bindingId: WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID,
@@ -252,6 +268,7 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
     evidence,
     unavailableEvidence,
     wiremockProofStatus,
+    localstackProofStatus,
     providerUnavailableChecked: true,
     checks: [
       "webhook sink container started from canonical test Compose with ephemeral loopback port",
@@ -262,13 +279,13 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
       "unavailable endpoint failed closed with safe reason code",
       "tenant, synthetic-data, no-egress, audit, metric, trace, and redaction evidence captured",
       "WireMock composed proof passed through adapter-contained wiremock-captain boundary",
-      "LocalStack remains deferred to USF-208",
+      "LocalStack composed proof passed through adapter-contained official AWS SDK v3 clients",
       "mock OIDC is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence",
       "no prohibited readiness or certification claim emitted",
     ],
     prohibitedClaimsObserved: PROHIBITED_CLAIMS_OBSERVED,
     deferredBoundaries: [
-      "localstack-service-semantics-deferred-to-USF-208",
+      "localstack-live-cloud-provider-compatibility-not-claimed",
       "wiremock-service-semantics-resolved-by-USF-209",
       "mock-oidc-service-semantics-superseded-for-selected-closure-tier-by-USF-210",
       "webhook-delivery-notification-provider-not-claimed",

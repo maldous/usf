@@ -1,0 +1,16 @@
+{
+  "name": "usf-208-localstack-stale-deferral",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/mockProviderSubstrateDisposition/localstackServiceSemanticProofPresent",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/mockSubstrateClassifications/0/status",
+      "value": "deferred-with-owner"
+    }
+  ]
+}

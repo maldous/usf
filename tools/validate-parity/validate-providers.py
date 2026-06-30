@@ -108,7 +108,7 @@ REQUIRED_MODES = {
 }
 
 FORBIDDEN_IMPORT = re.compile(
-    r"from\s+[\"'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|wiremock-captain|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio|nats|keycloak-js)[\"']"
+    r"from\s+[\"'](?:pg|postgres|redis|ioredis|@aws-sdk(?:/[^\"']+)?|aws-sdk|minio|wiremock-captain|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio|nats|keycloak-js)[\"']"
 )
 
 

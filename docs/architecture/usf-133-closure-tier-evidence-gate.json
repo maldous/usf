@@ -555,18 +555,29 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-176",
+        "USF-201",
+        "USF-208",
+        "USF-209",
+        "USF-210"
       ],
-      "assuranceMaturityLevel": "documented",
+      "assuranceMaturityLevel": "integration-proven",
       "promotionImpact": [
-        "dev-readiness",
         "test-readiness",
         "staging-readiness",
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "enterpriseExceptionRef": "exception-service-localstack"
+      "enterpriseExceptionRef": "exception-service-localstack-live-boundary",
+      "proofEvidenceRefs": [
+        "corepack pnpm proof:localstack",
+        "packages/proof/src/localstack-composed-proof.ts",
+        "adapters/resources/src/index.ts",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ]
     },
     {
       "serviceId": "wiremock",
@@ -1997,18 +2008,18 @@
       ]
     },
     {
-      "id": "exception-service-localstack",
+      "id": "exception-service-localstack-live-boundary",
       "targetType": "service",
       "targetId": "localstack",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; LocalStack emulation is not live external provider evidence.",
+      "disposition": "bounded-local-proof-with-live-boundary",
+      "reason": "USF-208 proves bounded profile-gated LocalStack S3 SQS SNS and Secrets Manager emulator semantics only; live cloud-provider compatibility, provider certification, supplier evidence, and environment promotion remain non-claims.",
       "owner": "platform-provider-foundation",
       "riskOwner": "platform-provider-risk-owner",
       "controlOwner": "platform-provider-control-owner",
-      "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "treatmentPath": "defer-live-provider-and-promotion-claims",
+      "followUpIssue": "USF-193",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "does-not-block-bounded-local-proof-but-blocks-readiness-claims",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -2018,7 +2029,7 @@
         "iso-supporting-evidence-completeness"
       ],
       "preventsPromotion": {
-        "dev-readiness": true,
+        "dev-readiness": false,
         "test-readiness": true,
         "staging-readiness": true,
         "production-readiness": true,

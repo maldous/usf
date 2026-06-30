@@ -90,11 +90,13 @@ ADAPTER_IDP_SOURCE_PATH = Path("adapters/idp/src/index.ts")
 ADAPTER_SECRETS_SOURCE_PATH = Path("adapters/secrets/src/index.ts")
 ADAPTER_WF_SOURCE_PATH = Path("adapters/wf/src/index.ts")
 ADAPTER_SEARCH_SOURCE_PATH = Path("adapters/search/src/index.ts")
+ADAPTER_RESOURCES_SOURCE_PATH = Path("adapters/resources/src/index.ts")
 ADAPTER_PROVIDER_MOCK_SOURCE_PATH = Path("adapters/mail/src/index.ts")
 MEILISEARCH_PROOF_SOURCE_PATH = Path("packages/proof/src/meilisearch-composed-proof.ts")
 CLAMAV_PROOF_SOURCE_PATH = Path("packages/proof/src/clamav-composed-proof.ts")
 MOCK_PROVIDER_PROOF_SOURCE_PATH = Path("packages/proof/src/mock-provider-substrate-proof.ts")
 WIREMOCK_PROOF_SOURCE_PATH = Path("packages/proof/src/wiremock-composed-proof.ts")
+LOCALSTACK_PROOF_SOURCE_PATH = Path("packages/proof/src/localstack-composed-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
@@ -353,6 +355,14 @@ MOCK_PROVIDER_SUBSTRATE_REQUIRED_EVIDENCE_REFS = {
     "usf-209-resilience-wiremock-composed-proof",
     "usf-209-incident-vulnerability-wiremock-composed-proof",
     "usf-209-privacy-wiremock-composed-proof",
+    "usf-208-soa-localstack-composed-proof",
+    "usf-208-evidence-localstack-composed-proof",
+    "usf-208-threat-localstack-overclaim",
+    "sdk-usf-208-localstack-cloud-emulator-aws-sdk-v3",
+    "usf-208-access-localstack-composed-proof",
+    "usf-208-resilience-localstack-composed-proof",
+    "usf-208-incident-vulnerability-localstack-composed-proof",
+    "usf-208-privacy-localstack-composed-proof",
     "usf-210-soa-mock-oidc-reclassification",
     "usf-210-evidence-mock-oidc-reclassification",
     "usf-210-threat-mock-oidc-overclaim",
@@ -491,10 +501,10 @@ LANE5_PROVIDER_DISPOSITIONS = {
     },
     "usf-189-localstack-cloud-mock-provider": {
         "serviceIds": ["localstack"],
-        "providerIds": ["provider-emulator-localstack-deferred"],
+        "providerIds": ["provider-emulator-localstack-composed-test", "provider-emulator-localstack-deferred"],
         "followUpIssue": "USF-208",
         "boundaryRef": "usf-189-mock-provider-deferred",
-        "allowedStatuses": {"profile-gated"},
+        "allowedStatuses": {"profile-gated-proven"},
     },
     "usf-209-wiremock-http-mock-provider": {
         "serviceIds": ["wiremock"],
@@ -575,7 +585,7 @@ SOURCE_TEARDOWN_MARKERS = (
     "USF_WORKER_RUN_ONCE",
 )
 PROVIDER_SDK_IMPORT_RE = re.compile(
-    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|meilisearch|clamscan|wiremock-captain|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
+    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@aws-sdk(?:/[^\"']+)?|aws-sdk|minio|mailpit-api|meilisearch|clamscan|wiremock-captain|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
 )
 FORBIDDEN_SDK_IMPORT_PATHS = (
     Path("packages/core/src/index.ts"),
@@ -2422,6 +2432,7 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
     if required_services - set(matrix.get("serviceIds", [])):
         F.add("USF-RUNTIME-027", "serviceIds", "mock provider service ids are incomplete")
     required_providers = {
+        "provider-emulator-localstack-composed-test",
         "provider-emulator-localstack-deferred",
         "provider-mock-wiremock-composed-test",
         "provider-mock-wiremock-deferred",
@@ -2451,8 +2462,8 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition", "mock provider disposition must be an object")
     else:
         expected_disposition = {
-            "disposition": "bounded-webhook-sink-and-wiremock-proof-with-explicit-localstack-deferral",
-            "localstackServiceSemanticProofPresent": False,
+            "disposition": "bounded-webhook-sink-wiremock-and-localstack-proof-with-mock-oidc-selected-tier-supersession",
+            "localstackServiceSemanticProofPresent": True,
             "wiremockServiceSemanticProofPresent": True,
             "webhookSinkProviderProofPresent": True,
             "mockOidcComposeServiceProofPresent": False,
@@ -2478,12 +2489,14 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
             F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.serviceCatalogueServiceIds", "service ids are incomplete")
         if required_providers - set(disposition.get("providerRegistryIds", [])):
             F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.providerRegistryIds", "provider ids are incomplete")
-        if {"USF-208"} - set(disposition.get("followUpIssues", [])):
-            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.followUpIssues", "remaining LocalStack follow-up issue is incomplete")
+        if "USF-208" in set(disposition.get("followUpIssues", [])):
+            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.followUpIssues", "USF-208 must not remain a deferred LocalStack follow-up")
         if "USF-209" in set(disposition.get("followUpIssues", [])):
             F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.followUpIssues", "USF-209 must not remain a deferred WireMock follow-up")
         if "USF-210" in set(disposition.get("followUpIssues", [])):
             F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.followUpIssues", "USF-210 must not remain a deferred mock OIDC follow-up")
+        if "USF-208" not in set(disposition.get("resolvedIssues", [])):
+            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.resolvedIssues", "USF-208 LocalStack proof must be recorded as resolved")
         if "USF-209" not in set(disposition.get("resolvedIssues", [])):
             F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.resolvedIssues", "USF-209 WireMock proof must be recorded as resolved")
         if "USF-210" not in set(disposition.get("resolvedIssues", [])):
@@ -2500,10 +2513,16 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
     required_classifications = {
         "localstack": {
             "providerBindingId": "usf-189-localstack-cloud-mock-provider",
-            "providerRegistryId": "provider-emulator-localstack-deferred",
-            "status": "deferred-with-owner",
-            "followUpIssue": "USF-208",
-            "proofPresent": False,
+            "providerRegistryId": "provider-emulator-localstack-composed-test",
+            "status": "profile-gated-proven",
+            "sourceIssue": "USF-208",
+            "proofPresent": True,
+            "proofCommand": "corepack pnpm proof:localstack",
+            "makeTarget": "localstack-proof",
+            "sdkPackage": "@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/client-sns,@aws-sdk/client-secrets-manager",
+            "sdkVersion": "3.1077.0",
+            "sdkBoundary": "adapter-package-only",
+            "endpointRef": "endpoint://compose/localstack",
         },
         "wiremock": {
             "providerBindingId": "usf-209-wiremock-http-mock-provider",
@@ -2647,14 +2666,18 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
     }
     expected_boundaries = {
         "usf-189-localstack-cloud-mock-provider": {
-            "providerRegistryId": "provider-emulator-localstack-deferred",
-            "bindingStatus": "profile-gated",
-            "providerMode": "live-external-deferred",
+            "providerRegistryId": "provider-emulator-localstack-composed-test",
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
             "runtimeProviderBindingActive": False,
-            "sdkPackage": None,
-            "sdkVersion": None,
-            "endpointRef": None,
-            "followUpIssue": "USF-208",
+            "sdkPackage": "@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/client-sns,@aws-sdk/client-secrets-manager",
+            "sdkVersion": "3.1077.0",
+            "sdkBoundary": "adapter-package-only",
+            "endpointRef": "endpoint://compose/localstack",
+            "sourceIssue": "USF-208",
+            "proofCommand": "corepack pnpm proof:localstack",
+            "makeTarget": "localstack-proof",
             "serviceCatalogueServiceId": "localstack",
         },
         "usf-209-wiremock-http-mock-provider": {
@@ -2704,17 +2727,17 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         F.add("USF-RUNTIME-027", "operationalEvidencePosture", "operational evidence posture must be an object")
     else:
         expected_operational = {
-            "readinessRetry": "webhook-sink-and-wiremock-bounded-exponential-backoff-60s-localstack-deferred-mock-oidc-not-runtime-binding",
-            "timeout": "webhook-sink-request-timeout-5s-wiremock-client-request-timeout-5s-unavailable-proof-localstack-deferred-mock-oidc-not-runtime-binding",
-            "failClosed": "webhook-sink-and-wiremock-provider-unavailable-fails-closed-localstack-deferred-mock-oidc-not-runtime-binding",
-            "noExternalEgress": "webhook-sink-and-wiremock-loopback-only-proof-localstack-deferred-mock-oidc-not-runtime-binding",
-            "safeTeardown": "webhook-sink-and-wiremock-compose-down-finally-localstack-deferred-mock-oidc-not-runtime-binding",
-            "structuredLogging": "webhook-sink-and-wiremock-value-free-structured-evidence",
-            "tracingCorrelation": "webhook-sink-and-wiremock-correlation-and-trace-hash-evidence",
-            "metrics": "webhook-sink-and-wiremock-readiness-retry-latency-fail-closed-health-evidence",
-            "auditEvents": "webhook-sink-and-wiremock-value-free-audit-evidence",
-            "redaction": "webhook-sink-and-wiremock-safe-hashes-no-raw-endpoint-token-secret-stack-or-payload",
-            "syntheticData": "webhook-sink-and-wiremock-synthetic-only-proof-data",
+            "readinessRetry": "webhook-sink-wiremock-and-localstack-bounded-exponential-backoff-60s-mock-oidc-not-runtime-binding",
+            "timeout": "webhook-sink-request-timeout-5s-wiremock-client-request-timeout-5s-localstack-aws-sdk-request-timeout-5s-unavailable-proof-mock-oidc-not-runtime-binding",
+            "failClosed": "webhook-sink-wiremock-and-localstack-provider-unavailable-fails-closed-mock-oidc-not-runtime-binding",
+            "noExternalEgress": "webhook-sink-wiremock-and-localstack-loopback-only-proof-mock-oidc-not-runtime-binding",
+            "safeTeardown": "webhook-sink-wiremock-and-localstack-compose-down-finally-mock-oidc-not-runtime-binding",
+            "structuredLogging": "webhook-sink-wiremock-and-localstack-value-free-structured-evidence",
+            "tracingCorrelation": "webhook-sink-wiremock-and-localstack-correlation-and-trace-hash-evidence",
+            "metrics": "webhook-sink-wiremock-and-localstack-readiness-retry-latency-fail-closed-health-evidence",
+            "auditEvents": "webhook-sink-wiremock-and-localstack-value-free-audit-evidence",
+            "redaction": "webhook-sink-wiremock-and-localstack-safe-hashes-no-raw-endpoint-token-secret-stack-or-payload",
+            "syntheticData": "webhook-sink-wiremock-and-localstack-synthetic-only-proof-data",
         }
         for key, expected in expected_operational.items():
             if operational.get(key) != expected:
@@ -2725,20 +2748,69 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         F.add("USF-RUNTIME-027", "enterpriseEvidenceRefs", "mock provider substrate enterprise evidence refs are incomplete")
 
     bindings = binding_records(state["manifest"])
-    for binding_id in ("usf-189-localstack-cloud-mock-provider",):
-        binding = bindings.get(binding_id)
-        if not binding:
-            F.add("USF-RUNTIME-027", "providerBindingMatrix", f"mock provider disposition is missing from runtime manifest: {binding_id}")
-            continue
-        expected_follow_up = "USF-208" if "localstack" in binding_id else "USF-209"
-        if expected_follow_up not in binding.get("followUpIssueRefs", []):
-            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}", f"runtime manifest must link {expected_follow_up}")
-        if expected_follow_up not in str(binding.get("deferredReason", "")):
-            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}.deferredReason", f"runtime manifest must defer service-semantic proof to {expected_follow_up}")
-        if binding.get("endpointRef") is not None:
-            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}", "deferred mock provider must not expose endpoint binding")
-        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
-            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}", "deferred mock provider must not name an SDK/client package")
+    localstack_binding = bindings.get("usf-189-localstack-cloud-mock-provider")
+    if not localstack_binding:
+        F.add(
+            "USF-RUNTIME-027",
+            "providerBindingMatrix.usf-189-localstack-cloud-mock-provider",
+            "runtime manifest must include LocalStack proof provider binding",
+        )
+    else:
+        localstack_expected = {
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkBoundary": "adapter-package-only",
+            "sourceUseDisposition": "runtime-proof-support",
+            "endpointRef": "endpoint://compose/localstack",
+            "sdkPackage": "@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/client-sns,@aws-sdk/client-secrets-manager",
+            "sdkVersion": "3.1077.0",
+            "proofCommand": "corepack pnpm proof:localstack",
+        }
+        for key, expected_value in localstack_expected.items():
+            if localstack_binding.get(key) != expected_value:
+                F.add(
+                    "USF-RUNTIME-027",
+                    f"providerBindingMatrix.usf-189-localstack-cloud-mock-provider.{key}",
+                    f"expected {expected_value!r}",
+                )
+        for provider_id in ("provider-emulator-localstack-composed-test", "provider-emulator-localstack-deferred"):
+            if provider_id not in localstack_binding.get("providerRegistryIds", []):
+                F.add(
+                    "USF-RUNTIME-027",
+                    "providerBindingMatrix.usf-189-localstack-cloud-mock-provider.providerRegistryIds",
+                    f"LocalStack binding must link {provider_id}",
+                )
+        if "USF-208" not in localstack_binding.get("followUpIssueRefs", []):
+            F.add(
+                "USF-RUNTIME-027",
+                "providerBindingMatrix.usf-189-localstack-cloud-mock-provider.followUpIssueRefs",
+                "LocalStack binding must link USF-208 source proof issue",
+            )
+        if "not claimed" not in str(localstack_binding.get("apiProofEvidence", "")) or "not claimed" not in str(localstack_binding.get("workerProofEvidence", "")):
+            F.add(
+                "USF-RUNTIME-027",
+                "providerBindingMatrix.usf-189-localstack-cloud-mock-provider",
+                "API and worker runtime binding non-claims must remain explicit",
+            )
+        proof_evidence = str(localstack_binding.get("proofEvidence", ""))
+        for marker in (
+            "SDK-backed profile-gated local Compose proof",
+            "S3 bucket object write read cleanup",
+            "SQS queue send receive cleanup",
+            "SNS topic publish cleanup",
+            "Secrets Manager secret write read cleanup",
+            "readiness retry",
+            "unavailable fail-closed",
+            "redaction",
+            "Compose teardown",
+        ):
+            if marker not in proof_evidence:
+                F.add(
+                    "USF-RUNTIME-027",
+                    "providerBindingMatrix.usf-189-localstack-cloud-mock-provider.proofEvidence",
+                    f"LocalStack proof evidence marker is missing: {marker}",
+                )
 
     wiremock_binding = bindings.get("usf-209-wiremock-http-mock-provider")
     if not wiremock_binding:
@@ -2832,13 +2904,16 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         for item in state["manifest"].get("deferredBoundaries", [])
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }.get("usf-189-mock-provider-deferred")
-    if not deferred or {"USF-201", "USF-208"} - set(deferred.get("followUpIssueRefs", [])):
-        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must link USF-201 split plus remaining LocalStack follow-up")
-    elif "USF-209" in set(deferred.get("followUpIssueRefs", [])):
-        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must not leave USF-209 as a deferred WireMock follow-up")
-    elif "USF-210" in set(deferred.get("followUpIssueRefs", [])):
-        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must not leave USF-210 as a deferred follow-up")
-    if deferred and ("USF-210" not in str(deferred.get("boundary", "")) or "superseded" not in str(deferred.get("boundary", ""))):
+    if not deferred or {"USF-153", "USF-201"} - set(deferred.get("followUpIssueRefs", [])):
+        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must link remaining webhook delivery/callback split follow-ups")
+    elif {"USF-208", "USF-209", "USF-210"} & set(deferred.get("followUpIssueRefs", [])):
+        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must not leave resolved mock substrate proofs as deferred follow-ups")
+    if deferred and (
+        "USF-208" not in str(deferred.get("boundary", ""))
+        or "USF-209" not in str(deferred.get("boundary", ""))
+        or "USF-210" not in str(deferred.get("boundary", ""))
+        or "superseded" not in str(deferred.get("boundary", ""))
+    ):
         F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred.boundary", "runtime deferred boundary must record USF-210 selected-tier supersession")
 
     scripts = state["package"].get("scripts") or {}
@@ -2852,6 +2927,18 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         F.add("USF-RUNTIME-027", "Makefile.wiremock-proof", "WireMock proof Make target is missing")
     if state["package"].get("dependencies", {}).get("wiremock-captain") != "4.1.3":
         F.add("USF-RUNTIME-027", "package.json.wiremock-captain", "wiremock-captain must be exact-version pinned to 4.1.3")
+    if scripts.get("proof:localstack") != "tsx packages/proof/src/localstack-composed-proof.ts":
+        F.add("USF-RUNTIME-027", "package.json.proof:localstack", "LocalStack proof package script is missing or stale")
+    if "localstack-proof" not in make_targets(state["makefile"]):
+        F.add("USF-RUNTIME-027", "Makefile.localstack-proof", "LocalStack proof Make target is missing")
+    for package_name in (
+        "@aws-sdk/client-s3",
+        "@aws-sdk/client-sqs",
+        "@aws-sdk/client-sns",
+        "@aws-sdk/client-secrets-manager",
+    ):
+        if state["package"].get("dependencies", {}).get(package_name) != "3.1077.0":
+            F.add("USF-RUNTIME-027", f"package.json.{package_name}", f"{package_name} must be exact-version pinned to 3.1077.0")
 
     adapter_source = state_text(state, ADAPTER_MAIL_SOURCE_PATH)
     for marker in (
@@ -2942,6 +3029,56 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         if marker not in wiremock_proof_source:
             F.add("USF-RUNTIME-027", str(WIREMOCK_PROOF_SOURCE_PATH), f"WireMock proof marker is missing: {marker}")
 
+    localstack_adapter_source = state_text(state, ADAPTER_RESOURCES_SOURCE_PATH)
+    for marker in (
+        "LocalStackCloudEmulatorProofAdapter",
+        "@aws-sdk/client-s3",
+        "@aws-sdk/client-sqs",
+        "@aws-sdk/client-sns",
+        "@aws-sdk/client-secrets-manager",
+        "LOCALSTACK_ENDPOINT_REF",
+        "retryLocalStackReadiness",
+        "bounded-exponential-backoff-60s",
+        "s3RoundTripChecked",
+        "sqsRoundTripChecked",
+        "snsPublishChecked",
+        "secretsManagerRoundTripChecked",
+        "cleanupSucceeded",
+        "structuredLogEvidenceCaptured",
+        "traceEvidenceCaptured",
+        "metricEvidenceCaptured",
+        "auditEvidenceCaptured",
+        "redactionChecked",
+        "noExternalEgressChecked",
+        "tenantSafeEvidenceChecked",
+        "proveUnavailable",
+    ):
+        if marker not in localstack_adapter_source:
+            F.add("USF-RUNTIME-027", str(ADAPTER_RESOURCES_SOURCE_PATH), f"LocalStack adapter proof marker is missing: {marker}")
+
+    localstack_proof_source = state_text(state, LOCALSTACK_PROOF_SOURCE_PATH)
+    for marker in (
+        "runLocalStackComposedProof",
+        "LocalStackCloudEmulatorProofAdapter",
+        "compose/compose.test.generated.yaml",
+        "provider-emulation",
+        "composeDown",
+        "finally",
+        "FORBIDDEN_EVIDENCE_PATTERN",
+        "proveUnavailable",
+        "providerUnavailableChecked",
+        "s3RoundTripChecked",
+        "sqsRoundTripChecked",
+        "snsPublishChecked",
+        "secretsManagerRoundTripChecked",
+        "cleanupSucceeded",
+        "corepack pnpm proof:localstack",
+        "USF-208",
+        "no-live-provider-readiness",
+    ):
+        if marker not in localstack_proof_source:
+            F.add("USF-RUNTIME-027", str(LOCALSTACK_PROOF_SOURCE_PATH), f"LocalStack proof marker is missing: {marker}")
+
     matrix_text = json.dumps(matrix, sort_keys=True)
     for stale in (
         "until USF-176 closes",
@@ -2952,6 +3089,12 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         "deferred-to-USF-201",
         "\"webhookSinkProviderProofPresent\": false",
         "\"wiremockServiceSemanticProofPresent\": false",
+        "\"localstackServiceSemanticProofPresent\": false",
+        "localstack-service-proof-deferred",
+        "LocalStack remains deferred",
+        "localstack=deferred",
+        "localstack-service-semantics-deferred-to-USF-208",
+        "\"followUpIssue\": \"USF-208\"",
         "\"followUpIssue\": \"USF-209\"",
         "\"providerBindingId\": \"usf-189-wiremock-http-mock-provider\"",
         "wiremock-service-semantics-deferred-to-USF-209",

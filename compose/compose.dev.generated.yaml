@@ -300,7 +300,7 @@ services:
     profiles:
       - assurance
   localstack:
-    image: localstack/localstack:4.0.4
+    image: localstack/localstack:4.8.1
     environment:
       SERVICES: "s3,sqs,sns,secretsmanager"
     ports:

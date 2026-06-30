@@ -17,7 +17,7 @@ Dev-in-memory-ready assessment: conditionally ready for the authorised local pro
 
 Dev-compose-minimal-ready assessment: conditionally ready for the current USF compose substrate and proof ladder only, not a universal React service parity claim.
 
-Dev-compose-universal-ready assessment: not ready. Missing, substituted, or decision-bound areas include Sentry, SonarQube, ClickHouse, Redis, ClamAV live/DLP depth, LocalStack, WireMock, pgAdmin, pgBackRest, Alertmanager, Alloy, Windmill, Temporal UI, and gateway/forward-auth operator access.
+Dev-compose-universal-ready assessment: not ready. Missing, substituted, or decision-bound areas include Sentry, SonarQube, ClickHouse, Redis, ClamAV live/DLP depth, LocalStack live-provider and broader mock-substrate boundaries, WireMock live-provider boundaries, pgAdmin, pgBackRest, Alertmanager, Alloy, Windmill, Temporal UI, and gateway/forward-auth operator access.
 
 ## Review Basis
 
