@@ -3907,6 +3907,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-195-soa-sonarqube-proof-boundary",
+      "mappedType": "source-issue-sonarqube-service-proof-boundary",
+      "controlPurpose": "Map USF-195 as the SonarQube service-semantic proof boundary, separating local deterministic validation from actual composed SonarQube scan and operator-console proof under USF-204.",
+      "riskTreated": "riskStatement=USF-195 could be treated as SonarQube service readiness even though it records explicit deferral, non-equivalence, and follow-up only",
+      "assetServiceAffected": "sonarqube, sonar-postgres, and sonar-oidc-plugin service catalogue rows and repository static-analysis quality-gate disposition",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; sourceIssue=USF-195; followUpIssue=USF-204; treatment=record SonarQube proof boundary, require docs/architecture/sonarqube-service-semantic-proof-boundary.json, and defer service readiness, scan execution, quality gate, unresolved issue handling, exception handling, security hotspot treatment, operator access, audit, retention, secret, supplier, and incident proof; reviewDate=2026-09-30",
+      "evidenceSource": "docs/architecture/sonarqube-service-semantic-proof-boundary.json; docs/architecture/static-analysis-quality-gate-disposition-matrix.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-195; USF-204",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "threatFailureScenario=local deterministic validation or generated Compose metadata is mistaken for SonarQube service operating evidence; impact=high; likelihood=medium; owner=platform-assurance-foundation; treatment=defer actual composed service proof to USF-204; reviewDate=2026-09-30; followUpIssue=USF-204; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -5212,6 +5238,30 @@
       ],
       "prOrMergeSha": "abf5fe4e0934095a2fc9ea8e1a80a717f5bb45db",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Windmill payloads, provider responses, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
+    },
+    {
+      "id": "usf-195-evidence-sonarqube-proof-boundary",
+      "proofResult": "sonarqube-service-semantic-proof-boundary",
+      "whatWasProven": "USF-195 records SonarQube, sonar-postgres, and sonar-oidc-plugin as explicit deferred service-proof boundaries in docs/architecture/sonarqube-service-semantic-proof-boundary.json, links actual composed scan and operator proof to USF-204, preserves local deterministic validation non-equivalence, and adds validator coverage for missing boundary evidence, missing follow-up, missing enterprise rows, local equivalence, and readiness overclaim.",
+      "whatWasNotProven": "This does not prove SonarQube readiness, quality-gate readiness, scanner readiness, vulnerability-clearance readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, USF-133 closure, SonarQube scan execution, unresolved issue handling, exception handling, security hotspot treatment, operator console access, supplier boundary, retention evidence, or incident workflow evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "sonarqube-service-proof-deferred-to-USF-204",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#sonarqube,#sonar-postgres,#sonar-oidc-plugin",
+      "adapterProviderId": "sonarqube-service-proof-deferred",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "2c5f363d638e3d985088e87b6f99efbae9deaca8",
+      "issueLinks": [
+        "USF-195",
+        "USF-204",
+        "USF-171",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "2c5f363d638e3d985088e87b6f99efbae9deaca8",
+      "retentionPosture": "Retain committed boundary matrix, validator rule, planted defects, validation output, and PR summary; do not retain SonarQube scan payloads, raw findings, credentials, tokens, endpoints, connection strings, or source-analysis result payloads as readiness evidence."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -6397,6 +6447,31 @@
       "failClosedBehaviour": "USF-RUNTIME-029 fails when docs/architecture/operator-workflow-provider-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-203 is missing, Temporal/jobs proof is marked Windmill equivalent, runtime manifest lacks USF-203 linkage, proof commands are incomplete, readiness claims are enabled, or stale self-deferral remains.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no Windmill provider payload, workflow execution, operator audit event, or service evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
       "residualRisk": "riskStatement=Windmill operator automation service semantics remain unproven after USF-178; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=defer service proof to USF-203; reviewDate=2026-09-30; followUpIssue=USF-203; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/operator-workflow-provider-disposition-matrix.json"
+    },
+    {
+      "id": "usf-195-threat-sonarqube-overclaim",
+      "targetType": "source-issue-sonarqube-service-proof-boundary",
+      "target": "docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+      "trustBoundary": "USF-195 repository evidence may define the SonarQube proof boundary only; actual composed service readiness, scanner execution, issue lifecycle, operator console behaviour, and scanner payloads remain outside this proof and are tracked by USF-204.",
+      "tenantBoundary": "USF-195 records value-free repository metadata only; tenant-safe scanner labels, issue lifecycle, and operator sessions are not proven.",
+      "credentialBoundary": "No SonarQube token, scanner credential, raw endpoint, provider payload, source-analysis payload, connection string, raw SDK error, or stack trace is introduced by USF-195.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production data, tenant data, PII, secrets, tokens, or private vulnerability payloads",
+      "abuseCases": [
+        "USF-195 marked Done as SonarQube service readiness",
+        "local deterministic validation treated as equivalent to SonarQube scan history or dashboard evidence",
+        "quality gate, security hotspot, unresolved issue, exception handling, or vulnerability clearance claimed without USF-204 evidence",
+        "full-dev-readiness, test-readiness, staging-readiness, production-readiness, live-provider-readiness, SOC readiness, ISO certification, or full React parity inferred from boundary-only evidence"
+      ],
+      "failureModes": [
+        "boundary matrix missing",
+        "USF-204 follow-up missing",
+        "enterprise evidence missing",
+        "local verification marked SonarQube-service-equivalent",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-ENTERPRISE-023 fails when docs/architecture/sonarqube-service-semantic-proof-boundary.json is missing or unsafe, enterprise rows are missing, non-claims are incomplete, USF-204 is missing, local checks are marked equivalent, or readiness claims are enabled.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live SonarQube monitoring, alerting, scanner payload, or operator audit evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
+      "residualRisk": "riskStatement=SonarQube service semantics remain unproven after USF-195; impact=high; likelihood=medium; owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; controlOwner=platform-assurance-control-owner; treatment=defer actual composed service proof to USF-204; reviewDate=2026-09-30; followUpIssue=USF-204; validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json; matrix=docs/architecture/sonarqube-service-semantic-proof-boundary.json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7862,6 +7937,51 @@
       "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-178; USF-203",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "access, approval, privileged operation, and provider proof deferred to USF-203; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; treatment=do not treat USF-178 as Windmill access proof; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-195-access-sonarqube-proof-boundary",
+      "targetType": "source-issue-sonarqube-service-proof-boundary",
+      "target": "docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-195",
+        "followUpIssue=USF-204",
+        "riskStatement=USF-195 could be treated as operator-ready SonarQube access proof without service-console evidence",
+        "threatFailureScenario=operator console access, quality-gate exception handling, scanner token posture, or operator audit evidence is claimed from repository validation only",
+        "affectedAssetService=sonarqube service proof boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-assurance-foundation",
+        "riskOwner=platform-assurance-risk-owner",
+        "controlOwner=platform-assurance-control-owner",
+        "treatment=record bounded proof boundary and defer SonarQube operator access proof to USF-204",
+        "reviewDate=2026-09-30",
+        "accessModel=defined-only",
+        "authRequirement=operator-auth-required-before-ui-exposure",
+        "authorizationBoundary=defined-only; USF-195 does not prove operator authorization",
+        "breakGlassRelevance=must-be-defined-before-readiness-claim",
+        "auditRequirement=value-free-operator-action-evidence-required-before-readiness-claim",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=required-before-operator-console-readiness",
+        "matrix=docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+        "validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/sonarqube-service-semantic-proof-boundary.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-195; USF-204",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "access proof deferred to USF-204; owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; treatment=do not treat USF-195 as SonarQube operator access proof; reviewDate=2026-09-30; followUpIssue=USF-204; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -10964,6 +11084,50 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-195-incident-vulnerability-sonarqube-proof-boundary",
+      "targetType": "source-issue-sonarqube-service-proof-boundary",
+      "target": "docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-195",
+        "followUpIssue=USF-204",
+        "riskStatement=static-analysis posture could be mistaken for vulnerability clearance or incident readiness without SonarQube service evidence",
+        "threatFailureScenario=security hotspot treatment, unresolved issue closure, advisory handling, exception handling, or corrective action is claimed from local validation only",
+        "affectedAssetService=sonarqube service proof boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-assurance-foundation",
+        "riskOwner=platform-assurance-risk-owner",
+        "controlOwner=platform-assurance-control-owner",
+        "treatment=record SonarQube incident and vulnerability boundaries and defer operating proof to USF-204",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=not-proven-by-USF-195",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-assurance-risk-owner",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness",
+        "dependencyUpdatePosture=owner-reviewed-before-service-claim",
+        "correctiveActionEvidence=PR-and-validator-output-only",
+        "certificationBoundary=no-soc-or-iso-certification-claim",
+        "matrix=docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+        "validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/sonarqube-service-semantic-proof-boundary.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-195; USF-204",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "incident and vulnerability operating evidence deferred to USF-204; owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-204; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -12751,6 +12915,52 @@
       "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-178; USF-203",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "privacy/data minimisation operating evidence deferred to USF-203; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-195-privacy-sonarqube-proof-boundary",
+      "targetType": "source-issue-sonarqube-service-proof-boundary",
+      "target": "docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-195",
+        "followUpIssue=USF-204",
+        "riskStatement=SonarQube scanner findings, source payloads, credentials, or tenant context could be retained or exposed if later proofs are not bounded",
+        "threatFailureScenario=raw scanner results, source-analysis payloads, secrets, tokens, endpoints, or private vulnerability data are committed as evidence",
+        "affectedAssetService=sonarqube service proof boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-assurance-foundation",
+        "riskOwner=platform-assurance-risk-owner",
+        "controlOwner=platform-assurance-control-owner",
+        "treatment=record value-free repository metadata only and defer scanner payload handling proof to USF-204",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-raw-provider-payloads",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-raw-events-or-scanner-results-committed-by-USF-195",
+        "matrix=docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+        "validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/sonarqube-service-semantic-proof-boundary.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-195; USF-204",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "privacy/data minimisation operating evidence deferred to USF-204; owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-204; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

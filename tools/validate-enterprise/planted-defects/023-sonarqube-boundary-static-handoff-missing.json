@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-171 static-analysis matrix does not carry USF-204 as remaining proof after USF-195.",
+  "staticAnalysisDrop": [
+    "remainingProofIssue"
+  ]
+}

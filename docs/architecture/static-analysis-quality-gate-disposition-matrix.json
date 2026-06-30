@@ -4,6 +4,7 @@
   "status": "draft",
   "sourceIssue": "USF-171",
   "followUpIssue": "USF-195",
+  "remainingProofIssue": "USF-204",
   "laneIssue": "USF-187",
   "parentIssue": "USF-133",
   "serviceId": "sonarqube",
@@ -11,10 +12,10 @@
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
   "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
-  "issueLinks": ["USF-171", "USF-195", "USF-187", "USF-184", "USF-192", "USF-133"],
+  "issueLinks": ["USF-171", "USF-195", "USF-204", "USF-187", "USF-184", "USF-192", "USF-133"],
   "humanDecision": {
     "decisionState": "accepted",
-    "summary": "SonarQube/static-analysis decision is not completion evidence. USF-171 records a bounded disposition gate: local deterministic repository verification is mandatory but not SonarQube service equivalence, while actual SonarQube service-semantic proof remains tracked by USF-195.",
+    "summary": "SonarQube/static-analysis decision is not completion evidence. USF-171 records a bounded disposition gate: local deterministic repository verification is mandatory but not SonarQube service equivalence. USF-195 records the explicit deferred service-proof boundary, while actual composed SonarQube scan and operator proof remains tracked by USF-204.",
     "decisionIsWorkComplete": false
   },
   "sonarqubeDisposition": {
@@ -24,11 +25,12 @@
     "qualityGateReadinessClaim": false,
     "serviceCatalogueServiceId": "sonarqube",
     "followUpIssue": "USF-195",
+    "remainingProofIssue": "USF-204",
     "owner": "platform-assurance-foundation",
     "riskOwner": "platform-assurance-risk-owner",
     "controlOwner": "platform-assurance-control-owner",
     "riskStatement": "SonarQube service semantics, unresolved issue handling, security hotspot treatment, and quality-gate exception workflow could be overclaimed from local repository verification output.",
-    "treatment": "defer SonarQube service-semantic proof to USF-195 and keep local deterministic checks non-equivalent",
+    "treatment": "record SonarQube service-semantic proof boundary in USF-195, defer actual composed scan and operator proof to USF-204, and keep local deterministic checks non-equivalent",
     "reviewDate": "2026-09-30",
     "deferredEvidence": [
       "SonarQube scan execution evidence",
@@ -81,19 +83,20 @@
     "dependencyAdvisoryClearanceClaim": false,
     "secretScanningCompletenessClaim": false,
     "followUpIssue": "USF-195",
+    "remainingProofIssue": "USF-204",
     "owner": "platform-security-foundation",
     "riskOwner": "platform-security-risk-owner",
     "controlOwner": "platform-security-control-owner",
     "reviewDate": "2026-09-30"
   },
   "operatorAccessAuditRetentionSupplierBoundary": {
-    "operatorAccessBoundary": "SonarQube operator console access remains defined-only and must be proven before a service readiness claim.",
+    "operatorAccessBoundary": "SonarQube operator console access remains defined-only under USF-195 and must be proven by USF-204 before a service readiness claim.",
     "authRequirement": "operator-auth-required",
     "auditRequirement": "operator-action-audit-required",
     "retentionBoundary": "No scanner findings or source-analysis payloads are retained in repository evidence by USF-171.",
     "secretBoundary": "No SonarQube token, scanner credential, raw endpoint, or provider payload is introduced by USF-171.",
     "supplierBoundary": "Local generated Compose service is not supplier/live-provider evidence; supplier posture is required before live-provider or production claims.",
-    "incidentBoundary": "No production incident or vulnerability-response workflow is proven by USF-171."
+    "incidentBoundary": "No production incident or vulnerability-response workflow is proven by USF-171 or USF-195."
   },
   "enterpriseEvidenceRefs": [
     "usf-171-soa-static-analysis-quality-gate-disposition",

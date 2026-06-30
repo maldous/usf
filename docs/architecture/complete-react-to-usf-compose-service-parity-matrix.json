@@ -1156,7 +1156,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF has no SonarQube SSO/operator clickthrough posture.",
+      "gap_or_decision": "USF-195 records this as an explicit deferred SonarQube service-proof boundary; actual composed proof remains USF-204.",
       "legacy_service_category": "quality-gate-auth",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1165,8 +1165,8 @@
       "react_ports": null,
       "react_service": "sonar-oidc-plugin",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-204 before any SonarQube service-readiness, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "none"
     },
     {
@@ -1180,7 +1180,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF has proof gates but no SonarQube service backing store.",
+      "gap_or_decision": "USF-195 records this as an explicit deferred SonarQube service-proof boundary; local verification is not SonarQube backing-store proof.",
       "legacy_service_category": "quality-gate-backing",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1189,8 +1189,8 @@
       "react_ports": null,
       "react_service": "sonar-postgres",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-204 before any SonarQube service-readiness, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "make verify only"
     },
     {
@@ -1205,7 +1205,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF make verify is not a SonarQube service equivalent.",
+      "gap_or_decision": "USF-195 records local deterministic verification as non-equivalent to SonarQube service proof; actual scan, quality-gate, security-hotspot, and operator-console proof remains USF-204.",
       "legacy_service_category": "quality-gate",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1216,8 +1216,8 @@
       ],
       "react_service": "sonarqube",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-204 before any SonarQube service-readiness, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "make verify"
     },
     {

@@ -1,0 +1,138 @@
+{
+  "id": "usf-195-sonarqube-service-semantic-proof-boundary",
+  "title": "USF-195 SonarQube Service Semantic Proof Boundary",
+  "sourceIssue": "USF-195",
+  "followUpIssue": "USF-204",
+  "sourceDispositionIssue": "USF-171",
+  "laneIssue": "USF-187",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "parentIssue": "USF-133",
+  "status": "reclassified-deferred-with-owner",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "staticAnalysisDispositionMatrix": "docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "serviceIds": [
+    "sonarqube",
+    "sonar-postgres",
+    "sonar-oidc-plugin"
+  ],
+  "issueLinks": [
+    "USF-195",
+    "USF-204",
+    "USF-171",
+    "USF-187",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "reclassification": {
+    "from": "requires-human-decision",
+    "to": "explicit-deferred-service-proof",
+    "decisionAcceptedDoesNotMeanWorkComplete": true,
+    "serviceSemanticProofImplemented": false,
+    "sonarqubeServiceReadinessClaim": false,
+    "qualityGateReadinessClaim": false,
+    "scannerReadinessClaim": false,
+    "localVerificationEquivalentToSonarQubeService": false,
+    "repositoryEvidence": [
+      "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json#sonarqube",
+      "docs/architecture/compose-service-disposition-closure-matrix.json#sonarqube",
+      "docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
+      "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "tools/validate-enterprise/validate-enterprise.py"
+    ]
+  },
+  "remainingProofBoundary": {
+    "issue": "USF-204",
+    "owner": "platform-assurance-foundation",
+    "riskOwner": "platform-assurance-risk-owner",
+    "controlOwner": "platform-assurance-control-owner",
+    "riskStatement": "SonarQube service semantics could be overclaimed from generated Compose metadata or local deterministic repository validation without a deterministic composed scan and operator-console proof.",
+    "treatment": "defer actual SonarQube composed scan and operator-console proof to USF-204 while preserving non-equivalence and readiness non-claims",
+    "reviewDate": "2026-09-30",
+    "requiredEvidence": [
+      "profile-gated SonarQube service readiness proof",
+      "scanner execution evidence",
+      "quality-gate threshold evidence",
+      "unresolved issue lifecycle evidence",
+      "quality-gate exception handling evidence",
+      "security hotspot treatment evidence",
+      "operator console access and audit evidence",
+      "retention, secret, supplier, and incident boundary evidence"
+    ]
+  },
+  "qualityGateBoundary": {
+    "scopeStatus": "deferred-to-USF-204",
+    "unresolvedIssueHandlingStatus": "deferred-to-USF-204",
+    "exceptionHandlingStatus": "deferred-to-USF-204",
+    "securityHotspotTreatmentStatus": "deferred-to-USF-204",
+    "owner": "platform-assurance-foundation",
+    "riskOwner": "platform-assurance-risk-owner",
+    "controlOwner": "platform-assurance-control-owner",
+    "reviewDate": "2026-09-30"
+  },
+  "operatorAccessAuditRetentionSupplierBoundary": {
+    "operatorAccessBoundary": "SonarQube operator console access is not proven by USF-195 and remains deferred to USF-204.",
+    "authRequirement": "operator-auth-required-before-console-readiness",
+    "auditRequirement": "operator-action-audit-required-before-console-readiness",
+    "retentionBoundary": "No scanner findings, source-analysis payloads, or SonarQube database records are retained as readiness evidence by USF-195.",
+    "secretBoundary": "No SonarQube token, scanner credential, raw endpoint, provider payload, or connection string is introduced by USF-195.",
+    "supplierBoundary": "Local generated Compose service metadata is not supplier or live-provider evidence.",
+    "incidentBoundary": "No production incident, vulnerability-response, or corrective-action workflow is proven by USF-195."
+  },
+  "localVerificationGate": {
+    "repositoryValidationRequired": true,
+    "sonarqubeServiceEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "Repository validation commands remain mandatory local deterministic verification evidence, but they are not equivalent to SonarQube service history, dashboards, issue lifecycle, security hotspot workflow, scanner execution, or quality-gate operations.",
+    "commands": [
+      "corepack pnpm verify",
+      "corepack pnpm parity",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ]
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-195-soa-sonarqube-proof-boundary",
+    "usf-195-evidence-sonarqube-proof-boundary",
+    "usf-195-threat-sonarqube-overclaim",
+    "usf-195-access-sonarqube-proof-boundary",
+    "usf-195-incident-vulnerability-sonarqube-proof-boundary",
+    "usf-195-privacy-sonarqube-proof-boundary"
+  ],
+  "readinessClaimsAllowed": [
+    "sonarqube-service-proof-boundary-recorded",
+    "sonarqube-service-proof-deferred-to-USF-204",
+    "local-deterministic-verification-non-equivalence-recorded"
+  ],
+  "readinessClaimsProhibited": [
+    "sonarqube-readiness",
+    "quality-gate-readiness",
+    "scanner-readiness",
+    "vulnerability-clearance-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ]
+}
