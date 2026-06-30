@@ -1,0 +1,16 @@
+{
+  "name": "usf-178-operator-workflow-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-029",
+  "operatorWorkflowProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/0",
+      "value": "operator-automation-readiness"
+    },
+    {
+      "op": "replace",
+      "path": "/operatorWorkflowProviderDisposition/operatorAutomationReadinessClaim",
+      "value": true
+    }
+  ]
+}

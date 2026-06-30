@@ -1,0 +1,14 @@
+{
+  "name": "usf-178-operator-workflow-missing-proof-command",
+  "expectedRule": "USF-RUNTIME-029",
+  "operatorWorkflowProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/temporalJobsSubstituteBoundary/commands",
+      "value": [
+        "corepack pnpm proof:jobs",
+        "corepack pnpm verify"
+      ]
+    }
+  ]
+}

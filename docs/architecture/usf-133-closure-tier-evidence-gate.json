@@ -628,7 +628,9 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-178",
+        "USF-203"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -650,7 +652,9 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-178",
+        "USF-203"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -672,7 +676,9 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-178",
+        "USF-203"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -694,7 +700,9 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-178",
+        "USF-203"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -2140,13 +2148,13 @@
       "id": "exception-service-windmill-postgres",
       "targetType": "service",
       "targetId": "windmill-postgres",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "disposition": "deferred",
+      "reason": "USF-178 records bounded operator workflow disposition only; USF-203 must prove or reclassify Windmill service semantics, access, approval, privileged operation, tenant, secret, audit, retention, cleanup, failure, resilience, supplier, privacy, and provider readiness boundaries before any stronger readiness claim.",
       "owner": "platform-workflow-foundation",
       "riskOwner": "platform-workflow-risk-owner",
       "controlOwner": "platform-workflow-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-203",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [
@@ -2183,13 +2191,13 @@
       "id": "exception-service-windmill-redis",
       "targetType": "service",
       "targetId": "windmill-redis",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "disposition": "deferred",
+      "reason": "USF-178 records bounded operator workflow disposition only; USF-203 must prove or reclassify Windmill service semantics, access, approval, privileged operation, tenant, secret, audit, retention, cleanup, failure, resilience, supplier, privacy, and provider readiness boundaries before any stronger readiness claim.",
       "owner": "platform-workflow-foundation",
       "riskOwner": "platform-workflow-risk-owner",
       "controlOwner": "platform-workflow-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-203",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [
@@ -2226,13 +2234,13 @@
       "id": "exception-service-windmill",
       "targetType": "service",
       "targetId": "windmill",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation; Windmill is platform/operator automation and is not a Temporal substitute.",
-      "owner": "platform-operations-foundation",
-      "riskOwner": "platform-operations-risk-owner",
-      "controlOwner": "platform-operations-control-owner",
+      "disposition": "deferred",
+      "reason": "USF-178 records bounded operator workflow disposition only; USF-203 must prove or reclassify Windmill service semantics, access, approval, privileged operation, tenant, secret, audit, retention, cleanup, failure, resilience, supplier, privacy, and provider readiness boundaries before any stronger readiness claim.",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-203",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [
@@ -2269,13 +2277,13 @@
       "id": "exception-service-windmill-worker",
       "targetType": "service",
       "targetId": "windmill-worker",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
-      "owner": "platform-operations-foundation",
-      "riskOwner": "platform-operations-risk-owner",
-      "controlOwner": "platform-operations-control-owner",
+      "disposition": "deferred",
+      "reason": "USF-178 records bounded operator workflow disposition only; USF-203 must prove or reclassify Windmill service semantics, access, approval, privileged operation, tenant, secret, audit, retention, cleanup, failure, resilience, supplier, privacy, and provider readiness boundaries before any stronger readiness claim.",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-203",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [

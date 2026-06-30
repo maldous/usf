@@ -1,0 +1,13 @@
+{
+  "name": "usf-178-operator-workflow-missing-enterprise-evidence",
+  "expectedRule": "USF-RUNTIME-029",
+  "operatorWorkflowProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/enterpriseEvidenceRefs",
+      "value": [
+        "usf-178-soa-operator-workflow-provider-disposition"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "usf-178-operator-workflow-runtime-link-missing",
+  "expectedRule": "USF-RUNTIME-029",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/15/followUpIssueRefs",
+      "value": [
+        "USF-178",
+        "USF-189"
+      ]
+    }
+  ]
+}

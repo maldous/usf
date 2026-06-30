@@ -32,11 +32,11 @@
   ],
   "closure_disposition_counts": {
     "covered-by-usf-runtime": 2,
-    "deferred": 7,
+    "deferred": 11,
     "implemented": 13,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "requires-human-decision": 12,
+    "requires-human-decision": 8,
     "substituted-partial": 2
   },
   "rows": [
@@ -2156,7 +2156,7 @@
         "windmill-postgres"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2171,7 +2171,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-postgres",
@@ -2187,13 +2187,17 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-178"
+          "USF-178",
+          "USF-203"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "Shared Postgres proof is not equivalent to Windmill Postgres persistence, migration, backup, access, audit, or restore proof.",
+          "Service catalogue presence and generated Compose derivation are not Windmill persistence readiness, production readiness, or live-provider readiness."
+        ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "Windmill Postgres persistence proof",
+          "Windmill-specific tenant, audit, backup, restore, retention, cleanup, timeout, retry, and teardown evidence",
+          "supplier, incident, vulnerability, privacy, and resilience posture proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2220,10 +2224,17 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-windmill-postgres",
           "resilience-posture-windmill-postgres",
-          "incident-vulnerability-windmill-postgres"
+          "incident-vulnerability-windmill-postgres",
+          "usf-178-soa-operator-workflow-provider-disposition",
+          "usf-178-evidence-operator-workflow-provider-disposition",
+          "usf-178-threat-windmill-overclaim",
+          "usf-178-resilience-operator-workflow-provider",
+          "usf-178-incident-vulnerability-operator-workflow-provider",
+          "usf-178-privacy-operator-workflow-provider"
         ],
         "tracking_issue_rationale": {
-          "USF-178": "operator workflow service proof and evidence"
+          "USF-178": "bounded operator workflow service disposition gate",
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2238,7 +2249,7 @@
         "windmill-redis"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2253,7 +2264,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-redis",
@@ -2269,13 +2280,17 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-178"
+          "USF-178",
+          "USF-203"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "NATS or in-memory queue proof is not equivalent to Windmill Redis queue/cache semantics, access, audit, retention, or cleanup proof.",
+          "Service catalogue presence and generated Compose derivation are not Windmill queue/cache readiness, production readiness, or live-provider readiness."
+        ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "Windmill Redis queue/cache proof",
+          "Windmill-specific tenant, audit, retention, cleanup, timeout, retry, and teardown evidence",
+          "supplier, incident, vulnerability, privacy, and resilience posture proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2302,10 +2317,17 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-windmill-redis",
           "resilience-posture-windmill-redis",
-          "incident-vulnerability-windmill-redis"
+          "incident-vulnerability-windmill-redis",
+          "usf-178-soa-operator-workflow-provider-disposition",
+          "usf-178-evidence-operator-workflow-provider-disposition",
+          "usf-178-threat-windmill-overclaim",
+          "usf-178-resilience-operator-workflow-provider",
+          "usf-178-incident-vulnerability-operator-workflow-provider",
+          "usf-178-privacy-operator-workflow-provider"
         ],
         "tracking_issue_rationale": {
-          "USF-178": "operator workflow service proof and evidence"
+          "USF-178": "bounded operator workflow service disposition gate",
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2320,7 +2342,7 @@
         "windmill"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2335,7 +2357,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill",
@@ -2351,16 +2373,19 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-178"
+          "USF-178",
+          "USF-203"
         ],
         "non_equivalence_boundaries": [
-          "Windmill is platform/operator automation and is not a Temporal substitute."
+          "Temporal application workflow proof, jobs proof, and worker runtime proof are not equivalent to Windmill operator automation service semantics.",
+          "Service catalogue presence and generated Compose derivation are not operator automation readiness, Windmill readiness, production readiness, or live-provider readiness."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "future operator console SSO/clickthrough and privileged access proof",
-          "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "Windmill service-semantic proof",
+          "operator console access and approval workflow proof",
+          "privileged operation boundary proof",
+          "tenant, secret, audit, retention, cleanup, failure-mode, timeout, retry, and teardown evidence",
+          "supplier, access review, break-glass, incident, vulnerability, and privacy posture proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2388,10 +2413,18 @@
           "soa-deferred-boundary-windmill",
           "access-posture-windmill",
           "resilience-posture-windmill",
-          "incident-vulnerability-windmill"
+          "incident-vulnerability-windmill",
+          "usf-178-soa-operator-workflow-provider-disposition",
+          "usf-178-evidence-operator-workflow-provider-disposition",
+          "usf-178-threat-windmill-overclaim",
+          "usf-178-access-operator-workflow-provider",
+          "usf-178-resilience-operator-workflow-provider",
+          "usf-178-incident-vulnerability-operator-workflow-provider",
+          "usf-178-privacy-operator-workflow-provider"
         ],
         "tracking_issue_rationale": {
-          "USF-178": "operator workflow service proof and evidence"
+          "USF-178": "bounded operator workflow service disposition gate",
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2406,7 +2439,7 @@
         "windmill-worker"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2421,7 +2454,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-worker",
@@ -2437,13 +2470,18 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-178"
+          "USF-178",
+          "USF-203"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "apps/work and Temporal application workflow proof are not equivalent to Windmill Worker operator automation execution proof.",
+          "Service catalogue presence and generated Compose derivation are not Windmill worker readiness, operator automation readiness, production readiness, or live-provider readiness."
+        ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "Windmill Worker service-semantic proof",
+          "operator automation execution proof",
+          "tenant, secret, audit, retention, cleanup, failure-mode, timeout, retry, and teardown evidence",
+          "supplier, incident, vulnerability, privacy, and resilience posture proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2471,10 +2509,17 @@
           "soa-deferred-boundary-windmill-worker",
           "access-posture-windmill-worker",
           "resilience-posture-windmill-worker",
-          "incident-vulnerability-windmill-worker"
+          "incident-vulnerability-windmill-worker",
+          "usf-178-soa-operator-workflow-provider-disposition",
+          "usf-178-evidence-operator-workflow-provider-disposition",
+          "usf-178-threat-windmill-overclaim",
+          "usf-178-resilience-operator-workflow-provider",
+          "usf-178-incident-vulnerability-operator-workflow-provider",
+          "usf-178-privacy-operator-workflow-provider"
         ],
         "tracking_issue_rationale": {
-          "USF-178": "operator workflow service proof and evidence"
+          "USF-178": "bounded operator workflow service disposition gate",
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

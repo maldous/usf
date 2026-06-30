@@ -1,0 +1,11 @@
+{
+  "name": "usf-178-operator-workflow-temporal-equivalence",
+  "expectedRule": "USF-RUNTIME-029",
+  "operatorWorkflowProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/temporalJobsSubstituteBoundary/operatorAutomationEquivalent",
+      "value": true
+    }
+  ]
+}
