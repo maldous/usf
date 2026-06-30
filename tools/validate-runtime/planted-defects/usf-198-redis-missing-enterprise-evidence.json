@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-RUNTIME-031",
+  "redisCacheProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/enterpriseEvidenceRefs",
+      "value": [
+        "usf-198-evidence-redis-cache-proof-boundary"
+      ]
+    }
+  ]
+}

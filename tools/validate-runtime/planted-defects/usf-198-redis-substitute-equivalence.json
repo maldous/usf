@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-031",
+  "redisCacheProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/natsAndInMemoryGate/redisServiceEquivalent",
+      "value": true
+    }
+  ]
+}

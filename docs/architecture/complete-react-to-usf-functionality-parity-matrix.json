@@ -355,9 +355,9 @@
       ],
       "evidence_grade": "D",
       "react_evidence_summary": "Redis compose service and cache/session/queue local dependency lineage",
-      "readiness_impact": "USF-173 records bounded cache/eventing disposition; NATS event-bus proof is not Redis cache proof, in-memory stores are non-equivalent, and Redis adapter/service-semantic proof remains deferred to USF-198 before any Redis or cache readiness claim.",
-      "tracking_carrier_or_recommendation": "USF-173/USF-198",
-      "usf_evidence_summary": "NATS is proven only as a bounded local composed event-bus provider; Redis is catalogued as an explicit deferred provider class with no SDK, endpoint, or cache adapter proof.",
+      "readiness_impact": "USF-173 records bounded cache/eventing disposition; USF-198 records the proof boundary; NATS event-bus proof is not Redis cache proof, in-memory stores are non-equivalent, and Redis adapter/service-semantic proof remains deferred to USF-207 before any Redis or cache readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-173/USF-198/USF-207",
+      "usf_evidence_summary": "NATS is proven only as a bounded local composed event-bus provider; Redis is catalogued as an explicit deferred provider class with no SDK, endpoint, or cache adapter proof; USF-207 owns actual Redis proof.",
       "usf_status": "deferred"
     },
     {

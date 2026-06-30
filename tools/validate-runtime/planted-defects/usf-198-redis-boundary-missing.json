@@ -1,0 +1,4 @@
+{
+  "expectedRule": "USF-RUNTIME-031",
+  "removeRedisCacheProofBoundary": true
+}
