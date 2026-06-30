@@ -530,14 +530,15 @@
       ],
       "enterpriseExceptionRef": "exception-service-sonarqube"
     },
-    {
-      "serviceId": "mock-oidc",
-      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mock-oidc",
-      "enterpriseEvidenceSource": "closure-matrix-row",
-      "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+  {
+    "serviceId": "mock-oidc",
+    "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mock-oidc",
+    "enterpriseEvidenceSource": "closure-matrix-row",
+    "serviceCatalogueOwnerSource": "service-catalogue-row",
+    "sourceIssueRefs": [
+      "USF-185",
+      "USF-210"
+    ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "enterprise-readiness",
@@ -1955,15 +1956,15 @@
     },
     {
       "id": "exception-service-mock-oidc",
-      "targetType": "service",
-      "targetId": "mock-oidc",
-      "disposition": "covered-by-usf-runtime",
-      "reason": "accepted implementation/proof decision for deferred service depth; Mock OIDC cannot prove live external identity provider readiness.",
-      "owner": "platform-provider-foundation",
-      "riskOwner": "platform-provider-risk-owner",
-      "controlOwner": "platform-provider-control-owner",
-      "treatmentPath": "document-non-equivalence-boundary",
-      "followUpIssue": "USF-185",
+    "targetType": "service",
+    "targetId": "mock-oidc",
+    "disposition": "covered-by-usf-runtime",
+    "reason": "USF-210 records historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence; this does not prove standalone mock OIDC service equivalence, live IdP compatibility, SSO readiness, or production identity-provider readiness.",
+    "owner": "platform-identity-foundation",
+    "riskOwner": "platform-identity-risk-owner",
+    "controlOwner": "platform-identity-control-owner",
+    "treatmentPath": "selected-tier-supersession-with-non-equivalence-boundary",
+    "followUpIssue": "USF-210",
       "reviewDate": "2026-09-30",
       "blockerStatus": "visible-non-equivalence-boundary",
       "promotionImpact": [

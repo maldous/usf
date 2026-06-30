@@ -1,0 +1,14 @@
+{
+  "name": "usf-210-mock-oidc-superseding-evidence-missing",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "remove",
+      "path": "/mockSubstrateClassifications/3/supersedingEvidenceRefs/0"
+    },
+    {
+      "op": "remove",
+      "path": "/enterpriseEvidenceRefs/13"
+    }
+  ]
+}

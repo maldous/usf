@@ -1,0 +1,11 @@
+{
+  "name": "usf-210-mock-oidc-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/3",
+      "value": "mock-oidc-readiness"
+    }
+  ]
+}

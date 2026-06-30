@@ -959,13 +959,12 @@
     {
       "id": "usf-189-mock-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-176 records mock-provider substrate disposition. USF-201 proves bounded webhook-sink capture only and splits remaining mock-provider substrate service semantics to USF-208 for LocalStack, USF-209 for WireMock, and USF-210 for mock OIDC. Risk remains that hermetic mocks, local emulators, fixtures, or webhook capture are treated as live provider compatibility, notification delivery, cloud-provider proof, no-egress proof, or complete local mock substrate readiness; owner platform-integration-foundation; review date 2026-09-30.",
+      "boundary": "USF-176 records mock-provider substrate disposition. USF-201 proves bounded webhook-sink capture only and splits remaining mock-provider substrate service semantics to USF-208 for LocalStack and USF-209 for WireMock. USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without claiming mock OIDC service equivalence or live IdP compatibility. Risk remains that hermetic mocks, local emulators, fixtures, webhook capture, or identity proof are treated as live provider compatibility, notification delivery, cloud-provider proof, no-egress proof, complete local mock substrate readiness, SSO readiness, or mock OIDC readiness; owner platform-integration-foundation; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
         "USF-208",
         "USF-209",
-        "USF-210",
         "USF-189"
       ],
       "claimsProhibitedUntilResolved": [

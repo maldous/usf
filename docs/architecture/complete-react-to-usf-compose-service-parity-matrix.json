@@ -406,7 +406,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "B",
-      "gap_or_decision": "USF has hermetic IDP tests and Keycloak-brokered auth proof; USF-176 records that this is not mock OIDC service equivalence and USF-210 owns any future mock OIDC service proof.",
+      "gap_or_decision": "USF has hermetic IDP tests and Keycloak-brokered auth proof. USF-210 records that the historical mock OIDC service is superseded for the selected closure tier, without claiming mock OIDC service equivalence, live IdP compatibility, or SSO readiness.",
       "legacy_service_category": "identity-test",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": {
@@ -420,7 +420,7 @@
       ],
       "react_service": "mock-oidc",
       "selection_class": "selected",
-      "tracking_recommendation": "covered by authorised foundation proof only for hermetic identity semantics; USF-210 owns service-equivalence proof if later required",
+      "tracking_recommendation": "covered by authorised foundation proof only for hermetic identity semantics and composed Keycloak proof; future mock OIDC service-equivalence proof requires a new source issue if scope changes",
       "usf_accounting_status": "covered-by-usf-runtime",
       "usf_service_or_substitute": "adapters/idp"
     },

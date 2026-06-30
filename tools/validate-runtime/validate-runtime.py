@@ -343,6 +343,14 @@ MOCK_PROVIDER_SUBSTRATE_REQUIRED_EVIDENCE_REFS = {
     "usf-201-resilience-webhook-sink-composed-proof",
     "usf-201-incident-vulnerability-mock-provider-split",
     "usf-201-privacy-webhook-sink-composed-proof",
+    "usf-210-soa-mock-oidc-reclassification",
+    "usf-210-evidence-mock-oidc-reclassification",
+    "usf-210-threat-mock-oidc-overclaim",
+    "sdk-usf-210-mock-oidc-not-selected",
+    "usf-210-access-mock-oidc-reclassification",
+    "usf-210-resilience-mock-oidc-reclassification",
+    "usf-210-incident-vulnerability-mock-oidc-reclassification",
+    "usf-210-privacy-mock-oidc-reclassification",
 }
 MOCK_PROVIDER_SUBSTRATE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "local-mock-completeness-readiness",
@@ -2410,7 +2418,7 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         F.add("USF-RUNTIME-027", "issueLinks", "mock provider substrate issue links are incomplete")
     if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
         F.add("USF-RUNTIME-027", "nonClaims", "mock provider substrate non-claims are incomplete")
-    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+    if MOCK_PROVIDER_SUBSTRATE_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
         F.add("USF-RUNTIME-027", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
     if MOCK_PROVIDER_SUBSTRATE_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
         F.add("USF-RUNTIME-027", "readinessClaimsProhibited", "mock provider prohibited claims are incomplete")
@@ -2431,6 +2439,8 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
             "wiremockServiceSemanticProofPresent": False,
             "webhookSinkProviderProofPresent": True,
             "mockOidcComposeServiceProofPresent": False,
+            "mockOidcRequiredForSelectedClosureTier": False,
+            "mockOidcReclassification": "superseded-for-selected-closure-tier",
             "hermeticMockLiveProviderEquivalent": False,
             "wiremockLiveProviderEquivalent": False,
             "localstackLiveCloudProviderEquivalent": False,
@@ -2451,8 +2461,12 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
             F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.serviceCatalogueServiceIds", "service ids are incomplete")
         if required_providers - set(disposition.get("providerRegistryIds", [])):
             F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.providerRegistryIds", "provider ids are incomplete")
-        if {"USF-208", "USF-209", "USF-210"} - set(disposition.get("followUpIssues", [])):
-            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.followUpIssues", "remaining mock provider follow-up issues are incomplete")
+        if {"USF-208", "USF-209"} - set(disposition.get("followUpIssues", [])):
+            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.followUpIssues", "remaining LocalStack/WireMock follow-up issues are incomplete")
+        if "USF-210" in set(disposition.get("followUpIssues", [])):
+            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.followUpIssues", "USF-210 must not remain a deferred mock OIDC follow-up")
+        if "USF-210" not in set(disposition.get("resolvedIssues", [])):
+            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.resolvedIssues", "USF-210 mock OIDC reclassification must be recorded as resolved for the selected tier")
         for field in ("riskStatement", "treatment", "deferredEvidence"):
             if disposition.get(field) in (None, "", []):
                 F.add("USF-RUNTIME-027", f"mockProviderSubstrateDisposition.{field}", "deferral field is required")
@@ -2490,9 +2504,11 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         "mock-oidc": {
             "providerBindingId": "not-runtime-compose-binding",
             "providerRegistryId": "identity-mock-oidc-catalogue-boundary",
-            "status": "deferred-with-owner",
-            "followUpIssue": "USF-210",
+            "status": "superseded-with-evidence",
+            "sourceIssue": "USF-210",
             "proofPresent": False,
+            "serviceProofRequiredForSelectedClosureTier": False,
+            "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
         },
     }
     for service_id, expected in required_classifications.items():
@@ -2507,6 +2523,39 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
             F.add("USF-RUNTIME-027", f"mockSubstrateClassifications.{service_id}.nonEquivalenceBoundary", "non-equivalence boundary is required")
         if service_id == "webhook-sink" and "not notification delivery" not in str(item.get("nonEquivalenceBoundary", "")):
             F.add("USF-RUNTIME-027", f"mockSubstrateClassifications.{service_id}.nonEquivalenceBoundary", "webhook capture proof must preserve delivery non-equivalence")
+        if service_id == "mock-oidc":
+            if item.get("followUpIssue") is not None:
+                F.add("USF-RUNTIME-027", "mockSubstrateClassifications.mock-oidc.followUpIssue", "mock OIDC must not remain deferred to USF-210")
+            required_superseding = {
+                "packages/proof/src/auth-identity-proof.ts",
+                "adapters/idp/src/hermetic-keycloak.ts",
+                "adapters/idp/src/index.ts",
+                "spec/instances/runtime-proof/runtime-application-compose-parity.json#keycloak-identity-provider",
+            }
+            if required_superseding - set(item.get("supersedingEvidenceRefs", [])):
+                F.add("USF-RUNTIME-027", "mockSubstrateClassifications.mock-oidc.supersedingEvidenceRefs", "mock OIDC superseding evidence refs are incomplete")
+            boundary = str(item.get("nonEquivalenceBoundary", ""))
+            for marker in ("selected closure tier", "not proof", "live IdP compatibility", "SSO provider readiness"):
+                if marker not in boundary:
+                    F.add("USF-RUNTIME-027", "mockSubstrateClassifications.mock-oidc.nonEquivalenceBoundary", f"missing mock OIDC non-equivalence marker: {marker}")
+
+    semantic_boundaries = {
+        item.get("semanticArea"): item
+        for item in matrix.get("semanticProofBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("semanticArea"), str)
+    }
+    mock_oidc_semantic = semantic_boundaries.get("mock-oidc-service-semantics")
+    if not mock_oidc_semantic:
+        F.add("USF-RUNTIME-027", "semanticProofBoundaries.mock-oidc-service-semantics", "mock OIDC semantic boundary is missing")
+    else:
+        if mock_oidc_semantic.get("status") != "superseded-for-selected-closure-tier":
+            F.add("USF-RUNTIME-027", "semanticProofBoundaries.mock-oidc-service-semantics.status", "mock OIDC semantic boundary must be selected-tier superseded")
+        if mock_oidc_semantic.get("sourceIssue") != "USF-210":
+            F.add("USF-RUNTIME-027", "semanticProofBoundaries.mock-oidc-service-semantics.sourceIssue", "mock OIDC semantic boundary must link USF-210")
+        if mock_oidc_semantic.get("followUpIssue") is not None:
+            F.add("USF-RUNTIME-027", "semanticProofBoundaries.mock-oidc-service-semantics.followUpIssue", "mock OIDC semantic boundary must not leave USF-210 as a follow-up")
+        if "service-equivalence proof" not in str(mock_oidc_semantic.get("nonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-027", "semanticProofBoundaries.mock-oidc-service-semantics.nonEquivalenceBoundary", "mock OIDC service-equivalence non-claim is required")
 
     substitute = matrix.get("hermeticMockSubstituteBoundary", {})
     if not isinstance(substitute, dict):
@@ -2598,11 +2647,11 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         F.add("USF-RUNTIME-027", "operationalEvidencePosture", "operational evidence posture must be an object")
     else:
         expected_operational = {
-            "readinessRetry": "webhook-sink-bounded-exponential-backoff-60s-localstack-wiremock-mock-oidc-deferred",
-            "timeout": "webhook-sink-request-timeout-5s-unavailable-proof-1s-localstack-wiremock-mock-oidc-deferred",
-            "failClosed": "webhook-sink-provider-unavailable-fails-closed-localstack-wiremock-mock-oidc-deferred",
-            "noExternalEgress": "webhook-sink-loopback-only-proof-localstack-wiremock-mock-oidc-deferred",
-            "safeTeardown": "webhook-sink-compose-down-finally-localstack-wiremock-mock-oidc-deferred",
+            "readinessRetry": "webhook-sink-bounded-exponential-backoff-60s-localstack-wiremock-deferred-mock-oidc-not-runtime-binding",
+            "timeout": "webhook-sink-request-timeout-5s-unavailable-proof-1s-localstack-wiremock-deferred-mock-oidc-not-runtime-binding",
+            "failClosed": "webhook-sink-provider-unavailable-fails-closed-localstack-wiremock-deferred-mock-oidc-not-runtime-binding",
+            "noExternalEgress": "webhook-sink-loopback-only-proof-localstack-wiremock-deferred-mock-oidc-not-runtime-binding",
+            "safeTeardown": "webhook-sink-compose-down-finally-localstack-wiremock-deferred-mock-oidc-not-runtime-binding",
             "structuredLogging": "webhook-sink-value-free-structured-evidence",
             "tracingCorrelation": "webhook-sink-correlation-and-trace-hash-evidence",
             "metrics": "webhook-sink-readiness-retry-latency-fail-closed-health-evidence",
@@ -2680,8 +2729,12 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         for item in state["manifest"].get("deferredBoundaries", [])
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }.get("usf-189-mock-provider-deferred")
-    if not deferred or {"USF-201", "USF-208", "USF-209", "USF-210"} - set(deferred.get("followUpIssueRefs", [])):
+    if not deferred or {"USF-201", "USF-208", "USF-209"} - set(deferred.get("followUpIssueRefs", [])):
         F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must link USF-201 split follow-ups")
+    elif "USF-210" in set(deferred.get("followUpIssueRefs", [])):
+        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must not leave USF-210 as a deferred follow-up")
+    if deferred and ("USF-210" not in str(deferred.get("boundary", "")) or "superseded" not in str(deferred.get("boundary", ""))):
+        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred.boundary", "runtime deferred boundary must record USF-210 selected-tier supersession")
 
     scripts = state["package"].get("scripts") or {}
     if scripts.get("proof:mock-substrate") != "tsx packages/proof/src/mock-provider-substrate-proof.ts":
@@ -2723,6 +2776,9 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         "USF-208",
         "USF-209",
         "USF-210",
+        "supersededServiceIds",
+        "resolvedIssueRefs",
+        "mock-oidc-service-semantics-superseded-for-selected-closure-tier-by-USF-210",
         "no-live-provider-readiness",
     ):
         if marker not in proof_source:
@@ -2737,6 +2793,9 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
         "\"followUpIssue\": \"USF-201\"",
         "deferred-to-USF-201",
         "\"webhookSinkProviderProofPresent\": false",
+        "\"followUpIssue\": \"USF-210\"",
+        "mockOidc=deferred-to-USF-210",
+        "mock-oidc-service-semantics-deferred-to-USF-210",
     ):
         if stale in matrix_text:
             F.add("USF-RUNTIME-027", "mock-provider-substrate-stale-self-deferral", f"stale self-deferral remains: {stale}")

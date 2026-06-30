@@ -4120,15 +4120,15 @@
       "id": "usf-201-soa-webhook-sink-composed-proof",
       "mappedType": "source-issue-webhook-sink-composed-proof",
       "controlPurpose": "Map USF-201 as bounded local Compose webhook-sink capture proof, protocol-exception governance, and explicit non-equivalence for live provider and notification delivery claims.",
-      "riskTreated": "effectivenessState=proven-local; riskStatement=Webhook sink capture proof could be mistaken for notification delivery, provider feedback, replay, live webhook compatibility, external provider readiness, or complete mock-provider substrate readiness; threatFailureScenario=proof command success is used to claim live provider compatibility; affectedAssetService=webhook-sink capture provider; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=prove bounded local capture and split LocalStack, WireMock, and mock OIDC to USF-208, USF-209, and USF-210; reviewDate=2026-09-30; followUpIssue=USF-153",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=Webhook sink capture proof could be mistaken for notification delivery, provider feedback, replay, live webhook compatibility, external provider readiness, or complete mock-provider substrate readiness; threatFailureScenario=proof command success is used to claim live provider compatibility; affectedAssetService=webhook-sink capture provider; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=prove bounded local capture, defer LocalStack to USF-208 and WireMock to USF-209, and record mock OIDC selected-tier supersession in USF-210; reviewDate=2026-09-30; followUpIssue=USF-153",
       "assetServiceAffected": "webhook-sink capture provider plus localstack wiremock mock-oidc deferred mock substrates",
       "owner": "platform-integration-foundation",
       "riskOwner": "platform-integration-risk-owner",
       "controlOwner": "platform-integration-control-owner",
-      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-201; serviceCatalogueRow=webhook-sink; providerRegistryId=notification-delivery-webhook-sink-composed-test; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=deferred-to-USF-210; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-201; serviceCatalogueRow=webhook-sink; providerRegistryId=notification-delivery-webhook-sink-composed-test; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=superseded-for-selected-tier-by-USF-210; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed",
       "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "LocalStack cloud-emulator proof, WireMock HTTP fixture proof, mock OIDC service proof, notification delivery, provider callback/replay, live webhook compatibility, API runtime binding, worker runtime binding, and environment readiness remain deferred or non-claimed; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-210,USF-153; exception=protocol-boundary-no-maintained-sdk",
+      "deferredReason": "LocalStack cloud-emulator proof, WireMock HTTP fixture proof, standalone mock OIDC service equivalence, notification delivery, provider callback/replay, live webhook compatibility, API runtime binding, worker runtime binding, and environment readiness remain deferred, superseded for selected tier, or non-claimed as applicable; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-153; resolvedIssue=USF-210; exception=protocol-boundary-no-maintained-sdk",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -4151,10 +4151,10 @@
       "owner": "platform-integration-foundation",
       "riskOwner": "platform-integration-risk-owner",
       "controlOwner": "platform-integration-control-owner",
-      "implementationStatus": "effectivenessState=proven-local; command=proof:mock-substrate; sourceIssue=USF-201; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=deferred-to-USF-210",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:mock-substrate; sourceIssue=USF-201; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=superseded-for-selected-tier-by-USF-210",
       "evidenceSource": "package.json; Makefile; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; docs/architecture/mock-provider-substrate-disposition-matrix.json",
       "validationCommand": "corepack pnpm proof:mock-substrate",
-      "deferredReason": "LocalStack, WireMock, mock OIDC, notification delivery, callback/replay, live provider compatibility, and environment readiness remain non-claims or follow-up work; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-210,USF-153",
+      "deferredReason": "LocalStack, WireMock, standalone mock OIDC service equivalence, notification delivery, callback/replay, live provider compatibility, and environment readiness remain non-claims or follow-up work as applicable; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-153; resolvedIssue=USF-210",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -4207,6 +4207,32 @@
       "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "USF-203 records a blocked reclassification because the generated Windmill service lacks healthcheck authority, readiness retry target, auth/admin bootstrap authority, token or credential boundary, SDK/client selection, proof-safe workflow seed setup, timeout, cleanup, and teardown proof wiring; owner=platform-workflow-foundation; reviewDate=2026-09-30; followUpIssue=USF-212; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-210-soa-mock-oidc-reclassification",
+      "mappedType": "source-issue-mock-oidc-reclassification",
+      "controlPurpose": "Map USF-210 as the selected closure-tier reclassification for historical mock OIDC service semantics, preserving identity-provider non-equivalence and preventing live IdP or SSO readiness overclaim.",
+      "riskTreated": "effectivenessState=documented; riskStatement=historical mock OIDC catalogue presence could be mistaken for standalone OIDC service proof, live IdP compatibility, SSO readiness, or identity-provider readiness; threatFailureScenario=hermetic identity proof or composed Keycloak proof is used to claim the historical mock OIDC service is implemented or provider-compatible; affectedAssetService=mock-oidc, hermetic identity proof, composed Keycloak provider; impact=high; likelihood=medium; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; controlOwner=platform-identity-control-owner; treatment=reclassify mock OIDC as superseded for selected closure tier only and require a future source issue for service-equivalence proof if scope changes; reviewDate=2026-09-30; sourceIssue=USF-210",
+      "assetServiceAffected": "mock-oidc service catalogue row, hermetic identity proof, and composed Keycloak provider proof",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "implementationStatus": "effectivenessState=documented; sourceIssue=USF-210; classification=superseded-for-selected-closure-tier; serviceProofRequiredForSelectedClosureTier=false; standaloneMockOidcServiceProof=false; liveIdpCompatibilityProof=false; ssoReadinessClaim=false; futureServiceEquivalenceRequiresNewSourceIssue=true",
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; docs/architecture/compose-service-disposition-closure-matrix.json; docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json; docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/proof/src/auth-identity-proof.ts; adapters/idp/src/hermetic-keycloak.ts; adapters/idp/src/index.ts; USF-210; USF-201; USF-176; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Mock OIDC service startup, standalone issuer compatibility, service-equivalence proof, live IdP compatibility, SSO readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure remain unproven and non-claimed; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -5814,6 +5840,30 @@
       ],
       "prOrMergeSha": "41d2eefb5ec3609c7e4fef49f17a3c5e99cdad03",
       "retentionPosture": "Retain committed blocker matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain workflow payloads, provider responses, raw provider output, credentials, tokens, raw endpoints, connection strings, stack traces, external data, production data, or operator secrets."
+    },
+    {
+      "id": "usf-210-evidence-mock-oidc-reclassification",
+      "proofResult": "mock-oidc-selected-tier-reclassification",
+      "whatWasProven": "USF-210 records that the historical mock OIDC service is not required as a standalone service proof for the selected USF-133 closure tier because hermetic identity proof and composed Keycloak provider proof cover the selected identity evidence boundary. It updates mock-provider, compose-disposition, parity, runtime-manifest, enterprise-evidence, proof metadata, validator, and planted-defect evidence to preserve non-equivalence.",
+      "whatWasNotProven": "This does not prove mock OIDC service startup, standalone issuer compatibility, service-equivalence proof, live IdP compatibility, SSO readiness, tenant identity provider readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "hermetic-identity-and-composed-keycloak-evidence-support",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#mock-oidc",
+      "adapterProviderId": "identity-mock-oidc-catalogue-boundary; HermeticKeycloak; keycloak-identity-provider",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "542b98e8248729744558f10e3488e8bad4b96b6c",
+      "issueLinks": [
+        "USF-210",
+        "USF-201",
+        "USF-176",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "542b98e8248729744558f10e3488e8bad4b96b6c",
+      "retentionPosture": "Retain committed matrices, runtime manifest metadata, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain tokens, identity payloads, provider responses, raw endpoints, credentials, stack traces, tenant data, production data, or live IdP artefacts."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -7204,7 +7254,7 @@
       ],
       "failClosedBehaviour": "USF-RUNTIME-027 fails missing matrix, manifest linkage, proof command, Make target, adapter/proof markers, enterprise evidence refs, follow-up issues, non-claims, and unsafe readiness claims; proof:mock-substrate exits nonzero on readiness, capture, redaction, unavailable, or teardown failure.",
       "monitoringAuditEvidence": "validator output, proof JSON, planted defects, PR summary, and Linear linkage only; evidence remains value-free with hashed correlation, tenant, delivery, trace, and body references plus safe outcome fields.",
-      "residualRisk": "riskStatement=remaining mock-provider substrate service semantics and delivery/live-provider compatibility remain deferred; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=defer LocalStack to USF-208 WireMock to USF-209 mock OIDC to USF-210 and delivery compatibility to USF-153; reviewDate=2026-09-30; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      "residualRisk": "riskStatement=remaining mock-provider substrate service semantics and delivery/live-provider compatibility remain deferred or non-claimed; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=defer LocalStack to USF-208 WireMock to USF-209, record mock OIDC selected-tier supersession in USF-210, and defer delivery compatibility to USF-153; reviewDate=2026-09-30; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
     },
     {
       "id": "usf-202-threat-pgbackrest-proof-blocker",
@@ -7261,6 +7311,33 @@
       "failClosedBehaviour": "USF-RUNTIME-029 fails when the USF-203 Windmill blocker matrix is missing or unsafe, enterprise refs are incomplete, USF-212 is missing, bootstrap authority or SDK/client selection is falsely marked present, runtime manifest lacks USF-212 linkage, or readiness claims are enabled.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no Windmill workflow execution, operator approval, provider payload, audit operation event, or service evidence is claimed.",
       "residualRisk": "riskStatement=Windmill operator automation service semantics remain blocked after USF-203; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=unblock configured proof boundary in USF-212; reviewDate=2026-09-30; followUpIssue=USF-212; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/windmill-operator-automation-proof-blocker-matrix.json"
+    },
+    {
+      "id": "usf-210-threat-mock-oidc-overclaim",
+      "targetType": "source-issue-mock-oidc-reclassification",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "trustBoundary": "USF-210 repository evidence may reclassify historical mock OIDC as superseded for the selected closure tier only; standalone mock OIDC service operation, live IdP compatibility, SSO readiness, and production identity-provider semantics remain outside this proof.",
+      "tenantBoundary": "Tenant identity isolation is covered only by existing hermetic identity and composed Keycloak proof boundaries where explicitly proven; USF-210 does not add a mock OIDC tenant-isolation service proof.",
+      "credentialBoundary": "No mock OIDC credentials, tokens, issuer secrets, raw endpoints, identity payloads, provider payloads, SDK errors, connection strings, or stack traces are introduced or retained by USF-210.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production data, tenant data, identity payloads, tokens, raw provider responses, credentials, or raw endpoints",
+      "abuseCases": [
+        "USF-210 marked as live IdP compatibility",
+        "hermetic identity proof treated as standalone mock OIDC service equivalence",
+        "composed Keycloak proof treated as SSO readiness",
+        "mock OIDC follow-up left as deferred and also claimed resolved",
+        "readiness or certification claim emitted from selected-tier reclassification"
+      ],
+      "failureModes": [
+        "matrix missing selected-tier supersession",
+        "USF-210 remains in follow-up issues",
+        "superseding evidence refs missing",
+        "runtime manifest still defers mock OIDC to USF-210",
+        "service-equivalence non-claim missing",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-027 fails when mock OIDC is still deferred to USF-210, selected-tier supersession is missing, superseding evidence refs are incomplete, enterprise evidence refs are missing, runtime manifest linkage is stale, proof metadata still records mock OIDC as a deferred service, or prohibited readiness/certification claims are enabled.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live IdP operation, identity payload, token, provider response, or service runtime evidence is claimed.",
+      "residualRisk": "riskStatement=standalone mock OIDC service semantics remain unproven and would require a new source issue if future closure-tier scope changes; impact=medium; likelihood=medium; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; controlOwner=platform-identity-control-owner; treatment=accept selected-tier supersession with non-equivalence and no live/SSO/readiness claim; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7487,6 +7564,22 @@
       "typescriptRuntimeCompatibility": "No TypeScript SDK or runtime dependency is added by USF-203.",
       "forbiddenLayerImportCheck": "USF-203 adds no SDK, client, CLI, protocol, or implementation imports; validators reject proof claims without configured proof boundary.",
       "updateDeprecationOwner": "platform-workflow-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-210-mock-oidc-not-selected",
+      "serviceId": "mock-oidc",
+      "adapterId": "not-runtime-compose-binding",
+      "providerId": "identity-mock-oidc-catalogue-boundary",
+      "packageName": "not-selected-selected-tier-superseded",
+      "version": "not-applicable-no-sdk-client-cli-or-protocol-boundary-selected",
+      "selectionRationale": "USF-210 does not implement a standalone mock OIDC runtime adapter or provider binding because the selected closure tier is satisfied by existing hermetic identity and composed Keycloak proof evidence with explicit non-equivalence. A future source issue must select a maintained SDK/client or justified protocol boundary if standalone mock OIDC service proof becomes required.",
+      "officialOrDeFactoStatus": "not-selected-because-standalone-service-proof-not-required-for-selected-tier",
+      "licencePosture": "No npm dependency, client package, CLI package, SDK, or container replacement is added by USF-210.",
+      "maintenancePosture": "No SDK update stream is introduced; platform-identity-dependency-owner must review any future mock OIDC service SDK/client choice before proof implementation.",
+      "securityAdvisoryPosture": "No new dependency advisory surface is added by USF-210; future service proof must document advisory posture before stronger identity-provider claims.",
+      "typescriptRuntimeCompatibility": "No TypeScript SDK or runtime dependency is added by USF-210.",
+      "forbiddenLayerImportCheck": "USF-210 adds no SDK, client, CLI, protocol, or implementation imports; USF-RUNTIME-027 rejects selected-tier overclaim and stale mock OIDC follow-up semantics.",
+      "updateDeprecationOwner": "platform-identity-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -9220,6 +9313,50 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-210-access-mock-oidc-reclassification",
+      "targetType": "source-issue-mock-oidc-reclassification",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=documented",
+        "sourceIssue=USF-210",
+        "riskStatement=mock OIDC reclassification could be mistaken for operator identity-provider access readiness",
+        "threatFailureScenario=SSO admin access public issuer exposure or live IdP access is claimed from selected-tier metadata only",
+        "affectedAssetService=mock-oidc identity provider boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-identity-foundation",
+        "riskOwner=platform-identity-risk-owner",
+        "controlOwner=platform-identity-control-owner",
+        "treatment=record selected-tier supersession and require a future source issue before standalone service access claims",
+        "reviewDate=2026-09-30",
+        "accessModel=no-human-access-claimed-by-USF-210",
+        "authRequirement=not proven for standalone mock OIDC service by USF-210",
+        "authorizationBoundary=existing hermetic identity and composed Keycloak proof boundaries only",
+        "breakGlassRelevance=not applicable to selected-tier reclassification",
+        "auditRequirement=value-free-validator-and-proof-metadata-only",
+        "reviewCadence=quarterly-before-stronger-identity-readiness-claim",
+        "deprovisioningPosture=no provider account lifecycle proven by USF-210",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-210",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Standalone mock OIDC service access, SSO admin access, public issuer exposure, live IdP access, and production identity access remain unproven; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -10739,6 +10876,45 @@
       "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Windmill execution, retention, cleanup, timeout, retry, teardown, and resilience evidence are blocked until USF-212; owner=platform-workflow-foundation; reviewDate=2026-09-30; followUpIssue=USF-212; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-210-resilience-mock-oidc-reclassification",
+      "targetType": "source-issue-mock-oidc-reclassification",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=documented",
+        "sourceIssue=USF-210",
+        "backupRequirement=not-applicable-to-selected-tier-reclassification",
+        "restoreProofRequirement=not claimed for standalone mock OIDC service",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=hermetic identity or Keycloak evidence treated as mock OIDC service resilience proof",
+        "cleanupTeardownProof=not applicable because USF-210 adds no runtime service operation",
+        "deferredDrBoundary=explicit-non-claim",
+        "readinessRetry=not applicable because standalone service proof is not selected",
+        "timeout=not applicable because no SDK/client/protocol call is introduced",
+        "failClosed=USF-RUNTIME-027 rejects selected-tier overclaim and stale deferred follow-up linkage",
+        "owner=platform-identity-foundation",
+        "riskOwner=platform-identity-risk-owner",
+        "controlOwner=platform-identity-control-owner",
+        "reviewDate=2026-09-30",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-210",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Standalone mock OIDC service readiness, retry, timeout, teardown, backup, restore, DR, RPO/RTO, and production recovery evidence remain unproven; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -12815,7 +12991,7 @@
       ],
       "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "Production incident detection alerting escalation rehearsal corrective action operation vulnerability SLA evidence LocalStack WireMock mock OIDC and delivery provider vulnerability posture remain unproven; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-210,USF-153; exception=protocol-boundary-no-maintained-sdk",
+      "deferredReason": "Production incident detection alerting escalation rehearsal corrective action operation vulnerability SLA evidence LocalStack WireMock standalone mock OIDC service operation and delivery provider vulnerability posture remain unproven or non-claimed; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-153; resolvedIssue=USF-210; exception=protocol-boundary-no-maintained-sdk",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -12904,6 +13080,49 @@
       "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Incident, vulnerability, advisory, dependency update, alerting, and corrective-action evidence are blocked until USF-212; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-212",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-210-incident-vulnerability-mock-oidc-reclassification",
+      "targetType": "source-issue-mock-oidc-reclassification",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=documented",
+        "sourceIssue=USF-210",
+        "riskStatement=mock OIDC selected-tier supersession could hide incident vulnerability or dependency posture gaps for a future standalone identity mock service",
+        "threatFailureScenario=repository metadata is treated as mock OIDC operating incident evidence, vulnerability review, alerting, or corrective-action readiness",
+        "affectedAssetService=mock-oidc identity provider boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-identity-foundation",
+        "riskOwner=platform-identity-risk-owner",
+        "controlOwner=platform-identity-control-owner",
+        "treatment=record non-implementation and require future issue before standalone service incident or advisory claims",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=repository-validator-and-PR-evidence-only",
+        "alertingPosture=not-proven-by-USF-210",
+        "escalationOwner=platform-identity-foundation",
+        "vulnerabilityAdvisoryReview=required-before-future-standalone-service-proof",
+        "dependencyUpdatePosture=no-new-SDK-or-client-added-by-USF-210",
+        "correctiveActionEvidenceBoundary=repository metadata PR and validator output only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-210",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-210",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Production incident detection, alerting, escalation rehearsal, vulnerability SLA, corrective-action operation, and standalone mock OIDC advisory evidence remain unproven; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -15116,7 +15335,7 @@
       ],
       "evidenceSource": "package.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts",
       "validationCommand": "corepack pnpm proof:mock-substrate",
-      "deferredReason": "Production data, live provider privacy, notification delivery privacy, callback/replay privacy, data residency, legal hold, custom retention, LocalStack, WireMock, and mock OIDC privacy evidence remain unproven; followUpIssues=USF-208,USF-209,USF-210,USF-153",
+      "deferredReason": "Production data, live provider privacy, notification delivery privacy, callback/replay privacy, data residency, legal hold, custom retention, LocalStack, WireMock, and standalone mock OIDC privacy evidence remain unproven or non-claimed; followUpIssues=USF-208,USF-209,USF-153; resolvedIssue=USF-210",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -15209,6 +15428,51 @@
       "evidenceSource": "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json; docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-203; USF-212",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Privacy and data minimisation operating evidence remains blocked until USF-212; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-212; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-210-privacy-mock-oidc-reclassification",
+      "targetType": "source-issue-mock-oidc-reclassification",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=documented",
+        "sourceIssue=USF-210",
+        "riskStatement=mock OIDC token payloads identity claims tenant data or credentials could be implied or retained if selected-tier metadata is mistaken for service proof",
+        "threatFailureScenario=identity token claims provider response or raw issuer metadata is committed as proof evidence or implied by reclassification",
+        "affectedAssetService=mock-oidc identity provider boundary",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-identity-foundation",
+        "riskOwner=platform-identity-risk-owner",
+        "controlOwner=platform-identity-control-owner",
+        "treatment=record value-free repository metadata only and require future issue before standalone service data handling proof",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=identity-governance-metadata-and-internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-identity-payloads-or-tokens",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-tokens-identity-claims-provider-responses-raw-errors-raw-endpoints-credentials-or-tenant-data-committed-by-USF-210",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-210",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Production data, live IdP privacy, SSO provider privacy, token handling, tenant identity data, data residency, legal hold, custom retention, and standalone mock OIDC privacy evidence remain unproven; owner=platform-identity-foundation; riskOwner=platform-identity-risk-owner; reviewDate=2026-09-30; followUpIssue=none-for-selected-tier; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

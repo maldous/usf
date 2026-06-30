@@ -24,8 +24,10 @@ interface MockProviderSubstrateProofResult {
   readonly composeService: "webhook-sink";
   readonly proofCommand: "corepack pnpm proof:mock-substrate";
   readonly implementedServiceIds: readonly ["webhook-sink"];
-  readonly deferredServiceIds: readonly ["localstack", "wiremock", "mock-oidc"];
-  readonly followUpIssueRefs: readonly ["USF-208", "USF-209", "USF-210"];
+  readonly deferredServiceIds: readonly ["localstack", "wiremock"];
+  readonly supersededServiceIds: readonly ["mock-oidc"];
+  readonly followUpIssueRefs: readonly ["USF-208", "USF-209"];
+  readonly resolvedIssueRefs: readonly ["USF-210"];
   readonly serviceCatalogueServiceId: typeof WEBHOOK_SINK_SERVICE_CATALOGUE_ID;
   readonly providerRegistryId: typeof WEBHOOK_SINK_PROVIDER_REGISTRY_ID;
   readonly bindingId: typeof WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID;
@@ -231,8 +233,10 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
     composeService: COMPOSE_SERVICE,
     proofCommand: PROOF_COMMAND,
     implementedServiceIds: ["webhook-sink"] as const,
-    deferredServiceIds: ["localstack", "wiremock", "mock-oidc"] as const,
-    followUpIssueRefs: ["USF-208", "USF-209", "USF-210"] as const,
+    deferredServiceIds: ["localstack", "wiremock"] as const,
+    supersededServiceIds: ["mock-oidc"] as const,
+    followUpIssueRefs: ["USF-208", "USF-209"] as const,
+    resolvedIssueRefs: ["USF-210"] as const,
     serviceCatalogueServiceId: WEBHOOK_SINK_SERVICE_CATALOGUE_ID,
     providerRegistryId: WEBHOOK_SINK_PROVIDER_REGISTRY_ID,
     bindingId: WEBHOOK_SINK_RUNTIME_PROVIDER_BINDING_ID,
@@ -251,14 +255,15 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
       "webhook echo readback verified without preserving raw payload or endpoint evidence",
       "unavailable endpoint failed closed with safe reason code",
       "tenant, synthetic-data, no-egress, audit, metric, trace, and redaction evidence captured",
-      "LocalStack, WireMock, and mock OIDC remain deferred to separate follow-up issues",
+      "LocalStack and WireMock remain deferred to separate follow-up issues",
+      "mock OIDC is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence",
       "no prohibited readiness or certification claim emitted",
     ],
     prohibitedClaimsObserved: PROHIBITED_CLAIMS_OBSERVED,
     deferredBoundaries: [
       "localstack-service-semantics-deferred-to-USF-208",
       "wiremock-service-semantics-deferred-to-USF-209",
-      "mock-oidc-service-semantics-deferred-to-USF-210",
+      "mock-oidc-service-semantics-superseded-for-selected-closure-tier-by-USF-210",
       "webhook-delivery-notification-provider-not-claimed",
       "provider-feedback-replay-not-claimed",
       "live-webhook-compatibility-not-claimed",
