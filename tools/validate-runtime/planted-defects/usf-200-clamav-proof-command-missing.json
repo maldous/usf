@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-RUNTIME-026",
+  "removePackageScripts": [
+    "proof:scanner:clamav"
+  ]
+}

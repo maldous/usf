@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-026",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/10/apiProofEvidence",
+      "value": "API runtime scanner binding is proven by USF-200."
+    }
+  ]
+}

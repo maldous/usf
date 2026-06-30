@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-026",
+  "fileScannerProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/proofEvidence/evidenceMarkers/3",
+      "value": "fail-open-provider-unavailable"
+    }
+  ]
+}

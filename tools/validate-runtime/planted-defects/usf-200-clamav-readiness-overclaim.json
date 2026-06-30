@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-026",
+  "fileScannerProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/0",
+      "value": "scanner-readiness"
+    }
+  ]
+}

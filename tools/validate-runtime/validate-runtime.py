@@ -89,6 +89,7 @@ ADAPTER_SECRETS_SOURCE_PATH = Path("adapters/secrets/src/index.ts")
 ADAPTER_WF_SOURCE_PATH = Path("adapters/wf/src/index.ts")
 ADAPTER_SEARCH_SOURCE_PATH = Path("adapters/search/src/index.ts")
 MEILISEARCH_PROOF_SOURCE_PATH = Path("packages/proof/src/meilisearch-composed-proof.ts")
+CLAMAV_PROOF_SOURCE_PATH = Path("packages/proof/src/clamav-composed-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
@@ -296,6 +297,13 @@ FILE_SCANNER_PROVIDER_REQUIRED_EVIDENCE_REFS = {
     "usf-175-access-file-scanner-provider",
     "usf-175-incident-vulnerability-file-scanner-provider",
     "usf-175-privacy-file-scanner-provider",
+    "usf-200-soa-clamav-composed-proof",
+    "usf-200-evidence-clamav-composed-proof",
+    "usf-200-threat-clamav-runtime-overclaim",
+    "usf-200-access-clamav-composed-proof",
+    "usf-200-resilience-clamav-composed-proof",
+    "usf-200-incident-vulnerability-clamav-composed-proof",
+    "usf-200-privacy-clamav-composed-proof",
 }
 FILE_SCANNER_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "scanner-readiness",
@@ -397,10 +405,10 @@ LANE5_PROVIDER_DISPOSITIONS = {
     },
     "usf-189-clamav-scanner-provider": {
         "serviceIds": ["clamav"],
-        "providerIds": ["file-scan-clamav-deferred"],
+        "providerIds": ["file-scan-clamav-composed-test", "file-scan-clamav-deferred"],
         "followUpIssue": "USF-200",
         "boundaryRef": "usf-189-scanner-provider-deferred",
-        "allowedStatuses": {"profile-gated"},
+        "allowedStatuses": {"profile-gated-proven"},
     },
     "usf-189-localstack-cloud-mock-provider": {
         "serviceIds": ["localstack"],
@@ -485,7 +493,7 @@ SOURCE_TEARDOWN_MARKERS = (
     "USF_WORKER_RUN_ONCE",
 )
 PROVIDER_SDK_IMPORT_RE = re.compile(
-    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|meilisearch|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
+    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|meilisearch|clamscan|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
 )
 FORBIDDEN_SDK_IMPORT_PATHS = (
     Path("packages/core/src/index.ts"),
@@ -1994,7 +2002,7 @@ def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) 
         "laneIssue": "USF-189",
         "parentIssue": "USF-133",
         "serviceId": "clamav",
-        "providerRegistryId": "file-scan-clamav-deferred",
+        "providerRegistryId": "file-scan-clamav-composed-test",
         "runtimeManifest": str(MANIFEST_PATH),
         "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
         "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
@@ -2007,7 +2015,7 @@ def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) 
         F.add("USF-RUNTIME-026", "issueLinks", "file scanner provider issue links are incomplete")
     if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
         F.add("USF-RUNTIME-026", "nonClaims", "file scanner provider non-claims are incomplete")
-    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+    if FILE_SCANNER_PROVIDER_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
         F.add("USF-RUNTIME-026", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
     if FILE_SCANNER_PROVIDER_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
         F.add("USF-RUNTIME-026", "readinessClaimsProhibited", "file scanner provider prohibited claims are incomplete")
@@ -2023,18 +2031,18 @@ def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) 
         F.add("USF-RUNTIME-026", "scannerProviderDisposition", "scanner provider disposition must be an object")
     else:
         expected_disposition = {
-            "disposition": "explicit-deferral-with-owner",
-            "clamavServiceSemanticProofPresent": False,
-            "composedScannerProviderProofPresent": False,
+            "disposition": "profile-gated-composed-proof-present",
+            "clamavServiceSemanticProofPresent": True,
+            "composedScannerProviderProofPresent": True,
             "deterministicScannerClamavEquivalent": False,
-            "failClosedQuarantineClaim": "bounded-hermetic-only",
+            "failClosedQuarantineClaim": "profile-gated-composed-proof",
             "liveScannerReadinessClaim": False,
             "dlpReadinessClaim": False,
             "vulnerabilityClearanceClaim": False,
             "scannerProviderReadinessClaim": False,
             "providerCompatibilityClaim": False,
             "serviceCatalogueServiceId": "clamav",
-            "providerRegistryId": "file-scan-clamav-deferred",
+            "providerRegistryId": "file-scan-clamav-composed-test",
             "followUpIssue": "USF-200",
             "owner": "platform-files-foundation",
             "riskOwner": "platform-files-risk-owner",
@@ -2084,40 +2092,100 @@ def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) 
     else:
         expected_provider = {
             "providerBindingId": "usf-189-clamav-scanner-provider",
-            "providerRegistryId": "file-scan-clamav-deferred",
-            "bindingStatus": "profile-gated",
-            "providerMode": "live-external-deferred",
+            "providerRegistryId": "file-scan-clamav-composed-test",
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
             "runtimeProviderBindingActive": False,
-            "sdkPackage": None,
-            "sdkVersion": None,
-            "endpointRef": None,
+            "sdkPackage": "clamscan",
+            "sdkVersion": "2.4.0",
+            "endpointRef": "endpoint://compose/clamav",
             "followUpIssue": "USF-200",
         }
         for key, expected in expected_provider.items():
             observed = provider_boundary.get(key)
             if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
                 F.add("USF-RUNTIME-026", f"providerBoundary.{key}", f"expected {expected!r}")
+        if provider_boundary.get("sdkBoundary") != "adapter-package-only":
+            F.add("USF-RUNTIME-026", "providerBoundary.sdkBoundary", "ClamAV proof must stay inside the adapter package boundary")
+        if provider_boundary.get("proofCommand") != "corepack pnpm proof:scanner:clamav":
+            F.add("USF-RUNTIME-026", "providerBoundary.proofCommand", "ClamAV proof command is missing or stale")
+        if provider_boundary.get("sourceUse") != "de-facto-clamscan-tcp-client":
+            F.add("USF-RUNTIME-026", "providerBoundary.sourceUse", "ClamAV source-use rationale is missing or stale")
 
     operational = matrix.get("operationalEvidencePosture", {})
     if not isinstance(operational, dict):
         F.add("USF-RUNTIME-026", "operationalEvidencePosture", "operational evidence posture must be an object")
     else:
         expected_operational = {
-            "readinessRetry": "deferred-to-USF-200",
-            "timeout": "deferred-to-USF-200",
-            "failClosed": "bounded-hermetic-files-proof-only",
-            "safeTeardown": "deferred-to-USF-200",
+            "readinessRetry": "bounded-exponential-backoff-180s-proven-by-USF-200",
+            "timeout": "clamd-scan-timeout-30000ms-and-unavailable-timeout-proof-proven-by-USF-200",
+            "safeTeardown": "compose-down-proven-by-USF-200",
         }
         for key, expected in expected_operational.items():
             if operational.get(key) != expected:
                 F.add("USF-RUNTIME-026", f"operationalEvidencePosture.{key}", f"expected {expected!r}")
-        for field in ("structuredLogging", "tracingCorrelation", "metrics", "auditEvents", "redaction"):
+        for field in ("failClosed", "structuredLogging", "tracingCorrelation", "metrics", "auditEvents", "redaction"):
             if field not in operational:
                 F.add("USF-RUNTIME-026", f"operationalEvidencePosture.{field}", "operational field is required")
 
     declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
     if declared_evidence != FILE_SCANNER_PROVIDER_REQUIRED_EVIDENCE_REFS:
         F.add("USF-RUNTIME-026", "enterpriseEvidenceRefs", "file scanner provider enterprise evidence refs are incomplete")
+
+    sdk_selection = matrix.get("sdkClientSelection", {})
+    if not isinstance(sdk_selection, dict):
+        F.add("USF-RUNTIME-026", "sdkClientSelection", "ClamAV SDK/client selection rationale is missing")
+    else:
+        expected_sdk = {
+            "package": "clamscan",
+            "version": "2.4.0",
+            "officialOrDeFactoStatus": "de-facto-maintained-client",
+            "localComposeCompatibility": "Configured for clamd TCP on loopback-published ephemeral port with localFallback disabled and no local binary invocation.",
+            "updateOwner": "platform-files-dependency-owner",
+        }
+        for key, expected in expected_sdk.items():
+            if sdk_selection.get(key) != expected:
+                F.add("USF-RUNTIME-026", f"sdkClientSelection.{key}", f"expected {expected!r}")
+        for field in (
+            "selectionRationale",
+            "licencePosture",
+            "maintenancePosture",
+            "securityAdvisoryPosture",
+            "typescriptRuntimeCompatibility",
+            "alternativesRejected",
+        ):
+            if not sdk_selection.get(field):
+                F.add("USF-RUNTIME-026", f"sdkClientSelection.{field}", "SDK/client governance field is required")
+
+    proof_evidence = matrix.get("proofEvidence", {})
+    if not isinstance(proof_evidence, dict):
+        F.add("USF-RUNTIME-026", "proofEvidence", "ClamAV proof evidence metadata is missing")
+    else:
+        expected_proof = {
+            "proofCommand": "corepack pnpm proof:scanner:clamav",
+            "packageScript": "proof:scanner:clamav",
+            "makeTarget": "scanner-proof-clamav",
+            "proofSource": "packages/proof/src/clamav-composed-proof.ts",
+            "adapterSource": "adapters/store/src/index.ts",
+        }
+        for key, expected in expected_proof.items():
+            if proof_evidence.get(key) != expected:
+                F.add("USF-RUNTIME-026", f"proofEvidence.{key}", f"expected {expected!r}")
+        markers = set(proof_evidence.get("evidenceMarkers", []))
+        for marker in (
+            "cleanScanChecked",
+            "infectedScanChecked",
+            "providerUnavailableChecked",
+            "failClosedQuarantineChecked",
+            "readinessRetryPolicy=bounded-exponential-backoff-180s",
+            "quarantinedDownloadDenied",
+            "cleanDeleteBoundaryChecked",
+            "tenantIsolationChecked",
+            "auditRedactionChecked",
+            "compose-down",
+        ):
+            if marker not in markers:
+                F.add("USF-RUNTIME-026", "proofEvidence.evidenceMarkers", f"missing proof marker: {marker}")
 
     bindings = binding_records(state["manifest"])
     binding = bindings.get("usf-189-clamav-scanner-provider")
@@ -2127,11 +2195,27 @@ def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) 
         if "USF-200" not in binding.get("followUpIssueRefs", []):
             F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider", "runtime manifest must link USF-200")
         if "USF-200" not in str(binding.get("deferredReason", "")):
-            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-200")
-        if binding.get("bindingStatus") != "profile-gated" or binding.get("endpointRef") is not None:
-            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider", "ClamAV must remain explicitly deferred/profile-gated without endpoint binding")
-        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
-            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider", "deferred ClamAV must not name an SDK/client package")
+            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider.deferredReason", "runtime manifest must record USF-200 bounded proof and remaining scanner deferrals")
+        expected_binding = {
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkBoundary": "adapter-package-only",
+            "endpointRef": "endpoint://compose/clamav",
+            "sdkPackage": "clamscan",
+            "sdkVersion": "2.4.0",
+            "proofCommand": "corepack pnpm proof:scanner:clamav",
+        }
+        for key, expected in expected_binding.items():
+            if binding.get(key) != expected:
+                F.add("USF-RUNTIME-026", f"providerBindingMatrix.usf-189-clamav-scanner-provider.{key}", f"expected {expected!r}")
+        if "file-scan-clamav-composed-test" not in binding.get("providerRegistryIds", []):
+            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider.providerRegistryIds", "composed-test provider registry id is missing")
+        if "not claimed" not in str(binding.get("apiProofEvidence", "")) or "not claimed" not in str(binding.get("workerProofEvidence", "")):
+            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider", "API and worker runtime binding non-claims must remain explicit")
+        for marker in ("readiness retry", "clean scan", "EICAR infected", "provider-unavailable", "fail-closed quarantine", "quarantined download denial", "deletion", "tenant isolation", "redaction", "Compose teardown"):
+            if marker not in str(binding.get("proofEvidence", "")):
+                F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider.proofEvidence", f"missing proof evidence marker: {marker}")
 
     deferred = {
         item.get("id"): item
@@ -2140,6 +2224,59 @@ def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) 
     }.get("usf-189-scanner-provider-deferred")
     if not deferred or "USF-200" not in deferred.get("followUpIssueRefs", []):
         F.add("USF-RUNTIME-026", "deferredBoundaries.usf-189-scanner-provider-deferred", "runtime deferred boundary must link USF-200")
+    elif "signature database freshness" not in str(deferred.get("boundary", "")) or "DLP readiness" not in str(deferred.get("boundary", "")):
+        F.add("USF-RUNTIME-026", "deferredBoundaries.usf-189-scanner-provider-deferred", "remaining scanner deferrals must stay explicit")
+
+    adapter_source = state_text(state, ADAPTER_STORE_SOURCE_PATH)
+    for marker in (
+        "ClamAvScanProvider",
+        "clamscan",
+        "localFallback: false",
+        "retryClamAvReadiness",
+        "bounded-exponential-backoff-180s",
+        "safeErrorRedactionChecked",
+        "metricEvidenceCaptured",
+        "traceEvidenceCaptured",
+        "auditEvidenceCaptured",
+        "redactionChecked",
+        "providerUnavailableChecked",
+        "failClosedQuarantineChecked",
+        "releaseBoundaryChecked",
+        "apiRuntimeUse",
+        "workerRuntimeUse",
+        "deterministicInMemorySubstituteUse",
+    ):
+        if marker not in adapter_source:
+            F.add("USF-RUNTIME-026", str(ADAPTER_STORE_SOURCE_PATH), f"ClamAV adapter proof marker is missing: {marker}")
+
+    clamav_proof_source = state_text(state, CLAMAV_PROOF_SOURCE_PATH)
+    for marker in (
+        "runClamAvComposedProof",
+        "compose",
+        "--profile",
+        "scanning",
+        "corepack pnpm proof:scanner:clamav",
+        "ClamAvScanProvider",
+        "composeDown",
+        "finally",
+        "FORBIDDEN_EVIDENCE_PATTERN",
+        "providerUnavailableQuarantined",
+        "quarantinedDownloadDenied",
+        "cleanDeleteBoundaryChecked",
+        "tenantIsolationChecked",
+        "no-production-readiness",
+        "no-live-provider-readiness",
+    ):
+        if marker not in clamav_proof_source:
+            F.add("USF-RUNTIME-026", str(CLAMAV_PROOF_SOURCE_PATH), f"ClamAV proof source marker is missing: {marker}")
+
+    scripts = state["package"].get("scripts") or {}
+    if scripts.get("proof:scanner:clamav") != "tsx packages/proof/src/clamav-composed-proof.ts":
+        F.add("USF-RUNTIME-026", "package.json.proof:scanner:clamav", "ClamAV proof package script is missing or stale")
+    if state["package"].get("dependencies", {}).get("clamscan") != "2.4.0":
+        F.add("USF-RUNTIME-026", "package.json:clamscan", "clamscan must be exact-version pinned to 2.4.0")
+    if "scanner-proof-clamav" not in make_targets(state["makefile"]):
+        F.add("USF-RUNTIME-026", "Makefile.scanner-proof-clamav", "ClamAV proof Make target is missing")
 
     matrix_text = json.dumps(matrix, sort_keys=True)
     for stale in ("until USF-175 closes", "followUpIssue=USF-175", "\"followUpIssue\": \"USF-175\"", "linkedFollowUpIssue=USF-175"):

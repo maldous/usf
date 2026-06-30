@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-026",
+  "sourceReplacements": [
+    {
+      "path": "adapters/store/src/index.ts",
+      "old": "retryClamAvReadiness",
+      "new": "clamAvReadinessWithoutRetry"
+    }
+  ]
+}

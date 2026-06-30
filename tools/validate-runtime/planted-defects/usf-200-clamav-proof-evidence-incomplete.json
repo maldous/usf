@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-026",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/10/proofEvidence",
+      "value": "SDK-backed profile-gated local Compose proof exercises clamd TCP readiness retry only."
+    }
+  ]
+}

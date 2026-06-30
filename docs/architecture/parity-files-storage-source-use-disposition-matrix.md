@@ -7,7 +7,7 @@
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-146 under USF-133; deferred depth tracked in USF-147 |
 | Source row basis | `docs/architecture/files-and-object-storage-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), the audit-evidence and config-and-secrets standards, and historical `../react` files/storage behaviour as lineage only |
-| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no Playwright; no live S3/MinIO/ClamAV/presigned-URL/DLP; no live/production claim |
+| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no Playwright; no live S3/MinIO/ClamAV/presigned-URL/DLP; USF-200 adds bounded local Compose ClamAV proof only; no live/production claim |
 
 ## Treatment Rules
 
@@ -18,8 +18,10 @@
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
 | `adapters/db/migrations/0003-files.sql` | source-derived-rewrite | React object_storage tenant-scoped metadata + isolation lineage | Tenant-scoped `files` metadata table: RLS + FORCE RLS + tenant policy, enterprise persistence metadata, soft delete/restore, legal-hold purge-block, integrity/scan fields. Adds the per-object checksum + opaque-key fields React lacked. |
+| `adapters/store/src/clamscan.d.ts` | new-with-rationale | USF-200 SDK/client boundary requirement; no React runtime/application code copied | Local TypeScript declaration for the de-facto `clamscan` SDK at the adapter boundary only; does not authorise SDK imports outside adapters or claim live scanner readiness. |
 | `capabilities/files/src/file-service.ts` | source-derived-rewrite | React upload/download/scan/quarantine/delete lineage | PDP-protected, tenant-scoped upload/download/get/list/delete/restore/purge/verify with scan gate, legal-hold purge-block, integrity verify, and value-free file audit. |
 | `packages/proof/src/files-storage-proof.ts` | evidence-only-support | File RLS + legal-hold proof requirement | Composed-Postgres proof: files RLS isolation, FORCE RLS, legal-hold purge-block, object-key uniqueness. `make files-proof`. |
+| `packages/proof/src/clamav-composed-proof.ts` | evidence-only-support | USF-200 bounded local Compose ClamAV proof requirement; no React runtime/application code copied | Profile-gated proof for SDK-backed local ClamAV clean/infected scans, provider-unavailable fail-closed quarantine routing, quarantined download denial, deletion, tenant isolation, value-free audit evidence, redaction, and teardown. No live scanner, DLP, staging, production, SOC, ISO, full dev, or full React parity claim. |
 | `tests/capabilities/files-storage.test.ts` | evidence-only-support | Files/storage behaviour proof requirement | Hermetic object-key-safety, upload-validation, isolation, scan/quarantine, lifecycle, legal-hold, integrity-tamper tests. |
 | `tests/apps/files-api.test.ts` | evidence-only-support | File surface proof requirement | API tests: upload/list/get/download/verify; redacted views (no object key); quarantine download 403; tenant mismatch; PDP deny. |
 
@@ -35,7 +37,7 @@
 | Download authorization | migrated | `capabilities/files` + PDP | PDP-gated; sensitive classification needs stronger auth; scan/lifecycle gate. |
 | Signed URL posture | deferred | `packages/ports` (SignedUrlIssuer) | Port-only; no live presigned URLs (USF-147). |
 | Checksum/integrity | migrated | `packages/core` (sha256/metadataHash), `file-service.verify` | Checksum + metadata hash; tamper detected. |
-| Scan/quarantine | partial | `packages/ports` (ScanProvider), `adapters/store` (InMemoryScanProvider) | Status model + fail-closed gate; live ClamAV/DLP deferred (USF-147). |
+| Scan/quarantine | partial | `packages/ports` (ScanProvider), `adapters/store` (InMemoryScanProvider, ClamAvScanProvider) | Status model + fail-closed gate; USF-200 proves bounded local Compose ClamAV clean/infected and provider-unavailable quarantine behaviour for synthetic payloads. Live ClamAV readiness, DLP, signature freshness, and release workflow remain deferred (USF-147). |
 | Derived objects | deferred | — | Preview/thumbnail/OCR/index inherit-classification rule defined in the standard; generation deferred (USF-147). |
 | Retention/legal hold | migrated | DB legal-hold trigger + `file-service.purge` | Legal hold blocks purge (proof + test). |
 | Object versioning | deferred | — | Fields/rules in the standard; provider versioning deferred (USF-147). |
@@ -52,4 +54,4 @@ The historical `../react` files/storage inventory (`.claude/runs/.../react-files
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live S3/MinIO/object-store, ClamAV/antivirus/DLP, presigned URLs, or KMS. No live-external-provider. No staging/production/deployment/production-live claim. No full React functional parity readiness claim.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live S3/MinIO/object-store, ClamAV/antivirus/DLP, presigned URLs, or KMS. USF-200 local Compose ClamAV proof is not live scanner readiness. No live-external-provider. No staging/production/deployment/production-live claim. No full React functional parity readiness claim.

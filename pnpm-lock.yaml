@@ -26,6 +26,9 @@ importers:
       '@temporalio/workflow':
         specifier: 1.18.1
         version: 1.18.1
+      clamscan:
+        specifier: 2.4.0
+        version: 2.4.0
       fastify:
         specifier: 5.8.5
         version: 5.8.5
@@ -1123,6 +1126,10 @@ packages:
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
+
+  clamscan@2.4.0:
+    resolution: {integrity: sha512-XBOxUiGOcQGuKmCn5qaM5rIK153fGCwsvJMbjVtcnNJ+j/YHrSj2gKNjyP65yr/E8JsKTTDtKYFG++p7Lzigyw==}
+    engines: {node: '>=16.0.0'}
 
   cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
@@ -3244,6 +3251,8 @@ snapshots:
   chai@6.2.2: {}
 
   chrome-trace-event@1.0.4: {}
+
+  clamscan@2.4.0: {}
 
   cliui@8.0.1:
     dependencies:
