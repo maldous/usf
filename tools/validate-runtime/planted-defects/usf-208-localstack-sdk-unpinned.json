@@ -1,0 +1,11 @@
+{
+  "name": "usf-208-localstack-sdk-unpinned",
+  "expectedRule": "USF-RUNTIME-027",
+  "packageDependencyPatches": [
+    {
+      "section": "dependencies",
+      "name": "@aws-sdk/client-s3",
+      "value": "^3.1077.0"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "usf-208-localstack-proof-evidence-incomplete",
+  "expectedRule": "USF-RUNTIME-027",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/11/proofEvidence",
+      "value": "SDK-backed profile-gated local Compose proof exercises S3 bucket object write read cleanup only."
+    }
+  ]
+}

@@ -15,6 +15,7 @@
   ],
   "providerRegistryIds": [
     "provider-emulator-localstack-deferred",
+    "provider-emulator-localstack-composed-test",
     "provider-mock-wiremock-composed-test",
     "provider-mock-wiremock-deferred",
     "notification-delivery-webhook-sink-composed-test",
@@ -38,12 +39,12 @@
   ],
   "humanDecision": {
     "decisionState": "accepted",
-    "decisionSummary": "Local mock provider substrate parity is split by semantic requirement. USF-201 proves bounded webhook-sink capture against local Compose using an adapter-contained protocol exception. USF-209 proves bounded WireMock configured HTTP mock semantics with wiremock-captain through an adapter-contained SDK boundary. LocalStack remains an explicit follow-up issue. USF-210 reclassifies historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without claiming mock OIDC service equivalence or live external provider compatibility.",
+    "decisionSummary": "Local mock provider substrate parity is split by semantic requirement. USF-201 proves bounded webhook-sink capture against local Compose using an adapter-contained protocol exception. USF-209 proves bounded WireMock configured HTTP mock semantics with wiremock-captain through an adapter-contained SDK boundary. USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through official AWS SDK v3 clients inside adapters/resources. USF-210 reclassifies historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without claiming mock OIDC service equivalence, live external provider compatibility, or cloud-provider compatibility.",
     "decisionIsWorkComplete": false
   },
   "mockProviderSubstrateDisposition": {
-    "disposition": "bounded-webhook-sink-and-wiremock-proof-with-explicit-localstack-deferral",
-    "localstackServiceSemanticProofPresent": false,
+    "disposition": "bounded-webhook-sink-wiremock-and-localstack-proof-with-mock-oidc-selected-tier-supersession",
+    "localstackServiceSemanticProofPresent": true,
     "wiremockServiceSemanticProofPresent": true,
     "webhookSinkProviderProofPresent": true,
     "mockOidcComposeServiceProofPresent": false,
@@ -62,6 +63,7 @@
     ],
     "providerRegistryIds": [
       "provider-emulator-localstack-deferred",
+      "provider-emulator-localstack-composed-test",
       "provider-mock-wiremock-composed-test",
       "provider-mock-wiremock-deferred",
       "notification-delivery-webhook-sink-composed-test",
@@ -69,9 +71,10 @@
       "identity-mock-oidc-catalogue-boundary"
     ],
     "followUpIssues": [
-      "USF-208"
+      "USF-153"
     ],
     "resolvedIssues": [
+      "USF-208",
       "USF-209",
       "USF-210"
     ],
@@ -82,19 +85,25 @@
     "controlOwner": "platform-integration-control-owner",
     "reviewDate": "2026-09-30",
     "riskStatement": "Local mock, fixture, webhook capture, or emulator evidence could be mistaken for live external provider compatibility, cloud-provider parity, notification delivery proof, or complete local mock substrate readiness.",
-    "treatment": "USF-201 proves bounded webhook-sink capture semantics with deterministic local Compose proof, no external egress, synthetic data, redaction, audit-shaped evidence, timeout and fail-closed unavailable handling, and teardown. USF-209 proves bounded WireMock configured HTTP mock semantics through the adapter-contained wiremock-captain SDK boundary, including deterministic matching, response templating, negative matching, request journal evidence, cleanup, unavailable fail-closed behaviour, no-egress, redaction, and audit-shaped evidence. LocalStack service semantics remain deferred to USF-208. USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by existing hermetic identity and composed Keycloak proof evidence, while preserving non-equivalence and live-provider non-claims.",
-    "deferredEvidence": "USF-201 and USF-209 do not prove LocalStack cloud-emulator semantics, notification delivery, provider callback/replay, live external provider compatibility, provider contract certification, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure. USF-210 does not prove mock OIDC service startup, issuer compatibility as a standalone service, live IdP compatibility, SSO readiness, or production identity-provider readiness."
+    "treatment": "USF-201 proves bounded webhook-sink capture semantics with deterministic local Compose proof, no external egress, synthetic data, redaction, audit-shaped evidence, timeout and fail-closed unavailable handling, and teardown. USF-209 proves bounded WireMock configured HTTP mock semantics through the adapter-contained wiremock-captain SDK boundary. USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through official AWS SDK v3 clients inside adapters/resources, including readiness retry, synthetic round trips, cleanup, unavailable fail-closed evidence, no-egress posture, redaction, and audit-shaped evidence. USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by existing hermetic identity and composed Keycloak proof evidence. Remaining provider delivery and live compatibility boundaries remain non-claims.",
+    "deferredEvidence": "USF-201, USF-208, and USF-209 do not prove notification delivery, provider callback/replay, live external provider compatibility, live cloud-provider compatibility, provider contract certification, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure. USF-210 does not prove mock OIDC service startup, issuer compatibility as a standalone service, live IdP compatibility, SSO readiness, or production identity-provider readiness."
   },
   "mockSubstrateClassifications": [
     {
       "serviceId": "localstack",
       "providerBindingId": "usf-189-localstack-cloud-mock-provider",
-      "providerRegistryId": "provider-emulator-localstack-deferred",
-      "classification": "provider-emulator-deferred",
-      "status": "deferred-with-owner",
-      "followUpIssue": "USF-208",
-      "proofPresent": false,
-      "nonEquivalenceBoundary": "LocalStack emulation is not live cloud-provider operation, supplier evidence, credential posture, tenant isolation proof, no-egress proof, or production cloud compatibility."
+      "providerRegistryId": "provider-emulator-localstack-composed-test",
+      "classification": "cloud-emulator-bounded-composed-proof",
+      "status": "profile-gated-proven",
+      "sourceIssue": "USF-208",
+      "proofPresent": true,
+      "proofCommand": "corepack pnpm proof:localstack",
+      "makeTarget": "localstack-proof",
+      "sdkPackage": "@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/client-sns,@aws-sdk/client-secrets-manager",
+      "sdkVersion": "3.1077.0",
+      "sdkBoundary": "adapter-package-only",
+      "endpointRef": "endpoint://compose/localstack",
+      "nonEquivalenceBoundary": "USF-208 proves configured LocalStack S3 SQS SNS and Secrets Manager emulator behaviour only for a profile-gated local Compose proof. It is not live cloud-provider operation, supplier evidence, production credential posture, provider contract certification, staging readiness, production readiness, or full mock-provider substrate readiness."
     },
     {
       "serviceId": "wiremock",
@@ -178,14 +187,19 @@
   "providerBoundaries": [
     {
       "providerBindingId": "usf-189-localstack-cloud-mock-provider",
-      "providerRegistryId": "provider-emulator-localstack-deferred",
-      "bindingStatus": "profile-gated",
-      "providerMode": "live-external-deferred",
+      "providerRegistryId": "provider-emulator-localstack-composed-test",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
       "runtimeProviderBindingActive": false,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "endpointRef": null,
-      "followUpIssue": "USF-208",
+      "sdkPackage": "@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/client-sns,@aws-sdk/client-secrets-manager",
+      "sdkVersion": "3.1077.0",
+      "sdkBoundary": "adapter-package-only",
+      "endpointRef": "endpoint://compose/localstack",
+      "sourceIssue": "USF-208",
+      "proofCommand": "corepack pnpm proof:localstack",
+      "makeTarget": "localstack-proof",
+      "remainingFollowUpIssues": [],
       "serviceCatalogueServiceId": "localstack"
     },
     {
@@ -231,9 +245,10 @@
   "semanticProofBoundaries": [
     {
       "semanticArea": "localstack-cloud-emulator-semantics",
-      "status": "deferred-with-owner",
-      "followUpIssue": "USF-208",
-      "nonEquivalenceBoundary": "Provider registry and hermetic provider proof do not prove LocalStack cloud API behaviour, data isolation, egress controls, cleanup, or provider compatibility."
+      "status": "implemented-and-proven-for-configured-cloud-emulator-apis",
+      "sourceIssue": "USF-208",
+      "proofCommand": "corepack pnpm proof:localstack",
+      "nonEquivalenceBoundary": "USF-208 proves configured LocalStack S3 SQS SNS and Secrets Manager emulator behaviour, readiness retry, cleanup, unavailable fail-closed evidence, no-egress posture, redaction, and tenant-safe synthetic proof output only for local Compose. It is not live cloud-provider compatibility, provider contract certification, supplier approval, staging readiness, production readiness, or full mock-provider substrate readiness."
     },
     {
       "semanticArea": "wiremock-http-provider-contract-semantics",
@@ -257,17 +272,17 @@
     }
   ],
   "operationalEvidencePosture": {
-    "readinessRetry": "webhook-sink-and-wiremock-bounded-exponential-backoff-60s-localstack-deferred-mock-oidc-not-runtime-binding",
-    "timeout": "webhook-sink-request-timeout-5s-wiremock-client-request-timeout-5s-unavailable-proof-localstack-deferred-mock-oidc-not-runtime-binding",
-    "failClosed": "webhook-sink-and-wiremock-provider-unavailable-fails-closed-localstack-deferred-mock-oidc-not-runtime-binding",
-    "noExternalEgress": "webhook-sink-and-wiremock-loopback-only-proof-localstack-deferred-mock-oidc-not-runtime-binding",
-    "safeTeardown": "webhook-sink-and-wiremock-compose-down-finally-localstack-deferred-mock-oidc-not-runtime-binding",
-    "structuredLogging": "webhook-sink-and-wiremock-value-free-structured-evidence",
-    "tracingCorrelation": "webhook-sink-and-wiremock-correlation-and-trace-hash-evidence",
-    "metrics": "webhook-sink-and-wiremock-readiness-retry-latency-fail-closed-health-evidence",
-    "auditEvents": "webhook-sink-and-wiremock-value-free-audit-evidence",
-    "redaction": "webhook-sink-and-wiremock-safe-hashes-no-raw-endpoint-token-secret-stack-or-payload",
-    "syntheticData": "webhook-sink-and-wiremock-synthetic-only-proof-data"
+    "readinessRetry": "webhook-sink-wiremock-and-localstack-bounded-exponential-backoff-60s-mock-oidc-not-runtime-binding",
+    "timeout": "webhook-sink-request-timeout-5s-wiremock-client-request-timeout-5s-localstack-aws-sdk-request-timeout-5s-unavailable-proof-mock-oidc-not-runtime-binding",
+    "failClosed": "webhook-sink-wiremock-and-localstack-provider-unavailable-fails-closed-mock-oidc-not-runtime-binding",
+    "noExternalEgress": "webhook-sink-wiremock-and-localstack-loopback-only-proof-mock-oidc-not-runtime-binding",
+    "safeTeardown": "webhook-sink-wiremock-and-localstack-compose-down-finally-mock-oidc-not-runtime-binding",
+    "structuredLogging": "webhook-sink-wiremock-and-localstack-value-free-structured-evidence",
+    "tracingCorrelation": "webhook-sink-wiremock-and-localstack-correlation-and-trace-hash-evidence",
+    "metrics": "webhook-sink-wiremock-and-localstack-readiness-retry-latency-fail-closed-health-evidence",
+    "auditEvents": "webhook-sink-wiremock-and-localstack-value-free-audit-evidence",
+    "redaction": "webhook-sink-wiremock-and-localstack-safe-hashes-no-raw-endpoint-token-secret-stack-or-payload",
+    "syntheticData": "webhook-sink-wiremock-and-localstack-synthetic-only-proof-data"
   },
   "enterpriseEvidenceRefs": [
     "usf-176-soa-mock-provider-substrate-disposition",
@@ -298,13 +313,21 @@
     "usf-209-access-wiremock-composed-proof",
     "usf-209-resilience-wiremock-composed-proof",
     "usf-209-incident-vulnerability-wiremock-composed-proof",
-    "usf-209-privacy-wiremock-composed-proof"
+    "usf-209-privacy-wiremock-composed-proof",
+    "usf-208-soa-localstack-composed-proof",
+    "usf-208-evidence-localstack-composed-proof",
+    "usf-208-threat-localstack-overclaim",
+    "sdk-usf-208-localstack-cloud-emulator-aws-sdk-v3",
+    "usf-208-access-localstack-composed-proof",
+    "usf-208-resilience-localstack-composed-proof",
+    "usf-208-incident-vulnerability-localstack-composed-proof",
+    "usf-208-privacy-localstack-composed-proof"
   ],
   "readinessClaimsAllowed": [
     "mock-provider-substrate-classification-recorded",
     "webhook-sink-local-capture-proof-recorded",
     "wiremock-local-configured-mock-proof-recorded",
-    "localstack-service-proof-deferred",
+    "localstack-local-cloud-emulator-proof-recorded",
     "mock-oidc-selected-tier-supersession-recorded",
     "hermetic-mock-non-equivalence-recorded"
   ],

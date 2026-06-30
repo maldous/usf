@@ -521,34 +521,39 @@
       "proofEvidence": "SDK-backed profile-gated local Compose proof exercises clamd TCP readiness retry, clean scan outcome, EICAR infected outcome, provider-unavailable timeout/failure path, fail-closed quarantine routing, quarantined download denial, clean-file deletion, tenant isolation, value-free audit evidence, redaction, and Compose teardown."
     },
     {
-      "bindingStatus": "profile-gated",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=LocalStack cloud-emulator semantics are catalogued but not proven through adapter or service proof; threatFailureScenario=mock cloud behaviour is treated as live cloud-provider compatibility; affectedAssetService=localstack; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-201 splits LocalStack cloud-emulator service proof to USF-208 after proving only webhook-sink capture; reviewDate=2026-09-30; linkedFollowUpIssue=USF-208",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=proven-local; riskStatement=LocalStack cloud-emulator semantics are proven only for profile-gated local Compose S3 SQS SNS and Secrets Manager emulator behaviour; threatFailureScenario=local emulator proof is treated as live cloud-provider compatibility; affectedAssetService=localstack; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-208 records official AWS SDK v3 local emulator proof plus non-equivalence boundaries; reviewDate=2026-09-30; linkedFollowUpIssue=none; remainingBoundary=live-provider-readiness-not-claimed",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
         "USF-208",
+        "USF-209",
+        "USF-210",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-208 proves bounded profile-gated local LocalStack emulator semantics only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, test-readiness, provider certification, or cloud-provider compatibility claim.",
       "bindingId": "usf-189-localstack-cloud-mock-provider",
       "serviceCatalogueServiceIds": [
         "localstack"
       ],
       "providerRegistryIds": [
+        "provider-emulator-localstack-composed-test",
         "provider-emulator-localstack-deferred"
       ],
-      "adapterName": "LocalStack provider deferred",
+      "adapterName": "LocalStackCloudEmulatorProofAdapter",
       "portName": "CloudProviderEmulator",
-      "endpointRef": null,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records provider-emulator-localstack-deferred as deferred evidence-only support linked to the LocalStack service catalogue row; USF-208 owns future LocalStack SDK/client or protocol proof.",
-      "apiProofEvidence": "No API proof is claimed for LocalStack cloud-emulator semantics; USF-201 keeps LocalStack deferred to USF-208 with no external egress, synthetic data, redaction, cleanup, audit, or live-provider claim.",
-      "workerProofEvidence": "No worker proof is claimed for LocalStack cloud-emulator semantics; USF-201 keeps LocalStack deferred to USF-208 for tenant, audit, cleanup, no-egress, and failure-mode proof."
+      "endpointRef": "endpoint://compose/localstack",
+      "sdkPackage": "@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/client-sns,@aws-sdk/client-secrets-manager",
+      "sdkVersion": "3.1077.0",
+      "providerRegistryEvidence": "packages/core/src/index.ts records provider-emulator-localstack-composed-test for bounded local Compose emulator proof and provider-emulator-localstack-deferred for live/cloud non-claims; both link to the LocalStack service catalogue row.",
+      "apiProofEvidence": "API runtime binding is not claimed for LocalStack; USF-208 proves profile-gated local Compose adapter behaviour through packages/proof/src/localstack-composed-proof.ts and adapters/resources/src/index.ts only.",
+      "workerProofEvidence": "Worker runtime binding is not claimed for LocalStack; USF-208 proves SDK-backed local emulator semantics, cleanup, redaction, no-egress posture, synthetic data, and fail-closed unavailable evidence outside worker orchestration.",
+      "proofCommand": "corepack pnpm proof:localstack",
+      "proofEvidence": "SDK-backed profile-gated local Compose proof exercises S3 bucket object write read cleanup, SQS queue send receive cleanup, SNS topic publish cleanup, Secrets Manager secret write read cleanup, readiness retry, unavailable fail-closed, redaction, synthetic data, no external egress, audit metric trace evidence, and Compose teardown."
     },
     {
       "bindingStatus": "profile-gated-proven",
@@ -556,7 +561,7 @@
       "providerClass": "local-composed-real-service",
       "sdkBoundary": "adapter-package-only",
       "sourceUseDisposition": "runtime-proof-support",
-      "deferredReason": "effectivenessState=proven-local; riskStatement=USF-209 proves bounded profile-gated local Compose WireMock configured mock semantics while LocalStack, live external provider compatibility, provider contract certification, API runtime binding, worker runtime binding, staging readiness, production readiness, and complete mock-provider substrate readiness remain outside scope; threatFailureScenario=WireMock fixture proof is overclaimed as live provider compatibility or provider contract certification; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-209 proves SDK-backed local composed WireMock semantics and leaves LocalStack to USF-208 plus live/provider readiness as explicit non-claims; reviewDate=2026-09-30; linkedSourceIssue=USF-209; linkedFollowUpIssue=USF-208",
+      "deferredReason": "effectivenessState=proven-local; riskStatement=USF-209 proves bounded profile-gated local Compose WireMock configured mock semantics while live external provider compatibility, provider contract certification, API runtime binding, worker runtime binding, staging readiness, production readiness, and complete mock-provider substrate readiness remain outside scope; threatFailureScenario=WireMock fixture proof is overclaimed as live provider compatibility or provider contract certification; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-209 proves SDK-backed local composed WireMock semantics while USF-208 separately records bounded LocalStack local emulator proof and live/provider readiness remains an explicit non-claim; reviewDate=2026-09-30; linkedSourceIssue=USF-209; linkedFollowUpIssue=none",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
@@ -963,10 +968,10 @@
     {
       "id": "usf-189-mock-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-176 records mock-provider substrate disposition. USF-201 proves bounded webhook-sink capture, USF-209 proves bounded WireMock configured HTTP mock semantics, and USF-208 remains open for LocalStack. USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without claiming mock OIDC service equivalence or live IdP compatibility. Risk remains that hermetic mocks, local emulators, fixtures, webhook capture, identity proof, or WireMock fixture proof are treated as live provider compatibility, notification delivery, cloud-provider proof, no-egress proof beyond the proven local boundaries, complete local mock substrate readiness, SSO readiness, provider contract certification, or mock provider readiness; owner platform-integration-foundation; review date 2026-09-30. Lane traceability remains USF-189.",
+      "boundary": "USF-176 records mock-provider substrate disposition. USF-201 proves bounded webhook-sink capture, USF-209 proves bounded WireMock configured HTTP mock semantics, USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics, and USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence. Remaining boundaries are notification delivery, provider callback/replay, live external provider compatibility, cloud-provider compatibility, provider contract certification, SSO readiness, complete local mock substrate readiness, stronger environment promotion, and USF-133 closure; owner platform-integration-foundation; review date 2026-09-30. Lane traceability remains USF-189.",
       "followUpIssueRefs": [
-        "USF-201",
-        "USF-208"
+        "USF-153",
+        "USF-201"
       ],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
