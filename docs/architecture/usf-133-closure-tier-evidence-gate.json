@@ -1,0 +1,326 @@
+{
+  "id": "usf-133-closure-tier-evidence-gate",
+  "title": "USF-133 Closure Tier Evidence Gate",
+  "authorityNote": "Repository evidence gate for USF-166. Linear tracks work only and does not define USF semantic authority.",
+  "issueId": "USF-166",
+  "parentIssueId": "USF-133",
+  "laneWrapperIssueId": "USF-185",
+  "dashboardIssueId": "USF-184",
+  "coordinatorIssueId": "USF-192",
+  "blockedDownstreamIssueIds": [
+    "USF-167"
+  ],
+  "sourceIssueIds": [
+    "USF-166",
+    "USF-167",
+    "USF-182"
+  ],
+  "selectedClosureTier": {
+    "id": "bounded-source-issue-evidence-gate",
+    "kind": "risk-based-closure-tier",
+    "decisionAcceptedDoesNotMeanWorkComplete": true,
+    "usf133ClosureClaimed": false,
+    "sourceIssueDoneByImplication": false,
+    "laneWrapperDoneMeansSourceIssueDone": false,
+    "allows": [
+      "evidence-backed source issue closure consideration after merge and post-merge reconciliation",
+      "bounded service/capability disposition classification",
+      "bounded validator-enforced non-claim evidence organization",
+      "source/deferred issue sequencing for unresolved rows"
+    ],
+    "prohibits": [
+      "USF-133 closure by implication",
+      "source issue Done by lane wrapper completion",
+      "decision accepted equals work complete",
+      "substitute equivalence without non-equivalence boundary",
+      "deferred work without owner, risk treatment, review date, and follow-up issue"
+    ]
+  },
+  "authorityInputs": {
+    "serviceCatalogue": "spec/instances/compose-service/service-catalogue.json",
+    "serviceDispositionClosureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+    "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+    "gapRegister": "docs/architecture/usf-dev-foundation-gap-register.md",
+    "cleanupOrchestration": "docs/architecture/usf-dev-readiness-cleanup-orchestration.md"
+  },
+  "evidenceFreshnessPolicy": {
+    "staleEvidenceSatisfiesClosure": false,
+    "unmergedEvidenceSatisfiesClosure": false,
+    "pendingPrEvidenceSatisfiesUsf133Closure": false,
+    "requiredFields": [
+      "prRef",
+      "mergeShaRef",
+      "validationCommand",
+      "issueId",
+      "evidenceId",
+      "sourceRef",
+      "freshness"
+    ],
+    "acceptedFreshnessValues": [
+      "current",
+      "deferred",
+      "blocked",
+      "pending-pr-merge"
+    ],
+    "rejectedFreshnessValues": [
+      "stale",
+      "unknown"
+    ]
+  },
+  "mergedEvidenceInputs": [
+    {
+      "prRef": "#124",
+      "mergeShaRef": "394e672c698963064244fccd9c357c0c31e1ad8e",
+      "issueRefs": [
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "evidenceId": "cleanup-orchestration-lane-map",
+      "sourceRef": "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
+      "freshness": "current"
+    },
+    {
+      "prRef": "#125",
+      "mergeShaRef": "ad68834d8c10d58d6e295eae699cfffdd80c2343",
+      "issueRefs": [
+        "USF-185",
+        "USF-166",
+        "USF-167",
+        "USF-182"
+      ],
+      "evidenceId": "evidence-lane1-service-disposition-closure-matrix",
+      "sourceRef": "docs/architecture/compose-service-disposition-closure-matrix.json",
+      "freshness": "current"
+    },
+    {
+      "prRef": "#127",
+      "mergeShaRef": "151728b95623403b2a9da6e82aff79f0a31a4a47",
+      "issueRefs": [
+        "USF-190"
+      ],
+      "evidenceId": "evidence-usf-190-status-integrity-validator",
+      "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "freshness": "current"
+    },
+    {
+      "prRef": "#128",
+      "mergeShaRef": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
+      "issueRefs": [
+        "USF-188"
+      ],
+      "evidenceId": "usf-188-evidence-observability-operations-posture",
+      "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "freshness": "current"
+    },
+    {
+      "prRef": "#129",
+      "mergeShaRef": "6e43503ab611262be0f79b22675beb27be864ed9",
+      "issueRefs": [
+        "USF-187"
+      ],
+      "evidenceId": "usf-187-sentry-error-monitoring-evidence",
+      "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "freshness": "current"
+    },
+    {
+      "prRef": "#130",
+      "mergeShaRef": "bca1e865c8988ca8e7506f94f244622155fa6fc1",
+      "issueRefs": [
+        "USF-186"
+      ],
+      "evidenceId": "usf-186-evidence-operator-access-gateway-matrix",
+      "sourceRef": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "freshness": "current"
+    },
+    {
+      "prRef": "#131",
+      "mergeShaRef": "fcc9c182a9234fd19cdf58b32020bad64342808c",
+      "issueRefs": [
+        "USF-191"
+      ],
+      "evidenceId": "usf-191-evidence-domain-depth-validator",
+      "sourceRef": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "freshness": "current"
+    },
+    {
+      "prRef": "#132",
+      "mergeShaRef": "f5251b1bc48ece0586fb694a188130fb7a99f1c8",
+      "issueRefs": [
+        "USF-189"
+      ],
+      "evidenceId": "evidence-usf-189-runtime-provider-disposition-validator",
+      "sourceRef": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "freshness": "current"
+    }
+  ],
+  "thisPrEvidence": {
+    "prRef": "pending-usf-166-pr",
+    "mergeShaRef": "pending-post-merge-reconciliation",
+    "issueRefs": [
+      "USF-166",
+      "USF-167",
+      "USF-182",
+      "USF-184",
+      "USF-185",
+      "USF-192",
+      "USF-133"
+    ],
+    "evidenceId": "evidence-usf-166-closure-tier-evidence-gate",
+    "sourceRef": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+    "freshness": "pending-pr-merge",
+    "satisfiesUsf133Closure": false
+  },
+  "requiredServiceDispositionRefs": [
+    {"serviceId": "postgres", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#postgres", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "keycloak-db", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#keycloak-db", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "keycloak", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#keycloak", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "nats", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#nats", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "temporal", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "minio", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#minio", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "openbao", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#openbao", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "otel-collector", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#otel-collector", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "prometheus", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#prometheus", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "grafana", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#grafana", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "loki", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#loki", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "tempo", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#tempo", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "mailpit", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mailpit", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "webhook-sink", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#webhook-sink", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "redis", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#redis", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "meilisearch", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#meilisearch", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "clickhouse", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#clickhouse", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "pgadmin", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#pgadmin", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "sonar-postgres", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sonar-postgres", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "sonar-oidc-plugin", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sonar-oidc-plugin", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "sonarqube", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sonarqube", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-171", "USF-187", "USF-184", "USF-192", "USF-133"]},
+    {"serviceId": "mock-oidc", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mock-oidc", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "localstack", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#localstack", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "wiremock", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#wiremock", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "alertmanager", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#alertmanager", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "alloy", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#alloy", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "windmill-postgres", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-postgres", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "windmill-redis", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-redis", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "windmill", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "windmill-worker", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-worker", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "temporal-postgres", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal-postgres", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "temporal-ui", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal-ui", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "pgbackrest", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#pgbackrest", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "clamav", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#clamav", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "sentry", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sentry", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-170", "USF-187", "USF-184", "USF-192", "USF-133"]},
+    {"serviceId": "caddy", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#caddy", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"]},
+    {"serviceId": "platform-api", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#platform-api", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-185"]},
+    {"serviceId": "react-app", "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#react-app", "enterpriseEvidenceSource": "closure-matrix-row", "serviceCatalogueOwnerSource": "service-catalogue-row", "sourceIssueRefs": ["USF-133", "USF-185"]}
+  ],
+  "requiredCapabilityDispositionRefs": [
+    {"capabilityId": "tenant-isolation", "status": "bounded", "owner": "platform-runtime-foundation", "riskOwner": "platform-runtime-risk-owner", "controlOwner": "platform-runtime-control-owner", "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json", "validationCommands": ["corepack pnpm runtime:proof:compose", "python3 tools/validate-runtime/validate-runtime.py all --json"], "sourceIssueRefs": ["USF-189"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-167", "riskStatement": "Runtime tenant isolation evidence is bounded to current local proof and does not close every service/capability row."}},
+    {"capabilityId": "authorization", "status": "bounded", "owner": "platform-security-foundation", "riskOwner": "platform-security-risk-owner", "controlOwner": "platform-security-control-owner", "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "validationCommands": ["corepack pnpm proof:authz", "python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-190", "USF-141"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-141", "riskStatement": "Authorization proof is bounded and requires source issue evidence before stronger claims."}},
+    {"capabilityId": "audit-evidence", "status": "bounded", "owner": "platform-security-foundation", "riskOwner": "platform-security-risk-owner", "controlOwner": "platform-security-control-owner", "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "validationCommands": ["corepack pnpm proof:audit", "python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-190", "USF-143"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-143", "riskStatement": "Audit evidence is local and bounded until source acceptance proves required retention and operating depth."}},
+    {"capabilityId": "config-secrets", "status": "bounded", "owner": "platform-security-foundation", "riskOwner": "platform-security-risk-owner", "controlOwner": "platform-security-control-owner", "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "validationCommands": ["corepack pnpm proof:config", "python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-190", "USF-145"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-145", "riskStatement": "Secret boundary proof is local and does not prove live-provider secret management."}},
+    {"capabilityId": "data-classification", "status": "bounded", "owner": "platform-governance-foundation", "riskOwner": "platform-governance-risk-owner", "controlOwner": "platform-governance-control-owner", "evidenceSource": "spec/instances/compose-service/service-catalogue.json", "validationCommands": ["python3 tools/validate-compose/validate-compose.py all --json"], "sourceIssueRefs": ["USF-168", "USF-185"], "riskTreatment": {"treatment": "mitigate", "reviewDate": "2026-09-30", "followUpIssue": "USF-167", "riskStatement": "Classification metadata is present but does not complete every downstream proof."}},
+    {"capabilityId": "retention-purge", "status": "deferred", "owner": "platform-data-foundation", "riskOwner": "platform-data-risk-owner", "controlOwner": "platform-data-control-owner", "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json", "validationCommands": ["python3 tools/validate-parity/validate-domain-depth.py all --json"], "sourceIssueRefs": ["USF-191", "USF-161"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-161", "riskStatement": "Retention, purge, and legal-hold behaviour remain source-depth work."}},
+    {"capabilityId": "backup-restore", "status": "deferred", "owner": "platform-data-foundation", "riskOwner": "platform-data-risk-owner", "controlOwner": "platform-data-control-owner", "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json", "validationCommands": ["corepack pnpm providers-proof", "python3 tools/validate-runtime/validate-runtime.py all --json"], "sourceIssueRefs": ["USF-189", "USF-177"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-177", "riskStatement": "pgBackRest and restore evidence remain deferred and no backup/restore readiness is claimed."}},
+    {"capabilityId": "incident-response", "status": "deferred", "owner": "platform-operations-foundation", "riskOwner": "platform-operations-risk-owner", "controlOwner": "platform-operations-control-owner", "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-188", "USF-159"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-159", "riskStatement": "Incident workflow evidence is posture-only until alerting/dashboard/incident operating proof exists."}},
+    {"capabilityId": "vulnerability-dependency-posture", "status": "bounded", "owner": "platform-security-foundation", "riskOwner": "platform-security-risk-owner", "controlOwner": "platform-security-control-owner", "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-187", "USF-171"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-171", "riskStatement": "Local deterministic validation is not equivalent to SonarQube/static-analysis service operating evidence."}},
+    {"capabilityId": "observability", "status": "bounded", "owner": "platform-observability-foundation", "riskOwner": "platform-observability-risk-owner", "controlOwner": "platform-observability-control-owner", "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json", "validationCommands": ["corepack pnpm proof:observability", "python3 tools/validate-parity/validate-observability.py all --json"], "sourceIssueRefs": ["USF-188", "USF-159"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-159", "riskStatement": "Telemetry evidence is bounded and no live alerting/dashboard readiness is claimed."}},
+    {"capabilityId": "operator-admin-access", "status": "bounded", "owner": "platform-operations-foundation", "riskOwner": "platform-operations-risk-owner", "controlOwner": "platform-operations-control-owner", "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json", "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-186", "USF-169", "USF-180"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-169", "riskStatement": "Operator/admin access posture is matrixed but runtime access review and clickthrough proof remain deferred."}},
+    {"capabilityId": "provider-supplier-boundaries", "status": "deferred", "owner": "platform-provider-foundation", "riskOwner": "platform-provider-risk-owner", "controlOwner": "platform-provider-control-owner", "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-167"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-167", "riskStatement": "Supplier/live-provider boundary evidence remains outside the current local foundation proof."}},
+    {"capabilityId": "privacy-data-minimisation", "status": "bounded", "owner": "platform-governance-foundation", "riskOwner": "platform-governance-risk-owner", "controlOwner": "platform-governance-control-owner", "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json", "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"], "sourceIssueRefs": ["USF-190", "USF-191"], "riskTreatment": {"treatment": "defer", "reviewDate": "2026-09-30", "followUpIssue": "USF-161", "riskStatement": "Proof data is synthetic and value-free, but retention/purge/legal-hold depth remains deferred."}}
+  ],
+  "proofCommands": [
+    {"id": "verify", "command": "corepack pnpm verify", "packageScript": "verify", "wiredIntoClosureGate": true},
+    {"id": "parity", "command": "corepack pnpm parity", "packageScript": "parity", "wiredIntoClosureGate": true},
+    {"id": "validate-spec-all", "command": "python3 tools/validate-spec/validate-spec.py all --json", "packageScript": "", "wiredIntoClosureGate": true},
+    {"id": "validate-spec-pr", "command": "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json", "packageScript": "", "wiredIntoClosureGate": true},
+    {"id": "validate-bootstrap", "command": "python3 tools/validate-bootstrap/validate-bootstrap.py all --json", "packageScript": "", "wiredIntoClosureGate": true},
+    {"id": "validate-parity", "command": "python3 tools/validate-parity/validate-parity.py all --json", "packageScript": "parity", "wiredIntoClosureGate": true},
+    {"id": "validate-enterprise", "command": "python3 tools/validate-enterprise/validate-enterprise.py all --json", "packageScript": "enterprise:validate", "wiredIntoClosureGate": true},
+    {"id": "validate-runtime", "command": "python3 tools/validate-runtime/validate-runtime.py all --json", "packageScript": "runtime:validate", "wiredIntoClosureGate": true},
+    {"id": "validate-compose", "command": "python3 tools/validate-compose/validate-compose.py all --json", "packageScript": "compose:validate", "wiredIntoClosureGate": true}
+  ],
+  "validators": [
+    {"id": "validate-parity", "path": "tools/validate-parity/validate-parity.py", "packageScript": "parity", "verifyPath": "corepack pnpm verify -> corepack pnpm parity", "required": true},
+    {"id": "validate-enterprise", "path": "tools/validate-enterprise/validate-enterprise.py", "packageScript": "enterprise:validate", "verifyPath": "corepack pnpm verify -> corepack pnpm parity -> validate-enterprise", "required": true},
+    {"id": "validate-runtime", "path": "tools/validate-runtime/validate-runtime.py", "packageScript": "runtime:validate", "verifyPath": "corepack pnpm verify -> runtime:validate", "required": true},
+    {"id": "validate-compose", "path": "tools/validate-compose/validate-compose.py", "packageScript": "compose:validate", "verifyPath": "corepack pnpm parity -> validate-compose", "required": true}
+  ],
+  "statusIntegrity": {
+    "usf133ClosureAllowed": false,
+    "usf133ClosureClaimed": false,
+    "usf166DoneClaimed": false,
+    "usf167DoneClaimed": false,
+    "usf182DoneClaimed": false,
+    "laneWrapperDoneStatesSatisfySourceIssues": false,
+    "validationPassingAloneIsDone": false,
+    "postMergeReconciliationRequired": true,
+    "downstreamUsf167BlockedUntilUsf166MergedAndReconciled": true
+  },
+  "enterpriseFeatureCompletenessMatrix": [
+    {"feature": "tenant-isolation", "status": "bounded", "capabilityRef": "tenant-isolation"},
+    {"feature": "authorization", "status": "bounded", "capabilityRef": "authorization"},
+    {"feature": "audit-evidence", "status": "bounded", "capabilityRef": "audit-evidence"},
+    {"feature": "config-secrets", "status": "bounded", "capabilityRef": "config-secrets"},
+    {"feature": "data-classification", "status": "bounded", "capabilityRef": "data-classification"},
+    {"feature": "retention-purge", "status": "deferred", "capabilityRef": "retention-purge"},
+    {"feature": "backup-restore", "status": "deferred", "capabilityRef": "backup-restore"},
+    {"feature": "incident-response", "status": "deferred", "capabilityRef": "incident-response"},
+    {"feature": "vulnerability-dependency-posture", "status": "bounded", "capabilityRef": "vulnerability-dependency-posture"},
+    {"feature": "observability", "status": "bounded", "capabilityRef": "observability"},
+    {"feature": "operator-admin-access", "status": "bounded", "capabilityRef": "operator-admin-access"},
+    {"feature": "provider-supplier-boundaries", "status": "deferred", "capabilityRef": "provider-supplier-boundaries"},
+    {"feature": "privacy-data-minimisation", "status": "bounded", "capabilityRef": "privacy-data-minimisation"}
+  ],
+  "operationalReadinessPosture": {
+    "readinessChecks": "bounded-local-proof-or-deferred-per-service-row",
+    "retryTimeoutBehaviour": "bounded-local-proof-or-deferred-per-service-row",
+    "failClosedMode": "bounded-local-proof-or-deferred-per-service-row",
+    "safeTeardown": "bounded-local-proof-or-deferred-per-service-row",
+    "structuredLogging": "bounded-local-proof-or-deferred-per-service-row",
+    "tracingCorrelation": "bounded-local-proof-or-deferred-per-service-row",
+    "metrics": "bounded-local-proof-or-deferred-per-service-row",
+    "auditEvents": "bounded-local-proof-or-deferred-per-service-row",
+    "redaction": "bounded-local-proof-or-deferred-per-service-row"
+  },
+  "parallelWorkSafety": {
+    "laneOrSourceScopedEvidenceRows": true,
+    "appendEvidenceRowsDoNotOverwrite": true,
+    "preserveExistingEvidenceIds": true,
+    "crossLaneDependenciesLinkedExplicitly": true,
+    "sharedFilesLikelyToConflict": [
+      "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "docs/architecture/usf-dev-foundation-gap-register.md",
+      "docs/architecture/compose-service-disposition-closure-matrix.json",
+      "tools/validate-parity/validate-parity.py",
+      "tools/validate-enterprise/validate-enterprise.py"
+    ]
+  },
+  "readinessClaimsAllowed": [
+    "closure-tier-evidence-gate-defined",
+    "source-issue-status-integrity-validation",
+    "service-disposition-evidence-organization",
+    "enterprise-evidence-organization-support"
+  ],
+  "readinessClaimsProhibited": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ],
+  "plantedDefectRequirements": [
+    "missing closure-tier evidence",
+    "missing required service disposition",
+    "missing proof command",
+    "missing validator linkage",
+    "missing non-equivalence boundary",
+    "false closure of USF-133",
+    "false Done state for source issue",
+    "readiness overclaim"
+  ]
+}

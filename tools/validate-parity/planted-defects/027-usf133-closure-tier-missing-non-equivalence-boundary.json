@@ -1,0 +1,12 @@
+{
+  "description": "USF-133 closure-tier evidence gate relies on a substitute row whose non-equivalence boundary was removed.",
+  "expectedRule": "USF-PARITY-027",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "wiremock",
+      "setEvidence": {
+        "non_equivalence_boundaries": []
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "description": "USF-133 closure-tier evidence gate is missing from repository evidence.",
+  "expectedRule": "USF-PARITY-023",
+  "mutation": {
+    "removeUsf133ClosureTierGate": true
+  }
+}

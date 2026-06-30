@@ -58,14 +58,24 @@ RULES = {
     "USF-PARITY-020": ("blocking", "unresolved compose service disposition lacks follow-up or out-of-scope rationale"),
     "USF-PARITY-021": ("blocking", "compose service disposition asserts unsupported proof or false equivalence"),
     "USF-PARITY-022": ("blocking", "compose service disposition closure or readiness is overclaimed"),
+    "USF-PARITY-023": ("blocking", "USF-133 closure-tier evidence gate is missing or invalid"),
+    "USF-PARITY-024": ("blocking", "USF-133 closure-tier gate lacks service or capability disposition evidence"),
+    "USF-PARITY-025": ("blocking", "USF-133 closure-tier gate lacks required proof command evidence"),
+    "USF-PARITY-026": ("blocking", "USF-133 closure-tier gate lacks validator linkage"),
+    "USF-PARITY-027": ("blocking", "USF-133 closure-tier gate lacks a non-equivalence boundary for a substitute"),
+    "USF-PARITY-028": ("blocking", "USF-133 closure is falsely claimed or implied"),
+    "USF-PARITY-029": ("blocking", "source issue Done state is falsely claimed or implied"),
+    "USF-PARITY-030": ("blocking", "USF-133 closure-tier readiness or certification is overclaimed"),
     "USF-PARITY-SELFTEST": ("blocking", "planted parity defect did not raise its expected rule"),
 }
 
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
 COMPOSE_CLOSURE_MATRIX_PATH = "docs/architecture/compose-service-disposition-closure-matrix.json"
+USF133_CLOSURE_TIER_GATE_PATH = "docs/architecture/usf-133-closure-tier-evidence-gate.json"
 COMPOSE_PARITY_MATRIX_PATH = "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
 COMPOSE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 ENTERPRISE_EVIDENCE_MODEL_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+PACKAGE_JSON_PATH = "package.json"
 SHAPE_PATH = "tools/validate-parity/parity-matrix-shape.json"
 SELFTEST_DIR = "tools/validate-parity/planted-defects"
 
@@ -120,6 +130,46 @@ PROHIBITED_READINESS_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
+}
+USF133_GATE_PROHIBITED_CLAIMS = PROHIBITED_READINESS_CLAIMS | {"usf-133-closure"}
+USF133_REQUIRED_CAPABILITIES = {
+    "tenant-isolation",
+    "authorization",
+    "audit-evidence",
+    "config-secrets",
+    "data-classification",
+    "retention-purge",
+    "backup-restore",
+    "incident-response",
+    "vulnerability-dependency-posture",
+    "observability",
+    "operator-admin-access",
+    "provider-supplier-boundaries",
+    "privacy-data-minimisation",
+}
+USF133_CAPABILITY_STATUSES = {"proven", "bounded", "deferred", "out-of-scope", "blocked"}
+USF133_REQUIRED_PROOF_COMMANDS = {
+    "verify",
+    "parity",
+    "validate-spec-all",
+    "validate-spec-pr",
+    "validate-bootstrap",
+    "validate-parity",
+    "validate-enterprise",
+    "validate-runtime",
+    "validate-compose",
+}
+USF133_REQUIRED_VALIDATORS = {
+    "validate-parity",
+    "validate-enterprise",
+    "validate-runtime",
+    "validate-compose",
+}
+USF133_REQUIRED_GATE_INPUTS = {
+    "serviceCatalogue": COMPOSE_CATALOGUE_PATH,
+    "serviceDispositionClosureMatrix": COMPOSE_CLOSURE_MATRIX_PATH,
+    "enterpriseEvidenceModel": ENTERPRISE_EVIDENCE_MODEL_PATH,
+    "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
 }
 
 # UI/browser artefact markers that the UI-agnostic foundation must not contain
@@ -213,6 +263,11 @@ def build_state(overrides=None):
         compose_closure_error = overrides.get("composeClosureMatrixError")
     else:
         compose_closure_matrix, compose_closure_error = load_optional_json(COMPOSE_CLOSURE_MATRIX_PATH)
+    if "usf133ClosureTierGate" in overrides:
+        usf133_closure_tier_gate = overrides["usf133ClosureTierGate"]
+        usf133_closure_tier_error = overrides.get("usf133ClosureTierGateError")
+    else:
+        usf133_closure_tier_gate, usf133_closure_tier_error = load_optional_json(USF133_CLOSURE_TIER_GATE_PATH)
     if "composeParityMatrix" in overrides:
         compose_parity_matrix = overrides["composeParityMatrix"]
         compose_parity_error = overrides.get("composeParityMatrixError")
@@ -229,6 +284,8 @@ def build_state(overrides=None):
         "matrixError": matrix_error,
         "composeClosureMatrix": compose_closure_matrix,
         "composeClosureMatrixError": compose_closure_error,
+        "usf133ClosureTierGate": usf133_closure_tier_gate,
+        "usf133ClosureTierGateError": usf133_closure_tier_error,
         "composeParityMatrix": compose_parity_matrix,
         "composeParityMatrixError": compose_parity_error,
         "composeCatalogue": compose_catalogue,
@@ -578,6 +635,216 @@ def check_compose_service_closure(F, state):
         )
 
 
+def _rows_by_id(rows, key):
+    if not isinstance(rows, list):
+        return {}
+    return {
+        row.get(key): row
+        for row in rows
+        if isinstance(row, dict) and isinstance(row.get(key), str) and row.get(key)
+    }
+
+
+def _has_usf_issue_list(value):
+    return isinstance(value, list) and value and all(str(item).startswith("USF-") for item in value)
+
+
+def _valid_merge_sha(value):
+    return isinstance(value, str) and len(value) == 40 and all(ch in "0123456789abcdef" for ch in value)
+
+
+def check_usf133_closure_tier_gate(F, state):
+    gate = state.get("usf133ClosureTierGate")
+    closure_matrix = state.get("composeClosureMatrix")
+    if not isinstance(gate, dict):
+        F.add("USF-PARITY-023", USF133_CLOSURE_TIER_GATE_PATH, f"cannot load closure-tier evidence gate: {state.get('usf133ClosureTierGateError')}")
+        return
+    if not isinstance(closure_matrix, dict):
+        F.add("USF-PARITY-023", USF133_CLOSURE_TIER_GATE_PATH, "closure-tier gate cannot be checked without closure matrix")
+        return
+
+    expected_top = {
+        "id": "usf-133-closure-tier-evidence-gate",
+        "issueId": "USF-166",
+        "parentIssueId": "USF-133",
+        "laneWrapperIssueId": "USF-185",
+        "dashboardIssueId": "USF-184",
+        "coordinatorIssueId": "USF-192",
+    }
+    for key, expected in expected_top.items():
+        if gate.get(key) != expected:
+            F.add("USF-PARITY-023", f"{USF133_CLOSURE_TIER_GATE_PATH}:{key}", f"expected {expected!r}")
+    if "USF-167" not in set(gate.get("blockedDownstreamIssueIds") or []):
+        F.add("USF-PARITY-023", "blockedDownstreamIssueIds", "USF-167 must remain explicitly blocked downstream")
+    if set(gate.get("sourceIssueIds") or []) != {"USF-166", "USF-167", "USF-182"}:
+        F.add("USF-PARITY-023", "sourceIssueIds", "closure tier must remain scoped to USF-166, USF-167, and USF-182")
+
+    tier = gate.get("selectedClosureTier", {})
+    if tier.get("kind") != "risk-based-closure-tier" or tier.get("decisionAcceptedDoesNotMeanWorkComplete") is not True:
+        F.add("USF-PARITY-023", "selectedClosureTier", "closure tier must be a risk-based evidence gate and not a decision-only closure")
+    if tier.get("usf133ClosureClaimed") is not False:
+        F.add("USF-PARITY-028", "selectedClosureTier.usf133ClosureClaimed", "USF-133 closure must not be claimed by USF-166")
+    if tier.get("sourceIssueDoneByImplication") is not False or tier.get("laneWrapperDoneMeansSourceIssueDone") is not False:
+        F.add("USF-PARITY-029", "selectedClosureTier", "source issues must not be Done by implication")
+    for key, expected in USF133_REQUIRED_GATE_INPUTS.items():
+        if gate.get("authorityInputs", {}).get(key) != expected:
+            F.add("USF-PARITY-023", f"authorityInputs.{key}", f"expected {expected}")
+
+    allowed_claims = _set_or_empty(gate.get("readinessClaimsAllowed"))
+    prohibited_claims = _set_or_empty(gate.get("readinessClaimsProhibited"))
+    if allowed_claims & USF133_GATE_PROHIBITED_CLAIMS:
+        F.add("USF-PARITY-030", "readinessClaimsAllowed", f"prohibited claims allowed: {sorted(allowed_claims & USF133_GATE_PROHIBITED_CLAIMS)}")
+    missing_claims = USF133_GATE_PROHIBITED_CLAIMS - prohibited_claims
+    if missing_claims:
+        F.add("USF-PARITY-030", "readinessClaimsProhibited", f"missing prohibited claims: {sorted(missing_claims)}")
+
+    freshness_policy = gate.get("evidenceFreshnessPolicy", {})
+    for key in ("staleEvidenceSatisfiesClosure", "unmergedEvidenceSatisfiesClosure", "pendingPrEvidenceSatisfiesUsf133Closure"):
+        if freshness_policy.get(key) is not False:
+            F.add("USF-PARITY-023", f"evidenceFreshnessPolicy.{key}", "stale, unmerged, or pending PR evidence must not satisfy closure")
+    if {"stale", "unknown"} - set(freshness_policy.get("rejectedFreshnessValues") or []):
+        F.add("USF-PARITY-023", "evidenceFreshnessPolicy.rejectedFreshnessValues", "stale and unknown freshness must be rejected")
+    for evidence in gate.get("mergedEvidenceInputs", []):
+        subject = evidence.get("evidenceId", "mergedEvidenceInputs")
+        for field in ("prRef", "mergeShaRef", "issueRefs", "evidenceId", "sourceRef", "freshness"):
+            if not evidence.get(field):
+                F.add("USF-PARITY-023", subject, f"missing {field}")
+        if not _valid_merge_sha(evidence.get("mergeShaRef")):
+            F.add("USF-PARITY-023", subject, "mergeShaRef must be a 40-character SHA for merged evidence")
+        if evidence.get("freshness") in {"stale", "unknown"}:
+            F.add("USF-PARITY-023", subject, "stale or unknown evidence cannot satisfy closure")
+    this_pr = gate.get("thisPrEvidence", {})
+    if this_pr.get("freshness") != "pending-pr-merge" or this_pr.get("satisfiesUsf133Closure") is not False:
+        F.add("USF-PARITY-028", "thisPrEvidence", "unmerged USF-166 evidence must not satisfy USF-133 closure")
+
+    closure_rows = _closure_row_map(closure_matrix)
+    service_refs = _rows_by_id(gate.get("requiredServiceDispositionRefs"), "serviceId")
+    if set(service_refs) != set(closure_rows):
+        F.add(
+            "USF-PARITY-024",
+            "requiredServiceDispositionRefs",
+            f"missing={sorted(set(closure_rows) - set(service_refs))} extra={sorted(set(service_refs) - set(closure_rows))}",
+        )
+    for service_id, closure_row in sorted(closure_rows.items()):
+        ref = service_refs.get(service_id)
+        if not ref:
+            continue
+        expected_ref = f"{COMPOSE_CLOSURE_MATRIX_PATH}#{service_id}"
+        if ref.get("matrixRowRef") != expected_ref:
+            F.add("USF-PARITY-024", f"service:{service_id}", "service reference does not point at closure matrix row")
+        if ref.get("enterpriseEvidenceSource") != "closure-matrix-row" or ref.get("serviceCatalogueOwnerSource") != "service-catalogue-row":
+            F.add("USF-PARITY-024", f"service:{service_id}", "service reference must inherit enterprise and owner metadata from governed rows")
+        if not _has_usf_issue_list(ref.get("sourceIssueRefs")):
+            F.add("USF-PARITY-024", f"service:{service_id}", "service reference lacks USF source issue refs")
+        evidence = closure_row.get("closure_evidence", {})
+        disposition = evidence.get("closure_disposition")
+        if disposition in COMPOSE_BLOCKING_DISPOSITIONS:
+            issues = evidence.get("tracking_issues")
+            if not _has_usf_issue_list(issues):
+                F.add("USF-PARITY-024", f"service:{service_id}", "blocking service row lacks follow-up issue evidence")
+        if disposition in {"covered-by-usf-runtime", "substituted-partial"} and not _non_empty_list(evidence.get("non_equivalence_boundaries")):
+            F.add("USF-PARITY-027", f"service:{service_id}", "substitute row lacks non-equivalence boundary")
+
+    capabilities = _rows_by_id(gate.get("requiredCapabilityDispositionRefs"), "capabilityId")
+    if set(capabilities) != USF133_REQUIRED_CAPABILITIES:
+        F.add(
+            "USF-PARITY-024",
+            "requiredCapabilityDispositionRefs",
+            f"missing={sorted(USF133_REQUIRED_CAPABILITIES - set(capabilities))} extra={sorted(set(capabilities) - USF133_REQUIRED_CAPABILITIES)}",
+        )
+    for capability_id, capability in sorted(capabilities.items()):
+        if capability.get("status") not in USF133_CAPABILITY_STATUSES:
+            F.add("USF-PARITY-024", f"capability:{capability_id}", f"invalid capability status {capability.get('status')!r}")
+        for field in ("owner", "riskOwner", "controlOwner", "evidenceSource"):
+            if not str(capability.get(field) or "").strip():
+                F.add("USF-PARITY-024", f"capability:{capability_id}", f"missing {field}")
+        if not _non_empty_list(capability.get("validationCommands")):
+            F.add("USF-PARITY-024", f"capability:{capability_id}", "missing validation commands")
+        if not _has_usf_issue_list(capability.get("sourceIssueRefs")):
+            F.add("USF-PARITY-024", f"capability:{capability_id}", "missing USF source issue refs")
+        risk = capability.get("riskTreatment", {})
+        for field in ("treatment", "reviewDate", "followUpIssue", "riskStatement"):
+            if not str(risk.get(field) or "").strip():
+                F.add("USF-PARITY-024", f"capability:{capability_id}", f"missing risk treatment {field}")
+        if not str(risk.get("followUpIssue", "")).startswith("USF-"):
+            F.add("USF-PARITY-024", f"capability:{capability_id}", "risk treatment follow-up issue must be a USF issue")
+
+    feature_rows = _rows_by_id(gate.get("enterpriseFeatureCompletenessMatrix"), "feature")
+    if set(feature_rows) != USF133_REQUIRED_CAPABILITIES:
+        F.add("USF-PARITY-024", "enterpriseFeatureCompletenessMatrix", "feature completeness matrix must cover every required capability")
+    for feature, row in feature_rows.items():
+        capability = capabilities.get(row.get("capabilityRef"))
+        if not capability or row.get("status") != capability.get("status"):
+            F.add("USF-PARITY-024", f"feature:{feature}", "feature row must point at matching capability status")
+
+    package = read_json(PACKAGE_JSON_PATH) if os.path.exists(PACKAGE_JSON_PATH) else {}
+    scripts = package.get("scripts", {}) if isinstance(package, dict) else {}
+    proof_commands = _rows_by_id(gate.get("proofCommands"), "id")
+    if set(proof_commands) != USF133_REQUIRED_PROOF_COMMANDS:
+        F.add(
+            "USF-PARITY-025",
+            "proofCommands",
+            f"missing={sorted(USF133_REQUIRED_PROOF_COMMANDS - set(proof_commands))} extra={sorted(set(proof_commands) - USF133_REQUIRED_PROOF_COMMANDS)}",
+        )
+    for command_id, command in proof_commands.items():
+        if command.get("wiredIntoClosureGate") is not True:
+            F.add("USF-PARITY-025", f"proofCommand:{command_id}", "proof command is not wired into closure gate")
+        if not str(command.get("command") or "").strip():
+            F.add("USF-PARITY-025", f"proofCommand:{command_id}", "proof command string is required")
+        script_name = command.get("packageScript")
+        if script_name:
+            script = scripts.get(script_name)
+            if not script:
+                F.add("USF-PARITY-025", f"proofCommand:{command_id}", f"package script {script_name} is missing")
+            if command_id == "verify" and "parity" not in str(script):
+                F.add("USF-PARITY-025", "proofCommand:verify", "verify must include parity")
+            if command_id == "parity" and "validate-parity.py" not in str(script):
+                F.add("USF-PARITY-025", "proofCommand:parity", "parity must include validate-parity")
+
+    validators = _rows_by_id(gate.get("validators"), "id")
+    if set(validators) != USF133_REQUIRED_VALIDATORS:
+        F.add(
+            "USF-PARITY-026",
+            "validators",
+            f"missing={sorted(USF133_REQUIRED_VALIDATORS - set(validators))} extra={sorted(set(validators) - USF133_REQUIRED_VALIDATORS)}",
+        )
+    for validator_id, validator in validators.items():
+        path = validator.get("path")
+        if validator.get("required") is not True:
+            F.add("USF-PARITY-026", f"validator:{validator_id}", "validator row must be required")
+        if not path or not os.path.exists(path):
+            F.add("USF-PARITY-026", f"validator:{validator_id}", "validator path is missing")
+        script_name = validator.get("packageScript")
+        if script_name and script_name not in scripts:
+            F.add("USF-PARITY-026", f"validator:{validator_id}", f"package script {script_name} is missing")
+        if not str(validator.get("verifyPath") or "").strip():
+            F.add("USF-PARITY-026", f"validator:{validator_id}", "validator lacks verify/parity wiring note")
+
+    status = gate.get("statusIntegrity", {})
+    if status.get("usf133ClosureAllowed") is not False or status.get("usf133ClosureClaimed") is not False:
+        F.add("USF-PARITY-028", "statusIntegrity", "USF-133 closure is not allowed or claimed by this source issue")
+    for key in ("usf166DoneClaimed", "usf167DoneClaimed", "usf182DoneClaimed", "laneWrapperDoneStatesSatisfySourceIssues", "validationPassingAloneIsDone"):
+        if status.get(key) is not False:
+            F.add("USF-PARITY-029", f"statusIntegrity.{key}", "source issue Done state must not be claimed or implied")
+    if status.get("postMergeReconciliationRequired") is not True or status.get("downstreamUsf167BlockedUntilUsf166MergedAndReconciled") is not True:
+        F.add("USF-PARITY-029", "statusIntegrity", "post-merge reconciliation and USF-167 block must remain explicit")
+
+    enterprise_model, enterprise_error = load_optional_json(ENTERPRISE_EVIDENCE_MODEL_PATH)
+    if isinstance(enterprise_model, dict):
+        soa = _rows_by_id(enterprise_model.get("soaSupportMappings"), "id")
+        evidence = _rows_by_id(enterprise_model.get("evidenceRegister"), "id")
+        threats = _rows_by_id(enterprise_model.get("threatModelAbuseCaseRegister"), "id")
+        for required_id, rows, rule in (
+            ("usf-166-soa-closure-tier-evidence-gate", soa, "USF-PARITY-024"),
+            ("evidence-usf-166-closure-tier-input-baseline", evidence, "USF-PARITY-024"),
+            ("usf-166-threat-closure-tier-overclaim", threats, "USF-PARITY-024"),
+        ):
+            if required_id not in rows:
+                F.add(rule, required_id, "USF-166 enterprise evidence linkage is missing")
+    else:
+        F.add("USF-PARITY-024", ENTERPRISE_EVIDENCE_MODEL_PATH, f"cannot load enterprise evidence model: {enterprise_error}")
+
+
 def run_checks(F, state=None):
     state = state or build_state()
     if not check_shape(F, state):
@@ -585,6 +852,7 @@ def run_checks(F, state=None):
     check_rows(F, state)
     check_no_unauthorised_ui_artefacts(F, state)
     check_compose_service_closure(F, state)
+    check_usf133_closure_tier_gate(F, state)
 
 
 def apply_mutation(base_state, mutation):
@@ -592,6 +860,7 @@ def apply_mutation(base_state, mutation):
     base_paths = base_state["paths"]
     matrix = copy.deepcopy(base_matrix) if base_matrix is not None else None
     compose_closure_matrix = copy.deepcopy(base_state.get("composeClosureMatrix"))
+    usf133_closure_tier_gate = copy.deepcopy(base_state.get("usf133ClosureTierGate"))
     compose_parity_matrix = copy.deepcopy(base_state.get("composeParityMatrix"))
     compose_catalogue = copy.deepcopy(base_state.get("composeCatalogue"))
     paths = set(base_paths)
@@ -602,14 +871,31 @@ def apply_mutation(base_state, mutation):
         overrides["paths"] = paths
         return overrides
     if mutation.get("removeComposeClosureMatrix"):
-        overrides["composeClosureMatrix"] = None
+        compose_closure_matrix = None
         overrides["composeClosureMatrixError"] = "missing"
+    if mutation.get("removeUsf133ClosureTierGate"):
+        usf133_closure_tier_gate = None
+        overrides["usf133ClosureTierGateError"] = "missing"
     if "setTop" in mutation:
         for k, v in mutation["setTop"].items():
             matrix[k] = v
     if "composeClosureSetTop" in mutation:
         for k, v in mutation["composeClosureSetTop"].items():
             compose_closure_matrix[k] = v
+    if "closureTierSetTop" in mutation:
+        for k, v in mutation["closureTierSetTop"].items():
+            usf133_closure_tier_gate[k] = v
+    if "closureTierSetSelectedTier" in mutation:
+        tier = usf133_closure_tier_gate.setdefault("selectedClosureTier", {})
+        for k, v in mutation["closureTierSetSelectedTier"].items():
+            tier[k] = v
+    if "closureTierSetStatusIntegrity" in mutation:
+        status = usf133_closure_tier_gate.setdefault("statusIntegrity", {})
+        for k, v in mutation["closureTierSetStatusIntegrity"].items():
+            status[k] = v
+    if "closureTierSetClaims" in mutation:
+        for k, v in mutation["closureTierSetClaims"].items():
+            usf133_closure_tier_gate[k] = v
     if "domainsSetAll" in mutation:
         for row in matrix.get("domains", []):
             for k, v in mutation["domainsSetAll"].items():
@@ -649,8 +935,27 @@ def apply_mutation(base_state, mutation):
             row for row in compose_closure_matrix.get("rows", [])
             if row.get("service_id") != service_id
         ]
+    if "removeClosureTierServiceRef" in mutation:
+        service_id = mutation["removeClosureTierServiceRef"].get("serviceId")
+        usf133_closure_tier_gate["requiredServiceDispositionRefs"] = [
+            row for row in usf133_closure_tier_gate.get("requiredServiceDispositionRefs", [])
+            if row.get("serviceId") != service_id
+        ]
+    if "closureTierRemoveProofCommand" in mutation:
+        command_id = mutation["closureTierRemoveProofCommand"].get("id")
+        usf133_closure_tier_gate["proofCommands"] = [
+            row for row in usf133_closure_tier_gate.get("proofCommands", [])
+            if row.get("id") != command_id
+        ]
+    if "closureTierRemoveValidator" in mutation:
+        validator_id = mutation["closureTierRemoveValidator"].get("id")
+        usf133_closure_tier_gate["validators"] = [
+            row for row in usf133_closure_tier_gate.get("validators", [])
+            if row.get("id") != validator_id
+        ]
     overrides["matrix"] = matrix
     overrides["composeClosureMatrix"] = compose_closure_matrix
+    overrides["usf133ClosureTierGate"] = usf133_closure_tier_gate
     overrides["composeParityMatrix"] = compose_parity_matrix
     overrides["composeCatalogue"] = compose_catalogue
     overrides["paths"] = paths

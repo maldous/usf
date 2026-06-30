@@ -3569,6 +3569,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-166-soa-closure-tier-evidence-gate",
+      "mappedType": "closure-tier-control",
+      "controlPurpose": "Define USF-133 closure-tier execution as a repository evidence gate rather than a Linear-only decision.",
+      "riskTreated": "USF-133 or source issues could be marked closed by implication from lane wrappers, validation success, or accepted decisions without every acceptance criterion being mapped to merged evidence.",
+      "assetServiceAffected": "USF-133 closure tier; service disposition rows; source issues USF-166 USF-167 USF-182",
+      "owner": "USF-166 source issue owner",
+      "riskOwner": "USF-133 coordinator via USF-192",
+      "controlOwner": "USF-185 Lane 1 evidence gate owner",
+      "implementationStatus": "effectivenessState=defined-only; closureClaimed=false; postMergeReconciliationRequired=true; USF-133 remains open",
+      "evidenceSource": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+      "validationCommand": "python3 tools/validate-parity/validate-parity.py all --json",
+      "deferredReason": "USF-167 remains blocked until USF-166 is merged and reconciled; USF-133 remains open until every parent acceptance criterion is individually satisfied.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -4571,6 +4597,30 @@
       ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain proof command output in PR validation summary and keep USF-163 open for deep runtime, legal, regulatory, and migration depth."
+    },
+    {
+      "id": "evidence-usf-166-closure-tier-input-baseline",
+      "proofResult": "USF-166 closure-tier input baseline",
+      "whatWasProven": "Current main contains the merged lane-wrapper evidence inputs consumed by the USF-166 closure-tier evidence gate.",
+      "whatWasNotProven": "This does not prove USF-133 closure, USF-166 Done, USF-167 readiness, staging, production, live-provider, SOC, ISO certification, full dev readiness, or full React parity.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "docs/architecture/compose-service-disposition-closure-matrix.json",
+      "adapterProviderId": "not-applicable-closure-tier-gate",
+      "validationCommand": "python3 tools/validate-parity/validate-parity.py all --json",
+      "commandPin": "tools/validate-parity/validate-parity.py",
+      "commitPin": "fcc9c182a9234fd19cdf58b32020bad64342808c",
+      "issueLinks": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-184",
+        "USF-185",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "fcc9c182a9234fd19cdf58b32020bad64342808c",
+      "retentionPosture": "Retain the gate artifact, validator output, PR summary, and post-merge Linear reconciliation; unmerged USF-166 evidence cannot satisfy USF-133 closure."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -5398,6 +5448,32 @@
       "failClosedBehaviour": "validate-domain-depth blocks false closure, false Done, missing follow-up, missing proof, USF-153 reparent drift, USF-39 mutation, and readiness overclaims.",
       "monitoringAuditEvidence": "PR validation output must include validate-domain-depth, validate-enterprise, parity, planted defects, and the domain closure matrix evidence IDs.",
       "residualRisk": "Live provider, production, gateway, distributed, legal/regulatory, supplier, resilience, and certification depth remains deferred to USF-151, USF-153, USF-155, USF-157, USF-161, and USF-163."
+    },
+    {
+      "id": "usf-166-threat-closure-tier-overclaim",
+      "targetType": "closure-tier-control",
+      "target": "USF-133 closure-tier evidence gate",
+      "trustBoundary": "Repository evidence and validators define closure-tier execution; Linear comments and lane-wrapper Done states are tracking inputs only.",
+      "tenantBoundary": "Tenant-affecting service and capability evidence remains bounded by service catalogue, runtime proof, and source-issue rows; unproven rows stay deferred.",
+      "credentialBoundary": "The closure gate adds no runtime credentials and must not expose secrets, endpoints, tokens, provider payloads, or stack traces.",
+      "dataClassification": "metadata-only governance evidence and synthetic/local proof references",
+      "abuseCases": [
+        "USF-133 closure implied by source issue gate",
+        "source issue Done implied by lane wrapper Done",
+        "substitute treated as equivalent without boundary",
+        "accepted decision treated as completed work",
+        "readiness or certification claim introduced through docs"
+      ],
+      "failureModes": [
+        "closure-tier evidence missing",
+        "service disposition row missing",
+        "proof command stale or unwired",
+        "validator linkage missing",
+        "deferred item lacks owner, treatment, review date, or follow-up issue"
+      ],
+      "failClosedBehaviour": "validate-parity blocks missing gate evidence, missing service/capability mapping, false Done, USF-133 closure implication, missing non-equivalence boundary, stale proof command linkage, and prohibited readiness claims.",
+      "monitoringAuditEvidence": "PR validation summary must include validate-parity, validate-enterprise, planted defects, and post-merge reconciliation before any Done decision.",
+      "residualRisk": "USF-167, USF-182, source/deferred service rows, and parent USF-133 acceptance remain open until separately proven and reconciled."
     }
   ],
   "sdkDependencyGovernance": [
