@@ -3621,6 +3621,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-proof-proof-operator-access",
+      "mappedType": "proof-command",
+      "controlPurpose": "Map the USF-169 hermetic API operator-access proof to SoA-support evidence for tenant context fail-closed behaviour, PDP enforcement, redacted provider and observability posture reads, audit evidence, and explicit non-claims.",
+      "riskTreated": "Operator-access posture could be treated as proven from documentation alone, or API operator surfaces could expose provider or observability posture without tenant, role, audit, and redaction proof.",
+      "assetServiceAffected": "API operator provider posture and observability posture routes; operator access posture matrix; related gateway and clickthrough boundary.",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; runtimeMode=hermetic; providerMode=hermetic-mock; operatorConsoleRuntimeReadinessClaim=false; gatewayReadinessClaim=false; clickthroughReadinessClaim=false; publicExposureClaim=false; productionLiveClaim=false",
+      "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "corepack pnpm proof:operator-access",
+      "deferredReason": "Composed service console login, gateway route proof, clickthrough UX, executed periodic access reviews, deprovisioning workflow evidence, public or LAN exposure proof, staging, production, and live-provider operator access remain deferred to USF-180 or service-specific source issues.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -4669,6 +4695,29 @@
       ],
       "prOrMergeSha": "058ce94038eaeda75cc971119ee24a6d49a755c3",
       "retentionPosture": "Retain the promotion standard, schema, validator output, PR validation summary, and post-merge Linear reconciliation; this row is evidence organisation and does not satisfy any environment readiness claim by itself."
+    },
+    {
+      "id": "evidence-proof-proof-operator-access",
+      "proofResult": "proof:operator-access",
+      "whatWasProven": "USF-169 hermetic API operator-access proof exercises missing tenant, tenant mismatch, PDP denial for tenant-admin, security-admin permit for provider and observability posture reads, redacted provider and observability responses, tenant-safe security signal emission, and value-free audit evidence.",
+      "whatWasNotProven": "Does not prove composed service console login, gateway route proof, clickthrough UX, executed periodic access reviews, deprovisioning workflow evidence, public exposure, LAN exposure, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure.",
+      "runtimeMode": "hermetic",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "adapterProviderId": "not-applicable-api-operator-access-proof",
+      "validationCommand": "corepack pnpm proof:operator-access",
+      "commandPin": "tsx packages/proof/src/operator-access-proof.ts",
+      "commitPin": "2c461b1ceaac8832fe370ae736028b98340929d7",
+      "issueLinks": [
+        "USF-169",
+        "USF-180",
+        "USF-186",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "2c461b1ceaac8832fe370ae736028b98340929d7",
+      "retentionPosture": "Retain proof command output in the PR validation summary and post-merge Linear reconciliation; update this row if the proof command or operator-access scope changes."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -5550,6 +5599,32 @@
       "failClosedBehaviour": "validate-enterprise blocks missing environment promotion rows, provider/environment mismatches, destructive staging or production posture, missing evidence metadata, missing non-claims, and readiness/certification overclaims.",
       "monitoringAuditEvidence": "PR validation summary must include validate-spec, validate-enterprise, planted defects, dashboard/coordinator updates, and post-merge Linear reconciliation before any Done decision.",
       "residualRisk": "USF-167 and later source issues must still provide actual service, provider, operational, and environment-specific readiness evidence before any stronger readiness claim. It does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-react-parity-readiness."
+    },
+    {
+      "id": "usf-169-threat-operator-api-access-proof",
+      "targetType": "proof-command",
+      "target": "packages/proof/src/operator-access-proof.ts",
+      "trustBoundary": "Hermetic API proof evidence is not a composed service console, gateway route, clickthrough, public exposure, staging, production, or live-provider access proof.",
+      "tenantBoundary": "Proof uses synthetic tenant context and requires missing-tenant and tenant-mismatch requests to fail closed before operator posture data is returned.",
+      "credentialBoundary": "Proof output must not include tokens, cookies, raw endpoints, connection strings, provider payloads, stack traces, object keys, passwords, or private keys.",
+      "dataClassification": "synthetic local proof data and metadata-only operator posture evidence",
+      "abuseCases": [
+        "tenant-admin reads provider or observability operator posture without security-admin role",
+        "tenant mismatch returns operator posture data",
+        "provider or observability response leaks secret material or raw provider payloads",
+        "API proof is treated as gateway or clickthrough readiness",
+        "hermetic provider proof is treated as live-provider or production readiness"
+      ],
+      "failureModes": [
+        "missing tenant context does not fail closed",
+        "PDP denial does not emit tenant-safe security signal",
+        "audit evidence lacks provider or observability read action",
+        "proof output includes raw secret or endpoint material",
+        "non-claim booleans are changed to true"
+      ],
+      "failClosedBehaviour": "The proof asserts 400 or 403 safe-error responses for missing tenant, tenant mismatch, and unauthorized role paths, and validate-enterprise blocks missing proof wiring or readiness overclaim markers.",
+      "monitoringAuditEvidence": "Proof verifies provider.readiness.checked, provider.health.checked, observability.readiness.read, and observability.signal.read audit actions plus an authorization.denied security signal.",
+      "residualRisk": "Gateway route proof, clickthrough UX, composed service console login, executed access review, deprovisioning workflow, public exposure, staging, production, and live-provider access remain deferred."
     }
   ],
   "sdkDependencyGovernance": [
@@ -6539,6 +6614,40 @@
       "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "USF-193 defines approval gates only; executed access review, production approver workflow, break-glass operation, and public exposure proof are not claimed.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-169-access-review-operator-api-proof",
+      "targetType": "proof-command",
+      "target": "packages/proof/src/operator-access-proof.ts",
+      "posture": [
+        "effectivenessState=proven-local",
+        "accessReviewOwner=platform-access-foundation",
+        "authRequirement=security-admin-role-required-for-provider-and-observability-posture-reads",
+        "authorizationModel=PDP-fail-closed-for-missing-tenant-tenant-mismatch-and-tenant-admin-role",
+        "auditRequirement=value-free-provider-and-observability-read-audit-events-required",
+        "publicExposureAllowed=false",
+        "lanExposureAllowed=false",
+        "breakGlassRelevance=not-proven-for-runtime-console-or-gateway",
+        "reviewCadence=2026-09-30-or-before-USF-180-closure",
+        "deprovisioningPosture=deferred-until-executed-access-review-or-identity-lifecycle-proof",
+        "linkedFollowUpIssues=USF-180",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "packages/proof/src/operator-access-proof.ts; docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "corepack pnpm proof:operator-access",
+      "deferredReason": "Executed periodic access review, break-glass operation, deprovisioning workflow, gateway route proof, and clickthrough UX remain deferred to USF-180 or service-specific source issues.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -10447,6 +10556,36 @@
       "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "USF-193 records privacy and data-minimisation requirements for future promotion gates but does not prove production privacy, DSR, residency, legal hold, retention, purge, or customer data controls.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-operator-access",
+      "targetType": "proof-command",
+      "target": "proof:operator-access",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=metadata-only-operator-posture-evidence",
+        "redactionPolicy=no-token-no-cookie-no-raw-endpoint-no-connection-string-no-provider-payload-no-stack-trace",
+        "retentionPurgePosture=retain-value-free-proof-output-in-PR-and-Linear-summary",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "tenantBoundary=synthetic-tenant-context-and-tenant-mismatch-fail-closed-proof"
+      ],
+      "evidenceSource": "packages/proof/src/operator-access-proof.ts",
+      "validationCommand": "corepack pnpm proof:operator-access",
+      "deferredReason": "No production data, public exposure, gateway clickthrough, service console session, live-provider data, legal hold, residency, or production privacy control is proven by USF-169.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
