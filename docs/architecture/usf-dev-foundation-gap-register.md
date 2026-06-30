@@ -23,7 +23,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 | ID     | Gap                                                     | Required action                                                                                                                                            | Boundary                                      |
 | ------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
 | P1-001 | Sentry service parity unresolved                        | USF-170 records a bounded Sentry/error-monitoring disposition with local observability proof kept non-equivalent to deferred USF-196 Sentry service proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator access. | No SOC/SIEM/error-monitoring readiness claim. |
-| P1-002 | SonarQube quality gate parity unresolved                | USF-171 records a bounded SonarQube/static-analysis quality-gate disposition with local deterministic verification kept non-equivalent to deferred USF-195 SonarQube service proof, quality-gate scope, exception handling, and operator access. | No SonarQube, test-readiness, SOC, or ISO certification claim. |
+| P1-002 | SonarQube quality gate parity unresolved                | USF-171 records a bounded SonarQube/static-analysis quality-gate disposition with local deterministic verification kept non-equivalent to SonarQube service proof. USF-195 records the SonarQube row as explicit deferred service proof, and USF-204 owns actual composed scan, quality-gate, security-hotspot, and operator-console proof. | No SonarQube, test-readiness, SOC, or ISO certification claim. |
 | P1-003 | ClickHouse analytics/event-store parity unresolved      | USF-172 records a bounded analytics/event-store disposition with in-memory proof kept non-equivalent to deferred USF-197 ClickHouse adapter and service-semantic proof for persisted ingestion, tenant-safe query, aggregation, retention, audit, teardown, and provider failure modes. | No ClickHouse/event-store readiness claim.    |
 | P1-004 | Redis/cache parity unresolved                           | USF-173 records a bounded cache/eventing disposition with NATS event-bus proof and in-memory evidence kept non-equivalent to deferred USF-198 Redis adapter and service-semantic proof for tenant-safe cache operations, expiration, retry, audit, teardown, and provider failure modes. | No Redis/cache/eventing readiness claim.      |
 | P1-005 | Meilisearch/search provider parity unresolved           | USF-174 records a bounded composed search provider disposition with in-memory search proof kept non-equivalent to deferred USF-199 Meilisearch adapter and service-semantic proof for indexing, query, ranking, filtering, async indexing, deletion, retention, reindex, retry, audit, teardown, and provider failure modes. | No Meilisearch/composed-search/search-provider/vector/AI readiness claim. |
@@ -171,9 +171,10 @@ Sentry and SonarQube closure-matrix rows remain closure-blocking and link to the
 enterprise evidence rows. Sentry runtime event capture, redaction, tenant-safe labels,
 retention, alert handoff, and operator-console proof remain deferred under USF-196 after
 USF-170 records the bounded disposition gate.
-SonarQube service-semantic proof, quality-gate scope, unresolved issue handling, exceptions,
-security hotspot treatment, and operator-console proof remain deferred under USF-195 after
-USF-171 records the bounded disposition gate.
+USF-195 records the SonarQube row as an explicit deferred service-proof boundary after
+USF-171 records the bounded disposition gate. Actual composed scan execution, quality-gate
+scope, unresolved issue handling, exceptions, security hotspot treatment, and operator-console
+proof remain deferred under USF-204.
 Security scanning is defined-only for this lane; live scanner provider proof, vulnerability
 clearance, SAST/DAST completeness, secret-scanning completeness, and certification evidence are
 not claimed.

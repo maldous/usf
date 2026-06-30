@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-195 SonarQube proof boundary artefact is missing.",
+  "removeSonarqubeBoundary": true
+}

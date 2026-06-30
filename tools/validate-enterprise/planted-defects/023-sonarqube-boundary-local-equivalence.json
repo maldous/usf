@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-195 incorrectly treats local deterministic validation as SonarQube service equivalence.",
+  "sonarqubeBoundarySet": {
+    "reclassification.localVerificationEquivalentToSonarQubeService": true,
+    "localVerificationGate.sonarqubeServiceEquivalent": true
+  }
+}

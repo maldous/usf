@@ -388,7 +388,10 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-171",
+        "USF-195",
+        "USF-204"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -410,7 +413,10 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-171",
+        "USF-195",
+        "USF-204"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -432,7 +438,10 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-171",
+        "USF-195",
+        "USF-204"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -454,7 +463,10 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-171",
+        "USF-195",
+        "USF-204"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -500,6 +512,8 @@
         "USF-182",
         "USF-185",
         "USF-171",
+        "USF-195",
+        "USF-204",
         "USF-187",
         "USF-184",
         "USF-192",
@@ -1812,13 +1826,13 @@
       "id": "exception-service-sonar-postgres",
       "targetType": "service",
       "targetId": "sonar-postgres",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service",
+      "disposition": "deferred",
+      "reason": "USF-195 records sonar-postgres as an explicit deferred SonarQube service-proof boundary; actual composed backing-store proof remains USF-204.",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-204",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [
@@ -1855,13 +1869,13 @@
       "id": "exception-service-sonar-oidc-plugin",
       "targetType": "service",
       "targetId": "sonar-oidc-plugin",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; Plugin fetch mechanics are deployment details, not independent semantic authority.",
+      "disposition": "deferred",
+      "reason": "USF-195 records sonar-oidc-plugin as an explicit deferred SonarQube service-proof boundary; plugin fetch mechanics are deployment details, not independent semantic authority; actual composed plugin/bootstrap proof remains USF-204.",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-204",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [
@@ -1898,13 +1912,13 @@
       "id": "exception-service-sonarqube",
       "targetType": "service",
       "targetId": "sonarqube",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; USF-171 service-semantic proof for SonarQube unresolved issues, quality gate scope, security hotspots, exceptions, and operator console access remains deferred.; Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history.; Lane 3 preserves the split between mandatory local deterministic verification and deferred SonarQube service proof; local validators are not equivalent to SonarQube service-operating evidence.; SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+      "disposition": "deferred",
+      "reason": "USF-195 records SonarQube as an explicit deferred service-proof boundary; actual composed scan execution, quality gate scope, unresolved issue handling, security hotspot treatment, exception handling, operator console access, audit, retention, secret, supplier, and incident evidence remains USF-204.; Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history.; Lane 3 preserves the split between mandatory local deterministic verification and deferred SonarQube service proof; local validators are not equivalent to SonarQube service-operating evidence.; SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-204",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [

@@ -1476,7 +1476,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-postgres",
@@ -1492,11 +1492,14 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-171"
+          "USF-171",
+          "USF-195",
+          "USF-204"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service"
+          "USF-195 records this as an explicit deferred SonarQube service-proof boundary.",
+          "USF-204 remains required for actual composed SonarQube backing-store evidence."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1505,6 +1508,10 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
+          "sonarqube-readiness",
+          "quality-gate-readiness",
+          "scanner-readiness",
+          "vulnerability-clearance-readiness",
           "full-react-parity-readiness",
           "full-dev-readiness",
           "test-readiness",
@@ -1526,7 +1533,9 @@
           "incident-vulnerability-sonar-postgres"
         ],
         "tracking_issue_rationale": {
-          "USF-171": "static analysis quality-gate disposition proof and evidence"
+          "USF-171": "static analysis quality-gate disposition proof and evidence",
+          "USF-195": "SonarQube service-semantic proof boundary and reclassification",
+          "USF-204": "SonarQube composed scan and operator console proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -1554,7 +1563,7 @@
         "dev"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-oidc-plugin",
@@ -1570,13 +1579,16 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-171"
+          "USF-171",
+          "USF-195",
+          "USF-204"
         ],
         "non_equivalence_boundaries": [
           "Plugin fetch mechanics are deployment details, not independent semantic authority."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service"
+          "USF-195 records this as an explicit deferred SonarQube service-proof boundary.",
+          "USF-204 remains required for actual composed SonarQube plugin/bootstrap evidence."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1585,6 +1597,10 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
+          "sonarqube-readiness",
+          "quality-gate-readiness",
+          "scanner-readiness",
+          "vulnerability-clearance-readiness",
           "full-react-parity-readiness",
           "full-dev-readiness",
           "test-readiness",
@@ -1606,7 +1622,9 @@
           "incident-vulnerability-sonar-oidc-plugin"
         ],
         "tracking_issue_rationale": {
-          "USF-171": "static analysis quality-gate disposition proof and evidence"
+          "USF-171": "static analysis quality-gate disposition proof and evidence",
+          "USF-195": "SonarQube service-semantic proof boundary and reclassification",
+          "USF-204": "SonarQube composed scan and operator console proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -1636,7 +1654,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonarqube",
@@ -1656,6 +1674,7 @@
           "USF-185",
           "USF-171",
           "USF-195",
+          "USF-204",
           "USF-187",
           "USF-184",
           "USF-192",
@@ -1667,9 +1686,8 @@
           "SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "future operator console SSO/clickthrough and privileged access proof",
-          "USF-195 service-semantic proof for SonarQube unresolved issues, quality gate scope, security hotspots, exceptions, and operator console access remains deferred."
+          "USF-195 records this as an explicit deferred SonarQube service-proof boundary.",
+          "USF-204 remains required for actual composed SonarQube scan execution, quality gate scope, unresolved issues, security hotspots, exceptions, operator console access, audit, retention, secret, supplier, and incident evidence."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1678,6 +1696,10 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
+          "sonarqube-readiness",
+          "quality-gate-readiness",
+          "scanner-readiness",
+          "vulnerability-clearance-readiness",
           "full-react-parity-readiness",
           "full-dev-readiness",
           "test-readiness",
@@ -1708,7 +1730,8 @@
         ],
         "tracking_issue_rationale": {
           "USF-171": "bounded static-analysis quality-gate disposition proof and evidence",
-          "USF-195": "SonarQube service-semantic proof and operator access depth"
+          "USF-195": "SonarQube service-semantic proof boundary and reclassification",
+          "USF-204": "SonarQube composed scan and operator console proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
