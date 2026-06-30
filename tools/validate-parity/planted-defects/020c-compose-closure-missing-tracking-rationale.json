@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-020",
+  "description": "blocking compose service disposition links a downstream source issue without a rationale",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "redis",
+      "setEvidence": {
+        "tracking_issue_rationale": {}
+      }
+    }
+  }
+}

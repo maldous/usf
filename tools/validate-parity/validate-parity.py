@@ -121,6 +121,37 @@ COMPOSE_CLOSURE_DISPOSITIONS = {
 }
 COMPOSE_IMPLEMENTED_DISPOSITIONS = {"implemented", "implemented-equivalent", "covered-by-usf-runtime"}
 COMPOSE_BLOCKING_DISPOSITIONS = {"deferred", "requires-human-decision", "substituted-partial"}
+COMPOSE_CLOSURE_META_ISSUES = {
+    "USF-133",
+    "USF-166",
+    "USF-167",
+    "USF-182",
+    "USF-184",
+    "USF-185",
+    "USF-186",
+    "USF-187",
+    "USF-188",
+    "USF-189",
+    "USF-190",
+    "USF-191",
+    "USF-192",
+}
+COMPOSE_REQUIRED_DOWNSTREAM_ISSUES = {
+    "USF-151",
+    "USF-159",
+    "USF-169",
+    "USF-170",
+    "USF-171",
+    "USF-172",
+    "USF-173",
+    "USF-174",
+    "USF-175",
+    "USF-176",
+    "USF-177",
+    "USF-178",
+    "USF-179",
+    "USF-180",
+}
 COMPOSE_NON_EQUIVALENT_DISPOSITIONS = {
     "covered-by-usf-runtime",
     "substituted-partial",
@@ -634,6 +665,18 @@ def check_compose_service_closure(F, state):
         F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix lacks done-state governance reference")
     if closure_matrix.get("parent_issue") != "USF-133" or closure_matrix.get("lane_issue") != "USF-185":
         F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix is not scoped to USF-185 under USF-133")
+    if closure_matrix.get("source_issue_execution_gate") != "USF-167":
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix does not identify USF-167 as the source execution gate")
+    if closure_matrix.get("environment_promotion_standard") != ENVIRONMENT_PROMOTION_STANDARD_PATH:
+        F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure matrix does not link the environment promotion standard")
+    downstream_source_issues = _set_or_empty(closure_matrix.get("downstream_source_issues"))
+    missing_downstream_source_issues = COMPOSE_REQUIRED_DOWNSTREAM_ISSUES - downstream_source_issues
+    if missing_downstream_source_issues:
+        F.add(
+            "USF-PARITY-020",
+            COMPOSE_CLOSURE_MATRIX_PATH,
+            f"closure matrix lacks downstream source issue registry entries: {sorted(missing_downstream_source_issues)}",
+        )
     missing_non_claims = PROHIBITED_READINESS_CLAIMS - _set_or_empty(closure_matrix.get("non_claims"))
     if missing_non_claims:
         F.add("USF-PARITY-022", COMPOSE_CLOSURE_MATRIX_PATH, f"missing non-claims: {sorted(missing_non_claims)}")
@@ -722,6 +765,25 @@ def check_compose_service_closure(F, state):
             issues = evidence.get("tracking_issues")
             if not _non_empty_list(issues) or not all(str(issue).startswith("USF-") for issue in issues):
                 F.add("USF-PARITY-020", f"service:{service_id}", "blocking disposition lacks linked USF follow-up issue")
+            else:
+                downstream_issues = [str(issue) for issue in issues if str(issue) not in COMPOSE_CLOSURE_META_ISSUES]
+                if not downstream_issues:
+                    F.add("USF-PARITY-020", f"service:{service_id}", "blocking disposition only links closure gate or wrapper issues")
+                rationale = evidence.get("tracking_issue_rationale")
+                if not isinstance(rationale, dict):
+                    F.add("USF-PARITY-020", f"service:{service_id}", "blocking disposition lacks tracking issue rationale")
+                else:
+                    for issue in downstream_issues:
+                        if not str(rationale.get(issue) or "").strip():
+                            F.add("USF-PARITY-020", f"service:{service_id}:{issue}", "downstream source follow-up lacks rationale")
+            if evidence.get("source_issue_gate") != "USF-167":
+                F.add("USF-PARITY-020", f"service:{service_id}", "blocking disposition does not link the USF-167 execution gate")
+            env_ref = str(evidence.get("environment_promotion_standard_ref") or "")
+            if not env_ref.startswith(ENVIRONMENT_PROMOTION_STANDARD_PATH):
+                F.add("USF-PARITY-020", f"service:{service_id}", "blocking disposition lacks environment promotion standard reference")
+            note = str(evidence.get("disposition_execution_note") or "").lower()
+            if "does not close" not in note or "readiness" not in note:
+                F.add("USF-PARITY-022", f"service:{service_id}", "blocking disposition lacks explicit non-closure or readiness boundary")
         elif evidence.get("closure_blocking") is True:
             F.add("USF-PARITY-021", f"service:{service_id}", "resolved disposition is marked closure_blocking")
 

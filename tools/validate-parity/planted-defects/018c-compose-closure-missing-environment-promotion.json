@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-PARITY-018",
+  "description": "compose closure matrix lacks the environment promotion standard link",
+  "mutation": {
+    "composeClosureSetTop": {
+      "environment_promotion_standard": ""
+    }
+  }
+}

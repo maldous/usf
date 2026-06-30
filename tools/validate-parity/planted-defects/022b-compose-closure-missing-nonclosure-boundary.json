@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-PARITY-022",
+  "description": "blocking compose service disposition lacks explicit non-closure and readiness boundary text",
+  "mutation": {
+    "composeClosureRowPatch": {
+      "service_id": "redis",
+      "setEvidence": {
+        "disposition_execution_note": "USF-167 records repository-backed disposition evidence."
+      }
+    }
+  }
+}

@@ -1101,7 +1101,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-173"
         ],
         "non_equivalence_boundaries": [
           "Dev in-memory cache is not equivalent to Redis eviction, persistence, or wire protocol behaviour."
@@ -1137,7 +1138,13 @@
           "soa-deferred-boundary-redis",
           "resilience-posture-redis",
           "incident-vulnerability-redis"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-173": "cache and eventing service disposition proof"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1177,7 +1184,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-174"
         ],
         "non_equivalence_boundaries": [
           "Dev in-memory search is not equivalent to Meilisearch ranking, indexing, or persistence."
@@ -1213,7 +1221,13 @@
           "soa-deferred-boundary-meilisearch",
           "resilience-posture-meilisearch",
           "incident-vulnerability-meilisearch"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-174": "composed search provider disposition proof"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1253,7 +1267,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-172"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -1287,7 +1302,13 @@
           "soa-deferred-boundary-clickhouse",
           "resilience-posture-clickhouse",
           "incident-vulnerability-clickhouse"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-172": "analytics event-store provider disposition proof"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1328,7 +1349,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-169"
         ],
         "non_equivalence_boundaries": [
           "pgAdmin database inspection/admin workflow is not equivalent to application-level database tests."
@@ -1364,7 +1386,13 @@
           "access-posture-pgadmin",
           "resilience-posture-pgadmin",
           "incident-vulnerability-pgadmin"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-169": "operator/admin access posture proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1405,7 +1433,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-171"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -1437,7 +1466,13 @@
           "soa-deferred-boundary-sonar-postgres",
           "resilience-posture-sonar-postgres",
           "incident-vulnerability-sonar-postgres"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-171": "static analysis quality-gate disposition proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1476,7 +1511,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-171"
         ],
         "non_equivalence_boundaries": [
           "Plugin fetch mechanics are deployment details, not independent semantic authority."
@@ -1510,7 +1546,13 @@
           "soa-deferred-boundary-sonar-oidc-plugin",
           "resilience-posture-sonar-oidc-plugin",
           "incident-vulnerability-sonar-oidc-plugin"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-171": "static analysis quality-gate disposition proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1604,7 +1646,13 @@
           "usf-187-sonarqube-static-analysis-risk-treatment",
           "usf-187-sonarqube-static-analysis-incident-vulnerability",
           "usf-187-sonarqube-static-analysis-privacy"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-171": "static analysis quality-gate disposition proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1711,7 +1759,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-176"
         ],
         "non_equivalence_boundaries": [
           "LocalStack emulation is not live external provider evidence."
@@ -1745,7 +1794,13 @@
           "soa-deferred-boundary-localstack",
           "resilience-posture-localstack",
           "incident-vulnerability-localstack"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-176": "local mock provider substrate proof"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1785,7 +1840,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-176"
         ],
         "non_equivalence_boundaries": [
           "WireMock proves configured mock behaviour only."
@@ -1819,7 +1875,13 @@
           "soa-deferred-boundary-wiremock",
           "resilience-posture-wiremock",
           "incident-vulnerability-wiremock"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-176": "local mock provider substrate proof"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1860,7 +1922,9 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-179",
+          "USF-159"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -1896,7 +1960,14 @@
           "access-posture-alertmanager",
           "resilience-posture-alertmanager",
           "incident-vulnerability-alertmanager"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-179": "observability operations stack proof and evidence",
+          "USF-159": "observability deferred operations backend and incident evidence depth"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -1937,7 +2008,9 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-179",
+          "USF-159"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -1971,7 +2044,14 @@
           "soa-deferred-boundary-alloy",
           "resilience-posture-alloy",
           "incident-vulnerability-alloy"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-179": "observability operations stack proof and evidence",
+          "USF-159": "observability deferred operations backend and incident evidence depth"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2012,7 +2092,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-178"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -2046,7 +2127,13 @@
           "soa-deferred-boundary-windmill-postgres",
           "resilience-posture-windmill-postgres",
           "incident-vulnerability-windmill-postgres"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-178": "operator workflow service proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2087,7 +2174,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-178"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -2121,7 +2209,13 @@
           "soa-deferred-boundary-windmill-redis",
           "resilience-posture-windmill-redis",
           "incident-vulnerability-windmill-redis"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-178": "operator workflow service proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2162,7 +2256,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-178"
         ],
         "non_equivalence_boundaries": [
           "Windmill is platform/operator automation and is not a Temporal substitute."
@@ -2200,7 +2295,13 @@
           "access-posture-windmill",
           "resilience-posture-windmill",
           "incident-vulnerability-windmill"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-178": "operator workflow service proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2241,7 +2342,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-178"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -2276,7 +2378,13 @@
           "access-posture-windmill-worker",
           "resilience-posture-windmill-worker",
           "incident-vulnerability-windmill-worker"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-178": "operator workflow service proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2317,7 +2425,9 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-151",
+          "USF-178"
         ],
         "non_equivalence_boundaries": [
           "USF dev Temporal currently uses postgres service; separate Temporal database remains an isolation decision."
@@ -2351,7 +2461,14 @@
           "soa-deferred-boundary-temporal-postgres",
           "resilience-posture-temporal-postgres",
           "incident-vulnerability-temporal-postgres"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-151": "jobs and workflow enterprise proof depth",
+          "USF-178": "operator workflow service proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2392,7 +2509,9 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-169",
+          "USF-178"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -2428,7 +2547,14 @@
           "access-posture-temporal-ui",
           "resilience-posture-temporal-ui",
           "incident-vulnerability-temporal-ui"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-169": "operator/admin access posture proof and evidence",
+          "USF-178": "operator workflow service proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2469,7 +2595,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-177"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -2503,7 +2630,13 @@
           "soa-deferred-boundary-pgbackrest",
           "resilience-posture-pgbackrest",
           "incident-vulnerability-pgbackrest"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-177": "backup restore service proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2544,7 +2677,8 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-175"
         ],
         "non_equivalence_boundaries": [
           "Shared scanning engine is valid only when queues, files, scan results, and evidence are environment scoped."
@@ -2580,7 +2714,13 @@
           "soa-deferred-boundary-clamav",
           "resilience-posture-clamav",
           "incident-vulnerability-clamav"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-175": "file quarantine and scanning provider proof"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2686,7 +2826,13 @@
           "usf-187-sentry-error-monitoring-risk-treatment",
           "usf-187-sentry-error-monitoring-incident-vulnerability",
           "usf-187-sentry-error-monitoring-privacy"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-170": "Sentry error-monitoring disposition proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2727,7 +2873,9 @@
           "USF-166",
           "USF-167",
           "USF-182",
-          "USF-185"
+          "USF-185",
+          "USF-180",
+          "USF-169"
         ],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
@@ -2763,7 +2911,14 @@
           "access-posture-caddy",
           "resilience-posture-caddy",
           "incident-vulnerability-caddy"
-        ]
+        ],
+        "tracking_issue_rationale": {
+          "USF-180": "gateway and clickthrough access substrate proof",
+          "USF-169": "operator/admin access posture proof and evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
       }
     },
     {
@@ -2903,5 +3058,23 @@
   "enterprise_evidence_model": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
   "enterprise_evidence_validator": "tools/validate-enterprise/validate-enterprise.py all --json",
   "done_state_governance_ref": "enterprise-evidence.repository-model#doneStateGovernance",
-  "statement_of_applicability_support_only": true
+  "statement_of_applicability_support_only": true,
+  "source_issue_execution_gate": "USF-167",
+  "environment_promotion_standard": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+  "downstream_source_issues": [
+    "USF-169",
+    "USF-170",
+    "USF-171",
+    "USF-172",
+    "USF-173",
+    "USF-174",
+    "USF-175",
+    "USF-176",
+    "USF-177",
+    "USF-178",
+    "USF-179",
+    "USF-180",
+    "USF-159",
+    "USF-151"
+  ]
 }
