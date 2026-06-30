@@ -31,6 +31,7 @@ No React runtime/application code is copied. No USF path mirrors a React path. G
 | supplier/subprocessor posture | external provider readiness lineage | supplier posture fields | partial | represented as posture, not approval | supplier review approval workflow |
 | local/composed/live-deferred separation | compose substrate and proof-gate lineage | provider mode hard-boundary validation | migrated | tests and proof reject live overclaims | live provider authority and proof package |
 | provider test safety | in-memory/mock/local test provider lineage | synthetic tests and proof output | migrated | tests avoid real endpoints/credentials/customer data | broader fixture scanner |
+| webhook-sink local capture provider | webhook/mock-provider lineage and compose echo substrate | `WebhookSinkCaptureProvider` plus `proof:mock-substrate` | bounded-local-proof | USF-201 proves only local Compose capture with adapter-contained protocol exception, readiness retry, fail-closed unavailable handling, redaction, audit-shaped evidence, and teardown | notification delivery, callback/replay, live webhook compatibility, LocalStack, WireMock, and mock OIDC remain separate follow-ups |
 | future API/provider status surfaces | readiness/status API lineage | `/v1/providers`, `/v1/providers/{id}` | migrated | PDP-protected, OpenAPI-covered, redacted | health/readiness subroutes if authorised |
 | React UI/Playwright provider behaviours | provider status/admin UI and E2E lineage | API/capability/proof tests | foundation-behaviour-rewritten-from-ui-test | no Playwright added; provider behaviours covered by foundation tests | UI/UX remains separate |
 
@@ -39,5 +40,7 @@ No React runtime/application code is copied. No USF path mirrors a React path. G
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
 | `tests/adapters/provider-path-encoding.test.ts` | new-with-rationale | evidence-only-support | Hermetic test proving MinIO and OpenBao composed-provider tenant path segments use collision-free base64url encoding rather than lossy normalisation. |
+| `packages/proof/src/mock-provider-substrate-proof.ts` | new-with-rationale | runtime-proof-support | Profile-gated local Compose proof for webhook-sink capture only; it does not copy React runtime/application code and does not prove LocalStack, WireMock, mock OIDC, notification delivery, or live provider compatibility. |
+| `adapters/mail/src/index.ts` | adapter-boundary-extension | runtime-proof-support | Hosts the `WebhookSinkCaptureProvider` protocol exception inside the adapter package, keeping protocol calls out of core, ports, capabilities, API routes, worker orchestration, and PDP code. |
 
 Boundary: provider modes and environment classes remain separate. `composed-test` is not production readiness. `live-external-deferred` is not live readiness. No live-external-authorised provider is registered in this slice.

@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "remove",
+      "path": "/providerBoundaries/2/protocolBoundary"
+    }
+  ]
+}

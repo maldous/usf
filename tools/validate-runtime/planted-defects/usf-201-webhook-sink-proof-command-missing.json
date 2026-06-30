@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-RUNTIME-027",
+  "removePackageScripts": ["proof:mock-substrate"],
+  "removeMakeTargets": ["mock-substrate-proof"]
+}

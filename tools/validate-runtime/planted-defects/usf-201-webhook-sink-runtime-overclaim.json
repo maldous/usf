@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-027",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/13/claimBoundary",
+      "value": "Webhook sink proof covers notification delivery readiness and live provider compatibility."
+    }
+  ]
+}

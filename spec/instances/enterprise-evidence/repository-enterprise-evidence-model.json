@@ -4115,6 +4115,58 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-201-soa-webhook-sink-composed-proof",
+      "mappedType": "source-issue-webhook-sink-composed-proof",
+      "controlPurpose": "Map USF-201 as bounded local Compose webhook-sink capture proof, protocol-exception governance, and explicit non-equivalence for live provider and notification delivery claims.",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=Webhook sink capture proof could be mistaken for notification delivery, provider feedback, replay, live webhook compatibility, external provider readiness, or complete mock-provider substrate readiness; threatFailureScenario=proof command success is used to claim live provider compatibility; affectedAssetService=webhook-sink capture provider; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=prove bounded local capture and split LocalStack, WireMock, and mock OIDC to USF-208, USF-209, and USF-210; reviewDate=2026-09-30; followUpIssue=USF-153",
+      "assetServiceAffected": "webhook-sink capture provider plus localstack wiremock mock-oidc deferred mock substrates",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-201; serviceCatalogueRow=webhook-sink; providerRegistryId=notification-delivery-webhook-sink-composed-test; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=deferred-to-USF-210; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed",
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "LocalStack cloud-emulator proof, WireMock HTTP fixture proof, mock OIDC service proof, notification delivery, provider callback/replay, live webhook compatibility, API runtime binding, worker runtime binding, and environment readiness remain deferred or non-claimed; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-210,USF-153; exception=protocol-boundary-no-maintained-sdk",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-mock-substrate",
+      "mappedType": "proof-command",
+      "controlPurpose": "Govern proof command evidence posture for proof:mock-substrate.",
+      "riskTreated": "Proof output could be mistaken for full local mock substrate readiness or live provider compatibility unless command scope and non-claims are explicit.",
+      "assetServiceAffected": "proof:mock-substrate",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:mock-substrate; sourceIssue=USF-201; localstack=deferred-to-USF-208; wiremock=deferred-to-USF-209; mockOidc=deferred-to-USF-210",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "validationCommand": "corepack pnpm proof:mock-substrate",
+      "deferredReason": "LocalStack, WireMock, mock OIDC, notification delivery, callback/replay, live provider compatibility, and environment readiness remain non-claims or follow-up work; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-210,USF-153",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -5608,6 +5660,58 @@
       ],
       "prOrMergeSha": "3ef8570f9ad319cc9226a95d055752ce9bbd5a87",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
+    },
+    {
+      "id": "usf-201-evidence-webhook-sink-composed-proof",
+      "proofResult": "webhook-sink-composed-capture-provider-proof",
+      "whatWasProven": "USF-201 adds a bounded local Compose proof for webhook-sink capture using an adapter-contained HTTP protocol exception because no maintained SDK exists for the echo service. The proof starts the canonical test Compose webhook-sink service with loopback ephemeral host exposure, waits with bounded readiness retry, performs a synthetic capture request, verifies readback of payload classification and body hash, records value-free structured log trace metric and audit-shaped evidence, proves unavailable fail-closed behaviour, checks redaction and no external egress posture, and tears Compose down in a finally path.",
+      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, WireMock HTTP fixture semantics, mock OIDC service operation, notification delivery, provider callback or replay, deliverability, live webhook compatibility, external provider readiness, API runtime provider use, worker runtime provider use, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#webhook-sink",
+      "adapterProviderId": "notification-delivery-webhook-sink-composed-test",
+      "validationCommand": "corepack pnpm proof:mock-substrate",
+      "commandPin": "tsx packages/proof/src/mock-provider-substrate-proof.ts",
+      "commitPin": "f01c13cf15bccf64a4e58e1a69a2012f39d24cb5",
+      "issueLinks": [
+        "USF-201",
+        "USF-176",
+        "USF-208",
+        "USF-209",
+        "USF-210",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "f01c13cf15bccf64a4e58e1a69a2012f39d24cb5",
+      "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, raw endpoints, request bodies, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
+    },
+    {
+      "id": "evidence-proof-proof-mock-substrate",
+      "proofResult": "proof:mock-substrate",
+      "whatWasProven": "Package script proof:mock-substrate is the command-pinned proof surface for bounded local Compose webhook-sink capture semantics, unavailable fail-closed behaviour, redacted value-free evidence, no external egress posture, and Compose teardown.",
+      "whatWasNotProven": "This does not prove LocalStack cloud-emulator semantics, WireMock HTTP fixture semantics, mock OIDC service operation, notification delivery, provider callback or replay, live webhook compatibility, API runtime provider use, worker runtime provider use, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#webhook-sink",
+      "adapterProviderId": "notification-delivery-webhook-sink-composed-test",
+      "validationCommand": "corepack pnpm proof:mock-substrate",
+      "commandPin": "tsx packages/proof/src/mock-provider-substrate-proof.ts",
+      "commitPin": "f01c13cf15bccf64a4e58e1a69a2012f39d24cb5",
+      "issueLinks": [
+        "USF-201",
+        "USF-176",
+        "USF-208",
+        "USF-209",
+        "USF-210",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "f01c13cf15bccf64a4e58e1a69a2012f39d24cb5",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -6970,6 +7074,35 @@
       "failClosedBehaviour": "Runtime and enterprise validators fail missing matrix, manifest, proof command, SDK governance, operational evidence, enterprise evidence refs, non-claims, and unsafe readiness claims; proof command fails closed on adapter or file-service errors.",
       "monitoringAuditEvidence": "validator output, proof JSON, planted defects, PR summary, and Linear linkage only; evidence remains value-free with correlation/trace hashes and safe outcome fields.",
       "residualRisk": "riskStatement=release workflow signature freshness DLP live-provider operation and runtime binding remain deferred; impact=high; likelihood=medium; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; controlOwner=platform-files-control-owner; treatment=defer runtime binding and readiness claims; reviewDate=2026-09-30; followUpIssue=USF-147; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+    },
+    {
+      "id": "usf-201-threat-mock-provider-execution-split",
+      "targetType": "source-issue-mock-provider-substrate-proof",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "trustBoundary": "USF-201 repository evidence may define bounded webhook-sink capture proof only; LocalStack, WireMock, mock OIDC, notification delivery, callback replay, and live external provider compatibility remain outside this proof.",
+      "tenantBoundary": "Synthetic tenant id is hashed before evidence retention and is used only for local capture proof; no production tenant data, API route tenant enforcement, worker tenant enforcement, live provider tenant isolation, or provider compatibility claim is made.",
+      "credentialBoundary": "No real credentials, tokens, API keys, raw endpoints, SDK errors, provider payloads, connection strings, request bodies, or stack traces are retained or emitted; endpoint is represented as endpoint://compose/webhook-sink.",
+      "dataClassification": "synthetic local proof data and committed governance metadata only",
+      "abuseCases": [
+        "USF-201 marked Done as complete local mock substrate readiness",
+        "webhook-sink capture proof marked notification delivery or live provider compatibility",
+        "LocalStack WireMock or mock OIDC marked proven without their own proof",
+        "protocol exception escapes adapter boundary",
+        "proof output includes raw endpoint token payload stack trace or provider response body"
+      ],
+      "failureModes": [
+        "proof command missing",
+        "webhook-sink readiness retry missing",
+        "capture request or readback missing",
+        "provider-unavailable fail-closed proof missing",
+        "compose teardown missing",
+        "safe error redaction missing",
+        "remaining mock substrate follow-up missing",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-027 fails missing matrix, manifest linkage, proof command, Make target, adapter/proof markers, enterprise evidence refs, follow-up issues, non-claims, and unsafe readiness claims; proof:mock-substrate exits nonzero on readiness, capture, redaction, unavailable, or teardown failure.",
+      "monitoringAuditEvidence": "validator output, proof JSON, planted defects, PR summary, and Linear linkage only; evidence remains value-free with hashed correlation, tenant, delivery, trace, and body references plus safe outcome fields.",
+      "residualRisk": "riskStatement=remaining mock-provider substrate service semantics and delivery/live-provider compatibility remain deferred; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=defer LocalStack to USF-208 WireMock to USF-209 mock OIDC to USF-210 and delivery compatibility to USF-153; reviewDate=2026-09-30; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7148,6 +7281,22 @@
       "typescriptRuntimeCompatibility": "Repository supplies a local module declaration for the adapter boundary; package validation checks repository Node and TypeScript compatibility.",
       "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and tools/validate-enterprise/validate-enterprise.py enforce adapter-boundary SDK imports and exact version pinning.",
       "updateDeprecationOwner": "platform-files-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-189-webhook-sink-capture-provider-protocol-exception",
+      "serviceId": "webhook-sink",
+      "adapterId": "WebhookSinkCaptureProvider",
+      "providerId": "notification-delivery-webhook-sink-composed-test",
+      "packageName": "not-applicable-protocol-exception",
+      "version": "not-applicable-no-sdk-added",
+      "selectionRationale": "mendhak/http-https-echo exposes a local echo HTTP surface and has no maintained official or de-facto Node SDK suitable for this Compose proof; direct protocol use is confined to adapters/mail/src/index.ts and exercised only by proof:mock-substrate.",
+      "officialOrDeFactoStatus": "no-suitable-sdk-or-client-exists-for-local-echo-service",
+      "licencePosture": "No new npm dependency is added by USF-201; container image licensing remains service-catalogue/dependency-review posture before stronger readiness claims.",
+      "maintenancePosture": "No SDK update stream exists; update/deprecation owner reviews the Compose image and proof adapter before stronger readiness claims.",
+      "securityAdvisoryPosture": "Container image and adapter protocol exception require advisory review before stronger readiness claims; proof output is redacted and local-only.",
+      "typescriptRuntimeCompatibility": "Uses Node runtime fetch and AbortController through the adapter boundary under existing TypeScript/Node posture; no SDK imports are introduced.",
+      "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py enforces adapter-boundary markers and proof command evidence; no SDK/protocol code is imported into core, ports, capabilities, API routes, worker orchestration, or PDP.",
+      "updateDeprecationOwner": "platform-integration-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -8747,6 +8896,50 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-201-access-webhook-sink-composed-proof",
+      "targetType": "source-issue-mock-provider-substrate-proof",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-201",
+        "riskStatement=webhook-sink proof could be treated as public webhook or operator access readiness",
+        "threatFailureScenario=public endpoint exposure API route access worker access or live provider access is claimed from adapter proof only",
+        "affectedAssetService=webhook-sink capture provider",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=record loopback-only proof and no public or runtime access claim",
+        "reviewDate=2026-09-30",
+        "accessModel=adapter-proof-only-local-loopback-compose",
+        "authRequirement=not-proven-for-API-or-worker-runtime-binding",
+        "authorizationBoundary=tenant-safe-proof-evidence-only",
+        "breakGlassRelevance=not-applicable-to-proof-command",
+        "auditRequirement=value-free-webhook-capture-audit-evidence-captured",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=compose-down-only-no-provider-state",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "API route access, worker access, operator UI access, public exposure, live provider access, and delivery provider access remain unproven; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; treatment=defer until explicit runtime binding or delivery authority; reviewDate=2026-09-30; followUpIssue=USF-153; exception=protocol-boundary-no-maintained-sdk",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -10141,6 +10334,51 @@
       "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/clamav-composed-proof.ts; adapters/store/src/index.ts; packages/core/src/index.ts; package.json; pnpm-lock.yaml; USF-200; USF-175; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Backup/restore, DR, RPO/RTO, live resilience, signature DB update/freshness, and production recovery evidence remain unproven; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-147; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-201-resilience-webhook-sink-composed-proof",
+      "targetType": "source-issue-mock-provider-substrate-proof",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-201",
+        "riskStatement=webhook-sink proof could be mistaken for durable delivery resilience or DR readiness",
+        "threatFailureScenario=readiness retry or compose teardown is overclaimed as backup restore DR RPO RTO or durable webhook delivery proof",
+        "affectedAssetService=webhook-sink capture provider",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=prove bounded readiness retry timeout fail-closed unavailable behaviour and Compose teardown only",
+        "reviewDate=2026-09-30",
+        "backupRequirement=not-claimed-for-USF-201",
+        "restoreProofRequirement=required-before-readiness-claim",
+        "rpoRtoTarget=not-claimed-until-proven",
+        "corruptionFailureScenario=not-proven-by-USF-201",
+        "cleanupTeardownProof=compose-down-finally-boundary-proven",
+        "deferredDrBoundary=explicit-non-claim",
+        "readinessRetry=bounded-exponential-backoff-60s",
+        "timeout=webhook-request-timeout-5000ms-and-unavailable-proof-timeout",
+        "failClosed=proof-exits-nonzero-on-readiness-capture-redaction-or-teardown-failure",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Backup restore DR RPO RTO durable delivery replay provider callback retry queues and production recovery evidence remain unproven; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-153; exception=protocol-boundary-no-maintained-sdk",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -12175,6 +12413,49 @@
       "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/clamav-composed-proof.ts; adapters/store/src/index.ts; packages/core/src/index.ts; package.json; pnpm-lock.yaml; USF-200; USF-175; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Production incident detection, alerting, escalation rehearsal, corrective action operation, vulnerability SLA evidence, and signature freshness advisory operation remain unproven; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-147; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-201-incident-vulnerability-mock-provider-split",
+      "targetType": "source-issue-mock-provider-substrate-proof",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local-for-webhook-sink-and-deferred-with-owner-for-remaining-mocks",
+        "sourceIssue=USF-201",
+        "riskStatement=webhook-sink local proof could be treated as incident alerting vulnerability or live provider readiness while LocalStack WireMock or mock OIDC remain unproven",
+        "threatFailureScenario=local proof health or protocol exception metadata is overclaimed as production monitoring incident vulnerability or provider operation",
+        "affectedAssetService=webhook-sink localstack wiremock mock-oidc",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=record local proof health evidence protocol exception governance and split remaining provider proof to follow-up issues",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=value-free-proof-health-and-validator-output-only",
+        "alertingPosture=not-proven-by-USF-201",
+        "escalationOwner=platform-integration-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "dependencyUpdatePosture=no-new-sdk-dependency-protocol-exception-owner-reviewed",
+        "correctiveActionEvidenceBoundary=repository metadata PR and validator output only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-201",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Production incident detection alerting escalation rehearsal corrective action operation vulnerability SLA evidence LocalStack WireMock mock OIDC and delivery provider vulnerability posture remain unproven; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssues=USF-208,USF-209,USF-210,USF-153; exception=protocol-boundary-no-maintained-sdk",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -14313,6 +14594,81 @@
       "evidenceSource": "package.json; packages/proof/src/clamav-composed-proof.ts; adapters/store/src/index.ts",
       "validationCommand": "corepack pnpm proof:scanner:clamav",
       "deferredReason": "not-deferred-for-bounded-proof; production data, live provider privacy, API/worker runtime data paths, DLP privacy, and data residency remain non-claims",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-201-privacy-webhook-sink-composed-proof",
+      "targetType": "source-issue-mock-provider-substrate-proof",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-201",
+        "riskStatement=webhook-sink proof could retain raw tenant identifiers request bodies endpoints provider payloads or protocol errors if evidence is not bounded",
+        "threatFailureScenario=proof output or committed evidence leaks raw tenant data webhook payload endpoint credentials token stack trace provider response or production data",
+        "affectedAssetService=webhook-sink capture provider",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=record synthetic value-free evidence only and enforce redaction in proof and validators",
+        "reviewDate=2026-09-30",
+        "dataOrigin=synthetic-profile-gated-local-compose-proof",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-internal-proof-data",
+        "redactionPolicy=value-free-proof-output-and-no-raw-provider-payloads",
+        "retentionPurgePosture=compose-down-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-raw-request-bodies-tenant-identifiers-endpoints-provider-payloads-tokens-credentials-or-stack-traces-committed-by-USF-201",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts; packages/core/src/index.ts; package.json; Makefile; USF-201; USF-176; USF-208; USF-209; USF-210; USF-189; USF-184; USF-192; USF-133",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Production data live-provider privacy delivery privacy data residency legal hold custom retention and runtime API/worker data path privacy evidence remain unproven; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-153; exception=protocol-boundary-no-maintained-sdk",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-mock-substrate",
+      "targetType": "proof",
+      "target": "proof:mock-substrate",
+      "posture": [
+        "dataOrigin=synthetic-or-local-dev-test-only",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=value-free-proof-output",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-201",
+        "validationCommand=corepack pnpm proof:mock-substrate"
+      ],
+      "evidenceSource": "package.json; packages/proof/src/mock-provider-substrate-proof.ts; adapters/mail/src/index.ts",
+      "validationCommand": "corepack pnpm proof:mock-substrate",
+      "deferredReason": "Production data, live provider privacy, notification delivery privacy, callback/replay privacy, data residency, legal hold, custom retention, LocalStack, WireMock, and mock OIDC privacy evidence remain unproven; followUpIssues=USF-208,USF-209,USF-210,USF-153",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

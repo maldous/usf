@@ -182,6 +182,13 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
       sdkMarkers: ["mailpit-api"],
     },
     {
+      providerId: "notification-delivery-webhook-sink-composed-test",
+      adapterName: "WebhookSinkCaptureProvider",
+      endpointRef: "endpoint://compose/webhook-sink",
+      adapterPath: "adapters/mail/src/index.ts",
+      sdkMarkers: [],
+    },
+    {
       providerId: "event-bus-nats-composed-test",
       adapterName: "NatsEventBus",
       endpointRef: "endpoint://compose/nats",
@@ -266,6 +273,18 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
         !adapterText.includes("sanitizeSecretPathToken"),
         "OpenBaoSecretStore uses lossy path normalisation",
       );
+    }
+    if (expected.adapterName === "WebhookSinkCaptureProvider") {
+      for (const marker of [
+        "WEBHOOK_SINK_PROTOCOL_BOUNDARY",
+        "http-protocol-exception-no-maintained-sdk",
+        "retryWebhookSinkReadiness",
+        "noExternalEgressChecked",
+        "tenantSafeEvidenceChecked",
+        "remainingDeferredBoundaries",
+      ]) {
+        assert(adapterText.includes(marker), `${expected.adapterName} missing ${marker}`);
+      }
     }
     const provider = PROVIDER_REGISTRY.find((entry) => entry.providerId === expected.providerId);
     assert(provider, `${expected.providerId} composed provider registry entry missing`);

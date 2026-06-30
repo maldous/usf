@@ -455,9 +455,9 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "localstack/wiremock lineage",
-      "readiness_impact": "USF-176 records bounded mock-provider substrate disposition and non-equivalence; USF-201 owns LocalStack, WireMock, webhook sink, and mock OIDC service-semantic proof before any local mock completeness or live-provider compatibility claim.",
-      "tracking_carrier_or_recommendation": "USF-176/USF-201",
-      "usf_evidence_summary": "provider modes, webhook-sink catalogue boundary, hermetic provider proof, and USF-176 disposition matrix only",
+      "readiness_impact": "USF-201 proves bounded webhook-sink local capture only. LocalStack service semantics remain USF-208, WireMock service semantics remain USF-209, and mock OIDC service semantics remain USF-210 before any local mock completeness or live-provider compatibility claim.",
+      "tracking_carrier_or_recommendation": "USF-176/USF-201 plus USF-208/USF-209/USF-210",
+      "usf_evidence_summary": "provider modes, webhook-sink bounded capture proof, hermetic provider proof, USF-176 disposition matrix, and explicit remaining mock-substrate follow-ups",
       "usf_status": "deferred-with-owner"
     },
     {

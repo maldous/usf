@@ -1,8 +1,8 @@
 {
-  "id": "usf-176-mock-provider-substrate-disposition-matrix",
-  "title": "USF-176 local mock provider substrate disposition matrix",
-  "sourceIssue": "USF-176",
-  "followUpIssue": "USF-201",
+  "id": "usf-201-mock-provider-substrate-disposition-matrix",
+  "title": "USF-201 local mock provider substrate proof and disposition matrix",
+  "sourceIssue": "USF-201",
+  "predecessorIssue": "USF-176",
   "laneIssue": "USF-189",
   "dashboardIssue": "USF-184",
   "coordinatorIssue": "USF-192",
@@ -11,23 +11,35 @@
   "providerRegistryIds": [
     "provider-emulator-localstack-deferred",
     "provider-mock-wiremock-deferred",
-    "notification-delivery-webhook-sink-deferred"
+    "notification-delivery-webhook-sink-composed-test",
+    "notification-delivery-webhook-sink-deferred",
+    "identity-mock-oidc-catalogue-boundary"
   ],
   "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-  "issueLinks": ["USF-176", "USF-201", "USF-189", "USF-184", "USF-192", "USF-133"],
+  "issueLinks": [
+    "USF-176",
+    "USF-201",
+    "USF-208",
+    "USF-209",
+    "USF-210",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
   "humanDecision": {
     "decisionState": "accepted",
-    "decisionSummary": "Local mock provider substrate parity is split by semantic requirement. Hermetic mock proof, webhook capture, LocalStack emulation, and WireMock fixtures are accepted only for their bounded local semantics and are not equivalent to live external provider compatibility.",
+    "decisionSummary": "Local mock provider substrate parity is split by semantic requirement. USF-201 proves bounded webhook-sink capture against local Compose using an adapter-contained protocol exception. LocalStack, WireMock, and mock OIDC remain explicit follow-up issues and are not equivalent to live external provider compatibility.",
     "decisionIsWorkComplete": false
   },
   "mockProviderSubstrateDisposition": {
-    "disposition": "explicit-deferral-with-owner",
+    "disposition": "bounded-webhook-sink-proof-with-explicit-service-deferrals",
     "localstackServiceSemanticProofPresent": false,
     "wiremockServiceSemanticProofPresent": false,
-    "webhookSinkProviderProofPresent": false,
+    "webhookSinkProviderProofPresent": true,
     "mockOidcComposeServiceProofPresent": false,
     "hermeticMockLiveProviderEquivalent": false,
     "wiremockLiveProviderEquivalent": false,
@@ -40,16 +52,18 @@
     "providerRegistryIds": [
       "provider-emulator-localstack-deferred",
       "provider-mock-wiremock-deferred",
-      "notification-delivery-webhook-sink-deferred"
+      "notification-delivery-webhook-sink-composed-test",
+      "notification-delivery-webhook-sink-deferred",
+      "identity-mock-oidc-catalogue-boundary"
     ],
-    "followUpIssue": "USF-201",
+    "followUpIssues": ["USF-208", "USF-209", "USF-210"],
     "owner": "platform-integration-foundation",
     "riskOwner": "platform-integration-risk-owner",
     "controlOwner": "platform-integration-control-owner",
     "reviewDate": "2026-09-30",
     "riskStatement": "Local mock, fixture, webhook capture, or emulator evidence could be mistaken for live external provider compatibility, cloud-provider parity, notification delivery proof, or complete local mock substrate readiness.",
-    "treatment": "Defer LocalStack, WireMock, webhook sink, and mock OIDC service-semantic proof, SDK/client or protocol selection, adapter or fixture boundary, deterministic behaviour proof, tenant safety, no-egress evidence, synthetic-data proof, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof to USF-201.",
-    "deferredEvidence": "USF-176 records the bounded disposition gate, non-equivalence boundaries, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only."
+    "treatment": "USF-201 proves bounded webhook-sink capture semantics with deterministic local Compose proof, no external egress, synthetic data, redaction, audit-shaped evidence, timeout and fail-closed unavailable handling, and teardown. LocalStack, WireMock, and mock OIDC service semantics remain deferred to USF-208, USF-209, and USF-210.",
+    "deferredEvidence": "USF-201 does not prove LocalStack cloud-emulator semantics, WireMock HTTP contract fixture semantics, mock OIDC service operation, notification delivery, provider callback/replay, live external provider compatibility, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure."
   },
   "mockSubstrateClassifications": [
     {
@@ -58,7 +72,7 @@
       "providerRegistryId": "provider-emulator-localstack-deferred",
       "classification": "provider-emulator-deferred",
       "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-208",
       "proofPresent": false,
       "nonEquivalenceBoundary": "LocalStack emulation is not live cloud-provider operation, supplier evidence, credential posture, tenant isolation proof, no-egress proof, or production cloud compatibility."
     },
@@ -68,19 +82,22 @@
       "providerRegistryId": "provider-mock-wiremock-deferred",
       "classification": "http-provider-mock-deferred",
       "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-209",
       "proofPresent": false,
       "nonEquivalenceBoundary": "WireMock fixtures prove configured mock behaviour only after proof exists; they are not live external provider compatibility, provider contract certification, or production provider readiness."
     },
     {
       "serviceId": "webhook-sink",
       "providerBindingId": "usf-189-webhook-sink-capture-provider",
-      "providerRegistryId": "notification-delivery-webhook-sink-deferred",
-      "classification": "webhook-capture-boundary",
-      "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
-      "proofPresent": false,
-      "nonEquivalenceBoundary": "Webhook sink capture is not notification delivery, provider feedback ingestion, deliverability, live webhook compatibility, or external provider proof."
+      "providerRegistryId": "notification-delivery-webhook-sink-composed-test",
+      "classification": "webhook-capture-bounded-composed-proof",
+      "status": "implemented-and-proven",
+      "sourceIssue": "USF-201",
+      "proofPresent": true,
+      "proofCommand": "corepack pnpm proof:mock-substrate",
+      "makeTarget": "mock-substrate-proof",
+      "protocolBoundary": "http-protocol-exception-no-maintained-sdk",
+      "nonEquivalenceBoundary": "Webhook sink capture proof is not notification delivery, provider feedback ingestion, deliverability, live webhook compatibility, external provider proof, or full local mock substrate readiness."
     },
     {
       "serviceId": "mock-oidc",
@@ -88,7 +105,7 @@
       "providerRegistryId": "identity-mock-oidc-catalogue-boundary",
       "classification": "identity-provider-mock-catalogued",
       "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-210",
       "proofPresent": false,
       "nonEquivalenceBoundary": "Hermetic identity proof is not proof of the historical mock OIDC service, live IdP compatibility, SSO provider readiness, or production identity-provider readiness."
     }
@@ -134,7 +151,7 @@
       "sdkPackage": null,
       "sdkVersion": null,
       "endpointRef": null,
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-208",
       "serviceCatalogueServiceId": "localstack"
     },
     {
@@ -146,19 +163,25 @@
       "sdkPackage": null,
       "sdkVersion": null,
       "endpointRef": null,
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-209",
       "serviceCatalogueServiceId": "wiremock"
     },
     {
       "providerBindingId": "usf-189-webhook-sink-capture-provider",
-      "providerRegistryId": "notification-delivery-webhook-sink-deferred",
-      "bindingStatus": "compose-boundary-only",
-      "providerMode": "live-external-deferred",
+      "providerRegistryId": "notification-delivery-webhook-sink-composed-test",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
       "runtimeProviderBindingActive": false,
       "sdkPackage": null,
       "sdkVersion": null,
-      "endpointRef": null,
-      "followUpIssue": "USF-201",
+      "sdkBoundary": "adapter-package-only",
+      "protocolBoundary": "http-protocol-exception-no-maintained-sdk",
+      "endpointRef": "endpoint://compose/webhook-sink",
+      "sourceIssue": "USF-201",
+      "proofCommand": "corepack pnpm proof:mock-substrate",
+      "makeTarget": "mock-substrate-proof",
+      "remainingFollowUpIssues": ["USF-153"],
       "serviceCatalogueServiceId": "webhook-sink"
     }
   ],
@@ -166,40 +189,41 @@
     {
       "semanticArea": "localstack-cloud-emulator-semantics",
       "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-208",
       "nonEquivalenceBoundary": "Provider registry and hermetic provider proof do not prove LocalStack cloud API behaviour, data isolation, egress controls, cleanup, or provider compatibility."
     },
     {
       "semanticArea": "wiremock-http-provider-contract-semantics",
       "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-209",
       "nonEquivalenceBoundary": "Configured fixture posture is not WireMock runtime proof, external provider contract compatibility, or live provider evidence."
     },
     {
       "semanticArea": "webhook-sink-capture-and-delivery-semantics",
-      "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
-      "nonEquivalenceBoundary": "Webhook sink catalogue presence is not delivery, callback, replay, provider feedback, or live webhook compatibility proof."
+      "status": "implemented-and-proven-for-capture-only",
+      "sourceIssue": "USF-201",
+      "proofCommand": "corepack pnpm proof:mock-substrate",
+      "nonEquivalenceBoundary": "USF-201 proves local webhook capture against the Compose webhook sink only; it is not delivery, callback, replay, provider feedback, deliverability, or live webhook compatibility proof."
     },
     {
       "semanticArea": "mock-oidc-service-semantics",
       "status": "deferred-with-owner",
-      "followUpIssue": "USF-201",
+      "followUpIssue": "USF-210",
       "nonEquivalenceBoundary": "Hermetic identity proof is not historical mock OIDC service operation or live IdP compatibility."
     }
   ],
   "operationalEvidencePosture": {
-    "readinessRetry": "deferred-to-USF-201",
-    "timeout": "deferred-to-USF-201",
-    "failClosed": "bounded-provider-registry-proof-only",
-    "noExternalEgress": "required-before-mock-substrate-readiness-claim",
-    "safeTeardown": "deferred-to-USF-201",
-    "structuredLogging": "required-before-provider-proof",
-    "tracingCorrelation": "required-before-provider-proof",
-    "metrics": "required-before-provider-proof",
-    "auditEvents": "required-before-provider-proof",
-    "redaction": "required-before-provider-proof",
-    "syntheticData": "required-before-provider-proof"
+    "readinessRetry": "webhook-sink-bounded-exponential-backoff-60s-localstack-wiremock-mock-oidc-deferred",
+    "timeout": "webhook-sink-request-timeout-5s-unavailable-proof-1s-localstack-wiremock-mock-oidc-deferred",
+    "failClosed": "webhook-sink-provider-unavailable-fails-closed-localstack-wiremock-mock-oidc-deferred",
+    "noExternalEgress": "webhook-sink-loopback-only-proof-localstack-wiremock-mock-oidc-deferred",
+    "safeTeardown": "webhook-sink-compose-down-finally-localstack-wiremock-mock-oidc-deferred",
+    "structuredLogging": "webhook-sink-value-free-structured-evidence",
+    "tracingCorrelation": "webhook-sink-correlation-and-trace-hash-evidence",
+    "metrics": "webhook-sink-readiness-retry-latency-fail-closed-health-evidence",
+    "auditEvents": "webhook-sink-value-free-audit-evidence",
+    "redaction": "webhook-sink-safe-hashes-no-raw-endpoint-token-secret-stack-or-payload",
+    "syntheticData": "webhook-sink-synthetic-only-proof-data"
   },
   "enterpriseEvidenceRefs": [
     "usf-176-soa-mock-provider-substrate-disposition",
@@ -207,11 +231,19 @@
     "usf-176-threat-mock-provider-overclaim",
     "usf-176-access-mock-provider-substrate",
     "usf-176-incident-vulnerability-mock-provider-substrate",
-    "usf-176-privacy-mock-provider-substrate"
+    "usf-176-privacy-mock-provider-substrate",
+    "usf-201-soa-webhook-sink-composed-proof",
+    "usf-201-evidence-webhook-sink-composed-proof",
+    "usf-201-threat-mock-provider-execution-split",
+    "usf-201-access-webhook-sink-composed-proof",
+    "usf-201-resilience-webhook-sink-composed-proof",
+    "usf-201-incident-vulnerability-mock-provider-split",
+    "usf-201-privacy-webhook-sink-composed-proof"
   ],
   "readinessClaimsAllowed": [
-    "mock-provider-substrate-disposition-recorded",
-    "mock-provider-service-proof-deferred",
+    "mock-provider-substrate-classification-recorded",
+    "webhook-sink-local-capture-proof-recorded",
+    "localstack-wiremock-mock-oidc-service-proof-deferred",
     "hermetic-mock-non-equivalence-recorded"
   ],
   "readinessClaimsProhibited": [

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-027",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/13/proofEvidence",
+      "value": "Webhook sink proof only records service startup."
+    }
+  ]
+}

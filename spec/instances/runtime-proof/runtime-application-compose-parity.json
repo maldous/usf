@@ -526,10 +526,11 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=LocalStack cloud-emulator semantics are catalogued but not proven through adapter or service proof; threatFailureScenario=mock cloud behaviour is treated as live cloud-provider compatibility; affectedAssetService=localstack; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-176 records the bounded mock-provider substrate disposition and USF-201 owns LocalStack cloud-emulator service semantics; reviewDate=2026-09-30; linkedFollowUpIssue=USF-201",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=LocalStack cloud-emulator semantics are catalogued but not proven through adapter or service proof; threatFailureScenario=mock cloud behaviour is treated as live cloud-provider compatibility; affectedAssetService=localstack; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-201 splits LocalStack cloud-emulator service proof to USF-208 after proving only webhook-sink capture; reviewDate=2026-09-30; linkedFollowUpIssue=USF-208",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
+        "USF-208",
         "USF-189"
       ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
@@ -545,9 +546,9 @@
       "endpointRef": null,
       "sdkPackage": null,
       "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records provider-emulator-localstack-deferred as deferred evidence-only support linked to the LocalStack service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for LocalStack cloud-emulator semantics; USF-176 records bounded disposition and USF-201 owns service proof, no external egress proof, synthetic data proof, redaction, cleanup, audit, or live-provider claim.",
-      "workerProofEvidence": "No worker proof is claimed for LocalStack cloud-emulator semantics; USF-176 records bounded disposition and USF-201 owns synthetic data, redaction, cleanup, no-egress, tenant, audit, and failure-mode proof."
+      "providerRegistryEvidence": "packages/core/src/index.ts records provider-emulator-localstack-deferred as deferred evidence-only support linked to the LocalStack service catalogue row; USF-208 owns future LocalStack SDK/client or protocol proof.",
+      "apiProofEvidence": "No API proof is claimed for LocalStack cloud-emulator semantics; USF-201 keeps LocalStack deferred to USF-208 with no external egress, synthetic data, redaction, cleanup, audit, or live-provider claim.",
+      "workerProofEvidence": "No worker proof is claimed for LocalStack cloud-emulator semantics; USF-201 keeps LocalStack deferred to USF-208 for tenant, audit, cleanup, no-egress, and failure-mode proof."
     },
     {
       "bindingStatus": "profile-gated",
@@ -555,10 +556,11 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=WireMock HTTP mock semantics are catalogued but not proven through configured runtime fixture proof; threatFailureScenario=fixture capture is overclaimed as live external provider compatibility; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-176 records the bounded mock-provider substrate disposition and USF-201 owns WireMock HTTP provider mock service semantics; reviewDate=2026-09-30; linkedFollowUpIssue=USF-201",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=WireMock HTTP mock semantics are catalogued but not proven through configured runtime fixture proof; threatFailureScenario=fixture capture is overclaimed as live external provider compatibility; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-201 splits WireMock HTTP provider mock service proof to USF-209 after proving only webhook-sink capture; reviewDate=2026-09-30; linkedFollowUpIssue=USF-209",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
+        "USF-209",
         "USF-189"
       ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
@@ -574,38 +576,42 @@
       "endpointRef": null,
       "sdkPackage": null,
       "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records provider-mock-wiremock-deferred as deferred evidence-only support linked to the WireMock service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for WireMock external HTTP provider contract semantics; USF-176 records bounded disposition and USF-201 owns service proof and contract fixture boundaries.",
-      "workerProofEvidence": "No worker proof is claimed for WireMock external HTTP provider contract semantics; USF-176 records bounded disposition and USF-201 owns synthetic data, redaction, cleanup, audit, and failure-mode proof."
+      "providerRegistryEvidence": "packages/core/src/index.ts records provider-mock-wiremock-deferred as deferred evidence-only support linked to the WireMock service catalogue row; USF-209 owns future WireMock fixture/client proof.",
+      "apiProofEvidence": "No API proof is claimed for WireMock external HTTP provider contract semantics; USF-201 keeps WireMock deferred to USF-209 for service proof and contract fixture boundaries.",
+      "workerProofEvidence": "No worker proof is claimed for WireMock external HTTP provider contract semantics; USF-201 keeps WireMock deferred to USF-209 for synthetic data, redaction, cleanup, audit, and failure-mode proof."
     },
     {
-      "bindingStatus": "compose-boundary-only",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Webhook sink capture is catalogued as a local capture boundary but not proven as a provider adapter or delivery provider; threatFailureScenario=webhook capture is overclaimed as notification delivery or external provider compatibility; affectedAssetService=webhook-sink; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=USF-176 records the bounded mock-provider substrate disposition and USF-201 owns webhook sink capture provider semantics; reviewDate=2026-09-30; linkedFollowUpIssue=USF-201",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=USF-201 proves bounded local webhook-sink capture only while notification delivery, provider feedback, replay, live webhook compatibility, API runtime binding, worker runtime binding, and complete mock-provider substrate evidence remain outside scope; threatFailureScenario=local echo capture success is used to claim external provider compatibility or live-provider-readiness; affectedAssetService=webhook-sink; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=prove bounded local capture and leave delivery/callback/replay/live compatibility as explicit non-claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-153; protocolBoundary=http-protocol-exception-no-maintained-sdk",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
+        "USF-153",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-201 profile-gated local Compose webhook-sink capture proof only; not delivery, not callback/replay, not live webhook compatibility, no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, test-readiness, deployment-readiness, enterprise-production-readiness, or USF-133 closure claim.",
       "bindingId": "usf-189-webhook-sink-capture-provider",
       "serviceCatalogueServiceIds": [
         "webhook-sink"
       ],
       "providerRegistryIds": [
+        "notification-delivery-webhook-sink-composed-test",
         "notification-delivery-webhook-sink-deferred"
       ],
-      "adapterName": "Webhook sink provider deferred",
+      "adapterName": "WebhookSinkCaptureProvider",
       "portName": "WebhookCaptureProvider",
-      "endpointRef": null,
+      "endpointRef": "endpoint://compose/webhook-sink",
       "sdkPackage": null,
       "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records notification-delivery-webhook-sink-deferred as deferred evidence-only support linked to the webhook sink service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for webhook sink capture provider semantics; USF-176 records bounded disposition and USF-201 owns capture, callback, replay, delivery-feedback, synthetic data, redaction, cleanup, and audit proof.",
-      "workerProofEvidence": "No worker proof is claimed for webhook sink capture provider semantics; USF-176 records bounded disposition and USF-201 owns synthetic data, redaction, cleanup, audit, and failure-mode proof."
+      "providerRegistryEvidence": "packages/core/src/index.ts records notification-delivery-webhook-sink-composed-test as a proof-only composed-test provider linked to the webhook-sink service catalogue row, while retaining notification-delivery-webhook-sink-deferred for delivery/live-provider non-claims.",
+      "apiProofEvidence": "No API runtime webhook provider use is claimed by USF-201; profile-gated proof exercises the adapter package protocol-exception boundary directly against the local Compose webhook sink.",
+      "workerProofEvidence": "No worker runtime webhook delivery use is claimed by USF-201; profile-gated proof exercises capture, readback, no external egress, synthetic data, redaction, timeout/fail-closed unavailable handling, value-free audit-shaped evidence, and Compose teardown.",
+      "proofCommand": "corepack pnpm proof:mock-substrate",
+      "proofEvidence": "Adapter-contained protocol-exception proof starts the canonical test Compose webhook-sink service with loopback ephemeral host exposure, waits with bounded readiness retry, posts a synthetic webhook capture, reads the echoed payload classification and body hash, verifies redacted evidence, proves unavailable fail-closed behaviour, and tears Compose down in finally."
     },
     {
       "bindingStatus": "profile-gated",
@@ -829,6 +835,12 @@
       "makeTarget": "runtime-proof-compose",
       "invocation": "tsx packages/proof/src/runtime-application-proof.ts compose",
       "mode": "dev-compose-backed"
+    },
+    {
+      "packageScript": "proof:mock-substrate",
+      "makeTarget": "mock-substrate-proof",
+      "invocation": "tsx packages/proof/src/mock-provider-substrate-proof.ts",
+      "mode": "dev-compose-backed"
     }
   ],
   "syntheticDataBoundary": "Runtime proof sends synthetic tenant ids, actor ids, and job payload markers only.",
@@ -945,10 +957,13 @@
     {
       "id": "usf-189-mock-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-176 records LocalStack, WireMock, webhook sink, and mock OIDC provider mock semantics as a bounded disposition with owner, risk, non-equivalence, and validator evidence. USF-201 owns actual mock-substrate adapter/service-semantic proof. Risk is treating hermetic mocks, local emulators, fixtures, or webhook capture as live provider compatibility, notification delivery, cloud-provider proof, no-egress proof, or complete local mock substrate readiness; affected services localstack, wiremock, webhook-sink, and mock-oidc; impact medium; likelihood medium; owner platform-integration-foundation; treatment defer mock-provider substrate proof to USF-201; review date 2026-09-30.",
+      "boundary": "USF-176 records mock-provider substrate disposition. USF-201 proves bounded webhook-sink capture only and splits remaining mock-provider substrate service semantics to USF-208 for LocalStack, USF-209 for WireMock, and USF-210 for mock OIDC. Risk remains that hermetic mocks, local emulators, fixtures, or webhook capture are treated as live provider compatibility, notification delivery, cloud-provider proof, no-egress proof, or complete local mock substrate readiness; owner platform-integration-foundation; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-176",
         "USF-201",
+        "USF-208",
+        "USF-209",
+        "USF-210",
         "USF-189"
       ],
       "claimsProhibitedUntilResolved": [

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/mockSubstrateClassifications/3/followUpIssue",
+      "value": "USF-201"
+    }
+  ]
+}
