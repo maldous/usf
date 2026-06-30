@@ -1,0 +1,421 @@
+{
+  "id": "usf-191-domain-deferred-depth-closure-matrix",
+  "title": "USF-191 Domain Deferred-Depth Closure Matrix",
+  "laneIssue": "USF-191",
+  "parentIssue": "USF-133",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "relatedIssueUntouched": "USF-39",
+  "status": "open-not-done",
+  "closureClaimed": false,
+  "usf39Touched": false,
+  "reviewDate": "2026-07-30",
+  "allowedEffectivenessStates": [
+    "defined-only",
+    "implemented",
+    "proven-local",
+    "operating-evidence-present",
+    "deferred-with-owner",
+    "out-of-scope-with-rationale"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ],
+  "prohibitedClaimsMade": [],
+  "sourceEvidenceReviewed": [
+    "../react/docs/evidence/platform/phase-5-5-scheduled-jobs.md",
+    "../react/docs/evidence/platform/phase-6-profile-notifications.md",
+    "../react/docs/evidence/platform/notification-transport-foundation.md",
+    "../react/docs/evidence/platform/phase-3-api-keys-rate-limits.md",
+    "../react/docs/evidence/platform/composed-provider-readiness.md",
+    "../react/docs/evidence/platform/provider-config-foundation.md",
+    "../react/docs/evidence/platform/provider-environment-classification.md",
+    "../react/docs/evidence/platform/rate-limit-provider-foundation.md",
+    "../react/docs/evidence/platform/phase-4-search.md",
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-postgres-portable-tenant-import-applier-runtime-proof.json",
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-data-portability-runtime-proof.json",
+    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-workflow-closure-runtime-proof.json"
+  ],
+  "enterpriseEvidenceRefs": [
+    "usf-191-soa-domain-deferred-depth",
+    "usf-191-evidence-domain-depth-matrix",
+    "usf-191-evidence-domain-depth-validator",
+    "usf-191-evidence-domain-depth-planted-defects",
+    "usf-191-threat-domain-deferred-depth-overclaim",
+    "usf-191-access-domain-privileged-operations",
+    "usf-191-resilience-domain-deferred-depth",
+    "usf-191-incident-domain-deferred-depth",
+    "usf-191-privacy-domain-deferred-depth"
+  ],
+  "domainRows": [
+    {
+      "id": "usf-191-jobs-workflows",
+      "domain": "jobs/workflows",
+      "sourceIssue": "USF-151",
+      "sourceIssueStatus": "open",
+      "linearParentKnown": "USF-133",
+      "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
+      "standardPath": "docs/architecture/jobs-and-workflows-standard.md",
+      "sourceUseMatrixPath": "docs/architecture/parity-jobs-workflows-source-use-disposition-matrix.md",
+      "enterpriseEvidenceRefs": [
+        "usf-191-soa-domain-deferred-depth",
+        "usf-191-evidence-jobs-workflows-proof",
+        "usf-191-resilience-domain-deferred-depth"
+      ],
+      "controls": [
+        {
+          "id": "usf-191-jobs-local-control-proof",
+          "controlName": "Hermetic jobs and workflow execution controls",
+          "effectivenessState": "proven-local",
+          "proofCommand": "corepack pnpm proof:jobs",
+          "validatorCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+          "evidenceRefs": [
+            "usf-191-evidence-jobs-workflows-proof"
+          ],
+          "proofBoundary": "Hermetic proof covers classification, tenant context, service actor execution, PDP checks, bounded retry, idempotency, dead-letter evidence, redaction, schedules, approvals, audit, and local read/list controls.",
+          "nonClaims": [
+            "live-provider-readiness",
+            "production-readiness",
+            "full-dev-readiness",
+            "full-react-parity-readiness"
+          ]
+        },
+        {
+          "id": "usf-191-jobs-live-workflow-engine-deferral",
+          "controlName": "Workflow provider, scheduler, queue, replay, and high-risk automation depth",
+          "effectivenessState": "deferred-with-owner",
+          "acceptedDeferral": true,
+          "riskStatement": "Jobs/workflows can only be treated as local control evidence until durable live workflow, queue, scheduler, replay, backup, and automation-provider behaviour is implemented and proven.",
+          "threatFailureScenario": "A false closure would allow Temporal, Windmill, queue, cron, replay, or high-risk automation controls to be treated as production-capable without proving retry, drain, pause/resume, backpressure, migration, or recovery behaviour.",
+          "affectedAssetService": "jobs-workflows; workflow-engine-temporal-composed-test; workflow-engine-windmill-composed-test; event-bus; scheduler; operational automation",
+          "impact": "high",
+          "likelihood": "medium",
+          "owner": "USF-151 owner via USF-191",
+          "treatment": "defer-with-owner; keep source issue open; require future proof for live workflow provider, queue/worker cluster, replay/migration, transactional outbox/inbox, quotas/backpressure, drain, backup/restore, dry-run gates, cron schedules, heartbeats, egress, and observability before stronger claims.",
+          "reviewDate": "2026-07-30",
+          "linkedFollowUpIssue": "USF-151",
+          "proofBoundary": "Existing proof is hermetic-local only and does not prove live Temporal, Windmill, queue, worker cluster, production cron, or provider recovery."
+        }
+      ],
+      "statusIntegrity": {
+        "falseDoneAllowed": false,
+        "doneClaimed": false,
+        "sourceIssueMustRemainOpen": true,
+        "coordinatorIssue": "USF-192"
+      }
+    },
+    {
+      "id": "usf-191-notifications",
+      "domain": "notifications",
+      "sourceIssue": "USF-153",
+      "sourceIssueStatus": "open",
+      "linearParentKnown": "USF-152; related to USF-133; do not reparent without coordinator approval",
+      "doNotReparent": true,
+      "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
+      "standardPath": "docs/architecture/notifications-and-messaging-standard.md",
+      "sourceUseMatrixPath": "docs/architecture/parity-notifications-messaging-source-use-disposition-matrix.md",
+      "enterpriseEvidenceRefs": [
+        "usf-191-soa-domain-deferred-depth",
+        "usf-191-evidence-notifications-proof",
+        "usf-191-privacy-domain-deferred-depth"
+      ],
+      "controls": [
+        {
+          "id": "usf-191-notifications-local-control-proof",
+          "controlName": "Hermetic notification template, consent, provider config, job, retry, and audit controls",
+          "effectivenessState": "proven-local",
+          "proofCommand": "corepack pnpm proof:notify",
+          "validatorCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+          "evidenceRefs": [
+            "usf-191-evidence-notifications-proof"
+          ],
+          "proofBoundary": "Hermetic proof covers tenant scope, template approval, recipient/address redaction, consent suppression, SecretReference provider config, idempotent delivery jobs, bounded retry/dead-letter evidence, and audit.",
+          "nonClaims": [
+            "live-provider-readiness",
+            "production-readiness",
+            "soc-readiness",
+            "iso27001-certification"
+          ]
+        },
+        {
+          "id": "usf-191-notifications-live-delivery-deferral",
+          "controlName": "Notification persistence, transactional outbox, feedback, unsubscribe, provider, deliverability, campaign, retention, and circuit-breaker depth",
+          "effectivenessState": "deferred-with-owner",
+          "acceptedDeferral": true,
+          "riskStatement": "Notification controls cannot be treated as complete until persistence, outbox, provider feedback, unsubscribe ingestion, live delivery, deliverability, bulk/campaign, retention purge, verification, and circuit breakers are proven.",
+          "threatFailureScenario": "A false closure would allow lost notifications, suppressed unsubscribe/bounce handling, unbounded campaign delivery, or provider failure to be missed while appearing Done.",
+          "affectedAssetService": "notifications; notification providers; notification logs; delivery jobs; recipient addresses",
+          "impact": "high",
+          "likelihood": "medium",
+          "owner": "USF-153 owner via USF-191",
+          "treatment": "defer-with-owner; preserve USF-153 as follow-up; do not reparent; require future DB-backed persistence, transactional outbox, bounce/complaint ingestion, unsubscribe routes, live providers, deliverability, campaign runtime, rate limits, retention purge, address verification, provider circuit breakers, and API/UI proof.",
+          "reviewDate": "2026-07-30",
+          "linkedFollowUpIssue": "USF-153",
+          "proofBoundary": "Existing proof is hermetic-local only and does not prove production SMTP, SMS, push, webhook providers, deliverability, legal certification, or live-provider posture."
+        }
+      ],
+      "statusIntegrity": {
+        "falseDoneAllowed": false,
+        "doneClaimed": false,
+        "sourceIssueMustRemainOpen": true,
+        "coordinatorIssue": "USF-192"
+      }
+    },
+    {
+      "id": "usf-191-api-contracts",
+      "domain": "API/contracts",
+      "sourceIssue": "USF-155",
+      "sourceIssueStatus": "open",
+      "linearParentKnown": "USF-133",
+      "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
+      "standardPath": "docs/architecture/api-and-contract-surface-standard.md",
+      "sourceUseMatrixPath": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+      "enterpriseEvidenceRefs": [
+        "usf-191-soa-domain-deferred-depth",
+        "usf-191-evidence-api-contracts-proof",
+        "usf-191-access-domain-privileged-operations"
+      ],
+      "controls": [
+        {
+          "id": "usf-191-api-contracts-local-proof",
+          "controlName": "Hermetic API contract, OpenAPI, guard, envelope, idempotency, and pagination controls",
+          "effectivenessState": "proven-local",
+          "proofCommand": "corepack pnpm proof:api",
+          "validatorCommand": "python3 tools/validate-parity/validate-api.py all --json",
+          "evidenceRefs": [
+            "usf-191-evidence-api-contracts-proof"
+          ],
+          "proofBoundary": "Hermetic proof covers route contract mapping, OpenAPI safety, missing-tenant and tenant-mismatch denial, PDP denial, side-effecting idempotency, safe errors, and pagination cursor safety.",
+          "nonClaims": [
+            "deployment-readiness",
+            "production-readiness",
+            "full-react-parity-readiness",
+            "live-provider-readiness"
+          ]
+        },
+        {
+          "id": "usf-191-api-contracts-public-compatibility-deferral",
+          "controlName": "GraphQL, federation, generated clients, public compatibility, browser CSRF/cookie runtime, advanced queries, quotas, gateway, TLS/WAF, and deprecation depth",
+          "effectivenessState": "deferred-with-owner",
+          "acceptedDeferral": true,
+          "riskStatement": "The API surface cannot claim public or compatibility readiness until gateway, browser-session, GraphQL/federation, client generation, schema drift, abuse quota, TLS/WAF, and deprecation controls are implemented and proven.",
+          "threatFailureScenario": "A false closure would expose unproven compatibility or gateway controls, allowing unsafe client contracts, CSRF/cookie assumptions, or unsupported public API stability claims.",
+          "affectedAssetService": "API contracts; OpenAPI; browser sessions; gateway/proxy; developer clients",
+          "impact": "high",
+          "likelihood": "medium",
+          "owner": "USF-155 owner via USF-191",
+          "treatment": "defer-with-owner; retain USF-155 and link future gateway/operator work to USF-180 where applicable; require future proof for GraphQL/federation, generated clients, compatibility, CSRF/cookie runtime, advanced query semantics, quota/abuse controls, bulk APIs, gateway/trusted proxy, TLS/WAF, and deprecation.",
+          "reviewDate": "2026-07-30",
+          "linkedFollowUpIssue": "USF-155",
+          "proofBoundary": "Existing proof is hermetic Fastify/OpenAPI control evidence and does not prove public API, external SDK, production gateway, TLS/WAF, or browser-session readiness."
+        }
+      ],
+      "statusIntegrity": {
+        "falseDoneAllowed": false,
+        "doneClaimed": false,
+        "sourceIssueMustRemainOpen": true,
+        "coordinatorIssue": "USF-192"
+      }
+    },
+    {
+      "id": "usf-191-providers",
+      "domain": "providers",
+      "sourceIssue": "USF-157",
+      "sourceIssueStatus": "open",
+      "linearParentKnown": "USF-133",
+      "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
+      "standardPath": "docs/architecture/provider-adapters-and-modes-standard.md",
+      "sourceUseMatrixPath": "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+      "enterpriseEvidenceRefs": [
+        "usf-191-soa-domain-deferred-depth",
+        "usf-191-evidence-providers-proof",
+        "usf-191-incident-domain-deferred-depth"
+      ],
+      "controls": [
+        {
+          "id": "usf-191-providers-local-control-proof",
+          "controlName": "Hermetic provider registry, mode, SecretReference, redaction, fail-closed, and import-boundary controls",
+          "effectivenessState": "proven-local",
+          "proofCommand": "corepack pnpm proof:providers",
+          "validatorCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+          "evidenceRefs": [
+            "usf-191-evidence-providers-proof"
+          ],
+          "proofBoundary": "Hermetic proof covers explicit provider modes, categories, owners, SecretReference-only credentials, redacted status, disabled/deferred/unavailable fail-closed behaviour, audit metadata, and adapter-boundary SDK imports.",
+          "nonClaims": [
+            "live-provider-readiness",
+            "production-readiness",
+            "soc-readiness",
+            "iso27001-certification"
+          ]
+        },
+        {
+          "id": "usf-191-providers-live-resilience-deferral",
+          "controlName": "Live provider authority, supplier, egress, TLS, circuit breaker, drift, incident, failover, cache/search/gateway/observability, and readiness aggregation depth",
+          "effectivenessState": "deferred-with-owner",
+          "acceptedDeferral": true,
+          "riskStatement": "Provider readiness remains bounded until live-external-authorised authority, supplier/subprocessor governance, egress, TLS/certs, circuit breakers, drift detection, incident hooks, failover, and composed readiness aggregation are proven.",
+          "threatFailureScenario": "A false closure would let composed provider availability or local registry entries masquerade as live-provider authorisation, supplier approval, or production resilience.",
+          "affectedAssetService": "provider registry; provider adapters; external provider candidates; cache/search/gateway/observability provider dependencies",
+          "impact": "high",
+          "likelihood": "medium",
+          "owner": "USF-157 owner via USF-191",
+          "treatment": "defer-with-owner; retain USF-157; require future proof for composed-provider scope reconciliation, live-external-authorised mode, supplier/subprocessor workflow, egress allow-listing, TLS/certs, circuit breakers/timeouts/fallback/bulkheads, drift detection, incident hooks, failover/DR, cache/search/gateway/observability provider depth, and composed readiness aggregation.",
+          "reviewDate": "2026-07-30",
+          "linkedFollowUpIssue": "USF-157",
+          "proofBoundary": "Existing proof is local/dev/test control evidence and does not prove live external providers, supplier approval, SOC, ISO, production, or regulatory certification."
+        }
+      ],
+      "statusIntegrity": {
+        "falseDoneAllowed": false,
+        "doneClaimed": false,
+        "sourceIssueMustRemainOpen": true,
+        "coordinatorIssue": "USF-192"
+      }
+    },
+    {
+      "id": "usf-191-guardrails",
+      "domain": "guardrails",
+      "sourceIssue": "USF-161",
+      "sourceIssueStatus": "open",
+      "linearParentKnown": "USF-133",
+      "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
+      "standardPath": "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+      "sourceUseMatrixPath": "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md",
+      "enterpriseEvidenceRefs": [
+        "usf-191-soa-domain-deferred-depth",
+        "usf-191-evidence-guardrails-proof",
+        "usf-191-access-domain-privileged-operations"
+      ],
+      "controls": [
+        {
+          "id": "usf-191-guardrails-local-control-proof",
+          "controlName": "Hermetic rate-limit, quota, backpressure, safe denial, audit, and telemetry controls",
+          "effectivenessState": "proven-local",
+          "proofCommand": "corepack pnpm proof:guardrails",
+          "validatorCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+          "evidenceRefs": [
+            "usf-191-evidence-guardrails-proof"
+          ],
+          "proofBoundary": "Hermetic proof covers fixed-window rate limits, tenant-isolated quotas, fail-closed policy validation, idempotent accounting, safe denial evidence, audit, and telemetry signals.",
+          "nonClaims": [
+            "live-provider-readiness",
+            "production-readiness",
+            "soc-readiness",
+            "iso27001-certification"
+          ]
+        },
+        {
+          "id": "usf-191-guardrails-distributed-enforcement-deferral",
+          "controlName": "Distributed enforcement, gateway/edge/WAF/CDN/bot/fraud, rollout, operator API, policy approval, cost quota, IP privacy, and abuse operations depth",
+          "effectivenessState": "deferred-with-owner",
+          "acceptedDeferral": true,
+          "riskStatement": "Guardrails remain local/dev/test evidence until distributed counters, multi-node consistency, live gateway/edge enforcement, WAF/CDN/bot/fraud controls, and abuse operations are proven.",
+          "threatFailureScenario": "A false closure would let single-node guardrails be treated as distributed abuse protection, causing fail-open rate limits, quota bypass, or ungoverned policy rollout.",
+          "affectedAssetService": "guardrails; API gateway; edge/WAF/CDN; abuse controls; telemetry and audit records",
+          "impact": "high",
+          "likelihood": "medium",
+          "owner": "USF-161 owner via USF-191",
+          "treatment": "defer-with-owner; retain USF-161; require future proof for distributed counters, multi-node consistency, live edge/gateway enforcement, WAF/CDN/bot/fraud provider posture, route rollout, operator guardrail APIs, policy approval workflow, cost quotas, IP privacy, and production abuse operations.",
+          "reviewDate": "2026-07-30",
+          "linkedFollowUpIssue": "USF-161",
+          "proofBoundary": "Existing proof is single-node in-memory local/dev/test control evidence and does not prove live WAF, edge, gateway, bot, fraud, abuse-provider, SOC, ISO, or production readiness."
+        }
+      ],
+      "statusIntegrity": {
+        "falseDoneAllowed": false,
+        "doneClaimed": false,
+        "sourceIssueMustRemainOpen": true,
+        "coordinatorIssue": "USF-192"
+      }
+    },
+    {
+      "id": "usf-191-import-export-bulk",
+      "domain": "import/export/bulk",
+      "sourceIssue": "USF-163",
+      "sourceIssueStatus": "open",
+      "linearParentKnown": "USF-133",
+      "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
+      "standardPath": "docs/architecture/import-export-and-bulk-operations-standard.md",
+      "sourceUseMatrixPath": "docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md",
+      "enterpriseEvidenceRefs": [
+        "usf-191-soa-domain-deferred-depth",
+        "usf-191-evidence-import-export-bulk-proof",
+        "usf-191-privacy-domain-deferred-depth",
+        "usf-191-resilience-domain-deferred-depth"
+      ],
+      "controls": [
+        {
+          "id": "usf-191-import-export-bulk-local-proof",
+          "controlName": "Hermetic bulk metadata, PDP, guardrail, quarantine, job, audit, telemetry, preview, and evidence manifest controls",
+          "effectivenessState": "proven-local",
+          "proofCommand": "corepack pnpm proof:bulk",
+          "validatorCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+          "evidenceRefs": [
+            "usf-191-evidence-import-export-bulk-proof"
+          ],
+          "proofBoundary": "Hermetic proof covers tenant-scoped bulk metadata, PDP, guardrails, file quarantine, jobs, audit, telemetry, deterministic preview, format safety, and evidence-package manifest hashes.",
+          "nonClaims": [
+            "production-readiness",
+            "live-provider-readiness",
+            "enterprise-production-readiness",
+            "full-react-parity-readiness"
+          ]
+        },
+        {
+          "id": "usf-191-import-export-bulk-deep-runtime-deferral",
+          "controlName": "HTTP/OpenAPI surfaces, migration runtime, resumable applier, live transfer providers, parser adapters, decompression controls, rollback, approval, purge, legal hold, eDiscovery, regulatory, and production migration depth",
+          "effectivenessState": "deferred-with-owner",
+          "acceptedDeferral": true,
+          "riskStatement": "Import/export/bulk remains local/dev/test evidence until deep runtime, live transfer, resumable mutation, rollback, legal hold, eDiscovery, retention, and regulatory export behaviour is implemented and proven.",
+          "threatFailureScenario": "A false closure would allow destructive import/export or regulatory data movement to proceed without proof for rollback, compensation, approval separation, purge, retention, decompression-bomb controls, or legal hold constraints.",
+          "affectedAssetService": "import-export-bulk; file storage; jobs; guardrails; audit evidence; tenant data exports and imports",
+          "impact": "high",
+          "likelihood": "medium",
+          "owner": "USF-163 owner via USF-191",
+          "treatment": "defer-with-owner; retain USF-163; require future proof for broad HTTP/OpenAPI surfaces, production migration runtime, transactional resumable import applier, live transfer providers, parser adapters, decompression-bomb controls, rollback/compensation workflows, approval/SoD depth, export purge/retention scheduler, legal hold workflow runtime, legal/eDiscovery/regulatory export evidence, and production migration evidence if ever authorised.",
+          "reviewDate": "2026-07-30",
+          "linkedFollowUpIssue": "USF-163",
+          "proofBoundary": "Existing proof is hermetic local/dev/test governed data-movement evidence and does not prove production, legal, regulatory, eDiscovery, live-provider, or production migration readiness."
+        }
+      ],
+      "statusIntegrity": {
+        "falseDoneAllowed": false,
+        "doneClaimed": false,
+        "sourceIssueMustRemainOpen": true,
+        "coordinatorIssue": "USF-192"
+      }
+    }
+  ],
+  "plantedDefects": [
+    {
+      "id": "usf-191-planted-incomplete-closure",
+      "path": "tools/validate-parity/domain-depth-planted-defects/001-incomplete-closure.json",
+      "expectedRule": "USF-DOMAIN-DEPTH-006"
+    },
+    {
+      "id": "usf-191-planted-missing-follow-up",
+      "path": "tools/validate-parity/domain-depth-planted-defects/002-missing-follow-up.json",
+      "expectedRule": "USF-DOMAIN-DEPTH-004"
+    },
+    {
+      "id": "usf-191-planted-missing-proof",
+      "path": "tools/validate-parity/domain-depth-planted-defects/003-missing-proof.json",
+      "expectedRule": "USF-DOMAIN-DEPTH-005"
+    },
+    {
+      "id": "usf-191-planted-false-done",
+      "path": "tools/validate-parity/domain-depth-planted-defects/004-false-done.json",
+      "expectedRule": "USF-DOMAIN-DEPTH-006"
+    }
+  ]
+}

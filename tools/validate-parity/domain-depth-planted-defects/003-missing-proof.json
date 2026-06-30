@@ -1,0 +1,6 @@
+{
+  "name": "proof-backed domain control is missing its proof command",
+  "expectedRule": "USF-DOMAIN-DEPTH-005",
+  "controlId": "usf-191-api-contracts-local-proof",
+  "removeProofField": "proofCommand"
+}

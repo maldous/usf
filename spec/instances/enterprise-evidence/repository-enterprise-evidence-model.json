@@ -3543,6 +3543,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-191-soa-domain-deferred-depth",
+      "mappedType": "domain-deferred-depth-control",
+      "controlPurpose": "Map Lane 7 domain deferred-depth cleanup to SoA-support evidence for jobs, notifications, API/contracts, providers, guardrails, and import/export/bulk.",
+      "riskTreated": "Domain-specific deferred depth remains explicitly open, owned, risk-treated, and linked to source follow-up issues rather than being hidden behind local proof or false Done.",
+      "assetServiceAffected": "jobs-workflows; notifications; API contracts; providers; guardrails; import-export-bulk",
+      "owner": "USF-191 lane owner",
+      "riskOwner": "USF-191 source issue owners via USF-151 USF-153 USF-155 USF-157 USF-161 USF-163",
+      "controlOwner": "USF-191 coordinator boundary via USF-192",
+      "implementationStatus": "effectivenessState=proven-local for existing domain proofs; effectivenessState=deferred-with-owner for unresolved live/runtime/provider/enterprise depth; closureClaimed=false",
+      "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "deferredReason": "domain depth remains follow-up-tracked in USF-151, USF-153, USF-155, USF-157, USF-161, and USF-163; USF-191 must not close USF-133 or mutate USF-39",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -4344,6 +4370,207 @@
       ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain runtime validator output, planted-defect selftest output, and PR validation summary; update merge SHA after merge if a coordinator records final evidence."
+    },
+    {
+      "id": "usf-191-evidence-domain-depth-matrix",
+      "proofResult": "domain-deferred-depth-closure-matrix",
+      "whatWasProven": "Lane 7 domain deferred-depth rows are explicitly mapped to proof-backed local controls or accepted deferrals with owner, risk, threat/failure scenario, asset/service, impact, likelihood, treatment, review date, and follow-up issue.",
+      "whatWasNotProven": "Does not prove source issues Done, USF-133 closure, full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "commandPin": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-151",
+        "USF-153",
+        "USF-155",
+        "USF-157",
+        "USF-161",
+        "USF-163",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed matrix, validator output, planted-defect output, and draft PR validation summary; update merge SHA after merge in Linear if coordinator directs."
+    },
+    {
+      "id": "usf-191-evidence-domain-depth-validator",
+      "proofResult": "domain-deferred-depth-validator",
+      "whatWasProven": "Lane 7 validator fails closed on missing domains, invalid effectiveness states, missing deferral risk/follow-up fields, missing proof fields, false closure, false Done, missing non-claims, enterprise evidence gaps, USF-153 reparent drift, and USF-39 mutation.",
+      "whatWasNotProven": "Validator success alone does not make USF-191, USF-133, or any source issue Done and does not prove broader readiness or certification.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "commandPin": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain validator output and selftest output in PR evidence."
+    },
+    {
+      "id": "usf-191-evidence-domain-depth-planted-defects",
+      "proofResult": "domain-deferred-depth-planted-defects",
+      "whatWasProven": "Planted defects prove the Lane 7 validator catches incomplete closure, missing follow-up, missing proof, and false Done.",
+      "whatWasNotProven": "Planted defects are validator evidence only and do not prove runtime behaviour, live providers, production, certification, or issue completion.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "tools/validate-parity/domain-depth-planted-defects",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py selftest --json",
+      "commandPin": "python3 tools/validate-parity/validate-domain-depth.py selftest --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain planted-defect fixtures and validator selftest output in PR evidence."
+    },
+    {
+      "id": "usf-191-evidence-jobs-workflows-proof",
+      "proofResult": "proof:jobs",
+      "whatWasProven": "Jobs/workflows local proof covers classified, tenant-scoped, PDP-guarded, service-actor-run, bounded-retry, idempotent, dead-lettered, redacted, scheduled, approval-gated, and audited local behaviour.",
+      "whatWasNotProven": "Does not prove live Temporal, Windmill, queue/worker cluster, production cron, replay/migration, backup/restore, provider recovery, production, or live-provider readiness.",
+      "runtimeMode": "hermetic",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "not-applicable-domain-proof",
+      "adapterProviderId": "not-applicable-or-command-specific",
+      "validationCommand": "corepack pnpm proof:jobs",
+      "commandPin": "tsx packages/proof/src/jobs-workflows-proof.ts",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-151",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain proof command output in PR validation summary and keep USF-151 open for live/runtime/provider depth."
+    },
+    {
+      "id": "usf-191-evidence-notifications-proof",
+      "proofResult": "proof:notify",
+      "whatWasProven": "Notifications local proof covers tenant scope, template safety, recipient/address redaction, consent/suppression fail-closed handling, SecretReference provider config, idempotent delivery jobs, bounded retry/dead-letter evidence, and lifecycle audit.",
+      "whatWasNotProven": "Does not prove DB-backed notification persistence, transactional outbox, bounce/complaint feedback, unsubscribe ingestion, live providers, deliverability, campaign runtime, retention purge, address verification, circuit breakers, production, or certification.",
+      "runtimeMode": "hermetic",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "not-applicable-domain-proof",
+      "adapterProviderId": "not-applicable-or-command-specific",
+      "validationCommand": "corepack pnpm proof:notify",
+      "commandPin": "tsx packages/proof/src/notifications-messaging-proof.ts",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-153",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain proof command output in PR validation summary; keep USF-153 open and do not reparent without coordinator approval."
+    },
+    {
+      "id": "usf-191-evidence-api-contracts-proof",
+      "proofResult": "proof:api",
+      "whatWasProven": "API/contracts local proof covers route contract mapping, OpenAPI safety, safe error envelopes, tenant-context denial, PDP denial, idempotency conflict handling, and pagination cursor safety.",
+      "whatWasNotProven": "Does not prove GraphQL/federation, generated clients, public compatibility, browser CSRF/cookie runtime, advanced query semantics, gateway/trusted proxy, TLS/WAF, deprecation, external SDK, production, or deployment readiness.",
+      "runtimeMode": "hermetic",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "not-applicable-domain-proof",
+      "adapterProviderId": "not-applicable-or-command-specific",
+      "validationCommand": "corepack pnpm proof:api",
+      "commandPin": "tsx packages/proof/src/api-contracts-proof.ts",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-155",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain proof command output in PR validation summary and keep USF-155 open for public compatibility and gateway depth."
+    },
+    {
+      "id": "usf-191-evidence-providers-proof",
+      "proofResult": "proof:providers",
+      "whatWasProven": "Providers local proof covers explicit provider modes, category/owner registry, SecretReference-only credentials, redacted status, disabled/deferred/unavailable fail-closed posture, value-free audit metadata, and adapter-boundary SDK imports.",
+      "whatWasNotProven": "Does not prove live-external-authorised providers, supplier/subprocessor approval, live egress, TLS/cert posture, failover/DR, incident hooks, SOC, ISO, regulatory certification, production, or live-provider readiness.",
+      "runtimeMode": "hermetic",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "not-applicable-domain-proof",
+      "adapterProviderId": "not-applicable-or-command-specific",
+      "validationCommand": "corepack pnpm proof:providers",
+      "commandPin": "tsx packages/proof/src/provider-adapters-proof.ts",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-157",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain proof command output in PR validation summary and keep USF-157 open for live-provider resilience and supplier depth."
+    },
+    {
+      "id": "usf-191-evidence-guardrails-proof",
+      "proofResult": "proof:guardrails",
+      "whatWasProven": "Guardrails local proof covers fixed-window rate limits, tenant-isolated quotas, fail-closed policy validation, idempotent accounting, safe denial evidence, observability signals, and no live WAF/edge/gateway claim.",
+      "whatWasNotProven": "Does not prove distributed counters, multi-node consistency, live edge/gateway enforcement, WAF/CDN/bot/fraud provider posture, abuse operations, SOC, ISO, production, or live-provider readiness.",
+      "runtimeMode": "hermetic",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "not-applicable-domain-proof",
+      "adapterProviderId": "not-applicable-or-command-specific",
+      "validationCommand": "corepack pnpm proof:guardrails",
+      "commandPin": "tsx packages/proof/src/rate-limits-abuse-controls-proof.ts",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-161",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain proof command output in PR validation summary and keep USF-161 open for distributed enforcement and abuse operations depth."
+    },
+    {
+      "id": "usf-191-evidence-import-export-bulk-proof",
+      "proofResult": "proof:bulk",
+      "whatWasProven": "Import/export/bulk local proof covers tenant-scoped bulk metadata, PDP, guardrails, file quarantine, jobs, audit, telemetry, deterministic preview, evidence-package manifest hashes, and local format safety.",
+      "whatWasNotProven": "Does not prove broad HTTP/OpenAPI surfaces, production migration runtime, resumable import applier, live transfer providers, parser adapters, rollback/compensation, purge/retention scheduler, legal hold workflow, eDiscovery, regulatory export, production, or live-provider readiness.",
+      "runtimeMode": "hermetic",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "not-applicable-domain-proof",
+      "adapterProviderId": "not-applicable-or-command-specific",
+      "validationCommand": "corepack pnpm proof:bulk",
+      "commandPin": "tsx packages/proof/src/import-export-bulk-proof.ts",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-191",
+        "USF-163",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain proof command output in PR validation summary and keep USF-163 open for deep runtime, legal, regulatory, and migration depth."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -5145,6 +5372,32 @@
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-178 deferral and non-claims",
       "residualRisk": "Windmill proof, access review, incident posture, privacy posture, and resilience evidence remain deferred to USF-178"
+    },
+    {
+      "id": "usf-191-threat-domain-deferred-depth-overclaim",
+      "targetType": "domain-depth-control",
+      "target": "jobs notifications api providers guardrails import-export-bulk",
+      "trustBoundary": "USF local proof and historical React evidence must not cross into live-provider, production, certification, or Done claims.",
+      "tenantBoundary": "Domain proofs remain synthetic, hermetic, or local-control evidence; tenant-affecting runtime/provider depth remains follow-up-tracked per source issue.",
+      "credentialBoundary": "No real credentials, raw provider secrets, production endpoints, or provider payloads may be introduced by Lane 7.",
+      "dataClassification": "synthetic local proof data, metadata-only evidence rows, and source-evidence references only",
+      "abuseCases": [
+        "false Done on USF-191 or source issues",
+        "local proof treated as live-provider readiness",
+        "deferred domain depth missing owner or follow-up issue",
+        "USF-153 silently reparented away from its current Linear parent",
+        "USF-39 mutated during Lane 7"
+      ],
+      "failureModes": [
+        "incomplete closure hidden by broad readiness wording",
+        "missing proof command or validator command",
+        "deferred item lacks threat or risk treatment",
+        "non-claim removed or contradicted",
+        "domain source issue marked Done without merged evidence"
+      ],
+      "failClosedBehaviour": "validate-domain-depth blocks false closure, false Done, missing follow-up, missing proof, USF-153 reparent drift, USF-39 mutation, and readiness overclaims.",
+      "monitoringAuditEvidence": "PR validation output must include validate-domain-depth, validate-enterprise, parity, planted defects, and the domain closure matrix evidence IDs.",
+      "residualRisk": "Live provider, production, gateway, distributed, legal/regulatory, supplier, resilience, and certification depth remains deferred to USF-151, USF-153, USF-155, USF-157, USF-161, and USF-163."
     }
   ],
   "sdkDependencyGovernance": [
@@ -6068,6 +6321,38 @@
       "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "runtime access proof, executed access reviews, gateway route proof, clickthrough UX, and privileged-operation audit proof remain deferred with owners to USF-169 and USF-180",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-191-access-domain-privileged-operations",
+      "targetType": "domain-depth-control",
+      "target": "jobs notifications api providers guardrails import-export-bulk",
+      "posture": [
+        "accessModel=local-proof-or-deferred-provider-depth",
+        "authRequirement=PDP-and-operator-boundary-proof-where-local-controls-exist",
+        "breakGlassRelevance=required-before-production-or-live-provider-claim",
+        "auditRequirement=value-free-domain-proof-and-PR-validation-summary",
+        "reviewCadence=2026-07-30-or-before-source-issue-Done",
+        "deprovisioningPosture=deferred-until-live-provider-or-operator-runtime-exists",
+        "rollbackDeferredBoundary=source-issues-remain-open",
+        "changeManagementEvidence=USF-191-draft-PR-validator-output",
+        "no-public-exposure-claim",
+        "USF-39-untouched"
+      ],
+      "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "deferredReason": "live provider, public API, gateway, operator automation, distributed guardrail, and legal/regulatory access operations remain follow-up-tracked and not Done",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -7239,6 +7524,36 @@
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "risk treatment and rollback boundary recorded without claiming backup or restore proof; owner=platform-security-foundation; reviewDate=2026-09-30; followUpIssue=USF-171; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-191-resilience-domain-deferred-depth",
+      "targetType": "domain-depth-control",
+      "target": "jobs providers import-export-bulk notifications guardrails api",
+      "posture": [
+        "backupRequirement=required-before-live-or-production-readiness-claim",
+        "restoreProofRequirement=required-for-workflow-replay-import-export-and-provider-state-before-stronger-claim",
+        "rpoRtoTarget=not-claimed-until-proven",
+        "corruptionFailureScenario=workflow-replay-import-rollback-provider-failover-not-yet-proven",
+        "cleanupTeardownProof=local-proof-only-or-deferred",
+        "deferredDrBoundary=explicit-non-claim",
+        "rollbackBoundary=source-issue-follow-ups-own-unresolved-depth",
+        "riskTreatment=defer-with-owner-and-review-date-2026-07-30"
+      ],
+      "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "deferredReason": "workflow replay/migration, backup/restore, provider failover/DR, import/export rollback/compensation, notification retention purge, and distributed guardrail recovery remain follow-up-tracked",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -8540,6 +8855,36 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-191-incident-domain-deferred-depth",
+      "targetType": "domain-depth-control",
+      "target": "jobs notifications api providers guardrails import-export-bulk",
+      "posture": [
+        "incidentDetectionHook=local-validator-and-proof-output-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=USF-191-source-issue-owners",
+        "vulnerabilityAdvisoryReview=required-before-live-provider-or-production-claim",
+        "dependencyUpdatePosture=no-new-provider-SDKs-added-by-lane",
+        "correctiveActionEvidence=PR-validation-output-and-follow-up-source-issues",
+        "riskTreatment=defer-with-owner-review-2026-07-30",
+        "incidentScenario=false-readiness-or-false-Done-blocked-by-domain-depth-validator"
+      ],
+      "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "deferredReason": "live incident hooks, supplier/provider vulnerability workflow, gateway/WAF abuse operations, deliverability incident handling, and legal/regulatory data-movement incident posture remain follow-up-tracked",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -9790,6 +10135,36 @@
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "USF-178 required before Windmill provider privacy, access, approval, audit, retention, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-191-privacy-domain-deferred-depth",
+      "targetType": "domain-depth-control",
+      "target": "notifications api providers guardrails import-export-bulk jobs",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-and-metadata-only",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=value-free-proof-output-secret-ref-only-and-no-raw-provider-payloads",
+        "retentionPurgePosture=notification-retention-export-purge-and-bulk-cleanup-deferred-to-source-issues",
+        "legalHoldRelevance=not-claimed-until-USF-163-depth-is-proven",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "ipPrivacyBoundary=USF-161-follow-up-required-before-live-abuse-ops",
+        "dataMinimisationBoundary=bulk-import-export-legal-regulatory-and-eDiscovery-depth-not-proven"
+      ],
+      "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
+      "deferredReason": "notification recipient data, public API/browser-session data, provider payloads, guardrail IP/privacy handling, and bulk/import/export legal or regulatory data movement remain follow-up-tracked",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
