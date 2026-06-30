@@ -34,6 +34,7 @@ SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.
 RUNTIME_MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-parity.json")
 CLOSURE_MATRIX_PATH = Path("docs/architecture/compose-service-disposition-closure-matrix.json")
 OPERATOR_ACCESS_MATRIX_PATH = Path("docs/architecture/operator-access-gateway-posture-matrix.json")
+ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 PACKAGE_PATH = Path("package.json")
 PLANTED_DEFECT_DIR = Path("tools/validate-enterprise/planted-defects")
 
@@ -52,6 +53,10 @@ RULES = {
     "USF-ENTERPRISE-012": ("blocking", "Lane 3 assurance control-plane disposition is incomplete"),
     "USF-ENTERPRISE-013": ("blocking", "Lane 3 assurance control-plane readiness or certification is overclaimed"),
     "USF-ENTERPRISE-014": ("blocking", "operator access or gateway posture matrix is incomplete or unsafe"),
+    "USF-ENTERPRISE-015": ("blocking", "environment promotion standard is missing required stage or gate metadata"),
+    "USF-ENTERPRISE-016": ("blocking", "environment promotion enterprise evidence or ownership is incomplete"),
+    "USF-ENTERPRISE-017": ("blocking", "environment promotion provider, environment, or destructive semantics are unsafe"),
+    "USF-ENTERPRISE-018": ("blocking", "environment promotion readiness or certification claim is overclaimed"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -321,6 +326,66 @@ LANE6_EXCEPTION_TOKENS = (
     "exceptionExpiry=",
 )
 OPERATOR_AUTH_REQUIREMENTS = {"operator-auth-required", "admin-auth-required"}
+PROMOTION_STAGES = {"dev", "test", "staging", "production"}
+PROMOTION_TOP_NON_CLAIMS = REQUIRED_NON_CLAIMS | {"usf-133-closure"}
+PROMOTION_REQUIRED_MODEL_ROWS = {
+    "soaSupportMappings": {"usf-193-soa-environment-promotion-standard"},
+    "evidenceRegister": {"usf-193-evidence-environment-promotion-standard"},
+    "threatModelAbuseCaseRegister": {"usf-193-threat-environment-promotion-overclaim"},
+    "accessReviewPrivilegedOperationPosture": {"usf-193-access-environment-promotion-approvals"},
+    "backupRestoreResiliencePosture": {"usf-193-resilience-environment-promotion-gates"},
+    "incidentVulnerabilityManagementEvidence": {"usf-193-incident-environment-promotion-boundary"},
+    "privacyDataMinimisationPosture": {"usf-193-privacy-environment-promotion-data-posture"},
+}
+PROMOTION_REQUIRED_ENTERPRISE_TOKENS = {
+    "risk register",
+    "Statement of Applicability",
+    "tenant isolation",
+    "admin/operator access",
+    "data classification",
+    "secrets",
+    "structured logs",
+    "alerting",
+    "SAST",
+    "backup/restore",
+    "change approval",
+    "customer-facing enterprise feature posture",
+}
+PROMOTION_REQUIRED_EVIDENCE_PACKAGE_TOKENS = {
+    "environment",
+    "commit SHA",
+    "PR",
+    "issue",
+    "evidence id",
+    "validation commands",
+    "risk decision",
+    "exception list",
+    "approver",
+    "review expiry",
+    "non-claims",
+}
+PROMOTION_CLAIM_RULE_TOKENS = {
+    "dev evidence must not satisfy test readiness",
+    "test evidence must not satisfy staging readiness",
+    "staging evidence must not satisfy production readiness",
+    "production readiness requires explicit production-live evidence",
+    "hermetic-mock provider mode must not satisfy",
+    "destructive test semantics must not satisfy staging or production",
+    "readiness claims must not exceed proof level",
+    "ISO/SOC/certification",
+}
+
+
+def missing_required_non_claims(row: dict[str, Any]) -> set[str]:
+    if "nonClaims" in row:
+        return REQUIRED_NON_CLAIMS - set(row.get("nonClaims", []))
+    row_text = json.dumps(row, sort_keys=True).lower()
+    missing: set[str] = set()
+    for claim in REQUIRED_NON_CLAIMS:
+        spaced = claim.replace("-", " ")
+        if claim not in row_text and spaced not in row_text:
+            missing.add(claim)
+    return missing
 
 
 class Findings:
@@ -488,12 +553,17 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     operator_access_matrix = (
         read_json(OPERATOR_ACCESS_MATRIX_PATH) if (ROOT / OPERATOR_ACCESS_MATRIX_PATH).exists() else None
     )
+    environment_promotion = (
+        read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
+    )
 
     model = apply_model_defect(model, defect)
     if closure_matrix is not None:
         closure_matrix = apply_closure_defect(closure_matrix, defect)
     if operator_access_matrix is not None:
         operator_access_matrix = apply_operator_access_defect(operator_access_matrix, defect)
+    if environment_promotion is not None:
+        environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
     return {
         "model": model,
         "schema": schema,
@@ -502,6 +572,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "package": package,
         "closureMatrix": closure_matrix,
         "operatorAccessMatrix": operator_access_matrix,
+        "environmentPromotion": environment_promotion,
     }
 
 
@@ -616,6 +687,40 @@ def apply_operator_access_defect(matrix: dict[str, Any], defect: dict[str, Any])
                     row.pop(key, None)
                 for key, value in patch.get("set", {}).items():
                     row[key] = value
+    return out
+
+
+def apply_environment_promotion_defect(promotion: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(promotion)
+    if defect.get("removePromotionEnvironment"):
+        stage = defect["removePromotionEnvironment"]
+        out["environmentStandards"] = [
+            row for row in out.get("environmentStandards", []) if row.get("environmentStage") != stage
+        ]
+    if defect.get("removePromotionGate"):
+        gate_id = defect["removePromotionGate"]
+        out["promotionGates"] = [row for row in out.get("promotionGates", []) if row.get("id") != gate_id]
+    for key, value in defect.get("promotionTopSet", {}).items():
+        out[key] = value
+    if defect.get("promotionDropNonClaims"):
+        dropped = set(defect.get("promotionDropNonClaims", []))
+        out["nonClaims"] = [item for item in out.get("nonClaims", []) if item not in dropped]
+    for patch in defect.get("promotionEnvironmentPatch", []):
+        for row in out.get("environmentStandards", []):
+            if row.get("environmentStage") != patch.get("environmentStage"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for patch in defect.get("promotionGatePatch", []):
+        for row in out.get("promotionGates", []):
+            if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
     return out
 
 
@@ -1317,6 +1422,207 @@ def check_assurance_control_plane_disposition(F: Findings, state: dict[str, Any]
                     F.add("USF-ENTERPRISE-013", closure_service_id, "assurance control-plane closure must remain blocking")
 
 
+def check_environment_promotion_standard(F: Findings, state: dict[str, Any]) -> None:
+    promotion = state.get("environmentPromotion")
+    if not isinstance(promotion, dict):
+        F.add("USF-ENTERPRISE-015", str(ENVIRONMENT_PROMOTION_PATH), "environment promotion standard is missing")
+        return
+
+    if promotion.get("issueId") != "USF-193" or promotion.get("parentIssueId") != "USF-133":
+        F.add("USF-ENTERPRISE-015", str(ENVIRONMENT_PROMOTION_PATH), "issue or parent linkage is incorrect")
+    if promotion.get("serviceDispositionIssueId") != "USF-167":
+        F.add("USF-ENTERPRISE-015", "serviceDispositionIssueId", "USF-167 must remain the service disposition gate")
+
+    top_non_claims = set(promotion.get("nonClaims", []))
+    missing_non_claims = PROMOTION_TOP_NON_CLAIMS - top_non_claims
+    if missing_non_claims:
+        F.add("USF-ENTERPRISE-018", "environmentPromotion.nonClaims", f"missing {sorted(missing_non_claims)}")
+
+    stages: dict[str, dict[str, Any]] = {}
+    for row in promotion.get("environmentStandards", []):
+        if isinstance(row, dict) and isinstance(row.get("environmentStage"), str):
+            stage = row["environmentStage"]
+            if stage in stages:
+                F.add("USF-ENTERPRISE-015", stage, "duplicate environment stage row")
+            stages[stage] = row
+    missing_stages = PROMOTION_STAGES - set(stages)
+    if missing_stages:
+        F.add("USF-ENTERPRISE-015", "environmentStandards", f"missing stages {sorted(missing_stages)}")
+
+    for stage, row in stages.items():
+        subject = f"environmentStandards.{stage}"
+        for field in (
+            "purpose",
+            "proofRequirements",
+            "validatorCommands",
+            "enterpriseEvidenceRequirements",
+            "promotionPrerequisites",
+            "requiredApprover",
+            "owners",
+            "riskTreatment",
+            "statementOfApplicabilitySupport",
+            "promotionImpactBlockedUntilProven",
+        ):
+            if row.get(field) in (None, "", []):
+                F.add("USF-ENTERPRISE-016", subject, f"missing {field}")
+
+        owners = row.get("owners", {})
+        if not isinstance(owners, dict):
+            F.add("USF-ENTERPRISE-016", subject, "owners must be an object")
+        else:
+            for field in ("owner", "riskOwner", "controlOwner", "evidenceOwner"):
+                if not owners.get(field):
+                    F.add("USF-ENTERPRISE-016", subject, f"missing owners.{field}")
+
+        risk = row.get("riskTreatment", {})
+        if not isinstance(risk, dict):
+            F.add("USF-ENTERPRISE-016", subject, "riskTreatment must be an object")
+        else:
+            for field in (
+                "riskStatement",
+                "threatFailureScenario",
+                "impact",
+                "likelihood",
+                "treatment",
+                "reviewDate",
+                "followUpIssue",
+            ):
+                if not risk.get(field):
+                    F.add("USF-ENTERPRISE-016", subject, f"missing riskTreatment.{field}")
+            if not DATE_RE.fullmatch(str(risk.get("reviewDate", ""))):
+                F.add("USF-ENTERPRISE-016", subject, "riskTreatment.reviewDate must be YYYY-MM-DD")
+            if not str(risk.get("followUpIssue", "")).startswith("USF-"):
+                F.add("USF-ENTERPRISE-016", subject, "riskTreatment.followUpIssue must be a USF issue")
+
+        allowed = set(row.get("allowedClaims", []))
+        prohibited = set(row.get("prohibitedClaims", []))
+        unsafe_allowed = (PROMOTION_TOP_NON_CLAIMS - {"usf-133-closure"}) & allowed
+        if unsafe_allowed:
+            F.add("USF-ENTERPRISE-018", subject, f"allowedClaims overclaim readiness: {sorted(unsafe_allowed)}")
+        if "usf-133-closure" in allowed:
+            F.add("USF-ENTERPRISE-018", subject, "allowedClaims must not include USF-133 closure")
+        if stage != "dev" and allowed:
+            F.add("USF-ENTERPRISE-018", subject, "non-dev stage must not allow current readiness claims")
+        if stage in {"dev", "test", "staging"} and "production-readiness" not in prohibited:
+            F.add("USF-ENTERPRISE-018", subject, "lower environments must prohibit production readiness")
+        if "iso27001-certification" not in prohibited and stage != "production":
+            F.add("USF-ENTERPRISE-018", subject, "non-production stages must prohibit ISO certification claim")
+
+    dev = stages.get("dev", {})
+    if dev:
+        if dev.get("defaultProviderMode") != "hermetic-mock":
+            F.add("USF-ENTERPRISE-017", "dev.defaultProviderMode", "dev default must remain hermetic-mock")
+        if "hermetic-mock" not in set(dev.get("permittedProviderModes", [])):
+            F.add("USF-ENTERPRISE-017", "dev.permittedProviderModes", "dev must permit hermetic-mock")
+        if dev.get("composeRequiredForRequiredServices") is not False:
+            F.add("USF-ENTERPRISE-017", "dev.composeRequiredForRequiredServices", "dev Compose must remain proof-boundary-specific")
+        if dev.get("syntheticDataOnly") is not True:
+            F.add("USF-ENTERPRISE-016", "dev.syntheticDataOnly", "dev must remain synthetic-data only")
+
+    test = stages.get("test", {})
+    if test:
+        if "hermetic-mock" in set(test.get("permittedProviderModes", [])):
+            F.add("USF-ENTERPRISE-017", "test.permittedProviderModes", "in-memory/hermetic providers cannot satisfy test-composed proof")
+        if test.get("defaultProviderMode") != "local-composed-real-service":
+            F.add("USF-ENTERPRISE-017", "test.defaultProviderMode", "test must default to local-composed-real-service")
+        if test.get("composeRequiredForRequiredServices") is not True:
+            F.add("USF-ENTERPRISE-017", "test.composeRequiredForRequiredServices", "test must be composed for required services/providers")
+        if test.get("destructiveTestingAllowed") is not True or test.get("syntheticDataOnly") is not True:
+            F.add("USF-ENTERPRISE-017", "test.destructiveTestingAllowed", "test destructive semantics require synthetic resettable data")
+
+    staging = stages.get("staging", {})
+    if staging:
+        if staging.get("destructiveTestingAllowed") is not False:
+            F.add("USF-ENTERPRISE-017", "staging.destructiveTestingAllowed", "staging must not allow broad destructive testing")
+        if staging.get("nonDestructiveOperationRequired") is not True:
+            F.add("USF-ENTERPRISE-017", "staging.nonDestructiveOperationRequired", "staging must be non-destructive")
+        if staging.get("dataPosture") != "controlled-non-production":
+            F.add("USF-ENTERPRISE-017", "staging.dataPosture", "staging must use controlled non-production data")
+        text = json.dumps(staging, sort_keys=True).lower()
+        for token in ("migration", "rollback", "release", "non-destructive"):
+            if token not in text:
+                F.add("USF-ENTERPRISE-016", "staging.proofRequirements", f"staging lacks {token} evidence posture")
+
+    production = stages.get("production", {})
+    if production:
+        if production.get("environmentClass") != "production-live":
+            F.add("USF-ENTERPRISE-017", "production.environmentClass", "production must be production-live")
+        if set(production.get("permittedProviderModes", [])) != {"live-external-provider"}:
+            F.add("USF-ENTERPRISE-017", "production.permittedProviderModes", "production must require live-external-provider authority")
+        if production.get("residualRiskApprovalRequired") is not True:
+            F.add("USF-ENTERPRISE-016", "production.residualRiskApprovalRequired", "production requires approved residual risk")
+        if production.get("destructiveTestingAllowed") is not False or production.get("nonDestructiveOperationRequired") is not True:
+            F.add("USF-ENTERPRISE-017", "production.destructiveTestingAllowed", "production must be non-destructive")
+        if production.get("dataPosture") != "production-governed":
+            F.add("USF-ENTERPRISE-016", "production.dataPosture", "production must require governed production data posture")
+
+    gates = promotion.get("promotionGates", [])
+    gate_pairs = {(gate.get("from"), gate.get("to")) for gate in gates if isinstance(gate, dict)}
+    expected_pairs = {("dev", "test"), ("test", "staging"), ("staging", "production")}
+    if gate_pairs != expected_pairs:
+        F.add("USF-ENTERPRISE-015", "promotionGates", f"expected gates {sorted(expected_pairs)}, got {sorted(gate_pairs)}")
+    for gate in gates:
+        if not isinstance(gate, dict):
+            F.add("USF-ENTERPRISE-015", "promotionGates", "gate rows must be objects")
+            continue
+        gate_id = gate.get("id", "unknown")
+        for field in ("requiredEvidence", "forbiddenEvidenceSubstitutions", "approver", "validationCommands", "nonClaims"):
+            if gate.get(field) in (None, "", []):
+                F.add("USF-ENTERPRISE-016", gate_id, f"missing {field}")
+        if gate.get("riskAcceptanceRequired") is not True:
+            F.add("USF-ENTERPRISE-016", gate_id, "risk acceptance must be required")
+        if PROMOTION_TOP_NON_CLAIMS - set(gate.get("nonClaims", [])):
+            F.add("USF-ENTERPRISE-018", gate_id, "promotion gate non-claims are incomplete")
+
+    claim_rules = "\n".join(str(item) for item in promotion.get("claimRules", []))
+    for token in PROMOTION_CLAIM_RULE_TOKENS:
+        if token not in claim_rules:
+            F.add("USF-ENTERPRISE-017", "claimRules", f"missing claim rule token: {token}")
+    enterprise_text = "\n".join(str(item) for item in promotion.get("enterpriseAssuranceRequirements", []))
+    for token in PROMOTION_REQUIRED_ENTERPRISE_TOKENS:
+        if token not in enterprise_text:
+            F.add("USF-ENTERPRISE-016", "enterpriseAssuranceRequirements", f"missing enterprise requirement: {token}")
+    evidence_shape = set(promotion.get("evidencePackageShape", []))
+    missing_shape = PROMOTION_REQUIRED_EVIDENCE_PACKAGE_TOKENS - evidence_shape
+    if missing_shape:
+        F.add("USF-ENTERPRISE-016", "evidencePackageShape", f"missing {sorted(missing_shape)}")
+    negative = promotion.get("negativeAssurance", {})
+    if not isinstance(negative, dict):
+        F.add("USF-ENTERPRISE-018", "negativeAssurance", "negative assurance must be an object")
+    else:
+        negative_text = json.dumps(negative, sort_keys=True)
+        for token in ("test readiness", "staging readiness", "production readiness", "ISO/IEC 27001 certification", "USF-133 closure"):
+            if token not in negative_text:
+                F.add("USF-ENTERPRISE-018", "negativeAssurance", f"missing negative assurance for {token}")
+
+    model = state["model"]
+    for section, required_ids in PROMOTION_REQUIRED_MODEL_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in required_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-016", row_id, f"missing USF-193 enterprise row in {section}")
+                continue
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-018", row_id, "USF-193 enterprise row non-claims are incomplete")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-016", row_id, "USF-193 enterprise row lacks validation command")
+            if section == "threatModelAbuseCaseRegister" and "validate-enterprise" not in json.dumps(row, sort_keys=True):
+                F.add("USF-ENTERPRISE-016", row_id, "USF-193 threat row lacks validation reference")
+            if section == "soaSupportMappings":
+                for field in ("owner", "riskOwner", "controlOwner", "evidenceSource", "deferredReason"):
+                    if not row.get(field):
+                        F.add("USF-ENTERPRISE-016", row_id, f"SoA row lacks {field}")
+                if str(ENVIRONMENT_PROMOTION_PATH) not in str(row.get("evidenceSource", "")):
+                    F.add("USF-ENTERPRISE-016", row_id, "SoA row must link the promotion instance")
+            elif section == "evidenceRegister":
+                for issue in ("USF-193", "USF-167", "USF-184", "USF-192", "USF-133"):
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-016", row_id, f"evidence row lacks {issue}")
+                if "not prove" not in str(row.get("whatWasNotProven", "")).lower():
+                    F.add("USF-ENTERPRISE-018", row_id, "evidence row must preserve explicit non-proof boundary")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -1334,6 +1640,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_operator_access_gateway_matrix(F, state)
     check_lane4_observability(F, state)
     check_assurance_control_plane_disposition(F, state)
+    check_environment_promotion_standard(F, state)
     return F
 
 

@@ -1949,6 +1949,62 @@
       ]
     },
     {
+      "id": "environment-promotion.schema.json",
+      "title": "Environment Promotion Schema",
+      "path": "spec/schemas/environment-promotion.schema.json",
+      "class": "environment-schema",
+      "family": "provider-and-environment",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Environment",
+        "Provider Mode",
+        "Proof",
+        "Evidence"
+      ],
+      "purpose": "Validates environment promotion and readiness gate definitions for dev, test, staging, and production without conflating environments, provider modes, proof levels, or readiness claims.",
+      "requiredBecause": "USF-193 requires a single machine-readable promotion standard before later work can assess dev, test, staging, or production readiness truthfully.",
+      "sourceInputs": [
+        "docs/adr/0009-bootstrap-readiness-marker-and-dev-test-boundary.md",
+        "docs/architecture/bootstrap-readiness-governance.md",
+        "docs/architecture/production-proof-posture-matrix.md",
+        "USF-193"
+      ],
+      "taxonomyRefs": [
+        "environment-classification",
+        "proof-classification",
+        "evidence-classification",
+        "validation-reporting-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "environment-classes",
+        "provider-modes"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "governance reviewers"
+      ],
+      "validationResponsibilities": [
+        "dev, test, staging, and production rows are present",
+        "provider modes are not upgraded by environment names",
+        "destructive test semantics do not satisfy staging or production posture",
+        "lower-environment evidence does not satisfy higher readiness claims",
+        "enterprise evidence, ownership, risk, SoA support, and non-claims are present"
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "Dev evidence treated as test readiness.",
+        "Test evidence treated as staging readiness.",
+        "Staging rehearsal treated as production-live readiness.",
+        "In-memory providers treated as composed service readiness.",
+        "Enterprise or ISO-supporting evidence organisation mistaken for certification."
+      ],
+      "aiGuidance": "Use this standard as a gate definition only. Do not claim readiness unless current merged evidence satisfies the exact environment, provider, proof, freshness, approval, and non-claim requirements."
+    },
+    {
       "id": "command.schema.json",
       "title": "Command Schema",
       "path": "spec/schemas/command.schema.json",

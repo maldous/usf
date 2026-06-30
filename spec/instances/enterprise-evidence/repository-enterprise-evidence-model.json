@@ -3595,6 +3595,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-193-soa-environment-promotion-standard",
+      "mappedType": "environment-promotion-control",
+      "controlPurpose": "Define dev, test, staging, and production promotion gates as distinct repository evidence requirements without allowing environment or provider-mode overclaims.",
+      "riskTreated": "effectivenessState=defined-only; riskStatement=Lower-environment evidence could be treated as higher-environment readiness; threatFailureScenario=dev, test, or staging evidence is used to imply test, staging, production, live-provider, SOC, ISO, full-dev, full-parity, or USF-133 closure readiness; affectedAssetService=environment promotion gates; impact=critical; likelihood=medium; owner=platform-foundation; treatment=mitigate through schema-governed environment-promotion standard and enterprise validator; reviewDate=2026-09-30; followUpIssue=USF-167.",
+      "assetServiceAffected": "dev, test, staging, and production promotion gates",
+      "owner": "platform-foundation",
+      "riskOwner": "platform-foundation-risk-owner",
+      "controlOwner": "platform-foundation-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; standardDefined=true; readinessClaimed=false; USF-133 remains open",
+      "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "USF-193 defines gates only; readiness assessments require separate merged evidence, owner approval, residual-risk decision, and source issue reconciliation. USF-167 remains the service-disposition execution gate.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -4621,6 +4647,28 @@
       ],
       "prOrMergeSha": "fcc9c182a9234fd19cdf58b32020bad64342808c",
       "retentionPosture": "Retain the gate artifact, validator output, PR summary, and post-merge Linear reconciliation; unmerged USF-166 evidence cannot satisfy USF-133 closure."
+    },
+    {
+      "id": "usf-193-evidence-environment-promotion-standard",
+      "proofResult": "USF-193 environment promotion gate definition",
+      "whatWasProven": "Repository authority now defines dev, test, staging, and production promotion gates with provider-mode separation, data posture, destructive/non-destructive semantics, proof requirements, enterprise evidence requirements, allowed/prohibited claim boundaries, promotion prerequisites, and negative assurance.",
+      "whatWasNotProven": "This does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+      "adapterProviderId": "not-applicable-environment-promotion-gate",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "tools/validate-enterprise/validate-enterprise.py",
+      "commitPin": "058ce94038eaeda75cc971119ee24a6d49a755c3",
+      "issueLinks": [
+        "USF-193",
+        "USF-167",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "058ce94038eaeda75cc971119ee24a6d49a755c3",
+      "retentionPosture": "Retain the promotion standard, schema, validator output, PR validation summary, and post-merge Linear reconciliation; this row is evidence organisation and does not satisfy any environment readiness claim by itself."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -5474,6 +5522,34 @@
       "failClosedBehaviour": "validate-parity blocks missing gate evidence, missing service/capability mapping, false Done, USF-133 closure implication, missing non-equivalence boundary, stale proof command linkage, and prohibited readiness claims.",
       "monitoringAuditEvidence": "PR validation summary must include validate-parity, validate-enterprise, planted defects, and post-merge reconciliation before any Done decision.",
       "residualRisk": "USF-167, USF-182, source/deferred service rows, and parent USF-133 acceptance remain open until separately proven and reconciled."
+    },
+    {
+      "id": "usf-193-threat-environment-promotion-overclaim",
+      "targetType": "environment-promotion-control",
+      "target": "dev test staging production promotion gates",
+      "trustBoundary": "Environment promotion is repository semantic evidence; Linear comments, generated reports, and lower-environment proofs are not promotion approval.",
+      "tenantBoundary": "Tenant-affecting readiness evidence must remain scoped to the exact environment, provider mode, proof level, service catalogue row, and synthetic or governed data posture being assessed.",
+      "credentialBoundary": "USF-193 introduces no runtime credentials and must not permit real secrets, external egress, raw endpoints, provider payloads, tokens, or production data.",
+      "dataClassification": "metadata-only governance evidence plus synthetic/local proof references; no production data or production-derived data is introduced.",
+      "abuseCases": [
+        "dev evidence treated as test readiness",
+        "test evidence treated as staging readiness",
+        "staging rehearsal treated as production readiness",
+        "in-memory provider proof treated as composed service proof",
+        "destructive test semantics treated as staging or production posture",
+        "enterprise evidence organisation treated as ISO/SOC certification"
+      ],
+      "failureModes": [
+        "environment row missing",
+        "provider mode mismatch",
+        "promotion prerequisite missing",
+        "enterprise evidence requirement missing",
+        "non-claim removed",
+        "unsafe promotion claim introduced"
+      ],
+      "failClosedBehaviour": "validate-enterprise blocks missing environment promotion rows, provider/environment mismatches, destructive staging or production posture, missing evidence metadata, missing non-claims, and readiness/certification overclaims.",
+      "monitoringAuditEvidence": "PR validation summary must include validate-spec, validate-enterprise, planted defects, dashboard/coordinator updates, and post-merge Linear reconciliation before any Done decision.",
+      "residualRisk": "USF-167 and later source issues must still provide actual service, provider, operational, and environment-specific readiness evidence before any stronger readiness claim. It does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-react-parity-readiness."
     }
   ],
   "sdkDependencyGovernance": [
@@ -6429,6 +6505,40 @@
       "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
       "deferredReason": "live provider, public API, gateway, operator automation, distributed guardrail, and legal/regulatory access operations remain follow-up-tracked and not Done",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-193-access-environment-promotion-approvals",
+      "targetType": "environment-promotion-control",
+      "target": "environment promotion approver and access-review gates",
+      "posture": [
+        "effectivenessState=defined-only",
+        "accessModel=promotion-approval-metadata-only",
+        "authRequirement=approver-required-before-any-future-readiness-claim",
+        "breakGlassRelevance=production-and-staging-exception-paths-must-be-approved-before-use",
+        "auditRequirement=value-free-promotion-decision-evidence-required-before-readiness-claim",
+        "reviewCadence=2026-09-30-or-before-any-readiness-assessment",
+        "deprovisioningPosture=required-before-production-or-live-provider-claim",
+        "owner=platform-foundation",
+        "riskOwner=platform-foundation-risk-owner",
+        "controlOwner=platform-foundation-control-owner",
+        "followUpIssue=USF-167",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "USF-193 defines approval gates only; executed access review, production approver workflow, break-glass operation, and public exposure proof are not claimed.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -7630,6 +7740,38 @@
       "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
       "deferredReason": "workflow replay/migration, backup/restore, provider failover/DR, import/export rollback/compensation, notification retention purge, and distributed guardrail recovery remain follow-up-tracked",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-193-resilience-environment-promotion-gates",
+      "targetType": "environment-promotion-control",
+      "target": "dev test staging production resilience gate requirements",
+      "posture": [
+        "effectivenessState=defined-only",
+        "backupRequirement=required-before-test-staging-production-or-live-provider-readiness-claim",
+        "restoreProofRequirement=required-before-backup-restore-readiness-or-production-readiness-claim",
+        "rpoRtoTarget=explicit-non-claim-until-source-issue-proof",
+        "corruptionFailureScenario=lower-environment-reset-or-rehearsal-evidence-treated-as-live-restore-proof",
+        "cleanupTeardownProof=required-for-test-composed-and-provider-proof-but-not-sufficient-for-staging-or-production",
+        "deferredDrBoundary=staging-and-production-DR-proof-not-claimed",
+        "rollbackBoundary=USF-193-defines-required-fields-only",
+        "riskTreatment=defer-with-owner-review-2026-09-30",
+        "followUpIssue=USF-167"
+      ],
+      "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "USF-193 defines backup, restore, DR, migration, rollback, and RPO/RTO promotion requirements but does not prove operating resilience for any environment.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -8961,6 +9103,39 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-193-incident-environment-promotion-boundary",
+      "targetType": "environment-promotion-control",
+      "target": "environment promotion incident vulnerability and corrective-action posture",
+      "posture": [
+        "effectivenessState=defined-only",
+        "incidentDetectionHook=validator-and-PR-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-foundation-risk-owner",
+        "vulnerabilityAdvisoryReview=required-before-any-test-staging-production-or-live-provider-readiness-claim",
+        "dependencyUpdatePosture=required-before-release-or-production-claim",
+        "correctiveActionEvidence=USF-193-validator-output-and-follow-up-source-issues",
+        "postIncidentEvidenceBoundary=not-claimed",
+        "owner=platform-foundation",
+        "reviewDate=2026-09-30",
+        "followUpIssue=USF-167"
+      ],
+      "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "USF-193 requires incident and vulnerability fields for future gates but does not prove live alerting, incident response, escalation, corrective-action, patch SLA, SIEM, SOC, ISO, staging, or production readiness.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -10241,6 +10416,37 @@
       "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
       "deferredReason": "notification recipient data, public API/browser-session data, provider payloads, guardrail IP/privacy handling, and bulk/import/export legal or regulatory data movement remain follow-up-tracked",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-193-privacy-environment-promotion-data-posture",
+      "targetType": "environment-promotion-control",
+      "target": "dev test staging production data privacy and residency gates",
+      "posture": [
+        "dataOrigin=synthetic-for-dev-and-test-controlled-non-production-for-staging-production-governed-only-after-future-approval",
+        "piiPosture=no-production-pii-claim-from-USF-193",
+        "redactionPolicy=required-before-proof-or-readiness-evidence-is-accepted",
+        "retentionPurgePosture=required-before-test-staging-production-or-enterprise-readiness-claim",
+        "legalHoldRelevance=not-claimed-until-source-issue-proof",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "dataClassification=environment-specific-and-required-by-future-assessment",
+        "privacyDataMinimisationBoundary=USF-193-defines-required-fields-only",
+        "followUpIssue=USF-167"
+      ],
+      "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "USF-193 records privacy and data-minimisation requirements for future promotion gates but does not prove production privacy, DSR, residency, legal hold, retention, purge, or customer data controls.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

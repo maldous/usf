@@ -40,6 +40,7 @@
     "serviceCatalogue": "spec/instances/compose-service/service-catalogue.json",
     "serviceDispositionClosureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
     "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "environmentPromotionStandard": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
     "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
     "gapRegister": "docs/architecture/usf-dev-foundation-gap-register.md",
     "cleanupOrchestration": "docs/architecture/usf-dev-readiness-cleanup-orchestration.md"
@@ -1602,11 +1603,14 @@
   },
   "environmentPromotionStandardDependency": {
     "issueId": "USF-193",
-    "status": "formal-tracker-open",
-    "purpose": "USF-193 will define the canonical dev/test/staging/production promotion standard. PR #133 only records that the closure-tier gate can consume it later.",
+    "status": "implemented-by-usf-193",
+    "purpose": "USF-193 defines the canonical dev/test/staging/production promotion standard consumed by the closure-tier gate. The standard separates environment class, provider mode, data posture, destructive semantics, evidence freshness, approver, and non-claim boundaries.",
+    "standardPath": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+    "implementedByIssueId": "USF-193",
     "requiredForPr133Acceptance": false,
     "requiredBeforeReadinessClaim": true,
     "implementedByThisPr": false,
+    "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
     "nonClaims": [
       "full-dev-readiness",
       "test-readiness",

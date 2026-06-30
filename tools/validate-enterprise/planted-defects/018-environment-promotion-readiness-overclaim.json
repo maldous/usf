@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-ENTERPRISE-018",
+  "promotionEnvironmentPatch": [
+    {
+      "environmentStage": "production",
+      "set": {
+        "allowedClaims": [
+          "production-readiness"
+        ]
+      }
+    }
+  ]
+}

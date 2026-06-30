@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-ENTERPRISE-017",
+  "promotionEnvironmentPatch": [
+    {
+      "environmentStage": "staging",
+      "set": {
+        "destructiveTestingAllowed": true
+      }
+    }
+  ]
+}
