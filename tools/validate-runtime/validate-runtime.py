@@ -58,6 +58,7 @@ RULES = {
     "USF-RUNTIME-027": ("blocking", "mock provider substrate disposition is incomplete or unsafe"),
     "USF-RUNTIME-028": ("blocking", "backup and restore provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-029": ("blocking", "operator workflow provider disposition is incomplete or unsafe"),
+    "USF-RUNTIME-030": ("blocking", "ClickHouse service proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -65,6 +66,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-parity.json")
 SCHEMA_PATH = Path("spec/schemas/runtime-proof.schema.json")
 ANALYTICS_EVENT_STORE_MATRIX_PATH = Path("docs/architecture/analytics-event-store-provider-disposition-matrix.json")
+CLICKHOUSE_PROOF_BOUNDARY_PATH = Path("docs/architecture/clickhouse-service-semantic-proof-boundary.json")
 CACHE_EVENTING_MATRIX_PATH = Path("docs/architecture/cache-eventing-service-disposition-matrix.json")
 COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-provider-disposition-matrix.json")
 FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provider-disposition-matrix.json")
@@ -207,12 +209,24 @@ ANALYTICS_EVENT_STORE_REQUIRED_EVIDENCE_REFS = {
     "usf-172-incident-vulnerability-analytics-event-store",
     "usf-172-privacy-analytics-event-store",
 }
+CLICKHOUSE_BOUNDARY_REQUIRED_ISSUES = {"USF-197", "USF-206", "USF-172", "USF-189", "USF-184", "USF-192", "USF-133"}
+CLICKHOUSE_BOUNDARY_REQUIRED_EVIDENCE_REFS = {
+    "usf-197-soa-clickhouse-proof-boundary",
+    "usf-197-evidence-clickhouse-proof-boundary",
+    "usf-197-threat-clickhouse-overclaim",
+    "usf-197-access-clickhouse-proof-boundary",
+    "usf-197-incident-vulnerability-clickhouse-proof-boundary",
+    "usf-197-privacy-clickhouse-proof-boundary",
+}
 ANALYTICS_EVENT_STORE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "analytics-readiness",
     "analytics-provider-readiness",
     "event-store-readiness",
     "clickhouse-readiness",
     "provider-compatibility-readiness",
+}
+CLICKHOUSE_BOUNDARY_PROHIBITED_CLAIMS = ANALYTICS_EVENT_STORE_PROHIBITED_CLAIMS | {
+    "usf-133-closure",
 }
 CACHE_EVENTING_REQUIRED_ISSUES = {"USF-173", "USF-198", "USF-189", "USF-184", "USF-192", "USF-133"}
 CACHE_EVENTING_REQUIRED_EVIDENCE_REFS = {
@@ -559,6 +573,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         analytics_matrix = read_json(ANALYTICS_EVENT_STORE_MATRIX_PATH)
         if defect.get("analyticsEventStoreMatrixPatches"):
             analytics_matrix = apply_manifest_patches(analytics_matrix, defect["analyticsEventStoreMatrixPatches"])
+    clickhouse_boundary: Any = None
+    if not defect.get("removeClickhouseProofBoundary"):
+        clickhouse_boundary = read_json(CLICKHOUSE_PROOF_BOUNDARY_PATH)
+        if defect.get("clickhouseProofBoundaryPatches"):
+            clickhouse_boundary = apply_manifest_patches(
+                clickhouse_boundary,
+                defect["clickhouseProofBoundaryPatches"],
+            )
     cache_eventing_matrix: Any = None
     if not defect.get("removeCacheEventingMatrix"):
         cache_eventing_matrix = read_json(CACHE_EVENTING_MATRIX_PATH)
@@ -626,6 +648,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "manifest": manifest,
         "schema": read_json(SCHEMA_PATH),
         "analyticsEventStoreMatrix": analytics_matrix,
+        "clickhouseProofBoundary": clickhouse_boundary,
         "cacheEventingMatrix": cache_eventing_matrix,
         "composedSearchProviderMatrix": composed_search_provider_matrix,
         "fileScannerProviderMatrix": file_scanner_provider_matrix,
@@ -1145,7 +1168,7 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
                 F.add("USF-RUNTIME-023", f"providerBoundary.{key}", f"expected {expected!r}")
 
     declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
-    if declared_evidence != ANALYTICS_EVENT_STORE_REQUIRED_EVIDENCE_REFS:
+    if not ANALYTICS_EVENT_STORE_REQUIRED_EVIDENCE_REFS.issubset(declared_evidence):
         F.add("USF-RUNTIME-023", "enterpriseEvidenceRefs", "analytics event-store enterprise evidence refs are incomplete")
 
     bindings = binding_records(state["manifest"])
@@ -1172,6 +1195,157 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
     for stale in ("until USF-172 closes", "followUpIssue=USF-172", "\"followUpIssue\": \"USF-172\""):
         if stale in matrix_text:
             F.add("USF-RUNTIME-023", "analytics-event-store-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
+def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) -> None:
+    boundary = state.get("clickhouseProofBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-RUNTIME-030", str(CLICKHOUSE_PROOF_BOUNDARY_PATH), "ClickHouse proof boundary is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-197",
+        "followUpIssue": "USF-206",
+        "sourceDispositionIssue": "USF-172",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "status": "reclassified-deferred-with-owner",
+        "serviceCatalogueAuthority": SERVICE_CATALOGUE_PATH,
+        "runtimeManifest": str(MANIFEST_PATH),
+        "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+        "analyticsEventStoreDispositionMatrix": str(ANALYTICS_EVENT_STORE_MATRIX_PATH),
+        "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if boundary.get(key) != expected:
+            F.add("USF-RUNTIME-030", key, f"expected {expected!r}")
+
+    if set(boundary.get("serviceIds", [])) != {"clickhouse"}:
+        F.add("USF-RUNTIME-030", "serviceIds", "ClickHouse boundary service ids are incomplete")
+    if set(boundary.get("providerBindingIds", [])) != {"usf-189-clickhouse-analytics-provider"}:
+        F.add("USF-RUNTIME-030", "providerBindingIds", "ClickHouse boundary provider binding ids are incomplete")
+    if set(boundary.get("providerRegistryIds", [])) != {"analytics-store-clickhouse-deferred"}:
+        F.add("USF-RUNTIME-030", "providerRegistryIds", "ClickHouse boundary provider registry ids are incomplete")
+    if CLICKHOUSE_BOUNDARY_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
+        F.add("USF-RUNTIME-030", "issueLinks", "ClickHouse boundary issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(boundary.get("nonClaims", [])):
+        F.add("USF-RUNTIME-030", "nonClaims", "ClickHouse boundary non-claims are incomplete")
+    if CLICKHOUSE_BOUNDARY_PROHIBITED_CLAIMS - set(boundary.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-030", "readinessClaimsProhibited", "ClickHouse boundary prohibited claims are incomplete")
+    if CLICKHOUSE_BOUNDARY_PROHIBITED_CLAIMS & set(boundary.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-030", "readinessClaimsAllowed", "ClickHouse boundary allows a prohibited readiness claim")
+
+    reclassification = boundary.get("reclassification", {})
+    if not isinstance(reclassification, dict):
+        F.add("USF-RUNTIME-030", "reclassification", "ClickHouse reclassification must be an object")
+    else:
+        expected_reclassification = {
+            "from": "explicit-deferral-with-owner",
+            "to": "explicit-deferred-service-proof",
+            "decisionAcceptedDoesNotMeanWorkComplete": True,
+            "serviceSemanticProofImplemented": False,
+            "clickhouseServiceReadinessClaim": False,
+            "analyticsReadinessClaim": False,
+            "eventStoreReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "inMemoryAnalyticsEquivalentToClickHouseService": False,
+        }
+        for key, expected in expected_reclassification.items():
+            observed = reclassification.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-030", f"reclassification.{key}", f"expected {expected!r}")
+        if len(reclassification.get("repositoryEvidence", [])) < 6:
+            F.add("USF-RUNTIME-030", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
+
+    remaining = boundary.get("remainingProofBoundary", {})
+    if not isinstance(remaining, dict):
+        F.add("USF-RUNTIME-030", "remainingProofBoundary", "remaining proof boundary must be an object")
+    else:
+        expected_remaining = {
+            "issue": "USF-206",
+            "owner": "platform-data-foundation",
+            "riskOwner": "platform-data-risk-owner",
+            "controlOwner": "platform-data-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_remaining.items():
+            if remaining.get(key) != expected:
+                F.add("USF-RUNTIME-030", f"remainingProofBoundary.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "requiredEvidence"):
+            if remaining.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-030", f"remainingProofBoundary.{field}", "remaining proof field is required")
+        if len(remaining.get("requiredEvidence", [])) < 8:
+            F.add("USF-RUNTIME-030", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
+
+    analytics = boundary.get("analyticsEventStoreBoundary", {})
+    for field in (
+        "eventIngestionStatus",
+        "tenantSafeQueryStatus",
+        "retentionDeletionStatus",
+        "auditEvidenceStatus",
+        "readinessRetryStatus",
+        "teardownCleanupStatus",
+        "providerFailureHandlingStatus",
+    ):
+        if analytics.get(field) != "deferred-to-USF-206":
+            F.add("USF-RUNTIME-030", f"analyticsEventStoreBoundary.{field}", "analytics boundary must defer to USF-206")
+    for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
+        if not analytics.get(field):
+            F.add("USF-RUNTIME-030", f"analyticsEventStoreBoundary.{field}", "analytics boundary owner metadata is required")
+
+    sdk = boundary.get("sdkProviderBoundary", {})
+    if sdk.get("sdkSelectionStatus") != "deferred-to-USF-206":
+        F.add("USF-RUNTIME-030", "sdkProviderBoundary.sdkSelectionStatus", "SDK selection must defer to USF-206")
+    if sdk.get("sdkPackage") is not None or sdk.get("sdkVersion") is not None:
+        F.add("USF-RUNTIME-030", "sdkProviderBoundary", "deferred ClickHouse boundary must not name an SDK package")
+    if sdk.get("sdkBoundary") != "adapter-package-only-when-implemented":
+        F.add("USF-RUNTIME-030", "sdkProviderBoundary.sdkBoundary", "SDK boundary must remain adapter-only when implemented")
+    for field in ("secretBoundary", "supplierBoundary"):
+        if not sdk.get(field):
+            F.add("USF-RUNTIME-030", f"sdkProviderBoundary.{field}", "SDK/provider boundary field is required")
+
+    in_memory_gate = boundary.get("inMemoryAnalyticsGate", {})
+    if in_memory_gate.get("repositoryValidationRequired") is not True:
+        F.add("USF-RUNTIME-030", "inMemoryAnalyticsGate.repositoryValidationRequired", "repository validation must remain required")
+    if in_memory_gate.get("clickhouseServiceEquivalent") is not False:
+        F.add("USF-RUNTIME-030", "inMemoryAnalyticsGate.clickhouseServiceEquivalent", "in-memory analytics must not be ClickHouse equivalent")
+    if not in_memory_gate.get("substitutionNonEquivalenceBoundary"):
+        F.add("USF-RUNTIME-030", "inMemoryAnalyticsGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+    commands = set(in_memory_gate.get("commands", []))
+    for command in (
+        "corepack pnpm runtime:proof",
+        "corepack pnpm providers-proof",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    ):
+        if command not in commands:
+            F.add("USF-RUNTIME-030", "inMemoryAnalyticsGate.commands", f"missing {command}")
+
+    declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != CLICKHOUSE_BOUNDARY_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-030", "enterpriseEvidenceRefs", "ClickHouse boundary enterprise evidence refs are incomplete")
+
+    matrix = state.get("analyticsEventStoreMatrix") or {}
+    if "USF-206" not in set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-030", "analyticsEventStoreMatrix.issueLinks", "analytics matrix must link USF-206")
+    if matrix.get("remainingProofIssue") != "USF-206":
+        F.add("USF-RUNTIME-030", "analyticsEventStoreMatrix.remainingProofIssue", "analytics matrix must carry USF-206 as remaining proof")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-clickhouse-analytics-provider")
+    if not binding or "USF-206" not in binding.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "runtime manifest must link USF-206")
+    if binding and "USF-206" not in str(binding.get("deferredReason", "")):
+        F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider.deferredReason", "runtime manifest must defer actual proof to USF-206")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-analytics-provider-deferred")
+    if not deferred or "USF-206" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-030", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must link USF-206")
 
 
 def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None:
@@ -2522,6 +2696,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_readiness_posture,
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
+            check_clickhouse_service_proof_boundary,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
@@ -2551,6 +2726,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_readiness_posture,
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
+            check_clickhouse_service_proof_boundary,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,

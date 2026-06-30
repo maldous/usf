@@ -1,0 +1,4 @@
+{
+  "expectedRule": "USF-RUNTIME-030",
+  "removeClickhouseProofBoundary": true
+}

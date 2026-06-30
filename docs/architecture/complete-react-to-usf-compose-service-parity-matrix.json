@@ -144,7 +144,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-172 records bounded analytics/event-store disposition; USF-197 must prove ClickHouse adapter/service semantics before any analytics-provider or event-store readiness claim.",
+      "gap_or_decision": "USF-172 records bounded analytics/event-store disposition; USF-197 records the ClickHouse proof boundary; USF-206 must prove ClickHouse adapter/service semantics before any analytics-provider or event-store readiness claim.",
       "legacy_service_category": "analytics-event-store",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -156,7 +156,7 @@
       ],
       "react_service": "clickhouse",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-172/USF-197",
+      "tracking_recommendation": "USF-172/USF-197/USF-206",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "ClickHouse catalogue row and explicit deferred provider class"
     },
