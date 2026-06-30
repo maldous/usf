@@ -1,0 +1,11 @@
+{
+  "name": "usf-202-pgbackrest-image-probe-not-fail-closed",
+  "expectedRule": "USF-RUNTIME-028",
+  "pgbackrestProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/observedBlockers/imagePullProbe/result",
+      "value": "pass"
+    }
+  ]
+}

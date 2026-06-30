@@ -518,7 +518,7 @@
       "criticality": "critical",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "C",
-      "gap_or_decision": "USF-177 records a bounded backup/restore disposition and keeps DB/RLS/files proof non-equivalent; USF-202 must prove pgBackRest backup artifact creation, restore drill, tenant/classification preservation, secret exclusion, audit, retention, cleanup, failure, RPO/RTO, and resilience semantics before any backup/restore or disaster recovery readiness claim.",
+      "gap_or_decision": "USF-177 records a bounded backup/restore disposition and keeps DB/RLS/files proof non-equivalent; USF-202 records that the current generated pgBackRest image is not pullable and no configured repository, stanza, Postgres linkage, readiness retry, timeout, or restore drill boundary exists; USF-211 must unblock a maintained pinned image and configured proof boundary before any backup/restore or disaster recovery readiness claim.",
       "legacy_service_category": "backup-restore",
       "provider_mode_posture": "profile-gated/deferred; no backup, restore, disaster recovery, or live external readiness claimed",
       "react_build": null,
@@ -527,8 +527,8 @@
       "react_ports": null,
       "react_service": "pgbackrest",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-202 backup/restore service proof follow-up before any backup, restore, disaster recovery, staging, production, or live-provider readiness claim",
-      "usf_accounting_status": "deferred",
+      "tracking_recommendation": "USF-211 pgBackRest image/configuration unblocker before any backup, restore, disaster recovery, staging, production, or live-provider readiness claim",
+      "usf_accounting_status": "blocked",
       "usf_service_or_substitute": "DB proof plus explicit pgBackRest deferred provider class"
     },
     {

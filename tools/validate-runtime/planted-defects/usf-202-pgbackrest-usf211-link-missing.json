@@ -1,0 +1,16 @@
+{
+  "name": "usf-202-pgbackrest-usf211-link-missing",
+  "expectedRule": "USF-RUNTIME-028",
+  "pgbackrestProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-202"
+    },
+    {
+      "op": "replace",
+      "path": "/reclassificationDecision/blockedFollowUpIssue",
+      "value": "USF-202"
+    }
+  ]
+}

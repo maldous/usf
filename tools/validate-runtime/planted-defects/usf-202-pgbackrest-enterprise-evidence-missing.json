@@ -1,0 +1,13 @@
+{
+  "name": "usf-202-pgbackrest-enterprise-evidence-missing",
+  "expectedRule": "USF-RUNTIME-028",
+  "pgbackrestProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/enterpriseEvidenceRefs",
+      "value": [
+        "usf-202-soa-pgbackrest-proof-blocker"
+      ]
+    }
+  ]
+}

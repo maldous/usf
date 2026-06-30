@@ -1,0 +1,16 @@
+{
+  "name": "usf-202-pgbackrest-cli-selection-premature",
+  "expectedRule": "USF-RUNTIME-028",
+  "pgbackrestProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/cliProtocolBoundary/selectionStatus",
+      "value": "selected"
+    },
+    {
+      "op": "replace",
+      "path": "/cliProtocolBoundary/sdkPackage",
+      "value": "pgbackrest-sdk"
+    }
+  ]
+}

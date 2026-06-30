@@ -1,0 +1,11 @@
+{
+  "name": "usf-202-pgbackrest-repository-config-falsely-present",
+  "expectedRule": "USF-RUNTIME-028",
+  "pgbackrestProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/observedBlockers/repositoryConfigPresent",
+      "value": true
+    }
+  ]
+}
