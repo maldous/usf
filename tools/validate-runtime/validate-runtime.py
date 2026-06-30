@@ -46,6 +46,11 @@ RULES = {
     "USF-RUNTIME-015": ("blocking", "provider registry linkage for composed binding is missing"),
     "USF-RUNTIME-016": ("blocking", "provider SDK dependency is not exact-version pinned"),
     "USF-RUNTIME-017": ("blocking", "tenant-scoped provider paths lack collision-free encoding evidence"),
+    "USF-RUNTIME-018": ("blocking", "Lane 5 runtime provider proof or explicit deferral is missing"),
+    "USF-RUNTIME-019": ("blocking", "Lane 5 provider disposition hides an in-memory fallback"),
+    "USF-RUNTIME-020": ("blocking", "Lane 5 provider SDK/client boundary is missing or unsafe"),
+    "USF-RUNTIME-021": ("blocking", "Lane 5 provider disposition has unsafe readiness posture"),
+    "USF-RUNTIME-022": ("blocking", "Lane 5 provider disposition overclaims provider readiness"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -179,6 +184,93 @@ REQUIRED_PROHIBITED_CLAIMS = {
     "full-react-parity",
     "test-readiness",
 }
+LANE5_PROVIDER_DISPOSITIONS = {
+    "usf-189-clickhouse-analytics-provider": {
+        "serviceIds": ["clickhouse"],
+        "providerIds": ["analytics-store-clickhouse-deferred"],
+        "followUpIssue": "USF-172",
+        "boundaryRef": "usf-189-analytics-provider-deferred",
+        "allowedStatuses": {"unsupported-deferred"},
+    },
+    "usf-189-redis-cache-provider": {
+        "serviceIds": ["redis"],
+        "providerIds": ["cache-redis-deferred"],
+        "followUpIssue": "USF-173",
+        "boundaryRef": "usf-189-cache-provider-deferred",
+        "allowedStatuses": {"unsupported-deferred"},
+    },
+    "usf-189-meilisearch-search-provider": {
+        "serviceIds": ["meilisearch"],
+        "providerIds": ["full-text-search-meilisearch-deferred"],
+        "followUpIssue": "USF-174",
+        "boundaryRef": "usf-189-search-provider-deferred",
+        "allowedStatuses": {"unsupported-deferred"},
+    },
+    "usf-189-clamav-scanner-provider": {
+        "serviceIds": ["clamav"],
+        "providerIds": ["file-scan-clamav-deferred"],
+        "followUpIssue": "USF-175",
+        "boundaryRef": "usf-189-scanner-provider-deferred",
+        "allowedStatuses": {"profile-gated"},
+    },
+    "usf-189-localstack-cloud-mock-provider": {
+        "serviceIds": ["localstack"],
+        "providerIds": ["provider-emulator-localstack-deferred"],
+        "followUpIssue": "USF-176",
+        "boundaryRef": "usf-189-mock-provider-deferred",
+        "allowedStatuses": {"profile-gated"},
+    },
+    "usf-189-wiremock-http-mock-provider": {
+        "serviceIds": ["wiremock"],
+        "providerIds": ["provider-mock-wiremock-deferred"],
+        "followUpIssue": "USF-176",
+        "boundaryRef": "usf-189-mock-provider-deferred",
+        "allowedStatuses": {"profile-gated"},
+    },
+    "usf-189-webhook-sink-capture-provider": {
+        "serviceIds": ["webhook-sink"],
+        "providerIds": ["notification-delivery-webhook-sink-deferred"],
+        "followUpIssue": "USF-176",
+        "boundaryRef": "usf-189-mock-provider-deferred",
+        "allowedStatuses": {"compose-boundary-only"},
+    },
+    "usf-189-pgbackrest-backup-provider": {
+        "serviceIds": ["pgbackrest"],
+        "providerIds": ["backup-restore-pgbackrest-deferred"],
+        "followUpIssue": "USF-177",
+        "boundaryRef": "usf-189-backup-provider-deferred",
+        "allowedStatuses": {"profile-gated"},
+    },
+    "usf-189-windmill-automation-provider": {
+        "serviceIds": ["windmill", "windmill-worker", "windmill-postgres", "windmill-redis"],
+        "providerIds": ["operational-job-engine-windmill-deferred"],
+        "followUpIssue": "USF-178",
+        "boundaryRef": "usf-189-workflow-automation-provider-deferred",
+        "allowedStatuses": {"profile-gated"},
+    },
+}
+LANE5_RISK_TOKENS = (
+    "effectivenessState=deferred-with-owner",
+    "riskStatement=",
+    "threatFailureScenario=",
+    "affectedAssetService=",
+    "impact=",
+    "likelihood=",
+    "owner=",
+    "treatment=",
+    "reviewDate=",
+    "linkedFollowUpIssue=",
+)
+LANE5_OVERCLAIM_RE = re.compile(
+    r"production-ready\b|staging-ready\b|test-ready\b|live-provider-ready\b|provider proof complete|"
+    r"full dev readiness|full react parity|satisfies live|(?<!non-)equivalent to live|ready for production",
+    re.IGNORECASE,
+)
+LANE5_HIDDEN_FALLBACK_RE = re.compile(
+    r"(?:in-memory|process memory|nats)[^.]{0,100}\b(?:satisfies|proves|equivalent to|substitutes)\b.*"
+    r"(?:composed|provider|redis|clickhouse|meilisearch|clamav|windmill)",
+    re.IGNORECASE,
+)
 PROHIBITED_ALLOWED_MARKERS = {
     "production",
     "staging",
@@ -602,6 +694,145 @@ def check_provider_bindings(F: Findings, state: dict[str, Any]) -> None:
             F.add("USF-RUNTIME-012", str(PROOF_SOURCE_PATH), f"proof source missing provider evidence marker: {marker}")
 
 
+def lane5_binding_payload(binding: dict[str, Any]) -> str:
+    return json.dumps(
+        {
+            "providerRegistryEvidence": binding.get("providerRegistryEvidence"),
+            "apiProofEvidence": binding.get("apiProofEvidence"),
+            "workerProofEvidence": binding.get("workerProofEvidence"),
+            "deferredReason": binding.get("deferredReason"),
+            "claimBoundary": binding.get("claimBoundary"),
+        },
+        sort_keys=True,
+    )
+
+
+def check_lane5_provider_dispositions(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["manifest"]
+    bindings = binding_records(manifest)
+    registry_source = state_text(state, PROVIDER_REGISTRY_SOURCE_PATH)
+    for binding_id, metadata in LANE5_PROVIDER_DISPOSITIONS.items():
+        binding = bindings.get(binding_id)
+        if not binding:
+            F.add("USF-RUNTIME-018", "providerBindingMatrix", f"Lane 5 provider disposition missing: {binding_id}")
+            continue
+        if binding.get("bindingStatus") not in metadata["allowedStatuses"]:
+            F.add("USF-RUNTIME-018", binding_id, "Lane 5 provider disposition has unexpected status")
+        for service_id in metadata["serviceIds"]:
+            if service_id not in binding.get("serviceCatalogueServiceIds", []):
+                F.add("USF-RUNTIME-018", binding_id, f"service catalogue id missing: {service_id}")
+        for provider_id in metadata["providerIds"]:
+            if provider_id not in binding.get("providerRegistryIds", []):
+                F.add("USF-RUNTIME-018", binding_id, f"provider registry id missing: {provider_id}")
+            if provider_id not in registry_source:
+                F.add("USF-RUNTIME-018", str(PROVIDER_REGISTRY_SOURCE_PATH), f"registry source missing {provider_id}")
+        follow_up = metadata["followUpIssue"]
+        if follow_up not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-018", binding_id, f"follow-up issue missing: {follow_up}")
+        for field in (
+            "providerRegistryEvidence",
+            "apiProofEvidence",
+            "workerProofEvidence",
+            "deferredReason",
+            "claimBoundary",
+        ):
+            if not binding.get(field):
+                F.add("USF-RUNTIME-018", binding_id, f"Lane 5 disposition lacks {field}")
+        deferred_reason = str(binding.get("deferredReason") or "")
+        for token in LANE5_RISK_TOKENS:
+            if token not in deferred_reason:
+                F.add("USF-RUNTIME-018", binding_id, f"deferred risk metadata missing {token}")
+
+
+def check_lane5_hidden_in_memory_fallback(F: Findings, state: dict[str, Any]) -> None:
+    bindings = binding_records(state["manifest"])
+    for binding_id in LANE5_PROVIDER_DISPOSITIONS:
+        binding = bindings.get(binding_id)
+        if not binding:
+            continue
+        if binding.get("providerMode") == "in-memory" or binding.get("providerClass") == "hermetic-mock":
+            F.add("USF-RUNTIME-019", binding_id, "Lane 5 deferred provider cannot be represented as in-memory or hermetic")
+        text = lane5_binding_payload(binding)
+        if LANE5_HIDDEN_FALLBACK_RE.search(text):
+            F.add("USF-RUNTIME-019", binding_id, "Lane 5 disposition treats a substitute as provider proof")
+
+
+def check_lane5_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
+    bindings = binding_records(state["manifest"])
+    for binding_id in LANE5_PROVIDER_DISPOSITIONS:
+        binding = bindings.get(binding_id)
+        if not binding:
+            continue
+        implemented = binding.get("bindingStatus") == "active" or binding.get("providerMode") == "composed-test"
+        if implemented:
+            for field in ("adapterName", "portName", "endpointRef", "sdkPackage", "sdkVersion"):
+                if not binding.get(field):
+                    F.add("USF-RUNTIME-020", binding_id, f"implemented provider lacks {field}")
+            if binding.get("sdkBoundary") != "adapter-package-only":
+                F.add("USF-RUNTIME-020", binding_id, "implemented provider lacks adapter-package-only SDK boundary")
+        else:
+            if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+                F.add("USF-RUNTIME-020", binding_id, "deferred provider must not name an SDK/client package")
+            if binding.get("sdkBoundary") != "not-applicable":
+                F.add("USF-RUNTIME-020", binding_id, "deferred provider SDK boundary must be not-applicable")
+            if binding.get("endpointRef") is not None:
+                F.add("USF-RUNTIME-020", binding_id, "deferred provider must not expose an endpoint reference")
+
+
+def check_lane5_readiness_posture(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["manifest"]
+    bindings = binding_records(manifest)
+    compose = mode_records(manifest).get("dev-compose-backed", {})
+    active_refs = set(compose.get("providerBindingRefs", []))
+    deferred_provider_refs = set(compose.get("deferredProviderBindingRefs", []))
+    boundary_refs = set(compose.get("deferredBoundaryRefs", []))
+    expected_boundaries = {metadata["boundaryRef"] for metadata in LANE5_PROVIDER_DISPOSITIONS.values()}
+    missing_boundaries = sorted(expected_boundaries - boundary_refs)
+    if missing_boundaries:
+        F.add("USF-RUNTIME-021", "dev-compose-backed", f"Lane 5 deferred boundary refs missing: {', '.join(missing_boundaries)}")
+    deferred_boundaries = {
+        item.get("id"): item
+        for item in manifest.get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    for boundary_id in sorted(expected_boundaries):
+        boundary = deferred_boundaries.get(boundary_id)
+        if not boundary:
+            F.add("USF-RUNTIME-021", boundary_id, "Lane 5 deferred boundary record missing")
+            continue
+        missing_claims = REQUIRED_PROHIBITED_CLAIMS - set(boundary.get("claimsProhibitedUntilResolved", []))
+        if missing_claims:
+            F.add("USF-RUNTIME-021", boundary_id, f"deferred boundary missing prohibited claims: {sorted(missing_claims)}")
+        follow_ups = set(boundary.get("followUpIssueRefs", []))
+        if "USF-189" not in follow_ups:
+            F.add("USF-RUNTIME-021", boundary_id, "deferred boundary lacks USF-189 traceability")
+    for binding_id, metadata in LANE5_PROVIDER_DISPOSITIONS.items():
+        binding = bindings.get(binding_id)
+        if not binding:
+            continue
+        if binding_id in active_refs or binding_id in deferred_provider_refs:
+            F.add("USF-RUNTIME-021", binding_id, "Lane 5 deferred provider must not be wired as a compose runtime provider binding ref")
+        if binding.get("bindingStatus") == "active":
+            F.add("USF-RUNTIME-021", binding_id, "Lane 5 deferred provider cannot be marked active")
+        if not binding.get("deferredReason") or metadata["followUpIssue"] not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-021", binding_id, "Lane 5 deferred provider lacks follow-up risk posture")
+        claim_boundary = str(binding.get("claimBoundary") or "")
+        missing_claims = REQUIRED_PROHIBITED_CLAIMS - {claim for claim in REQUIRED_PROHIBITED_CLAIMS if claim in claim_boundary}
+        if missing_claims:
+            F.add("USF-RUNTIME-021", binding_id, f"claim boundary missing non-claims: {sorted(missing_claims)}")
+
+
+def check_lane5_provider_overclaim(F: Findings, state: dict[str, Any]) -> None:
+    bindings = binding_records(state["manifest"])
+    for binding_id in LANE5_PROVIDER_DISPOSITIONS:
+        binding = bindings.get(binding_id)
+        if not binding:
+            continue
+        text = lane5_binding_payload(binding)
+        if LANE5_OVERCLAIM_RE.search(text):
+            F.add("USF-RUNTIME-022", binding_id, "Lane 5 provider disposition contains readiness overclaim language")
+
+
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     for binding_id, metadata in REQUIRED_PROVIDER_BINDINGS.items():
         adapter_path = metadata["adapterPath"]
@@ -778,6 +1009,11 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_boundaries,
             check_deferred_boundaries,
             check_provider_bindings,
+            check_lane5_provider_dispositions,
+            check_lane5_hidden_in_memory_fallback,
+            check_lane5_sdk_boundary,
+            check_lane5_readiness_posture,
+            check_lane5_provider_overclaim,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -795,6 +1031,11 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_boundaries,
             check_deferred_boundaries,
             check_provider_bindings,
+            check_lane5_provider_dispositions,
+            check_lane5_hidden_in_memory_fallback,
+            check_lane5_sdk_boundary,
+            check_lane5_readiness_posture,
+            check_lane5_provider_overclaim,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

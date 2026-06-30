@@ -770,6 +770,8 @@ def check_sdk_governance(F: Findings, state: dict[str, Any]) -> None:
     sdk_rows = rows_by_id(model.get("sdkDependencyGovernance"))
     for binding in runtime_manifest.get("providerBindingMatrix", []):
         binding_id = binding.get("bindingId")
+        if binding.get("sdkPackage") in {None, ""}:
+            continue
         packages = [item.strip() for item in str(binding.get("sdkPackage", "")).split(",") if item.strip()]
         versions = [item.strip() for item in str(binding.get("sdkVersion", "")).split(",") if item.strip()]
         for idx, package_name in enumerate(packages):
