@@ -53,6 +53,7 @@ RULES = {
     "USF-RUNTIME-022": ("blocking", "Lane 5 provider disposition overclaims provider readiness"),
     "USF-RUNTIME-023": ("blocking", "analytics event-store provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-024": ("blocking", "cache and eventing service disposition is incomplete or unsafe"),
+    "USF-RUNTIME-025": ("blocking", "composed search provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -61,6 +62,7 @@ MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-p
 SCHEMA_PATH = Path("spec/schemas/runtime-proof.schema.json")
 ANALYTICS_EVENT_STORE_MATRIX_PATH = Path("docs/architecture/analytics-event-store-provider-disposition-matrix.json")
 CACHE_EVENTING_MATRIX_PATH = Path("docs/architecture/cache-eventing-service-disposition-matrix.json")
+COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-provider-disposition-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -222,6 +224,25 @@ CACHE_EVENTING_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "live-eventing-readiness",
     "provider-compatibility-readiness",
 }
+COMPOSED_SEARCH_PROVIDER_REQUIRED_ISSUES = {"USF-174", "USF-199", "USF-189", "USF-184", "USF-192", "USF-133"}
+COMPOSED_SEARCH_PROVIDER_REQUIRED_EVIDENCE_REFS = {
+    "usf-174-soa-composed-search-provider-disposition",
+    "usf-174-evidence-composed-search-provider-disposition",
+    "usf-174-threat-meilisearch-overclaim",
+    "usf-174-access-composed-search-provider",
+    "usf-174-incident-vulnerability-composed-search-provider",
+    "usf-174-privacy-composed-search-provider",
+}
+COMPOSED_SEARCH_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
+    "search-readiness",
+    "search-provider-readiness",
+    "composed-search-readiness",
+    "meilisearch-readiness",
+    "live-search-readiness",
+    "vector-search-readiness",
+    "ai-search-readiness",
+    "provider-compatibility-readiness",
+}
 LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clickhouse-analytics-provider": {
         "serviceIds": ["clickhouse"],
@@ -240,7 +261,7 @@ LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-meilisearch-search-provider": {
         "serviceIds": ["meilisearch"],
         "providerIds": ["full-text-search-meilisearch-deferred"],
-        "followUpIssue": "USF-174",
+        "followUpIssue": "USF-199",
         "boundaryRef": "usf-189-search-provider-deferred",
         "allowedStatuses": {"unsupported-deferred"},
     },
@@ -450,6 +471,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         cache_eventing_matrix = read_json(CACHE_EVENTING_MATRIX_PATH)
         if defect.get("cacheEventingMatrixPatches"):
             cache_eventing_matrix = apply_manifest_patches(cache_eventing_matrix, defect["cacheEventingMatrixPatches"])
+    composed_search_provider_matrix: Any = None
+    if not defect.get("removeComposedSearchProviderMatrix"):
+        composed_search_provider_matrix = read_json(COMPOSED_SEARCH_PROVIDER_MATRIX_PATH)
+        if defect.get("composedSearchProviderMatrixPatches"):
+            composed_search_provider_matrix = apply_manifest_patches(
+                composed_search_provider_matrix,
+                defect["composedSearchProviderMatrixPatches"],
+            )
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
@@ -473,6 +502,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "schema": read_json(SCHEMA_PATH),
         "analyticsEventStoreMatrix": analytics_matrix,
         "cacheEventingMatrix": cache_eventing_matrix,
+        "composedSearchProviderMatrix": composed_search_provider_matrix,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -1242,6 +1272,168 @@ def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None
             F.add("USF-RUNTIME-024", "cache-eventing-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
 
+def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("composedSearchProviderMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-RUNTIME-025", str(COMPOSED_SEARCH_PROVIDER_MATRIX_PATH), "composed search provider disposition matrix is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-174",
+        "followUpIssue": "USF-199",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "serviceId": "meilisearch",
+        "providerRegistryId": "full-text-search-meilisearch-deferred",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-RUNTIME-025", key, f"expected {expected!r}")
+
+    if COMPOSED_SEARCH_PROVIDER_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-025", "issueLinks", "composed search provider issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-RUNTIME-025", "nonClaims", "composed search provider non-claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-025", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
+    if COMPOSED_SEARCH_PROVIDER_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-025", "readinessClaimsProhibited", "composed search provider prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-RUNTIME-025", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-RUNTIME-025", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    disposition = matrix.get("searchProviderDisposition", {})
+    if not isinstance(disposition, dict):
+        F.add("USF-RUNTIME-025", "searchProviderDisposition", "search provider disposition must be an object")
+    else:
+        expected_disposition = {
+            "disposition": "explicit-deferral-with-owner",
+            "meilisearchServiceSemanticProofPresent": False,
+            "composedSearchProviderProofPresent": False,
+            "inMemoryMeilisearchEquivalent": False,
+            "liveSearchReadinessClaim": False,
+            "vectorSearchReadinessClaim": False,
+            "aiSearchReadinessClaim": False,
+            "searchProviderReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "serviceCatalogueServiceId": "meilisearch",
+            "providerRegistryId": "full-text-search-meilisearch-deferred",
+            "followUpIssue": "USF-199",
+            "owner": "platform-search-foundation",
+            "riskOwner": "platform-search-risk-owner",
+            "controlOwner": "platform-search-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_disposition.items():
+            observed = disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-025", f"searchProviderDisposition.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "deferredEvidence"):
+            if disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-025", f"searchProviderDisposition.{field}", "deferral field is required")
+
+    substitute = matrix.get("inMemorySubstituteBoundary", {})
+    if not isinstance(substitute, dict):
+        F.add("USF-RUNTIME-025", "inMemorySubstituteBoundary", "substitute boundary must be an object")
+    else:
+        if substitute.get("usedWhereSemanticallyPermitted") is not True:
+            F.add("USF-RUNTIME-025", "inMemorySubstituteBoundary.usedWhereSemanticallyPermitted", "permitted in-memory use must be explicit")
+        for key in (
+            "meilisearchServiceEquivalent",
+            "rankingEquivalent",
+            "filteringEquivalent",
+            "asyncIndexingEquivalent",
+        ):
+            if substitute.get(key) is not False:
+                F.add("USF-RUNTIME-025", f"inMemorySubstituteBoundary.{key}", "in-memory evidence must not be Meilisearch equivalent")
+        if "not equivalent to Meilisearch" not in str(substitute.get("substitutionNonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-025", "inMemorySubstituteBoundary.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+        commands = set(substitute.get("commands", []))
+        for command in (
+            "corepack pnpm proof:search",
+            "corepack pnpm runtime:proof:in-memory",
+            "corepack pnpm verify",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+        ):
+            if command not in commands:
+                F.add("USF-RUNTIME-025", "inMemorySubstituteBoundary.commands", f"missing {command}")
+        if len(substitute.get("scopeCovered", [])) < 4 or len(substitute.get("limits", [])) < 6:
+            F.add("USF-RUNTIME-025", "inMemorySubstituteBoundary", "substitute scope and limits are incomplete")
+
+    provider_boundary = matrix.get("providerBoundary", {})
+    if not isinstance(provider_boundary, dict):
+        F.add("USF-RUNTIME-025", "providerBoundary", "provider boundary must be an object")
+    else:
+        expected_provider = {
+            "providerBindingId": "usf-189-meilisearch-search-provider",
+            "providerRegistryId": "full-text-search-meilisearch-deferred",
+            "bindingStatus": "unsupported-deferred",
+            "providerMode": "live-external-deferred",
+            "runtimeProviderBindingActive": False,
+            "sdkPackage": None,
+            "sdkVersion": None,
+            "endpointRef": None,
+            "followUpIssue": "USF-199",
+        }
+        for key, expected in expected_provider.items():
+            observed = provider_boundary.get(key)
+            if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
+                F.add("USF-RUNTIME-025", f"providerBoundary.{key}", f"expected {expected!r}")
+
+    operational = matrix.get("operationalEvidencePosture", {})
+    if not isinstance(operational, dict):
+        F.add("USF-RUNTIME-025", "operationalEvidencePosture", "operational evidence posture must be an object")
+    else:
+        expected_operational = {
+            "readinessRetry": "deferred-to-USF-199",
+            "timeout": "deferred-to-USF-199",
+            "safeTeardown": "deferred-to-USF-199",
+        }
+        for key, expected in expected_operational.items():
+            if operational.get(key) != expected:
+                F.add("USF-RUNTIME-025", f"operationalEvidencePosture.{key}", f"expected {expected!r}")
+        for field in ("failClosed", "structuredLogging", "tracingCorrelation", "metrics", "auditEvents", "redaction"):
+            if field not in operational:
+                F.add("USF-RUNTIME-025", f"operationalEvidencePosture.{field}", "operational field is required")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != COMPOSED_SEARCH_PROVIDER_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-025", "enterpriseEvidenceRefs", "composed search provider enterprise evidence refs are incomplete")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-meilisearch-search-provider")
+    if not binding:
+        F.add("USF-RUNTIME-025", "providerBindingMatrix", "Meilisearch provider disposition is missing from runtime manifest")
+    else:
+        if "USF-199" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider", "runtime manifest must link USF-199")
+        if "USF-199" not in str(binding.get("deferredReason", "")):
+            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-199")
+        if binding.get("bindingStatus") != "unsupported-deferred" or binding.get("endpointRef") is not None:
+            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider", "Meilisearch must remain explicitly deferred without endpoint binding")
+        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+            F.add("USF-RUNTIME-025", "providerBindingMatrix.usf-189-meilisearch-search-provider", "deferred Meilisearch must not name an SDK/client package")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-search-provider-deferred")
+    if not deferred or "USF-199" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-025", "deferredBoundaries.usf-189-search-provider-deferred", "runtime deferred boundary must link USF-199")
+
+    matrix_text = json.dumps(matrix, sort_keys=True)
+    for stale in ("until USF-174 closes", "followUpIssue=USF-174", "\"followUpIssue\": \"USF-174\"", "linkedFollowUpIssue=USF-174"):
+        if stale in matrix_text:
+            F.add("USF-RUNTIME-025", "composed-search-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     for binding_id, metadata in REQUIRED_PROVIDER_BINDINGS.items():
         adapter_path = metadata["adapterPath"]
@@ -1425,6 +1617,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
             check_cache_eventing_disposition,
+            check_composed_search_provider_disposition,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -1449,6 +1642,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
             check_cache_eventing_disposition,
+            check_composed_search_provider_disposition,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

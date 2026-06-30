@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-025",
+  "composedSearchProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/inMemorySubstituteBoundary/meilisearchServiceEquivalent",
+      "value": true
+    }
+  ]
+}

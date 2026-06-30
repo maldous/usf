@@ -353,7 +353,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF search proof is in-memory/local; no live or composed search provider readiness is claimed.",
+      "gap_or_decision": "USF-174 records bounded composed search provider disposition; in-memory search remains non-equivalent and USF-199 must prove Meilisearch adapter/service semantics before any Meilisearch, composed search, search-provider, vector, AI, or provider-compatibility readiness claim.",
       "legacy_service_category": "search-index",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -364,9 +364,9 @@
       ],
       "react_service": "meilisearch",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
-      "usf_service_or_substitute": "in-memory search adapter"
+      "tracking_recommendation": "USF-174/USF-199",
+      "usf_accounting_status": "deferred",
+      "usf_service_or_substitute": "in-memory search adapter plus explicit Meilisearch deferred provider class"
     },
     {
       "business_or_foundation_purpose": "local S3-compatible object storage and console",
@@ -1453,11 +1453,11 @@
   "status": "review-draft",
   "status_counts": {
     "covered-by-usf-runtime": 2,
-    "deferred": 6,
+    "deferred": 7,
     "implemented": 11,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "requires-human-decision": 31,
+    "requires-human-decision": 30,
     "substituted-partial": 2
   },
   "usf_compose_service_count": 14,

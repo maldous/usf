@@ -32,11 +32,11 @@
   ],
   "closure_disposition_counts": {
     "covered-by-usf-runtime": 2,
-    "deferred": 6,
+    "deferred": 7,
     "implemented": 13,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "requires-human-decision": 13,
+    "requires-human-decision": 12,
     "substituted-partial": 2
   },
   "rows": [
@@ -1185,7 +1185,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#meilisearch",
@@ -1194,20 +1194,27 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "docs/architecture/composed-search-provider-disposition-matrix.json",
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "python3 tools/validate-runtime/validate-runtime.py all --json"
         ],
         "tracking_issues": [
           "USF-166",
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-174"
+          "USF-174",
+          "USF-199"
         ],
         "non_equivalence_boundaries": [
-          "Dev in-memory search is not equivalent to Meilisearch ranking, indexing, or persistence."
+          "USF-174 records that in-memory search is not equivalent to Meilisearch composed provider indexing, ranking, filtering, async indexing visibility, persistence, deletion, retention, reindex, SDK/client, readiness retry, provider failure-mode, or wire/API behaviour.",
+          "USF-199 must prove Meilisearch adapter/service semantics before any composed search, Meilisearch, search-provider, vector, AI, live-provider, or provider compatibility readiness claim."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
+          "USF-199 Meilisearch search adapter proof and service semantics",
+          "Meilisearch SDK/client selection and adapter boundary evidence",
+          "tenant-safe indexing, query, ranking, filtering, async indexing, deletion, retention, reindex, retry, timeout, fail-closed, audit, teardown, and provider failure-mode evidence",
           "live external/provider-managed service evidence",
           "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
         ],
@@ -1234,12 +1241,19 @@
           "evidence-lane1-service-disposition-closure-matrix",
           "threat-lane-usf-185",
           "evidence-enterprise-evidence-model-validator",
+          "usf-174-soa-composed-search-provider-disposition",
+          "usf-174-evidence-composed-search-provider-disposition",
+          "usf-174-threat-meilisearch-overclaim",
+          "usf-174-access-composed-search-provider",
+          "usf-174-incident-vulnerability-composed-search-provider",
+          "usf-174-privacy-composed-search-provider",
           "soa-deferred-boundary-meilisearch",
           "resilience-posture-meilisearch",
           "incident-vulnerability-meilisearch"
         ],
         "tracking_issue_rationale": {
-          "USF-174": "composed search provider disposition proof"
+          "USF-174": "composed search provider disposition proof",
+          "USF-199": "Meilisearch search adapter proof and service semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

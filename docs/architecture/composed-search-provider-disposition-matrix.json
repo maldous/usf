@@ -1,0 +1,167 @@
+{
+  "id": "usf-174-composed-search-provider-disposition-matrix",
+  "title": "USF-174 composed search provider disposition matrix",
+  "sourceIssue": "USF-174",
+  "followUpIssue": "USF-199",
+  "laneIssue": "USF-189",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "parentIssue": "USF-133",
+  "serviceId": "meilisearch",
+  "providerRegistryId": "full-text-search-meilisearch-deferred",
+  "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+  "issueLinks": [
+    "USF-174",
+    "USF-199",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "decisionSummary": "Search provider parity is split by semantic requirement. In-memory search is accepted only where service catalogue authority permits it and is not equivalent to Meilisearch composed provider semantics.",
+    "decisionIsWorkComplete": false
+  },
+  "searchProviderDisposition": {
+    "disposition": "explicit-deferral-with-owner",
+    "meilisearchServiceSemanticProofPresent": false,
+    "composedSearchProviderProofPresent": false,
+    "inMemoryMeilisearchEquivalent": false,
+    "liveSearchReadinessClaim": false,
+    "vectorSearchReadinessClaim": false,
+    "aiSearchReadinessClaim": false,
+    "searchProviderReadinessClaim": false,
+    "providerCompatibilityClaim": false,
+    "serviceCatalogueServiceId": "meilisearch",
+    "providerRegistryId": "full-text-search-meilisearch-deferred",
+    "followUpIssue": "USF-199",
+    "owner": "platform-search-foundation",
+    "riskOwner": "platform-search-risk-owner",
+    "controlOwner": "platform-search-control-owner",
+    "reviewDate": "2026-09-30",
+    "riskStatement": "Meilisearch service semantics could be claimed from hermetic in-memory search proof or from service catalogue presence without SDK-backed composed provider evidence.",
+    "treatment": "Defer Meilisearch SDK/client selection, adapter implementation, indexing, query, ranking, filtering, async indexing, deletion, retention, reindex, readiness retry, failure-mode, audit, teardown, supplier, incident, privacy, and provider proof to USF-199.",
+    "deferredEvidence": "USF-174 records the bounded disposition gate, non-equivalence boundary, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only."
+  },
+  "inMemorySubstituteBoundary": {
+    "usedWhereSemanticallyPermitted": true,
+    "meilisearchServiceEquivalent": false,
+    "rankingEquivalent": false,
+    "filteringEquivalent": false,
+    "asyncIndexingEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "In-memory search proof is not equivalent to Meilisearch composed provider indexing, ranking, filtering, async indexing visibility, persistence, deletion, retention, reindex, SDK/client, readiness retry, provider failure-mode, or wire/API behaviour.",
+    "commands": [
+      "corepack pnpm proof:search",
+      "corepack pnpm runtime:proof:in-memory",
+      "corepack pnpm verify",
+      "python3 tools/validate-runtime/validate-runtime.py all --json"
+    ],
+    "scopeCovered": [
+      "tenant-safe hermetic search indexing proof where semantically permitted",
+      "repository search capability proof posture from USF-164",
+      "non-equivalence to Meilisearch provider semantics",
+      "value-free repository evidence and validation linkage"
+    ],
+    "limits": [
+      "does not prove Meilisearch adapter binding",
+      "does not prove Meilisearch indexing or query compatibility",
+      "does not prove ranking, filtering, async indexing, deletion, retention, or reindex behaviour",
+      "does not prove Meilisearch SDK/client selection or dependency posture",
+      "does not prove provider failure modes, retry, timeout, audit operation evidence, or teardown",
+      "does not prove vector, embedding, AI, RAG, live-provider, test, staging, production, SOC, ISO, full dev, or full React parity readiness"
+    ]
+  },
+  "providerBoundary": {
+    "providerBindingId": "usf-189-meilisearch-search-provider",
+    "providerRegistryId": "full-text-search-meilisearch-deferred",
+    "bindingStatus": "unsupported-deferred",
+    "providerMode": "live-external-deferred",
+    "runtimeProviderBindingActive": false,
+    "sdkPackage": null,
+    "sdkVersion": null,
+    "endpointRef": null,
+    "followUpIssue": "USF-199",
+    "serviceCatalogueServiceId": "meilisearch",
+    "providerRegistryEvidence": "packages/core/src/index.ts records full-text-search-meilisearch-deferred as deferred evidence-only support linked to the Meilisearch service catalogue row."
+  },
+  "semanticProofBoundaries": [
+    {
+      "semanticArea": "indexing",
+      "status": "deferred-with-owner",
+      "followUpIssue": "USF-199",
+      "nonEquivalenceBoundary": "Hermetic in-memory indexing proof is not Meilisearch indexing proof."
+    },
+    {
+      "semanticArea": "query-ranking-filtering",
+      "status": "deferred-with-owner",
+      "followUpIssue": "USF-199",
+      "nonEquivalenceBoundary": "In-memory search result ordering and filtering do not prove Meilisearch ranking, filtering, tokenization, or query compatibility."
+    },
+    {
+      "semanticArea": "async-indexing-deletion-retention-reindex",
+      "status": "deferred-with-owner",
+      "followUpIssue": "USF-199",
+      "nonEquivalenceBoundary": "USF-174 does not prove provider-visible async indexing, delete propagation, retention, purge, or reindex behaviour."
+    }
+  ],
+  "operationalEvidencePosture": {
+    "readinessRetry": "deferred-to-USF-199",
+    "timeout": "deferred-to-USF-199",
+    "failClosed": "required-before-search-provider-readiness-claim",
+    "safeTeardown": "deferred-to-USF-199",
+    "structuredLogging": "required-before-provider-proof",
+    "tracingCorrelation": "required-before-provider-proof",
+    "metrics": "required-before-provider-proof",
+    "auditEvents": "required-before-provider-proof",
+    "redaction": "required-before-provider-proof"
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-174-soa-composed-search-provider-disposition",
+    "usf-174-evidence-composed-search-provider-disposition",
+    "usf-174-threat-meilisearch-overclaim",
+    "usf-174-access-composed-search-provider",
+    "usf-174-incident-vulnerability-composed-search-provider",
+    "usf-174-privacy-composed-search-provider"
+  ],
+  "readinessClaimsAllowed": [
+    "composed-search-provider-disposition-recorded",
+    "meilisearch-service-proof-deferred",
+    "in-memory-search-non-equivalence-recorded"
+  ],
+  "readinessClaimsProhibited": [
+    "search-readiness",
+    "search-provider-readiness",
+    "composed-search-readiness",
+    "meilisearch-readiness",
+    "live-search-readiness",
+    "vector-search-readiness",
+    "ai-search-readiness",
+    "provider-compatibility-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ]
+}
