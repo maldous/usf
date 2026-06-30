@@ -21,6 +21,7 @@
   "issueLinks": [
     "USF-178",
     "USF-203",
+    "USF-212",
     "USF-189",
     "USF-184",
     "USF-192",
@@ -61,8 +62,8 @@
     "controlOwner": "platform-workflow-control-owner",
     "reviewDate": "2026-09-30",
     "riskStatement": "Windmill service catalogue presence, Temporal application workflow proof, jobs proof, or worker runtime proof could be mistaken for operator automation access, approval, privileged operation, tenant, secret, audit, retention, cleanup, or fail-closed readiness.",
-    "treatment": "Defer Windmill SDK/client/CLI/protocol selection, adapter implementation, operator automation execution, approval workflow, privileged operation boundary, tenant and secret proof, audit evidence, retention, cleanup, failure handling, timeout, retry, teardown, incident, vulnerability, privacy, supplier, and access-review proof to USF-203.",
-    "deferredEvidence": "USF-178 records the bounded disposition gate, non-equivalence boundary, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only."
+    "treatment": "USF-178 defers Windmill SDK/client/CLI/protocol selection, adapter implementation, operator automation execution, approval workflow, privileged operation boundary, tenant and secret proof, audit evidence, retention, cleanup, failure handling, timeout, retry, teardown, incident, vulnerability, privacy, supplier, and access-review proof to USF-203; USF-203 records the blocked reclassification and USF-212 owns actual bootstrap and proof work.",
+    "deferredEvidence": "USF-178 records the bounded disposition gate, non-equivalence boundary, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only; USF-203 records a separate blocked reclassification matrix."
   },
   "temporalJobsSubstituteBoundary": {
     "usedWhereSemanticallyPermitted": true,

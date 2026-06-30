@@ -1,0 +1,16 @@
+{
+  "name": "usf-203-windmill-bootstrap-falsely-present",
+  "expectedRule": "USF-RUNTIME-029",
+  "windmillProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/observedBlockers/authAdminBootstrapAuthorityPresent",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/observedBlockers/proofSafeWorkflowSeedPresent",
+      "value": true
+    }
+  ]
+}

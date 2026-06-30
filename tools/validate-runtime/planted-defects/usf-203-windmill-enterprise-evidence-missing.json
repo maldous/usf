@@ -1,0 +1,19 @@
+{
+  "name": "usf-203-windmill-enterprise-evidence-missing",
+  "expectedRule": "USF-RUNTIME-029",
+  "windmillProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/enterpriseEvidenceRefs",
+      "value": [
+        "usf-203-soa-windmill-proof-blocker",
+        "usf-203-evidence-windmill-proof-blocker",
+        "usf-203-threat-windmill-proof-blocker",
+        "usf-203-access-windmill-proof-blocker",
+        "usf-203-resilience-windmill-proof-blocker",
+        "usf-203-incident-vulnerability-windmill-proof-blocker",
+        "usf-203-privacy-windmill-proof-blocker"
+      ]
+    }
+  ]
+}

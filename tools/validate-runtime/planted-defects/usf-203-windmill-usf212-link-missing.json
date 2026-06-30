@@ -1,0 +1,16 @@
+{
+  "name": "usf-203-windmill-usf212-link-missing",
+  "expectedRule": "USF-RUNTIME-029",
+  "windmillProofBlockerMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-203"
+    },
+    {
+      "op": "replace",
+      "path": "/reclassificationDecision/blockedFollowUpIssue",
+      "value": "USF-203"
+    }
+  ]
+}

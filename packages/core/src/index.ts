@@ -2097,7 +2097,7 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = Object.freeze
     portName: "OperationalJobEngine",
     adapterName: "Windmill provider deferred",
     businessPurpose:
-      "Recognised operational automation provider class; not implemented or live-ready.",
+      "Recognised operational automation provider class; no local bootstrap, SDK/client, operator workflow, or readiness proof is claimed until USF-212.",
     dataClassification: "confidential",
     healthStatus: "deferred",
     readinessStatus: "deferred",

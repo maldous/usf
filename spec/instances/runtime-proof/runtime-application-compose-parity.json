@@ -649,10 +649,11 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Windmill operator automation semantics are catalogued but not proven and must not be substituted by Temporal application workflows; threatFailureScenario=operator automation access, approval, tenant, credential, audit, cleanup, or fail-closed boundaries are overclaimed; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer Windmill provider proof to USF-203 while USF-178 records the bounded disposition gate and blocks workflow automation readiness claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-203",
+      "deferredReason": "effectivenessState=blocked-with-owner-and-follow-up; riskStatement=Windmill operator automation semantics are catalogued but not proven and must not be substituted by Temporal application workflows; threatFailureScenario=operator automation access, approval, tenant, credential, audit, cleanup, or fail-closed boundaries are overclaimed; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-203 records blocked reclassification and USF-212 owns Windmill bootstrap, SDK/client, readiness, operator workflow, and teardown proof; reviewDate=2026-09-30; linkedFollowUpIssue=USF-212",
       "followUpIssueRefs": [
         "USF-178",
         "USF-203",
+        "USF-212",
         "USF-189"
       ],
       "claimBoundary": "USF-189 explicit deferral only; Temporal application workflow proof is not Windmill operator automation proof; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
@@ -672,8 +673,8 @@
       "sdkPackage": null,
       "sdkVersion": null,
       "providerRegistryEvidence": "packages/core/src/index.ts records operational-job-engine-windmill-deferred as deferred evidence-only support linked to the Windmill service catalogue rows.",
-      "apiProofEvidence": "No API proof is claimed for Windmill operator automation, access, approval, privileged operation, tenant, audit, retention, or cleanup semantics; USF-178 records the disposition gate and USF-203 owns proof.",
-      "workerProofEvidence": "Temporal composed workflow proof remains application-workflow proof only; no worker proof is claimed for Windmill operator automation provider semantics; this remains deferred to USF-203."
+      "apiProofEvidence": "No API proof is claimed for Windmill operator automation, access, approval, privileged operation, tenant, audit, retention, or cleanup semantics; USF-178 records the disposition gate, USF-203 records blocked reclassification, and USF-212 owns proof.",
+      "workerProofEvidence": "Temporal composed workflow proof remains application-workflow proof only; no worker proof is claimed for Windmill operator automation provider semantics; this remains blocked until USF-212 provides bootstrap and proof authority."
     }
   ],
   "providerSdkBoundary": [
@@ -1002,10 +1003,11 @@
     {
       "id": "usf-189-workflow-automation-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-189 records Windmill operator automation provider semantics as deferred-with-owner; risk is treating Temporal application workflow proof as Windmill operator automation access, approval, tenant, credential, audit, retention, cleanup, and fail-closed proof; affected services windmill, windmill-worker, windmill-postgres, windmill-redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer workflow automation proof to USF-203 while USF-178 records bounded disposition; review date 2026-09-30.",
+      "boundary": "USF-189 records Windmill operator automation provider semantics as blocked-with-owner-and-follow-up after USF-203 reclassification; risk is treating Temporal application workflow proof as Windmill operator automation access, approval, tenant, credential, audit, retention, cleanup, and fail-closed proof; affected services windmill, windmill-worker, windmill-postgres, windmill-redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer actual Windmill bootstrap and proof to USF-212 while USF-178 records bounded disposition and USF-203 records blocked reclassification; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-178",
         "USF-203",
+        "USF-212",
         "USF-189"
       ],
       "claimsProhibitedUntilResolved": [
