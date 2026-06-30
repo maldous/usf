@@ -62,7 +62,7 @@ Evidence grades: A=5, B=11, C=7, D=7.
 | infra-cloud                | Cloud/edge infra             | deferred                | C     | P2           | future environment blockers                                       | No live cloud/edge/deployment readiness claimed.                                                                                                                                                                                     |
 | ui-runtime                 | UI/UX app                    | not-applicable          | C     | non-blocking | USF-134                                                           | UI/UX is future non-foundation scope.                                                                                                                                                                                                |
 | i18n-runtime               | Internationalisation         | deferred                | C     | P2           | future UI/API blocker                                             | Need decide if foundation requires i18n contracts before UI work.                                                                                                                                                                    |
-| dev-commands               | Developer command parity     | partial                 | B     | P1           | USF-133 follow-up                                                 | Runtime proof commands now cover bounded API/worker in-memory proof plus compose-backed Postgres, Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal runtime provider binding proof; Sonar/Sentry/operator-surface/compose-universal parity remains incomplete. |
+| dev-commands               | Developer command parity     | partial                 | B     | P1           | USF-133 follow-up                                                 | Runtime proof commands now cover bounded API/worker in-memory proof plus compose-backed Postgres, Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal runtime provider binding proof, including collision-free tenant path evidence for MinIO/OpenBao; Sonar/Sentry/operator-surface/compose-universal parity remains incomplete. |
 | service-catalog-cmdb       | Service catalogue/CMDB       | partial                 | C     | P0           | USF-168 / `spec/instances/compose-service/service-catalogue.json` | Semantic service catalogue authority now exists and is validator-enforced, but it does not close USF-133 or prove broader readiness.                                                                                                 |
 | data-flow-trust-boundaries | Data flows/trust boundaries  | partial                 | C     | P0           | new tracker recommended                                           | Need complete data-flow/trust-boundary review for missing optional services.                                                                                                                                                         |
 
@@ -93,7 +93,8 @@ The proof model has two explicit modes:
 
 The compose-backed mode is not service-equivalent to React's platform API container or
 Windmill worker service. USF-183 resolves bounded runtime provider bindings for Postgres,
-Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal. Operator/admin surfaces,
+Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal, including collision-free tenant path
+evidence for MinIO/OpenBao composed storage and secrets bindings. Operator/admin surfaces,
 backup/restore, scanner, observability backend, quality-gate, mock-provider, gateway, and
 automation service disposition remain separate USF-133 closure questions.
 

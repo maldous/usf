@@ -8254,6 +8254,22 @@
                   "resolveChecked": {
                     "type": "boolean"
                   },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
+                    "type": "boolean"
+                  },
                   "realmChecked": {
                     "type": "boolean"
                   },
@@ -8619,6 +8635,22 @@
                     "type": "boolean"
                   },
                   "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
                     "type": "boolean"
                   },
                   "realmChecked": {
@@ -8988,6 +9020,22 @@
                   "resolveChecked": {
                     "type": "boolean"
                   },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
+                    "type": "boolean"
+                  },
                   "realmChecked": {
                     "type": "boolean"
                   },
@@ -9353,6 +9401,22 @@
                     "type": "boolean"
                   },
                   "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
                     "type": "boolean"
                   },
                   "realmChecked": {
@@ -9722,6 +9786,22 @@
                   "resolveChecked": {
                     "type": "boolean"
                   },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
+                    "type": "boolean"
+                  },
                   "realmChecked": {
                     "type": "boolean"
                   },
@@ -10087,6 +10167,22 @@
                     "type": "boolean"
                   },
                   "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
                     "type": "boolean"
                   },
                   "realmChecked": {
@@ -13569,6 +13665,22 @@
                   "resolveChecked": {
                     "type": "boolean"
                   },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
+                    "type": "boolean"
+                  },
                   "realmChecked": {
                     "type": "boolean"
                   },
@@ -13934,6 +14046,22 @@
                     "type": "boolean"
                   },
                   "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
                     "type": "boolean"
                   },
                   "realmChecked": {
@@ -14303,6 +14431,22 @@
                   "resolveChecked": {
                     "type": "boolean"
                   },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
+                    "type": "boolean"
+                  },
                   "realmChecked": {
                     "type": "boolean"
                   },
@@ -14668,6 +14812,22 @@
                     "type": "boolean"
                   },
                   "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
                     "type": "boolean"
                   },
                   "realmChecked": {
@@ -15037,6 +15197,22 @@
                   "resolveChecked": {
                     "type": "boolean"
                   },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
+                    "type": "boolean"
+                  },
                   "realmChecked": {
                     "type": "boolean"
                   },
@@ -15402,6 +15578,22 @@
                     "type": "boolean"
                   },
                   "resolveChecked": {
+                    "type": "boolean"
+                  },
+                  "pathEncoding": {
+                    "const": "base64url-per-segment",
+                    "type": "string"
+                  },
+                  "pathCollisionResistanceChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingTenantBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingObjectKeyBoundaryChecked": {
+                    "type": "boolean"
+                  },
+                  "collidingSecretNameBoundaryChecked": {
                     "type": "boolean"
                   },
                   "realmChecked": {

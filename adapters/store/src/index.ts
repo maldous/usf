@@ -56,6 +56,10 @@ export interface MinioComposedObjectStoreEvidence {
   readonly readbackChecked: boolean;
   readonly deleteChecked: boolean;
   readonly tenantIsolationChecked: boolean;
+  readonly pathEncoding: "base64url-per-segment";
+  readonly pathCollisionResistanceChecked: boolean;
+  readonly collidingTenantBoundaryChecked: boolean;
+  readonly collidingObjectKeyBoundaryChecked: boolean;
   readonly cleanupBoundary: "object-delete-and-compose-down";
   readonly safeProviderSummary: "minio-composed-provider";
   readonly tenantIdHash: string;
@@ -133,7 +137,7 @@ export class MinioObjectStore implements ObjectStore {
   }
 
   #key(tenantId: string, key: string): string {
-    return `${sanitizeObjectToken(tenantId)}/${sanitizeObjectToken(key)}`;
+    return `${encodeMinioObjectPathSegment(tenantId)}/${encodeMinioObjectPathSegment(key)}`;
   }
 
   async #ensureBucket(): Promise<void> {
@@ -160,6 +164,9 @@ export class MinioObjectStore implements ObjectStore {
     readonly readbackChecked: boolean;
     readonly deleteChecked: boolean;
     readonly tenantIsolationChecked: boolean;
+    readonly pathCollisionResistanceChecked?: boolean;
+    readonly collidingTenantBoundaryChecked?: boolean;
+    readonly collidingObjectKeyBoundaryChecked?: boolean;
     readonly byteCount: number;
   }): MinioComposedObjectStoreEvidence {
     const evidence: MinioComposedObjectStoreEvidence = Object.freeze({
@@ -196,6 +203,10 @@ export class MinioObjectStore implements ObjectStore {
       readbackChecked: input.readbackChecked,
       deleteChecked: input.deleteChecked,
       tenantIsolationChecked: input.tenantIsolationChecked,
+      pathEncoding: "base64url-per-segment",
+      pathCollisionResistanceChecked: input.pathCollisionResistanceChecked ?? false,
+      collidingTenantBoundaryChecked: input.collidingTenantBoundaryChecked ?? false,
+      collidingObjectKeyBoundaryChecked: input.collidingObjectKeyBoundaryChecked ?? false,
       cleanupBoundary: "object-delete-and-compose-down",
       safeProviderSummary: "minio-composed-provider",
       tenantIdHash: opaqueHash(`minio-tenant:${input.tenantId}`),
@@ -291,11 +302,52 @@ export class MinioObjectStore implements ObjectStore {
   async proveRoundTrip(context: TenantContext): Promise<MinioComposedObjectStoreEvidence> {
     const key = "runtime-proof-object.txt";
     const body = "synthetic minio runtime proof payload";
-    await this.putObject({ tenantId: context.tenantId, key, body });
-    const readback = await this.getObject({ tenantId: context.tenantId, key });
-    const otherTenant = await this.getObject({ tenantId: `${context.tenantId}-other`, key });
-    await this.deleteObject({ tenantId: context.tenantId, key });
+    const collidingTenantA = "runtime/proof";
+    const collidingTenantB = "runtime_proof";
+    const collidingKeyA = "object/proof.txt";
+    const collidingKeyB = "object_proof.txt";
+    const collidingBodyA = "synthetic minio collision proof payload A";
+    const collidingBodyB = "synthetic minio collision proof payload B";
+    let readback: string | undefined;
+    let otherTenant: string | undefined;
+    let collidingReadA: string | undefined;
+    let collidingReadB: string | undefined;
+    try {
+      await this.putObject({ tenantId: context.tenantId, key, body });
+      readback = await this.getObject({ tenantId: context.tenantId, key });
+      otherTenant = await this.getObject({ tenantId: `${context.tenantId}-other`, key });
+      await this.putObject({
+        tenantId: collidingTenantA,
+        key: collidingKeyA,
+        body: collidingBodyA,
+      });
+      await this.putObject({
+        tenantId: collidingTenantB,
+        key: collidingKeyB,
+        body: collidingBodyB,
+      });
+      collidingReadA = await this.getObject({
+        tenantId: collidingTenantA,
+        key: collidingKeyA,
+      });
+      collidingReadB = await this.getObject({
+        tenantId: collidingTenantB,
+        key: collidingKeyB,
+      });
+    } finally {
+      await Promise.all([
+        this.deleteObject({ tenantId: context.tenantId, key }).catch(() => undefined),
+        this.deleteObject({ tenantId: collidingTenantA, key: collidingKeyA }).catch(
+          () => undefined,
+        ),
+        this.deleteObject({ tenantId: collidingTenantB, key: collidingKeyB }).catch(
+          () => undefined,
+        ),
+      ]);
+    }
     const deleted = await this.headObject({ tenantId: context.tenantId, key });
+    const collisionTenantBoundaryChecked =
+      collidingReadA === collidingBodyA && collidingReadB === collidingBodyB;
     return this.#record({
       tenantId: context.tenantId,
       key,
@@ -305,6 +357,9 @@ export class MinioObjectStore implements ObjectStore {
       readbackChecked: readback === body,
       deleteChecked: deleted.exists === false,
       tenantIsolationChecked: otherTenant === undefined,
+      pathCollisionResistanceChecked: collisionTenantBoundaryChecked,
+      collidingTenantBoundaryChecked: collisionTenantBoundaryChecked,
+      collidingObjectKeyBoundaryChecked: collisionTenantBoundaryChecked,
       byteCount: Buffer.byteLength(body),
     });
   }
@@ -318,9 +373,8 @@ async function streamToString(stream: Readable): Promise<string> {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-function sanitizeObjectToken(value: string): string {
-  const sanitized = value.replace(/[^A-Za-z0-9_.=-]/g, "_").slice(0, 160);
-  return sanitized || "value";
+export function encodeMinioObjectPathSegment(value: string): string {
+  return `b64_${Buffer.from(value, "utf8").toString("base64url")}`;
 }
 
 async function retryMinioReadiness<T>(

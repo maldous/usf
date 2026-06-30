@@ -680,7 +680,12 @@ function assertMinioEvidence(
     value.writeChecked !== true ||
     value.readbackChecked !== true ||
     (surface === "worker" &&
-      (value.deleteChecked !== true || value.tenantIsolationChecked !== true))
+      (value.deleteChecked !== true ||
+        value.tenantIsolationChecked !== true ||
+        value.pathEncoding !== "base64url-per-segment" ||
+        value.pathCollisionResistanceChecked !== true ||
+        value.collidingTenantBoundaryChecked !== true ||
+        value.collidingObjectKeyBoundaryChecked !== true))
   ) {
     throw new Error(`${surface} MinIO provider evidence did not prove object round trip`);
   }
@@ -729,7 +734,12 @@ function assertOpenBaoEvidence(
     value.writeChecked !== true ||
     value.describeChecked !== true ||
     value.resolveChecked !== true ||
-    value.tenantIsolationChecked !== true
+    value.tenantIsolationChecked !== true ||
+    (surface === "worker" &&
+      (value.pathEncoding !== "base64url-per-segment" ||
+        value.pathCollisionResistanceChecked !== true ||
+        value.collidingTenantBoundaryChecked !== true ||
+        value.collidingSecretNameBoundaryChecked !== true))
   ) {
     throw new Error(`${surface} OpenBao provider evidence did not prove secret round trip`);
   }
