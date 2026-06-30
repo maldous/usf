@@ -6160,7 +6160,7 @@
       "adapterProviderId": "cache-redis-composed-test",
       "validationCommand": "corepack pnpm proof:cache:redis",
       "commandPin": "tsx packages/proof/src/redis-composed-proof.ts",
-      "commitPin": "7c5f58935454032c7865dab3dfc22a036f080760",
+      "commitPin": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
       "issueLinks": [
         "USF-207",
         "USF-198",
@@ -6170,7 +6170,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "7c5f58935454032c7865dab3dfc22a036f080760",
+      "prOrMergeSha": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
       "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, Redis keys, values, endpoints, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
     },
     {
@@ -6184,7 +6184,7 @@
       "adapterProviderId": "cache-redis-composed-test",
       "validationCommand": "corepack pnpm proof:cache:redis",
       "commandPin": "tsx packages/proof/src/redis-composed-proof.ts",
-      "commitPin": "7c5f58935454032c7865dab3dfc22a036f080760",
+      "commitPin": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
       "issueLinks": [
         "USF-207",
         "USF-198",
@@ -6194,7 +6194,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "7c5f58935454032c7865dab3dfc22a036f080760",
+      "prOrMergeSha": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     }
   ],
