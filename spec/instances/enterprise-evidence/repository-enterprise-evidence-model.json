@@ -5199,7 +5199,7 @@
       "adapterProviderId": "operational-job-engine-windmill-deferred",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "commitPin": "a5fc3ba924667c5245b368dc0d767df52d151785",
+      "commitPin": "abf5fe4e0934095a2fc9ea8e1a80a717f5bb45db",
       "issueLinks": [
         "USF-178",
         "USF-203",
@@ -5210,7 +5210,7 @@
         "USF-180",
         "USF-133"
       ],
-      "prOrMergeSha": "a5fc3ba924667c5245b368dc0d767df52d151785",
+      "prOrMergeSha": "abf5fe4e0934095a2fc9ea8e1a80a717f5bb45db",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Windmill payloads, provider responses, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
