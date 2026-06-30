@@ -4954,7 +4954,7 @@
       "adapterProviderId": "cache-redis-deferred; event-bus-nats-composed-test",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "commitPin": "e004ca5862724ce488edd5e251b2eb7c5e7893f5",
+      "commitPin": "ce8cae7aa5b5360288969f1cf33c8aa31efdadcb",
       "issueLinks": [
         "USF-173",
         "USF-198",
@@ -4963,7 +4963,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "e004ca5862724ce488edd5e251b2eb7c5e7893f5",
+      "prOrMergeSha": "ce8cae7aa5b5360288969f1cf33c8aa31efdadcb",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Redis values, NATS payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
