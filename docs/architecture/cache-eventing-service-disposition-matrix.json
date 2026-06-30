@@ -4,6 +4,7 @@
   "status": "draft",
   "sourceIssue": "USF-173",
   "followUpIssue": "USF-198",
+  "remainingProofIssue": "USF-207",
   "laneIssue": "USF-189",
   "parentIssue": "USF-133",
   "serviceIds": ["redis", "nats"],
@@ -15,7 +16,7 @@
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
   "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-  "issueLinks": ["USF-173", "USF-198", "USF-189", "USF-184", "USF-192", "USF-133"],
+  "issueLinks": ["USF-173", "USF-198", "USF-207", "USF-189", "USF-184", "USF-192", "USF-133"],
   "humanDecision": {
     "decisionState": "accepted",
     "summary": "Cache and eventing are separate semantic roles. NATS is the composed event-bus provider where event-bus semantics are claimed; Redis-compatible composed support is required where Redis, cache, distributed runtime state, queue-adjacent, expiration, or Redis-specific semantics are claimed; in-memory substitutes are accepted only where semantically permitted and non-equivalence is recorded.",
@@ -127,7 +128,8 @@
     "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#redis",
     "runtimeManifestBinding": "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-redis-cache-provider",
     "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-deferred as deferred evidence-only support linked to the Redis service catalogue row.",
-    "followUpIssue": "USF-198"
+    "followUpIssue": "USF-198",
+    "remainingProofIssue": "USF-207"
   },
   "inMemorySubstituteBoundary": {
     "usedWhereSemanticallyPermitted": true,

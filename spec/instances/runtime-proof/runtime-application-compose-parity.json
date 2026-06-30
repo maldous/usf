@@ -431,10 +431,11 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Redis cache provider semantics are catalogued but not proven and must not be substituted by NATS or process memory; threatFailureScenario=cache expiration, eviction, persistence, retry, tenant, queue-adjacent, and audit guarantees are overclaimed from NATS or in-memory evidence; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-173 records bounded cache/eventing disposition and defers Redis adapter proof and readiness claims to USF-198; reviewDate=2026-09-30; linkedFollowUpIssue=USF-198",
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=Redis cache provider semantics are catalogued but not proven and must not be substituted by NATS or process memory; threatFailureScenario=cache expiration, eviction, persistence, retry, tenant, queue-adjacent, and audit guarantees are overclaimed from NATS or in-memory evidence; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-173 records bounded cache/eventing disposition, USF-198 records the proof boundary, and USF-207 owns actual adapter proof; reviewDate=2026-09-30; linkedFollowUpIssue=USF-207",
       "followUpIssueRefs": [
         "USF-173",
         "USF-198",
+        "USF-207",
         "USF-189"
       ],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
@@ -451,8 +452,8 @@
       "sdkPackage": null,
       "sdkVersion": null,
       "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-deferred as deferred evidence-only support linked to the Redis service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for Redis cache semantics; expiration, eviction, persistence, retry, tenant isolation, access, audit, and teardown evidence remain deferred to USF-198 after USF-173 records the cache/eventing non-equivalence boundary.",
-      "workerProofEvidence": "NATS event-bus proof is not Redis cache proof; no worker proof is claimed for Redis cache semantics until USF-198 records a Redis adapter boundary, SDK/client rationale, readiness retry, and cleanup evidence."
+      "apiProofEvidence": "No API proof is claimed for Redis cache semantics; expiration, eviction, persistence, retry, tenant isolation, access, audit, and teardown evidence remain deferred to USF-207 after USF-173 records the cache/eventing non-equivalence boundary and USF-198 records the proof boundary.",
+      "workerProofEvidence": "NATS event-bus proof is not Redis cache proof; no worker proof is claimed for Redis cache semantics until USF-207 records a Redis adapter boundary, SDK/client rationale, readiness retry, and cleanup evidence after the USF-198 proof boundary."
     },
     {
       "bindingStatus": "unsupported-deferred",
@@ -871,10 +872,11 @@
     {
       "id": "usf-189-cache-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-173 records cache and eventing as separate semantic service roles; Redis cache provider semantics remain deferred-with-owner because NATS and process memory are not cache expiration, eviction, persistence, tenant key isolation, queue-adjacent, access, audit, or teardown proof. Affected service redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer Redis adapter proof to USF-198; review date 2026-09-30.",
+      "boundary": "USF-173 records cache and eventing as separate semantic service roles; USF-198 records the Redis proof boundary; Redis cache provider semantics remain deferred-with-owner because NATS and process memory are not cache expiration, eviction, persistence, tenant key isolation, queue-adjacent, access, audit, or teardown proof. Affected service redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer Redis adapter proof to USF-207; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-173",
         "USF-198",
+        "USF-207",
         "USF-189"
       ],
       "claimsProhibitedUntilResolved": [

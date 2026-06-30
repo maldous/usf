@@ -59,6 +59,7 @@ RULES = {
     "USF-RUNTIME-028": ("blocking", "backup and restore provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-029": ("blocking", "operator workflow provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-030": ("blocking", "ClickHouse service proof boundary is incomplete or unsafe"),
+    "USF-RUNTIME-031": ("blocking", "Redis cache service proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -67,6 +68,7 @@ MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-p
 SCHEMA_PATH = Path("spec/schemas/runtime-proof.schema.json")
 ANALYTICS_EVENT_STORE_MATRIX_PATH = Path("docs/architecture/analytics-event-store-provider-disposition-matrix.json")
 CLICKHOUSE_PROOF_BOUNDARY_PATH = Path("docs/architecture/clickhouse-service-semantic-proof-boundary.json")
+REDIS_CACHE_PROOF_BOUNDARY_PATH = Path("docs/architecture/redis-cache-service-semantic-proof-boundary.json")
 CACHE_EVENTING_MATRIX_PATH = Path("docs/architecture/cache-eventing-service-disposition-matrix.json")
 COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-provider-disposition-matrix.json")
 FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provider-disposition-matrix.json")
@@ -218,6 +220,15 @@ CLICKHOUSE_BOUNDARY_REQUIRED_EVIDENCE_REFS = {
     "usf-197-incident-vulnerability-clickhouse-proof-boundary",
     "usf-197-privacy-clickhouse-proof-boundary",
 }
+REDIS_CACHE_BOUNDARY_REQUIRED_ISSUES = {"USF-198", "USF-207", "USF-173", "USF-189", "USF-184", "USF-192", "USF-133"}
+REDIS_CACHE_BOUNDARY_REQUIRED_EVIDENCE_REFS = {
+    "usf-198-soa-redis-cache-proof-boundary",
+    "usf-198-evidence-redis-cache-proof-boundary",
+    "usf-198-threat-redis-cache-overclaim",
+    "usf-198-access-redis-cache-proof-boundary",
+    "usf-198-incident-vulnerability-redis-cache-proof-boundary",
+    "usf-198-privacy-redis-cache-proof-boundary",
+}
 ANALYTICS_EVENT_STORE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "analytics-readiness",
     "analytics-provider-readiness",
@@ -245,6 +256,9 @@ CACHE_EVENTING_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "live-cache-readiness",
     "live-eventing-readiness",
     "provider-compatibility-readiness",
+}
+REDIS_CACHE_BOUNDARY_PROHIBITED_CLAIMS = CACHE_EVENTING_PROHIBITED_CLAIMS | {
+    "usf-133-closure",
 }
 COMPOSED_SEARCH_PROVIDER_REQUIRED_ISSUES = {"USF-174", "USF-199", "USF-189", "USF-184", "USF-192", "USF-133"}
 COMPOSED_SEARCH_PROVIDER_REQUIRED_EVIDENCE_REFS = {
@@ -581,6 +595,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 clickhouse_boundary,
                 defect["clickhouseProofBoundaryPatches"],
             )
+    redis_cache_boundary: Any = None
+    if not defect.get("removeRedisCacheProofBoundary"):
+        redis_cache_boundary = read_json(REDIS_CACHE_PROOF_BOUNDARY_PATH)
+        if defect.get("redisCacheProofBoundaryPatches"):
+            redis_cache_boundary = apply_manifest_patches(
+                redis_cache_boundary,
+                defect["redisCacheProofBoundaryPatches"],
+            )
     cache_eventing_matrix: Any = None
     if not defect.get("removeCacheEventingMatrix"):
         cache_eventing_matrix = read_json(CACHE_EVENTING_MATRIX_PATH)
@@ -649,6 +671,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "schema": read_json(SCHEMA_PATH),
         "analyticsEventStoreMatrix": analytics_matrix,
         "clickhouseProofBoundary": clickhouse_boundary,
+        "redisCacheProofBoundary": redis_cache_boundary,
         "cacheEventingMatrix": cache_eventing_matrix,
         "composedSearchProviderMatrix": composed_search_provider_matrix,
         "fileScannerProviderMatrix": file_scanner_provider_matrix,
@@ -1346,6 +1369,158 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
     }.get("usf-189-analytics-provider-deferred")
     if not deferred or "USF-206" not in deferred.get("followUpIssueRefs", []):
         F.add("USF-RUNTIME-030", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must link USF-206")
+
+
+def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any]) -> None:
+    boundary = state.get("redisCacheProofBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-RUNTIME-031", str(REDIS_CACHE_PROOF_BOUNDARY_PATH), "Redis cache proof boundary is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-198",
+        "followUpIssue": "USF-207",
+        "sourceDispositionIssue": "USF-173",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "status": "reclassified-deferred-with-owner",
+        "serviceCatalogueAuthority": SERVICE_CATALOGUE_PATH,
+        "runtimeManifest": str(MANIFEST_PATH),
+        "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+        "cacheEventingDispositionMatrix": str(CACHE_EVENTING_MATRIX_PATH),
+        "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if boundary.get(key) != expected:
+            F.add("USF-RUNTIME-031", key, f"expected {expected!r}")
+
+    if set(boundary.get("serviceIds", [])) != {"redis"}:
+        F.add("USF-RUNTIME-031", "serviceIds", "Redis boundary service ids are incomplete")
+    if set(boundary.get("providerBindingIds", [])) != {"usf-189-redis-cache-provider"}:
+        F.add("USF-RUNTIME-031", "providerBindingIds", "Redis boundary provider binding ids are incomplete")
+    if set(boundary.get("providerRegistryIds", [])) != {"cache-redis-deferred"}:
+        F.add("USF-RUNTIME-031", "providerRegistryIds", "Redis boundary provider registry ids are incomplete")
+    if REDIS_CACHE_BOUNDARY_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
+        F.add("USF-RUNTIME-031", "issueLinks", "Redis boundary issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(boundary.get("nonClaims", [])):
+        F.add("USF-RUNTIME-031", "nonClaims", "Redis boundary non-claims are incomplete")
+    if REDIS_CACHE_BOUNDARY_PROHIBITED_CLAIMS - set(boundary.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-031", "readinessClaimsProhibited", "Redis boundary prohibited claims are incomplete")
+    if REDIS_CACHE_BOUNDARY_PROHIBITED_CLAIMS & set(boundary.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-031", "readinessClaimsAllowed", "Redis boundary allows a prohibited readiness claim")
+
+    reclassification = boundary.get("reclassification", {})
+    if not isinstance(reclassification, dict):
+        F.add("USF-RUNTIME-031", "reclassification", "Redis reclassification must be an object")
+    else:
+        expected_reclassification = {
+            "from": "explicit-deferral-with-owner",
+            "to": "explicit-deferred-service-proof",
+            "decisionAcceptedDoesNotMeanWorkComplete": True,
+            "serviceSemanticProofImplemented": False,
+            "redisServiceReadinessClaim": False,
+            "cacheReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "natsEquivalentToRedisService": False,
+            "inMemoryCacheEquivalentToRedisService": False,
+        }
+        for key, expected in expected_reclassification.items():
+            observed = reclassification.get(key)
+            if observed != expected:
+                F.add("USF-RUNTIME-031", f"reclassification.{key}", f"expected {expected!r}")
+        if len(reclassification.get("repositoryEvidence", [])) < 6:
+            F.add("USF-RUNTIME-031", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
+
+    remaining = boundary.get("remainingProofBoundary", {})
+    if not isinstance(remaining, dict):
+        F.add("USF-RUNTIME-031", "remainingProofBoundary", "remaining proof boundary must be an object")
+    else:
+        expected_remaining = {
+            "issue": "USF-207",
+            "owner": "platform-workflow-foundation",
+            "riskOwner": "platform-workflow-risk-owner",
+            "controlOwner": "platform-workflow-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_remaining.items():
+            if remaining.get(key) != expected:
+                F.add("USF-RUNTIME-031", f"remainingProofBoundary.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "requiredEvidence"):
+            if remaining.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-031", f"remainingProofBoundary.{field}", "remaining proof field is required")
+        if len(remaining.get("requiredEvidence", [])) < 8:
+            F.add("USF-RUNTIME-031", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
+
+    cache_boundary = boundary.get("cacheProviderBoundary", {})
+    for field in (
+        "writeReadStatus",
+        "expirationTtlStatus",
+        "retryTimeoutStatus",
+        "failClosedStatus",
+        "auditEvidenceStatus",
+        "readinessRetryStatus",
+        "teardownCleanupStatus",
+        "providerFailureHandlingStatus",
+    ):
+        if cache_boundary.get(field) != "deferred-to-USF-207":
+            F.add("USF-RUNTIME-031", f"cacheProviderBoundary.{field}", "Redis cache boundary must defer to USF-207")
+    for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
+        if not cache_boundary.get(field):
+            F.add("USF-RUNTIME-031", f"cacheProviderBoundary.{field}", "Redis cache boundary owner metadata is required")
+
+    sdk = boundary.get("sdkProviderBoundary", {})
+    if sdk.get("sdkSelectionStatus") != "deferred-to-USF-207":
+        F.add("USF-RUNTIME-031", "sdkProviderBoundary.sdkSelectionStatus", "SDK selection must defer to USF-207")
+    if sdk.get("sdkPackage") is not None or sdk.get("sdkVersion") is not None:
+        F.add("USF-RUNTIME-031", "sdkProviderBoundary", "deferred Redis boundary must not name an SDK package")
+    if sdk.get("sdkBoundary") != "adapter-package-only-when-implemented":
+        F.add("USF-RUNTIME-031", "sdkProviderBoundary.sdkBoundary", "SDK boundary must remain adapter-only when implemented")
+    for field in ("secretBoundary", "supplierBoundary"):
+        if not sdk.get(field):
+            F.add("USF-RUNTIME-031", f"sdkProviderBoundary.{field}", "SDK/provider boundary field is required")
+
+    substitute_gate = boundary.get("natsAndInMemoryGate", {})
+    if substitute_gate.get("repositoryValidationRequired") is not True:
+        F.add("USF-RUNTIME-031", "natsAndInMemoryGate.repositoryValidationRequired", "repository validation must remain required")
+    if substitute_gate.get("redisServiceEquivalent") is not False:
+        F.add("USF-RUNTIME-031", "natsAndInMemoryGate.redisServiceEquivalent", "NATS and in-memory evidence must not be Redis equivalent")
+    if not substitute_gate.get("substitutionNonEquivalenceBoundary"):
+        F.add("USF-RUNTIME-031", "natsAndInMemoryGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+    commands = set(substitute_gate.get("commands", []))
+    for command in (
+        "corepack pnpm runtime:proof",
+        "corepack pnpm providers-proof",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    ):
+        if command not in commands:
+            F.add("USF-RUNTIME-031", "natsAndInMemoryGate.commands", f"missing {command}")
+
+    declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != REDIS_CACHE_BOUNDARY_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-031", "enterpriseEvidenceRefs", "Redis boundary enterprise evidence refs are incomplete")
+
+    matrix = state.get("cacheEventingMatrix") or {}
+    if "USF-207" not in set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-031", "cacheEventingMatrix.issueLinks", "cache/eventing matrix must link USF-207")
+    if matrix.get("remainingProofIssue") != "USF-207":
+        F.add("USF-RUNTIME-031", "cacheEventingMatrix.remainingProofIssue", "cache/eventing matrix must carry USF-207 as remaining proof")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-redis-cache-provider")
+    if not binding or "USF-207" not in binding.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest must link USF-207")
+    if binding and "USF-207" not in str(binding.get("deferredReason", "")):
+        F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider.deferredReason", "runtime manifest must defer actual proof to USF-207")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-cache-provider-deferred")
+    if not deferred or "USF-207" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-031", "deferredBoundaries.usf-189-cache-provider-deferred", "runtime deferred boundary must link USF-207")
 
 
 def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None:
@@ -2697,6 +2872,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
             check_clickhouse_service_proof_boundary,
+            check_redis_cache_service_proof_boundary,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
@@ -2727,6 +2903,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_lane5_provider_overclaim,
             check_analytics_event_store_disposition,
             check_clickhouse_service_proof_boundary,
+            check_redis_cache_service_proof_boundary,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,

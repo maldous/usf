@@ -1121,15 +1121,16 @@
           "USF-182",
           "USF-185",
           "USF-173",
-          "USF-198"
+          "USF-198",
+          "USF-207"
         ],
         "non_equivalence_boundaries": [
           "USF-173 records cache and event-bus as separate semantic roles; NATS bounded event-bus proof is not Redis cache, expiration, eviction, persistence, key-space, distributed runtime state, queue-adjacent, retry, fail-closed, audit, or wire-protocol proof.",
           "Dev in-memory cache is not equivalent to Redis eviction, persistence, expiration, distributed key-space, SDK/client, provider failure-mode, or wire-protocol behaviour.",
-          "USF-198 must prove Redis-compatible adapter/service semantics before any Redis, cache-provider, distributed runtime state, queue-adjacent, or live cache readiness claim."
+          "USF-198 records the Redis proof boundary and USF-207 must prove Redis-compatible adapter/service semantics before any Redis, cache-provider, distributed runtime state, queue-adjacent, or live cache readiness claim."
         ],
         "missing_evidence": [
-          "USF-198 Redis cache service-semantic adapter proof",
+          "USF-207 Redis cache service-semantic adapter proof",
           "Redis SDK/client selection and adapter boundary evidence",
           "tenant-safe set/get/delete or equivalent write/read evidence",
           "expiration or TTL, retry, timeout, fail-closed, audit, teardown, and provider failure-mode evidence",
@@ -1167,11 +1168,18 @@
           "usf-173-threat-redis-nats-overclaim",
           "usf-173-access-cache-eventing",
           "usf-173-incident-vulnerability-cache-eventing",
-          "usf-173-privacy-cache-eventing"
+          "usf-173-privacy-cache-eventing",
+          "usf-198-soa-redis-cache-proof-boundary",
+          "usf-198-evidence-redis-cache-proof-boundary",
+          "usf-198-threat-redis-cache-overclaim",
+          "usf-198-access-redis-cache-proof-boundary",
+          "usf-198-incident-vulnerability-redis-cache-proof-boundary",
+          "usf-198-privacy-redis-cache-proof-boundary"
         ],
         "tracking_issue_rationale": {
           "USF-173": "cache and eventing service disposition proof",
-          "USF-198": "Redis cache adapter proof and service semantics"
+          "USF-198": "Redis cache proof boundary",
+          "USF-207": "Redis composed cache adapter proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
