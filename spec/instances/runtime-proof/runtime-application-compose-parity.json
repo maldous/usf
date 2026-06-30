@@ -364,8 +364,8 @@
       "providerClass": "not-applicable",
       "sdkBoundary": "not-applicable",
       "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=ClickHouse analytics/event-store provider semantics are catalogued but not proven; threatFailureScenario=in-memory or catalogue-only analytics is mistaken for composed event-store proof; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=defer adapter proof and block readiness claims; reviewDate=2026-09-30; linkedFollowUpIssue=USF-172",
-      "followUpIssueRefs": ["USF-172", "USF-189"],
+      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=ClickHouse analytics/event-store provider semantics are catalogued but not proven; threatFailureScenario=in-memory or catalogue-only analytics is mistaken for composed event-store proof; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=USF-172 records bounded disposition and defers adapter/service-semantic proof to USF-197; reviewDate=2026-09-30; linkedFollowUpIssue=USF-197",
+      "followUpIssueRefs": ["USF-172", "USF-197", "USF-189"],
       "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-clickhouse-analytics-provider",
       "serviceCatalogueServiceIds": ["clickhouse"],
@@ -376,8 +376,8 @@
       "sdkPackage": null,
       "sdkVersion": null,
       "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-deferred as deferred evidence-only support linked to the ClickHouse service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for ClickHouse analytics/event-store semantics; tenant, access, retention, audit, and teardown evidence remain deferred to USF-172.",
-      "workerProofEvidence": "No worker proof is claimed for ClickHouse analytics/event-store semantics; SDK/client selection, readiness retry, supplier, incident, privacy, and backup evidence remain deferred to USF-172."
+      "apiProofEvidence": "No API proof is claimed for ClickHouse analytics/event-store semantics; tenant, access, retention, audit, and teardown evidence remain deferred to USF-197 after USF-172 records the bounded disposition.",
+      "workerProofEvidence": "No worker proof is claimed for ClickHouse analytics/event-store semantics; SDK/client selection, readiness retry, supplier, incident, privacy, and backup evidence remain deferred to USF-197 after USF-172 records the bounded disposition."
     },
     {
       "bindingStatus": "unsupported-deferred",
@@ -735,8 +735,8 @@
     {
       "id": "usf-189-analytics-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-189 records ClickHouse analytics/event-store provider semantics as deferred-with-owner; risk is hidden provider proof or in-memory equivalence; affected service clickhouse; impact high; likelihood medium; owner platform-data-foundation; treatment defer adapter proof to USF-172; review date 2026-09-30.",
-      "followUpIssueRefs": ["USF-172", "USF-189"],
+      "boundary": "USF-189 records ClickHouse analytics/event-store provider semantics as deferred-with-owner; risk is hidden provider proof or in-memory equivalence; affected service clickhouse; impact high; likelihood medium; owner platform-data-foundation; USF-172 records bounded disposition and treatment defers adapter/service-semantic proof to USF-197; review date 2026-09-30.",
+      "followUpIssueRefs": ["USF-172", "USF-197", "USF-189"],
       "claimsProhibitedUntilResolved": [
         "production-readiness",
         "staging-readiness",

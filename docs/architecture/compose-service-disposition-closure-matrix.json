@@ -32,11 +32,11 @@
   ],
   "closure_disposition_counts": {
     "covered-by-usf-runtime": 2,
-    "deferred": 4,
+    "deferred": 5,
     "implemented": 13,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "requires-human-decision": 15,
+    "requires-human-decision": 14,
     "substituted-partial": 2
   },
   "rows": [
@@ -1252,7 +1252,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#clickhouse",
@@ -1268,11 +1268,17 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-172"
+          "USF-172",
+          "USF-197"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-172 records that deterministic in-memory analytics/event evidence may be used only where semantically permitted and is not equivalent to ClickHouse persisted event ingestion, queryable history, aggregation, retention/replay, provider failure modes, SDK/client boundary, or cross-process runtime visibility.",
+          "Sentry-internal ClickHouse usage is not general product analytics/event-store readiness unless separately catalogued, adapter-bound, and proven."
+        ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
+          "USF-197 ClickHouse analytics/event-store service-semantic adapter proof",
+          "ClickHouse SDK/client selection and adapter boundary evidence",
+          "persisted event ingestion, tenant-safe query, aggregation, retention, replay, audit, teardown, and provider failure-mode evidence",
           "live external/provider-managed service evidence",
           "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
         ],
@@ -1299,12 +1305,19 @@
           "evidence-lane1-service-disposition-closure-matrix",
           "threat-lane-usf-185",
           "evidence-enterprise-evidence-model-validator",
+          "usf-172-soa-analytics-event-store-disposition",
+          "usf-172-evidence-analytics-event-store-disposition",
+          "usf-172-threat-clickhouse-overclaim",
+          "usf-172-access-analytics-event-store",
+          "usf-172-incident-vulnerability-analytics-event-store",
+          "usf-172-privacy-analytics-event-store",
           "soa-deferred-boundary-clickhouse",
           "resilience-posture-clickhouse",
           "incident-vulnerability-clickhouse"
         ],
         "tracking_issue_rationale": {
-          "USF-172": "analytics event-store provider disposition proof"
+          "USF-172": "analytics event-store provider disposition proof",
+          "USF-197": "ClickHouse analytics event-store adapter proof and service semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

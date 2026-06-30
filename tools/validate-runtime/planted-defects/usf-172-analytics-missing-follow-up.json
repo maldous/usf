@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-023",
+  "analyticsEventStoreMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-172"
+    }
+  ]
+}
