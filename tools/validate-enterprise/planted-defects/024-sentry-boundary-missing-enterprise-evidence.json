@@ -1,0 +1,7 @@
+{
+  "id": "024-sentry-boundary-missing-enterprise-evidence",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "sentryBoundaryDrop": [
+    "enterpriseEvidenceRefs"
+  ]
+}

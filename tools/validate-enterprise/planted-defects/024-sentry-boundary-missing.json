@@ -1,0 +1,5 @@
+{
+  "id": "024-sentry-boundary-missing",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "removeSentryBoundary": true
+}

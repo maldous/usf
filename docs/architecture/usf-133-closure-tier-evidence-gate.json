@@ -831,7 +831,9 @@
         "USF-187",
         "USF-184",
         "USF-192",
-        "USF-133"
+        "USF-133",
+        "USF-196",
+        "USF-205"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -2506,13 +2508,13 @@
       "id": "exception-service-sentry",
       "targetType": "service",
       "targetId": "sentry",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; USF-196 service-semantic proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator console access remains deferred after USF-170 records the bounded disposition gate.; React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.; Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance.; Lane 3 records Sentry as a profile-gated shared error-assurance control plane only where Sentry semantics are claimed; local logs are not equivalent to Sentry service semantics.; Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+      "disposition": "deferred",
+      "reason": "USF-196 records the Sentry service-semantic proof boundary and non-equivalence to local observability proof. Actual Sentry service readiness, event ingestion, issue lifecycle, retention, alert handoff, incident workflow, operator console access, secret, supplier, and privacy proof remains deferred to USF-205. Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, full React parity, or USF-133 closure readiness.",
       "owner": "platform-observability-foundation",
       "riskOwner": "platform-observability-risk-owner",
       "controlOwner": "platform-observability-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-205",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [

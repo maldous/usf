@@ -22,7 +22,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 
 | ID     | Gap                                                     | Required action                                                                                                                                            | Boundary                                      |
 | ------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| P1-001 | Sentry service parity unresolved                        | USF-170 records a bounded Sentry/error-monitoring disposition with local observability proof kept non-equivalent to deferred USF-196 Sentry service proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator access. | No SOC/SIEM/error-monitoring readiness claim. |
+| P1-001 | Sentry service parity unresolved                        | USF-170 records a bounded Sentry/error-monitoring disposition with local observability proof kept non-equivalent to Sentry service proof. USF-196 records the Sentry row as an explicit deferred service-proof boundary, and USF-205 owns actual event capture, redaction, tenant-safe labels, retention, alert handoff, incident, and operator-console proof. | No Sentry, SOC/SIEM/error-monitoring, live monitoring, incident, alerting, or environment readiness claim. |
 | P1-002 | SonarQube quality gate parity unresolved                | USF-171 records a bounded SonarQube/static-analysis quality-gate disposition with local deterministic verification kept non-equivalent to SonarQube service proof. USF-195 records the SonarQube row as explicit deferred service proof, and USF-204 owns actual composed scan, quality-gate, security-hotspot, and operator-console proof. | No SonarQube, test-readiness, SOC, or ISO certification claim. |
 | P1-003 | ClickHouse analytics/event-store parity unresolved      | USF-172 records a bounded analytics/event-store disposition with in-memory proof kept non-equivalent to deferred USF-197 ClickHouse adapter and service-semantic proof for persisted ingestion, tenant-safe query, aggregation, retention, audit, teardown, and provider failure modes. | No ClickHouse/event-store readiness claim.    |
 | P1-004 | Redis/cache parity unresolved                           | USF-173 records a bounded cache/eventing disposition with NATS event-bus proof and in-memory evidence kept non-equivalent to deferred USF-198 Redis adapter and service-semantic proof for tenant-safe cache operations, expiration, retry, audit, teardown, and provider failure modes. | No Redis/cache/eventing readiness claim.      |
@@ -52,7 +52,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 | HD-001 | Accepted for USF-166 execution: the closure tier is a bounded source-issue evidence gate, not a full readiness claim or USF-133 closure. |
 | HD-002 | Does ClickHouse remain required for universal local/dev platform parity?     |
 | HD-003 | Accepted decision: SonarQube/static analysis is split between mandatory local deterministic verification and deferred shared service proof where SonarQube semantics are claimed. |
-| HD-004 | Accepted decision: Sentry/error monitoring remains a shared error-assurance control plane where Sentry semantics are claimed; USF-170 records the bounded disposition gate and service proof remains deferred under USF-196. |
+| HD-004 | Accepted decision: Sentry/error monitoring remains a shared error-assurance control plane where Sentry semantics are claimed; USF-170 records the bounded disposition gate, USF-196 records the explicit service-proof boundary, and actual proof remains deferred under USF-205. |
 | HD-005 | Accepted decision: Search provider parity is split by semantic requirement; in-memory search is valid only where catalogue authority permits it, while Meilisearch semantics remain deferred to USF-199 where composed search-provider behaviour is claimed. |
 | HD-006 | Are LocalStack and WireMock required mock-provider substrates? USF-176 records bounded disposition; USF-201 owns proof if required. |
 | HD-007 | Accepted decision: file scanner provider parity is split by semantic requirement; deterministic scan markers are valid only where catalogue authority permits them, while ClamAV semantics remain deferred to USF-200 where composed scanner-provider behaviour is claimed. |
@@ -168,9 +168,10 @@ state, risk statement, threat/failure scenario, affected asset/service, impact, 
 treatment, review date, follow-up issue, validation command, and explicit non-claims.
 
 Sentry and SonarQube closure-matrix rows remain closure-blocking and link to the Lane 3
-enterprise evidence rows. Sentry runtime event capture, redaction, tenant-safe labels,
-retention, alert handoff, and operator-console proof remain deferred under USF-196 after
-USF-170 records the bounded disposition gate.
+enterprise evidence rows. USF-196 records the Sentry row as an explicit deferred
+service-proof boundary after USF-170 records the bounded disposition gate. Actual Sentry
+event capture, redaction, tenant-safe labels, retention, alert handoff, incident, and
+operator-console proof remain deferred under USF-205.
 USF-195 records the SonarQube row as an explicit deferred service-proof boundary after
 USF-171 records the bounded disposition gate. Actual composed scan execution, quality-gate
 scope, unresolved issue handling, exceptions, security hotspot treatment, and operator-console

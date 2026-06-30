@@ -680,7 +680,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -689,8 +689,8 @@
       "react_ports": null,
       "react_service": "sentry-cleanup",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -705,7 +705,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -714,8 +714,8 @@
       "react_ports": null,
       "react_service": "sentry-clickhouse",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -730,7 +730,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -739,8 +739,8 @@
       "react_ports": null,
       "react_service": "sentry-events-consumer",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -755,7 +755,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -764,8 +764,8 @@
       "react_ports": null,
       "react_service": "sentry-kafka",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -780,7 +780,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -789,8 +789,8 @@
       "react_ports": null,
       "react_service": "sentry-kafka-init",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -805,7 +805,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -814,8 +814,8 @@
       "react_ports": null,
       "react_service": "sentry-memcached",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -830,7 +830,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -839,8 +839,8 @@
       "react_ports": null,
       "react_service": "sentry-migrate",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -855,7 +855,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -864,8 +864,8 @@
       "react_ports": null,
       "react_service": "sentry-post-process-forwarder",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -880,7 +880,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -889,8 +889,8 @@
       "react_ports": null,
       "react_service": "sentry-postgres",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -905,7 +905,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -914,8 +914,8 @@
       "react_ports": null,
       "react_service": "sentry-redis",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -930,7 +930,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -939,8 +939,8 @@
       "react_ports": null,
       "react_service": "sentry-relay",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -955,7 +955,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -964,8 +964,8 @@
       "react_ports": null,
       "react_service": "sentry-snuba-api",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -980,7 +980,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -989,8 +989,8 @@
       "react_ports": null,
       "react_service": "sentry-snuba-errors",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -1005,7 +1005,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1014,8 +1014,8 @@
       "react_ports": null,
       "react_service": "sentry-snuba-migrate",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -1030,7 +1030,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1039,8 +1039,8 @@
       "react_ports": null,
       "react_service": "sentry-snuba-replacer",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -1055,7 +1055,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1064,8 +1064,8 @@
       "react_ports": null,
       "react_service": "sentry-taskbroker",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -1080,7 +1080,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1089,8 +1089,8 @@
       "react_ports": null,
       "react_service": "sentry-taskscheduler",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -1105,7 +1105,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1114,8 +1114,8 @@
       "react_ports": null,
       "react_service": "sentry-taskworker",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
@@ -1130,7 +1130,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF observability is not equivalent to self-hosted Sentry service parity.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof; actual event capture, alert handoff, incident, retention, and operator-console proof remains USF-205.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1141,8 +1141,8 @@
       ],
       "react_service": "sentry-web",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
     {
