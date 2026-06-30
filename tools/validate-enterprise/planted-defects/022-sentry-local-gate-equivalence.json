@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-022",
+  "description": "USF-170 local observability evidence is incorrectly treated as Sentry service equivalence.",
+  "sentryErrorSet": {
+    "localErrorEvidenceGate.sentryServiceEquivalent": true
+  }
+}

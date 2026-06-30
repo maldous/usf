@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-022",
+  "description": "USF-170 incorrectly claims Sentry or live monitoring readiness.",
+  "sentryErrorSet": {
+    "sentryDisposition.liveMonitoringReadinessClaim": true
+  }
+}

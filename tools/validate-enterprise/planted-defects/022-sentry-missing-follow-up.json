@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-022",
+  "description": "USF-170 Sentry service proof deferral lacks the USF-196 follow-up.",
+  "sentryErrorSet": {
+    "sentryDisposition.followUpIssue": "USF-170"
+  }
+}

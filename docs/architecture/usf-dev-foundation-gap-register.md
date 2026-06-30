@@ -22,7 +22,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 
 | ID     | Gap                                                     | Required action                                                                                                                                            | Boundary                                      |
 | ------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| P1-001 | Sentry service parity unresolved                        | USF-187 records Sentry as a shared error-assurance control-plane disposition with owner/risk/control owner metadata, risk treatment, evidence mapping, and deferred USF-170 proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator access. | No SOC/SIEM/error-monitoring readiness claim. |
+| P1-001 | Sentry service parity unresolved                        | USF-170 records a bounded Sentry/error-monitoring disposition with local observability proof kept non-equivalent to deferred USF-196 Sentry service proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator access. | No SOC/SIEM/error-monitoring readiness claim. |
 | P1-002 | SonarQube quality gate parity unresolved                | USF-171 records a bounded SonarQube/static-analysis quality-gate disposition with local deterministic verification kept non-equivalent to deferred USF-195 SonarQube service proof, quality-gate scope, exception handling, and operator access. | No SonarQube, test-readiness, SOC, or ISO certification claim. |
 | P1-003 | ClickHouse analytics/event-store parity unresolved      | USF-189 records an explicit deferred provider disposition linked to USF-172; future work must add adapter proof before stronger claims.                     | No ClickHouse/event-store readiness claim.    |
 | P1-004 | Redis/cache parity unresolved                           | USF-189 records an explicit deferred provider disposition linked to USF-173; NATS and in-memory stores are not Redis cache equivalence.                     | No Redis service equivalence claim.           |
@@ -52,7 +52,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 | HD-001 | Accepted for USF-166 execution: the closure tier is a bounded source-issue evidence gate, not a full readiness claim or USF-133 closure. |
 | HD-002 | Does ClickHouse remain required for universal local/dev platform parity?     |
 | HD-003 | Accepted decision: SonarQube/static analysis is split between mandatory local deterministic verification and deferred shared service proof where SonarQube semantics are claimed. |
-| HD-004 | Accepted decision: Sentry/error monitoring remains a shared error-assurance control plane where Sentry semantics are claimed, with service proof deferred under USF-170. |
+| HD-004 | Accepted decision: Sentry/error monitoring remains a shared error-assurance control plane where Sentry semantics are claimed; USF-170 records the bounded disposition gate and service proof remains deferred under USF-196. |
 | HD-005 | Does Meilisearch remain required or is in-memory/Postgres search sufficient? |
 | HD-006 | Are LocalStack and WireMock required mock-provider substrates?               |
 | HD-007 | Is ClamAV required as composed proof or deferred scanner posture?            |
@@ -169,7 +169,8 @@ treatment, review date, follow-up issue, validation command, and explicit non-cl
 
 Sentry and SonarQube closure-matrix rows remain closure-blocking and link to the Lane 3
 enterprise evidence rows. Sentry runtime event capture, redaction, tenant-safe labels,
-retention, alert handoff, and operator-console proof remain deferred under USF-170.
+retention, alert handoff, and operator-console proof remain deferred under USF-196 after
+USF-170 records the bounded disposition gate.
 SonarQube service-semantic proof, quality-gate scope, unresolved issue handling, exceptions,
 security hotspot treatment, and operator-console proof remain deferred under USF-195 after
 USF-171 records the bounded disposition gate.
