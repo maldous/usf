@@ -1,0 +1,16 @@
+{
+  "name": "usf-177-backup-restore-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-028",
+  "backupRestoreProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/0",
+      "value": "backup-readiness"
+    },
+    {
+      "op": "replace",
+      "path": "/backupRestoreProviderDisposition/backupReadinessClaim",
+      "value": true
+    }
+  ]
+}

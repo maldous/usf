@@ -1,0 +1,5 @@
+{
+  "name": "usf-177-backup-restore-matrix-missing",
+  "expectedRule": "USF-RUNTIME-028",
+  "removeBackupRestoreProviderMatrix": true
+}

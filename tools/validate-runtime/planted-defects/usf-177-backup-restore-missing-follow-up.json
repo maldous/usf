@@ -1,0 +1,21 @@
+{
+  "name": "usf-177-backup-restore-missing-follow-up",
+  "expectedRule": "USF-RUNTIME-028",
+  "backupRestoreProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-177"
+    },
+    {
+      "op": "replace",
+      "path": "/backupRestoreProviderDisposition/followUpIssue",
+      "value": "USF-177"
+    },
+    {
+      "op": "replace",
+      "path": "/providerBoundary/followUpIssue",
+      "value": "USF-177"
+    }
+  ]
+}

@@ -56,6 +56,7 @@ RULES = {
     "USF-RUNTIME-025": ("blocking", "composed search provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-026": ("blocking", "file scanner provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-027": ("blocking", "mock provider substrate disposition is incomplete or unsafe"),
+    "USF-RUNTIME-028": ("blocking", "backup and restore provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -67,6 +68,7 @@ CACHE_EVENTING_MATRIX_PATH = Path("docs/architecture/cache-eventing-service-disp
 COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-provider-disposition-matrix.json")
 FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provider-disposition-matrix.json")
 MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH = Path("docs/architecture/mock-provider-substrate-disposition-matrix.json")
+BACKUP_RESTORE_PROVIDER_MATRIX_PATH = Path("docs/architecture/backup-restore-provider-disposition-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -285,6 +287,26 @@ MOCK_PROVIDER_SUBSTRATE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "mock-oidc-readiness",
     "provider-compatibility-readiness",
 }
+BACKUP_RESTORE_PROVIDER_REQUIRED_ISSUES = {"USF-177", "USF-202", "USF-189", "USF-184", "USF-192", "USF-133"}
+BACKUP_RESTORE_PROVIDER_REQUIRED_EVIDENCE_REFS = {
+    "usf-177-soa-backup-restore-provider-disposition",
+    "usf-177-evidence-backup-restore-provider-disposition",
+    "usf-177-threat-pgbackrest-overclaim",
+    "usf-177-access-backup-restore-provider",
+    "usf-177-resilience-backup-restore-provider",
+    "usf-177-incident-vulnerability-backup-restore-provider",
+    "usf-177-privacy-backup-restore-provider",
+}
+BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
+    "backup-readiness",
+    "restore-readiness",
+    "backup-restore-readiness",
+    "disaster-recovery-readiness",
+    "dr-readiness",
+    "rpo-rto-readiness",
+    "pgbackrest-readiness",
+    "provider-compatibility-readiness",
+}
 LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clickhouse-analytics-provider": {
         "serviceIds": ["clickhouse"],
@@ -338,7 +360,7 @@ LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-pgbackrest-backup-provider": {
         "serviceIds": ["pgbackrest"],
         "providerIds": ["backup-restore-pgbackrest-deferred"],
-        "followUpIssue": "USF-177",
+        "followUpIssue": "USF-202",
         "boundaryRef": "usf-189-backup-provider-deferred",
         "allowedStatuses": {"profile-gated"},
     },
@@ -537,6 +559,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 mock_provider_substrate_matrix,
                 defect["mockProviderSubstrateMatrixPatches"],
             )
+    backup_restore_provider_matrix: Any = None
+    if not defect.get("removeBackupRestoreProviderMatrix"):
+        backup_restore_provider_matrix = read_json(BACKUP_RESTORE_PROVIDER_MATRIX_PATH)
+        if defect.get("backupRestoreProviderMatrixPatches"):
+            backup_restore_provider_matrix = apply_manifest_patches(
+                backup_restore_provider_matrix,
+                defect["backupRestoreProviderMatrixPatches"],
+            )
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
@@ -563,6 +593,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "composedSearchProviderMatrix": composed_search_provider_matrix,
         "fileScannerProviderMatrix": file_scanner_provider_matrix,
         "mockProviderSubstrateMatrix": mock_provider_substrate_matrix,
+        "backupRestoreProviderMatrix": backup_restore_provider_matrix,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -1904,6 +1935,187 @@ def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]
             F.add("USF-RUNTIME-027", "mock-provider-substrate-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
 
+def check_backup_restore_provider_disposition(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("backupRestoreProviderMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-RUNTIME-028", str(BACKUP_RESTORE_PROVIDER_MATRIX_PATH), "backup/restore provider disposition matrix is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-177",
+        "followUpIssue": "USF-202",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "serviceId": "pgbackrest",
+        "providerRegistryId": "backup-restore-pgbackrest-deferred",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-RUNTIME-028", key, f"expected {expected!r}")
+
+    if BACKUP_RESTORE_PROVIDER_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-028", "issueLinks", "backup/restore provider issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-RUNTIME-028", "nonClaims", "backup/restore provider non-claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-028", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
+    if BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-028", "readinessClaimsProhibited", "backup/restore provider prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-RUNTIME-028", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-RUNTIME-028", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    disposition = matrix.get("backupRestoreProviderDisposition", {})
+    if not isinstance(disposition, dict):
+        F.add("USF-RUNTIME-028", "backupRestoreProviderDisposition", "backup/restore provider disposition must be an object")
+    else:
+        expected_disposition = {
+            "disposition": "explicit-deferral-with-owner",
+            "pgbackrestServiceSemanticProofPresent": False,
+            "backupArtifactProofPresent": False,
+            "restoreDrillProofPresent": False,
+            "tenantBoundaryPreservationProofPresent": False,
+            "classificationPreservationProofPresent": False,
+            "secretExclusionProofPresent": False,
+            "auditEvidenceProofPresent": False,
+            "retentionProofPresent": False,
+            "cleanupProofPresent": False,
+            "failureBehaviourProofPresent": False,
+            "backupReadinessClaim": False,
+            "restoreReadinessClaim": False,
+            "disasterRecoveryReadinessClaim": False,
+            "rpoRtoReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "serviceCatalogueServiceId": "pgbackrest",
+            "providerRegistryId": "backup-restore-pgbackrest-deferred",
+            "followUpIssue": "USF-202",
+            "owner": "platform-data-foundation",
+            "riskOwner": "platform-data-risk-owner",
+            "controlOwner": "platform-data-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_disposition.items():
+            observed = disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-028", f"backupRestoreProviderDisposition.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "deferredEvidence"):
+            if disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-028", f"backupRestoreProviderDisposition.{field}", "deferral field is required")
+
+    provider_boundary = matrix.get("providerBoundary", {})
+    if not isinstance(provider_boundary, dict):
+        F.add("USF-RUNTIME-028", "providerBoundary", "provider boundary must be an object")
+    else:
+        expected_provider = {
+            "providerBindingId": "usf-189-pgbackrest-backup-provider",
+            "providerRegistryId": "backup-restore-pgbackrest-deferred",
+            "bindingStatus": "profile-gated",
+            "providerMode": "live-external-deferred",
+            "runtimeProviderBindingActive": False,
+            "sdkPackage": None,
+            "sdkVersion": None,
+            "endpointRef": None,
+            "followUpIssue": "USF-202",
+        }
+        for key, expected in expected_provider.items():
+            observed = provider_boundary.get(key)
+            if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
+                F.add("USF-RUNTIME-028", f"providerBoundary.{key}", f"expected {expected!r}")
+
+    substitute = matrix.get("dbProofSubstituteBoundary", {})
+    if not isinstance(substitute, dict):
+        F.add("USF-RUNTIME-028", "dbProofSubstituteBoundary", "substitute boundary must be an object")
+    else:
+        if substitute.get("usedWhereSemanticallyPermitted") is not True:
+            F.add("USF-RUNTIME-028", "dbProofSubstituteBoundary.usedWhereSemanticallyPermitted", "permitted DB proof use must be explicit")
+        for key in (
+            "pgbackrestServiceEquivalent",
+            "backupArtifactEquivalent",
+            "restoreDrillEquivalent",
+            "disasterRecoveryEquivalent",
+            "rpoRtoEquivalent",
+        ):
+            if substitute.get(key) is not False:
+                F.add("USF-RUNTIME-028", f"dbProofSubstituteBoundary.{key}", "DB proof evidence must not be backup/restore equivalent")
+        if "not equivalent to pgBackRest" not in str(substitute.get("substitutionNonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-028", "dbProofSubstituteBoundary.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+        commands = set(substitute.get("commands", []))
+        for command in (
+            "corepack pnpm proof:db",
+            "corepack pnpm proof:files",
+            "corepack pnpm verify",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+        ):
+            if command not in commands:
+                F.add("USF-RUNTIME-028", "dbProofSubstituteBoundary.commands", f"missing {command}")
+        if len(substitute.get("scopeCovered", [])) < 4 or len(substitute.get("limits", [])) < 7:
+            F.add("USF-RUNTIME-028", "dbProofSubstituteBoundary", "substitute scope and limits are incomplete")
+
+    operational = matrix.get("operationalEvidencePosture", {})
+    if not isinstance(operational, dict):
+        F.add("USF-RUNTIME-028", "operationalEvidencePosture", "operational evidence posture must be an object")
+    else:
+        expected_operational = {
+            "readinessRetry": "deferred-to-USF-202",
+            "timeout": "deferred-to-USF-202",
+            "failClosed": "bounded-disposition-only",
+            "safeTeardown": "deferred-to-USF-202",
+            "restoreDrill": "deferred-to-USF-202",
+            "rpoRto": "not-claimed-until-USF-202-proof",
+        }
+        for key, expected in expected_operational.items():
+            if operational.get(key) != expected:
+                F.add("USF-RUNTIME-028", f"operationalEvidencePosture.{key}", f"expected {expected!r}")
+        for field in (
+            "structuredLogging",
+            "tracingCorrelation",
+            "metrics",
+            "auditEvents",
+            "redaction",
+            "retention",
+            "secretExclusion",
+        ):
+            if field not in operational:
+                F.add("USF-RUNTIME-028", f"operationalEvidencePosture.{field}", "operational field is required")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != BACKUP_RESTORE_PROVIDER_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-028", "enterpriseEvidenceRefs", "backup/restore provider enterprise evidence refs are incomplete")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-pgbackrest-backup-provider")
+    if not binding:
+        F.add("USF-RUNTIME-028", "providerBindingMatrix", "pgBackRest provider disposition is missing from runtime manifest")
+    else:
+        if "USF-202" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "runtime manifest must link USF-202")
+        if "USF-202" not in str(binding.get("deferredReason", "")):
+            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-202")
+        if binding.get("bindingStatus") != "profile-gated" or binding.get("endpointRef") is not None:
+            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "pgBackRest must remain explicitly deferred/profile-gated without endpoint binding")
+        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "deferred pgBackRest must not name an SDK/client package")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-backup-provider-deferred")
+    if not deferred or "USF-202" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-028", "deferredBoundaries.usf-189-backup-provider-deferred", "runtime deferred boundary must link USF-202")
+
+    matrix_text = json.dumps(matrix, sort_keys=True)
+    for stale in ("until USF-177 closes", "followUpIssue=USF-177", "\"followUpIssue\": \"USF-177\"", "linkedFollowUpIssue=USF-177"):
+        if stale in matrix_text:
+            F.add("USF-RUNTIME-028", "backup-restore-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     for binding_id, metadata in REQUIRED_PROVIDER_BINDINGS.items():
         adapter_path = metadata["adapterPath"]
@@ -2090,6 +2302,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
             check_mock_provider_substrate_disposition,
+            check_backup_restore_provider_disposition,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -2117,6 +2330,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
             check_mock_provider_substrate_disposition,
+            check_backup_restore_provider_disposition,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

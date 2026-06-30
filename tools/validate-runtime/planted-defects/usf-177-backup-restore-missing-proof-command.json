@@ -1,0 +1,14 @@
+{
+  "name": "usf-177-backup-restore-missing-proof-command",
+  "expectedRule": "USF-RUNTIME-028",
+  "backupRestoreProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/dbProofSubstituteBoundary/commands",
+      "value": [
+        "corepack pnpm proof:db",
+        "corepack pnpm verify"
+      ]
+    }
+  ]
+}

@@ -518,18 +518,18 @@
       "criticality": "critical",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "C",
-      "gap_or_decision": "USF has DB/RLS proof but no composed backup/restore service proof.",
+      "gap_or_decision": "USF-177 records a bounded backup/restore disposition and keeps DB/RLS/files proof non-equivalent; USF-202 must prove pgBackRest backup artifact creation, restore drill, tenant/classification preservation, secret exclusion, audit, retention, cleanup, failure, RPO/RTO, and resilience semantics before any backup/restore or disaster recovery readiness claim.",
       "legacy_service_category": "backup-restore",
-      "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
+      "provider_mode_posture": "profile-gated/deferred; no backup, restore, disaster recovery, or live external readiness claimed",
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "woblerr/docker-pgbackrest:alpine",
       "react_ports": null,
       "react_service": "pgbackrest",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
+      "tracking_recommendation": "USF-202 backup/restore service proof follow-up before any backup, restore, disaster recovery, staging, production, or live-provider readiness claim",
       "usf_accounting_status": "deferred",
-      "usf_service_or_substitute": "DB proof only"
+      "usf_service_or_substitute": "DB proof plus explicit pgBackRest deferred provider class"
     },
     {
       "business_or_foundation_purpose": "React historical platform API process",
