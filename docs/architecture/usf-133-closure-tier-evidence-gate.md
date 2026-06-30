@@ -33,6 +33,7 @@ The gate consumes:
 - the semantic service catalogue at `spec/instances/compose-service/service-catalogue.json`;
 - the Lane 1 service disposition matrix at `docs/architecture/compose-service-disposition-closure-matrix.json`;
 - the repository enterprise evidence model at `spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json`;
+- the environment promotion standard at `spec/instances/environment-promotion/environment-promotion-enterprise-standard.json`;
 - the runtime proof manifest at `spec/instances/runtime-proof/runtime-application-compose-parity.json`;
 - the cleanup orchestration note at `docs/architecture/usf-dev-readiness-cleanup-orchestration.md`;
 - the gap register at `docs/architecture/usf-dev-foundation-gap-register.md`.
@@ -57,7 +58,9 @@ The machine-readable gate also records enterprise assessment posture so later so
 - a future readiness evidence package shape containing environment, commit SHA, PR, issue, evidence id, validation commands, risk decision, exception list, approver, review expiry, and non-claims;
 - negative assurance that records what is not proven and fails closure if partial evidence implies readiness.
 
-USF-193 remains the formal tracker for the environment promotion standard and readiness gate definitions. PR #133 does not define dev/test/staging/production promotion rules; it only ensures the USF-133 closure-tier gate can consume those definitions later and cannot overclaim before they exist.
+USF-193 defines the formal environment promotion standard and readiness gate definitions consumed by this closure-tier gate. That standard separates environment class, provider mode, data posture, destructive semantics, evidence freshness, approver, and non-claim boundaries for dev, test, staging, and production.
+
+The presence of the USF-193 standard is not a readiness claim. It gives later source issues a repository authority for promotion assessment and keeps every readiness claim blocked until issue-specific merged evidence satisfies the relevant gate.
 
 ## Status Integrity
 

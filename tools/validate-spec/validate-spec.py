@@ -181,6 +181,8 @@ ENUM_BINDINGS = {
     ("data-migration", "/$defs/dataKind"): "data-migration-kinds",
     ("environment", "/$defs/environment"): "environment-classes",
     ("environment", "/$defs/providerMode"): "provider-modes",
+    ("environment-promotion", "/$defs/environmentClass"): "environment-classes",
+    ("environment-promotion", "/$defs/providerMode"): "provider-modes",
     ("event-contract", "/$defs/eventWorkflowKind"): "event-workflow-kinds",
     ("evidence-envelope", "/$defs/providerMode"): "provider-modes",
     ("evidence-envelope", "/$defs/environment"): "environment-classes",
@@ -225,6 +227,12 @@ ENUM_BINDINGS = {
 ENUM_LOCAL_ALLOW = {
     ("adr", "/properties/decisionStatus"),
     ("compose-service", "/$defs/requiredState"),
+    ("environment-promotion", "/$defs/dataPosture"),
+    ("environment-promotion", "/$defs/destructionPosture"),
+    ("environment-promotion", "/$defs/environmentStage"),
+    ("environment-promotion", "/$defs/maturityLevel"),
+    ("environment-promotion", "/$defs/promotionImpact"),
+    ("environment-promotion", "/$defs/readinessClaim"),
 }
 
 RULES = {

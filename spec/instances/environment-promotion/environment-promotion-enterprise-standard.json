@@ -1,0 +1,570 @@
+{
+  "id": "environment-promotion.enterprise-standard",
+  "title": "Environment Promotion Enterprise Standard",
+  "description": "Canonical USF-193 environment promotion and readiness gate definition for dev, test, staging, and production. This is a semantic gate and enterprise evidence organisation artefact only; it does not claim readiness for any environment.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Environment",
+    "Provider Mode",
+    "Proof",
+    "Evidence"
+  ],
+  "taxonomyRefs": [
+    "environment-classification",
+    "proof-classification",
+    "evidence-classification",
+    "validation-reporting-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "lifecycle-states",
+    "environment-classes",
+    "provider-modes"
+  ],
+  "aiGuidance": "Do not infer readiness across environments. Provider mode, environment, proof level, freshness, and approval remain separate dimensions. This standard defines gates; it does not satisfy them.",
+  "issueId": "USF-193",
+  "parentIssueId": "USF-133",
+  "dashboardIssueId": "USF-184",
+  "coordinatorIssueId": "USF-192",
+  "serviceDispositionIssueId": "USF-167",
+  "environmentStandards": [
+    {
+      "environmentStage": "dev",
+      "environmentClass": "local",
+      "purpose": "Fast local development and bounded proof using in-memory or hermetic providers by default, with Compose only where a specific proof boundary requires a real local service.",
+      "permittedProviderModes": [
+        "hermetic-mock",
+        "local-composed-real-service"
+      ],
+      "defaultProviderMode": "hermetic-mock",
+      "dataPosture": "synthetic-disposable",
+      "destructionPosture": "disposable",
+      "syntheticDataOnly": true,
+      "composeRequiredForRequiredServices": false,
+      "destructiveTestingAllowed": true,
+      "nonDestructiveOperationRequired": false,
+      "proofRequirements": [
+        "Provider mode is reported explicitly as hermetic-mock unless a specific Compose-backed proof declares local-composed-real-service.",
+        "Synthetic tenant, actor, and job data only.",
+        "Tenant mismatch and authorization failure paths fail closed.",
+        "Audit evidence is value-free and commit-linked.",
+        "No lower or higher environment readiness claim is emitted."
+      ],
+      "validatorCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "enterpriseEvidenceRequirements": [
+        "owner, risk owner, control owner, and evidence owner recorded",
+        "synthetic-data boundary recorded",
+        "tenant boundary and access boundary recorded",
+        "secret boundary recorded",
+        "audit evidence posture recorded",
+        "retention and cleanup posture recorded",
+        "non-claims preserved"
+      ],
+      "allowedClaims": [
+        "bounded-dev-evidence"
+      ],
+      "prohibitedClaims": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ],
+      "promotionPrerequisites": [
+        "USF-193 merged standard is present",
+        "Current commit validation passes",
+        "Any Compose-backed dev proof declares local-composed-real-service and service-catalogue linkage"
+      ],
+      "requiredApprover": "USF-192 coordinator for later readiness assessment",
+      "residualRiskApprovalRequired": false,
+      "owners": {
+        "owner": "platform-foundation",
+        "riskOwner": "platform-foundation-risk-owner",
+        "controlOwner": "platform-foundation-control-owner",
+        "evidenceOwner": "platform-foundation-evidence-owner"
+      },
+      "riskTreatment": {
+        "riskStatement": "Dev proof could be overclaimed as test, staging, production, live-provider, full-dev, or full-parity readiness.",
+        "threatFailureScenario": "A passing in-memory or bounded local proof is treated as a stronger environment readiness claim.",
+        "impact": "high",
+        "likelihood": "medium",
+        "treatment": "mitigate through validator-enforced provider and environment separation plus explicit non-claims",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-133"
+      },
+      "statementOfApplicabilitySupport": [
+        "environment classification",
+        "access-control boundary",
+        "audit evidence boundary",
+        "change evidence boundary",
+        "synthetic data boundary"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpactBlockedUntilProven": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "environmentStage": "test",
+      "environmentClass": "integration",
+      "purpose": "Fully composed local test substrate for required services and providers, with destructive reset and exhaustive synthetic-data testing where applicable.",
+      "permittedProviderModes": [
+        "local-composed-real-service"
+      ],
+      "defaultProviderMode": "local-composed-real-service",
+      "dataPosture": "synthetic-resettable",
+      "destructionPosture": "destructive-reset-expected",
+      "syntheticDataOnly": true,
+      "composeRequiredForRequiredServices": true,
+      "destructiveTestingAllowed": true,
+      "nonDestructiveOperationRequired": false,
+      "proofRequirements": [
+        "Every required service/provider is composed or explicitly deferred by a linked source issue.",
+        "No in-memory provider satisfies test-composed proof.",
+        "Reset, migration, rollback, purge, provider-failure, and tenant-isolation failure testing is allowed only against disposable synthetic data.",
+        "Provider and service proof outputs are command-pinned and current for the assessed commit.",
+        "No staging, production, live-provider, SOC, ISO, deployment, full-dev, full-parity, or USF-133 closure claim is emitted."
+      ],
+      "validatorCommands": [
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "enterpriseEvidenceRequirements": [
+        "service catalogue linkage for every required service",
+        "provider-mode evidence for every adapter proof",
+        "destructive reset boundary",
+        "synthetic data boundary",
+        "tenant-isolation failure evidence",
+        "audit evidence posture",
+        "cleanup and teardown evidence"
+      ],
+      "allowedClaims": [],
+      "prohibitedClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ],
+      "promotionPrerequisites": [
+        "USF-167 compose service disposition gate merged and reconciled",
+        "All required service rows closed, deferred with owner and follow-up, or explicitly out of scope",
+        "Compose and runtime validators pass on the current commit",
+        "Enterprise evidence rows record unresolved promotion impact"
+      ],
+      "requiredApprover": "USF-192 coordinator plus source issue owners",
+      "residualRiskApprovalRequired": true,
+      "owners": {
+        "owner": "platform-test-foundation",
+        "riskOwner": "platform-test-risk-owner",
+        "controlOwner": "platform-test-control-owner",
+        "evidenceOwner": "platform-test-evidence-owner"
+      },
+      "riskTreatment": {
+        "riskStatement": "In-memory proof or partially composed proof could be treated as complete test readiness.",
+        "threatFailureScenario": "A required composed service/provider is silently omitted while test readiness is implied.",
+        "impact": "high",
+        "likelihood": "medium",
+        "treatment": "mitigate with service-disposition and provider-proof validators; defer unresolved rows to linked source issues",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-167"
+      },
+      "statementOfApplicabilitySupport": [
+        "asset inventory",
+        "change and promotion evidence",
+        "tenant isolation",
+        "backup and restore boundary",
+        "incident evidence boundary"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpactBlockedUntilProven": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "environmentStage": "staging",
+      "environmentClass": "staging",
+      "purpose": "Production-shaped release and migration rehearsal using controlled non-production data and non-destructive operational posture.",
+      "permittedProviderModes": [
+        "local-composed-real-service",
+        "external-sandbox"
+      ],
+      "defaultProviderMode": "external-sandbox",
+      "dataPosture": "controlled-non-production",
+      "destructionPosture": "non-destructive-rehearsal",
+      "syntheticDataOnly": false,
+      "composeRequiredForRequiredServices": true,
+      "destructiveTestingAllowed": false,
+      "nonDestructiveOperationRequired": true,
+      "proofRequirements": [
+        "Migration rehearsal and rollback rehearsal are current and non-destructive.",
+        "Config, secret, observability, alert-routing, compatibility, and release-promotion evidence exists.",
+        "Representative data is controlled non-production data unless a future explicit exception is approved.",
+        "Staging evidence cannot satisfy production-live readiness.",
+        "No production, live-provider, SOC, ISO, deployment, enterprise production, full-dev, full-parity, or USF-133 closure claim is emitted."
+      ],
+      "validatorCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-spec/validate-spec.py all --json"
+      ],
+      "enterpriseEvidenceRequirements": [
+        "release evidence pack",
+        "migration and rollback plan",
+        "non-destructive data posture",
+        "observability and alert routing posture",
+        "incident escalation boundary",
+        "vulnerability and dependency posture",
+        "privacy and data minimisation posture",
+        "customer-impact assessment boundary"
+      ],
+      "allowedClaims": [],
+      "prohibitedClaims": [
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ],
+      "promotionPrerequisites": [
+        "Test readiness assessment exists with current merged evidence",
+        "Production-shaped rehearsal evidence exists for the assessed commit",
+        "No destructive test semantics are used as staging evidence",
+        "Staging exceptions have owner, compensating control, expiry, validation command, and follow-up issue"
+      ],
+      "requiredApprover": "release-risk-owner and USF-192 coordinator",
+      "residualRiskApprovalRequired": true,
+      "owners": {
+        "owner": "platform-release-foundation",
+        "riskOwner": "platform-release-risk-owner",
+        "controlOwner": "platform-release-control-owner",
+        "evidenceOwner": "platform-release-evidence-owner"
+      },
+      "riskTreatment": {
+        "riskStatement": "Staging rehearsal could be overclaimed as production-live readiness or use destructive test semantics against non-disposable data.",
+        "threatFailureScenario": "A production-shaped rehearsal hides missing release, migration, rollback, alerting, privacy, or incident evidence.",
+        "impact": "critical",
+        "likelihood": "medium",
+        "treatment": "defer staging readiness until a separate source issue proves non-destructive production-shaped rehearsal evidence",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-133"
+      },
+      "statementOfApplicabilitySupport": [
+        "change approval",
+        "release management",
+        "incident response evidence",
+        "supplier boundary",
+        "privacy and data minimisation",
+        "secure SDLC evidence"
+      ],
+      "assuranceMaturityLevel": "designed",
+      "promotionImpactBlockedUntilProven": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "environmentStage": "production",
+      "environmentClass": "production-live",
+      "purpose": "Live tenant operation with authorised providers, governed access, operational controls, data protection, incident response, backup/restore, supplier posture, privacy controls, and approved residual risk.",
+      "permittedProviderModes": [
+        "live-external-provider"
+      ],
+      "defaultProviderMode": "live-external-provider",
+      "dataPosture": "production-governed",
+      "destructionPosture": "non-destructive-live-operation",
+      "syntheticDataOnly": false,
+      "composeRequiredForRequiredServices": false,
+      "destructiveTestingAllowed": false,
+      "nonDestructiveOperationRequired": true,
+      "proofRequirements": [
+        "Production-live provider authority exists for every live provider.",
+        "Real secrets, access controls, monitoring, incident response, backup/restore, privacy controls, supplier posture, and approved residual risk are current.",
+        "Only non-destructive live smoke or health proof is permitted unless a future explicit exception is approved.",
+        "Production readiness is never inferred from dev, test, or staging evidence.",
+        "No SOC, ISO certification, enterprise production, full-dev, full-parity, or USF-133 closure claim is emitted by this standard."
+      ],
+      "validatorCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-spec/validate-spec.py all --json"
+      ],
+      "enterpriseEvidenceRequirements": [
+        "live provider authority",
+        "operational owner approval",
+        "approved residual risk",
+        "production access review",
+        "incident response and escalation evidence",
+        "backup and restore evidence",
+        "privacy, retention, purge, legal hold, data residency, and supplier evidence",
+        "vulnerability and patch posture",
+        "release approval and rollback evidence"
+      ],
+      "allowedClaims": [],
+      "prohibitedClaims": [
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ],
+      "promotionPrerequisites": [
+        "Staging readiness assessment exists with current merged evidence",
+        "Live provider authority and supplier/subprocessor posture are approved",
+        "Production residual risk is approved by the risk owner",
+        "Operational evidence package is current and non-destructive",
+        "Release approval is recorded by the production approver"
+      ],
+      "requiredApprover": "production-risk-owner and accountable service owner",
+      "residualRiskApprovalRequired": true,
+      "owners": {
+        "owner": "platform-production-owner",
+        "riskOwner": "platform-production-risk-owner",
+        "controlOwner": "platform-production-control-owner",
+        "evidenceOwner": "platform-production-evidence-owner"
+      },
+      "riskTreatment": {
+        "riskStatement": "Production readiness could be inferred from lower-environment proof or incomplete operational controls.",
+        "threatFailureScenario": "Live operation begins without provider authority, approved residual risk, incident response, backup/restore, privacy, access review, or release approval evidence.",
+        "impact": "critical",
+        "likelihood": "medium",
+        "treatment": "defer production readiness until separate production source issues and approvals provide current merged evidence",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-133"
+      },
+      "statementOfApplicabilitySupport": [
+        "access control",
+        "supplier relationships",
+        "incident management",
+        "business continuity",
+        "cryptography and secrets",
+        "privacy and legal retention",
+        "secure SDLC and change management"
+      ],
+      "assuranceMaturityLevel": "not-assessed",
+      "promotionImpactBlockedUntilProven": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    }
+  ],
+  "promotionGates": [
+    {
+      "id": "promote-dev-to-test",
+      "from": "dev",
+      "to": "test",
+      "requiredEvidence": [
+        "USF-167 service disposition gate for required composed services",
+        "current compose validation",
+        "current runtime and provider proof where provider ports exist",
+        "enterprise evidence rows for owners, data boundary, tenant boundary, access boundary, and non-claims"
+      ],
+      "forbiddenEvidenceSubstitutions": [
+        "in-memory provider proof cannot satisfy test composed proof",
+        "dev smoke proof cannot satisfy test readiness",
+        "generated reports cannot replace proof evidence"
+      ],
+      "approver": "USF-192 coordinator",
+      "riskAcceptanceRequired": true,
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "nonClaims": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "promote-test-to-staging",
+      "from": "test",
+      "to": "staging",
+      "requiredEvidence": [
+        "current test readiness assessment",
+        "non-destructive production-shaped migration and release rehearsal plan",
+        "observability, alerting, incident, privacy, security scanning, and rollback evidence"
+      ],
+      "forbiddenEvidenceSubstitutions": [
+        "destructive test reset cannot satisfy staging data posture",
+        "test composed proof cannot satisfy staging rehearsal",
+        "local Compose topology cannot imply external sandbox or production-shaped readiness"
+      ],
+      "approver": "release-risk-owner",
+      "riskAcceptanceRequired": true,
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-spec/validate-spec.py all --json"
+      ],
+      "nonClaims": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "promote-staging-to-production",
+      "from": "staging",
+      "to": "production",
+      "requiredEvidence": [
+        "current staging readiness assessment",
+        "live provider authority and supplier/subprocessor approvals",
+        "production operational controls, access review, incident response, backup/restore, privacy, release approval, and approved residual risk"
+      ],
+      "forbiddenEvidenceSubstitutions": [
+        "staging rehearsal cannot satisfy production-live readiness",
+        "external sandbox proof cannot satisfy live-external-provider readiness",
+        "production-shaped topology cannot satisfy production-live evidence"
+      ],
+      "approver": "production-risk-owner",
+      "riskAcceptanceRequired": true,
+      "validationCommands": [
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-spec/validate-spec.py all --json"
+      ],
+      "nonClaims": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "claimRules": [
+    "dev evidence must not satisfy test readiness",
+    "test evidence must not satisfy staging readiness",
+    "staging evidence must not satisfy production readiness",
+    "production readiness requires explicit production-live evidence and approval",
+    "hermetic-mock provider mode must not satisfy local-composed-real-service, external-sandbox, or live-external-provider requirements",
+    "destructive test semantics must not satisfy staging or production posture",
+    "readiness claims must not exceed proof level, provider mode, environment class, freshness, and approval evidence",
+    "ISO/SOC/certification, enterprise production, full dev, full React parity, and USF-133 closure claims remain prohibited"
+  ],
+  "enterpriseAssuranceRequirements": [
+    "risk register and risk treatment",
+    "Statement of Applicability support mapping",
+    "owner, risk owner, control owner, and evidence owner",
+    "approved residual risk where applicable",
+    "tenant isolation and authorization",
+    "identity, SSO/OIDC, MFA, RBAC/ABAC, SCIM/user lifecycle where applicable",
+    "admin/operator access, break-glass, JIT access, access review, and deprovisioning",
+    "data classification, PII, retention, purge, legal hold, export, privacy/DSR, and data residency",
+    "secrets, KMS/key ownership, rotation, TLS/cert lifecycle, and no secret logging",
+    "structured logs, metrics, traces, correlation IDs, tenant-safe labels, redaction, and audit events",
+    "alerting, dashboards, incident response, escalation, post-incident review, and evidence preservation",
+    "SAST, dependency scanning, secret scanning, container/image scanning, SBOM, license posture, SDK governance, vulnerability exception, and patch SLA",
+    "application security verification posture for auth, session, access control, input/API/file/upload/error/security-header/rate-limit controls",
+    "backup/restore, RPO/RTO, failover, timeout/retry, circuit breakers, queue drain, worker replay, migration rollback, and provider outage scenarios",
+    "change approval, release evidence pack, migration plan, rollback plan, feature flags, phased rollout, compatibility, API deprecation, and customer-impact assessment",
+    "customer-facing enterprise feature posture including audit export, SSO/SAML/OIDC, SCIM, role templates, custom retention, data export/delete, support access approval, customer-managed keys, data residency, IP allowlisting, private networking, webhook signing, and admin reporting"
+  ],
+  "evidencePackageShape": [
+    "environment",
+    "commit SHA",
+    "PR",
+    "issue",
+    "evidence id",
+    "validation commands",
+    "risk decision",
+    "exception list",
+    "approver",
+    "review expiry",
+    "non-claims"
+  ],
+  "negativeAssurance": {
+    "notProven": [
+      "test readiness",
+      "staging readiness",
+      "production readiness",
+      "deployment readiness",
+      "live-provider readiness",
+      "SOC readiness",
+      "ISO/IEC 27001 certification",
+      "enterprise production readiness",
+      "full dev readiness",
+      "full React parity",
+      "USF-133 closure"
+    ],
+    "prohibitedInferences": [
+      "dev evidence implies test readiness",
+      "test evidence implies staging readiness",
+      "staging evidence implies production readiness",
+      "in-memory provider proof implies composed service proof",
+      "production-shaped rehearsal implies production-live operation",
+      "enterprise evidence organisation implies ISO/SOC certification"
+    ],
+    "falseClosureGuards": [
+      "validation passing alone is not Done",
+      "wrapper issue completion is not source issue completion",
+      "USF-133 remains open until every parent acceptance criterion is individually satisfied",
+      "USF-39 remains untouched",
+      "USF-167 remains a separate service-disposition execution gate"
+    ]
+  },
+  "nonClaims": [
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "full-dev-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}

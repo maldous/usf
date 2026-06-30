@@ -83,6 +83,7 @@ USF133_CLOSURE_TIER_GATE_PATH = "docs/architecture/usf-133-closure-tier-evidence
 COMPOSE_PARITY_MATRIX_PATH = "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
 COMPOSE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 ENTERPRISE_EVIDENCE_MODEL_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+ENVIRONMENT_PROMOTION_STANDARD_PATH = "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json"
 PACKAGE_JSON_PATH = "package.json"
 SHAPE_PATH = "tools/validate-parity/parity-matrix-shape.json"
 SELFTEST_DIR = "tools/validate-parity/planted-defects"
@@ -273,6 +274,7 @@ USF133_REQUIRED_GATE_INPUTS = {
     "serviceCatalogue": COMPOSE_CATALOGUE_PATH,
     "serviceDispositionClosureMatrix": COMPOSE_CLOSURE_MATRIX_PATH,
     "enterpriseEvidenceModel": ENTERPRISE_EVIDENCE_MODEL_PATH,
+    "environmentPromotionStandard": ENVIRONMENT_PROMOTION_STANDARD_PATH,
     "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
 }
 
@@ -867,9 +869,17 @@ def check_usf133_closure_tier_gate(F, state):
 
     env_dependency = gate.get("environmentPromotionStandardDependency", {})
     if env_dependency.get("issueId") != "USF-193" or env_dependency.get("implementedByThisPr") is not False:
-        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "USF-193 must remain the unimplemented formal environment promotion tracker for PR #133")
+        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "environment promotion dependency must remain scoped to USF-193 and must not be attributed to USF-166")
+    if env_dependency.get("implementedByIssueId") != "USF-193" or env_dependency.get("status") != "implemented-by-usf-193":
+        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "USF-193 must be recorded as the implemented environment promotion standard source issue")
+    if env_dependency.get("standardPath") != ENVIRONMENT_PROMOTION_STANDARD_PATH or not os.path.exists(ENVIRONMENT_PROMOTION_STANDARD_PATH):
+        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "environment promotion standard path is missing or incorrect")
+    if "validate-enterprise" not in str(env_dependency.get("validationCommand", "")):
+        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "environment promotion dependency must link enterprise validation")
     if env_dependency.get("requiredForPr133Acceptance") is not False or env_dependency.get("requiredBeforeReadinessClaim") is not True:
         F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "USF-193 is not required for PR #133 acceptance but is required before readiness claims")
+    if USF133_GATE_PROHIBITED_CLAIMS - _set_or_empty(env_dependency.get("nonClaims")):
+        F.add("USF-PARITY-031", "environmentPromotionStandardDependency", "environment promotion dependency non-claims are incomplete")
 
     freshness_policy = gate.get("evidenceFreshnessPolicy", {})
     for key in ("staleEvidenceSatisfiesClosure", "unmergedEvidenceSatisfiesClosure", "pendingPrEvidenceSatisfiesUsf133Closure"):
@@ -1194,6 +1204,12 @@ def apply_mutation(base_state, mutation):
             negative[k] = v
         for k in mutation["closureTierPatchNegativeAssurance"].get("drop", []):
             negative.pop(k, None)
+    if "closureTierPatchEnvironmentPromotionDependency" in mutation:
+        dependency = usf133_closure_tier_gate.setdefault("environmentPromotionStandardDependency", {})
+        for k, v in mutation["closureTierPatchEnvironmentPromotionDependency"].get("set", {}).items():
+            dependency[k] = v
+        for k in mutation["closureTierPatchEnvironmentPromotionDependency"].get("drop", []):
+            dependency.pop(k, None)
     if "domainsSetAll" in mutation:
         for row in matrix.get("domains", []):
             for k, v in mutation["domainsSetAll"].items():

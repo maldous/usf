@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:environment-promotion",
+  "title": "USF Environment Promotion Schema",
+  "description": "Draft JSON Schema for environment promotion and readiness gate definitions. It records dev, test, staging, and production as distinct promotion stages; separates environment classes from provider modes; captures data and destructive/non-destructive posture, proof gates, enterprise evidence requirements, allowed and prohibited claims, promotion prerequisites, negative assurance, and non-claim boundaries. It is ISO/IEC 27001-supporting evidence organisation only and does not claim certification, SOC readiness, production readiness, staging readiness, test readiness, full dev readiness, live-provider readiness, enterprise production readiness, full React parity, or USF-133 closure. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "issueId",
+    "parentIssueId",
+    "dashboardIssueId",
+    "coordinatorIssueId",
+    "serviceDispositionIssueId",
+    "environmentStandards",
+    "promotionGates",
+    "claimRules",
+    "enterpriseAssuranceRequirements",
+    "evidencePackageShape",
+    "negativeAssurance",
+    "nonClaims"
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "environmentStage": {
+      "type": "string",
+      "enum": [
+        "dev",
+        "test",
+        "staging",
+        "production"
+      ]
+    },
+    "environmentClass": {
+      "$comment": "Canonical values from environment-classes.",
+      "type": "string",
+      "enum": [
+        "local",
+        "hermetic",
+        "integration",
+        "staging",
+        "production-shaped",
+        "production-live"
+      ]
+    },
+    "providerMode": {
+      "$comment": "Canonical values from provider-modes.",
+      "type": "string",
+      "enum": [
+        "hermetic-mock",
+        "local-composed-real-service",
+        "external-sandbox",
+        "live-external-provider"
+      ]
+    },
+    "dataPosture": {
+      "type": "string",
+      "enum": [
+        "synthetic-disposable",
+        "synthetic-resettable",
+        "controlled-non-production",
+        "production-governed"
+      ]
+    },
+    "destructionPosture": {
+      "type": "string",
+      "enum": [
+        "disposable",
+        "destructive-reset-expected",
+        "non-destructive-rehearsal",
+        "non-destructive-live-operation"
+      ]
+    },
+    "readinessClaim": {
+      "type": "string",
+      "enum": [
+        "bounded-dev-evidence",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    "maturityLevel": {
+      "type": "string",
+      "enum": [
+        "not-assessed",
+        "designed",
+        "documented",
+        "implemented",
+        "tested",
+        "integration-proven",
+        "operationally-rehearsed",
+        "production-approved"
+      ]
+    },
+    "promotionImpact": {
+      "type": "string",
+      "enum": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    "ownerBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "riskOwner",
+        "controlOwner",
+        "evidenceOwner"
+      ],
+      "properties": {
+        "owner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "controlOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "riskTreatment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "riskStatement",
+        "threatFailureScenario",
+        "impact",
+        "likelihood",
+        "treatment",
+        "reviewDate",
+        "followUpIssue"
+      ],
+      "properties": {
+        "riskStatement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "threatFailureScenario": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "impact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "likelihood": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "treatment": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reviewDate": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "followUpIssue": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "environmentStandard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environmentStage",
+        "environmentClass",
+        "purpose",
+        "permittedProviderModes",
+        "defaultProviderMode",
+        "dataPosture",
+        "destructionPosture",
+        "syntheticDataOnly",
+        "composeRequiredForRequiredServices",
+        "destructiveTestingAllowed",
+        "nonDestructiveOperationRequired",
+        "proofRequirements",
+        "validatorCommands",
+        "enterpriseEvidenceRequirements",
+        "allowedClaims",
+        "prohibitedClaims",
+        "promotionPrerequisites",
+        "requiredApprover",
+        "residualRiskApprovalRequired",
+        "owners",
+        "riskTreatment",
+        "statementOfApplicabilitySupport",
+        "assuranceMaturityLevel",
+        "promotionImpactBlockedUntilProven"
+      ],
+      "properties": {
+        "environmentStage": {
+          "$ref": "#/$defs/environmentStage"
+        },
+        "environmentClass": {
+          "$ref": "#/$defs/environmentClass"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "permittedProviderModes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/providerMode"
+          },
+          "uniqueItems": true
+        },
+        "defaultProviderMode": {
+          "$ref": "#/$defs/providerMode"
+        },
+        "dataPosture": {
+          "$ref": "#/$defs/dataPosture"
+        },
+        "destructionPosture": {
+          "$ref": "#/$defs/destructionPosture"
+        },
+        "syntheticDataOnly": {
+          "type": "boolean"
+        },
+        "composeRequiredForRequiredServices": {
+          "type": "boolean"
+        },
+        "destructiveTestingAllowed": {
+          "type": "boolean"
+        },
+        "nonDestructiveOperationRequired": {
+          "type": "boolean"
+        },
+        "proofRequirements": {
+          "$ref": "#/$defs/stringList"
+        },
+        "validatorCommands": {
+          "$ref": "#/$defs/stringList"
+        },
+        "enterpriseEvidenceRequirements": {
+          "$ref": "#/$defs/stringList"
+        },
+        "allowedClaims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/readinessClaim"
+          },
+          "uniqueItems": true
+        },
+        "prohibitedClaims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/readinessClaim"
+          },
+          "uniqueItems": true
+        },
+        "promotionPrerequisites": {
+          "$ref": "#/$defs/stringList"
+        },
+        "requiredApprover": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "residualRiskApprovalRequired": {
+          "type": "boolean"
+        },
+        "owners": {
+          "$ref": "#/$defs/ownerBlock"
+        },
+        "riskTreatment": {
+          "$ref": "#/$defs/riskTreatment"
+        },
+        "statementOfApplicabilitySupport": {
+          "$ref": "#/$defs/stringList"
+        },
+        "assuranceMaturityLevel": {
+          "$ref": "#/$defs/maturityLevel"
+        },
+        "promotionImpactBlockedUntilProven": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/promotionImpact"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "promotionGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "from",
+        "to",
+        "requiredEvidence",
+        "forbiddenEvidenceSubstitutions",
+        "approver",
+        "riskAcceptanceRequired",
+        "validationCommands",
+        "nonClaims"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "from": {
+          "$ref": "#/$defs/environmentStage"
+        },
+        "to": {
+          "$ref": "#/$defs/environmentStage"
+        },
+        "requiredEvidence": {
+          "$ref": "#/$defs/stringList"
+        },
+        "forbiddenEvidenceSubstitutions": {
+          "$ref": "#/$defs/stringList"
+        },
+        "approver": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskAcceptanceRequired": {
+          "type": "boolean"
+        },
+        "validationCommands": {
+          "$ref": "#/$defs/stringList"
+        },
+        "nonClaims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/readinessClaim"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "title": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "authorityLevel": {
+      "type": "string",
+      "const": "semantic-definition"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "planned",
+        "draft",
+        "active",
+        "deprecated",
+        "retired",
+        "replaced",
+        "deferred"
+      ]
+    },
+    "ontologyConcepts": {
+      "$ref": "#/$defs/stringList"
+    },
+    "taxonomyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "vocabularyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "aiGuidance": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "issueId": {
+      "type": "string",
+      "const": "USF-193"
+    },
+    "parentIssueId": {
+      "type": "string",
+      "const": "USF-133"
+    },
+    "dashboardIssueId": {
+      "type": "string",
+      "const": "USF-184"
+    },
+    "coordinatorIssueId": {
+      "type": "string",
+      "const": "USF-192"
+    },
+    "serviceDispositionIssueId": {
+      "type": "string",
+      "const": "USF-167"
+    },
+    "environmentStandards": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "$ref": "#/$defs/environmentStandard"
+      },
+      "uniqueItems": true
+    },
+    "promotionGates": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "$ref": "#/$defs/promotionGate"
+      },
+      "uniqueItems": true
+    },
+    "claimRules": {
+      "$ref": "#/$defs/stringList"
+    },
+    "enterpriseAssuranceRequirements": {
+      "$ref": "#/$defs/stringList"
+    },
+    "evidencePackageShape": {
+      "$ref": "#/$defs/stringList"
+    },
+    "negativeAssurance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "notProven",
+        "prohibitedInferences",
+        "falseClosureGuards"
+      ],
+      "properties": {
+        "notProven": {
+          "$ref": "#/$defs/stringList"
+        },
+        "prohibitedInferences": {
+          "$ref": "#/$defs/stringList"
+        },
+        "falseClosureGuards": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "nonClaims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/readinessClaim"
+      },
+      "uniqueItems": true
+    }
+  }
+}

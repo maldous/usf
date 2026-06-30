@@ -1,0 +1,13 @@
+{
+  "description": "USF-133 closure-tier evidence gate omits the implemented USF-193 environment promotion standard linkage.",
+  "expectedRule": "USF-PARITY-031",
+  "mutation": {
+    "closureTierPatchEnvironmentPromotionDependency": {
+      "drop": [
+        "standardPath",
+        "implementedByIssueId",
+        "validationCommand"
+      ]
+    }
+  }
+}

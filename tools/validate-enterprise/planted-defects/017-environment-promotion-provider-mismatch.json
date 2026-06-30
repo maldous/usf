@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-ENTERPRISE-017",
+  "promotionEnvironmentPatch": [
+    {
+      "environmentStage": "test",
+      "set": {
+        "permittedProviderModes": [
+          "hermetic-mock"
+        ]
+      }
+    }
+  ]
+}
