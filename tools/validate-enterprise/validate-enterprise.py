@@ -34,6 +34,7 @@ SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.
 RUNTIME_MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-parity.json")
 CLOSURE_MATRIX_PATH = Path("docs/architecture/compose-service-disposition-closure-matrix.json")
 OPERATOR_ACCESS_MATRIX_PATH = Path("docs/architecture/operator-access-gateway-posture-matrix.json")
+GATEWAY_CLICKTHROUGH_MATRIX_PATH = Path("docs/architecture/gateway-clickthrough-access-substrate-matrix.json")
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 PACKAGE_PATH = Path("package.json")
@@ -59,6 +60,7 @@ RULES = {
     "USF-ENTERPRISE-017": ("blocking", "environment promotion provider, environment, or destructive semantics are unsafe"),
     "USF-ENTERPRISE-018": ("blocking", "environment promotion readiness or certification claim is overclaimed"),
     "USF-ENTERPRISE-019": ("blocking", "operator access proof command is missing or unsafe"),
+    "USF-ENTERPRISE-020": ("blocking", "gateway and clickthrough access substrate posture is incomplete or unsafe"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -376,6 +378,29 @@ PROMOTION_CLAIM_RULE_TOKENS = {
     "readiness claims must not exceed proof level",
     "ISO/SOC/certification",
 }
+GATEWAY_CLICKTHROUGH_REQUIRED_EVIDENCE_ROWS = {
+    "soaSupportMappings": {"usf-180-soa-gateway-clickthrough-substrate"},
+    "evidenceRegister": {"usf-180-evidence-gateway-clickthrough-substrate"},
+    "threatModelAbuseCaseRegister": {"usf-180-threat-gateway-clickthrough-overclaim"},
+    "accessReviewPrivilegedOperationPosture": {"usf-180-access-gateway-clickthrough-substrate"},
+    "incidentVulnerabilityManagementEvidence": {"usf-180-incident-vulnerability-gateway-clickthrough"},
+    "privacyDataMinimisationPosture": {"usf-180-privacy-gateway-clickthrough-substrate"},
+}
+GATEWAY_CLICKTHROUGH_REQUIRED_ISSUES = {
+    "USF-180",
+    "USF-169",
+    "USF-155",
+    "USF-179",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
+GATEWAY_CLICKTHROUGH_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
+    "gateway-readiness",
+    "clickthrough-readiness",
+    "public-exposure-readiness",
+}
 
 
 def missing_required_non_claims(row: dict[str, Any]) -> set[str]:
@@ -555,6 +580,9 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     operator_access_matrix = (
         read_json(OPERATOR_ACCESS_MATRIX_PATH) if (ROOT / OPERATOR_ACCESS_MATRIX_PATH).exists() else None
     )
+    gateway_clickthrough_matrix = (
+        read_json(GATEWAY_CLICKTHROUGH_MATRIX_PATH) if (ROOT / GATEWAY_CLICKTHROUGH_MATRIX_PATH).exists() else None
+    )
     environment_promotion = (
         read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
     )
@@ -569,6 +597,10 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         closure_matrix = apply_closure_defect(closure_matrix, defect)
     if operator_access_matrix is not None:
         operator_access_matrix = apply_operator_access_defect(operator_access_matrix, defect)
+    if defect.get("removeGatewayClickthroughMatrix"):
+        gateway_clickthrough_matrix = None
+    elif gateway_clickthrough_matrix is not None:
+        gateway_clickthrough_matrix = apply_gateway_clickthrough_defect(gateway_clickthrough_matrix, defect)
     if environment_promotion is not None:
         environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
     package = apply_package_defect(package, defect)
@@ -582,6 +614,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "package": package,
         "closureMatrix": closure_matrix,
         "operatorAccessMatrix": operator_access_matrix,
+        "gatewayClickthroughMatrix": gateway_clickthrough_matrix,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
     }
@@ -718,6 +751,42 @@ def apply_operator_access_defect(matrix: dict[str, Any], defect: dict[str, Any])
                     row.pop(key, None)
                 for key, value in patch.get("set", {}).items():
                     row[key] = value
+    return out
+
+
+def set_nested_value(target: dict[str, Any], dotted_path: str, value: Any) -> None:
+    parts = [part for part in dotted_path.split(".") if part]
+    if not parts:
+        return
+    cursor: dict[str, Any] = target
+    for part in parts[:-1]:
+        next_value = cursor.setdefault(part, {})
+        if not isinstance(next_value, dict):
+            next_value = {}
+            cursor[part] = next_value
+        cursor = next_value
+    cursor[parts[-1]] = value
+
+
+def drop_nested_value(target: dict[str, Any], dotted_path: str) -> None:
+    parts = [part for part in dotted_path.split(".") if part]
+    if not parts:
+        return
+    cursor: Any = target
+    for part in parts[:-1]:
+        if not isinstance(cursor, dict):
+            return
+        cursor = cursor.get(part)
+    if isinstance(cursor, dict):
+        cursor.pop(parts[-1], None)
+
+
+def apply_gateway_clickthrough_defect(matrix: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(matrix)
+    for key, value in defect.get("gatewayClickthroughSet", {}).items():
+        set_nested_value(out, key, value)
+    for key in defect.get("gatewayClickthroughDrop", []):
+        drop_nested_value(out, key)
     return out
 
 
@@ -1703,6 +1772,204 @@ def check_operator_access_proof_wiring(F: Findings, state: dict[str, Any]) -> No
             F.add("USF-ENTERPRISE-019", str(OPERATOR_ACCESS_PROOF_PATH), "operator access proof overclaims readiness")
 
 
+def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("gatewayClickthroughMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-ENTERPRISE-020", str(GATEWAY_CLICKTHROUGH_MATRIX_PATH), "gateway clickthrough substrate matrix is missing")
+        return
+
+    services = {
+        service.get("serviceId"): service
+        for service in state["serviceCatalogue"].get("services", [])
+        if isinstance(service, dict) and isinstance(service.get("serviceId"), str)
+    }
+    caddy = services.get("caddy", {})
+    if not isinstance(caddy, dict):
+        F.add("USF-ENTERPRISE-020", "caddy", "service catalogue lacks caddy gateway row")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-180",
+        "parentIssue": "USF-133",
+        "serviceId": "caddy",
+        "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
+        "operatorAccessMatrix": str(OPERATOR_ACCESS_MATRIX_PATH),
+        "apiContractStandard": "docs/architecture/api-and-contract-surface-standard.md",
+        "environmentPromotionStandard": str(ENVIRONMENT_PROMOTION_PATH),
+        "enterpriseEvidenceModel": str(MODEL_PATH),
+        "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-ENTERPRISE-020", key, f"expected {expected!r}")
+
+    issue_links = set(matrix.get("issueLinks", []))
+    if GATEWAY_CLICKTHROUGH_REQUIRED_ISSUES - issue_links:
+        F.add("USF-ENTERPRISE-020", "issueLinks", "gateway matrix issue links are incomplete")
+    if REQUIRED_NON_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-020", "nonClaims", "gateway matrix non-claims are incomplete")
+    if REQUIRED_NON_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-ENTERPRISE-020", "readinessClaimsAllowed", "gateway matrix allows prohibited readiness claim")
+    if GATEWAY_CLICKTHROUGH_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-ENTERPRISE-020", "readinessClaimsProhibited", "gateway matrix prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-ENTERPRISE-020", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-ENTERPRISE-020", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    inclusion = matrix.get("gatewayInclusion", {})
+    if not isinstance(inclusion, dict):
+        F.add("USF-ENTERPRISE-020", "gatewayInclusion", "gateway inclusion must be an object")
+    else:
+        expected_inclusion = {
+            "includedForDevFoundationAssessment": True,
+            "serviceCatalogueServiceId": "caddy",
+            "composeProfile": "gateway",
+            "localHostPublication": "loopback-only",
+            "publicExposureAllowed": False,
+            "lanExposureAllowed": False,
+            "productionExposureAllowedByThisIssue": False,
+            "gatewayReadinessClaim": False,
+            "deploymentReadinessClaim": False,
+        }
+        for key, expected in expected_inclusion.items():
+            observed = inclusion.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-ENTERPRISE-020", f"gatewayInclusion.{key}", f"expected {expected!r}")
+        if not inclusion.get("evidenceBoundary") or "no runtime route" not in str(inclusion.get("evidenceBoundary", "")):
+            F.add("USF-ENTERPRISE-020", "gatewayInclusion.evidenceBoundary", "gateway evidence boundary must deny route readiness")
+
+    if caddy.get("serviceKind") != "gateway":
+        F.add("USF-ENTERPRISE-020", "caddy.serviceKind", "caddy must remain classified as gateway")
+    if "gateway" not in set(caddy.get("composeProfiles", [])):
+        F.add("USF-ENTERPRISE-020", "caddy.composeProfiles", "caddy must remain gateway-profile gated")
+    ports = caddy.get("ports", [])
+    port_map = {port.get("portId"): port for port in ports if isinstance(port, dict)}
+    for port_id, published_port in (("gateway-http", 8081), ("gateway-https", 8443)):
+        port = port_map.get(port_id, {})
+        if port.get("hostIp") != "127.0.0.1" or port.get("bindScope") != "loopback-only":
+            F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", "gateway ports must remain loopback-only")
+        if port.get("internetExposureAllowed") is not False:
+            F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", "gateway port internet exposure must be denied")
+        if port.get("publishedPort") != published_port:
+            F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", f"expected published port {published_port}")
+
+    trusted_proxy = matrix.get("trustedProxyPolicy", {})
+    if not isinstance(trusted_proxy, dict):
+        F.add("USF-ENTERPRISE-020", "trustedProxyPolicy", "trusted proxy policy must be an object")
+    else:
+        if trusted_proxy.get("directClientForwardedHeadersTrusted") is not False:
+            F.add("USF-ENTERPRISE-020", "trustedProxyPolicy.directClientForwardedHeadersTrusted", "direct client forwarded headers must not be trusted")
+        if not trusted_proxy.get("trustedProxySources") or not trusted_proxy.get("requiredBeforeStrongerReadiness"):
+            F.add("USF-ENTERPRISE-020", "trustedProxyPolicy", "trusted proxy sources and stronger-readiness proof requirements are required")
+        policy_text = json.dumps(trusted_proxy, sort_keys=True).lower()
+        for token in ("forwarded", "local gateway", "header"):
+            if token not in policy_text:
+                F.add("USF-ENTERPRISE-020", "trustedProxyPolicy", f"trusted proxy policy lacks {token}")
+
+    sso = matrix.get("ssoPosture", {})
+    if not isinstance(sso, dict):
+        F.add("USF-ENTERPRISE-020", "ssoPosture", "SSO posture must be an object")
+    else:
+        if sso.get("localSsoReadinessClaim") is not False or sso.get("liveSsoReadinessClaim") is not False:
+            F.add("USF-ENTERPRISE-020", "ssoPosture", "SSO readiness claims must remain false")
+        if not sso.get("operatorAuthBoundary") or not sso.get("identityProviderBoundary") or not sso.get("requiredBeforeTestReadiness"):
+            F.add("USF-ENTERPRISE-020", "ssoPosture", "SSO boundaries and test-readiness requirements are required")
+
+    transport = matrix.get("localTransportBoundary", {})
+    if not isinstance(transport, dict):
+        F.add("USF-ENTERPRISE-020", "localTransportBoundary", "local transport boundary must be an object")
+    else:
+        expected_transport = {
+            "hostIp": "127.0.0.1",
+            "httpPublishedPort": 8081,
+            "httpsPublishedPort": 8443,
+            "publicExposureAllowed": False,
+            "lanExposureAllowed": False,
+        }
+        for key, expected in expected_transport.items():
+            observed = transport.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-ENTERPRISE-020", f"localTransportBoundary.{key}", f"expected {expected!r}")
+        if "No WAF" not in str(transport.get("wafPolicy", "")):
+            F.add("USF-ENTERPRISE-020", "localTransportBoundary.wafPolicy", "WAF non-claim must be explicit")
+
+    routing = matrix.get("serviceRoutingBoundary", {})
+    if not isinstance(routing, dict):
+        F.add("USF-ENTERPRISE-020", "serviceRoutingBoundary", "service routing boundary must be an object")
+    else:
+        if routing.get("routeImplementationCreated") is not False or routing.get("routeProofPresent") is not False:
+            F.add("USF-ENTERPRISE-020", "serviceRoutingBoundary", "route implementation/proof claims must remain false")
+        if "USF-155" not in set(routing.get("routeProofDeferredTo", [])):
+            F.add("USF-ENTERPRISE-020", "serviceRoutingBoundary.routeProofDeferredTo", "route proof must be deferred to USF-155")
+        if not routing.get("nonEquivalenceBoundary"):
+            F.add("USF-ENTERPRISE-020", "serviceRoutingBoundary.nonEquivalenceBoundary", "routing non-equivalence boundary is required")
+
+    clickthrough = matrix.get("clickthroughBoundary", {})
+    if not isinstance(clickthrough, dict):
+        F.add("USF-ENTERPRISE-020", "clickthroughBoundary", "clickthrough boundary must be an object")
+    else:
+        expected_clickthrough = {
+            "clickthroughUiImplementationPresent": False,
+            "clickthroughRuntimeProofPresent": False,
+            "acceptedDeferral": True,
+            "requiredBeforeTestReadiness": True,
+        }
+        for key, expected in expected_clickthrough.items():
+            observed = clickthrough.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-ENTERPRISE-020", f"clickthroughBoundary.{key}", f"expected {expected!r}")
+        if "USF-155" not in set(clickthrough.get("deferredTo", [])):
+            F.add("USF-ENTERPRISE-020", "clickthroughBoundary.deferredTo", "clickthrough must be deferred to USF-155")
+        if len(clickthrough.get("proofCriteria", [])) < 6:
+            F.add("USF-ENTERPRISE-020", "clickthroughBoundary.proofCriteria", "clickthrough proof criteria are incomplete")
+        if not clickthrough.get("nonEquivalenceBoundary"):
+            F.add("USF-ENTERPRISE-020", "clickthroughBoundary.nonEquivalenceBoundary", "clickthrough non-equivalence boundary is required")
+
+    dependencies = matrix.get("dependencyLinks", {})
+    expected_dependencies = {
+        "operatorAccessProof": "USF-169",
+        "apiGatewayCompatibility": "USF-155",
+        "observabilityOperations": "USF-179",
+        "environmentPromotionStandard": "USF-193",
+    }
+    if not isinstance(dependencies, dict):
+        F.add("USF-ENTERPRISE-020", "dependencyLinks", "dependency links must be an object")
+    else:
+        for key, expected in expected_dependencies.items():
+            if dependencies.get(key) != expected:
+                F.add("USF-ENTERPRISE-020", f"dependencyLinks.{key}", f"expected {expected!r}")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    required_evidence = set().union(*GATEWAY_CLICKTHROUGH_REQUIRED_EVIDENCE_ROWS.values())
+    if declared_evidence != required_evidence:
+        F.add("USF-ENTERPRISE-020", "enterpriseEvidenceRefs", "gateway matrix enterprise evidence refs are incomplete")
+
+    model = state["model"]
+    for section, row_ids in GATEWAY_CLICKTHROUGH_REQUIRED_EVIDENCE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in row_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-020", row_id, f"missing USF-180 enterprise row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-020", row_id, "USF-180 enterprise row non-claims are incomplete")
+            if "USF-180" not in row_text or str(GATEWAY_CLICKTHROUGH_MATRIX_PATH) not in row_text:
+                F.add("USF-ENTERPRISE-020", row_id, "USF-180 enterprise row lacks issue or matrix linkage")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-020", row_id, "USF-180 enterprise row lacks validation command")
+            if section == "evidenceRegister":
+                for issue in GATEWAY_CLICKTHROUGH_REQUIRED_ISSUES:
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-020", row_id, f"evidence row lacks {issue}")
+                if "not prove" not in str(row.get("whatWasNotProven", "")).lower():
+                    F.add("USF-ENTERPRISE-020", row_id, "evidence row must preserve explicit non-proof boundary")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -1722,6 +1989,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_assurance_control_plane_disposition(F, state)
     check_environment_promotion_standard(F, state)
     check_operator_access_proof_wiring(F, state)
+    check_gateway_clickthrough_substrate(F, state)
     return F
 
 

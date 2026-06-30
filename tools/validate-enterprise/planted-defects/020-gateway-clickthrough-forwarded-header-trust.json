@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-020",
+  "description": "USF-180 gateway substrate incorrectly trusts direct-client forwarded headers.",
+  "gatewayClickthroughSet": {
+    "trustedProxyPolicy.directClientForwardedHeadersTrusted": true
+  }
+}

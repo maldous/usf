@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-020",
+  "description": "USF-180 gateway substrate incorrectly permits public exposure.",
+  "gatewayClickthroughSet": {
+    "gatewayInclusion.publicExposureAllowed": true
+  }
+}
