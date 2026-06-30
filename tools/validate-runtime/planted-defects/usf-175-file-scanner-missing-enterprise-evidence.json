@@ -1,0 +1,10 @@
+{
+  "name": "usf-175-file-scanner-missing-enterprise-evidence",
+  "expectedRule": "USF-RUNTIME-026",
+  "fileScannerProviderMatrixPatches": [
+    {
+      "op": "remove",
+      "path": "/enterpriseEvidenceRefs/0"
+    }
+  ]
+}

@@ -118,7 +118,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "C",
-      "gap_or_decision": "USF records scan/quarantine posture but lacks composed scanner proof.",
+      "gap_or_decision": "USF-175 records a bounded file scanner provider disposition and keeps deterministic scan markers non-equivalent; USF-200 must prove ClamAV adapter/service semantics before any scanner readiness claim.",
       "legacy_service_category": "file-scan",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -129,9 +129,9 @@
       ],
       "react_service": "clamav",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
+      "tracking_recommendation": "USF-175/USF-200",
       "usf_accounting_status": "deferred",
-      "usf_service_or_substitute": "files scan posture only"
+      "usf_service_or_substitute": "files scan posture plus explicit ClamAV deferred provider class"
     },
     {
       "business_or_foundation_purpose": "analytics and Sentry column store",

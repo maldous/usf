@@ -1,0 +1,5 @@
+{
+  "name": "usf-175-file-scanner-matrix-missing",
+  "expectedRule": "USF-RUNTIME-026",
+  "removeFileScannerProviderMatrix": true
+}

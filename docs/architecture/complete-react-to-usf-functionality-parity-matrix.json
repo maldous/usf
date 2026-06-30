@@ -96,8 +96,8 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "MinIO/object storage and file lineage",
-      "readiness_impact": "ClamAV composed scanner and richer DLP remain deferred.",
-      "tracking_carrier_or_recommendation": "USF-146/USF-147",
+      "readiness_impact": "ClamAV composed scanner, richer DLP, and enterprise storage depth remain deferred; scanner provider semantics are tracked by USF-175/USF-200.",
+      "tracking_carrier_or_recommendation": "USF-146/USF-147/USF-175/USF-200",
       "usf_evidence_summary": "USF files proof",
       "usf_status": "partial"
     },
@@ -475,9 +475,9 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "clamav service lineage",
-      "readiness_impact": "Composed scanner proof absent.",
-      "tracking_carrier_or_recommendation": "new blocker recommended",
-      "usf_evidence_summary": "scan posture only",
+      "readiness_impact": "Composed ClamAV scanner proof remains deferred to USF-200; no live scanner or DLP readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-175/USF-200",
+      "usf_evidence_summary": "USF-175 bounded scanner provider disposition; deterministic scan posture only; ClamAV service proof deferred to USF-200.",
       "usf_status": "deferred"
     },
     {

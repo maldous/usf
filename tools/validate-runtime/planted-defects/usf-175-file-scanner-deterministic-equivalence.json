@@ -1,0 +1,16 @@
+{
+  "name": "usf-175-file-scanner-deterministic-equivalence",
+  "expectedRule": "USF-RUNTIME-026",
+  "fileScannerProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/scannerProviderDisposition/deterministicScannerClamavEquivalent",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/deterministicScanSubstituteBoundary/clamavServiceEquivalent",
+      "value": true
+    }
+  ]
+}

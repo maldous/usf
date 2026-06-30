@@ -1,0 +1,21 @@
+{
+  "name": "usf-175-file-scanner-missing-follow-up",
+  "expectedRule": "USF-RUNTIME-026",
+  "fileScannerProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-175"
+    },
+    {
+      "op": "replace",
+      "path": "/scannerProviderDisposition/followUpIssue",
+      "value": "USF-175"
+    },
+    {
+      "op": "replace",
+      "path": "/providerBoundary/followUpIssue",
+      "value": "USF-175"
+    }
+  ]
+}

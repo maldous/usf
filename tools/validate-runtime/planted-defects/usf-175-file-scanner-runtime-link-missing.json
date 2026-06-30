@@ -1,0 +1,14 @@
+{
+  "name": "usf-175-file-scanner-runtime-link-missing",
+  "expectedRule": "USF-RUNTIME-026",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/10/followUpIssueRefs",
+      "value": [
+        "USF-175",
+        "USF-189"
+      ]
+    }
+  ]
+}
