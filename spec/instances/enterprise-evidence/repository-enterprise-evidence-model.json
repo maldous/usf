@@ -3181,6 +3181,32 @@
       ]
     },
     {
+      "id": "usf-172-soa-analytics-event-store-disposition",
+      "mappedType": "source-issue-analytics-event-store-disposition",
+      "controlPurpose": "Map USF-172 as the bounded analytics/event-store disposition gate, separating semantically permitted in-memory evidence from deferred ClickHouse service-semantic proof under USF-197.",
+      "riskTreated": "riskStatement=USF-172 could be treated as analytics or event-store readiness even though it records explicit non-equivalence and deferral only",
+      "assetServiceAffected": "clickhouse service catalogue row and repository analytics/event-store disposition",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; sourceIssue=USF-172; followUpIssue=USF-197; treatment=record bounded disposition, require docs/architecture/analytics-event-store-provider-disposition-matrix.json, and defer ClickHouse SDK/client selection, adapter implementation, persisted event ingestion, tenant-safe query, aggregation, retention, audit, teardown, supplier, incident, privacy, and backup proof; reviewDate=2026-09-30",
+      "evidenceSource": "docs/architecture/analytics-event-store-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-172; USF-197",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "threatFailureScenario=in-memory analytics evidence or catalogue-only ClickHouse rows are mistaken for provider operating evidence; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=defer service-semantic proof to USF-197; reviewDate=2026-09-30; followUpIssue=USF-197; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "usf-187-sonarqube-static-analysis-soa",
       "mappedType": "assurance-control-plane",
       "controlPurpose": "Map Lane 3 shared assurance disposition for sonarqube shared static-analysis quality gate control plane, including owner, risk owner, control owner, risk treatment, follow-up issue, validator coverage, and readiness non-claims.",
@@ -3392,7 +3418,7 @@
       "id": "soa-adapter-usf-189-clickhouse-analytics-provider",
       "mappedType": "provider-disposition",
       "controlPurpose": "Govern USF-189 ClickHouse analytics/event-store provider deferral.",
-      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=analytics provider proof is absent; threatFailureScenario=catalogue or in-memory evidence is overclaimed; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=defer to USF-172; reviewDate=2026-09-30.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=analytics provider proof is absent; threatFailureScenario=catalogue or in-memory evidence is overclaimed; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=USF-172 records bounded disposition and USF-197 owns service-semantic proof; reviewDate=2026-09-30.",
       "assetServiceAffected": "clickhouse",
       "owner": "platform-data-foundation",
       "riskOwner": "platform-data-risk-owner",
@@ -3400,7 +3426,7 @@
       "implementationStatus": "deferred-with-owner",
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-172 follow-up required before ClickHouse analytics/event-store provider readiness or SDK/client selection.",
+      "deferredReason": "USF-172 records bounded disposition; USF-197 follow-up required before ClickHouse analytics/event-store provider readiness or SDK/client selection.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -4477,6 +4503,29 @@
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Sentry event payloads, raw exception details, credentials, tokens, endpoints, connection strings, or stack traces as readiness evidence."
     },
     {
+      "id": "usf-172-evidence-analytics-event-store-disposition",
+      "proofResult": "analytics-event-store-disposition-gate",
+      "whatWasProven": "USF-172 records a bounded analytics/event-store disposition in docs/architecture/analytics-event-store-provider-disposition-matrix.json, links ClickHouse service-semantic proof to USF-197, and adds validator coverage that fails stale self-deferral, missing follow-up, missing enterprise evidence, in-memory equivalence, missing runtime manifest linkage, and readiness overclaim.",
+      "whatWasNotProven": "This does not prove analytics readiness, analytics-provider readiness, event-store readiness, ClickHouse readiness, provider-compatibility readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, USF-133 closure, ClickHouse SDK/client selection, adapter implementation, persisted event ingestion, tenant-safe query, aggregation, retention, replay, purge, audit operation evidence, teardown, supplier boundary, backup/restore, incident posture, privacy posture, or live provider evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "clickhouse-service-proof-deferred-to-USF-197",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#clickhouse",
+      "adapterProviderId": "analytics-store-clickhouse-deferred",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "a8ad293e0befbff05a3c897bfec021d7b1f30588",
+      "issueLinks": [
+        "USF-172",
+        "USF-197",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "a8ad293e0befbff05a3c897bfec021d7b1f30588",
+      "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain ClickHouse event payloads, analytics payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
+    },
+    {
       "id": "usf-187-security-scanning-evidence",
       "proofResult": "security-scanning-posture-disposition",
       "whatWasProven": "Lane 3 defines security scanning posture, owner metadata, risk treatment, follow-up issue, validator coverage, and non-claims for shared assurance control planes.",
@@ -5475,6 +5524,33 @@
       "residualRisk": "riskStatement=Sentry service semantics remain unproven after USF-170; impact=high; likelihood=medium; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner; treatment=defer service proof to USF-196; reviewDate=2026-09-30; followUpIssue=USF-196; validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json; matrix=docs/architecture/sentry-error-monitoring-disposition-matrix.json"
     },
     {
+      "id": "usf-172-threat-clickhouse-overclaim",
+      "targetType": "source-issue-analytics-event-store-disposition",
+      "target": "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+      "trustBoundary": "USF-172 repository evidence may define bounded analytics/event-store disposition only; ClickHouse provider behaviour, adapter calls, persisted event payloads, and cross-process query semantics remain outside this proof and are tracked by USF-197.",
+      "tenantBoundary": "tenant analytics isolation remains unproven until USF-197 records ClickHouse tenant-safe ingestion and query proof; USF-172 records non-equivalence only.",
+      "credentialBoundary": "no ClickHouse credentials, raw endpoints, SDK errors, provider payloads, connection strings, or tokens are introduced by USF-172.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production analytics data, tenant data, or provider payloads",
+      "abuseCases": [
+        "USF-172 marked Done as analytics readiness",
+        "in-memory analytics evidence marked ClickHouse-service-equivalent",
+        "ClickHouse readiness overclaim",
+        "missing USF-197 follow-up link",
+        "runtime manifest omits USF-197 deferral"
+      ],
+      "failureModes": [
+        "matrix missing",
+        "follow-up missing",
+        "enterprise evidence missing",
+        "in-memory equivalence marked true",
+        "runtime manifest service proof defers back to USF-172",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-023 fails when docs/architecture/analytics-event-store-provider-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-197 is missing, in-memory checks are marked equivalent, runtime manifest lacks USF-197 linkage, readiness claims are enabled, or stale self-deferral remains.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live ClickHouse analytics, event-store, event payload, query result, retention, or provider evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
+      "residualRisk": "riskStatement=ClickHouse service semantics remain unproven after USF-172; impact=high; likelihood=medium; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; controlOwner=platform-data-control-owner; treatment=defer service proof to USF-197; reviewDate=2026-09-30; followUpIssue=USF-197; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/analytics-event-store-provider-disposition-matrix.json"
+    },
+    {
       "id": "usf-187-security-scanning-threat",
       "targetType": "assurance-control-plane",
       "target": "security-scanning",
@@ -5528,7 +5604,7 @@
       "targetType": "provider-disposition",
       "target": "usf-189-clickhouse-analytics-provider",
       "trustBoundary": "deferred ClickHouse analytics/event-store provider boundary; no adapter, endpoint, SDK, or runtime port is active",
-      "tenantBoundary": "tenant analytics isolation remains unproven until USF-172 records provider proof",
+      "tenantBoundary": "tenant analytics isolation remains unproven until USF-197 records provider proof",
       "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client selection is deferred",
       "dataClassification": "synthetic or metadata-only evidence; no production analytics data",
       "abuseCases": [
@@ -5542,8 +5618,8 @@
         "readiness non-claim removed"
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
-      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-172 deferral and non-claims",
-      "residualRisk": "ClickHouse adapter proof, supplier review, incident posture, privacy posture, and backup/resilience evidence remain deferred to USF-172"
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-172 disposition, USF-197 deferral, and non-claims",
+      "residualRisk": "ClickHouse adapter proof, supplier review, incident posture, privacy posture, and backup/resilience evidence remain deferred to USF-197 after USF-172 records the bounded disposition"
     },
     {
       "id": "threat-adapter-usf-189-redis-cache-provider",
@@ -6701,6 +6777,51 @@
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "access proof deferred; owner=platform-assurance-foundation; treatment=defer service-semantic proof under USF-195; keep local deterministic verification mandatory but non-equivalent to SonarQube service readiness; reviewDate=2026-09-30; followUpIssue=USF-195; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-172-access-analytics-event-store",
+      "targetType": "source-issue-analytics-event-store-disposition",
+      "target": "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-172",
+        "followUpIssue=USF-197",
+        "riskStatement=USF-172 could be treated as ClickHouse operator or provider access proof without service evidence",
+        "threatFailureScenario=ClickHouse console access, adapter credential posture, query authorization, or operator audit evidence is claimed from repository validation only",
+        "affectedAssetService=clickhouse analytics event-store disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "treatment=record bounded disposition and defer ClickHouse access and adapter proof to USF-197",
+        "reviewDate=2026-09-30",
+        "accessModel=defined-only",
+        "authRequirement=operator-auth-required-before-ui-exposure",
+        "authorizationBoundary=defined-only; USF-172 does not prove ClickHouse query authorization or operator access",
+        "breakGlassRelevance=must-be-defined-before-readiness-claim",
+        "auditRequirement=value-free-provider-operation-evidence-required-before-readiness-claim",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=required-before-operator-or-provider-readiness",
+        "matrix=docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/analytics-event-store-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-172; USF-197",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "access and provider proof deferred to USF-197; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; treatment=do not treat USF-172 as ClickHouse access proof; reviewDate=2026-09-30; followUpIssue=USF-197; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -9424,6 +9545,49 @@
       ]
     },
     {
+      "id": "usf-172-incident-vulnerability-analytics-event-store",
+      "targetType": "source-issue-analytics-event-store-disposition",
+      "target": "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-172",
+        "followUpIssue=USF-197",
+        "riskStatement=USF-172 could be treated as incident, alerting, or vulnerability readiness for ClickHouse without operating evidence",
+        "threatFailureScenario=ClickHouse provider health, query failure, event-loss detection, vulnerability/advisory review, or corrective-action evidence is claimed from repository validation only",
+        "affectedAssetService=clickhouse analytics event-store disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "treatment=record ClickHouse incident and vulnerability boundaries and defer operating proof to USF-197",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=defined-only; no live ClickHouse event ingestion or provider health proof",
+        "alertingPosture=not-proven-by-USF-172",
+        "escalationOwner=platform-data-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "correctiveActionEvidenceBoundary=repository metadata only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-172",
+        "matrix=docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/analytics-event-store-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-172; USF-197",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "incident, alerting, vulnerability/advisory, and corrective-action evidence deferred to USF-197; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-197; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "usf-187-sonarqube-static-analysis-incident-vulnerability",
       "targetType": "assurance-control-plane",
       "target": "sonarqube-static-analysis",
@@ -10576,6 +10740,52 @@
       ]
     },
     {
+      "id": "usf-172-privacy-analytics-event-store",
+      "targetType": "source-issue-analytics-event-store-disposition",
+      "target": "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-172",
+        "followUpIssue=USF-197",
+        "riskStatement=Analytics event-store evidence could retain raw event payloads, tenant identifiers, query results, credentials, or provider payloads if later proofs are not bounded",
+        "threatFailureScenario=ClickHouse events, query results, provider payloads, credentials, tokens, endpoints, or private tenant analytics data are committed as evidence",
+        "affectedAssetService=clickhouse analytics event-store disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "treatment=record value-free repository metadata only and defer ClickHouse event payload handling proof to USF-197",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-raw-provider-payloads",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-raw-events-query-results-or-provider-payloads-committed-by-USF-172",
+        "matrix=docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/analytics-event-store-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-172; USF-197",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "privacy/data minimisation operating evidence deferred to USF-197; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-197; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "usf-187-sentry-error-monitoring-privacy",
       "targetType": "assurance-control-plane",
       "target": "sentry-error-monitoring",
@@ -10864,13 +11074,13 @@
         "dataOrigin=metadata-only-deferral",
         "piiPosture=no-production-pii",
         "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
-        "retentionPurgePosture=deferred-until-USF-172",
+        "retentionPurgePosture=deferred-until-USF-197",
         "legalHoldRelevance=not-claimed",
         "crossBorderDataResidencyBoundary=not-claimed"
       ],
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-172 required before ClickHouse provider privacy, retention, tenant, and supplier posture claims.",
+      "deferredReason": "USF-172 records bounded disposition; USF-197 required before ClickHouse provider privacy, retention, tenant, and supplier posture claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

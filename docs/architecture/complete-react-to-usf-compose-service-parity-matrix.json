@@ -136,7 +136,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF has no ClickHouse compose service; decide whether analytics/event-store parity is required before USF-133 close.",
+      "gap_or_decision": "USF-172 records bounded analytics/event-store disposition; USF-197 must prove ClickHouse adapter/service semantics before any analytics-provider or event-store readiness claim.",
       "legacy_service_category": "analytics-event-store",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -145,9 +145,9 @@
       "react_ports": ["${CLICKHOUSE_HTTP_PORT:-8124}:8123", "${CLICKHOUSE_NATIVE_PORT:-9002}:9000"],
       "react_service": "clickhouse",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
-      "usf_service_or_substitute": "observability/bulk standards only"
+      "tracking_recommendation": "USF-172/USF-197",
+      "usf_accounting_status": "deferred",
+      "usf_service_or_substitute": "ClickHouse catalogue row and explicit deferred provider class"
     },
     {
       "business_or_foundation_purpose": "reverse proxy and forward-auth clickthrough",

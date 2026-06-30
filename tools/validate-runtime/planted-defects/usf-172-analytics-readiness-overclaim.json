@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-023",
+  "analyticsEventStoreMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed",
+      "value": ["production-readiness"]
+    }
+  ]
+}

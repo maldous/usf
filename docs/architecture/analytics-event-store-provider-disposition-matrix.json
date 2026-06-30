@@ -1,0 +1,128 @@
+{
+  "id": "usf-172-analytics-event-store-provider-disposition-matrix",
+  "title": "USF-172 Analytics Event-Store Provider Disposition Matrix",
+  "status": "draft",
+  "sourceIssue": "USF-172",
+  "followUpIssue": "USF-197",
+  "laneIssue": "USF-189",
+  "parentIssue": "USF-133",
+  "serviceId": "clickhouse",
+  "providerRegistryId": "analytics-store-clickhouse-deferred",
+  "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+  "issueLinks": ["USF-172", "USF-197", "USF-189", "USF-184", "USF-192", "USF-133"],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "summary": "Analytics/event-store decision is not completion evidence. USF-172 records a bounded disposition gate: deterministic in-memory analytics proof is allowed only where semantically permitted and is not equivalent to ClickHouse provider semantics, while actual ClickHouse service-semantic proof remains tracked by USF-197.",
+    "decisionIsWorkComplete": false
+  },
+  "analyticsEventStoreDisposition": {
+    "disposition": "explicit-deferral-with-owner",
+    "clickhouseServiceSemanticProofPresent": false,
+    "analyticsReadinessClaim": false,
+    "eventStoreReadinessClaim": false,
+    "providerCompatibilityClaim": false,
+    "serviceCatalogueServiceId": "clickhouse",
+    "providerRegistryId": "analytics-store-clickhouse-deferred",
+    "followUpIssue": "USF-197",
+    "owner": "platform-data-foundation",
+    "riskOwner": "platform-data-risk-owner",
+    "controlOwner": "platform-data-control-owner",
+    "riskStatement": "ClickHouse analytics/event-store provider semantics, persisted event ingestion, tenant-safe query, retention, replay, aggregation, provider failure modes, and cross-process visibility could be overclaimed from catalogue-only or in-memory evidence.",
+    "treatment": "defer ClickHouse service-semantic adapter proof to USF-197 and keep in-memory analytics proof non-equivalent",
+    "reviewDate": "2026-09-30",
+    "deferredEvidence": [
+      "ClickHouse SDK/client selection and adapter boundary evidence",
+      "persisted event ingestion evidence",
+      "tenant-safe query and aggregation evidence",
+      "retention, replay, and deletion boundary evidence",
+      "audit event evidence for analytics operations",
+      "readiness retry, timeout, teardown, and failure-mode evidence",
+      "supplier, secret, privacy, backup, incident, and vulnerability posture evidence"
+    ]
+  },
+  "inMemorySubstituteBoundary": {
+    "usedWhereSemanticallyPermitted": true,
+    "clickhouseServiceEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "Deterministic in-memory analytics or event evidence may prove local semantic paths only when the relevant catalogue and proof row permit it. It is not equivalent to ClickHouse persisted event ingestion, queryable event history, aggregation, retention/replay, provider failure modes, SDK/client boundary, or cross-process/runtime visibility.",
+    "commands": [
+      "corepack pnpm runtime:proof",
+      "corepack pnpm providers-proof",
+      "corepack pnpm parity",
+      "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "python3 tools/validate-parity/validate-providers.py all --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ],
+    "scopeCovered": [
+      "repository records ClickHouse as an explicit deferred provider class",
+      "runtime provider manifest keeps ClickHouse unsupported-deferred",
+      "provider registry uses evidence-only support without endpoint or SDK",
+      "validator rejects in-memory equivalence and readiness overclaim",
+      "enterprise evidence rows record tenant, retention, audit, privacy, supplier, and incident boundaries"
+    ],
+    "limits": [
+      "no ClickHouse SDK/client selected",
+      "no ClickHouse adapter implementation",
+      "no persisted event ingestion proof",
+      "no tenant-safe ClickHouse query or aggregation proof",
+      "no retention, replay, purge, or restore proof",
+      "no API or worker runtime use of ClickHouse",
+      "no supplier or live-provider evidence",
+      "no analytics readiness or event-store readiness claim"
+    ]
+  },
+  "providerBoundary": {
+    "providerBindingId": "usf-189-clickhouse-analytics-provider",
+    "providerRegistryId": "analytics-store-clickhouse-deferred",
+    "bindingStatus": "unsupported-deferred",
+    "providerMode": "live-external-deferred",
+    "runtimeProviderBindingActive": false,
+    "sdkPackage": null,
+    "sdkVersion": null,
+    "endpointRef": null,
+    "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#clickhouse",
+    "runtimeManifestBinding": "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-clickhouse-analytics-provider",
+    "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-deferred as deferred evidence-only support linked to the ClickHouse service catalogue row."
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-172-soa-analytics-event-store-disposition",
+    "usf-172-evidence-analytics-event-store-disposition",
+    "usf-172-threat-clickhouse-overclaim",
+    "usf-172-access-analytics-event-store",
+    "usf-172-incident-vulnerability-analytics-event-store",
+    "usf-172-privacy-analytics-event-store"
+  ],
+  "readinessClaimsAllowed": ["analytics-event-store-disposition-recorded", "clickhouse-service-proof-deferred", "in-memory-non-equivalence-recorded"],
+  "readinessClaimsProhibited": [
+    "analytics-readiness",
+    "analytics-provider-readiness",
+    "event-store-readiness",
+    "clickhouse-readiness",
+    "provider-compatibility-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ]
+}
