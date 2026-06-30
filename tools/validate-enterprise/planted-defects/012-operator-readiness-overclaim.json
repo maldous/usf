@@ -1,0 +1,10 @@
+{
+  "description": "Lane 2 access posture matrix allows a prohibited readiness claim.",
+  "expectedRule": "USF-ENTERPRISE-014",
+  "operatorAccessTopSet": {
+    "readinessClaimsAllowed": [
+      "access-posture-defined-only",
+      "production-readiness"
+    ]
+  }
+}

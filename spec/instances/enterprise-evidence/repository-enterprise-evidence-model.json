@@ -3205,6 +3205,110 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-186-soa-operator-access-gateway-posture-matrix",
+      "mappedType": "operator-access-gateway-posture-matrix",
+      "controlPurpose": "Govern Lane 2 operator/admin service access posture, gateway boundary, clickthrough boundary, authn/authz posture, audit evidence, break-glass relevance, and no-public-exposure non-claims.",
+      "riskTreated": "Operator/admin and gateway access decisions must be explicit, owner-assigned, audit-scoped, loopback/default-deny, and blocked from readiness overclaim.",
+      "assetServiceAffected": "keycloak,minio,openbao,prometheus,grafana,loki,tempo,mailpit,pgadmin,sonarqube,alertmanager,windmill,temporal-ui,sentry,caddy",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "defined-only; no runtime, UI, provider, or public route implementation created by USF-186",
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "future gateway route proof, operator clickthrough UX, access-review execution evidence, and privileged-operation audit proof remain under USF-169 and USF-180",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-186-soa-operator-access-gateway-validator",
+      "mappedType": "validator",
+      "controlPurpose": "Fail Lane 2 work when operator access or gateway posture decisions are missing, publicly exposed, unauthenticated, unaudited, ownerless, or readiness-overclaimed.",
+      "riskTreated": "Machine-checkable validator coverage prevents silent drift in access posture evidence.",
+      "assetServiceAffected": "operator-access-gateway-posture-matrix",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "defined-only validator coverage",
+      "evidenceSource": "tools/validate-enterprise/validate-enterprise.py",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "not-deferred for metadata validation; runtime access proof remains deferred to USF-169 and USF-180",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-186-soa-operator-access-risk-treatment-deferral",
+      "mappedType": "risk-treatment-deferral",
+      "controlPurpose": "Record Lane 2 deferred and partial operator access risks with owner, treatment, review date, and follow-up issue references.",
+      "riskTreated": "Deferred gateway, clickthrough, access review, audit proof, and provider-console evidence must remain visible and cannot be hidden behind readiness claims.",
+      "assetServiceAffected": "operator-admin-gateway-surfaces",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "deferred-with-owner; reviewDate=2026-09-30; followUpIssues=USF-169,USF-180",
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "gateway route proof, clickthrough UX, access-review execution evidence, and privileged-operation audit evidence are not created in Lane 2",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-186-soa-control-evidence-operator-access-gateway",
+      "mappedType": "control-evidence-reference",
+      "controlPurpose": "Link Lane 2 controls to matrix, enterprise evidence, and validator evidence because this model has no dedicated control/evidence graph section.",
+      "riskTreated": "Control/evidence relationships remain explicit without adding a new schema section in this lane.",
+      "assetServiceAffected": "operator-access-gateway-posture-matrix",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "defined-only; graph represented by matrix controlEvidenceRefs",
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "not-deferred for evidence-linking metadata; no dedicated graph model exists in the current enterprise schema",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -3932,6 +4036,52 @@
       ],
       "prOrMergeSha": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
       "retentionPosture": "Retain committed model rows, validator output, and PR validation summary; scanner outputs and exception files remain future evidence, not created by this lane."
+    },
+    {
+      "id": "usf-186-evidence-operator-access-gateway-posture-matrix",
+      "proofResult": "operator-access-gateway-posture-matrix-defined-only",
+      "whatWasProven": "Lane 2 operator/admin/gateway access posture rows are machine-checkable for owner, auth, audit, break-glass relevance, loopback/public-exposure boundary, deferred risk, and non-claims.",
+      "whatWasNotProven": "No runtime operator access proof, UI clickthrough implementation, public exposure proof, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, or full React parity is proven.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-186",
+        "USF-169",
+        "USF-180",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain committed matrix and validator output in PR evidence; update merge SHA after merge reconciliation if required."
+    },
+    {
+      "id": "usf-186-evidence-operator-access-gateway-validator",
+      "proofResult": "operator-access-gateway-validator-and-planted-defects",
+      "whatWasProven": "USF-ENTERPRISE-014 and planted defects check public exposure, missing auth, missing audit, missing owner, and readiness overclaim for Lane 2 access posture.",
+      "whatWasNotProven": "Validator coverage does not prove runtime route behaviour, real privileged access review execution, real audit log operation, external provider access, SOC readiness, ISO certification, production readiness, or full React parity.",
+      "runtimeMode": "not-runtime-specific",
+      "providerMode": "not-provider-specific",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-186",
+        "USF-169",
+        "USF-180",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain validator output and planted-defect results in PR evidence; update merge SHA after merge reconciliation if required."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -4509,6 +4659,32 @@
       "failClosedBehaviour": "enterprise validator must block missing Lane 3 assurance rows, missing effectiveness state, missing risk treatment metadata, incomplete non-claims, and certification/readiness overclaims",
       "monitoringAuditEvidence": "model rows, closure-matrix links, planted defects, validator output, and PR validation summary only; no runtime monitoring evidence is claimed by this lane",
       "residualRisk": "riskStatement=security scanning posture could be implied by local validators or SonarQube catalogue rows without a defined scanner scope, exception process, incident handoff, and risk treatment boundary; impact=high; likelihood=medium; owner=platform-security-foundation; treatment=define posture and defer stronger scanner service claims to USF-171 and USF-187 follow-up evidence; keep compose security validation non-equivalent to certification or live scanning; reviewDate=2026-09-30; followUpIssue=USF-171"
+    },
+    {
+      "id": "usf-186-threat-operator-access-gateway",
+      "targetType": "operator-access-gateway-boundary",
+      "target": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "trustBoundary": "operator/admin/gateway surfaces are metadata-defined only; future routes and clickthrough must preserve service-catalogue access decisions and fail closed",
+      "tenantBoundary": "tenant isolation for operator/admin access is not proven by Lane 2 and must be proven before stronger readiness claims",
+      "credentialBoundary": "operator access evidence must use secret references and value-free metadata only; no raw credentials, tokens, connection strings, or provider payloads",
+      "dataClassification": "operator metadata, telemetry metadata, captured-message metadata, assurance metadata, routing metadata, and secret metadata only",
+      "abuseCases": [
+        "public or LAN exposure of an operator/admin/gateway surface",
+        "missing authentication or authorisation on an operator/admin surface",
+        "privileged operation without audit evidence",
+        "missing owner for access review or risk treatment",
+        "readiness overclaim from defined-only access posture"
+      ],
+      "failureModes": [
+        "gateway route bypasses service-catalogue access decision",
+        "future clickthrough UI implies test or operator readiness without proof",
+        "control-plane endpoint is treated as public or operator-ready",
+        "external provider console access is treated as locally proven",
+        "deferred risk lacks follow-up owner or review date"
+      ],
+      "failClosedBehaviour": "USF-ENTERPRISE-014 fails on missing decisions, unsafe exposure, missing owner/auth/audit, deferred-risk gaps, or readiness overclaim; USF-186 remains open until merged evidence is reconciled",
+      "monitoringAuditEvidence": "validator output, planted-defect self-tests, PR evidence summary, and committed access posture matrix",
+      "residualRisk": "runtime gateway route behaviour, operator clickthrough UX, executed access reviews, privileged-operation audit proof, and provider-console access evidence remain deferred to USF-169 and USF-180"
     }
   ],
   "sdkDependencyGovernance": [
@@ -5399,6 +5575,39 @@
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "access proof deferred; owner=platform-security-foundation; treatment=define posture and defer stronger scanner service claims to USF-171 and USF-187 follow-up evidence; keep compose security validation non-equivalent to certification or live scanning; reviewDate=2026-09-30; followUpIssue=USF-171; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-186-access-review-operator-access-gateway-matrix",
+      "targetType": "operator-access-gateway-matrix",
+      "target": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "accessReviewOwner=platform-access-foundation",
+        "authRequirement=operator-or-admin-auth-required-for-human-surfaces",
+        "authorizationModel=service-catalogue-access-decisions",
+        "auditRequirement=operator-action-audit-required-for-human-surfaces",
+        "publicExposureAllowed=false",
+        "lanExposureAllowed=false",
+        "breakGlassRelevance=recorded-per-surface",
+        "reviewCadence=2026-09-30-before-stronger-readiness",
+        "linkedFollowUpIssues=USF-169,USF-180",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "runtime access proof, executed access reviews, gateway route proof, clickthrough UX, and privileged-operation audit proof remain deferred with owners to USF-169 and USF-180",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -7840,6 +8049,37 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-186-incident-vulnerability-operator-access-gateway",
+      "targetType": "operator-access-gateway-matrix",
+      "target": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "incidentDetectionHook=validator-and-PR-evidence-only",
+        "vulnerabilityScenario=public-exposure-or-auth-audit-owner-drift",
+        "escalationOwner=platform-access-risk-owner",
+        "correctiveActionEvidence=USF-ENTERPRISE-014-output-and-planted-defects",
+        "owner=platform-access-foundation",
+        "treatment=defer-runtime-gateway-clickthrough-and-audit-proof",
+        "reviewDate=2026-09-30",
+        "linkedFollowUpIssues=USF-169,USF-180"
+      ],
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "operating incident response, vulnerability SLA, live alerting, provider-console audit evidence, and production incident handling remain unproven",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -8807,6 +9047,37 @@
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "privacy/data minimisation posture recorded without raw assurance payloads; owner=platform-security-foundation; reviewDate=2026-09-30; followUpIssue=USF-171; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-186-privacy-operator-access-gateway",
+      "targetType": "operator-access-gateway-matrix",
+      "target": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "dataOrigin=metadata-only",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=secret-references-and-value-free-route-metadata-only",
+        "operatorDataMinimisation=no-raw-provider-payloads-or-captured-message-values",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "linkedFollowUpIssues=USF-169,USF-180"
+      ],
+      "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "runtime route logs, provider-console audit exports, executed access-review records, and production privacy operating evidence are not created in Lane 2",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

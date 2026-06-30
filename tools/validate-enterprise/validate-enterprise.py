@@ -33,6 +33,7 @@ SCHEMA_PATH = Path("spec/schemas/enterprise-evidence.schema.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 RUNTIME_MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-parity.json")
 CLOSURE_MATRIX_PATH = Path("docs/architecture/compose-service-disposition-closure-matrix.json")
+OPERATOR_ACCESS_MATRIX_PATH = Path("docs/architecture/operator-access-gateway-posture-matrix.json")
 PACKAGE_PATH = Path("package.json")
 PLANTED_DEFECT_DIR = Path("tools/validate-enterprise/planted-defects")
 
@@ -50,6 +51,7 @@ RULES = {
     "USF-ENTERPRISE-011": ("blocking", "Lane 6 enterprise safety-control evidence is incomplete"),
     "USF-ENTERPRISE-012": ("blocking", "Lane 3 assurance control-plane disposition is incomplete"),
     "USF-ENTERPRISE-013": ("blocking", "Lane 3 assurance control-plane readiness or certification is overclaimed"),
+    "USF-ENTERPRISE-014": ("blocking", "operator access or gateway posture matrix is incomplete or unsafe"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -231,6 +233,7 @@ ASSURANCE_CONTROL_PLANES = {
 }
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 PINNED_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+){1,3}(?:[-+][0-9A-Za-z.-]+)?$")
+DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 EFFECTIVENESS_STATES = {
     "defined-only",
     "implemented",
@@ -317,6 +320,7 @@ LANE6_EXCEPTION_TOKENS = (
     "compensatingControl=",
     "exceptionExpiry=",
 )
+OPERATOR_AUTH_REQUIREMENTS = {"operator-auth-required", "admin-auth-required"}
 
 
 class Findings:
@@ -434,6 +438,33 @@ def service_needs_access_posture(service: dict[str, Any]) -> bool:
     )
 
 
+def service_needs_operator_access_decision(service: dict[str, Any]) -> bool:
+    service_kind = service.get("serviceKind")
+    access_model = service.get("accessModel")
+    return (
+        service_kind
+        in {"gateway", "observability-control-plane", "assurance-control-plane", "operator-automation", "workflow-operator-ui"}
+        or service.get("adminSurface", {}).get("present") is True
+        or service.get("operatorSurface", {}).get("present") is True
+        or access_model in {"operator-access", "admin-only", "external-provider-console"}
+    )
+
+
+def local_publication(service: dict[str, Any]) -> str:
+    ports = service.get("ports") or []
+    if not ports:
+        return "not-host-published"
+    if all(
+        port.get("hostIp") == "127.0.0.1"
+        and port.get("bindScope") == "loopback-only"
+        and port.get("internetExposureAllowed") is False
+        for port in ports
+        if isinstance(port, dict)
+    ):
+        return "loopback-only"
+    return "non-loopback-present"
+
+
 def service_needs_resilience_posture(service: dict[str, Any]) -> bool:
     return service.get("dataBoundary") not in {None, "none"} or service.get("serviceKind") in {
         "database",
@@ -454,10 +485,15 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     runtime_manifest = read_json(RUNTIME_MANIFEST_PATH)
     package = read_json(PACKAGE_PATH)
     closure_matrix = read_json(CLOSURE_MATRIX_PATH) if (ROOT / CLOSURE_MATRIX_PATH).exists() else None
+    operator_access_matrix = (
+        read_json(OPERATOR_ACCESS_MATRIX_PATH) if (ROOT / OPERATOR_ACCESS_MATRIX_PATH).exists() else None
+    )
 
     model = apply_model_defect(model, defect)
     if closure_matrix is not None:
         closure_matrix = apply_closure_defect(closure_matrix, defect)
+    if operator_access_matrix is not None:
+        operator_access_matrix = apply_operator_access_defect(operator_access_matrix, defect)
     return {
         "model": model,
         "schema": schema,
@@ -465,6 +501,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "runtimeManifest": runtime_manifest,
         "package": package,
         "closureMatrix": closure_matrix,
+        "operatorAccessMatrix": operator_access_matrix,
     }
 
 
@@ -562,6 +599,23 @@ def apply_closure_defect(matrix: dict[str, Any], defect: dict[str, Any]) -> dict
         for row in out.get("rows", []):
             if row.get("service_id") == service_id:
                 row.get("closure_evidence", {}).pop("enterprise_evidence_refs", None)
+    return out
+
+
+def apply_operator_access_defect(matrix: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(matrix)
+    for key, value in defect.get("operatorAccessTopSet", {}).items():
+        out[key] = value
+    remove_row_id = defect.get("removeOperatorAccessRow")
+    if remove_row_id:
+        out["rows"] = [row for row in out.get("rows", []) if row.get("id") != remove_row_id]
+    for patch in defect.get("operatorAccessPatch", []):
+        for row in out.get("rows", []):
+            if row.get("id") == patch.get("id"):
+                for key in patch.get("drop", []):
+                    row.pop(key, None)
+                for key, value in patch.get("set", {}).items():
+                    row[key] = value
     return out
 
 
@@ -896,6 +950,215 @@ def check_closure_matrix_linkage(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-ENTERPRISE-007", str(CLOSURE_MATRIX_PATH), f"closure claimed with unresolved rows: {unresolved[:8]}")
 
 
+def check_operator_access_gateway_matrix(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("operatorAccessMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-ENTERPRISE-014", str(OPERATOR_ACCESS_MATRIX_PATH), "operator access gateway posture matrix is missing")
+        return
+
+    services = {
+        service.get("serviceId"): service
+        for service in state["serviceCatalogue"].get("services", [])
+        if isinstance(service, dict) and isinstance(service.get("serviceId"), str)
+    }
+    expected_services = {
+        service_id for service_id, service in services.items() if service_needs_operator_access_decision(service)
+    }
+    declared_services = set(matrix.get("requiredServiceIds", []))
+    if declared_services != expected_services:
+        missing = sorted(expected_services - declared_services)
+        extra = sorted(declared_services - expected_services)
+        F.add("USF-ENTERPRISE-014", "requiredServiceIds", f"missing={missing} extra={extra}")
+
+    if matrix.get("serviceCatalogueAuthority") != str(SERVICE_CATALOGUE_PATH):
+        F.add("USF-ENTERPRISE-014", "serviceCatalogueAuthority", "matrix must pin service catalogue authority")
+    if matrix.get("enterpriseEvidenceModel") != str(MODEL_PATH):
+        F.add("USF-ENTERPRISE-014", "enterpriseEvidenceModel", "matrix must pin enterprise evidence model")
+    if matrix.get("validationCommand") != "python3 tools/validate-enterprise/validate-enterprise.py all --json":
+        F.add("USF-ENTERPRISE-014", "validationCommand", "matrix validation command must be command-pinned")
+    if REQUIRED_NON_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-014", "nonClaims", "matrix non-claims are incomplete")
+    if set(matrix.get("effectivenessStatesAllowed", [])) != EFFECTIVENESS_STATES:
+        F.add("USF-ENTERPRISE-014", "effectivenessStatesAllowed", "effectiveness state set is incomplete")
+    if REQUIRED_NON_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-ENTERPRISE-014", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
+    if REQUIRED_NON_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-ENTERPRISE-014", "readinessClaimsProhibited", "matrix prohibited readiness claims are incomplete")
+    for field in (
+        "adminSurfaceExposurePolicy",
+        "authnAuthzPosture",
+        "tenantBoundary",
+        "secretBoundary",
+        "clickthroughBoundary",
+        "proofPosture",
+    ):
+        if not matrix.get(field):
+            F.add("USF-ENTERPRISE-014", field, "matrix boundary field is required")
+
+    gateway = matrix.get("gatewayBoundary", {})
+    if not isinstance(gateway, dict):
+        F.add("USF-ENTERPRISE-014", "gatewayBoundary", "gateway boundary must be an object")
+    else:
+        expected_gateway = {
+            "gatewayServiceId": "caddy",
+            "defaultExposure": "loopback-only",
+            "directPublicExposureClaim": False,
+            "directLanExposureClaim": False,
+            "clickthroughUiImplementationPresent": False,
+            "uiImplementationCreated": False,
+        }
+        for key, expected in expected_gateway.items():
+            observed = gateway.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-ENTERPRISE-014", f"gatewayBoundary.{key}", f"expected {expected!r}")
+        if not gateway.get("authnAuthzPosture") or not gateway.get("auditPosture"):
+            F.add("USF-ENTERPRISE-014", "gatewayBoundary", "gateway authn/authz and audit posture are required")
+
+    change = matrix.get("changeManagementEvidence", {})
+    if not isinstance(change, dict) or any(
+        not change.get(field) for field in ("changeRecord", "validation", "rollbackBoundary", "deferredBoundary")
+    ):
+        F.add("USF-ENTERPRISE-014", "changeManagementEvidence", "change, validation, rollback, and deferred boundaries are required")
+    if not matrix.get("controlEvidenceRefs"):
+        F.add("USF-ENTERPRISE-014", "controlEvidenceRefs", "control/evidence references are required")
+    for exception in matrix.get("exceptions", []):
+        if not isinstance(exception, dict):
+            F.add("USF-ENTERPRISE-014", "exceptions", "exception entries must be objects")
+            continue
+        for field in ("owner", "reason", "compensatingControl", "expiry", "validationCommand", "followUpIssue"):
+            if not exception.get(field):
+                F.add("USF-ENTERPRISE-014", exception.get("id", "exception"), f"missing exception {field}")
+
+    rows = matrix.get("rows", [])
+    if not isinstance(rows, list):
+        F.add("USF-ENTERPRISE-014", "rows", "matrix rows must be a list")
+        return
+    row_services = {row.get("serviceId"): row for row in rows if isinstance(row, dict)}
+    if set(row_services) != expected_services:
+        F.add(
+            "USF-ENTERPRISE-014",
+            "rows",
+            f"missing={sorted(expected_services - set(row_services))} extra={sorted(set(row_services) - expected_services)}",
+        )
+
+    row_ids: set[str] = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            F.add("USF-ENTERPRISE-014", "rows", "row must be an object")
+            continue
+        row_id = str(row.get("id", ""))
+        service_id = row.get("serviceId")
+        service = services.get(service_id)
+        if row_id in row_ids:
+            F.add("USF-ENTERPRISE-014", row_id, "duplicate matrix row id")
+        row_ids.add(row_id)
+        if not row_id.startswith("usf-186-"):
+            F.add("USF-ENTERPRISE-014", row_id or service_id or "row", "row id must use usf-186 prefix")
+        if service is None:
+            F.add("USF-ENTERPRISE-014", service_id or row_id, "row references unknown service")
+            continue
+
+        for field in (
+            "surfaceKind",
+            "effectivenessState",
+            "accessModel",
+            "authRequirement",
+            "auditRequirement",
+            "accessReviewOwner",
+            "riskOwner",
+            "controlOwner",
+            "breakGlassRelevance",
+            "defaultBindScope",
+            "localHostPublication",
+            "deferredRisk",
+        ):
+            if row.get(field) in (None, "", []):
+                F.add("USF-ENTERPRISE-014", row_id, f"missing {field}")
+        if row.get("effectivenessState") not in EFFECTIVENESS_STATES:
+            F.add("USF-ENTERPRISE-014", row_id, "unknown effectiveness state")
+        if row.get("publicExposureAllowed") is not False:
+            F.add("USF-ENTERPRISE-014", row_id, "public exposure must remain denied")
+        if row.get("lanExposureAllowed") is not False:
+            F.add("USF-ENTERPRISE-014", row_id, "LAN exposure must remain denied")
+        if row.get("accessModel") != service.get("accessModel"):
+            F.add("USF-ENTERPRISE-014", row_id, "access model does not match service catalogue")
+        if row.get("authRequirement") != service.get("authRequirement"):
+            F.add("USF-ENTERPRISE-014", row_id, "auth requirement does not match service catalogue")
+        if row.get("auditRequirement") != service.get("auditRequirement"):
+            F.add("USF-ENTERPRISE-014", row_id, "audit requirement does not match service catalogue")
+        if row.get("breakGlassRelevance") != service.get("breakGlassRelevance"):
+            F.add("USF-ENTERPRISE-014", row_id, "break-glass relevance does not match service catalogue")
+        if row.get("accessReviewOwner") != service.get("serviceOwner"):
+            F.add("USF-ENTERPRISE-014", row_id, "access review owner does not match service owner")
+        if row.get("riskOwner") != service.get("riskOwner") or row.get("controlOwner") != service.get("controlOwner"):
+            F.add("USF-ENTERPRISE-014", row_id, "risk or control owner does not match service catalogue")
+
+        publication = local_publication(service)
+        expected_bind = (
+            "external-provider-managed"
+            if publication == "not-host-published" and service.get("accessModel") == "external-provider-console"
+            else publication
+        )
+        if publication == "non-loopback-present":
+            F.add("USF-ENTERPRISE-014", service_id, "service catalogue contains non-loopback or exposed port")
+        if row.get("defaultBindScope") != expected_bind:
+            F.add("USF-ENTERPRISE-014", row_id, "default bind scope does not match catalogue exposure")
+        if row.get("localHostPublication") != publication:
+            F.add("USF-ENTERPRISE-014", row_id, "local host publication does not match service ports")
+        for port in service.get("ports", []) or []:
+            if (
+                port.get("hostIp") != "127.0.0.1"
+                or port.get("bindScope") != "loopback-only"
+                or port.get("internetExposureAllowed") is not False
+            ):
+                F.add("USF-ENTERPRISE-014", f"{service_id}:{port.get('portId')}", "operator/gateway port is not loopback-only")
+
+        human_surface = (
+            service.get("adminSurface", {}).get("present") is True
+            or service.get("operatorSurface", {}).get("present") is True
+            or service.get("accessModel") in {"operator-access", "admin-only", "external-provider-console"}
+            or service.get("serviceKind") == "gateway"
+        )
+        if human_surface and row.get("authRequirement") not in OPERATOR_AUTH_REQUIREMENTS:
+            F.add("USF-ENTERPRISE-014", row_id, "operator/admin/gateway surface lacks required auth posture")
+        if human_surface and row.get("auditRequirement") != "operator-action-audit-required":
+            F.add("USF-ENTERPRISE-014", row_id, "operator/admin/gateway surface lacks operator audit posture")
+        if row.get("surfaceKind") == "control-plane-no-human-access" and row.get("accessModel") != "no-human-access":
+            F.add("USF-ENTERPRISE-014", row_id, "no-human control-plane row must not permit human access")
+        if service_id == "caddy":
+            if row.get("surfaceKind") != "gateway":
+                F.add("USF-ENTERPRISE-014", row_id, "caddy row must be the gateway row")
+            source_refs = set(row.get("sourceRefs", []))
+            if "../react/docker/caddy/Caddyfile" not in source_refs:
+                F.add("USF-ENTERPRISE-014", row_id, "gateway row lacks React gateway lineage reference")
+
+        risk = row.get("deferredRisk", {})
+        if not isinstance(risk, dict):
+            F.add("USF-ENTERPRISE-014", row_id, "deferred risk must be an object")
+            continue
+        for field in (
+            "riskStatement",
+            "threatFailureScenario",
+            "affectedAssetService",
+            "impact",
+            "likelihood",
+            "owner",
+            "treatment",
+            "reviewDate",
+            "linkedFollowUpIssue",
+        ):
+            if not risk.get(field):
+                F.add("USF-ENTERPRISE-014", row_id, f"missing deferred risk {field}")
+        if risk.get("affectedAssetService") != service_id:
+            F.add("USF-ENTERPRISE-014", row_id, "deferred risk affected service does not match row")
+        if risk.get("owner") != row.get("accessReviewOwner"):
+            F.add("USF-ENTERPRISE-014", row_id, "deferred risk owner must match access review owner")
+        if not DATE_RE.fullmatch(str(risk.get("reviewDate", ""))):
+            F.add("USF-ENTERPRISE-014", row_id, "deferred risk review date must be YYYY-MM-DD")
+        if not str(risk.get("linkedFollowUpIssue", "")).startswith("USF-"):
+            F.add("USF-ENTERPRISE-014", row_id, "deferred risk follow-up issue must be linked")
+
+
 def check_lane4_observability(F: Findings, state: dict[str, Any]) -> None:
     model = state["model"]
     model_text = json.dumps(model, sort_keys=True)
@@ -1066,6 +1329,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_posture_registers(F, state)
     check_lane6_safety_controls(F, state)
     check_closure_matrix_linkage(F, state)
+    check_operator_access_gateway_matrix(F, state)
     check_lane4_observability(F, state)
     check_assurance_control_plane_disposition(F, state)
     return F

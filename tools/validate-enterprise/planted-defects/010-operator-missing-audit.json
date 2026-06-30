@@ -1,0 +1,12 @@
+{
+  "description": "Lane 2 operator surface lacks privileged-operation audit posture.",
+  "expectedRule": "USF-ENTERPRISE-014",
+  "operatorAccessPatch": [
+    {
+      "id": "usf-186-access-posture-pgadmin",
+      "set": {
+        "auditRequirement": "local-operational-logs"
+      }
+    }
+  ]
+}

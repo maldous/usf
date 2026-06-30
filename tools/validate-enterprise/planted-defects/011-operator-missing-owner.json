@@ -1,0 +1,12 @@
+{
+  "description": "Lane 2 operator access row lacks an access review owner.",
+  "expectedRule": "USF-ENTERPRISE-014",
+  "operatorAccessPatch": [
+    {
+      "id": "usf-186-access-posture-temporal-ui",
+      "drop": [
+        "accessReviewOwner"
+      ]
+    }
+  ]
+}

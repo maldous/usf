@@ -1,0 +1,12 @@
+{
+  "description": "Lane 2 gateway posture claims public operator exposure.",
+  "expectedRule": "USF-ENTERPRISE-014",
+  "operatorAccessPatch": [
+    {
+      "id": "usf-186-access-posture-caddy",
+      "set": {
+        "publicExposureAllowed": true
+      }
+    }
+  ]
+}
