@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-018",
+  "manifestPatches": [
+    {
+      "op": "remove",
+      "path": "/providerBindingMatrix/7"
+    }
+  ]
+}

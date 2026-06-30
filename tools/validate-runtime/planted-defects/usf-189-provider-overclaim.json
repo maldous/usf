@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-022",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/7/claimBoundary",
+      "value": "production-ready provider proof complete"
+    }
+  ]
+}

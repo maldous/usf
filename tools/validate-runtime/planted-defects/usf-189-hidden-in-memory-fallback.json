@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-019",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/7/providerMode",
+      "value": "in-memory"
+    }
+  ]
+}

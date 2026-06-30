@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-021",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/7/followUpIssueRefs",
+      "value": []
+    }
+  ]
+}

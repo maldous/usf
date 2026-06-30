@@ -3309,6 +3309,240 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-adapter-usf-189-clickhouse-analytics-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 ClickHouse analytics/event-store provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=analytics provider proof is absent; threatFailureScenario=catalogue or in-memory evidence is overclaimed; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=defer to USF-172; reviewDate=2026-09-30.",
+      "assetServiceAffected": "clickhouse",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-172 follow-up required before ClickHouse analytics/event-store provider readiness or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-redis-cache-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 Redis cache provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=Redis provider proof is absent; threatFailureScenario=NATS or process memory is treated as cache semantics; affectedAssetService=redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer to USF-173; reviewDate=2026-09-30.",
+      "assetServiceAffected": "redis",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-173 follow-up required before Redis cache provider readiness or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-meilisearch-search-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 Meilisearch search provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=Meilisearch provider proof is absent; threatFailureScenario=in-memory search proof is overclaimed; affectedAssetService=meilisearch; impact=medium; likelihood=medium; owner=platform-search-foundation; treatment=defer to USF-174; reviewDate=2026-09-30.",
+      "assetServiceAffected": "meilisearch",
+      "owner": "platform-search-foundation",
+      "riskOwner": "platform-search-risk-owner",
+      "controlOwner": "platform-search-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-174 follow-up required before Meilisearch search provider readiness or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-clamav-scanner-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 ClamAV scanner provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=ClamAV provider proof is absent; threatFailureScenario=deterministic scan markers are overclaimed; affectedAssetService=clamav; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=defer to USF-175; reviewDate=2026-09-30.",
+      "assetServiceAffected": "clamav",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-175 follow-up required before ClamAV scanner provider readiness or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-localstack-cloud-mock-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 LocalStack cloud mock provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=LocalStack provider proof is absent; threatFailureScenario=mock cloud behaviour is overclaimed as live provider compatibility; affectedAssetService=localstack; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=defer to USF-176; reviewDate=2026-09-30.",
+      "assetServiceAffected": "localstack",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-176 follow-up required before LocalStack mock-provider proof or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-wiremock-http-mock-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 WireMock HTTP mock provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=WireMock provider proof is absent; threatFailureScenario=fixtures are overclaimed as external provider compatibility; affectedAssetService=wiremock; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=defer to USF-176; reviewDate=2026-09-30.",
+      "assetServiceAffected": "wiremock",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-176 follow-up required before WireMock mock-provider proof or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-webhook-sink-capture-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 webhook sink capture provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=webhook sink provider proof is absent; threatFailureScenario=capture is overclaimed as notification delivery or external provider compatibility; affectedAssetService=webhook-sink; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=defer to USF-176; reviewDate=2026-09-30.",
+      "assetServiceAffected": "webhook-sink",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-176 follow-up required before webhook sink provider proof or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-pgbackrest-backup-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 pgBackRest backup/restore provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=backup/restore provider proof is absent; threatFailureScenario=documentation is overclaimed as restore drill evidence; affectedAssetService=pgbackrest; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=defer to USF-177; reviewDate=2026-09-30.",
+      "assetServiceAffected": "pgbackrest",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-177 follow-up required before pgBackRest backup/restore provider readiness or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-adapter-usf-189-windmill-automation-provider",
+      "mappedType": "provider-disposition",
+      "controlPurpose": "Govern USF-189 Windmill workflow automation provider deferral.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=Windmill provider proof is absent; threatFailureScenario=Temporal workflows are overclaimed as operator automation proof; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer to USF-178; reviewDate=2026-09-30.",
+      "assetServiceAffected": "windmill,windmill-worker,windmill-postgres,windmill-redis",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "deferred-with-owner",
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-178 follow-up required before Windmill operator automation provider readiness or SDK/client selection.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -4082,6 +4316,34 @@
       ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain validator output and planted-defect results in PR evidence; update merge SHA after merge reconciliation if required."
+    },
+    {
+      "id": "evidence-usf-189-runtime-provider-disposition-validator",
+      "proofResult": "runtime-provider-semantic-proof-cleanup-validator",
+      "whatWasProven": "USF-189 runtime provider disposition rows are present for analytics, cache, search, scanner, mocks, backup/restore, and workflow automation provider classes; validator rules fail closed on missing provider disposition, hidden in-memory fallback, missing SDK boundary, unsafe readiness posture, and provider overclaim.",
+      "whatWasNotProven": "Does not prove provider adapters, SDK/client selection for deferred providers, live-provider readiness, test readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-189 Done state.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "live-external-deferred",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json",
+      "adapterProviderId": "usf-189-provider-disposition-set",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "issueLinks": [
+        "USF-172",
+        "USF-173",
+        "USF-174",
+        "USF-175",
+        "USF-176",
+        "USF-177",
+        "USF-178",
+        "USF-184",
+        "USF-189",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
+      "retentionPosture": "Retain runtime validator output, planted-defect selftest output, and PR validation summary; update merge SHA after merge if a coordinator records final evidence."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -4685,6 +4947,204 @@
       "failClosedBehaviour": "USF-ENTERPRISE-014 fails on missing decisions, unsafe exposure, missing owner/auth/audit, deferred-risk gaps, or readiness overclaim; USF-186 remains open until merged evidence is reconciled",
       "monitoringAuditEvidence": "validator output, planted-defect self-tests, PR evidence summary, and committed access posture matrix",
       "residualRisk": "runtime gateway route behaviour, operator clickthrough UX, executed access reviews, privileged-operation audit proof, and provider-console access evidence remain deferred to USF-169 and USF-180"
+    },
+    {
+      "id": "threat-adapter-usf-189-clickhouse-analytics-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-clickhouse-analytics-provider",
+      "trustBoundary": "deferred ClickHouse analytics/event-store provider boundary; no adapter, endpoint, SDK, or runtime port is active",
+      "tenantBoundary": "tenant analytics isolation remains unproven until USF-172 records provider proof",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client selection is deferred",
+      "dataClassification": "synthetic or metadata-only evidence; no production analytics data",
+      "abuseCases": [
+        "hidden provider proof",
+        "in-memory equivalence overclaim",
+        "retention boundary overclaim"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-172 deferral and non-claims",
+      "residualRisk": "ClickHouse adapter proof, supplier review, incident posture, privacy posture, and backup/resilience evidence remain deferred to USF-172"
+    },
+    {
+      "id": "threat-adapter-usf-189-redis-cache-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-redis-cache-provider",
+      "trustBoundary": "deferred Redis cache provider boundary; NATS and process memory are not substitutes",
+      "tenantBoundary": "tenant cache key isolation, expiration, retry, audit, and teardown remain unproven until USF-173",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client selection is deferred",
+      "dataClassification": "synthetic or metadata-only evidence; no production cache data",
+      "abuseCases": [
+        "NATS treated as Redis",
+        "process memory treated as cache provider",
+        "expiration semantics overclaimed"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-173 deferral and non-claims",
+      "residualRisk": "Redis adapter proof, SDK/client rationale, incident posture, privacy posture, and resilience evidence remain deferred to USF-173"
+    },
+    {
+      "id": "threat-adapter-usf-189-meilisearch-search-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-meilisearch-search-provider",
+      "trustBoundary": "deferred Meilisearch provider boundary; in-memory search remains hermetic-only",
+      "tenantBoundary": "tenant indexing, deletion, retention, ranking, filtering, and reindex proof remain unproven until USF-174",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client selection is deferred",
+      "dataClassification": "synthetic or metadata-only evidence; no production search index data",
+      "abuseCases": [
+        "in-memory search overclaim",
+        "tenant search leakage",
+        "deletion or retention proof overclaim"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-174 deferral and non-claims",
+      "residualRisk": "Meilisearch adapter proof, SDK/client rationale, incident posture, privacy posture, and resilience evidence remain deferred to USF-174"
+    },
+    {
+      "id": "threat-adapter-usf-189-clamav-scanner-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-clamav-scanner-provider",
+      "trustBoundary": "deferred ClamAV scanner provider boundary; deterministic scan markers are not composed scanner proof",
+      "tenantBoundary": "tenant scan/quarantine/release/deletion evidence remains unproven until USF-175",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client or protocol exception rationale is deferred",
+      "dataClassification": "synthetic or metadata-only evidence; no production file data",
+      "abuseCases": [
+        "scan marker overclaim",
+        "scanner failure treated as clean",
+        "quarantine routing proof overclaim"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-175 deferral and non-claims",
+      "residualRisk": "ClamAV adapter proof, failure/timeout proof, privacy posture, and incident posture remain deferred to USF-175"
+    },
+    {
+      "id": "threat-adapter-usf-189-localstack-cloud-mock-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-localstack-cloud-mock-provider",
+      "trustBoundary": "deferred LocalStack cloud-emulator boundary; mocks cannot satisfy live provider readiness",
+      "tenantBoundary": "tenant emulator isolation and cleanup remain unproven until USF-176",
+      "credentialBoundary": "only local placeholders may be used; no real credentials or external egress",
+      "dataClassification": "synthetic or metadata-only evidence; no production cloud-provider data",
+      "abuseCases": [
+        "mock treated as live provider",
+        "egress boundary bypass",
+        "synthetic data cleanup missing"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
+      "residualRisk": "LocalStack proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176"
+    },
+    {
+      "id": "threat-adapter-usf-189-wiremock-http-mock-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-wiremock-http-mock-provider",
+      "trustBoundary": "deferred WireMock HTTP mock boundary; fixtures cannot satisfy external provider compatibility",
+      "tenantBoundary": "tenant fixture isolation and cleanup remain unproven until USF-176",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced",
+      "dataClassification": "synthetic or metadata-only evidence; no production external-provider payloads",
+      "abuseCases": [
+        "fixture treated as live provider",
+        "contract drift hidden",
+        "synthetic data cleanup missing"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
+      "residualRisk": "WireMock proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176"
+    },
+    {
+      "id": "threat-adapter-usf-189-webhook-sink-capture-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-webhook-sink-capture-provider",
+      "trustBoundary": "deferred webhook sink capture boundary; capture is not notification delivery or external compatibility proof",
+      "tenantBoundary": "tenant webhook capture isolation and cleanup remain unproven until USF-176",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced",
+      "dataClassification": "synthetic or metadata-only evidence; no production webhook payloads",
+      "abuseCases": [
+        "capture treated as delivery",
+        "fixture treated as live provider",
+        "synthetic data cleanup missing"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
+      "residualRisk": "Webhook sink proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176"
+    },
+    {
+      "id": "threat-adapter-usf-189-pgbackrest-backup-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-pgbackrest-backup-provider",
+      "trustBoundary": "deferred pgBackRest backup/restore provider boundary; documentation is not restore proof",
+      "tenantBoundary": "tenant backup, restore, retention, and cleanup evidence remain unproven until USF-177",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced; secret exclusion evidence is deferred",
+      "dataClassification": "synthetic or metadata-only evidence; no production backup data",
+      "abuseCases": [
+        "documentation treated as restore proof",
+        "backup artifact overclaim",
+        "secret exclusion proof missing"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-177 deferral and non-claims",
+      "residualRisk": "Backup artifact, restore drill, retention, incident posture, and resilience evidence remain deferred to USF-177"
+    },
+    {
+      "id": "threat-adapter-usf-189-windmill-automation-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-windmill-automation-provider",
+      "trustBoundary": "deferred Windmill operator automation boundary; Temporal application workflow proof is not Windmill proof",
+      "tenantBoundary": "tenant access, approval, audit, retention, cleanup, and fail-closed evidence remain unproven until USF-178",
+      "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client selection is deferred",
+      "dataClassification": "synthetic or metadata-only evidence; no production workflow automation data",
+      "abuseCases": [
+        "Temporal treated as Windmill",
+        "operator access proof overclaimed",
+        "secret boundary proof missing"
+      ],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
+      "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-178 deferral and non-claims",
+      "residualRisk": "Windmill proof, access review, incident posture, privacy posture, and resilience evidence remain deferred to USF-178"
     }
   ],
   "sdkDependencyGovernance": [
@@ -9078,6 +9538,258 @@
       "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "runtime route logs, provider-console audit exports, executed access-review records, and production privacy operating evidence are not created in Lane 2",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-clickhouse-analytics-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-clickhouse-analytics-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-172",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-172 required before ClickHouse provider privacy, retention, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-redis-cache-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-redis-cache-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-173",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-173 required before Redis provider privacy, retention, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-meilisearch-search-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-meilisearch-search-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-174",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-174 required before Meilisearch provider privacy, retention, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-clamav-scanner-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-clamav-scanner-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-175",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-175 required before ClamAV provider privacy, scan-content, quarantine, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-localstack-cloud-mock-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-localstack-cloud-mock-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-176",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-176 required before LocalStack mock provider privacy, synthetic data cleanup, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-wiremock-http-mock-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-wiremock-http-mock-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-176",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-176 required before WireMock mock provider privacy, synthetic data cleanup, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-webhook-sink-capture-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-webhook-sink-capture-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-176",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-176 required before webhook sink provider privacy, synthetic data cleanup, tenant, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-pgbackrest-backup-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-pgbackrest-backup-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-177",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-177 required before pgBackRest provider privacy, backup artifact, restore, retention, secret-exclusion, and supplier posture claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-adapter-usf-189-windmill-automation-provider",
+      "targetType": "provider-disposition",
+      "target": "usf-189-windmill-automation-provider",
+      "posture": [
+        "dataOrigin=metadata-only-deferral",
+        "piiPosture=no-production-pii",
+        "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
+        "retentionPurgePosture=deferred-until-USF-178",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed"
+      ],
+      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "USF-178 required before Windmill provider privacy, access, approval, audit, retention, tenant, and supplier posture claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
