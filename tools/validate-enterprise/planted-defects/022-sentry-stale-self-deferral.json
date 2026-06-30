@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-ENTERPRISE-022",
+  "description": "USF-170 enterprise evidence still defers follow-up work to itself.",
+  "posturePatch": [
+    {
+      "section": "accessReviewPrivilegedOperationPosture",
+      "id": "usf-170-access-sentry-error-monitoring",
+      "appendPosture": [
+        "followUpIssue=USF-170"
+      ]
+    }
+  ]
+}

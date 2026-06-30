@@ -2779,6 +2779,7 @@
           "USF-182",
           "USF-185",
           "USF-170",
+          "USF-196",
           "USF-187",
           "USF-184",
           "USF-192",
@@ -2793,7 +2794,7 @@
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
           "future operator console SSO/clickthrough and privileged access proof",
-          "USF-170 service-semantic proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator console access remains deferred."
+          "USF-196 service-semantic proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator console access remains deferred."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2827,10 +2828,13 @@
           "usf-187-sentry-error-monitoring-access",
           "usf-187-sentry-error-monitoring-risk-treatment",
           "usf-187-sentry-error-monitoring-incident-vulnerability",
-          "usf-187-sentry-error-monitoring-privacy"
+          "usf-187-sentry-error-monitoring-privacy",
+          "usf-170-soa-sentry-error-monitoring-disposition",
+          "usf-170-evidence-sentry-error-monitoring-disposition"
         ],
         "tracking_issue_rationale": {
-          "USF-170": "Sentry error-monitoring disposition proof and evidence"
+          "USF-170": "bounded Sentry error-monitoring disposition proof and evidence",
+          "USF-196": "Sentry service-semantic proof and operator access depth"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

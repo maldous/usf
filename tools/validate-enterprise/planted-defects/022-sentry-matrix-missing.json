@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-022",
+  "description": "USF-170 Sentry error-monitoring disposition matrix is missing.",
+  "removeSentryErrorMatrix": true
+}

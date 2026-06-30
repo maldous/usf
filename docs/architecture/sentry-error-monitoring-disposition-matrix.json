@@ -1,0 +1,134 @@
+{
+  "id": "usf-170-sentry-error-monitoring-disposition-matrix",
+  "title": "USF-170 Sentry Error-Monitoring Disposition Matrix",
+  "status": "draft",
+  "sourceIssue": "USF-170",
+  "followUpIssue": "USF-196",
+  "laneIssue": "USF-187",
+  "parentIssue": "USF-133",
+  "serviceId": "sentry",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "issueLinks": ["USF-170", "USF-196", "USF-187", "USF-184", "USF-192", "USF-133"],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "summary": "Sentry/error-monitoring decision is not completion evidence. USF-170 records a bounded disposition gate: local observability proof remains mandatory but not equivalent to Sentry service semantics, while actual Sentry service-semantic proof remains tracked by USF-196.",
+    "decisionIsWorkComplete": false
+  },
+  "sentryDisposition": {
+    "disposition": "explicit-deferral-with-owner",
+    "serviceSemanticProofPresent": false,
+    "serviceReadinessClaim": false,
+    "liveMonitoringReadinessClaim": false,
+    "serviceCatalogueServiceId": "sentry",
+    "followUpIssue": "USF-196",
+    "owner": "platform-observability-foundation",
+    "riskOwner": "platform-observability-risk-owner",
+    "controlOwner": "platform-observability-control-owner",
+    "riskStatement": "Sentry service semantics, event capture, redaction, tenant-safe labels, retention, alert handoff, incident evidence, and operator console access could be overclaimed from local observability proof output.",
+    "treatment": "defer Sentry service-semantic proof to USF-196 and keep local observability proof non-equivalent",
+    "reviewDate": "2026-09-30",
+    "deferredEvidence": [
+      "Sentry event capture evidence",
+      "redaction and tenant-safe label evidence",
+      "retention and purge evidence",
+      "alert handoff and incident evidence",
+      "operator console access and audit evidence",
+      "supplier and live-provider boundary evidence"
+    ]
+  },
+  "localErrorEvidenceGate": {
+    "usedAsSubstituteForLocalObservabilityChecks": true,
+    "sentryServiceEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "Repository observability proof and validation commands are mandatory local deterministic evidence, but they are not equivalent to Sentry event ingestion, issue lifecycle, dashboard, alert handoff, incident workflow, retention, or operator-console operations.",
+    "commands": [
+      "corepack pnpm verify",
+      "corepack pnpm parity",
+      "python3 tools/validate-parity/validate-observability.py all --json",
+      "python3 tools/validate-spec/validate-spec.py all --json",
+      "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ],
+    "scopeCovered": [
+      "local structured log proof",
+      "local metric label proof",
+      "local trace redaction proof",
+      "tenant-safe telemetry query proof",
+      "context propagation proof",
+      "observability readiness denial proof",
+      "security signal proof",
+      "enterprise evidence validation"
+    ],
+    "limits": [
+      "no Sentry event ingestion result",
+      "no Sentry issue lifecycle proof",
+      "no Sentry dashboard proof",
+      "no alert handoff proof",
+      "no incident workflow proof",
+      "no retention purge proof",
+      "no operator console access proof",
+      "no live monitoring readiness claim"
+    ]
+  },
+  "incidentAlertingPosture": {
+    "effectivenessState": "defined-only",
+    "sentryReadinessClaim": false,
+    "liveMonitoringReadinessClaim": false,
+    "incidentReadinessClaim": false,
+    "alertingReadinessClaim": false,
+    "followUpIssue": "USF-196",
+    "owner": "platform-observability-foundation",
+    "riskOwner": "platform-observability-risk-owner",
+    "controlOwner": "platform-observability-control-owner",
+    "reviewDate": "2026-09-30"
+  },
+  "operatorAccessAuditRetentionSupplierBoundary": {
+    "operatorAccessBoundary": "Sentry operator console access remains defined-only and must be proven before a service readiness claim.",
+    "authRequirement": "operator-auth-required",
+    "auditRequirement": "operator-action-audit-required",
+    "retentionBoundary": "No Sentry event payloads, issue payloads, stack traces, or source-analysis payloads are retained in repository evidence by USF-170.",
+    "secretBoundary": "No Sentry credential, DSN, raw endpoint, provider payload, event payload, or stack trace is introduced by USF-170.",
+    "supplierBoundary": "Profile-gated composed or external Sentry service is not supplier/live-provider evidence; supplier posture is required before live-provider or production claims.",
+    "incidentBoundary": "No production incident, alert handoff, escalation, or vulnerability-response workflow is proven by USF-170."
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-170-soa-sentry-error-monitoring-disposition",
+    "usf-170-evidence-sentry-error-monitoring-disposition",
+    "usf-170-threat-sentry-overclaim",
+    "usf-170-access-sentry-error-monitoring",
+    "usf-170-incident-vulnerability-sentry-error-monitoring",
+    "usf-170-privacy-sentry-error-monitoring"
+  ],
+  "readinessClaimsAllowed": ["local-observability-proof-required", "sentry-service-proof-deferred", "error-monitoring-disposition-recorded"],
+  "readinessClaimsProhibited": [
+    "sentry-readiness",
+    "error-monitoring-readiness",
+    "live-monitoring-readiness",
+    "incident-readiness",
+    "alerting-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ]
+}

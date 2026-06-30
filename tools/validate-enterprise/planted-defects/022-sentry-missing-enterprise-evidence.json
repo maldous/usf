@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-022",
+  "description": "USF-170 source-issue enterprise evidence row is missing.",
+  "removeEnterpriseEvidence": "usf-170-evidence-sentry-error-monitoring-disposition"
+}
