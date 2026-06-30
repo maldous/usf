@@ -1,0 +1,16 @@
+{
+  "name": "usf-175-file-scanner-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-026",
+  "fileScannerProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/0",
+      "value": "full-dev-readiness"
+    },
+    {
+      "op": "replace",
+      "path": "/scannerProviderDisposition/liveScannerReadinessClaim",
+      "value": true
+    }
+  ]
+}

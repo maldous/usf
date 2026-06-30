@@ -1,0 +1,169 @@
+{
+  "id": "usf-175-file-scanner-provider-disposition-matrix",
+  "title": "USF-175 file scanner provider disposition matrix",
+  "sourceIssue": "USF-175",
+  "followUpIssue": "USF-200",
+  "laneIssue": "USF-189",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "parentIssue": "USF-133",
+  "serviceId": "clamav",
+  "providerRegistryId": "file-scan-clamav-deferred",
+  "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+  "issueLinks": [
+    "USF-175",
+    "USF-200",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "decisionSummary": "File scanner provider parity is split by semantic requirement. Deterministic in-memory scan markers are accepted only where service catalogue authority permits them and are not equivalent to ClamAV composed provider semantics.",
+    "decisionIsWorkComplete": false
+  },
+  "scannerProviderDisposition": {
+    "disposition": "explicit-deferral-with-owner",
+    "clamavServiceSemanticProofPresent": false,
+    "composedScannerProviderProofPresent": false,
+    "deterministicScannerClamavEquivalent": false,
+    "failClosedQuarantineClaim": "bounded-hermetic-only",
+    "liveScannerReadinessClaim": false,
+    "dlpReadinessClaim": false,
+    "vulnerabilityClearanceClaim": false,
+    "scannerProviderReadinessClaim": false,
+    "providerCompatibilityClaim": false,
+    "serviceCatalogueServiceId": "clamav",
+    "providerRegistryId": "file-scan-clamav-deferred",
+    "followUpIssue": "USF-200",
+    "owner": "platform-files-foundation",
+    "riskOwner": "platform-files-risk-owner",
+    "controlOwner": "platform-files-control-owner",
+    "reviewDate": "2026-09-30",
+    "riskStatement": "ClamAV service semantics could be claimed from deterministic in-memory scan markers, files capability proof, or service catalogue presence without composed scanner provider evidence.",
+    "treatment": "Defer ClamAV SDK/client or protocol-exception selection, adapter implementation, scan invocation, clean/infected outcome proof, fail-closed quarantine routing, release boundary, deletion, retention, tenant isolation, readiness retry, failure-mode, audit, teardown, supplier, incident, privacy, and provider proof to USF-200.",
+    "deferredEvidence": "USF-175 records the bounded disposition gate, non-equivalence boundary, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only."
+  },
+  "deterministicScanSubstituteBoundary": {
+    "usedWhereSemanticallyPermitted": true,
+    "clamavServiceEquivalent": false,
+    "liveMalwareScanEquivalent": false,
+    "dlpEquivalent": false,
+    "providerFailureEquivalent": false,
+    "quarantineReleaseEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "Deterministic in-memory scan markers and files capability proof are not equivalent to ClamAV composed provider scan invocation, signature database posture, clean/infected wire response semantics, provider unavailable handling, timeout, readiness retry, release workflow, retention, deletion, audit operation evidence, supplier posture, or teardown behaviour.",
+    "commands": [
+      "corepack pnpm proof:files",
+      "corepack pnpm runtime:proof:in-memory",
+      "corepack pnpm verify",
+      "python3 tools/validate-runtime/validate-runtime.py all --json"
+    ],
+    "scopeCovered": [
+      "tenant-safe hermetic file scan status and quarantine proof where semantically permitted",
+      "files capability proof posture from USF-147/USF-146 lineage",
+      "non-equivalence to ClamAV provider semantics",
+      "value-free repository evidence and validation linkage"
+    ],
+    "limits": [
+      "does not prove ClamAV adapter binding",
+      "does not prove ClamAV clean or infected scan response compatibility",
+      "does not prove ClamAV signature database freshness or update posture",
+      "does not prove provider unavailable, timeout, readiness retry, or failure-mode behaviour",
+      "does not prove composed scanner quarantine release, deletion, retention, or teardown",
+      "does not prove live scanner, DLP, vulnerability-clearance, test, staging, production, SOC, ISO, full dev, or full React parity readiness"
+    ]
+  },
+  "providerBoundary": {
+    "providerBindingId": "usf-189-clamav-scanner-provider",
+    "providerRegistryId": "file-scan-clamav-deferred",
+    "bindingStatus": "profile-gated",
+    "providerMode": "live-external-deferred",
+    "runtimeProviderBindingActive": false,
+    "sdkPackage": null,
+    "sdkVersion": null,
+    "endpointRef": null,
+    "followUpIssue": "USF-200",
+    "serviceCatalogueServiceId": "clamav",
+    "providerRegistryEvidence": "packages/core/src/index.ts records file-scan-clamav-deferred as deferred evidence-only support linked to the ClamAV service catalogue row."
+  },
+  "semanticProofBoundaries": [
+    {
+      "semanticArea": "scan-invocation-clean-infected-outcomes",
+      "status": "deferred-with-owner",
+      "followUpIssue": "USF-200",
+      "nonEquivalenceBoundary": "Deterministic marker proof is not ClamAV composed provider scan invocation or clean/infected response proof."
+    },
+    {
+      "semanticArea": "fail-closed-quarantine-release-deletion-retention",
+      "status": "deferred-with-owner",
+      "followUpIssue": "USF-200",
+      "nonEquivalenceBoundary": "Hermetic file lifecycle proof does not prove ClamAV provider failure, timeout, quarantine routing, privileged release boundary, deletion, retention, or cleanup behaviour."
+    },
+    {
+      "semanticArea": "scanner-sdk-protocol-supplier-incident-privacy",
+      "status": "deferred-with-owner",
+      "followUpIssue": "USF-200",
+      "nonEquivalenceBoundary": "USF-175 does not select a scanner SDK/client, approve a lower-level protocol exception, prove supplier posture, incident posture, vulnerability posture, scan payload privacy, or scanner evidence retention."
+    }
+  ],
+  "operationalEvidencePosture": {
+    "readinessRetry": "deferred-to-USF-200",
+    "timeout": "deferred-to-USF-200",
+    "failClosed": "bounded-hermetic-files-proof-only",
+    "safeTeardown": "deferred-to-USF-200",
+    "structuredLogging": "required-before-provider-proof",
+    "tracingCorrelation": "required-before-provider-proof",
+    "metrics": "required-before-provider-proof",
+    "auditEvents": "required-before-provider-proof",
+    "redaction": "required-before-provider-proof"
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-175-soa-file-scanner-provider-disposition",
+    "usf-175-evidence-file-scanner-provider-disposition",
+    "usf-175-threat-clamav-overclaim",
+    "usf-175-access-file-scanner-provider",
+    "usf-175-incident-vulnerability-file-scanner-provider",
+    "usf-175-privacy-file-scanner-provider"
+  ],
+  "readinessClaimsAllowed": [
+    "file-scanner-provider-disposition-recorded",
+    "clamav-service-proof-deferred",
+    "deterministic-scan-non-equivalence-recorded"
+  ],
+  "readinessClaimsProhibited": [
+    "scanner-readiness",
+    "file-scanner-readiness",
+    "composed-scanner-readiness",
+    "clamav-readiness",
+    "live-scanner-readiness",
+    "dlp-readiness",
+    "vulnerability-clearance-readiness",
+    "provider-compatibility-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity"
+  ]
+}

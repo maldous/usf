@@ -3496,7 +3496,7 @@
       "id": "soa-adapter-usf-189-clamav-scanner-provider",
       "mappedType": "provider-disposition",
       "controlPurpose": "Govern USF-189 ClamAV scanner provider deferral.",
-      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=ClamAV provider proof is absent; threatFailureScenario=deterministic scan markers are overclaimed; affectedAssetService=clamav; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=defer to USF-175; reviewDate=2026-09-30.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=ClamAV provider proof is absent; threatFailureScenario=deterministic scan markers are overclaimed; affectedAssetService=clamav; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=USF-175 records disposition and USF-200 owns proof; reviewDate=2026-09-30.",
       "assetServiceAffected": "clamav",
       "owner": "platform-files-foundation",
       "riskOwner": "platform-files-risk-owner",
@@ -3504,7 +3504,7 @@
       "implementationStatus": "deferred-with-owner",
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-175 follow-up required before ClamAV scanner provider readiness or SDK/client selection.",
+      "deferredReason": "USF-200 follow-up required before ClamAV scanner provider readiness, SDK/client selection, or protocol-exception proof.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -3791,6 +3791,32 @@
       "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-174; USF-199",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "threatFailureScenario=in-memory search evidence is mistaken for Meilisearch composed provider evidence; impact=high; likelihood=medium; owner=platform-search-foundation; treatment=defer service-semantic proof to USF-199; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-175-soa-file-scanner-provider-disposition",
+      "mappedType": "source-issue-file-scanner-provider-disposition",
+      "controlPurpose": "Map USF-175 as the bounded file scanner provider disposition gate, separating deterministic in-memory scan markers from deferred ClamAV service-semantic proof under USF-200.",
+      "riskTreated": "riskStatement=USF-175 could be treated as ClamAV or live scanner readiness even though it records explicit semantic split, non-equivalence, and deferral only",
+      "assetServiceAffected": "clamav service catalogue row plus repository file scanner provider disposition",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; sourceIssue=USF-175; followUpIssue=USF-200; treatment=record bounded file scanner provider disposition, require docs/architecture/file-scanner-provider-disposition-matrix.json, and defer ClamAV SDK/client or protocol-exception selection, adapter implementation, scan invocation, quarantine, release, deletion, retention, tenant, retry, audit, teardown, supplier, incident, privacy, and backup proof; reviewDate=2026-09-30",
+      "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-175; USF-200",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "threatFailureScenario=deterministic scan markers are mistaken for ClamAV composed provider evidence; impact=high; likelihood=medium; owner=platform-files-foundation; treatment=defer service-semantic proof to USF-200; reviewDate=2026-09-30; followUpIssue=USF-200; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -5014,6 +5040,29 @@
       ],
       "prOrMergeSha": "4da8952a690adb7291e20228870933c59d1ce2c8",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Meilisearch documents, query payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
+    },
+    {
+      "id": "usf-175-evidence-file-scanner-provider-disposition",
+      "proofResult": "file-scanner-provider-disposition-gate",
+      "whatWasProven": "USF-175 records a bounded file scanner provider disposition in docs/architecture/file-scanner-provider-disposition-matrix.json, links ClamAV service-semantic proof to USF-200, records deterministic scan markers as hermetic and non-equivalent, updates runtime and closure matrices, and adds validator coverage that fails missing matrix, missing follow-up, false deterministic scan equivalence, missing enterprise evidence, missing runtime manifest linkage, missing proof-command linkage, and readiness overclaim.",
+      "whatWasNotProven": "This does not prove ClamAV readiness, composed scanner readiness, scanner-provider readiness, DLP readiness, vulnerability-clearance readiness, provider-compatibility readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, USF-133 closure, ClamAV SDK/client or protocol exception selection, adapter implementation, clean/infected scan compatibility, signature update posture, provider unavailable behaviour, timeout, readiness retry, fail-closed composed quarantine routing, release boundary, deletion, retention, audit operation evidence, teardown, supplier boundary, backup/restore, incident posture, privacy posture, retention posture, or live provider evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "clamav-service-proof-deferred-to-USF-200-and-deterministic-scan-proof-bounded",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#clamav",
+      "adapterProviderId": "file-scan-clamav-deferred",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "7d6cab08feef8261e58c3a6dd210cc044641d9e6",
+      "issueLinks": [
+        "USF-175",
+        "USF-200",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "7d6cab08feef8261e58c3a6dd210cc044641d9e6",
+      "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain ClamAV scan payloads, sample files, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -5768,7 +5817,7 @@
       "targetType": "provider-disposition",
       "target": "usf-189-clamav-scanner-provider",
       "trustBoundary": "deferred ClamAV scanner provider boundary; deterministic scan markers are not composed scanner proof",
-      "tenantBoundary": "tenant scan/quarantine/release/deletion evidence remains unproven until USF-175",
+      "tenantBoundary": "tenant scan/quarantine/release/deletion evidence remains unproven until USF-200; USF-175 records bounded disposition only",
       "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client or protocol exception rationale is deferred",
       "dataClassification": "synthetic or metadata-only evidence; no production file data",
       "abuseCases": [
@@ -5782,8 +5831,8 @@
         "readiness non-claim removed"
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
-      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-175 deferral and non-claims",
-      "residualRisk": "ClamAV adapter proof, failure/timeout proof, privacy posture, and incident posture remain deferred to USF-175"
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-175 disposition, USF-200 deferral, and non-claims",
+      "residualRisk": "ClamAV adapter proof, failure/timeout proof, privacy posture, and incident posture remain deferred to USF-200"
     },
     {
       "id": "threat-adapter-usf-189-localstack-cloud-mock-provider",
@@ -6083,6 +6132,34 @@
       "failClosedBehaviour": "USF-RUNTIME-025 fails when docs/architecture/composed-search-provider-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-199 is missing, in-memory checks are marked Meilisearch equivalent, runtime manifest lacks USF-199 linkage, proof commands are incomplete, readiness claims are enabled, or stale self-deferral remains.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live Meilisearch index, search document, query result, ranking result, filtering result, reindex result, or provider evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
       "residualRisk": "riskStatement=Meilisearch service semantics remain unproven after USF-174; impact=high; likelihood=medium; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; controlOwner=platform-search-control-owner; treatment=defer service proof to USF-199; reviewDate=2026-09-30; followUpIssue=USF-199; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/composed-search-provider-disposition-matrix.json"
+    },
+    {
+      "id": "usf-175-threat-clamav-overclaim",
+      "targetType": "source-issue-file-scanner-provider-disposition",
+      "target": "docs/architecture/file-scanner-provider-disposition-matrix.json",
+      "trustBoundary": "USF-175 repository evidence may define bounded file scanner provider disposition only; ClamAV provider behaviour, adapter calls, scan result semantics, signature database posture, fail-closed quarantine routing, release, deletion, retention, and timeout semantics remain outside this proof and are tracked by USF-200.",
+      "tenantBoundary": "tenant file scan isolation remains unproven for ClamAV until USF-200 records tenant-safe composed provider operation proof; USF-175 records non-equivalence only.",
+      "credentialBoundary": "no ClamAV credentials, raw endpoints, SDK errors, protocol payloads, scan payloads, file samples, connection strings, or tokens are introduced by USF-175.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production file data, tenant data, scan payloads, or provider payloads",
+      "abuseCases": [
+        "USF-175 marked Done as ClamAV readiness",
+        "deterministic scan marker proof marked ClamAV-service-equivalent",
+        "service catalogue presence marked composed scanner provider proof",
+        "missing USF-200 follow-up link",
+        "runtime manifest omits USF-200 deferral"
+      ],
+      "failureModes": [
+        "matrix missing",
+        "follow-up missing",
+        "enterprise evidence missing",
+        "deterministic scanner ClamAV equivalence marked true",
+        "runtime manifest service proof defers back only to USF-175",
+        "proof command linkage missing",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-026 fails when docs/architecture/file-scanner-provider-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-200 is missing, deterministic scan checks are marked ClamAV equivalent, runtime manifest lacks USF-200 linkage, proof commands are incomplete, readiness claims are enabled, or stale self-deferral remains.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live ClamAV scan, scan payload, signature update, file sample, quarantine release, deletion, retention, or provider evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
+      "residualRisk": "riskStatement=ClamAV service semantics remain unproven after USF-175; impact=high; likelihood=medium; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; controlOwner=platform-files-control-owner; treatment=defer service proof to USF-200; reviewDate=2026-09-30; followUpIssue=USF-200; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/file-scanner-provider-disposition-matrix.json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7368,6 +7445,51 @@
       "evidenceSource": "docs/architecture/composed-search-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-174; USF-199",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "access and provider proof deferred to USF-199; owner=platform-search-foundation; riskOwner=platform-search-risk-owner; treatment=do not treat USF-174 as Meilisearch access proof; reviewDate=2026-09-30; followUpIssue=USF-199; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-175-access-file-scanner-provider",
+      "targetType": "source-issue-file-scanner-provider-disposition",
+      "target": "docs/architecture/file-scanner-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-175",
+        "followUpIssue=USF-200",
+        "riskStatement=USF-175 could be treated as ClamAV operator or provider access proof without service evidence",
+        "threatFailureScenario=scanner admin access, adapter credential posture, scan release authorization, or operator audit evidence is claimed from repository validation only",
+        "affectedAssetService=clamav file scanner provider disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-files-foundation",
+        "riskOwner=platform-files-risk-owner",
+        "controlOwner=platform-files-control-owner",
+        "treatment=record bounded disposition and defer ClamAV access and adapter proof to USF-200",
+        "reviewDate=2026-09-30",
+        "accessModel=defined-only",
+        "authRequirement=operator-auth-required-before-ui-exposure",
+        "authorizationBoundary=defined-only; USF-175 does not prove ClamAV scan release authorization or operator access",
+        "breakGlassRelevance=must-be-defined-before-readiness-claim",
+        "auditRequirement=value-free-provider-operation-evidence-required-before-readiness-claim",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=required-before-operator-or-provider-readiness",
+        "matrix=docs/architecture/file-scanner-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-175; USF-200",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "access and provider proof deferred to USF-200; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; treatment=do not treat USF-175 as ClamAV access proof; reviewDate=2026-09-30; followUpIssue=USF-200; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -10215,6 +10337,49 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-175-incident-vulnerability-file-scanner-provider",
+      "targetType": "source-issue-file-scanner-provider-disposition",
+      "target": "docs/architecture/file-scanner-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-175",
+        "followUpIssue=USF-200",
+        "riskStatement=ClamAV incident, alerting, vulnerability, signature update, and corrective-action evidence could be overclaimed from deterministic scan markers",
+        "threatFailureScenario=ClamAV provider outage, stale signature database, scan timeout, provider advisory, or file scanning incident is treated as covered by hermetic proof",
+        "affectedAssetService=clamav file scanner provider disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-files-foundation",
+        "riskOwner=platform-files-risk-owner",
+        "controlOwner=platform-files-control-owner",
+        "treatment=record ClamAV incident and vulnerability boundaries and defer operating proof to USF-200",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=defined-only; no live ClamAV operation or provider health proof",
+        "alertingPosture=not-proven-by-USF-175",
+        "escalationOwner=platform-files-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "correctiveActionEvidenceBoundary=repository metadata only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-175",
+        "matrix=docs/architecture/file-scanner-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-175; USF-200",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "incident, alerting, vulnerability/advisory, signature-update, and corrective-action evidence deferred to USF-200; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-200; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -11534,13 +11699,13 @@
         "dataOrigin=metadata-only-deferral",
         "piiPosture=no-production-pii",
         "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
-        "retentionPurgePosture=deferred-until-USF-175",
+        "retentionPurgePosture=deferred-until-USF-200",
         "legalHoldRelevance=not-claimed",
         "crossBorderDataResidencyBoundary=not-claimed"
       ],
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-175 required before ClamAV provider privacy, scan-content, quarantine, tenant, and supplier posture claims.",
+      "deferredReason": "USF-200 required before ClamAV provider privacy, scan-content, quarantine, tenant, and supplier posture claims; USF-175 records disposition only.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -11818,6 +11983,52 @@
       "evidenceSource": "docs/architecture/cache-eventing-service-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-173; USF-198",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "privacy/data minimisation operating evidence deferred to USF-198; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-198; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-175-privacy-file-scanner-provider",
+      "targetType": "source-issue-file-scanner-provider-disposition",
+      "target": "docs/architecture/file-scanner-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-175",
+        "followUpIssue=USF-200",
+        "riskStatement=ClamAV scan payloads, file samples, tenant file data, or provider responses could be retained or exposed without proof",
+        "threatFailureScenario=file sample, scan result, malware signature payload, provider response, or raw scanner error is committed as evidence or retention/purge posture is implied from metadata only",
+        "affectedAssetService=clamav file scanner provider disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-files-foundation",
+        "riskOwner=platform-files-risk-owner",
+        "controlOwner=platform-files-control-owner",
+        "treatment=record value-free repository metadata only and defer ClamAV scan data handling proof to USF-200",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-raw-provider-payloads",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-file-samples-scan-payloads-scan-results-provider-responses-raw-errors-or-raw-endpoints-committed-by-USF-175",
+        "matrix=docs/architecture/file-scanner-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-175; USF-200",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "privacy/data minimisation operating evidence deferred to USF-200; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-200; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

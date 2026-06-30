@@ -54,6 +54,7 @@ RULES = {
     "USF-RUNTIME-023": ("blocking", "analytics event-store provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-024": ("blocking", "cache and eventing service disposition is incomplete or unsafe"),
     "USF-RUNTIME-025": ("blocking", "composed search provider disposition is incomplete or unsafe"),
+    "USF-RUNTIME-026": ("blocking", "file scanner provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -63,6 +64,7 @@ SCHEMA_PATH = Path("spec/schemas/runtime-proof.schema.json")
 ANALYTICS_EVENT_STORE_MATRIX_PATH = Path("docs/architecture/analytics-event-store-provider-disposition-matrix.json")
 CACHE_EVENTING_MATRIX_PATH = Path("docs/architecture/cache-eventing-service-disposition-matrix.json")
 COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-provider-disposition-matrix.json")
+FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provider-disposition-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -243,6 +245,25 @@ COMPOSED_SEARCH_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "ai-search-readiness",
     "provider-compatibility-readiness",
 }
+FILE_SCANNER_PROVIDER_REQUIRED_ISSUES = {"USF-175", "USF-200", "USF-189", "USF-184", "USF-192", "USF-133"}
+FILE_SCANNER_PROVIDER_REQUIRED_EVIDENCE_REFS = {
+    "usf-175-soa-file-scanner-provider-disposition",
+    "usf-175-evidence-file-scanner-provider-disposition",
+    "usf-175-threat-clamav-overclaim",
+    "usf-175-access-file-scanner-provider",
+    "usf-175-incident-vulnerability-file-scanner-provider",
+    "usf-175-privacy-file-scanner-provider",
+}
+FILE_SCANNER_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
+    "scanner-readiness",
+    "file-scanner-readiness",
+    "composed-scanner-readiness",
+    "clamav-readiness",
+    "live-scanner-readiness",
+    "dlp-readiness",
+    "vulnerability-clearance-readiness",
+    "provider-compatibility-readiness",
+}
 LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clickhouse-analytics-provider": {
         "serviceIds": ["clickhouse"],
@@ -268,7 +289,7 @@ LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clamav-scanner-provider": {
         "serviceIds": ["clamav"],
         "providerIds": ["file-scan-clamav-deferred"],
-        "followUpIssue": "USF-175",
+        "followUpIssue": "USF-200",
         "boundaryRef": "usf-189-scanner-provider-deferred",
         "allowedStatuses": {"profile-gated"},
     },
@@ -479,6 +500,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 composed_search_provider_matrix,
                 defect["composedSearchProviderMatrixPatches"],
             )
+    file_scanner_provider_matrix: Any = None
+    if not defect.get("removeFileScannerProviderMatrix"):
+        file_scanner_provider_matrix = read_json(FILE_SCANNER_PROVIDER_MATRIX_PATH)
+        if defect.get("fileScannerProviderMatrixPatches"):
+            file_scanner_provider_matrix = apply_manifest_patches(
+                file_scanner_provider_matrix,
+                defect["fileScannerProviderMatrixPatches"],
+            )
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
@@ -503,6 +532,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "analyticsEventStoreMatrix": analytics_matrix,
         "cacheEventingMatrix": cache_eventing_matrix,
         "composedSearchProviderMatrix": composed_search_provider_matrix,
+        "fileScannerProviderMatrix": file_scanner_provider_matrix,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -1434,6 +1464,171 @@ def check_composed_search_provider_disposition(F: Findings, state: dict[str, Any
             F.add("USF-RUNTIME-025", "composed-search-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
 
+def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("fileScannerProviderMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-RUNTIME-026", str(FILE_SCANNER_PROVIDER_MATRIX_PATH), "file scanner provider disposition matrix is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-175",
+        "followUpIssue": "USF-200",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "serviceId": "clamav",
+        "providerRegistryId": "file-scan-clamav-deferred",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-RUNTIME-026", key, f"expected {expected!r}")
+
+    if FILE_SCANNER_PROVIDER_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-026", "issueLinks", "file scanner provider issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-RUNTIME-026", "nonClaims", "file scanner provider non-claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-026", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
+    if FILE_SCANNER_PROVIDER_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-026", "readinessClaimsProhibited", "file scanner provider prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-RUNTIME-026", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-RUNTIME-026", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    disposition = matrix.get("scannerProviderDisposition", {})
+    if not isinstance(disposition, dict):
+        F.add("USF-RUNTIME-026", "scannerProviderDisposition", "scanner provider disposition must be an object")
+    else:
+        expected_disposition = {
+            "disposition": "explicit-deferral-with-owner",
+            "clamavServiceSemanticProofPresent": False,
+            "composedScannerProviderProofPresent": False,
+            "deterministicScannerClamavEquivalent": False,
+            "failClosedQuarantineClaim": "bounded-hermetic-only",
+            "liveScannerReadinessClaim": False,
+            "dlpReadinessClaim": False,
+            "vulnerabilityClearanceClaim": False,
+            "scannerProviderReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "serviceCatalogueServiceId": "clamav",
+            "providerRegistryId": "file-scan-clamav-deferred",
+            "followUpIssue": "USF-200",
+            "owner": "platform-files-foundation",
+            "riskOwner": "platform-files-risk-owner",
+            "controlOwner": "platform-files-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_disposition.items():
+            observed = disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-026", f"scannerProviderDisposition.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "deferredEvidence"):
+            if disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-026", f"scannerProviderDisposition.{field}", "deferral field is required")
+
+    substitute = matrix.get("deterministicScanSubstituteBoundary", {})
+    if not isinstance(substitute, dict):
+        F.add("USF-RUNTIME-026", "deterministicScanSubstituteBoundary", "substitute boundary must be an object")
+    else:
+        if substitute.get("usedWhereSemanticallyPermitted") is not True:
+            F.add("USF-RUNTIME-026", "deterministicScanSubstituteBoundary.usedWhereSemanticallyPermitted", "permitted deterministic scan use must be explicit")
+        for key in (
+            "clamavServiceEquivalent",
+            "liveMalwareScanEquivalent",
+            "dlpEquivalent",
+            "providerFailureEquivalent",
+            "quarantineReleaseEquivalent",
+        ):
+            if substitute.get(key) is not False:
+                F.add("USF-RUNTIME-026", f"deterministicScanSubstituteBoundary.{key}", "deterministic scan evidence must not be ClamAV equivalent")
+        if "not equivalent to ClamAV" not in str(substitute.get("substitutionNonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-026", "deterministicScanSubstituteBoundary.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+        commands = set(substitute.get("commands", []))
+        for command in (
+            "corepack pnpm proof:files",
+            "corepack pnpm runtime:proof:in-memory",
+            "corepack pnpm verify",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+        ):
+            if command not in commands:
+                F.add("USF-RUNTIME-026", "deterministicScanSubstituteBoundary.commands", f"missing {command}")
+        if len(substitute.get("scopeCovered", [])) < 4 or len(substitute.get("limits", [])) < 6:
+            F.add("USF-RUNTIME-026", "deterministicScanSubstituteBoundary", "substitute scope and limits are incomplete")
+
+    provider_boundary = matrix.get("providerBoundary", {})
+    if not isinstance(provider_boundary, dict):
+        F.add("USF-RUNTIME-026", "providerBoundary", "provider boundary must be an object")
+    else:
+        expected_provider = {
+            "providerBindingId": "usf-189-clamav-scanner-provider",
+            "providerRegistryId": "file-scan-clamav-deferred",
+            "bindingStatus": "profile-gated",
+            "providerMode": "live-external-deferred",
+            "runtimeProviderBindingActive": False,
+            "sdkPackage": None,
+            "sdkVersion": None,
+            "endpointRef": None,
+            "followUpIssue": "USF-200",
+        }
+        for key, expected in expected_provider.items():
+            observed = provider_boundary.get(key)
+            if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
+                F.add("USF-RUNTIME-026", f"providerBoundary.{key}", f"expected {expected!r}")
+
+    operational = matrix.get("operationalEvidencePosture", {})
+    if not isinstance(operational, dict):
+        F.add("USF-RUNTIME-026", "operationalEvidencePosture", "operational evidence posture must be an object")
+    else:
+        expected_operational = {
+            "readinessRetry": "deferred-to-USF-200",
+            "timeout": "deferred-to-USF-200",
+            "failClosed": "bounded-hermetic-files-proof-only",
+            "safeTeardown": "deferred-to-USF-200",
+        }
+        for key, expected in expected_operational.items():
+            if operational.get(key) != expected:
+                F.add("USF-RUNTIME-026", f"operationalEvidencePosture.{key}", f"expected {expected!r}")
+        for field in ("structuredLogging", "tracingCorrelation", "metrics", "auditEvents", "redaction"):
+            if field not in operational:
+                F.add("USF-RUNTIME-026", f"operationalEvidencePosture.{field}", "operational field is required")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != FILE_SCANNER_PROVIDER_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-026", "enterpriseEvidenceRefs", "file scanner provider enterprise evidence refs are incomplete")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-clamav-scanner-provider")
+    if not binding:
+        F.add("USF-RUNTIME-026", "providerBindingMatrix", "ClamAV provider disposition is missing from runtime manifest")
+    else:
+        if "USF-200" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider", "runtime manifest must link USF-200")
+        if "USF-200" not in str(binding.get("deferredReason", "")):
+            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-200")
+        if binding.get("bindingStatus") != "profile-gated" or binding.get("endpointRef") is not None:
+            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider", "ClamAV must remain explicitly deferred/profile-gated without endpoint binding")
+        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+            F.add("USF-RUNTIME-026", "providerBindingMatrix.usf-189-clamav-scanner-provider", "deferred ClamAV must not name an SDK/client package")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-scanner-provider-deferred")
+    if not deferred or "USF-200" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-026", "deferredBoundaries.usf-189-scanner-provider-deferred", "runtime deferred boundary must link USF-200")
+
+    matrix_text = json.dumps(matrix, sort_keys=True)
+    for stale in ("until USF-175 closes", "followUpIssue=USF-175", "\"followUpIssue\": \"USF-175\"", "linkedFollowUpIssue=USF-175"):
+        if stale in matrix_text:
+            F.add("USF-RUNTIME-026", "file-scanner-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     for binding_id, metadata in REQUIRED_PROVIDER_BINDINGS.items():
         adapter_path = metadata["adapterPath"]
@@ -1618,6 +1813,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_analytics_event_store_disposition,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
+            check_file_scanner_provider_disposition,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -1643,6 +1839,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_analytics_event_store_disposition,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
+            check_file_scanner_provider_disposition,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

@@ -1,0 +1,10 @@
+{
+  "name": "usf-175-file-scanner-missing-proof-command",
+  "expectedRule": "USF-RUNTIME-026",
+  "fileScannerProviderMatrixPatches": [
+    {
+      "op": "remove",
+      "path": "/deterministicScanSubstituteBoundary/commands/0"
+    }
+  ]
+}
