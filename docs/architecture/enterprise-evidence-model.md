@@ -32,6 +32,9 @@ update the relevant model sections:
   import check, and update/deprecation owner.
 - Logging, tracing, metrics, and audit evidence standard conformance.
 - Access review posture for operator, admin, gateway, and control-plane surfaces.
+- Lane-owned access posture matrices where a lane needs machine-checkable owner, exposure,
+  authn/authz, audit, deferred-risk, control/evidence, incident, privacy, and non-claim
+  evidence beyond the shared service catalogue.
 - Backup, restore, and resilience posture for data-bearing services.
 - Incident and vulnerability evidence posture.
 - Privacy and data minimisation posture.
