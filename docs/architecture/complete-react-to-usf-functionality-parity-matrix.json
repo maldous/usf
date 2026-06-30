@@ -336,9 +336,9 @@
       ],
       "evidence_grade": "D",
       "react_evidence_summary": "ClickHouse and contracts-analytics lineage",
-      "readiness_impact": "USF-172 records bounded analytics/event-store disposition; ClickHouse adapter and service-semantic proof remains deferred to USF-197 before any analytics-provider or event-store readiness claim.",
-      "tracking_carrier_or_recommendation": "USF-172/USF-197",
-      "usf_evidence_summary": "ClickHouse is catalogued as an explicit deferred provider class with in-memory analytics evidence kept non-equivalent to ClickHouse persisted event-store semantics.",
+      "readiness_impact": "USF-172 records bounded analytics/event-store disposition; USF-197 records the proof boundary; ClickHouse adapter and service-semantic proof remains deferred to USF-206 before any analytics-provider or event-store readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-172/USF-197/USF-206",
+      "usf_evidence_summary": "ClickHouse is catalogued as an explicit deferred provider class with in-memory analytics evidence kept non-equivalent to ClickHouse persisted event-store semantics; USF-206 owns actual adapter proof.",
       "usf_status": "deferred"
     },
     {

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-030",
+  "clickhouseProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-197"
+    }
+  ]
+}

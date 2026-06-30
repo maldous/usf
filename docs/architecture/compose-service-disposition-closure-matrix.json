@@ -1314,14 +1314,15 @@
           "USF-182",
           "USF-185",
           "USF-172",
-          "USF-197"
+          "USF-197",
+          "USF-206"
         ],
         "non_equivalence_boundaries": [
           "USF-172 records that deterministic in-memory analytics/event evidence may be used only where semantically permitted and is not equivalent to ClickHouse persisted event ingestion, queryable history, aggregation, retention/replay, provider failure modes, SDK/client boundary, or cross-process runtime visibility.",
           "Sentry-internal ClickHouse usage is not general product analytics/event-store readiness unless separately catalogued, adapter-bound, and proven."
         ],
         "missing_evidence": [
-          "USF-197 ClickHouse analytics/event-store service-semantic adapter proof",
+          "USF-206 ClickHouse analytics/event-store service-semantic adapter proof",
           "ClickHouse SDK/client selection and adapter boundary evidence",
           "persisted event ingestion, tenant-safe query, aggregation, retention, replay, audit, teardown, and provider failure-mode evidence",
           "live external/provider-managed service evidence",
@@ -1356,13 +1357,20 @@
           "usf-172-access-analytics-event-store",
           "usf-172-incident-vulnerability-analytics-event-store",
           "usf-172-privacy-analytics-event-store",
+          "usf-197-soa-clickhouse-proof-boundary",
+          "usf-197-evidence-clickhouse-proof-boundary",
+          "usf-197-threat-clickhouse-overclaim",
+          "usf-197-access-clickhouse-proof-boundary",
+          "usf-197-incident-vulnerability-clickhouse-proof-boundary",
+          "usf-197-privacy-clickhouse-proof-boundary",
           "soa-deferred-boundary-clickhouse",
           "resilience-posture-clickhouse",
           "incident-vulnerability-clickhouse"
         ],
         "tracking_issue_rationale": {
           "USF-172": "analytics event-store provider disposition proof",
-          "USF-197": "ClickHouse analytics event-store adapter proof and service semantics"
+          "USF-197": "ClickHouse analytics event-store proof boundary",
+          "USF-206": "ClickHouse composed analytics event-store adapter proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

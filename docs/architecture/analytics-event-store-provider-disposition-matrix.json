@@ -8,15 +8,16 @@
   "parentIssue": "USF-133",
   "serviceId": "clickhouse",
   "providerRegistryId": "analytics-store-clickhouse-deferred",
+  "remainingProofIssue": "USF-206",
   "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
   "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-  "issueLinks": ["USF-172", "USF-197", "USF-189", "USF-184", "USF-192", "USF-133"],
+  "issueLinks": ["USF-172", "USF-197", "USF-206", "USF-189", "USF-184", "USF-192", "USF-133"],
   "humanDecision": {
     "decisionState": "accepted",
-    "summary": "Analytics/event-store decision is not completion evidence. USF-172 records a bounded disposition gate: deterministic in-memory analytics proof is allowed only where semantically permitted and is not equivalent to ClickHouse provider semantics, while actual ClickHouse service-semantic proof remains tracked by USF-197.",
+    "summary": "Analytics/event-store decision is not completion evidence. USF-172 records a bounded disposition gate: deterministic in-memory analytics proof is allowed only where semantically permitted and is not equivalent to ClickHouse provider semantics. USF-197 records the service-semantic proof boundary, while actual ClickHouse adapter proof remains tracked by USF-206.",
     "decisionIsWorkComplete": false
   },
   "analyticsEventStoreDisposition": {
@@ -32,7 +33,7 @@
     "riskOwner": "platform-data-risk-owner",
     "controlOwner": "platform-data-control-owner",
     "riskStatement": "ClickHouse analytics/event-store provider semantics, persisted event ingestion, tenant-safe query, retention, replay, aggregation, provider failure modes, and cross-process visibility could be overclaimed from catalogue-only or in-memory evidence.",
-    "treatment": "defer ClickHouse service-semantic adapter proof to USF-197 and keep in-memory analytics proof non-equivalent",
+    "treatment": "defer ClickHouse service-semantic adapter proof through USF-197 to USF-206 and keep in-memory analytics proof non-equivalent",
     "reviewDate": "2026-09-30",
     "deferredEvidence": [
       "ClickHouse SDK/client selection and adapter boundary evidence",
@@ -42,7 +43,8 @@
       "audit event evidence for analytics operations",
       "readiness retry, timeout, teardown, and failure-mode evidence",
       "supplier, secret, privacy, backup, incident, and vulnerability posture evidence"
-    ]
+    ],
+    "remainingProofIssue": "USF-206"
   },
   "inMemorySubstituteBoundary": {
     "usedWhereSemanticallyPermitted": true,
@@ -85,7 +87,8 @@
     "endpointRef": null,
     "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#clickhouse",
     "runtimeManifestBinding": "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-clickhouse-analytics-provider",
-    "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-deferred as deferred evidence-only support linked to the ClickHouse service catalogue row."
+    "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-deferred as deferred evidence-only support linked to the ClickHouse service catalogue row.",
+    "remainingProofIssue": "USF-206"
   },
   "enterpriseEvidenceRefs": [
     "usf-172-soa-analytics-event-store-disposition",
@@ -93,7 +96,13 @@
     "usf-172-threat-clickhouse-overclaim",
     "usf-172-access-analytics-event-store",
     "usf-172-incident-vulnerability-analytics-event-store",
-    "usf-172-privacy-analytics-event-store"
+    "usf-172-privacy-analytics-event-store",
+    "usf-197-soa-clickhouse-proof-boundary",
+    "usf-197-evidence-clickhouse-proof-boundary",
+    "usf-197-threat-clickhouse-overclaim",
+    "usf-197-access-clickhouse-proof-boundary",
+    "usf-197-incident-vulnerability-clickhouse-proof-boundary",
+    "usf-197-privacy-clickhouse-proof-boundary"
   ],
   "readinessClaimsAllowed": ["analytics-event-store-disposition-recorded", "clickhouse-service-proof-deferred", "in-memory-non-equivalence-recorded"],
   "readinessClaimsProhibited": [
