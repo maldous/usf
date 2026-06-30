@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-019",
+  "description": "verify does not run operator access proof",
+  "packageScriptSet": {
+    "verify": "corepack pnpm proof:providers && corepack pnpm proof:observability"
+  }
+}

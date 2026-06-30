@@ -35,6 +35,7 @@ RUNTIME_MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-c
 CLOSURE_MATRIX_PATH = Path("docs/architecture/compose-service-disposition-closure-matrix.json")
 OPERATOR_ACCESS_MATRIX_PATH = Path("docs/architecture/operator-access-gateway-posture-matrix.json")
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
+OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 PACKAGE_PATH = Path("package.json")
 PLANTED_DEFECT_DIR = Path("tools/validate-enterprise/planted-defects")
 
@@ -57,6 +58,7 @@ RULES = {
     "USF-ENTERPRISE-016": ("blocking", "environment promotion enterprise evidence or ownership is incomplete"),
     "USF-ENTERPRISE-017": ("blocking", "environment promotion provider, environment, or destructive semantics are unsafe"),
     "USF-ENTERPRISE-018": ("blocking", "environment promotion readiness or certification claim is overclaimed"),
+    "USF-ENTERPRISE-019": ("blocking", "operator access proof command is missing or unsafe"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -556,6 +558,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     environment_promotion = (
         read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
     )
+    operator_access_proof_text = (
+        (ROOT / OPERATOR_ACCESS_PROOF_PATH).read_text(encoding="utf-8")
+        if (ROOT / OPERATOR_ACCESS_PROOF_PATH).exists()
+        else None
+    )
 
     model = apply_model_defect(model, defect)
     if closure_matrix is not None:
@@ -564,6 +571,9 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         operator_access_matrix = apply_operator_access_defect(operator_access_matrix, defect)
     if environment_promotion is not None:
         environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
+    package = apply_package_defect(package, defect)
+    if operator_access_proof_text is not None:
+        operator_access_proof_text = apply_operator_access_proof_defect(operator_access_proof_text, defect)
     return {
         "model": model,
         "schema": schema,
@@ -573,7 +583,28 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "closureMatrix": closure_matrix,
         "operatorAccessMatrix": operator_access_matrix,
         "environmentPromotion": environment_promotion,
+        "operatorAccessProofText": operator_access_proof_text,
     }
+
+
+def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(package)
+    scripts = out.setdefault("scripts", {})
+    for key in defect.get("packageScriptDrop", []):
+        scripts.pop(key, None)
+    for key, value in defect.get("packageScriptSet", {}).items():
+        scripts[key] = value
+    return out
+
+
+def apply_operator_access_proof_defect(text: str, defect: dict[str, Any]) -> str:
+    out = text
+    for replacement in defect.get("operatorAccessProofTextReplace", []):
+        if isinstance(replacement, dict):
+            out = out.replace(str(replacement.get("from", "")), str(replacement.get("to", "")))
+    if defect.get("operatorAccessProofTextAppend"):
+        out += str(defect["operatorAccessProofTextAppend"])
+    return out
 
 
 def apply_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
@@ -1623,6 +1654,55 @@ def check_environment_promotion_standard(F: Findings, state: dict[str, Any]) -> 
                     F.add("USF-ENTERPRISE-018", row_id, "evidence row must preserve explicit non-proof boundary")
 
 
+def check_operator_access_proof_wiring(F: Findings, state: dict[str, Any]) -> None:
+    package = state.get("package")
+    if not isinstance(package, dict):
+        F.add("USF-ENTERPRISE-019", str(PACKAGE_PATH), "package metadata is missing")
+        return
+    scripts = package.get("scripts", {})
+    if not isinstance(scripts, dict):
+        F.add("USF-ENTERPRISE-019", "package.scripts", "package scripts are missing")
+        return
+    expected_command = "tsx packages/proof/src/operator-access-proof.ts"
+    if scripts.get("proof:operator-access") != expected_command:
+        F.add("USF-ENTERPRISE-019", "proof:operator-access", "operator access proof command is missing or stale")
+    if "proof:operator-access" not in str(scripts.get("verify", "")):
+        F.add("USF-ENTERPRISE-019", "verify", "verify does not run operator access proof")
+
+    proof_path = ROOT / OPERATOR_ACCESS_PROOF_PATH
+    if not proof_path.exists():
+        F.add("USF-ENTERPRISE-019", str(OPERATOR_ACCESS_PROOF_PATH), "operator access proof file is missing")
+        return
+    proof_text = state.get("operatorAccessProofText")
+    if not isinstance(proof_text, str):
+        F.add("USF-ENTERPRISE-019", str(OPERATOR_ACCESS_PROOF_PATH), "operator access proof text is missing")
+        return
+    for required in (
+        "USF-169",
+        "operatorConsoleRuntimeReadinessClaim: false",
+        "gatewayReadinessClaim: false",
+        "clickthroughReadinessClaim: false",
+        "publicExposureClaim: false",
+        "productionLiveClaim: false",
+        "deferredBoundaries",
+        "provider.readiness.checked",
+        "observability.readiness.read",
+        "observability.signal.read",
+    ):
+        if required not in proof_text:
+            F.add("USF-ENTERPRISE-019", str(OPERATOR_ACCESS_PROOF_PATH), f"operator access proof lacks {required}")
+    compact = proof_text.lower().replace(" ", "")
+    for prohibited in (
+        "operatorconsoleruntimereadinessclaim:true",
+        "gatewayreadinessclaim:true",
+        "clickthroughreadinessclaim:true",
+        "publicexposureclaim:true",
+        "productionliveclaim:true",
+    ):
+        if prohibited in compact:
+            F.add("USF-ENTERPRISE-019", str(OPERATOR_ACCESS_PROOF_PATH), "operator access proof overclaims readiness")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -1641,6 +1721,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_lane4_observability(F, state)
     check_assurance_control_plane_disposition(F, state)
     check_environment_promotion_standard(F, state)
+    check_operator_access_proof_wiring(F, state)
     return F
 
 

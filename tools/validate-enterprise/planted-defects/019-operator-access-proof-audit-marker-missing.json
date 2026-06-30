@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-ENTERPRISE-019",
+  "description": "operator access proof is missing required audit evidence marker",
+  "operatorAccessProofTextReplace": [
+    {
+      "from": "provider.readiness.checked",
+      "to": "provider.ready.checked"
+    }
+  ]
+}
