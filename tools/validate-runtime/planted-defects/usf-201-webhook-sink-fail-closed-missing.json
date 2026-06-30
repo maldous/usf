@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-027",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/mock-provider-substrate-proof.ts",
+      "old": "providerUnavailableChecked",
+      "new": "providerUnavailableNotChecked"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-027",
+  "sourceReplacements": [
+    {
+      "path": "adapters/mail/src/index.ts",
+      "old": "redactionChecked",
+      "new": "redactionNotChecked"
+    }
+  ]
+}
