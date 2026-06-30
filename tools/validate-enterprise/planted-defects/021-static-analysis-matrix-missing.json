@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-021",
+  "description": "USF-171 static-analysis quality-gate disposition matrix is missing.",
+  "removeStaticAnalysisMatrix": true
+}

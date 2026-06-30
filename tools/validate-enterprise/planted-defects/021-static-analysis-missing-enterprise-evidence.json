@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-021",
+  "description": "USF-171 source-issue enterprise evidence row is missing.",
+  "removeEnterpriseEvidence": "usf-171-evidence-static-analysis-quality-gate-disposition"
+}

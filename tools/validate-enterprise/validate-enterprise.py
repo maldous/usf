@@ -35,6 +35,7 @@ RUNTIME_MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-c
 CLOSURE_MATRIX_PATH = Path("docs/architecture/compose-service-disposition-closure-matrix.json")
 OPERATOR_ACCESS_MATRIX_PATH = Path("docs/architecture/operator-access-gateway-posture-matrix.json")
 GATEWAY_CLICKTHROUGH_MATRIX_PATH = Path("docs/architecture/gateway-clickthrough-access-substrate-matrix.json")
+STATIC_ANALYSIS_MATRIX_PATH = Path("docs/architecture/static-analysis-quality-gate-disposition-matrix.json")
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 PACKAGE_PATH = Path("package.json")
@@ -61,6 +62,7 @@ RULES = {
     "USF-ENTERPRISE-018": ("blocking", "environment promotion readiness or certification claim is overclaimed"),
     "USF-ENTERPRISE-019": ("blocking", "operator access proof command is missing or unsafe"),
     "USF-ENTERPRISE-020": ("blocking", "gateway and clickthrough access substrate posture is incomplete or unsafe"),
+    "USF-ENTERPRISE-021": ("blocking", "static-analysis quality-gate disposition is incomplete or unsafe"),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -401,6 +403,21 @@ GATEWAY_CLICKTHROUGH_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "clickthrough-readiness",
     "public-exposure-readiness",
 }
+STATIC_ANALYSIS_REQUIRED_EVIDENCE_ROWS = {
+    "soaSupportMappings": {"usf-171-soa-static-analysis-quality-gate-disposition"},
+    "evidenceRegister": {"usf-171-evidence-static-analysis-quality-gate-disposition"},
+    "threatModelAbuseCaseRegister": {"usf-171-threat-static-analysis-overclaim"},
+    "accessReviewPrivilegedOperationPosture": {"usf-171-access-static-analysis-quality-gate"},
+    "incidentVulnerabilityManagementEvidence": {"usf-171-incident-vulnerability-static-analysis"},
+    "privacyDataMinimisationPosture": {"usf-171-privacy-static-analysis-quality-gate"},
+}
+STATIC_ANALYSIS_REQUIRED_ISSUES = {"USF-171", "USF-195", "USF-187", "USF-184", "USF-192", "USF-133"}
+STATIC_ANALYSIS_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
+    "sonarqube-readiness",
+    "quality-gate-readiness",
+    "scanner-readiness",
+    "vulnerability-clearance-readiness",
+}
 
 
 def missing_required_non_claims(row: dict[str, Any]) -> set[str]:
@@ -583,6 +600,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     gateway_clickthrough_matrix = (
         read_json(GATEWAY_CLICKTHROUGH_MATRIX_PATH) if (ROOT / GATEWAY_CLICKTHROUGH_MATRIX_PATH).exists() else None
     )
+    static_analysis_matrix = read_json(STATIC_ANALYSIS_MATRIX_PATH) if (ROOT / STATIC_ANALYSIS_MATRIX_PATH).exists() else None
     environment_promotion = (
         read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
     )
@@ -601,6 +619,10 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         gateway_clickthrough_matrix = None
     elif gateway_clickthrough_matrix is not None:
         gateway_clickthrough_matrix = apply_gateway_clickthrough_defect(gateway_clickthrough_matrix, defect)
+    if defect.get("removeStaticAnalysisMatrix"):
+        static_analysis_matrix = None
+    elif static_analysis_matrix is not None:
+        static_analysis_matrix = apply_static_analysis_defect(static_analysis_matrix, defect)
     if environment_promotion is not None:
         environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
     package = apply_package_defect(package, defect)
@@ -615,6 +637,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "closureMatrix": closure_matrix,
         "operatorAccessMatrix": operator_access_matrix,
         "gatewayClickthroughMatrix": gateway_clickthrough_matrix,
+        "staticAnalysisMatrix": static_analysis_matrix,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
     }
@@ -786,6 +809,15 @@ def apply_gateway_clickthrough_defect(matrix: dict[str, Any], defect: dict[str, 
     for key, value in defect.get("gatewayClickthroughSet", {}).items():
         set_nested_value(out, key, value)
     for key in defect.get("gatewayClickthroughDrop", []):
+        drop_nested_value(out, key)
+    return out
+
+
+def apply_static_analysis_defect(matrix: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(matrix)
+    for key, value in defect.get("staticAnalysisSet", {}).items():
+        set_nested_value(out, key, value)
+    for key in defect.get("staticAnalysisDrop", []):
         drop_nested_value(out, key)
     return out
 
@@ -1970,6 +2002,148 @@ def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> 
                     F.add("USF-ENTERPRISE-020", row_id, "evidence row must preserve explicit non-proof boundary")
 
 
+def check_static_analysis_quality_gate_disposition(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("staticAnalysisMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-ENTERPRISE-021", str(STATIC_ANALYSIS_MATRIX_PATH), "static-analysis quality-gate disposition matrix is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-171",
+        "followUpIssue": "USF-195",
+        "laneIssue": "USF-187",
+        "parentIssue": "USF-133",
+        "serviceId": "sonarqube",
+        "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
+        "closureMatrix": str(CLOSURE_MATRIX_PATH),
+        "enterpriseEvidenceModel": str(MODEL_PATH),
+        "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-ENTERPRISE-021", key, f"expected {expected!r}")
+
+    if STATIC_ANALYSIS_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-021", "issueLinks", "static-analysis matrix issue links are incomplete")
+    if REQUIRED_NON_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-021", "nonClaims", "static-analysis matrix non-claims are incomplete")
+    if REQUIRED_NON_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-ENTERPRISE-021", "readinessClaimsAllowed", "static-analysis matrix allows a prohibited readiness claim")
+    if STATIC_ANALYSIS_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-ENTERPRISE-021", "readinessClaimsProhibited", "static-analysis prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-ENTERPRISE-021", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-ENTERPRISE-021", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    disposition = matrix.get("sonarqubeDisposition", {})
+    if not isinstance(disposition, dict):
+        F.add("USF-ENTERPRISE-021", "sonarqubeDisposition", "SonarQube disposition must be an object")
+    else:
+        expected_disposition = {
+            "disposition": "explicit-deferral-with-owner",
+            "serviceSemanticProofPresent": False,
+            "serviceReadinessClaim": False,
+            "qualityGateReadinessClaim": False,
+            "serviceCatalogueServiceId": "sonarqube",
+            "followUpIssue": "USF-195",
+            "owner": "platform-assurance-foundation",
+            "riskOwner": "platform-assurance-risk-owner",
+            "controlOwner": "platform-assurance-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_disposition.items():
+            observed = disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-ENTERPRISE-021", f"sonarqubeDisposition.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "deferredEvidence"):
+            if disposition.get(field) in (None, "", []):
+                F.add("USF-ENTERPRISE-021", f"sonarqubeDisposition.{field}", "SonarQube deferral field is required")
+
+    local_gate = matrix.get("localVerificationGate", {})
+    if not isinstance(local_gate, dict):
+        F.add("USF-ENTERPRISE-021", "localVerificationGate", "local verification gate must be an object")
+    else:
+        if local_gate.get("usedAsSubstituteForLocalDeterministicChecks") is not True:
+            F.add("USF-ENTERPRISE-021", "localVerificationGate.usedAsSubstituteForLocalDeterministicChecks", "local deterministic substitution must be explicit")
+        if local_gate.get("sonarqubeServiceEquivalent") is not False:
+            F.add("USF-ENTERPRISE-021", "localVerificationGate.sonarqubeServiceEquivalent", "local checks must not be SonarQube service equivalent")
+        commands = set(local_gate.get("commands", []))
+        for command in ("corepack pnpm verify", "corepack pnpm parity", "python3 tools/validate-enterprise/validate-enterprise.py all --json"):
+            if command not in commands:
+                F.add("USF-ENTERPRISE-021", "localVerificationGate.commands", f"missing {command}")
+        if not local_gate.get("substitutionNonEquivalenceBoundary"):
+            F.add("USF-ENTERPRISE-021", "localVerificationGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+        if len(local_gate.get("scopeCovered", [])) < 6 or len(local_gate.get("limits", [])) < 6:
+            F.add("USF-ENTERPRISE-021", "localVerificationGate", "verification scope and limits are incomplete")
+
+    scanning = matrix.get("securityScanningPosture", {})
+    if not isinstance(scanning, dict):
+        F.add("USF-ENTERPRISE-021", "securityScanningPosture", "security scanning posture must be an object")
+    else:
+        expected_false = {
+            "scannerServiceReadinessClaim",
+            "vulnerabilityClearanceClaim",
+            "dependencyAdvisoryClearanceClaim",
+            "secretScanningCompletenessClaim",
+        }
+        for key in expected_false:
+            if scanning.get(key) is not False:
+                F.add("USF-ENTERPRISE-021", f"securityScanningPosture.{key}", "scanner readiness or clearance claims must remain false")
+        if scanning.get("followUpIssue") != "USF-195":
+            F.add("USF-ENTERPRISE-021", "securityScanningPosture.followUpIssue", "security scanning posture must link USF-195")
+
+    boundary = matrix.get("operatorAccessAuditRetentionSupplierBoundary", {})
+    if not isinstance(boundary, dict):
+        F.add("USF-ENTERPRISE-021", "operatorAccessAuditRetentionSupplierBoundary", "operator/access boundary must be an object")
+    else:
+        for field in (
+            "operatorAccessBoundary",
+            "authRequirement",
+            "auditRequirement",
+            "retentionBoundary",
+            "secretBoundary",
+            "supplierBoundary",
+            "incidentBoundary",
+        ):
+            if not boundary.get(field):
+                F.add("USF-ENTERPRISE-021", f"operatorAccessAuditRetentionSupplierBoundary.{field}", "boundary field is required")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    required_evidence = set().union(*STATIC_ANALYSIS_REQUIRED_EVIDENCE_ROWS.values())
+    if declared_evidence != required_evidence:
+        F.add("USF-ENTERPRISE-021", "enterpriseEvidenceRefs", "static-analysis enterprise evidence refs are incomplete")
+
+    model = state["model"]
+    for section, row_ids in STATIC_ANALYSIS_REQUIRED_EVIDENCE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in row_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-021", row_id, f"missing USF-171 enterprise row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-021", row_id, "USF-171 enterprise row non-claims are incomplete")
+            if "USF-171" not in row_text or "USF-195" not in row_text or str(STATIC_ANALYSIS_MATRIX_PATH) not in row_text:
+                F.add("USF-ENTERPRISE-021", row_id, "USF-171 enterprise row lacks issue, follow-up, or matrix linkage")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-021", row_id, "USF-171 enterprise row lacks validation command")
+            if section == "evidenceRegister":
+                for issue in STATIC_ANALYSIS_REQUIRED_ISSUES:
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-021", row_id, f"evidence row lacks {issue}")
+                if "not prove" not in str(row.get("whatWasNotProven", "")).lower():
+                    F.add("USF-ENTERPRISE-021", row_id, "evidence row must preserve explicit non-proof boundary")
+
+    assurance_text = json.dumps(model, sort_keys=True)
+    for stale in ("until USF-171 closes", "followUpIssue=USF-171"):
+        if stale in assurance_text:
+            F.add("USF-ENTERPRISE-021", "enterprise-evidence-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -1990,6 +2164,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_environment_promotion_standard(F, state)
     check_operator_access_proof_wiring(F, state)
     check_gateway_clickthrough_substrate(F, state)
+    check_static_analysis_quality_gate_disposition(F, state)
     return F
 
 

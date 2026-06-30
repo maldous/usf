@@ -1597,6 +1597,7 @@
           "USF-182",
           "USF-185",
           "USF-171",
+          "USF-195",
           "USF-187",
           "USF-184",
           "USF-192",
@@ -1610,7 +1611,7 @@
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
           "future operator console SSO/clickthrough and privileged access proof",
-          "USF-171 service-semantic proof for SonarQube unresolved issues, quality gate scope, security hotspots, exceptions, and operator console access remains deferred."
+          "USF-195 service-semantic proof for SonarQube unresolved issues, quality gate scope, security hotspots, exceptions, and operator console access remains deferred."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1648,7 +1649,8 @@
           "usf-187-sonarqube-static-analysis-privacy"
         ],
         "tracking_issue_rationale": {
-          "USF-171": "static analysis quality-gate disposition proof and evidence"
+          "USF-171": "bounded static-analysis quality-gate disposition proof and evidence",
+          "USF-195": "SonarQube service-semantic proof and operator access depth"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

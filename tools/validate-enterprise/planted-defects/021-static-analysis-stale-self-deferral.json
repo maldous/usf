@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-ENTERPRISE-021",
+  "description": "USF-171 enterprise evidence still defers follow-up work to itself.",
+  "posturePatch": [
+    {
+      "section": "accessReviewPrivilegedOperationPosture",
+      "id": "usf-171-access-static-analysis-quality-gate",
+      "appendPosture": ["followUpIssue=USF-171"]
+    }
+  ]
+}

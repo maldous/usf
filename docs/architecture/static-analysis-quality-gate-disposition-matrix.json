@@ -1,0 +1,135 @@
+{
+  "id": "usf-171-static-analysis-quality-gate-disposition-matrix",
+  "title": "USF-171 Static Analysis Quality-Gate Disposition Matrix",
+  "status": "draft",
+  "sourceIssue": "USF-171",
+  "followUpIssue": "USF-195",
+  "laneIssue": "USF-187",
+  "parentIssue": "USF-133",
+  "serviceId": "sonarqube",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "issueLinks": ["USF-171", "USF-195", "USF-187", "USF-184", "USF-192", "USF-133"],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "summary": "SonarQube/static-analysis decision is not completion evidence. USF-171 records a bounded disposition gate: local deterministic repository verification is mandatory but not SonarQube service equivalence, while actual SonarQube service-semantic proof remains tracked by USF-195.",
+    "decisionIsWorkComplete": false
+  },
+  "sonarqubeDisposition": {
+    "disposition": "explicit-deferral-with-owner",
+    "serviceSemanticProofPresent": false,
+    "serviceReadinessClaim": false,
+    "qualityGateReadinessClaim": false,
+    "serviceCatalogueServiceId": "sonarqube",
+    "followUpIssue": "USF-195",
+    "owner": "platform-assurance-foundation",
+    "riskOwner": "platform-assurance-risk-owner",
+    "controlOwner": "platform-assurance-control-owner",
+    "riskStatement": "SonarQube service semantics, unresolved issue handling, security hotspot treatment, and quality-gate exception workflow could be overclaimed from local repository verification output.",
+    "treatment": "defer SonarQube service-semantic proof to USF-195 and keep local deterministic checks non-equivalent",
+    "reviewDate": "2026-09-30",
+    "deferredEvidence": [
+      "SonarQube scan execution evidence",
+      "quality-gate threshold and exception handling evidence",
+      "unresolved issue handling evidence",
+      "security hotspot treatment evidence",
+      "operator console access and audit evidence",
+      "retention and supplier boundary evidence"
+    ]
+  },
+  "localVerificationGate": {
+    "usedAsSubstituteForLocalDeterministicChecks": true,
+    "sonarqubeServiceEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "Repository validation commands are mandatory local deterministic verification evidence, but they are not equivalent to SonarQube service history, dashboards, issue lifecycle, security hotspot workflow, or quality-gate operations.",
+    "commands": [
+      "corepack pnpm verify",
+      "corepack pnpm parity",
+      "python3 tools/validate-spec/validate-spec.py all --json",
+      "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "python3 tools/validate-parity/validate-parity.py all --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ],
+    "scopeCovered": [
+      "format",
+      "lint",
+      "typecheck",
+      "unit-tests",
+      "OpenAPI contract check",
+      "repository proof commands",
+      "compose validation",
+      "runtime validation",
+      "parity validators",
+      "enterprise evidence validators"
+    ],
+    "limits": [
+      "no SonarQube scan result",
+      "no SonarQube service UI proof",
+      "no absolute-zero quality gate",
+      "no unresolved issue lifecycle proof",
+      "no security hotspot treatment proof",
+      "no live scanner provider proof",
+      "no test readiness claim",
+      "no production readiness claim"
+    ]
+  },
+  "securityScanningPosture": {
+    "effectivenessState": "defined-only",
+    "scannerServiceReadinessClaim": false,
+    "vulnerabilityClearanceClaim": false,
+    "dependencyAdvisoryClearanceClaim": false,
+    "secretScanningCompletenessClaim": false,
+    "followUpIssue": "USF-195",
+    "owner": "platform-security-foundation",
+    "riskOwner": "platform-security-risk-owner",
+    "controlOwner": "platform-security-control-owner",
+    "reviewDate": "2026-09-30"
+  },
+  "operatorAccessAuditRetentionSupplierBoundary": {
+    "operatorAccessBoundary": "SonarQube operator console access remains defined-only and must be proven before a service readiness claim.",
+    "authRequirement": "operator-auth-required",
+    "auditRequirement": "operator-action-audit-required",
+    "retentionBoundary": "No scanner findings or source-analysis payloads are retained in repository evidence by USF-171.",
+    "secretBoundary": "No SonarQube token, scanner credential, raw endpoint, or provider payload is introduced by USF-171.",
+    "supplierBoundary": "Local generated Compose service is not supplier/live-provider evidence; supplier posture is required before live-provider or production claims.",
+    "incidentBoundary": "No production incident or vulnerability-response workflow is proven by USF-171."
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-171-soa-static-analysis-quality-gate-disposition",
+    "usf-171-evidence-static-analysis-quality-gate-disposition",
+    "usf-171-threat-static-analysis-overclaim",
+    "usf-171-access-static-analysis-quality-gate",
+    "usf-171-incident-vulnerability-static-analysis",
+    "usf-171-privacy-static-analysis-quality-gate"
+  ],
+  "readinessClaimsAllowed": ["local-deterministic-verification-required", "sonarqube-service-proof-deferred", "quality-gate-disposition-recorded"],
+  "readinessClaimsProhibited": [
+    "sonarqube-readiness",
+    "quality-gate-readiness",
+    "scanner-readiness",
+    "vulnerability-clearance-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ]
+}
