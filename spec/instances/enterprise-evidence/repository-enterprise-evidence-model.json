@@ -4513,7 +4513,7 @@
       "adapterProviderId": "analytics-store-clickhouse-deferred",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "commitPin": "a8ad293e0befbff05a3c897bfec021d7b1f30588",
+      "commitPin": "6e848ae536cf5d127b3e50a1729ca9c3b199ea49",
       "issueLinks": [
         "USF-172",
         "USF-197",
@@ -4522,7 +4522,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "a8ad293e0befbff05a3c897bfec021d7b1f30588",
+      "prOrMergeSha": "6e848ae536cf5d127b3e50a1729ca9c3b199ea49",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain ClickHouse event payloads, analytics payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
     {
