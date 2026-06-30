@@ -1,0 +1,11 @@
+{
+  "name": "usf-207-redis-stale-deferral",
+  "expectedRule": "USF-RUNTIME-031",
+  "redisCacheProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/reclassification/serviceSemanticProofImplemented",
+      "value": false
+    }
+  ]
+}

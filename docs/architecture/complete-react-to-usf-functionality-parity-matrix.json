@@ -353,12 +353,12 @@
         "secret-redaction",
         "resilience"
       ],
-      "evidence_grade": "D",
+      "evidence_grade": "C",
       "react_evidence_summary": "Redis compose service and cache/session/queue local dependency lineage",
-      "readiness_impact": "USF-173 records bounded cache/eventing disposition; USF-198 records the proof boundary; NATS event-bus proof is not Redis cache proof, in-memory stores are non-equivalent, and Redis adapter/service-semantic proof remains deferred to USF-207 before any Redis or cache readiness claim.",
+      "readiness_impact": "USF-173 records bounded cache/eventing disposition and USF-198 records the Redis proof boundary. USF-207 adds bounded SDK-backed local Compose Redis cache proof for synthetic tenant-safe write/read/delete, TTL expiration, readiness retry, timeout, cleanup, unavailable fail-closed behaviour, redaction, metrics/tracing, and audit-shaped evidence. No Redis/cache readiness, API/worker runtime cache binding, live/provider-managed Redis, provider compatibility, or environment readiness claim is made.",
       "tracking_carrier_or_recommendation": "USF-173/USF-198/USF-207",
-      "usf_evidence_summary": "NATS is proven only as a bounded local composed event-bus provider; Redis is catalogued as an explicit deferred provider class with no SDK, endpoint, or cache adapter proof; USF-207 owns actual Redis proof.",
-      "usf_status": "deferred"
+      "usf_evidence_summary": "NATS is proven only as a bounded local composed event-bus provider. Redis is now represented by cache-redis-composed-test for profile-gated local Compose proof and cache-redis-deferred for remaining live/provider-managed and runtime-integration boundaries.",
+      "usf_status": "profile-gated-bounded-proof"
     },
     {
       "blocking_level": "P1",

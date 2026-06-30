@@ -97,6 +97,7 @@ CLAMAV_PROOF_SOURCE_PATH = Path("packages/proof/src/clamav-composed-proof.ts")
 MOCK_PROVIDER_PROOF_SOURCE_PATH = Path("packages/proof/src/mock-provider-substrate-proof.ts")
 WIREMOCK_PROOF_SOURCE_PATH = Path("packages/proof/src/wiremock-composed-proof.ts")
 LOCALSTACK_PROOF_SOURCE_PATH = Path("packages/proof/src/localstack-composed-proof.ts")
+REDIS_PROOF_SOURCE_PATH = Path("packages/proof/src/redis-composed-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
@@ -238,6 +239,14 @@ REDIS_CACHE_BOUNDARY_REQUIRED_EVIDENCE_REFS = {
     "usf-198-access-redis-cache-proof-boundary",
     "usf-198-incident-vulnerability-redis-cache-proof-boundary",
     "usf-198-privacy-redis-cache-proof-boundary",
+    "usf-207-soa-redis-composed-proof",
+    "usf-207-evidence-redis-composed-proof",
+    "usf-207-threat-redis-cache-overclaim",
+    "usf-207-access-redis-composed-proof",
+    "usf-207-resilience-redis-composed-proof",
+    "usf-207-incident-vulnerability-redis-composed-proof",
+    "usf-207-privacy-redis-composed-proof",
+    "sdk-usf-189-redis-cache-provider-redis",
 }
 ANALYTICS_EVENT_STORE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "analytics-readiness",
@@ -249,7 +258,7 @@ ANALYTICS_EVENT_STORE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
 CLICKHOUSE_BOUNDARY_PROHIBITED_CLAIMS = ANALYTICS_EVENT_STORE_PROHIBITED_CLAIMS | {
     "usf-133-closure",
 }
-CACHE_EVENTING_REQUIRED_ISSUES = {"USF-173", "USF-198", "USF-189", "USF-184", "USF-192", "USF-133"}
+CACHE_EVENTING_REQUIRED_ISSUES = {"USF-173", "USF-198", "USF-207", "USF-189", "USF-184", "USF-192", "USF-133"}
 CACHE_EVENTING_REQUIRED_EVIDENCE_REFS = {
     "usf-173-soa-cache-eventing-disposition",
     "usf-173-evidence-cache-eventing-disposition",
@@ -257,6 +266,7 @@ CACHE_EVENTING_REQUIRED_EVIDENCE_REFS = {
     "usf-173-access-cache-eventing",
     "usf-173-incident-vulnerability-cache-eventing",
     "usf-173-privacy-cache-eventing",
+    *REDIS_CACHE_BOUNDARY_REQUIRED_EVIDENCE_REFS,
 }
 CACHE_EVENTING_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "cache-readiness",
@@ -480,10 +490,10 @@ LANE5_PROVIDER_DISPOSITIONS = {
     },
     "usf-189-redis-cache-provider": {
         "serviceIds": ["redis"],
-        "providerIds": ["cache-redis-deferred"],
-        "followUpIssue": "USF-198",
+        "providerIds": ["cache-redis-composed-test", "cache-redis-deferred"],
+        "followUpIssue": "USF-207",
         "boundaryRef": "usf-189-cache-provider-deferred",
-        "allowedStatuses": {"unsupported-deferred"},
+        "allowedStatuses": {"profile-gated-proven"},
     },
     "usf-189-meilisearch-search-provider": {
         "serviceIds": ["meilisearch"],
@@ -1520,12 +1530,12 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
         return
 
     expected_top = {
-        "sourceIssue": "USF-198",
-        "followUpIssue": "USF-207",
+        "sourceIssue": "USF-207",
+        "followUpIssue": None,
         "sourceDispositionIssue": "USF-173",
         "laneIssue": "USF-189",
         "parentIssue": "USF-133",
-        "status": "reclassified-deferred-with-owner",
+        "status": "profile-gated-bounded-proof-present",
         "serviceCatalogueAuthority": SERVICE_CATALOGUE_PATH,
         "runtimeManifest": str(MANIFEST_PATH),
         "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
@@ -1541,7 +1551,7 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
         F.add("USF-RUNTIME-031", "serviceIds", "Redis boundary service ids are incomplete")
     if set(boundary.get("providerBindingIds", [])) != {"usf-189-redis-cache-provider"}:
         F.add("USF-RUNTIME-031", "providerBindingIds", "Redis boundary provider binding ids are incomplete")
-    if set(boundary.get("providerRegistryIds", [])) != {"cache-redis-deferred"}:
+    if set(boundary.get("providerRegistryIds", [])) != {"cache-redis-composed-test", "cache-redis-deferred"}:
         F.add("USF-RUNTIME-031", "providerRegistryIds", "Redis boundary provider registry ids are incomplete")
     if REDIS_CACHE_BOUNDARY_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
         F.add("USF-RUNTIME-031", "issueLinks", "Redis boundary issue links are incomplete")
@@ -1557,10 +1567,10 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
         F.add("USF-RUNTIME-031", "reclassification", "Redis reclassification must be an object")
     else:
         expected_reclassification = {
-            "from": "explicit-deferral-with-owner",
-            "to": "explicit-deferred-service-proof",
+            "from": "explicit-deferred-service-proof",
+            "to": "profile-gated-bounded-local-compose-proof",
             "decisionAcceptedDoesNotMeanWorkComplete": True,
-            "serviceSemanticProofImplemented": False,
+            "serviceSemanticProofImplemented": True,
             "redisServiceReadinessClaim": False,
             "cacheReadinessClaim": False,
             "providerCompatibilityClaim": False,
@@ -1571,7 +1581,14 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
             observed = reclassification.get(key)
             if observed != expected:
                 F.add("USF-RUNTIME-031", f"reclassification.{key}", f"expected {expected!r}")
-        if len(reclassification.get("repositoryEvidence", [])) < 6:
+        required_refs = {
+            "adapters/bus/src/index.ts#RedisComposedCacheAdapter",
+            "packages/proof/src/redis-composed-proof.ts",
+            "package.json#proof:cache:redis",
+            "Makefile#redis-cache-proof",
+            "tools/validate-runtime/validate-runtime.py",
+        }
+        if required_refs - set(reclassification.get("repositoryEvidence", [])):
             F.add("USF-RUNTIME-031", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
 
     remaining = boundary.get("remainingProofBoundary", {})
@@ -1579,7 +1596,7 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
         F.add("USF-RUNTIME-031", "remainingProofBoundary", "remaining proof boundary must be an object")
     else:
         expected_remaining = {
-            "issue": "USF-207",
+            "issue": "none-for-USF-207-bounded-proof",
             "owner": "platform-workflow-foundation",
             "riskOwner": "platform-workflow-risk-owner",
             "controlOwner": "platform-workflow-control-owner",
@@ -1591,33 +1608,45 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
         for field in ("riskStatement", "treatment", "requiredEvidence"):
             if remaining.get(field) in (None, "", []):
                 F.add("USF-RUNTIME-031", f"remainingProofBoundary.{field}", "remaining proof field is required")
-        if len(remaining.get("requiredEvidence", [])) < 8:
+        required_remaining = {
+            "environment-specific Redis readiness and promotion gates before any dev/test/staging/production readiness claim",
+            "live/provider-managed Redis supplier and credential evidence before any live-provider claim",
+            "API runtime cache-port integration proof before any API Redis runtime-use claim",
+            "worker runtime cache-port integration proof before any worker Redis runtime-use claim",
+        }
+        if required_remaining - set(remaining.get("requiredEvidence", [])):
             F.add("USF-RUNTIME-031", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
 
     cache_boundary = boundary.get("cacheProviderBoundary", {})
-    for field in (
-        "writeReadStatus",
-        "expirationTtlStatus",
-        "retryTimeoutStatus",
-        "failClosedStatus",
-        "auditEvidenceStatus",
-        "readinessRetryStatus",
-        "teardownCleanupStatus",
-        "providerFailureHandlingStatus",
-    ):
-        if cache_boundary.get(field) != "deferred-to-USF-207":
-            F.add("USF-RUNTIME-031", f"cacheProviderBoundary.{field}", "Redis cache boundary must defer to USF-207")
+    expected_cache = {
+        "writeReadStatus": "proven-by-USF-207-profile-gated-local-compose",
+        "expirationTtlStatus": "proven-by-USF-207-profile-gated-local-compose",
+        "retryTimeoutStatus": "proven-by-USF-207-profile-gated-local-compose",
+        "failClosedStatus": "proven-by-USF-207-profile-gated-local-compose",
+        "auditEvidenceStatus": "value-free-audit-shaped-evidence-proven-by-USF-207",
+        "readinessRetryStatus": "bounded-exponential-backoff-60s-proven-by-USF-207",
+        "teardownCleanupStatus": "redis-key-delete-and-compose-down-proven-by-USF-207",
+        "providerFailureHandlingStatus": "unavailable-provider-fail-closed-proven-by-USF-207",
+    }
+    for field, expected in expected_cache.items():
+        if cache_boundary.get(field) != expected:
+            F.add("USF-RUNTIME-031", f"cacheProviderBoundary.{field}", f"expected {expected!r}")
     for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
         if not cache_boundary.get(field):
             F.add("USF-RUNTIME-031", f"cacheProviderBoundary.{field}", "Redis cache boundary owner metadata is required")
 
     sdk = boundary.get("sdkProviderBoundary", {})
-    if sdk.get("sdkSelectionStatus") != "deferred-to-USF-207":
-        F.add("USF-RUNTIME-031", "sdkProviderBoundary.sdkSelectionStatus", "SDK selection must defer to USF-207")
-    if sdk.get("sdkPackage") is not None or sdk.get("sdkVersion") is not None:
-        F.add("USF-RUNTIME-031", "sdkProviderBoundary", "deferred Redis boundary must not name an SDK package")
-    if sdk.get("sdkBoundary") != "adapter-package-only-when-implemented":
-        F.add("USF-RUNTIME-031", "sdkProviderBoundary.sdkBoundary", "SDK boundary must remain adapter-only when implemented")
+    expected_sdk = {
+        "sdkSelectionStatus": "official-sdk-selected-and-pinned",
+        "sdkPackage": "redis",
+        "sdkVersion": "6.0.1",
+        "sdkBoundary": "adapter-package-only",
+    }
+    for field, expected in expected_sdk.items():
+        if sdk.get(field) != expected:
+            F.add("USF-RUNTIME-031", f"sdkProviderBoundary.{field}", f"expected {expected!r}")
+    if "official Node Redis client" not in str(sdk.get("sdkSelectionRationale", "")):
+        F.add("USF-RUNTIME-031", "sdkProviderBoundary.sdkSelectionRationale", "Redis SDK rationale must name official Node Redis client")
     for field in ("secretBoundary", "supplierBoundary"):
         if not sdk.get(field):
             F.add("USF-RUNTIME-031", f"sdkProviderBoundary.{field}", "SDK/provider boundary field is required")
@@ -1631,6 +1660,7 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
         F.add("USF-RUNTIME-031", "natsAndInMemoryGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
     commands = set(substitute_gate.get("commands", []))
     for command in (
+        "corepack pnpm proof:cache:redis",
         "corepack pnpm runtime:proof",
         "corepack pnpm providers-proof",
         "python3 tools/validate-runtime/validate-runtime.py all --json",
@@ -1643,18 +1673,88 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
     if declared_evidence != REDIS_CACHE_BOUNDARY_REQUIRED_EVIDENCE_REFS:
         F.add("USF-RUNTIME-031", "enterpriseEvidenceRefs", "Redis boundary enterprise evidence refs are incomplete")
 
+    package = state["package"]
+    scripts = package.get("scripts") if isinstance(package.get("scripts"), dict) else {}
+    if scripts.get("proof:cache:redis") != "tsx packages/proof/src/redis-composed-proof.ts":
+        F.add("USF-RUNTIME-031", "package.json#proof:cache:redis", "Redis proof package script is missing or stale")
+    if package.get("dependencies", {}).get("redis") != "6.0.1":
+        F.add("USF-RUNTIME-016", "package.json#redis", "Redis SDK dependency must be exact-version pinned")
+    if "redis-cache-proof" not in make_targets(state["makefile"]):
+        F.add("USF-RUNTIME-031", "Makefile#redis-cache-proof", "Redis proof Make target is missing")
+
+    adapter_source = state_text(state, ADAPTER_BUS_SOURCE_PATH)
+    proof_source = state_text(state, REDIS_PROOF_SOURCE_PATH)
+    adapter_markers = (
+        "createClient",
+        "RedisComposedCacheAdapter",
+        "retryRedisReadiness",
+        "this.#client.set",
+        "this.#client.get",
+        "this.#client.del",
+        "this.#client.ttl",
+        "ttlExpirationChecked",
+        "tenantNamespaceChecked",
+        "cleanupSucceeded",
+        "proveUnavailable",
+        "safeErrorCode",
+        "redactionChecked",
+        "endpoint://compose/redis",
+    )
+    for marker in adapter_markers:
+        if marker not in adapter_source:
+            F.add("USF-RUNTIME-031", str(ADAPTER_BUS_SOURCE_PATH), f"Redis adapter missing proof marker: {marker}")
+    proof_markers = (
+        "compose/compose.test.generated.yaml",
+        "runtime-providers",
+        "redis",
+        "host_ip: 127.0.0.1",
+        "published: \"0\"",
+        "RedisComposedCacheAdapter",
+        "proveRoundTrip",
+        "proveUnavailable",
+        "composeDown",
+        "assertSafeEvidence",
+    )
+    for marker in proof_markers:
+        if marker not in proof_source:
+            F.add("USF-RUNTIME-031", str(REDIS_PROOF_SOURCE_PATH), f"Redis proof source missing marker: {marker}")
+
     matrix = state.get("cacheEventingMatrix") or {}
     if "USF-207" not in set(matrix.get("issueLinks", [])):
         F.add("USF-RUNTIME-031", "cacheEventingMatrix.issueLinks", "cache/eventing matrix must link USF-207")
-    if matrix.get("remainingProofIssue") != "USF-207":
-        F.add("USF-RUNTIME-031", "cacheEventingMatrix.remainingProofIssue", "cache/eventing matrix must carry USF-207 as remaining proof")
+    if matrix.get("remainingProofIssue") is not None:
+        F.add("USF-RUNTIME-031", "cacheEventingMatrix.remainingProofIssue", "cache/eventing matrix must not carry USF-207 as unresolved remaining proof")
 
     bindings = binding_records(state["manifest"])
     binding = bindings.get("usf-189-redis-cache-provider")
-    if not binding or "USF-207" not in binding.get("followUpIssueRefs", []):
-        F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest must link USF-207")
-    if binding and "USF-207" not in str(binding.get("deferredReason", "")):
-        F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider.deferredReason", "runtime manifest must defer actual proof to USF-207")
+    if not binding:
+        F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest must include Redis provider binding")
+    else:
+        expected_binding = {
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkBoundary": "adapter-package-only",
+            "sourceUseDisposition": "runtime-proof-support",
+            "adapterName": "RedisComposedCacheAdapter",
+            "portName": "CacheProvider",
+            "endpointRef": "endpoint://compose/redis",
+            "sdkPackage": "redis",
+            "sdkVersion": "6.0.1",
+            "proofCommand": "corepack pnpm proof:cache:redis",
+        }
+        for field, expected in expected_binding.items():
+            if binding.get(field) != expected:
+                F.add("USF-RUNTIME-031", f"providerBindingMatrix.usf-189-redis-cache-provider.{field}", f"expected {expected!r}")
+        if set(binding.get("providerRegistryIds", [])) != {"cache-redis-composed-test", "cache-redis-deferred"}:
+            F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider.providerRegistryIds", "Redis binding must carry composed and deferred provider registry ids")
+        if "USF-207" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest must link USF-207")
+        if "USF-207 proof:cache:redis" not in str(binding.get("proofEvidence", "")):
+            F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider.proofEvidence", "runtime manifest must record Redis proof evidence")
+        stale_text = json.dumps(binding, sort_keys=True).lower()
+        if "actual redis proof" in stale_text or "defer actual" in stale_text:
+            F.add("USF-RUNTIME-031", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest still carries stale Redis deferral wording")
 
     deferred = {
         item.get("id"): item
@@ -1662,8 +1762,9 @@ def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any])
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }.get("usf-189-cache-provider-deferred")
     if not deferred or "USF-207" not in deferred.get("followUpIssueRefs", []):
-        F.add("USF-RUNTIME-031", "deferredBoundaries.usf-189-cache-provider-deferred", "runtime deferred boundary must link USF-207")
-
+        F.add("USF-RUNTIME-031", "deferredBoundaries.usf-189-cache-provider-deferred", "runtime deferred boundary must link USF-207 lineage")
+    if deferred and "USF-207 resolves bounded local Compose Redis adapter proof" not in str(deferred.get("boundary", "")):
+        F.add("USF-RUNTIME-031", "deferredBoundaries.usf-189-cache-provider-deferred", "runtime deferred boundary must distinguish resolved local proof from remaining readiness boundaries")
 
 def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None:
     matrix = state.get("cacheEventingMatrix")
@@ -1729,17 +1830,19 @@ def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None
         expected_cache = {
             "serviceCatalogueServiceId": "redis",
             "providerBindingId": "usf-189-redis-cache-provider",
-            "providerRegistryId": "cache-redis-deferred",
-            "disposition": "explicit-deferral-with-owner",
-            "followUpIssue": "USF-198",
+            "providerRegistryId": "cache-redis-composed-test",
+            "disposition": "profile-gated-bounded-local-compose-proof",
+            "followUpIssue": "USF-207",
             "readinessClaim": False,
         }
         for key, expected in expected_cache.items():
             observed = cache_role.get(key)
             if observed is not expected if isinstance(expected, bool) else observed != expected:
                 F.add("USF-RUNTIME-024", f"semanticRoleClassification.cache.{key}", f"expected {expected!r}")
-        if "neither NATS nor process memory" not in str(cache_role.get("nonEquivalenceBoundary", "")):
-            F.add("USF-RUNTIME-024", "semanticRoleClassification.cache.nonEquivalenceBoundary", "Redis deferral must reject NATS and process-memory equivalence")
+        if "NATS event-bus proof" not in str(cache_role.get("nonEquivalenceBoundary", "")) or "process-memory proof" not in str(cache_role.get("nonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-024", "semanticRoleClassification.cache.nonEquivalenceBoundary", "Redis proof must preserve NATS and process-memory non-equivalence")
+        if "corepack pnpm proof:cache:redis" not in set(cache_role.get("proofCommands", [])):
+            F.add("USF-RUNTIME-024", "semanticRoleClassification.cache.proofCommands", "Redis cache role must reference proof:cache:redis")
     in_memory_role = roles.get("in-memory-substitute", {})
     if in_memory_role:
         if in_memory_role.get("disposition") != "allowed-only-where-semantically-permitted":
@@ -1754,18 +1857,18 @@ def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None
         F.add("USF-RUNTIME-024", "cacheEventingDisposition", "cache/eventing disposition must be an object")
     else:
         expected_disposition = {
-            "disposition": "explicit-split-with-cache-deferral",
-            "cacheServiceSemanticProofPresent": False,
-            "redisServiceSemanticProofPresent": False,
+            "disposition": "explicit-split-with-profile-gated-redis-proof",
+            "cacheServiceSemanticProofPresent": True,
+            "redisServiceSemanticProofPresent": True,
             "natsEventBusProofPresent": True,
             "natsRedisEquivalent": False,
             "inMemoryRedisEquivalent": False,
             "redisReadinessClaim": False,
             "cacheReadinessClaim": False,
             "eventingReadinessClaim": False,
-            "redisProviderRegistryId": "cache-redis-deferred",
+            "redisProviderRegistryId": "cache-redis-composed-test",
             "natsProviderRegistryId": "event-bus-nats-composed-test",
-            "followUpIssue": "USF-198",
+            "followUpIssue": "USF-207",
             "owner": "platform-workflow-foundation",
             "riskOwner": "platform-workflow-risk-owner",
             "controlOwner": "platform-workflow-control-owner",
@@ -1814,14 +1917,18 @@ def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None
     else:
         expected_redis = {
             "providerBindingId": "usf-189-redis-cache-provider",
-            "providerRegistryId": "cache-redis-deferred",
-            "bindingStatus": "unsupported-deferred",
-            "providerMode": "live-external-deferred",
+            "providerRegistryId": "cache-redis-composed-test",
+            "deferredProviderRegistryId": "cache-redis-deferred",
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
             "runtimeProviderBindingActive": False,
-            "sdkPackage": None,
-            "sdkVersion": None,
-            "endpointRef": None,
-            "followUpIssue": "USF-198",
+            "sdkPackage": "redis",
+            "sdkVersion": "6.0.1",
+            "sdkBoundary": "adapter-package-only",
+            "endpointRef": "endpoint://compose/redis",
+            "proofCommand": "corepack pnpm proof:cache:redis",
+            "followUpIssue": "USF-207",
+            "remainingProofIssue": None,
         }
         for key, expected in expected_redis.items():
             observed = redis_boundary.get(key)
@@ -1860,14 +1967,14 @@ def check_cache_eventing_disposition(F: Findings, state: dict[str, Any]) -> None
     if not redis_binding:
         F.add("USF-RUNTIME-024", "providerBindingMatrix", "Redis provider disposition is missing from runtime manifest")
     else:
-        if "USF-198" not in redis_binding.get("followUpIssueRefs", []):
-            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest must link USF-198")
-        if "USF-198" not in str(redis_binding.get("deferredReason", "")):
-            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-198")
-        if redis_binding.get("bindingStatus") != "unsupported-deferred" or redis_binding.get("endpointRef") is not None:
-            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "Redis must remain explicitly deferred without endpoint binding")
-        if redis_binding.get("sdkPackage") is not None or redis_binding.get("sdkVersion") is not None:
-            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "deferred Redis must not name an SDK/client package")
+        if "USF-207" not in redis_binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "runtime manifest must link USF-207")
+        if redis_binding.get("bindingStatus") != "profile-gated-proven" or redis_binding.get("endpointRef") != "endpoint://compose/redis":
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "Redis must be profile-gated proven with redacted endpoint ref")
+        if redis_binding.get("sdkPackage") != "redis" or redis_binding.get("sdkVersion") != "6.0.1":
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "Redis must name exact pinned SDK/client package")
+        if redis_binding.get("proofCommand") != "corepack pnpm proof:cache:redis":
+            F.add("USF-RUNTIME-024", "providerBindingMatrix.usf-189-redis-cache-provider", "Redis must reference proof:cache:redis")
 
     nats_binding = bindings.get("nats-event-bus-provider")
     if not nats_binding:

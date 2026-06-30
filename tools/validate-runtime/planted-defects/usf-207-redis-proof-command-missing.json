@@ -1,0 +1,10 @@
+{
+  "name": "usf-207-redis-proof-command-missing",
+  "expectedRule": "USF-RUNTIME-031",
+  "removePackageScripts": [
+    "proof:cache:redis"
+  ],
+  "removeMakeTargets": [
+    "redis-cache-proof"
+  ]
+}

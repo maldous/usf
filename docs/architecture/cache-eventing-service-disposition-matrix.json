@@ -4,11 +4,18 @@
   "status": "draft",
   "sourceIssue": "USF-173",
   "followUpIssue": "USF-198",
-  "remainingProofIssue": "USF-207",
+  "remainingProofIssue": null,
   "laneIssue": "USF-189",
   "parentIssue": "USF-133",
-  "serviceIds": ["redis", "nats"],
-  "providerRegistryIds": ["cache-redis-deferred", "event-bus-nats-composed-test"],
+  "serviceIds": [
+    "redis",
+    "nats"
+  ],
+  "providerRegistryIds": [
+    "cache-redis-composed-test",
+    "cache-redis-deferred",
+    "event-bus-nats-composed-test"
+  ],
   "activeEventBusBindingId": "nats-event-bus-provider",
   "deferredCacheBindingId": "usf-189-redis-cache-provider",
   "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
@@ -16,7 +23,15 @@
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
   "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-  "issueLinks": ["USF-173", "USF-198", "USF-207", "USF-189", "USF-184", "USF-192", "USF-133"],
+  "issueLinks": [
+    "USF-173",
+    "USF-198",
+    "USF-207",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
   "humanDecision": {
     "decisionState": "accepted",
     "summary": "Cache and eventing are separate semantic roles. NATS is the composed event-bus provider where event-bus semantics are claimed; Redis-compatible composed support is required where Redis, cache, distributed runtime state, queue-adjacent, expiration, or Redis-specific semantics are claimed; in-memory substitutes are accepted only where semantically permitted and non-equivalence is recorded.",
@@ -41,11 +56,15 @@
       "role": "cache",
       "serviceCatalogueServiceId": "redis",
       "providerBindingId": "usf-189-redis-cache-provider",
-      "providerRegistryId": "cache-redis-deferred",
-      "disposition": "explicit-deferral-with-owner",
-      "followUpIssue": "USF-198",
-      "nonEquivalenceBoundary": "Redis-compatible cache semantics require separate adapter/service proof; neither NATS nor process memory is equivalent to Redis expiration, eviction, persistence, key-space, distributed runtime state, queue-adjacent, retry, fail-closed, audit, or wire-protocol behaviour.",
-      "readinessClaim": false
+      "providerRegistryId": "cache-redis-composed-test",
+      "disposition": "profile-gated-bounded-local-compose-proof",
+      "followUpIssue": "USF-207",
+      "nonEquivalenceBoundary": "Redis cache proof is now direct bounded local Compose evidence; NATS event-bus proof and process-memory proof remain separate evidence classes and are not used as Redis provider substitutes.",
+      "readinessClaim": false,
+      "proofCommands": [
+        "corepack pnpm proof:cache:redis",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ]
     },
     {
       "role": "in-memory-substitute",
@@ -58,33 +77,33 @@
     }
   ],
   "cacheEventingDisposition": {
-    "disposition": "explicit-split-with-cache-deferral",
-    "cacheServiceSemanticProofPresent": false,
-    "redisServiceSemanticProofPresent": false,
+    "disposition": "explicit-split-with-profile-gated-redis-proof",
+    "cacheServiceSemanticProofPresent": true,
+    "redisServiceSemanticProofPresent": true,
     "natsEventBusProofPresent": true,
     "natsRedisEquivalent": false,
     "inMemoryRedisEquivalent": false,
     "redisReadinessClaim": false,
     "cacheReadinessClaim": false,
     "eventingReadinessClaim": false,
-    "serviceCatalogueServiceIds": ["redis", "nats"],
-    "redisProviderRegistryId": "cache-redis-deferred",
+    "serviceCatalogueServiceIds": [
+      "redis",
+      "nats"
+    ],
+    "redisProviderRegistryId": "cache-redis-composed-test",
     "natsProviderRegistryId": "event-bus-nats-composed-test",
-    "followUpIssue": "USF-198",
+    "followUpIssue": "USF-207",
     "owner": "platform-workflow-foundation",
     "riskOwner": "platform-workflow-risk-owner",
     "controlOwner": "platform-workflow-control-owner",
     "riskStatement": "Redis cache provider semantics, expiration, eviction, persistence, tenant key isolation, queue-adjacent use, retry, audit, teardown, and provider failure modes could be overclaimed from NATS event-bus or in-memory evidence.",
-    "treatment": "record the cache/eventing semantic split in USF-173, keep NATS and in-memory evidence non-equivalent to Redis, and defer Redis service-semantic adapter proof to USF-198",
+    "treatment": "record the cache/eventing semantic split in USF-173, keep event-bus and in-memory evidence separate from Redis provider proof, and record USF-207 bounded local Redis SDK proof without readiness claims",
     "reviewDate": "2026-09-30",
     "deferredEvidence": [
-      "Redis SDK/client selection and adapter boundary evidence",
-      "tenant-safe Redis set/get/delete or equivalent write/read evidence",
-      "expiration or TTL evidence",
-      "retry, timeout, fail-closed, and readiness retry evidence",
-      "audit evidence for cache operations",
-      "teardown or cleanup evidence",
-      "supplier, secret, privacy, backup, incident, vulnerability, retention, and resilience posture evidence"
+      "API runtime cache-port integration proof remains unclaimed",
+      "worker runtime cache-port integration proof remains unclaimed",
+      "live/provider-managed Redis supplier, credential, and environment promotion evidence remains unclaimed",
+      "backup/restore, DR, production alerting, and operator access readiness remain unclaimed"
     ]
   },
   "natsEventBusBoundary": {
@@ -118,18 +137,21 @@
   },
   "redisProviderBoundary": {
     "providerBindingId": "usf-189-redis-cache-provider",
-    "providerRegistryId": "cache-redis-deferred",
-    "bindingStatus": "unsupported-deferred",
-    "providerMode": "live-external-deferred",
+    "providerRegistryId": "cache-redis-composed-test",
+    "deferredProviderRegistryId": "cache-redis-deferred",
+    "bindingStatus": "profile-gated-proven",
+    "providerMode": "composed-test",
     "runtimeProviderBindingActive": false,
-    "sdkPackage": null,
-    "sdkVersion": null,
-    "endpointRef": null,
+    "sdkPackage": "redis",
+    "sdkVersion": "6.0.1",
+    "sdkBoundary": "adapter-package-only",
+    "endpointRef": "endpoint://compose/redis",
     "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#redis",
     "runtimeManifestBinding": "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-redis-cache-provider",
-    "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-deferred as deferred evidence-only support linked to the Redis service catalogue row.",
-    "followUpIssue": "USF-198",
-    "remainingProofIssue": "USF-207"
+    "providerRegistryEvidence": "packages/core/src/index.ts records cache-redis-composed-test as bounded local Compose proof and cache-redis-deferred for remaining live/provider-managed boundaries.",
+    "proofCommand": "corepack pnpm proof:cache:redis",
+    "followUpIssue": "USF-207",
+    "remainingProofIssue": null
   },
   "inMemorySubstituteBoundary": {
     "usedWhereSemanticallyPermitted": true,
@@ -144,20 +166,19 @@
       "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     ],
     "scopeCovered": [
-      "repository records Redis as an explicit deferred provider class",
-      "runtime provider manifest keeps Redis unsupported-deferred",
-      "provider registry uses evidence-only support without endpoint or SDK",
-      "validator rejects NATS or in-memory Redis equivalence and readiness overclaim",
+      "repository records Redis as a profile-gated bounded local Compose provider proof",
+      "runtime provider manifest keeps Redis outside API/worker active provider binding refs",
+      "provider registry records cache-redis-composed-test plus cache-redis-deferred",
+      "validator rejects event-bus or in-memory Redis substitution and readiness overclaim",
       "enterprise evidence rows record tenant, retention, audit, privacy, supplier, incident, and cache/eventing boundaries"
     ],
     "limits": [
-      "no Redis SDK/client selected",
-      "no Redis adapter implementation",
-      "no Redis tenant-safe set/get/delete proof",
-      "no Redis expiration or TTL proof",
-      "no Redis retry, fail-closed, teardown, or provider failure-mode proof",
-      "no Redis supplier or live-provider evidence",
-      "no cache readiness, eventing readiness, Redis readiness, or live eventing/cache readiness claim"
+      "in-memory proof is not Redis provider proof",
+      "NATS proof is not Redis cache proof",
+      "no API runtime cache binding claim",
+      "no worker runtime cache binding claim",
+      "no live provider readiness claim",
+      "no cache readiness or Redis readiness claim"
     ]
   },
   "enterpriseEvidenceRefs": [
@@ -166,9 +187,28 @@
     "usf-173-threat-redis-nats-overclaim",
     "usf-173-access-cache-eventing",
     "usf-173-incident-vulnerability-cache-eventing",
-    "usf-173-privacy-cache-eventing"
+    "usf-173-privacy-cache-eventing",
+    "usf-198-soa-redis-cache-proof-boundary",
+    "usf-198-evidence-redis-cache-proof-boundary",
+    "usf-198-threat-redis-cache-overclaim",
+    "usf-198-access-redis-cache-proof-boundary",
+    "usf-198-incident-vulnerability-redis-cache-proof-boundary",
+    "usf-198-privacy-redis-cache-proof-boundary",
+    "usf-207-soa-redis-composed-proof",
+    "usf-207-evidence-redis-composed-proof",
+    "usf-207-threat-redis-cache-overclaim",
+    "usf-207-access-redis-composed-proof",
+    "usf-207-resilience-redis-composed-proof",
+    "usf-207-incident-vulnerability-redis-composed-proof",
+    "usf-207-privacy-redis-composed-proof",
+    "sdk-usf-189-redis-cache-provider-redis"
   ],
-  "readinessClaimsAllowed": ["cache-eventing-disposition-recorded", "nats-event-bus-proof-linked", "redis-service-proof-deferred", "in-memory-non-equivalence-recorded"],
+  "readinessClaimsAllowed": [
+    "cache-eventing-disposition-recorded",
+    "nats-event-bus-proof-linked",
+    "redis-profile-gated-local-compose-proof-linked",
+    "in-memory-non-equivalence-recorded"
+  ],
   "readinessClaimsProhibited": [
     "cache-readiness",
     "eventing-readiness",

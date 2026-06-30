@@ -1,0 +1,11 @@
+{
+  "name": "usf-207-redis-sdk-import-leak",
+  "expectedRule": "USF-RUNTIME-013",
+  "sourceReplacements": [
+    {
+      "path": "apps/api/src/runtime.ts",
+      "old": "import {",
+      "new": "import { createClient } from \"redis\";\nimport {"
+    }
+  ]
+}

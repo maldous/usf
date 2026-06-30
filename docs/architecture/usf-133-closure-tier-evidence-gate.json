@@ -365,10 +365,11 @@
         "USF-167",
         "USF-182",
         "USF-185",
-        "USF-174",
-        "USF-199"
+        "USF-173",
+        "USF-198",
+        "USF-207"
       ],
-      "assuranceMaturityLevel": "documented",
+      "assuranceMaturityLevel": "integration-proven",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -377,7 +378,13 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "enterpriseExceptionRef": "exception-service-redis"
+      "enterpriseExceptionRef": "exception-service-redis",
+      "proofEvidenceRefs": [
+        "corepack pnpm proof:cache:redis",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#usf-207-evidence-redis-composed-proof"
+      ],
+      "validationCommand": "corepack pnpm proof:cache:redis"
     },
     {
       "serviceId": "meilisearch",
@@ -1675,15 +1682,15 @@
       "id": "exception-service-redis",
       "targetType": "service",
       "targetId": "redis",
-      "disposition": "requires-human-decision",
-      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation; Dev in-memory cache is not equivalent to Redis eviction, persistence, or wire protocol behaviour.",
-      "owner": "platform-data-foundation",
-      "riskOwner": "platform-data-risk-owner",
-      "controlOwner": "platform-data-control-owner",
-      "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "disposition": "profile-gated-bounded-proof",
+      "reason": "USF-207 provides bounded local Compose Redis proof for synthetic SDK-backed cache operations, TTL, readiness retry, timeout, cleanup, unavailable fail-closed, redaction, metrics/tracing, and audit-shaped evidence. Remaining exception covers API/worker runtime cache integration, live/provider-managed Redis, environment readiness, supplier, operator, backup/restore, DR, and broader cache readiness evidence. Dev in-memory cache and NATS event-bus proof remain non-equivalent to Redis provider behaviour.",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "treatmentPath": "bounded-proof-plus-defer-stronger-claims",
+      "followUpIssue": "USF-207",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "bounded-proof-present-but-blocks-readiness-and-usf-133-closure-claims",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",

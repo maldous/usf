@@ -1,0 +1,11 @@
+{
+  "name": "usf-207-redis-sdk-unpinned",
+  "expectedRule": "USF-RUNTIME-016",
+  "packageDependencyPatches": [
+    {
+      "section": "dependencies",
+      "name": "redis",
+      "value": "^6.0.1"
+    }
+  ]
+}
