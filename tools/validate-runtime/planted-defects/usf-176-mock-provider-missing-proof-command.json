@@ -1,0 +1,10 @@
+{
+  "name": "usf-176-mock-provider-missing-proof-command",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "remove",
+      "path": "/hermeticMockSubstituteBoundary/commands/0"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "usf-176-mock-provider-runtime-link-missing",
+  "expectedRule": "USF-RUNTIME-027",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/11/followUpIssueRefs",
+      "value": [
+        "USF-176",
+        "USF-189"
+      ]
+    }
+  ]
+}

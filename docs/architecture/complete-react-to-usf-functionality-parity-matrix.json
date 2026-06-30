@@ -453,12 +453,12 @@
         "provider-mode",
         "guardrails"
       ],
-      "evidence_grade": "D",
+      "evidence_grade": "C",
       "react_evidence_summary": "localstack/wiremock lineage",
-      "readiness_impact": "Need decide mock provider coverage and behavioural contract.",
-      "tracking_carrier_or_recommendation": "draft decision required",
-      "usf_evidence_summary": "webhook-sink/provider modes only",
-      "usf_status": "requires-human-decision"
+      "readiness_impact": "USF-176 records bounded mock-provider substrate disposition and non-equivalence; USF-201 owns LocalStack, WireMock, webhook sink, and mock OIDC service-semantic proof before any local mock completeness or live-provider compatibility claim.",
+      "tracking_carrier_or_recommendation": "USF-176/USF-201",
+      "usf_evidence_summary": "provider modes, webhook-sink catalogue boundary, hermetic provider proof, and USF-176 disposition matrix only",
+      "usf_status": "deferred-with-owner"
     },
     {
       "blocking_level": "P1",

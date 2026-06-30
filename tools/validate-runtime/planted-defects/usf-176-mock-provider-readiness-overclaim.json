@@ -1,0 +1,16 @@
+{
+  "name": "usf-176-mock-provider-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/0",
+      "value": "live-provider-readiness"
+    },
+    {
+      "op": "replace",
+      "path": "/mockProviderSubstrateDisposition/liveProviderReadinessClaim",
+      "value": true
+    }
+  ]
+}

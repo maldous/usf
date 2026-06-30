@@ -1,0 +1,5 @@
+{
+  "name": "usf-176-mock-provider-matrix-missing",
+  "expectedRule": "USF-RUNTIME-027",
+  "removeMockProviderSubstrateMatrix": true
+}
