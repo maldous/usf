@@ -1027,13 +1027,18 @@
           "spec/instances/compose-service/service-catalogue.json"
         ],
         "tracking_issues": [
-          "USF-185"
+          "USF-185",
+          "USF-176",
+          "USF-201"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-176 records bounded mock-provider disposition only; USF-201 owns service-semantic proof and live-provider non-equivalence remains explicit."
+        ],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-201 mock-provider substrate service-semantic proof, no-egress proof, tenant safety, synthetic-data proof, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1060,8 +1065,18 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-webhook-sink",
           "resilience-posture-webhook-sink",
-          "incident-vulnerability-webhook-sink"
-        ]
+          "incident-vulnerability-webhook-sink",
+          "usf-176-soa-mock-provider-substrate-disposition",
+          "usf-176-evidence-mock-provider-substrate-disposition",
+          "usf-176-threat-mock-provider-overclaim",
+          "usf-176-access-mock-provider-substrate",
+          "usf-176-incident-vulnerability-mock-provider-substrate",
+          "usf-176-privacy-mock-provider-substrate"
+        ],
+        "tracking_issue_rationale": {
+          "USF-176": "bounded local mock provider substrate disposition and non-equivalence gate",
+          "USF-201": "actual local mock provider substrate service semantics and adapter proof"
+        }
       }
     },
     {
@@ -1731,13 +1746,17 @@
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
         "tracking_issues": [
-          "USF-185"
+          "USF-185",
+          "USF-176",
+          "USF-201"
         ],
         "non_equivalence_boundaries": [
-          "Mock OIDC cannot prove live external identity provider readiness."
+          "Mock OIDC cannot prove live external identity provider readiness.",
+          "USF-176 records bounded mock-provider disposition only; USF-201 owns service-semantic proof and live-provider non-equivalence remains explicit."
         ],
         "missing_evidence": [
-          "accepted implementation/proof decision for deferred service depth"
+          "accepted implementation/proof decision for deferred service depth",
+          "USF-201 mock-provider substrate service-semantic proof, no-egress proof, tenant safety, synthetic-data proof, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1763,8 +1782,18 @@
           "threat-lane-usf-185",
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-mock-oidc",
-          "incident-vulnerability-mock-oidc"
-        ]
+          "incident-vulnerability-mock-oidc",
+          "usf-176-soa-mock-provider-substrate-disposition",
+          "usf-176-evidence-mock-provider-substrate-disposition",
+          "usf-176-threat-mock-provider-overclaim",
+          "usf-176-access-mock-provider-substrate",
+          "usf-176-incident-vulnerability-mock-provider-substrate",
+          "usf-176-privacy-mock-provider-substrate"
+        ],
+        "tracking_issue_rationale": {
+          "USF-176": "bounded local mock provider substrate disposition and non-equivalence gate",
+          "USF-201": "actual local mock provider substrate service semantics and adapter proof"
+        }
       }
     },
     {
@@ -1805,13 +1834,16 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-176"
+          "USF-176",
+          "USF-201"
         ],
         "non_equivalence_boundaries": [
-          "LocalStack emulation is not live external provider evidence."
+          "LocalStack emulation is not live external provider evidence.",
+          "USF-176 records bounded mock-provider disposition only; USF-201 owns service-semantic proof and live-provider non-equivalence remains explicit."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service"
+          "current runtime proof stronger than catalogue classification for this service",
+          "USF-201 mock-provider substrate service-semantic proof, no-egress proof, tenant safety, synthetic-data proof, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1838,10 +1870,17 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-localstack",
           "resilience-posture-localstack",
-          "incident-vulnerability-localstack"
+          "incident-vulnerability-localstack",
+          "usf-176-soa-mock-provider-substrate-disposition",
+          "usf-176-evidence-mock-provider-substrate-disposition",
+          "usf-176-threat-mock-provider-overclaim",
+          "usf-176-access-mock-provider-substrate",
+          "usf-176-incident-vulnerability-mock-provider-substrate",
+          "usf-176-privacy-mock-provider-substrate"
         ],
         "tracking_issue_rationale": {
-          "USF-176": "local mock provider substrate proof"
+          "USF-176": "bounded local mock provider substrate disposition and non-equivalence gate",
+          "USF-201": "actual local mock provider substrate service semantics and adapter proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -1886,13 +1925,16 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-176"
+          "USF-176",
+          "USF-201"
         ],
         "non_equivalence_boundaries": [
-          "WireMock proves configured mock behaviour only."
+          "WireMock proves configured mock behaviour only.",
+          "USF-176 records bounded mock-provider disposition only; USF-201 owns service-semantic proof and live-provider non-equivalence remains explicit."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service"
+          "current runtime proof stronger than catalogue classification for this service",
+          "USF-201 mock-provider substrate service-semantic proof, no-egress proof, tenant safety, synthetic-data proof, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1919,10 +1961,17 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-wiremock",
           "resilience-posture-wiremock",
-          "incident-vulnerability-wiremock"
+          "incident-vulnerability-wiremock",
+          "usf-176-soa-mock-provider-substrate-disposition",
+          "usf-176-evidence-mock-provider-substrate-disposition",
+          "usf-176-threat-mock-provider-overclaim",
+          "usf-176-access-mock-provider-substrate",
+          "usf-176-incident-vulnerability-mock-provider-substrate",
+          "usf-176-privacy-mock-provider-substrate"
         ],
         "tracking_issue_rationale": {
-          "USF-176": "local mock provider substrate proof"
+          "USF-176": "bounded local mock provider substrate disposition and non-equivalence gate",
+          "USF-201": "actual local mock provider substrate service semantics and adapter proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

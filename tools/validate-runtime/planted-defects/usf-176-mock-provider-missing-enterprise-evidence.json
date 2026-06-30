@@ -1,0 +1,10 @@
+{
+  "name": "usf-176-mock-provider-missing-enterprise-evidence",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "remove",
+      "path": "/enterpriseEvidenceRefs/0"
+    }
+  ]
+}

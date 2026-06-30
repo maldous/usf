@@ -3829,6 +3829,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-176-soa-mock-provider-substrate-disposition",
+      "mappedType": "source-issue-mock-provider-substrate-disposition",
+      "controlPurpose": "Map USF-176 as the bounded local mock provider substrate disposition gate, separating hermetic mock/provider registry proof from deferred LocalStack, WireMock, webhook sink, and mock OIDC service-semantic proof under USF-201.",
+      "riskTreated": "riskStatement=USF-176 could be treated as local mock completeness or live external provider compatibility even though it records explicit semantic split, non-equivalence, and deferral only",
+      "assetServiceAffected": "localstack, wiremock, webhook-sink, and mock-oidc service catalogue rows plus repository mock-provider substrate disposition",
+      "owner": "platform-integration-foundation",
+      "riskOwner": "platform-integration-risk-owner",
+      "controlOwner": "platform-integration-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; sourceIssue=USF-176; followUpIssue=USF-201; treatment=record bounded mock-provider substrate disposition, require docs/architecture/mock-provider-substrate-disposition-matrix.json, and defer LocalStack, WireMock, webhook sink, mock OIDC, SDK/client or protocol selection, adapter or fixture implementation, deterministic behaviour, tenant, no-egress, synthetic-data, redaction, audit, cleanup, failure-mode, supplier, incident, privacy, and provider proof; reviewDate=2026-09-30",
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-176; USF-201",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "threatFailureScenario=hermetic or mock evidence is mistaken for live external provider compatibility or local mock completeness; impact=medium; likelihood=medium; owner=platform-integration-foundation; treatment=defer service-semantic proof to USF-201; reviewDate=2026-09-30; followUpIssue=USF-201; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -5063,6 +5089,29 @@
       ],
       "prOrMergeSha": "be342d2ab9bd388be324e692046482fe82ad1b73",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain ClamAV scan payloads, sample files, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
+    },
+    {
+      "id": "usf-176-evidence-mock-provider-substrate-disposition",
+      "proofResult": "mock-provider-substrate-disposition-gate",
+      "whatWasProven": "USF-176 records a bounded local mock provider substrate disposition in docs/architecture/mock-provider-substrate-disposition-matrix.json, links LocalStack, WireMock, webhook sink, and mock OIDC service-semantic proof to USF-201, records hermetic mock/provider proof as bounded and non-equivalent, updates runtime and closure matrices, and adds validator coverage that fails missing matrix, missing follow-up, false live-provider equivalence, missing enterprise evidence, missing runtime manifest linkage, missing proof-command linkage, and readiness overclaim.",
+      "whatWasNotProven": "This does not prove local mock completeness, mock-provider readiness, external-provider compatibility readiness, live-provider readiness, LocalStack readiness, WireMock readiness, webhook delivery readiness, mock OIDC readiness, provider-compatibility readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, USF-133 closure, SDK/client or protocol exception selection, adapter implementation, tenant-safe fixture execution, no-egress proof, deterministic service behaviour, cleanup, retry, timeout, fail-closed behaviour, audit operation evidence, teardown, supplier boundary, incident posture, privacy posture, retention posture, or live provider evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "mock-provider-service-proof-deferred-to-USF-201-and-hermetic-provider-proof-bounded",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#localstack; spec/instances/compose-service/service-catalogue.json#wiremock; spec/instances/compose-service/service-catalogue.json#webhook-sink; spec/instances/compose-service/service-catalogue.json#mock-oidc",
+      "adapterProviderId": "provider-emulator-localstack-deferred; provider-mock-wiremock-deferred; notification-delivery-webhook-sink-deferred",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "dfa6a4b61db23cf090a5b8d1984270fe3d6fa41d",
+      "issueLinks": [
+        "USF-176",
+        "USF-201",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "dfa6a4b61db23cf090a5b8d1984270fe3d6fa41d",
+      "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain provider payloads, mock fixture payloads, webhook bodies, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -6160,6 +6209,36 @@
       "failClosedBehaviour": "USF-RUNTIME-026 fails when docs/architecture/file-scanner-provider-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-200 is missing, deterministic scan checks are marked ClamAV equivalent, runtime manifest lacks USF-200 linkage, proof commands are incomplete, readiness claims are enabled, or stale self-deferral remains.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live ClamAV scan, scan payload, signature update, file sample, quarantine release, deletion, retention, or provider evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
       "residualRisk": "riskStatement=ClamAV service semantics remain unproven after USF-175; impact=high; likelihood=medium; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; controlOwner=platform-files-control-owner; treatment=defer service proof to USF-200; reviewDate=2026-09-30; followUpIssue=USF-200; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/file-scanner-provider-disposition-matrix.json"
+    },
+    {
+      "id": "usf-176-threat-mock-provider-overclaim",
+      "targetType": "source-issue-mock-provider-substrate-disposition",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "trustBoundary": "USF-176 repository evidence may define bounded mock-provider substrate disposition only; LocalStack, WireMock, webhook sink, and mock OIDC service behaviour, adapter calls, fixture execution, no-egress proof, cleanup, audit, supplier, and provider compatibility semantics remain outside this proof and are tracked by USF-201.",
+      "tenantBoundary": "tenant isolation remains unproven for local mock substrates until USF-201 records tenant-safe service operation proof; USF-176 records non-equivalence only.",
+      "credentialBoundary": "no LocalStack, WireMock, webhook, mock OIDC, provider credentials, raw endpoints, SDK errors, provider payloads, fixture payloads, connection strings, webhook bodies, or tokens are introduced by USF-176.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production data, tenant data, provider payloads, fixture payloads, webhook bodies, or raw provider responses",
+      "abuseCases": [
+        "USF-176 marked Done as local mock completeness",
+        "hermetic provider proof marked live external provider compatible",
+        "LocalStack service catalogue presence marked cloud-provider proof",
+        "WireMock fixture posture marked external provider compatibility",
+        "webhook sink capture marked notification delivery proof",
+        "missing USF-201 follow-up link",
+        "runtime manifest omits USF-201 deferral"
+      ],
+      "failureModes": [
+        "matrix missing",
+        "follow-up missing",
+        "enterprise evidence missing",
+        "hermetic mock live-provider equivalence marked true",
+        "runtime manifest service proof defers back only to USF-176",
+        "proof command linkage missing",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-027 fails when docs/architecture/mock-provider-substrate-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-201 is missing, hermetic/mock checks are marked live-provider equivalent, runtime manifest lacks USF-201 linkage, proof commands are incomplete, readiness claims are enabled, or stale self-deferral remains.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no live provider operation, provider payload, mock fixture output, webhook body, no-egress telemetry, or service evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
+      "residualRisk": "riskStatement=local mock provider substrate service semantics remain unproven after USF-176; impact=medium; likelihood=medium; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; controlOwner=platform-integration-control-owner; treatment=defer service proof to USF-201; reviewDate=2026-09-30; followUpIssue=USF-201; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7490,6 +7569,51 @@
       "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-175; USF-200",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "access and provider proof deferred to USF-200; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; treatment=do not treat USF-175 as ClamAV access proof; reviewDate=2026-09-30; followUpIssue=USF-200; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-176-access-mock-provider-substrate",
+      "targetType": "source-issue-mock-provider-substrate-disposition",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-176",
+        "followUpIssue=USF-201",
+        "riskStatement=USF-176 could be treated as mock provider operator or provider access proof without service evidence",
+        "threatFailureScenario=mock provider admin access, fixture mutation, webhook capture access, credential posture, or operator audit evidence is claimed from repository validation only",
+        "affectedAssetService=localstack wiremock webhook-sink mock-oidc mock provider substrate disposition",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=record bounded disposition and defer mock provider access and adapter proof to USF-201",
+        "reviewDate=2026-09-30",
+        "accessModel=defined-only",
+        "authRequirement=operator-auth-required-before-ui-exposure",
+        "authorizationBoundary=defined-only; USF-176 does not prove mock provider console, fixture, webhook, or identity-provider access",
+        "breakGlassRelevance=must-be-defined-before-readiness-claim",
+        "auditRequirement=value-free-provider-operation-evidence-required-before-readiness-claim",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=required-before-operator-or-provider-readiness",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-176; USF-201",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "access and provider proof deferred to USF-201; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; treatment=do not treat USF-176 as mock provider access proof; reviewDate=2026-09-30; followUpIssue=USF-201; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -10380,6 +10504,49 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-176-incident-vulnerability-mock-provider-substrate",
+      "targetType": "source-issue-mock-provider-substrate-disposition",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-176",
+        "followUpIssue=USF-201",
+        "riskStatement=mock provider incident, alerting, vulnerability, dependency, and corrective-action evidence could be overclaimed from hermetic provider proof",
+        "threatFailureScenario=LocalStack, WireMock, webhook sink, or mock OIDC outage, fixture drift, provider dependency advisory, or mock substrate incident is treated as covered by repository metadata",
+        "affectedAssetService=localstack wiremock webhook-sink mock-oidc mock provider substrate disposition",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=record mock provider incident and vulnerability boundaries and defer operating proof to USF-201",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=defined-only; no live mock-substrate operation or provider health proof",
+        "alertingPosture=not-proven-by-USF-176",
+        "escalationOwner=platform-integration-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "correctiveActionEvidenceBoundary=repository metadata only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-176",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-176; USF-201",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "incident, alerting, vulnerability/advisory, dependency update, and corrective-action evidence deferred to USF-201; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-201; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -12029,6 +12196,52 @@
       "evidenceSource": "docs/architecture/file-scanner-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-175; USF-200",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "privacy/data minimisation operating evidence deferred to USF-200; owner=platform-files-foundation; riskOwner=platform-files-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-200; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-176-privacy-mock-provider-substrate",
+      "targetType": "source-issue-mock-provider-substrate-disposition",
+      "target": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-176",
+        "followUpIssue=USF-201",
+        "riskStatement=mock fixture payloads, webhook bodies, tenant data, credentials, or provider responses could be retained or exposed without proof",
+        "threatFailureScenario=fixture request, webhook payload, provider response, mock identity token, or raw error is committed as evidence or retention/purge posture is implied from metadata only",
+        "affectedAssetService=localstack wiremock webhook-sink mock-oidc mock provider substrate disposition",
+        "impact=medium",
+        "likelihood=medium",
+        "owner=platform-integration-foundation",
+        "riskOwner=platform-integration-risk-owner",
+        "controlOwner=platform-integration-control-owner",
+        "treatment=record value-free repository metadata only and defer mock substrate data handling proof to USF-201",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-raw-provider-payloads",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-provider-payloads-fixture-payloads-webhook-bodies-identity-tokens-provider-responses-raw-errors-or-raw-endpoints-committed-by-USF-176",
+        "matrix=docs/architecture/mock-provider-substrate-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-176; USF-201",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "privacy/data minimisation operating evidence deferred to USF-201; owner=platform-integration-foundation; riskOwner=platform-integration-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-201; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

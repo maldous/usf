@@ -1,0 +1,21 @@
+{
+  "name": "usf-176-mock-provider-missing-follow-up",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-176"
+    },
+    {
+      "op": "replace",
+      "path": "/mockProviderSubstrateDisposition/followUpIssue",
+      "value": "USF-176"
+    },
+    {
+      "op": "replace",
+      "path": "/providerBoundaries/0/followUpIssue",
+      "value": "USF-176"
+    }
+  ]
+}

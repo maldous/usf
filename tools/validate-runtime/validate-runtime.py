@@ -55,6 +55,7 @@ RULES = {
     "USF-RUNTIME-024": ("blocking", "cache and eventing service disposition is incomplete or unsafe"),
     "USF-RUNTIME-025": ("blocking", "composed search provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-026": ("blocking", "file scanner provider disposition is incomplete or unsafe"),
+    "USF-RUNTIME-027": ("blocking", "mock provider substrate disposition is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -65,6 +66,7 @@ ANALYTICS_EVENT_STORE_MATRIX_PATH = Path("docs/architecture/analytics-event-stor
 CACHE_EVENTING_MATRIX_PATH = Path("docs/architecture/cache-eventing-service-disposition-matrix.json")
 COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-provider-disposition-matrix.json")
 FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provider-disposition-matrix.json")
+MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH = Path("docs/architecture/mock-provider-substrate-disposition-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -264,6 +266,25 @@ FILE_SCANNER_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "vulnerability-clearance-readiness",
     "provider-compatibility-readiness",
 }
+MOCK_PROVIDER_SUBSTRATE_REQUIRED_ISSUES = {"USF-176", "USF-201", "USF-189", "USF-184", "USF-192", "USF-133"}
+MOCK_PROVIDER_SUBSTRATE_REQUIRED_EVIDENCE_REFS = {
+    "usf-176-soa-mock-provider-substrate-disposition",
+    "usf-176-evidence-mock-provider-substrate-disposition",
+    "usf-176-threat-mock-provider-overclaim",
+    "usf-176-access-mock-provider-substrate",
+    "usf-176-incident-vulnerability-mock-provider-substrate",
+    "usf-176-privacy-mock-provider-substrate",
+}
+MOCK_PROVIDER_SUBSTRATE_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
+    "local-mock-completeness-readiness",
+    "mock-provider-readiness",
+    "external-provider-compatibility-readiness",
+    "localstack-readiness",
+    "wiremock-readiness",
+    "webhook-delivery-readiness",
+    "mock-oidc-readiness",
+    "provider-compatibility-readiness",
+}
 LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clickhouse-analytics-provider": {
         "serviceIds": ["clickhouse"],
@@ -296,21 +317,21 @@ LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-localstack-cloud-mock-provider": {
         "serviceIds": ["localstack"],
         "providerIds": ["provider-emulator-localstack-deferred"],
-        "followUpIssue": "USF-176",
+        "followUpIssue": "USF-201",
         "boundaryRef": "usf-189-mock-provider-deferred",
         "allowedStatuses": {"profile-gated"},
     },
     "usf-189-wiremock-http-mock-provider": {
         "serviceIds": ["wiremock"],
         "providerIds": ["provider-mock-wiremock-deferred"],
-        "followUpIssue": "USF-176",
+        "followUpIssue": "USF-201",
         "boundaryRef": "usf-189-mock-provider-deferred",
         "allowedStatuses": {"profile-gated"},
     },
     "usf-189-webhook-sink-capture-provider": {
         "serviceIds": ["webhook-sink"],
         "providerIds": ["notification-delivery-webhook-sink-deferred"],
-        "followUpIssue": "USF-176",
+        "followUpIssue": "USF-201",
         "boundaryRef": "usf-189-mock-provider-deferred",
         "allowedStatuses": {"compose-boundary-only"},
     },
@@ -508,6 +529,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 file_scanner_provider_matrix,
                 defect["fileScannerProviderMatrixPatches"],
             )
+    mock_provider_substrate_matrix: Any = None
+    if not defect.get("removeMockProviderSubstrateMatrix"):
+        mock_provider_substrate_matrix = read_json(MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH)
+        if defect.get("mockProviderSubstrateMatrixPatches"):
+            mock_provider_substrate_matrix = apply_manifest_patches(
+                mock_provider_substrate_matrix,
+                defect["mockProviderSubstrateMatrixPatches"],
+            )
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
@@ -533,6 +562,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "cacheEventingMatrix": cache_eventing_matrix,
         "composedSearchProviderMatrix": composed_search_provider_matrix,
         "fileScannerProviderMatrix": file_scanner_provider_matrix,
+        "mockProviderSubstrateMatrix": mock_provider_substrate_matrix,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -1629,6 +1659,251 @@ def check_file_scanner_provider_disposition(F: Findings, state: dict[str, Any]) 
             F.add("USF-RUNTIME-026", "file-scanner-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
 
+def check_mock_provider_substrate_disposition(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("mockProviderSubstrateMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-RUNTIME-027", str(MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH), "mock provider substrate disposition matrix is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-176",
+        "followUpIssue": "USF-201",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-RUNTIME-027", key, f"expected {expected!r}")
+
+    required_services = {"localstack", "wiremock", "webhook-sink", "mock-oidc"}
+    if required_services - set(matrix.get("serviceIds", [])):
+        F.add("USF-RUNTIME-027", "serviceIds", "mock provider service ids are incomplete")
+    required_providers = {
+        "provider-emulator-localstack-deferred",
+        "provider-mock-wiremock-deferred",
+        "notification-delivery-webhook-sink-deferred",
+    }
+    if required_providers - set(matrix.get("providerRegistryIds", [])):
+        F.add("USF-RUNTIME-027", "providerRegistryIds", "mock provider registry ids are incomplete")
+    if MOCK_PROVIDER_SUBSTRATE_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-027", "issueLinks", "mock provider substrate issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-RUNTIME-027", "nonClaims", "mock provider substrate non-claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-027", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
+    if MOCK_PROVIDER_SUBSTRATE_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-027", "readinessClaimsProhibited", "mock provider prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-RUNTIME-027", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-RUNTIME-027", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    disposition = matrix.get("mockProviderSubstrateDisposition", {})
+    if not isinstance(disposition, dict):
+        F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition", "mock provider disposition must be an object")
+    else:
+        expected_disposition = {
+            "disposition": "explicit-deferral-with-owner",
+            "localstackServiceSemanticProofPresent": False,
+            "wiremockServiceSemanticProofPresent": False,
+            "webhookSinkProviderProofPresent": False,
+            "mockOidcComposeServiceProofPresent": False,
+            "hermeticMockLiveProviderEquivalent": False,
+            "wiremockLiveProviderEquivalent": False,
+            "localstackLiveCloudProviderEquivalent": False,
+            "webhookSinkNotificationDeliveryEquivalent": False,
+            "mockProviderCompletenessClaim": False,
+            "liveProviderReadinessClaim": False,
+            "externalProviderCompatibilityClaim": False,
+            "followUpIssue": "USF-201",
+            "owner": "platform-integration-foundation",
+            "riskOwner": "platform-integration-risk-owner",
+            "controlOwner": "platform-integration-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_disposition.items():
+            observed = disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-027", f"mockProviderSubstrateDisposition.{key}", f"expected {expected!r}")
+        if required_services - set(disposition.get("serviceCatalogueServiceIds", [])):
+            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.serviceCatalogueServiceIds", "service ids are incomplete")
+        if required_providers - set(disposition.get("providerRegistryIds", [])):
+            F.add("USF-RUNTIME-027", "mockProviderSubstrateDisposition.providerRegistryIds", "provider ids are incomplete")
+        for field in ("riskStatement", "treatment", "deferredEvidence"):
+            if disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-027", f"mockProviderSubstrateDisposition.{field}", "deferral field is required")
+
+    classifications = {
+        item.get("serviceId"): item
+        for item in matrix.get("mockSubstrateClassifications", [])
+        if isinstance(item, dict) and isinstance(item.get("serviceId"), str)
+    }
+    required_classifications = {
+        "localstack": {
+            "providerBindingId": "usf-189-localstack-cloud-mock-provider",
+            "providerRegistryId": "provider-emulator-localstack-deferred",
+        },
+        "wiremock": {
+            "providerBindingId": "usf-189-wiremock-http-mock-provider",
+            "providerRegistryId": "provider-mock-wiremock-deferred",
+        },
+        "webhook-sink": {
+            "providerBindingId": "usf-189-webhook-sink-capture-provider",
+            "providerRegistryId": "notification-delivery-webhook-sink-deferred",
+        },
+        "mock-oidc": {
+            "providerBindingId": "not-runtime-compose-binding",
+            "providerRegistryId": "identity-mock-oidc-catalogue-boundary",
+        },
+    }
+    for service_id, expected in required_classifications.items():
+        item = classifications.get(service_id)
+        if not item:
+            F.add("USF-RUNTIME-027", "mockSubstrateClassifications", f"missing {service_id}")
+            continue
+        if item.get("status") != "deferred-with-owner" or item.get("followUpIssue") != "USF-201":
+            F.add("USF-RUNTIME-027", f"mockSubstrateClassifications.{service_id}", "classification must defer to USF-201")
+        if item.get("proofPresent") is not False:
+            F.add("USF-RUNTIME-027", f"mockSubstrateClassifications.{service_id}.proofPresent", "proof must not be claimed")
+        for key, expected_value in expected.items():
+            if item.get(key) != expected_value:
+                F.add("USF-RUNTIME-027", f"mockSubstrateClassifications.{service_id}.{key}", f"expected {expected_value!r}")
+        if not item.get("nonEquivalenceBoundary"):
+            F.add("USF-RUNTIME-027", f"mockSubstrateClassifications.{service_id}.nonEquivalenceBoundary", "non-equivalence boundary is required")
+
+    substitute = matrix.get("hermeticMockSubstituteBoundary", {})
+    if not isinstance(substitute, dict):
+        F.add("USF-RUNTIME-027", "hermeticMockSubstituteBoundary", "substitute boundary must be an object")
+    else:
+        if substitute.get("usedWhereSemanticallyPermitted") is not True:
+            F.add("USF-RUNTIME-027", "hermeticMockSubstituteBoundary.usedWhereSemanticallyPermitted", "permitted hermetic mock use must be explicit")
+        for key in (
+            "liveProviderEquivalent",
+            "externalProviderCompatibilityEquivalent",
+            "cloudProviderEquivalent",
+            "httpProviderContractEquivalent",
+            "webhookDeliveryEquivalent",
+            "mockOidcServiceEquivalent",
+        ):
+            if substitute.get(key) is not False:
+                F.add("USF-RUNTIME-027", f"hermeticMockSubstituteBoundary.{key}", "hermetic mock evidence must not be live/provider equivalent")
+        if "not equivalent to LocalStack" not in str(substitute.get("substitutionNonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-027", "hermeticMockSubstituteBoundary.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+        commands = set(substitute.get("commands", []))
+        for command in (
+            "corepack pnpm proof:providers",
+            "corepack pnpm runtime:proof:in-memory",
+            "corepack pnpm verify",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+        ):
+            if command not in commands:
+                F.add("USF-RUNTIME-027", "hermeticMockSubstituteBoundary.commands", f"missing {command}")
+        if len(substitute.get("scopeCovered", [])) < 4 or len(substitute.get("limits", [])) < 6:
+            F.add("USF-RUNTIME-027", "hermeticMockSubstituteBoundary", "substitute scope and limits are incomplete")
+
+    boundaries = {
+        item.get("providerBindingId"): item
+        for item in matrix.get("providerBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("providerBindingId"), str)
+    }
+    expected_boundaries = {
+        "usf-189-localstack-cloud-mock-provider": {
+            "providerRegistryId": "provider-emulator-localstack-deferred",
+            "bindingStatus": "profile-gated",
+            "serviceCatalogueServiceId": "localstack",
+        },
+        "usf-189-wiremock-http-mock-provider": {
+            "providerRegistryId": "provider-mock-wiremock-deferred",
+            "bindingStatus": "profile-gated",
+            "serviceCatalogueServiceId": "wiremock",
+        },
+        "usf-189-webhook-sink-capture-provider": {
+            "providerRegistryId": "notification-delivery-webhook-sink-deferred",
+            "bindingStatus": "compose-boundary-only",
+            "serviceCatalogueServiceId": "webhook-sink",
+        },
+    }
+    for binding_id, expected in expected_boundaries.items():
+        item = boundaries.get(binding_id)
+        if not item:
+            F.add("USF-RUNTIME-027", "providerBoundaries", f"missing {binding_id}")
+            continue
+        common = {
+            "providerMode": "live-external-deferred",
+            "runtimeProviderBindingActive": False,
+            "sdkPackage": None,
+            "sdkVersion": None,
+            "endpointRef": None,
+            "followUpIssue": "USF-201",
+        }
+        for key, expected_value in {**expected, **common}.items():
+            observed = item.get(key)
+            if observed is not expected_value if isinstance(expected_value, bool) or expected_value is None else observed != expected_value:
+                F.add("USF-RUNTIME-027", f"providerBoundaries.{binding_id}.{key}", f"expected {expected_value!r}")
+
+    operational = matrix.get("operationalEvidencePosture", {})
+    if not isinstance(operational, dict):
+        F.add("USF-RUNTIME-027", "operationalEvidencePosture", "operational evidence posture must be an object")
+    else:
+        expected_operational = {
+            "readinessRetry": "deferred-to-USF-201",
+            "timeout": "deferred-to-USF-201",
+            "failClosed": "bounded-provider-registry-proof-only",
+            "noExternalEgress": "required-before-mock-substrate-readiness-claim",
+            "safeTeardown": "deferred-to-USF-201",
+        }
+        for key, expected in expected_operational.items():
+            if operational.get(key) != expected:
+                F.add("USF-RUNTIME-027", f"operationalEvidencePosture.{key}", f"expected {expected!r}")
+        for field in (
+            "structuredLogging",
+            "tracingCorrelation",
+            "metrics",
+            "auditEvents",
+            "redaction",
+            "syntheticData",
+        ):
+            if field not in operational:
+                F.add("USF-RUNTIME-027", f"operationalEvidencePosture.{field}", "operational field is required")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != MOCK_PROVIDER_SUBSTRATE_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-027", "enterpriseEvidenceRefs", "mock provider substrate enterprise evidence refs are incomplete")
+
+    bindings = binding_records(state["manifest"])
+    for binding_id in expected_boundaries:
+        binding = bindings.get(binding_id)
+        if not binding:
+            F.add("USF-RUNTIME-027", "providerBindingMatrix", f"mock provider disposition is missing from runtime manifest: {binding_id}")
+            continue
+        if "USF-201" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}", "runtime manifest must link USF-201")
+        if "USF-201" not in str(binding.get("deferredReason", "")):
+            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}.deferredReason", "runtime manifest must defer service-semantic proof to USF-201")
+        if binding.get("endpointRef") is not None:
+            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}", "deferred mock provider must not expose endpoint binding")
+        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+            F.add("USF-RUNTIME-027", f"providerBindingMatrix.{binding_id}", "deferred mock provider must not name an SDK/client package")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-mock-provider-deferred")
+    if not deferred or "USF-201" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-027", "deferredBoundaries.usf-189-mock-provider-deferred", "runtime deferred boundary must link USF-201")
+
+    matrix_text = json.dumps(matrix, sort_keys=True)
+    for stale in ("until USF-176 closes", "followUpIssue=USF-176", "\"followUpIssue\": \"USF-176\"", "linkedFollowUpIssue=USF-176"):
+        if stale in matrix_text:
+            F.add("USF-RUNTIME-027", "mock-provider-substrate-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     for binding_id, metadata in REQUIRED_PROVIDER_BINDINGS.items():
         adapter_path = metadata["adapterPath"]
@@ -1814,6 +2089,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
+            check_mock_provider_substrate_disposition,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -1840,6 +2116,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
+            check_mock_provider_substrate_disposition,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

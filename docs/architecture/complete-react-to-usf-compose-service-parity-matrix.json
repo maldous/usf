@@ -273,7 +273,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF has provider modes but no LocalStack equivalent.",
+      "gap_or_decision": "USF-176 records bounded LocalStack mock-provider disposition; USF-201 owns actual LocalStack service-semantic proof. LocalStack emulation is not live cloud-provider readiness.",
       "legacy_service_category": "cloud-mock",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -284,9 +284,9 @@
       ],
       "react_service": "localstack",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
+      "tracking_recommendation": "USF-176 bounded disposition gate; USF-201 service proof follow-up before any mock-provider completeness claim",
       "usf_accounting_status": "requires-human-decision",
-      "usf_service_or_substitute": "provider live-deferred posture"
+      "usf_service_or_substitute": "provider live-deferred posture plus USF-176/USF-201 evidence boundary"
     },
     {
       "business_or_foundation_purpose": "local log backend",
@@ -406,7 +406,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "B",
-      "gap_or_decision": "USF has hermetic IDP tests and Keycloak-brokered auth proof; no compose mock-oidc service.",
+      "gap_or_decision": "USF has hermetic IDP tests and Keycloak-brokered auth proof; USF-176 records that this is not mock OIDC service equivalence and USF-201 owns any future mock OIDC service proof.",
       "legacy_service_category": "identity-test",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": {
@@ -420,7 +420,7 @@
       ],
       "react_service": "mock-oidc",
       "selection_class": "selected",
-      "tracking_recommendation": "covered by existing authorised foundation slice evidence",
+      "tracking_recommendation": "covered by authorised foundation proof only for hermetic identity semantics; USF-201 owns service-equivalence proof if later required",
       "usf_accounting_status": "covered-by-usf-runtime",
       "usf_service_or_substitute": "adapters/idp"
     },
@@ -1434,7 +1434,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "C",
-      "gap_or_decision": "USF webhook sink is not a WireMock behavioural equivalent.",
+      "gap_or_decision": "USF-176 records bounded WireMock mock-provider disposition; webhook-sink remains non-equivalent and USF-201 owns actual WireMock service-semantic proof.",
       "legacy_service_category": "external-http-mock",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1445,9 +1445,9 @@
       ],
       "react_service": "wiremock",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
+      "tracking_recommendation": "USF-176 bounded disposition gate; USF-201 service proof follow-up before any external-provider compatibility claim",
       "usf_accounting_status": "substituted-partial",
-      "usf_service_or_substitute": "webhook-sink"
+      "usf_service_or_substitute": "webhook-sink plus USF-176/USF-201 non-equivalence boundary"
     }
   ],
   "status": "review-draft",

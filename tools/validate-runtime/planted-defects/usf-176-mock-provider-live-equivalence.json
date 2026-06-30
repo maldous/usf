@@ -1,0 +1,16 @@
+{
+  "name": "usf-176-mock-provider-live-equivalence",
+  "expectedRule": "USF-RUNTIME-027",
+  "mockProviderSubstrateMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/mockProviderSubstrateDisposition/hermeticMockLiveProviderEquivalent",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/hermeticMockSubstituteBoundary/liveProviderEquivalent",
+      "value": true
+    }
+  ]
+}
