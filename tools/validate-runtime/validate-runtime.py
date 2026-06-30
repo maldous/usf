@@ -57,6 +57,7 @@ RULES = {
     "USF-RUNTIME-026": ("blocking", "file scanner provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-027": ("blocking", "mock provider substrate disposition is incomplete or unsafe"),
     "USF-RUNTIME-028": ("blocking", "backup and restore provider disposition is incomplete or unsafe"),
+    "USF-RUNTIME-029": ("blocking", "operator workflow provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -69,6 +70,7 @@ COMPOSED_SEARCH_PROVIDER_MATRIX_PATH = Path("docs/architecture/composed-search-p
 FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provider-disposition-matrix.json")
 MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH = Path("docs/architecture/mock-provider-substrate-disposition-matrix.json")
 BACKUP_RESTORE_PROVIDER_MATRIX_PATH = Path("docs/architecture/backup-restore-provider-disposition-matrix.json")
+OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH = Path("docs/architecture/operator-workflow-provider-disposition-matrix.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -307,6 +309,33 @@ BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "pgbackrest-readiness",
     "provider-compatibility-readiness",
 }
+OPERATOR_WORKFLOW_PROVIDER_REQUIRED_ISSUES = {
+    "USF-178",
+    "USF-203",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-169",
+    "USF-180",
+    "USF-133",
+}
+OPERATOR_WORKFLOW_PROVIDER_REQUIRED_EVIDENCE_REFS = {
+    "usf-178-soa-operator-workflow-provider-disposition",
+    "usf-178-evidence-operator-workflow-provider-disposition",
+    "usf-178-threat-windmill-overclaim",
+    "usf-178-access-operator-workflow-provider",
+    "usf-178-resilience-operator-workflow-provider",
+    "usf-178-incident-vulnerability-operator-workflow-provider",
+    "usf-178-privacy-operator-workflow-provider",
+}
+OPERATOR_WORKFLOW_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
+    "operator-automation-readiness",
+    "windmill-readiness",
+    "workflow-automation-readiness",
+    "operator-workflow-readiness",
+    "privileged-operation-readiness",
+    "provider-compatibility-readiness",
+}
 LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clickhouse-analytics-provider": {
         "serviceIds": ["clickhouse"],
@@ -367,7 +396,7 @@ LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-windmill-automation-provider": {
         "serviceIds": ["windmill", "windmill-worker", "windmill-postgres", "windmill-redis"],
         "providerIds": ["operational-job-engine-windmill-deferred"],
-        "followUpIssue": "USF-178",
+        "followUpIssue": "USF-203",
         "boundaryRef": "usf-189-workflow-automation-provider-deferred",
         "allowedStatuses": {"profile-gated"},
     },
@@ -567,6 +596,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 backup_restore_provider_matrix,
                 defect["backupRestoreProviderMatrixPatches"],
             )
+    operator_workflow_provider_matrix: Any = None
+    if not defect.get("removeOperatorWorkflowProviderMatrix"):
+        operator_workflow_provider_matrix = read_json(OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH)
+        if defect.get("operatorWorkflowProviderMatrixPatches"):
+            operator_workflow_provider_matrix = apply_manifest_patches(
+                operator_workflow_provider_matrix,
+                defect["operatorWorkflowProviderMatrixPatches"],
+            )
     package = read_json(PACKAGE_PATH)
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
@@ -594,6 +631,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "fileScannerProviderMatrix": file_scanner_provider_matrix,
         "mockProviderSubstrateMatrix": mock_provider_substrate_matrix,
         "backupRestoreProviderMatrix": backup_restore_provider_matrix,
+        "operatorWorkflowProviderMatrix": operator_workflow_provider_matrix,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -2116,6 +2154,192 @@ def check_backup_restore_provider_disposition(F: Findings, state: dict[str, Any]
             F.add("USF-RUNTIME-028", "backup-restore-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
 
+def check_operator_workflow_provider_disposition(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state.get("operatorWorkflowProviderMatrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-RUNTIME-029", str(OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH), "operator workflow provider disposition matrix is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-178",
+        "followUpIssue": "USF-203",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "providerRegistryId": "operational-job-engine-windmill-deferred",
+        "runtimeManifest": str(MANIFEST_PATH),
+        "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if matrix.get(key) != expected:
+            F.add("USF-RUNTIME-029", key, f"expected {expected!r}")
+
+    service_ids = set(matrix.get("serviceIds", []))
+    expected_service_ids = {"windmill", "windmill-worker", "windmill-postgres", "windmill-redis"}
+    if expected_service_ids - service_ids:
+        F.add("USF-RUNTIME-029", "serviceIds", "operator workflow service ids are incomplete")
+    if OPERATOR_WORKFLOW_PROVIDER_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
+        F.add("USF-RUNTIME-029", "issueLinks", "operator workflow provider issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(matrix.get("nonClaims", [])):
+        F.add("USF-RUNTIME-029", "nonClaims", "operator workflow provider non-claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-029", "readinessClaimsAllowed", "matrix allows a prohibited readiness claim")
+    if OPERATOR_WORKFLOW_PROVIDER_PROHIBITED_CLAIMS - set(matrix.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-029", "readinessClaimsProhibited", "operator workflow provider prohibited claims are incomplete")
+
+    decision = matrix.get("humanDecision", {})
+    if not isinstance(decision, dict) or decision.get("decisionState") != "accepted":
+        F.add("USF-RUNTIME-029", "humanDecision", "accepted human decision must be recorded")
+    elif decision.get("decisionIsWorkComplete") is not False:
+        F.add("USF-RUNTIME-029", "humanDecision.decisionIsWorkComplete", "decision must not mean work complete")
+
+    disposition = matrix.get("operatorWorkflowProviderDisposition", {})
+    if not isinstance(disposition, dict):
+        F.add("USF-RUNTIME-029", "operatorWorkflowProviderDisposition", "operator workflow provider disposition must be an object")
+    else:
+        expected_disposition = {
+            "disposition": "explicit-deferral-with-owner",
+            "windmillServiceSemanticProofPresent": False,
+            "operatorAccessProofPresent": False,
+            "approvalWorkflowProofPresent": False,
+            "privilegedOperationBoundaryProofPresent": False,
+            "tenantBoundaryProofPresent": False,
+            "secretBoundaryProofPresent": False,
+            "auditEvidenceProofPresent": False,
+            "retentionProofPresent": False,
+            "cleanupProofPresent": False,
+            "failureBehaviourProofPresent": False,
+            "operatorAutomationReadinessClaim": False,
+            "windmillReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "providerRegistryId": "operational-job-engine-windmill-deferred",
+            "followUpIssue": "USF-203",
+            "owner": "platform-workflow-foundation",
+            "riskOwner": "platform-workflow-risk-owner",
+            "controlOwner": "platform-workflow-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_disposition.items():
+            observed = disposition.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-029", f"operatorWorkflowProviderDisposition.{key}", f"expected {expected!r}")
+        if set(disposition.get("serviceCatalogueServiceIds", [])) != expected_service_ids:
+            F.add("USF-RUNTIME-029", "operatorWorkflowProviderDisposition.serviceCatalogueServiceIds", "Windmill service catalogue ids are incomplete")
+        for field in ("riskStatement", "treatment", "deferredEvidence"):
+            if disposition.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-029", f"operatorWorkflowProviderDisposition.{field}", "deferral field is required")
+
+    provider_boundary = matrix.get("providerBoundary", {})
+    if not isinstance(provider_boundary, dict):
+        F.add("USF-RUNTIME-029", "providerBoundary", "provider boundary must be an object")
+    else:
+        expected_provider = {
+            "providerBindingId": "usf-189-windmill-automation-provider",
+            "providerRegistryId": "operational-job-engine-windmill-deferred",
+            "bindingStatus": "profile-gated",
+            "providerMode": "live-external-deferred",
+            "runtimeProviderBindingActive": False,
+            "sdkPackage": None,
+            "sdkVersion": None,
+            "endpointRef": None,
+            "followUpIssue": "USF-203",
+        }
+        for key, expected in expected_provider.items():
+            observed = provider_boundary.get(key)
+            if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
+                F.add("USF-RUNTIME-029", f"providerBoundary.{key}", f"expected {expected!r}")
+        if set(provider_boundary.get("serviceCatalogueServiceIds", [])) != expected_service_ids:
+            F.add("USF-RUNTIME-029", "providerBoundary.serviceCatalogueServiceIds", "Windmill service catalogue ids are incomplete")
+
+    substitute = matrix.get("temporalJobsSubstituteBoundary", {})
+    if not isinstance(substitute, dict):
+        F.add("USF-RUNTIME-029", "temporalJobsSubstituteBoundary", "substitute boundary must be an object")
+    else:
+        if substitute.get("usedWhereSemanticallyPermitted") is not True:
+            F.add("USF-RUNTIME-029", "temporalJobsSubstituteBoundary.usedWhereSemanticallyPermitted", "permitted Temporal/jobs proof use must be explicit")
+        for key in (
+            "windmillServiceEquivalent",
+            "operatorAutomationEquivalent",
+            "approvalWorkflowEquivalent",
+            "privilegedOperationEquivalent",
+            "operatorAccessEquivalent",
+        ):
+            if substitute.get(key) is not False:
+                F.add("USF-RUNTIME-029", f"temporalJobsSubstituteBoundary.{key}", "Temporal/jobs proof evidence must not be Windmill equivalent")
+        if "not equivalent to Windmill" not in str(substitute.get("substitutionNonEquivalenceBoundary", "")):
+            F.add("USF-RUNTIME-029", "temporalJobsSubstituteBoundary.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+        commands = set(substitute.get("commands", []))
+        for command in (
+            "corepack pnpm proof:jobs",
+            "corepack pnpm runtime:proof",
+            "corepack pnpm providers-proof",
+            "corepack pnpm verify",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+        ):
+            if command not in commands:
+                F.add("USF-RUNTIME-029", "temporalJobsSubstituteBoundary.commands", f"missing {command}")
+        if len(substitute.get("scopeCovered", [])) < 4 or len(substitute.get("limits", [])) < 7:
+            F.add("USF-RUNTIME-029", "temporalJobsSubstituteBoundary", "substitute scope and limits are incomplete")
+
+    operational = matrix.get("operationalEvidencePosture", {})
+    if not isinstance(operational, dict):
+        F.add("USF-RUNTIME-029", "operationalEvidencePosture", "operational evidence posture must be an object")
+    else:
+        expected_operational = {
+            "readinessRetry": "deferred-to-USF-203",
+            "timeout": "deferred-to-USF-203",
+            "failClosed": "bounded-disposition-only",
+            "safeTeardown": "deferred-to-USF-203",
+            "accessReview": "deferred-to-USF-203",
+            "breakGlass": "not-claimed-until-USF-203-proof",
+        }
+        for key, expected in expected_operational.items():
+            if operational.get(key) != expected:
+                F.add("USF-RUNTIME-029", f"operationalEvidencePosture.{key}", f"expected {expected!r}")
+        for field in (
+            "structuredLogging",
+            "tracingCorrelation",
+            "metrics",
+            "auditEvents",
+            "redaction",
+            "retention",
+            "secretBoundary",
+        ):
+            if field not in operational:
+                F.add("USF-RUNTIME-029", f"operationalEvidencePosture.{field}", "operational field is required")
+
+    declared_evidence = set(matrix.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != OPERATOR_WORKFLOW_PROVIDER_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-029", "enterpriseEvidenceRefs", "operator workflow provider enterprise evidence refs are incomplete")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-windmill-automation-provider")
+    if not binding:
+        F.add("USF-RUNTIME-029", "providerBindingMatrix", "Windmill provider disposition is missing from runtime manifest")
+    else:
+        if "USF-203" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "runtime manifest must link USF-203")
+        if "USF-203" not in str(binding.get("deferredReason", "")):
+            F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-203")
+        if binding.get("bindingStatus") != "profile-gated" or binding.get("endpointRef") is not None:
+            F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "Windmill must remain explicitly deferred/profile-gated without endpoint binding")
+        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+            F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "deferred Windmill must not name an SDK/client package")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-workflow-automation-provider-deferred")
+    if not deferred or "USF-203" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-029", "deferredBoundaries.usf-189-workflow-automation-provider-deferred", "runtime deferred boundary must link USF-203")
+
+    matrix_text = json.dumps(matrix, sort_keys=True)
+    for stale in ("until USF-178 closes", "followUpIssue=USF-178", "\"followUpIssue\": \"USF-178\"", "linkedFollowUpIssue=USF-178"):
+        if stale in matrix_text:
+            F.add("USF-RUNTIME-029", "operator-workflow-provider-stale-self-deferral", f"stale self-deferral remains: {stale}")
+
+
 def check_provider_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
     for binding_id, metadata in REQUIRED_PROVIDER_BINDINGS.items():
         adapter_path = metadata["adapterPath"]
@@ -2303,6 +2527,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_file_scanner_provider_disposition,
             check_mock_provider_substrate_disposition,
             check_backup_restore_provider_disposition,
+            check_operator_workflow_provider_disposition,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -2331,6 +2556,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_file_scanner_provider_disposition,
             check_mock_provider_substrate_disposition,
             check_backup_restore_provider_disposition,
+            check_operator_workflow_provider_disposition,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

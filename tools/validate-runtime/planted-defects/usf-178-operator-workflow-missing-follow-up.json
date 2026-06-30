@@ -1,0 +1,21 @@
+{
+  "name": "usf-178-operator-workflow-missing-follow-up",
+  "expectedRule": "USF-RUNTIME-029",
+  "operatorWorkflowProviderMatrixPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-178"
+    },
+    {
+      "op": "replace",
+      "path": "/operatorWorkflowProviderDisposition/followUpIssue",
+      "value": "USF-178"
+    },
+    {
+      "op": "replace",
+      "path": "/providerBoundary/followUpIssue",
+      "value": "USF-178"
+    }
+  ]
+}

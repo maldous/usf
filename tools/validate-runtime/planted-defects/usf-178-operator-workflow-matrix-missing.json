@@ -1,0 +1,5 @@
+{
+  "name": "usf-178-operator-workflow-matrix-missing",
+  "expectedRule": "USF-RUNTIME-029",
+  "removeOperatorWorkflowProviderMatrix": true
+}

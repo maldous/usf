@@ -1,0 +1,183 @@
+{
+  "id": "usf-178-operator-workflow-provider-disposition-matrix",
+  "title": "USF-178 operator workflow provider disposition matrix",
+  "sourceIssue": "USF-178",
+  "followUpIssue": "USF-203",
+  "laneIssue": "USF-189",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "parentIssue": "USF-133",
+  "serviceIds": [
+    "windmill",
+    "windmill-worker",
+    "windmill-postgres",
+    "windmill-redis"
+  ],
+  "providerRegistryId": "operational-job-engine-windmill-deferred",
+  "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+  "issueLinks": [
+    "USF-178",
+    "USF-203",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-169",
+    "USF-180",
+    "USF-133"
+  ],
+  "humanDecision": {
+    "decisionState": "accepted",
+    "decisionSummary": "Windmill operator automation disposition is split by semantic requirement. Temporal application workflow proof and jobs proof may support bounded workflow posture only and are not equivalent to Windmill operator automation access, approval, privileged operation, tenant, secret, audit, retention, cleanup, or fail-closed proof.",
+    "decisionIsWorkComplete": false
+  },
+  "operatorWorkflowProviderDisposition": {
+    "disposition": "explicit-deferral-with-owner",
+    "windmillServiceSemanticProofPresent": false,
+    "operatorAccessProofPresent": false,
+    "approvalWorkflowProofPresent": false,
+    "privilegedOperationBoundaryProofPresent": false,
+    "tenantBoundaryProofPresent": false,
+    "secretBoundaryProofPresent": false,
+    "auditEvidenceProofPresent": false,
+    "retentionProofPresent": false,
+    "cleanupProofPresent": false,
+    "failureBehaviourProofPresent": false,
+    "operatorAutomationReadinessClaim": false,
+    "windmillReadinessClaim": false,
+    "providerCompatibilityClaim": false,
+    "serviceCatalogueServiceIds": [
+      "windmill",
+      "windmill-worker",
+      "windmill-postgres",
+      "windmill-redis"
+    ],
+    "providerRegistryId": "operational-job-engine-windmill-deferred",
+    "followUpIssue": "USF-203",
+    "owner": "platform-workflow-foundation",
+    "riskOwner": "platform-workflow-risk-owner",
+    "controlOwner": "platform-workflow-control-owner",
+    "reviewDate": "2026-09-30",
+    "riskStatement": "Windmill service catalogue presence, Temporal application workflow proof, jobs proof, or worker runtime proof could be mistaken for operator automation access, approval, privileged operation, tenant, secret, audit, retention, cleanup, or fail-closed readiness.",
+    "treatment": "Defer Windmill SDK/client/CLI/protocol selection, adapter implementation, operator automation execution, approval workflow, privileged operation boundary, tenant and secret proof, audit evidence, retention, cleanup, failure handling, timeout, retry, teardown, incident, vulnerability, privacy, supplier, and access-review proof to USF-203.",
+    "deferredEvidence": "USF-178 records the bounded disposition gate, non-equivalence boundary, runtime manifest deferral, enterprise evidence rows, validator coverage, and planted defects only."
+  },
+  "temporalJobsSubstituteBoundary": {
+    "usedWhereSemanticallyPermitted": true,
+    "windmillServiceEquivalent": false,
+    "operatorAutomationEquivalent": false,
+    "approvalWorkflowEquivalent": false,
+    "privilegedOperationEquivalent": false,
+    "operatorAccessEquivalent": false,
+    "substitutionNonEquivalenceBoundary": "Temporal application workflow proof, jobs proof, and worker runtime proof are not equivalent to Windmill operator automation service semantics, operator console access, approval workflows, privileged operation execution, Windmill-specific tenant and secret boundaries, audit operation evidence, retention execution, cleanup, supplier posture, or teardown behaviour.",
+    "commands": [
+      "corepack pnpm proof:jobs",
+      "corepack pnpm runtime:proof",
+      "corepack pnpm providers-proof",
+      "corepack pnpm verify",
+      "python3 tools/validate-runtime/validate-runtime.py all --json"
+    ],
+    "scopeCovered": [
+      "bounded local jobs and workflow proof where semantically permitted",
+      "bounded Temporal application workflow provider proof where semantically permitted",
+      "non-equivalence to Windmill operator automation provider semantics",
+      "value-free repository evidence and validation linkage"
+    ],
+    "limits": [
+      "does not prove Windmill adapter binding",
+      "does not prove Windmill operator console access",
+      "does not prove approval workflow execution",
+      "does not prove privileged operation boundary",
+      "does not prove Windmill tenant or secret isolation",
+      "does not prove operator automation audit operation evidence",
+      "does not prove retention execution",
+      "does not prove provider teardown or cleanup"
+    ]
+  },
+  "providerBoundary": {
+    "providerBindingId": "usf-189-windmill-automation-provider",
+    "providerRegistryId": "operational-job-engine-windmill-deferred",
+    "serviceCatalogueServiceIds": [
+      "windmill",
+      "windmill-worker",
+      "windmill-postgres",
+      "windmill-redis"
+    ],
+    "bindingStatus": "profile-gated",
+    "providerMode": "live-external-deferred",
+    "runtimeProviderBindingActive": false,
+    "sdkPackage": null,
+    "sdkVersion": null,
+    "endpointRef": null,
+    "followUpIssue": "USF-203",
+    "nonEquivalenceBoundary": "Windmill remains a deferred operator automation provider boundary until USF-203 proves service semantics, access, approval, privileged operation, tenant and secret boundaries, audit evidence, retention, failure handling, and cleanup."
+  },
+  "semanticProofBoundaries": {
+    "operatorWorkflowExecutionProof": "deferred-to-USF-203",
+    "operatorAccessProof": "deferred-to-USF-203",
+    "approvalWorkflowProof": "deferred-to-USF-203",
+    "privilegedOperationBoundaryProof": "deferred-to-USF-203",
+    "tenantBoundaryProof": "deferred-to-USF-203",
+    "secretBoundaryProof": "deferred-to-USF-203",
+    "auditEvidenceProof": "deferred-to-USF-203",
+    "retentionCleanupProof": "deferred-to-USF-203",
+    "failureModeProof": "deferred-to-USF-203"
+  },
+  "operationalEvidencePosture": {
+    "readinessRetry": "deferred-to-USF-203",
+    "timeout": "deferred-to-USF-203",
+    "failClosed": "bounded-disposition-only",
+    "safeTeardown": "deferred-to-USF-203",
+    "accessReview": "deferred-to-USF-203",
+    "breakGlass": "not-claimed-until-USF-203-proof",
+    "structuredLogging": "required-before-operator-automation-readiness-claim",
+    "tracingCorrelation": "required-before-operator-automation-readiness-claim",
+    "metrics": "required-before-operator-automation-readiness-claim",
+    "auditEvents": "required-before-operator-automation-readiness-claim",
+    "redaction": "required-before-operator-automation-readiness-claim",
+    "retention": "deferred-to-USF-203",
+    "secretBoundary": "deferred-to-USF-203"
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-178-soa-operator-workflow-provider-disposition",
+    "usf-178-evidence-operator-workflow-provider-disposition",
+    "usf-178-threat-windmill-overclaim",
+    "usf-178-access-operator-workflow-provider",
+    "usf-178-resilience-operator-workflow-provider",
+    "usf-178-incident-vulnerability-operator-workflow-provider",
+    "usf-178-privacy-operator-workflow-provider"
+  ],
+  "readinessClaimsAllowed": [
+    "service-disposition-classification",
+    "provider-boundary-deferral",
+    "non-equivalence-documentation"
+  ],
+  "readinessClaimsProhibited": [
+    "production-readiness",
+    "staging-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "full-dev-readiness",
+    "full-react-parity",
+    "test-readiness",
+    "operator-automation-readiness",
+    "windmill-readiness",
+    "workflow-automation-readiness",
+    "operator-workflow-readiness",
+    "privileged-operation-readiness",
+    "provider-compatibility-readiness"
+  ],
+  "nonClaims": [
+    "production-readiness",
+    "staging-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "full-dev-readiness",
+    "full-react-parity",
+    "test-readiness"
+  ]
+}

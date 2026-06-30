@@ -3626,7 +3626,7 @@
       "id": "soa-adapter-usf-189-windmill-automation-provider",
       "mappedType": "provider-disposition",
       "controlPurpose": "Govern USF-189 Windmill workflow automation provider deferral.",
-      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=Windmill provider proof is absent; threatFailureScenario=Temporal workflows are overclaimed as operator automation proof; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer to USF-178; reviewDate=2026-09-30.",
+      "riskTreated": "effectivenessState=deferred-with-owner; riskStatement=Windmill provider proof is absent; threatFailureScenario=Temporal workflows are overclaimed as operator automation proof; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer service-semantic proof to USF-203 while USF-178 records bounded disposition; reviewDate=2026-09-30.",
       "assetServiceAffected": "windmill,windmill-worker,windmill-postgres,windmill-redis",
       "owner": "platform-workflow-foundation",
       "riskOwner": "platform-workflow-risk-owner",
@@ -3634,7 +3634,7 @@
       "implementationStatus": "deferred-with-owner",
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-178 follow-up required before Windmill operator automation provider readiness or SDK/client selection.",
+      "deferredReason": "USF-203 follow-up required before Windmill operator automation provider readiness or SDK/client selection; USF-178 records bounded disposition only.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -3869,6 +3869,32 @@
       "evidenceSource": "docs/architecture/backup-restore-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-177; USF-202",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "threatFailureScenario=DB/RLS proof, files proof, documentation, or catalogue presence is mistaken for backup artifact or restore drill evidence; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=defer service-semantic proof to USF-202; reviewDate=2026-09-30; followUpIssue=USF-202; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-178-soa-operator-workflow-provider-disposition",
+      "mappedType": "source-issue-operator-workflow-provider-disposition",
+      "controlPurpose": "Map USF-178 as the bounded operator workflow provider disposition gate, separating Temporal application workflow and jobs proof from deferred Windmill operator automation proof under USF-203.",
+      "riskTreated": "riskStatement=USF-178 could be treated as operator automation readiness or Windmill readiness even though it records explicit semantic split, non-equivalence, and deferral only",
+      "assetServiceAffected": "windmill, windmill-worker, windmill-postgres, windmill-redis service catalogue rows, operational-job-engine-windmill-deferred provider registry entry, and repository operator workflow disposition",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; sourceIssue=USF-178; followUpIssue=USF-203; treatment=record bounded operator workflow provider disposition, require docs/architecture/operator-workflow-provider-disposition-matrix.json, and defer Windmill service semantics, access, approval, privileged operation, tenant, secret, audit, retention, cleanup, failure, timeout, retry, teardown, supplier, incident, vulnerability, privacy, access review, break-glass, and provider proof; reviewDate=2026-09-30",
+      "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-178; USF-203",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "threatFailureScenario=Temporal application workflow proof, jobs proof, worker runtime proof, documentation, or catalogue presence is mistaken for Windmill operator automation evidence; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=defer service-semantic proof to USF-203; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -5161,6 +5187,31 @@
       ],
       "prOrMergeSha": "268cfdf23b984ca51961475f6a130525e21e65bb",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain backup artifacts, restore payloads, database contents, file payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
+    },
+    {
+      "id": "usf-178-evidence-operator-workflow-provider-disposition",
+      "proofResult": "operator-workflow-provider-disposition-gate",
+      "whatWasProven": "USF-178 records a bounded operator workflow provider disposition in docs/architecture/operator-workflow-provider-disposition-matrix.json, links Windmill service-semantic proof to USF-203, records Temporal/jobs proof as bounded and non-equivalent, updates runtime and closure matrices, and adds validator coverage that fails missing matrix, missing follow-up, false Windmill equivalence, missing enterprise evidence, missing runtime manifest linkage, missing proof-command linkage, and readiness overclaim.",
+      "whatWasNotProven": "This does not prove operator automation readiness, Windmill readiness, workflow automation readiness, operator workflow readiness, privileged operation readiness, provider-compatibility readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, USF-133 closure, Windmill SDK/client/CLI/protocol exception selection, adapter implementation, operator workflow execution, operator console access, approval workflow success, privileged operation boundary, tenant boundary preservation, secret boundary, audit operation evidence, retention execution, cleanup, timeout, retry, failure handling, teardown, supplier boundary, incident posture, privacy posture, or live provider evidence.",
+      "runtimeMode": "repository-validation-only",
+      "providerMode": "windmill-service-proof-deferred-to-USF-203-and-temporal-jobs-proof-bounded",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#windmill,#windmill-worker,#windmill-postgres,#windmill-redis",
+      "adapterProviderId": "operational-job-engine-windmill-deferred",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "commitPin": "a5fc3ba924667c5245b368dc0d767df52d151785",
+      "issueLinks": [
+        "USF-178",
+        "USF-203",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-169",
+        "USF-180",
+        "USF-133"
+      ],
+      "prOrMergeSha": "a5fc3ba924667c5245b368dc0d767df52d151785",
+      "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Windmill payloads, provider responses, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -6025,7 +6076,7 @@
       "targetType": "provider-disposition",
       "target": "usf-189-windmill-automation-provider",
       "trustBoundary": "deferred Windmill operator automation boundary; Temporal application workflow proof is not Windmill proof",
-      "tenantBoundary": "tenant access, approval, audit, retention, cleanup, and fail-closed evidence remain unproven until USF-178",
+      "tenantBoundary": "tenant access, approval, audit, retention, cleanup, and fail-closed evidence remain unproven until USF-203",
       "credentialBoundary": "no real credentials or raw provider secrets may be introduced; SDK/client selection is deferred",
       "dataClassification": "synthetic or metadata-only evidence; no production workflow automation data",
       "abuseCases": [
@@ -6039,8 +6090,8 @@
         "readiness non-claim removed"
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
-      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-178 deferral and non-claims",
-      "residualRisk": "Windmill proof, access review, incident posture, privacy posture, and resilience evidence remain deferred to USF-178"
+      "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-178 bounded disposition, USF-203 deferral, and non-claims",
+      "residualRisk": "Windmill proof, access review, incident posture, privacy posture, and resilience evidence remain deferred to USF-203; USF-178 records bounded disposition only"
     },
     {
       "id": "usf-191-threat-domain-deferred-depth-overclaim",
@@ -6317,6 +6368,35 @@
       "failClosedBehaviour": "USF-RUNTIME-028 fails when docs/architecture/backup-restore-provider-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-202 is missing, DB/files proof is marked backup/restore equivalent, runtime manifest lacks USF-202 linkage, proof commands are incomplete, readiness claims are enabled, or stale self-deferral remains.",
       "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no backup artifact, restore drill, provider payload, database dump, file payload, audit operation event, or service evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
       "residualRisk": "riskStatement=pgBackRest backup and restore service semantics remain unproven after USF-177; impact=critical; likelihood=medium; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; controlOwner=platform-data-control-owner; treatment=defer service proof to USF-202; reviewDate=2026-09-30; followUpIssue=USF-202; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/backup-restore-provider-disposition-matrix.json"
+    },
+    {
+      "id": "usf-178-threat-windmill-overclaim",
+      "targetType": "source-issue-operator-workflow-provider-disposition",
+      "target": "docs/architecture/operator-workflow-provider-disposition-matrix.json",
+      "trustBoundary": "USF-178 repository evidence may define bounded operator workflow provider disposition only; Windmill service semantics, access, approval, privileged operation, tenant, secret, audit, retention, cleanup, failure, supplier, and operator automation semantics remain outside this proof and are tracked by USF-203.",
+      "tenantBoundary": "tenant isolation across Windmill operator automation remains unproven until USF-203 records tenant-safe service evidence; USF-178 records non-equivalence only.",
+      "credentialBoundary": "no Windmill credentials, raw endpoints, workflow payloads, provider responses, SDK errors, connection strings, tokens, or stack traces are introduced by USF-178.",
+      "dataClassification": "repository governance metadata and validation summaries only; no production data, tenant data, workflow payloads, provider responses, or raw errors",
+      "abuseCases": [
+        "USF-178 marked Done as operator automation readiness",
+        "Temporal proof marked Windmill proof",
+        "jobs proof marked approval workflow proof",
+        "service catalogue presence marked privileged operation proof",
+        "missing USF-203 follow-up link",
+        "runtime manifest omits USF-203 deferral"
+      ],
+      "failureModes": [
+        "matrix missing",
+        "follow-up missing",
+        "enterprise evidence missing",
+        "Temporal/jobs proof marked Windmill equivalent",
+        "runtime manifest service proof defers back only to USF-178",
+        "proof command linkage missing",
+        "readiness claim enabled"
+      ],
+      "failClosedBehaviour": "USF-RUNTIME-029 fails when docs/architecture/operator-workflow-provider-disposition-matrix.json is missing or unsafe, enterprise refs are incomplete, non-claims are incomplete, USF-203 is missing, Temporal/jobs proof is marked Windmill equivalent, runtime manifest lacks USF-203 linkage, proof commands are incomplete, readiness claims are enabled, or stale self-deferral remains.",
+      "monitoringAuditEvidence": "validator output, planted defects, PR summary, and value-free Linear linkage only; no Windmill provider payload, workflow execution, operator audit event, or service evidence is claimed; non-claims preserved for full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, and full-react-parity-readiness.",
+      "residualRisk": "riskStatement=Windmill operator automation service semantics remain unproven after USF-178; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=defer service proof to USF-203; reviewDate=2026-09-30; followUpIssue=USF-203; validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json; matrix=docs/architecture/operator-workflow-provider-disposition-matrix.json"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7749,6 +7829,51 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-178-access-operator-workflow-provider",
+      "targetType": "source-issue-operator-workflow-provider-disposition",
+      "target": "docs/architecture/operator-workflow-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-178",
+        "followUpIssue=USF-203",
+        "riskStatement=USF-178 could be treated as Windmill access, approval, or privileged operation proof without service evidence",
+        "threatFailureScenario=operator automation access, approval, privileged operation, secret handling, or operator audit evidence is claimed from repository validation only",
+        "affectedAssetService=Windmill operator workflow provider disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record bounded disposition and defer privileged operator workflow access proof to USF-203",
+        "reviewDate=2026-09-30",
+        "accessModel=defined-only",
+        "authRequirement=operator-auth-required-before-operator-automation-claim",
+        "authorizationBoundary=defined-only; USF-178 does not prove Windmill access, approval, execution, or provider access",
+        "breakGlassRelevance=must-be-defined-before-operator-automation-readiness-claim",
+        "auditRequirement=value-free-operator-workflow-operation-evidence-required-before-readiness-claim",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=required-before-operator-or-provider-readiness",
+        "matrix=docs/architecture/operator-workflow-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-178; USF-203",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "access, approval, privileged operation, and provider proof deferred to USF-203; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; treatment=do not treat USF-178 as Windmill access proof; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -9011,6 +9136,48 @@
       "evidenceSource": "docs/architecture/backup-restore-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-177; USF-202",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "backup artifact, restore drill, RPO/RTO, DR, retention, secret exclusion, audit, cleanup, and failure evidence deferred to USF-202; owner=platform-data-foundation; reviewDate=2026-09-30; followUpIssue=USF-202; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-178-resilience-operator-workflow-provider",
+      "targetType": "source-issue-operator-workflow-provider-disposition",
+      "target": "docs/architecture/operator-workflow-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-178",
+        "followUpIssue=USF-203",
+        "backupRequirement=not-claimed-for-Windmill-until-USF-203",
+        "restoreProofRequirement=not-claimed-for-Windmill-until-USF-203",
+        "rpoRtoTarget=not-claimed-until-USF-203-proof",
+        "corruptionFailureScenario=Temporal/jobs proof treated as Windmill operator automation service proof",
+        "cleanupTeardownProof=required-where-proof-writes-or-executes-workflows",
+        "deferredDrBoundary=explicit-non-claim",
+        "readinessRetry=deferred-to-USF-203",
+        "timeout=deferred-to-USF-203",
+        "failClosed=bounded-disposition-only",
+        "auditEvidenceProof=deferred-to-USF-203",
+        "retentionExecution=deferred-to-USF-203",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "reviewDate=2026-09-30",
+        "matrix=docs/architecture/operator-workflow-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; USF-178; USF-203",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "Windmill execution, retention, cleanup, failure, timeout, retry, teardown, access review, and resilience evidence deferred to USF-203; owner=platform-workflow-foundation; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -10754,6 +10921,49 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-178-incident-vulnerability-operator-workflow-provider",
+      "targetType": "source-issue-operator-workflow-provider-disposition",
+      "target": "docs/architecture/operator-workflow-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-178",
+        "followUpIssue=USF-203",
+        "riskStatement=Windmill incident, alerting, vulnerability, dependency, and corrective-action evidence could be overclaimed from catalogue or Temporal/jobs proof",
+        "threatFailureScenario=operator workflow failure, approval bypass, credential exposure, provider dependency advisory, or failed workflow recovery is treated as covered by repository metadata",
+        "affectedAssetService=Windmill operator workflow provider disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record Windmill incident and vulnerability boundaries and defer operating proof to USF-203",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=defined-only; no live Windmill operation proof",
+        "alertingPosture=not-proven-by-USF-178",
+        "escalationOwner=platform-workflow-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "correctiveActionEvidenceBoundary=repository metadata only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-178",
+        "matrix=docs/architecture/operator-workflow-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-178; USF-203",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "incident, alerting, vulnerability/advisory, dependency update, and corrective-action evidence deferred to USF-203; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -12213,13 +12423,13 @@
         "dataOrigin=metadata-only-deferral",
         "piiPosture=no-production-pii",
         "redactionPolicy=no-endpoint-no-credential-no-provider-payload",
-        "retentionPurgePosture=deferred-until-USF-178",
+        "retentionPurgePosture=deferred-until-USF-203",
         "legalHoldRelevance=not-claimed",
         "crossBorderDataResidencyBoundary=not-claimed"
       ],
       "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-      "deferredReason": "USF-178 required before Windmill provider privacy, access, approval, audit, retention, tenant, and supplier posture claims.",
+      "deferredReason": "USF-203 required before Windmill provider privacy, access, approval, audit, retention, tenant, and supplier posture claims; USF-178 records bounded disposition only.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -12495,6 +12705,52 @@
       "evidenceSource": "docs/architecture/backup-restore-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-177; USF-202",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "privacy/data minimisation operating evidence deferred to USF-202; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-202; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-178-privacy-operator-workflow-provider",
+      "targetType": "source-issue-operator-workflow-provider-disposition",
+      "target": "docs/architecture/operator-workflow-provider-disposition-matrix.json",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-178",
+        "followUpIssue=USF-203",
+        "riskStatement=Windmill workflow payloads, provider responses, tenant data, credentials, or raw errors could be retained or exposed without proof",
+        "threatFailureScenario=workflow payload, provider response, credential, approval record, or raw error is committed as evidence or retention/purge posture is implied from metadata only",
+        "affectedAssetService=Windmill operator workflow provider disposition",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-workflow-foundation",
+        "riskOwner=platform-workflow-risk-owner",
+        "controlOwner=platform-workflow-control-owner",
+        "treatment=record value-free repository metadata only and defer Windmill data handling proof to USF-203",
+        "reviewDate=2026-09-30",
+        "dataOrigin=repository governance metadata and validation summaries only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=operator-workflow-metadata-and-internal-governance-metadata",
+        "redactionPolicy=value-free-proof-output-and-no-provider-payloads",
+        "retentionPurgePosture=committed-metadata-and-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "privacyMinimisationBoundary=no-workflow-payloads-provider-responses-raw-errors-raw-endpoints-credentials-or-tokens-committed-by-USF-178",
+        "matrix=docs/architecture/operator-workflow-provider-disposition-matrix.json",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-178; USF-203",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "privacy/data minimisation operating evidence deferred to USF-203; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-203; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

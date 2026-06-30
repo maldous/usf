@@ -1336,7 +1336,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF jobs/workflows does not include Windmill operator automation.",
+      "gap_or_decision": "USF-178 records bounded operator workflow disposition and keeps Temporal/jobs proof non-equivalent; USF-203 owns Windmill access, approval, privileged operation, tenant/secret/audit, retention, cleanup, failure, and provider semantics proof.",
       "legacy_service_category": "operator-automation",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1348,8 +1348,8 @@
       "react_service": "windmill",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
-      "usf_service_or_substitute": "jobs/workflows standard"
+      "usf_accounting_status": "deferred",
+      "usf_service_or_substitute": "jobs/workflows standard plus explicit Windmill deferred provider class"
     },
     {
       "business_or_foundation_purpose": "Windmill persistence",
@@ -1362,7 +1362,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "No USF composed Windmill persistence.",
+      "gap_or_decision": "USF-178 records Windmill persistence as part of the deferred operator workflow provider boundary; USF-203 owns any Windmill persistence proof or reclassification.",
       "legacy_service_category": "operator-automation-backing",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1372,7 +1372,7 @@
       "react_service": "windmill-postgres",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "none"
     },
     {
@@ -1386,7 +1386,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "No USF composed Windmill Redis.",
+      "gap_or_decision": "USF-178 records Windmill Redis as part of the deferred operator workflow provider boundary; USF-203 owns any Windmill queue/cache proof or reclassification.",
       "legacy_service_category": "operator-automation-backing",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1396,7 +1396,7 @@
       "react_service": "windmill-redis",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "none"
     },
     {
@@ -1410,7 +1410,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-181 proves bounded apps/work execution; USF-183 proves worker Postgres, Mailpit, NATS, MinIO, Keycloak, OpenBao, and Temporal provider bindings, but this is not Windmill operator automation parity.",
+      "gap_or_decision": "USF-181 proves bounded apps/work execution and USF-183 proves Temporal provider binding, but USF-178 records that neither is Windmill operator automation parity; USF-203 owns the actual proof.",
       "legacy_service_category": "operator-automation-worker",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1420,8 +1420,8 @@
       "react_service": "windmill-worker",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
-      "usf_service_or_substitute": "apps/work plus jobs proof"
+      "usf_accounting_status": "deferred",
+      "usf_service_or_substitute": "apps/work plus jobs proof with explicit non-equivalence"
     },
     {
       "business_or_foundation_purpose": "deterministic external HTTP mocks",
