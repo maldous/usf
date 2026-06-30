@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-ENTERPRISE-021",
+  "description": "USF-171 SonarQube service proof deferral lacks the USF-195 follow-up.",
+  "staticAnalysisSet": {
+    "sonarqubeDisposition.followUpIssue": "USF-171"
+  }
+}
