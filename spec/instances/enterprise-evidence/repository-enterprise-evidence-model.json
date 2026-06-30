@@ -6056,7 +6056,7 @@
       "adapterProviderId": "provider-emulator-localstack-composed-test",
       "validationCommand": "corepack pnpm proof:localstack",
       "commandPin": "tsx packages/proof/src/localstack-composed-proof.ts",
-      "commitPin": "3f7c68e71aeef2021a4ee69b90da13f4c19041dc",
+      "commitPin": "fef52f7e3179db5899bf89f9ff2a88e946065ff8",
       "issueLinks": [
         "USF-208",
         "USF-201",
@@ -6068,7 +6068,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "3f7c68e71aeef2021a4ee69b90da13f4c19041dc",
+      "prOrMergeSha": "fef52f7e3179db5899bf89f9ff2a88e946065ff8",
       "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, raw endpoints, object contents, queue messages, secret values, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
     },
     {
@@ -6082,7 +6082,7 @@
       "adapterProviderId": "provider-emulator-localstack-composed-test",
       "validationCommand": "corepack pnpm proof:localstack",
       "commandPin": "tsx packages/proof/src/localstack-composed-proof.ts",
-      "commitPin": "3f7c68e71aeef2021a4ee69b90da13f4c19041dc",
+      "commitPin": "fef52f7e3179db5899bf89f9ff2a88e946065ff8",
       "issueLinks": [
         "USF-208",
         "USF-201",
@@ -6094,7 +6094,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "3f7c68e71aeef2021a4ee69b90da13f4c19041dc",
+      "prOrMergeSha": "fef52f7e3179db5899bf89f9ff2a88e946065ff8",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     }
   ],
