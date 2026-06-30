@@ -113,6 +113,41 @@ Audit events may reference telemetry IDs. Telemetry may reference audit IDs. Tel
 
 Dashboard posture may record dashboard_id, dashboard_name, signal_sources, owner, access_policy, tenant_scope, classification, and runbook_refs. Dashboards are future ops UI unless authorised. Dashboard definitions must not expose secrets and must respect tenant scope. Live dashboard readiness is not claimed.
 
+## Lane 4 Observability Operations Posture
+
+Lane 4 records operations posture for logging, tracing, metrics, alerting, dashboards, incident
+evidence, correlation identifiers, and tenant-safe redaction. The current Lane 4 artefacts define
+the control and deferral boundary only. They do not add runtime observability providers, live
+alert delivery, dashboard runtime, incident-response operation, on-call coverage, SIEM export, or
+production monitoring.
+
+The Lane 4 metadata instance is
+`spec/instances/observability-signal/observability-operations-posture.json`. It uses the existing
+observability-signal schema as metadata for a `runtime-proof-output` posture signal. It links the
+historical observability-signals proof as stale hermetic lineage and the Lane 4 enterprise evidence
+row `usf-188-evidence-observability-operations-posture` as current repository evidence
+organisation.
+
+Lane 4 control posture:
+
+| Control | Effectiveness State | Boundary |
+| --- | --- | --- |
+| loggingPosture | defined-only | Structured logs require message templates, safe reason codes, correlation IDs, and no raw payloads. Unsafe logs fail validation. |
+| tracingPosture | defined-only | Trace/correlation metadata is required where represented; no live tracing backend readiness is claimed. |
+| metricsPosture | defined-only | Metrics require allow-listed tenant-safe labels and no raw tenant/user/resource labels. |
+| correlationIdPosture | defined-only | Correlation IDs link log, metric, trace, audit, proof, and incident posture; missing correlation is a validator failure where Lane 4 evidence depends on it. |
+| tenantSafeRedactionPosture | defined-only | rawSecretLeakage=blocked, unsafeLogBoundary=message-template-only, and tenantSafeLabels=allow-listed. |
+| alertingWorkflow | deferred-with-owner | Alert routing posture is defined, but live alert delivery is deferred to USF-159. |
+| dashboardWorkflow | deferred-with-owner | Dashboard metadata is defined, but dashboard runtime and operator workflow proof are deferred to USF-159 and operator-access issues. dashboardReadinessClaim=false. |
+| incidentBoundary | deferred-with-owner | incidentBoundary=explicit-local-evidence-only; incident-response readiness requires future workflow proof and owner acceptance. |
+
+Deferred Lane 4 items carry `alertingWorkflow=deferred-with-owner`, owner
+`platform-observability-foundation`, risk owner
+`platform-observability-risk-owner`, affected asset/service `observability-operations`, impact
+`operator misses or misreads operational evidence`, likelihood `medium until workflow proof lands`,
+treatment `defer-with-owner-and-validator-boundary`, review date `2026-09-30`, and follow-up issue
+`USF-159`.
+
 ## Deferred Depth
 
 Deferred observability depth includes live OpenTelemetry/Prometheus/Loki/Tempo/Sentry provider integrations, SIEM export, alert delivery, incident management process, dashboard runtime, retention purge workflow, SLO/error-budget measurement, rate-limit telemetry, cross-tenant aggregate analytics, and external provider readiness. These require a separate directive and must not be inferred from this local/dev/test proof.

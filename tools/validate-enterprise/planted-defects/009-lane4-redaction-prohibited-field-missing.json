@@ -1,0 +1,6 @@
+{
+  "id": "enterprise.lane4-redaction-prohibited-field-missing",
+  "description": "Lane 4 raw secret leakage prohibited field is missing from the observability evidence standard.",
+  "expectedRule": "USF-ENTERPRISE-010",
+  "observabilityDropProhibitedField": "rawSecret"
+}
