@@ -41,16 +41,15 @@
     "dashboard": "USF-184",
     "coordinator": "USF-192",
     "approvedLanes": [
-      "USF-185"
-    ],
-    "blockedLanes": [
+      "USF-185",
       "USF-186",
       "USF-187",
       "USF-188",
       "USF-189",
       "USF-190",
       "USF-191"
-    ]
+    ],
+    "blockedLanes": []
   },
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "policy": {
@@ -7286,7 +7285,7 @@
   "laneEvidenceRequirements": [
     {
       "laneIssue": "USF-185",
-      "approvalStatus": "approved-lane-1-only",
+      "approvalStatus": "approved-by-coordinator-gate",
       "requiredEnterpriseEvidenceSections": [
         "soaSupportMappings",
         "evidenceRegister",
@@ -7305,7 +7304,7 @@
     },
     {
       "laneIssue": "USF-186",
-      "approvalStatus": "blocked-by-coordinator-gate",
+      "approvalStatus": "approved-by-coordinator-gate",
       "requiredEnterpriseEvidenceSections": [
         "soaSupportMappings",
         "evidenceRegister",
@@ -7319,12 +7318,12 @@
         "doneStateGovernance",
         "nonClaims"
       ],
-      "implementationAllowed": false,
+      "implementationAllowed": true,
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     },
     {
       "laneIssue": "USF-187",
-      "approvalStatus": "blocked-by-coordinator-gate",
+      "approvalStatus": "approved-by-coordinator-gate",
       "requiredEnterpriseEvidenceSections": [
         "soaSupportMappings",
         "evidenceRegister",
@@ -7338,12 +7337,12 @@
         "doneStateGovernance",
         "nonClaims"
       ],
-      "implementationAllowed": false,
+      "implementationAllowed": true,
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     },
     {
       "laneIssue": "USF-188",
-      "approvalStatus": "blocked-by-coordinator-gate",
+      "approvalStatus": "approved-by-coordinator-gate",
       "requiredEnterpriseEvidenceSections": [
         "soaSupportMappings",
         "evidenceRegister",
@@ -7357,12 +7356,12 @@
         "doneStateGovernance",
         "nonClaims"
       ],
-      "implementationAllowed": false,
+      "implementationAllowed": true,
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     },
     {
       "laneIssue": "USF-189",
-      "approvalStatus": "blocked-by-coordinator-gate",
+      "approvalStatus": "approved-by-coordinator-gate",
       "requiredEnterpriseEvidenceSections": [
         "soaSupportMappings",
         "evidenceRegister",
@@ -7376,12 +7375,12 @@
         "doneStateGovernance",
         "nonClaims"
       ],
-      "implementationAllowed": false,
+      "implementationAllowed": true,
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     },
     {
       "laneIssue": "USF-190",
-      "approvalStatus": "blocked-by-coordinator-gate",
+      "approvalStatus": "approved-by-coordinator-gate",
       "requiredEnterpriseEvidenceSections": [
         "soaSupportMappings",
         "evidenceRegister",
@@ -7395,12 +7394,12 @@
         "doneStateGovernance",
         "nonClaims"
       ],
-      "implementationAllowed": false,
+      "implementationAllowed": true,
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     },
     {
       "laneIssue": "USF-191",
-      "approvalStatus": "blocked-by-coordinator-gate",
+      "approvalStatus": "approved-by-coordinator-gate",
       "requiredEnterpriseEvidenceSections": [
         "soaSupportMappings",
         "evidenceRegister",
@@ -7414,7 +7413,7 @@
         "doneStateGovernance",
         "nonClaims"
       ],
-      "implementationAllowed": false,
+      "implementationAllowed": true,
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     }
   ],

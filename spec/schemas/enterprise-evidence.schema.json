@@ -68,7 +68,11 @@
           "$ref": "#/$defs/stringList"
         },
         "blockedLanes": {
-          "$ref": "#/$defs/stringList"
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
         }
       }
     },
