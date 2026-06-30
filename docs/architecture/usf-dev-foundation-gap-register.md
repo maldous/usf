@@ -21,8 +21,8 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 
 | ID     | Gap                                                     | Required action                                                                                                                                            | Boundary                                      |
 | ------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| P1-001 | Sentry service parity unresolved                        | Decide whether USF telemetry proof substitutes for Sentry or create deferred error-monitoring blocker.                                                     | No SOC/SIEM/error-monitoring readiness claim. |
-| P1-002 | SonarQube quality gate parity unresolved                | Decide whether make verify substitutes for SonarQube or create quality-gate service blocker.                                                               | No SonarQube readiness claim.                 |
+| P1-001 | Sentry service parity unresolved                        | USF-187 records Sentry as a shared error-assurance control-plane disposition with owner/risk/control owner metadata, risk treatment, evidence mapping, and deferred USF-170 proof for event capture, redaction, tenant-safe labels, retention, alert handoff, and operator access. | No SOC/SIEM/error-monitoring readiness claim. |
+| P1-002 | SonarQube quality gate parity unresolved                | USF-187 records SonarQube/static analysis as a shared assurance control-plane disposition with local deterministic verification kept non-equivalent to deferred USF-171 SonarQube service proof, quality-gate scope, exception handling, and operator access. | No SonarQube, test-readiness, SOC, or ISO certification claim. |
 | P1-003 | ClickHouse analytics/event-store parity unresolved      | Decide include/defer for analytics/event-store capability.                                                                                                 | No ClickHouse/event-store readiness claim.    |
 | P1-004 | Redis/cache parity unresolved                           | Decide if NATS/in-memory stores are sufficient or Redis remains required.                                                                                  | No Redis service equivalence claim.           |
 | P1-005 | Meilisearch/search provider parity unresolved           | Decide whether in-memory search proof is sufficient or composed search provider is required.                                                               | No live/vector/AI search readiness claim.     |
@@ -31,6 +31,7 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 | P1-008 | pgBackRest backup/restore proof absent                  | Create backup/restore deferred depth or implementation authority.                                                                                          | No backup/restore readiness claim.            |
 | P1-009 | Windmill operator automation parity unresolved          | Decide if Temporal/jobs proof substitutes or Windmill remains required.                                                                                    | No operator automation readiness claim.       |
 | P1-010 | Operator/admin surface catalogue incomplete             | Catalog pgAdmin, MinIO console, Grafana, Temporal UI, Sentry, SonarQube, Windmill, Mailpit, OpenBao, Prometheus, Loki, Tempo, Alertmanager access posture. | No operator console readiness claim.          |
+| P1-011 | Shared security scanning posture incomplete             | USF-187 defines a security-scanning posture for static analysis, compose security checks, dependency advisory review, and vulnerability triage; stronger scanner-service proof, exceptions, and operating evidence remain deferred to USF-171/USF-187 follow-up evidence. | No live scanner, vulnerability-clearance, deployment-readiness, SOC, or ISO certification claim. |
 
 ## P2 Follow-Ups Before Broader Environment or Operator Readiness
 
@@ -48,8 +49,8 @@ This register is derived from followup.txt and todo.txt plus source inspection. 
 | ------ | ---------------------------------------------------------------------------- |
 | HD-001 | Which readiness tier is the closure bar for USF-133?                         |
 | HD-002 | Does ClickHouse remain required for universal local/dev platform parity?     |
-| HD-003 | Does SonarQube remain required or is make verify sufficient?                 |
-| HD-004 | Does Sentry remain required or is USF telemetry proof sufficient?            |
+| HD-003 | Accepted decision: SonarQube/static analysis is split between mandatory local deterministic verification and deferred shared service proof where SonarQube semantics are claimed. |
+| HD-004 | Accepted decision: Sentry/error monitoring remains a shared error-assurance control plane where Sentry semantics are claimed, with service proof deferred under USF-170. |
 | HD-005 | Does Meilisearch remain required or is in-memory/Postgres search sufficient? |
 | HD-006 | Are LocalStack and WireMock required mock-provider substrates?               |
 | HD-007 | Is ClamAV required as composed proof or deferred scanner posture?            |
@@ -65,7 +66,7 @@ Recommended draft-only Linear work, if accepted by a human in a later apply-mode
 | React parity: universal compose service disposition closure | Create exact trackers for all grade C/D compose service rows and close or defer them truthfully.                                                                                                                                                                                  | P0                         |
 | React parity: service catalogue and trust-boundary review   | Keep the semantic service catalogue current as service decisions change; use validators to prevent metadata, evidence, and non-claim drift.                                                                                                                                       | P0 follow-up governance    |
 | React parity: non-runtime composed service disposition      | USF-183 proves the service-catalogue-required runtime provider bindings that have USF runtime ports. Operator surfaces, backup/restore, scanner, observability backend, quality-gate, mock-provider, gateway, and automation service disposition still require USF-133 decisions. | P0 follow-up under USF-133 |
-| React parity: operational service decisions                 | Resolve Sentry, SonarQube, ClickHouse, Redis, Meilisearch, ClamAV, LocalStack, WireMock, Windmill, pgAdmin, pgBackRest.                                                                                                                                                           | P1                         |
+| React parity: operational service decisions                 | Complete or defer remaining evidence for Sentry, SonarQube, security scanning, ClickHouse, Redis, Meilisearch, ClamAV, LocalStack, WireMock, Windmill, pgAdmin, pgBackRest.                                                                                                       | P1                         |
 | React parity: operator/admin surface posture                | Define admin console set, authn/authz, tenant safety, and future ops UI boundaries.                                                                                                                                                                                               | P1                         |
 | React parity: alerting, dashboard, incident posture depth   | Resolve Alertmanager, Alloy, dashboards, alert routing, and incident evidence depth.                                                                                                                                                                                              | P2                         |
 
@@ -81,7 +82,7 @@ This orchestration pass is planning and issue hygiene only. It does not authoris
 - `docs/architecture/compose-service-disposition-closure-matrix.json` records Lane 1 service-disposition closure evidence for each semantic service-catalogue row.
 - `tools/validate-parity/validate-parity.py` now fails service-disposition closure evidence when a closure-relevant service row is missing, a disposition is absent, an unresolved row lacks linked follow-up issues, proof evidence is missing, runtime proof is falsely treated as Compose service equivalence, or closure/readiness is overclaimed.
 - `spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json` records repository-level enterprise evidence organisation for SoA-support mappings, evidence-register rows, threat/abuse posture, SDK dependency governance, observability evidence standards, access review posture, resilience posture, incident/vulnerability evidence, privacy/data minimisation, done-state governance, and non-claims.
-- `tools/validate-enterprise/validate-enterprise.py` fails lane work when enterprise evidence model coverage, commit/command/issue-linked evidence, SDK governance, threat posture, observability evidence standards, posture registers, done-state governance, or Lane 1 closure-matrix enterprise linkage is missing.
+- `tools/validate-enterprise/validate-enterprise.py` fails lane work when enterprise evidence model coverage, commit/command/issue-linked evidence, SDK governance, threat posture, observability evidence standards, posture registers, done-state governance, Lane 1 closure-matrix enterprise linkage, Lane 3 assurance control-plane disposition, or assurance readiness/certification non-claims are missing.
 - Lane 4 appends `usf-188` observability operations evidence rows and extends observability/enterprise validators so missing telemetry posture, raw secret leakage, unsafe logs, missing incident boundary, missing redaction, and overclaims fail closed.
 - Add a validator that rejects readiness overclaims in complete review artifacts.
 - Planted defects cover missing service row, missing disposition, false closure, missing follow-up issue, missing proof evidence, false runtime-to-Compose equivalence, missing enterprise evidence linkage, missing SoA-support coverage, missing commit-pinned evidence, missing threat posture, SDK governance drift, observability evidence drift, done-state overclaim, and readiness overclaim.
@@ -135,3 +136,32 @@ Applicability support fields.
 This status does not claim ISO/IEC 27001 certification, SOC readiness, production
 readiness, staging readiness, live-provider readiness, enterprise production readiness,
 full dev readiness, test readiness, or full React parity.
+
+## USF-187 Lane 3 Shared Assurance Control-Plane Status
+
+USF-187 appends Lane 3-owned enterprise rows with stable `usf-187` ids for:
+
+- Sentry/error monitoring: `usf-187-sentry-error-monitoring-*`.
+- SonarQube/static analysis: `usf-187-sonarqube-static-analysis-*`.
+- Security scanning posture: `usf-187-security-scanning-*`.
+
+Each bundle records SoA-support mapping, evidence register linkage, threat/abuse posture,
+access review posture, risk-treatment/deferred-boundary posture, incident/vulnerability
+posture, privacy/data-minimisation posture, owner, risk owner, control owner, effectiveness
+state, risk statement, threat/failure scenario, affected asset/service, impact, likelihood,
+treatment, review date, follow-up issue, validation command, and explicit non-claims.
+
+Sentry and SonarQube closure-matrix rows remain closure-blocking and link to the Lane 3
+enterprise evidence rows. Sentry runtime event capture, redaction, tenant-safe labels,
+retention, alert handoff, and operator-console proof remain deferred under USF-170.
+SonarQube service-semantic proof, quality-gate scope, unresolved issue handling, exceptions,
+security hotspot treatment, and operator-console proof remain deferred under USF-171.
+Security scanning is defined-only for this lane; live scanner provider proof, vulnerability
+clearance, SAST/DAST completeness, secret-scanning completeness, and certification evidence are
+not claimed.
+
+`tools/validate-enterprise/validate-enterprise.py` enforces Lane 3 disposition with
+USF-ENTERPRISE-011 and assurance overclaim prevention with USF-ENTERPRISE-012. Planted defects
+`008-assurance-disposition-missing.json` and
+`009-assurance-certification-overclaim.json` prove the validator catches hidden assurance gaps
+and certification overclaims.
