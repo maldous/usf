@@ -1,0 +1,227 @@
+{
+  "id": "observability-alerting-dashboard-incident-execution-proof",
+  "title": "USF-222 Observability Alerting Dashboard Incident Workflow Execution Proof",
+  "sourceIssue": "USF-222",
+  "predecessorIssue": "USF-218",
+  "parentIssue": "USF-133",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "status": "bounded-local-execution-proof-recorded-provider-readiness-deferred",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "proofFile": "packages/proof/src/observability-operations-execution-proof.ts",
+  "proofCommand": "corepack pnpm proof:observability:operations-execution",
+  "makeTarget": "make observability-operations-execution-proof",
+  "validationCommands": [
+    "corepack pnpm proof:observability:operations-execution",
+    "python3 tools/validate-parity/validate-observability.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "corepack pnpm parity",
+    "corepack pnpm verify"
+  ],
+  "issueLinks": [
+    "USF-222",
+    "USF-218",
+    "USF-159",
+    "USF-170",
+    "USF-196",
+    "USF-205",
+    "USF-184",
+    "USF-192",
+    "USF-193",
+    "USF-133"
+  ],
+  "owner": "platform-observability-foundation",
+  "riskOwner": "platform-observability-risk-owner",
+  "controlOwner": "platform-observability-control-owner",
+  "reviewDate": "2026-09-30",
+  "riskTreatment": "mitigate-local-execution-proof-and-defer-live-provider-readiness",
+  "runtimeMode": "local-synthetic-observability-operations-execution-proof",
+  "providerMode": "hermetic-mock",
+  "serviceCatalogueRows": [
+    "spec/instances/compose-service/service-catalogue.json#otel-collector",
+    "spec/instances/compose-service/service-catalogue.json#prometheus",
+    "spec/instances/compose-service/service-catalogue.json#grafana",
+    "spec/instances/compose-service/service-catalogue.json#loki",
+    "spec/instances/compose-service/service-catalogue.json#tempo",
+    "spec/instances/compose-service/service-catalogue.json#alertmanager",
+    "spec/instances/compose-service/service-catalogue.json#alloy",
+    "spec/instances/compose-service/service-catalogue.json#sentry"
+  ],
+  "providerRegistryIds": [
+    "observability-captured-local",
+    "observability-compose-stack",
+    "observability-sentry-sdk-envelope-local"
+  ],
+  "enterpriseEvidenceRefs": [
+    "soa-usf-222-observability-operations-execution-proof",
+    "evidence-usf-222-observability-operations-execution-proof",
+    "threat-usf-222-observability-operations-overclaim",
+    "access-usf-222-observability-operations-boundary",
+    "resilience-usf-222-observability-operations-boundary",
+    "incident-usf-222-observability-operations-boundary",
+    "privacy-usf-222-observability-operations-boundary"
+  ],
+  "claims": {
+    "boundedLocalExecutionProofRecorded": true,
+    "alertRoutingProofExecuted": true,
+    "dashboardRuntimeModelExecuted": true,
+    "incidentWorkflowProofExecuted": true,
+    "sliSloOperationProofExecuted": true,
+    "retentionPurgeProofExecuted": true,
+    "crossTenantAggregateSafetyProofExecuted": true,
+    "serviceReadinessClaim": false,
+    "sentryServiceReadinessClaim": false,
+    "liveMonitoringReadinessClaim": false,
+    "alertingReadinessClaim": false,
+    "dashboardReadinessClaim": false,
+    "incidentResponseReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "executionEvidence": {
+    "alertRuleEvaluated": true,
+    "alertThresholdCrossed": true,
+    "alertRoutedToSyntheticReceiver": true,
+    "alertRoutingAuditCaptured": true,
+    "dashboardRuntimeRendered": true,
+    "dashboardTenantBoundaryChecked": true,
+    "incidentCreated": true,
+    "incidentAcknowledged": true,
+    "incidentCorrectiveActionRecorded": true,
+    "incidentResolved": true,
+    "sliCalculated": true,
+    "sloEvaluated": true,
+    "retentionPurgeExecuted": true,
+    "retentionPurgeAuditCaptured": true,
+    "crossTenantAggregateChecked": true,
+    "crossTenantAggregateTenantNamesSuppressed": true,
+    "tenantIsolationChecked": true,
+    "auditEvidenceCaptured": true,
+    "structuredLogEvidenceCaptured": true,
+    "tracingEvidenceCaptured": true,
+    "metricEvidenceCaptured": true,
+    "redactionChecked": true,
+    "syntheticDataChecked": true,
+    "safeFailureChecked": true
+  },
+  "serviceBindingDispositions": [
+    {
+      "serviceId": "otel-collector",
+      "executionEvidence": "local-synthetic-signal-ingest-and-routing-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not OpenTelemetry Collector service readiness, export readiness, staging readiness, production readiness, or live-provider readiness."
+    },
+    {
+      "serviceId": "prometheus",
+      "executionEvidence": "local-synthetic-SLI-SLO-calculation-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not Prometheus service readiness, query readiness, staging readiness, production readiness, or live-provider readiness."
+    },
+    {
+      "serviceId": "grafana",
+      "executionEvidence": "local-synthetic-dashboard-runtime-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not Grafana service readiness, browser dashboard readiness, public dashboard exposure, staging readiness, production readiness, or live-provider readiness."
+    },
+    {
+      "serviceId": "loki",
+      "executionEvidence": "local-synthetic-structured-log-and-retention-purge-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not Loki service readiness, log backend readiness, staging readiness, production readiness, or live-provider readiness."
+    },
+    {
+      "serviceId": "tempo",
+      "executionEvidence": "local-synthetic-trace-correlation-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not Tempo service readiness, trace backend readiness, staging readiness, production readiness, or live-provider readiness."
+    },
+    {
+      "serviceId": "alertmanager",
+      "executionEvidence": "local-synthetic-alert-routing-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not Alertmanager service readiness, live alert delivery readiness, staging readiness, production readiness, or live-provider readiness."
+    },
+    {
+      "serviceId": "alloy",
+      "executionEvidence": "local-synthetic-routing-and-redaction-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not Alloy service readiness, telemetry pipeline readiness, staging readiness, production readiness, or live-provider readiness."
+    },
+    {
+      "serviceId": "sentry",
+      "executionEvidence": "local-Sentry-SDK-envelope-lineage-plus-local-incident-workflow-model",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Local proof is not Sentry service readiness, ingestion readiness, issue lifecycle readiness, alert handoff readiness, staging readiness, production readiness, or live-provider readiness."
+    }
+  ],
+  "remainingDeferredBoundaries": [
+    {
+      "id": "live-observability-provider-readiness",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-193",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "nonClaimBoundary": "Live provider readiness and environment promotion readiness are not proven by USF-222."
+    },
+    {
+      "id": "provider-console-and-public-dashboard-readiness",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-169",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "Provider console and public dashboard readiness are not proven by USF-222."
+    }
+  ],
+  "negativeEvidence": [
+    "No live observability backend readiness is proven.",
+    "No Sentry service readiness, ingestion, issue lifecycle, alert handoff, or provider console operation is proven.",
+    "No Grafana browser dashboard, public dashboard exposure, or operator console readiness is proven.",
+    "USF-222 records no proof for Alertmanager live delivery, on-call escalation, customer notification, or production incident response operation.",
+    "No test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, full dev, full React parity, or USF-133 closure readiness is proven."
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure",
+    "live-monitoring-readiness",
+    "alerting-readiness",
+    "dashboard-readiness",
+    "incident-response-readiness",
+    "sentry-service-readiness"
+  ]
+}

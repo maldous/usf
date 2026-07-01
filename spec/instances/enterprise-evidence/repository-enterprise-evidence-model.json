@@ -1621,6 +1621,38 @@
       ]
     },
     {
+      "id": "soa-proof-proof-observability-operations-execution",
+      "mappedType": "proof-command",
+      "controlPurpose": "Govern proof command evidence posture for proof:observability:operations-execution.",
+      "riskTreated": "Proof output could be mistaken for live observability provider readiness, Sentry service readiness, Alertmanager live delivery, Grafana dashboard readiness, incident-response readiness, environment readiness, or USF-133 closure unless scope and non-claims are explicit.",
+      "assetServiceAffected": "proof:observability:operations-execution",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:observability:operations-execution; sourceIssue=USF-222; runtimeMode=local-synthetic-observability-operations-execution-proof; providerMode=hermetic-mock; liveMonitoringReadiness=not-claimed; alertingReadiness=not-claimed; dashboardReadiness=not-claimed; incidentResponseReadiness=not-claimed; sentryServiceReadiness=not-claimed; usf133Closure=not-claimed",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/observability-operations-execution-proof.ts; docs/architecture/observability-alerting-dashboard-incident-execution-proof.json",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution",
+      "deferredReason": "Live observability provider readiness, Sentry service ingestion, Grafana browser dashboard operation, Alertmanager live delivery, provider-managed retention purge, production incident response, environment promotion, and USF-133 closure remain non-claims; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner; reviewDate=2026-09-30; followUpIssue=USF-159.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "live-monitoring-readiness",
+        "alerting-readiness",
+        "dashboard-readiness",
+        "incident-response-readiness",
+        "sentry-service-readiness"
+      ]
+    },
+    {
       "id": "soa-proof-proof-providers",
       "mappedType": "proof",
       "controlPurpose": "Govern proof command evidence posture for proof:providers.",
@@ -5237,6 +5269,38 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "soa-usf-222-observability-operations-execution-proof",
+      "mappedType": "source-issue-observability-operations-execution-proof",
+      "controlPurpose": "Organize bounded local alert routing, dashboard runtime model, incident workflow, SLI/SLO calculation, retention purge, cross-tenant aggregate, and observability audit evidence for USF-222 without claiming service or live-provider readiness.",
+      "riskTreated": "Local synthetic observability execution proof could be mistaken for Grafana readiness, Alertmanager live delivery readiness, Sentry service readiness, production monitoring, incident response readiness, environment readiness, or USF-133 closure.",
+      "assetServiceAffected": "otel-collector,prometheus,grafana,loki,tempo,alertmanager,alloy,sentry",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-222; proofCommand=corepack pnpm proof:observability:operations-execution; runtimeMode=local-synthetic-observability-operations-execution-proof; providerMode=hermetic-mock; liveMonitoringReadinessClaim=false; alertingReadinessClaim=false; dashboardReadinessClaim=false; incidentResponseReadinessClaim=false; sentryServiceReadinessClaim=false; usf133ClosureClaim=false",
+      "evidenceSource": "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json; packages/proof/src/observability-operations-execution-proof.ts; USF-222; USF-218; USF-133",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution; python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Live provider readiness, Sentry service ingestion, Grafana browser dashboard operation, Alertmanager live delivery, provider-managed retention purge, production incident response, environment promotion, and USF-133 closure remain unproven; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "live-monitoring-readiness",
+        "alerting-readiness",
+        "dashboard-readiness",
+        "incident-response-readiness",
+        "sentry-service-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -5559,6 +5623,33 @@
       ],
       "prOrMergeSha": "ca0e7f7b98c4ef37b259a22d9edca0f1f2fee714",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed proof source, boundary matrix, and validator metadata; do not retain Sentry event envelopes, raw endpoints, credentials, tokens, stack traces, provider payloads, or tenant identifiers as repository evidence."
+    },
+    {
+      "id": "evidence-proof-proof-observability-operations-execution",
+      "proofResult": "proof:observability:operations-execution",
+      "whatWasProven": "Package script proof:observability:operations-execution is the command-pinned proof surface for USF-222 bounded local synthetic alert threshold evaluation and routing, dashboard runtime model rendering, incident workflow creation acknowledgement corrective-action and resolution, SLI/SLO calculation, retention purge, tenant-isolated query behaviour, cross-tenant aggregate suppression of tenant names, and value-free observability audit evidence.",
+      "whatWasNotProven": "This does not prove live observability provider readiness, Sentry service readiness or ingestion, Grafana service readiness or public dashboard exposure, Alertmanager live delivery, production monitoring, production incident response operation, provider-managed retention purge, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-dev-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "local-synthetic-observability-operations-execution-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#otel-collector,prometheus,grafana,loki,tempo,alertmanager,alloy,sentry",
+      "adapterProviderId": "observability-captured-local; observability-compose-stack; observability-sentry-sdk-envelope-local",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution",
+      "commandPin": "tsx packages/proof/src/observability-operations-execution-proof.ts",
+      "commitPin": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "issueLinks": [
+        "USF-222",
+        "USF-218",
+        "USF-159",
+        "USF-170",
+        "USF-196",
+        "USF-205",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed proof source, docs/architecture/observability-alerting-dashboard-incident-execution-proof.json, and validator metadata; do not retain raw telemetry payloads, raw endpoints, credentials, tokens, stack traces, provider payloads, tenant names, user emails, production data, or customer data as repository evidence."
     },
     {
       "id": "evidence-proof-proof-providers",
@@ -7754,9 +7845,60 @@
       ],
       "prOrMergeSha": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
       "retentionPosture": "Retain value-free proof command output in the PR validation summary and post-merge Linear reconciliation; no raw endpoint, credential, token, connection string, stack trace, provider payload, production data, or customer data is retained."
+    },
+    {
+      "id": "evidence-usf-222-observability-operations-execution-proof",
+      "proofResult": "observability-alerting-dashboard-incident-execution-proof",
+      "whatWasProven": "USF-222 proves bounded local execution of synthetic alert threshold evaluation and routing, dashboard runtime model rendering, incident workflow creation acknowledgement corrective action and resolution, SLI/SLO calculation, retention purge, tenant-isolated query behaviour, cross-tenant aggregate suppression of tenant names, and value-free observability audit evidence.",
+      "whatWasNotProven": "USF-222 does not prove live observability provider readiness, Sentry service readiness or ingestion, Grafana service readiness or public dashboard exposure, Alertmanager live delivery, production monitoring, production incident response, provider-managed retention purge, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-dev-readiness, full-react-parity-readiness, or usf-133-closure.",
+      "runtimeMode": "local-synthetic-observability-operations-execution-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#otel-collector,prometheus,grafana,loki,tempo,alertmanager,alloy,sentry",
+      "adapterProviderId": "observability-captured-local; observability-compose-stack; observability-sentry-sdk-envelope-local",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution; python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "tsx packages/proof/src/observability-operations-execution-proof.ts",
+      "commitPin": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "issueLinks": [
+        "USF-222",
+        "USF-218",
+        "USF-159",
+        "USF-170",
+        "USF-196",
+        "USF-205",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "retentionPosture": "Retain committed proof artefact at docs/architecture/observability-alerting-dashboard-incident-execution-proof.json, proof command output in PR validation summary, validator result, planted defects, and Linear reconciliation. No raw telemetry payload, tenant name, user email, endpoint, credential, token, provider payload, stack trace, production data, or customer data is retained. owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner."
     }
   ],
   "threatModelAbuseCaseRegister": [
+    {
+      "id": "threat-usf-222-observability-operations-overclaim",
+      "targetType": "source-issue-execution-proof",
+      "target": "observability-alerting-dashboard-incident-execution-proof",
+      "trustBoundary": "Local synthetic proof boundary only; no live observability backend, Sentry service, Alertmanager live delivery, Grafana browser dashboard, public dashboard, production incident response, or provider-managed retention boundary claim.",
+      "tenantBoundary": "Proof uses synthetic tenant-scoped queries and cross-tenant aggregate suppression; raw tenant names are not retained in proof output.",
+      "credentialBoundary": "No raw endpoint, DSN, token, credential, provider payload, stack trace, raw SDK error, tenant name, user email, customer data, or production data is retained.",
+      "dataClassification": "internal synthetic observability metadata and execution proof evidence only",
+      "abuseCases": [
+        "Local synthetic alert routing is treated as live alert delivery readiness",
+        "Local dashboard runtime model is treated as Grafana readiness or public dashboard exposure",
+        "Local incident workflow model is treated as production incident response readiness",
+        "USF-222 proof is treated as USF-133 closure evidence"
+      ],
+      "failureModes": [
+        "proof command wiring is missing",
+        "enterprise evidence refs are missing",
+        "cross-tenant aggregate leaks tenant names",
+        "readiness claim appears in proof or evidence output"
+      ],
+      "failClosedBehaviour": "validate-observability and validate-enterprise fail when USF-222 proof artefact, execution markers, enterprise rows, service non-equivalence boundaries, or non-claims are missing or overclaimed.",
+      "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, proof command output, and value-free synthetic audit-linked signals only. Evidence artefact: docs/architecture/observability-alerting-dashboard-incident-execution-proof.json. Source issue USF-222.",
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; live provider, Sentry service, Grafana, Alertmanager, production incident response, and environment readiness remain non-claims. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness,usf-133-closure,live-monitoring-readiness,alerting-readiness,dashboard-readiness,incident-response-readiness,sentry-service-readiness."
+    },
     {
       "id": "threat-adapter-runtime-database-provider-binding",
       "targetType": "adapter",
@@ -10450,6 +10592,47 @@
   },
   "accessReviewPrivilegedOperationPosture": [
     {
+      "id": "access-usf-222-observability-operations-boundary",
+      "targetType": "source-issue-execution-proof",
+      "target": "observability alert dashboard incident operation access boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-222",
+        "accessModel=local-synthetic-proof-only-no-provider-console-operation",
+        "authnAuthzBoundary=existing-PDP-local-observability-route-and-proof-context-only",
+        "leastPrivilegePosture=synthetic-platform-observability-proof-actor-only",
+        "breakGlassRelevance=not-proven-by-USF-222",
+        "auditEvidence=value-free-local-proof-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-observability-service-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-222",
+        "noPublicExposureClaim=true",
+        "dashboardReadinessClaim=false",
+        "alertingReadinessClaim=false",
+        "incidentResponseReadinessClaim=false"
+      ],
+      "evidenceSource": "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json; packages/proof/src/observability-operations-execution-proof.ts; USF-222",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Provider console access, Sentry console access, Grafana browser dashboard access, alert-routing administration, live on-call access review, break-glass execution, deprovisioning, and public exposure proof are not proven by USF-222; owner=platform-observability-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "live-monitoring-readiness",
+        "alerting-readiness",
+        "dashboard-readiness",
+        "incident-response-readiness",
+        "sentry-service-readiness"
+      ]
+    },
+    {
       "id": "access-posture-keycloak",
       "targetType": "service",
       "target": "keycloak",
@@ -13045,6 +13228,48 @@
   ],
   "backupRestoreResiliencePosture": [
     {
+      "id": "resilience-usf-222-observability-operations-boundary",
+      "targetType": "source-issue-execution-proof",
+      "target": "observability alert dashboard incident retention SLI/SLO and aggregate resilience boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-222",
+        "readinessChecks=local-synthetic-proof-only",
+        "retryTimeoutBehaviour=not-proven-for-live-observability-services-alerts-dashboards-or-incidents",
+        "failClosedMode=validator-blocks-overclaim-and-missing-proof-boundary",
+        "safeTeardown=not-applicable-no-compose-resources-written",
+        "structuredLogging=value-free-proof-and-validator-output-only",
+        "tracingCorrelation=local-proof-correlation-evidence-only",
+        "metrics=local-synthetic-SLI-SLO-and-alert-threshold-evidence",
+        "auditEvents=value-free-local-proof-and-reconciliation-comments-only",
+        "redaction=no-raw-telemetry-payload-token-endpoint-credential-provider-payload-stack-trace-tenant-name-user-email-or-customer-data",
+        "backupRestorePosture=not-proven-for-provider-managed-observability-data",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=live-observability-provider-and-production-incident-DR-deferred"
+      ],
+      "evidenceSource": "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json; packages/proof/src/observability-operations-execution-proof.ts; USF-222",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Live observability service readiness, provider retries, dashboard availability, live alert delivery, production incident workflow, provider-managed telemetry retention purge, backup/restore, DR, RPO, and RTO are not proven; owner=platform-observability-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "live-monitoring-readiness",
+        "alerting-readiness",
+        "dashboard-readiness",
+        "incident-response-readiness",
+        "sentry-service-readiness"
+      ]
+    },
+    {
       "id": "resilience-posture-postgres",
       "targetType": "service",
       "target": "postgres",
@@ -15459,6 +15684,43 @@
     }
   ],
   "incidentVulnerabilityManagementEvidence": [
+    {
+      "id": "incident-usf-222-observability-operations-boundary",
+      "targetType": "source-issue-execution-proof",
+      "target": "observability alert delivery dashboard incident workflow and vulnerability evidence boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-222",
+        "incidentDetectionHook=local-synthetic-alert-threshold-and-routing-proof",
+        "alertingPosture=local-synthetic-route-only-no-live-delivery-readiness",
+        "escalationOwner=platform-observability-foundation",
+        "vulnerabilityAdvisoryReview=required-before-live-observability-provider-or-Sentry-service-readiness-claim",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-222",
+        "correctiveActionEvidence=local-synthetic-incident-corrective-action-step-recorded",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-222"
+      ],
+      "evidenceSource": "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json; tools/validate-parity/validate-observability.py; packages/proof/src/observability-operations-execution-proof.ts",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution; python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Live alert delivery, on-call escalation, provider incident workflow, status-page operation, vulnerability SLA evidence, supplier advisory response, production corrective action, and post-incident evidence are not proven by USF-222; owner=platform-observability-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "live-monitoring-readiness",
+        "alerting-readiness",
+        "dashboard-readiness",
+        "incident-response-readiness",
+        "sentry-service-readiness"
+      ]
+    },
     {
       "id": "incident-vulnerability-postgres",
       "targetType": "service",
@@ -18580,6 +18842,45 @@
   ],
   "privacyDataMinimisationPosture": [
     {
+      "id": "privacy-usf-222-observability-operations-boundary",
+      "targetType": "source-issue-execution-proof",
+      "target": "observability operations execution proof privacy and data minimisation boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-222",
+        "dataOrigin=synthetic-local-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-or-user-email-retained",
+        "dataClassification=internal-observability-metadata-and-local-execution-proof-evidence-only",
+        "redactionPolicy=no-raw-telemetry-payload-log-message-span-payload-token-endpoint-credential-provider-payload-stack-trace-tenant-name-user-email-or-customer-data-in-evidence",
+        "retentionPurgePosture=local-synthetic-record-purge-proof-only-no-provider-managed-retention-readiness",
+        "legalHoldRelevance=not-proven-for-observability-service-retention-or-provider-data",
+        "dataResidencyCrossBorderBoundary=hermetic-local-and-repository-evidence-only-no-live-provider-residency-claim",
+        "supplierSubprocessorBoundary=not-proven-by-USF-222"
+      ],
+      "evidenceSource": "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json; packages/proof/src/observability-operations-execution-proof.ts; USF-222",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Provider-managed privacy, data residency, legal hold, production retention, telemetry purge operation, Sentry service retention, supplier/subprocessor posture, and live observability provider privacy evidence are not proven by USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "live-monitoring-readiness",
+        "alerting-readiness",
+        "dashboard-readiness",
+        "incident-response-readiness",
+        "sentry-service-readiness"
+      ]
+    },
+    {
       "id": "privacy-proof-dev-smoke",
       "targetType": "proof",
       "target": "dev:smoke",
@@ -18969,6 +19270,45 @@
         "iso27001-certification",
         "enterprise-production-readiness",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-observability-operations-execution",
+      "targetType": "proof",
+      "target": "proof:observability:operations-execution",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii-customer-data-tenant-name-or-user-email-retained",
+        "dataClassification=internal-observability-metadata-and-local-execution-proof-evidence-only",
+        "redactionPolicy=value-free-proof-output-safe-status-only",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only-no-provider-managed-telemetry-retention-claim",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=hermetic-local-and-repository-evidence-only-no-live-provider-residency-claim",
+        "owner=platform-observability-foundation",
+        "riskOwner=platform-observability-risk-owner",
+        "controlOwner=platform-observability-control-owner",
+        "reviewDate=2026-09-30"
+      ],
+      "evidenceSource": "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json; packages/proof/src/observability-operations-execution-proof.ts; USF-222",
+      "validationCommand": "corepack pnpm proof:observability:operations-execution",
+      "deferredReason": "Provider-managed privacy, data residency, legal hold, production retention, telemetry purge operation, Sentry service retention, supplier/subprocessor posture, and live observability provider privacy evidence are not proven by USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-159; exception=none.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "live-monitoring-readiness",
+        "alerting-readiness",
+        "dashboard-readiness",
+        "incident-response-readiness",
+        "sentry-service-readiness"
       ]
     },
     {

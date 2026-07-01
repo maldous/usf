@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf222-proof-marker-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-019",
+  "edits": [
+    {
+      "target": "packages/proof/src/observability-operations-execution-proof.ts",
+      "old": "incidentCorrectiveActionRecorded: true,\n      incidentResolved: true",
+      "new": "incidentCorrectiveActionRecorded: false,\n      incidentResolved: true"
+    }
+  ]
+}

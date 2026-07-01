@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-ENTERPRISE-030",
+  "observabilityOperationsExecutionSet": {
+    "claims.dashboardReadinessClaim": true
+  }
+}
