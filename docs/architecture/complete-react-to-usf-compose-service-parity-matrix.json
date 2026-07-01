@@ -69,7 +69,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "prom/alertmanager:v0.27.0",
-      "react_ports": ["${ALERTMANAGER_PORT:-9093}:9093"],
+      "react_ports": [
+        "${ALERTMANAGER_PORT:-9093}:9093"
+      ],
       "react_service": "alertmanager",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -94,7 +96,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/alloy:v1.5.1",
-      "react_ports": ["${ALLOY_PORT:-12345}:12345"],
+      "react_ports": [
+        "${ALLOY_PORT:-12345}:12345"
+      ],
       "react_service": "alloy",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -118,7 +122,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "clamav/clamav:stable",
-      "react_ports": ["${CLAMAV_PORT:-3310}:3310"],
+      "react_ports": [
+        "${CLAMAV_PORT:-3310}:3310"
+      ],
       "react_service": "clamav",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-175/USF-200",
@@ -142,7 +148,10 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "clickhouse/clickhouse-server:24.12",
-      "react_ports": ["${CLICKHOUSE_HTTP_PORT:-8124}:8123", "${CLICKHOUSE_NATIVE_PORT:-9002}:9000"],
+      "react_ports": [
+        "${CLICKHOUSE_HTTP_PORT:-8124}:8123",
+        "${CLICKHOUSE_NATIVE_PORT:-9002}:9000"
+      ],
       "react_service": "clickhouse",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-172/USF-197/USF-206",
@@ -192,7 +201,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/grafana:11.4.0",
-      "react_ports": ["${GRAFANA_PORT:-3200}:3000"],
+      "react_ports": [
+        "${GRAFANA_PORT:-3200}:3000"
+      ],
       "react_service": "grafana",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -216,7 +227,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "quay.io/keycloak/keycloak:26.2",
-      "react_ports": ["${KEYCLOAK_PORT:-8090}:8080"],
+      "react_ports": [
+        "${KEYCLOAK_PORT:-8090}:8080"
+      ],
       "react_service": "keycloak",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -264,7 +277,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "localstack/localstack:4.0.4",
-      "react_ports": ["${LOCALSTACK_PORT:-4566}:4566"],
+      "react_ports": [
+        "${LOCALSTACK_PORT:-4566}:4566"
+      ],
       "react_service": "localstack",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-208 bounded service proof merged; any live cloud-provider compatibility, provider contract certification, or environment-promotion readiness claim remains separate.",
@@ -289,7 +304,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/loki:3.3.2",
-      "react_ports": ["${LOKI_PORT:-3100}:3100"],
+      "react_ports": [
+        "${LOKI_PORT:-3100}:3100"
+      ],
       "react_service": "loki",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -313,7 +330,10 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "axllent/mailpit:v1.21.0",
-      "react_ports": ["${MAILPIT_SMTP_PORT:-1025}:1025", "${MAILPIT_UI_PORT:-8025}:8025"],
+      "react_ports": [
+        "${MAILPIT_SMTP_PORT:-1025}:1025",
+        "${MAILPIT_UI_PORT:-8025}:8025"
+      ],
       "react_service": "mailpit",
       "selection_class": "selected",
       "tracking_recommendation": "covered for bounded Mailpit runtime provider binding; broader notification/live provider posture remains non-claimed",
@@ -337,7 +357,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "getmeili/meilisearch:v1.10",
-      "react_ports": ["${MEILISEARCH_PORT:-7700}:7700"],
+      "react_ports": [
+        "${MEILISEARCH_PORT:-7700}:7700"
+      ],
       "react_service": "meilisearch",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-174/USF-199; future explicit runtime binding issue required before API or worker runtime search-binding claims",
@@ -361,7 +383,10 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "minio/minio:RELEASE.2024-12-18T13-15-44Z",
-      "react_ports": ["${MINIO_API_PORT:-9000}:9000", "${MINIO_CONSOLE_PORT:-9001}:9001"],
+      "react_ports": [
+        "${MINIO_API_PORT:-9000}:9000",
+        "${MINIO_CONSOLE_PORT:-9001}:9001"
+      ],
       "react_service": "minio",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -388,7 +413,9 @@
       },
       "react_compose_file": "../react/compose.yaml",
       "react_image": null,
-      "react_ports": ["${MOCK_OIDC_PORT:-9080}:8080"],
+      "react_ports": [
+        "${MOCK_OIDC_PORT:-9080}:8080"
+      ],
       "react_service": "mock-oidc",
       "selection_class": "selected",
       "tracking_recommendation": "covered by authorised foundation proof only for hermetic identity semantics and composed Keycloak proof; future mock OIDC service-equivalence proof requires a new source issue if scope changes",
@@ -412,7 +439,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "openbao/openbao:2.2.0",
-      "react_ports": ["${OPENBAO_PORT:-8200}:8200"],
+      "react_ports": [
+        "${OPENBAO_PORT:-8200}:8200"
+      ],
       "react_service": "openbao",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -466,7 +495,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "dpage/pgadmin4:8.14",
-      "react_ports": ["${PGADMIN_PORT:-5050}:80"],
+      "react_ports": [
+        "${PGADMIN_PORT:-5050}:80"
+      ],
       "react_service": "pgadmin",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -518,7 +549,9 @@
       },
       "react_compose_file": "../react/compose.yaml",
       "react_image": null,
-      "react_ports": ["${PLATFORM_API_PORT:-3001}:3001"],
+      "react_ports": [
+        "${PLATFORM_API_PORT:-3001}:3001"
+      ],
       "react_service": "platform-api",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -542,7 +575,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "postgres:16.6-alpine",
-      "react_ports": ["${POSTGRES_PORT:-5433}:5432"],
+      "react_ports": [
+        "${POSTGRES_PORT:-5433}:5432"
+      ],
       "react_service": "postgres",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -567,7 +602,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "prom/prometheus:v2.54.1",
-      "react_ports": ["${PROMETHEUS_PORT:-9090}:9090"],
+      "react_ports": [
+        "${PROMETHEUS_PORT:-9090}:9090"
+      ],
       "react_service": "prometheus",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -594,7 +631,9 @@
       },
       "react_compose_file": "../react/compose.yaml",
       "react_image": null,
-      "react_ports": ["${WEB_HTTP_PORT:-80}:80"],
+      "react_ports": [
+        "${WEB_HTTP_PORT:-80}:80"
+      ],
       "react_service": "react-app",
       "selection_class": "future-ui",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -618,7 +657,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "redis:7.4.2-alpine",
-      "react_ports": ["${REDIS_PORT:-6379}:6379"],
+      "react_ports": [
+        "${REDIS_PORT:-6379}:6379"
+      ],
       "react_service": "redis",
       "selection_class": "profile-gated-proven",
       "tracking_recommendation": "USF-173/USF-198/USF-207",
@@ -637,7 +678,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -646,7 +687,7 @@
       "react_ports": null,
       "react_service": "sentry-cleanup",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -662,7 +703,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -671,7 +712,7 @@
       "react_ports": null,
       "react_service": "sentry-clickhouse",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -687,7 +728,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -696,7 +737,7 @@
       "react_ports": null,
       "react_service": "sentry-events-consumer",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -712,7 +753,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -721,7 +762,7 @@
       "react_ports": null,
       "react_service": "sentry-kafka",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -737,7 +778,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -746,7 +787,7 @@
       "react_ports": null,
       "react_service": "sentry-kafka-init",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -762,7 +803,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -771,7 +812,7 @@
       "react_ports": null,
       "react_service": "sentry-memcached",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -787,7 +828,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -796,7 +837,7 @@
       "react_ports": null,
       "react_service": "sentry-migrate",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -812,7 +853,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -821,7 +862,7 @@
       "react_ports": null,
       "react_service": "sentry-post-process-forwarder",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -837,7 +878,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -846,7 +887,7 @@
       "react_ports": null,
       "react_service": "sentry-postgres",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -862,7 +903,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -871,7 +912,7 @@
       "react_ports": null,
       "react_service": "sentry-redis",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -887,7 +928,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -896,7 +937,7 @@
       "react_ports": null,
       "react_service": "sentry-relay",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -912,7 +953,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -921,7 +962,7 @@
       "react_ports": null,
       "react_service": "sentry-snuba-api",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -937,7 +978,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -946,7 +987,7 @@
       "react_ports": null,
       "react_service": "sentry-snuba-errors",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -962,7 +1003,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -971,7 +1012,7 @@
       "react_ports": null,
       "react_service": "sentry-snuba-migrate",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -987,7 +1028,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -996,7 +1037,7 @@
       "react_ports": null,
       "react_service": "sentry-snuba-replacer",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -1012,7 +1053,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1021,7 +1062,7 @@
       "react_ports": null,
       "react_service": "sentry-taskbroker",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -1037,7 +1078,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1046,7 +1087,7 @@
       "react_ports": null,
       "react_service": "sentry-taskscheduler",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -1062,7 +1103,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records this as an explicit deferred Sentry service-proof boundary; local observability proof is not Sentry backing-service proof.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1071,7 +1112,7 @@
       "react_ports": null,
       "react_service": "sentry-taskworker",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -1087,16 +1128,18 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof; actual event capture, alert handoff, incident, retention, and operator-console proof remains USF-205.",
+      "gap_or_decision": "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred.",
       "legacy_service_category": "error-monitoring",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "ghcr.io/getsentry/sentry:26.5.2",
-      "react_ports": ["9060:9000"],
+      "react_ports": [
+        "9060:9000"
+      ],
       "react_service": "sentry-web",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-205 before any Sentry service-readiness, live monitoring, environment-readiness, or USF-133 closure claim",
+      "tracking_recommendation": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
       "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "observability telemetry only"
     },
@@ -1166,7 +1209,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "sonarqube:25.9.0.112764-community",
-      "react_ports": ["${SONAR_PORT:-9064}:9000"],
+      "react_ports": [
+        "${SONAR_PORT:-9064}:9000"
+      ],
       "react_service": "sonarqube",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-204 bounded proof merged; residual operator/gateway and environment promotion boundaries remain USF-169/USF-193 or later source issues.",
@@ -1191,7 +1236,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "grafana/tempo:2.6.0",
-      "react_ports": ["${TEMPO_HTTP_PORT:-3201}:3200"],
+      "react_ports": [
+        "${TEMPO_HTTP_PORT:-3201}:3200"
+      ],
       "react_service": "tempo",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -1215,7 +1262,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "temporalio/auto-setup:1.25.1",
-      "react_ports": ["${TEMPORAL_PORT:-7233}:7233"],
+      "react_ports": [
+        "${TEMPORAL_PORT:-7233}:7233"
+      ],
       "react_service": "temporal",
       "selection_class": "selected",
       "tracking_recommendation": "covered by existing authorised foundation slice evidence",
@@ -1264,7 +1313,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "temporalio/ui:2.35.0",
-      "react_ports": ["${TEMPORAL_UI_PORT:-8088}:8080"],
+      "react_ports": [
+        "${TEMPORAL_UI_PORT:-8088}:8080"
+      ],
       "react_service": "temporal-ui",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -1289,7 +1340,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "ghcr.io/windmill-labs/windmill:1.734",
-      "react_ports": ["${WINDMILL_PORT:-8000}:8000"],
+      "react_ports": [
+        "${WINDMILL_PORT:-8000}:8000"
+      ],
       "react_service": "windmill",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
@@ -1385,7 +1438,9 @@
       "react_build": null,
       "react_compose_file": "../react/compose.yaml",
       "react_image": "wiremock/wiremock:3.13.2-2-alpine",
-      "react_ports": ["${WIREMOCK_PORT:-8089}:8080"],
+      "react_ports": [
+        "${WIREMOCK_PORT:-8089}:8080"
+      ],
       "react_service": "wiremock",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-209 bounded service proof merged; USF-208 bounded LocalStack proof now records the remaining local cloud-emulator service-semantic evidence without any live-provider or readiness claim.",

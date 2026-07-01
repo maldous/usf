@@ -1,0 +1,16 @@
+{
+  "id": "024-sentry-sdk-proof-closure-stale",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "closureServicePatch": [
+    {
+      "serviceId": "sentry",
+      "set": {
+        "proof_evidence_refs": [
+          "usf-187-sentry-error-monitoring-evidence",
+          "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+          "docs/architecture/sentry-service-semantic-proof-boundary.json"
+        ]
+      }
+    }
+  ]
+}

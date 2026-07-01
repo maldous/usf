@@ -18,11 +18,14 @@
     "USF-184",
     "USF-192",
     "USF-133",
-    "USF-205"
+    "USF-205",
+    "USF-159",
+    "USF-169",
+    "USF-193"
   ],
   "humanDecision": {
     "decisionState": "accepted",
-    "summary": "Sentry/error-monitoring decision is not completion evidence. USF-170 records a bounded disposition gate: local observability proof remains mandatory but not equivalent to Sentry service semantics, while actual Sentry service-semantic proof remains tracked by USF-196.",
+    "summary": "Sentry/error-monitoring decision is not completion evidence. USF-170 records a bounded disposition gate, USF-196 records the service-proof boundary, and USF-205 records an accepted official SDK envelope proof while keeping Sentry service readiness and live monitoring explicitly deferred.",
     "decisionIsWorkComplete": false
   },
   "sentryDisposition": {
@@ -36,7 +39,7 @@
     "riskOwner": "platform-observability-risk-owner",
     "controlOwner": "platform-observability-control-owner",
     "riskStatement": "Sentry service semantics, event capture, redaction, tenant-safe labels, retention, alert handoff, incident evidence, and operator console access could be overclaimed from local observability proof output.",
-    "treatment": "defer Sentry service-semantic proof to USF-196, with actual service event capture and operator-console proof now tracked by USF-205; keep local observability proof non-equivalent",
+    "treatment": "USF-205 proves official SDK envelope capture, redaction, tenant-safe labels, and fail-closed local transport, while service readiness, alert handoff, incident workflow, operator browser console access, supplier, live monitoring, and environment promotion remain deferred.",
     "reviewDate": "2026-09-30",
     "deferredEvidence": [
       "Sentry event capture evidence",
@@ -46,7 +49,8 @@
       "operator console access and audit evidence",
       "supplier and live-provider boundary evidence"
     ],
-    "remainingProofIssue": "USF-205"
+    "remainingProofIssue": "USF-159",
+    "resolvedProofIssue": "USF-205"
   },
   "localErrorEvidenceGate": {
     "usedAsSubstituteForLocalObservabilityChecks": true,
@@ -68,17 +72,20 @@
       "context propagation proof",
       "observability readiness denial proof",
       "security signal proof",
-      "enterprise evidence validation"
+      "enterprise evidence validation",
+      "Sentry SDK envelope capture proof",
+      "Sentry SDK redaction and tenant-safe label proof"
     ],
     "limits": [
-      "no Sentry event ingestion result",
       "no Sentry issue lifecycle proof",
       "no Sentry dashboard proof",
       "no alert handoff proof",
       "no incident workflow proof",
       "no retention purge proof",
       "no operator console access proof",
-      "no live monitoring readiness claim"
+      "no live monitoring readiness claim",
+      "no Sentry service ingestion result",
+      "no Sentry service readiness proof"
     ]
   },
   "incidentAlertingPosture": {
@@ -92,7 +99,7 @@
     "riskOwner": "platform-observability-risk-owner",
     "controlOwner": "platform-observability-control-owner",
     "reviewDate": "2026-09-30",
-    "remainingProofIssue": "USF-205"
+    "remainingProofIssue": "USF-159"
   },
   "operatorAccessAuditRetentionSupplierBoundary": {
     "operatorAccessBoundary": "Sentry operator console access remains defined-only and must be proven before a service readiness claim.",
@@ -102,7 +109,7 @@
     "secretBoundary": "No Sentry credential, DSN, raw endpoint, provider payload, event payload, or stack trace is introduced by USF-170.",
     "supplierBoundary": "Profile-gated composed or external Sentry service is not supplier/live-provider evidence; supplier posture is required before live-provider or production claims.",
     "incidentBoundary": "No production incident, alert handoff, escalation, or vulnerability-response workflow is proven by USF-170.",
-    "remainingProofIssue": "USF-205"
+    "remainingProofIssue": "USF-159"
   },
   "enterpriseEvidenceRefs": [
     "usf-170-soa-sentry-error-monitoring-disposition",
@@ -115,7 +122,8 @@
   "readinessClaimsAllowed": [
     "local-observability-proof-required",
     "sentry-service-proof-deferred",
-    "error-monitoring-disposition-recorded"
+    "error-monitoring-disposition-recorded",
+    "sentry-sdk-envelope-proof-recorded"
   ],
   "readinessClaimsProhibited": [
     "sentry-readiness",
@@ -146,5 +154,5 @@
     "enterprise-production-readiness",
     "full-react-parity-readiness"
   ],
-  "remainingProofIssue": "USF-205"
+  "remainingProofIssue": "USF-159"
 }

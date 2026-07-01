@@ -1,0 +1,8 @@
+{
+  "id": "024-sentry-sdk-proof-readiness-overclaim",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "sentryBoundarySet": {
+    "acceptedSdkEnvelopeProof.serviceReadinessStatus": "ready",
+    "acceptedSdkEnvelopeProof.eventIngestionStatus": "sentry-service-ingested"
+  }
+}

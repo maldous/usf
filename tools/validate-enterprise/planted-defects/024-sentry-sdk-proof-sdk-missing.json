@@ -1,0 +1,12 @@
+{
+  "id": "024-sentry-sdk-proof-sdk-missing",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "sdkPatch": [
+    {
+      "id": "sdk-usf-205-sentry-sdk-envelope-provider-at-sentry-node",
+      "set": {
+        "version": "10.61.0"
+      }
+    }
+  ]
+}

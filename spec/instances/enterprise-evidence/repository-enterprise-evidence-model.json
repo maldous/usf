@@ -40,7 +40,15 @@
     "parent": "USF-133",
     "dashboard": "USF-184",
     "coordinator": "USF-192",
-    "approvedLanes": ["USF-185", "USF-186", "USF-187", "USF-188", "USF-189", "USF-190", "USF-191"],
+    "approvedLanes": [
+      "USF-185",
+      "USF-186",
+      "USF-187",
+      "USF-188",
+      "USF-189",
+      "USF-190",
+      "USF-191"
+    ],
     "blockedLanes": []
   },
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
@@ -1573,6 +1581,32 @@
       "evidenceSource": "package.json",
       "validationCommand": "corepack pnpm proof:observability",
       "deferredReason": "not-deferred",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-observability-sentry",
+      "mappedType": "proof-command",
+      "controlPurpose": "Govern proof command evidence posture for proof:observability:sentry.",
+      "riskTreated": "Proof output could be mistaken for Sentry service readiness, Sentry service ingestion, live monitoring, alerting, incident workflow, operator console access, live-provider readiness, or USF-133 closure unless scope and non-claims are explicit.",
+      "assetServiceAffected": "proof:observability:sentry",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:observability:sentry; sourceIssue=USF-205; providerMode=local-test; sentryServiceReadiness=not-claimed; serviceIngestion=not-claimed; operatorConsole=not-claimed",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/sentry-sdk-envelope-proof.ts; adapters/obs/src/index.ts; docs/architecture/sentry-service-semantic-proof-boundary.json",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "deferredReason": "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator browser console access, live/provider-managed Sentry, environment readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=USF-159",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -4523,6 +4557,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-205-soa-sentry-sdk-envelope-proof",
+      "mappedType": "source-issue-sentry-accepted-sdk-envelope-proof",
+      "controlPurpose": "Map USF-205 as an accepted Sentry SDK envelope proof while preserving service-readiness and live-monitoring non-claims.",
+      "riskTreated": "riskStatement=Sentry event capture, redaction, tenant labels, and fail-closed SDK posture could be overclaimed as Sentry service readiness without explicit non-equivalence and validator coverage.",
+      "assetServiceAffected": "sentry service catalogue row and observability SDK proof boundary",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-205; proofCommand=corepack pnpm proof:observability:sentry; providerMode=local-test; serviceReadinessStatus=deferred-no-generated-compose-target; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "evidenceSource": "docs/architecture/sentry-service-semantic-proof-boundary.json; packages/proof/src/sentry-sdk-envelope-proof.ts; adapters/obs/src/index.ts; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; USF-205",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "deferredReason": "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator browser console access, supplier/live-provider evidence, and environment promotion remain deferred; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner; reviewDate=2026-09-30; followUpIssue=USF-159; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -4538,7 +4598,12 @@
       "validationCommand": "corepack pnpm dev:smoke",
       "commandPin": "tsx packages/proof/src/dev-smoke.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4554,7 +4619,12 @@
       "validationCommand": "corepack pnpm proof:api",
       "commandPin": "tsx packages/proof/src/api-contracts-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4570,7 +4640,12 @@
       "validationCommand": "corepack pnpm proof:audit",
       "commandPin": "tsx packages/proof/src/audit-evidence-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4586,7 +4661,12 @@
       "validationCommand": "corepack pnpm proof:auth",
       "commandPin": "tsx packages/proof/src/auth-identity-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4602,7 +4682,12 @@
       "validationCommand": "corepack pnpm proof:authz",
       "commandPin": "tsx packages/proof/src/authz-rls-consistency-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4618,7 +4703,12 @@
       "validationCommand": "corepack pnpm proof:bootstrap",
       "commandPin": "tsx packages/proof/src/bootstrap-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4634,7 +4724,12 @@
       "validationCommand": "corepack pnpm proof:bulk",
       "commandPin": "tsx packages/proof/src/import-export-bulk-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4650,7 +4745,12 @@
       "validationCommand": "corepack pnpm proof:config",
       "commandPin": "tsx packages/proof/src/config-secrets-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4666,7 +4766,12 @@
       "validationCommand": "corepack pnpm proof:db",
       "commandPin": "tsx packages/proof/src/db-rls-isolation-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4682,7 +4787,12 @@
       "validationCommand": "corepack pnpm proof:files",
       "commandPin": "tsx packages/proof/src/files-storage-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4698,7 +4808,12 @@
       "validationCommand": "corepack pnpm proof:guardrails",
       "commandPin": "tsx packages/proof/src/rate-limits-abuse-controls-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4714,7 +4829,12 @@
       "validationCommand": "corepack pnpm proof:jobs",
       "commandPin": "tsx packages/proof/src/jobs-workflows-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4730,7 +4850,12 @@
       "validationCommand": "corepack pnpm proof:notify",
       "commandPin": "tsx packages/proof/src/notifications-messaging-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4746,9 +4871,40 @@
       "validationCommand": "corepack pnpm proof:observability",
       "commandPin": "tsx packages/proof/src/observability-telemetry-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
+    },
+    {
+      "id": "evidence-proof-proof-observability-sentry",
+      "proofResult": "proof:observability:sentry",
+      "whatWasProven": "Package script proof:observability:sentry is the command-pinned proof surface for accepted Sentry SDK envelope capture, adapter-bound local transport, tenant-safe opaque label handling, redaction checks, value-free retention boundary, and unavailable-transport fail-closed evidence.",
+      "whatWasNotProven": "This does not prove Sentry service readiness, Sentry service ingestion, issue lifecycle, dashboard readiness, alert handoff, incident workflow, operator browser console access, review cadence, deprovisioning, supplier boundary, live monitoring readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "local-proof",
+      "providerMode": "local-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#sentry",
+      "adapterProviderId": "observability-sentry-sdk-envelope-local",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "commandPin": "tsx packages/proof/src/sentry-sdk-envelope-proof.ts",
+      "commitPin": "ca0e7f7b98c4ef37b259a22d9edca0f1f2fee714",
+      "issueLinks": [
+        "USF-205",
+        "USF-196",
+        "USF-170",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-159",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "ca0e7f7b98c4ef37b259a22d9edca0f1f2fee714",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed proof source, boundary matrix, and validator metadata; do not retain Sentry event envelopes, raw endpoints, credentials, tokens, stack traces, provider payloads, or tenant identifiers as repository evidence."
     },
     {
       "id": "evidence-proof-proof-providers",
@@ -4762,7 +4918,12 @@
       "validationCommand": "corepack pnpm proof:providers",
       "commandPin": "tsx packages/proof/src/provider-adapters-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4778,7 +4939,12 @@
       "validationCommand": "corepack pnpm proof:resources",
       "commandPin": "tsx packages/proof/src/resource-lifecycle-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4794,7 +4960,12 @@
       "validationCommand": "corepack pnpm proof:search",
       "commandPin": "tsx packages/proof/src/search-indexing-proof.ts",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4810,7 +4981,12 @@
       "validationCommand": "corepack pnpm providers-proof",
       "commandPin": "pnpm proof:providers",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4826,7 +5002,12 @@
       "validationCommand": "corepack pnpm runtime:proof",
       "commandPin": "tsx packages/proof/src/runtime-application-proof.ts all",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4842,7 +5023,12 @@
       "validationCommand": "corepack pnpm runtime:proof:compose",
       "commandPin": "tsx packages/proof/src/runtime-application-proof.ts compose",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4858,7 +5044,12 @@
       "validationCommand": "corepack pnpm runtime:proof:in-memory",
       "commandPin": "tsx packages/proof/src/runtime-application-proof.ts in-memory",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-133", "USF-184", "USF-185", "USF-192"],
+      "issueLinks": [
+        "USF-133",
+        "USF-184",
+        "USF-185",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model."
     },
@@ -4874,7 +5065,11 @@
       "validationCommand": "python3 tools/validate-parity/validate-parity.py all --json",
       "commandPin": "python3 tools/validate-parity/validate-parity.py all --json",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-185", "USF-184", "USF-192"],
+      "issueLinks": [
+        "USF-185",
+        "USF-184",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain committed matrix and validator output in PR evidence; update merge SHA after merge in Linear."
     },
@@ -4890,7 +5085,11 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueLinks": ["USF-185", "USF-184", "USF-192"],
+      "issueLinks": [
+        "USF-185",
+        "USF-184",
+        "USF-192"
+      ],
       "prOrMergeSha": "394e672c698963064244fccd9c357c0c31e1ad8e",
       "retentionPosture": "Retain committed model and validator output in PR evidence; update merge SHA after merge in Linear."
     },
@@ -4906,7 +5105,14 @@
       "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
       "commandPin": "python3 tools/validate-parity/validate-observability.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-188", "USF-179", "USF-159", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-188",
+        "USF-179",
+        "USF-159",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed metadata and PR validation summary. effectStateAlias=effectivenessState=defined-only; rawSecretLeakage=blocked; unsafeLogBoundary=message-template-only; tenantSafeLabels=allow-listed; redactionStatus=tenant-safe-required; effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159"
     },
@@ -4922,7 +5128,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-190", "USF-139", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-190",
+        "USF-139",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed Lane 6 evidence mapping, PR validation output, and source proof references; no backup or restore readiness is claimed."
     },
@@ -4938,7 +5150,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-190", "USF-141", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-190",
+        "USF-141",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; PDP remains synchronous and USF-190 remains open."
     },
@@ -4954,7 +5172,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-190", "USF-143", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-190",
+        "USF-143",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; audit retention/export depth remains deferred."
     },
@@ -4970,7 +5194,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-190", "USF-145", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-190",
+        "USF-145",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; no real secret values or live secret-manager claim."
     },
@@ -4986,7 +5216,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-190", "USF-147", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-190",
+        "USF-147",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed Lane 6 evidence mapping and PR validation output; object lifecycle and evidence export remain deferred."
     },
@@ -5002,7 +5238,14 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-190", "USF-139", "USF-147", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-190",
+        "USF-139",
+        "USF-147",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain this deferred boundary until follow-up issues replace it with proof-backed backup, restore, retention, purge, and legal-hold evidence."
     },
@@ -5018,7 +5261,12 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-190", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-190",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain validator output and planted defect fixtures in PR evidence; USF-190 remains open until coordinator review."
     },
@@ -5034,7 +5282,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
-      "issueLinks": ["USF-187", "USF-170", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-187",
+        "USF-170",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
       "retentionPosture": "Retain committed model rows, closure-matrix linkage, validator output, and PR validation summary; do not retain raw error events as evidence in this repository."
     },
@@ -5050,7 +5304,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
-      "issueLinks": ["USF-187", "USF-171", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-187",
+        "USF-171",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
       "retentionPosture": "Retain committed model rows, closure-matrix linkage, validator output, and PR validation summary; retain no scanner findings or source-analysis payloads as readiness evidence."
     },
@@ -5092,7 +5352,14 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "833d368b03a64be3df35785a7ae51fcdc8894fad",
-      "issueLinks": ["USF-170", "USF-196", "USF-187", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-170",
+        "USF-196",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "833d368b03a64be3df35785a7ae51fcdc8894fad",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Sentry event payloads, raw exception details, credentials, tokens, endpoints, connection strings, or stack traces as readiness evidence."
     },
@@ -5108,7 +5375,14 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "6e848ae536cf5d127b3e50a1729ca9c3b199ea49",
-      "issueLinks": ["USF-172", "USF-197", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-172",
+        "USF-197",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "6e848ae536cf5d127b3e50a1729ca9c3b199ea49",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain ClickHouse event payloads, analytics payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5124,7 +5398,15 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "2e8fc29c507950d53c459030a11f3c7bd11eab74",
-      "issueLinks": ["USF-197", "USF-206", "USF-172", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-197",
+        "USF-206",
+        "USF-172",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "2e8fc29c507950d53c459030a11f3c7bd11eab74",
       "retentionPosture": "Retain committed boundary document, validator rule, planted defects, validation output, and PR summary; do not retain ClickHouse event payloads, analytics payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5140,7 +5422,15 @@
       "validationCommand": "corepack pnpm proof:analytics:clickhouse",
       "commandPin": "tsx packages/proof/src/clickhouse-composed-proof.ts",
       "commitPin": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
-      "issueLinks": ["USF-206", "USF-197", "USF-172", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-206",
+        "USF-197",
+        "USF-172",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
       "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, event payloads, query results, endpoints, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
     },
@@ -5156,7 +5446,15 @@
       "validationCommand": "corepack pnpm proof:analytics:clickhouse",
       "commandPin": "tsx packages/proof/src/clickhouse-composed-proof.ts",
       "commitPin": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
-      "issueLinks": ["USF-206", "USF-197", "USF-172", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-206",
+        "USF-197",
+        "USF-172",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     },
@@ -5172,7 +5470,15 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "a39edfe3b8f841fb4ceb8dc063f5f114a0e2aa63",
-      "issueLinks": ["USF-198", "USF-207", "USF-173", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-198",
+        "USF-207",
+        "USF-173",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "a39edfe3b8f841fb4ceb8dc063f5f114a0e2aa63",
       "retentionPosture": "Retain committed boundary document, validator rule, planted defects, validation output, and PR summary; do not retain Redis cache values, keys, provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5188,7 +5494,14 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
-      "issueLinks": ["USF-187", "USF-171", "USF-184", "USF-192", "USF-133", "USF-170"],
+      "issueLinks": [
+        "USF-187",
+        "USF-171",
+        "USF-184",
+        "USF-192",
+        "USF-133",
+        "USF-170"
+      ],
       "prOrMergeSha": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
       "retentionPosture": "Retain committed model rows, validator output, and PR validation summary; scanner outputs and exception files remain future evidence, not created by this lane."
     },
@@ -5204,7 +5517,14 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-186", "USF-169", "USF-180", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-186",
+        "USF-169",
+        "USF-180",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain committed matrix and validator output in PR evidence; update merge SHA after merge reconciliation if required."
     },
@@ -5220,7 +5540,14 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-186", "USF-169", "USF-180", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-186",
+        "USF-169",
+        "USF-180",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain validator output and planted-defect results in PR evidence; update merge SHA after merge reconciliation if required."
     },
@@ -5291,7 +5618,12 @@
       "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py all --json",
       "commandPin": "python3 tools/validate-parity/validate-domain-depth.py all --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain validator output and selftest output in PR evidence."
     },
@@ -5307,7 +5639,12 @@
       "validationCommand": "python3 tools/validate-parity/validate-domain-depth.py selftest --json",
       "commandPin": "python3 tools/validate-parity/validate-domain-depth.py selftest --json",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain planted-defect fixtures and validator selftest output in PR evidence."
     },
@@ -5323,7 +5660,13 @@
       "validationCommand": "corepack pnpm proof:jobs",
       "commandPin": "tsx packages/proof/src/jobs-workflows-proof.ts",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-151", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-151",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain proof command output in PR validation summary and keep USF-151 open for live/runtime/provider depth."
     },
@@ -5339,7 +5682,13 @@
       "validationCommand": "corepack pnpm proof:notify",
       "commandPin": "tsx packages/proof/src/notifications-messaging-proof.ts",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-153", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-153",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain proof command output in PR validation summary; keep USF-153 open and do not reparent without coordinator approval."
     },
@@ -5355,7 +5704,13 @@
       "validationCommand": "corepack pnpm proof:api",
       "commandPin": "tsx packages/proof/src/api-contracts-proof.ts",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-155", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-155",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain proof command output in PR validation summary and keep USF-155 open for public compatibility and gateway depth."
     },
@@ -5371,7 +5726,13 @@
       "validationCommand": "corepack pnpm proof:providers",
       "commandPin": "tsx packages/proof/src/provider-adapters-proof.ts",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-157", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-157",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain proof command output in PR validation summary and keep USF-157 open for live-provider resilience and supplier depth."
     },
@@ -5387,7 +5748,13 @@
       "validationCommand": "corepack pnpm proof:guardrails",
       "commandPin": "tsx packages/proof/src/rate-limits-abuse-controls-proof.ts",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-161", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-161",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain proof command output in PR validation summary and keep USF-161 open for distributed enforcement and abuse operations depth."
     },
@@ -5403,7 +5770,13 @@
       "validationCommand": "corepack pnpm proof:bulk",
       "commandPin": "tsx packages/proof/src/import-export-bulk-proof.ts",
       "commitPin": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
-      "issueLinks": ["USF-191", "USF-163", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-191",
+        "USF-163",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "0da3c2cb5c72d52e0839aa6181ce593c449a5d8e",
       "retentionPosture": "Retain proof command output in PR validation summary and keep USF-163 open for deep runtime, legal, regulatory, and migration depth."
     },
@@ -5419,7 +5792,15 @@
       "validationCommand": "python3 tools/validate-parity/validate-parity.py all --json",
       "commandPin": "tools/validate-parity/validate-parity.py",
       "commitPin": "fcc9c182a9234fd19cdf58b32020bad64342808c",
-      "issueLinks": ["USF-166", "USF-167", "USF-182", "USF-184", "USF-185", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-166",
+        "USF-167",
+        "USF-182",
+        "USF-184",
+        "USF-185",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "fcc9c182a9234fd19cdf58b32020bad64342808c",
       "retentionPosture": "Retain the gate artifact, validator output, PR summary, and post-merge Linear reconciliation; unmerged USF-166 evidence cannot satisfy USF-133 closure."
     },
@@ -5435,7 +5816,13 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "tools/validate-enterprise/validate-enterprise.py",
       "commitPin": "058ce94038eaeda75cc971119ee24a6d49a755c3",
-      "issueLinks": ["USF-193", "USF-167", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-193",
+        "USF-167",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "058ce94038eaeda75cc971119ee24a6d49a755c3",
       "retentionPosture": "Retain the promotion standard, schema, validator output, PR validation summary, and post-merge Linear reconciliation; this row is evidence organisation and does not satisfy any environment readiness claim by itself."
     },
@@ -5451,7 +5838,14 @@
       "validationCommand": "corepack pnpm proof:operator-access",
       "commandPin": "tsx packages/proof/src/operator-access-proof.ts",
       "commitPin": "46086313242b3cf001a96f2710f3589d0f788a89",
-      "issueLinks": ["USF-169", "USF-180", "USF-186", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-169",
+        "USF-180",
+        "USF-186",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "46086313242b3cf001a96f2710f3589d0f788a89",
       "retentionPosture": "Retain proof command output in the PR validation summary and post-merge Linear reconciliation; update this row if the proof command or operator-access scope changes."
     },
@@ -5492,7 +5886,14 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "ce8cae7aa5b5360288969f1cf33c8aa31efdadcb",
-      "issueLinks": ["USF-173", "USF-198", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-173",
+        "USF-198",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "ce8cae7aa5b5360288969f1cf33c8aa31efdadcb",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Redis values, NATS payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5508,7 +5909,14 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "4da8952a690adb7291e20228870933c59d1ce2c8",
-      "issueLinks": ["USF-174", "USF-199", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-174",
+        "USF-199",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "4da8952a690adb7291e20228870933c59d1ce2c8",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain Meilisearch documents, query payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5524,7 +5932,14 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "be342d2ab9bd388be324e692046482fe82ad1b73",
-      "issueLinks": ["USF-175", "USF-200", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-175",
+        "USF-200",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "be342d2ab9bd388be324e692046482fe82ad1b73",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain ClamAV scan payloads, sample files, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5540,7 +5955,14 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "dfa6a4b61db23cf090a5b8d1984270fe3d6fa41d",
-      "issueLinks": ["USF-176", "USF-201", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-176",
+        "USF-201",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "dfa6a4b61db23cf090a5b8d1984270fe3d6fa41d",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain provider payloads, mock fixture payloads, webhook bodies, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5556,7 +5978,14 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "268cfdf23b984ca51961475f6a130525e21e65bb",
-      "issueLinks": ["USF-177", "USF-202", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-177",
+        "USF-202",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "268cfdf23b984ca51961475f6a130525e21e65bb",
       "retentionPosture": "Retain committed matrix, validator rule, planted defects, validation output, and PR summary; do not retain backup artifacts, restore payloads, database contents, file payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
     },
@@ -5597,7 +6026,15 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "2c5f363d638e3d985088e87b6f99efbae9deaca8",
-      "issueLinks": ["USF-195", "USF-204", "USF-171", "USF-187", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-195",
+        "USF-204",
+        "USF-171",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "2c5f363d638e3d985088e87b6f99efbae9deaca8",
       "retentionPosture": "Retain committed boundary matrix, validator rule, planted defects, validation output, and PR summary; do not retain SonarQube scan payloads, raw findings, credentials, tokens, endpoints, connection strings, or source-analysis result payloads as readiness evidence."
     },
@@ -5613,7 +6050,15 @@
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commitPin": "6cd9a2583abc37143d68a0282fbeaa9c7dce8839",
-      "issueLinks": ["USF-196", "USF-205", "USF-170", "USF-187", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-196",
+        "USF-205",
+        "USF-170",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "6cd9a2583abc37143d68a0282fbeaa9c7dce8839",
       "retentionPosture": "Retain committed boundary matrix, validator rule, planted defects, validation output, and PR summary; do not retain Sentry events, issue payloads, stack traces, credentials, tokens, endpoints, connection strings, or provider payloads as readiness evidence."
     },
@@ -5629,7 +6074,14 @@
       "validationCommand": "corepack pnpm proof:search:meilisearch",
       "commandPin": "tsx packages/proof/src/meilisearch-composed-proof.ts",
       "commitPin": "b0775e02262074793c70b17ac19b47615a6a6caf",
-      "issueLinks": ["USF-199", "USF-174", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-199",
+        "USF-174",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "b0775e02262074793c70b17ac19b47615a6a6caf",
       "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw indexed documents, query payloads, tenant identifiers, raw endpoints, credentials, tokens, SDK errors, provider payloads, stack traces, or production data."
     },
@@ -5645,7 +6097,14 @@
       "validationCommand": "corepack pnpm proof:search:meilisearch",
       "commandPin": "tsx packages/proof/src/meilisearch-composed-proof.ts",
       "commitPin": "b0775e02262074793c70b17ac19b47615a6a6caf",
-      "issueLinks": ["USF-199", "USF-174", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-199",
+        "USF-174",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "b0775e02262074793c70b17ac19b47615a6a6caf",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     },
@@ -5661,7 +6120,14 @@
       "validationCommand": "corepack pnpm proof:scanner:clamav",
       "commandPin": "tsx packages/proof/src/clamav-composed-proof.ts",
       "commitPin": "3ef8570f9ad319cc9226a95d055752ce9bbd5a87",
-      "issueLinks": ["USF-200", "USF-175", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-200",
+        "USF-175",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "3ef8570f9ad319cc9226a95d055752ce9bbd5a87",
       "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw file payloads, EICAR payload text, tenant identifiers, object keys, raw endpoints, credentials, tokens, SDK errors, provider payloads, stack traces, or production data."
     },
@@ -5677,7 +6143,14 @@
       "validationCommand": "corepack pnpm proof:scanner:clamav",
       "commandPin": "tsx packages/proof/src/clamav-composed-proof.ts",
       "commitPin": "3ef8570f9ad319cc9226a95d055752ce9bbd5a87",
-      "issueLinks": ["USF-200", "USF-175", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-200",
+        "USF-175",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "3ef8570f9ad319cc9226a95d055752ce9bbd5a87",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     },
@@ -5745,7 +6218,15 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "d4cd42edcc319923da29cd9929e545f163bf4be9",
-      "issueLinks": ["USF-202", "USF-211", "USF-177", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-202",
+        "USF-211",
+        "USF-177",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "d4cd42edcc319923da29cd9929e545f163bf4be9",
       "retentionPosture": "Retain committed blocker matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain backup artifacts, restore payloads, database dumps, file payloads, raw provider output, credentials, tokens, raw endpoints, connection strings, stack traces, or production data."
     },
@@ -5787,7 +6268,15 @@
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "commitPin": "542b98e8248729744558f10e3488e8bad4b96b6c",
-      "issueLinks": ["USF-210", "USF-201", "USF-176", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-210",
+        "USF-201",
+        "USF-176",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "542b98e8248729744558f10e3488e8bad4b96b6c",
       "retentionPosture": "Retain committed matrices, runtime manifest metadata, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain tokens, identity payloads, provider responses, raw endpoints, credentials, stack traces, tenant data, production data, or live IdP artefacts."
     },
@@ -5905,7 +6394,15 @@
       "validationCommand": "corepack pnpm proof:cache:redis",
       "commandPin": "tsx packages/proof/src/redis-composed-proof.ts",
       "commitPin": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
-      "issueLinks": ["USF-207", "USF-198", "USF-173", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-207",
+        "USF-198",
+        "USF-173",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
       "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, Redis keys, values, endpoints, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
     },
@@ -5921,7 +6418,15 @@
       "validationCommand": "corepack pnpm proof:cache:redis",
       "commandPin": "tsx packages/proof/src/redis-composed-proof.ts",
       "commitPin": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
-      "issueLinks": ["USF-207", "USF-198", "USF-173", "USF-189", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-207",
+        "USF-198",
+        "USF-173",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "7d3576202951f878ef5fb91e3ccf9f1d86309ddd",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     },
@@ -5937,7 +6442,15 @@
       "validationCommand": "corepack pnpm proof:assurance:sonarqube",
       "commandPin": "tsx packages/proof/src/sonarqube-composed-proof.ts",
       "commitPin": "1c71e4a97d39818bb83a48ec49048ac28fa4b93c",
-      "issueLinks": ["USF-204", "USF-195", "USF-171", "USF-187", "USF-184", "USF-192", "USF-133"],
+      "issueLinks": [
+        "USF-204",
+        "USF-195",
+        "USF-171",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
       "prOrMergeSha": "1c71e4a97d39818bb83a48ec49048ac28fa4b93c",
       "retentionPosture": "Retain committed proof code, matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw source payloads, credentials, token values, raw endpoints, scanner logs, provider payloads, connection strings, stack traces, or production data."
     },
@@ -5966,6 +6479,32 @@
       ],
       "prOrMergeSha": "1c71e4a97d39818bb83a48ec49048ac28fa4b93c",
       "retentionPosture": "Retain committed proof code, matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw source payloads, credentials, token values, raw endpoints, scanner logs, provider payloads, connection strings, stack traces, or production data."
+    },
+    {
+      "id": "usf-205-evidence-sentry-sdk-envelope-proof",
+      "proofResult": "sentry-accepted-sdk-envelope-proof",
+      "whatWasProven": "USF-205 proves official Sentry Node SDK captureEvent path through an adapter-bound in-memory transport, tenant-safe opaque label handling, event redaction checks, value-free retention boundary, and unavailable-transport fail-closed evidence.",
+      "whatWasNotProven": "This does not prove Sentry service readiness, Sentry service ingestion, issue lifecycle, dashboard readiness, alert handoff, incident workflow, operator browser console access, review cadence, deprovisioning, supplier boundary, live monitoring readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "local-proof",
+      "providerMode": "local-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#sentry",
+      "adapterProviderId": "observability-sentry-sdk-envelope-local",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "commandPin": "corepack pnpm proof:observability:sentry",
+      "commitPin": "ca0e7f7b98c4ef37b259a22d9edca0f1f2fee714",
+      "issueLinks": [
+        "USF-205",
+        "USF-196",
+        "USF-170",
+        "USF-187",
+        "USF-184",
+        "USF-192",
+        "USF-159",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "ca0e7f7b98c4ef37b259a22d9edca0f1f2fee714",
+      "retentionPosture": "Retain committed proof source, docs/architecture/sentry-service-semantic-proof-boundary.json, boundary matrix, validator output, and PR validation summary; do not retain Sentry event envelopes, raw endpoints, credentials, tokens, stack traces, provider payloads, or tenant identifiers as repository evidence."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -6689,7 +7228,11 @@
         "in-memory equivalence overclaim",
         "retention boundary overclaim"
       ],
-      "failureModes": ["provider row missing", "follow-up missing", "readiness non-claim removed"],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-172 disposition, USF-197 deferral, and non-claims",
       "residualRisk": "ClickHouse adapter proof, supplier review, incident posture, privacy posture, and backup/resilience evidence remain deferred to USF-197 after USF-172 records the bounded disposition"
@@ -6707,7 +7250,11 @@
         "process memory treated as cache provider",
         "expiration semantics overclaimed"
       ],
-      "failureModes": ["provider row missing", "follow-up missing", "readiness non-claim removed"],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-173 deferral and non-claims",
       "residualRisk": "Redis adapter proof, SDK/client rationale, incident posture, privacy posture, and resilience evidence remain deferred to USF-173"
@@ -6783,7 +7330,11 @@
         "egress boundary bypass",
         "synthetic data cleanup missing"
       ],
-      "failureModes": ["provider row missing", "follow-up missing", "readiness non-claim removed"],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
       "residualRisk": "Live cloud-provider compatibility, provider certification, stronger incident posture, stronger privacy posture, and environment promotion remain non-claimed; bounded local emulator proof and cleanup evidence are provided by USF-208."
@@ -6801,7 +7352,11 @@
         "contract drift hidden",
         "synthetic data cleanup missing"
       ],
-      "failureModes": ["provider row missing", "follow-up missing", "readiness non-claim removed"],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
       "residualRisk": "WireMock proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176"
@@ -6819,7 +7374,11 @@
         "fixture treated as live provider",
         "synthetic data cleanup missing"
       ],
-      "failureModes": ["provider row missing", "follow-up missing", "readiness non-claim removed"],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
       "residualRisk": "Webhook sink proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176"
@@ -6837,7 +7396,11 @@
         "backup artifact overclaim",
         "secret exclusion proof missing"
       ],
-      "failureModes": ["provider row missing", "follow-up missing", "readiness non-claim removed"],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-177 deferral and non-claims",
       "residualRisk": "Backup artifact, restore drill, retention, incident posture, and resilience evidence remain deferred to USF-177"
@@ -6855,7 +7418,11 @@
         "operator access proof overclaimed",
         "secret boundary proof missing"
       ],
-      "failureModes": ["provider row missing", "follow-up missing", "readiness non-claim removed"],
+      "failureModes": [
+        "provider row missing",
+        "follow-up missing",
+        "readiness non-claim removed"
+      ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-178 bounded disposition, USF-203 deferral, and non-claims",
       "residualRisk": "Windmill proof, access review, incident posture, privacy posture, and resilience evidence remain deferred to USF-203; USF-178 records bounded disposition only"
@@ -7561,6 +8128,31 @@
       "failClosedBehaviour": "Proof fails if readiness, scanner submission, quality-gate readback, redaction, cleanup, credential revocation, or unavailable-provider denial evidence is missing.",
       "monitoringAuditEvidence": "value-free structured proof JSON records hashes, retry counts, outcome, safe reason codes, cleanup status, metric/trace/audit-shaped flags, and non-claims only.",
       "residualRisk": "riskStatement=USF-204 bounded local Compose proof could be overclaimed as full SonarQube readiness or vulnerability clearance; impact=high; likelihood=medium; owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; controlOwner=platform-assurance-control-owner; treatment=record residual deferrals to USF-169 and USF-193; reviewDate=2026-09-30; followUpIssue=USF-169,USF-193; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness"
+    },
+    {
+      "id": "usf-205-threat-sentry-sdk-envelope-proof",
+      "targetType": "source-issue-sentry-accepted-sdk-envelope-proof",
+      "target": "docs/architecture/sentry-service-semantic-proof-boundary.json",
+      "trustBoundary": "USF-205 local SDK proof is adapter-bound and in-process only; it must not be treated as Sentry service, live monitoring, or external supplier evidence.",
+      "tenantBoundary": "Synthetic tenant context is represented by opaque hash only; raw tenant and actor identifiers are rejected from proof output.",
+      "credentialBoundary": "Synthetic credential-shaped and endpoint-shaped inputs are redacted from safe evidence; no real Sentry DSN, token, raw endpoint, provider payload, or stack trace is emitted.",
+      "dataClassification": "telemetry metadata and value-free synthetic event evidence only; no production-derived data, PII, raw event payload, stack trace, secret, token, or tenant identifier is retained.",
+      "abuseCases": [
+        "USF-205 local SDK envelope proof is marked as Sentry service readiness",
+        "SDK transport proof is treated as service ingestion, issue lifecycle, alert handoff, incident workflow, or operator console proof",
+        "raw endpoint, credential, token, tenant identifier, provider payload, stack trace, or SDK error payload leaks into proof output",
+        "full dev, test, staging, production, live-provider, SOC, ISO, enterprise production, full React parity, or USF-133 closure is inferred from local SDK proof"
+      ],
+      "failureModes": [
+        "SDK dependency missing or unpinned",
+        "SDK import leaks outside adapter boundary",
+        "proof command missing from package scripts or verify",
+        "redaction or tenant-safe label assertion missing",
+        "Sentry service readiness overclaimed from local SDK proof"
+      ],
+      "failClosedBehaviour": "USF-205 proof fails when SDK transport capture is missing, redaction markers leak, tenant-safe label evidence is missing, unavailable transport is not exercised, or prohibited readiness claims appear.",
+      "monitoringAuditEvidence": "value-free proof output, enterprise validator output, planted defects, and PR validation summary only; no live Sentry event, issue, alert, incident, or console audit evidence is claimed.",
+      "residualRisk": "riskStatement=service readiness, live monitoring, alerting, incident workflow, and operator console proof remain unproven; impact=high; likelihood=medium; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner; treatment=defer remaining Sentry service and operations evidence to USF-159, USF-169, and USF-193; reviewDate=2026-09-30; followUpIssue=USF-159; validationCommand=corepack pnpm proof:observability:sentry; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness"
     }
   ],
   "sdkDependencyGovernance": [
@@ -7947,6 +8539,22 @@
       "typescriptRuntimeCompatibility": "Package ships TypeScript declarations and supports repository proof execution through tsx on Node >=24.16.0.",
       "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py rejects @sonar/scan imports outside adapter/proof/provider-integration boundaries; USF-204 confines @sonar/scan to adapters/assurance.",
       "updateDeprecationOwner": "platform-assurance-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-205-sentry-sdk-envelope-provider-at-sentry-node",
+      "serviceId": "sentry",
+      "adapterId": "SentrySdkEnvelopeProofAdapter",
+      "providerId": "observability-sentry-sdk-envelope-local",
+      "packageName": "@sentry/node",
+      "version": "10.62.0",
+      "selectionRationale": "@sentry/node is the official Sentry Node SDK and was selected for accepted local SDK envelope proof of event capture shape, redaction, tenant-safe labels, and unavailable transport fail-closed behaviour. Hand-rolled Sentry protocol calls, ad hoc HTTP, raw sockets, and shell-based clients were rejected because the official maintained SDK satisfies the local proof boundary.",
+      "officialOrDeFactoStatus": "official-sentry-node-sdk",
+      "licencePosture": "MIT package according to npm metadata reviewed for USF-205; exact version pinned in package.json and pnpm-lock.yaml.",
+      "maintenancePosture": "Sentry-maintained official SDK; package version 10.62.0 supports Node >=18 and is compatible with repository Node >=24.16.0. Update/deprecation owner must review before stronger readiness claims or dependency upgrades.",
+      "securityAdvisoryPosture": "No advisory clearance is claimed by this row; dependency advisory review remains required before stronger readiness, promotion, live-provider, or customer assurance claims.; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness",
+      "typescriptRuntimeCompatibility": "Package ships TypeScript declarations and supports repository proof execution through tsx on Node >=24.16.0.",
+      "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and tools/validate-parity/validate-providers.py reject @sentry/node imports outside adapter/proof/provider-integration boundaries; USF-205 confines @sentry/node to adapters/obs.",
+      "updateDeprecationOwner": "platform-observability-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -9874,6 +10482,49 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-205-access-sentry-sdk-envelope-proof",
+      "targetType": "source-issue-sentry-accepted-sdk-envelope-proof",
+      "target": "docs/architecture/sentry-service-semantic-proof-boundary.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-205",
+        "followUpIssue=USF-159",
+        "riskStatement=SDK envelope proof could be treated as operator-ready Sentry console access without browser console, review cadence, deprovisioning, and public exposure evidence",
+        "threatFailureScenario=operator console access, issue lifecycle, alert handoff, incident workflow, credential posture, or operator audit evidence is claimed from local SDK proof only",
+        "affectedAssetService=sentry accepted SDK envelope proof",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-observability-foundation",
+        "riskOwner=platform-observability-risk-owner",
+        "controlOwner=platform-observability-control-owner",
+        "treatment=prove local SDK envelope boundary and defer browser console access, access review cadence, deprovisioning, and no-public-exposure proof to later operator/observability work",
+        "reviewDate=2026-09-30",
+        "accessModel=local-sdk-transport-only",
+        "authRequirement=not-service-auth-proof",
+        "authorizationBoundary=does-not-prove-operator-console-authorization",
+        "breakGlassRelevance=not-proven-by-USF-205",
+        "auditRequirement=value-free-proof-evidence-only",
+        "reviewCadence=deferred-before-stronger-readiness-claim",
+        "deprovisioningPosture=deferred-before-operator-console-readiness",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/sentry-service-semantic-proof-boundary.json; packages/proof/src/sentry-sdk-envelope-proof.ts; USF-205",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "deferredReason": "operator browser console access, review cadence, deprovisioning, and public exposure proof deferred; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=USF-159; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -11588,6 +12239,40 @@
       "evidenceSource": "docs/architecture/sonarqube-service-semantic-proof-boundary.json; packages/proof/src/sonarqube-composed-proof.ts; adapters/assurance/src/index.ts",
       "validationCommand": "corepack pnpm proof:assurance:sonarqube",
       "deferredReason": "owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; treatment=defer DR and environment readiness; reviewDate=2026-09-30; followUpIssue=USF-193",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-205-resilience-sentry-sdk-envelope-proof",
+      "targetType": "source-issue-sentry-accepted-sdk-envelope-proof",
+      "target": "packages/proof/src/sentry-sdk-envelope-proof.ts",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-205",
+        "providerMode=local-test",
+        "readinessCheck=sdk-transport-capture-only",
+        "retryTimeoutPolicy=bounded-flush-timeout-2000ms",
+        "failClosedBehaviour=unavailable-transport-path-exercised",
+        "cleanupTeardown=Sentry.close-called-after-proof",
+        "serviceReadinessStatus=deferred-no-generated-compose-target",
+        "backupRequirement=not-applicable-local-sdk-proof",
+        "restoreProofStatus=not-applicable-local-sdk-proof",
+        "rpoRtoTarget=not-claimed",
+        "drBoundary=service-dr-and-production-operations-deferred"
+      ],
+      "evidenceSource": "docs/architecture/sentry-service-semantic-proof-boundary.json; packages/proof/src/sentry-sdk-envelope-proof.ts; adapters/obs/src/index.ts; USF-205",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "deferredReason": "service resilience, live monitoring, alert handoff, incident workflow, and DR posture remain deferred; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=USF-159; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -14005,6 +14690,38 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-205-incident-vulnerability-sentry-sdk-envelope-proof",
+      "targetType": "source-issue-sentry-accepted-sdk-envelope-proof",
+      "target": "docs/architecture/sentry-service-semantic-proof-boundary.json",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-205",
+        "incidentDetectionHook=local-sdk-envelope-capture-and-unavailable-transport-assertions-only",
+        "alertingPosture=deferred-with-owner",
+        "escalationOwner=platform-observability-foundation",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "correctiveActionEvidenceBoundary=not-proven-by-USF-205",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-205",
+        "followUpIssue=USF-159",
+        "reviewDate=2026-09-30"
+      ],
+      "evidenceSource": "docs/architecture/sentry-service-semantic-proof-boundary.json; packages/proof/src/sentry-sdk-envelope-proof.ts; USF-205",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "deferredReason": "alert handoff, incident workflow, vulnerability response, and corrective-action operating evidence deferred; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=USF-159; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -14387,6 +15104,37 @@
       "evidenceSource": "package.json",
       "validationCommand": "corepack pnpm proof:observability",
       "deferredReason": "not-deferred",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-observability-sentry",
+      "targetType": "proof",
+      "target": "proof:observability:sentry",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=telemetry-metadata-value-free",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only-no-sentry-event-retention",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-205",
+        "validationCommand=corepack pnpm proof:observability:sentry"
+      ],
+      "evidenceSource": "package.json; packages/proof/src/sentry-sdk-envelope-proof.ts; adapters/obs/src/index.ts; docs/architecture/sentry-service-semantic-proof-boundary.json",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "deferredReason": "Sentry service privacy, provider-managed data residency, legal hold, production retention, supplier/subprocessor posture, live monitoring, environment readiness, and USF-133 closure remain non-claims; followUpIssue=USF-159; reviewDate=2026-09-30",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16686,6 +17434,39 @@
       "evidenceSource": "package.json#proof:assurance:sonarqube; packages/proof/src/sonarqube-composed-proof.ts",
       "validationCommand": "corepack pnpm proof:assurance:sonarqube",
       "deferredReason": "Production privacy, data-residency, legal-hold, and live-provider readiness evidence remain unclaimed; followUpIssue=USF-193; reviewDate=2026-09-30",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-205-privacy-sentry-sdk-envelope-proof",
+      "targetType": "source-issue-sentry-accepted-sdk-envelope-proof",
+      "target": "packages/proof/src/sentry-sdk-envelope-proof.ts",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-205",
+        "syntheticVsProductionDerivedData=synthetic-only",
+        "piiPosture=no-pii-in-proof-output",
+        "dataClassification=telemetry-metadata-value-free",
+        "redactionPolicy=raw-tenant-actor-endpoint-token-stack-provider-payload-markers-rejected",
+        "retentionPurgePosture=in-memory-envelope-inspection-only-no-event-retention",
+        "legalHoldRelevance=not-applicable-local-proof",
+        "dataResidencyCrossBorderBoundary=not-proven; no external egress",
+        "followUpIssue=USF-159",
+        "reviewDate=2026-09-30"
+      ],
+      "evidenceSource": "docs/architecture/sentry-service-semantic-proof-boundary.json; packages/proof/src/sentry-sdk-envelope-proof.ts; adapters/obs/src/index.ts; USF-205",
+      "validationCommand": "corepack pnpm proof:observability:sentry",
+      "deferredReason": "provider-managed privacy, data residency, legal hold, production retention, and external processor posture deferred; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=USF-159; exception=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

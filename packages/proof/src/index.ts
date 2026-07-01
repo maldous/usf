@@ -11,6 +11,7 @@ export { runNotificationsMessagingProof } from "./notifications-messaging-proof.
 export { runApiContractsProof } from "./api-contracts-proof.ts";
 export { runProviderAdaptersProof } from "./provider-adapters-proof.ts";
 export { runObservabilityTelemetryProof } from "./observability-telemetry-proof.ts";
+export { runSentryAcceptedProof } from "./sentry-sdk-envelope-proof.ts";
 export { runRateLimitsAbuseControlsProof } from "./rate-limits-abuse-controls-proof.ts";
 export { runImportExportBulkProof } from "./import-export-bulk-proof.ts";
 export { runSearchIndexingProof } from "./search-indexing-proof.ts";
