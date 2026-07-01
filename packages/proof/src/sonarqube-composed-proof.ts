@@ -147,9 +147,7 @@ async function writeComposeOverride(): Promise<{ readonly dir: string; readonly 
   return { dir, path };
 }
 
-async function writeSyntheticProject(
-  dir: string,
-): Promise<{
+async function writeSyntheticProject(dir: string): Promise<{
   readonly projectDir: string;
   readonly sonarHome: string;
   readonly sonarWork: string;
