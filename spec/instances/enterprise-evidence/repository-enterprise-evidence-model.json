@@ -6998,7 +6998,7 @@
       "adapterProviderId": "object-storage-minio-composed-test; file-scan-clamav-composed-test; files-postgres-rls-proof-boundary",
       "validationCommand": "make files-proof; python3 tools/validate-parity/validate-files.py all --json",
       "commandPin": "tsx packages/proof/src/files-storage-proof.ts",
-      "commitPin": "pending-pr-merge",
+      "commitPin": "a63949c37778654c4f007de901a85446dcf1016c",
       "issueLinks": [
         "USF-147",
         "USF-190",
@@ -7008,7 +7008,7 @@
         "USF-200",
         "USF-211"
       ],
-      "prOrMergeSha": "pending-pr-merge",
+      "prOrMergeSha": "a63949c37778654c4f007de901a85446dcf1016c",
       "retentionPosture": "Retain committed proof code, files-storage enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw file content, object key, malware payload, credential, token, raw endpoint, provider payload, or production data is retained."
     }
   ],
