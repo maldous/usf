@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-204 SonarQube composed proof command is missing from boundary metadata and package scripts.",
+  "sonarqubeBoundaryDrop": ["composedProof.proofCommand"],
+  "packageScriptDrop": ["proof:assurance:sonarqube"]
+}

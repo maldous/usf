@@ -7,14 +7,8 @@
   "laneWrapperIssueId": "USF-185",
   "dashboardIssueId": "USF-184",
   "coordinatorIssueId": "USF-192",
-  "blockedDownstreamIssueIds": [
-    "USF-167"
-  ],
-  "sourceIssueIds": [
-    "USF-166",
-    "USF-167",
-    "USF-182"
-  ],
+  "blockedDownstreamIssueIds": ["USF-167"],
+  "sourceIssueIds": ["USF-166", "USF-167", "USF-182"],
   "selectedClosureTier": {
     "id": "bounded-source-issue-evidence-gate",
     "kind": "risk-based-closure-tier",
@@ -58,26 +52,14 @@
       "sourceRef",
       "freshness"
     ],
-    "acceptedFreshnessValues": [
-      "current",
-      "deferred",
-      "blocked",
-      "pending-pr-merge"
-    ],
-    "rejectedFreshnessValues": [
-      "stale",
-      "unknown"
-    ]
+    "acceptedFreshnessValues": ["current", "deferred", "blocked", "pending-pr-merge"],
+    "rejectedFreshnessValues": ["stale", "unknown"]
   },
   "mergedEvidenceInputs": [
     {
       "prRef": "#124",
       "mergeShaRef": "394e672c698963064244fccd9c357c0c31e1ad8e",
-      "issueRefs": [
-        "USF-184",
-        "USF-192",
-        "USF-133"
-      ],
+      "issueRefs": ["USF-184", "USF-192", "USF-133"],
       "evidenceId": "cleanup-orchestration-lane-map",
       "sourceRef": "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
       "freshness": "current",
@@ -88,12 +70,7 @@
     {
       "prRef": "#125",
       "mergeShaRef": "ad68834d8c10d58d6e295eae699cfffdd80c2343",
-      "issueRefs": [
-        "USF-185",
-        "USF-166",
-        "USF-167",
-        "USF-182"
-      ],
+      "issueRefs": ["USF-185", "USF-166", "USF-167", "USF-182"],
       "evidenceId": "evidence-lane1-service-disposition-closure-matrix",
       "sourceRef": "docs/architecture/compose-service-disposition-closure-matrix.json",
       "freshness": "current",
@@ -104,9 +81,7 @@
     {
       "prRef": "#127",
       "mergeShaRef": "151728b95623403b2a9da6e82aff79f0a31a4a47",
-      "issueRefs": [
-        "USF-190"
-      ],
+      "issueRefs": ["USF-190"],
       "evidenceId": "evidence-usf-190-status-integrity-validator",
       "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "freshness": "current",
@@ -117,9 +92,7 @@
     {
       "prRef": "#128",
       "mergeShaRef": "98a5e7036c0b7dee69d2fecfd26180b5c4d1ca3f",
-      "issueRefs": [
-        "USF-188"
-      ],
+      "issueRefs": ["USF-188"],
       "evidenceId": "usf-188-evidence-observability-operations-posture",
       "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "freshness": "current",
@@ -130,9 +103,7 @@
     {
       "prRef": "#129",
       "mergeShaRef": "6e43503ab611262be0f79b22675beb27be864ed9",
-      "issueRefs": [
-        "USF-187"
-      ],
+      "issueRefs": ["USF-187"],
       "evidenceId": "usf-187-sentry-error-monitoring-evidence",
       "sourceRef": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "freshness": "current",
@@ -143,9 +114,7 @@
     {
       "prRef": "#130",
       "mergeShaRef": "bca1e865c8988ca8e7506f94f244622155fa6fc1",
-      "issueRefs": [
-        "USF-186"
-      ],
+      "issueRefs": ["USF-186"],
       "evidenceId": "usf-186-evidence-operator-access-gateway-matrix",
       "sourceRef": "docs/architecture/operator-access-gateway-posture-matrix.json",
       "freshness": "current",
@@ -156,9 +125,7 @@
     {
       "prRef": "#131",
       "mergeShaRef": "fcc9c182a9234fd19cdf58b32020bad64342808c",
-      "issueRefs": [
-        "USF-191"
-      ],
+      "issueRefs": ["USF-191"],
       "evidenceId": "usf-191-evidence-domain-depth-validator",
       "sourceRef": "docs/architecture/domain-deferred-depth-closure-matrix.json",
       "freshness": "current",
@@ -169,9 +136,7 @@
     {
       "prRef": "#132",
       "mergeShaRef": "f5251b1bc48ece0586fb694a188130fb7a99f1c8",
-      "issueRefs": [
-        "USF-189"
-      ],
+      "issueRefs": ["USF-189"],
       "evidenceId": "evidence-usf-189-runtime-provider-disposition-validator",
       "sourceRef": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
       "freshness": "current",
@@ -183,15 +148,7 @@
   "thisPrEvidence": {
     "prRef": "pending-usf-166-pr",
     "mergeShaRef": "pending-post-merge-reconciliation",
-    "issueRefs": [
-      "USF-166",
-      "USF-167",
-      "USF-182",
-      "USF-184",
-      "USF-185",
-      "USF-192",
-      "USF-133"
-    ],
+    "issueRefs": ["USF-166", "USF-167", "USF-182", "USF-184", "USF-185", "USF-192", "USF-133"],
     "evidenceId": "evidence-usf-166-closure-tier-evidence-gate",
     "sourceRef": "docs/architecture/usf-133-closure-tier-evidence-gate.json",
     "freshness": "pending-pr-merge",
@@ -206,9 +163,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#postgres",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -217,9 +172,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#keycloak-db",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -228,9 +181,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#keycloak",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -239,9 +190,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#nats",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -250,9 +199,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -261,9 +208,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#minio",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -272,9 +217,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#openbao",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -283,9 +226,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#otel-collector",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -294,9 +235,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#prometheus",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -305,9 +244,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#grafana",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -316,9 +253,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#loki",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -327,9 +262,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#tempo",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -338,9 +271,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mailpit",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -349,9 +280,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#webhook-sink",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
     },
@@ -391,14 +320,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#meilisearch",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185",
-        "USF-174",
-        "USF-199"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-174", "USF-199"],
       "assuranceMaturityLevel": "integration-proven",
       "promotionImpact": [
         "dev-readiness",
@@ -502,12 +424,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#sonar-oidc-plugin",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -553,15 +470,9 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#mock-oidc",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185",
-        "USF-210"
-      ],
+      "sourceIssueRefs": ["USF-185", "USF-210"],
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ],
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"],
       "enterpriseExceptionRef": "exception-service-mock-oidc"
     },
     {
@@ -631,12 +542,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#alertmanager",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -653,12 +559,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#alloy",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -675,14 +576,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-postgres",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185",
-        "USF-178",
-        "USF-203"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -699,14 +593,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-redis",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185",
-        "USF-178",
-        "USF-203"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -723,14 +610,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185",
-        "USF-178",
-        "USF-203"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -747,14 +627,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#windmill-worker",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185",
-        "USF-178",
-        "USF-203"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -771,12 +644,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal-postgres",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -793,12 +661,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#temporal-ui",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -815,12 +678,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#pgbackrest",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -837,12 +695,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#clamav",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -888,12 +741,7 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#caddy",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-166",
-        "USF-167",
-        "USF-182",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-166", "USF-167", "USF-182", "USF-185"],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
@@ -910,14 +758,9 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#platform-api",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-185"],
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ],
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"],
       "enterpriseExceptionRef": "exception-service-platform-api"
     },
     {
@@ -925,15 +768,9 @@
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#react-app",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
-      "sourceIssueRefs": [
-        "USF-133",
-        "USF-185"
-      ],
+      "sourceIssueRefs": ["USF-133", "USF-185"],
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ],
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"],
       "enterpriseExceptionRef": "exception-service-react-app"
     }
   ],
@@ -949,9 +786,7 @@
         "corepack pnpm runtime:proof:compose",
         "python3 tools/validate-runtime/validate-runtime.py all --json"
       ],
-      "sourceIssueRefs": [
-        "USF-189"
-      ],
+      "sourceIssueRefs": ["USF-189"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -959,10 +794,7 @@
         "riskStatement": "Runtime tenant isolation evidence is bounded to current local proof and does not close every service/capability row."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "authorization",
@@ -975,10 +807,7 @@
         "corepack pnpm proof:authz",
         "python3 tools/validate-enterprise/validate-enterprise.py all --json"
       ],
-      "sourceIssueRefs": [
-        "USF-190",
-        "USF-141"
-      ],
+      "sourceIssueRefs": ["USF-190", "USF-141"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -986,10 +815,7 @@
         "riskStatement": "Authorization proof is bounded and requires source issue evidence before stronger claims."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "audit-evidence",
@@ -1002,10 +828,7 @@
         "corepack pnpm proof:audit",
         "python3 tools/validate-enterprise/validate-enterprise.py all --json"
       ],
-      "sourceIssueRefs": [
-        "USF-190",
-        "USF-143"
-      ],
+      "sourceIssueRefs": ["USF-190", "USF-143"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1013,10 +836,7 @@
         "riskStatement": "Audit evidence is local and bounded until source acceptance proves required retention and operating depth."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "config-secrets",
@@ -1029,10 +849,7 @@
         "corepack pnpm proof:config",
         "python3 tools/validate-enterprise/validate-enterprise.py all --json"
       ],
-      "sourceIssueRefs": [
-        "USF-190",
-        "USF-145"
-      ],
+      "sourceIssueRefs": ["USF-190", "USF-145"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1040,10 +857,7 @@
         "riskStatement": "Secret boundary proof is local and does not prove live-provider secret management."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "data-classification",
@@ -1052,13 +866,8 @@
       "riskOwner": "platform-governance-risk-owner",
       "controlOwner": "platform-governance-control-owner",
       "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
-      "validationCommands": [
-        "python3 tools/validate-compose/validate-compose.py all --json"
-      ],
-      "sourceIssueRefs": [
-        "USF-168",
-        "USF-185"
-      ],
+      "validationCommands": ["python3 tools/validate-compose/validate-compose.py all --json"],
+      "sourceIssueRefs": ["USF-168", "USF-185"],
       "riskTreatment": {
         "treatment": "mitigate",
         "reviewDate": "2026-09-30",
@@ -1066,10 +875,7 @@
         "riskStatement": "Classification metadata is present but does not complete every downstream proof."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "retention-purge",
@@ -1078,13 +884,8 @@
       "riskOwner": "platform-data-risk-owner",
       "controlOwner": "platform-data-control-owner",
       "evidenceSource": "docs/architecture/domain-deferred-depth-closure-matrix.json",
-      "validationCommands": [
-        "python3 tools/validate-parity/validate-domain-depth.py all --json"
-      ],
-      "sourceIssueRefs": [
-        "USF-191",
-        "USF-161"
-      ],
+      "validationCommands": ["python3 tools/validate-parity/validate-domain-depth.py all --json"],
+      "sourceIssueRefs": ["USF-191", "USF-161"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1113,10 +914,7 @@
         "corepack pnpm providers-proof",
         "python3 tools/validate-runtime/validate-runtime.py all --json"
       ],
-      "sourceIssueRefs": [
-        "USF-189",
-        "USF-177"
-      ],
+      "sourceIssueRefs": ["USF-189", "USF-177"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1141,13 +939,8 @@
       "riskOwner": "platform-operations-risk-owner",
       "controlOwner": "platform-operations-control-owner",
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
-      "validationCommands": [
-        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
-      ],
-      "sourceIssueRefs": [
-        "USF-188",
-        "USF-159"
-      ],
+      "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"],
+      "sourceIssueRefs": ["USF-188", "USF-159"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1172,13 +965,8 @@
       "riskOwner": "platform-security-risk-owner",
       "controlOwner": "platform-security-control-owner",
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
-      "validationCommands": [
-        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
-      ],
-      "sourceIssueRefs": [
-        "USF-187",
-        "USF-171"
-      ],
+      "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"],
+      "sourceIssueRefs": ["USF-187", "USF-171"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1186,10 +974,7 @@
         "riskStatement": "Local deterministic validation is not equivalent to SonarQube/static-analysis service operating evidence."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "observability",
@@ -1202,10 +987,7 @@
         "corepack pnpm proof:observability",
         "python3 tools/validate-parity/validate-observability.py all --json"
       ],
-      "sourceIssueRefs": [
-        "USF-188",
-        "USF-159"
-      ],
+      "sourceIssueRefs": ["USF-188", "USF-159"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1213,10 +995,7 @@
         "riskStatement": "Telemetry evidence is bounded and no live alerting/dashboard readiness is claimed."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "operator-admin-access",
@@ -1225,14 +1004,8 @@
       "riskOwner": "platform-operations-risk-owner",
       "controlOwner": "platform-operations-control-owner",
       "evidenceSource": "docs/architecture/operator-access-gateway-posture-matrix.json",
-      "validationCommands": [
-        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
-      ],
-      "sourceIssueRefs": [
-        "USF-186",
-        "USF-169",
-        "USF-180"
-      ],
+      "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"],
+      "sourceIssueRefs": ["USF-186", "USF-169", "USF-180"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1240,10 +1013,7 @@
         "riskStatement": "Operator/admin access posture is matrixed but runtime access review and clickthrough proof remain deferred."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     },
     {
       "capabilityId": "provider-supplier-boundaries",
@@ -1252,12 +1022,8 @@
       "riskOwner": "platform-provider-risk-owner",
       "controlOwner": "platform-provider-control-owner",
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
-      "validationCommands": [
-        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
-      ],
-      "sourceIssueRefs": [
-        "USF-167"
-      ],
+      "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"],
+      "sourceIssueRefs": ["USF-167"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1282,13 +1048,8 @@
       "riskOwner": "platform-governance-risk-owner",
       "controlOwner": "platform-governance-control-owner",
       "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
-      "validationCommands": [
-        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
-      ],
-      "sourceIssueRefs": [
-        "USF-190",
-        "USF-191"
-      ],
+      "validationCommands": ["python3 tools/validate-enterprise/validate-enterprise.py all --json"],
+      "sourceIssueRefs": ["USF-190", "USF-191"],
       "riskTreatment": {
         "treatment": "defer",
         "reviewDate": "2026-09-30",
@@ -1296,10 +1057,7 @@
         "riskStatement": "Proof data is synthetic and value-free, but retention/purge/legal-hold depth remains deferred."
       },
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ]
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"]
     }
   ],
   "proofCommands": [
@@ -1865,15 +1623,15 @@
       "id": "exception-service-sonar-postgres",
       "targetType": "service",
       "targetId": "sonar-postgres",
-      "disposition": "deferred",
-      "reason": "USF-195 records sonar-postgres as an explicit deferred SonarQube service-proof boundary; actual composed backing-store proof remains USF-204.",
+      "disposition": "profile-gated-bounded-proof",
+      "reason": "USF-204 records bounded local Compose SonarQube proof that exercises SonarQube with sonar-postgres backing storage for synthetic data only. This is not test, staging, production, live-provider, SOC, ISO, enterprise production, full dev readiness, full React parity, or USF-133 closure evidence.",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
-      "treatmentPath": "defer",
-      "followUpIssue": "USF-204",
+      "treatmentPath": "bounded-proof-with-residual-environment-promotion-non-claims",
+      "followUpIssue": "USF-193",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "visible-non-equivalence-boundary",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -1909,12 +1667,12 @@
       "targetType": "service",
       "targetId": "sonar-oidc-plugin",
       "disposition": "deferred",
-      "reason": "USF-195 records sonar-oidc-plugin as an explicit deferred SonarQube service-proof boundary; plugin fetch mechanics are deployment details, not independent semantic authority; actual composed plugin/bootstrap proof remains USF-204.",
+      "reason": "USF-204 does not exercise sonar-oidc-plugin bootstrap or brokered identity integration. OIDC plugin depth remains an explicit residual deferral for operator access, gateway, identity, or environment-promotion follow-up evidence.",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-204",
+      "followUpIssue": "USF-169",
       "reviewDate": "2026-09-30",
       "blockerStatus": "blocks-usf-133-closure-tier",
       "promotionImpact": [
@@ -1951,15 +1709,15 @@
       "id": "exception-service-sonarqube",
       "targetType": "service",
       "targetId": "sonarqube",
-      "disposition": "deferred",
-      "reason": "USF-195 records SonarQube as an explicit deferred service-proof boundary; actual composed scan execution, quality gate scope, unresolved issue handling, security hotspot treatment, exception handling, operator console access, audit, retention, secret, supplier, and incident evidence remains USF-204.; Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history.; Lane 3 preserves the split between mandatory local deterministic verification and deferred SonarQube service proof; local validators are not equivalent to SonarQube service-operating evidence.; SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+      "disposition": "profile-gated-bounded-proof-with-residual-deferrals",
+      "reason": "USF-204 records bounded local Compose SonarQube scanner execution, quality-gate readback, unresolved issue query path, security hotspot query path, authenticated local API access validation, cleanup, credential revocation, redaction, and unavailable-provider fail-closed proof. Operator UI clickthrough, quality-gate policy administration, security hotspot human review workflow, sonar-oidc-plugin depth, environment promotion, live-provider, and production readiness remain unclaimed residual boundaries.",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
-      "treatmentPath": "defer",
-      "followUpIssue": "USF-204",
+      "treatmentPath": "bounded-proof-with-residual-deferrals",
+      "followUpIssue": "USF-169",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "visible-non-equivalence-boundary",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -2003,10 +1761,7 @@
       "followUpIssue": "USF-210",
       "reviewDate": "2026-09-30",
       "blockerStatus": "visible-non-equivalence-boundary",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ],
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"],
       "preventsPromotion": {
         "enterprise-readiness": true,
         "iso-supporting-evidence-completeness": true
@@ -2638,10 +2393,7 @@
       "followUpIssue": "USF-185",
       "reviewDate": "2026-09-30",
       "blockerStatus": "visible-non-equivalence-boundary",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ],
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"],
       "preventsPromotion": {
         "enterprise-readiness": true,
         "iso-supporting-evidence-completeness": true
@@ -2673,10 +2425,7 @@
       "followUpIssue": "USF-133",
       "reviewDate": "2026-09-30",
       "blockerStatus": "visible-non-equivalence-boundary",
-      "promotionImpact": [
-        "enterprise-readiness",
-        "iso-supporting-evidence-completeness"
-      ],
+      "promotionImpact": ["enterprise-readiness", "iso-supporting-evidence-completeness"],
       "preventsPromotion": {
         "enterprise-readiness": true,
         "iso-supporting-evidence-completeness": true

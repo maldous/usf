@@ -33,6 +33,7 @@
       "@foundation/adapter-bus": ["adapters/bus/src/index.ts"],
       "@foundation/adapter-bulk": ["adapters/bulk/src/index.ts"],
       "@foundation/adapter-db": ["adapters/db/src/index.ts"],
+      "@foundation/adapter-assurance": ["adapters/assurance/src/index.ts"],
       "@foundation/adapter-guardrails": ["adapters/guardrails/src/index.ts"],
       "@foundation/adapter-idp": ["adapters/idp/src/index.ts"],
       "@foundation/adapter-mail": ["adapters/mail/src/index.ts"],

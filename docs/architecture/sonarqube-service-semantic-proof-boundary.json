@@ -1,24 +1,20 @@
 {
   "id": "usf-195-sonarqube-service-semantic-proof-boundary",
-  "title": "USF-195 SonarQube Service Semantic Proof Boundary",
-  "sourceIssue": "USF-195",
-  "followUpIssue": "USF-204",
+  "title": "USF-195/USF-204 SonarQube Service Semantic Proof Boundary",
+  "sourceIssue": "USF-204",
+  "followUpIssue": "USF-169",
   "sourceDispositionIssue": "USF-171",
   "laneIssue": "USF-187",
   "dashboardIssue": "USF-184",
   "coordinatorIssue": "USF-192",
   "parentIssue": "USF-133",
-  "status": "reclassified-deferred-with-owner",
+  "status": "profile-gated-bounded-proof-with-deferred-boundaries",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "staticAnalysisDispositionMatrix": "docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
-  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
-  "serviceIds": [
-    "sonarqube",
-    "sonar-postgres",
-    "sonar-oidc-plugin"
-  ],
+  "validationCommand": "corepack pnpm proof:assurance:sonarqube",
+  "serviceIds": ["sonarqube", "sonar-postgres", "sonar-oidc-plugin"],
   "issueLinks": [
     "USF-195",
     "USF-204",
@@ -26,62 +22,65 @@
     "USF-187",
     "USF-184",
     "USF-192",
-    "USF-133"
+    "USF-133",
+    "USF-169",
+    "USF-193"
   ],
   "reclassification": {
     "from": "requires-human-decision",
-    "to": "explicit-deferred-service-proof",
+    "to": "profile-gated-bounded-local-compose-proof",
     "decisionAcceptedDoesNotMeanWorkComplete": true,
-    "serviceSemanticProofImplemented": false,
+    "serviceSemanticProofImplemented": true,
     "sonarqubeServiceReadinessClaim": false,
     "qualityGateReadinessClaim": false,
     "scannerReadinessClaim": false,
     "localVerificationEquivalentToSonarQubeService": false,
     "repositoryEvidence": [
-      "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json#sonarqube",
+      "packages/proof/src/sonarqube-composed-proof.ts",
+      "adapters/assurance/src/index.ts",
+      "packages/core/src/index.ts#quality-gate-sonarqube-composed-test",
       "docs/architecture/compose-service-disposition-closure-matrix.json#sonarqube",
       "docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
       "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
-      "tools/validate-enterprise/validate-enterprise.py"
+      "tools/validate-enterprise/validate-enterprise.py",
+      "docs/architecture/sonarqube-service-semantic-proof-boundary.json"
     ]
   },
   "remainingProofBoundary": {
-    "issue": "USF-204",
+    "issue": "USF-169",
+    "additionalFollowUpIssues": ["USF-193"],
     "owner": "platform-assurance-foundation",
     "riskOwner": "platform-assurance-risk-owner",
     "controlOwner": "platform-assurance-control-owner",
-    "riskStatement": "SonarQube service semantics could be overclaimed from generated Compose metadata or local deterministic repository validation without a deterministic composed scan and operator-console proof.",
-    "treatment": "defer actual SonarQube composed scan and operator-console proof to USF-204 while preserving non-equivalence and readiness non-claims",
+    "riskStatement": "USF-204 proves bounded local Compose scan semantics but must not be overclaimed as operator UI, policy administration, human hotspot workflow, OIDC plugin depth, environment readiness, or live-provider readiness.",
+    "treatment": "retain explicit deferrals for UI clickthrough, policy administration, hotspot human review, OIDC plugin depth, and environment promotion semantics while accepting bounded local Compose proof for scanner submission and service readback",
     "reviewDate": "2026-09-30",
     "requiredEvidence": [
-      "profile-gated SonarQube service readiness proof",
-      "scanner execution evidence",
-      "quality-gate threshold evidence",
-      "unresolved issue lifecycle evidence",
-      "quality-gate exception handling evidence",
-      "security hotspot treatment evidence",
-      "operator console access and audit evidence",
-      "retention, secret, supplier, and incident boundary evidence"
+      "operator console UI clickthrough proof remains USF-169 or later gateway/operator issue",
+      "quality-gate policy administration evidence remains deferred",
+      "security hotspot human review workflow remains deferred",
+      "sonar-oidc-plugin bootstrap and identity integration evidence remains deferred",
+      "environment promotion semantics remain USF-193 governed"
     ]
   },
   "qualityGateBoundary": {
-    "scopeStatus": "deferred-to-USF-204",
-    "unresolvedIssueHandlingStatus": "deferred-to-USF-204",
-    "exceptionHandlingStatus": "deferred-to-USF-204",
-    "securityHotspotTreatmentStatus": "deferred-to-USF-204",
+    "scopeStatus": "profile-gated-bounded-proof",
+    "unresolvedIssueHandlingStatus": "query-path-proven-zero-open-for-synthetic-project",
+    "exceptionHandlingStatus": "quality-gate-fail-closed-readback-proven-policy-administration-deferred",
+    "securityHotspotTreatmentStatus": "query-path-proven-zero-hotspots-human-review-deferred",
     "owner": "platform-assurance-foundation",
     "riskOwner": "platform-assurance-risk-owner",
     "controlOwner": "platform-assurance-control-owner",
     "reviewDate": "2026-09-30"
   },
   "operatorAccessAuditRetentionSupplierBoundary": {
-    "operatorAccessBoundary": "SonarQube operator console access is not proven by USF-195 and remains deferred to USF-204.",
+    "operatorAccessBoundary": "USF-204 validates authenticated local API access for the SonarQube proof credential; browser UI clickthrough and public exposure are not claimed.",
     "authRequirement": "operator-auth-required-before-console-readiness",
-    "auditRequirement": "operator-action-audit-required-before-console-readiness",
-    "retentionBoundary": "No scanner findings, source-analysis payloads, or SonarQube database records are retained as readiness evidence by USF-195.",
-    "secretBoundary": "No SonarQube token, scanner credential, raw endpoint, provider payload, or connection string is introduced by USF-195.",
-    "supplierBoundary": "Local generated Compose service metadata is not supplier or live-provider evidence.",
-    "incidentBoundary": "No production incident, vulnerability-response, or corrective-action workflow is proven by USF-195."
+    "auditRequirement": "proof emits value-free audit-shaped evidence only; production operator-action audit is not claimed",
+    "retentionBoundary": "USF-204 deletes the temporary synthetic project and revokes the temporary credential after proof; no scanner payloads are retained as readiness evidence.",
+    "secretBoundary": "No SonarQube credential, token value, raw endpoint, provider payload, scanner log, or connection string is emitted in proof evidence.",
+    "supplierBoundary": "Local generated Compose service metadata and local scanner proof are not supplier or live-provider evidence.",
+    "incidentBoundary": "No production incident, vulnerability-response, or corrective-action workflow is proven by USF-204."
   },
   "localVerificationGate": {
     "repositoryValidationRequired": true,
@@ -90,7 +89,8 @@
     "commands": [
       "corepack pnpm verify",
       "corepack pnpm parity",
-      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "corepack pnpm proof:assurance:sonarqube"
     ]
   },
   "enterpriseEvidenceRefs": [
@@ -99,11 +99,21 @@
     "usf-195-threat-sonarqube-overclaim",
     "usf-195-access-sonarqube-proof-boundary",
     "usf-195-incident-vulnerability-sonarqube-proof-boundary",
-    "usf-195-privacy-sonarqube-proof-boundary"
+    "usf-195-privacy-sonarqube-proof-boundary",
+    "usf-204-soa-sonarqube-composed-proof",
+    "usf-204-evidence-sonarqube-composed-proof",
+    "usf-204-threat-sonarqube-composed-proof",
+    "usf-204-access-sonarqube-composed-proof",
+    "usf-204-resilience-sonarqube-composed-proof",
+    "usf-204-incident-vulnerability-sonarqube-composed-proof",
+    "usf-204-privacy-sonarqube-composed-proof",
+    "sdk-usf-204-sonarqube-composed-quality-gate-provider-at-sonar-scan",
+    "soa-proof-proof-assurance-sonarqube",
+    "evidence-proof-proof-assurance-sonarqube"
   ],
   "readinessClaimsAllowed": [
-    "sonarqube-service-proof-boundary-recorded",
-    "sonarqube-service-proof-deferred-to-USF-204",
+    "sonarqube-bounded-local-compose-proof-recorded",
+    "sonarqube-synthetic-scan-proof-recorded",
     "local-deterministic-verification-non-equivalence-recorded"
   ],
   "readinessClaimsProhibited": [
@@ -133,6 +143,32 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness"
-  ]
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ],
+  "predecessorIssue": "USF-195",
+  "composedProof": {
+    "issue": "USF-204",
+    "owner": "platform-assurance-foundation",
+    "riskOwner": "platform-assurance-risk-owner",
+    "controlOwner": "platform-assurance-control-owner",
+    "proofCommand": "corepack pnpm proof:assurance:sonarqube",
+    "packageScript": "proof:assurance:sonarqube",
+    "makeTarget": "sonarqube-assurance-proof",
+    "providerRegistryId": "quality-gate-sonarqube-composed-test",
+    "adapterName": "SonarQubeComposedQualityGateAdapter",
+    "sdkPackage": "@sonar/scan",
+    "sdkVersion": "4.3.8",
+    "sdkSelectionRationale": "@sonar/scan is the official SonarSource npm scanner package, currently stable at 4.3.8, with TypeScript declarations and local SonarQube compatibility. It is preferred over raw scanner shell execution, unmaintained sonar-scanner wrappers, and ad hoc scanner protocol calls.",
+    "webApiBoundary": "sonarqube-web-api-no-maintained-js-admin-sdk-exception; Web API calls are confined to adapters/assurance for readiness, temporary credential lifecycle, quality gate readback, issue and hotspot query, and cleanup.",
+    "serviceReadinessProof": "bounded Web API retry reaches UP against local Compose SonarQube",
+    "scannerExecutionProof": "official SonarSource npm scanner submits a synthetic TypeScript project",
+    "qualityGateProof": "quality gate status readback returns OK for the synthetic project",
+    "unresolvedIssueHandlingProof": "unresolved issue query path exercised and value-free count bucket recorded",
+    "securityHotspotTreatmentProof": "security hotspot query path exercised and value-free count bucket recorded; human review workflow remains deferred",
+    "operatorAccessProof": "authenticated local API validation proves operator credential boundary; UI clickthrough is not claimed",
+    "retentionCleanupProof": "temporary project deletion and temporary credential revocation are checked",
+    "redactionProof": "scanner stdout and stderr are suppressed; proof output contains endpoint refs and hashes only",
+    "reviewDate": "2026-09-30"
+  }
 }

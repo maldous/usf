@@ -42,6 +42,7 @@ SENTRY_PROOF_BOUNDARY_PATH = Path("docs/architecture/sentry-service-semantic-pro
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 PACKAGE_PATH = Path("package.json")
+MAKEFILE_PATH = Path("Makefile")
 PLANTED_DEFECT_DIR = Path("tools/validate-enterprise/planted-defects")
 
 RULES = {
@@ -410,14 +411,30 @@ GATEWAY_CLICKTHROUGH_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "public-exposure-readiness",
 }
 STATIC_ANALYSIS_REQUIRED_EVIDENCE_ROWS = {
-    "soaSupportMappings": {"usf-171-soa-static-analysis-quality-gate-disposition"},
-    "evidenceRegister": {"usf-171-evidence-static-analysis-quality-gate-disposition"},
+    "soaSupportMappings": {
+        "usf-171-soa-static-analysis-quality-gate-disposition",
+        "usf-204-soa-sonarqube-composed-proof",
+    },
+    "evidenceRegister": {
+        "usf-171-evidence-static-analysis-quality-gate-disposition",
+        "usf-204-evidence-sonarqube-composed-proof",
+    },
     "threatModelAbuseCaseRegister": {"usf-171-threat-static-analysis-overclaim"},
     "accessReviewPrivilegedOperationPosture": {"usf-171-access-static-analysis-quality-gate"},
     "incidentVulnerabilityManagementEvidence": {"usf-171-incident-vulnerability-static-analysis"},
     "privacyDataMinimisationPosture": {"usf-171-privacy-static-analysis-quality-gate"},
 }
-STATIC_ANALYSIS_REQUIRED_ISSUES = {"USF-171", "USF-195", "USF-187", "USF-184", "USF-192", "USF-133"}
+STATIC_ANALYSIS_REQUIRED_ISSUES = {
+    "USF-171",
+    "USF-195",
+    "USF-204",
+    "USF-169",
+    "USF-193",
+    "USF-187",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
 STATIC_ANALYSIS_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "sonarqube-readiness",
     "quality-gate-readiness",
@@ -425,17 +442,41 @@ STATIC_ANALYSIS_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "vulnerability-clearance-readiness",
 }
 SONARQUBE_BOUNDARY_REQUIRED_EVIDENCE_ROWS = {
-    "soaSupportMappings": {"usf-195-soa-sonarqube-proof-boundary"},
-    "evidenceRegister": {"usf-195-evidence-sonarqube-proof-boundary"},
-    "threatModelAbuseCaseRegister": {"usf-195-threat-sonarqube-overclaim"},
-    "accessReviewPrivilegedOperationPosture": {"usf-195-access-sonarqube-proof-boundary"},
-    "incidentVulnerabilityManagementEvidence": {"usf-195-incident-vulnerability-sonarqube-proof-boundary"},
-    "privacyDataMinimisationPosture": {"usf-195-privacy-sonarqube-proof-boundary"},
+    "soaSupportMappings": {
+        "usf-195-soa-sonarqube-proof-boundary",
+        "soa-proof-proof-assurance-sonarqube",
+        "usf-204-soa-sonarqube-composed-proof",
+    },
+    "evidenceRegister": {
+        "usf-195-evidence-sonarqube-proof-boundary",
+        "evidence-proof-proof-assurance-sonarqube",
+        "usf-204-evidence-sonarqube-composed-proof",
+    },
+    "threatModelAbuseCaseRegister": {
+        "usf-195-threat-sonarqube-overclaim",
+        "usf-204-threat-sonarqube-composed-proof",
+    },
+    "sdkDependencyGovernance": {"sdk-usf-204-sonarqube-composed-quality-gate-provider-at-sonar-scan"},
+    "accessReviewPrivilegedOperationPosture": {
+        "usf-195-access-sonarqube-proof-boundary",
+        "usf-204-access-sonarqube-composed-proof",
+    },
+    "backupRestoreResiliencePosture": {"usf-204-resilience-sonarqube-composed-proof"},
+    "incidentVulnerabilityManagementEvidence": {
+        "usf-195-incident-vulnerability-sonarqube-proof-boundary",
+        "usf-204-incident-vulnerability-sonarqube-composed-proof",
+    },
+    "privacyDataMinimisationPosture": {
+        "usf-195-privacy-sonarqube-proof-boundary",
+        "usf-204-privacy-sonarqube-composed-proof",
+    },
 }
 SONARQUBE_BOUNDARY_REQUIRED_ISSUES = {
     "USF-195",
     "USF-204",
     "USF-171",
+    "USF-169",
+    "USF-193",
     "USF-187",
     "USF-184",
     "USF-192",
@@ -653,6 +694,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     service_catalogue = read_json(SERVICE_CATALOGUE_PATH)
     runtime_manifest = read_json(RUNTIME_MANIFEST_PATH)
     package = read_json(PACKAGE_PATH)
+    makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8")
     closure_matrix = read_json(CLOSURE_MATRIX_PATH) if (ROOT / CLOSURE_MATRIX_PATH).exists() else None
     operator_access_matrix = (
         read_json(OPERATOR_ACCESS_MATRIX_PATH) if (ROOT / OPERATOR_ACCESS_MATRIX_PATH).exists() else None
@@ -713,6 +755,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "serviceCatalogue": service_catalogue,
         "runtimeManifest": runtime_manifest,
         "package": package,
+        "makefile": makefile,
         "closureMatrix": closure_matrix,
         "operatorAccessMatrix": operator_access_matrix,
         "gatewayClickthroughMatrix": gateway_clickthrough_matrix,
@@ -839,6 +882,15 @@ def apply_closure_defect(matrix: dict[str, Any], defect: dict[str, Any]) -> dict
         for row in out.get("rows", []):
             if row.get("service_id") == service_id:
                 row.get("closure_evidence", {}).pop("enterprise_evidence_refs", None)
+    for patch in defect.get("closureServicePatch", []):
+        for row in out.get("rows", []):
+            if row.get("service_id") != patch.get("serviceId"):
+                continue
+            evidence = row.setdefault("closure_evidence", {})
+            for key in patch.get("drop", []):
+                drop_nested_value(evidence, key)
+            for key, value in patch.get("set", {}).items():
+                set_nested_value(evidence, key, value)
     return out
 
 
@@ -1659,7 +1711,13 @@ def check_assurance_control_plane_disposition(F: Findings, state: dict[str, Any]
                 tracking = set(evidence.get("tracking_issues", []))
                 if "USF-187" not in tracking or source_issue not in tracking:
                     F.add("USF-ENTERPRISE-012", closure_service_id, "closure matrix lacks Lane 3/source tracking issues")
-                if evidence.get("closure_blocking") is not True:
+                sonarqube_bounded = (
+                    closure_service_id == "sonarqube"
+                    and evidence.get("closure_disposition") == "profile-gated-bounded-proof"
+                    and evidence.get("closure_blocking") is False
+                    and "usf-204-evidence-sonarqube-composed-proof" in refs
+                )
+                if evidence.get("closure_blocking") is not True and not sonarqube_bounded:
                     F.add("USF-ENTERPRISE-013", closure_service_id, "assurance control-plane closure must remain blocking")
 
 
@@ -2120,7 +2178,7 @@ def check_static_analysis_quality_gate_disposition(F: Findings, state: dict[str,
     expected_top = {
         "sourceIssue": "USF-171",
         "followUpIssue": "USF-195",
-        "remainingProofIssue": "USF-204",
+        "remainingProofIssue": "USF-169",
         "laneIssue": "USF-187",
         "parentIssue": "USF-133",
         "serviceId": "sonarqube",
@@ -2133,9 +2191,10 @@ def check_static_analysis_quality_gate_disposition(F: Findings, state: dict[str,
         if matrix.get(key) != expected:
             F.add("USF-ENTERPRISE-021", key, f"expected {expected!r}")
 
-    required_static_issues = STATIC_ANALYSIS_REQUIRED_ISSUES | {"USF-204"}
-    if required_static_issues - set(matrix.get("issueLinks", [])):
+    if STATIC_ANALYSIS_REQUIRED_ISSUES - set(matrix.get("issueLinks", [])):
         F.add("USF-ENTERPRISE-021", "issueLinks", "static-analysis matrix issue links are incomplete")
+    if matrix.get("resolvedProofIssue") != "USF-204":
+        F.add("USF-ENTERPRISE-021", "resolvedProofIssue", "static-analysis matrix must record USF-204 as resolved proof")
     if REQUIRED_NON_CLAIMS - set(matrix.get("nonClaims", [])):
         F.add("USF-ENTERPRISE-021", "nonClaims", "static-analysis matrix non-claims are incomplete")
     if REQUIRED_NON_CLAIMS & set(matrix.get("readinessClaimsAllowed", [])):
@@ -2154,13 +2213,13 @@ def check_static_analysis_quality_gate_disposition(F: Findings, state: dict[str,
         F.add("USF-ENTERPRISE-021", "sonarqubeDisposition", "SonarQube disposition must be an object")
     else:
         expected_disposition = {
-            "disposition": "explicit-deferral-with-owner",
-            "serviceSemanticProofPresent": False,
+            "disposition": "profile-gated-bounded-proof-with-deferred-boundaries",
+            "serviceSemanticProofPresent": True,
             "serviceReadinessClaim": False,
             "qualityGateReadinessClaim": False,
             "serviceCatalogueServiceId": "sonarqube",
             "followUpIssue": "USF-195",
-            "remainingProofIssue": "USF-204",
+            "remainingProofIssue": "USF-169",
             "owner": "platform-assurance-foundation",
             "riskOwner": "platform-assurance-risk-owner",
             "controlOwner": "platform-assurance-control-owner",
@@ -2173,6 +2232,8 @@ def check_static_analysis_quality_gate_disposition(F: Findings, state: dict[str,
         for field in ("riskStatement", "treatment", "deferredEvidence"):
             if disposition.get(field) in (None, "", []):
                 F.add("USF-ENTERPRISE-021", f"sonarqubeDisposition.{field}", "SonarQube deferral field is required")
+        if disposition.get("resolvedProofIssue") != "USF-204":
+            F.add("USF-ENTERPRISE-021", "sonarqubeDisposition.resolvedProofIssue", "USF-204 must be recorded as resolved proof")
 
     local_gate = matrix.get("localVerificationGate", {})
     if not isinstance(local_gate, dict):
@@ -2269,21 +2330,23 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         return
 
     expected_top = {
-        "sourceIssue": "USF-195",
-        "followUpIssue": "USF-204",
+        "sourceIssue": "USF-204",
+        "followUpIssue": "USF-169",
         "sourceDispositionIssue": "USF-171",
         "laneIssue": "USF-187",
         "parentIssue": "USF-133",
-        "status": "reclassified-deferred-with-owner",
+        "status": "profile-gated-bounded-proof-with-deferred-boundaries",
         "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
         "closureMatrix": str(CLOSURE_MATRIX_PATH),
         "staticAnalysisDispositionMatrix": str(STATIC_ANALYSIS_MATRIX_PATH),
         "enterpriseEvidenceModel": str(MODEL_PATH),
-        "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "validationCommand": "corepack pnpm proof:assurance:sonarqube",
     }
     for key, expected in expected_top.items():
         if boundary.get(key) != expected:
             F.add("USF-ENTERPRISE-023", key, f"expected {expected!r}")
+    if boundary.get("predecessorIssue") != "USF-195":
+        F.add("USF-ENTERPRISE-023", "predecessorIssue", "SonarQube boundary must preserve USF-195 lineage")
 
     if set(boundary.get("serviceIds", [])) != SONARQUBE_BOUNDARY_REQUIRED_SERVICES:
         F.add("USF-ENTERPRISE-023", "serviceIds", "SonarQube boundary service ids are incomplete")
@@ -2302,9 +2365,9 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
     else:
         expected_reclassification = {
             "from": "requires-human-decision",
-            "to": "explicit-deferred-service-proof",
+            "to": "profile-gated-bounded-local-compose-proof",
             "decisionAcceptedDoesNotMeanWorkComplete": True,
-            "serviceSemanticProofImplemented": False,
+            "serviceSemanticProofImplemented": True,
             "sonarqubeServiceReadinessClaim": False,
             "qualityGateReadinessClaim": False,
             "scannerReadinessClaim": False,
@@ -2314,7 +2377,16 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
             observed = reclassification.get(key)
             if observed is not expected if isinstance(expected, bool) else observed != expected:
                 F.add("USF-ENTERPRISE-023", f"reclassification.{key}", f"expected {expected!r}")
-        if len(reclassification.get("repositoryEvidence", [])) < 5:
+        evidence_refs = set(reclassification.get("repositoryEvidence", []))
+        for required_ref in (
+            "packages/proof/src/sonarqube-composed-proof.ts",
+            "adapters/assurance/src/index.ts",
+            "packages/core/src/index.ts#quality-gate-sonarqube-composed-test",
+            str(SONARQUBE_PROOF_BOUNDARY_PATH),
+        ):
+            if required_ref not in evidence_refs:
+                F.add("USF-ENTERPRISE-023", "reclassification.repositoryEvidence", f"missing {required_ref}")
+        if len(evidence_refs) < 6:
             F.add("USF-ENTERPRISE-023", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
 
     remaining = boundary.get("remainingProofBoundary", {})
@@ -2322,7 +2394,7 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         F.add("USF-ENTERPRISE-023", "remainingProofBoundary", "remaining proof boundary must be an object")
     else:
         expected_remaining = {
-            "issue": "USF-204",
+            "issue": "USF-169",
             "owner": "platform-assurance-foundation",
             "riskOwner": "platform-assurance-risk-owner",
             "controlOwner": "platform-assurance-control-owner",
@@ -2334,18 +2406,21 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         for field in ("riskStatement", "treatment", "requiredEvidence"):
             if remaining.get(field) in (None, "", []):
                 F.add("USF-ENTERPRISE-023", f"remainingProofBoundary.{field}", "remaining proof field is required")
-        if len(remaining.get("requiredEvidence", [])) < 6:
+        if "USF-193" not in set(remaining.get("additionalFollowUpIssues", [])):
+            F.add("USF-ENTERPRISE-023", "remainingProofBoundary.additionalFollowUpIssues", "remaining proof boundary must link USF-193")
+        if len(remaining.get("requiredEvidence", [])) < 5:
             F.add("USF-ENTERPRISE-023", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
 
     quality = boundary.get("qualityGateBoundary", {})
-    for field in (
-        "scopeStatus",
-        "unresolvedIssueHandlingStatus",
-        "exceptionHandlingStatus",
-        "securityHotspotTreatmentStatus",
-    ):
-        if quality.get(field) != "deferred-to-USF-204":
-            F.add("USF-ENTERPRISE-023", f"qualityGateBoundary.{field}", "quality gate boundary must defer to USF-204")
+    expected_quality = {
+        "scopeStatus": "profile-gated-bounded-proof",
+        "unresolvedIssueHandlingStatus": "query-path-proven-zero-open-for-synthetic-project",
+        "exceptionHandlingStatus": "quality-gate-fail-closed-readback-proven-policy-administration-deferred",
+        "securityHotspotTreatmentStatus": "query-path-proven-zero-hotspots-human-review-deferred",
+    }
+    for field, expected in expected_quality.items():
+        if quality.get(field) != expected:
+            F.add("USF-ENTERPRISE-023", f"qualityGateBoundary.{field}", f"expected {expected!r}")
     for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
         if not quality.get(field):
             F.add("USF-ENTERPRISE-023", f"qualityGateBoundary.{field}", "quality gate owner metadata is required")
@@ -2362,6 +2437,14 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
     ):
         if not operator.get(field):
             F.add("USF-ENTERPRISE-023", f"operatorAccessAuditRetentionSupplierBoundary.{field}", "operator boundary field is required")
+    unsafe_boundary_re = re.compile(r"https?://|127\.0\.0\.1|localhost|squ_|connection_string|admin:admin", re.IGNORECASE)
+    operator_text = json.dumps(operator, sort_keys=True)
+    if unsafe_boundary_re.search(operator_text):
+        F.add(
+            "USF-ENTERPRISE-023",
+            "operatorAccessAuditRetentionSupplierBoundary",
+            "operator boundary must not expose raw endpoints, credentials, connection strings, or token values",
+        )
 
     local_gate = boundary.get("localVerificationGate", {})
     if local_gate.get("repositoryValidationRequired") is not True:
@@ -2372,6 +2455,81 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         F.add("USF-ENTERPRISE-023", "localVerificationGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
     if "python3 tools/validate-enterprise/validate-enterprise.py all --json" not in set(local_gate.get("commands", [])):
         F.add("USF-ENTERPRISE-023", "localVerificationGate.commands", "enterprise validation command is required")
+    if "corepack pnpm proof:assurance:sonarqube" not in set(local_gate.get("commands", [])):
+        F.add("USF-ENTERPRISE-023", "localVerificationGate.commands", "SonarQube proof command is required")
+
+    composed = boundary.get("composedProof", {})
+    if not isinstance(composed, dict):
+        F.add("USF-ENTERPRISE-023", "composedProof", "SonarQube composed proof metadata is required")
+    else:
+        expected_composed = {
+            "issue": "USF-204",
+            "proofCommand": "corepack pnpm proof:assurance:sonarqube",
+            "packageScript": "proof:assurance:sonarqube",
+            "makeTarget": "sonarqube-assurance-proof",
+            "providerRegistryId": "quality-gate-sonarqube-composed-test",
+            "adapterName": "SonarQubeComposedQualityGateAdapter",
+            "sdkPackage": "@sonar/scan",
+            "sdkVersion": "4.3.8",
+            "webApiBoundary": "sonarqube-web-api-no-maintained-js-admin-sdk-exception; Web API calls are confined to adapters/assurance for readiness, temporary credential lifecycle, quality gate readback, issue and hotspot query, and cleanup.",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_composed.items():
+            if composed.get(key) != expected:
+                F.add("USF-ENTERPRISE-023", f"composedProof.{key}", f"expected {expected!r}")
+        if "official SonarSource" not in str(composed.get("sdkSelectionRationale", "")):
+            F.add("USF-ENTERPRISE-023", "composedProof.sdkSelectionRationale", "official SonarSource SDK rationale is required")
+        for field in (
+            "serviceReadinessProof",
+            "scannerExecutionProof",
+            "qualityGateProof",
+            "unresolvedIssueHandlingProof",
+            "securityHotspotTreatmentProof",
+            "operatorAccessProof",
+            "retentionCleanupProof",
+            "redactionProof",
+        ):
+            if not composed.get(field):
+                F.add("USF-ENTERPRISE-023", f"composedProof.{field}", "composed proof evidence field is required")
+
+    package = state.get("package") or {}
+    scripts = package.get("scripts") if isinstance(package, dict) else {}
+    if not isinstance(scripts, dict) or scripts.get("proof:assurance:sonarqube") != "tsx packages/proof/src/sonarqube-composed-proof.ts":
+        F.add("USF-ENTERPRISE-023", "package.json#proof:assurance:sonarqube", "SonarQube proof package script is missing or stale")
+    if isinstance(scripts, dict) and "proof:assurance:sonarqube" not in str(scripts.get("verify", "")):
+        F.add("USF-ENTERPRISE-023", "package.json#verify", "verify must run SonarQube proof")
+    if package.get("dependencies", {}).get("@sonar/scan") != "4.3.8":
+        F.add("USF-ENTERPRISE-023", "package.json#@sonar/scan", "SonarQube SDK dependency must be exact-version pinned")
+    if "\nsonarqube-assurance-proof:" not in f"\n{state['makefile']}":
+        F.add("USF-ENTERPRISE-023", "Makefile#sonarqube-assurance-proof", "SonarQube proof Make target is missing")
+    proof_source = (ROOT / "packages/proof/src/sonarqube-composed-proof.ts").read_text(encoding="utf-8")
+    adapter_source = (ROOT / "adapters/assurance/src/index.ts").read_text(encoding="utf-8")
+    for marker in (
+        "@sonar/scan",
+        "bounded-exponential-backoff-240s",
+        "structuredLogEvidenceCaptured",
+        "traceEvidenceCaptured",
+        "metricEvidenceCaptured",
+        "auditEvidenceCaptured",
+        "redactionChecked",
+        "suppressScannerOutput",
+        "credentialRevocationChecked",
+        "projectDeletionChecked",
+    ):
+        if marker not in adapter_source:
+            F.add("USF-ENTERPRISE-023", "adapters/assurance/src/index.ts", f"adapter marker is missing: {marker}")
+    for marker in (
+        "COMPOSE_PROFILE = \"assurance\"",
+        "published: \"0\"",
+        "host_ip: 127.0.0.1",
+        "composeDown",
+        "--remove-orphans",
+        "-v",
+        "assertSafeEvidence",
+        "proof:assurance:sonarqube",
+    ):
+        if marker not in proof_source:
+            F.add("USF-ENTERPRISE-023", "packages/proof/src/sonarqube-composed-proof.ts", f"proof marker is missing: {marker}")
 
     declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
     required_evidence = set().union(*SONARQUBE_BOUNDARY_REQUIRED_EVIDENCE_ROWS.values())
@@ -2388,18 +2546,43 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         if not evidence:
             F.add("USF-ENTERPRISE-023", f"closureMatrix.{service_id}", "SonarQube service closure row is missing")
             continue
-        if evidence.get("closure_disposition") != "deferred" or evidence.get("closure_blocking") is not True:
-            F.add("USF-ENTERPRISE-023", f"closureMatrix.{service_id}", "SonarQube service row must remain deferred and closure-blocking")
+        if service_id in {"sonarqube", "sonar-postgres"}:
+            if (
+                evidence.get("closure_disposition") != "profile-gated-bounded-proof"
+                or evidence.get("closure_blocking") is not False
+            ):
+                F.add(
+                    "USF-ENTERPRISE-023",
+                    f"closureMatrix.{service_id}",
+                    "SonarQube service row must record bounded profile-gated proof",
+                )
+            for required_ref in (
+                "corepack pnpm proof:assurance:sonarqube",
+                "usf-204-evidence-sonarqube-composed-proof",
+            ):
+                if required_ref not in set(evidence.get("proof_evidence_refs", [])):
+                    F.add("USF-ENTERPRISE-023", f"closureMatrix.{service_id}.proof_evidence_refs", f"missing {required_ref}")
+            if "usf-204-evidence-sonarqube-composed-proof" not in set(evidence.get("enterprise_evidence_refs", [])):
+                F.add("USF-ENTERPRISE-023", f"closureMatrix.{service_id}.enterprise_evidence_refs", "USF-204 evidence ref is required")
+        else:
+            if evidence.get("closure_disposition") != "deferred" or evidence.get("closure_blocking") is not True:
+                F.add(
+                    "USF-ENTERPRISE-023",
+                    f"closureMatrix.{service_id}",
+                    "sonar-oidc-plugin row must remain deferred and closure-blocking",
+                )
         if not {"USF-195", "USF-204"}.issubset(set(evidence.get("tracking_issues", []))):
             F.add("USF-ENTERPRISE-023", f"closureMatrix.{service_id}.tracking_issues", "SonarQube service row must link USF-195 and USF-204")
         if STATIC_ANALYSIS_PROHIBITED_CLAIMS - set(evidence.get("readiness_claims_prohibited", [])):
             F.add("USF-ENTERPRISE-023", f"closureMatrix.{service_id}.readiness_claims_prohibited", "SonarQube closure row prohibited claims are incomplete")
 
     static_matrix = state.get("staticAnalysisMatrix") or {}
-    if static_matrix.get("remainingProofIssue") != "USF-204":
-        F.add("USF-ENTERPRISE-023", "staticAnalysisMatrix.remainingProofIssue", "static analysis matrix must carry USF-204 as remaining proof")
-    if "USF-204" not in set(static_matrix.get("issueLinks", [])):
-        F.add("USF-ENTERPRISE-023", "staticAnalysisMatrix.issueLinks", "static analysis matrix must link USF-204")
+    if static_matrix.get("remainingProofIssue") != "USF-169":
+        F.add("USF-ENTERPRISE-023", "staticAnalysisMatrix.remainingProofIssue", "static analysis matrix must carry USF-169 as remaining proof")
+    if static_matrix.get("resolvedProofIssue") != "USF-204":
+        F.add("USF-ENTERPRISE-023", "staticAnalysisMatrix.resolvedProofIssue", "static analysis matrix must record USF-204 as resolved proof")
+    if {"USF-204", "USF-169", "USF-193"} - set(static_matrix.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-023", "staticAnalysisMatrix.issueLinks", "static analysis matrix must link USF-204, USF-169, and USF-193")
 
     model = state["model"]
     for section, row_ids in SONARQUBE_BOUNDARY_REQUIRED_EVIDENCE_ROWS.items():
@@ -2407,21 +2590,47 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         for row_id in row_ids:
             row = rows.get(row_id)
             if not row:
-                F.add("USF-ENTERPRISE-023", row_id, f"missing USF-195 enterprise row in {section}")
+                F.add("USF-ENTERPRISE-023", row_id, f"missing SonarQube enterprise row in {section}")
                 continue
             row_text = json.dumps(row, sort_keys=True)
             if missing_required_non_claims(row):
-                F.add("USF-ENTERPRISE-023", row_id, "USF-195 enterprise row non-claims are incomplete")
-            if "USF-195" not in row_text or "USF-204" not in row_text or str(SONARQUBE_PROOF_BOUNDARY_PATH) not in row_text:
-                F.add("USF-ENTERPRISE-023", row_id, "USF-195 enterprise row lacks issue, follow-up, or boundary linkage")
-            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
-                F.add("USF-ENTERPRISE-023", row_id, "USF-195 enterprise row lacks validation command")
+                F.add("USF-ENTERPRISE-023", row_id, "SonarQube enterprise row non-claims are incomplete")
+            if "USF-204" in row_id and "USF-204" not in row_text:
+                F.add("USF-ENTERPRISE-023", row_id, "USF-204 enterprise row lacks issue linkage")
+            if "usf-195" in row_id and "USF-195" not in row_text:
+                F.add("USF-ENTERPRISE-023", row_id, "USF-195 enterprise row lacks issue linkage")
+            if section not in {"threatModelAbuseCaseRegister", "sdkDependencyGovernance"} and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-023", row_id, "SonarQube enterprise row lacks validation command")
             if section == "evidenceRegister":
-                for issue in SONARQUBE_BOUNDARY_REQUIRED_ISSUES:
+                expected_issues = {"USF-195", "USF-204", "USF-171", "USF-187", "USF-184", "USF-192", "USF-133"}
+                for issue in expected_issues:
                     if issue not in row.get("issueLinks", []):
                         F.add("USF-ENTERPRISE-023", row_id, f"evidence row lacks {issue}")
                 if "not prove" not in str(row.get("whatWasNotProven", "")).lower():
                     F.add("USF-ENTERPRISE-023", row_id, "evidence row must preserve explicit non-proof boundary")
+                if "USF-204" in row_id and row.get("validationCommand") != "corepack pnpm proof:assurance:sonarqube":
+                    F.add("USF-ENTERPRISE-023", row_id, "USF-204 evidence row must pin SonarQube proof command")
+            if section == "sdkDependencyGovernance":
+                expected_sdk = {
+                    "packageName": "@sonar/scan",
+                    "version": "4.3.8",
+                    "officialOrDeFactoStatus": "official-sonarsource-npm-scanner",
+                    "providerId": "quality-gate-sonarqube-composed-test",
+                }
+                for key, expected in expected_sdk.items():
+                    if row.get(key) != expected:
+                        F.add("USF-ENTERPRISE-023", f"{row_id}.{key}", f"expected {expected!r}")
+                for field in (
+                    "selectionRationale",
+                    "licencePosture",
+                    "maintenancePosture",
+                    "securityAdvisoryPosture",
+                    "typescriptRuntimeCompatibility",
+                    "forbiddenLayerImportCheck",
+                    "updateDeprecationOwner",
+                ):
+                    if not row.get(field):
+                        F.add("USF-ENTERPRISE-023", f"{row_id}.{field}", "SDK governance field is required")
 
 
 def check_sentry_error_monitoring_disposition(F: Findings, state: dict[str, Any]) -> None:

@@ -393,12 +393,12 @@
         "provider-mode",
         "guardrails"
       ],
-      "evidence_grade": "D",
+      "evidence_grade": "B",
       "react_evidence_summary": "SonarQube compose profile and tooling-ci lineage",
-      "readiness_impact": "Decide whether SonarQube remains required for universal dev foundation.",
-      "tracking_carrier_or_recommendation": "draft decision required",
-      "usf_evidence_summary": "make verify only",
-      "usf_status": "requires-human-decision"
+      "readiness_impact": "USF-204 proves bounded local Compose SonarQube scan submission and quality-gate readback for synthetic source only; this is not scanner readiness, vulnerability clearance, environment readiness, or full React parity.",
+      "tracking_carrier_or_recommendation": "USF-171/USF-195/USF-204 with residual USF-169 and USF-193 boundaries.",
+      "usf_evidence_summary": "Local deterministic validation remains mandatory and non-equivalent; USF-204 adds official SonarSource npm scanner proof against local Compose SonarQube with redacted evidence and cleanup.",
+      "usf_status": "profile-gated-bounded-proof"
     },
     {
       "blocking_level": "P1",
