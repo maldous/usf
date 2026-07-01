@@ -10,10 +10,15 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
+  BreakGlassRegistry,
   createPolicyDecisionPoint,
   InMemoryTenantMembershipDirectory,
 } from "@foundation/capability-tenant";
-import { createTenantContext, type AuthorizationRequest } from "@foundation/core";
+import {
+  createTenantContext,
+  type AuthorizationRequest,
+  type MembershipStatus,
+} from "@foundation/core";
 
 const COMPOSE = ["compose", "-f", "compose/compose.yaml", "exec", "-T", "postgres", "psql"];
 const DB = "foundation";
@@ -103,17 +108,24 @@ function setup(): void {
   );
 }
 
-function buildPdp() {
+function buildPdp(
+  input: {
+    readonly status?: MembershipStatus;
+    readonly roles?: readonly string[];
+    readonly actorId?: string;
+    readonly tenantId?: string;
+  } = {},
+) {
   // Actor is an active member of tenant A only (USF authority), mirroring the seeded DB rows.
   const memberships = new InMemoryTenantMembershipDirectory();
   memberships.upsert({
     membershipId: "m-a",
-    tenantId: TENANT_A,
-    actorId: ACTOR,
-    status: "active",
-    roles: ["tenant-admin"],
+    tenantId: input.tenantId ?? TENANT_A,
+    actorId: input.actorId ?? ACTOR,
+    status: input.status ?? "active",
+    roles: input.roles ?? ["tenant-admin"],
   });
-  return createPolicyDecisionPoint({ memberships });
+  return { memberships, pdp: createPolicyDecisionPoint({ memberships }) };
 }
 
 function authzRequest(tenantId: string): AuthorizationRequest {
@@ -124,12 +136,31 @@ function authzRequest(tenantId: string): AuthorizationRequest {
   };
 }
 
+function classifiedRequest(tenantId: string, classification: string): AuthorizationRequest {
+  return {
+    ...authzRequest(tenantId),
+    resource: {
+      type: "tenant-member",
+      id: "classified-row",
+      tenantId,
+      attributes: { data_classification: classification },
+    },
+  };
+}
+
+function assertSyncDecision(value: unknown): void {
+  if (value && typeof value === "object" && "then" in value) {
+    throw new Error("PDP decide returned a Promise; PDP must remain synchronous");
+  }
+}
+
 function main(): void {
   setup();
-  const pdp = buildPdp();
+  const { memberships, pdp } = buildPdp();
 
   // (a) PDP permit for tenant A, and RLS context set to exactly the decided tenant succeeds.
   const permit = pdp.decide(authzRequest(TENANT_A));
+  assertSyncDecision(permit);
   if (permit.effect !== "permit") {
     throw new Error(`expected PDP permit for tenant A, got ${permit.effect}/${permit.reasonCode}`);
   }
@@ -143,6 +174,9 @@ function main(): void {
     throw new Error(`PDP decided tenant ${permit.tenantId} must equal the RLS SET LOCAL tenant`);
   }
   checks.push("PDP permit uses exactly the tenant the RLS context is set to; read succeeds");
+  checks.push(
+    "PDP decision is synchronous; no Promise or async provider call is part of evaluation",
+  );
 
   // (b) PDP deny for tenant B (no active membership): the deny path never reaches the database.
   const deny = pdp.decide(authzRequest(TENANT_B));
@@ -167,6 +201,96 @@ function main(): void {
     "RLS blocks cross-tenant data even when the app-layer tenant is wrong (independent backstop)",
   );
 
+  // (d) Membership lifecycle and cache posture: every non-active membership fails
+  // closed, and a changed membership is observed by the next synchronous decision.
+  const inactiveStatuses: readonly MembershipStatus[] = [
+    "pending",
+    "invited",
+    "suspended",
+    "revoked",
+    "expired",
+    "deleted",
+  ];
+  for (const status of inactiveStatuses) {
+    const inactive = buildPdp({ status }).pdp.decide(authzRequest(TENANT_A));
+    assertSyncDecision(inactive);
+    if (inactive.effect !== "deny" || inactive.reasonCode !== "inactive-or-missing-membership") {
+      throw new Error(`membership status ${status} must fail closed`);
+    }
+  }
+  checks.push("membership lifecycle fail-closed: only active memberships authorize");
+
+  memberships.upsert({
+    membershipId: "m-a",
+    tenantId: TENANT_A,
+    actorId: ACTOR,
+    status: "suspended",
+    roles: ["tenant-admin"],
+  });
+  const afterSuspension = pdp.decide(authzRequest(TENANT_A));
+  assertSyncDecision(afterSuspension);
+  if (afterSuspension.effect !== "deny") {
+    throw new Error("PDP must re-read membership state after suspension; cached permit is unsafe");
+  }
+  checks.push("authorization cache posture: no cached permit survives membership suspension");
+
+  memberships.upsert({
+    membershipId: "m-a",
+    tenantId: TENANT_A,
+    actorId: ACTOR,
+    status: "active",
+    roles: ["tenant-admin"],
+  });
+  const revalidated = pdp.decide(authzRequest(TENANT_A));
+  assertSyncDecision(revalidated);
+  if (revalidated.effect !== "permit") {
+    throw new Error("PDP must permit again after active membership is refreshed");
+  }
+  checks.push(
+    "time-of-check posture: sensitive actions are re-evaluated against current membership",
+  );
+
+  const restrictedDenied = pdp.decide(classifiedRequest(TENANT_A, "restricted"));
+  assertSyncDecision(restrictedDenied);
+  if (restrictedDenied.effect !== "deny") {
+    throw new Error("restricted data read must require stronger authorization");
+  }
+  const securityPdp = buildPdp({ roles: ["security-admin"] }).pdp;
+  const restrictedPermit = securityPdp.decide(classifiedRequest(TENANT_A, "restricted"));
+  assertSyncDecision(restrictedPermit);
+  if (
+    restrictedPermit.effect !== "permit" ||
+    !restrictedPermit.obligations.includes("log-sensitive-access")
+  ) {
+    throw new Error("security-admin restricted data read must carry sensitive-access obligation");
+  }
+  checks.push(
+    "ABAC classification depth: restricted data requires stronger permission and audit obligation",
+  );
+
+  const breakGlass = new BreakGlassRegistry();
+  try {
+    breakGlass.approve({
+      tenantId: TENANT_A,
+      requesterId: ACTOR,
+      approverId: ACTOR,
+      reason: "unsafe-self-approval",
+      scope: "tenant.members.*",
+      ttlMs: 60_000,
+    });
+    throw new Error("break-glass self approval unexpectedly succeeded");
+  } catch (error) {
+    if (!(error instanceof Error) || !error.message.includes("cannot approve")) {
+      throw error;
+    }
+  }
+  checks.push("separation of duties: break-glass self-approval fails closed");
+
+  if (!permit.policyVersion || !permit.evaluationContextHash) {
+    throw new Error("policy version and evaluation context hash are required evidence");
+  }
+  checks.push("policy input evidence carries version and evaluation-context hash");
+
   console.log(
     JSON.stringify(
       {
@@ -177,6 +301,27 @@ function main(): void {
         proofLevelObserved: "substrate-proven",
         liveExternalProviderClaim: false,
         productionLiveClaim: false,
+        liveProviderReadinessClaim: false,
+        certificationClaim: false,
+        fullAuthorizationParityClaim: false,
+        usf133ClosureClaim: false,
+        enterpriseAuthzDepthGate: {
+          sourceIssue: "USF-141",
+          pdpSynchronousChecked: true,
+          membershipLifecycleFailClosedChecked: true,
+          authorizationCacheInvalidationChecked: true,
+          timeOfCheckRevalidationChecked: true,
+          abacClassificationChecked: true,
+          breakGlassSeparationChecked: true,
+          policyInputVersionHashChecked: true,
+          delegationImpersonationImplemented: false,
+          fieldLevelControlsStatus: "classification-only-field-level-depth-deferred",
+          tokenSessionValidationFollowUp: "USF-149",
+          rateLimitFollowUp: "USF-161",
+          workflowRevalidationFollowUp: "USF-151",
+          apiGatewayFollowUp: "USF-155",
+          operatorAccessFollowUp: "USF-169",
+        },
         policyVersion: permit.policyVersion,
         checks: checks.length,
         checkLabels: checks,

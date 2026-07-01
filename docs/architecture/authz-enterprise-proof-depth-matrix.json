@@ -1,0 +1,238 @@
+{
+  "id": "authz-enterprise-proof-depth-matrix",
+  "sourceIssue": "USF-141",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-190",
+  "capabilityId": "tenant-authz-pdp",
+  "proofCommand": "make authz-proof",
+  "rawProofCommand": "corepack pnpm proof:authz",
+  "rawProofCommandBoundary": "requires Compose Postgres to be running; make authz-proof owns startup and teardown",
+  "validatorCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+  "sourceUseMatrix": "docs/architecture/parity-tenant-authz-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-141-authz-enterprise-proof-depth",
+    "evidence-usf-141-authz-enterprise-proof-depth",
+    "threat-usf-141-authz-enterprise-depth",
+    "access-usf-141-authz-enterprise-depth",
+    "incident-usf-141-authz-enterprise-depth",
+    "privacy-usf-141-authz-enterprise-depth"
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred authorization control is implemented with proof or explicitly reclassified.",
+      "evidence": "controls array records proven-local, bounded-local-proof, transferred, or deferred-with-owner status for every USF-141 control."
+    },
+    {
+      "criterion": "PDP synchronous behaviour is preserved.",
+      "evidence": "pdp-synchronous-evaluation control and proof output check that decide returns a synchronous PolicyDecision."
+    },
+    {
+      "criterion": "Tenant, access, audit, and fail-closed evidence exists for any new control claim.",
+      "evidence": "make authz-proof and tests/capabilities/authorization.test.ts cover tenant, access, audit, and fail-closed evidence for proven controls."
+    },
+    {
+      "criterion": "Validator coverage exists for any new authorization claim.",
+      "evidence": "USF-AUTHZ-008 through USF-AUTHZ-013 validate the USF-141 matrix, proof linkage, deferred metadata, sync PDP, and non-claims."
+    },
+    {
+      "criterion": "No live provider or certification readiness claim is made without proof.",
+      "evidence": "claims are false and nonClaims includes live-provider, certification, production, full-readiness, and USF-133 closure non-claims."
+    }
+  ],
+  "controls": [
+    {
+      "id": "pdp-synchronous-evaluation",
+      "status": "proven-local",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/authz-rls-consistency-proof.ts",
+        "capabilities/tenant/src/pdp.ts"
+      ],
+      "proofCommand": "make authz-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "nonClaimBoundary": "synchronous local PDP proof is not live provider readiness"
+    },
+    {
+      "id": "membership-lifecycle-fail-closed",
+      "status": "proven-local",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/authz-rls-consistency-proof.ts",
+        "tests/capabilities/authorization.test.ts",
+        "docs/architecture/tenant-authorization-standard.md"
+      ],
+      "proofCommand": "make authz-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "nonClaimBoundary": "local in-memory membership proof is not external IdP lifecycle readiness"
+    },
+    {
+      "id": "authorization-cache-and-revalidation",
+      "status": "bounded-local-proof",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/authz-rls-consistency-proof.ts",
+        "capabilities/tenant/src/pdp.ts"
+      ],
+      "proofCommand": "make authz-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "nonClaimBoundary": "no cache exists in this slice; future distributed cache invalidation remains non-claimed"
+    },
+    {
+      "id": "abac-attribute-expansion",
+      "status": "bounded-local-proof",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/authz-rls-consistency-proof.ts",
+        "tests/capabilities/authorization.test.ts",
+        "docs/architecture/tenant-authorization-standard.md"
+      ],
+      "proofCommand": "make authz-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "nonClaimBoundary": "classification ABAC is proven; device, network, relationship, assurance, and geo attributes remain deferred"
+    },
+    {
+      "id": "policy-input-versioned-schema",
+      "status": "bounded-local-proof",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/tenant/src/authorization-policy.ts",
+        "capabilities/tenant/src/pdp.ts",
+        "packages/proof/src/authz-rls-consistency-proof.ts"
+      ],
+      "proofCommand": "make authz-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "nonClaimBoundary": "policy version and context hash are proven; no public policy schema compatibility claim"
+    },
+    {
+      "id": "delegation-and-impersonation",
+      "status": "deferred-with-owner",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-149",
+        "USF-155",
+        "USF-169"
+      ],
+      "deferredReason": "No authorised delegation or impersonation product surface exists in the current foundation scope; any future surface needs explicit original/effective actor, expiry, PDP, and audit proof.",
+      "nonClaimBoundary": "delegation and impersonation readiness are not claimed"
+    },
+    {
+      "id": "field-level-authorization",
+      "status": "deferred-with-owner",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-147",
+        "USF-155",
+        "USF-163"
+      ],
+      "deferredReason": "Classification-based stronger read permission is proven, but field visibility and mutability policy surfaces remain domain-specific deferred depth.",
+      "nonClaimBoundary": "field-level authorization readiness is not claimed"
+    },
+    {
+      "id": "token-session-validation-depth",
+      "status": "transferred",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-149"
+      ],
+      "deferredReason": "Authentication token and session runtime depth belongs to the auth/identity source issue; token claims remain inputs only and do not authorize.",
+      "nonClaimBoundary": "live IdP, browser session, and token lifecycle readiness are not claimed by USF-141"
+    },
+    {
+      "id": "authz-rate-limits-and-abuse-controls",
+      "status": "transferred",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-161"
+      ],
+      "deferredReason": "Distributed rate-limit and abuse-control enforcement belongs to the guardrails source issue.",
+      "nonClaimBoundary": "production or distributed authorization rate limiting is not claimed"
+    },
+    {
+      "id": "workflow-toctou-and-long-running-revalidation",
+      "status": "transferred",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-151"
+      ],
+      "deferredReason": "The local PDP re-evaluates current membership on every decision; long-running workflow revalidation belongs to jobs/workflows source depth.",
+      "nonClaimBoundary": "workflow replay, long-running revalidation, and production orchestration readiness are not claimed"
+    },
+    {
+      "id": "broader-separation-of-duties",
+      "status": "bounded-local-proof",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/authz-rls-consistency-proof.ts",
+        "tests/capabilities/authorization.test.ts",
+        "packages/proof/src/jobs-workflows-proof.ts"
+      ],
+      "proofCommand": "make authz-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "nonClaimBoundary": "break-glass and workflow approval SoD are bounded local proofs; full policy administration SoD is not claimed"
+    }
+  ],
+  "claims": {
+    "liveProviderReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTHZ-010",
+  "mutation": {
+    "file": "capabilities/tenant/src/pdp.ts",
+    "replace": {
+      "old": "decide(request: AuthorizationRequest): PolicyDecision {",
+      "new": "async decide(request: AuthorizationRequest): Promise<PolicyDecision> {"
+    }
+  }
+}

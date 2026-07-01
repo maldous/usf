@@ -77,7 +77,8 @@
         "capabilities/tenant/src/authorize.ts",
         "packages/proof/src/authz-rls-consistency-proof.ts",
         "tools/validate-parity/validate-authz.py",
-        "docs/architecture/tenant-authorization-standard.md"
+        "docs/architecture/tenant-authorization-standard.md",
+        "docs/architecture/authz-enterprise-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/authorization.test.ts",
@@ -85,16 +86,16 @@
         "tests/capabilities/tenant-isolation.test.ts"
       ],
       "usf_proofs": [
-        "make authz-proof (packages/proof/src/authz-rls-consistency-proof.ts): PDP/RLS consistency under the real app role",
-        "make parity (validate-authz USF-AUTHZ-001..007 with 7 planted defects)"
+        "make authz-proof (packages/proof/src/authz-rls-consistency-proof.ts): PDP/RLS consistency under the real app role plus USF-141 synchronous PDP, membership lifecycle, no-cache revalidation, classification ABAC, break-glass SoD, and policy version/hash evidence",
+        "make parity (validate-authz USF-AUTHZ-001..013 with planted defects)"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-141",
+      "blocker": "USF-149/USF-151/USF-155/USF-161 plus domain-specific follow-ups",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "USF-140 merged: USF-owned PDP (ADR 0010) combining RBAC+ABAC over active membership, fail-closed, structured audited decisions, break-glass in PDP, identity-not-authorization, PDP/RLS consistency proof, validate-authz enforcement. Deferred authz depth tracked in USF-141.",
-      "retry_condition": "USF-141 completes deferred authorization depth (delegation/impersonation, field-level authz, cache, token/session validation, rate-limiting); full tenant/authz parity then moves to migrated."
+      "evidence": "USF-140 merged: USF-owned PDP (ADR 0010) combining RBAC+ABAC over active membership, fail-closed, structured audited decisions, break-glass in PDP, identity-not-authorization, PDP/RLS consistency proof, validate-authz enforcement. USF-141 adds bounded enterprise proof-depth evidence for synchronous PDP, membership lifecycle fail-closed, no cached permit after membership suspension, TOCTOU-style revalidation at decision time, classification ABAC, break-glass separation of duties, policy version/context hash, enterprise evidence rows, and validate-authz USF-AUTHZ-008..013. Remaining delegation/impersonation, field-level policy, token/session, distributed rate-limit, workflow revalidation, API/gateway, and operator-access depth is explicitly transferred or deferred to linked source issues.",
+      "retry_condition": "Linked source-depth issues complete transferred authorization depth: USF-149 for token/session and identity runtime, USF-151 for long-running workflow revalidation, USF-155 for API/gateway/browser-session surfaces, USF-161 for distributed authz rate-limit and abuse controls, and domain issues for field-level policy. Full tenant/authz parity remains unclaimed until those land."
     },
     {
       "react_item_id": "audit-events",

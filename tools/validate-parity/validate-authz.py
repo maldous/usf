@@ -11,6 +11,12 @@ policy and capability source so a regression fails closed:
   USF-AUTHZ-005  the authorizer emits authorization-decision audit evidence
   USF-AUTHZ-006  break-glass forbids self-approval
   USF-AUTHZ-007  the tenant/authz capability does not import a provider/IdP/DB adapter
+  USF-AUTHZ-008  USF-141 enterprise authorization depth matrix is present and complete
+  USF-AUTHZ-009  deferred/reclassified authorization control lacks owner or follow-up metadata
+  USF-AUTHZ-010  PDP synchronous behaviour is lost
+  USF-AUTHZ-011  USF-141 proof or enterprise evidence linkage is incomplete
+  USF-AUTHZ-012  authorization depth readiness/certification is overclaimed
+  USF-AUTHZ-013  USF-141 proven control lacks proof-backed evidence
 
 Live PDP and PDP/RLS-consistency behaviour is proven by the hermetic tests and the
 composed-Postgres proof (make authz-proof). Planted defects under
@@ -33,14 +39,50 @@ RULES = {
     "USF-AUTHZ-005": ("blocking", "authorizer does not emit authorization-decision audit"),
     "USF-AUTHZ-006": ("blocking", "break-glass does not forbid self-approval"),
     "USF-AUTHZ-007": ("blocking", "tenant/authz capability imports a provider adapter"),
+    "USF-AUTHZ-008": ("blocking", "USF-141 authorization depth matrix is missing or incomplete"),
+    "USF-AUTHZ-009": ("blocking", "deferred authorization control lacks owner or follow-up metadata"),
+    "USF-AUTHZ-010": ("blocking", "PDP synchronous behaviour is not preserved"),
+    "USF-AUTHZ-011": ("blocking", "USF-141 proof or enterprise evidence linkage is incomplete"),
+    "USF-AUTHZ-012": ("blocking", "authorization depth readiness or certification is overclaimed"),
+    "USF-AUTHZ-013": ("blocking", "USF-141 proven authorization control lacks proof-backed evidence"),
     "USF-AUTHZ-SELFTEST": ("blocking", "planted authz defect did not raise its expected rule"),
 }
 
 POLICY = "capabilities/tenant/src/authorization-policy.ts"
 AUTHORIZE = "capabilities/tenant/src/authorize.ts"
+PDP = "capabilities/tenant/src/pdp.ts"
 TENANT_INDEX = "capabilities/tenant/src/index.ts"
 CAPABILITY_GLOB = "capabilities/tenant/src/*.ts"
 SELFTEST_DIR = "tools/validate-parity/authz-planted-defects"
+USF141_MATRIX_PATH = "docs/architecture/authz-enterprise-proof-depth-matrix.json"
+USF141_REQUIRED_CONTROLS = {
+    "pdp-synchronous-evaluation",
+    "membership-lifecycle-fail-closed",
+    "authorization-cache-and-revalidation",
+    "abac-attribute-expansion",
+    "policy-input-versioned-schema",
+    "delegation-and-impersonation",
+    "field-level-authorization",
+    "token-session-validation-depth",
+    "authz-rate-limits-and-abuse-controls",
+    "workflow-toctou-and-long-running-revalidation",
+    "broader-separation-of-duties",
+}
+USF141_PROHIBITED_CLAIMS = {
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure",
+}
+PROVEN_STATUSES = {"proven-local", "bounded-local-proof", "implemented"}
+DEFERRED_STATUSES = {"deferred-with-owner", "transferred", "out-of-scope-with-rationale"}
 
 
 class Findings:
@@ -82,16 +124,26 @@ def read_text(path):
         return handle.read()
 
 
+def read_json(path):
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as handle:
+        return json.load(handle)
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     files = {}
     for path in sorted(glob.glob(CAPABILITY_GLOB)):
         files[path] = read_text(path)
-    for key in (POLICY, AUTHORIZE, TENANT_INDEX):
+    for key in (POLICY, AUTHORIZE, PDP, TENANT_INDEX):
         files.setdefault(key, read_text(key))
     for path, text in overrides.get("files", {}).items():
         files[path] = text
-    return {"files": files}
+    return {
+        "files": files,
+        "usf141_matrix": overrides.get("usf141_matrix", read_json(USF141_MATRIX_PATH)),
+    }
 
 
 def role_permissions_block(policy):
@@ -110,6 +162,7 @@ def run_checks(F, state=None):
     policy = files.get(POLICY, "")
     authorize = files.get(AUTHORIZE, "")
     tenant_index = files.get(TENANT_INDEX, "")
+    pdp = files.get(PDP, "")
 
     if 'DEFAULT_EFFECT = "deny"' not in policy:
         F.add("USF-AUTHZ-001", POLICY, "DEFAULT_EFFECT must be \"deny\"")
@@ -126,16 +179,106 @@ def run_checks(F, state=None):
     for path, text in sorted(files.items()):
         if re.search(r'from "@foundation/adapter-', text):
             F.add("USF-AUTHZ-007", path, "tenant/authz capability must not import a provider adapter")
+    if re.search(r"async\s+decide\s*\(", pdp) or re.search(r"decide\s*\([^)]*\)\s*:\s*Promise", pdp):
+        F.add("USF-AUTHZ-010", PDP, "PDP decide must remain synchronous")
+    if "await " in pdp:
+        F.add("USF-AUTHZ-010", PDP, "PDP must not await provider state during evaluation")
+    check_usf141_matrix(F, state)
+
+
+def _control_by_id(matrix):
+    return {control.get("id"): control for control in matrix.get("controls", []) if isinstance(control, dict)}
+
+
+def _has_nonempty_list(value):
+    return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item for item in value)
+
+
+def check_usf141_matrix(F, state):
+    matrix = state.get("usf141_matrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-AUTHZ-008", USF141_MATRIX_PATH, "USF-141 authorization depth matrix is missing")
+        return
+    if matrix.get("sourceIssue") != "USF-141" or matrix.get("capabilityId") != "tenant-authz-pdp":
+        F.add("USF-AUTHZ-008", USF141_MATRIX_PATH, "matrix does not identify USF-141 tenant-authz-pdp scope")
+    if matrix.get("proofCommand") != "make authz-proof":
+        F.add("USF-AUTHZ-011", USF141_MATRIX_PATH, "proof command must use the Compose startup/teardown wrapper")
+    if "Compose Postgres" not in matrix.get("rawProofCommandBoundary", ""):
+        F.add("USF-AUTHZ-011", USF141_MATRIX_PATH, "raw proof command boundary is missing")
+    controls = _control_by_id(matrix)
+    missing = sorted(USF141_REQUIRED_CONTROLS - set(controls))
+    if missing:
+        F.add("USF-AUTHZ-008", USF141_MATRIX_PATH, f"missing required controls: {missing}")
+
+    claims = matrix.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-AUTHZ-012", USF141_MATRIX_PATH, "claims object is missing")
+    else:
+        for key, value in claims.items():
+            if key.endswith("Claim") and value is not False:
+                F.add("USF-AUTHZ-012", key, "readiness/certification claim must be false")
+    nonclaims = set(matrix.get("nonClaims", []))
+    missing_nonclaims = sorted(USF141_PROHIBITED_CLAIMS - nonclaims)
+    if missing_nonclaims:
+        F.add("USF-AUTHZ-012", USF141_MATRIX_PATH, f"missing non-claims: {missing_nonclaims}")
+
+    if not _has_nonempty_list(matrix.get("enterpriseEvidenceRefs")):
+        F.add("USF-AUTHZ-011", USF141_MATRIX_PATH, "enterprise evidence references are missing")
+    if not matrix.get("sourceUseMatrix") or not matrix.get("parityMatrix"):
+        F.add("USF-AUTHZ-011", USF141_MATRIX_PATH, "source-use or parity matrix linkage is missing")
+
+    for control_id, control in sorted(controls.items()):
+        status = control.get("status")
+        if not control.get("nonClaimBoundary"):
+            F.add("USF-AUTHZ-008", control_id, "control lacks non-claim boundary")
+        if status in PROVEN_STATUSES:
+            if not control.get("proofCommand") or not control.get("validationCommand"):
+                F.add("USF-AUTHZ-013", control_id, "proven control lacks proof or validator command")
+            if not _has_nonempty_list(control.get("evidenceRefs")):
+                F.add("USF-AUTHZ-013", control_id, "proven control lacks evidence references")
+        elif status in DEFERRED_STATUSES:
+            required = ["owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "followUpIssues"]
+            missing_fields = [field for field in required if not control.get(field)]
+            if missing_fields:
+                F.add("USF-AUTHZ-009", control_id, f"deferred/reclassified control missing {missing_fields}")
+            if not _has_nonempty_list(control.get("followUpIssues")):
+                F.add("USF-AUTHZ-009", control_id, "deferred/reclassified control lacks follow-up issues")
+        else:
+            F.add("USF-AUTHZ-008", control_id, f"unknown or missing control status: {status}")
 
 
 def apply_mutation(base, mutation):
     files = dict(base["files"])
+    matrix = copy.deepcopy(base.get("usf141_matrix"))
     target = mutation.get("file")
     if "replace" in mutation and target in files:
         files[target] = files[target].replace(mutation["replace"]["old"], mutation["replace"]["new"])
     if "append" in mutation and target is not None:
         files[target] = files.get(target, "") + "\n" + mutation["append"]
-    return {"files": files}
+    if mutation.get("matrixOmit"):
+        matrix = None
+    if matrix is not None and mutation.get("matrixRemoveControl"):
+        matrix["controls"] = [
+            control for control in matrix.get("controls", [])
+            if control.get("id") != mutation["matrixRemoveControl"]
+        ]
+    if matrix is not None and mutation.get("matrixRemoveDeferredFollowUp"):
+        target_control = mutation["matrixRemoveDeferredFollowUp"]
+        for control in matrix.get("controls", []):
+            if control.get("id") == target_control:
+                control.pop("followUpIssues", None)
+                control.pop("reviewDate", None)
+    if matrix is not None and mutation.get("matrixRemoveProofCommand"):
+        target_control = mutation["matrixRemoveProofCommand"]
+        for control in matrix.get("controls", []):
+            if control.get("id") == target_control:
+                control.pop("proofCommand", None)
+    if matrix is not None and mutation.get("matrixClearEnterpriseEvidenceRefs"):
+        matrix["enterpriseEvidenceRefs"] = []
+    if matrix is not None and "matrixSetClaim" in mutation:
+        target_claim = mutation["matrixSetClaim"]
+        matrix.setdefault("claims", {})[target_claim["claim"]] = target_claim["value"]
+    return {"files": files, "usf141_matrix": matrix}
 
 
 def load_selftest_fixtures(F):
@@ -160,7 +303,7 @@ def run_selftest(F):
     for path, fixture in fixtures:
         expected = fixture.get("expectedRule")
         local = Findings()
-        run_checks(local, build_state({"files": apply_mutation(base, fixture.get("mutation", {}))["files"]}))
+        run_checks(local, build_state(apply_mutation(base, fixture.get("mutation", {}))))
         got = {item["ruleId"] for item in local.items}
         if expected not in got:
             F.add("USF-AUTHZ-SELFTEST", path, f"expected {expected}; got {sorted(got)}")

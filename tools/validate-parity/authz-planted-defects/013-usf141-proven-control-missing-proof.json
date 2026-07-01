@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-AUTHZ-013",
+  "mutation": {
+    "matrixRemoveProofCommand": "pdp-synchronous-evaluation"
+  }
+}

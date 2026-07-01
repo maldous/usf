@@ -22,8 +22,9 @@
 | `capabilities/tenant/src/membership.ts` | source-derived-rewrite | React tenant membership and identity-mapping lineage | In-memory tenant membership directory and identity directory (stable actor mapping; only active memberships authorize). |
 | `capabilities/tenant/src/authorize.ts` | source-derived-rewrite | React request-level authorization audit lineage | Authorizer capability: PDP decision plus authorization-decision audit evidence. |
 | `packages/proof/src/authz-rls-consistency-proof.ts` | evidence-only-support | PDP/RLS consistency requirement | Composed-Postgres proof that the PDP and RLS agree on tenant boundaries. |
+| `docs/architecture/authz-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-141 enterprise authorization depth requirement | Machine-readable control disposition for synchronous PDP, membership lifecycle, cache/revalidation posture, ABAC depth, delegation/impersonation deferral, field-level boundaries, token/session transfer, rate-limit transfer, workflow revalidation transfer, and non-claims. |
 | `tests/capabilities/authorization.test.ts` | evidence-only-support | Tenant/authz behaviour proof requirement | Hermetic PDP/RBAC/ABAC/membership/break-glass decision-matrix tests. |
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No full authorization parity, full dev readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, or USF-133 closure claim.
