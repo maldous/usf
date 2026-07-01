@@ -222,7 +222,7 @@
       "usf_status": "migrated"
     },
     {
-      "blocking_level": "P1",
+      "blocking_level": "none",
       "capability_group": "quotas, throttles, abuse controls",
       "capability_id": "guardrails",
       "capability_name": "Rate limits/guardrails",
@@ -236,10 +236,10 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Rate limit/quota lineage",
-      "readiness_impact": "Distributed and edge enforcement deferred.",
-      "tracking_carrier_or_recommendation": "USF-160/USF-161",
-      "usf_evidence_summary": "USF guardrails proof",
-      "usf_status": "partial"
+      "readiness_impact": "USF-161 adds bounded synthetic distributed guardrails proof for durable counters, multi-node consistency, route/domain rollout, operator policy approval, cost quota, IP-derived privacy, tenant fairness, audit, retention, and provider fail-closed evidence. Live edge, WAF, CDN, bot, fraud, gateway, production abuse-control operations, and environment readiness remain explicit non-claims.",
+      "tracking_carrier_or_recommendation": "USF-160/USF-161; docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json",
+      "usf_evidence_summary": "USF guardrails proof plus guardrails distributed enforcement proof-depth matrix, validate-guardrails USF-GUARDRAILS-010 through USF-GUARDRAILS-014, enterprise evidence rows, and planted defects.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
     },
     {
       "blocking_level": "P1",

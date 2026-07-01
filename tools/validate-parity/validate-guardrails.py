@@ -23,6 +23,11 @@ RULES = {
     "USF-GUARDRAILS-007": ("blocking", "guardrail parity/source-use rows missing"),
     "USF-GUARDRAILS-008": ("blocking", "guardrail live-enforcement overclaim or unsafe example"),
     "USF-GUARDRAILS-009": ("blocking", "guardrail audit/observability linkage missing"),
+    "USF-GUARDRAILS-010": ("blocking", "USF-161 distributed guardrail proof markers are missing"),
+    "USF-GUARDRAILS-011": ("blocking", "USF-161 distributed guardrail depth matrix is missing or incomplete"),
+    "USF-GUARDRAILS-012": ("blocking", "USF-161 enterprise evidence rows are missing"),
+    "USF-GUARDRAILS-013": ("blocking", "USF-161 live/provider guardrail boundary is incomplete"),
+    "USF-GUARDRAILS-014": ("blocking", "USF-161 guardrail readiness claim is overclaimed"),
     "USF-GUARDRAILS-SELFTEST": ("blocking", "planted guardrail defect did not raise its expected rule"),
 }
 
@@ -41,6 +46,8 @@ PROOF_TESTS = "tests/packages/proof.test.ts"
 STANDARD = "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
 SOURCE_USE = "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md"
 BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
+DEPTH_MATRIX = "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
+ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
@@ -62,6 +69,8 @@ SOURCE_FILES = (
     STANDARD,
     SOURCE_USE,
     BOOTSTRAP_SOURCE_USE,
+    DEPTH_MATRIX,
+    ENTERPRISE_MODEL,
     PACKAGE,
     MAKEFILE,
 )
@@ -139,7 +148,15 @@ def build_state(overrides=None):
         files[path] = text
     matrix = overrides.get("matrix", read_json(MATRIX))
     openapi = overrides.get("openapi", read_json(OPENAPI_JSON))
-    return {"files": files, "matrix": matrix, "openapi": openapi}
+    depth_matrix = overrides.get("depth_matrix", read_json(DEPTH_MATRIX))
+    enterprise_model = overrides.get("enterprise_model", read_json(ENTERPRISE_MODEL))
+    return {
+        "files": files,
+        "matrix": matrix,
+        "openapi": openapi,
+        "depth_matrix": depth_matrix,
+        "enterprise_model": enterprise_model,
+    }
 
 
 def guardrail_rows(matrix):
@@ -174,10 +191,14 @@ def run_checks(F, state=None):
     standard = files[STANDARD]
     source_use = files[SOURCE_USE]
     bootstrap_source_use = files[BOOTSTRAP_SOURCE_USE]
+    depth_matrix_text = files[DEPTH_MATRIX]
+    enterprise_text = files[ENTERPRISE_MODEL]
     package = files[PACKAGE]
     makefile = files[MAKEFILE]
     matrix = state["matrix"]
     openapi = state["openapi"]
+    depth_matrix = state["depth_matrix"]
+    enterprise_model = state["enterprise_model"]
 
     for token in [
         "GUARDRAIL_CLASSIFICATIONS",
@@ -293,8 +314,12 @@ def run_checks(F, state=None):
         F.add("USF-GUARDRAILS-007", MATRIX, "guardrail parity matrix rows incomplete")
     if not any(row.get("react_item_id") == "guardrails.rate-limits" for row in rows):
         F.add("USF-GUARDRAILS-007", MATRIX, "rate-limit row missing")
-    if not any(row.get("react_item_id") == "guardrails.future-api-ops-surfaces" and row.get("usf_status") == "deferred" for row in rows):
-        F.add("USF-GUARDRAILS-007", MATRIX, "future API/ops deferred row missing")
+    if not any(
+        row.get("react_item_id") == "guardrails.future-api-ops-surfaces"
+        and "proof-local operator control-plane" in str(row.get("evidence", ""))
+        for row in rows
+    ):
+        F.add("USF-GUARDRAILS-007", MATRIX, "future API/ops USF-161 boundary row missing")
     if not all(row.get("domain_authorised") is True for row in rows if str(row.get("react_item_id", "")).startswith("guardrails.")):
         F.add("USF-GUARDRAILS-007", MATRIX, "guardrail rows are not domain-authorised")
     for path in [
@@ -319,12 +344,216 @@ def run_checks(F, state=None):
     if "recordSecuritySignal" not in server or "runtime.auditRecorder.record" not in server:
         F.add("USF-GUARDRAILS-009", SERVER, "guardrail telemetry/audit linkage missing")
 
+    for token in [
+        'sourceIssue: "USF-161"',
+        "distributedDepthEvidence",
+        "boundedDistributedGuardrailsProven: true",
+        "durableDistributedCounterChecked: true",
+        "multiNodeConsistencyChecked: true",
+        "routeByRouteRolloutChecked: true",
+        "gatewayEdgePostureChecked: true",
+        "wafCdnBotFraudProviderBoundaryChecked: true",
+        "operatorGuardrailApiChecked: true",
+        "policyApprovalWorkflowChecked: true",
+        "costQuotaChecked: true",
+        "ipDerivedPrivacyChecked: true",
+        "tenantFairnessChecked: true",
+        "auditEvidenceChecked: true",
+        "retentionBoundaryExplicit: true",
+        "providerBoundaryChecked: true",
+        "crossDomainGuardrailLinkageChecked: true",
+        "unavailableProviderFailClosedChecked: true",
+        "liveDistributedEnforcementReadinessClaim: false",
+        "productionAbusePreventionReadinessClaim: false",
+        "ProofDurableDistributedGuardrailLedger",
+        "ProofDistributedGuardrailControlPlane",
+        "USF-161 distributed guardrails proof uses durable synthetic counters across two nodes",
+    ]:
+        if token not in proof:
+            F.add("USF-GUARDRAILS-010", PROOF, f"USF-161 proof marker missing {token}")
+    for token in [
+        'sourceIssue: "USF-161"',
+        "boundedDistributedGuardrailsProven: true",
+        "durableDistributedCounterChecked: true",
+        "multiNodeConsistencyChecked: true",
+        "routeByRouteRolloutChecked: true",
+        "operatorGuardrailApiChecked: true",
+        "policyApprovalWorkflowChecked: true",
+        "productionAbusePreventionReadinessClaim: false",
+    ]:
+        if token not in proof_tests:
+            F.add("USF-GUARDRAILS-010", PROOF_TESTS, f"USF-161 proof test marker missing {token}")
+
+    if not isinstance(depth_matrix, dict):
+        F.add("USF-GUARDRAILS-011", DEPTH_MATRIX, "USF-161 proof-depth matrix must exist and parse")
+        depth_matrix = {}
+    if depth_matrix.get("sourceIssue") != "USF-161":
+        F.add("USF-GUARDRAILS-011", DEPTH_MATRIX, "matrix must be scoped to USF-161")
+    if depth_matrix.get("proofCommand") != "make guardrails-proof":
+        F.add("USF-GUARDRAILS-011", DEPTH_MATRIX, "matrix proof command must be make guardrails-proof")
+    claims = depth_matrix.get("claims", {})
+    if not isinstance(claims, dict) or claims.get("boundedDistributedGuardrailsProven") is not True:
+        F.add("USF-GUARDRAILS-011", DEPTH_MATRIX, "matrix must record boundedDistributedGuardrailsProven=true")
+    for true_claim in (
+        "durableDistributedCounterChecked",
+        "multiNodeConsistencyChecked",
+        "routeByRouteRolloutChecked",
+        "operatorGuardrailApiChecked",
+        "policyApprovalWorkflowChecked",
+        "costQuotaChecked",
+        "ipDerivedPrivacyChecked",
+        "tenantFairnessChecked",
+        "auditEvidenceChecked",
+        "retentionBoundaryExplicit",
+        "providerBoundaryChecked",
+        "crossDomainGuardrailLinkageChecked",
+        "unavailableProviderFailClosedChecked",
+    ):
+        if claims.get(true_claim) is not True:
+            F.add("USF-GUARDRAILS-011", DEPTH_MATRIX, f"matrix claim must be true: {true_claim}")
+    for false_claim in (
+        "liveDistributedEnforcementReadinessClaim",
+        "liveWafReadinessClaim",
+        "liveEdgeReadinessClaim",
+        "liveGatewayReadinessClaim",
+        "liveCdnReadinessClaim",
+        "liveBotFraudReadinessClaim",
+        "productionAbusePreventionReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(false_claim) is not False:
+            F.add("USF-GUARDRAILS-014", DEPTH_MATRIX, f"matrix claim must be false: {false_claim}")
+    controls = depth_matrix.get("controls", [])
+    if not isinstance(controls, list):
+        F.add("USF-GUARDRAILS-011", DEPTH_MATRIX, "matrix controls must be a list")
+        controls = []
+    control_ids = {item.get("id") for item in controls if isinstance(item, dict)}
+    for required in (
+        "local-single-node-foundation-preserved",
+        "durable-distributed-counters",
+        "multi-node-consistency",
+        "route-by-route-domain-rollout",
+        "operator-policy-approval-control-plane",
+        "cost-quota-provider-fail-closed",
+        "ip-privacy-tenant-audit-retention",
+        "gateway-edge-provider-boundary",
+        "production-abuse-operations-boundary",
+    ):
+        if required not in control_ids:
+            F.add("USF-GUARDRAILS-011", DEPTH_MATRIX, f"missing control {required}")
+    for item in controls:
+        if not isinstance(item, dict):
+            continue
+        status = item.get("status")
+        if status in {"out-of-scope-with-rationale", "deferred-with-owner"}:
+            for field in (
+                "owner",
+                "riskOwner",
+                "controlOwner",
+                "riskTreatment",
+                "reviewDate",
+                "promotionImpact",
+                "nonClaimBoundary",
+            ):
+                if not item.get(field):
+                    F.add(
+                        "USF-GUARDRAILS-013",
+                        f"{DEPTH_MATRIX}#{item.get('id')}",
+                        f"reclassified control missing {field}",
+                    )
+        if status in {"proven-local", "bounded-local-proof"}:
+            for field in ("proofCommand", "validationCommand", "evidenceRefs", "nonClaimBoundary"):
+                if not item.get(field):
+                    F.add(
+                        "USF-GUARDRAILS-011",
+                        f"{DEPTH_MATRIX}#{item.get('id')}",
+                        f"proven control missing {field}",
+                    )
+    for token in (
+        "live edge",
+        "WAF",
+        "CDN",
+        "bot",
+        "fraud",
+        "provider-managed counters",
+        "customer traffic",
+        "public guardrail API",
+        "production abuse-control operation",
+        "No live edge",
+    ):
+        if token not in json.dumps(depth_matrix):
+            F.add("USF-GUARDRAILS-013", DEPTH_MATRIX, f"reclassified boundary missing {token}")
+
+    enterprise_row_ids = set()
+    if isinstance(enterprise_model, dict):
+        for key in (
+            "soaSupportMappings",
+            "evidenceRegister",
+            "threatModelAbuseCaseRegister",
+            "accessReviewPrivilegedOperationPosture",
+            "backupRestoreResiliencePosture",
+            "incidentVulnerabilityManagementEvidence",
+            "privacyDataMinimisationPosture",
+        ):
+            rows_for_key = enterprise_model.get(key, [])
+            if isinstance(rows_for_key, list):
+                enterprise_row_ids.update(
+                    row.get("id") for row in rows_for_key if isinstance(row, dict)
+                )
+    for row_id in (
+        "soa-usf-161-guardrails-distributed-depth",
+        "evidence-usf-161-guardrails-distributed-depth",
+        "threat-usf-161-guardrails-distributed-depth",
+        "access-usf-161-guardrails-distributed-depth",
+        "resilience-usf-161-guardrails-distributed-depth",
+        "incident-usf-161-guardrails-distributed-depth",
+        "privacy-usf-161-guardrails-distributed-depth",
+    ):
+        if row_id not in enterprise_row_ids:
+            F.add("USF-GUARDRAILS-012", ENTERPRISE_MODEL, f"enterprise row missing {row_id}")
+    for token in (
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-161",
+        "guardrails-distributed-enforcement-proof-depth-matrix",
+        "boundedDistributedGuardrailsProven=true",
+        "liveWafReadinessClaim=false",
+        "liveCdnReadinessClaim=false",
+        "liveBotFraudReadinessClaim=false",
+        "productionAbusePreventionReadinessClaim=false",
+    ):
+        if token.lower() not in enterprise_text.lower():
+            F.add("USF-GUARDRAILS-012", ENTERPRISE_MODEL, f"enterprise evidence token missing {token}")
+
+    usf161_sources = "\n".join([standard, source_use, depth_matrix_text, proof, json.dumps(depth_matrix)])
+    for phrase in (
+        "live edge readiness is proven",
+        "live waf readiness is proven",
+        "live cdn readiness is proven",
+        "bot protection readiness is proven",
+        "fraud provider readiness is proven",
+        "production abuse prevention readiness is proven",
+        "guardrails readiness is complete",
+        "usf-133 closure is proven",
+    ):
+        if phrase in usf161_sources.lower():
+            F.add("USF-GUARDRAILS-014", "USF-161", f"readiness overclaim present: {phrase}")
+
 
 def apply_defect(state, defect):
     mutated = {
         "files": dict(state["files"]),
         "matrix": json.loads(json.dumps(state["matrix"])),
         "openapi": json.loads(json.dumps(state["openapi"])),
+        "depth_matrix": json.loads(json.dumps(state["depth_matrix"])),
+        "enterprise_model": json.loads(json.dumps(state["enterprise_model"])),
     }
     for edit in defect.get("edits", []):
         target = edit["target"]
@@ -341,6 +570,22 @@ def apply_defect(state, defect):
                 raise AssertionError(f"old text not found in openapi for defect {defect.get('id')}")
             mutated["openapi"] = json.loads(text.replace(old, new, 1))
             mutated["files"][OPENAPI_JSON] = json.dumps(mutated["openapi"])
+        elif target == "depth_matrix":
+            text = json.dumps(mutated["depth_matrix"])
+            if old not in text:
+                raise AssertionError(
+                    f"old text not found in depth matrix for defect {defect.get('id')}"
+                )
+            mutated["depth_matrix"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][DEPTH_MATRIX] = json.dumps(mutated["depth_matrix"])
+        elif target == "enterprise_model":
+            text = json.dumps(mutated["enterprise_model"])
+            if old not in text:
+                raise AssertionError(
+                    f"old text not found in enterprise model for defect {defect.get('id')}"
+                )
+            mutated["enterprise_model"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][ENTERPRISE_MODEL] = json.dumps(mutated["enterprise_model"])
         else:
             text = mutated["files"].get(target, "")
             if old not in text:

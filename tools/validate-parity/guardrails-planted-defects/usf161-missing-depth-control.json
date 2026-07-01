@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.usf161-missing-depth-control",
+  "expectedRuleId": "USF-GUARDRAILS-011",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "durable-distributed-counters",
+      "new": "durable-distributed-counters-defect"
+    }
+  ]
+}

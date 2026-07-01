@@ -2371,16 +2371,17 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "react_item_id": "guardrails.throttles",
       "behaviour_summary": "Throttle control type and decision semantics represented; runtime delay scheduling deferred.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
         "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/rate-limits-abuse-controls.test.ts",
@@ -2389,10 +2390,12 @@
       ],
       "usf_proofs": [
         "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
       ],
-      "evidence": "Throttle control type and decision semantics represented; runtime delay scheduling deferred.",
-      "retry_condition": "USF-161: implement actual delay queue/admission integration"
+      "evidence": "Throttle and delay semantics remain modelled; USF-161 adds bounded route/domain proof and explicitly reclassifies actual delay-queue runtime scheduling as outside this source issue readiness claim.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",
@@ -2405,16 +2408,17 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "react_item_id": "guardrails.admission-control",
       "behaviour_summary": "Admission denial semantics, unknown policy fail-closed, and security policy denial represented; broad admission rollout deferred.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
         "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/rate-limits-abuse-controls.test.ts",
@@ -2423,10 +2427,12 @@
       ],
       "usf_proofs": [
         "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
       ],
-      "evidence": "Admission denial semantics, unknown policy fail-closed, and security policy denial represented; broad admission rollout deferred.",
-      "retry_condition": "USF-161: roll out admission policies across protected entry points"
+      "evidence": "Admission denial semantics remain modelled; USF-161 adds bounded distributed proof and fail-closed provider-unavailable evidence without claiming broad production admission rollout.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",
@@ -2473,16 +2479,17 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "react_item_id": "guardrails.actor-session-service-actor-limits",
       "behaviour_summary": "Actor and service-actor scope modeled; privileged actors are not exempt by default. Session-specific runtime guards deferred.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
         "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/rate-limits-abuse-controls.test.ts",
@@ -2491,10 +2498,12 @@
       ],
       "usf_proofs": [
         "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
       ],
-      "evidence": "Actor and service-actor scope modeled; privileged actors are not exempt by default. Session-specific runtime guards deferred.",
-      "retry_condition": "USF-161: session and break-glass rate-limit runtime rollout"
+      "evidence": "Actor and service-actor scopes remain modelled; USF-161 records privileged/operator guardrail control-plane evidence and reclassifies session-specific live runtime rollout as a future stronger claim.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",
@@ -2507,11 +2516,11 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "react_item_id": "guardrails.api-route-guardrails",
       "behaviour_summary": "POST /v1/jobs side-effecting route is guarded with safe 429; route metadata records posture.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
@@ -2519,7 +2528,8 @@
         "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
         "apps/api/src/server.ts",
         "packages/contracts/src/api-surface.ts",
-        "packages/openapi/openapi.json"
+        "packages/openapi/openapi.json",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/rate-limits-abuse-controls.test.ts",
@@ -2528,10 +2538,12 @@
       ],
       "usf_proofs": [
         "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
       ],
-      "evidence": "POST /v1/jobs side-effecting route is guarded with safe 429; route metadata records posture.",
-      "retry_condition": "USF-161: broad API route guard rollout and future guardrail ops APIs"
+      "evidence": "POST /v1/jobs remains concretely guarded; USF-161 adds synthetic route-by-route proof across API, jobs, notifications, files, providers, and import/export boundaries without public gateway readiness claims.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",
@@ -2580,177 +2592,17 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "react_item_id": "guardrails.notification-guardrails",
       "behaviour_summary": "Notification send/bulk guardrail posture represented in the standard; runtime notification quota rollout deferred.",
-      "usf_status": "partial",
-      "usf_paths": [
-        "packages/core/src/index.ts",
-        "packages/ports/src/index.ts",
-        "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
-      ],
-      "usf_tests": [
-        "tests/capabilities/rate-limits-abuse-controls.test.ts",
-        "tests/apps/api-contracts.test.ts",
-        "tests/packages/proof.test.ts"
-      ],
-      "usf_proofs": [
-        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
-      ],
-      "evidence": "Notification send/bulk guardrail posture represented in the standard; runtime notification quota rollout deferred.",
-      "retry_condition": "USF-161: notification send, bulk send, and consent/suppression-linked quotas"
-    },
-    {
-      "category": "guardrail",
-      "react_paths": [
-        "../react/apps/platform-api/src/usecases/rate-limits.ts",
-        "../react/apps/platform-api/src/usecases/quota.ts",
-        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
-        "../react/apps/platform-api/tests/unit/quota.test.ts"
-      ],
-      "semantic_authority": "known",
-      "source_use_disposition": "replace",
-      "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
-      "domain_authorised": true,
-      "react_item_id": "guardrails.file-guardrails",
-      "behaviour_summary": "File upload/download/export guardrail posture represented; full runtime file quota rollout deferred.",
-      "usf_status": "partial",
-      "usf_paths": [
-        "packages/core/src/index.ts",
-        "packages/ports/src/index.ts",
-        "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
-      ],
-      "usf_tests": [
-        "tests/capabilities/rate-limits-abuse-controls.test.ts",
-        "tests/apps/api-contracts.test.ts",
-        "tests/packages/proof.test.ts"
-      ],
-      "usf_proofs": [
-        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
-      ],
-      "evidence": "File upload/download/export guardrail posture represented; full runtime file quota rollout deferred.",
-      "retry_condition": "USF-161: file upload/download/export rate and quota policies"
-    },
-    {
-      "category": "guardrail",
-      "react_paths": [
-        "../react/apps/platform-api/src/usecases/rate-limits.ts",
-        "../react/apps/platform-api/src/usecases/quota.ts",
-        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
-        "../react/apps/platform-api/tests/unit/quota.test.ts"
-      ],
-      "semantic_authority": "known",
-      "source_use_disposition": "replace",
-      "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
-      "domain_authorised": true,
-      "react_item_id": "guardrails.provider-guardrails",
-      "behaviour_summary": "Provider backpressure/protection model is represented without live provider enforcement claims.",
-      "usf_status": "partial",
-      "usf_paths": [
-        "packages/core/src/index.ts",
-        "packages/ports/src/index.ts",
-        "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
-      ],
-      "usf_tests": [
-        "tests/capabilities/rate-limits-abuse-controls.test.ts",
-        "tests/apps/api-contracts.test.ts",
-        "tests/packages/proof.test.ts"
-      ],
-      "usf_proofs": [
-        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
-      ],
-      "evidence": "Provider backpressure/protection model is represented without live provider enforcement claims.",
-      "retry_condition": "USF-161: provider call budgets, circuit breaker integration, cost controls"
-    },
-    {
-      "category": "guardrail",
-      "react_paths": [
-        "../react/apps/platform-api/src/usecases/rate-limits.ts",
-        "../react/apps/platform-api/src/usecases/quota.ts",
-        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
-        "../react/apps/platform-api/tests/unit/quota.test.ts"
-      ],
-      "semantic_authority": "known",
-      "source_use_disposition": "replace",
-      "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
-      "domain_authorised": true,
-      "react_item_id": "guardrails.bulk-operation-safety",
-      "behaviour_summary": "Bulk operation classification and quota/idempotency posture represented; broad bulk runtime deferred.",
-      "usf_status": "partial",
-      "usf_paths": [
-        "packages/core/src/index.ts",
-        "packages/ports/src/index.ts",
-        "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
-      ],
-      "usf_tests": [
-        "tests/capabilities/rate-limits-abuse-controls.test.ts",
-        "tests/apps/api-contracts.test.ts",
-        "tests/packages/proof.test.ts"
-      ],
-      "usf_proofs": [
-        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
-      ],
-      "evidence": "Bulk operation classification and quota/idempotency posture represented; broad bulk runtime deferred.",
-      "retry_condition": "USF-161: bulk operation approval/dry-run/cancellation guardrails"
-    },
-    {
-      "category": "guardrail",
-      "react_paths": [
-        "../react/apps/platform-api/src/usecases/rate-limits.ts",
-        "../react/apps/platform-api/src/usecases/quota.ts",
-        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
-        "../react/apps/platform-api/tests/unit/quota.test.ts"
-      ],
-      "semantic_authority": "known",
-      "source_use_disposition": "replace",
-      "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
-      "domain_authorised": true,
-      "react_item_id": "guardrails.data-exfiltration-posture",
-      "behaviour_summary": "Suspicious extraction signals are defined but not broadly enforced in runtime.",
-      "usf_status": "deferred",
-      "usf_paths": [
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
-      ],
-      "usf_tests": [],
-      "usf_proofs": [],
-      "evidence": "Suspicious extraction signals are defined but not broadly enforced in runtime.",
-      "retry_condition": "USF-161: implement data-exfiltration detection signals and blocking posture"
-    },
-    {
-      "category": "guardrail",
-      "react_paths": [
-        "../react/apps/platform-api/src/usecases/rate-limits.ts",
-        "../react/apps/platform-api/src/usecases/quota.ts",
-        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
-        "../react/apps/platform-api/tests/unit/quota.test.ts"
-      ],
-      "semantic_authority": "known",
-      "source_use_disposition": "replace",
-      "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
-      "domain_authorised": true,
-      "react_item_id": "guardrails.abuse-signals",
-      "behaviour_summary": "rate_limit.exceeded and policy denial signals emitted where represented; broader abuse signal catalogue deferred.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
         "adapters/guardrails/src/index.ts",
         "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
-        "apps/api/src/server.ts"
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/rate-limits-abuse-controls.test.ts",
@@ -2759,10 +2611,12 @@
       ],
       "usf_proofs": [
         "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
       ],
-      "evidence": "rate_limit.exceeded and policy denial signals emitted where represented; broader abuse signal catalogue deferred.",
-      "retry_condition": "USF-161: credential stuffing, token replay, pagination scraping, and bulk export signals"
+      "evidence": "USF-161 adds synthetic notification route guardrail posture and distributed counter evidence; live delivery-provider and campaign/API runtime readiness remain non-claims.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",
@@ -2775,16 +2629,17 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "react_item_id": "guardrails.backpressure-degradation",
-      "behaviour_summary": "Backpressure decision and 503 semantics represented; degraded-mode scheduler/runtime deferred.",
-      "usf_status": "partial",
+      "react_item_id": "guardrails.file-guardrails",
+      "behaviour_summary": "File upload/download/export guardrail posture represented; full runtime file quota rollout deferred.",
+      "usf_status": "migrated",
       "usf_paths": [
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
         "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/rate-limits-abuse-controls.test.ts",
@@ -2793,10 +2648,191 @@
       ],
       "usf_proofs": [
         "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
       ],
-      "evidence": "Backpressure decision and 503 semantics represented; degraded-mode scheduler/runtime deferred.",
-      "retry_condition": "USF-161: queue delay, load shedding, and priority policies"
+      "evidence": "USF-161 adds synthetic file export guardrail posture and distributed counter evidence; live storage, scanner, DLP, KMS, and production file quota readiness remain non-claims.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.provider-guardrails",
+      "behaviour_summary": "Provider backpressure/protection model is represented without live provider enforcement claims.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
+      ],
+      "evidence": "USF-161 adds synthetic cost quota and unavailable-provider fail-closed evidence without live provider or supplier readiness claims.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.bulk-operation-safety",
+      "behaviour_summary": "Bulk operation classification and quota/idempotency posture represented; broad bulk runtime deferred.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
+      ],
+      "evidence": "USF-161 adds synthetic bulk import/export route guardrail posture and bounded distributed evidence; broad public bulk API/runtime depth remains governed by USF-163.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.data-exfiltration-posture",
+      "behaviour_summary": "Suspicious extraction signals are defined but not broadly enforced in runtime.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
+      ],
+      "usf_tests": [
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
+      ],
+      "evidence": "USF-161 records IP-derived privacy, tenant-safe evidence, and explicit non-equivalence for live DLP/SIEM/UEBA data-exfiltration operations.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.abuse-signals",
+      "behaviour_summary": "rate_limit.exceeded and policy denial signals emitted where represented; broader abuse signal catalogue deferred.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "apps/api/src/server.ts",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
+      ],
+      "evidence": "USF-161 keeps rate-limit and policy denial signals value-free and adds synthetic provider-unavailable/cost-quota abuse-control evidence without bot/fraud provider claims.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
+    },
+    {
+      "category": "guardrail",
+      "react_paths": [
+        "../react/apps/platform-api/src/usecases/rate-limits.ts",
+        "../react/apps/platform-api/src/usecases/quota.ts",
+        "../react/apps/platform-api/tests/unit/rate-limits.test.ts",
+        "../react/apps/platform-api/tests/unit/quota.test.ts"
+      ],
+      "semantic_authority": "known",
+      "source_use_disposition": "replace",
+      "blocker": "USF-161",
+      "blocking_foundation_readiness": false,
+      "domain_authorised": true,
+      "react_item_id": "guardrails.backpressure-degradation",
+      "behaviour_summary": "Backpressure decision and 503 semantics represented; degraded-mode scheduler/runtime deferred.",
+      "usf_status": "migrated",
+      "usf_paths": [
+        "packages/core/src/index.ts",
+        "packages/ports/src/index.ts",
+        "adapters/guardrails/src/index.ts",
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
+      ],
+      "usf_tests": [
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
+      ],
+      "evidence": "USF-161 adds unavailable-provider fail-closed evidence and preserves 503 backpressure posture; live queue delay, load shedding, and priority scheduler operation remain non-claims.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",
@@ -2843,16 +2879,17 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "react_item_id": "guardrails.distributed-enforcement-posture",
       "behaviour_summary": "single-node-in-memory, local-test, composed-test, distributed-deferred, live-edge-deferred posture represented without live claim.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
         "adapters/guardrails/src/index.ts",
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/rate-limits-abuse-controls.test.ts",
@@ -2861,10 +2898,12 @@
       ],
       "usf_proofs": [
         "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts)",
-        "make parity (validate-guardrails with planted defects)"
+        "make parity (validate-guardrails with planted defects)",
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
       ],
-      "evidence": "single-node-in-memory, local-test, composed-test, distributed-deferred, live-edge-deferred posture represented without live claim.",
-      "retry_condition": "USF-161: distributed and live edge enforcement require explicit authority"
+      "evidence": "USF-161 proves bounded synthetic durable counters and multi-node consistency while preserving non-equivalence for live edge, WAF, CDN, gateway, bot, fraud, and production abuse-prevention.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",
@@ -2946,18 +2985,24 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-161",
-      "blocking_foundation_readiness": true,
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "react_item_id": "guardrails.future-api-ops-surfaces",
       "behaviour_summary": "Future /v1/guardrails surfaces are defined and deferred; no HTTP ops surface implemented in this slice.",
-      "usf_status": "deferred",
+      "usf_status": "migrated",
       "usf_paths": [
-        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md"
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
       ],
-      "usf_tests": [],
-      "usf_proofs": [],
-      "evidence": "Future /v1/guardrails surfaces are defined and deferred; no HTTP ops surface implemented in this slice.",
-      "retry_condition": "USF-161: authorise and implement operator-only PDP-protected guardrail policy/usage APIs"
+      "usf_tests": [
+        "tests/packages/proof.test.ts"
+      ],
+      "usf_proofs": [
+        "make guardrails-proof (packages/proof/src/rate-limits-abuse-controls-proof.ts; USF-161 bounded distributed guardrails depth)",
+        "make parity (validate-guardrails with USF-161 planted defects)"
+      ],
+      "evidence": "USF-161 proves a proof-local operator control-plane flow for draft, approval, publication, and journal evidence; public HTTP guardrail APIs, admin UI, and break-glass operation remain non-claims.",
+      "retry_condition": "No stronger live/provider/production/operator HTTP readiness claim is allowed without a separately authorised source issue and merged proof."
     },
     {
       "category": "guardrail",

@@ -2,7 +2,7 @@
 
 Status: draft  
 Domain: parity-rate-limits-abuse-controls  
-Tracking: USF-160 implementation, USF-161 deferred depth under USF-133
+Tracking: USF-160 local foundation and USF-161 bounded distributed-depth proof under USF-133
 
 This matrix records how React rate-limit, quota, throttling, abuse-control, tenant-fairness, retry-after, admission-control, and operational-guardrail lineage is used in USF. Linear tracks work only and does not define USF semantic authority.
 
@@ -13,10 +13,10 @@ No runtime/application code is copied from `../react`. No USF path mirrors React
 | Rate-limit use case | `../react/apps/platform-api/src/usecases/rate-limits.ts` | must-migrate | `packages/core/src/index.ts`, `adapters/guardrails/src/index.ts` | rewrite-from-behaviour | Local/dev/test fixed-window decisions, fail-closed unknown policy, retry-after, safe denial. |
 | Rate-limit repository ports | `../react/apps/platform-api/src/ports/rate-limit-repository.ts` | must-migrate | `packages/ports/src/index.ts` | rewrite-from-behaviour | `GuardrailPort` replaces source port shape with broader guardrail semantics. |
 | In-memory rate-limit repository | `../react/apps/platform-api/src/adapters/in-memory-rate-limit-repository.ts` | must-migrate | `adapters/guardrails/src/index.ts` | rewrite-from-behaviour | Deterministic bounded in-memory guardrail store for local/dev/test proof. |
-| Redis/Postgres rate-limit providers | `../react/apps/platform-api/src/adapters/redis-rate-limit-repository.ts`, `../react/apps/platform-api/src/adapters/postgres-rate-limit-repository.ts` | deferred | `docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md` | lineage-only | Distributed/live-capable enforcement classified and deferred; no live provider readiness claim. |
+| Redis/Postgres rate-limit providers | `../react/apps/platform-api/src/adapters/redis-rate-limit-repository.ts`, `../react/apps/platform-api/src/adapters/postgres-rate-limit-repository.ts` | partial | `docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md`, `docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json` | lineage-only | USF-161 proves proof-local durable distributed counters and multi-node consistency with synthetic fixtures. Redis/Postgres/live provider counter readiness remains unclaimed. |
 | Quota use case | `../react/apps/platform-api/src/usecases/quota.ts` | must-migrate | `packages/core/src/index.ts`, `adapters/guardrails/src/index.ts` | rewrite-from-behaviour | Tenant-isolated quota accounting and 409 quota-conflict posture. |
 | Quota runtime proofs | `../react/apps/platform-api/scripts/quota-enforcement-runtime-proof.ts` | must-migrate | `packages/proof/src/rate-limits-abuse-controls-proof.ts` | rewrite-from-behaviour | Quota isolation and safe evidence rewritten as hermetic USF proof. |
-| Rate-limit runtime proofs | `../react/apps/platform-api/scripts/rate-limits-runtime-proof.ts`, `../react/apps/platform-api/scripts/rate-limits-redis-runtime-proof.ts` | must-migrate | `packages/proof/src/rate-limits-abuse-controls-proof.ts` | rewrite-from-behaviour | Local proof covers in-memory semantics; Redis/live distributed proof is deferred. |
+| Rate-limit runtime proofs | `../react/apps/platform-api/scripts/rate-limits-runtime-proof.ts`, `../react/apps/platform-api/scripts/rate-limits-redis-runtime-proof.ts` | must-migrate | `packages/proof/src/rate-limits-abuse-controls-proof.ts` | rewrite-from-behaviour | Local proof covers in-memory semantics. USF-161 adds synthetic durable counter, multi-node consistency, route/domain rollout, policy approval, cost quota, and provider fail-closed evidence without claiming Redis/live provider readiness. |
 | Rate-limit and quota tests | `../react/apps/platform-api/tests/unit/rate-limits.test.ts`, `../react/apps/platform-api/tests/unit/quota.test.ts`, `../react/apps/platform-api/tests/unit/redis-rate-limit-repository.test.ts` | must-migrate | `tests/capabilities/rate-limits-abuse-controls.test.ts`, `tests/apps/api-contracts.test.ts` | rewrite-from-behaviour | Behaviours rewritten as capability/API/proof tests; no UI/Playwright added. |
 | API route quota/limit posture | React API route and contract lineage | must-migrate | `apps/api/src/server.ts`, `packages/contracts/src/api-surface.ts`, `packages/openapi/openapi.json` | rewrite-from-behaviour | `POST /v1/jobs` has concrete local guardrail; route metadata and OpenAPI include 429. |
 | File/storage quota lineage | `../react/packages/adapters-object-storage/src/index.ts`, storage object tests/proofs | partial | standard and proof posture | lineage-only | Resource guardrail posture classified; broad file quota runtime remains deferred to guardrail depth. |
@@ -24,7 +24,7 @@ No runtime/application code is copied from `../react`. No USF path mirrors React
 | Provider protection/backpressure | React provider/health/rate-limit lineage | partial | `adapters/guardrails/src/index.ts`, standard | rewrite-from-behaviour | Provider backpressure model represented without live provider enforcement. |
 | Observability/security signals | React monitoring and request instrumentation lineage | must-migrate | `apps/api/src/server.ts`, `packages/proof/src/rate-limits-abuse-controls-proof.ts` | rewrite-from-behaviour | Safe rate-limit and policy-denial signals through the local telemetry collector. |
 | Audit/evidence | React audit and operational proof lineage | must-migrate | `packages/core/src/index.ts`, `apps/api/src/server.ts` | rewrite-from-behaviour | Guardrail event taxonomy and value-free denial evidence. |
-| Future API/ops guardrail surfaces | React admin/API posture evidence | deferred | standard | lineage-only | `/v1/guardrails/*` routes classified and deferred; no UI or ops surface implemented. |
+| Future API/ops guardrail surfaces | React admin/API posture evidence | partial | standard and USF-161 proof matrix | lineage-only | USF-161 proves a proof-local operator control-plane flow for policy draft, approval, publication, and value-free journal evidence. Public HTTP `/v1/guardrails/*` routes, UI, break-glass operation, and production operator readiness remain unclaimed. |
 | Live WAF/edge/gateway/CDN/bot/fraud provider posture | React provider/adapters/compose lineage | deferred | standard and validator | lineage-only | Explicitly not implemented; exact future authority required before live integration. |
 | React UI/Playwright guardrail behaviours | React persona/UI/E2E rate-limit or abuse posture where present | foundation-behaviour-rewritten-from-ui-test | capability/API/proof tests | rewrite-from-behaviour | Foundation behaviours rewritten without Playwright; UI/UX remains separate. |
 
@@ -42,7 +42,8 @@ No runtime/application code is copied from `../react`. No USF path mirrors React
 | `apps/api/src/server.ts` | source-derived-rewrite | React API guard, retry-after, error-envelope, telemetry, audit lineage | Enforces jobs.create guardrail and safe 429 envelope. |
 | `packages/contracts/src/api-surface.ts` | source-derived-rewrite | React API contract and route posture lineage | Documents concrete local guardrail posture and 429. |
 | `packages/openapi/openapi.json` | evidence-only-support | Generated OpenAPI contract output | Regenerated to include 429 response. |
-| `packages/proof/src/rate-limits-abuse-controls-proof.ts` | source-derived-rewrite | React proof behaviour rewritten for USF | Hermetic guardrail proof. |
+| `packages/proof/src/rate-limits-abuse-controls-proof.ts` | source-derived-rewrite | React proof behaviour rewritten for USF | Hermetic guardrail proof plus USF-161 bounded synthetic distributed guardrails depth evidence. |
+| `docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json` | evidence-only-support | USF-161 source-issue evidence gate | Machine-checkable distributed-depth proof matrix, deferred live/provider boundaries, enterprise evidence references, and non-claims. |
 | `packages/proof/src/index.ts` | new-with-rationale | Proof package target | Exports guardrails proof. |
 | `tests/capabilities/rate-limits-abuse-controls.test.ts` | source-derived-rewrite | React rate-limit/quota tests rewritten as foundation tests | Tests fail-closed, tenant-safe, idempotent guardrail behaviour. |
 | `tests/apps/api-contracts.test.ts` | source-derived-rewrite | React API/route guard tests rewritten as foundation tests | Tests side-effecting route guard and safe telemetry/audit. |
@@ -50,15 +51,22 @@ No runtime/application code is copied from `../react`. No USF path mirrors React
 | `tools/validate-parity/validate-guardrails.py` | source-derived-rewrite | Existing parity validator pattern and guardrail validator expectations | Static validator for guardrail invariants. |
 | `tools/validate-parity/guardrails-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Planted defects for high-risk guardrail regressions. |
 
-## Deferred Depth
+## USF-161 Distributed Depth
 
-Deferred work is tracked by USF-161 and is non-blocking for USF-160 local/dev/test parity acceptance unless a later directive authorises it:
+USF-161 proves bounded synthetic distributed guardrails depth for the selected source issue:
 
-- durable/distributed quota counters;
-- persisted idempotency ledger for guardrail decisions;
-- full API/resource rollout;
-- guardrail admin API routes;
-- policy approval workflow and review expiry enforcement;
+- proof-local durable/distributed quota counters;
+- multi-node consistency over a shared synthetic counter key;
+- route/domain rollout posture across API, jobs, notifications, files, providers, and import/export boundaries;
+- proof-local operator policy approval workflow and value-free journal evidence;
+- cost quota denial and unavailable-provider fail-closed behaviour;
+- IP-derived privacy posture using opaque hashes only;
+- tenant fairness, audit, cleanup, and retention-boundary evidence.
+
+Remaining out-of-scope or deferred boundaries are not hidden:
+
 - live WAF, edge, gateway, CDN, bot, fraud, or abuse provider integration;
-- file, notification, provider, audit-export, and identity-action runtime guardrails beyond represented posture;
-- live alerting/SIEM/DLP/UEBA integration.
+- public HTTP guardrail admin APIs, operator UI, and break-glass operation;
+- provider-managed Redis/Postgres/CDN/WAF counters and customer traffic operation;
+- live alerting/SIEM/DLP/UEBA integration;
+- staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure.

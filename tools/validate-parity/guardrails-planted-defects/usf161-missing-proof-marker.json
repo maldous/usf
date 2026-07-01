@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.usf161-missing-proof-marker",
+  "expectedRuleId": "USF-GUARDRAILS-010",
+  "edits": [
+    {
+      "target": "packages/proof/src/rate-limits-abuse-controls-proof.ts",
+      "old": "USF-161 distributed guardrails proof uses durable synthetic counters across two nodes",
+      "new": "USF-161 distributed guardrails proof marker defect"
+    }
+  ]
+}

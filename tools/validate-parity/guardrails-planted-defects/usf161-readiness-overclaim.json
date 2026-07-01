@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.usf161-readiness-overclaim",
+  "expectedRuleId": "USF-GUARDRAILS-014",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+      "new": "Production abuse prevention readiness is proven by USF-161."
+    }
+  ]
+}
