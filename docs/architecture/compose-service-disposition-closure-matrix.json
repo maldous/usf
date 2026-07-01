@@ -1450,11 +1450,12 @@
           "USF-182",
           "USF-185",
           "USF-169",
-          "USF-217"
+          "USF-217",
+          "USF-221"
         ],
         "non_equivalence_boundaries": [
           "pgAdmin database inspection/admin workflow is not equivalent to application-level database tests.",
-          "USF-217 must prove or explicitly defer pgAdmin access review, deprovisioning, break-glass, audit, tenant, secret, privacy, SSO/clickthrough, and privileged-operation depth before any operator-console readiness claim."
+          "USF-217 records current disposition evidence and USF-221 must prove pgAdmin access review, deprovisioning, break-glass, audit, tenant, secret, privacy, SSO/clickthrough, and privileged-operation depth before any operator-console readiness claim."
         ],
         "missing_evidence": [
           "pgAdmin operator/admin console access review and deprovisioning proof",
@@ -1486,11 +1487,13 @@
           "soa-deferred-boundary-pgadmin",
           "access-posture-pgadmin",
           "resilience-posture-pgadmin",
-          "incident-vulnerability-pgadmin"
+          "incident-vulnerability-pgadmin",
+          "operator-admin-access-review-deprovisioning-proof-depth"
         ],
         "tracking_issue_rationale": {
           "USF-169": "operator/admin access posture proof and evidence",
-          "USF-217": "operator admin console access review and deprovisioning proof depth"
+          "USF-217": "operator admin console access review and deprovisioning proof depth",
+          "USF-221": "future executed access-review, deprovisioning, revocation, and operator-console workflow proof before stronger readiness claims"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2873,11 +2876,12 @@
           "USF-185",
           "USF-169",
           "USF-178",
-          "USF-217"
+          "USF-217",
+          "USF-221"
         ],
         "non_equivalence_boundaries": [
           "Temporal service runtime proof is not equivalent to Temporal UI operator console access-review, deprovisioning, break-glass, audit, tenant, secret, privacy, or clickthrough proof.",
-          "USF-217 must prove or explicitly defer Temporal UI privileged-operation depth before any operator-console readiness claim."
+          "USF-217 records current disposition evidence and USF-221 must prove Temporal UI privileged-operation depth before any operator-console readiness claim."
         ],
         "missing_evidence": [
           "Temporal UI operator/admin console access review and deprovisioning proof",
@@ -2911,12 +2915,14 @@
           "soa-deferred-boundary-temporal-ui",
           "access-posture-temporal-ui",
           "resilience-posture-temporal-ui",
-          "incident-vulnerability-temporal-ui"
+          "incident-vulnerability-temporal-ui",
+          "operator-admin-access-review-deprovisioning-proof-depth"
         ],
         "tracking_issue_rationale": {
           "USF-169": "operator/admin access posture proof and evidence",
           "USF-178": "operator workflow service proof and evidence",
-          "USF-217": "operator admin console access review and deprovisioning proof depth"
+          "USF-217": "operator admin console access review and deprovisioning proof depth",
+          "USF-221": "future executed access-review, deprovisioning, revocation, and operator-console workflow proof before stronger readiness claims"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -3313,11 +3319,12 @@
           "USF-185",
           "USF-180",
           "USF-169",
-          "USF-217"
+          "USF-217",
+          "USF-221"
         ],
         "non_equivalence_boundaries": [
           "API security posture and local service binding evidence are not equivalent to Caddy/forward-auth gateway, clickthrough, public exposure, or operator access proof.",
-          "USF-180 owns gateway/clickthrough substrate depth and USF-217 owns operator/admin access-review and deprovisioning depth before any gateway or operator-console readiness claim."
+          "USF-180 owns gateway/clickthrough substrate depth and USF-217 records disposition evidence and USF-221 owns operator/admin access-review and deprovisioning execution depth before any gateway or operator-console readiness claim."
         ],
         "missing_evidence": [
           "Caddy/forward-auth gateway and clickthrough proof",
@@ -3351,12 +3358,14 @@
           "soa-deferred-boundary-caddy",
           "access-posture-caddy",
           "resilience-posture-caddy",
-          "incident-vulnerability-caddy"
+          "incident-vulnerability-caddy",
+          "operator-admin-access-review-deprovisioning-proof-depth"
         ],
         "tracking_issue_rationale": {
           "USF-180": "gateway and clickthrough access substrate proof",
           "USF-169": "operator/admin access posture proof and evidence",
-          "USF-217": "operator admin console access review and deprovisioning proof depth"
+          "USF-217": "operator admin console access review and deprovisioning proof depth",
+          "USF-221": "future executed access-review, deprovisioning, revocation, and operator-console workflow proof before stronger readiness claims"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

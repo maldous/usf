@@ -1,0 +1,6 @@
+{
+  "name": "operator-access-review-depth-missing",
+  "description": "USF-217 operator access review and deprovisioning depth artefact is missing.",
+  "expectedRule": "USF-ENTERPRISE-025",
+  "removeOperatorAccessReviewDepth": true
+}

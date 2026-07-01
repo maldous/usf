@@ -1,0 +1,13 @@
+{
+  "name": "operator-access-review-execution-overclaim",
+  "description": "Operator matrix overclaims executed access-review proof from disposition metadata.",
+  "expectedRule": "USF-ENTERPRISE-025",
+  "operatorAccessPatch": [
+    {
+      "id": "usf-186-access-posture-minio",
+      "set": {
+        "accessReviewExecutionClaim": true
+      }
+    }
+  ]
+}

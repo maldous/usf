@@ -1,0 +1,12 @@
+{
+  "description": "USF-217 disposition evidence is present but the future operator access execution follow-up is missing from a reconciled compose row.",
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "composeParityServicePatch": {
+      "react_service": "pgadmin",
+      "set": {
+        "tracking_recommendation": "USF-169 plus USF-217 disposition evidence are present before any stronger readiness proof"
+      }
+    }
+  }
+}

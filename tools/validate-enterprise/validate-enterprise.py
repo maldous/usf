@@ -34,6 +34,9 @@ SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.
 RUNTIME_MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-parity.json")
 CLOSURE_MATRIX_PATH = Path("docs/architecture/compose-service-disposition-closure-matrix.json")
 OPERATOR_ACCESS_MATRIX_PATH = Path("docs/architecture/operator-access-gateway-posture-matrix.json")
+OPERATOR_ACCESS_REVIEW_DEPTH_PATH = Path(
+    "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json"
+)
 GATEWAY_CLICKTHROUGH_MATRIX_PATH = Path("docs/architecture/gateway-clickthrough-access-substrate-matrix.json")
 STATIC_ANALYSIS_MATRIX_PATH = Path("docs/architecture/static-analysis-quality-gate-disposition-matrix.json")
 SONARQUBE_PROOF_BOUNDARY_PATH = Path("docs/architecture/sonarqube-service-semantic-proof-boundary.json")
@@ -70,6 +73,10 @@ RULES = {
     "USF-ENTERPRISE-022": ("blocking", "Sentry error-monitoring disposition is incomplete or unsafe"),
     "USF-ENTERPRISE-023": ("blocking", "SonarQube service proof boundary is incomplete or unsafe"),
     "USF-ENTERPRISE-024": ("blocking", "Sentry service proof boundary is incomplete or unsafe"),
+    "USF-ENTERPRISE-025": (
+        "blocking",
+        "operator access review or deprovisioning depth is incomplete or overclaimed",
+    ),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -722,6 +729,9 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     operator_access_matrix = (
         read_json(OPERATOR_ACCESS_MATRIX_PATH) if (ROOT / OPERATOR_ACCESS_MATRIX_PATH).exists() else None
     )
+    operator_access_review_depth = (
+        read_json(OPERATOR_ACCESS_REVIEW_DEPTH_PATH) if (ROOT / OPERATOR_ACCESS_REVIEW_DEPTH_PATH).exists() else None
+    )
     gateway_clickthrough_matrix = (
         read_json(GATEWAY_CLICKTHROUGH_MATRIX_PATH) if (ROOT / GATEWAY_CLICKTHROUGH_MATRIX_PATH).exists() else None
     )
@@ -747,6 +757,10 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         closure_matrix = apply_closure_defect(closure_matrix, defect)
     if operator_access_matrix is not None:
         operator_access_matrix = apply_operator_access_defect(operator_access_matrix, defect)
+    if defect.get("removeOperatorAccessReviewDepth"):
+        operator_access_review_depth = None
+    elif operator_access_review_depth is not None:
+        operator_access_review_depth = apply_operator_access_review_depth_defect(operator_access_review_depth, defect)
     if defect.get("removeGatewayClickthroughMatrix"):
         gateway_clickthrough_matrix = None
     elif gateway_clickthrough_matrix is not None:
@@ -781,6 +795,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "makefile": makefile,
         "closureMatrix": closure_matrix,
         "operatorAccessMatrix": operator_access_matrix,
+        "operatorAccessReviewDepth": operator_access_review_depth,
         "gatewayClickthroughMatrix": gateway_clickthrough_matrix,
         "staticAnalysisMatrix": static_analysis_matrix,
         "sonarqubeProofBoundary": sonarqube_proof_boundary,
@@ -931,6 +946,23 @@ def apply_operator_access_defect(matrix: dict[str, Any], defect: dict[str, Any])
                     row.pop(key, None)
                 for key, value in patch.get("set", {}).items():
                     row[key] = value
+    return out
+
+
+def apply_operator_access_review_depth_defect(matrix: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(matrix)
+    for key, value in defect.get("operatorAccessReviewDepthTopSet", {}).items():
+        out[key] = value
+    remove_row_id = defect.get("removeOperatorAccessReviewDepthRow")
+    if remove_row_id:
+        out["rows"] = [row for row in out.get("rows", []) if row.get("id") != remove_row_id]
+    for patch in defect.get("operatorAccessReviewDepthPatch", []):
+        for row in out.get("rows", []):
+            if row.get("id") == patch.get("id"):
+                for key in patch.get("drop", []):
+                    drop_nested_value(row, key)
+                for key, value in patch.get("set", {}).items():
+                    set_nested_value(row, key, value)
     return out
 
 
@@ -1580,6 +1612,154 @@ def check_operator_access_gateway_matrix(F: Findings, state: dict[str, Any]) -> 
             F.add("USF-ENTERPRISE-014", row_id, "deferred risk review date must be YYYY-MM-DD")
         if not str(risk.get("linkedFollowUpIssue", "")).startswith("USF-"):
             F.add("USF-ENTERPRISE-014", row_id, "deferred risk follow-up issue must be linked")
+
+
+def check_operator_access_review_deprovisioning_depth(F: Findings, state: dict[str, Any]) -> None:
+    depth = state.get("operatorAccessReviewDepth")
+    operator_matrix = state.get("operatorAccessMatrix")
+    if not isinstance(depth, dict):
+        F.add("USF-ENTERPRISE-025", str(OPERATOR_ACCESS_REVIEW_DEPTH_PATH), "USF-217 depth artefact is missing")
+        return
+    if not isinstance(operator_matrix, dict):
+        F.add("USF-ENTERPRISE-025", str(OPERATOR_ACCESS_MATRIX_PATH), "operator access matrix is required")
+        return
+
+    services = {
+        service.get("serviceId"): service
+        for service in state["serviceCatalogue"].get("services", [])
+        if isinstance(service, dict) and isinstance(service.get("serviceId"), str)
+    }
+    expected_services = {
+        service_id for service_id, service in services.items() if service_needs_operator_access_decision(service)
+    }
+    declared_services = set(depth.get("requiredServiceIds", []))
+    if declared_services != expected_services:
+        F.add(
+            "USF-ENTERPRISE-025",
+            "requiredServiceIds",
+            f"missing={sorted(expected_services - declared_services)} extra={sorted(declared_services - expected_services)}",
+        )
+    if depth.get("issueId") != "USF-217" or depth.get("followUpIssueId") != "USF-221":
+        F.add("USF-ENTERPRISE-025", "issueLinks", "USF-217 and USF-221 linkage is required")
+    if depth.get("serviceCatalogueAuthority") != str(SERVICE_CATALOGUE_PATH):
+        F.add("USF-ENTERPRISE-025", "serviceCatalogueAuthority", "service catalogue authority must be pinned")
+    if depth.get("operatorAccessMatrix") != str(OPERATOR_ACCESS_MATRIX_PATH):
+        F.add("USF-ENTERPRISE-025", "operatorAccessMatrix", "operator access matrix path must be pinned")
+    if depth.get("enterpriseEvidenceModel") != str(MODEL_PATH):
+        F.add("USF-ENTERPRISE-025", "enterpriseEvidenceModel", "enterprise evidence model path must be pinned")
+    if depth.get("validationCommand") != "python3 tools/validate-enterprise/validate-enterprise.py all --json":
+        F.add("USF-ENTERPRISE-025", "validationCommand", "validator command must be pinned")
+    if REQUIRED_NON_CLAIMS - set(depth.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-025", "nonClaims", "depth artefact non-claims are incomplete")
+    if REQUIRED_NON_CLAIMS & set(depth.get("readinessClaimsAllowed", [])):
+        F.add("USF-ENTERPRISE-025", "readinessClaimsAllowed", "depth artefact allows a prohibited claim")
+    for field in ("accessReviewExecutionClaim", "deprovisioningExecutionClaim", "publicExposureClaim", "runtimeConsoleReadinessClaim"):
+        if depth.get(field) is not False:
+            F.add("USF-ENTERPRISE-025", field, "claim must remain false")
+
+    rows = depth.get("rows", [])
+    if not isinstance(rows, list):
+        F.add("USF-ENTERPRISE-025", "rows", "depth rows must be a list")
+        return
+    rows_by_service = {row.get("serviceId"): row for row in rows if isinstance(row, dict)}
+    if set(rows_by_service) != expected_services:
+        F.add(
+            "USF-ENTERPRISE-025",
+            "rows",
+            f"missing={sorted(expected_services - set(rows_by_service))} extra={sorted(set(rows_by_service) - expected_services)}",
+        )
+
+    operator_rows = {
+        row.get("serviceId"): row for row in operator_matrix.get("rows", []) if isinstance(row, dict)
+    }
+    access_posture_rows = {
+        row.get("target"): row
+        for row in state["model"].get("accessReviewPrivilegedOperationPosture", [])
+        if isinstance(row, dict) and row.get("targetType") == "service"
+    }
+    for service_id in sorted(expected_services):
+        row = rows_by_service.get(service_id)
+        operator_row = operator_rows.get(service_id, {})
+        enterprise_row = access_posture_rows.get(service_id)
+        if not isinstance(row, dict):
+            continue
+        row_id = str(row.get("id", ""))
+        if not row_id.startswith("usf-217-"):
+            F.add("USF-ENTERPRISE-025", row_id or service_id, "row id must use usf-217 prefix")
+        if row.get("sourceMatrixRowId") != operator_row.get("id"):
+            F.add("USF-ENTERPRISE-025", row_id, "source matrix row linkage is stale")
+        if row.get("closureTierDisposition") != "explicitly-deferred-with-owner":
+            F.add("USF-ENTERPRISE-025", row_id, "closure tier disposition must be explicit deferral")
+        if row.get("publicExposureAllowed") is not False or row.get("lanExposureAllowed") is not False:
+            F.add("USF-ENTERPRISE-025", row_id, "public and LAN exposure must remain denied")
+        for field in ("accessModel", "authRequirement", "auditRequirement", "breakGlassRelevance"):
+            if row.get(field) != operator_row.get(field):
+                F.add("USF-ENTERPRISE-025", row_id, f"{field} does not match operator matrix")
+        for field in ("owner", "riskOwner", "controlOwner"):
+            expected = operator_row.get("accessReviewOwner") if field == "owner" else operator_row.get(field)
+            if row.get(field) != expected:
+                F.add("USF-ENTERPRISE-025", row_id, f"{field} does not match operator matrix")
+        for posture_field in ("accessReviewCadence", "deprovisioningPosture"):
+            posture = row.get(posture_field)
+            if not isinstance(posture, dict):
+                F.add("USF-ENTERPRISE-025", row_id, f"{posture_field} must be an object")
+                continue
+            expected_values = {
+                "status": "deferred-to-USF-221",
+                "followUpIssue": "USF-221",
+                "owner": row.get("owner"),
+                "riskOwner": row.get("riskOwner"),
+                "controlOwner": row.get("controlOwner"),
+            }
+            for key, expected in expected_values.items():
+                if posture.get(key) != expected:
+                    F.add("USF-ENTERPRISE-025", f"{row_id}.{posture_field}.{key}", f"expected {expected!r}")
+            if not DATE_RE.fullmatch(str(posture.get("reviewDate", ""))):
+                F.add("USF-ENTERPRISE-025", f"{row_id}.{posture_field}.reviewDate", "review date must be YYYY-MM-DD")
+            if not posture.get("currentEvidence") or not posture.get("requiredBeforeClaims"):
+                F.add("USF-ENTERPRISE-025", f"{row_id}.{posture_field}", "current evidence and claim boundary are required")
+        proof = row.get("proofEvidence", {})
+        if not isinstance(proof, dict):
+            F.add("USF-ENTERPRISE-025", row_id, "proof evidence boundary must be an object")
+        else:
+            for field in ("accessReviewExecutionProven", "deprovisioningExecutionProven", "consoleLoginProofProven", "clickthroughProofProven"):
+                if proof.get(field) is not False:
+                    F.add("USF-ENTERPRISE-025", f"{row_id}.proofEvidence.{field}", "proof must not be overclaimed")
+            if not proof.get("nonEquivalenceBoundary"):
+                F.add("USF-ENTERPRISE-025", f"{row_id}.proofEvidence", "non-equivalence boundary is required")
+        if REQUIRED_NON_CLAIMS - set(row.get("nonClaims", [])):
+            F.add("USF-ENTERPRISE-025", row_id, "row non-claims are incomplete")
+
+        for matrix_field, expected in (
+            ("accessReviewExecutionClaim", False),
+            ("deprovisioningExecutionClaim", False),
+            ("runtimeConsoleReadinessClaim", False),
+        ):
+            if operator_row.get(matrix_field) is not expected:
+                F.add("USF-ENTERPRISE-025", f"{operator_row.get('id', service_id)}.{matrix_field}", "operator matrix claim must remain false")
+        if operator_row.get("accessReviewCadence", {}).get("followUpIssue") != "USF-221":
+            F.add("USF-ENTERPRISE-025", operator_row.get("id", service_id), "operator matrix access review follow-up must be USF-221")
+        if operator_row.get("deprovisioningPosture", {}).get("followUpIssue") != "USF-221":
+            F.add("USF-ENTERPRISE-025", operator_row.get("id", service_id), "operator matrix deprovisioning follow-up must be USF-221")
+
+        if not isinstance(enterprise_row, dict):
+            F.add("USF-ENTERPRISE-025", service_id, "enterprise access posture row is missing")
+            continue
+        enterprise_text = json.dumps(enterprise_row, sort_keys=True)
+        if "TODO-before-readiness-claim" in enterprise_text:
+            F.add("USF-ENTERPRISE-025", enterprise_row.get("id", service_id), "TODO access posture placeholder remains")
+        for token in (
+            "sourceIssue=USF-217",
+            "reviewCadence=deferred-to-USF-221-before-any-readiness-claim",
+            "deprovisioningPosture=deferred-to-USF-221-before-any-readiness-claim",
+            "accessReviewExecutionEvidence=not-proven",
+            "deprovisioningExecutionEvidence=not-proven",
+            "followUpIssue=USF-221",
+        ):
+            if token not in enterprise_text:
+                F.add("USF-ENTERPRISE-025", enterprise_row.get("id", service_id), f"missing enterprise posture token {token}")
+        if REQUIRED_NON_CLAIMS - set(enterprise_row.get("nonClaims", [])):
+            F.add("USF-ENTERPRISE-025", enterprise_row.get("id", service_id), "enterprise row non-claims are incomplete")
 
 
 def check_lane4_observability(F: Findings, state: dict[str, Any]) -> None:
@@ -3114,6 +3294,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_lane6_safety_controls(F, state)
     check_closure_matrix_linkage(F, state)
     check_operator_access_gateway_matrix(F, state)
+    check_operator_access_review_deprovisioning_depth(F, state)
     check_lane4_observability(F, state)
     check_assurance_control_plane_disposition(F, state)
     check_environment_promotion_standard(F, state)

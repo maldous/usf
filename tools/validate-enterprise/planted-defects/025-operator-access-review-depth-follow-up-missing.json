@@ -1,0 +1,13 @@
+{
+  "name": "operator-access-review-depth-follow-up-missing",
+  "description": "USF-217 depth row omits the follow-up issue for access-review execution.",
+  "expectedRule": "USF-ENTERPRISE-025",
+  "operatorAccessReviewDepthPatch": [
+    {
+      "id": "usf-217-access-review-deprovisioning-caddy",
+      "drop": [
+        "accessReviewCadence.followUpIssue"
+      ]
+    }
+  ]
+}

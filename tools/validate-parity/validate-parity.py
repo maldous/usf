@@ -185,7 +185,8 @@ PROHIBITED_READINESS_CLAIMS = {
     "enterprise-production-readiness",
 }
 USF133_GATE_PROHIBITED_CLAIMS = PROHIBITED_READINESS_CLAIMS | {"usf-133-closure"}
-USF216_CURRENT_OPEN_BLOCKERS = {"USF-217", "USF-218", "USF-219", "USF-220"}
+USF216_CURRENT_OPEN_BLOCKERS = {"USF-218", "USF-219", "USF-220"}
+USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP = "USF-221"
 USF216_RECONCILED_COMPOSE_SERVICES = {
     "external-caddy": "caddy",
     "pgadmin": "pgadmin",
@@ -1301,8 +1302,13 @@ def check_usf216_final_reconciliation(F, state):
                 continue
             if row.get("usf_accounting_status") == "requires-human-decision":
                 F.add("USF-PARITY-039", f"compose:{react_service}", "stale requires-human-decision remains after owner-backed reconciliation")
-            if "USF-217" not in str(row.get("tracking_recommendation") or ""):
-                F.add("USF-PARITY-039", f"compose:{react_service}", "operator/gateway compose row lacks current USF-217 owner boundary")
+            tracking = str(row.get("tracking_recommendation") or "")
+            if "USF-217" not in tracking or USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP not in tracking:
+                F.add(
+                    "USF-PARITY-039",
+                    f"compose:{react_service}",
+                    "operator/gateway compose row lacks USF-217 disposition evidence and USF-221 follow-up boundary",
+                )
 
     closure = state.get("composeClosureMatrix")
     if isinstance(closure, dict):
@@ -1319,8 +1325,13 @@ def check_usf216_final_reconciliation(F, state):
             evidence = row.get("closure_evidence", {}) if row else {}
             if evidence.get("closure_disposition") == "requires-human-decision":
                 F.add("USF-PARITY-039", f"closure:{service_id}", "stale requires-human-decision remains after accepted deferral")
-            if "USF-217" not in set(evidence.get("tracking_issues") or []):
-                F.add("USF-PARITY-039", f"closure:{service_id}", "operator/gateway closure row lacks current USF-217 owner issue")
+            tracking_issues = set(evidence.get("tracking_issues") or [])
+            if not {"USF-217", USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP} <= tracking_issues:
+                F.add(
+                    "USF-PARITY-039",
+                    f"closure:{service_id}",
+                    "operator/gateway closure row lacks USF-217 evidence and USF-221 follow-up issue",
+                )
 
     gate = state.get("usf133ClosureTierGate")
     if isinstance(gate, dict):
@@ -1333,8 +1344,13 @@ def check_usf216_final_reconciliation(F, state):
             if exception.get("followUpIssue") == "USF-166":
                 F.add("USF-PARITY-039", f"exception:{service_id}", "exception still self-defers to USF-166")
             ref = refs.get(service_id) or {}
-            if "USF-217" not in set(ref.get("sourceIssueRefs") or []):
-                F.add("USF-PARITY-039", f"serviceRef:{service_id}", "service ref lacks current USF-217 owner issue")
+            source_refs = set(ref.get("sourceIssueRefs") or [])
+            if not {"USF-217", USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP} <= source_refs:
+                F.add(
+                    "USF-PARITY-039",
+                    f"serviceRef:{service_id}",
+                    "service ref lacks USF-217 evidence and USF-221 follow-up issue",
+                )
 
 
 def run_checks(F, state=None):

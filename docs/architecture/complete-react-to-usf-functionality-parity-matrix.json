@@ -435,9 +435,9 @@
       ],
       "evidence_grade": "D",
       "react_evidence_summary": "Compose admin services and forward-auth comments",
-      "readiness_impact": "USF-169 proves bounded included operator access posture, USF-180 owns gateway/clickthrough substrate depth, and USF-217 owns remaining access review, deprovisioning, break-glass, audit, tenant, secret, privacy, and console-surface depth. No operator-console readiness or public exposure claim is made.",
-      "tracking_carrier_or_recommendation": "USF-169/USF-180 plus current open blocker USF-217",
-      "usf_evidence_summary": "Operator/admin surfaces have bounded access posture evidence for included surfaces; console access review, deprovisioning, clickthrough, and public exposure remain deferred with owner.",
+      "readiness_impact": "USF-169 proves bounded included operator access posture, USF-180 owns gateway/clickthrough substrate depth, and USF-217 records access-review/deprovisioning disposition for every in-scope surface. USF-221 owns future executed access-review, deprovisioning, revocation, and operator-console workflow proof. No operator-console readiness or public exposure claim is made.",
+      "tracking_carrier_or_recommendation": "USF-169/USF-180 plus USF-217 disposition evidence and USF-221 future execution follow-up",
+      "usf_evidence_summary": "Operator/admin surfaces have bounded access posture evidence and explicit access-review/deprovisioning disposition; executed console access review, deprovisioning, clickthrough, and public exposure remain deferred to USF-221 or existing gateway follow-ups.",
       "usf_status": "deferred-with-owner"
     },
     {
