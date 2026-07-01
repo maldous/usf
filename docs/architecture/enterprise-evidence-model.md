@@ -88,9 +88,13 @@ The Lane 3 validator coverage is:
   SOC, ISO/IEC 27001 certification, live-provider, deployment, production, test, full-dev,
   enterprise-production, or full React parity overclaim.
 
-The model remains evidence organisation only. Sentry runtime event capture/redaction/retention,
-SonarQube service quality-gate proof, and security scanner operating evidence remain deferred
-unless later merged evidence closes the linked follow-up issues.
+The model remains evidence organisation only. USF-205 records accepted local Sentry SDK-envelope
+proof for event-shape capture, redaction, tenant-safe labels, value-free retention posture, and
+unavailable-transport fail-closed behaviour, but Sentry service readiness, service ingestion,
+issue lifecycle, alert handoff, incident workflow, operator console access, live-provider
+operation, and environment promotion remain deferred unless later merged evidence closes the
+linked follow-up issues. SonarQube service quality-gate proof is bounded by USF-204, and security
+scanner operating evidence remains bounded by its source issue scope.
 
 ## Non-Claims
 

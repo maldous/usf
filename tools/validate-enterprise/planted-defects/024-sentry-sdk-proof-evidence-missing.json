@@ -1,0 +1,5 @@
+{
+  "id": "024-sentry-sdk-proof-evidence-missing",
+  "expectedRule": "USF-ENTERPRISE-024",
+  "removeEnterpriseEvidence": "usf-205-evidence-sentry-sdk-envelope-proof"
+}

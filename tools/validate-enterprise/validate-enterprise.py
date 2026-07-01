@@ -501,16 +501,39 @@ SENTRY_ERROR_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "alerting-readiness",
 }
 SENTRY_BOUNDARY_REQUIRED_EVIDENCE_ROWS = {
-    "soaSupportMappings": {"usf-196-soa-sentry-proof-boundary"},
-    "evidenceRegister": {"usf-196-evidence-sentry-proof-boundary"},
-    "threatModelAbuseCaseRegister": {"usf-196-threat-sentry-overclaim"},
-    "accessReviewPrivilegedOperationPosture": {"usf-196-access-sentry-proof-boundary"},
-    "incidentVulnerabilityManagementEvidence": {"usf-196-incident-vulnerability-sentry-proof-boundary"},
-    "privacyDataMinimisationPosture": {"usf-196-privacy-sentry-proof-boundary"},
+    "soaSupportMappings": {
+        "usf-196-soa-sentry-proof-boundary",
+        "usf-205-soa-sentry-sdk-envelope-proof",
+    },
+    "evidenceRegister": {
+        "usf-196-evidence-sentry-proof-boundary",
+        "usf-205-evidence-sentry-sdk-envelope-proof",
+    },
+    "threatModelAbuseCaseRegister": {
+        "usf-196-threat-sentry-overclaim",
+        "usf-205-threat-sentry-sdk-envelope-proof",
+    },
+    "sdkDependencyGovernance": {"sdk-usf-205-sentry-sdk-envelope-provider-at-sentry-node"},
+    "accessReviewPrivilegedOperationPosture": {
+        "usf-196-access-sentry-proof-boundary",
+        "usf-205-access-sentry-sdk-envelope-proof",
+    },
+    "backupRestoreResiliencePosture": {"usf-205-resilience-sentry-sdk-envelope-proof"},
+    "incidentVulnerabilityManagementEvidence": {
+        "usf-196-incident-vulnerability-sentry-proof-boundary",
+        "usf-205-incident-vulnerability-sentry-sdk-envelope-proof",
+    },
+    "privacyDataMinimisationPosture": {
+        "usf-196-privacy-sentry-proof-boundary",
+        "usf-205-privacy-sentry-sdk-envelope-proof",
+    },
 }
 SENTRY_BOUNDARY_REQUIRED_ISSUES = {
     "USF-196",
     "USF-205",
+    "USF-159",
+    "USF-169",
+    "USF-193",
     "USF-170",
     "USF-187",
     "USF-184",
@@ -2780,17 +2803,18 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
         return
 
     expected_top = {
-        "sourceIssue": "USF-196",
-        "followUpIssue": "USF-205",
+        "sourceIssue": "USF-205",
+        "predecessorIssue": "USF-196",
+        "followUpIssue": "USF-159",
         "sourceDispositionIssue": "USF-170",
         "laneIssue": "USF-187",
         "parentIssue": "USF-133",
-        "status": "reclassified-deferred-with-owner",
+        "status": "accepted-sdk-envelope-proof-service-readiness-deferred",
         "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
         "closureMatrix": str(CLOSURE_MATRIX_PATH),
         "sentryErrorMonitoringDispositionMatrix": str(SENTRY_ERROR_MATRIX_PATH),
         "enterpriseEvidenceModel": str(MODEL_PATH),
-        "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "validationCommand": "corepack pnpm proof:observability:sentry",
     }
     for key, expected in expected_top.items():
         if boundary.get(key) != expected:
@@ -2815,9 +2839,10 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
     else:
         expected_reclassification = {
             "from": "requires-human-decision",
-            "to": "explicit-deferred-service-proof",
+            "to": "accepted-sdk-envelope-proof-service-readiness-deferred",
             "decisionAcceptedDoesNotMeanWorkComplete": True,
             "serviceSemanticProofImplemented": False,
+            "acceptedSdkEnvelopeProofImplemented": True,
             "sentryServiceReadinessClaim": False,
             "liveMonitoringReadinessClaim": False,
             "incidentReadinessClaim": False,
@@ -2836,7 +2861,7 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
         F.add("USF-ENTERPRISE-024", "remainingProofBoundary", "remaining proof boundary must be an object")
     else:
         expected_remaining = {
-            "issue": "USF-205",
+            "issue": "USF-159",
             "owner": "platform-observability-foundation",
             "riskOwner": "platform-observability-risk-owner",
             "controlOwner": "platform-observability-control-owner",
@@ -2857,11 +2882,20 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
         "redactionStatus",
         "tenantSafeLabelStatus",
         "retentionStatus",
-        "alertHandoffStatus",
-        "incidentEvidenceStatus",
     ):
-        if event_boundary.get(field) != "deferred-to-USF-205":
-            F.add("USF-ENTERPRISE-024", f"eventMonitoringBoundary.{field}", "event monitoring boundary must defer to USF-205")
+        if event_boundary.get(field) != "accepted-sdk-envelope-proof":
+            F.add(
+                "USF-ENTERPRISE-024",
+                f"eventMonitoringBoundary.{field}",
+                "event monitoring boundary must record accepted SDK-envelope proof",
+            )
+    for field in ("alertHandoffStatus", "incidentEvidenceStatus"):
+        if event_boundary.get(field) != "deferred-with-owner-review-date":
+            F.add(
+                "USF-ENTERPRISE-024",
+                f"eventMonitoringBoundary.{field}",
+                "alert and incident boundaries must remain deferred with owner review date",
+            )
     for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
         if not event_boundary.get(field):
             F.add("USF-ENTERPRISE-024", f"eventMonitoringBoundary.{field}", "event monitoring owner metadata is required")
@@ -2888,6 +2922,91 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
         F.add("USF-ENTERPRISE-024", "localObservabilityGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
     if "python3 tools/validate-enterprise/validate-enterprise.py all --json" not in set(local_gate.get("commands", [])):
         F.add("USF-ENTERPRISE-024", "localObservabilityGate.commands", "enterprise validation command is required")
+    if "corepack pnpm proof:observability:sentry" not in set(local_gate.get("commands", [])):
+        F.add("USF-ENTERPRISE-024", "localObservabilityGate.commands", "Sentry SDK-envelope proof command is required")
+
+    sdk_proof = boundary.get("acceptedSdkEnvelopeProof", {})
+    if not isinstance(sdk_proof, dict):
+        F.add("USF-ENTERPRISE-024", "acceptedSdkEnvelopeProof", "accepted Sentry SDK-envelope proof metadata is required")
+    else:
+        expected_sdk_proof = {
+            "issue": "USF-205",
+            "proofCommand": "corepack pnpm proof:observability:sentry",
+            "packageScript": "proof:observability:sentry",
+            "makeTarget": "sentry-observability-proof",
+            "adapterPath": "adapters/obs/src/index.ts#SentrySdkEnvelopeProofAdapter",
+            "proofPath": "packages/proof/src/sentry-sdk-envelope-proof.ts",
+            "providerRegistryId": "observability-sentry-sdk-envelope-local",
+            "adapterName": "SentrySdkEnvelopeProofAdapter",
+            "sdkPackage": "@sentry/node",
+            "sdkVersion": "10.62.0",
+            "officialOrDeFactoStatus": "official-sentry-node-sdk",
+            "providerMode": "local-test",
+            "serviceCatalogueServiceId": "sentry",
+            "serviceReadinessStatus": "deferred-no-generated-compose-target",
+            "eventIngestionStatus": "sdk-envelope-captured-local-transport-not-service-ingestion",
+            "tenantLabelStatus": "opaque-hash-only",
+            "failClosedStatus": "unavailable-transport-path-exercised",
+        }
+        for key, expected in expected_sdk_proof.items():
+            if sdk_proof.get(key) != expected:
+                F.add("USF-ENTERPRISE-024", f"acceptedSdkEnvelopeProof.{key}", f"expected {expected!r}")
+        safe_output = str(sdk_proof.get("safeOutputBoundary", "")).lower()
+        if "value-free" not in safe_output or "no raw endpoint" not in safe_output or "tenant identifier" not in safe_output:
+            F.add(
+                "USF-ENTERPRISE-024",
+                "acceptedSdkEnvelopeProof.safeOutputBoundary",
+                "safe output boundary must explicitly prohibit raw and tenant-identifying evidence",
+            )
+
+    package = state.get("package") or {}
+    scripts = package.get("scripts") if isinstance(package, dict) else {}
+    if not isinstance(scripts, dict) or scripts.get("proof:observability:sentry") != "tsx packages/proof/src/sentry-sdk-envelope-proof.ts":
+        F.add("USF-ENTERPRISE-024", "package.json#proof:observability:sentry", "Sentry proof package script is missing or stale")
+    if isinstance(scripts, dict) and "proof:observability:sentry" not in str(scripts.get("verify", "")):
+        F.add("USF-ENTERPRISE-024", "package.json#verify", "verify must run Sentry proof")
+    if package.get("dependencies", {}).get("@sentry/node") != "10.62.0":
+        F.add("USF-ENTERPRISE-024", "package.json#@sentry/node", "Sentry SDK dependency must be exact-version pinned")
+    if "\nsentry-observability-proof:" not in f"\n{state['makefile']}":
+        F.add("USF-ENTERPRISE-024", "Makefile#sentry-observability-proof", "Sentry proof Make target is missing")
+    proof_source = (ROOT / "packages/proof/src/sentry-sdk-envelope-proof.ts").read_text(encoding="utf-8")
+    adapter_source = (ROOT / "adapters/obs/src/index.ts").read_text(encoding="utf-8")
+    provider_registry_source = (ROOT / "packages/core/src/index.ts").read_text(encoding="utf-8")
+    for marker in (
+        "@sentry/node",
+        "SentrySdkEnvelopeProofAdapter",
+        "beforeSend",
+        "createTransport",
+        "eventCaptureChecked",
+        "redactionChecked",
+        "tenantSafeLabelChecked",
+        "sentry-sdk-envelope-fail-closed",
+        "deferred-no-generated-compose-target",
+        "sdk-envelope-captured-local-transport-not-service-ingestion",
+        "local-sdk-envelope-proof-is-not-sentry-service-readiness",
+    ):
+        if marker not in adapter_source:
+            F.add("USF-ENTERPRISE-024", "adapters/obs/src/index.ts", f"adapter marker is missing: {marker}")
+    for marker in (
+        "SentrySdkEnvelopeProofAdapter",
+        "FORBIDDEN_SAFE_OUTPUT_RE",
+        "proof:observability:sentry",
+        "serviceReadinessStatus",
+        "sentry-readiness-not-claimed",
+        "usf-133-closure-not-claimed",
+        "unavailableProviderResult",
+    ):
+        if marker not in proof_source:
+            F.add("USF-ENTERPRISE-024", "packages/proof/src/sentry-sdk-envelope-proof.ts", f"proof marker is missing: {marker}")
+    for marker in (
+        "observability-sentry-sdk-envelope-local",
+        "SentrySdkEnvelopeProofAdapter",
+        "endpoint://not-generated/sentry-sdk-envelope-proof",
+        "not-applicable-local-in-memory-transport",
+        "fail-closed-on-unavailable-transport",
+    ):
+        if marker not in provider_registry_source:
+            F.add("USF-ENTERPRISE-024", "packages/core/src/index.ts", f"provider registry marker is missing: {marker}")
 
     declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
     required_evidence = set().union(*SENTRY_BOUNDARY_REQUIRED_EVIDENCE_ROWS.values())
@@ -2907,14 +3026,25 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
             F.add("USF-ENTERPRISE-024", "closureMatrix.sentry", "Sentry service row must remain deferred and closure-blocking")
         if not {"USF-196", "USF-205"}.issubset(set(evidence.get("tracking_issues", []))):
             F.add("USF-ENTERPRISE-024", "closureMatrix.sentry.tracking_issues", "Sentry service row must link USF-196 and USF-205")
+        for required_ref in (
+            "corepack pnpm proof:observability:sentry",
+            "packages/proof/src/sentry-sdk-envelope-proof.ts",
+            "usf-205-evidence-sentry-sdk-envelope-proof",
+        ):
+            if required_ref not in set(evidence.get("proof_evidence_refs", [])):
+                F.add("USF-ENTERPRISE-024", "closureMatrix.sentry.proof_evidence_refs", f"missing {required_ref}")
+        if "usf-205-evidence-sentry-sdk-envelope-proof" not in set(evidence.get("enterprise_evidence_refs", [])):
+            F.add("USF-ENTERPRISE-024", "closureMatrix.sentry.enterprise_evidence_refs", "USF-205 evidence ref is required")
         if SENTRY_ERROR_PROHIBITED_CLAIMS - set(evidence.get("readiness_claims_prohibited", [])):
             F.add("USF-ENTERPRISE-024", "closureMatrix.sentry.readiness_claims_prohibited", "Sentry closure row prohibited claims are incomplete")
 
     sentry_matrix = state.get("sentryErrorMatrix") or {}
-    if sentry_matrix.get("remainingProofIssue") != "USF-205":
-        F.add("USF-ENTERPRISE-024", "sentryErrorMatrix.remainingProofIssue", "Sentry matrix must carry USF-205 as remaining proof")
-    if "USF-205" not in set(sentry_matrix.get("issueLinks", [])):
-        F.add("USF-ENTERPRISE-024", "sentryErrorMatrix.issueLinks", "Sentry matrix must link USF-205")
+    if sentry_matrix.get("remainingProofIssue") != "USF-159":
+        F.add("USF-ENTERPRISE-024", "sentryErrorMatrix.remainingProofIssue", "Sentry matrix must carry USF-159 as remaining proof")
+    if sentry_matrix.get("sentryDisposition", {}).get("resolvedProofIssue") != "USF-205":
+        F.add("USF-ENTERPRISE-024", "sentryDisposition.resolvedProofIssue", "Sentry matrix must record USF-205 as resolved proof")
+    if {"USF-205", "USF-159", "USF-169", "USF-193"} - set(sentry_matrix.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-024", "sentryErrorMatrix.issueLinks", "Sentry matrix must link USF-205, USF-159, USF-169, and USF-193")
 
     model = state["model"]
     for section, row_ids in SENTRY_BOUNDARY_REQUIRED_EVIDENCE_ROWS.items():
@@ -2922,21 +3052,51 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
         for row_id in row_ids:
             row = rows.get(row_id)
             if not row:
-                F.add("USF-ENTERPRISE-024", row_id, f"missing USF-196 enterprise row in {section}")
+                F.add("USF-ENTERPRISE-024", row_id, f"missing Sentry enterprise row in {section}")
                 continue
             row_text = json.dumps(row, sort_keys=True)
             if missing_required_non_claims(row):
-                F.add("USF-ENTERPRISE-024", row_id, "USF-196 enterprise row non-claims are incomplete")
-            if "USF-196" not in row_text or "USF-205" not in row_text or str(SENTRY_PROOF_BOUNDARY_PATH) not in row_text:
-                F.add("USF-ENTERPRISE-024", row_id, "USF-196 enterprise row lacks issue, follow-up, or boundary linkage")
-            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
-                F.add("USF-ENTERPRISE-024", row_id, "USF-196 enterprise row lacks validation command")
+                F.add("USF-ENTERPRISE-024", row_id, "Sentry enterprise row non-claims are incomplete")
+            if "USF-205" in row_id and "USF-205" not in row_text:
+                F.add("USF-ENTERPRISE-024", row_id, "USF-205 enterprise row lacks issue linkage")
+            if "usf-196" in row_id and "USF-196" not in row_text:
+                F.add("USF-ENTERPRISE-024", row_id, "USF-196 enterprise row lacks issue linkage")
+            if section != "sdkDependencyGovernance" and str(SENTRY_PROOF_BOUNDARY_PATH) not in row_text:
+                F.add("USF-ENTERPRISE-024", row_id, "Sentry enterprise row lacks boundary linkage")
+            if section not in {"threatModelAbuseCaseRegister", "sdkDependencyGovernance"} and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-024", row_id, "Sentry enterprise row lacks validation command")
             if section == "evidenceRegister":
-                for issue in SENTRY_BOUNDARY_REQUIRED_ISSUES:
+                expected_issues = SENTRY_BOUNDARY_REQUIRED_ISSUES
+                if "USF-205" not in row_id:
+                    expected_issues = {"USF-196", "USF-205", "USF-170", "USF-187", "USF-184", "USF-192", "USF-133"}
+                for issue in expected_issues:
                     if issue not in row.get("issueLinks", []):
                         F.add("USF-ENTERPRISE-024", row_id, f"evidence row lacks {issue}")
                 if "not prove" not in str(row.get("whatWasNotProven", "")).lower():
                     F.add("USF-ENTERPRISE-024", row_id, "evidence row must preserve explicit non-proof boundary")
+                if "USF-205" in row_id and row.get("validationCommand") != "corepack pnpm proof:observability:sentry":
+                    F.add("USF-ENTERPRISE-024", row_id, "USF-205 evidence row must pin Sentry proof command")
+            if section == "sdkDependencyGovernance":
+                expected_sdk = {
+                    "packageName": "@sentry/node",
+                    "version": "10.62.0",
+                    "officialOrDeFactoStatus": "official-sentry-node-sdk",
+                    "providerId": "observability-sentry-sdk-envelope-local",
+                }
+                for key, expected in expected_sdk.items():
+                    if row.get(key) != expected:
+                        F.add("USF-ENTERPRISE-024", f"{row_id}.{key}", f"expected {expected!r}")
+                for field in (
+                    "selectionRationale",
+                    "licencePosture",
+                    "maintenancePosture",
+                    "securityAdvisoryPosture",
+                    "typescriptRuntimeCompatibility",
+                    "forbiddenLayerImportCheck",
+                    "updateDeprecationOwner",
+                ):
+                    if not row.get(field):
+                        F.add("USF-ENTERPRISE-024", f"{row_id}.{field}", "Sentry SDK governance field is required")
 
 
 def run_checks(state: dict[str, Any]) -> Findings:

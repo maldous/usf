@@ -1,19 +1,19 @@
 {
-  "id": "usf-196-sentry-service-semantic-proof-boundary",
-  "title": "USF-196 Sentry Service Semantic Proof Boundary",
-  "sourceIssue": "USF-196",
-  "followUpIssue": "USF-205",
+  "id": "usf-196-usf-205-sentry-service-semantic-proof-boundary",
+  "title": "USF-196/USF-205 Sentry Service Semantic Proof Boundary",
+  "sourceIssue": "USF-205",
+  "followUpIssue": "USF-159",
   "sourceDispositionIssue": "USF-170",
   "laneIssue": "USF-187",
   "dashboardIssue": "USF-184",
   "coordinatorIssue": "USF-192",
   "parentIssue": "USF-133",
-  "status": "reclassified-deferred-with-owner",
+  "status": "accepted-sdk-envelope-proof-service-readiness-deferred",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "sentryErrorMonitoringDispositionMatrix": "docs/architecture/sentry-error-monitoring-disposition-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
-  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "validationCommand": "corepack pnpm proof:observability:sentry",
   "serviceIds": [
     "sentry"
   ],
@@ -45,11 +45,14 @@
     "USF-187",
     "USF-184",
     "USF-192",
-    "USF-133"
+    "USF-133",
+    "USF-159",
+    "USF-169",
+    "USF-193"
   ],
   "reclassification": {
     "from": "requires-human-decision",
-    "to": "explicit-deferred-service-proof",
+    "to": "accepted-sdk-envelope-proof-service-readiness-deferred",
     "decisionAcceptedDoesNotMeanWorkComplete": true,
     "serviceSemanticProofImplemented": false,
     "sentryServiceReadinessClaim": false,
@@ -58,52 +61,52 @@
     "alertingReadinessClaim": false,
     "localObservabilityEquivalentToSentryService": false,
     "repositoryEvidence": [
-      "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json#sentry",
-      "docs/architecture/compose-service-disposition-closure-matrix.json#sentry",
-      "docs/architecture/sentry-error-monitoring-disposition-matrix.json",
+      "docs/architecture/sentry-service-semantic-proof-boundary.json",
+      "packages/proof/src/sentry-sdk-envelope-proof.ts",
+      "adapters/obs/src/index.ts#SentrySdkEnvelopeProofAdapter",
+      "packages/core/src/index.ts#observability-sentry-sdk-envelope-local",
       "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
       "tools/validate-enterprise/validate-enterprise.py"
-    ]
+    ],
+    "acceptedSdkEnvelopeProofImplemented": true
   },
   "remainingProofBoundary": {
-    "issue": "USF-205",
+    "issue": "USF-159",
     "owner": "platform-observability-foundation",
     "riskOwner": "platform-observability-risk-owner",
     "controlOwner": "platform-observability-control-owner",
-    "riskStatement": "Sentry service semantics could be overclaimed from generated Compose metadata or local deterministic observability proof without deterministic composed event capture, issue lifecycle, alert handoff, incident evidence, and operator-console proof.",
-    "treatment": "defer actual Sentry composed event capture and operator-console proof to USF-205 while preserving non-equivalence and readiness non-claims",
+    "riskStatement": "Sentry SDK envelope capture is proven locally, but generated Compose does not include a local Sentry service and therefore service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, and operator console access remain unproven.",
+    "treatment": "accept USF-205 SDK envelope proof for local event-shape, redaction, tenant-label, and fail-closed evidence; defer service readiness, live monitoring, alert/incident operating evidence, operator browser console access, and environment promotion to linked follow-up issues.",
     "reviewDate": "2026-09-30",
     "requiredEvidence": [
-      "profile-gated Sentry service readiness proof",
-      "event capture and ingestion evidence",
-      "redaction and tenant-safe label evidence",
-      "retention and purge evidence",
-      "alert handoff evidence",
-      "incident evidence boundary",
-      "operator console access and audit evidence",
-      "secret, supplier, and privacy boundary evidence"
+      "Sentry service readiness proof from an authorised generated local service or accepted external provider boundary",
+      "Sentry service ingestion and issue lifecycle evidence",
+      "alert handoff and incident workflow evidence",
+      "operator browser console access, review cadence, and deprovisioning evidence",
+      "supplier/live-provider boundary evidence",
+      "environment promotion evidence under USF-193"
     ]
   },
   "eventMonitoringBoundary": {
-    "eventCaptureStatus": "deferred-to-USF-205",
-    "redactionStatus": "deferred-to-USF-205",
-    "tenantSafeLabelStatus": "deferred-to-USF-205",
-    "retentionStatus": "deferred-to-USF-205",
-    "alertHandoffStatus": "deferred-to-USF-205",
-    "incidentEvidenceStatus": "deferred-to-USF-205",
+    "eventCaptureStatus": "accepted-sdk-envelope-proof",
+    "redactionStatus": "accepted-sdk-envelope-proof",
+    "tenantSafeLabelStatus": "accepted-sdk-envelope-proof",
+    "retentionStatus": "accepted-sdk-envelope-proof",
+    "alertHandoffStatus": "deferred-with-owner-review-date",
+    "incidentEvidenceStatus": "deferred-with-owner-review-date",
     "owner": "platform-observability-foundation",
     "riskOwner": "platform-observability-risk-owner",
     "controlOwner": "platform-observability-control-owner",
     "reviewDate": "2026-09-30"
   },
   "operatorAccessAuditRetentionSupplierBoundary": {
-    "operatorAccessBoundary": "Sentry operator console access is not proven by USF-196 and remains deferred to USF-205.",
+    "operatorAccessBoundary": "USF-205 does not prove Sentry browser console clickthrough or public exposure. Operator console access remains deferred to operator/gateway and observability depth work with owner and review date.",
     "authRequirement": "operator-auth-required-before-console-readiness",
     "auditRequirement": "operator-action-audit-required-before-console-readiness",
-    "retentionBoundary": "No Sentry events, issue payloads, stack traces, alert payloads, or incident records are retained as readiness evidence by USF-196.",
-    "secretBoundary": "No Sentry DSN, token, raw endpoint, provider payload, event payload, stack trace, or connection string is introduced by USF-196.",
-    "supplierBoundary": "Local generated Compose service metadata and local observability proof are not supplier or live-provider evidence.",
-    "incidentBoundary": "No production incident, alert handoff, escalation, vulnerability-response, or corrective-action workflow is proven by USF-196."
+    "retentionBoundary": "USF-205 inspects SDK envelope content in memory only, retains no Sentry event payloads as repository evidence, and records value-free proof metadata only.",
+    "secretBoundary": "No Sentry credential, token, raw endpoint, event payload, provider payload, stack trace, raw SDK error, or connection string is emitted by USF-205 proof evidence.",
+    "supplierBoundary": "USF-205 uses the official SDK locally but does not prove Sentry SaaS, self-hosted Sentry, supplier, subprocessor, or live-provider readiness.",
+    "incidentBoundary": "USF-205 does not prove production incident, alert handoff, escalation, vulnerability-response, or corrective-action workflows."
   },
   "localObservabilityGate": {
     "repositoryValidationRequired": true,
@@ -112,7 +115,8 @@
     "commands": [
       "corepack pnpm verify",
       "corepack pnpm parity",
-      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "corepack pnpm proof:observability:sentry"
     ]
   },
   "enterpriseEvidenceRefs": [
@@ -121,12 +125,22 @@
     "usf-196-threat-sentry-overclaim",
     "usf-196-access-sentry-proof-boundary",
     "usf-196-incident-vulnerability-sentry-proof-boundary",
-    "usf-196-privacy-sentry-proof-boundary"
+    "usf-196-privacy-sentry-proof-boundary",
+    "usf-205-soa-sentry-sdk-envelope-proof",
+    "usf-205-evidence-sentry-sdk-envelope-proof",
+    "usf-205-threat-sentry-sdk-envelope-proof",
+    "sdk-usf-205-sentry-sdk-envelope-provider-at-sentry-node",
+    "usf-205-access-sentry-sdk-envelope-proof",
+    "usf-205-resilience-sentry-sdk-envelope-proof",
+    "usf-205-incident-vulnerability-sentry-sdk-envelope-proof",
+    "usf-205-privacy-sentry-sdk-envelope-proof"
   ],
   "readinessClaimsAllowed": [
     "sentry-service-proof-boundary-recorded",
     "sentry-service-proof-deferred-to-USF-205",
-    "local-observability-non-equivalence-recorded"
+    "local-observability-non-equivalence-recorded",
+    "sentry-sdk-envelope-proof-recorded",
+    "sentry-service-readiness-deferred-after-sdk-proof"
   ],
   "readinessClaimsProhibited": [
     "sentry-readiness",
@@ -157,5 +171,32 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-react-parity-readiness"
-  ]
+  ],
+  "predecessorIssue": "USF-196",
+  "remainingFollowUpIssues": [
+    "USF-159",
+    "USF-169",
+    "USF-193"
+  ],
+  "acceptedSdkEnvelopeProof": {
+    "issue": "USF-205",
+    "proofCommand": "corepack pnpm proof:observability:sentry",
+    "packageScript": "proof:observability:sentry",
+    "makeTarget": "sentry-observability-proof",
+    "adapterPath": "adapters/obs/src/index.ts#SentrySdkEnvelopeProofAdapter",
+    "proofPath": "packages/proof/src/sentry-sdk-envelope-proof.ts",
+    "providerRegistryId": "observability-sentry-sdk-envelope-local",
+    "adapterName": "SentrySdkEnvelopeProofAdapter",
+    "sdkPackage": "@sentry/node",
+    "sdkVersion": "10.62.0",
+    "officialOrDeFactoStatus": "official-sentry-node-sdk",
+    "providerMode": "local-test",
+    "serviceCatalogueServiceId": "sentry",
+    "serviceReadinessStatus": "deferred-no-generated-compose-target",
+    "eventIngestionStatus": "sdk-envelope-captured-local-transport-not-service-ingestion",
+    "redactionStatus": "raw-tenant-actor-endpoint-token-stack-and-provider-payload-markers-redacted",
+    "tenantLabelStatus": "opaque-hash-only",
+    "failClosedStatus": "unavailable-transport-path-exercised",
+    "safeOutputBoundary": "proof output contains value-free metadata only and no raw endpoint, credential, token, stack trace, provider payload, event payload, or tenant identifier"
+  }
 }
