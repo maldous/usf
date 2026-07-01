@@ -183,11 +183,11 @@
     "redaction": "Proof output prohibits secrets, raw endpoints, connection strings, tokens, stack traces, raw provider payloads, table values, backup artifacts, restore payloads, and WAL file names."
   },
   "evidenceFreshness": {
-    "pr": "pending-USF-223-pr",
-    "mergeSha": null,
+    "pr": "https://github.com/maldous/usf/pull/189",
+    "mergeSha": "fb7b75875e969778a3d78c2e4b659b9dec757bf9",
     "issueId": "USF-223",
     "evidenceId": "evidence-usf-223-backup-restore-execution-proof",
-    "evidenceState": "current-on-branch-until-pr-merge",
+    "evidenceState": "current-on-main-after-pr-189-merge",
     "retentionPosture": "repository metadata and PR validation summaries only; no backup artifacts, restore payloads, database dumps, provider responses, raw endpoints, credentials, tokens, stack traces, WAL file names, or production data are committed"
   },
   "nonClaims": [
