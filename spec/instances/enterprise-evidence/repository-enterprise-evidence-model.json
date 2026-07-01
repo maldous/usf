@@ -5288,7 +5288,7 @@
       "adapterProviderId": "analytics-store-clickhouse-composed-test",
       "validationCommand": "corepack pnpm proof:analytics:clickhouse",
       "commandPin": "tsx packages/proof/src/clickhouse-composed-proof.ts",
-      "commitPin": "0000000000000000000000000000000000000000",
+      "commitPin": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
       "issueLinks": [
         "USF-206",
         "USF-197",
@@ -5298,7 +5298,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "0000000000000000000000000000000000000000",
+      "prOrMergeSha": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
       "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, event payloads, query results, endpoints, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
     },
     {
@@ -5312,7 +5312,7 @@
       "adapterProviderId": "analytics-store-clickhouse-composed-test",
       "validationCommand": "corepack pnpm proof:analytics:clickhouse",
       "commandPin": "tsx packages/proof/src/clickhouse-composed-proof.ts",
-      "commitPin": "0000000000000000000000000000000000000000",
+      "commitPin": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
       "issueLinks": [
         "USF-206",
         "USF-197",
@@ -5322,7 +5322,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "0000000000000000000000000000000000000000",
+      "prOrMergeSha": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     },
     {
