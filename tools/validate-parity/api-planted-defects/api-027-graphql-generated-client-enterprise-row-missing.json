@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-API-027",
+  "mutation": {
+    "removeEnterpriseRow": {
+      "section": "evidenceRegister",
+      "id": "evidence-usf-214-graphql-generated-client-disposition"
+    }
+  }
+}

@@ -3,11 +3,11 @@
 |                       |                                                                                      |
 | --------------------- | ------------------------------------------------------------------------------------ |
 | Document type         | Architecture / API contract boundary standard                                        |
-| Status                | Draft / parity-api-contracts implementation authority under USF-133                   |
-| Authority level       | Semantic implementation standard subordinate to Charter, Authority Model, and ADRs    |
+| Status                | Draft / parity-api-contracts implementation authority under USF-133                  |
+| Authority level       | Semantic implementation standard subordinate to Charter, Authority Model, and ADRs   |
 | Linear scope          | USF-154, child of USF-133                                                            |
 | Provider posture      | Local/dev/test contract proof only                                                   |
-| Certification posture | ISO 27001-supporting technical control evidence only; no certification claim is made  |
+| Certification posture | ISO 27001-supporting technical control evidence only; no certification claim is made |
 
 This standard defines APIs as security and contract boundaries. It supports technical control evidence, tenant isolation, privacy, authorization review, compatibility review, observability posture, and future UI/API readiness. This is not a production, public API, deployment, gateway, external-client SDK, external developer platform, regulatory, or ISO certification claim. Do not claim ISO certification. Do not claim public API readiness. Do not claim production readiness. Do not claim external developer platform readiness.
 
@@ -182,3 +182,22 @@ The explicitly deferred controls are:
 - generated SDK/client distribution, GraphQL, and federation readiness, which remain under USF-214 or future authorised source issues.
 
 This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, public launch readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.
+
+## USF-214 GraphQL, Federation, And Generated Client Disposition Boundary
+
+USF-214 adds a bounded disposition evidence gate for GraphQL, federation, generated SDKs, generated clients, external developer platform surfaces, and client distribution. The gate is recorded in `docs/architecture/api-graphql-generated-client-disposition-matrix.json` and exercised by `make api-proof`.
+
+The implemented and proven local controls are:
+
+- GraphQL runtime and federation posture is classified as out-of-scope-with-rationale for the current USF foundation runtime proof;
+- generated SDK, generated client, external developer surface, and client distribution posture is classified as deferred-with-owner;
+- tenant, access, audit, secret, privacy, synthetic-data, and non-equivalence boundaries are emitted by the local API disposition proof;
+- validator coverage prevents GraphQL, federation, generated-client, generated-SDK, public API, external developer platform, deployment, staging, production, SOC, ISO certification, full-dev, full-parity, or USF-133 closure overclaims.
+
+The explicitly deferred controls are:
+
+- generated SDK/client creation, compile/run tests, package publication, distribution, and customer compatibility fixtures;
+- GraphQL runtime, federation gateway, resolver authorization, schema stitching, subscriptions, persisted queries, and GraphQL client runtime;
+- external developer portal, API key issuance, SDK registry publication, public documentation operation, public support workflow, and customer onboarding.
+
+This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, public API readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.

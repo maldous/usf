@@ -176,9 +176,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "REST/GraphQL/OpenAPI lineage",
-      "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. USF-213 adds bounded public API compatibility and release-governance evidence through a deterministic local compatibility snapshot and explicit non-equivalence boundaries. GraphQL, generated clients, browser-session runtime, public launch, consumer contracts, gateway-live, edge/WAF/TLS, deployment, and bulk API readiness remain explicitly reclassified, transferred, or deferred without readiness claims.",
-      "tracking_carrier_or_recommendation": "USF-154/USF-155/USF-213 plus USF-214 for GraphQL/generated client disposition",
-      "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix, public API compatibility release-governance matrix, and validate-api USF-API-001..024",
+      "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. USF-213 adds bounded public API compatibility and release-governance evidence through a deterministic local compatibility snapshot and explicit non-equivalence boundaries. USF-214 classifies GraphQL/federation as out of current foundation runtime scope and generated SDK/client/distribution as deferred-with-owner. Browser-session runtime, public launch, consumer contracts, gateway-live, edge/WAF/TLS, deployment, and bulk API readiness remain explicitly reclassified, transferred, or deferred without readiness claims.",
+      "tracking_carrier_or_recommendation": "USF-154/USF-155/USF-213/USF-214",
+      "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix, public API compatibility release-governance matrix, GraphQL/generated-client disposition matrix, and validate-api USF-API-001..029",
       "usf_status": "partial"
     },
     {
@@ -316,10 +316,10 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "contracts-graphql, graphql-api-runtime, graphql-browser-client",
-      "readiness_impact": "Decide whether REST/OpenAPI foundation is sufficient or GraphQL compatibility is required.",
-      "tracking_carrier_or_recommendation": "draft decision required",
-      "usf_evidence_summary": "No equivalent GraphQL runtime claimed",
-      "usf_status": "requires-human-decision"
+      "readiness_impact": "USF-214 classifies GraphQL runtime and federation as out of current foundation runtime scope for this local REST/OpenAPI foundation, and classifies generated SDK/client/distribution as deferred-with-owner. Stronger GraphQL, federation, generated-client, public developer platform, staging, production, deployment, SOC, ISO, full-dev, full-parity, and USF-133 closure claims remain blocked unless future authorised source issues implement and prove them.",
+      "tracking_carrier_or_recommendation": "USF-214 plus future GraphQL/federation or generated-client issue only if separately authorised",
+      "usf_evidence_summary": "USF-214 GraphQL/generated-client disposition matrix plus API proof markers and validate-api USF-API-025..029; no equivalent GraphQL runtime or generated client artifact is claimed",
+      "usf_status": "deferred"
     },
     {
       "blocking_level": "P1",

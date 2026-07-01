@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-028",
+  "mutation": {
+    "file": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+    "replace": {
+      "old": "\"followUpIssue\": \"future-generated-client-issue-if-public-api-client-distribution-is-authorised\"",
+      "new": "\"followUpIssue\": \"\""
+    }
+  }
+}

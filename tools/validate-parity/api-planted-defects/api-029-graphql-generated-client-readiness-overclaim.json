@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-API-029",
+  "mutation": {
+    "file": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+    "append": "GraphQL readiness is proven"
+  }
+}
