@@ -885,8 +885,12 @@ export function createEnterpriseIdentityControlPlane(
     },
 
     async emitThreatSignal(context, signal) {
+      const eventType = THREAT_SIGNAL_EVENT[signal];
+      if (!eventType) {
+        return deny("unknown-threat-signal");
+      }
       await audit({
-        eventType: THREAT_SIGNAL_EVENT[signal],
+        eventType,
         context,
         action: `identity.threat.${signal}`,
         outcome: signal.includes("denied") ? DENIED : "failed",
