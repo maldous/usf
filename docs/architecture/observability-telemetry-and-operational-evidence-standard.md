@@ -148,6 +148,30 @@ Deferred Lane 4 items carry `alertingWorkflow=deferred-with-owner`, owner
 treatment `defer-with-owner-and-validator-boundary`, review date `2026-09-30`, and follow-up issue
 `USF-159`.
 
+## USF-159 Observability Operations Depth Gate
+
+USF-159 records the source-issue evidence gate for deferred observability operations depth in
+`docs/architecture/observability-operations-enterprise-proof-depth-matrix.json`.
+
+The gate proves local operations evidence only: tenant-safe metric labels, trace and correlation
+metadata, structured-log redaction, PDP-protected observability routes, value-free access audit
+evidence, health/readiness/liveness separation, provider-mode posture, and explicit retention
+boundary language.
+
+The gate reclassifies these live or deep operations as outside the current dev-foundation claim:
+live OpenTelemetry collector export, Prometheus, Loki, Tempo, Grafana, Alertmanager, Alloy, Sentry
+service ingestion, SIEM export, live alert delivery, dashboard runtime, incident workflow, on-call
+escalation, status-page operation, vulnerability workflow, corrective-action process, retention
+purge operation, SLI/SLO operation, and cross-tenant aggregate analytics.
+
+USF-159 uses `effectivenessState=proven-local` for local telemetry operations and
+`effectivenessState=out-of-scope-with-rationale` for live/deep operations. It preserves
+`liveMonitoringReadinessClaim=false`, `liveAlertingClaim=false`, `dashboardReadinessClaim=false`,
+`incidentResponseReadinessClaim=false`, `siemReadinessClaim=false`, and the broader readiness and
+certification non-claims. No live observability, incident-response, staging, production, SOC, ISO,
+full dev readiness, full React parity, enterprise production readiness, or USF-133 closure claim is
+made.
+
 ## Deferred Depth
 
 Deferred observability depth includes live OpenTelemetry/Prometheus/Loki/Tempo/Sentry provider integrations, SIEM export, alert delivery, incident management process, dashboard runtime, retention purge workflow, SLO/error-budget measurement, rate-limit telemetry, cross-tenant aggregate analytics, and external provider readiness. These require a separate directive and must not be inferred from this local/dev/test proof.

@@ -32,7 +32,7 @@
         "packages/keycloak"
       ],
       "behaviour_summary": "Keycloak/OIDC brokering, session cookies, claim/role mapping, credential lifecycle, JWKS/discovery.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "adapters/idp/src/keycloak-verifier.ts",
         "adapters/idp/src/hermetic-keycloak.ts",
@@ -69,7 +69,7 @@
         "apps/platform-api/src/server/authorize-resource.ts"
       ],
       "behaviour_summary": "Tenant context, application-layer PDP combining RBAC and ABAC (default-deny), tenant membership lifecycle, break-glass authorization, decision audit; identity is not authorization; RLS backstop.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "capabilities/tenant",
         "capabilities/tenant/src/authorization-policy.ts",
@@ -2032,7 +2032,7 @@
         "e2e/discovery/browser-bff-trace.spec.ts"
       ],
       "behaviour_summary": "Controlled local/dev/test observability and telemetry surface: metrics, traces/spans, structured logs, operational/security signals, health/readiness/liveness, correlation propagation, redaction, tenant-safe operational insight, provider-mode posture, and future ops/API readiness.",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
         "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
@@ -2046,7 +2046,8 @@
         "packages/openapi/src/index.ts",
         "packages/openapi/openapi.json",
         "packages/proof/src/observability-telemetry-proof.ts",
-        "tools/validate-parity/validate-observability.py"
+        "tools/validate-parity/validate-observability.py",
+        "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/observability-telemetry.test.ts",
@@ -2059,12 +2060,12 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "linear_issue": "USF-158",
-      "blocker": "USF-159",
-      "blocking_foundation_readiness": true,
+      "linear_issue": "USF-158/USF-159",
+      "blocker": "none",
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "USF-158 implements the local/dev/test observability telemetry slice: controlled signal model, bounded in-memory collector, safe metric label validation, span/log/event redaction, context propagation through the tenant-context API path, PDP-protected redacted observability routes, value-free audit of observability access, make observability-proof, and validate-observability. No live monitoring, SIEM, alerting, SOC, ISO, dashboard, incident-response, or production readiness claim is made.",
-      "retry_condition": "USF-159 completes deferred live observability backend, export, alerting, dashboard, incident, retention, SLI/SLO, and cross-tenant aggregate depth under explicit authority."
+      "evidence": "USF-158 implements the local/dev/test observability telemetry slice: controlled signal model, bounded in-memory collector, safe metric label validation, span/log/event redaction, context propagation through the tenant-context API path, PDP-protected redacted observability routes, value-free audit of observability access, make observability-proof, and validate-observability. USF-159 records the bounded source-issue evidence gate for local operations depth and explicitly reclassifies live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, and cross-tenant aggregate analytics as unproven and unclaimed.",
+      "retry_condition": "No retry needed for the current local/dev/test observability operations depth gate. Future live observability or incident-response readiness requires separate authority and proof."
     },
     {
       "react_item_id": "observability.metrics-cardinality",
@@ -2241,10 +2242,12 @@
         "compose.yaml"
       ],
       "behaviour_summary": "Live telemetry backends, SIEM/export, alert delivery, incident workflow, dashboards, retention purge, SLI/SLO measurement, cross-tenant aggregates, and external observability providers are represented as posture but deferred.",
-      "usf_status": "deferred",
+      "usf_status": "not-applicable",
       "usf_paths": [
         "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
-        "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md"
+        "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+        "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json",
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
       ],
       "usf_tests": [
         "tests/capabilities/observability-telemetry.test.ts"
@@ -2254,12 +2257,12 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "linear_issue": "USF-158",
-      "blocker": "USF-159",
-      "blocking_foundation_readiness": true,
+      "linear_issue": "USF-158/USF-159",
+      "blocker": "none",
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "USF-159 tracks deferred depth. This slice records posture and validators but makes no live monitoring, live metrics/log/tracing backend, SIEM, live alerting, dashboard, incident-response, SOC, ISO, or production readiness claim.",
-      "retry_condition": "USF-159 receives an authorised implementation directive and proves the deferred live/backend/deep operational controls without overclaiming."
+      "evidence": "USF-159 records docs/architecture/observability-operations-enterprise-proof-depth-matrix.json, extends make observability-proof with source-issue markers, and validates explicit reclassification of live telemetry backends, SIEM export, alert delivery, dashboard runtime, incident workflow, retention purge operation, SLI/SLO operation, cross-tenant aggregate analytics, and external observability providers. No live monitoring, live metrics/log/tracing backend, SIEM, live alerting, dashboard, incident-response, SOC, ISO, staging, production, full dev readiness, full React parity, or USF-133 closure claim is made.",
+      "retry_condition": "No retry needed for current foundation scope. Future live/backend/deep operational controls require separate issue authority, provider/environment proof, and readiness-specific validation."
     },
     {
       "react_item_id": "developer-commands-proof",

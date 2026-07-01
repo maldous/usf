@@ -1,0 +1,250 @@
+{
+  "id": "observability-operations-enterprise-proof-depth-matrix",
+  "sourceIssue": "USF-159",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-188",
+  "capabilityId": "observability-operations-enterprise-depth",
+  "proofCommand": "make observability-proof",
+  "rawProofCommand": "corepack pnpm proof:observability",
+  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises USF local observability operations evidence with synthetic tenants, value-free telemetry, tenant-safe labels, redaction, PDP-protected operator surfaces, provider-mode posture, and explicit reclassification of live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure claims.",
+  "validatorCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+  "proofFile": "packages/proof/src/observability-telemetry-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-observability.py",
+  "sourceUseMatrix": "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "operationsPostureInstance": "spec/instances/observability-signal/observability-operations-posture.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-159-observability-operations-depth",
+    "evidence-usf-159-observability-operations-depth",
+    "threat-usf-159-observability-operations-depth",
+    "access-usf-159-observability-operations-depth",
+    "resilience-usf-159-observability-operations-depth",
+    "incident-usf-159-observability-operations-depth",
+    "privacy-usf-159-observability-operations-depth"
+  ],
+  "serviceCatalogueRows": [
+    "spec/instances/compose-service/service-catalogue.json#otel-collector",
+    "spec/instances/compose-service/service-catalogue.json#prometheus",
+    "spec/instances/compose-service/service-catalogue.json#grafana",
+    "spec/instances/compose-service/service-catalogue.json#loki",
+    "spec/instances/compose-service/service-catalogue.json#tempo",
+    "spec/instances/compose-service/service-catalogue.json#alertmanager",
+    "spec/instances/compose-service/service-catalogue.json#alloy",
+    "spec/instances/compose-service/service-catalogue.json#sentry"
+  ],
+  "providerMode": "hermetic-mock",
+  "runtimeMode": "local-synthetic-observability-operations-proof",
+  "claims": {
+    "localOperationsDepthProven": true,
+    "liveBackendBoundaryReclassified": true,
+    "providerCredentialsSecretReferenceChecked": true,
+    "tenantSafeLabelsChecked": true,
+    "redactionChecked": true,
+    "retentionBoundaryExplicit": true,
+    "accessBoundaryChecked": true,
+    "auditEvidenceBoundaryChecked": true,
+    "alertDeliveryReclassified": true,
+    "dashboardRuntimeReclassified": true,
+    "incidentWorkflowReclassified": true,
+    "sliSloMeasurementReclassified": true,
+    "crossTenantAggregateBoundaryChecked": true,
+    "liveMonitoringReadinessClaim": false,
+    "liveMetricsBackendClaim": false,
+    "liveLogBackendClaim": false,
+    "liveTracingBackendClaim": false,
+    "liveAlertingClaim": false,
+    "dashboardReadinessClaim": false,
+    "incidentResponseReadinessClaim": false,
+    "siemReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "Hermetic observability proof does not prove live telemetry backends, live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow operation, on-call process, status-page operation, SLO operation, or production monitoring.",
+    "Local tenant-safe telemetry and operator API proof does not prove Grafana, Prometheus, Loki, Tempo, Alertmanager, Alloy, Sentry, or external observability provider readiness.",
+    "USF-159 reclassifies live/deep observability operations as outside the current dev-foundation source-issue acceptance unless a future issue explicitly authorises and proves them."
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred observability backend or operation is implemented with proof or explicitly reclassified.",
+      "evidence": "Controls below record proven-local evidence for local telemetry operations, credentials posture, tenant-safe labels, access, audit linkage, redaction, retention posture, and cross-tenant query denial. Live backends, SIEM export, alert delivery, dashboards, incident workflow, SLI/SLO operation, and cross-tenant aggregate analytics are explicitly reclassified as not proven and not claimed by USF-159."
+    },
+    {
+      "criterion": "Provider credentials remain secret-reference based.",
+      "evidence": "provider-credential-boundary records secret-reference-only posture and the proof scans status output for secret and endpoint references."
+    },
+    {
+      "criterion": "Tenant-safe labels, redaction, retention, access, and audit evidence are proven where claimed.",
+      "evidence": "make observability-proof records allow-listed labels, redaction before persistence, tenant query isolation, PDP-protected observability routes, value-free access audit, health/readiness/liveness separation, and retention/disposal non-equivalence."
+    },
+    {
+      "criterion": "Source-use and parity matrices remain truthful.",
+      "evidence": "This matrix, the source-use matrix, gap register, functionality parity matrix, and scope classification matrix name USF-159 as bounded local proof plus explicit reclassification, not live observability readiness."
+    },
+    {
+      "criterion": "No live observability or incident readiness claim is made without proof.",
+      "evidence": "claims object and proof result set live monitoring, backend, SIEM, alerting, dashboard, incident-response, staging, production, SOC, ISO certification, full-dev, full-parity, and USF-133 closure claims to false."
+    }
+  ],
+  "controls": [
+    {
+      "id": "local-telemetry-operations-depth",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/observability-telemetry-proof.ts",
+        "adapters/obs/src/index.ts",
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "proofChecks": [
+        "metric labels are allow-listed",
+        "spans and structured logs are redacted before persistence",
+        "tenant telemetry queries are isolated",
+        "health readiness and liveness are distinct"
+      ],
+      "proofCommand": "make observability-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "nonClaimBoundary": "Local in-memory telemetry operations are not live monitoring backend readiness, SIEM readiness, or production monitoring."
+    },
+    {
+      "id": "provider-credential-boundary",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/observability-telemetry-proof.ts",
+        "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+        "spec/instances/observability-signal/observability-operations-posture.json"
+      ],
+      "proofChecks": [
+        "proof output excludes secret references, endpoint references, tokens, recipient addresses, raw provider responses, and stack traces"
+      ],
+      "proofCommand": "make observability-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "nonClaimBoundary": "Secret-reference posture is local proof evidence only and is not live provider credential readiness."
+    },
+    {
+      "id": "tenant-redaction-access-audit-retention",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "apps/api/src/server.ts",
+        "packages/proof/src/observability-telemetry-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "tests/capabilities/observability-telemetry.test.ts"
+      ],
+      "proofChecks": [
+        "tenant A cannot query tenant B telemetry",
+        "PDP-protected observability routes emit value-free access audit",
+        "safe output contains redacted values only",
+        "retention posture is explicit and not live purge readiness"
+      ],
+      "proofCommand": "make observability-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "nonClaimBoundary": "Local redaction, access, audit, and retention posture is not production retention, legal hold, SIEM export, or incident-response readiness."
+    },
+    {
+      "id": "live-backend-export-boundary",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "ISO-supporting evidence completeness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+        "docs/architecture/sentry-service-semantic-proof-boundary.json"
+      ],
+      "nonClaimBoundary": "Prometheus, Loki, Tempo, Grafana, Alertmanager, Alloy, Sentry service ingestion, OpenTelemetry collector export, SIEM export, and external observability providers are not proven or claimed by USF-159."
+    },
+    {
+      "id": "alert-dashboard-incident-boundary",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "ISO-supporting evidence completeness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+        "spec/instances/observability-signal/observability-operations-posture.json"
+      ],
+      "nonClaimBoundary": "Alert delivery, alert routing operation, dashboard runtime, incident workflow, on-call escalation, status-page operation, vulnerability workflow, corrective-action process, and post-incident review evidence are not proven or claimed by USF-159."
+    },
+    {
+      "id": "sli-slo-cross-tenant-aggregate-boundary",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
+        "packages/proof/src/observability-telemetry-proof.ts"
+      ],
+      "nonClaimBoundary": "SLI/SLO posture is represented, but operational measurement, error-budget policy execution, live burn-rate alerting, and cross-tenant aggregate analytics are not proven or claimed by USF-159."
+    }
+  ],
+  "deferredBoundaries": [
+    {
+      "id": "live-observability-backends",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "ISO-supporting evidence completeness"
+      ],
+      "nonClaimBoundary": "No live observability backend, SIEM, Sentry service readiness, alert delivery, dashboard runtime, incident-response, staging, or production readiness claim is made by USF-159."
+    }
+  ]
+}

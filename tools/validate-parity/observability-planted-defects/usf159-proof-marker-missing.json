@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf159-proof-marker-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-013",
+  "edits": [
+    {
+      "target": "packages/proof/src/observability-telemetry-proof.ts",
+      "old": "USF-159 operations depth evidence reclassifies live backends alerting dashboards incident workflow retention purge SLI SLO and cross-tenant aggregate depth without readiness claims",
+      "new": "USF-159 operations depth evidence missing"
+    }
+  ]
+}

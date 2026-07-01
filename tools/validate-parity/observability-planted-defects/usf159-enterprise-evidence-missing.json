@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf159-enterprise-evidence-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-015",
+  "edits": [
+    {
+      "target": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "old": "\"id\": \"evidence-usf-159-observability-operations-depth\"",
+      "new": "\"id\": \"evidence-usf-159-observability-operations-depth-defect\""
+    }
+  ]
+}

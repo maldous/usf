@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf159-matrix-control-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-014",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "alert-dashboard-incident-boundary",
+      "new": "alert-dashboard-incident-boundary-defect"
+    }
+  ]
+}

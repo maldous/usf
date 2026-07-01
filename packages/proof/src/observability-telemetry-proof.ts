@@ -15,9 +15,28 @@ import {
 interface ObservabilityTelemetryProofResult {
   readonly status: "pass";
   readonly proof: "observability-telemetry";
+  readonly sourceIssue: "USF-159";
   readonly providerMode: "hermetic-mock";
   readonly environment: "hermetic";
   readonly proofLevelObserved: "behaviour-proven";
+  readonly operationsDepthEvidence: {
+    readonly sourceIssue: "USF-159";
+    readonly matrix: "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json";
+    readonly localOperationsDepthProven: true;
+    readonly liveBackendBoundaryReclassified: true;
+    readonly providerCredentialsSecretReferenceChecked: true;
+    readonly tenantSafeLabelsChecked: true;
+    readonly redactionChecked: true;
+    readonly retentionBoundaryExplicit: true;
+    readonly accessBoundaryChecked: true;
+    readonly auditEvidenceBoundaryChecked: true;
+    readonly alertDeliveryReclassified: true;
+    readonly dashboardRuntimeReclassified: true;
+    readonly incidentWorkflowReclassified: true;
+    readonly sliSloMeasurementReclassified: true;
+    readonly crossTenantAggregateBoundaryChecked: true;
+    readonly liveOperationsReadinessClaim: false;
+  };
   readonly liveMonitoringReadinessClaim: false;
   readonly liveMetricsBackendClaim: false;
   readonly liveLogBackendClaim: false;
@@ -300,9 +319,28 @@ export async function runObservabilityTelemetryProof(): Promise<ObservabilityTel
   return Object.freeze({
     status: "pass",
     proof: "observability-telemetry",
+    sourceIssue: "USF-159",
     providerMode: "hermetic-mock",
     environment: "hermetic",
     proofLevelObserved: "behaviour-proven",
+    operationsDepthEvidence: Object.freeze({
+      sourceIssue: "USF-159",
+      matrix: "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json",
+      localOperationsDepthProven: true,
+      liveBackendBoundaryReclassified: true,
+      providerCredentialsSecretReferenceChecked: true,
+      tenantSafeLabelsChecked: true,
+      redactionChecked: true,
+      retentionBoundaryExplicit: true,
+      accessBoundaryChecked: true,
+      auditEvidenceBoundaryChecked: true,
+      alertDeliveryReclassified: true,
+      dashboardRuntimeReclassified: true,
+      incidentWorkflowReclassified: true,
+      sliSloMeasurementReclassified: true,
+      crossTenantAggregateBoundaryChecked: true,
+      liveOperationsReadinessClaim: false,
+    }),
     liveMonitoringReadinessClaim: false,
     liveMetricsBackendClaim: false,
     liveLogBackendClaim: false,
@@ -323,6 +361,7 @@ export async function runObservabilityTelemetryProof(): Promise<ObservabilityTel
       "health readiness and liveness are distinct",
       "deferred and disabled provider modes do not imply live readiness",
       "security signal is emitted for denied authorization posture",
+      "USF-159 operations depth evidence reclassifies live backends alerting dashboards incident workflow retention purge SLI SLO and cross-tenant aggregate depth without readiness claims",
       "no live monitoring SIEM alerting or production readiness claim is made",
     ]),
   });
