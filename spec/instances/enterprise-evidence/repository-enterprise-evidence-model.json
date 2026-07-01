@@ -7048,7 +7048,7 @@
       "adapterProviderId": "hermetic-keycloak-token-verifier; enterprise-identity-control-plane-local",
       "validationCommand": "make auth-proof; python3 tools/validate-parity/validate-auth.py all --json",
       "commandPin": "tsx packages/proof/src/auth-identity-proof.ts",
-      "commitPin": "3914c664f3bdeed88baad7d143509aac93790ec6",
+      "commitPin": "ee36bd5b6cf69bb4bf7ecc4223b61bd563896743",
       "issueLinks": [
         "USF-149",
         "USF-133",
@@ -7056,7 +7056,7 @@
         "USF-192",
         "USF-193"
       ],
-      "prOrMergeSha": "3914c664f3bdeed88baad7d143509aac93790ec6",
+      "prOrMergeSha": "ee36bd5b6cf69bb4bf7ecc4223b61bd563896743",
       "retentionPosture": "Retain committed proof code, auth identity enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw token, cookie, secret, external IdP identifier, broker payload, provider payload, email value, or production data is retained."
     }
   ],
