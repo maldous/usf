@@ -1,8 +1,5 @@
 import { setTimeout as sleep } from "node:timers/promises";
-import {
-  ClickHouseLogLevel,
-  createClient as createClickHouseClient,
-} from "@clickhouse/client";
+import { ClickHouseLogLevel, createClient as createClickHouseClient } from "@clickhouse/client";
 import { opaqueHash, type TenantContext } from "@foundation/core";
 import type { EventBus } from "@foundation/ports";
 import { createClient as createRedisClient } from "redis";
@@ -169,8 +166,7 @@ export interface ClickHouseComposedAnalyticsEvidence {
   readonly tenantIdHash: string;
   readonly proofRunHash: string | null;
   readonly operation:
-    | "clickhouse-analytics-round-trip"
-    | "clickhouse-analytics-unavailable-fail-closed";
+    "clickhouse-analytics-round-trip" | "clickhouse-analytics-unavailable-fail-closed";
   readonly operationOutcome: "succeeded" | "failed-closed";
   readonly safeErrorCode: "clickhouse-provider-error-redacted" | null;
   readonly failClosedDenials: number;
@@ -805,10 +801,9 @@ export class ClickHouseComposedAnalyticsEventStoreAdapter {
   }
 
   async proveRoundTrip(context: TenantContext): Promise<ClickHouseComposedAnalyticsEvidence> {
-    const proofRunHash = opaqueHash(`clickhouse-proof-run:${context.tenantId}:${context.actorId}`).slice(
-      0,
-      32,
-    );
+    const proofRunHash = opaqueHash(
+      `clickhouse-proof-run:${context.tenantId}:${context.actorId}`,
+    ).slice(0, 32);
     const tenantHash = this.#tenantHash(context.tenantId);
     const otherTenantHash = this.#tenantHash(`${context.tenantId}-other`);
     let cleanupSucceeded = false;
@@ -911,9 +906,10 @@ export class ClickHouseComposedAnalyticsEventStoreAdapter {
       });
     } finally {
       if (!cleanupSucceeded) {
-        await this.#command(`DROP TABLE IF EXISTS ${this.#tableName}`, "clickhouse-cleanup-timeout").catch(
-          () => undefined,
-        );
+        await this.#command(
+          `DROP TABLE IF EXISTS ${this.#tableName}`,
+          "clickhouse-cleanup-timeout",
+        ).catch(() => undefined);
       }
       await this.close();
     }
@@ -957,7 +953,10 @@ export class ClickHouseComposedAnalyticsEventStoreAdapter {
   }
 
   async #createTable(): Promise<void> {
-    await this.#command(`DROP TABLE IF EXISTS ${this.#tableName}`, "clickhouse-precreate-drop-timeout");
+    await this.#command(
+      `DROP TABLE IF EXISTS ${this.#tableName}`,
+      "clickhouse-precreate-drop-timeout",
+    );
     await this.#command(
       `CREATE TABLE ${this.#tableName} (
         proof_run_hash String,

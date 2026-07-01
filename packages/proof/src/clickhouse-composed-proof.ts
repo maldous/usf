@@ -203,7 +203,10 @@ async function proveUnavailable(port: number): Promise<ClickHouseComposedAnalyti
     environment: "integration",
   });
   const evidence = await provider.proveUnavailable(context);
-  assert(evidence.operationOutcome === "failed-closed", "unavailable ClickHouse did not fail closed");
+  assert(
+    evidence.operationOutcome === "failed-closed",
+    "unavailable ClickHouse did not fail closed",
+  );
   assert(evidence.failClosedDenials === 1, "unavailable ClickHouse denial missing");
   return evidence;
 }
@@ -266,7 +269,10 @@ export async function runClickHouseComposedProof(): Promise<ClickHouseComposedPr
   assert(evidence.eventIngestionChecked, "clickhouse-proof-missing-ingestion-check");
   assert(evidence.tenantSafeQueryChecked, "clickhouse-proof-missing-tenant-query-check");
   assert(evidence.aggregationChecked, "clickhouse-proof-missing-aggregation-check");
-  assert(evidence.invalidClassificationRejected, "clickhouse-proof-missing-invalid-classification-check");
+  assert(
+    evidence.invalidClassificationRejected,
+    "clickhouse-proof-missing-invalid-classification-check",
+  );
   assert(evidence.retentionDeletionChecked, "clickhouse-proof-missing-retention-deletion-check");
   assert(evidence.cleanupSucceeded, "clickhouse-proof-missing-cleanup");
   assert(evidence.readinessAttempts > 0, "clickhouse-proof-missing-readiness-attempts");

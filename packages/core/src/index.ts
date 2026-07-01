@@ -1739,7 +1739,10 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = Object.freeze
         tenantScope: "tenant-scoped",
       },
     ],
-    driftPosture: { driftStatus: "in-sync", expectedConfigHash: "compose-clickhouse-runtime-providers" },
+    driftPosture: {
+      driftStatus: "in-sync",
+      expectedConfigHash: "compose-clickhouse-runtime-providers",
+    },
   }),
   makeProvider({
     providerId: "analytics-store-clickhouse-deferred",
