@@ -1,0 +1,13 @@
+{
+  "description": "USF-147 reclassified control lacks follow-up and review metadata.",
+  "expectedRule": "USF-FILES-015",
+  "mutation": {
+    "usf147ControlSet": {
+      "id": "presigned-url-boundary",
+      "values": {
+        "followUpIssue": "__DELETE__",
+        "reviewDate": "__DELETE__"
+      }
+    }
+  }
+}

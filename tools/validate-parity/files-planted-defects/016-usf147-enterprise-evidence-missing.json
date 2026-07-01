@@ -1,0 +1,13 @@
+{
+  "description": "USF-147 enterprise evidence rows are missing.",
+  "expectedRule": "USF-FILES-016",
+  "mutation": {
+    "enterpriseRemoveIds": [
+      "soa-usf-147-files-storage-enterprise-proof-depth",
+      "evidence-usf-147-files-storage-enterprise-proof-depth",
+      "threat-usf-147-files-storage-enterprise-depth",
+      "incident-usf-147-files-storage-enterprise-depth",
+      "privacy-usf-147-files-storage-enterprise-depth"
+    ]
+  }
+}

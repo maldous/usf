@@ -1,0 +1,11 @@
+{
+  "description": "USF-147 files proof is missing a required proof token.",
+  "expectedRule": "USF-FILES-017",
+  "mutation": {
+    "file": "packages/proof/src/files-storage-proof.ts",
+    "replace": {
+      "old": "proveEnterpriseStorageDepthReclassification",
+      "new": "proveStorageDepthWithoutEnterpriseToken"
+    }
+  }
+}

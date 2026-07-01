@@ -1,0 +1,9 @@
+{
+  "description": "USF-147 enterprise files/storage matrix does not identify the source issue.",
+  "expectedRule": "USF-FILES-014",
+  "mutation": {
+    "usf147MatrixSet": {
+      "sourceIssue": "USF-999"
+    }
+  }
+}

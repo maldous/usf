@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Document type | Architecture / domain semantic standard |
-| Status | Draft / parity-files-storage (USF-146) |
+| Status | Draft / parity-files-storage (USF-146) plus USF-147 bounded enterprise depth |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010; consistent with the Enterprise Persistence Metadata and Classification, audit-evidence, and config-and-secrets standards |
 | Issue scope | USF-146 under USF-133; deferred depth tracked in USF-147 |
 | Evidence basis | Historical `../react` files/storage behaviour as lineage only; PR 92 DB/RLS; PR 93 PDP; PR 94 audit; PR 95 config/secrets |
@@ -83,8 +83,8 @@ Fields: tenant_storage_quota, tenant_file_count_quota, max_file_size (enforced),
 
 ## 17. Validator expectations
 
-`tools/validate-parity/validate-files.py` fails closed when: classification model missing; file metadata not tenant-scoped/FORCE-RLS; object-key safety missing; upload validation not fail-closed; downloads not scan/lifecycle gated; routes not PDP/tenant-guarded; file actions not audited; legal hold does not block purge; views expose object keys; a secret/credential appears in OpenAPI; live object-store/scanner/provider/production-live is overclaimed; integrity not verifiable; or the parity matrix files row lacks tests/proofs. Each rule has a planted defect under `tools/validate-parity/files-planted-defects`. The DB substrate is additionally enforced by `validate-db.py` (files classified tenant-scoped, RLS, tenant index).
+`tools/validate-parity/validate-files.py` fails closed when: classification model missing; file metadata not tenant-scoped/FORCE-RLS; object-key safety missing; upload validation not fail-closed; downloads not scan/lifecycle gated; routes not PDP/tenant-guarded; file actions not audited; legal hold does not block purge; views expose object keys; a secret/credential appears in OpenAPI; live object-store/scanner/provider/production-live is overclaimed; integrity not verifiable; the parity matrix files row lacks tests/proofs; the USF-147 enterprise matrix is missing; reclassified controls lack owner/follow-up metadata; proof/evidence linkage is missing; proof tokens are missing; proven controls lack proof-backed evidence; MinIO or ClamAV reconciliation is overclaimed; or prohibited readiness/certification claims appear. Each rule has a planted defect under `tools/validate-parity/files-planted-defects`. The DB substrate is additionally enforced by `validate-db.py` (files classified tenant-scoped, RLS, tenant index).
 
 ## 18. Deferred files/storage depth (USF-147)
 
-Live MinIO/S3 object-store adapter + presigned URLs; live ClamAV/antivirus + DLP scanner; DB-backed file-metadata runtime adapter (shares USF-139 pg adapter); derived objects (preview/thumbnail/OCR/index); object versioning; backup/restore/DR; encryption/KMS; data residency enforcement; quotas/rate limiting + temporary-upload cleanup; evidence package export; object-lock/WORM. Each has a retry condition in USF-147. None is overclaimed in the parity matrix while open.
+USF-147 records bounded local proof and explicit reclassification for the enterprise depth items above. Bounded evidence exists for Postgres file metadata RLS, legal-hold purge blocking, object-key uniqueness, MinIO composed-test provider reconciliation, ClamAV composed-test scanner reconciliation, and file/evidence-package posture. Stronger capabilities remain non-claims unless later source issues prove them: live S3 or provider-managed object store readiness, production presigned URL runtime, derived object generation runtime, provider object versioning, object-store backup/restore/DR, live DLP/exfiltration controls, KMS custody or customer-managed keys, production data residency enforcement, storage quota/rate-limit runtime, temporary-upload cleanup, object-lock/WORM, environment-promotion readiness, and full files/storage parity.

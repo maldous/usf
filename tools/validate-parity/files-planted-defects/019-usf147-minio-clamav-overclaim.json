@@ -1,0 +1,11 @@
+{
+  "description": "USF-147 MinIO reconciliation omits live object-store non-claim.",
+  "expectedRule": "USF-FILES-019",
+  "mutation": {
+    "file": "packages/proof/src/files-storage-proof.ts",
+    "replace": {
+      "old": "liveObjectStoreReadinessClaim: false",
+      "new": "liveObjectStoreReadinessClaim: true"
+    }
+  }
+}

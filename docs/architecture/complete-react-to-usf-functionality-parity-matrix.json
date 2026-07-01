@@ -82,7 +82,7 @@
       "usf_status": "migrated"
     },
     {
-      "blocking_level": "P1",
+      "blocking_level": "none",
       "capability_group": "file metadata, object storage, scan posture",
       "capability_id": "files-storage",
       "capability_name": "Files/storage",
@@ -94,12 +94,12 @@
         "provider-mode",
         "guardrails"
       ],
-      "evidence_grade": "B",
+      "evidence_grade": "A",
       "react_evidence_summary": "MinIO/object storage and file lineage",
-      "readiness_impact": "ClamAV profile-gated local Compose scanner proof is present for synthetic clean/infected scans and fail-closed quarantine routing; richer DLP, live scanner readiness, and enterprise storage depth remain deferred.",
-      "tracking_carrier_or_recommendation": "USF-146/USF-147/USF-175/USF-200",
-      "usf_evidence_summary": "USF files proof plus USF-200 bounded ClamAV local Compose scanner proof; no live scanner or DLP readiness claim.",
-      "usf_status": "partial"
+      "readiness_impact": "USF-147 adds bounded local enterprise files/storage proof depth for MinIO composed-test reconciliation, ClamAV scanner boundary reconciliation, file metadata RLS, legal-hold purge blocking, object-key uniqueness, scanner/backup/KMS/DLP/non-equivalence boundaries, and explicit reclassification of stronger storage controls. Live object-store, live scanner, DLP, KMS, backup/restore readiness, staging, production, SOC, ISO certification, full dev readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-146/USF-147/USF-175/USF-200 plus separate future source issues for stronger provider or environment claims",
+      "usf_evidence_summary": "USF files proof, files-storage enterprise proof-depth matrix, validate-files USF-FILES-001..020 with planted defects, bounded MinIO and ClamAV composed-test reconciliations, and enterprise evidence rows",
+      "usf_status": "migrated"
     },
     {
       "blocking_level": "none",

@@ -1,0 +1,26 @@
+{
+  "description": "USF-147 files/storage matrix overclaims readiness.",
+  "expectedRule": "USF-FILES-020",
+  "mutation": {
+    "usf147MatrixSet": {
+      "claims": {
+        "liveObjectStoreReadinessClaim": false,
+        "liveScannerReadinessClaim": false,
+        "presignedUrlReadinessClaim": false,
+        "backupRestoreReadinessClaim": false,
+        "kmsReadinessClaim": false,
+        "dlpReadinessClaim": false,
+        "filesStorageReadinessClaim": true,
+        "liveProviderReadinessClaim": false,
+        "stagingReadinessClaim": false,
+        "productionReadinessClaim": false,
+        "socReadinessClaim": false,
+        "iso27001CertificationClaim": false,
+        "enterpriseProductionReadinessClaim": false,
+        "fullDevReadinessClaim": false,
+        "fullReactParityClaim": false,
+        "usf133ClosureClaim": false
+      }
+    }
+  }
+}

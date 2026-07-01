@@ -1,0 +1,289 @@
+{
+  "id": "files-storage-enterprise-proof-depth-matrix",
+  "sourceIssue": "USF-147",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-190",
+  "capabilityId": "files-storage-enterprise-depth",
+  "proofCommand": "make files-proof",
+  "rawProofCommand": "corepack pnpm proof:files",
+  "rawProofCommandBoundary": "requires Compose Postgres to be running; make files-proof owns startup and teardown; MinIO and ClamAV reconciliation consumes existing composed-test provider evidence without claiming live object-store or scanner readiness",
+  "validatorCommand": "python3 tools/validate-parity/validate-files.py all --json",
+  "sourceUseMatrix": "docs/architecture/parity-files-storage-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-147-files-storage-enterprise-proof-depth",
+    "evidence-usf-147-files-storage-enterprise-proof-depth",
+    "threat-usf-147-files-storage-enterprise-depth",
+    "incident-usf-147-files-storage-enterprise-depth",
+    "privacy-usf-147-files-storage-enterprise-depth"
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Current MinIO runtime proof is reconciled with deferred storage items.",
+      "evidence": "make files-proof checks the provider registry entry object-storage-minio-composed-test, service catalogue authority, local endpoint reference, composed-test mode, no external egress, placeholder credential scope, and explicit live object-store and presigned URL non-claims."
+    },
+    {
+      "criterion": "Each remaining files/storage control is implemented with proof or explicitly reclassified.",
+      "evidence": "controls array records bounded-local-proof for current metadata, MinIO, ClamAV, and evidence package posture, and explicitly-reclassified status for stronger presigned URL, derived object, versioning, backup, DLP, KMS, residency, quota, cleanup, and object-lock claims."
+    },
+    {
+      "criterion": "Tenant, retention, deletion, scanner, and backup boundaries are explicit where claimed.",
+      "evidence": "make files-proof checks Postgres RLS, missing tenant fail-closed behaviour, legal-hold purge blocking, MinIO composed-test boundary, ClamAV composed-test boundary, and backup/DR non-equivalence boundaries."
+    },
+    {
+      "criterion": "Validator coverage exists for any new files/storage claim.",
+      "evidence": "USF-FILES-014 through USF-FILES-020 validate this matrix, reclassified metadata, proof/evidence linkage, control proof tokens, proven-control evidence, provider reconciliation, and readiness non-claims."
+    },
+    {
+      "criterion": "No scanner, backup, KMS, production, or certification claim is made without proof.",
+      "evidence": "claims are false and nonClaims includes live scanner, backup/restore, KMS, files/storage readiness beyond bounded proof, staging, production, SOC, ISO certification, full-readiness, full React parity, and USF-133 closure non-claims."
+    }
+  ],
+  "controls": [
+    {
+      "id": "minio-runtime-binding-reconciliation",
+      "status": "bounded-local-proof",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/files-storage-proof.ts",
+        "packages/core/src/index.ts",
+        "adapters/store/src/index.ts"
+      ],
+      "proofChecks": [
+        "USF-147 MinIO runtime binding is reconciled"
+      ],
+      "proofCommand": "make files-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-files.py all --json",
+      "nonClaimBoundary": "local MinIO composed-test provider registry reconciliation is not live S3, provider-managed object-store, presigned URL, staging, or production readiness"
+    },
+    {
+      "id": "clamav-scanner-support-reconciliation",
+      "status": "bounded-local-proof",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/files-storage-proof.ts",
+        "packages/proof/src/clamav-composed-proof.ts",
+        "adapters/store/src/index.ts"
+      ],
+      "proofChecks": [
+        "USF-147 ClamAV scanner boundary is reconciled"
+      ],
+      "proofCommand": "make files-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-files.py all --json",
+      "nonClaimBoundary": "bounded local ClamAV composed-test proof is not live scanner readiness, signature freshness operation, DLP readiness, or production malware-control readiness"
+    },
+    {
+      "id": "db-backed-file-metadata-adapter-linkage",
+      "status": "bounded-local-proof",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/files-storage-proof.ts",
+        "adapters/db/migrations/0003-files.sql"
+      ],
+      "proofChecks": [
+        "files ENABLE + FORCE RLS, has a tenant policy, and indexes tenant_id",
+        "tenant A is isolated from tenant B files (RLS)"
+      ],
+      "proofCommand": "make files-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-files.py all --json",
+      "nonClaimBoundary": "Postgres files table and RLS proof is not a production JavaScript DB-backed file metadata adapter or environment promotion claim"
+    },
+    {
+      "id": "presigned-url-boundary",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-presigned-url-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md"
+      ],
+      "nonClaimBoundary": "SignedUrlIssuer remains port/posture only; no presigned URL runtime or production download readiness claim"
+    },
+    {
+      "id": "derived-objects-posture",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-derived-object-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md",
+        "docs/architecture/parity-search-indexing-source-use-disposition-matrix.md"
+      ],
+      "nonClaimBoundary": "preview thumbnail OCR and extracted-text generation remain posture only; no derived-object runtime readiness claim"
+    },
+    {
+      "id": "object-versioning-posture",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-object-versioning-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md"
+      ],
+      "nonClaimBoundary": "object version and delete-marker posture is defined but not provider-versioning readiness"
+    },
+    {
+      "id": "backup-restore-dr-posture",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-211-and-future-object-backup-source-issue-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/pgbackrest-configured-proof-boundary.json",
+        "docs/architecture/files-and-object-storage-standard.md"
+      ],
+      "nonClaimBoundary": "pgBackRest DB proof does not prove object-store backup, restore, DR, RPO, RTO, or production recovery readiness"
+    },
+    {
+      "id": "dlp-exfiltration-controls",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-dlp-exfiltration-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md",
+        "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md"
+      ],
+      "nonClaimBoundary": "DLP and exfiltration controls remain reserved detection posture; no live DLP or SIEM readiness claim"
+    },
+    {
+      "id": "encryption-kms-posture",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-storage-kms-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md",
+        "docs/architecture/config-and-secrets-standard.md"
+      ],
+      "nonClaimBoundary": "encryption and key reference posture is recorded; no KMS custody, customer-managed key, or production encryption readiness claim"
+    },
+    {
+      "id": "data-residency-enforcement",
+      "status": "explicitly-reclassified",
+      "owner": "platform-privacy-foundation",
+      "riskOwner": "platform-privacy-risk-owner",
+      "controlOwner": "platform-privacy-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-storage-residency-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md"
+      ],
+      "nonClaimBoundary": "residency fields are reserved; no production residency, cross-border transfer, or provider-region enforcement readiness claim"
+    },
+    {
+      "id": "quota-rate-limit-temporary-cleanup",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-storage-quota-cleanup-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md",
+        "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md"
+      ],
+      "nonClaimBoundary": "size validation is proven but storage quota runtime, download/upload rate limiting, multipart, and temporary upload cleanup remain non-claims"
+    },
+    {
+      "id": "object-lock-worm-posture",
+      "status": "explicitly-reclassified",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-object-lock-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/files-and-object-storage-standard.md"
+      ],
+      "nonClaimBoundary": "legal hold is proven in metadata and DB trigger; provider object-lock and WORM retention are not claimed"
+    },
+    {
+      "id": "evidence-package-export-posture",
+      "status": "bounded-local-proof",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/files-storage-proof.ts",
+        "packages/proof/src/import-export-bulk-proof.ts",
+        "packages/core/src/index.ts"
+      ],
+      "proofChecks": [
+        "USF-147 storage depth controls are proven or explicitly reclassified"
+      ],
+      "proofCommand": "make files-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-files.py all --json",
+      "nonClaimBoundary": "bounded file and bulk evidence package posture is not legal export, eDiscovery, regulatory export, or production evidence package readiness"
+    }
+  ],
+  "claims": {
+    "liveObjectStoreReadinessClaim": false,
+    "liveScannerReadinessClaim": false,
+    "presignedUrlReadinessClaim": false,
+    "backupRestoreReadinessClaim": false,
+    "kmsReadinessClaim": false,
+    "dlpReadinessClaim": false,
+    "filesStorageReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "live-object-store-readiness",
+    "live-scanner-readiness",
+    "backup-restore-readiness",
+    "kms-readiness",
+    "dlp-readiness",
+    "full-files-storage-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}
