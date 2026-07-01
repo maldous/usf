@@ -1,6 +1,7 @@
 import {
   runAuthIdentityProof,
   runApiContractsProof,
+  runBackupRestoreOperationsExecutionProof,
   runBootstrapProof,
   runDevSmoke,
   runJobsWorkflowsProof,
@@ -307,5 +308,11 @@ describe("resource lifecycle proof", () => {
       eDiscoveryReadinessClaim: false,
       productionLiveClaim: false,
     });
+  });
+});
+
+describe("backup/restore operations proof surface", () => {
+  it("exports the bounded USF-223 execution proof command surface", () => {
+    expect(runBackupRestoreOperationsExecutionProof).toBeTypeOf("function");
   });
 });

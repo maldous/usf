@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-035",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/backup-restore-operations-execution-proof.ts",
+      "old": "pitrRestoreExecuted",
+      "new": "pitrRestoreDeferred"
+    }
+  ]
+}

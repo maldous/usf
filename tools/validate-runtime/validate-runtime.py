@@ -63,6 +63,7 @@ RULES = {
     "USF-RUNTIME-032": ("blocking", "pgBackRest configured proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-033": ("blocking", "Windmill configured proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-034": ("blocking", "backup restore DR and RPO/RTO operational depth is incomplete or overclaimed"),
+    "USF-RUNTIME-035": ("blocking", "backup restore DR PITR and RPO/RTO execution proof is incomplete or overclaimed"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -81,6 +82,9 @@ PGBACKREST_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/pgbackrest-backup
 PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH = Path("docs/architecture/pgbackrest-configured-proof-boundary.json")
 BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH = Path(
     "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
+)
+BACKUP_RESTORE_EXECUTION_PROOF_PATH = Path(
+    "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json"
 )
 OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH = Path("docs/architecture/operator-workflow-provider-disposition-matrix.json")
 WINDMILL_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/windmill-operator-automation-proof-blocker-matrix.json")
@@ -108,6 +112,9 @@ LOCALSTACK_PROOF_SOURCE_PATH = Path("packages/proof/src/localstack-composed-proo
 CLICKHOUSE_PROOF_SOURCE_PATH = Path("packages/proof/src/clickhouse-composed-proof.ts")
 REDIS_PROOF_SOURCE_PATH = Path("packages/proof/src/redis-composed-proof.ts")
 PGBACKREST_PROOF_SOURCE_PATH = Path("packages/proof/src/pgbackrest-configured-proof.ts")
+BACKUP_RESTORE_OPERATIONS_PROOF_SOURCE_PATH = Path(
+    "packages/proof/src/backup-restore-operations-execution-proof.ts"
+)
 WINDMILL_PROOF_SOURCE_PATH = Path("packages/proof/src/windmill-configured-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
@@ -517,6 +524,37 @@ BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_DATA_SERVICES = {
     "temporal-postgres",
     "pgbackrest",
 }
+BACKUP_RESTORE_EXECUTION_REQUIRED_ISSUES = {
+    "USF-223",
+    "USF-219",
+    "USF-211",
+    "USF-202",
+    "USF-177",
+    "USF-139",
+    "USF-147",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
+BACKUP_RESTORE_EXECUTION_REQUIRED_EVIDENCE_REFS = {
+    "soa-usf-223-backup-restore-execution-proof",
+    "evidence-usf-223-backup-restore-execution-proof",
+    "evidence-proof-proof-backup-operations",
+    "threat-usf-223-backup-restore-overclaim",
+    "resilience-usf-223-backup-restore-execution-boundary",
+    "incident-usf-223-backup-restore-execution-boundary",
+    "privacy-usf-223-backup-restore-data-boundary",
+}
+BACKUP_RESTORE_EXECUTION_REQUIRED_BOUNDARIES = {
+    "online-backup-and-wal-archive-local-proof",
+    "pitr-and-scheduled-backup-operation-local-proof",
+    "failure-dr-rpo-rto-local-proof",
+}
+BACKUP_RESTORE_EXECUTION_REQUIRED_DEFERRED_BOUNDARIES = {
+    "environment-promotion-backup-gates",
+    "provider-managed-backup-and-supplier-boundary",
+}
 BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "backup-readiness",
     "restore-readiness",
@@ -900,6 +938,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 backup_restore_operational_depth,
                 defect["backupRestoreOperationalDepthPatches"],
             )
+    backup_restore_execution_proof: Any = None
+    if not defect.get("removeBackupRestoreExecutionProof"):
+        backup_restore_execution_proof = read_json(BACKUP_RESTORE_EXECUTION_PROOF_PATH)
+        if defect.get("backupRestoreExecutionProofPatches"):
+            backup_restore_execution_proof = apply_manifest_patches(
+                backup_restore_execution_proof,
+                defect["backupRestoreExecutionProofPatches"],
+            )
     operator_workflow_provider_matrix: Any = None
     if not defect.get("removeOperatorWorkflowProviderMatrix"):
         operator_workflow_provider_matrix = read_json(OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH)
@@ -959,6 +1005,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "pgbackrestProofBlockerMatrix": pgbackrest_proof_blocker_matrix,
         "pgbackrestConfiguredProofBoundary": pgbackrest_configured_proof_boundary,
         "backupRestoreOperationalDepth": backup_restore_operational_depth,
+        "backupRestoreExecutionProof": backup_restore_execution_proof,
         "operatorWorkflowProviderMatrix": operator_workflow_provider_matrix,
         "windmillProofBlockerMatrix": windmill_proof_blocker_matrix,
         "windmillConfiguredProofBoundary": windmill_configured_proof_boundary,
@@ -4244,6 +4291,184 @@ def check_backup_restore_operational_depth(F: Findings, state: dict[str, Any]) -
             F.add("USF-RUNTIME-034", str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH), f"readiness overclaim present: {phrase}")
 
 
+def check_backup_restore_execution_proof(F: Findings, state: dict[str, Any]) -> None:
+    proof = state.get("backupRestoreExecutionProof")
+    if not isinstance(proof, dict):
+        F.add("USF-RUNTIME-035", str(BACKUP_RESTORE_EXECUTION_PROOF_PATH), "USF-223 backup restore execution proof artefact is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-223",
+        "parentIssue": "USF-133",
+        "status": "bounded-local-execution-proof-present",
+        "serviceCatalogueAuthority": SERVICE_CATALOGUE_PATH,
+        "runtimeManifest": str(MANIFEST_PATH),
+        "usf219DispositionGate": str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH),
+        "pgbackrestConfiguredProofBoundary": str(PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH),
+        "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+        "proofCommand": "corepack pnpm proof:backup:operations",
+        "proofSource": str(BACKUP_RESTORE_OPERATIONS_PROOF_SOURCE_PATH),
+        "makeTarget": "backup-operations-proof",
+    }
+    for key, expected in expected_top.items():
+        if proof.get(key) != expected:
+            F.add("USF-RUNTIME-035", key, f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate"):
+        if not proof.get(field):
+            F.add("USF-RUNTIME-035", field, "owner, risk, control, treatment, and review metadata are required")
+    if BACKUP_RESTORE_EXECUTION_REQUIRED_ISSUES - set(proof.get("issueLinks", [])):
+        F.add("USF-RUNTIME-035", "issueLinks", "USF-223 issue links are incomplete")
+    if set(proof.get("enterpriseEvidenceRefs", [])) != BACKUP_RESTORE_EXECUTION_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-035", "enterpriseEvidenceRefs", "USF-223 enterprise evidence refs are incomplete")
+    if BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS - set(proof.get("nonClaims", [])):
+        F.add("USF-RUNTIME-035", "nonClaims", "USF-223 backup/restore execution non-claims are incomplete")
+
+    commands = set(proof.get("validationCommands", []))
+    for command in (
+        "corepack pnpm proof:backup:operations",
+        "corepack pnpm proof:backup:pgbackrest",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+    ):
+        if command not in commands:
+            F.add("USF-RUNTIME-035", "validationCommands", f"missing {command}")
+
+    claims = proof.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-RUNTIME-035", "claims", "claims must be an object")
+        claims = {}
+    for key in (
+        "boundedLocalExecutionProofPresent",
+        "onlineBackupExecuted",
+        "walArchiveObserved",
+        "pitrRestoreExecuted",
+        "scheduledBackupOperationExecuted",
+        "sourceFailureScenarioExecuted",
+        "drRehearsalExecuted",
+        "rpoObservationCaptured",
+        "rtoObservationCaptured",
+    ):
+        if claims.get(key) is not True:
+            F.add("USF-RUNTIME-035", f"claims.{key}", "bounded local execution marker must be true")
+    for key in (
+        "backupReadinessClaim",
+        "restoreReadinessClaim",
+        "disasterRecoveryReadinessClaim",
+        "pitrReadinessClaim",
+        "onlineBackupReadinessClaim",
+        "scheduledBackupReadinessClaim",
+        "rpoRtoReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "providerManagedBackupClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(key) is not False:
+            F.add("USF-RUNTIME-035", f"claims.{key}", "readiness or closure claim must remain false")
+
+    boundary_rows = {
+        row.get("id"): row
+        for row in proof.get("executionProofBoundaries", [])
+        if isinstance(row, dict) and isinstance(row.get("id"), str)
+    }
+    missing_boundaries = BACKUP_RESTORE_EXECUTION_REQUIRED_BOUNDARIES - set(boundary_rows)
+    if missing_boundaries:
+        F.add("USF-RUNTIME-035", "executionProofBoundaries", f"missing boundaries: {sorted(missing_boundaries)}")
+    for boundary_id, row in boundary_rows.items():
+        if row.get("status") != "proven-local" or row.get("sourceIssue") != "USF-223":
+            F.add("USF-RUNTIME-035", boundary_id, "execution boundary must be proven-local by USF-223")
+        for field in ("proofCommand", "evidenceSource", "serviceCatalogueRows", "whatIsProven", "whatIsNotProven", "nonEquivalenceBoundary"):
+            if not row.get(field):
+                F.add("USF-RUNTIME-035", f"{boundary_id}.{field}", "execution boundary field is required")
+        if "readiness" not in str(row.get("whatIsNotProven", "")).lower():
+            F.add("USF-RUNTIME-035", f"{boundary_id}.whatIsNotProven", "negative evidence must preserve readiness non-claim")
+
+    deferred_rows = {
+        row.get("id"): row
+        for row in proof.get("remainingDeferredBoundaries", [])
+        if isinstance(row, dict) and isinstance(row.get("id"), str)
+    }
+    missing_deferred = BACKUP_RESTORE_EXECUTION_REQUIRED_DEFERRED_BOUNDARIES - set(deferred_rows)
+    if missing_deferred:
+        F.add("USF-RUNTIME-035", "remainingDeferredBoundaries", f"missing deferred boundaries: {sorted(missing_deferred)}")
+    for boundary_id, row in deferred_rows.items():
+        if row.get("status") != "deferred-with-owner":
+            F.add("USF-RUNTIME-035", boundary_id, "remaining boundary must remain deferred with owner")
+        for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "promotionImpact", "followUpIssue", "nonClaimBoundary"):
+            if not row.get(field):
+                F.add("USF-RUNTIME-035", f"{boundary_id}.{field}", "deferred boundary field is required")
+
+    operational = proof.get("operationalEvidence", {})
+    if not isinstance(operational, dict):
+        F.add("USF-RUNTIME-035", "operationalEvidence", "operational evidence must be an object")
+        operational = {}
+    for field in (
+        "readinessChecks",
+        "retryTimeoutBehaviour",
+        "failClosedMode",
+        "safeTeardown",
+        "structuredLogging",
+        "tracingCorrelation",
+        "metrics",
+        "auditEvents",
+        "redaction",
+    ):
+        if not operational.get(field):
+            F.add("USF-RUNTIME-035", f"operationalEvidence.{field}", "operational evidence field is required")
+
+    scripts = state["package"].get("scripts", {})
+    if scripts.get("proof:backup:operations") != "tsx packages/proof/src/backup-restore-operations-execution-proof.ts":
+        F.add("USF-RUNTIME-035", "package.json#proof:backup:operations", "backup operations proof package script is missing or stale")
+    if "proof:backup:operations" not in str(scripts.get("verify", "")):
+        F.add("USF-RUNTIME-035", "package.json#verify", "verify must run the backup operations proof")
+    if "backup-operations-proof" not in make_targets(state["makefile"]):
+        F.add("USF-RUNTIME-035", "Makefile#backup-operations-proof", "backup operations proof Make target is missing")
+
+    proof_source = state_text(state, BACKUP_RESTORE_OPERATIONS_PROOF_SOURCE_PATH)
+    for marker in (
+        "runBackupRestoreOperationsExecutionProof",
+        "onlineBackupExecuted",
+        "walArchiveObserved",
+        "pitrRestoreExecuted",
+        "scheduledBackupOperationExecuted",
+        "drRehearsalExecuted",
+        "rpoObservationBoundary",
+        "rtoObservationBoundary",
+        "providerManagedBackupClaim: false",
+        "failClosedReasonCode",
+        "assertSafeEvidence",
+        "composeDown",
+        "finally",
+        "FORBIDDEN_EVIDENCE_PATTERN",
+    ):
+        if marker not in proof_source:
+            F.add("USF-RUNTIME-035", str(BACKUP_RESTORE_OPERATIONS_PROOF_SOURCE_PATH), f"proof source missing marker: {marker}")
+
+    text = json.dumps(proof, sort_keys=True).lower()
+    for phrase in (
+        "backup readiness is proven",
+        "restore readiness is proven",
+        "disaster recovery readiness is proven",
+        "pitr readiness is proven",
+        "rpo readiness is proven",
+        "rto readiness is proven",
+        "production readiness is proven",
+        "live-provider readiness is proven",
+        "usf-133 closure is proven",
+    ):
+        if phrase in text:
+            F.add("USF-RUNTIME-035", str(BACKUP_RESTORE_EXECUTION_PROOF_PATH), f"readiness overclaim present: {phrase}")
+
+
 def check_windmill_configured_proof_boundary(F: Findings, state: dict[str, Any]) -> None:
     boundary = state.get("windmillConfiguredProofBoundary")
     if not isinstance(boundary, dict):
@@ -5075,6 +5300,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_redis_cache_service_proof_boundary,
             check_pgbackrest_configured_proof_boundary,
             check_backup_restore_operational_depth,
+            check_backup_restore_execution_proof,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
@@ -5109,6 +5335,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_redis_cache_service_proof_boundary,
             check_pgbackrest_configured_proof_boundary,
             check_backup_restore_operational_depth,
+            check_backup_restore_execution_proof,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,

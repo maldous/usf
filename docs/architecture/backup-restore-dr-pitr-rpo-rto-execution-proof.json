@@ -1,0 +1,220 @@
+{
+  "id": "usf-223-backup-restore-dr-pitr-rpo-rto-execution-proof",
+  "title": "USF-223 backup restore DR PITR and RPO/RTO execution proof",
+  "sourceIssue": "USF-223",
+  "predecessorIssues": [
+    "USF-219",
+    "USF-211"
+  ],
+  "parentIssue": "USF-133",
+  "status": "bounded-local-execution-proof-present",
+  "owner": "platform-data-foundation",
+  "riskOwner": "platform-data-risk-owner",
+  "controlOwner": "platform-data-control-owner",
+  "riskTreatment": "mitigate-selected-local-execution-gap-with-bounded-profile-gated-proof-and-preserve-stronger-readiness-non-claims",
+  "reviewDate": "2026-09-30",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "usf219DispositionGate": "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
+  "pgbackrestConfiguredProofBoundary": "docs/architecture/pgbackrest-configured-proof-boundary.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "proofCommand": "corepack pnpm proof:backup:operations",
+  "proofSource": "packages/proof/src/backup-restore-operations-execution-proof.ts",
+  "makeTarget": "backup-operations-proof",
+  "issueLinks": [
+    "USF-223",
+    "USF-219",
+    "USF-211",
+    "USF-202",
+    "USF-177",
+    "USF-139",
+    "USF-147",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "validationCommands": [
+    "corepack pnpm proof:backup:operations",
+    "corepack pnpm proof:backup:pgbackrest",
+    "python3 tools/validate-runtime/validate-runtime.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "python3 tools/validate-parity/validate-parity.py all --json"
+  ],
+  "enterpriseEvidenceRefs": [
+    "soa-usf-223-backup-restore-execution-proof",
+    "evidence-usf-223-backup-restore-execution-proof",
+    "evidence-proof-proof-backup-operations",
+    "threat-usf-223-backup-restore-overclaim",
+    "resilience-usf-223-backup-restore-execution-boundary",
+    "incident-usf-223-backup-restore-execution-boundary",
+    "privacy-usf-223-backup-restore-data-boundary"
+  ],
+  "serviceCatalogueRows": [
+    "spec/instances/compose-service/service-catalogue.json#postgres",
+    "spec/instances/compose-service/service-catalogue.json#pgbackrest"
+  ],
+  "providerBindingIds": [
+    "usf-189-pgbackrest-backup-provider"
+  ],
+  "providerRegistryIds": [
+    "backup-restore-pgbackrest-composed-test",
+    "backup-restore-pgbackrest-deferred"
+  ],
+  "claims": {
+    "boundedLocalExecutionProofPresent": true,
+    "onlineBackupExecuted": true,
+    "walArchiveObserved": true,
+    "pitrRestoreExecuted": true,
+    "scheduledBackupOperationExecuted": true,
+    "sourceFailureScenarioExecuted": true,
+    "drRehearsalExecuted": true,
+    "rpoObservationCaptured": true,
+    "rtoObservationCaptured": true,
+    "backupReadinessClaim": false,
+    "restoreReadinessClaim": false,
+    "disasterRecoveryReadinessClaim": false,
+    "pitrReadinessClaim": false,
+    "onlineBackupReadinessClaim": false,
+    "scheduledBackupReadinessClaim": false,
+    "rpoRtoReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "providerManagedBackupClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "executionProofBoundaries": [
+    {
+      "id": "online-backup-and-wal-archive-local-proof",
+      "status": "proven-local",
+      "sourceIssue": "USF-223",
+      "proofCommand": "corepack pnpm proof:backup:operations",
+      "evidenceSource": "packages/proof/src/backup-restore-operations-execution-proof.ts",
+      "serviceCatalogueRows": [
+        "postgres",
+        "pgbackrest"
+      ],
+      "whatIsProven": "A profile-gated local Compose proof starts synthetic Postgres with WAL archiving enabled, creates a pgBackRest online full backup while Postgres is running, and observes at least one archived WAL file.",
+      "whatIsNotProven": "This does not prove no backup readiness, restore readiness, environment promotion, provider-managed operation, live-provider, staging, production, SOC, ISO, full dev, full React parity, or USF-133 closure claim is made.",
+      "nonEquivalenceBoundary": "Local online backup and local WAL archive evidence are not equivalent to managed backup operation, environment-promotion backup gates, production backup operation, or live-provider backup service evidence."
+    },
+    {
+      "id": "pitr-and-scheduled-backup-operation-local-proof",
+      "status": "proven-local",
+      "sourceIssue": "USF-223",
+      "proofCommand": "corepack pnpm proof:backup:operations",
+      "evidenceSource": "packages/proof/src/backup-restore-operations-execution-proof.ts",
+      "serviceCatalogueRows": [
+        "postgres",
+        "pgbackrest"
+      ],
+      "whatIsProven": "The proof dispatches a deterministic local scheduled-backup operation as a second pgBackRest backup, creates a restore point, restores into an isolated volume, replays archived WAL to the target, and verifies the post-target mutation is absent.",
+      "whatIsNotProven": "This does not prove no scheduler service readiness, provider-managed schedule operation, PITR readiness, restore readiness, staging, production, live-provider, SOC, ISO, full dev, full React parity, or USF-133 closure claim is made.",
+      "nonEquivalenceBoundary": "A deterministic local scheduled dispatch is not equivalent to a production scheduler, managed backup plan, operator runbook rehearsal, or environment promotion gate."
+    },
+    {
+      "id": "failure-dr-rpo-rto-local-proof",
+      "status": "proven-local",
+      "sourceIssue": "USF-223",
+      "proofCommand": "corepack pnpm proof:backup:operations",
+      "evidenceSource": "packages/proof/src/backup-restore-operations-execution-proof.ts",
+      "serviceCatalogueRows": [
+        "postgres",
+        "pgbackrest"
+      ],
+      "whatIsProven": "The proof stops the source Postgres before restore, restores to a fresh isolated volume, captures local RPO/RTO observation buckets, proves missing repository fail-closed behaviour, and tears down Compose resources and temporary directories.",
+      "whatIsNotProven": "This does not prove no DR readiness, RPO target achievement, RTO target achievement, production incident runbook, provider-managed DR, staging, production, live-provider, SOC, ISO, full dev, full React parity, or USF-133 closure claim is made.",
+      "nonEquivalenceBoundary": "Local failure rehearsal and local duration/count observations are not equivalent to target-backed RPO/RTO commitments, production DR exercise, customer-impact assessment, or live-provider disaster recovery evidence."
+    }
+  ],
+  "remainingDeferredBoundaries": [
+    {
+      "id": "environment-promotion-backup-gates",
+      "status": "deferred-with-owner",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "riskTreatment": "defer-environment-specific-gates-to-USF-193-and-future-source-issues",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "followUpIssue": "USF-193",
+      "nonClaimBoundary": "USF-223 does not prove test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, full dev, full React parity, or USF-133 closure readiness."
+    },
+    {
+      "id": "provider-managed-backup-and-supplier-boundary",
+      "status": "deferred-with-owner",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "riskTreatment": "defer-live-provider-and-managed-backup-operation-until-provider-authority-and-evidence-exist",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "followUpIssue": "USF-133",
+      "nonClaimBoundary": "The local pgBackRest CLI proof does not prove managed supplier operation, live-provider readiness, production operation, SOC readiness, ISO certification, or enterprise production readiness."
+    }
+  ],
+  "operationalEvidence": {
+    "readinessChecks": "Postgres pg_isready and pgBackRest version checks use bounded retry before proof operations.",
+    "retryTimeoutBehaviour": "All Docker, psql, and pgBackRest calls use bounded timeouts; no infinite retry loop is used.",
+    "failClosedMode": "Missing repository proof exits nonzero and is recorded as safe reason code pgbackrest-repository-unavailable.",
+    "safeTeardown": "Restore container, Compose project, named volumes, socket directory, archive directory, and temporary override are removed in finally paths.",
+    "structuredLogging": "Proof output is structured JSON with booleans, buckets, ids, and safe reason codes only.",
+    "tracingCorrelation": "Trace-shaped evidence is recorded as value-free proof metadata; no live tracing backend claim is made.",
+    "metrics": "Metric-shaped evidence records readiness attempts, backup set count, WAL archive count bucket, duration buckets, and cleanup state.",
+    "auditEvents": "Audit-shaped value-free evidence is recorded in the proof result; no production audit log claim is made.",
+    "redaction": "Proof output prohibits secrets, raw endpoints, connection strings, tokens, stack traces, raw provider payloads, table values, backup artifacts, restore payloads, and WAL file names."
+  },
+  "evidenceFreshness": {
+    "pr": "pending-USF-223-pr",
+    "mergeSha": null,
+    "issueId": "USF-223",
+    "evidenceId": "evidence-usf-223-backup-restore-execution-proof",
+    "evidenceState": "current-on-branch-until-pr-merge",
+    "retentionPosture": "repository metadata and PR validation summaries only; no backup artifacts, restore payloads, database dumps, provider responses, raw endpoints, credentials, tokens, stack traces, WAL file names, or production data are committed"
+  },
+  "nonClaims": [
+    "backup-readiness",
+    "restore-readiness",
+    "backup-restore-readiness",
+    "disaster-recovery-readiness",
+    "dr-readiness",
+    "pitr-readiness",
+    "online-backup-readiness",
+    "scheduled-backup-readiness",
+    "rpo-readiness",
+    "rto-readiness",
+    "rpo-rto-readiness",
+    "pgbackrest-readiness",
+    "provider-compatibility-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-dev-readiness",
+    "full-react-parity-readiness",
+    "full-react-parity",
+    "usf-133-closure"
+  ]
+}

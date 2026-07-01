@@ -22,6 +22,7 @@ export { runSonarQubeComposedProof } from "./sonarqube-composed-proof.ts";
 export { runMockProviderSubstrateProof } from "./mock-provider-substrate-proof.ts";
 export { runClickHouseComposedProof } from "./clickhouse-composed-proof.ts";
 export { runPgBackRestConfiguredProof } from "./pgbackrest-configured-proof.ts";
+export { runBackupRestoreOperationsExecutionProof } from "./backup-restore-operations-execution-proof.ts";
 export { runWindmillConfiguredProof } from "./windmill-configured-proof.ts";
 export { runRedisComposedProof } from "./redis-composed-proof.ts";
 export { runResourceLifecycleProof } from "./resource-lifecycle-proof.ts";
