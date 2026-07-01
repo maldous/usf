@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-035",
+  "backupRestoreExecutionProofPatches": [
+    {
+      "op": "remove",
+      "path": "/remainingDeferredBoundaries/0"
+    }
+  ]
+}

@@ -55,6 +55,9 @@ OBSERVABILITY_OPERATIONS_EXECUTION_PROOF_PATH = Path(
 BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH = Path(
     "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
 )
+BACKUP_RESTORE_EXECUTION_PROOF_PATH = Path(
+    "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json"
+)
 GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH = Path(
     "docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json"
 )
@@ -116,6 +119,10 @@ RULES = {
     "USF-ENTERPRISE-030": (
         "blocking",
         "observability alerting dashboard incident execution proof is incomplete or overclaimed",
+    ),
+    "USF-ENTERPRISE-031": (
+        "blocking",
+        "backup restore DR PITR and RPO/RTO execution proof enterprise evidence is incomplete or overclaimed",
     ),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
@@ -642,6 +649,30 @@ BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_DATA_SERVICES = {
     "temporal-postgres",
     "pgbackrest",
 }
+BACKUP_RESTORE_EXECUTION_REQUIRED_EVIDENCE_ROWS = {
+    "soaSupportMappings": {"soa-usf-223-backup-restore-execution-proof"},
+    "evidenceRegister": {
+        "evidence-usf-223-backup-restore-execution-proof",
+        "evidence-proof-proof-backup-operations",
+    },
+    "threatModelAbuseCaseRegister": {"threat-usf-223-backup-restore-overclaim"},
+    "backupRestoreResiliencePosture": {"resilience-usf-223-backup-restore-execution-boundary"},
+    "incidentVulnerabilityManagementEvidence": {"incident-usf-223-backup-restore-execution-boundary"},
+    "privacyDataMinimisationPosture": {"privacy-usf-223-backup-restore-data-boundary"},
+}
+BACKUP_RESTORE_EXECUTION_REQUIRED_ISSUES = {
+    "USF-223",
+    "USF-219",
+    "USF-211",
+    "USF-202",
+    "USF-177",
+    "USF-139",
+    "USF-147",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
 GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_EVIDENCE_ROWS = {
     "soaSupportMappings": {"soa-usf-220-generated-client-graphql-delivery-depth"},
     "evidenceRegister": {"evidence-usf-220-generated-client-graphql-delivery-depth"},
@@ -983,6 +1014,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         if (ROOT / BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH).exists()
         else None
     )
+    backup_restore_execution_proof = (
+        read_json(BACKUP_RESTORE_EXECUTION_PROOF_PATH)
+        if (ROOT / BACKUP_RESTORE_EXECUTION_PROOF_PATH).exists()
+        else None
+    )
     generated_client_graphql_delivery_depth = (
         read_json(GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH)
         if (ROOT / GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH).exists()
@@ -1063,6 +1099,16 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
             backup_restore_operational_depth,
             defect,
         )
+    if defect.get("removeBackupRestoreExecutionProof"):
+        backup_restore_execution_proof = None
+    elif backup_restore_execution_proof is not None:
+        backup_restore_execution_proof = apply_backup_restore_operational_depth_defect(
+            backup_restore_execution_proof,
+            {
+                "backupRestoreOperationalDepthSet": defect.get("backupRestoreExecutionProofSet", {}),
+                "backupRestoreOperationalDepthDrop": defect.get("backupRestoreExecutionProofDrop", []),
+            },
+        )
     if defect.get("removeGeneratedClientGraphqlDeliveryDepth"):
         generated_client_graphql_delivery_depth = None
     elif generated_client_graphql_delivery_depth is not None:
@@ -1105,6 +1151,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "observabilityServiceDepth": observability_service_depth,
         "observabilityOperationsExecutionProof": observability_operations_execution_proof,
         "backupRestoreOperationalDepth": backup_restore_operational_depth,
+        "backupRestoreExecutionProof": backup_restore_execution_proof,
         "generatedClientGraphqlDeliveryDepth": generated_client_graphql_delivery_depth,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
@@ -4583,6 +4630,150 @@ def check_backup_restore_operational_depth(F: Findings, state: dict[str, Any]) -
             F.add("USF-ENTERPRISE-027", str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH), f"readiness overclaim present: {phrase}")
 
 
+def check_backup_restore_execution_proof(F: Findings, state: dict[str, Any]) -> None:
+    proof = state.get("backupRestoreExecutionProof")
+    if not isinstance(proof, dict):
+        F.add(
+            "USF-ENTERPRISE-031",
+            str(BACKUP_RESTORE_EXECUTION_PROOF_PATH),
+            "USF-223 backup restore execution proof artefact is missing",
+        )
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-223",
+        "parentIssue": "USF-133",
+        "status": "bounded-local-execution-proof-present",
+        "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
+        "enterpriseEvidenceModel": str(MODEL_PATH),
+        "proofCommand": "corepack pnpm proof:backup:operations",
+        "proofSource": "packages/proof/src/backup-restore-operations-execution-proof.ts",
+    }
+    for key, expected in expected_top.items():
+        if proof.get(key) != expected:
+            F.add("USF-ENTERPRISE-031", key, f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate"):
+        if not proof.get(field):
+            F.add("USF-ENTERPRISE-031", field, "owner, risk, control, treatment, and review metadata are required")
+    if BACKUP_RESTORE_EXECUTION_REQUIRED_ISSUES - set(proof.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-031", "issueLinks", "USF-223 issue links are incomplete")
+    required_refs = set().union(*BACKUP_RESTORE_EXECUTION_REQUIRED_EVIDENCE_ROWS.values())
+    if set(proof.get("enterpriseEvidenceRefs", [])) != required_refs:
+        F.add("USF-ENTERPRISE-031", "enterpriseEvidenceRefs", "USF-223 enterprise evidence refs are incomplete")
+    if REQUIRED_NON_CLAIMS - set(proof.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-031", "nonClaims", "USF-223 non-claims are incomplete")
+
+    claims = proof.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-ENTERPRISE-031", "claims", "claims must be an object")
+        claims = {}
+    for key in (
+        "boundedLocalExecutionProofPresent",
+        "onlineBackupExecuted",
+        "walArchiveObserved",
+        "pitrRestoreExecuted",
+        "scheduledBackupOperationExecuted",
+        "sourceFailureScenarioExecuted",
+        "drRehearsalExecuted",
+        "rpoObservationCaptured",
+        "rtoObservationCaptured",
+    ):
+        if claims.get(key) is not True:
+            F.add("USF-ENTERPRISE-031", f"claims.{key}", "bounded local execution marker must be true")
+    for key in (
+        "backupReadinessClaim",
+        "restoreReadinessClaim",
+        "disasterRecoveryReadinessClaim",
+        "pitrReadinessClaim",
+        "onlineBackupReadinessClaim",
+        "scheduledBackupReadinessClaim",
+        "rpoRtoReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "providerManagedBackupClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(key) is not False:
+            F.add("USF-ENTERPRISE-031", f"claims.{key}", "readiness or closure claim must remain false")
+
+    boundaries = rows_by_id(proof.get("executionProofBoundaries"))
+    for boundary_id in (
+        "online-backup-and-wal-archive-local-proof",
+        "pitr-and-scheduled-backup-operation-local-proof",
+        "failure-dr-rpo-rto-local-proof",
+    ):
+        row = boundaries.get(boundary_id)
+        if not row:
+            F.add("USF-ENTERPRISE-031", "executionProofBoundaries", f"missing {boundary_id}")
+            continue
+        if row.get("status") != "proven-local" or row.get("sourceIssue") != "USF-223":
+            F.add("USF-ENTERPRISE-031", boundary_id, "execution boundary must be proven-local by USF-223")
+        for field in ("whatIsProven", "whatIsNotProven", "nonEquivalenceBoundary", "evidenceSource"):
+            if not row.get(field):
+                F.add("USF-ENTERPRISE-031", f"{boundary_id}.{field}", "execution boundary field is required")
+        if "not prove" not in str(row.get("whatIsNotProven", "")).lower():
+            F.add("USF-ENTERPRISE-031", f"{boundary_id}.whatIsNotProven", "negative evidence must preserve explicit non-proof boundary")
+
+    deferred = rows_by_id(proof.get("remainingDeferredBoundaries"))
+    for boundary_id in ("environment-promotion-backup-gates", "provider-managed-backup-and-supplier-boundary"):
+        row = deferred.get(boundary_id)
+        if not row:
+            F.add("USF-ENTERPRISE-031", "remainingDeferredBoundaries", f"missing {boundary_id}")
+            continue
+        if row.get("status") != "deferred-with-owner":
+            F.add("USF-ENTERPRISE-031", boundary_id, "remaining boundary must be deferred with owner")
+        for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "promotionImpact", "followUpIssue", "nonClaimBoundary"):
+            if not row.get(field):
+                F.add("USF-ENTERPRISE-031", f"{boundary_id}.{field}", "deferred boundary field is required")
+
+    model = state["model"]
+    for section, row_ids in BACKUP_RESTORE_EXECUTION_REQUIRED_EVIDENCE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in row_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-031", row_id, f"missing USF-223 enterprise row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-031", row_id, "USF-223 enterprise row non-claims are incomplete")
+            if "USF-223" not in row_text or str(BACKUP_RESTORE_EXECUTION_PROOF_PATH) not in row_text:
+                F.add("USF-ENTERPRISE-031", row_id, "USF-223 row lacks issue or artefact linkage")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-031", row_id, "USF-223 row lacks validation command")
+            if section == "evidenceRegister":
+                for issue in ("USF-223", "USF-219", "USF-211", "USF-184", "USF-192", "USF-133"):
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-031", row_id, f"evidence row lacks {issue}")
+                negative = str(row.get("whatWasNotProven", "")).lower()
+                if "not prove" not in negative and "unproven" not in negative:
+                    F.add("USF-ENTERPRISE-031", row_id, "evidence row must preserve explicit non-proof boundary")
+
+    source_text = json.dumps(proof, sort_keys=True).lower()
+    for phrase in (
+        "backup readiness is proven",
+        "restore readiness is proven",
+        "dr readiness is proven",
+        "disaster recovery readiness is proven",
+        "pitr readiness is proven",
+        "rpo readiness is proven",
+        "rto readiness is proven",
+        "production readiness is proven",
+        "live provider readiness is proven",
+        "usf-133 closure is proven",
+    ):
+        if phrase in source_text:
+            F.add("USF-ENTERPRISE-031", str(BACKUP_RESTORE_EXECUTION_PROOF_PATH), f"readiness overclaim present: {phrase}")
+
+
 def check_generated_client_graphql_delivery_depth(F: Findings, state: dict[str, Any]) -> None:
     depth = state.get("generatedClientGraphqlDeliveryDepth")
     if not isinstance(depth, dict):
@@ -4752,6 +4943,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_observability_service_operations_depth(F, state)
     check_observability_operations_execution_proof(F, state)
     check_backup_restore_operational_depth(F, state)
+    check_backup_restore_execution_proof(F, state)
     check_generated_client_graphql_delivery_depth(F, state)
     return F
 
