@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-NOTIFY-019",
+  "mutation": {
+    "depthMatrixRemoveControl": "provider-feedback-ingestion"
+  }
+}

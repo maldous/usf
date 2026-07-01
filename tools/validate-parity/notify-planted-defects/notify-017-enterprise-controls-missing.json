@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-NOTIFY-017",
+  "mutation": {
+    "file": "capabilities/notify/src/enterprise-messaging-controls.ts",
+    "replace": {
+      "old": "EnterpriseNotificationControlPlane",
+      "new": "EnterpriseNotificationControlsRemoved"
+    }
+  }
+}

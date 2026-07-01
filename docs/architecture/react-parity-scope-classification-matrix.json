@@ -262,23 +262,25 @@
         "capabilities/notify/src/index.ts",
         "adapters/mail/src/index.ts",
         "packages/proof/src/notifications-messaging-proof.ts",
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
         "tools/validate-parity/validate-notify.py",
-        "docs/architecture/notifications-and-messaging-standard.md"
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/notifications-messaging.test.ts"
       ],
       "usf_proofs": [
         "make notify-proof",
-        "make parity (validate-notify USF-NOTIFY-001..016 with planted defects)"
+        "make parity (validate-notify USF-NOTIFY-001..021 with planted defects)"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-152",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "USF-152 implements foundation notification intent/message/delivery semantics with PDP, audit, provider abstraction, templates, preferences, suppression, delivery jobs, idempotency, retry, dead-letter, and value-free evidence. Deeper deliverability/live-provider/API/UI/bulk/outbox depth remains deferred and explicitly tracked.",
-      "retry_condition": "Deferred notifications depth completes DB-backed outbox/persistence, live provider webhook feedback, deliverability controls, bulk/campaign execution, rate limits, retention purge runtime, and safe future API/UI surfaces; no live provider readiness is claimed."
+      "evidence": "USF-152 implements foundation notification intent/message/delivery semantics with PDP, audit, provider abstraction, templates, preferences, suppression, delivery jobs, idempotency, retry, dead-letter, and value-free evidence. USF-153 adds bounded local enterprise depth for persistence/outbox, feedback ingestion, unsubscribe ingestion, retention purge, legal-hold denial, bulk runtime, rate-limit denial, address verification, provider circuit posture, tenant/access/secret/redaction evidence, and explicit API/UI/live-provider non-equivalence boundaries.",
+      "retry_condition": "Live external providers, provider deliverability, public notification API readiness, browser UI readiness, distributed campaign/rate-limit operations, environment promotion, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure remain unclaimed."
     },
     {
       "react_item_id": "notifications.model",
@@ -359,8 +361,8 @@
       "blocker": "USF-152",
       "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "Recipient identity is separate from address_ref; verified/status/source fields are represented; audit/provider evidence stores recipientAddressHash, not raw address.",
-      "retry_condition": "DB-backed recipient registry and richer address verification workflows remain deferred."
+      "evidence": "Recipient identity is separate from address_ref; verified/status/source fields are represented; audit/provider evidence stores recipientAddressHash, not raw address. USF-153 proves bounded local address-verification fail-closed posture for unverified recipients.",
+      "retry_condition": "DB-backed recipient registry and live email/SMS/push/domain/device verification workflows remain deferred."
     },
     {
       "react_item_id": "notifications.channel-governance",
@@ -450,7 +452,7 @@
       "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "evidence": "Notification delivery enqueues notification.delivery operational jobs with notification-job classification, tenant scope, idempotency key, duplicate suppression, bounded retry, and dead-letter evidence.",
-      "retry_condition": "Durable DB outbox/inbox persistence is deferred."
+      "retry_condition": "USF-153 proves bounded local outbox dedupe. Distributed outbox processing, provider callback replay, live provider delivery, and production messaging queue readiness remain deferred."
     },
     {
       "react_item_id": "notifications.preferences-consent-suppression",
@@ -487,10 +489,13 @@
         "docs/evidence/configuration/tenant-email-sender-configuration.md"
       ],
       "behaviour_summary": "Bounce and complaint handling are follow-up/deliverability posture in React evidence, not implemented runtime feedback handling.",
-      "usf_status": "deferred",
+      "usf_status": "partial",
       "usf_paths": [
         "packages/core/src/index.ts",
-        "docs/architecture/notifications-and-messaging-standard.md"
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/notifications-messaging.test.ts"
@@ -503,8 +508,8 @@
       "blocker": "USF-153",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "Feedback event types, bounce/complaint status fields, and suppression update posture are represented. Live inbound provider webhook handling, open/click tracking, and deliverability automation are deferred.",
-      "retry_condition": "Future directive authorises inbound feedback webhooks, privacy controls, and suppression updates from provider feedback."
+      "evidence": "Feedback event types, bounce/complaint status fields, and suppression update posture are represented. USF-153 proves bounded local bounce feedback ingestion, suppression update, later delivery denial, value-free audit evidence, and live-provider callback non-equivalence.",
+      "retry_condition": "Live inbound provider webhook handling, provider replay, open/click tracking, provider suppression-list sync, and deliverability automation remain deferred."
     },
     {
       "react_item_id": "notifications.unsubscribe-posture",
@@ -517,7 +522,10 @@
       "usf_status": "partial",
       "usf_paths": [
         "packages/core/src/index.ts",
-        "capabilities/notify/src/index.ts"
+        "capabilities/notify/src/index.ts",
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/notifications-messaging.test.ts"
@@ -530,8 +538,8 @@
       "blocker": "USF-153",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "unsubscribe_status is represented and marketing/bulk sends fail closed when unsubscribed. End-user unsubscribe routes and feedback ingestion are deferred.",
-      "retry_condition": "Implement governed unsubscribe API/feedback handling in a future API/UI surface directive."
+      "evidence": "unsubscribe_status is represented and marketing/bulk sends fail closed when unsubscribed. USF-153 proves bounded local unsubscribe ingestion, preference update, later marketing delivery denial, value-free audit evidence, and public API/UI non-equivalence.",
+      "retry_condition": "End-user unsubscribe routes, browser UI, email-link security, and live provider unsubscribe callbacks remain deferred."
     },
     {
       "react_item_id": "notifications.mandatory-security",
@@ -569,10 +577,13 @@
         "docs/adr/0066-support-administration-and-break-glass-architecture.md"
       ],
       "behaviour_summary": "Announcements are bulk-like in React but do not provide mature campaign consent, rate limit, cancellation, retention, or purge controls.",
-      "usf_status": "deferred",
+      "usf_status": "partial",
       "usf_paths": [
         "packages/core/src/index.ts",
-        "docs/architecture/notifications-and-messaging-standard.md"
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/notifications-messaging.test.ts"
@@ -585,8 +596,8 @@
       "blocker": "USF-153",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "Bulk classification, access action, retention fields, legal_hold, purge_allowed_at, and rate-limit posture are defined. Bulk/campaign execution, quota runtime, and purge runtime are deferred.",
-      "retry_condition": "Future directive authorises campaign/bulk execution, quotas, abuse controls, retention purge, and legal-hold workflows."
+      "evidence": "Bulk classification, access action, retention fields, legal_hold, purge_allowed_at, and rate-limit posture are defined. USF-153 proves bounded local bulk campaign runtime, consent/suppression preconditions, tenant limit fail-closed behaviour, rate-limit denial, retention purge, legal-hold purge denial, provider circuit posture, and value-free audit evidence.",
+      "retry_condition": "Distributed campaign operations, edge/distributed quotas, customer bulk-send readiness, DSR/export/delete workflows, custom retention, legal hold service readiness, and production retention operations remain deferred."
     },
     {
       "react_item_id": "notifications.audit-evidence-redaction",
@@ -632,6 +643,7 @@
       "usf_status": "deferred",
       "usf_paths": [
         "docs/architecture/notifications-and-messaging-standard.md",
+        "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json",
         "tests/capabilities/notifications-messaging.test.ts"
       ],
       "usf_tests": [
@@ -645,8 +657,8 @@
       "blocker": "USF-153",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "Foundation behaviours from UI/control-plane tests are rewritten as capability tests. No notification UI, browser E2E, or HTTP notification API is implemented in this slice.",
-      "retry_condition": "Future API/UI directive authorises redacted PDP-protected notification routes/OpenAPI and downstream UI consumption."
+      "evidence": "Foundation behaviours from UI/control-plane tests are rewritten as capability tests. Existing local API contract evidence is an explicit non-equivalent substitute for public notification API readiness, and no notification UI, browser E2E, or customer admin messaging UI is implemented in this slice.",
+      "retry_condition": "USF-155 and future UI directives must authorise redacted PDP-protected notification routes/OpenAPI, browser/client compatibility, and downstream UI consumption before any API or UI readiness claim."
     },
     {
       "react_item_id": "api-routes-openapi",

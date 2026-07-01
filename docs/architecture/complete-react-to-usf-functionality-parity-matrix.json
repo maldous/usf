@@ -156,9 +156,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Mailpit/Brevo/template lineage",
-      "readiness_impact": "Live providers and broader delivery feedback remain deferred.",
+      "readiness_impact": "USF-153 adds bounded local enterprise notifications proof depth for persistence/outbox, provider feedback ingestion, unsubscribe ingestion, retention purge, legal-hold denial, bulk campaign runtime, rate-limit denial, address verification, provider circuit posture, value-free audit evidence, tenant/access/secret/redaction evidence, and explicit API/UI/live-provider non-equivalence boundaries. Live providers, provider deliverability, public notification API readiness, browser UI readiness, environment promotion, production operation, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure remain non-claims.",
       "tracking_carrier_or_recommendation": "USF-152/USF-153",
-      "usf_evidence_summary": "USF notify proof",
+      "usf_evidence_summary": "USF notify proof plus notifications messaging enterprise proof-depth matrix and validate-notify USF-NOTIFY-001..021",
       "usf_status": "partial"
     },
     {

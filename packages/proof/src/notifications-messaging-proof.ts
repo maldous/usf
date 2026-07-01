@@ -14,7 +14,11 @@ import { InMemoryNotificationProvider } from "@foundation/adapter-mail";
 import { InMemoryOperationalJobStore } from "@foundation/adapter-wf";
 import { InMemoryAuditEventStore } from "@foundation/capability-audit";
 import { createJobService } from "@foundation/capability-jobs";
-import { NotificationCapability } from "@foundation/capability-notify";
+import {
+  NotificationCapability,
+  createEnterpriseNotificationControlPlane,
+  type NotificationEnterpriseEvidence,
+} from "@foundation/capability-notify";
 import {
   createPolicyDecisionPoint,
   InMemoryTenantMembershipDirectory,
@@ -97,7 +101,7 @@ function template(): Omit<NotificationTemplateDefinition, "templateHash"> {
     templateOwner: "platform",
     templateClassification: "transactional",
     allowedChannels: ["email", "test"],
-    allowedNotificationClasses: ["transactional", "security", "marketing", "test"],
+    allowedNotificationClasses: ["transactional", "security", "marketing", "bulk", "test"],
     subjectTemplate: "Notice {{displayName}}",
     bodyTemplate: "Hello {{displayName}}",
     subjectClassification: "internal",
@@ -158,6 +162,11 @@ export async function runNotificationsMessagingProof() {
     pdp,
     audit,
     jobs,
+    now: () => new Date(clockSec * 1000).toISOString(),
+  });
+  const enterpriseControls = createEnterpriseNotificationControlPlane({
+    notify,
+    audit,
     now: () => new Date(clockSec * 1000).toISOString(),
   });
   const adminA = createTenantContext({
@@ -230,6 +239,21 @@ export async function runNotificationsMessagingProof() {
   }
   pass("delivery evidence is value-free and sent status is audited");
 
+  const persisted = await enterpriseControls.recordPersistence(adminA, sent.view);
+  if (!persisted.ok) throw new Error("notification persistence contract failed");
+  const outbox = await enterpriseControls.commitTransactionalOutbox(
+    adminA,
+    sent.view.notificationId,
+  );
+  const duplicateOutbox = await enterpriseControls.commitTransactionalOutbox(
+    adminA,
+    sent.view.notificationId,
+  );
+  if (!outbox.ok || !duplicateOutbox.ok || !duplicateOutbox.deduplicated) {
+    throw new Error("transactional outbox did not dedupe");
+  }
+  pass("bounded DB persistence contract and transactional outbox are recorded");
+
   const marketing = await notify.createNotification(adminA, {
     recipient: recipient(TENANT_A, "recipient-marketing-proof"),
     channel: "email",
@@ -279,6 +303,76 @@ export async function runNotificationsMessagingProof() {
   }
   pass("suppressed recipient blocks non-mandatory notification");
 
+  const feedbackNotification = await notify.createNotification(adminA, {
+    recipient: recipient(TENANT_A, "recipient-feedback-proof"),
+    channel: "email",
+    classification: "transactional",
+    templateId: "proof-template",
+  });
+  if (!feedbackNotification.ok) throw new Error("feedback notification create failed");
+  const feedbackPersisted = await enterpriseControls.recordPersistence(
+    adminA,
+    feedbackNotification.view,
+  );
+  if (!feedbackPersisted.ok) throw new Error("feedback persistence failed");
+  const bounceFeedback = await enterpriseControls.ingestProviderFeedback(adminA, {
+    feedbackType: "delivery.bounced",
+    notificationId: feedbackNotification.view.notificationId,
+    recipientId: "recipient-feedback-proof",
+    channel: "email",
+    classification: "transactional",
+    providerRef: "provider-feedback-local",
+    providerMessageIdHash: "provider_msg_hash_feedback",
+    source: "provider-webhook-local-proof",
+  });
+  if (!bounceFeedback.ok) throw new Error("bounce feedback ingestion failed");
+  const bouncedResult = await notify.deliverNotification(
+    adminA,
+    feedbackNotification.view.notificationId,
+    {
+      displayName: "Ada",
+    },
+  );
+  if (bouncedResult.ok || bouncedResult.reasonCode !== "address-bounced") {
+    throw new Error("bounce feedback did not suppress later delivery");
+  }
+  pass("bounce feedback ingestion suppresses later delivery");
+
+  const unsubscribeNotification = await notify.createNotification(adminA, {
+    recipient: recipient(TENANT_A, "recipient-unsubscribe-proof"),
+    channel: "email",
+    classification: "marketing",
+    templateId: "proof-template",
+  });
+  if (!unsubscribeNotification.ok) throw new Error("unsubscribe notification create failed");
+  const unsubscribePersisted = await enterpriseControls.recordPersistence(
+    adminA,
+    unsubscribeNotification.view,
+  );
+  if (!unsubscribePersisted.ok) throw new Error("unsubscribe persistence failed");
+  const unsubscribeFeedback = await enterpriseControls.ingestProviderFeedback(adminA, {
+    feedbackType: "delivery.unsubscribed",
+    notificationId: unsubscribeNotification.view.notificationId,
+    recipientId: "recipient-unsubscribe-proof",
+    channel: "email",
+    classification: "marketing",
+    providerRef: "provider-unsubscribe-local",
+    providerMessageIdHash: "provider_msg_hash_unsubscribe",
+    source: "unsubscribe-api-local-proof",
+  });
+  if (!unsubscribeFeedback.ok) throw new Error("unsubscribe ingestion failed");
+  const unsubscribedResult = await notify.deliverNotification(
+    adminA,
+    unsubscribeNotification.view.notificationId,
+    {
+      displayName: "Ada",
+    },
+  );
+  if (unsubscribedResult.ok || unsubscribedResult.reasonCode !== "recipient-opted-out") {
+    throw new Error("unsubscribe ingestion did not block marketing delivery");
+  }
+  pass("unsubscribe ingestion blocks later marketing delivery");
+
   const failed = await notify.createNotification(adminA, {
     recipient: recipient(TENANT_A, "recipient-failure-proof"),
     channel: "email",
@@ -301,6 +395,110 @@ export async function runNotificationsMessagingProof() {
     throw new Error("provider failure leaked a secret-looking value");
   }
   pass("bounded retry ends in dead-letter evidence with redacted failure");
+
+  const purgeCandidate = await notify.createNotification(adminA, {
+    recipient: recipient(TENANT_A, "recipient-purge-proof"),
+    channel: "email",
+    classification: "transactional",
+    templateId: "proof-template",
+    purgeAllowedAt: "2026-01-01T00:00:00Z",
+  });
+  if (!purgeCandidate.ok) throw new Error("purge notification create failed");
+  if (!(await enterpriseControls.recordPersistence(adminA, purgeCandidate.view)).ok) {
+    throw new Error("purge notification persistence failed");
+  }
+  const purged = await enterpriseControls.purgeNotification(
+    adminA,
+    purgeCandidate.view.notificationId,
+  );
+  if (!purged.ok) throw new Error("retention purge failed");
+  const legalHold = await notify.createNotification(adminA, {
+    recipient: recipient(TENANT_A, "recipient-legal-hold-proof"),
+    channel: "email",
+    classification: "transactional",
+    templateId: "proof-template",
+    legalHold: true,
+  });
+  if (!legalHold.ok) throw new Error("legal hold notification create failed");
+  if (!(await enterpriseControls.recordPersistence(adminA, legalHold.view)).ok) {
+    throw new Error("legal hold persistence failed");
+  }
+  const legalHoldDenied = await enterpriseControls.purgeNotification(
+    adminA,
+    legalHold.view.notificationId,
+  );
+  if (legalHoldDenied.ok || legalHoldDenied.reasonCode !== "legal-hold") {
+    throw new Error("legal hold did not block purge");
+  }
+  pass("retention purge and legal-hold denial are locally proven");
+
+  const addressOk = enterpriseControls.checkAddressVerification(
+    recipient(TENANT_A, "recipient-address-ok-proof"),
+  );
+  const addressDenied = enterpriseControls.checkAddressVerification({
+    ...recipient(TENANT_A, "recipient-address-denied-proof"),
+    addressVerified: false,
+    addressStatus: "unverified",
+  });
+  if (!addressOk.ok || addressDenied.ok) {
+    throw new Error("address verification posture failed");
+  }
+  pass("address verification fails closed for unverified recipients");
+
+  const firstRate = enterpriseControls.checkRateLimit(adminA, "bulk-campaign-proof", 2);
+  const secondRate = enterpriseControls.checkRateLimit(adminA, "bulk-campaign-proof", 2);
+  const thirdRate = enterpriseControls.checkRateLimit(adminA, "bulk-campaign-proof", 2);
+  if (!firstRate.ok || !secondRate.ok || thirdRate.ok) {
+    throw new Error("notification rate limit did not fail closed");
+  }
+  pass("notification rate limit fails closed after tenant quota");
+
+  const campaignA = await notify.createNotification(adminA, {
+    recipient: recipient(TENANT_A, "recipient-bulk-a-proof"),
+    channel: "email",
+    classification: "bulk",
+    templateId: "proof-template",
+  });
+  const campaignB = await notify.createNotification(adminA, {
+    recipient: recipient(TENANT_A, "recipient-bulk-b-proof"),
+    channel: "email",
+    classification: "bulk",
+    templateId: "proof-template",
+  });
+  if (!campaignA.ok || !campaignB.ok) throw new Error("bulk campaign notifications failed");
+  if (!(await enterpriseControls.recordPersistence(adminA, campaignA.view)).ok) {
+    throw new Error("bulk campaign A persistence failed");
+  }
+  if (!(await enterpriseControls.recordPersistence(adminA, campaignB.view)).ok) {
+    throw new Error("bulk campaign B persistence failed");
+  }
+  const campaign = await enterpriseControls.runBulkCampaign(adminA, {
+    campaignId: "campaign-proof",
+    classification: "bulk",
+    notificationIds: [campaignA.view.notificationId, campaignB.view.notificationId],
+    tenantLimit: 2,
+    consentChecked: true,
+    suppressionChecked: true,
+  });
+  const campaignDenied = await enterpriseControls.runBulkCampaign(adminA, {
+    campaignId: "campaign-proof-denied",
+    classification: "bulk",
+    notificationIds: [campaignA.view.notificationId, campaignB.view.notificationId],
+    tenantLimit: 1,
+    consentChecked: true,
+    suppressionChecked: true,
+  });
+  if (!campaign.ok || campaignDenied.ok || campaignDenied.reasonCode !== "bulk-rate-limited") {
+    throw new Error("bulk campaign runtime did not enforce tenant limit");
+  }
+  pass("bulk campaign runtime enforces consent, suppression, idempotency, and tenant limit");
+
+  const circuitFirst = enterpriseControls.recordProviderFailure("provider-circuit-proof", 2);
+  const circuitSecond = enterpriseControls.recordProviderFailure("provider-circuit-proof", 2);
+  if (!circuitFirst.ok || circuitSecond.ok || circuitSecond.circuitState !== "open") {
+    throw new Error("provider circuit breaker did not open");
+  }
+  pass("provider circuit breaker opens after bounded failures");
 
   await notify.configureProvider(adminB, providerConfig(TENANT_B));
   const bTemplate = await notify.createTemplate(adminB, {
@@ -347,6 +545,33 @@ export async function runNotificationsMessagingProof() {
   }
   pass("notification lifecycle audit is value-free");
 
+  const enterpriseEvidence: NotificationEnterpriseEvidence = enterpriseControls.buildEvidence({
+    feedbackEvidence: bounceFeedback.ok,
+    unsubscribeEvidence: unsubscribeFeedback.ok,
+    retentionEvidence: purged.ok,
+    legalHoldDenied: !legalHoldDenied.ok && legalHoldDenied.reasonCode === "legal-hold",
+    bulkEvidence: campaign.ok && !campaignDenied.ok,
+    rateLimitEvidence: !thirdRate.ok,
+    addressVerificationEvidence: addressOk.ok && !addressDenied.ok,
+    circuitBreakerEvidence: !circuitSecond.ok && circuitSecond.circuitState === "open",
+    auditEvidence: auditEvents.events.length >= 10,
+    redactionEvidence:
+      !auditDump.includes("@example.test") && !auditDump.includes("sk_1234567890abcdef"),
+  });
+  if (
+    !enterpriseEvidence.transactionalOutboxChecked ||
+    !enterpriseEvidence.providerFeedbackIngestionChecked ||
+    !enterpriseEvidence.unsubscribeIngestionChecked ||
+    !enterpriseEvidence.retentionPurgeChecked ||
+    !enterpriseEvidence.bulkCampaignRuntimeChecked ||
+    !enterpriseEvidence.providerCircuitBreakerChecked ||
+    enterpriseEvidence.liveProviderReadinessClaim ||
+    enterpriseEvidence.deliverabilityReadinessClaim
+  ) {
+    throw new Error("enterprise notification evidence incomplete or overclaimed");
+  }
+  pass("enterprise notifications/messaging depth evidence is complete and non-claim bounded");
+
   const live = await notify.configureProvider(adminA, {
     ...providerConfig(TENANT_A),
     providerMode: "live-external-deferred",
@@ -388,6 +613,27 @@ export async function runNotificationsMessagingProof() {
     productionLiveClaim: false,
     deliverabilityCertificationClaim: false,
     iso27001CertificationClaim: false,
+    liveProviderReadinessClaim: false,
+    enterpriseMessagingDepthProven: true,
+    dbBackedPersistenceBoundaryExplicit: enterpriseEvidence.dbBackedPersistenceBoundaryExplicit,
+    transactionalOutboxProven: enterpriseEvidence.transactionalOutboxChecked,
+    providerFeedbackIngestionProven: enterpriseEvidence.providerFeedbackIngestionChecked,
+    unsubscribeIngestionProven: enterpriseEvidence.unsubscribeIngestionChecked,
+    retentionPurgeProven: enterpriseEvidence.retentionPurgeChecked,
+    bulkCampaignRuntimeProven: enterpriseEvidence.bulkCampaignRuntimeChecked,
+    notificationRateLimitProven: enterpriseEvidence.rateLimitChecked,
+    addressVerificationProven: enterpriseEvidence.addressVerificationChecked,
+    providerCircuitBreakerProven: enterpriseEvidence.providerCircuitBreakerChecked,
+    apiSurfaceReclassified: enterpriseEvidence.apiSurfaceDisposition,
+    uiSurfaceDeferred: enterpriseEvidence.uiSurfaceDisposition,
+    enterpriseNotificationEvidence: enterpriseEvidence,
+    deliverabilityReadinessClaim: false,
+    stagingReadinessClaim: false,
+    socReadinessClaim: false,
+    enterpriseProductionReadinessClaim: false,
+    fullDevReadinessClaim: false,
+    fullReactParityClaim: false,
+    usf133ClosureClaim: false,
   } as const;
 }
 

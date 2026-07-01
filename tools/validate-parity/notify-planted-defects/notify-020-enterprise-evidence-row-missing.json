@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-NOTIFY-020",
+  "mutation": {
+    "removeEnterpriseEvidenceId": "evidence-usf-153-notifications-messaging-enterprise-depth"
+  }
+}

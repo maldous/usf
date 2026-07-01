@@ -31,12 +31,18 @@ RULES = {
     "USF-NOTIFY-014": ("blocking", "notifications parity matrix row lacks authorisation/backing"),
     "USF-NOTIFY-015": ("blocking", "notifications source-use matrix missing"),
     "USF-NOTIFY-016": ("blocking", "OpenAPI contains raw notification secrets or recipient data"),
+    "USF-NOTIFY-017": ("blocking", "enterprise notification control-plane helper is missing"),
+    "USF-NOTIFY-018": ("blocking", "USF-153 enterprise notification proof markers are missing"),
+    "USF-NOTIFY-019": ("blocking", "USF-153 enterprise notification proof-depth matrix is incomplete"),
+    "USF-NOTIFY-020": ("blocking", "USF-153 enterprise evidence rows are missing"),
+    "USF-NOTIFY-021": ("blocking", "notifications enterprise depth proof overclaims live, deliverability, or readiness posture"),
     "USF-NOTIFY-SELFTEST": ("blocking", "planted notifications defect did not raise its expected rule"),
 }
 
 CORE = "packages/core/src/index.ts"
 PORTS = "packages/ports/src/index.ts"
 NOTIFY = "capabilities/notify/src/index.ts"
+ENTERPRISE_CONTROLS = "capabilities/notify/src/enterprise-messaging-controls.ts"
 ADAPTER = "adapters/mail/src/index.ts"
 POLICY = "capabilities/tenant/src/authorization-policy.ts"
 PROOF = "packages/proof/src/notifications-messaging-proof.ts"
@@ -44,8 +50,24 @@ TESTS = "tests/capabilities/notifications-messaging.test.ts"
 OPENAPI = "packages/openapi/openapi.json"
 STANDARD = "docs/architecture/notifications-and-messaging-standard.md"
 SOURCE_USE = "docs/architecture/parity-notifications-messaging-source-use-disposition-matrix.md"
+DEPTH_MATRIX_PATH = "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json"
+ENTERPRISE_EVIDENCE_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
-SOURCE_FILES = (CORE, PORTS, NOTIFY, ADAPTER, POLICY, PROOF, TESTS, OPENAPI, STANDARD, SOURCE_USE)
+SOURCE_FILES = (
+    CORE,
+    PORTS,
+    NOTIFY,
+    ENTERPRISE_CONTROLS,
+    ADAPTER,
+    POLICY,
+    PROOF,
+    TESTS,
+    OPENAPI,
+    STANDARD,
+    SOURCE_USE,
+    DEPTH_MATRIX_PATH,
+    ENTERPRISE_EVIDENCE_PATH,
+)
 SELFTEST_DIR = "tools/validate-parity/notify-planted-defects"
 
 OPENAPI_SECRET_NEEDLES = [
@@ -107,13 +129,30 @@ def load_matrix():
         return None
 
 
+def load_json(path):
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as handle:
+            return json.load(handle)
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     files = {path: read_text(path) for path in SOURCE_FILES}
     for path, text in overrides.get("files", {}).items():
         files[path] = text
     matrix = overrides["matrix"] if "matrix" in overrides else load_matrix()
-    return {"files": files, "matrix": matrix}
+    depth_matrix = overrides["depthMatrix"] if "depthMatrix" in overrides else load_json(DEPTH_MATRIX_PATH)
+    enterprise_evidence = overrides["enterpriseEvidence"] if "enterpriseEvidence" in overrides else load_json(ENTERPRISE_EVIDENCE_PATH)
+    return {
+        "files": files,
+        "matrix": matrix,
+        "depthMatrix": depth_matrix,
+        "enterpriseEvidence": enterprise_evidence,
+    }
 
 
 def notification_rows(matrix):
@@ -126,12 +165,22 @@ def notification_rows(matrix):
     ]
 
 
+def enterprise_rows(model, section):
+    if not isinstance(model, dict):
+        return {}
+    rows = model.get(section, [])
+    if not isinstance(rows, list):
+        return {}
+    return {row.get("id"): row for row in rows if isinstance(row, dict)}
+
+
 def run_checks(F, state=None):
     state = state or build_state()
     files = state["files"]
     core = files.get(CORE, "")
     ports = files.get(PORTS, "")
     notify = files.get(NOTIFY, "")
+    enterprise_controls = files.get(ENTERPRISE_CONTROLS, "")
     adapter = files.get(ADAPTER, "")
     policy = files.get(POLICY, "")
     proof = files.get(PROOF, "")
@@ -139,6 +188,8 @@ def run_checks(F, state=None):
     openapi = files.get(OPENAPI, "")
     standard = files.get(STANDARD, "")
     source_use = files.get(SOURCE_USE, "")
+    depth_matrix = state.get("depthMatrix")
+    enterprise_evidence = state.get("enterpriseEvidence")
 
     for token in (
         "NOTIFICATION_CLASSIFICATIONS",
@@ -367,13 +418,179 @@ def run_checks(F, state=None):
         if needle in openapi:
             F.add("USF-NOTIFY-016", OPENAPI, f"raw notification secret/address content in OpenAPI: {needle!r}")
 
+    if not enterprise_controls:
+        F.add("USF-NOTIFY-017", ENTERPRISE_CONTROLS, "enterprise notification controls file must exist")
+    else:
+        for token in (
+            "EnterpriseNotificationControlPlane",
+            "NotificationEnterpriseEvidence",
+            "issueId: \"USF-153\"",
+            "recordPersistence",
+            "commitTransactionalOutbox",
+            "ingestProviderFeedback",
+            "checkAddressVerification",
+            "checkRateLimit",
+            "recordProviderFailure",
+            "runBulkCampaign",
+            "purgeNotification",
+            "buildEvidence",
+            "liveProviderReadinessClaim: false",
+            "deliverabilityReadinessClaim: false",
+            "usf133ClosureClaim: false",
+        ):
+            if token not in enterprise_controls:
+                F.add("USF-NOTIFY-017", ENTERPRISE_CONTROLS, f"enterprise control-plane token missing: {token}")
+    if "createEnterpriseNotificationControlPlane" not in notify:
+        F.add("USF-NOTIFY-017", NOTIFY, "enterprise notification control-plane export missing")
+
+    for token in (
+        "createEnterpriseNotificationControlPlane",
+        "enterpriseMessagingDepthProven: true",
+        "dbBackedPersistenceBoundaryExplicit",
+        "transactionalOutboxProven",
+        "providerFeedbackIngestionProven",
+        "unsubscribeIngestionProven",
+        "retentionPurgeProven",
+        "bulkCampaignRuntimeProven",
+        "notificationRateLimitProven",
+        "addressVerificationProven",
+        "providerCircuitBreakerProven",
+        "apiSurfaceReclassified",
+        "uiSurfaceDeferred",
+        "enterpriseNotificationEvidence",
+        "liveProviderReadinessClaim: false",
+        "deliverabilityReadinessClaim: false",
+        "stagingReadinessClaim: false",
+        "socReadinessClaim: false",
+        "fullDevReadinessClaim: false",
+        "fullReactParityClaim: false",
+        "usf133ClosureClaim: false",
+    ):
+        if token not in proof:
+            F.add("USF-NOTIFY-018", PROOF, f"USF-153 proof marker missing: {token}")
+
+    required_controls = {
+        "bounded-db-persistence-contract",
+        "transactional-outbox",
+        "provider-feedback-ingestion",
+        "unsubscribe-ingestion",
+        "retention-purge-legal-hold",
+        "bulk-campaign-runtime",
+        "rate-limit-abuse-control",
+        "address-verification",
+        "provider-circuit-breaker",
+        "api-surface-non-equivalent-substitute",
+        "ui-surface-deferred",
+        "live-provider-deliverability-deferred",
+    }
+    if not isinstance(depth_matrix, dict):
+        F.add("USF-NOTIFY-019", DEPTH_MATRIX_PATH, "USF-153 enterprise proof-depth matrix must be valid JSON object")
+    else:
+        if depth_matrix.get("sourceIssue") != "USF-153":
+            F.add("USF-NOTIFY-019", DEPTH_MATRIX_PATH, "matrix sourceIssue must be USF-153")
+        if depth_matrix.get("proofCommand") != "make notify-proof":
+            F.add("USF-NOTIFY-019", DEPTH_MATRIX_PATH, "matrix proof command must be make notify-proof")
+        if depth_matrix.get("validatorCommand") != "python3 tools/validate-parity/validate-notify.py all --json":
+            F.add("USF-NOTIFY-019", DEPTH_MATRIX_PATH, "matrix validator command must pin validate-notify")
+        controls = {
+            row.get("id")
+            for row in depth_matrix.get("controls", [])
+            if isinstance(row, dict)
+        }
+        missing_controls = required_controls - controls
+        if missing_controls:
+            F.add("USF-NOTIFY-019", DEPTH_MATRIX_PATH, f"missing controls: {sorted(missing_controls)}")
+        refs = set(depth_matrix.get("enterpriseEvidenceRefs", []))
+        for required_ref in (
+            "soa-usf-153-notifications-messaging-enterprise-depth",
+            "evidence-usf-153-notifications-messaging-enterprise-depth",
+            "threat-usf-153-notifications-messaging-enterprise-depth",
+            "access-usf-153-notifications-messaging-enterprise-depth",
+            "resilience-usf-153-notifications-messaging-enterprise-depth",
+            "incident-usf-153-notifications-messaging-enterprise-depth",
+            "privacy-usf-153-notifications-messaging-enterprise-depth",
+        ):
+            if required_ref not in refs:
+                F.add("USF-NOTIFY-019", DEPTH_MATRIX_PATH, f"missing enterprise evidence ref {required_ref}")
+        claims = depth_matrix.get("claims", {})
+        for key in (
+            "liveProviderReadinessClaim",
+            "deliverabilityReadinessClaim",
+            "uiReadinessClaim",
+            "stagingReadinessClaim",
+            "productionReadinessClaim",
+            "socReadinessClaim",
+            "iso27001CertificationClaim",
+            "fullDevReadinessClaim",
+            "fullReactParityClaim",
+            "usf133ClosureClaim",
+        ):
+            if claims.get(key) is not False:
+                F.add("USF-NOTIFY-021", DEPTH_MATRIX_PATH, f"matrix claim must be false: {key}")
+
+    required_evidence = {
+        "soaSupportMappings": "soa-usf-153-notifications-messaging-enterprise-depth",
+        "evidenceRegister": "evidence-usf-153-notifications-messaging-enterprise-depth",
+        "threatModelAbuseCaseRegister": "threat-usf-153-notifications-messaging-enterprise-depth",
+        "accessReviewPrivilegedOperationPosture": "access-usf-153-notifications-messaging-enterprise-depth",
+        "backupRestoreResiliencePosture": "resilience-usf-153-notifications-messaging-enterprise-depth",
+        "incidentVulnerabilityManagementEvidence": "incident-usf-153-notifications-messaging-enterprise-depth",
+        "privacyDataMinimisationPosture": "privacy-usf-153-notifications-messaging-enterprise-depth",
+    }
+    for section, row_id in required_evidence.items():
+        row = enterprise_rows(enterprise_evidence, section).get(row_id)
+        if not row:
+            F.add("USF-NOTIFY-020", ENTERPRISE_EVIDENCE_PATH, f"missing enterprise evidence row {row_id}")
+            continue
+        if "USF-153" not in json.dumps(row, sort_keys=True):
+            F.add("USF-NOTIFY-020", ENTERPRISE_EVIDENCE_PATH, f"enterprise evidence row lacks USF-153 linkage: {row_id}")
+        if "validate-notify" not in json.dumps(row, sort_keys=True) and section != "privacyDataMinimisationPosture":
+            F.add("USF-NOTIFY-020", ENTERPRISE_EVIDENCE_PATH, f"enterprise evidence row lacks validator linkage: {row_id}")
+
+    overclaim_needles = (
+        "liveProviderReadinessClaim: true",
+        "deliverabilityReadinessClaim: true",
+        "productionReadinessClaim: true",
+        "stagingReadinessClaim: true",
+        "socReadinessClaim: true",
+        "iso27001CertificationClaim: true",
+        "fullDevReadinessClaim: true",
+        "fullReactParityClaim: true",
+        "usf133ClosureClaim: true",
+        "liveProviderReadinessClaim\": true",
+        "deliverabilityReadinessClaim\": true",
+        "productionReadinessClaim\": true",
+        "stagingReadinessClaim\": true",
+        "socReadinessClaim\": true",
+        "iso27001CertificationClaim\": true",
+        "fullDevReadinessClaim\": true",
+        "fullReactParityClaim\": true",
+        "usf133ClosureClaim\": true",
+    )
+    overclaim_text = proof + "\n" + files.get(DEPTH_MATRIX_PATH, "")
+    for needle in overclaim_needles:
+        if needle in overclaim_text:
+            F.add("USF-NOTIFY-021", PROOF, f"prohibited readiness claim present: {needle}")
+
 
 def apply_mutation(base, mutation):
     files = dict(base["files"])
     matrix = json.loads(json.dumps(base["matrix"])) if base["matrix"] is not None else None
+    depth_matrix = json.loads(json.dumps(base["depthMatrix"])) if base.get("depthMatrix") is not None else None
+    enterprise_evidence = json.loads(json.dumps(base["enterpriseEvidence"])) if base.get("enterpriseEvidence") is not None else None
     target = mutation.get("file")
     if "replace" in mutation and target in files:
         files[target] = files[target].replace(mutation["replace"]["old"], mutation["replace"]["new"])
+        if target == DEPTH_MATRIX_PATH:
+            try:
+                depth_matrix = json.loads(files[target])
+            except Exception:  # noqa: BLE001
+                depth_matrix = None
+        if target == ENTERPRISE_EVIDENCE_PATH:
+            try:
+                enterprise_evidence = json.loads(files[target])
+            except Exception:  # noqa: BLE001
+                enterprise_evidence = None
     if "append" in mutation and target is not None:
         files[target] = files.get(target, "") + "\n" + mutation["append"]
     if "matrixNotificationsSet" in mutation and matrix is not None:
@@ -381,7 +598,41 @@ def apply_mutation(base, mutation):
         if rows:
             for key, value in mutation["matrixNotificationsSet"].items():
                 rows[0][key] = value
-    return {"files": files, "matrix": matrix}
+    if "depthMatrixClaimsSet" in mutation and isinstance(depth_matrix, dict):
+        claims = depth_matrix.setdefault("claims", {})
+        for key, value in mutation["depthMatrixClaimsSet"].items():
+            claims[key] = value
+        files[DEPTH_MATRIX_PATH] = json.dumps(depth_matrix)
+    if "depthMatrixRemoveControl" in mutation and isinstance(depth_matrix, dict):
+        depth_matrix["controls"] = [
+            row
+            for row in depth_matrix.get("controls", [])
+            if not isinstance(row, dict) or row.get("id") != mutation["depthMatrixRemoveControl"]
+        ]
+        files[DEPTH_MATRIX_PATH] = json.dumps(depth_matrix)
+    if "removeEnterpriseEvidenceId" in mutation and isinstance(enterprise_evidence, dict):
+        remove_id = mutation["removeEnterpriseEvidenceId"]
+        for section in (
+            "soaSupportMappings",
+            "evidenceRegister",
+            "threatModelAbuseCaseRegister",
+            "accessReviewPrivilegedOperationPosture",
+            "backupRestoreResiliencePosture",
+            "incidentVulnerabilityManagementEvidence",
+            "privacyDataMinimisationPosture",
+        ):
+            enterprise_evidence[section] = [
+                row
+                for row in enterprise_evidence.get(section, [])
+                if not isinstance(row, dict) or row.get("id") != remove_id
+            ]
+        files[ENTERPRISE_EVIDENCE_PATH] = json.dumps(enterprise_evidence)
+    return {
+        "files": files,
+        "matrix": matrix,
+        "depthMatrix": depth_matrix,
+        "enterpriseEvidence": enterprise_evidence,
+    }
 
 
 def load_selftest_fixtures(F):
