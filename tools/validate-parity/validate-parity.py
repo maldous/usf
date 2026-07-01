@@ -74,12 +74,15 @@ RULES = {
     "USF-PARITY-036": ("blocking", "USF-133 closure-tier enterprise customer feature posture is incomplete"),
     "USF-PARITY-037": ("blocking", "USF-133 closure-tier future evidence package shape is incomplete"),
     "USF-PARITY-038": ("blocking", "USF-133 closure-tier negative assurance is incomplete or overclaimed"),
+    "USF-PARITY-039": ("blocking", "USF-133 final blocker and matrix reconciliation evidence is incomplete"),
     "USF-PARITY-SELFTEST": ("blocking", "planted parity defect did not raise its expected rule"),
 }
 
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
 COMPOSE_CLOSURE_MATRIX_PATH = "docs/architecture/compose-service-disposition-closure-matrix.json"
 USF133_CLOSURE_TIER_GATE_PATH = "docs/architecture/usf-133-closure-tier-evidence-gate.json"
+USF133_FINAL_RECONCILIATION_PATH = "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
+COMPLETE_FUNCTIONALITY_MATRIX_PATH = "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json"
 COMPOSE_PARITY_MATRIX_PATH = "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
 COMPOSE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 ENTERPRISE_EVIDENCE_MODEL_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
@@ -182,6 +185,22 @@ PROHIBITED_READINESS_CLAIMS = {
     "enterprise-production-readiness",
 }
 USF133_GATE_PROHIBITED_CLAIMS = PROHIBITED_READINESS_CLAIMS | {"usf-133-closure"}
+USF216_CURRENT_OPEN_BLOCKERS = {"USF-217", "USF-218", "USF-219", "USF-220"}
+USF216_RECONCILED_COMPOSE_SERVICES = {
+    "external-caddy": "caddy",
+    "pgadmin": "pgadmin",
+    "temporal-ui": "temporal-ui",
+}
+USF216_RECONCILED_FUNCTIONALITY_CAPABILITIES = {
+    "error-monitoring",
+    "backup-restore",
+    "operator-admin-surfaces",
+    "infra-cloud",
+    "i18n-runtime",
+    "dev-commands",
+    "service-catalog-cmdb",
+    "data-flow-trust-boundaries",
+}
 USF133_REQUIRED_CAPABILITIES = {
     "tenant-isolation",
     "authorization",
@@ -415,6 +434,16 @@ def build_state(overrides=None):
         usf133_closure_tier_error = overrides.get("usf133ClosureTierGateError")
     else:
         usf133_closure_tier_gate, usf133_closure_tier_error = load_optional_json(USF133_CLOSURE_TIER_GATE_PATH)
+    if "usf133FinalReconciliation" in overrides:
+        usf133_final_reconciliation = overrides["usf133FinalReconciliation"]
+        usf133_final_reconciliation_error = overrides.get("usf133FinalReconciliationError")
+    else:
+        usf133_final_reconciliation, usf133_final_reconciliation_error = load_optional_json(USF133_FINAL_RECONCILIATION_PATH)
+    if "functionalityParityMatrix" in overrides:
+        functionality_parity_matrix = overrides["functionalityParityMatrix"]
+        functionality_parity_error = overrides.get("functionalityParityMatrixError")
+    else:
+        functionality_parity_matrix, functionality_parity_error = load_optional_json(COMPLETE_FUNCTIONALITY_MATRIX_PATH)
     if "composeParityMatrix" in overrides:
         compose_parity_matrix = overrides["composeParityMatrix"]
         compose_parity_error = overrides.get("composeParityMatrixError")
@@ -433,6 +462,10 @@ def build_state(overrides=None):
         "composeClosureMatrixError": compose_closure_error,
         "usf133ClosureTierGate": usf133_closure_tier_gate,
         "usf133ClosureTierGateError": usf133_closure_tier_error,
+        "usf133FinalReconciliation": usf133_final_reconciliation,
+        "usf133FinalReconciliationError": usf133_final_reconciliation_error,
+        "functionalityParityMatrix": functionality_parity_matrix,
+        "functionalityParityMatrixError": functionality_parity_error,
         "composeParityMatrix": compose_parity_matrix,
         "composeParityMatrixError": compose_parity_error,
         "composeCatalogue": compose_catalogue,
@@ -1176,6 +1209,134 @@ def check_usf133_closure_tier_gate(F, state):
         F.add("USF-PARITY-024", ENTERPRISE_EVIDENCE_MODEL_PATH, f"cannot load enterprise evidence model: {enterprise_error}")
 
 
+def _check_counter(F, subject, rows, row_key, declared_counts):
+    values = []
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            continue
+        value = row.get(row_key)
+        if value is None:
+            F.add("USF-PARITY-039", f"{subject}.row[{index}]", f"missing counted field {row_key}")
+            continue
+        values.append(value)
+    actual = dict(sorted(Counter(values).items()))
+    if declared_counts != actual:
+        F.add("USF-PARITY-039", subject, f"declared status counts are stale; expected {actual}")
+
+
+def check_usf216_final_reconciliation(F, state):
+    reconciliation = state.get("usf133FinalReconciliation")
+    if reconciliation is None:
+        F.add(
+            "USF-PARITY-039",
+            USF133_FINAL_RECONCILIATION_PATH,
+            f"cannot load final reconciliation: {state.get('usf133FinalReconciliationError')}",
+        )
+        return
+    if reconciliation.get("id") != "usf-133-final-blocker-and-matrix-reconciliation":
+        F.add("USF-PARITY-039", USF133_FINAL_RECONCILIATION_PATH, "unexpected reconciliation id")
+    if reconciliation.get("issueId") != "USF-216" or reconciliation.get("parentIssueId") != "USF-133":
+        F.add("USF-PARITY-039", USF133_FINAL_RECONCILIATION_PATH, "reconciliation must be scoped to USF-216 under USF-133")
+    if reconciliation.get("usf133ClosureClaimed") is not False:
+        F.add("USF-PARITY-039", "usf216.usf133ClosureClaimed", "USF-216 must not claim USF-133 closure")
+    if reconciliation.get("sourceIssueDoneByImplication") is not False:
+        F.add("USF-PARITY-039", "usf216.sourceIssueDoneByImplication", "USF-216 must not mark source issues Done by implication")
+    if USF133_GATE_PROHIBITED_CLAIMS - _set_or_empty(reconciliation.get("nonClaims")):
+        F.add("USF-PARITY-039", "usf216.nonClaims", "USF-216 non-claims are incomplete")
+
+    acceptance = _rows_by_id(reconciliation.get("acceptanceCriteriaMapping"), "criterionId")
+    for criterion_id in (
+        "usf133-acceptance-mapped",
+        "stale-blockers-resolved-safely",
+        "stale-decision-wording-removed",
+        "remaining-deferred-owner-nonclaim-boundaries",
+        "usf133-remains-open",
+    ):
+        row = acceptance.get(criterion_id)
+        if not row:
+            F.add("USF-PARITY-039", f"usf216.acceptance:{criterion_id}", "acceptance criterion is not mapped")
+            continue
+        if row.get("evidenceState") != "mapped":
+            F.add("USF-PARITY-039", f"usf216.acceptance:{criterion_id}", "acceptance criterion is not mapped to evidence")
+        if not _non_empty_list(row.get("evidenceRefs")):
+            F.add("USF-PARITY-039", f"usf216.acceptance:{criterion_id}", "acceptance criterion lacks evidence refs")
+
+    blockers = set(reconciliation.get("currentOpenBlockerIssues") or [])
+    if not USF216_CURRENT_OPEN_BLOCKERS <= blockers:
+        F.add(
+            "USF-PARITY-039",
+            "usf216.currentOpenBlockerIssues",
+            f"missing current open blockers: {sorted(USF216_CURRENT_OPEN_BLOCKERS - blockers)}",
+        )
+    if not _non_empty_list(reconciliation.get("validationCommands")):
+        F.add("USF-PARITY-039", "usf216.validationCommands", "validation command list is required")
+
+    functionality = state.get("functionalityParityMatrix")
+    if functionality is None:
+        F.add("USF-PARITY-039", COMPLETE_FUNCTIONALITY_MATRIX_PATH, f"cannot load matrix: {state.get('functionalityParityMatrixError')}")
+    else:
+        capabilities = _rows_by_id(functionality.get("capabilities"), "capability_id")
+        _check_counter(F, f"{COMPLETE_FUNCTIONALITY_MATRIX_PATH}.status_counts", functionality.get("capabilities", []), "usf_status", functionality.get("status_counts"))
+        for capability_id in USF216_RECONCILED_FUNCTIONALITY_CAPABILITIES:
+            row = capabilities.get(capability_id)
+            if not row:
+                F.add("USF-PARITY-039", f"functionality:{capability_id}", "reconciled capability row is missing")
+                continue
+            if row.get("usf_status") == "requires-human-decision":
+                F.add("USF-PARITY-039", f"functionality:{capability_id}", "stale requires-human-decision remains after owner-backed reconciliation")
+            carrier = str(row.get("tracking_carrier_or_recommendation") or "")
+            if "USF-" not in carrier:
+                F.add("USF-PARITY-039", f"functionality:{capability_id}", "reconciled capability lacks current USF owner issue")
+
+    compose = state.get("composeParityMatrix")
+    if compose is None:
+        F.add("USF-PARITY-039", COMPOSE_PARITY_MATRIX_PATH, f"cannot load matrix: {state.get('composeParityMatrixError')}")
+    else:
+        service_rows = _rows_by_id(compose.get("services"), "react_service")
+        _check_counter(F, f"{COMPOSE_PARITY_MATRIX_PATH}.status_counts", compose.get("services", []), "usf_accounting_status", compose.get("status_counts"))
+        for react_service in USF216_RECONCILED_COMPOSE_SERVICES:
+            row = service_rows.get(react_service)
+            if not row:
+                F.add("USF-PARITY-039", f"compose:{react_service}", "reconciled compose row is missing")
+                continue
+            if row.get("usf_accounting_status") == "requires-human-decision":
+                F.add("USF-PARITY-039", f"compose:{react_service}", "stale requires-human-decision remains after owner-backed reconciliation")
+            if "USF-217" not in str(row.get("tracking_recommendation") or ""):
+                F.add("USF-PARITY-039", f"compose:{react_service}", "operator/gateway compose row lacks current USF-217 owner boundary")
+
+    closure = state.get("composeClosureMatrix")
+    if isinstance(closure, dict):
+        closure_rows = _closure_row_map(closure)
+        _check_counter(
+            F,
+            f"{COMPOSE_CLOSURE_MATRIX_PATH}.closure_disposition_counts",
+            [row.get("closure_evidence", {}) for row in closure.get("rows", [])],
+            "closure_disposition",
+            closure.get("closure_disposition_counts"),
+        )
+        for react_service, service_id in USF216_RECONCILED_COMPOSE_SERVICES.items():
+            row = closure_rows.get(service_id)
+            evidence = row.get("closure_evidence", {}) if row else {}
+            if evidence.get("closure_disposition") == "requires-human-decision":
+                F.add("USF-PARITY-039", f"closure:{service_id}", "stale requires-human-decision remains after accepted deferral")
+            if "USF-217" not in set(evidence.get("tracking_issues") or []):
+                F.add("USF-PARITY-039", f"closure:{service_id}", "operator/gateway closure row lacks current USF-217 owner issue")
+
+    gate = state.get("usf133ClosureTierGate")
+    if isinstance(gate, dict):
+        exceptions = _rows_by_id(gate.get("enterpriseExceptionRegister"), "id")
+        refs = _rows_by_id(gate.get("requiredServiceDispositionRefs"), "serviceId")
+        for service_id in USF216_RECONCILED_COMPOSE_SERVICES.values():
+            exception = exceptions.get(f"exception-service-{service_id}") or {}
+            if exception.get("disposition") == "requires-human-decision":
+                F.add("USF-PARITY-039", f"exception:{service_id}", "stale requires-human-decision exception remains after accepted deferral")
+            if exception.get("followUpIssue") == "USF-166":
+                F.add("USF-PARITY-039", f"exception:{service_id}", "exception still self-defers to USF-166")
+            ref = refs.get(service_id) or {}
+            if "USF-217" not in set(ref.get("sourceIssueRefs") or []):
+                F.add("USF-PARITY-039", f"serviceRef:{service_id}", "service ref lacks current USF-217 owner issue")
+
+
 def run_checks(F, state=None):
     state = state or build_state()
     if not check_shape(F, state):
@@ -1184,6 +1345,7 @@ def run_checks(F, state=None):
     check_no_unauthorised_ui_artefacts(F, state)
     check_compose_service_closure(F, state)
     check_usf133_closure_tier_gate(F, state)
+    check_usf216_final_reconciliation(F, state)
 
 
 def apply_mutation(base_state, mutation):
@@ -1192,6 +1354,8 @@ def apply_mutation(base_state, mutation):
     matrix = copy.deepcopy(base_matrix) if base_matrix is not None else None
     compose_closure_matrix = copy.deepcopy(base_state.get("composeClosureMatrix"))
     usf133_closure_tier_gate = copy.deepcopy(base_state.get("usf133ClosureTierGate"))
+    usf133_final_reconciliation = copy.deepcopy(base_state.get("usf133FinalReconciliation"))
+    functionality_parity_matrix = copy.deepcopy(base_state.get("functionalityParityMatrix"))
     compose_parity_matrix = copy.deepcopy(base_state.get("composeParityMatrix"))
     compose_catalogue = copy.deepcopy(base_state.get("composeCatalogue"))
     paths = set(base_paths)
@@ -1207,6 +1371,9 @@ def apply_mutation(base_state, mutation):
     if mutation.get("removeUsf133ClosureTierGate"):
         usf133_closure_tier_gate = None
         overrides["usf133ClosureTierGateError"] = "missing"
+    if mutation.get("removeUsf216FinalReconciliation"):
+        usf133_final_reconciliation = None
+        overrides["usf133FinalReconciliationError"] = "missing"
     if "setTop" in mutation:
         for k, v in mutation["setTop"].items():
             matrix[k] = v
@@ -1242,6 +1409,16 @@ def apply_mutation(base_state, mutation):
         row = next(
             r for r in usf133_closure_tier_gate.get("requiredServiceDispositionRefs", [])
             if r.get("serviceId") == patch["serviceId"]
+        )
+        for k, v in patch.get("set", {}).items():
+            row[k] = v
+        for k in patch.get("drop", []):
+            row.pop(k, None)
+    if "closureTierPatchException" in mutation:
+        patch = mutation["closureTierPatchException"]
+        row = next(
+            r for r in usf133_closure_tier_gate.get("enterpriseExceptionRegister", [])
+            if r.get("id") == patch["id"]
         )
         for k, v in patch.get("set", {}).items():
             row[k] = v
@@ -1300,6 +1477,26 @@ def apply_mutation(base_state, mutation):
                 row.pop(k, None)
     if "addPath" in mutation:
         paths.add(mutation["addPath"])
+    if "functionalityCapabilityPatch" in mutation:
+        patch = mutation["functionalityCapabilityPatch"]
+        row = next(
+            r for r in functionality_parity_matrix.get("capabilities", [])
+            if r.get("capability_id") == patch["capability_id"]
+        )
+        for k, v in patch.get("set", {}).items():
+            row[k] = v
+        for k in patch.get("drop", []):
+            row.pop(k, None)
+    if "composeParityServicePatch" in mutation:
+        patch = mutation["composeParityServicePatch"]
+        row = next(
+            r for r in compose_parity_matrix.get("services", [])
+            if r.get("react_service") == patch["react_service"]
+        )
+        for k, v in patch.get("set", {}).items():
+            row[k] = v
+        for k in patch.get("drop", []):
+            row.pop(k, None)
     if "composeClosureRowPatch" in mutation:
         patch = mutation["composeClosureRowPatch"]
         if "service_id" in patch:
@@ -1345,6 +1542,8 @@ def apply_mutation(base_state, mutation):
     overrides["matrix"] = matrix
     overrides["composeClosureMatrix"] = compose_closure_matrix
     overrides["usf133ClosureTierGate"] = usf133_closure_tier_gate
+    overrides["usf133FinalReconciliation"] = usf133_final_reconciliation
+    overrides["functionalityParityMatrix"] = functionality_parity_matrix
     overrides["composeParityMatrix"] = compose_parity_matrix
     overrides["composeCatalogue"] = compose_catalogue
     overrides["paths"] = paths

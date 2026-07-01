@@ -1,0 +1,13 @@
+{
+  "description": "USF-216 reconciled compose service row regresses to stale decision-only wording.",
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "composeParityServicePatch": {
+      "react_service": "pgadmin",
+      "set": {
+        "usf_accounting_status": "requires-human-decision",
+        "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "description": "USF-216 reconciled functionality matrix row regresses to stale decision-only wording.",
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "functionalityCapabilityPatch": {
+      "capability_id": "operator-admin-surfaces",
+      "set": {
+        "usf_status": "requires-human-decision",
+        "tracking_carrier_or_recommendation": "draft decision required"
+      }
+    }
+  }
+}

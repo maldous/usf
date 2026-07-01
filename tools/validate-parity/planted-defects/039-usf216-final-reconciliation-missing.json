@@ -1,0 +1,7 @@
+{
+  "description": "USF-216 final blocker and matrix reconciliation evidence is missing.",
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "removeUsf216FinalReconciliation": true
+  }
+}

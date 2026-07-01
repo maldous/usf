@@ -1,0 +1,355 @@
+{
+  "id": "usf-133-final-blocker-and-matrix-reconciliation",
+  "title": "USF-133 Final Blocker and Matrix Reconciliation",
+  "issueId": "USF-216",
+  "parentIssueId": "USF-133",
+  "dashboardIssueId": "USF-184",
+  "coordinatorIssueId": "USF-192",
+  "sourceIssueContext": [
+    "USF-166",
+    "USF-167",
+    "USF-182",
+    "USF-185",
+    "USF-193",
+    "USF-215"
+  ],
+  "authorityNote": "Repository evidence only. Linear tracks work and blocker state, but does not define USF semantic authority. This artifact reconciles stale review wording and blocker mapping without claiming USF-133 closure.",
+  "usf133ClosureClaimed": false,
+  "sourceIssueDoneByImplication": false,
+  "wrapperDoneStatesSatisfySourceIssues": false,
+  "currentOpenBlockerIssues": [
+    "USF-217",
+    "USF-218",
+    "USF-219",
+    "USF-220"
+  ],
+  "nonBlockingContextIssues": [
+    "USF-134",
+    "USF-184",
+    "USF-192"
+  ],
+  "resolvedSourceIssuesUsedAsEvidence": [
+    "USF-166",
+    "USF-167",
+    "USF-168",
+    "USF-169",
+    "USF-170",
+    "USF-177",
+    "USF-180",
+    "USF-182",
+    "USF-193",
+    "USF-205",
+    "USF-211",
+    "USF-214",
+    "USF-215"
+  ],
+  "usf133AcceptanceCriteriaMapping": [
+    {
+      "criterionId": "readiness-directive-ui-boundary-scope-matrix",
+      "criterion": "Readiness directive, UI-agnostic boundary, and scope-classification matrix exist in docs/architecture and are merged.",
+      "classification": "mapped-to-merged-evidence",
+      "evidenceRefs": [
+        "docs/architecture/full-react-parity-readiness-directive.md",
+        "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
+        "docs/architecture/react-parity-scope-classification-matrix.md",
+        "docs/architecture/usf-final-semantic-completeness-audit.json"
+      ],
+      "remainingBlocker": null,
+      "nonClaimBoundary": "The presence of planning artifacts does not close USF-133 or claim readiness."
+    },
+    {
+      "criterionId": "foundation-domain-dispositions",
+      "criterion": "Every foundation domain has a disposition; none is unknown-unclassified.",
+      "classification": "mapped-with-current-follow-up-blockers",
+      "evidenceRefs": [
+        "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+        "docs/architecture/domain-deferred-depth-closure-matrix.json",
+        "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
+      ],
+      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "nonClaimBoundary": "Partial, deferred, and bounded rows remain visible and do not imply full parity or readiness."
+    },
+    {
+      "criterionId": "historical-tests-proofs-classified",
+      "criterion": "Every historical test and proof group is classified; no UI or Playwright test disappears silently.",
+      "classification": "mapped-to-existing-classification-evidence",
+      "evidenceRefs": [
+        "docs/architecture/complete-react-to-usf-functionality-parity-review.md",
+        "docs/architecture/react-parity-scope-classification-matrix.json",
+        "docs/architecture/foundation-ui-agnostic-readiness-boundary.md"
+      ],
+      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "nonClaimBoundary": "Historical classification is lineage and disposition evidence only; it is not a readiness claim."
+    },
+    {
+      "criterionId": "ui-playwright-behaviour-rewrite-named",
+      "criterion": "Foundation behaviours proven only via UI or Playwright are named for rewrite as foundation-level tests.",
+      "classification": "mapped-to-boundary-evidence",
+      "evidenceRefs": [
+        "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
+        "docs/architecture/complete-react-to-usf-functionality-parity-review.md"
+      ],
+      "remainingBlocker": "USF-217 and USF-220 where operator or external-developer surfaces remain deferred",
+      "nonClaimBoundary": "UI/UX and Playwright evidence are not foundation readiness requirements by themselves."
+    },
+    {
+      "criterionId": "per-domain-children-enumerated",
+      "criterion": "Per-domain parity children are enumerated.",
+      "classification": "mapped-to-linear-and-repository-evidence",
+      "evidenceRefs": [
+        "docs/architecture/full-parity-linear-tracking-plan.md",
+        "docs/architecture/usf-final-semantic-completeness-audit.json",
+        "USF-217",
+        "USF-218",
+        "USF-219",
+        "USF-220"
+      ],
+      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "nonClaimBoundary": "Enumeration and follow-up linkage do not complete the follow-up issues."
+    },
+    {
+      "criterionId": "parity-validator-and-gate",
+      "criterion": "A parity-enforcement validator and a make parity gate are tracked as a blocker.",
+      "classification": "implemented-and-validated",
+      "evidenceRefs": [
+        "package.json#scripts.parity",
+        "tools/validate-parity/validate-parity.py",
+        "USF-135",
+        "USF-182"
+      ],
+      "remainingBlocker": null,
+      "nonClaimBoundary": "Validator presence does not imply Done or readiness."
+    },
+    {
+      "criterionId": "semantic-authority-decisions-tracked",
+      "criterion": "Semantic-authority decisions required for parity are tracked.",
+      "classification": "mapped-with-current-owner-issues",
+      "evidenceRefs": [
+        "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+        "docs/architecture/compose-service-disposition-closure-matrix.json",
+        "docs/architecture/usf-133-closure-tier-evidence-gate.json"
+      ],
+      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "nonClaimBoundary": "Accepted decisions are not completion evidence unless merged proof satisfies each source issue."
+    },
+    {
+      "criterionId": "future-ui-ux-issue-exists",
+      "criterion": "A non-foundation-blocking future UI/UX issue exists.",
+      "classification": "implemented-and-nonblocking",
+      "evidenceRefs": [
+        "USF-134"
+      ],
+      "remainingBlocker": null,
+      "nonClaimBoundary": "USF-134 is non-foundation-blocking and does not prove UI readiness."
+    },
+    {
+      "criterionId": "no-readiness-claim-while-incomplete",
+      "criterion": "No full foundation dev readiness claim is made while the matrix is incomplete.",
+      "classification": "preserved",
+      "evidenceRefs": [
+        "USF-133",
+        "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+        "docs/architecture/usf-final-semantic-completeness-audit.json",
+        "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
+      ],
+      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "nonClaimBoundary": "USF-133 remains open."
+    }
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterionId": "usf133-acceptance-mapped",
+      "evidenceState": "mapped",
+      "evidenceRefs": [
+        "usf133AcceptanceCriteriaMapping",
+        "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.md"
+      ]
+    },
+    {
+      "criterionId": "stale-blockers-resolved-safely",
+      "evidenceState": "mapped",
+      "evidenceRefs": [
+        "currentOpenBlockerIssues",
+        "linearBlockerRelationPolicy"
+      ]
+    },
+    {
+      "criterionId": "stale-decision-wording-removed",
+      "evidenceState": "mapped",
+      "evidenceRefs": [
+        "staleRowReconciliations",
+        "tools/validate-parity/validate-parity.py#USF-PARITY-039"
+      ]
+    },
+    {
+      "criterionId": "remaining-deferred-owner-nonclaim-boundaries",
+      "evidenceState": "mapped",
+      "evidenceRefs": [
+        "remainingDeferredBoundaries",
+        "nonClaims"
+      ]
+    },
+    {
+      "criterionId": "usf133-remains-open",
+      "evidenceState": "mapped",
+      "evidenceRefs": [
+        "usf133ClosureClaimed=false",
+        "USF-133 remains open in Linear until separate closure criteria are satisfied"
+      ]
+    }
+  ],
+  "staleRowReconciliations": [
+    {
+      "rowId": "functionality:error-monitoring",
+      "previousStaleWording": "requires-human-decision / draft decision required",
+      "currentDisposition": "bounded-sdk-envelope-proof",
+      "currentOwnerIssues": [
+        "USF-170",
+        "USF-196",
+        "USF-205",
+        "USF-218"
+      ],
+      "remainingBoundary": "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment readiness remain deferred.",
+      "nonClaims": [
+        "live-provider-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "rowId": "functionality:backup-restore",
+      "previousStaleWording": "new blocker recommended",
+      "currentDisposition": "deferred-with-owner",
+      "currentOwnerIssues": [
+        "USF-177",
+        "USF-202",
+        "USF-211",
+        "USF-219"
+      ],
+      "remainingBoundary": "DR, RPO/RTO, PITR, online backup, scheduled backup, corruption/failure drill, operational restore, provider-managed operation, and environment readiness remain deferred.",
+      "nonClaims": [
+        "production-readiness",
+        "enterprise-production-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "rowId": "functionality:operator-admin-surfaces",
+      "previousStaleWording": "requires-human-decision / draft decision required",
+      "currentDisposition": "deferred-with-owner",
+      "currentOwnerIssues": [
+        "USF-169",
+        "USF-180",
+        "USF-217"
+      ],
+      "remainingBoundary": "Console access review, deprovisioning, clickthrough, break-glass, public exposure, tenant, secret, privacy, and privileged-operation evidence remain deferred.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "enterprise-production-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "rowId": "compose:external-caddy",
+      "previousStaleWording": "requires-human-decision",
+      "currentDisposition": "deferred",
+      "currentOwnerIssues": [
+        "USF-180",
+        "USF-217"
+      ],
+      "remainingBoundary": "Caddy/forward-auth gateway, clickthrough, public exposure, and privileged operator access evidence remain deferred.",
+      "nonClaims": [
+        "deployment-readiness",
+        "production-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "rowId": "compose:pgadmin",
+      "previousStaleWording": "requires-human-decision",
+      "currentDisposition": "deferred",
+      "currentOwnerIssues": [
+        "USF-169",
+        "USF-217"
+      ],
+      "remainingBoundary": "pgAdmin access review, deprovisioning, SSO/clickthrough, break-glass, tenant, secret, privacy, audit, and privileged operation evidence remain deferred.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "production-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "rowId": "compose:temporal-ui",
+      "previousStaleWording": "requires-human-decision",
+      "currentDisposition": "deferred",
+      "currentOwnerIssues": [
+        "USF-178",
+        "USF-217"
+      ],
+      "remainingBoundary": "Temporal UI operator console access review, deprovisioning, SSO/clickthrough, break-glass, tenant, secret, privacy, audit, and privileged operation evidence remain deferred.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "production-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "remainingDeferredBoundaries": [
+    {
+      "issueId": "USF-217",
+      "boundary": "operator admin console access review and deprovisioning proof depth",
+      "blocksUsf133": true
+    },
+    {
+      "issueId": "USF-218",
+      "boundary": "observability service alerting dashboard and incident workflow proof depth",
+      "blocksUsf133": true
+    },
+    {
+      "issueId": "USF-219",
+      "boundary": "backup restore DR and RPO RTO operational proof depth",
+      "blocksUsf133": true
+    },
+    {
+      "issueId": "USF-220",
+      "boundary": "generated client external developer and GraphQL federation delivery proof depth",
+      "blocksUsf133": true
+    }
+  ],
+  "linearBlockerRelationPolicy": {
+    "staleRelationsRemovedByThisIssue": [],
+    "reason": "The current USF-215 repository audit records only USF-216 through USF-220 as USF-133 blocking children. No hidden Linear relation was removed without MCP-exposed evidence. USF-216 may be marked Done only after merge and post-merge validation; then USF-217 through USF-220 remain the current closure blockers.",
+    "noIssueMarkedDoneByImplication": true
+  },
+  "validationCommands": [
+    "python3 -m json.tool docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json",
+    "python3 -m json.tool docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+    "python3 -m json.tool docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+    "python3 -m json.tool docs/architecture/compose-service-disposition-closure-matrix.json",
+    "python3 -m json.tool docs/architecture/usf-133-closure-tier-evidence-gate.json",
+    "corepack pnpm verify",
+    "corepack pnpm parity",
+    "python3 tools/validate-spec/validate-spec.py all --json",
+    "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+    "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+    "python3 tools/validate-parity/validate-parity.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "git diff --check",
+    "git diff --check origin/main...HEAD"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}
