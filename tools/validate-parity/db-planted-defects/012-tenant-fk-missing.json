@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-DB-012",
+  "mutation": {
+    "sqlReplace": {
+      "old": "tenant_id uuid NOT NULL REFERENCES tenants (tenant_id)",
+      "new": "tenant_id uuid NOT NULL"
+    }
+  }
+}

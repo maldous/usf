@@ -1,5 +1,5 @@
 // Generated DB type surface derived from the migrated schema under
-// adapters/db/migrations (0001 + 0002). Freshness is pinned to the migration
+// adapters/db/migrations. Freshness is pinned to the migration
 // manifest SHA-256 and verified by check-generated-types.ts. Includes the
 // enterprise persistence metadata columns required by
 // docs/architecture/enterprise-persistence-metadata-and-classification-standard.md.
@@ -182,4 +182,4 @@ export interface BootstrapDatabase {
 // adapters/db/migrations/manifest.json. Regenerate these types and this pin when
 // a new forward-only migration is added.
 export const generatedFromMigrationsManifestSha256 =
-  "5d28b8e11982c704c0ef5c64c1a56534c538bfd3a2bc90cd62cf7c2dc96d58fb";
+  "94d59278c53b59d77680708d15879ca267d24aca34484f464710e9820916887b";

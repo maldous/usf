@@ -4719,6 +4719,32 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "soa-usf-139-db-enterprise-proof-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Organise bounded local enterprise DB proof-depth evidence for Postgres tenant isolation, migration integrity, transaction rollback, data classification, and explicit DB readiness non-claims.",
+      "riskTreated": "A local Postgres proof could be overread as full DB, backup, restore, production, live-provider, SOC, ISO, or USF-133 readiness without explicit evidence boundaries.",
+      "assetServiceAffected": "postgres and tenant-scoped persistence",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "bounded-local-proof-and-reclassification-gate",
+      "evidenceSource": "docs/architecture/db-enterprise-controls-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "deferredReason": "backup/restore readiness, DR, production operation, live-provider operation, export/legal-hold workflow, and environment promotion remain non-claims with follow-up linkage",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -6762,6 +6788,30 @@
       ],
       "prOrMergeSha": "eac014e74bed478b558d68a29805cbeaf2223e6f",
       "retentionPosture": "Retain committed matrix and validator output in PR validation summary; record the real PR merge SHA in Linear after merge; proof output remains value-free and redacted."
+    },
+    {
+      "id": "evidence-usf-139-db-enterprise-proof-depth",
+      "proofResult": "proof:db",
+      "whatWasProven": "Package script proof:db is the command-pinned bounded local Compose Postgres proof for USF-139. It applies current forward-only migrations, proves real app-role and migration-owner separation, RLS and FORCE RLS, tenant_id foreign-key and tenant_id-leading index evidence, missing tenant fail-closed behaviour, cross-tenant write denial, failed transaction rollback, lifecycle immutability, version increment, append-only audit ledger, legal-hold purge block, JSON row classification, identifier-sequence review, redacted catalog evidence, and explicit non-claims.",
+      "whatWasNotProven": "No full DB parity, backup readiness, restore readiness, disaster recovery readiness, RPO/RTO, production operation, staging or test readiness, live-provider operation, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is proven.",
+      "runtimeMode": "compose-local-proof",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres",
+      "adapterProviderId": "database-postgres-composed-test",
+      "validationCommand": "corepack pnpm proof:db; python3 tools/validate-parity/validate-db.py all --json",
+      "commandPin": "tsx packages/proof/src/db-rls-isolation-proof.ts",
+      "commitPin": "10f50e7aa873bfa4466b2d9e024a558c87eed8b8",
+      "issueLinks": [
+        "USF-139",
+        "USF-133",
+        "USF-184",
+        "USF-190",
+        "USF-192",
+        "USF-211",
+        "USF-202"
+      ],
+      "prOrMergeSha": "10f50e7aa873bfa4466b2d9e024a558c87eed8b8",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed matrix, validator, and enterprise evidence metadata; no raw tenant values or credentials are retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8490,6 +8540,34 @@
       "failClosedBehaviour": "validate-providers and proof:providers fail when the USF-157 matrix, required controls, enterprise evidence references, non-claims, SDK boundary evidence, or prohibited claim boundaries are missing or contradictory.",
       "monitoringAuditEvidence": "PR validation output, validate-providers selftest, proof:providers output, planted defects, and Linear merge reconciliation only; no production incident or live monitoring evidence is claimed.",
       "residualRisk": "Live-provider authority, supplier approval, production incident hooks, runtime drift, failover, DR, and promotion readiness remain deferred with owner and require later source issues before stronger claims."
+    },
+    {
+      "id": "threat-usf-139-db-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-139 Postgres enterprise DB proof depth",
+      "trustBoundary": "Local Compose Postgres proof boundary using synthetic tenants and repository-authorised migrations only; no live/provider-managed or production DB boundary claim.",
+      "tenantBoundary": "RLS, FORCE RLS, tenant_id foreign keys, tenant_id-leading indexes, SET LOCAL transaction context, and fail-closed missing tenant checks must prevent cross-tenant reads and writes in the bounded proof.",
+      "credentialBoundary": "Only local Compose placeholders and redacted endpoint references are used; proof output must not expose passwords, connection strings, raw endpoints, tokens, provider payloads, stack traces, or raw SQL error payloads.",
+      "dataClassification": "Synthetic tenant data, audit evidence, identity metadata, and security-sensitive audit JSON boundary only.",
+      "abuseCases": [
+        "cross-tenant read through missing RLS or missing tenant context",
+        "cross-tenant write through missing WITH CHECK or missing tenant foreign key",
+        "pooled connection tenant context leakage",
+        "partial write retained after failed transaction",
+        "backup or restore readiness inferred from local DB proof",
+        "JSON metadata used to hide unclassified tenant data"
+      ],
+      "failureModes": [
+        "missing FORCE RLS",
+        "missing tenant_id foreign key",
+        "missing tenant_id index",
+        "migration manifest drift",
+        "raw endpoint or credential exposed in evidence",
+        "deferred backup/restore or export workflow treated as complete"
+      ],
+      "failClosedBehaviour": "validate-db USF-DB-001 through USF-DB-016, proof:db, runtime validators, and enterprise validators must fail or preserve explicit deferral before any stronger DB claim is made.",
+      "monitoringAuditEvidence": "proof:db emits value-free catalog and check-label evidence; PR validation summary records validator output and non-claims.",
+      "residualRisk": "Production operation, live-provider DB operation, backup/restore readiness, DR, RPO/RTO, export/legal-hold workflows, and environment promotion remain follow-up-scoped non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -11038,6 +11116,36 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "access-usf-139-db-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-139 Postgres proof roles",
+      "posture": [
+        "accessModel=local-compose-proof-roles-only",
+        "authRequirement=database-role-separation-superuser-migration-owner-runtime-role",
+        "leastPrivilegePosture=runtime-role-no-superuser-no-bypassrls-no-ddl-no-set-role",
+        "breakGlassRelevance=break_glass_grants-table-tenant-scoped-and-rls-protected",
+        "auditRequirement=value-free-proof-catalog-evidence",
+        "reviewCadence=2026-09-30-before-stronger-readiness-claim",
+        "deprovisioningPosture=compose-down-volume-removal-local-only",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "packages/proof/src/db-rls-isolation-proof.ts",
+      "validationCommand": "corepack pnpm proof:db",
+      "deferredReason": "operator database access review, managed-provider access, and production deprovisioning evidence remain non-claims",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -12923,6 +13031,41 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-139-db-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-139 Postgres enterprise DB proof depth",
+      "posture": [
+        "backupRequirement=linked-to-USF-211-bounded-local-pgBackRest-proof-only",
+        "restoreProofRequirement=not-satisfied-by-USF-139-proof-db",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=deferred-to-backup-restore-and-domain-source-issues",
+        "cleanupTeardownProof=make-db-proof-compose-down-volume-removal",
+        "readinessChecks=compose-postgres-health-and-proof-catalog-checks",
+        "retryTimeoutBehaviour=bounded-by-compose-wait-and-proof-fail-closed",
+        "failClosedMode=validation-and-proof-fail-on-missing-controls",
+        "structuredLogging=proof-output-value-free",
+        "tracingCorrelation=correlation-id-metadata-proven-in-schema",
+        "metrics=validator-and-proof-check-counts-only",
+        "auditEvents=append-only-ledger-hash-chain-proven",
+        "redaction=raw-endpoints-credentials-and-values-not-retained"
+      ],
+      "evidenceSource": "docs/architecture/db-enterprise-controls-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "deferredReason": "USF-139 does not claim backup readiness, restore readiness, DR, RPO/RTO, production operation, live-provider operation, or environment promotion readiness",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -15468,6 +15611,34 @@
       "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json; tools/validate-parity/validate-providers.py",
       "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
       "deferredReason": "Production incident detection, alerting, escalation rehearsal, corrective action operation, vulnerability SLA evidence, supplier incident hooks, and provider advisory operation remain unproven; followUpIssue=USF-159 or future source issue as applicable",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-139-db-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-139 Postgres enterprise DB proof depth",
+      "posture": [
+        "incidentDetectionHook=proof-and-validator-failure-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-data-risk-owner",
+        "vulnerabilityAdvisoryReview=postgres-pg-kysely-advisory-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=owner-reviewed-through-package-and-compose-governance",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/db-enterprise-controls-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "deferredReason": "operating incident hooks, production alerting, managed-provider advisory workflow, and patch SLA evidence remain non-claims",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -18407,6 +18578,35 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
+      ]
+    },
+    {
+      "id": "privacy-usf-139-db-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-139 proof:db synthetic data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=confidential-tenant-metadata-and-security-sensitive-audit-json",
+        "redactionPolicy=value-free-catalog-output-no-raw-values",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=local-trigger-proof-only-not-customer-legal-hold-workflow",
+        "dataResidencyCrossBorderBoundary=not-claimed"
+      ],
+      "evidenceSource": "packages/proof/src/db-rls-isolation-proof.ts",
+      "validationCommand": "corepack pnpm proof:db",
+      "deferredReason": "customer data retention, export, deletion, residency, and legal-hold operating workflows remain source-issue follow-ups",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
       ]
     }
   ],

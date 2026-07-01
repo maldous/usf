@@ -1,0 +1,302 @@
+{
+  "id": "db-enterprise-controls-proof-depth-matrix",
+  "title": "USF-139 DB enterprise controls and Postgres proof-depth matrix",
+  "sourceIssue": "USF-139",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-190",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "relatedIssues": [
+    "USF-138",
+    "USF-183",
+    "USF-202",
+    "USF-211",
+    "USF-147",
+    "USF-151",
+    "USF-153",
+    "USF-159",
+    "USF-163"
+  ],
+  "status": "bounded-local-proof-and-reclassification-gate",
+  "serviceCatalogueServiceId": "postgres",
+  "providerRegistryId": "database-postgres-composed-test",
+  "runtimeProviderBindingId": "runtime-database-provider-binding",
+  "proofCommand": "corepack pnpm proof:db",
+  "validatorCommand": "python3 tools/validate-parity/validate-db.py all --json",
+  "sourceUseMatrix": "docs/architecture/parity-db-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/react-parity-scope-classification-matrix.json#db-rls-migrations",
+  "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres",
+  "runtimeProofEvidence": "packages/proof/src/db-rls-isolation-proof.ts",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-139-db-enterprise-proof-depth",
+    "evidence-usf-139-db-enterprise-proof-depth",
+    "threat-usf-139-db-enterprise-depth",
+    "access-usf-139-db-enterprise-depth",
+    "resilience-usf-139-db-enterprise-depth",
+    "incident-usf-139-db-enterprise-depth",
+    "privacy-usf-139-db-enterprise-depth"
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "postgres-runtime-proof-reconciled",
+      "satisfied": true,
+      "evidenceRefs": [
+        "runtime-database-provider-binding",
+        "corepack pnpm proof:db",
+        "python3 tools/validate-runtime/validate-runtime.py all --json"
+      ]
+    },
+    {
+      "id": "enterprise-controls-implemented-or-reclassified",
+      "satisfied": true,
+      "evidenceRefs": [
+        "docs/architecture/db-enterprise-controls-proof-depth-matrix.json#controls",
+        "python3 tools/validate-parity/validate-db.py all --json"
+      ]
+    },
+    {
+      "id": "source-use-and-parity-truthful",
+      "satisfied": true,
+      "evidenceRefs": [
+        "docs/architecture/parity-db-source-use-disposition-matrix.md",
+        "docs/architecture/react-parity-scope-classification-matrix.json#db-rls-migrations"
+      ]
+    },
+    {
+      "id": "validator-coverage-added",
+      "satisfied": true,
+      "evidenceRefs": [
+        "USF-DB-012",
+        "USF-DB-013",
+        "USF-DB-014",
+        "USF-DB-015",
+        "USF-DB-016"
+      ]
+    },
+    {
+      "id": "no-production-backup-restore-certification-claim",
+      "satisfied": true,
+      "evidenceRefs": [
+        "docs/architecture/db-enterprise-controls-proof-depth-matrix.json#claims",
+        "USF-DB-016"
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "runtime-postgres-proof-reconciliation",
+      "status": "proven-local",
+      "description": "Current Postgres runtime provider binding evidence is reconciled with the deferred DB adapter item without treating local proof as live-provider or production readiness.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceRefs": [
+        "runtime-database-provider-binding",
+        "evidence-usf-139-db-enterprise-proof-depth"
+      ],
+      "proofCommand": "corepack pnpm proof:db",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "proofMarkers": [
+        "runtimePostgresProofReconciled",
+        "liveExternalProviderClaim=false",
+        "productionLiveClaim=false"
+      ]
+    },
+    {
+      "id": "broader-tenant-key-enforcement",
+      "status": "proven-local",
+      "description": "All current tenant-boundary tables carry explicit tenant_id foreign keys to tenants, FORCE RLS, tenant policies, and tenant_id-leading indexes.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceRefs": [
+        "adapters/db/migrations/0004-enterprise-db-proof-depth.sql",
+        "packages/proof/src/db-rls-isolation-proof.ts",
+        "USF-DB-012"
+      ],
+      "proofCommand": "corepack pnpm proof:db",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "proofMarkers": [
+        "tenantKeyEnforcementChecked",
+        "tenantForeignKeys",
+        "tenantIdIndexes"
+      ]
+    },
+    {
+      "id": "index-and-performance-evidence",
+      "status": "bounded-local-proof",
+      "description": "Catalog proof and validator evidence confirm tenant_id-leading indexes and active-row partial indexes for current tenant paths. EXPLAIN plans, workload performance, and production SLOs are not claimed.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceRefs": [
+        "packages/proof/src/db-rls-isolation-proof.ts",
+        "USF-DB-010"
+      ],
+      "proofCommand": "corepack pnpm proof:db",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "proofMarkers": [
+        "indexEvidenceChecked",
+        "activePartialIndexes"
+      ]
+    },
+    {
+      "id": "pooling-and-transaction-guarantees",
+      "status": "bounded-local-proof",
+      "description": "Proof exercises SET LOCAL tenant-context cleanup after commit and a failed cross-tenant transaction rollback. PgBouncer, transaction-pooling deployment, and production pool sizing remain non-claims.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceRefs": [
+        "packages/proof/src/db-rls-isolation-proof.ts"
+      ],
+      "proofCommand": "corepack pnpm proof:db",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "proofMarkers": [
+        "poolingTenantContextLeakChecked",
+        "transactionRollbackChecked"
+      ]
+    },
+    {
+      "id": "operational-table-classification",
+      "status": "reclassified-deferred",
+      "description": "Current schema_migrations control-plane table is classified and proven. Future outbox, inbox, idempotency, workflow, notification, provider cursor, and observability operational tables are deferred to their owning source issues.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-151",
+        "USF-153",
+        "USF-159",
+        "USF-163"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/persistent-object-classification-registry.json#schema_migrations",
+        "USF-DB-011"
+      ],
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json"
+    },
+    {
+      "id": "aggregate-non-leakage",
+      "status": "not-applicable-with-rationale",
+      "description": "No cross-tenant aggregate table is introduced by current DB migrations. Future aggregate tables must use the cross-tenant-aggregate classification and prove non-leakage before any stronger claim.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-159",
+        "USF-163"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/persistent-object-classification-registry.json#cross-tenant-aggregate"
+      ],
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json"
+    },
+    {
+      "id": "backup-restore-export-safety",
+      "status": "reclassified-deferred",
+      "description": "USF-211 supplies bounded local pgBackRest proof linkage, but USF-139 does not claim backup readiness, restore readiness, DR, RPO/RTO, tenant export, legal-hold export, or production backup operation.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssues": [
+        "USF-211",
+        "USF-202",
+        "USF-163"
+      ],
+      "evidenceRefs": [
+        "corepack pnpm proof:backup:pgbackrest",
+        "docs/architecture/backup-restore-provider-disposition-matrix.json"
+      ],
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json"
+    },
+    {
+      "id": "optimistic-concurrency-depth",
+      "status": "bounded-local-proof",
+      "description": "The DB proof demonstrates row version increment as the optimistic-concurrency basis. Stale-update API conflict semantics, retry idempotency, and duplicate command rejection remain delegated to domain adapters.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceRefs": [
+        "packages/proof/src/db-rls-isolation-proof.ts"
+      ],
+      "proofCommand": "corepack pnpm proof:db",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "proofMarkers": [
+        "version increments on mutable update"
+      ]
+    },
+    {
+      "id": "identifier-enumeration-review",
+      "status": "bounded-local-proof",
+      "description": "Proof records that current tenant-boundary schema introduces no public sequential identifier sequences. Future externally visible IDs and enumeration controls remain domain-owned.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceRefs": [
+        "packages/proof/src/db-rls-isolation-proof.ts"
+      ],
+      "proofCommand": "corepack pnpm proof:db",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "proofMarkers": [
+        "identifierEnumerationReviewed"
+      ]
+    },
+    {
+      "id": "json-document-classification",
+      "status": "bounded-local-proof",
+      "description": "The current JSONB-bearing audit metadata column is classified at the security-sensitive row boundary. Future JSON/document fields must not hide tenant references or bypass classification.",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "evidenceRefs": [
+        "packages/proof/src/db-rls-isolation-proof.ts",
+        "docs/architecture/persistent-object-classification-registry.json#audit_ledger"
+      ],
+      "proofCommand": "corepack pnpm proof:db",
+      "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
+      "proofMarkers": [
+        "jsonDocumentClassificationChecked"
+      ]
+    }
+  ],
+  "claims": {
+    "fullDbParityClaim": false,
+    "fullDevReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "backupReadinessClaim": false,
+    "restoreReadinessClaim": false,
+    "disasterRecoveryReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullReactParityReadinessClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "backup-readiness",
+    "restore-readiness",
+    "disaster-recovery-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}

@@ -18,11 +18,13 @@ Every implementation target file added by the parity-db slice is listed here wit
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
 | `adapters/db/migrations/0002-enterprise-persistence-metadata.sql` | source-derived-rewrite | Historical react lifecycle/audit/RLS evidence; enterprise persistence standard | Forward-only migration adding classification-driven lifecycle, actor, trace, integrity, and retention metadata, the migration-control-plane table, and integrity guardrail triggers. |
+| `adapters/db/migrations/0004-enterprise-db-proof-depth.sql` | new-with-rationale | USF-139 enterprise DB proof-depth acceptance and validator evidence | Forward-only migration adding the explicit tenant foreign-key guardrail for break-glass grants without editing committed migrations. |
 | `adapters/db/migrations/manifest.json` | new-with-rationale | Migration order/checksum/immutability requirement | Ordered, per-file SHA-256 manifest pinning migration immutability and order. |
-| `packages/proof/src/db-rls-isolation-proof.ts` | evidence-only-support | RLS and enterprise persistence proof requirement | Composed-Postgres data-isolation proof executed under the real application role with migration-owner separation and catalog evidence. |
+| `docs/architecture/db-enterprise-controls-proof-depth-matrix.json` | evidence-only-support | USF-139 closure and reclassification gate | Machine-readable mapping of implemented, bounded, and reclassified enterprise DB controls, evidence, follow-ups, validation commands, and non-claims. |
+| `packages/proof/src/db-rls-isolation-proof.ts` | evidence-only-support | RLS and enterprise persistence proof requirement | Composed-Postgres data-isolation proof executed under the real application role with migration-owner separation, tenant-key/index checks, transaction rollback proof, JSON classification proof, identifier review, and catalog evidence. |
 | `tests/adapters/migration-manifest.test.ts` | evidence-only-support | Migration immutability/order and generated-type freshness requirement | Hermetic tests for manifest order/checksum/immutability and generated-type freshness. |
 | `tests/adapters/persistence-metadata.test.ts` | evidence-only-support | Enterprise persistence metadata and classification standard | Hermetic tests asserting classification coverage, required metadata columns, and integrity triggers in the migrations. |
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No real customer/tenant data; fixtures are deterministic synthetic only.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No backup readiness, restore readiness, disaster recovery readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure claim. No real customer/tenant data; fixtures are deterministic synthetic only.
