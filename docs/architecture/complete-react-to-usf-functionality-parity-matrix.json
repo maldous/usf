@@ -56,9 +56,9 @@
       ],
       "evidence_grade": "A",
       "react_evidence_summary": "Audit event and evidence lineage",
-      "readiness_impact": "Durable bus and external evidence integrations remain deferred.",
-      "tracking_carrier_or_recommendation": "USF-142/USF-143",
-      "usf_evidence_summary": "USF audit proof",
+      "readiness_impact": "USF-143 adds bounded local enterprise audit proof depth for signing/key boundary, value-free evidence package, retention/disposal, outbox delivery, Postgres outcome mapping, forensic refs, SIEM envelope posture, detection mapping, and multi-version readers. Live KMS/SIEM, public export API, production operations, SOC, ISO certification, full dev readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-142/USF-143 plus remaining broader API/operations/export surfaces linked to USF-155, USF-159, and USF-163",
+      "usf_evidence_summary": "USF audit proof, audit enterprise proof-depth matrix, validate-audit USF-AUDIT-001..019 with planted defects, and enterprise evidence rows",
       "usf_status": "migrated"
     },
     {

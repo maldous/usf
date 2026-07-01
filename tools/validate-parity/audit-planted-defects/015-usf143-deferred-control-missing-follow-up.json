@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-AUDIT-015",
+  "mutation": {
+    "usf143ForceDeferredMissingFollowUp": "siem-forwarder-posture"
+  }
+}

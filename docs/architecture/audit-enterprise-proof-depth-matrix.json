@@ -1,0 +1,256 @@
+{
+  "id": "audit-enterprise-proof-depth-matrix",
+  "sourceIssue": "USF-143",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-190",
+  "capabilityId": "audit-evidence-enterprise-depth",
+  "proofCommand": "make audit-proof",
+  "rawProofCommand": "corepack pnpm proof:audit",
+  "rawProofCommandBoundary": "requires Compose Postgres to be running; make audit-proof owns startup and teardown",
+  "validatorCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+  "sourceUseMatrix": "docs/architecture/parity-audit-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-143-audit-enterprise-proof-depth",
+    "evidence-usf-143-audit-enterprise-proof-depth",
+    "threat-usf-143-audit-enterprise-depth",
+    "incident-usf-143-audit-enterprise-depth",
+    "privacy-usf-143-audit-enterprise-depth"
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred audit control is implemented with proof or explicitly reclassified.",
+      "evidence": "controls array records proven-local or bounded-local-proof status for every USF-143 deferred audit-depth control, with explicit live-provider non-equivalence boundaries."
+    },
+    {
+      "criterion": "Audit evidence remains value-free, tenant-safe, and redacted.",
+      "evidence": "make audit-proof checks redaction, value-free evidence packages, tenant-scoped export metadata, synthetic forensic references, and no signing material in output."
+    },
+    {
+      "criterion": "Retention, disposal, signing, export, and delivery claims are backed by proof where stated.",
+      "evidence": "make audit-proof checks local signing/verification, export package integrity, legal-hold disposal blocking, audited eligible disposal, bounded outbox retry, and dead-letter fail-closed behaviour."
+    },
+    {
+      "criterion": "Validator coverage exists for any new audit claim.",
+      "evidence": "USF-AUDIT-014 through USF-AUDIT-019 validate this matrix, deferred metadata, proof/evidence linkage, enterprise proof coverage, proven-control evidence, and readiness non-claims."
+    },
+    {
+      "criterion": "No SIEM, KMS, production, or certification claim is made without proof.",
+      "evidence": "claims are false and nonClaims includes SIEM, KMS, audit-export readiness beyond bounded proof, production, SOC, ISO certification, full-readiness, and USF-133 closure non-claims."
+    }
+  ],
+  "controls": [
+    {
+      "id": "cryptographic-signing-and-key-management",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "docs/architecture/audit-evidence-standard.md"
+      ],
+      "proofChecks": [
+        "enterprise signing/key boundary"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "local deterministic signing proof is not live KMS, HSM, key-custody, rotation-operation, or certification readiness"
+    },
+    {
+      "id": "audit-export-evidence-package",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "packages/ports/src/index.ts"
+      ],
+      "proofChecks": [
+        "audit export/evidence package"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "bounded local evidence-package proof is not public export API, customer export readiness, live SIEM export, or production export readiness"
+    },
+    {
+      "id": "retention-disposal-lifecycle",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "adapters/db/migrations/0002-enterprise-persistence-metadata.sql"
+      ],
+      "proofChecks": [
+        "retention/disposal"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "local legal-hold/disposal proof is not automated retention job, legal hold operations readiness, or production purge readiness"
+    },
+    {
+      "id": "durable-outbox-delivery-reliability",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts"
+      ],
+      "proofChecks": [
+        "durable outbox/delivery"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "bounded synthetic outbox proof is not distributed event bus, production retry, or customer delivery readiness"
+    },
+    {
+      "id": "postgres-audit-adapter-linkage",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "adapters/db/migrations/0002-enterprise-persistence-metadata.sql"
+      ],
+      "proofChecks": [
+        "Postgres audit adapter linkage"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "outcome mapping and DB constraint proof is not a live JavaScript Postgres audit adapter readiness claim"
+    },
+    {
+      "id": "forensic-request-session-capture",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "packages/core/src/index.ts"
+      ],
+      "proofChecks": [
+        "forensic request/session capture"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "synthetic value-free request/session refs are not browser session, production client telemetry, or IP/device collection readiness"
+    },
+    {
+      "id": "siem-forwarder-posture",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "packages/ports/src/index.ts"
+      ],
+      "proofChecks": [
+        "SIEM forwarder posture"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "local value-free SIEM envelope proof is not live SIEM integration, alerting, monitoring, or production incident readiness"
+    },
+    {
+      "id": "detection-monitoring-posture",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "packages/core/src/index.ts"
+      ],
+      "proofChecks": [
+        "detection monitoring posture"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "local detection mapping is not production monitoring, alerting, incident response, or SOC readiness"
+    },
+    {
+      "id": "multi-version-event-readers",
+      "status": "bounded-local-proof",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "tests/capabilities/audit-evidence.test.ts"
+      ],
+      "proofChecks": [
+        "multi-version readers"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "bounded v0/v1 reader proof is not full historical migration, customer export, or production compatibility readiness"
+    },
+    {
+      "id": "value-free-redaction-boundary",
+      "status": "proven-local",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/audit-evidence-proof.ts",
+        "tests/capabilities/audit-evidence.test.ts",
+        "packages/core/src/index.ts"
+      ],
+      "proofChecks": [
+        "value-free",
+        "redacted"
+      ],
+      "proofCommand": "make audit-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaimBoundary": "redacted synthetic audit evidence is not production privacy, DSR, data residency, or legal hold operations readiness"
+    }
+  ],
+  "claims": {
+    "siemReadinessClaim": false,
+    "kmsReadinessClaim": false,
+    "auditExportReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "siem-readiness",
+    "kms-readiness",
+    "audit-export-readiness-beyond-bounded-local-proof",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}

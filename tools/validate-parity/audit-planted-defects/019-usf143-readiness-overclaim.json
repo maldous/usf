@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-AUDIT-019",
+  "mutation": {
+    "usf143SetClaim": {
+      "claim": "iso27001CertificationClaim",
+      "value": true
+    }
+  }
+}

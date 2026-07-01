@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUDIT-017",
+  "mutation": {
+    "file": "packages/proof/src/audit-evidence-proof.ts",
+    "replace": {
+      "old": "proveEnterpriseSigningAndKeyBoundary",
+      "new": "proveEnterpriseSigningBoundaryMissing"
+    }
+  }
+}
