@@ -30,6 +30,11 @@ RULES = {
     "USF-API-012": ("blocking", "API parity matrix rows lack authorisation/backing"),
     "USF-API-013": ("blocking", "API source-use matrix missing"),
     "USF-API-014": ("blocking", "API lifecycle/security/browser/compatibility posture missing"),
+    "USF-API-015": ("blocking", "USF-155 enterprise API/gateway proof markers are missing"),
+    "USF-API-016": ("blocking", "USF-155 API/gateway proof-depth matrix is missing or incomplete"),
+    "USF-API-017": ("blocking", "USF-155 enterprise evidence rows are missing"),
+    "USF-API-018": ("blocking", "USF-155 deferred or reclassified API/gateway boundary is incomplete"),
+    "USF-API-019": ("blocking", "USF-155 API/gateway readiness claim is overclaimed"),
     "USF-API-SELFTEST": ("blocking", "planted API defect did not raise its expected rule"),
 }
 
@@ -47,6 +52,8 @@ OPENAPI_TESTS = "tests/packages/openapi.test.ts"
 PROOF_TESTS = "tests/packages/proof.test.ts"
 STANDARD = "docs/architecture/api-and-contract-surface-standard.md"
 SOURCE_USE = "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
+DEPTH_MATRIX = "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json"
+ENTERPRISE_EVIDENCE = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
@@ -65,6 +72,8 @@ SOURCE_FILES = (
     PROOF_TESTS,
     STANDARD,
     SOURCE_USE,
+    DEPTH_MATRIX,
+    ENTERPRISE_EVIDENCE,
     PACKAGE,
     MAKEFILE,
 )
@@ -160,7 +169,15 @@ def build_state(overrides=None):
         files[path] = text
     matrix = overrides["matrix"] if "matrix" in overrides else load_matrix()
     openapi = overrides["openapi"] if "openapi" in overrides else read_json(OPENAPI_JSON)
-    return {"files": files, "matrix": matrix, "openapi": openapi}
+    depth_matrix = overrides["depthMatrix"] if "depthMatrix" in overrides else read_json(DEPTH_MATRIX)
+    enterprise = overrides["enterprise"] if "enterprise" in overrides else read_json(ENTERPRISE_EVIDENCE)
+    return {
+        "files": files,
+        "matrix": matrix,
+        "openapi": openapi,
+        "depthMatrix": depth_matrix,
+        "enterprise": enterprise,
+    }
 
 
 def api_rows(matrix):
@@ -221,9 +238,13 @@ def run_checks(F, state=None):
     proof_tests = files.get(PROOF_TESTS, "")
     standard = files.get(STANDARD, "")
     source_use = files.get(SOURCE_USE, "")
+    depth_matrix_text = files.get(DEPTH_MATRIX, "")
+    enterprise_text = files.get(ENTERPRISE_EVIDENCE, "")
     package = files.get(PACKAGE, "")
     makefile = files.get(MAKEFILE, "")
     openapi = state["openapi"]
+    depth_matrix = state.get("depthMatrix")
+    enterprise = state.get("enterprise")
 
     if not re.search(r"\bAPI_ROUTE_CLASSIFICATIONS\b", api_surface) or not re.search(r"\bAPI_ROUTE_CONTRACTS\b", api_surface):
         F.add("USF-API-001", API_SURFACE, "API route classifications and contract table must exist")
@@ -415,7 +436,7 @@ def run_checks(F, state=None):
     else:
         if main.get("domain_authorised") is not True:
             F.add("USF-API-012", MATRIX_PATH, "api-routes-openapi row must be domain_authorised=true")
-        if main.get("linear_issue") != "USF-154" and main.get("blocker") != "USF-154":
+        if "USF-154" not in str(main.get("linear_issue", "")) and main.get("blocker") != "USF-154":
             F.add("USF-API-012", MATRIX_PATH, "api-routes-openapi row must reference USF-154")
         if not main.get("usf_tests") or not main.get("usf_proofs"):
             F.add("USF-API-012", MATRIX_PATH, "api-routes-openapi row must reference tests and proofs")
@@ -452,16 +473,145 @@ def run_checks(F, state=None):
         if token not in api_surface + openapi_builder + openapi_tests:
             F.add("USF-API-014", API_SURFACE, f"API posture token missing {token}")
 
+    for token in (
+        "enterpriseApiGatewayDepthProven: true",
+        "apiGatewayDepthEvidence",
+        "issueId: \"USF-155\"",
+        "browserSessionBoundaryExplicit: true",
+        "graphqlFederationReclassified: true",
+        "generatedClientReclassified: true",
+        "gatewayEdgeReclassified: true",
+        "bulkApiTransferred: true",
+        "auditEvidenceCaptured: true",
+        "gatewayLiveReadinessClaim: false",
+        "publicCompatibilityReadinessClaim: false",
+        "browserSessionReadinessClaim: false",
+        "graphqlFederationReadinessClaim: false",
+        "generatedClientReadinessClaim: false",
+        "usf133ClosureClaim: false",
+    ):
+        if token not in proof:
+            F.add("USF-API-015", PROOF, f"USF-155 proof marker missing {token}")
+    for token in (
+        "enterpriseApiGatewayDepthProven",
+        "gatewayLiveReadinessClaim",
+        "apiGatewayDepthEvidence",
+    ):
+        if token not in proof_tests + app_tests:
+            F.add("USF-API-015", "tests", f"USF-155 test marker missing {token}")
+
+    if not isinstance(depth_matrix, dict):
+        F.add("USF-API-016", DEPTH_MATRIX, "USF-155 proof-depth matrix must exist and parse")
+    else:
+        if depth_matrix.get("sourceIssue") != "USF-155":
+            F.add("USF-API-016", DEPTH_MATRIX, "matrix must be scoped to USF-155")
+        claims = depth_matrix.get("claims")
+        if not isinstance(claims, dict) or claims.get("enterpriseApiGatewayDepthProven") is not True:
+            F.add("USF-API-016", DEPTH_MATRIX, "matrix must record enterpriseApiGatewayDepthProven=true")
+        controls = depth_matrix.get("controls")
+        if not isinstance(controls, list):
+            F.add("USF-API-016", DEPTH_MATRIX, "matrix controls must be a list")
+            controls = []
+        control_ids = {item.get("id") for item in controls if isinstance(item, dict)}
+        for required in (
+            "route-metadata-enterprise-depth",
+            "openapi-contract-coverage",
+            "local-compatibility-metadata",
+            "browser-session-csrf-cookie-boundary",
+            "gateway-edge-trust-boundary",
+            "graphql-federation-lineage",
+            "generated-client-boundary",
+            "bulk-api-depth-transfer",
+            "tenant-access-audit-redaction-boundary",
+        ):
+            if required not in control_ids:
+                F.add("USF-API-016", DEPTH_MATRIX, f"missing control {required}")
+        for item in controls:
+            if not isinstance(item, dict):
+                continue
+            status = item.get("status")
+            if status in {"deferred-with-owner", "out-of-scope-with-rationale"}:
+                for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "nonClaimBoundary"):
+                    if not item.get(field):
+                        F.add("USF-API-018", f"{DEPTH_MATRIX}#{item.get('id')}", f"deferred/reclassified control missing {field}")
+            if status == "deferred-with-owner" and not item.get("followUpIssue"):
+                F.add("USF-API-018", f"{DEPTH_MATRIX}#{item.get('id')}", "deferred control missing followUpIssue")
+        for required in (
+            "api-gateway-enterprise-proof-depth-matrix",
+            "USF-155",
+            "No full dev readiness",
+            "gateway-live readiness",
+            "public API readiness",
+            "generated SDK readiness",
+            "GraphQL",
+            "browser-session",
+            "bulkApiTransferred",
+        ):
+            if required not in depth_matrix_text:
+                F.add("USF-API-016", DEPTH_MATRIX, f"matrix text missing {required}")
+
+    required_enterprise_rows = {
+        "soaSupportMappings": "soa-usf-155-api-gateway-enterprise-depth",
+        "evidenceRegister": "evidence-usf-155-api-gateway-enterprise-depth",
+        "threatModelAbuseCaseRegister": "threat-usf-155-api-gateway-enterprise-depth",
+        "accessReviewPrivilegedOperationPosture": "access-usf-155-api-gateway-enterprise-depth",
+        "backupRestoreResiliencePosture": "resilience-usf-155-api-gateway-enterprise-depth",
+        "incidentVulnerabilityManagementEvidence": "incident-usf-155-api-gateway-enterprise-depth",
+        "privacyDataMinimisationPosture": "privacy-usf-155-api-gateway-enterprise-depth",
+    }
+    if not isinstance(enterprise, dict):
+        F.add("USF-API-017", ENTERPRISE_EVIDENCE, "enterprise evidence model must exist and parse")
+    else:
+        for section, expected_id in required_enterprise_rows.items():
+            rows = enterprise.get(section)
+            if not isinstance(rows, list) or not any(
+                isinstance(row, dict) and row.get("id") == expected_id for row in rows
+            ):
+                F.add("USF-API-017", ENTERPRISE_EVIDENCE, f"missing enterprise evidence row {expected_id}")
+    for expected_id in required_enterprise_rows.values():
+        if expected_id not in enterprise_text:
+            F.add("USF-API-017", ENTERPRISE_EVIDENCE, f"enterprise text missing {expected_id}")
+
+    combined_boundary_text = "\n".join([proof, standard, source_use, depth_matrix_text, enterprise_text])
+    for phrase in (
+        "public API readiness is proven",
+        "gateway-live readiness is proven",
+        "generated SDK readiness is proven",
+        "GraphQL readiness is proven",
+        "browser-session readiness is proven",
+        "production readiness is proven",
+        "staging readiness is proven",
+        "SOC readiness is proven",
+        "ISO certification readiness is proven",
+        "ISO/IEC 27001 certification is proven",
+        "USF-133 closure is claimed",
+        "USF-133 is closed",
+    ):
+        if phrase.lower() in combined_boundary_text.lower():
+            F.add("USF-API-019", "USF-155", f"readiness overclaim present: {phrase}")
+
 
 def apply_mutation(base, mutation):
     files = dict(base["files"])
     matrix = json.loads(json.dumps(base["matrix"])) if base["matrix"] is not None else None
     openapi = json.loads(json.dumps(base["openapi"])) if base["openapi"] is not None else None
+    depth_matrix = json.loads(json.dumps(base["depthMatrix"])) if base.get("depthMatrix") is not None else None
+    enterprise = json.loads(json.dumps(base["enterprise"])) if base.get("enterprise") is not None else None
     target = mutation.get("file")
     if "replace" in mutation and target in files:
         files[target] = files[target].replace(mutation["replace"]["old"], mutation["replace"]["new"])
     if "append" in mutation and target is not None:
         files[target] = files.get(target, "") + "\n" + mutation["append"]
+    if target == DEPTH_MATRIX and target in files:
+        try:
+            depth_matrix = json.loads(files[target])
+        except Exception:  # noqa: BLE001
+            depth_matrix = None
+    if target == ENTERPRISE_EVIDENCE and target in files:
+        try:
+            enterprise = json.loads(files[target])
+        except Exception:  # noqa: BLE001
+            enterprise = None
     if "matrixApiSet" in mutation and matrix is not None:
         rows = api_rows(matrix)
         row = next((item for item in rows if item.get("react_item_id") == "api-routes-openapi"), None)
@@ -472,7 +622,32 @@ def apply_mutation(base, mutation):
         boundary = openapi.setdefault("x-usf-boundary", {})
         if isinstance(boundary, dict):
             boundary.update(mutation["openapiBoundarySet"])
-    return {"files": files, "matrix": matrix, "openapi": openapi}
+    if "depthMatrixClaimSet" in mutation and isinstance(depth_matrix, dict):
+        claims = depth_matrix.setdefault("claims", {})
+        if isinstance(claims, dict):
+            claims.update(mutation["depthMatrixClaimSet"])
+    if "removeDepthMatrixControl" in mutation and isinstance(depth_matrix, dict):
+        remove_id = mutation["removeDepthMatrixControl"]
+        controls = depth_matrix.get("controls")
+        if isinstance(controls, list):
+            depth_matrix["controls"] = [
+                item for item in controls if not (isinstance(item, dict) and item.get("id") == remove_id)
+            ]
+    if "removeEnterpriseRow" in mutation and isinstance(enterprise, dict):
+        section = mutation["removeEnterpriseRow"].get("section")
+        row_id = mutation["removeEnterpriseRow"].get("id")
+        rows = enterprise.get(section)
+        if isinstance(rows, list):
+            enterprise[section] = [
+                item for item in rows if not (isinstance(item, dict) and item.get("id") == row_id)
+            ]
+    return {
+        "files": files,
+        "matrix": matrix,
+        "openapi": openapi,
+        "depthMatrix": depth_matrix,
+        "enterprise": enterprise,
+    }
 
 
 def load_selftest_fixtures(F):

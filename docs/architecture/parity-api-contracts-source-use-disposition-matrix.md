@@ -38,6 +38,7 @@ This matrix records the treatment of files touched for the API/routes/OpenAPI/co
 | `Makefile` | new-with-rationale | Existing make proof target pattern | Adds `make api-proof`. |
 | `tools/validate-parity/validate-api.py` | source-derived-rewrite | Existing parity validator patterns and API validator expectations | Adds robust API/contracts parity checks and selftest harness. |
 | `tools/validate-parity/api-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Proves high-risk API validator rules fire. |
+| `docs/architecture/api-gateway-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-155 issue acceptance and existing enterprise proof-depth matrix pattern | Records which API/gateway depth controls are proven locally, explicitly deferred, transferred, or out of scope with owner, risk, follow-up, and non-claim boundaries. |
 
 ## Architecture And Matrix Files
 
@@ -61,7 +62,12 @@ This matrix records the treatment of files touched for the API/routes/OpenAPI/co
 | Idempotency headers and replay safety | rewrite-from-behaviour | API idempotency ledger for side-effecting job and notification send routes |
 | Correlation/request IDs and safe observability | rewrite-from-behaviour | request/correlation propagation and OpenAPI metadata |
 | Future UI/API readiness metadata | rewrite-from-behaviour | field exposure, lifecycle, action/capability tags, reason codes, route metadata |
-| GraphQL/federation, generated external clients, live gateway/edge, public compatibility guarantees, and full consumer contracts | deferred/lineage-only | Deferred to API/contracts depth issue; not claimed by this slice |
+| GraphQL/federation | out-of-scope-with-rationale | Inventoried as lineage only under USF-155; USF-214 is required if GraphQL or federation enters foundation runtime scope |
+| Generated external clients and SDK distribution | deferred-with-owner | USF-155 records OpenAPI generation as local contract evidence only; USF-214 is required before SDK readiness claim |
+| Browser-session CSRF/cookie runtime | deferred-with-owner | USF-155 records route metadata only; browser-session runtime remains under identity/UI authority |
+| Live gateway/edge/TLS/WAF/trusted-proxy posture | deferred-with-owner | USF-155 records local gateway metadata and service-catalogue substrate only; future gateway route-proof issue required before gateway-live or edge readiness |
+| Public compatibility guarantees and consumer contracts | deferred-with-owner | USF-155 records local compatibility metadata and OpenAPI checker only; USF-213 is required before any public API compatibility readiness claim |
+| Broad bulk/import/export API surface | deferred-with-owner | Transferred to USF-163 for import/export/bulk deep runtime proof depth |
 | React UI/Playwright API behaviours | foundation-behaviour-rewritten-from-ui-test | API/capability/contract/proof tests only; no UI/Playwright added |
 
 ## Boundary Confirmation

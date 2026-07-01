@@ -66,6 +66,17 @@ describe("api/contracts proof", () => {
       providerMode: "hermetic-mock",
       publicApiReadinessClaim: false,
       externalSdkReadinessClaim: false,
+      gatewayLiveReadinessClaim: false,
+      enterpriseApiGatewayDepthProven: true,
+      apiGatewayDepthEvidence: {
+        issueId: "USF-155",
+        routeMetadataChecked: true,
+        browserSessionBoundaryExplicit: true,
+        graphqlFederationReclassified: true,
+        generatedClientReclassified: true,
+        gatewayEdgeReclassified: true,
+        auditEvidenceCaptured: true,
+      },
       productionLiveClaim: false,
     });
   });

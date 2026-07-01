@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-API-019",
+  "mutation": {
+    "file": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+    "append": "gateway-live readiness is proven"
+  }
+}

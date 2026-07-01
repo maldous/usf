@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-API-016",
+  "mutation": {
+    "removeDepthMatrixControl": "gateway-edge-trust-boundary"
+  }
+}

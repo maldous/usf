@@ -685,6 +685,7 @@
         "packages/openapi/src/check.ts",
         "packages/openapi/openapi.json",
         "packages/proof/src/api-contracts-proof.ts",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
         "tests/apps/api-contracts.test.ts",
         "tests/packages/openapi.test.ts",
         "tools/validate-parity/validate-api.py"
@@ -702,12 +703,12 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-155",
+      "blocker": "USF-149/USF-161/USF-163/USF-193/USF-213/USF-214",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "USF-154 implements local/dev/test API contract parity: route metadata, OpenAPI 3.1 generation/checking, guarded tenant-safe routes, safe error envelope, idempotency proof, opaque cursor proof, synthetic examples, and API proof. GraphQL/federation, generated external clients, public compatibility guarantees, live gateway/edge, and deeper bulk/rate-limit/browser-session depth remain deferred.",
-      "retry_condition": "Resolve USF-155 after an authorised API depth directive covers GraphQL/federation, generated clients, live gateway/edge posture, public compatibility policy, browser-session CSRF/cookie runtime, and advanced bulk/rate-limit controls.",
-      "linear_issue": "USF-154"
+      "evidence": "USF-154 implements local/dev/test API contract parity. USF-155 adds bounded enterprise API/gateway proof-depth evidence: route metadata, OpenAPI coverage, guarded tenant-safe routes, safe error envelope, idempotency proof, opaque cursor proof, value-free audit evidence, explicit browser-session/gateway/public-compatibility non-equivalence boundaries, and validator coverage. GraphQL/federation, generated external clients, public compatibility guarantees, live gateway/edge, broad bulk routes, and browser-session runtime remain reclassified or deferred with non-claims.",
+      "retry_condition": "USF-155 resolves the API/gateway depth evidence gate only. Stronger claims still require their owners: USF-149 for identity/browser-session runtime, USF-161 for distributed guardrails or edge enforcement, USF-163 for bulk/import/export API surfaces, USF-193 for environment promotion semantics, USF-213 for public API compatibility, and USF-214 for generated-client or GraphQL readiness before public/gateway-live/generated-client claims.",
+      "linear_issue": "USF-154/USF-155"
     },
     {
       "react_item_id": "api.route-inventory",
@@ -734,6 +735,7 @@
         "packages/openapi/src/check.ts",
         "packages/openapi/openapi.json",
         "packages/proof/src/api-contracts-proof.ts",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
         "tests/apps/api-contracts.test.ts",
         "tests/packages/openapi.test.ts",
         "tools/validate-parity/validate-api.py"
@@ -1388,12 +1390,12 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "linear_issue": "USF-154",
-      "blocker": "USF-155",
-      "blocking_foundation_readiness": true,
+      "linear_issue": "USF-154/USF-155",
+      "blocker": "USF-149",
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "Metadata is present; no browser session/cookie runtime is implemented in this UI-free slice.",
-      "retry_condition": "Authorised browser/API depth directive implements session-cookie and CSRF runtime controls if needed."
+      "evidence": "USF-155 proves route metadata carries explicit browser-session and CSRF posture, while browser cookie/session runtime remains deferred to identity/browser-session authority. No browser-session readiness claim is made.",
+      "retry_condition": "USF-149 or a future UI/API issue must authorise and prove cookie session, CSRF token rotation, browser UI session handling, and environment-specific browser security posture before any browser-session readiness claim."
     },
     {
       "react_item_id": "api.rate-limiting-abuse-posture",
@@ -1462,6 +1464,7 @@
         "packages/openapi/src/check.ts",
         "packages/openapi/openapi.json",
         "packages/proof/src/api-contracts-proof.ts",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
         "tests/apps/api-contracts.test.ts",
         "tests/packages/openapi.test.ts",
         "tools/validate-parity/validate-api.py"
@@ -1577,12 +1580,12 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "linear_issue": "USF-154",
-      "blocker": "USF-155",
-      "blocking_foundation_readiness": true,
+      "linear_issue": "USF-154/USF-155",
+      "blocker": "USF-213",
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "OpenAPI checker exists and no public compatibility guarantee is claimed.",
-      "retry_condition": "Authorised compatibility directive adds synthetic snapshots, diff policy gates, and consumer contract posture."
+      "evidence": "USF-155 proves local compatibility metadata and OpenAPI checker posture while explicitly preserving no public compatibility, consumer-driven contract, generated SDK, SemVer release, or public API readiness claim.",
+      "retry_condition": "USF-213 must add generated snapshots, consumer contract posture, compatibility approval, client generation, and release governance before any public compatibility readiness claim."
     },
     {
       "react_item_id": "api.future-ui-api-readiness",
@@ -1659,11 +1662,11 @@
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "linear_issue": "USF-154",
-      "blocker": "USF-155",
+      "blocker": "USF-163",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "Bulk posture is defined; high-risk bulk surfaces are deferred.",
-      "retry_condition": "Authorised bulk/API directive implements bounded tenant-scoped bulk routes with idempotency and audit."
+      "evidence": "USF-155 explicitly transfers broad import/export/bulk HTTP surface depth to USF-163. Local route metadata and idempotency proof are not bulk route readiness.",
+      "retry_condition": "USF-163 must implement or reclassify import/export/bulk API surfaces, transfer provider, parser, rollback, retention, legal hold, and production migration boundaries before stronger bulk API claims."
     },
     {
       "react_item_id": "api.gateway-edge-posture",
@@ -1681,6 +1684,8 @@
       "usf_status": "deferred",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+        "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
         "packages/contracts/src/api-surface.ts"
       ],
       "usf_tests": [
@@ -1691,12 +1696,12 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "linear_issue": "USF-154",
-      "blocker": "USF-155",
+      "linear_issue": "USF-154/USF-155/USF-180",
+      "blocker": "USF-161/USF-180/USF-213",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "Local proof does not claim deployed edge controls.",
-      "retry_condition": "Authorised deployment/gateway directive defines and proves trusted proxy, forwarded header, TLS, WAF, and gateway controls."
+      "evidence": "USF-155 records local gateway metadata and non-equivalence to live gateway/edge posture. USF-180 records local gateway/clickthrough substrate only. No trusted proxy, TLS termination, WAF, public exposure, staging, production, or gateway-live readiness claim is made.",
+      "retry_condition": "USF-161, USF-180, and USF-213 must authorise and prove distributed edge enforcement, trusted proxy allowlists, forwarded header trust, TLS termination, WAF policy, public exposure, and gateway-mediated audit before gateway-live or edge readiness claims."
     },
     {
       "react_item_id": "api.graphql-generated-client-posture",
@@ -1714,6 +1719,7 @@
       "usf_status": "deferred",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
         "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
       ],
       "usf_tests": [
@@ -1724,12 +1730,12 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "linear_issue": "USF-154",
-      "blocker": "USF-155",
-      "blocking_foundation_readiness": true,
+      "linear_issue": "USF-154/USF-155",
+      "blocker": "USF-214",
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "OpenAPI route contracts are implemented; GraphQL/federation and generated clients remain lineage-only.",
-      "retry_condition": "Authorised API depth directive decides whether GraphQL/federation and generated clients are in foundation scope."
+      "evidence": "USF-155 explicitly reclassifies GraphQL/federation as lineage-only and generated clients as deferred. OpenAPI route contracts are implemented, but no GraphQL, federation, generated SDK, external developer platform, or public API readiness claim is made.",
+      "retry_condition": "USF-214 must authorise GraphQL/federation or generated client work before it can enter foundation scope or satisfy any public/client readiness claim."
     },
     {
       "react_item_id": "api.react-ui-playwright-api-behaviours",

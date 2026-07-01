@@ -1,0 +1,289 @@
+{
+  "id": "api-gateway-enterprise-proof-depth-matrix",
+  "sourceIssue": "USF-155",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-191",
+  "capabilityId": "api-gateway-enterprise-depth",
+  "proofCommand": "make api-proof",
+  "rawProofCommand": "corepack pnpm proof:api",
+  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises the USF API contract proof, synthetic tenants, local route metadata, OpenAPI coverage, safe error envelopes, PDP denials, local idempotency, opaque cursor posture, value-free audit evidence, and explicit reclassification of public API, generated client, GraphQL, browser-session, gateway-live, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure claims.",
+  "validatorCommand": "python3 tools/validate-parity/validate-api.py all --json",
+  "proofFile": "packages/proof/src/api-contracts-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-api.py",
+  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-155-api-gateway-enterprise-depth",
+    "evidence-usf-155-api-gateway-enterprise-depth",
+    "threat-usf-155-api-gateway-enterprise-depth",
+    "access-usf-155-api-gateway-enterprise-depth",
+    "resilience-usf-155-api-gateway-enterprise-depth",
+    "incident-usf-155-api-gateway-enterprise-depth",
+    "privacy-usf-155-api-gateway-enterprise-depth"
+  ],
+  "serviceCatalogueRows": [
+    "spec/instances/compose-service/service-catalogue.json#external-caddy"
+  ],
+  "providerMode": "hermetic-mock",
+  "runtimeMode": "local-synthetic-api-contract-proof",
+  "claims": {
+    "enterpriseApiGatewayDepthProven": true,
+    "routeMetadataChecked": true,
+    "openApiCoverageChecked": true,
+    "safeExampleBoundaryChecked": true,
+    "compatibilityMetadataChecked": true,
+    "browserSessionBoundaryExplicit": true,
+    "graphqlFederationReclassified": true,
+    "generatedClientReclassified": true,
+    "gatewayEdgeReclassified": true,
+    "bulkApiTransferred": true,
+    "publicApiReadinessClaim": false,
+    "externalSdkReadinessClaim": false,
+    "gatewayLiveReadinessClaim": false,
+    "browserSessionReadinessClaim": false,
+    "graphqlFederationReadinessClaim": false,
+    "generatedClientReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "Hermetic API proof does not prove public API readiness, external developer platform readiness, generated SDK readiness, GraphQL federation readiness, browser-session readiness, gateway-live readiness, WAF readiness, TLS termination readiness, or deployed edge readiness.",
+    "Local route metadata and OpenAPI proof do not prove customer-facing compatibility guarantees, consumer-driven contract operation, browser UI operation, public unsubscribe or bulk API readiness, environment promotion, or production API operation.",
+    "The external-caddy service catalogue row and gateway-clickthrough matrix remain profile-gated local substrate evidence only; they are not equivalent to public gateway or live edge readiness."
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred API/gateway control is implemented with proof or explicitly reclassified.",
+      "evidence": "Controls below record bounded-local-proof for route metadata, OpenAPI coverage, safe examples, local compatibility metadata, tenant/access/audit/redaction evidence, and explicit reclassification or transfer for GraphQL/federation, generated clients, browser sessions, gateway/edge/WAF/TLS, bulk API depth, and live/public compatibility."
+    },
+    {
+      "criterion": "GraphQL, client, compatibility, browser-session, and gateway boundaries are explicit where claimed.",
+      "evidence": "graphql-federation-lineage, generated-client-boundary, local-compatibility-metadata, browser-session-csrf-cookie-boundary, and gateway-edge-trust-boundary controls define disposition, owner, follow-up, review date, and non-equivalence boundaries."
+    },
+    {
+      "criterion": "Route metadata, OpenAPI evidence, source-use, and parity matrices remain truthful.",
+      "evidence": "make api-proof records route metadata and OpenAPI counts; this matrix and the source-use and parity matrices name USF-155 boundaries without public API, generated SDK, gateway-live, or production claims."
+    },
+    {
+      "criterion": "Validator coverage exists for any new API or gateway claim.",
+      "evidence": "USF-API-015 through USF-API-019 validate USF-155 proof markers, matrix completeness, enterprise evidence rows, explicit deferred/reclassified boundaries, and prohibited readiness claims."
+    },
+    {
+      "criterion": "No public API, gateway-live, or production readiness claim is made without proof.",
+      "evidence": "claims object and proof result set publicApiReadinessClaim, externalSdkReadinessClaim, gatewayLiveReadinessClaim, browserSessionReadinessClaim, GraphQL/generated-client readiness, staging, production, SOC, ISO certification, full-dev, full-parity, and USF-133 closure claims to false."
+    }
+  ],
+  "controls": [
+    {
+      "id": "route-metadata-enterprise-depth",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/contracts/src/api-surface.ts",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts"
+      ],
+      "proofChecks": [
+        "route metadata records compatibility, browser, security, field exposure, and gateway posture",
+        "all route contracts map to implemented Fastify routes and capabilities"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "Local route metadata proof is not public API readiness, external developer platform readiness, generated SDK readiness, or production API operation."
+    },
+    {
+      "id": "openapi-contract-coverage",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/openapi/src/check.ts",
+        "packages/openapi/openapi.json",
+        "packages/proof/src/api-contracts-proof.ts"
+      ],
+      "proofChecks": [
+        "OpenAPI validates, operation IDs are unique, and examples are synthetic/safe"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "OpenAPI local contract coverage is not public documentation readiness, external client compatibility, consumer contract acceptance, or production deployment readiness."
+    },
+    {
+      "id": "local-compatibility-metadata",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate-with-local-metadata-and-defer-public-contracts",
+      "followUpIssue": "USF-213 for public API compatibility and release governance; USF-214 for generated-client or GraphQL readiness",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "packages/contracts/src/api-surface.ts",
+        "packages/openapi/src/check.ts",
+        "tests/packages/openapi.test.ts"
+      ],
+      "proofChecks": [
+        "compatibility metadata is present for every implemented route",
+        "OpenAPI checker rejects unsafe examples and readiness overclaims"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "Compatibility metadata and OpenAPI diff posture are not a public compatibility guarantee, consumer-driven contract, generated client readiness, or SemVer release readiness."
+    },
+    {
+      "id": "browser-session-csrf-cookie-boundary",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-149 for identity/browser-session runtime and future UI/API issue before cookie-session readiness",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/auth-and-identity-standard.md",
+        "packages/contracts/src/api-surface.ts"
+      ],
+      "nonClaimBoundary": "Route CSRF metadata is not browser session runtime, cookie auth, CSRF token rotation, UI session handling, public API readiness, or production browser security posture."
+    },
+    {
+      "id": "gateway-edge-trust-boundary",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-180 records local gateway substrate; USF-161 and USF-213 are required before live gateway, edge, or public exposure readiness",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/gateway-clickthrough-access-substrate-matrix.json",
+        "docs/architecture/operator-access-gateway-posture-matrix.json",
+        "spec/instances/compose-service/service-catalogue.json#external-caddy"
+      ],
+      "nonClaimBoundary": "Gateway service catalogue and route metadata are not a deployed gateway, trusted proxy proof, TLS termination proof, WAF proof, public exposure proof, or live edge readiness."
+    },
+    {
+      "id": "graphql-federation-lineage",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "followUpIssue": "USF-214",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/react-parity-scope-classification-matrix.json"
+      ],
+      "nonClaimBoundary": "GraphQL and federation lineage is inventoried only. It is not implemented, not required for current local REST contract proof, and not public API readiness."
+    },
+    {
+      "id": "generated-client-boundary",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-214",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "packages/openapi/openapi.json",
+        "docs/architecture/api-and-contract-surface-standard.md"
+      ],
+      "nonClaimBoundary": "OpenAPI generation is not generated client implementation, SDK distribution, client compatibility certification, public developer portal readiness, or package release readiness."
+    },
+    {
+      "id": "bulk-api-depth-transfer",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer-to-domain-owner",
+      "followUpIssue": "USF-163 owns import/export/bulk deep runtime proof depth",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/import-export-and-bulk-operations-standard.md",
+        "docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md",
+        "packages/proof/src/import-export-bulk-proof.ts"
+      ],
+      "nonClaimBoundary": "API route metadata and local idempotency proof are not broad import/export/bulk HTTP surface readiness, production migration readiness, legal export readiness, or regulatory export readiness."
+    },
+    {
+      "id": "tenant-access-audit-redaction-boundary",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/apps/api-contracts.test.ts",
+        "apps/api/src/server.ts"
+      ],
+      "proofChecks": [
+        "missing tenant context denied with safe error envelope",
+        "protected route without permission denied by PDP",
+        "tenant mismatch denied without cross-tenant enumeration",
+        "API proof captures value-free tenant/access audit evidence"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "Local tenant/access/audit/redaction proof is not public API exposure, support access approval, incident-response readiness, or production operation."
+    }
+  ],
+  "deferredBoundaries": [
+    {
+      "id": "public-api-readiness",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-213",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "No public API readiness claim is made by USF-155."
+    },
+    {
+      "id": "gateway-live-readiness",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-161/USF-180/USF-213",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "No gateway-live, WAF, edge, TLS termination, public exposure, staging, or production readiness claim is made by USF-155."
+    }
+  ]
+}
