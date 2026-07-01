@@ -162,7 +162,7 @@
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": null,
+      "blocker": "none for bounded USF-145 source scope; stronger readiness claims require separate source issues",
       "blocking_foundation_readiness": false,
       "domain_authorised": true,
       "evidence": "USF-144 core config/secrets proof plus USF-145 bounded enterprise proof depth: config/secrets standard, config-secrets enterprise proof-depth matrix, source-use matrix, validate-config USF-CONFIG-001..022 with planted defects, make config-proof, enterprise evidence rows, and OpenBao composed-test provider reconciliation. Non-claims preserve no live secret-manager, KMS, staging/production readiness, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure.",
