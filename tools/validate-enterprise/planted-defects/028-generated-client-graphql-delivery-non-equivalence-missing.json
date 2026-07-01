@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-ENTERPRISE-028",
+  "generatedClientGraphqlDeliverySurfacePatch": [
+    {
+      "id": "generated-client",
+      "drop": [
+        "nonEquivalenceBoundary"
+      ]
+    }
+  ]
+}

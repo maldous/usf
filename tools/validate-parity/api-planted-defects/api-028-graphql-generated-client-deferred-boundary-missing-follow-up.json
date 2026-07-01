@@ -3,7 +3,7 @@
   "mutation": {
     "file": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
     "replace": {
-      "old": "\"followUpIssue\": \"future-generated-client-issue-if-public-api-client-distribution-is-authorised\"",
+      "old": "\"followUpIssue\": \"USF-224\"",
       "new": "\"followUpIssue\": \"\""
     }
   }

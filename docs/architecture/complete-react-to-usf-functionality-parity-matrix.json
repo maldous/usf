@@ -176,9 +176,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "REST/GraphQL/OpenAPI lineage",
-      "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. USF-213 adds bounded public API compatibility and release-governance evidence through a deterministic local compatibility snapshot and explicit non-equivalence boundaries. USF-214 classifies GraphQL/federation as out of current foundation runtime scope and generated SDK/client/distribution as deferred-with-owner. Browser-session runtime, public launch, consumer contracts, gateway-live, edge/WAF/TLS, deployment, and bulk API readiness remain explicitly reclassified, transferred, or deferred without readiness claims.",
-      "tracking_carrier_or_recommendation": "USF-154/USF-155/USF-213/USF-214",
-      "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix, public API compatibility release-governance matrix, GraphQL/generated-client disposition matrix, and validate-api USF-API-001..029",
+  "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. USF-213 adds bounded public API compatibility and release-governance evidence through a deterministic local compatibility snapshot and explicit non-equivalence boundaries. USF-214 classifies GraphQL/federation as out of current foundation runtime scope and generated SDK/client/distribution as deferred-with-owner. USF-220 records the selected closure-tier delivery-depth disposition and links future generated-client, external-developer, GraphQL, or federation execution proof to USF-224. Browser-session runtime, public launch, consumer contracts, gateway-live, edge/WAF/TLS, deployment, and bulk API readiness remain explicitly reclassified, transferred, or deferred without readiness claims.",
+  "tracking_carrier_or_recommendation": "USF-154/USF-155/USF-213/USF-214/USF-220 with future execution proof tracked by USF-224",
+  "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix, public API compatibility release-governance matrix, GraphQL/generated-client disposition matrix, USF-220 delivery-depth disposition, and validate-api USF-API-001..029 plus final reconciliation coverage",
       "usf_status": "partial"
     },
     {
@@ -316,9 +316,9 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "contracts-graphql, graphql-api-runtime, graphql-browser-client",
-      "readiness_impact": "USF-214 classifies GraphQL runtime and federation as out of current foundation runtime scope for this local REST/OpenAPI foundation, and classifies generated SDK/client/distribution as deferred-with-owner. Stronger GraphQL, federation, generated-client, public developer platform, staging, production, deployment, SOC, ISO, full-dev, full-parity, and USF-133 closure claims remain blocked unless future authorised source issues implement and prove them.",
-      "tracking_carrier_or_recommendation": "USF-214 plus future GraphQL/federation or generated-client issue only if separately authorised",
-      "usf_evidence_summary": "USF-214 GraphQL/generated-client disposition matrix plus API proof markers and validate-api USF-API-025..029; no equivalent GraphQL runtime or generated client artifact is claimed",
+  "readiness_impact": "USF-214 classifies GraphQL runtime and federation as out of current foundation runtime scope for this local REST/OpenAPI foundation, and classifies generated SDK/client/distribution as deferred-with-owner. USF-220 records the selected closure-tier delivery-depth disposition and links future GraphQL, federation, generated-client, public developer platform, staging, production, deployment, SOC, ISO, full-dev, full-parity, and USF-133 closure proof work to USF-224 if separately authorised.",
+  "tracking_carrier_or_recommendation": "USF-214/USF-220 with future execution proof tracked by USF-224",
+  "usf_evidence_summary": "USF-214 GraphQL/generated-client disposition matrix plus API proof markers, USF-220 delivery-depth disposition, and validate-api USF-API-025..029; no equivalent GraphQL runtime or generated client artifact is claimed",
       "usf_status": "deferred"
     },
     {

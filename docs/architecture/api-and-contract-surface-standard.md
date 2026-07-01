@@ -201,3 +201,9 @@ The explicitly deferred controls are:
 - external developer portal, API key issuance, SDK registry publication, public documentation operation, public support workflow, and customer onboarding.
 
 This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, public API readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.
+
+## USF-220 Delivery Depth Follow-Up Boundary
+
+USF-220 records the selected closure-tier disposition for the GraphQL, federation, generated SDK, generated client, external developer platform, and client distribution surfaces classified by USF-214. It does not add a runtime, generated client, SDK package, developer portal, public API launch, or federation implementation. It replaces placeholder future follow-up wording with USF-224 as the explicit execution-proof owner for any separately authorised generated-client, external-developer, GraphQL, or federation delivery work.
+
+USF-220 preserves the non-equivalence boundary: REST/OpenAPI local proof, route metadata, OpenAPI output, and compatibility snapshot evidence are not GraphQL runtime proof, federation gateway proof, generated SDK/client proof, external developer platform proof, package publication proof, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure.

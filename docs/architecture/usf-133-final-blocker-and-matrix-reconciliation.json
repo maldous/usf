@@ -17,16 +17,15 @@
   "usf133ClosureClaimed": false,
   "sourceIssueDoneByImplication": false,
   "wrapperDoneStatesSatisfySourceIssues": false,
-  "currentOpenBlockerIssues": [
-    "USF-220"
-  ],
+  "currentOpenBlockerIssues": [],
   "nonBlockingContextIssues": [
     "USF-134",
     "USF-184",
     "USF-192",
     "USF-221",
     "USF-222",
-    "USF-223"
+    "USF-223",
+    "USF-224"
   ],
   "resolvedSourceIssuesUsedAsEvidence": [
     "USF-166",
@@ -43,7 +42,8 @@
     "USF-214",
     "USF-215",
     "USF-218",
-    "USF-219"
+    "USF-219",
+    "USF-220"
   ],
   "usf133AcceptanceCriteriaMapping": [
     {
@@ -68,7 +68,7 @@
         "docs/architecture/domain-deferred-depth-closure-matrix.json",
         "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
       ],
-      "remainingBlocker": "USF-219, USF-220",
+      "remainingBlocker": null,
       "nonClaimBoundary": "Partial, deferred, and bounded rows remain visible and do not imply full parity or readiness."
     },
     {
@@ -80,7 +80,7 @@
         "docs/architecture/react-parity-scope-classification-matrix.json",
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md"
       ],
-      "remainingBlocker": "USF-219, USF-220",
+      "remainingBlocker": null,
       "nonClaimBoundary": "Historical classification is lineage and disposition evidence only; it is not a readiness claim."
     },
     {
@@ -91,7 +91,7 @@
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
         "docs/architecture/complete-react-to-usf-functionality-parity-review.md"
       ],
-      "remainingBlocker": "USF-217 and USF-220 where operator or external-developer surfaces remain deferred",
+      "remainingBlocker": "External-developer generated-client and GraphQL/federation execution proof remains deferred to USF-224; this is not a selected closure-tier blocker after USF-220 disposition evidence.",
       "nonClaimBoundary": "UI/UX and Playwright evidence are not foundation readiness requirements by themselves."
     },
     {
@@ -104,9 +104,10 @@
         "USF-217",
         "USF-218",
         "USF-219",
-        "USF-220"
+        "USF-220",
+        "USF-224"
       ],
-      "remainingBlocker": "USF-219, USF-220",
+      "remainingBlocker": null,
       "nonClaimBoundary": "Enumeration and follow-up linkage do not complete the follow-up issues."
     },
     {
@@ -132,7 +133,7 @@
         "docs/architecture/compose-service-disposition-closure-matrix.json",
         "docs/architecture/usf-133-closure-tier-evidence-gate.json"
       ],
-      "remainingBlocker": "USF-219, USF-220",
+      "remainingBlocker": null,
       "nonClaimBoundary": "Accepted decisions are not completion evidence unless merged proof satisfies each source issue."
     },
     {
@@ -155,7 +156,7 @@
         "docs/architecture/usf-final-semantic-completeness-audit.json",
         "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
       ],
-      "remainingBlocker": "USF-219, USF-220",
+      "remainingBlocker": null,
       "nonClaimBoundary": "USF-133 remains open."
     }
   ],
@@ -238,6 +239,26 @@
       "nonClaims": [
         "production-readiness",
         "enterprise-production-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "rowId": "functionality:graphql-surface",
+      "previousStaleWording": "future GraphQL/federation or generated-client issue only if separately authorised",
+      "currentDisposition": "bounded-disposition-recorded-execution-proof-deferred",
+      "currentOwnerIssues": [
+        "USF-214",
+        "USF-220",
+        "USF-224"
+      ],
+      "remainingBoundary": "GraphQL runtime, federation gateway, generated SDK/client creation, client compile/run tests, package publication, external developer platform, public documentation operation, API key onboarding, and public distribution remain deferred to USF-224 if separately authorised.",
+      "nonClaims": [
+        "generated-client-readiness",
+        "graphql-runtime-readiness",
+        "federation-readiness",
+        "external-developer-platform-readiness",
+        "full-dev-readiness",
+        "full-react-parity-readiness",
         "usf-133-closure"
       ]
     },
@@ -328,13 +349,17 @@
     },
     {
       "issueId": "USF-220",
-      "boundary": "generated client external developer and GraphQL federation delivery proof depth",
-      "blocksUsf133": true
+      "boundary": "generated client, external developer platform, GraphQL runtime, and federation delivery proof depth recorded with owner-backed deferral to USF-224",
+      "blocksUsf133": false,
+      "status": "resolved-by-bounded-disposition-evidence",
+      "followUpIssue": "USF-224",
+      "evidenceSource": "docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json",
+      "nonClaimBoundary": "USF-220 does not prove generated SDK readiness, generated client readiness, external developer platform readiness, GraphQL runtime readiness, federation readiness, public API readiness, environment readiness, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
     }
   ],
   "linearBlockerRelationPolicy": {
     "staleRelationsRemovedByThisIssue": [],
-    "reason": "The current repository audit now treats USF-217 as resolved by merged disposition evidence once its PR is merged. USF-218, USF-219, and USF-220 remain selected-closure-tier blockers. USF-221 tracks future access-review and deprovisioning execution proof as a non-blocking follow-up for stronger readiness claims.",
+    "reason": "The current repository audit treats USF-217, USF-218, USF-219, and USF-220 as resolved by bounded disposition evidence for the selected closure tier only. USF-221, USF-222, USF-223, and USF-224 track future execution proof for stronger readiness claims.",
     "noIssueMarkedDoneByImplication": true
   },
   "validationCommands": [

@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-ENTERPRISE-028",
+  "generatedClientGraphqlDeliveryDepthSet": {
+    "claims.generatedClientReadinessClaim": true
+  }
+}

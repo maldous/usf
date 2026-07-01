@@ -173,7 +173,7 @@
       "riskOwner": "platform-api-risk-owner",
       "controlOwner": "platform-api-control-owner",
       "riskTreatment": "defer",
-      "followUpIssue": "USF-214 for generated clients plus future developer-platform issue if authorised",
+      "followUpIssue": "USF-214 and USF-224 for generated clients, external developer platform, and future execution proof if authorised",
       "reviewDate": "2026-09-30",
       "evidenceRefs": [
         "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
