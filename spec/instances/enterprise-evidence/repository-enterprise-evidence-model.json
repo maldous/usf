@@ -5031,6 +5031,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-213-public-api-compatibility-governance",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-213 public API compatibility and release-governance controls for compatibility scope, deterministic local route/OpenAPI snapshot evidence, consumer-contract deferral, release governance, SemVer posture, external developer platform boundary, and explicit readiness non-claims.",
+      "riskTreated": "Public API compatibility could be implied from local route metadata or OpenAPI generation, allowing unsupported public API launch, consumer contract, generated SDK, deployment, production, certification, full-readiness, or full-parity claims.",
+      "assetServiceAffected": "API contract surface; OpenAPI surface; compatibility snapshot; release governance boundary; external developer platform boundary",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-213; currentEvidence=evidence-usf-213-public-api-compatibility-governance; publicApiCompatibilityGovernanceProven=true; compatibilitySnapshotChecked=true; publicApiCompatibilityReadinessClaim=false; consumerContractReadinessClaim=false; releaseCompatibilityReadinessClaim=false; externalDeveloperPlatformReadinessClaim=false",
+      "evidenceSource": "docs/architecture/api-public-compatibility-release-governance-matrix.json; packages/proof/src/api-contracts-proof.ts; tools/validate-parity/validate-api.py",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "riskStatement=Public API compatibility and release governance could be overclaimed from local OpenAPI evidence.; threatFailureScenario=Local route contract snapshot is mistaken for public launch readiness, consumer-driven contract readiness, SDK compatibility, deployment readiness, or production API operation.; affectedAssetService=API contract and release governance boundary; impact=high; likelihood=medium; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; controlOwner=platform-api-control-owner; treatment=mitigate with deterministic local snapshot plus explicit deferred public-compatibility and release-governance boundaries; reviewDate=2026-09-30; followUpIssue=USF-214 for generated clients and future public API launch or consumer-contract issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7370,6 +7396,30 @@
       ],
       "prOrMergeSha": "8cacf376ed8126abade8a2448627501a84866389",
       "retentionPosture": "Retain committed proof code, import-export-bulk-deep-runtime-proof-depth-matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw row payload, object key, credential, token, secret, provider payload, stack trace, production data, customer data, legal production package, or live provider event is retained. effectivenessState=proven-local; sourceIssue=USF-163; boundedDeepRuntimeProven=true; productionMigrationReadinessClaim=false; legalExportReadinessClaim=false; eDiscoveryReadinessClaim=false; regulatoryExportReadinessClaim=false; liveExternalProviderReadinessClaim=false"
+    },
+    {
+      "id": "evidence-usf-213-public-api-compatibility-governance",
+      "proofResult": "proof:api",
+      "whatWasProven": "make api-proof is the command-pinned bounded hermetic proof for USF-213. It proves a deterministic local compatibility snapshot over the current route contract table, validates that public API compatibility scope is defined beyond route metadata alone, records release-governance and SemVer posture as bounded documentation evidence, and emits explicit public API compatibility non-claims.",
+      "whatWasNotProven": "No public API readiness, public API launch readiness, consumer-driven contract readiness, external customer fixture compatibility, generated SDK readiness, GraphQL/federation readiness, external developer platform readiness, public documentation operation, public support workflow, release compatibility readiness, SemVer package-release readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-api-contract-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#api,external-caddy",
+      "adapterProviderId": "api-contract-surface; openapi-local-generator; public-api-compatibility-non-equivalent-governance-boundary",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "commandPin": "tsx packages/proof/src/api-contracts-proof.ts",
+      "commitPin": "2ac74e80ae007eccdc9cd8cf33f3c085b5ba0105",
+      "issueLinks": [
+        "USF-213",
+        "USF-155",
+        "USF-214",
+        "USF-193",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "2ac74e80ae007eccdc9cd8cf33f3c085b5ba0105",
+      "retentionPosture": "Retain committed proof code, API public compatibility release-governance matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw payload, credential, token, cookie, authorization header, provider endpoint, stack trace, customer data, production data, consumer contract payload, public API key, or external developer data is retained. effectivenessState=proven-local; sourceIssue=USF-213; publicApiCompatibilityGovernanceProven=true; publicApiCompatibilityReadinessClaim=false; consumerContractReadinessClaim=false; releaseCompatibilityReadinessClaim=false; externalDeveloperPlatformReadinessClaim=false"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -9418,6 +9468,32 @@
       "failClosedBehaviour": "validate-bulk fails when USF-163 proof markers, deep-runtime matrix controls, enterprise rows, boundary controls, or non-claim false fields are missing.",
       "monitoringAuditEvidence": "proof:bulk emits value-free audit and telemetry evidence for denied provider transfer, rollback, purge, legal-hold denial, guardrail denial, retry, and completion paths.",
       "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-163; broad HTTP routes, live transfer providers, full parser adapter suite, legal/eDiscovery/regulatory workflows, production migration, production retention services, live alerting, and environment promotion remain outside current claim; owner=platform-import-export-foundation; riskOwner=platform-import-export-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-213 and future legal/provider/migration issues if separately authorised"
+    },
+    {
+      "id": "threat-usf-213-public-api-compatibility-governance",
+      "targetType": "source-issue-control-gate",
+      "target": "public-api-compatibility-release-governance",
+      "trustBoundary": "Hermetic local route/OpenAPI compatibility snapshot and release-governance documentation only; no public API launch, consumer contract, generated SDK, deployment, live gateway, or production operation boundary claim.",
+      "tenantBoundary": "Snapshot evidence is route metadata only and does not include production tenant payloads, customer fixtures, public API keys, or external developer data.",
+      "credentialBoundary": "No raw authorization header, cookie, token, credential, API key, endpoint, provider payload, stack trace, consumer fixture, or production payload is retained in evidence.",
+      "dataClassification": "internal synthetic API contract metadata and OpenAPI example metadata only",
+      "abuseCases": [
+        "local OpenAPI generation treated as public API readiness",
+        "compatibility snapshot treated as consumer-driven contract readiness",
+        "version metadata treated as SemVer release readiness",
+        "release governance wording treated as deployment or production readiness",
+        "external developer platform boundary hidden behind partial parity language"
+      ],
+      "failureModes": [
+        "USF-213 proof markers removed",
+        "compatibility matrix control removed",
+        "consumer contract deferral lacks owner or review date",
+        "readiness claim set true in proof output or matrix",
+        "public API, generated SDK, or production claim appears in docs"
+      ],
+      "failClosedBehaviour": "validate-api USF-API-020 through USF-API-024 block missing USF-213 proof markers, incomplete matrix controls, missing enterprise rows, incomplete deferred boundaries, and public compatibility readiness overclaims.",
+      "monitoringAuditEvidence": "make api-proof output, validate-api findings, local route snapshot hash, OpenAPI checker output, and value-free proof checks only; no live monitoring backend.",
+      "residualRisk": "Public API launch, consumer-driven contract operation, generated SDK/client distribution, GraphQL/federation, external developer platform, deployment, environment promotion, and production API operation remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-214 and future public API launch or consumer-contract issue if separately authorised"
     }
   ],
   "sdkDependencyGovernance": [
@@ -12245,6 +12321,39 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-213-public-api-compatibility-governance",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-213 public API compatibility and release-governance access posture",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-213",
+        "accessModel=local-synthetic-API-contract-proof-and-release-governance-documentation-only",
+        "authRequirement=no-public-client-access-or-API-key-issuance-proven",
+        "leastPrivilegePosture=route-required-action-metadata-only-no-public-developer-portal-or-support-access-claim",
+        "breakGlassRelevance=not-proven-by-USF-213",
+        "auditRequirement=value-free-proof-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-public-API-or-release-compatibility-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-213",
+        "noPublicExposureClaim=true",
+        "publicApiCompatibilityReadinessClaim=false"
+      ],
+      "evidenceSource": "docs/architecture/api-public-compatibility-release-governance-matrix.json; packages/proof/src/api-contracts-proof.ts",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "Public API access reviews, API key issuance, developer onboarding, support access approval, executed deprovisioning, public documentation operation, and production break-glass operation are not proven by USF-213; owner=platform-api-foundation; reviewDate=2026-09-30; followUpIssue=future public API access issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -14402,6 +14511,43 @@
       "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts",
       "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
       "deferredReason": "Production backup, restore, migration rollback, DR, RPO, RTO, live transfer provider resilience, and production retention scheduler operation are not proven; owner=platform-import-export-foundation; reviewDate=2026-09-30; followUpIssue=future backup/migration/provider issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-213-public-api-compatibility-governance",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-213 public API compatibility and release-governance resilience posture",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-213",
+        "backupRequirement=not-applicable-for-local-API-contract-snapshot-proof",
+        "restoreProofRequirement=restore-readiness-not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=route-or-OpenAPI-snapshot-drift-must-not-be-treated-as-public-readiness",
+        "cleanupTeardownProof=Fastify-app-closed-in-proof-finally-path",
+        "readinessChecks=openapi-check-plus-hermetic-proof-and-validator-markers-only",
+        "retryTimeoutBehaviour=not-applicable-no-live-public-api-runtime",
+        "failClosedMode=missing-compatibility-matrix-or-overclaim-blocked-by-validator",
+        "structuredLogging=value-free-proof-result-only",
+        "tracingCorrelation=request-correlation-and-trace-id-propagation-local-only",
+        "metrics=proof-check-counts-and-validator-findings-only",
+        "auditEvents=value-free-local-proof-audit-events-where-represented",
+        "redaction=raw-token-cookie-authorization-header-endpoint-payload-secret-provider-error-provider-payload-stack-trace-public-api-key-and-customer-data-not-retained"
+      ],
+      "evidenceSource": "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "Public API uptime, consumer contract service operation, generated client compatibility testing, release rollback, public changelog operation, deployment rollback, staging, production, DR, RPO, RTO, live observability, and production incident operation remain non-claims; owner=platform-api-foundation; reviewDate=2026-09-30; followUpIssue=USF-193 and future release-governance issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -17303,6 +17449,37 @@
       "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts; tools/validate-parity/validate-bulk.py",
       "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
       "deferredReason": "Production incident hooks, paging, parser CVE workflow, external transfer provider advisory response, legal export incident workflow, corrective action operation, and post-incident evidence are not proven; owner=platform-import-export-foundation; reviewDate=2026-09-30; followUpIssue=future provider/parser/legal operations issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-213-public-api-compatibility-governance",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-213 public API compatibility incident and vulnerability posture",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-213",
+        "incidentDetectionHook=local-API-compatibility-snapshot-drift-validator-and-planted-defect-output-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-api-risk-owner",
+        "vulnerabilityAdvisoryReview=public-API-generated-client-and-release-governance-advisory-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-SDK-or-provider-dependency-added-by-USF-213",
+        "correctiveActionEvidence=validator-and-PR-evidence-only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-213"
+      ],
+      "evidenceSource": "docs/architecture/api-public-compatibility-release-governance-matrix.json; tools/validate-parity/validate-api.py",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "Production public API incident hooks, paging, escalation execution, public API advisory response, patch SLA evidence, public changelog corrections, SDK advisory workflow, and post-incident evidence remain non-claims; owner=platform-api-foundation; reviewDate=2026-09-30; followUpIssue=future public API incident or release-governance issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -20592,6 +20769,38 @@
       "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts",
       "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
       "deferredReason": "Customer import/export privacy, DSR, legal export package privacy, data residency, custom retention, external transfer subprocessors, production retention purge operation, and live provider privacy evidence are not proven; owner=platform-import-export-foundation; riskOwner=platform-import-export-risk-owner; reviewDate=2026-09-30; followUpIssue=future privacy/legal/export provider issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-213-public-api-compatibility-governance",
+      "targetType": "source-issue-control-gate",
+      "target": "proof:api public compatibility governance data boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-213",
+        "dataOrigin=synthetic-local-proof-data-and-route-metadata-only",
+        "piiPosture=no-production-PII-customer-data-or-external-developer-data",
+        "dataClassification=internal-API-route-metadata-openapi-example-and-compatibility-snapshot-metadata",
+        "redactionPolicy=no-raw-token-cookie-authorization-header-endpoint-payload-secret-provider-error-provider-payload-stack-trace-public-api-key-consumer-fixture-or-customer-data-in-proof-output",
+        "retentionPurgePosture=committed-metadata-and-proof-summary-only-no-public-API-data-retention-readiness",
+        "legalHoldRelevance=not-claimed-for-public-API-or-consumer-contract-operation",
+        "dataResidencyCrossBorderBoundary=hermetic-local-only-no-production-residency-claim",
+        "externalDeveloperBoundary=no-developer-portal-or-public-client-data-proven"
+      ],
+      "evidenceSource": "docs/architecture/api-public-compatibility-release-governance-matrix.json; packages/proof/src/api-contracts-proof.ts",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "Customer API payload privacy, public API privacy posture, DSR, public developer data, generated client distribution privacy, data residency, public docs retention, legal hold workflow, custom retention, and production API data recovery privacy remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=future public API privacy issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

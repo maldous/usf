@@ -1,0 +1,241 @@
+{
+  "id": "api-public-compatibility-release-governance-matrix",
+  "sourceIssue": "USF-213",
+  "parentIssue": "USF-133",
+  "predecessorIssue": "USF-155",
+  "capabilityId": "public-api-compatibility-release-governance",
+  "proofCommand": "make api-proof",
+  "rawProofCommand": "corepack pnpm proof:api",
+  "validatorCommand": "python3 tools/validate-parity/validate-api.py all --json",
+  "proofFile": "packages/proof/src/api-contracts-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-api.py",
+  "standard": "docs/architecture/api-and-contract-surface-standard.md",
+  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-213-public-api-compatibility-governance",
+    "evidence-usf-213-public-api-compatibility-governance",
+    "threat-usf-213-public-api-compatibility-governance",
+    "access-usf-213-public-api-compatibility-governance",
+    "resilience-usf-213-public-api-compatibility-governance",
+    "incident-usf-213-public-api-compatibility-governance",
+    "privacy-usf-213-public-api-compatibility-governance"
+  ],
+  "runtimeMode": "local-synthetic-api-contract-proof",
+  "providerMode": "hermetic-mock",
+  "claims": {
+    "publicApiCompatibilityGovernanceProven": true,
+    "publicApiCompatibilityScopeDefined": true,
+    "compatibilitySnapshotChecked": true,
+    "releaseGovernanceBoundaryChecked": true,
+    "semverPolicyBoundaryChecked": true,
+    "consumerContractDeferredWithOwner": true,
+    "externalDeveloperPlatformBoundaryExplicit": true,
+    "generatedPublicExamplesBounded": true,
+    "nonEquivalenceBoundaryRecorded": true,
+    "publicApiReadinessClaim": false,
+    "publicApiCompatibilityReadinessClaim": false,
+    "consumerContractReadinessClaim": false,
+    "releaseCompatibilityReadinessClaim": false,
+    "externalDeveloperPlatformReadinessClaim": false,
+    "generatedSdkReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Public API compatibility scope is defined without relying on local route metadata alone.",
+      "evidence": "This matrix defines the scope as local OpenAPI/route-contract snapshot governance plus explicit non-equivalence boundaries for public API launch, consumer contracts, external developer platform, generated SDK distribution, deployment, and production operation."
+    },
+    {
+      "criterion": "Consumer contract or compatibility snapshot evidence is implemented and proven, or explicitly deferred with owner and review date.",
+      "evidence": "proof:api emits publicApiCompatibilityGovernanceEvidence with a deterministic local compatibility snapshot hash and route count. Consumer-driven contracts remain deferred-with-owner in the controls below with reviewDate 2026-09-30."
+    },
+    {
+      "criterion": "Release compatibility governance is represented with evidence or explicit non-equivalence boundary.",
+      "evidence": "release-governance-boundary and semver-versioning-posture controls define release governance as documented/bounded only; package release, public compatibility guarantees, and SemVer readiness remain non-equivalent."
+    },
+    {
+      "criterion": "Validator coverage fails on public compatibility readiness overclaim.",
+      "evidence": "validate-api USF-API-020 through USF-API-024 check proof markers, matrix completeness, enterprise evidence rows, deferred governance boundaries, and public compatibility readiness overclaims."
+    },
+    {
+      "criterion": "Enterprise evidence rows record owner, risk owner, control owner, evidence source, validation command, and non-claims.",
+      "evidence": "The enterpriseEvidenceRefs rows are required by validate-api and point at this matrix, proof:api, and validate-api."
+    },
+    {
+      "criterion": "No prohibited readiness or certification claim is made.",
+      "evidence": "All prohibited readiness and certification claim booleans are false and nonClaims below preserve the boundary."
+    }
+  ],
+  "controls": [
+    {
+      "id": "public-api-compatibility-scope",
+      "status": "documented",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate-with-bounded-local-snapshot-and-defer-public-readiness",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+        "docs/architecture/api-and-contract-surface-standard.md"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "USF-213 defines public API compatibility posture but does not prove public API readiness, public launch readiness, external developer platform readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+    },
+    {
+      "id": "compatibility-snapshot-evidence",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/packages/proof.test.ts",
+        "packages/contracts/src/api-surface.ts",
+        "packages/openapi/openapi.json"
+      ],
+      "proofChecks": [
+        "USF-213 public API compatibility scope and release governance are bounded by a deterministic local snapshot"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "A deterministic local route/OpenAPI compatibility snapshot is not a consumer-driven contract, SDK compatibility certification, public changelog process, public API launch readiness, staging readiness, production readiness, or deployment readiness."
+    },
+    {
+      "id": "consumer-contract-boundary",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-consumer-contract-issue-if-public-api-is-authorised",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json"
+      ],
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "No consumer-driven contract harness, external customer fixture suite, public compatibility guarantee, or developer-facing SDK compatibility is proven by USF-213."
+    },
+    {
+      "id": "release-governance-boundary",
+      "status": "documented",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate-with-explicit-non-equivalence",
+      "followUpIssue": "USF-193 for environment promotion semantics and future release-governance issue if public API launch is authorised",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json"
+      ],
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "Documented release compatibility governance is not SemVer release readiness, public deprecation operation, production release approval, deployment readiness, or environment promotion readiness."
+    },
+    {
+      "id": "semver-versioning-posture",
+      "status": "documented",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate-with-versioning-policy-and-defer-public-release",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "packages/contracts/src/api-surface.ts"
+      ],
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "Route and operation version metadata is not package SemVer readiness, published SDK versioning, customer migration readiness, or public API lifecycle operation."
+    },
+    {
+      "id": "external-developer-platform-boundary",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-214 for generated clients plus future developer-platform issue if authorised",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
+      ],
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaimBoundary": "No public developer portal, generated SDK distribution, external developer onboarding, API key issuance, public docs publication, or support/SLA readiness is proven."
+    }
+  ],
+  "deferredBoundaries": [
+    {
+      "id": "public-api-launch-readiness",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-public-api-launch-issue-if-authorised",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "No public API launch readiness or customer-facing compatibility guarantee is claimed."
+    },
+    {
+      "id": "consumer-driven-contracts",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-consumer-contract-issue-if-public-api-is-authorised",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "No consumer-driven contract readiness or external customer fixture compatibility is claimed."
+    },
+    {
+      "id": "release-compatibility-operation",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-193 and future release-governance issue if public API launch is authorised",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "No production release approval, public changelog operation, SemVer package-release readiness, or deployment readiness is claimed."
+    }
+  ],
+  "nonClaims": [
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "No public API readiness, public API launch readiness, external developer platform readiness, consumer-driven contract readiness, generated SDK readiness, public documentation readiness, release compatibility readiness, SemVer release readiness, or customer compatibility guarantee is made.",
+    "USF-213 does not implement GraphQL, federation, generated clients, SDK distribution, public developer portal, API key issuance, public support workflow, staging deployment, production deployment, live gateway, WAF, TLS termination, or edge operation."
+  ]
+}

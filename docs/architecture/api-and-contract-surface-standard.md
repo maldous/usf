@@ -161,3 +161,24 @@ The explicitly reclassified or deferred controls are:
 - Broad import/export/bulk API surface depth remains owned by USF-163.
 
 This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, gateway-live readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.
+
+## USF-213 Public API Compatibility And Release Governance Boundary
+
+USF-213 adds a bounded public API compatibility and release-governance evidence gate. The gate is recorded in `docs/architecture/api-public-compatibility-release-governance-matrix.json` and exercised by `make api-proof`.
+
+The implemented and proven local controls are:
+
+- a deterministic local compatibility snapshot over the current route contract table;
+- explicit public API compatibility scope that does not rely on route metadata alone;
+- release-governance, versioning, and SemVer posture as documented boundaries;
+- synthetic OpenAPI examples and contract metadata preserved as local evidence only;
+- explicit non-claims for public API readiness, consumer-driven contract readiness, release compatibility readiness, external developer platform readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure.
+
+The explicitly deferred controls are:
+
+- consumer-driven contract suites and external customer compatibility fixtures;
+- public API launch readiness, external developer portal, public API key issuance, support/SLA workflow, and public documentation operation;
+- package SemVer release operation, public changelog operation, production release approval, deployment readiness, and environment promotion readiness;
+- generated SDK/client distribution, GraphQL, and federation readiness, which remain under USF-214 or future authorised source issues.
+
+This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, public launch readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.
