@@ -5936,9 +5936,9 @@
       "adapterProviderId": "quality-gate-sonarqube-composed-test",
       "validationCommand": "corepack pnpm proof:assurance:sonarqube",
       "commandPin": "tsx packages/proof/src/sonarqube-composed-proof.ts",
-      "commitPin": "0000000000000000000000000000000000000000",
+      "commitPin": "1c71e4a97d39818bb83a48ec49048ac28fa4b93c",
       "issueLinks": ["USF-204", "USF-195", "USF-171", "USF-187", "USF-184", "USF-192", "USF-133"],
-      "prOrMergeSha": "0000000000000000000000000000000000000000",
+      "prOrMergeSha": "1c71e4a97d39818bb83a48ec49048ac28fa4b93c",
       "retentionPosture": "Retain committed proof code, matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw source payloads, credentials, token values, raw endpoints, scanner logs, provider payloads, connection strings, stack traces, or production data."
     },
     {
@@ -5952,7 +5952,7 @@
       "adapterProviderId": "quality-gate-sonarqube-composed-test",
       "validationCommand": "corepack pnpm proof:assurance:sonarqube",
       "commandPin": "tsx packages/proof/src/sonarqube-composed-proof.ts",
-      "commitPin": "0000000000000000000000000000000000000000",
+      "commitPin": "1c71e4a97d39818bb83a48ec49048ac28fa4b93c",
       "issueLinks": [
         "USF-204",
         "USF-195",
@@ -5964,7 +5964,7 @@
         "USF-169",
         "USF-193"
       ],
-      "prOrMergeSha": "0000000000000000000000000000000000000000",
+      "prOrMergeSha": "1c71e4a97d39818bb83a48ec49048ac28fa4b93c",
       "retentionPosture": "Retain committed proof code, matrix, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw source payloads, credentials, token values, raw endpoints, scanner logs, provider payloads, connection strings, stack traces, or production data."
     }
   ],
