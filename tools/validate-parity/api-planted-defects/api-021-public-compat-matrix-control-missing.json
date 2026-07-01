@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-API-021",
+  "mutation": {
+    "removePublicCompatControl": "compatibility-snapshot-evidence"
+  }
+}

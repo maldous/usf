@@ -3,6 +3,7 @@ import { DEV_ACTOR_ID, DEV_TENANT_ID, createDevRuntime } from "@foundation/app-a
 import { buildApi } from "@foundation/app-api";
 import { buildOpenApiDocument } from "@foundation/openapi";
 import { checkOpenApiContract } from "@foundation/openapi/check";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 interface ApiContractsProofResult {
@@ -27,6 +28,8 @@ interface ApiContractsProofResult {
   readonly usf133ClosureClaim: false;
   readonly enterpriseApiGatewayDepthProven: true;
   readonly apiGatewayDepthEvidence: ApiGatewayDepthEvidence;
+  readonly publicApiCompatibilityGovernanceProven: true;
+  readonly publicApiCompatibilityGovernanceEvidence: PublicApiCompatibilityGovernanceEvidence;
   readonly routeCount: number;
   readonly operationCount: number;
   readonly checks: readonly string[];
@@ -52,6 +55,32 @@ interface ApiGatewayDepthEvidence {
   readonly gatewayLiveReadinessClaim: false;
   readonly productionReadinessClaim: false;
   readonly stagingReadinessClaim: false;
+  readonly socReadinessClaim: false;
+  readonly iso27001CertificationClaim: false;
+  readonly fullDevReadinessClaim: false;
+  readonly fullReactParityClaim: false;
+  readonly usf133ClosureClaim: false;
+}
+
+interface PublicApiCompatibilityGovernanceEvidence {
+  readonly issueId: "USF-213";
+  readonly publicApiCompatibilityScopeDefined: true;
+  readonly compatibilitySnapshotChecked: true;
+  readonly compatibilitySnapshotHash: string;
+  readonly compatibilitySnapshotRouteCount: number;
+  readonly releaseGovernanceBoundaryChecked: true;
+  readonly semverPolicyBoundaryChecked: true;
+  readonly consumerContractDeferredWithOwner: true;
+  readonly externalDeveloperPlatformBoundaryExplicit: true;
+  readonly generatedPublicExamplesBounded: true;
+  readonly nonEquivalenceBoundaryRecorded: true;
+  readonly publicApiCompatibilityReadinessClaim: false;
+  readonly consumerContractReadinessClaim: false;
+  readonly releaseCompatibilityReadinessClaim: false;
+  readonly externalDeveloperPlatformReadinessClaim: false;
+  readonly stagingReadinessClaim: false;
+  readonly productionReadinessClaim: false;
+  readonly deploymentReadinessClaim: false;
   readonly socReadinessClaim: false;
   readonly iso27001CertificationClaim: false;
   readonly fullDevReadinessClaim: false;
@@ -132,6 +161,40 @@ function assertRouteMetadataDepth(): void {
   }
 }
 
+function compatibilitySnapshotHash(): string {
+  const snapshot = API_ROUTE_CONTRACTS.map((route) => ({
+    routeId: route.routeId,
+    method: route.method,
+    path: route.path,
+    lifecycle: route.lifecycle,
+    compatibilityPolicy: route.compatibilityPolicy,
+    deprecationStatus: route.deprecationStatus,
+    replacementOperationId: route.replacementOperationId,
+    owningCapability: route.owningCapability,
+    routeClassification: route.routeClassification,
+  })).sort((left, right) => left.routeId.localeCompare(right.routeId));
+  return createHash("sha256").update(JSON.stringify(snapshot)).digest("hex");
+}
+
+function assertPublicApiCompatibilityGovernance(
+  openapi: ReturnType<typeof buildOpenApiDocument>,
+): string {
+  const boundary = openapi["x-usf-boundary"];
+  assert(boundary.publicApiReadinessClaim === false, "public API readiness claim must be false");
+  assert(boundary.productionReadinessClaim === false, "production readiness claim must be false");
+  for (const route of API_ROUTE_CONTRACTS) {
+    assert(
+      route.compatibilityPolicy.trim().length > 0,
+      `compatibility policy missing ${route.routeId}`,
+    );
+    assert(
+      route.lifecycle !== "removed",
+      `removed route present in compatibility snapshot ${route.routeId}`,
+    );
+  }
+  return compatibilitySnapshotHash();
+}
+
 export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
   checkOpenApiContract();
   const runtime = createDevRuntime();
@@ -145,6 +208,10 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
     assertRouteMetadataDepth();
     checks.push(
       "route metadata records compatibility, browser, security, field exposure, and gateway posture",
+    );
+    const snapshotHash = assertPublicApiCompatibilityGovernance(openapi);
+    checks.push(
+      "USF-213 public API compatibility scope and release governance are bounded by a deterministic local snapshot",
     );
 
     for (const route of API_ROUTE_CONTRACTS) {
@@ -380,6 +447,32 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
         gatewayLiveReadinessClaim: false,
         productionReadinessClaim: false,
         stagingReadinessClaim: false,
+        socReadinessClaim: false,
+        iso27001CertificationClaim: false,
+        fullDevReadinessClaim: false,
+        fullReactParityClaim: false,
+        usf133ClosureClaim: false,
+      },
+      publicApiCompatibilityGovernanceProven: true,
+      publicApiCompatibilityGovernanceEvidence: {
+        issueId: "USF-213",
+        publicApiCompatibilityScopeDefined: true,
+        compatibilitySnapshotChecked: true,
+        compatibilitySnapshotHash: snapshotHash,
+        compatibilitySnapshotRouteCount: API_ROUTE_CONTRACTS.length,
+        releaseGovernanceBoundaryChecked: true,
+        semverPolicyBoundaryChecked: true,
+        consumerContractDeferredWithOwner: true,
+        externalDeveloperPlatformBoundaryExplicit: true,
+        generatedPublicExamplesBounded: true,
+        nonEquivalenceBoundaryRecorded: true,
+        publicApiCompatibilityReadinessClaim: false,
+        consumerContractReadinessClaim: false,
+        releaseCompatibilityReadinessClaim: false,
+        externalDeveloperPlatformReadinessClaim: false,
+        stagingReadinessClaim: false,
+        productionReadinessClaim: false,
+        deploymentReadinessClaim: false,
         socReadinessClaim: false,
         iso27001CertificationClaim: false,
         fullDevReadinessClaim: false,

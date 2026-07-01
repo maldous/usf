@@ -35,6 +35,11 @@ RULES = {
     "USF-API-017": ("blocking", "USF-155 enterprise evidence rows are missing"),
     "USF-API-018": ("blocking", "USF-155 deferred or reclassified API/gateway boundary is incomplete"),
     "USF-API-019": ("blocking", "USF-155 API/gateway readiness claim is overclaimed"),
+    "USF-API-020": ("blocking", "USF-213 public API compatibility governance proof markers are missing"),
+    "USF-API-021": ("blocking", "USF-213 public API compatibility governance matrix is missing or incomplete"),
+    "USF-API-022": ("blocking", "USF-213 enterprise evidence rows are missing"),
+    "USF-API-023": ("blocking", "USF-213 deferred public compatibility or release-governance boundary is incomplete"),
+    "USF-API-024": ("blocking", "USF-213 public compatibility readiness claim is overclaimed"),
     "USF-API-SELFTEST": ("blocking", "planted API defect did not raise its expected rule"),
 }
 
@@ -53,6 +58,7 @@ PROOF_TESTS = "tests/packages/proof.test.ts"
 STANDARD = "docs/architecture/api-and-contract-surface-standard.md"
 SOURCE_USE = "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
 DEPTH_MATRIX = "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json"
+PUBLIC_COMPAT_MATRIX = "docs/architecture/api-public-compatibility-release-governance-matrix.json"
 ENTERPRISE_EVIDENCE = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
@@ -73,6 +79,7 @@ SOURCE_FILES = (
     STANDARD,
     SOURCE_USE,
     DEPTH_MATRIX,
+    PUBLIC_COMPAT_MATRIX,
     ENTERPRISE_EVIDENCE,
     PACKAGE,
     MAKEFILE,
@@ -170,12 +177,16 @@ def build_state(overrides=None):
     matrix = overrides["matrix"] if "matrix" in overrides else load_matrix()
     openapi = overrides["openapi"] if "openapi" in overrides else read_json(OPENAPI_JSON)
     depth_matrix = overrides["depthMatrix"] if "depthMatrix" in overrides else read_json(DEPTH_MATRIX)
+    public_compat_matrix = (
+        overrides["publicCompatMatrix"] if "publicCompatMatrix" in overrides else read_json(PUBLIC_COMPAT_MATRIX)
+    )
     enterprise = overrides["enterprise"] if "enterprise" in overrides else read_json(ENTERPRISE_EVIDENCE)
     return {
         "files": files,
         "matrix": matrix,
         "openapi": openapi,
         "depthMatrix": depth_matrix,
+        "publicCompatMatrix": public_compat_matrix,
         "enterprise": enterprise,
     }
 
@@ -239,11 +250,13 @@ def run_checks(F, state=None):
     standard = files.get(STANDARD, "")
     source_use = files.get(SOURCE_USE, "")
     depth_matrix_text = files.get(DEPTH_MATRIX, "")
+    public_compat_matrix_text = files.get(PUBLIC_COMPAT_MATRIX, "")
     enterprise_text = files.get(ENTERPRISE_EVIDENCE, "")
     package = files.get(PACKAGE, "")
     makefile = files.get(MAKEFILE, "")
     openapi = state["openapi"]
     depth_matrix = state.get("depthMatrix")
+    public_compat_matrix = state.get("publicCompatMatrix")
     enterprise = state.get("enterprise")
 
     if not re.search(r"\bAPI_ROUTE_CLASSIFICATIONS\b", api_surface) or not re.search(r"\bAPI_ROUTE_CONTRACTS\b", api_surface):
@@ -404,6 +417,7 @@ def run_checks(F, state=None):
         "publicApiReadinessClaim: false",
         "externalSdkReadinessClaim: false",
         "productionLiveClaim: false",
+        "publicApiCompatibilityGovernanceProven: true",
         "runApiContractsProof",
         "routeCount",
         "operationCount",
@@ -493,12 +507,42 @@ def run_checks(F, state=None):
         if token not in proof:
             F.add("USF-API-015", PROOF, f"USF-155 proof marker missing {token}")
     for token in (
+        "publicApiCompatibilityGovernanceProven: true",
+        "publicApiCompatibilityGovernanceEvidence",
+        "issueId: \"USF-213\"",
+        "publicApiCompatibilityScopeDefined: true",
+        "compatibilitySnapshotChecked: true",
+        "compatibilitySnapshotHash",
+        "releaseGovernanceBoundaryChecked: true",
+        "semverPolicyBoundaryChecked: true",
+        "consumerContractDeferredWithOwner: true",
+        "externalDeveloperPlatformBoundaryExplicit: true",
+        "publicApiCompatibilityReadinessClaim: false",
+        "consumerContractReadinessClaim: false",
+        "releaseCompatibilityReadinessClaim: false",
+        "externalDeveloperPlatformReadinessClaim: false",
+        "deploymentReadinessClaim: false",
+        "usf133ClosureClaim: false",
+    ):
+        if token not in proof:
+            F.add("USF-API-020", PROOF, f"USF-213 proof marker missing {token}")
+    for token in (
         "enterpriseApiGatewayDepthProven",
         "gatewayLiveReadinessClaim",
         "apiGatewayDepthEvidence",
     ):
         if token not in proof_tests + app_tests:
             F.add("USF-API-015", "tests", f"USF-155 test marker missing {token}")
+    for token in (
+        "publicApiCompatibilityGovernanceProven",
+        "publicApiCompatibilityGovernanceEvidence",
+        "publicApiCompatibilityScopeDefined",
+        "compatibilitySnapshotChecked",
+        "consumerContractDeferredWithOwner",
+        "releaseCompatibilityReadinessClaim",
+    ):
+        if token not in proof_tests:
+            F.add("USF-API-020", PROOF_TESTS, f"USF-213 test marker missing {token}")
 
     if not isinstance(depth_matrix, dict):
         F.add("USF-API-016", DEPTH_MATRIX, "USF-155 proof-depth matrix must exist and parse")
@@ -572,7 +616,105 @@ def run_checks(F, state=None):
         if expected_id not in enterprise_text:
             F.add("USF-API-017", ENTERPRISE_EVIDENCE, f"enterprise text missing {expected_id}")
 
-    combined_boundary_text = "\n".join([proof, standard, source_use, depth_matrix_text, enterprise_text])
+    if not isinstance(public_compat_matrix, dict):
+        F.add("USF-API-021", PUBLIC_COMPAT_MATRIX, "USF-213 matrix must exist and parse")
+    else:
+        if public_compat_matrix.get("sourceIssue") != "USF-213":
+            F.add("USF-API-021", PUBLIC_COMPAT_MATRIX, "matrix must be scoped to USF-213")
+        claims = public_compat_matrix.get("claims")
+        if not isinstance(claims, dict) or claims.get("publicApiCompatibilityGovernanceProven") is not True:
+            F.add("USF-API-021", PUBLIC_COMPAT_MATRIX, "matrix must record publicApiCompatibilityGovernanceProven=true")
+        for claim in (
+            "publicApiReadinessClaim",
+            "publicApiCompatibilityReadinessClaim",
+            "consumerContractReadinessClaim",
+            "releaseCompatibilityReadinessClaim",
+            "externalDeveloperPlatformReadinessClaim",
+            "generatedSdkReadinessClaim",
+            "deploymentReadinessClaim",
+            "stagingReadinessClaim",
+            "productionReadinessClaim",
+            "socReadinessClaim",
+            "iso27001CertificationClaim",
+            "fullDevReadinessClaim",
+            "fullReactParityClaim",
+            "usf133ClosureClaim",
+        ):
+            if not isinstance(claims, dict) or claims.get(claim) is not False:
+                F.add("USF-API-024", PUBLIC_COMPAT_MATRIX, f"matrix must keep {claim}=false")
+        controls = public_compat_matrix.get("controls")
+        if not isinstance(controls, list):
+            F.add("USF-API-021", PUBLIC_COMPAT_MATRIX, "matrix controls must be a list")
+            controls = []
+        control_ids = {item.get("id") for item in controls if isinstance(item, dict)}
+        for required in (
+            "public-api-compatibility-scope",
+            "compatibility-snapshot-evidence",
+            "consumer-contract-boundary",
+            "release-governance-boundary",
+            "semver-versioning-posture",
+            "external-developer-platform-boundary",
+        ):
+            if required not in control_ids:
+                F.add("USF-API-021", PUBLIC_COMPAT_MATRIX, f"missing control {required}")
+        for item in controls:
+            if not isinstance(item, dict):
+                continue
+            for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "nonClaimBoundary"):
+                if not item.get(field):
+                    F.add("USF-API-023", f"{PUBLIC_COMPAT_MATRIX}#{item.get('id')}", f"control missing {field}")
+            if item.get("status") == "deferred-with-owner" and not item.get("followUpIssue"):
+                F.add("USF-API-023", f"{PUBLIC_COMPAT_MATRIX}#{item.get('id')}", "deferred control missing followUpIssue")
+        for boundary in public_compat_matrix.get("deferredBoundaries", []):
+            if not isinstance(boundary, dict):
+                continue
+            for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "followUpIssue", "promotionImpact", "nonClaimBoundary"):
+                if not boundary.get(field):
+                    F.add("USF-API-023", f"{PUBLIC_COMPAT_MATRIX}#{boundary.get('id')}", f"deferred boundary missing {field}")
+        for required in (
+            "api-public-compatibility-release-governance-matrix",
+            "USF-213",
+            "deterministic local compatibility snapshot",
+            "consumer-driven contract",
+            "release compatibility",
+            "external developer platform",
+            "No public API launch readiness",
+            "No full dev readiness",
+        ):
+            if required not in public_compat_matrix_text:
+                F.add("USF-API-021", PUBLIC_COMPAT_MATRIX, f"matrix text missing {required}")
+
+    required_usf213_enterprise_rows = {
+        "soaSupportMappings": "soa-usf-213-public-api-compatibility-governance",
+        "evidenceRegister": "evidence-usf-213-public-api-compatibility-governance",
+        "threatModelAbuseCaseRegister": "threat-usf-213-public-api-compatibility-governance",
+        "accessReviewPrivilegedOperationPosture": "access-usf-213-public-api-compatibility-governance",
+        "backupRestoreResiliencePosture": "resilience-usf-213-public-api-compatibility-governance",
+        "incidentVulnerabilityManagementEvidence": "incident-usf-213-public-api-compatibility-governance",
+        "privacyDataMinimisationPosture": "privacy-usf-213-public-api-compatibility-governance",
+    }
+    if not isinstance(enterprise, dict):
+        F.add("USF-API-022", ENTERPRISE_EVIDENCE, "enterprise evidence model must exist and parse")
+    else:
+        for section, expected_id in required_usf213_enterprise_rows.items():
+            rows = enterprise.get(section)
+            if not isinstance(rows, list) or not any(
+                isinstance(row, dict) and (row.get("id") == expected_id or row.get("evidenceId") == expected_id)
+                for row in rows
+            ):
+                F.add("USF-API-022", ENTERPRISE_EVIDENCE, f"missing enterprise evidence row {expected_id}")
+    for expected_id in required_usf213_enterprise_rows.values():
+        if expected_id not in enterprise_text:
+            F.add("USF-API-022", ENTERPRISE_EVIDENCE, f"enterprise text missing {expected_id}")
+
+    combined_boundary_text = "\n".join([
+        proof,
+        standard,
+        source_use,
+        depth_matrix_text,
+        public_compat_matrix_text,
+        enterprise_text,
+    ])
     for phrase in (
         "public API readiness is proven",
         "gateway-live readiness is proven",
@@ -589,6 +731,21 @@ def run_checks(F, state=None):
     ):
         if phrase.lower() in combined_boundary_text.lower():
             F.add("USF-API-019", "USF-155", f"readiness overclaim present: {phrase}")
+    for phrase in (
+        "public API launch readiness is proven",
+        "public API compatibility readiness is proven",
+        "consumer contract readiness is proven",
+        "release compatibility readiness is proven",
+        "external developer platform readiness is proven",
+        "generated SDK readiness is proven",
+        "production API readiness is proven",
+        "SOC readiness is explicitly proven",
+        "ISO certification readiness is explicitly proven",
+        "USF-133 closure is claimed",
+        "USF-133 is closed",
+    ):
+        if phrase.lower() in combined_boundary_text.lower():
+            F.add("USF-API-024", "USF-213", f"readiness overclaim present: {phrase}")
 
 
 def apply_mutation(base, mutation):
@@ -596,6 +753,9 @@ def apply_mutation(base, mutation):
     matrix = json.loads(json.dumps(base["matrix"])) if base["matrix"] is not None else None
     openapi = json.loads(json.dumps(base["openapi"])) if base["openapi"] is not None else None
     depth_matrix = json.loads(json.dumps(base["depthMatrix"])) if base.get("depthMatrix") is not None else None
+    public_compat_matrix = (
+        json.loads(json.dumps(base["publicCompatMatrix"])) if base.get("publicCompatMatrix") is not None else None
+    )
     enterprise = json.loads(json.dumps(base["enterprise"])) if base.get("enterprise") is not None else None
     target = mutation.get("file")
     if "replace" in mutation and target in files:
@@ -607,6 +767,11 @@ def apply_mutation(base, mutation):
             depth_matrix = json.loads(files[target])
         except Exception:  # noqa: BLE001
             depth_matrix = None
+    if target == PUBLIC_COMPAT_MATRIX and target in files:
+        try:
+            public_compat_matrix = json.loads(files[target])
+        except Exception:  # noqa: BLE001
+            public_compat_matrix = None
     if target == ENTERPRISE_EVIDENCE and target in files:
         try:
             enterprise = json.loads(files[target])
@@ -633,19 +798,36 @@ def apply_mutation(base, mutation):
             depth_matrix["controls"] = [
                 item for item in controls if not (isinstance(item, dict) and item.get("id") == remove_id)
             ]
+    if "publicCompatClaimSet" in mutation and isinstance(public_compat_matrix, dict):
+        claims = public_compat_matrix.setdefault("claims", {})
+        if isinstance(claims, dict):
+            claims.update(mutation["publicCompatClaimSet"])
+    if "removePublicCompatControl" in mutation and isinstance(public_compat_matrix, dict):
+        remove_id = mutation["removePublicCompatControl"]
+        controls = public_compat_matrix.get("controls")
+        if isinstance(controls, list):
+            public_compat_matrix["controls"] = [
+                item for item in controls if not (isinstance(item, dict) and item.get("id") == remove_id)
+            ]
     if "removeEnterpriseRow" in mutation and isinstance(enterprise, dict):
         section = mutation["removeEnterpriseRow"].get("section")
         row_id = mutation["removeEnterpriseRow"].get("id")
         rows = enterprise.get(section)
         if isinstance(rows, list):
             enterprise[section] = [
-                item for item in rows if not (isinstance(item, dict) and item.get("id") == row_id)
+                item
+                for item in rows
+                if not (
+                    isinstance(item, dict)
+                    and (item.get("id") == row_id or item.get("evidenceId") == row_id)
+                )
             ]
     return {
         "files": files,
         "matrix": matrix,
         "openapi": openapi,
         "depthMatrix": depth_matrix,
+        "publicCompatMatrix": public_compat_matrix,
         "enterprise": enterprise,
     }
 

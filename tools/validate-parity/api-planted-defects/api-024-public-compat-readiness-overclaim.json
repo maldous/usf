@@ -1,0 +1,7 @@
+{
+  "expectedRule": "USF-API-024",
+  "mutation": {
+    "file": "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+    "append": "public API launch readiness is proven"
+  }
+}

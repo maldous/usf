@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-023",
+  "mutation": {
+    "file": "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+    "replace": {
+      "old": "\"followUpIssue\": \"future-consumer-contract-issue-if-public-api-is-authorised\",",
+      "new": "\"followUpIssue\": \"\","
+    }
+  }
+}

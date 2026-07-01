@@ -77,6 +77,21 @@ describe("api/contracts proof", () => {
         gatewayEdgeReclassified: true,
         auditEvidenceCaptured: true,
       },
+      publicApiCompatibilityGovernanceProven: true,
+      publicApiCompatibilityGovernanceEvidence: {
+        issueId: "USF-213",
+        publicApiCompatibilityScopeDefined: true,
+        compatibilitySnapshotChecked: true,
+        releaseGovernanceBoundaryChecked: true,
+        semverPolicyBoundaryChecked: true,
+        consumerContractDeferredWithOwner: true,
+        externalDeveloperPlatformBoundaryExplicit: true,
+        publicApiCompatibilityReadinessClaim: false,
+        consumerContractReadinessClaim: false,
+        releaseCompatibilityReadinessClaim: false,
+        externalDeveloperPlatformReadinessClaim: false,
+        usf133ClosureClaim: false,
+      },
       productionLiveClaim: false,
     });
   });

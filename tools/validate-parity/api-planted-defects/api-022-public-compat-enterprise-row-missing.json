@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-API-022",
+  "mutation": {
+    "removeEnterpriseRow": {
+      "section": "evidenceRegister",
+      "id": "evidence-usf-213-public-api-compatibility-governance"
+    }
+  }
+}

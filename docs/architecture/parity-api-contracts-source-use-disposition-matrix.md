@@ -39,6 +39,7 @@ This matrix records the treatment of files touched for the API/routes/OpenAPI/co
 | `tools/validate-parity/validate-api.py` | source-derived-rewrite | Existing parity validator patterns and API validator expectations | Adds robust API/contracts parity checks and selftest harness. |
 | `tools/validate-parity/api-planted-defects/*.json` | evidence-only-support | Validator planted-defect pattern | Proves high-risk API validator rules fire. |
 | `docs/architecture/api-gateway-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-155 issue acceptance and existing enterprise proof-depth matrix pattern | Records which API/gateway depth controls are proven locally, explicitly deferred, transferred, or out of scope with owner, risk, follow-up, and non-claim boundaries. |
+| `docs/architecture/api-public-compatibility-release-governance-matrix.json` | evidence-only-support | USF-213 issue acceptance and existing enterprise proof-depth matrix pattern | Records public API compatibility scope, deterministic local compatibility snapshot evidence, release governance and SemVer posture, consumer-contract deferrals, external developer platform boundary, enterprise evidence refs, validation commands, and explicit non-claims. |
 
 ## Architecture And Matrix Files
 
@@ -67,6 +68,7 @@ This matrix records the treatment of files touched for the API/routes/OpenAPI/co
 | Browser-session CSRF/cookie runtime | deferred-with-owner | USF-155 records route metadata only; browser-session runtime remains under identity/UI authority |
 | Live gateway/edge/TLS/WAF/trusted-proxy posture | deferred-with-owner | USF-155 records local gateway metadata and service-catalogue substrate only; future gateway route-proof issue required before gateway-live or edge readiness |
 | Public compatibility guarantees and consumer contracts | deferred-with-owner | USF-155 records local compatibility metadata and OpenAPI checker only; USF-213 is required before any public API compatibility readiness claim |
+| Public API compatibility and release governance | bounded-local-proof-and-reclassified-depth | USF-213 records a deterministic local compatibility snapshot and release-governance evidence boundary while preserving public API launch, consumer contract, external developer platform, generated SDK, deployment, staging, production, SOC, ISO, full readiness, full parity, and USF-133 closure non-claims |
 | Broad bulk/import/export API surface | deferred-with-owner | Transferred to USF-163 for import/export/bulk deep runtime proof depth |
 | React UI/Playwright API behaviours | foundation-behaviour-rewritten-from-ui-test | API/capability/contract/proof tests only; no UI/Playwright added |
 
