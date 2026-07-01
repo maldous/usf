@@ -1766,7 +1766,9 @@
         "packages/proof/src/db-rls-isolation-proof.ts",
         "tools/validate-parity/validate-db.py",
         "docs/architecture/enterprise-persistence-metadata-and-classification-standard.md",
-        "docs/architecture/persistent-object-classification-registry.json"
+        "docs/architecture/persistent-object-classification-registry.json",
+        "adapters/db/migrations/0004-enterprise-db-proof-depth.sql",
+        "docs/architecture/db-enterprise-controls-proof-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/adapters/db-rls.test.ts",
@@ -1775,16 +1777,17 @@
         "tests/capabilities/tenant-isolation.test.ts"
       ],
       "usf_proofs": [
-        "make db-proof (packages/proof/src/db-rls-isolation-proof.ts): 19 checks under the real app role with migration-owner separation and catalog evidence",
-        "make parity (validate-db USF-DB-001..011 with 11 planted defects)"
+        "make db-proof (packages/proof/src/db-rls-isolation-proof.ts): real app role proof with migration-owner separation, RLS, tenant-key/index, transaction rollback, lifecycle, append-only audit, legal-hold, JSON classification, identifier review, and catalog evidence",
+        "make parity (validate-db USF-DB-001..016 with planted defects)",
+        "docs/architecture/db-enterprise-controls-proof-depth-matrix.json records USF-139 implemented, bounded, and reclassified DB controls"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-139",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "USF-138 merged the enterprise persistence standard, classification registry, migration 0002 (lifecycle/append-only/legal-hold triggers, schema_migrations control plane), manifest checksum/immutability, validate-db enforcement, and the live composed-Postgres real-app-role isolation proof. Deferred enterprise DB controls and the JS Postgres runtime adapter are tracked in USF-139.",
-      "retry_condition": "USF-139 completes the deferred enterprise DB controls and the JS Postgres runtime adapter; full DB-domain parity then moves to migrated."
+      "evidence": "USF-138 merged the enterprise persistence standard, classification registry, migration 0002, manifest checksum/immutability, validate-db enforcement, and live composed-Postgres real-app-role isolation proof. USF-139 adds migration 0004 for the remaining tenant-key FK guardrail, extends proof:db for tenant key/index, transaction rollback, JSON classification, identifier review, and catalog evidence, and records bounded/reclassified controls in the DB enterprise proof-depth matrix. Backup/restore readiness, DR, production, live-provider, and certification claims remain prohibited and linked to follow-up evidence boundaries such as USF-211/USF-202.",
+      "retry_condition": "Future source issues prove any desired production DB, live-provider, backup/restore readiness, DR, RPO/RTO, export/legal-hold workflow, or environment-promotion claim without overclaiming USF-139 local proof."
     },
     {
       "react_item_id": "provider-adapters-modes",

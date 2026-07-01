@@ -18,6 +18,11 @@ docs/architecture/persistent-object-classification-registry.json:
   USF-DB-009  migration manifest is contiguous and checksum-immutable
   USF-DB-010  tenant-scoped tables index tenant_id
   USF-DB-011  a migration-control-plane object exists
+  USF-DB-012  tenant-boundary tables carry an explicit tenant_id foreign key
+  USF-DB-013  USF-139 enterprise DB proof-depth matrix exists and is complete
+  USF-DB-014  USF-139 deferred/reclassified controls carry owner and follow-up
+  USF-DB-015  USF-139 proof and enterprise evidence linkage is present
+  USF-DB-016  USF-139 DB readiness/certification overclaims remain prohibited
 
 Live role/search-path/catalog posture is asserted separately by the composed
 Postgres proof (packages/proof/src/db-rls-isolation-proof.ts). Planted defects
@@ -44,10 +49,16 @@ RULES = {
     "USF-DB-009": ("blocking", "migration manifest is non-contiguous or checksum-mismatched"),
     "USF-DB-010": ("blocking", "tenant-scoped table does not index tenant_id"),
     "USF-DB-011": ("blocking", "no migration-control-plane object is classified"),
+    "USF-DB-012": ("blocking", "tenant-boundary table does not carry a tenant_id foreign key"),
+    "USF-DB-013": ("blocking", "USF-139 enterprise DB proof-depth matrix is missing or incomplete"),
+    "USF-DB-014": ("blocking", "USF-139 deferred/reclassified control lacks owner or follow-up metadata"),
+    "USF-DB-015": ("blocking", "USF-139 proof or enterprise evidence linkage is incomplete"),
+    "USF-DB-016": ("blocking", "USF-139 DB readiness or certification claim is overclaimed"),
     "USF-DB-SELFTEST": ("blocking", "planted DB defect did not raise its expected rule"),
 }
 
 REGISTRY_PATH = "docs/architecture/persistent-object-classification-registry.json"
+USF139_MATRIX_PATH = "docs/architecture/db-enterprise-controls-proof-depth-matrix.json"
 MIGRATIONS_DIR = "adapters/db/migrations"
 MANIFEST_PATH = "adapters/db/migrations/manifest.json"
 SELFTEST_DIR = "tools/validate-parity/db-planted-defects"
@@ -57,6 +68,41 @@ KNOWN_CLASSES = {
     "audit-evidence", "migration-control-plane", "append-only-ledger", "ephemeral-runtime-state",
 }
 CONSTRAINT_KEYWORDS = {"PRIMARY", "FOREIGN", "CHECK", "CONSTRAINT", "UNIQUE"}
+TENANT_BOUNDARY_CLASSES = {"tenant-scoped", "audit-evidence", "append-only-ledger"}
+USF139_REQUIRED_CONTROLS = {
+    "runtime-postgres-proof-reconciliation",
+    "broader-tenant-key-enforcement",
+    "index-and-performance-evidence",
+    "pooling-and-transaction-guarantees",
+    "operational-table-classification",
+    "aggregate-non-leakage",
+    "backup-restore-export-safety",
+    "optimistic-concurrency-depth",
+    "identifier-enumeration-review",
+    "json-document-classification",
+}
+USF139_PROHIBITED_CLAIMS = {
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "backup-readiness",
+    "restore-readiness",
+    "disaster-recovery-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure",
+}
+PROVEN_STATUSES = {"proven-local", "bounded-local-proof", "implemented-bounded"}
+DEFERRED_STATUSES = {
+    "reclassified-deferred",
+    "deferred-with-owner",
+    "not-applicable-with-rationale",
+}
 
 
 class Findings:
@@ -96,6 +142,12 @@ def read_json(path):
         return json.load(handle)
 
 
+def read_json_optional(path):
+    if not os.path.exists(path):
+        return None
+    return read_json(path)
+
+
 def read_text(path):
     with open(path, encoding="utf-8") as handle:
         return handle.read()
@@ -103,6 +155,7 @@ def read_text(path):
 
 def parse_sql(sql):
     tables = {}
+    tenant_fks = set()
     for m in re.finditer(r"CREATE TABLE (\w+)\s*\((.*?)\n\);", sql, re.DOTALL):
         name, body = m.group(1), m.group(2)
         cols = set()
@@ -115,9 +168,17 @@ def parse_sql(sql):
                 continue
             if re.match(r"^[a-z_][a-z0-9_]*$", tok):
                 cols.add(tok)
+            if re.search(r"\btenant_id\b.*REFERENCES\s+tenants\s*\(\s*tenant_id\s*\)", line, re.IGNORECASE):
+                tenant_fks.add(name)
         tables[name] = cols
     for m in re.finditer(r"ALTER TABLE (\w+)\s+ADD COLUMN (\w+)", sql):
         tables.setdefault(m.group(1), set()).add(m.group(2))
+    for m in re.finditer(
+        r"ALTER TABLE (\w+).*?FOREIGN KEY\s*\(\s*tenant_id\s*\)\s*REFERENCES\s+tenants\s*\(\s*tenant_id\s*\)",
+        sql,
+        re.DOTALL | re.IGNORECASE,
+    ):
+        tenant_fks.add(m.group(1))
     rls = {}
     for m in re.finditer(r"ALTER TABLE (\w+)\s+ENABLE ROW LEVEL SECURITY", sql):
         rls.setdefault(m.group(1), {"enable": False, "force": False})["enable"] = True
@@ -136,7 +197,7 @@ def parse_sql(sql):
         cols = {c.strip().split()[0] for c in m.group(2).split(",") if c.strip()}
         indexes.append((m.group(1), cols))
     return {"tables": tables, "rls": rls, "policies": policies, "grants": grants,
-            "secdef": secdef, "indexes": indexes}
+            "secdef": secdef, "indexes": indexes, "tenant_fks": tenant_fks}
 
 
 def load_migrations():
@@ -152,6 +213,7 @@ def load_migrations():
 def build_state(overrides=None):
     overrides = overrides or {}
     registry = overrides.get("registry") or read_json(REGISTRY_PATH)
+    matrix = overrides.get("usf139_matrix", read_json_optional(USF139_MATRIX_PATH))
     if "manifest" in overrides:
         manifest = overrides["manifest"]
         entries = sorted(manifest.get("migrations", []), key=lambda e: e.get("order", 0))
@@ -163,7 +225,7 @@ def build_state(overrides=None):
     else:
         sql = "\n".join(files.get(e["file"]) or "" for e in entries)
     return {"registry": registry, "manifest": manifest, "entries": entries,
-            "files": files, "sql": sql, "parsed": parse_sql(sql)}
+            "files": files, "sql": sql, "parsed": parse_sql(sql), "usf139_matrix": matrix}
 
 
 def check_classification(F, state):
@@ -271,6 +333,77 @@ def check_control_plane(F, state):
         F.add("USF-DB-011", "registry", "no migration-control-plane object is classified")
 
 
+def check_tenant_foreign_keys(F, state):
+    registry = state["registry"]
+    classes = registry.get("classes", {})
+    tenant_fks = state["parsed"].get("tenant_fks", set())
+    tables = state["parsed"]["tables"]
+    for name, obj in sorted(registry.get("objects", {}).items()):
+        cls = classes.get(obj.get("class"))
+        if cls is None or name not in tables:
+            continue
+        if obj.get("class") not in TENANT_BOUNDARY_CLASSES:
+            continue
+        if "tenant_id" not in tables.get(name, set()):
+            continue
+        if name not in tenant_fks:
+            F.add("USF-DB-012", name, "tenant-boundary table lacks tenant_id foreign key to tenants")
+
+
+def _control_by_id(matrix):
+    return {control.get("id"): control for control in matrix.get("controls", []) if isinstance(control, dict)}
+
+
+def _has_nonempty_list(value):
+    return isinstance(value, list) and all(isinstance(item, str) and item for item in value)
+
+
+def check_usf139_matrix(F, state):
+    matrix = state.get("usf139_matrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-DB-013", USF139_MATRIX_PATH, "USF-139 enterprise DB proof-depth matrix is missing")
+        return
+    if matrix.get("sourceIssue") != "USF-139" or matrix.get("serviceCatalogueServiceId") != "postgres":
+        F.add("USF-DB-013", USF139_MATRIX_PATH, "matrix does not identify USF-139 and postgres")
+    controls = _control_by_id(matrix)
+    missing = sorted(USF139_REQUIRED_CONTROLS - set(controls))
+    if missing:
+        F.add("USF-DB-013", USF139_MATRIX_PATH, f"missing required controls: {missing}")
+    claims = matrix.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-DB-016", USF139_MATRIX_PATH, "claims object is missing")
+    else:
+        for key, value in claims.items():
+            if key.endswith("Claim") and value is not False:
+                F.add("USF-DB-016", key, "readiness/certification claim must be false")
+    nonclaims = set(matrix.get("nonClaims", []))
+    missing_nonclaims = sorted(USF139_PROHIBITED_CLAIMS - nonclaims)
+    if missing_nonclaims:
+        F.add("USF-DB-016", USF139_MATRIX_PATH, f"missing non-claims: {missing_nonclaims}")
+
+    if not _has_nonempty_list(matrix.get("enterpriseEvidenceRefs")):
+        F.add("USF-DB-015", USF139_MATRIX_PATH, "enterprise evidence references are missing")
+    if not matrix.get("sourceUseMatrix") or not matrix.get("parityMatrix"):
+        F.add("USF-DB-015", USF139_MATRIX_PATH, "source-use or parity matrix linkage is missing")
+
+    for control_id, control in sorted(controls.items()):
+        status = control.get("status")
+        if status in PROVEN_STATUSES:
+            if not control.get("proofCommand") or not control.get("validationCommand"):
+                F.add("USF-DB-015", control_id, "proven control lacks proof or validator command")
+            if not _has_nonempty_list(control.get("evidenceRefs")):
+                F.add("USF-DB-015", control_id, "proven control lacks evidence references")
+        elif status in DEFERRED_STATUSES:
+            required = ["owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "followUpIssues"]
+            missing_fields = [field for field in required if not control.get(field)]
+            if missing_fields:
+                F.add("USF-DB-014", control_id, f"deferred/reclassified control missing {missing_fields}")
+            if not _has_nonempty_list(control.get("followUpIssues")):
+                F.add("USF-DB-014", control_id, "deferred/reclassified control lacks follow-up issues")
+        else:
+            F.add("USF-DB-013", control_id, f"unknown or missing control status: {status}")
+
+
 def run_checks(F, state=None):
     state = state or build_state()
     check_classification(F, state)
@@ -281,6 +414,8 @@ def run_checks(F, state=None):
     check_manifest(F, state)
     check_tenant_index(F, state)
     check_control_plane(F, state)
+    check_tenant_foreign_keys(F, state)
+    check_usf139_matrix(F, state)
 
 
 def apply_mutation(base, mutation):
@@ -303,10 +438,35 @@ def apply_mutation(base, mutation):
     if mutation.get("manifestTamper"):
         if manifest.get("migrations"):
             manifest["migrations"][0]["sha256"] = "0" * 64
+    matrix = copy.deepcopy(base.get("usf139_matrix"))
+    if mutation.get("matrixOmit"):
+        matrix = None
+    if matrix is not None and mutation.get("matrixRemoveControl"):
+        matrix["controls"] = [
+            control for control in matrix.get("controls", [])
+            if control.get("id") != mutation["matrixRemoveControl"]
+        ]
+    if matrix is not None and mutation.get("matrixRemoveDeferredFollowUp"):
+        target = mutation["matrixRemoveDeferredFollowUp"]
+        for control in matrix.get("controls", []):
+            if control.get("id") == target:
+                control.pop("followUpIssues", None)
+                control.pop("reviewDate", None)
+    if matrix is not None and mutation.get("matrixRemoveProofCommand"):
+        target = mutation["matrixRemoveProofCommand"]
+        for control in matrix.get("controls", []):
+            if control.get("id") == target:
+                control.pop("proofCommand", None)
+    if matrix is not None and mutation.get("matrixClearEnterpriseEvidenceRefs"):
+        matrix["enterpriseEvidenceRefs"] = []
+    if matrix is not None and "matrixSetClaim" in mutation:
+        target = mutation["matrixSetClaim"]
+        matrix.setdefault("claims", {})[target["claim"]] = target["value"]
     overrides["registry"] = registry
     overrides["manifest"] = manifest
     overrides["files"] = files
     overrides["sql"] = sql
+    overrides["usf139_matrix"] = matrix
     return overrides
 
 

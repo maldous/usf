@@ -25,10 +25,13 @@ describe("database RLS posture", () => {
   });
 
   it("records SQL controls for RLS and runtime role posture", () => {
-    const sql = readFileSync("adapters/db/migrations/0001-bootstrap.sql", "utf8");
+    const sql = ["0001-bootstrap.sql", "0004-enterprise-db-proof-depth.sql"]
+      .map((file) => readFileSync(`adapters/db/migrations/${file}`, "utf8"))
+      .join("\n");
     expect(sql).toContain("ENABLE ROW LEVEL SECURITY");
     expect(sql).toContain("FORCE ROW LEVEL SECURITY");
     expect(sql).toContain("current_setting('app.tenant_id'");
     expect(sql).toContain("BYPASSRLS");
+    expect(sql).toContain("break_glass_grants_tenant_fk");
   });
 });

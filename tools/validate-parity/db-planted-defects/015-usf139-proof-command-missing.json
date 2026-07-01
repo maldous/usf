@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-DB-015",
+  "mutation": {
+    "matrixRemoveProofCommand": "runtime-postgres-proof-reconciliation"
+  }
+}

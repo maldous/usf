@@ -408,6 +408,8 @@ export async function preparePostgresRuntimeProofDatabase(
         `);
       await migration.query(migrationFile("0001-bootstrap.sql"));
       await migration.query(migrationFile("0002-enterprise-persistence-metadata.sql"));
+      await migration.query(migrationFile("0003-files.sql"));
+      await migration.query(migrationFile("0004-enterprise-db-proof-depth.sql"));
       await admin.query(`
           ALTER ROLE ${DEFAULT_POSTGRES_RUNTIME_USER} LOGIN PASSWORD '${DEFAULT_POSTGRES_RUNTIME_PASSWORD}';
           ALTER ROLE ${DEFAULT_POSTGRES_RUNTIME_USER} SET search_path = public;
@@ -416,7 +418,9 @@ export async function preparePostgresRuntimeProofDatabase(
           GRANT USAGE ON SCHEMA public TO ${DEFAULT_POSTGRES_RUNTIME_USER};
           INSERT INTO schema_migrations (migration_id, checksum, applied_by, tool_version, status)
           VALUES ('0001-bootstrap', 'runtime-compose-provider-proof', '${MIGRATION_OWNER}', 'runtime-proof', 'applied'),
-                 ('0002-enterprise-persistence-metadata', 'runtime-compose-provider-proof', '${MIGRATION_OWNER}', 'runtime-proof', 'applied');
+                 ('0002-enterprise-persistence-metadata', 'runtime-compose-provider-proof', '${MIGRATION_OWNER}', 'runtime-proof', 'applied'),
+                 ('0003-files', 'runtime-compose-provider-proof', '${MIGRATION_OWNER}', 'runtime-proof', 'applied'),
+                 ('0004-enterprise-db-proof-depth', 'runtime-compose-provider-proof', '${MIGRATION_OWNER}', 'runtime-proof', 'applied');
         `);
     }, "postgres-composed-provider-migration-readiness-failed");
     for (const tenant of seed.tenants) {

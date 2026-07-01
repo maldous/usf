@@ -20,6 +20,12 @@
       "id": "0003-files",
       "file": "0003-files.sql",
       "sha256": "2e9a56113332bb0e05e051e286969f1b2f7e8ee72ee28dc2133d4574fe8d7ce9"
+    },
+    {
+      "order": 4,
+      "id": "0004-enterprise-db-proof-depth",
+      "file": "0004-enterprise-db-proof-depth.sql",
+      "sha256": "600b4c3680a2bd1292aac103c1db58a8995ecf134f2f5c5adcf7ac4bdee06ae7"
     }
   ]
 }

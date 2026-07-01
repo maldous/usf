@@ -16,9 +16,9 @@
       ],
       "evidence_grade": "A",
       "react_evidence_summary": "Postgres, migrations, RLS proof lineage",
-      "readiness_impact": "Deferred depth remains for backup/restore and broader DB operations.",
-      "tracking_carrier_or_recommendation": "USF-138/USF-139",
-      "usf_evidence_summary": "USF DB/RLS slice, make db-proof",
+      "readiness_impact": "USF-139 adds bounded local enterprise DB proof depth and reclassifies backup/restore, DR, production, and live-provider DB readiness as non-claims with linked follow-ups.",
+      "tracking_carrier_or_recommendation": "USF-138/USF-139 with backup/restore linkage to USF-211 and broader readiness non-claims",
+      "usf_evidence_summary": "USF DB/RLS slice, proof:db, validate-db USF-DB-001..016, and db enterprise controls proof-depth matrix",
       "usf_status": "migrated"
     },
     {

@@ -80,6 +80,7 @@ function setup(): void {
   psql(SUPER, migration("0001-bootstrap.sql"));
   psql(SUPER, migration("0002-enterprise-persistence-metadata.sql"));
   psql(SUPER, migration("0003-files.sql"));
+  psql(SUPER, migration("0004-enterprise-db-proof-depth.sql"));
   psql(
     SUPER,
     `

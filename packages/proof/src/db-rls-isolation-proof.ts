@@ -4,7 +4,8 @@
 // real Postgres substrate, under the ACTUAL runtime application role (not a table
 // owner, migration owner, superuser, or convenience role), with migration-owner /
 // app-runtime role separation. Run via `make db-proof` (brings up the composed
-// Postgres, runs this, tears it down). Emits deterministic catalog evidence.
+// Postgres, runs this, tears it down). Emits deterministic catalog evidence for
+// USF-139's bounded enterprise DB proof-depth gate.
 //
 // This is hermetic/composed-local proof. It makes no live-external-provider or
 // production-live claim.
@@ -19,6 +20,12 @@ const MIGRATION_OWNER = "migration_owner";
 const APP_ROLE = "foundation_runtime";
 const TENANT_A = "11111111-1111-1111-1111-111111111111";
 const TENANT_B = "22222222-2222-2222-2222-222222222222";
+const TENANT_BOUNDARY_TABLES = [
+  "tenant_memberships",
+  "audit_ledger",
+  "break_glass_grants",
+  "files",
+];
 
 interface RunOptions {
   readonly expectFailure?: boolean;
@@ -98,6 +105,8 @@ function setup(): void {
   // tenant-scoped tables and FORCE RLS applies even to the owner.
   psql(MIGRATION_OWNER, migrationFile("0001-bootstrap.sql"));
   psql(MIGRATION_OWNER, migrationFile("0002-enterprise-persistence-metadata.sql"));
+  psql(MIGRATION_OWNER, migrationFile("0003-files.sql"));
+  psql(MIGRATION_OWNER, migrationFile("0004-enterprise-db-proof-depth.sql"));
   // Execution-environment lockdown for the application role (superuser-applied infra).
   psql(
     SUPER,
@@ -109,7 +118,9 @@ function setup(): void {
     GRANT USAGE ON SCHEMA public TO ${APP_ROLE};
     INSERT INTO schema_migrations (migration_id, checksum, applied_by, tool_version, status)
     VALUES ('0001-bootstrap', 'composed-proof', '${MIGRATION_OWNER}', 'proof', 'applied'),
-           ('0002-enterprise-persistence-metadata', 'composed-proof', '${MIGRATION_OWNER}', 'proof', 'applied');
+           ('0002-enterprise-persistence-metadata', 'composed-proof', '${MIGRATION_OWNER}', 'proof', 'applied'),
+           ('0003-files', 'composed-proof', '${MIGRATION_OWNER}', 'proof', 'applied'),
+           ('0004-enterprise-db-proof-depth', 'composed-proof', '${MIGRATION_OWNER}', 'proof', 'applied');
   `,
   );
   // Seed cross-tenant data as the superuser (bypasses RLS) so the app-role proof can
@@ -185,7 +196,7 @@ function proveAppRolePosture(): void {
 }
 
 function proveRlsCatalog(): void {
-  for (const table of ["tenant_memberships", "audit_ledger", "break_glass_grants"]) {
+  for (const table of TENANT_BOUNDARY_TABLES) {
     const flags = scalar(
       SUPER,
       `SELECT relrowsecurity::text || ',' || relforcerowsecurity::text FROM pg_class WHERE relname = '${table}';`,
@@ -195,6 +206,57 @@ function proveRlsCatalog(): void {
     }
   }
   pass("catalog confirms ENABLE + FORCE row level security on tenant-scoped/ledger tables");
+}
+
+function proveTenantKeyAndIndexControls(): void {
+  for (const table of TENANT_BOUNDARY_TABLES) {
+    const tenantFk = scalar(
+      SUPER,
+      `
+      SELECT count(*)
+      FROM pg_constraint c
+      JOIN pg_class table_ref ON table_ref.oid = c.conrelid
+      JOIN pg_class target_ref ON target_ref.oid = c.confrelid
+      JOIN pg_attribute attr ON attr.attrelid = table_ref.oid AND attr.attnum = ANY(c.conkey)
+      WHERE c.contype = 'f'
+        AND table_ref.relname = '${table}'
+        AND target_ref.relname = 'tenants'
+        AND attr.attname = 'tenant_id';
+    `,
+    );
+    if (Number(tenantFk) < 1) {
+      throw new Error(`${table} must carry a tenant_id foreign key to tenants, saw ${tenantFk}`);
+    }
+
+    const tenantIndex = scalar(
+      SUPER,
+      `
+      SELECT count(*)
+      FROM pg_indexes
+      WHERE schemaname = 'public'
+        AND tablename = '${table}'
+        AND indexdef ILIKE '%(tenant_id%';
+    `,
+    );
+    if (tenantIndex === "0") {
+      throw new Error(`${table} must carry tenant_id-leading index evidence`);
+    }
+  }
+  pass("tenant boundary tables carry tenant_id foreign keys and tenant_id-leading indexes");
+
+  const partialIndexes = scalar(
+    SUPER,
+    `
+    SELECT count(*)
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND indexdef ILIKE '%deleted_at IS NULL%';
+  `,
+  );
+  if (Number(partialIndexes) < 2) {
+    throw new Error(`active-row partial index evidence incomplete, saw ${partialIndexes}`);
+  }
+  pass("active tenant row paths have partial-index evidence for non-deleted rows");
 }
 
 function proveIsolationAndNoLeak(): void {
@@ -240,6 +302,30 @@ function proveIsolationAndNoLeak(): void {
     { expectFailure: true },
   );
   pass("cross-tenant insert is blocked by the RLS WITH CHECK policy");
+}
+
+function proveTransactionRollback(): void {
+  psql(
+    APP_ROLE,
+    `
+    BEGIN;
+    SET LOCAL app.tenant_id = '${TENANT_A}';
+    INSERT INTO tenant_memberships (tenant_id, actor_id, email, roles, created_by, updated_by, correlation_id)
+    VALUES ('${TENANT_A}', 'rollback-probe', 'rollback@tenant-a.example', ARRAY['tenant-member'], 'app', 'app', 'rollback-corr');
+    INSERT INTO tenant_memberships (tenant_id, actor_id, email, roles, created_by, updated_by, correlation_id)
+    VALUES ('${TENANT_B}', 'rollback-cross', 'rollback@tenant-b.example', ARRAY['tenant-member'], 'app', 'app', 'rollback-corr');
+    COMMIT;
+  `,
+    { expectFailure: true },
+  );
+  const partialRows = scalar(
+    SUPER,
+    `SELECT count(*) FROM tenant_memberships WHERE actor_id IN ('rollback-probe', 'rollback-cross');`,
+  );
+  if (partialRows !== "0") {
+    throw new Error(`failed tenant transaction left partial rows, saw ${partialRows}`);
+  }
+  pass("failed cross-tenant transaction rolls back without partial tenant writes");
 }
 
 function proveLifecycle(): void {
@@ -368,6 +454,37 @@ function proveLegalHold(): void {
   pass("legal_hold blocks destructive purge (BEFORE DELETE trigger)");
 }
 
+function proveJsonAndIdentifierBoundaries(): void {
+  const metadataType = scalar(
+    SUPER,
+    `SELECT data_type FROM information_schema.columns WHERE table_name = 'audit_ledger' AND column_name = 'metadata';`,
+  );
+  if (metadataType !== "jsonb") {
+    throw new Error(`audit_ledger.metadata should be jsonb, saw ${metadataType}`);
+  }
+  const jsonClassification = scalar(
+    SUPER,
+    `SELECT count(*) FROM audit_ledger WHERE data_classification <> 'security-sensitive';`,
+  );
+  if (jsonClassification !== "0") {
+    throw new Error(
+      `audit JSON-bearing rows must remain security-sensitive, saw ${jsonClassification}`,
+    );
+  }
+  pass("JSON/document-bearing audit metadata is classified security-sensitive at the row boundary");
+
+  const sequences = scalar(
+    SUPER,
+    `SELECT count(*) FROM information_schema.sequences WHERE sequence_schema = 'public';`,
+  );
+  if (sequences !== "0") {
+    throw new Error(
+      `tenant schema should not introduce public sequential identifiers, saw ${sequences}`,
+    );
+  }
+  pass("identifier enumeration review: no public sequential identifier sequences are introduced");
+}
+
 function emitCatalogEvidence(): Record<string, unknown> {
   const tables = scalar(
     SUPER,
@@ -390,6 +507,26 @@ function emitCatalogEvidence(): Record<string, unknown> {
     SUPER,
     `SELECT count(*) FROM pg_indexes WHERE schemaname = 'public' AND indexdef ILIKE '%(tenant_id%';`,
   );
+  const tenantForeignKeys = scalar(
+    SUPER,
+    `
+    SELECT count(*)
+    FROM pg_constraint c
+    JOIN pg_class target_ref ON target_ref.oid = c.confrelid
+    JOIN pg_attribute attr ON attr.attrelid = c.conrelid AND attr.attnum = ANY(c.conkey)
+    WHERE c.contype = 'f'
+      AND target_ref.relname = 'tenants'
+      AND attr.attname = 'tenant_id';
+  `,
+  );
+  const activePartialIndexes = scalar(
+    SUPER,
+    `SELECT count(*) FROM pg_indexes WHERE schemaname = 'public' AND indexdef ILIKE '%deleted_at IS NULL%';`,
+  );
+  const jsonColumns = scalar(
+    SUPER,
+    `SELECT count(*) FROM information_schema.columns WHERE table_schema = 'public' AND data_type = 'jsonb';`,
+  );
   const migrations = scalar(
     SUPER,
     `SELECT string_agg(migration_id || ':' || status, ',' ORDER BY migration_id) FROM schema_migrations;`,
@@ -401,6 +538,9 @@ function emitCatalogEvidence(): Record<string, unknown> {
     policyCount: Number(policies),
     securityDefinerFunctions: Number(secdef),
     tenantIdIndexes: Number(tenantIndexes),
+    tenantForeignKeys: Number(tenantForeignKeys),
+    activePartialIndexes: Number(activePartialIndexes),
+    jsonColumns: Number(jsonColumns),
     migrationControlPlane: migrations,
   };
 }
@@ -409,10 +549,13 @@ function main(): void {
   setup();
   proveAppRolePosture();
   proveRlsCatalog();
+  proveTenantKeyAndIndexControls();
   proveIsolationAndNoLeak();
+  proveTransactionRollback();
   proveLifecycle();
   proveAppendOnlyAndChain();
   proveLegalHold();
+  proveJsonAndIdentifierBoundaries();
   const catalog = emitCatalogEvidence();
   console.log(
     JSON.stringify(
@@ -424,6 +567,24 @@ function main(): void {
         proofLevelObserved: "substrate-proven",
         liveExternalProviderClaim: false,
         productionLiveClaim: false,
+        backupRestoreReadinessClaim: false,
+        restoreReadinessClaim: false,
+        disasterRecoveryReadinessClaim: false,
+        certificationClaim: false,
+        usf133ClosureClaim: false,
+        enterpriseDbDepthGate: {
+          sourceIssue: "USF-139",
+          runtimePostgresProofReconciled: true,
+          tenantKeyEnforcementChecked: true,
+          indexEvidenceChecked: true,
+          transactionRollbackChecked: true,
+          poolingTenantContextLeakChecked: true,
+          jsonDocumentClassificationChecked: true,
+          identifierEnumerationReviewed: true,
+          backupRestoreLinkedIssue: "USF-211",
+          backupRestoreReadinessClaim: false,
+          operationalTablesDeferredToSourceIssues: ["USF-151", "USF-153", "USF-159", "USF-163"],
+        },
         appRole: APP_ROLE,
         migrationRole: MIGRATION_OWNER,
         checks: checks.length,
