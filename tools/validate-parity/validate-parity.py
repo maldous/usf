@@ -185,10 +185,11 @@ PROHIBITED_READINESS_CLAIMS = {
     "enterprise-production-readiness",
 }
 USF133_GATE_PROHIBITED_CLAIMS = PROHIBITED_READINESS_CLAIMS | {"usf-133-closure"}
-USF216_CURRENT_OPEN_BLOCKERS = {"USF-220"}
+USF216_CURRENT_OPEN_BLOCKERS = set()
 USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP = "USF-221"
 USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP = "USF-222"
 USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP = "USF-223"
+USF220_GENERATED_CLIENT_GRAPHQL_EXECUTION_FOLLOW_UP = "USF-224"
 USF218_OBSERVABILITY_SERVICES = {
     "otel-collector",
     "prometheus",
@@ -213,6 +214,8 @@ USF216_RECONCILED_FUNCTIONALITY_CAPABILITIES = {
     "dev-commands",
     "service-catalog-cmdb",
     "data-flow-trust-boundaries",
+    "api-contracts",
+    "graphql-surface",
 }
 USF133_REQUIRED_CAPABILITIES = {
     "tenant-isolation",
@@ -1285,14 +1288,22 @@ def check_usf216_final_reconciliation(F, state):
         F.add("USF-PARITY-039", "usf216.currentOpenBlockerIssues", "USF-218 must not remain a current blocker after bounded disposition evidence")
     if "USF-219" in blockers:
         F.add("USF-PARITY-039", "usf216.currentOpenBlockerIssues", "USF-219 must not remain a current blocker after bounded backup/restore disposition evidence")
+    if "USF-220" in blockers:
+        F.add("USF-PARITY-039", "usf216.currentOpenBlockerIssues", "USF-220 must not remain a current blocker after bounded generated-client GraphQL disposition evidence")
+    if blockers:
+        F.add("USF-PARITY-039", "usf216.currentOpenBlockerIssues", "current selected closure-tier blocker list must be empty after USF-220 disposition evidence")
     if USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP not in set(reconciliation.get("nonBlockingContextIssues") or []):
         F.add("USF-PARITY-039", "usf216.nonBlockingContextIssues", "USF-222 observability execution follow-up must remain visible")
     if USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP not in set(reconciliation.get("nonBlockingContextIssues") or []):
         F.add("USF-PARITY-039", "usf216.nonBlockingContextIssues", "USF-223 backup/restore execution follow-up must remain visible")
+    if USF220_GENERATED_CLIENT_GRAPHQL_EXECUTION_FOLLOW_UP not in set(reconciliation.get("nonBlockingContextIssues") or []):
+        F.add("USF-PARITY-039", "usf216.nonBlockingContextIssues", "USF-224 generated-client GraphQL execution follow-up must remain visible")
     if "USF-218" not in set(reconciliation.get("resolvedSourceIssuesUsedAsEvidence") or []):
         F.add("USF-PARITY-039", "usf216.resolvedSourceIssuesUsedAsEvidence", "USF-218 must be recorded as resolved source evidence")
     if "USF-219" not in set(reconciliation.get("resolvedSourceIssuesUsedAsEvidence") or []):
         F.add("USF-PARITY-039", "usf216.resolvedSourceIssuesUsedAsEvidence", "USF-219 must be recorded as resolved source evidence")
+    if "USF-220" not in set(reconciliation.get("resolvedSourceIssuesUsedAsEvidence") or []):
+        F.add("USF-PARITY-039", "usf216.resolvedSourceIssuesUsedAsEvidence", "USF-220 must be recorded as resolved source evidence")
     if not _non_empty_list(reconciliation.get("validationCommands")):
         F.add("USF-PARITY-039", "usf216.validationCommands", "validation command list is required")
 
@@ -1327,6 +1338,14 @@ def check_usf216_final_reconciliation(F, state):
                     "USF-PARITY-039",
                     "functionality:backup-restore",
                     "backup/restore row must carry USF-219 disposition and USF-223 execution follow-up",
+                )
+            if capability_id in {"api-contracts", "graphql-surface"} and (
+                "USF-220" not in carrier or USF220_GENERATED_CLIENT_GRAPHQL_EXECUTION_FOLLOW_UP not in carrier
+            ):
+                F.add(
+                    "USF-PARITY-039",
+                    f"functionality:{capability_id}",
+                    "API GraphQL/generated-client row must carry USF-220 disposition and USF-224 execution follow-up",
                 )
 
     compose = state.get("composeParityMatrix")

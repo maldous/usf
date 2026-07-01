@@ -49,6 +49,9 @@ OBSERVABILITY_SERVICE_DEPTH_PATH = Path(
 BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH = Path(
     "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
 )
+GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH = Path(
+    "docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json"
+)
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 PACKAGE_PATH = Path("package.json")
@@ -91,6 +94,10 @@ RULES = {
     "USF-ENTERPRISE-027": (
         "blocking",
         "backup restore DR and RPO/RTO operational depth is incomplete or overclaimed",
+    ),
+    "USF-ENTERPRISE-028": (
+        "blocking",
+        "generated-client external-developer GraphQL federation delivery depth is incomplete or overclaimed",
     ),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
@@ -617,6 +624,43 @@ BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_DATA_SERVICES = {
     "temporal-postgres",
     "pgbackrest",
 }
+GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_EVIDENCE_ROWS = {
+    "soaSupportMappings": {"soa-usf-220-generated-client-graphql-delivery-depth"},
+    "evidenceRegister": {"evidence-usf-220-generated-client-graphql-delivery-depth"},
+    "threatModelAbuseCaseRegister": {"threat-usf-220-generated-client-graphql-overclaim"},
+    "accessReviewPrivilegedOperationPosture": {"access-usf-220-generated-client-graphql-boundary"},
+    "backupRestoreResiliencePosture": {"resilience-usf-220-generated-client-graphql-boundary"},
+    "incidentVulnerabilityManagementEvidence": {"incident-usf-220-generated-client-graphql-boundary"},
+    "privacyDataMinimisationPosture": {"privacy-usf-220-generated-client-graphql-boundary"},
+}
+GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_ISSUES = {
+    "USF-220",
+    "USF-224",
+    "USF-214",
+    "USF-213",
+    "USF-155",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
+GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_SURFACES = {
+    "graphql-runtime",
+    "federation-runtime",
+    "generated-sdk",
+    "generated-client",
+    "external-developer-platform",
+    "client-distribution",
+}
+GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
+    "usf-133-closure",
+    "generated-sdk-readiness",
+    "generated-client-readiness",
+    "external-developer-platform-readiness",
+    "graphql-runtime-readiness",
+    "federation-readiness",
+    "public-api-readiness",
+}
 OBSERVABILITY_SERVICE_DEPTH_REQUIRED_ISSUES = {
     "USF-218",
     "USF-222",
@@ -856,6 +900,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         if (ROOT / BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH).exists()
         else None
     )
+    generated_client_graphql_delivery_depth = (
+        read_json(GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH)
+        if (ROOT / GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH).exists()
+        else None
+    )
     environment_promotion = (
         read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
     )
@@ -907,6 +956,13 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
             backup_restore_operational_depth,
             defect,
         )
+    if defect.get("removeGeneratedClientGraphqlDeliveryDepth"):
+        generated_client_graphql_delivery_depth = None
+    elif generated_client_graphql_delivery_depth is not None:
+        generated_client_graphql_delivery_depth = apply_generated_client_graphql_delivery_depth_defect(
+            generated_client_graphql_delivery_depth,
+            defect,
+        )
     if environment_promotion is not None:
         environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
     package = apply_package_defect(package, defect)
@@ -930,6 +986,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "sentryProofBoundary": sentry_proof_boundary,
         "observabilityServiceDepth": observability_service_depth,
         "backupRestoreOperationalDepth": backup_restore_operational_depth,
+        "generatedClientGraphqlDeliveryDepth": generated_client_graphql_delivery_depth,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
     }
@@ -1245,6 +1302,28 @@ def apply_backup_restore_operational_depth_defect(depth: dict[str, Any], defect:
             (r for r in out.get("dataBearingServiceDispositions", []) if r.get("serviceId") == patch["serviceId"]),
             None,
         )
+        if row is None:
+            continue
+        for key, value in patch.get("set", {}).items():
+            set_nested_value(row, key, value)
+        for key in patch.get("drop", []):
+            drop_nested_value(row, key)
+    return out
+
+
+def apply_generated_client_graphql_delivery_depth_defect(depth: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(depth)
+    for key, value in defect.get("generatedClientGraphqlDeliveryDepthSet", {}).items():
+        set_nested_value(out, key, value)
+    for key in defect.get("generatedClientGraphqlDeliveryDepthDrop", []):
+        drop_nested_value(out, key)
+    remove_surface = defect.get("removeGeneratedClientGraphqlDeliverySurface")
+    if remove_surface:
+        out["surfaceDispositions"] = [
+            row for row in out.get("surfaceDispositions", []) if row.get("id") != remove_surface
+        ]
+    for patch in defect.get("generatedClientGraphqlDeliverySurfacePatch", []):
+        row = next((r for r in out.get("surfaceDispositions", []) if r.get("id") == patch["id"]), None)
         if row is None:
             continue
         for key, value in patch.get("set", {}).items():
@@ -3867,6 +3946,146 @@ def check_backup_restore_operational_depth(F: Findings, state: dict[str, Any]) -
             F.add("USF-ENTERPRISE-027", str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH), f"readiness overclaim present: {phrase}")
 
 
+def check_generated_client_graphql_delivery_depth(F: Findings, state: dict[str, Any]) -> None:
+    depth = state.get("generatedClientGraphqlDeliveryDepth")
+    if not isinstance(depth, dict):
+        F.add(
+            "USF-ENTERPRISE-028",
+            str(GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH),
+            "USF-220 generated-client GraphQL delivery-depth artefact is missing",
+        )
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-220",
+        "followUpIssue": "USF-224",
+        "parentIssue": "USF-133",
+        "status": "bounded-disposition-recorded-execution-proof-deferred",
+        "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
+        "enterpriseEvidenceModel": str(MODEL_PATH),
+    }
+    for key, expected in expected_top.items():
+        if depth.get(key) != expected:
+            F.add("USF-ENTERPRISE-028", key, f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate"):
+        if not depth.get(field):
+            F.add("USF-ENTERPRISE-028", field, "owner, risk, control, and review metadata are required")
+    if GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_ISSUES - set(depth.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-028", "issueLinks", "USF-220 issue links are incomplete")
+    if GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PROHIBITED_CLAIMS - set(depth.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-028", "nonClaims", "USF-220 non-claims are incomplete")
+    if set(depth.get("enterpriseEvidenceRefs", [])) != set().union(
+        *GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_EVIDENCE_ROWS.values()
+    ):
+        F.add("USF-ENTERPRISE-028", "enterpriseEvidenceRefs", "USF-220 enterprise evidence refs are incomplete")
+
+    claims = depth.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-ENTERPRISE-028", "claims", "claims must be an object")
+        claims = {}
+    for key in (
+        "selectedClosureTierDispositionRecorded",
+        "predecessorDispositionsAccepted",
+        "followUpExecutionProofLinked",
+        "apiMatricesCurrent",
+        "enterpriseEvidenceRowsCurrent",
+        "nonEquivalenceBoundariesRecorded",
+    ):
+        if claims.get(key) is not True:
+            F.add("USF-ENTERPRISE-028", f"claims.{key}", "bounded disposition marker must be true")
+    for key in (
+        "generatedSdkReadinessClaim",
+        "generatedClientReadinessClaim",
+        "externalDeveloperPlatformReadinessClaim",
+        "graphqlRuntimeReadinessClaim",
+        "federationReadinessClaim",
+        "publicApiReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(key) is not False:
+            F.add("USF-ENTERPRISE-028", f"claims.{key}", "readiness or closure claim must remain false")
+
+    surfaces = rows_by_id(depth.get("surfaceDispositions"))
+    if GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_SURFACES - set(surfaces):
+        F.add("USF-ENTERPRISE-028", "surfaceDispositions", "required generated-client GraphQL surfaces are missing")
+    for surface_id, row in surfaces.items():
+        if row.get("status") not in {"deferred-with-owner", "out-of-scope-with-rationale"}:
+            F.add("USF-ENTERPRISE-028", surface_id, "surface must be deferred or out of current scope")
+        for field in (
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "riskTreatment",
+            "followUpIssue",
+            "reviewDate",
+            "promotionImpact",
+            "evidenceRefs",
+            "nonEquivalenceBoundary",
+            "nonClaimBoundary",
+        ):
+            if not row.get(field):
+                F.add("USF-ENTERPRISE-028", f"{surface_id}.{field}", "surface disposition field is required")
+        if row.get("followUpIssue") != "USF-224":
+            F.add("USF-ENTERPRISE-028", f"{surface_id}.followUpIssue", "surface execution proof must link USF-224")
+
+    model = state["model"]
+    for section, row_ids in GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_EVIDENCE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in row_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-028", row_id, f"missing USF-220 enterprise row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-028", row_id, "USF-220 enterprise row non-claims are incomplete")
+            if (
+                "USF-220" not in row_text
+                or "USF-224" not in row_text
+                or str(GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH) not in row_text
+            ):
+                F.add("USF-ENTERPRISE-028", row_id, "USF-220 row lacks issue, follow-up, or artefact linkage")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-028", row_id, "USF-220 row lacks validation command")
+            if section == "evidenceRegister":
+                for issue in GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_REQUIRED_ISSUES:
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-028", row_id, f"evidence row lacks {issue}")
+                negative = str(row.get("whatWasNotProven", "")).lower()
+                if "does not prove" not in negative and "not prove" not in negative:
+                    F.add("USF-ENTERPRISE-028", row_id, "evidence row must preserve explicit non-proof boundary")
+
+    source_text = json.dumps(depth, sort_keys=True).lower()
+    for phrase in (
+        "generated sdk readiness is proven",
+        "generated client readiness is proven",
+        "external developer platform readiness is proven",
+        "graphql readiness is proven",
+        "graphql runtime readiness is proven",
+        "federation readiness is proven",
+        "public api readiness is proven",
+        "production readiness is proven",
+        "live provider readiness is proven",
+        "usf-133 closure is proven",
+    ):
+        if phrase in source_text:
+            F.add(
+                "USF-ENTERPRISE-028",
+                str(GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH),
+                f"readiness overclaim present: {phrase}",
+            )
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -3894,6 +4113,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_sentry_service_proof_boundary(F, state)
     check_observability_service_operations_depth(F, state)
     check_backup_restore_operational_depth(F, state)
+    check_generated_client_graphql_delivery_depth(F, state)
     return F
 
 

@@ -1,0 +1,254 @@
+{
+  "id": "generated-client-external-developer-graphql-federation-delivery-proof-depth",
+  "title": "Generated Client External Developer GraphQL Federation Delivery Proof Depth",
+  "sourceIssue": "USF-220",
+  "parentIssue": "USF-133",
+  "followUpIssue": "USF-224",
+  "predecessorIssues": ["USF-155", "USF-213", "USF-214"],
+  "relatedIssues": ["USF-184", "USF-192", "USF-193"],
+  "status": "bounded-disposition-recorded-execution-proof-deferred",
+  "owner": "platform-api-foundation",
+  "riskOwner": "platform-api-risk-owner",
+  "controlOwner": "platform-api-control-owner",
+  "riskTreatment": "defer-with-owner-and-validator-boundary",
+  "reviewDate": "2026-09-30",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "apiDispositionMatrix": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+  "publicCompatibilityMatrix": "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "functionalityParityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "closureReconciliation": "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json",
+  "proofCommand": "make api-proof",
+  "rawProofCommand": "corepack pnpm proof:api",
+  "validatorCommands": [
+    "python3 tools/validate-parity/validate-api.py all --json",
+    "python3 tools/validate-parity/validate-parity.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+  ],
+  "issueLinks": [
+    "USF-220",
+    "USF-224",
+    "USF-214",
+    "USF-213",
+    "USF-155",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "enterpriseEvidenceRefs": [
+    "soa-usf-220-generated-client-graphql-delivery-depth",
+    "evidence-usf-220-generated-client-graphql-delivery-depth",
+    "threat-usf-220-generated-client-graphql-overclaim",
+    "access-usf-220-generated-client-graphql-boundary",
+    "resilience-usf-220-generated-client-graphql-boundary",
+    "incident-usf-220-generated-client-graphql-boundary",
+    "privacy-usf-220-generated-client-graphql-boundary"
+  ],
+  "claims": {
+    "selectedClosureTierDispositionRecorded": true,
+    "predecessorDispositionsAccepted": true,
+    "followUpExecutionProofLinked": true,
+    "apiMatricesCurrent": true,
+    "enterpriseEvidenceRowsCurrent": true,
+    "nonEquivalenceBoundariesRecorded": true,
+    "generatedSdkReadinessClaim": false,
+    "generatedClientReadinessClaim": false,
+    "externalDeveloperPlatformReadinessClaim": false,
+    "graphqlRuntimeReadinessClaim": false,
+    "federationReadinessClaim": false,
+    "publicApiReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "surfaceDispositions": [
+    {
+      "id": "graphql-runtime",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer-unless-separately-authorised",
+      "followUpIssue": "USF-224",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "packages/proof/src/api-contracts-proof.ts",
+        "tools/validate-parity/validate-api.py"
+      ],
+      "nonEquivalenceBoundary": "REST/OpenAPI route-contract proof is not GraphQL runtime proof, resolver authorization proof, persisted-query proof, subscription proof, GraphQL schema compatibility proof, or GraphQL client readiness.",
+      "nonClaimBoundary": "No GraphQL runtime readiness, GraphQL operation readiness, public API readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+    },
+    {
+      "id": "federation-runtime",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer-unless-separately-authorised",
+      "followUpIssue": "USF-224",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "docs/architecture/api-and-contract-surface-standard.md"
+      ],
+      "nonEquivalenceBoundary": "GraphQL lineage and REST/OpenAPI proof are not federation gateway proof, schema stitching proof, subgraph authorization proof, federation composition proof, or gateway deployment proof.",
+      "nonClaimBoundary": "No federation readiness, gateway federation readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+    },
+    {
+      "id": "generated-sdk",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-224",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+      ],
+      "nonEquivalenceBoundary": "OpenAPI JSON generation, local route metadata, and public compatibility snapshot hashes are not generated SDK package creation, SDK compile proof, SDK runtime compatibility proof, versioned package publication, or customer distribution readiness.",
+      "nonClaimBoundary": "No generated SDK readiness, SDK package readiness, SDK distribution readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+    },
+    {
+      "id": "generated-client",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-224",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+      ],
+      "nonEquivalenceBoundary": "API proof markers and route metadata are not generated client artifact creation, generated client compile/run proof, multi-language client fixture proof, customer compatibility proof, or public package distribution proof.",
+      "nonClaimBoundary": "No generated client readiness, generated client compatibility readiness, external developer client readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+    },
+    {
+      "id": "external-developer-platform",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-224",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+      ],
+      "nonEquivalenceBoundary": "Local API proof, OpenAPI output, and release-governance documentation are not developer portal operation, API key onboarding, public documentation hosting, support workflow, public changelog, or customer-facing compatibility readiness.",
+      "nonClaimBoundary": "No external developer platform readiness, public documentation readiness, API key workflow readiness, support/SLA readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+    },
+    {
+      "id": "client-distribution",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-224",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+      ],
+      "nonEquivalenceBoundary": "Route contracts and local proof markers are not package registry operation, client artifact signing, SBOM publication, deprecation notices, consumer migration support, or public distribution readiness.",
+      "nonClaimBoundary": "No client distribution readiness, package publication readiness, artifact signing readiness, public developer readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+    }
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Generated SDK, generated client, external developer, GraphQL, and federation posture is proven, deferred with owner, or out of scope with rationale for the selected closure tier.",
+      "evidence": "surfaceDispositions records GraphQL and federation as out-of-scope-with-rationale, and generated SDK, generated client, external developer platform, and client distribution as deferred-with-owner, each with owner, risk owner, control owner, review date, promotion impact, follow-up USF-224, non-equivalence boundary, and non-claim boundary."
+    },
+    {
+      "criterion": "Any new runtime or client claim has proof, validator coverage, and planted defects.",
+      "evidence": "USF-220 makes no new runtime or client readiness claim. The repository records disposition evidence only and validator coverage prevents claim promotion without future proof."
+    },
+    {
+      "criterion": "Non-equivalence boundaries remain explicit.",
+      "evidence": "Every surfaceDispositions row includes a nonEquivalenceBoundary, and API matrices keep REST/OpenAPI proof non-equivalent to GraphQL, federation, generated SDK/client, external developer, and client distribution readiness."
+    },
+    {
+      "criterion": "Enterprise evidence and API matrices are current.",
+      "evidence": "enterpriseEvidenceRefs points to current USF-220 rows; API disposition matrices link USF-224 as the concrete execution-proof follow-up; final reconciliation removes USF-220 as the current blocker only after recording the deferred execution boundary."
+    },
+    {
+      "criterion": "USF-133 remains open unless separately satisfied.",
+      "evidence": "claims.usf133ClosureClaim remains false, nonClaims includes usf-133-closure, and this artefact does not assert parent closure."
+    }
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure",
+    "generated-sdk-readiness",
+    "generated-client-readiness",
+    "external-developer-platform-readiness",
+    "graphql-runtime-readiness",
+    "federation-readiness",
+    "public-api-readiness"
+  ]
+}

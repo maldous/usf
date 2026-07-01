@@ -3,7 +3,7 @@
   "sourceIssue": "USF-214",
   "parentIssue": "USF-133",
   "predecessorIssue": "USF-155",
-  "relatedIssues": ["USF-213", "USF-184", "USF-192"],
+  "relatedIssues": ["USF-213", "USF-220", "USF-224", "USF-184", "USF-192"],
   "capabilityId": "graphql-federation-generated-client-disposition",
   "proofCommand": "make api-proof",
   "rawProofCommand": "corepack pnpm proof:api",
@@ -118,7 +118,7 @@
       "riskOwner": "platform-api-risk-owner",
       "controlOwner": "platform-api-control-owner",
       "riskTreatment": "defer",
-      "followUpIssue": "future-generated-client-issue-if-public-api-client-distribution-is-authorised",
+      "followUpIssue": "USF-224",
       "reviewDate": "2026-09-30",
       "evidenceRefs": [
         "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
@@ -137,7 +137,7 @@
       "riskOwner": "platform-api-risk-owner",
       "controlOwner": "platform-api-control-owner",
       "riskTreatment": "defer",
-      "followUpIssue": "future-external-developer-platform-issue-if-public-api-is-authorised",
+      "followUpIssue": "USF-224",
       "reviewDate": "2026-09-30",
       "evidenceRefs": ["docs/architecture/api-graphql-generated-client-disposition-matrix.json"],
       "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
@@ -171,7 +171,7 @@
       "controlOwner": "platform-api-control-owner",
       "riskTreatment": "defer",
       "reviewDate": "2026-09-30",
-      "followUpIssue": "future-generated-client-issue-if-public-api-client-distribution-is-authorised",
+      "followUpIssue": "USF-224",
       "promotionImpact": [
         "test-readiness",
         "staging-readiness",
@@ -187,7 +187,7 @@
       "controlOwner": "platform-api-control-owner",
       "riskTreatment": "defer-unless-separately-authorised",
       "reviewDate": "2026-09-30",
-      "followUpIssue": "future-graphql-federation-issue-if-runtime-compatibility-is-authorised",
+      "followUpIssue": "USF-224",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -204,7 +204,7 @@
       "controlOwner": "platform-api-control-owner",
       "riskTreatment": "defer",
       "reviewDate": "2026-09-30",
-      "followUpIssue": "future-external-developer-platform-issue-if-public-api-is-authorised",
+      "followUpIssue": "USF-224",
       "promotionImpact": ["staging-readiness", "production-readiness", "enterprise-readiness"],
       "nonClaimBoundary": "No developer portal, API key workflow, SDK package registry, public documentation, customer onboarding, support/SLA, or public distribution readiness is claimed."
     }

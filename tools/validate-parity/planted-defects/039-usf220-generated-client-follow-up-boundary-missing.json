@@ -1,0 +1,15 @@
+{
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "usf216FinalReconciliationSetTop": {
+      "nonBlockingContextIssues": [
+        "USF-134",
+        "USF-184",
+        "USF-192",
+        "USF-221",
+        "USF-222",
+        "USF-223"
+      ]
+    }
+  }
+}
