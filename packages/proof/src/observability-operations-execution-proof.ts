@@ -28,6 +28,12 @@ const ENTERPRISE_EVIDENCE_REFS = Object.freeze([
   "privacy-usf-222-observability-operations-boundary",
 ] as const);
 
+const PROVIDER_REGISTRY_IDS = Object.freeze([
+  "observability-captured-local",
+  "observability-compose-stack",
+  "observability-sentry-sdk-envelope-local",
+] as const);
+
 const NON_CLAIMS = Object.freeze([
   "no-full-dev-readiness",
   "no-test-readiness",
@@ -121,11 +127,7 @@ export interface ObservabilityOperationsExecutionProofResult {
   readonly providerMode: "hermetic-mock";
   readonly proofCommand: "corepack pnpm proof:observability:operations-execution";
   readonly serviceCatalogueServiceIds: typeof SERVICE_IDS;
-  readonly providerRegistryIds: readonly [
-    "observability-captured-local",
-    "observability-compose-stack",
-    "observability-sentry-sdk-envelope-local",
-  ];
+  readonly providerRegistryIds: typeof PROVIDER_REGISTRY_IDS;
   readonly enterpriseEvidenceRefs: typeof ENTERPRISE_EVIDENCE_REFS;
   readonly evidenceArtefact: "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json";
   readonly evidence: ObservabilityOperationsExecutionProofEvidence;
@@ -306,14 +308,18 @@ export async function runObservabilityOperationsExecutionProof(): Promise<Observ
     "tenant beta query leaked cross-tenant signals",
   );
 
-  const requestSignals = alphaSignals.filter(
-    (signal) => signal.signalCategory === "metric" && signal.metricName === "api.request.count",
-  );
-  const errorSignals = alphaSignals.filter(
-    (signal) => signal.signalCategory === "metric" && signal.metricName === "api.error.count",
-  );
-  const requestCount = requestSignals.reduce((sum, signal) => sum + signal.value, 0);
-  const errorCount = errorSignals.reduce((sum, signal) => sum + signal.value, 0);
+  const requestCount = alphaSignals.reduce((sum, signal) => {
+    if (signal.signalCategory === "metric" && signal.metricName === "api.request.count") {
+      return sum + signal.value;
+    }
+    return sum;
+  }, 0);
+  const errorCount = alphaSignals.reduce((sum, signal) => {
+    if (signal.signalCategory === "metric" && signal.metricName === "api.error.count") {
+      return sum + signal.value;
+    }
+    return sum;
+  }, 0);
   const availability = (requestCount - errorCount) / requestCount;
   assert(availability >= 0.98, "synthetic SLI availability below bounded local proof floor");
 
@@ -360,11 +366,7 @@ export async function runObservabilityOperationsExecutionProof(): Promise<Observ
     providerMode: "hermetic-mock",
     proofCommand: "corepack pnpm proof:observability:operations-execution",
     serviceCatalogueServiceIds: SERVICE_IDS,
-    providerRegistryIds: Object.freeze([
-      "observability-captured-local",
-      "observability-compose-stack",
-      "observability-sentry-sdk-envelope-local",
-    ]),
+    providerRegistryIds: PROVIDER_REGISTRY_IDS,
     enterpriseEvidenceRefs: ENTERPRISE_EVIDENCE_REFS,
     evidenceArtefact:
       "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json",
