@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-JOBS-023",
+  "mutation": {
+    "usf151RemoveControl": "workflow-replay-migration"
+  }
+}

@@ -4875,6 +4875,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-151-jobs-workflows-enterprise-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-151 enterprise jobs and workflows depth controls for workflow versioning, deterministic replay, migration policy, outbox/inbox, quota/backpressure, pause/resume/drain, dry-run impact gates, heartbeat/concurrency, high-risk automation, egress circuit breakers, snapshot replay authorization, and explicit Temporal/Windmill/API non-equivalence boundaries.",
+      "riskTreated": "Deferred jobs/workflows depth could be hidden behind the core jobs proof, allowing unsupported live Temporal, Windmill, worker-cluster, operator automation, HTTP API, production, certification, or full-parity claims.",
+      "assetServiceAffected": "jobs capability; enterprise workflow control plane; durable workflow port; operational job port; Temporal and Windmill provider boundaries",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-151; currentEvidence=evidence-usf-151-jobs-workflows-enterprise-depth; deferredBoundary=live Temporal, live Windmill, distributed worker cluster, HTTP job API, operator console, environment promotion, backup/restore readiness, DR, live observability, and production operation; noReactRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/jobs-workflows-enterprise-proof-depth-matrix.json; packages/proof/src/jobs-workflows-proof.ts; tools/validate-parity/validate-jobs.py",
+      "validationCommand": "make jobs-proof; python3 tools/validate-parity/validate-jobs.py all --json",
+      "deferredReason": "riskStatement=Enterprise jobs/workflows depth needs bounded local proof without implying live workflow-provider or production automation readiness.; threatFailureScenario=Core hermetic jobs proof is mistaken for live Temporal, Windmill, worker cluster, HTTP API, or operator automation readiness.; affectedAssetService=jobs/workflows execution and provider boundaries; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=mitigate with local proof, explicit reclassification, and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-155 for API surfaces, USF-159 and USF-179 for observability/incident depth, USF-177 for backup/restore service proof, and future live-provider issue before live workflow claims; exceptionOwner=platform-workflow-risk-owner; exceptionReason=live provider, HTTP API, worker cluster, operator UI, DR, and production operations remain outside USF-151 bounded local proof; compensatingControl=validate-jobs plus jobs-workflows-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7058,6 +7084,33 @@
       ],
       "prOrMergeSha": "ee36bd5b6cf69bb4bf7ecc4223b61bd563896743",
       "retentionPosture": "Retain committed proof code, auth identity enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw token, cookie, secret, external IdP identifier, broker payload, provider payload, email value, or production data is retained."
+    },
+    {
+      "id": "evidence-usf-151-jobs-workflows-enterprise-depth",
+      "proofResult": "proof:jobs",
+      "whatWasProven": "make jobs-proof is the command-pinned bounded local hermetic proof for USF-151. It proves the existing jobs/workflows controls plus workflow definition registration with high-risk admin override, deterministic replay mismatch denial, explicit migration-policy gate, transactional outbox duplicate suppression, inbound inbox dedupe, tenant quota/backpressure denial, pause/resume/drain admission, dry-run approval and impact-hash binding, heartbeat miss detection, concurrency-key fail-closed behaviour, provider egress allow-list denial, circuit-breaker opening, snapshot replay authorization, value-free audit evidence, and explicit non-claims.",
+      "whatWasNotProven": "No live Temporal readiness, live Windmill readiness, external queue readiness, scheduler readiness, worker-cluster readiness, operator automation readiness, HTTP job/workflow API readiness, live observability/alerting, backup service readiness, restore readiness, DR, environment promotion, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-enterprise-workflow-control-plane",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#temporal; spec/instances/compose-service/service-catalogue.json#windmill",
+      "adapterProviderId": "durable-workflow-port-local; operational-job-port-local; enterprise-workflow-control-plane-local",
+      "validationCommand": "make jobs-proof; python3 tools/validate-parity/validate-jobs.py all --json",
+      "commandPin": "tsx packages/proof/src/jobs-workflows-proof.ts",
+      "commitPin": "6bcd7405e7afe542cd2546acc21c1092c9ef23d7",
+      "issueLinks": [
+        "USF-151",
+        "USF-133",
+        "USF-184",
+        "USF-191",
+        "USF-192",
+        "USF-155",
+        "USF-159",
+        "USF-177",
+        "USF-179",
+        "USF-212"
+      ],
+      "prOrMergeSha": "6bcd7405e7afe542cd2546acc21c1092c9ef23d7",
+      "retentionPosture": "Retain committed proof code, jobs workflows enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw payload, credential, token, provider endpoint, provider payload, object content, customer data, or production data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8949,6 +9002,33 @@
       "failClosedBehaviour": "validate-auth USF-AUTH-019 through USF-AUTH-023 block missing control plane, missing PDP actions, missing proof markers, unsafe readiness claims, and missing USF-149 evidence linkage.",
       "monitoringAuditEvidence": "make auth-proof output, auth validator findings, tenant_sso value-free audit events, authentication.identity events, and local security threat-signal audit events only; no live monitoring backend.",
       "residualRisk": "Live Keycloak admin API, live external broker/upstream IdP, live DNS/HTTP verification, browser UI/callback/cookies, refresh-token runtime, email delivery, SCIM, live SIEM, environment promotion, and production operation remain non-claims."
+    },
+    {
+      "id": "threat-usf-151-jobs-workflows-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-151 enterprise jobs and workflows proof depth",
+      "trustBoundary": "Hermetic in-memory jobs/workflows control plane only; Temporal and Windmill are service-catalogue/provider boundaries and not live workflow-provider readiness.",
+      "tenantBoundary": "Jobs, workflow controls, outbox/inbox keys, quota counters, queue states, heartbeats, concurrency keys, dry-run previews, and audit events are tenant-scoped and must fail closed on missing membership, tenant mismatch, or insufficient PDP permission.",
+      "credentialBoundary": "Raw provider endpoints, credentials, tokens, secrets, payload values, raw SDK errors, and stack traces are not emitted in proof output, audit metadata, validator findings, or evidence rows.",
+      "dataClassification": "security-sensitive synthetic workflow/job metadata only; no production-derived job payload or customer workflow state.",
+      "abuseCases": [
+        "hermetic jobs proof treated as live Temporal or Windmill readiness",
+        "ordinary tenant admin performs workflow admin override",
+        "impact gate approval is reused for different observed impact",
+        "provider egress endpoint bypasses allow-list",
+        "provider circuit remains open but work proceeds",
+        "HTTP job API readiness inferred from local capability proof"
+      ],
+      "failureModes": [
+        "workflow admin override action missing from synchronous PDP policy",
+        "enterprise workflow proof markers removed",
+        "outbox/inbox dedupe removed",
+        "readiness claim set true in proof output or matrix",
+        "audit evidence leaks raw endpoint, payload, token, secret, or provider data"
+      ],
+      "failClosedBehaviour": "validate-jobs USF-JOBS-021 through USF-JOBS-025 block missing control-plane helper, missing proof markers, incomplete USF-151 matrix, missing enterprise evidence linkage, missing PDP/admin override coupling, and prohibited readiness claims.",
+      "monitoringAuditEvidence": "make jobs-proof output, jobs validator findings, value-free job/workflow/control audit events, and local proof check labels only; no live monitoring backend.",
+      "residualRisk": "Live Temporal, live Windmill, external queue/scheduler/worker cluster, HTTP job API, operator UI, live metrics/alerting, backup/restore readiness, DR, environment promotion, and production operation remain non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -11587,6 +11667,36 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-151-jobs-workflows-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-151 jobs/workflows privileged execution controls",
+      "posture": [
+        "accessModel=local-synthetic-jobs-workflows-control-plane-only",
+        "authRequirement=active-tenant-membership-plus-explicit-job-workflow-or-workflow-admin-override-permission",
+        "leastPrivilegePosture=tenant-admin-schedule-actions-explicit; workflow-admin-override-security-admin-only; no-wildcard-role-grant",
+        "breakGlassRelevance=workflow-admin-override-is-high-risk-local-proof-only-not-production-break-glass",
+        "auditRequirement=job-workflow-schedule-provider-and-data-events-value-free",
+        "reviewCadence=2026-09-30-before-stronger-readiness-claim",
+        "deprovisioningPosture=membership-suspension-removes-PDP-permit-before-execution",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/jobs-workflows-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "deferredReason": "Operator console, public HTTP job/workflow APIs, executed access reviews, production break-glass, support recovery, and live provider privileged-operation evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -13531,6 +13641,41 @@
       "evidenceSource": "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json",
       "validationCommand": "make auth-proof",
       "deferredReason": "Live provider resilience, browser session recovery, refresh-token rotation, SIEM forwarding, backup/restore, DR, RPO/RTO, and production incident operation remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-151-jobs-workflows-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-151 jobs/workflows local proof resilience posture",
+      "posture": [
+        "backupRequirement=local-snapshot-replay-authorization-proof-only",
+        "restoreProofRequirement=restore-readiness-not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=workflow-state-provider-drift-or-replay-mismatch-must-not-be-treated-as-readiness",
+        "cleanupTeardownProof=in-memory-proof-only-no-durable-provider-state",
+        "readinessChecks=hermetic-proof-and-validator-markers-only",
+        "retryTimeoutBehaviour=bounded-retry-existing-job-proof-plus-local-circuit-breaker-fail-closed",
+        "failClosedMode=replay-mismatch-migration-policy-missing-quota-exceeded-impact-mismatch-egress-denied-circuit-open-and-replay-authorization-denials",
+        "structuredLogging=proof-output-value-free",
+        "tracingCorrelation=not-live-telemetry",
+        "metrics=validator-and-proof-check-counts-only",
+        "auditEvents=job-workflow-schedule-provider-and-data-events",
+        "redaction=raw-payloads-endpoints-credentials-tokens-secrets-provider-errors-and-stack-traces-not-retained"
+      ],
+      "evidenceSource": "docs/architecture/jobs-workflows-enterprise-proof-depth-matrix.json",
+      "validationCommand": "make jobs-proof",
+      "deferredReason": "Live provider resilience, worker-cluster recovery, backup service readiness, restore readiness, DR, RPO/RTO, live observability, and production incident operation remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16255,6 +16400,34 @@
       "evidenceSource": "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-auth.py all --json",
       "deferredReason": "Production auth incident hooks, paging, escalation execution, patch SLA evidence, live IdP advisory response, SIEM forwarding, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-151-jobs-workflows-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-151 jobs/workflows incident and vulnerability evidence posture",
+      "posture": [
+        "incidentDetectionHook=local-job-workflow-denial-replay-mismatch-quota-egress-and-circuit-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-workflow-risk-owner",
+        "vulnerabilityAdvisoryReview=Temporal-Windmill-and-workflow-provider-dependency-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-sdk-or-provider-dependency-added-by-USF-151",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/jobs-workflows-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "deferredReason": "Production workflow incident hooks, paging, escalation execution, patch SLA evidence, live Temporal/Windmill advisory response, SIEM forwarding, and post-incident evidence remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -19357,6 +19530,35 @@
       "evidenceSource": "packages/proof/src/auth-identity-proof.ts",
       "validationCommand": "make auth-proof",
       "deferredReason": "Customer identity data privacy, live provider privacy, DSR, data residency, legal hold, custom retention, and production account recovery privacy remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-151-jobs-workflows-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-151 proof:jobs synthetic jobs/workflows data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=security-sensitive-job-workflow-control-and-audit-metadata",
+        "redactionPolicy=no-raw-payload-endpoint-credential-token-secret-provider-payload-or-stack-trace-in-proof-output",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed-for-job-workflow-proof-data",
+        "dataResidencyCrossBorderBoundary=hermetic-local-only-no-production-residency-claim"
+      ],
+      "evidenceSource": "packages/proof/src/jobs-workflows-proof.ts",
+      "validationCommand": "make jobs-proof",
+      "deferredReason": "Customer workflow data privacy, live provider privacy, DSR, data residency, legal hold, custom retention, and production workflow-data recovery privacy remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

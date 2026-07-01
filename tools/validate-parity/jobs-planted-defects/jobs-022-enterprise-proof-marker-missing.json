@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-022",
+  "mutation": {
+    "file": "packages/proof/src/jobs-workflows-proof.ts",
+    "replace": {
+      "old": "enterpriseWorkflowDepthProven: true",
+      "new": "enterpriseWorkflowDepthProven: false"
+    }
+  }
+}
