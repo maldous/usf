@@ -161,6 +161,25 @@ This status does not claim ISO/IEC 27001 certification, SOC readiness, productio
 readiness, staging readiness, live-provider readiness, enterprise production readiness,
 full dev readiness, test readiness, or full React parity.
 
+## USF-161 Guardrails Distributed Enforcement Status
+
+USF-161 adds `docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json`
+as the bounded distributed guardrails depth evidence gate. The proof extends
+`packages/proof/src/rate-limits-abuse-controls-proof.ts` with deterministic synthetic
+evidence for proof-local durable counters, two proof nodes sharing a counter key,
+monotonic counter versions, route/domain rollout posture across API, jobs,
+notifications, files, providers, and import/export boundaries, proof-local operator
+policy approval events, cost quota denial, unavailable-provider fail-closed behaviour,
+IP-derived opaque references, tenant fairness, value-free audit evidence, cleanup, and
+retention-boundary posture.
+
+The proof and matrix remain non-equivalent to live edge, gateway, WAF, CDN, bot, fraud,
+SIEM, DLP, UEBA, provider-managed counters, customer traffic, public guardrail API
+routes, admin UI, break-glass operation, production abuse-control operation, and
+environment promotion readiness. No live edge, WAF, CDN, bot, fraud, gateway,
+production abuse-prevention, staging, production, live-provider, SOC, ISO certification,
+full dev, full React parity, or USF-133 closure claim is made.
+
 ## USF-187 Lane 3 Shared Assurance Control-Plane Status
 
 USF-187 appends Lane 3-owned enterprise rows with stable `usf-187` ids for:

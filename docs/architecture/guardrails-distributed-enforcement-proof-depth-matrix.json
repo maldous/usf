@@ -1,0 +1,308 @@
+{
+  "id": "guardrails-distributed-enforcement-proof-depth-matrix",
+  "sourceIssue": "USF-161",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-191",
+  "capabilityId": "guardrails-distributed-enforcement-depth",
+  "proofCommand": "make guardrails-proof",
+  "rawProofCommand": "corepack pnpm proof:guardrails",
+  "rawProofCommandBoundary": "Hermetic synthetic proof only. It exercises bounded distributed guardrails depth using deterministic local proof fixtures, synthetic tenants, synthetic actors, synthetic route metadata, proof-local durable counters, two proof nodes, value-free audit evidence, opaque IP-derived references, and explicit non-claims for live WAF, CDN, bot, fraud, edge, gateway, production abuse-prevention, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure.",
+  "validatorCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+  "proofFile": "packages/proof/src/rate-limits-abuse-controls-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-guardrails.py",
+  "sourceUseMatrix": "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-161-guardrails-distributed-depth",
+    "evidence-usf-161-guardrails-distributed-depth",
+    "threat-usf-161-guardrails-distributed-depth",
+    "access-usf-161-guardrails-distributed-depth",
+    "resilience-usf-161-guardrails-distributed-depth",
+    "incident-usf-161-guardrails-distributed-depth",
+    "privacy-usf-161-guardrails-distributed-depth"
+  ],
+  "serviceCatalogueRows": [
+    "spec/instances/compose-service/service-catalogue.json#api",
+    "spec/instances/compose-service/service-catalogue.json#worker",
+    "spec/instances/compose-service/service-catalogue.json#postgres",
+    "spec/instances/compose-service/service-catalogue.json#nats",
+    "spec/instances/compose-service/service-catalogue.json#temporal",
+    "spec/instances/compose-service/service-catalogue.json#mailpit",
+    "spec/instances/compose-service/service-catalogue.json#minio"
+  ],
+  "providerMode": "hermetic-mock",
+  "runtimeMode": "local-synthetic-distributed-guardrails-proof",
+  "claims": {
+    "boundedDistributedGuardrailsProven": true,
+    "durableDistributedCounterChecked": true,
+    "multiNodeConsistencyChecked": true,
+    "routeByRouteRolloutChecked": true,
+    "gatewayEdgePostureChecked": true,
+    "wafCdnBotFraudProviderBoundaryChecked": true,
+    "operatorGuardrailApiChecked": true,
+    "policyApprovalWorkflowChecked": true,
+    "costQuotaChecked": true,
+    "ipDerivedPrivacyChecked": true,
+    "tenantFairnessChecked": true,
+    "auditEvidenceChecked": true,
+    "retentionBoundaryExplicit": true,
+    "providerBoundaryChecked": true,
+    "crossDomainGuardrailLinkageChecked": true,
+    "unavailableProviderFailClosedChecked": true,
+    "liveDistributedEnforcementReadinessClaim": false,
+    "liveWafReadinessClaim": false,
+    "liveEdgeReadinessClaim": false,
+    "liveGatewayReadinessClaim": false,
+    "liveCdnReadinessClaim": false,
+    "liveBotFraudReadinessClaim": false,
+    "productionAbusePreventionReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "USF-161 bounded proof does not prove live WAF, CDN, bot, fraud, edge, gateway, provider-managed counters, staging, production, or external abuse-control operations.",
+    "Synthetic durable counter and multi-node proof does not prove Redis, Postgres, gateway, CDN, WAF, bot, fraud, SIEM, DLP, UEBA, or live provider operation.",
+    "Proof-local operator guardrail control-plane events do not create public HTTP guardrail APIs or operator UI readiness."
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred guardrail control is implemented with proof or explicitly reclassified.",
+      "evidence": "Controls below record bounded local proof for durable synthetic counters, multi-node consistency, route/domain rollout, operator control-plane events, policy approval workflow, cost quota, IP-derived privacy, tenant fairness, audit, retention, provider fail-closed behaviour, and explicit out-of-scope boundaries for live WAF, CDN, bot, fraud, edge, gateway, and production abuse operations."
+    },
+    {
+      "criterion": "Route-by-route and provider boundaries are explicit where claimed.",
+      "evidence": "route-by-route-domain-rollout and gateway-edge-provider-boundary name the synthetic API, jobs, notifications, files, providers, and import/export routes and record live provider non-equivalence."
+    },
+    {
+      "criterion": "Tenant, privacy, audit, and retention evidence exists where claimed.",
+      "evidence": "ip-privacy-tenant-audit-retention records opaque tenant and IP-derived proof, value-free journal evidence, and proof-only retention boundaries."
+    },
+    {
+      "criterion": "Validator coverage exists for any new guardrail claim.",
+      "evidence": "validate-guardrails.py checks proof markers, matrix claims, enterprise evidence rows, boundary fields, and readiness overclaims with planted defects."
+    },
+    {
+      "criterion": "No live edge, WAF, CDN, bot, fraud, or production abuse-prevention claim is made without proof.",
+      "evidence": "claims object and proof result set live and production guardrail readiness claims to false, and live provider controls remain out-of-scope-with-rationale."
+    }
+  ],
+  "controls": [
+    {
+      "id": "local-single-node-foundation-preserved",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "adapters/guardrails/src/index.ts",
+        "tests/capabilities/rate-limits-abuse-controls.test.ts",
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts"
+      ],
+      "proofChecks": [
+        "single-node local route guardrail proof remains present",
+        "idempotent accounting remains deterministic",
+        "unknown policy and invalid scope fail closed"
+      ],
+      "proofCommand": "make guardrails-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+      "nonClaimBoundary": "Local in-memory proof is not live distributed, live provider, staging, or production guardrail readiness."
+    },
+    {
+      "id": "durable-distributed-counters",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts",
+        "tests/packages/proof.test.ts"
+      ],
+      "proofChecks": [
+        "proof-local durable counter key is shared by node-a and node-b",
+        "counter versions are monotonic across proof nodes",
+        "over-limit request denies with safe retry-after"
+      ],
+      "proofCommand": "make guardrails-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+      "nonClaimBoundary": "Synthetic durable counters are not Redis, Postgres, gateway, WAF, CDN, edge, or production counter readiness."
+    },
+    {
+      "id": "multi-node-consistency",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts"
+      ],
+      "proofChecks": [
+        "node-a allows first request",
+        "node-b observes the same shared counter",
+        "node-b denies when the shared counter exceeds the policy limit"
+      ],
+      "proofCommand": "make guardrails-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+      "nonClaimBoundary": "Two-node synthetic proof is not production multi-region, HA, CDN, or live edge consistency."
+    },
+    {
+      "id": "route-by-route-domain-rollout",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts",
+        "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md"
+      ],
+      "proofChecks": [
+        "synthetic route metadata covers API, jobs, notifications, files, providers, and import/export domains",
+        "each route has owner, risk owner, control owner, and approval posture"
+      ],
+      "proofCommand": "make guardrails-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+      "nonClaimBoundary": "Synthetic route-by-route proof does not prove every HTTP route, public API gateway, browser gateway, live edge, or customer traffic route."
+    },
+    {
+      "id": "operator-policy-approval-control-plane",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts"
+      ],
+      "proofChecks": [
+        "policy draft cannot be pre-approved",
+        "unapproved policy publication fails closed",
+        "approved policies emit value-free operator events"
+      ],
+      "proofCommand": "make guardrails-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+      "nonClaimBoundary": "Proof-local operator events do not create public guardrail API routes, admin UI, break-glass workflow, or production policy-management readiness."
+    },
+    {
+      "id": "cost-quota-provider-fail-closed",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts"
+      ],
+      "proofChecks": [
+        "cost quota denies over-budget synthetic provider call",
+        "unavailable provider boundary fails closed with 503",
+        "provider boundary is explicit and not live-provider readiness"
+      ],
+      "proofCommand": "make guardrails-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+      "nonClaimBoundary": "Cost quota and provider fail-closed proof is not live billing, supplier, provider rate-card, or live-provider operation."
+    },
+    {
+      "id": "ip-privacy-tenant-audit-retention",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "packages/proof/src/rate-limits-abuse-controls-proof.ts",
+        "packages/core/src/index.ts"
+      ],
+      "proofChecks": [
+        "tenant beta receives isolated counter capacity",
+        "IP-derived subject reference is opaque",
+        "journal and audit-shaped evidence are value-free",
+        "retention boundary is proof-summary only"
+      ],
+      "proofCommand": "make guardrails-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
+      "nonClaimBoundary": "IP-derived privacy and proof journal evidence is not live privacy program, legal hold, production retention, or cross-border residency readiness."
+    },
+    {
+      "id": "gateway-edge-provider-boundary",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "ISO-supporting evidence completeness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
+        "docs/architecture/runtime-compose-provider-binding.md",
+        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
+      ],
+      "nonClaimBoundary": "Live edge, gateway, WAF, CDN, bot, fraud, provider-managed abuse controls, TLS termination, trusted proxy allowlists, and production abuse-prevention operation are not proven or claimed by USF-161."
+    },
+    {
+      "id": "production-abuse-operations-boundary",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "ISO-supporting evidence completeness"
+      ],
+      "evidenceRefs": [
+        "docs/architecture/usf-dev-foundation-gap-register.md",
+        "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
+      ],
+      "nonClaimBoundary": "Alert triage, bot or fraud operations, WAF tuning, SOC workflow, incident response, production abuse-control operation, customer-impact review, support escalation, and SLA/SLO operation are not proven or claimed by USF-161."
+    }
+  ],
+  "deferredBoundaries": [
+    {
+      "id": "live-edge-waf-cdn-bot-fraud-provider-boundary",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "riskTreatment": "avoid-until-authorised",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "ISO-supporting evidence completeness"
+      ],
+      "followUpIssue": "future live edge/WAF/CDN/bot/fraud provider issue if separately authorised",
+      "nonClaimBoundary": "No live edge, WAF, CDN, bot, fraud, provider-managed, staging, production, SOC, ISO, enterprise production, or USF-133 closure claim is made by USF-161."
+    }
+  ]
+}

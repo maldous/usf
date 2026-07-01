@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.usf161-missing-live-boundary",
+  "expectedRuleId": "USF-GUARDRAILS-013",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "provider-managed counters",
+      "new": "provider-managed controls removed"
+    }
+  ]
+}

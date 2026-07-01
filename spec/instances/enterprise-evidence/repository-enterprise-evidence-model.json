@@ -4979,6 +4979,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-161-guardrails-distributed-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-161 distributed guardrails depth controls for bounded synthetic durable counters, multi-node consistency, route/domain rollout, operator policy approval, cost quota, IP-derived privacy, tenant fairness, audit evidence, retention boundary, provider fail-closed posture, and explicit live/provider non-claims.",
+      "riskTreated": "Deferred distributed guardrail depth could be hidden behind local single-node proof, allowing unsupported live edge, WAF, CDN, bot, fraud, gateway, production abuse-prevention, staging, production, certification, or full-readiness claims.",
+      "assetServiceAffected": "guardrails; API; jobs-workflows; notifications; files-storage; providers; import-export-bulk",
+      "owner": "platform-guardrails-foundation",
+      "riskOwner": "platform-guardrails-risk-owner",
+      "controlOwner": "platform-guardrails-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-161; currentEvidence=evidence-usf-161-guardrails-distributed-depth; boundedDistributedGuardrailsProven=true; liveWafReadinessClaim=false; liveCdnReadinessClaim=false; liveBotFraudReadinessClaim=false; productionAbusePreventionReadinessClaim=false",
+      "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts; tools/validate-parity/validate-guardrails.py",
+      "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
+      "deferredReason": "riskStatement=Live edge, WAF, CDN, bot, fraud, gateway, provider-managed counters, customer traffic, production abuse-control operations, public guardrail APIs, admin UI, and break-glass operation remain outside USF-161 bounded proof; threatFailureScenario=synthetic distributed proof is mistaken for live provider or production abuse-control readiness; affectedAssetService=guardrails and protected domains; impact=high; likelihood=medium; owner=platform-guardrails-foundation; riskOwner=platform-guardrails-risk-owner; controlOwner=platform-guardrails-control-owner; treatment=mitigate with bounded proof, validator-enforced non-claims, and future issue before stronger claims; reviewDate=2026-09-30; followUpIssue=future live edge/WAF/CDN/bot/fraud provider issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7267,6 +7293,30 @@
       ],
       "prOrMergeSha": "7f704d58ee47ba973e16295b992f5fa98c532a70",
       "retentionPosture": "Retain committed proof code, observability operations enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw log message, raw span payload, raw metric payload, credential, token, provider endpoint, provider payload, stack trace, tenant name, user email, customer data, or production data is retained. effectivenessState=proven-local; sourceIssue=USF-159; observability-operations-enterprise-proof-depth-matrix; liveMonitoringReadinessClaim=false; dashboardReadinessClaim=false; incidentResponseReadinessClaim=false"
+    },
+    {
+      "id": "evidence-usf-161-guardrails-distributed-depth",
+      "proofResult": "proof:guardrails",
+      "whatWasProven": "make guardrails-proof is the command-pinned bounded hermetic proof for USF-161. It proves synthetic durable distributed counters, two proof nodes sharing a counter key, monotonic counter versions, route/domain rollout posture, proof-local operator policy approval events, cost quota denial, unavailable-provider fail-closed behaviour, IP-derived opaque references, tenant fairness, audit-shaped journal evidence, cleanup, retention boundary, and explicit USF-161 proof markers.",
+      "whatWasNotProven": "No live edge readiness, WAF readiness, CDN readiness, bot/fraud provider readiness, live gateway readiness, provider-managed counter readiness, customer-traffic operation, public guardrail API readiness, admin UI readiness, break-glass operation, production abuse-prevention readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-distributed-guardrails-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#api,worker,postgres,nats,temporal,mailpit,minio",
+      "adapterProviderId": "in-memory-guardrail-store; proof-durable-distributed-guardrail-ledger; non-equivalent-live-edge-waf-cdn-bot-fraud-provider-boundary",
+      "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
+      "commandPin": "tsx packages/proof/src/rate-limits-abuse-controls-proof.ts",
+      "commitPin": "43e1f077ebec0755e33ae6f8427014b39023b030",
+      "issueLinks": [
+        "USF-161",
+        "USF-160",
+        "USF-191",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "43e1f077ebec0755e33ae6f8427014b39023b030",
+      "retentionPosture": "Retain committed proof code, guardrails distributed enforcement proof-depth matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw IP, raw actor, customer data, production data, token, secret, provider payload, stack trace, or live provider event is retained. effectivenessState=proven-local; sourceIssue=USF-161; guardrails-distributed-enforcement-proof-depth-matrix; boundedDistributedGuardrailsProven=true; liveWafReadinessClaim=false; liveCdnReadinessClaim=false; liveBotFraudReadinessClaim=false; productionAbusePreventionReadinessClaim=false"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -9264,6 +9314,32 @@
       "failClosedBehaviour": "validate-api USF-API-015 through USF-API-019 block missing proof markers, incomplete USF-155 matrix, missing enterprise evidence linkage, incomplete deferred/reclassified boundaries, and prohibited API/gateway readiness claims.",
       "monitoringAuditEvidence": "make api-proof output, API validator findings, route metadata, OpenAPI checker output, safe API denial evidence, and value-free audit events only; no live monitoring backend.",
       "residualRisk": "Public API readiness, generated clients, GraphQL/federation, browser-session runtime, live gateway/edge/TLS/WAF, broad bulk API, environment promotion, and production API operation remain non-claims."
+    },
+    {
+      "id": "threat-usf-161-guardrails-distributed-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "guardrails-distributed-enforcement-depth",
+      "trustBoundary": "Hermetic synthetic guardrails proof boundary with proof-local durable counters and operator events; live edge, gateway, WAF, CDN, bot, fraud, provider-managed counters, and customer traffic are explicitly non-equivalent.",
+      "tenantBoundary": "Tenant counters are keyed by tenant and route; tenant beta receives isolated capacity and cannot consume tenant alpha quota; evidence uses synthetic tenant identifiers only.",
+      "credentialBoundary": "No raw token, secret, endpoint, raw provider payload, stack trace, raw actor, or raw IP is emitted; IP-derived references are opaque hashes.",
+      "dataClassification": "security-sensitive synthetic guardrail metadata and value-free proof journal only",
+      "abuseCases": [
+        "single-node proof is mistaken for distributed enforcement readiness",
+        "synthetic multi-node proof is mistaken for live edge or WAF enforcement",
+        "raw IP or actor identifiers leak through abuse-control evidence",
+        "operator policy proof is mistaken for public admin API readiness",
+        "provider failure path is treated as live provider resilience readiness"
+      ],
+      "failureModes": [
+        "counter version monotonicity missing",
+        "tenant counter key collision",
+        "policy approval bypass",
+        "provider-unavailable path does not fail closed",
+        "live readiness claim appears in proof or matrix"
+      ],
+      "failClosedBehaviour": "validate-guardrails fails when USF-161 proof markers, depth matrix controls, enterprise rows, reclassified boundaries, or non-claim false fields are missing.",
+      "monitoringAuditEvidence": "proof:guardrails emits value-free synthetic audit-shaped journal evidence, security signal evidence, cleanup evidence, retention-boundary evidence, and explicit non-claims.",
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-161; live edge, WAF, CDN, bot, fraud, gateway, customer traffic, production abuse-control operations, public guardrail APIs, admin UI, SIEM/DLP/UEBA operations, and environment promotion remain outside current claim; owner=platform-guardrails-foundation; riskOwner=platform-guardrails-risk-owner; reviewDate=2026-09-30; followUpIssue=future live provider issue if separately authorised"
     }
   ],
   "sdkDependencyGovernance": [
@@ -12025,6 +12101,39 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-161-guardrails-distributed-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "guardrails-distributed-enforcement-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-161",
+        "accessModel=proof-local operator control-plane events only",
+        "authnAuthzBoundary=synthetic security-admin approval evidence only",
+        "leastPrivilegePosture=policy draft approval and publication separated in proof",
+        "breakGlassRelevance=not-proven-by-USF-161",
+        "auditEvidence=value-free policy approval and publication journal evidence",
+        "reviewCadence=2026-09-30",
+        "deprovisioningPosture=not-proven-by-USF-161",
+        "noPublicExposureClaim=true",
+        "publicHttpGuardrailApiReadinessClaim=false"
+      ],
+      "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts",
+      "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
+      "deferredReason": "Public HTTP guardrail APIs, admin UI, break-glass operation, periodic access review, deprovisioning workflow, and production operator workflow are not proven by USF-161; owner=platform-guardrails-foundation; reviewDate=2026-09-30; followUpIssue=future operator guardrail API issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -14110,6 +14219,42 @@
       "evidenceSource": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
       "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
       "deferredReason": "Live gateway resilience, trusted proxy failover, WAF resilience, TLS renewal, public API uptime, generated client compatibility, backup service readiness, restore readiness, DR, RPO/RTO, live observability, and production incident operation remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-161-guardrails-distributed-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "guardrails-distributed-enforcement-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-161",
+        "readinessChecks=proof-local counter and policy publication assertions",
+        "retryTimeoutBehaviour=safe retry-after on bounded denials only",
+        "failClosedMode=unknown policy invalid config unapproved policy and provider unavailable deny safely",
+        "safeTeardown=synthetic cleanup journal event",
+        "structuredLogging=value-free proof result only",
+        "tracingCorrelation=correlation and trace identifiers represented in decisions",
+        "metrics=counter versions route count domain count audit count",
+        "auditEvents=value-free guardrail journal and core audit evidence",
+        "redaction=raw IP token secret provider payload and stack trace excluded",
+        "backupRestorePosture=not-applicable-proof-local-ledger",
+        "rpoRtoTarget=no-production-RPO-RTO-claim",
+        "deferredDrBoundary=live provider counter persistence DR and production abuse-control resilience not proven"
+      ],
+      "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts",
+      "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
+      "deferredReason": "Live distributed counter durability, provider-managed persistence, scheduled cleanup, DR, RPO, RTO, multi-region operation, and production abuse-control resilience are not proven by USF-161; owner=platform-guardrails-foundation; reviewDate=2026-09-30; followUpIssue=future live guardrails provider issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16949,6 +17094,37 @@
       "evidenceSource": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
       "deferredReason": "Production API incident hooks, paging, escalation execution, public API advisory response, gateway/WAF/TLS incident workflow, patch SLA evidence, SIEM forwarding, generated-client advisory workflow, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-161-guardrails-distributed-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "guardrails-distributed-enforcement-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-161",
+        "incidentDetectionHook=local security signal and proof validator output only",
+        "alertingPosture=not-proven-by-USF-161",
+        "escalationOwner=platform-guardrails-foundation",
+        "vulnerabilityAdvisoryReview=required-before-live-provider-claim",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-161",
+        "correctiveActionEvidence=validator-and-PR-evidence-only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-161"
+      ],
+      "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts; tools/validate-parity/validate-guardrails.py",
+      "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
+      "deferredReason": "Production abuse triage, live alerting, on-call escalation, incident workflow execution, vulnerability SLA evidence, provider advisory response, corrective action operation, and post-incident evidence are not proven by USF-161; owner=platform-guardrails-foundation; reviewDate=2026-09-30; followUpIssue=future abuse-operations issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -20172,6 +20348,40 @@
       "evidenceSource": "packages/proof/src/api-contracts-proof.ts",
       "validationCommand": "make api-proof",
       "deferredReason": "Customer API payload privacy, public API privacy posture, generated client distribution, browser session data flow, gateway logs, DSR, data residency, legal hold workflow, custom retention, and production API data recovery privacy remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-161-guardrails-distributed-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "guardrails-distributed-enforcement-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-161",
+        "dataOrigin=synthetic-local-proof-data-only",
+        "piiPosture=no-production-PII",
+        "dataClassification=security-sensitive-guardrail-metadata",
+        "redactionPolicy=opaque-hashes-for-subject-and-ip-derived-references",
+        "retentionPurgePosture=proof-summary-and-committed-metadata-only-no-live-purge-readiness",
+        "legalHoldRelevance=not-proven-by-USF-161",
+        "dataResidencyCrossBorderBoundary=not-live-provider-specific",
+        "rawSecretLeakage=blocked",
+        "rawIpLeakage=blocked",
+        "tenantSafeLabels=synthetic-only"
+      ],
+      "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts",
+      "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
+      "deferredReason": "Provider-managed privacy, raw traffic analytics, data residency, legal hold, production retention, retention purge operation, external subprocessor posture, and live abuse-provider privacy evidence are not proven by USF-161; owner=platform-guardrails-foundation; riskOwner=platform-guardrails-risk-owner; reviewDate=2026-09-30; followUpIssue=future live abuse provider issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

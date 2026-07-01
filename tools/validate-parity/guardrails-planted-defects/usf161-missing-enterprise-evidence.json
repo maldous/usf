@@ -1,0 +1,11 @@
+{
+  "id": "guardrails.usf161-missing-enterprise-evidence",
+  "expectedRuleId": "USF-GUARDRAILS-012",
+  "edits": [
+    {
+      "target": "enterprise_model",
+      "old": "\"id\": \"evidence-usf-161-guardrails-distributed-depth\"",
+      "new": "\"id\": \"evidence-usf-161-guardrails-distributed-depth-defect\""
+    }
+  ]
+}

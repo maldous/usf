@@ -1,10 +1,10 @@
 # Rate Limits, Quotas, and Abuse Controls Standard
 
-Status: draft  
-Authority: USF-133 / USF-160 bounded parity implementation standard  
-Scope: local/dev/test guardrail semantics and proof only
+Status: draft
+Authority: USF-133 / USF-160 / USF-161 bounded parity implementation standard
+Scope: local/dev/test guardrail semantics plus bounded synthetic distributed guardrails proof only
 
-This standard defines rate limiting, quota, throttling, admission control, abuse control, tenant fairness, backpressure, and operational guardrail posture for USF. It is ISO 27001-supporting technical control evidence only. It does not claim ISO certification, SOC readiness, WAF readiness, bot-protection readiness, production abuse-prevention readiness, live gateway readiness, or live edge enforcement readiness.
+This standard defines rate limiting, quota, throttling, admission control, abuse control, tenant fairness, backpressure, distributed counter evidence, and operational guardrail posture for USF. It is ISO 27001-supporting technical control evidence only. It does not claim ISO certification, SOC readiness, WAF readiness, CDN readiness, bot-protection readiness, fraud-provider readiness, production abuse-prevention readiness, live gateway readiness, or live edge enforcement readiness.
 
 ## Guardrails As Security And Availability Controls
 
@@ -181,7 +181,7 @@ Quota reset is deterministic. Quota state is scoped and isolated. Quota accounti
 
 Allowed enforcement posture values are single-node-in-memory, local-test, composed-test, distributed-deferred, and live-edge-deferred.
 
-In-memory enforcement is local/dev/test only. Single-node enforcement is not distributed production readiness. Distributed enforcement and live edge enforcement are deferred unless explicitly authorised.
+In-memory enforcement is local/dev/test only. Single-node enforcement is not distributed production readiness. USF-161 adds bounded synthetic distributed guardrails proof with proof-local durable counters, two proof nodes, route/domain rollout metadata, policy approval events, cost quota evidence, IP-derived privacy posture, tenant fairness evidence, and fail-closed provider-boundary evidence. This is a local proof boundary. It does not prove Redis/Postgres-backed live counters, CDN/WAF/edge/gateway enforcement, bot or fraud provider operation, staging readiness, production readiness, live-provider readiness, or production abuse-prevention readiness.
 
 ## Configuration And Policy Safety
 
@@ -202,7 +202,7 @@ Possible future surfaces include:
 - /v1/guardrails/usage
 - /v1/guardrails/status
 
-These are deferred in this slice. If implemented later, routes are operator-only or system-internal by default, PDP-protected, tenant-safe, redacted, and non-enumerating. They must not expose raw IPs, raw actor identifiers where sensitive, provider internals, cross-tenant quota state, or live edge-provider claims.
+USF-161 proves a proof-local operator control-plane flow for policy draft, approval, publication, and value-free journal evidence. It does not create public HTTP operator APIs, admin UI, break-glass workflows, or live operator readiness. If implemented later, routes are operator-only or system-internal by default, PDP-protected, tenant-safe, redacted, and non-enumerating. They must not expose raw IPs, raw actor identifiers where sensitive, provider internals, cross-tenant quota state, or live edge-provider claims.
 
 ## Current Implementation Boundary
 
@@ -219,4 +219,15 @@ USF-160 implements:
 - value-free audit evidence;
 - proof command and validator.
 
-Deferred depth includes distributed enforcement, live edge/WAF/gateway/CDN/bot/fraud provider integration, full guardrail admin API surfaces, persisted/durable counters, broad route/resource rollout, approval workflow, quota billing integration, and live alerting or SIEM integration.
+USF-161 adds bounded synthetic distributed guardrails proof:
+
+- proof-local durable distributed counters with monotonic counter versions;
+- two proof nodes sharing the same tenant/route counter key;
+- route/domain rollout posture covering API, jobs, notifications, files, providers, and import/export boundaries;
+- proof-local operator policy approval and publication events;
+- cost quota denial and provider-unavailable fail-closed evidence;
+- IP-derived privacy posture using opaque references only;
+- tenant, audit, retention, and cleanup evidence;
+- explicit non-equivalence for live edge, gateway, WAF, CDN, bot, fraud, provider-managed abuse controls, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure.
+
+Still outside this standard's proven boundary are live WAF, edge, gateway, CDN, bot, fraud, SIEM, DLP, UEBA, customer traffic, production abuse-control operation, public guardrail API routes, admin UI, break-glass operation, provider-managed counters, and environment promotion readiness.
