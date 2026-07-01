@@ -415,9 +415,9 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "pgbackrest compose service lineage",
-      "readiness_impact": "USF-177 records backup/restore provider disposition, USF-202 records the proof boundary, USF-211 proves bounded pgBackRest configured local cold backup/restore, and USF-219 owns remaining DR, RPO/RTO, PITR, scheduled backup, corruption/failure drill, and operational recovery depth. No backup/restore readiness is claimed.",
-      "tracking_carrier_or_recommendation": "USF-177/USF-202/USF-211 plus current open blocker USF-219",
-      "usf_evidence_summary": "Bounded local pgBackRest cold backup/restore evidence exists; online backup, WAL archive, PITR, DR, RPO/RTO, provider-managed operation, API/worker backup integration, and environment readiness remain deferred with owner.",
+      "readiness_impact": "USF-177 records backup/restore provider disposition, USF-202 records the proof boundary, USF-211 proves bounded pgBackRest configured local cold backup/restore, and USF-219 records the selected closure-tier DR, RPO/RTO, PITR, scheduled backup, corruption/failure drill, operational recovery, and promotion-impact disposition with execution proof deferred to USF-223. No backup/restore readiness is claimed.",
+      "tracking_carrier_or_recommendation": "USF-177/USF-202/USF-211/USF-219 with future execution proof tracked by USF-223",
+      "usf_evidence_summary": "Bounded local pgBackRest cold backup/restore evidence exists and USF-219 records data-bearing service promotion impact; online backup, WAL archive, PITR, DR rehearsal, RPO/RTO, provider-managed operation, API/worker backup integration, and environment readiness remain deferred to USF-223 or later owner issues.",
       "usf_status": "deferred-with-owner"
     },
     {
@@ -576,7 +576,7 @@
       "evidence_grade": "B",
       "react_evidence_summary": "React package scripts and Makefile lineage",
       "readiness_impact": "Commands exist for bounded local proof lanes, but operator/admin, backup/restore DR, generated-client delivery, and environment-promotion proof depth remain separate owner issues before any broad command or readiness claim.",
-      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219, and USF-220, with USF-222 as future observability execution-proof follow-up",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219/USF-223, and USF-220, with USF-222 as future observability execution-proof follow-up",
       "usf_evidence_summary": "USF make proof ladder plus bounded provider/service proof commands; universal React command parity and environment readiness remain unclaimed.",
       "usf_status": "partial"
     },
@@ -616,7 +616,7 @@
       "evidence_grade": "C",
       "react_evidence_summary": "React compose comments and packages",
       "readiness_impact": "Data-flow and trust-boundary depth is represented through service catalogue posture, enterprise evidence, runtime proof manifests, and the remaining owner issues for operator/admin, observability operations, backup/restore DR, generated-client delivery, and environment promotion.",
-      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219, and USF-220, with USF-222 as future observability execution-proof follow-up",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219/USF-223, and USF-220, with USF-222 as future observability execution-proof follow-up",
       "usf_evidence_summary": "Standards plus governed service, provider, runtime, and enterprise evidence rows; residual cross-boundary depth remains deferred with current owner issues.",
       "usf_status": "partial"
     }

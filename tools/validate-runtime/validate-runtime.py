@@ -62,6 +62,7 @@ RULES = {
     "USF-RUNTIME-031": ("blocking", "Redis cache service proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-032": ("blocking", "pgBackRest configured proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-033": ("blocking", "Windmill configured proof boundary is incomplete or unsafe"),
+    "USF-RUNTIME-034": ("blocking", "backup restore DR and RPO/RTO operational depth is incomplete or overclaimed"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -78,6 +79,9 @@ MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH = Path("docs/architecture/mock-provider-subs
 BACKUP_RESTORE_PROVIDER_MATRIX_PATH = Path("docs/architecture/backup-restore-provider-disposition-matrix.json")
 PGBACKREST_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json")
 PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH = Path("docs/architecture/pgbackrest-configured-proof-boundary.json")
+BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH = Path(
+    "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
+)
 OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH = Path("docs/architecture/operator-workflow-provider-disposition-matrix.json")
 WINDMILL_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/windmill-operator-automation-proof-blocker-matrix.json")
 WINDMILL_CONFIGURED_PROOF_BOUNDARY_PATH = Path("docs/architecture/windmill-configured-proof-boundary.json")
@@ -469,6 +473,50 @@ PGBACKREST_CONFIGURED_PROOF_REQUIRED_EVIDENCE_REFS = {
     "usf-211-privacy-pgbackrest-configured-proof",
     "sdk-usf-211-pgbackrest-official-cli",
 }
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_ISSUES = {
+    "USF-219",
+    "USF-223",
+    "USF-211",
+    "USF-202",
+    "USF-177",
+    "USF-139",
+    "USF-147",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_EVIDENCE_REFS = {
+    "soa-usf-219-backup-restore-dr-rpo-rto-depth",
+    "evidence-usf-219-backup-restore-dr-rpo-rto-disposition",
+    "threat-usf-219-backup-dr-rpo-rto-overclaim",
+    "resilience-usf-219-backup-restore-dr-rpo-rto-boundary",
+    "incident-usf-219-backup-restore-dr-boundary",
+    "privacy-usf-219-backup-restore-data-boundary",
+}
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_BOUNDARIES = {
+    "pgbackrest-cold-backup-restore-local-proof",
+    "online-backup-and-wal-archive",
+    "pitr-and-scheduled-backup-operation",
+    "corruption-failure-and-dr-rehearsal",
+    "rpo-rto-measurement",
+    "provider-managed-backup-and-supplier-boundary",
+}
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_DATA_SERVICES = {
+    "postgres",
+    "keycloak-db",
+    "minio",
+    "openbao",
+    "redis",
+    "meilisearch",
+    "clickhouse",
+    "sonar-postgres",
+    "sonar-oidc-plugin",
+    "windmill-postgres",
+    "windmill-redis",
+    "temporal-postgres",
+    "pgbackrest",
+}
 BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "backup-readiness",
     "restore-readiness",
@@ -844,6 +892,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 pgbackrest_configured_proof_boundary,
                 defect["pgbackrestConfiguredProofBoundaryPatches"],
             )
+    backup_restore_operational_depth: Any = None
+    if not defect.get("removeBackupRestoreOperationalDepth"):
+        backup_restore_operational_depth = read_json(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH)
+        if defect.get("backupRestoreOperationalDepthPatches"):
+            backup_restore_operational_depth = apply_manifest_patches(
+                backup_restore_operational_depth,
+                defect["backupRestoreOperationalDepthPatches"],
+            )
     operator_workflow_provider_matrix: Any = None
     if not defect.get("removeOperatorWorkflowProviderMatrix"):
         operator_workflow_provider_matrix = read_json(OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH)
@@ -902,6 +958,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "backupRestoreProviderMatrix": backup_restore_provider_matrix,
         "pgbackrestProofBlockerMatrix": pgbackrest_proof_blocker_matrix,
         "pgbackrestConfiguredProofBoundary": pgbackrest_configured_proof_boundary,
+        "backupRestoreOperationalDepth": backup_restore_operational_depth,
         "operatorWorkflowProviderMatrix": operator_workflow_provider_matrix,
         "windmillProofBlockerMatrix": windmill_proof_blocker_matrix,
         "windmillConfiguredProofBoundary": windmill_configured_proof_boundary,
@@ -4034,6 +4091,159 @@ def check_pgbackrest_configured_proof_boundary(F: Findings, state: dict[str, Any
         F.add("USF-RUNTIME-032", "deferredBoundaries.usf-189-backup-provider-deferred", "runtime deferred boundary must distinguish resolved local proof from remaining readiness boundaries")
 
 
+def check_backup_restore_operational_depth(F: Findings, state: dict[str, Any]) -> None:
+    depth = state.get("backupRestoreOperationalDepth")
+    if not isinstance(depth, dict):
+        F.add("USF-RUNTIME-034", str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH), "USF-219 backup restore operational depth artefact is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-219",
+        "followUpIssue": "USF-223",
+        "parentIssue": "USF-133",
+        "status": "bounded-disposition-recorded-execution-proof-deferred",
+        "serviceCatalogueAuthority": SERVICE_CATALOGUE_PATH,
+        "runtimeManifest": str(MANIFEST_PATH),
+        "pgbackrestConfiguredProofBoundary": str(PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH),
+        "backupRestoreProviderDispositionMatrix": str(BACKUP_RESTORE_PROVIDER_MATRIX_PATH),
+        "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    }
+    for key, expected in expected_top.items():
+        if depth.get(key) != expected:
+            F.add("USF-RUNTIME-034", key, f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate"):
+        if not depth.get(field):
+            F.add("USF-RUNTIME-034", field, "owner, risk, control, and review metadata are required")
+    if BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_ISSUES - set(depth.get("issueLinks", [])):
+        F.add("USF-RUNTIME-034", "issueLinks", "USF-219 issue links are incomplete")
+    if BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS - set(depth.get("nonClaims", [])):
+        F.add("USF-RUNTIME-034", "nonClaims", "backup/restore operational depth non-claims are incomplete")
+    if set(depth.get("enterpriseEvidenceRefs", [])) != BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-034", "enterpriseEvidenceRefs", "USF-219 enterprise evidence refs are incomplete")
+    commands = set(depth.get("validationCommands", []))
+    for command in (
+        "corepack pnpm proof:backup:pgbackrest",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+    ):
+        if command not in commands:
+            F.add("USF-RUNTIME-034", "validationCommands", f"missing {command}")
+
+    claims = depth.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-RUNTIME-034", "claims", "claims must be an object")
+        claims = {}
+    for key in (
+        "boundedDispositionRecorded",
+        "pgbackrestColdBackupRestoreProofAccepted",
+        "operationalBackupDepthExplicitlyDeferred",
+        "dataBearingPromotionImpactRecorded",
+    ):
+        if claims.get(key) is not True:
+            F.add("USF-RUNTIME-034", f"claims.{key}", "bounded disposition marker must be true")
+    for key in (
+        "backupReadinessClaim",
+        "restoreReadinessClaim",
+        "disasterRecoveryReadinessClaim",
+        "pitrReadinessClaim",
+        "onlineBackupReadinessClaim",
+        "scheduledBackupReadinessClaim",
+        "rpoRtoReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(key) is not False:
+            F.add("USF-RUNTIME-034", f"claims.{key}", "readiness or closure claim must remain false")
+
+    boundaries = depth.get("boundaries", [])
+    if not isinstance(boundaries, list):
+        F.add("USF-RUNTIME-034", "boundaries", "boundaries must be a list")
+        boundaries = []
+    boundary_rows = {row.get("id"): row for row in boundaries if isinstance(row, dict)}
+    missing_boundaries = BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_BOUNDARIES - set(boundary_rows)
+    if missing_boundaries:
+        F.add("USF-RUNTIME-034", "boundaries", f"missing boundaries: {sorted(missing_boundaries)}")
+    proven = boundary_rows.get("pgbackrest-cold-backup-restore-local-proof", {})
+    if proven.get("status") != "proven-local" or "USF-211" not in str(proven.get("sourceIssue", "")):
+        F.add("USF-RUNTIME-034", "pgbackrest-cold-backup-restore-local-proof", "USF-211 bounded local proof must be explicitly accepted")
+    for field in ("proofCommand", "validationCommand", "evidenceRefs", "nonEquivalenceBoundary", "nonClaimBoundary"):
+        if not proven.get(field):
+            F.add("USF-RUNTIME-034", f"pgbackrest-cold-backup-restore-local-proof.{field}", "proven local boundary field is required")
+    for boundary_id, row in boundary_rows.items():
+        if boundary_id == "pgbackrest-cold-backup-restore-local-proof":
+            continue
+        if row.get("status") != "deferred-with-owner":
+            F.add("USF-RUNTIME-034", boundary_id, "stronger operational boundary must remain deferred with owner")
+            continue
+        for field in (
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "riskTreatment",
+            "followUpIssue",
+            "reviewDate",
+            "promotionImpact",
+            "requiredEvidence",
+            "nonClaimBoundary",
+        ):
+            if not row.get(field):
+                F.add("USF-RUNTIME-034", f"{boundary_id}.{field}", "deferred operational boundary field is required")
+        if row.get("followUpIssue") != "USF-223":
+            F.add("USF-RUNTIME-034", f"{boundary_id}.followUpIssue", "operational execution proof must defer to USF-223")
+
+    dispositions = {
+        row.get("serviceId"): row
+        for row in depth.get("dataBearingServiceDispositions", [])
+        if isinstance(row, dict) and isinstance(row.get("serviceId"), str)
+    }
+    missing_services = BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_DATA_SERVICES - set(dispositions)
+    if missing_services:
+        F.add("USF-RUNTIME-034", "dataBearingServiceDispositions", f"missing data-bearing service rows: {sorted(missing_services)}")
+    for service_id, row in dispositions.items():
+        for field in (
+            "dataClassification",
+            "tenantBoundary",
+            "backupRestorePosture",
+            "retentionPosture",
+            "failureImpact",
+            "promotionImpact",
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "reviewDate",
+            "nonClaimBoundary",
+        ):
+            if not row.get(field):
+                F.add("USF-RUNTIME-034", f"dataBearingServiceDispositions.{service_id}.{field}", "data-bearing promotion impact field is required")
+        if row.get("backupRestorePosture") in {"environment-backup-required", "local-reset-only", "restore-proof-required", "deferred"} and row.get("followUpIssue") != "USF-223":
+            F.add("USF-RUNTIME-034", f"dataBearingServiceDispositions.{service_id}.followUpIssue", "backup-relevant data service must link USF-223")
+
+    text = json.dumps(depth, sort_keys=True).lower()
+    for phrase in (
+        "backup readiness is proven",
+        "restore readiness is proven",
+        "disaster recovery readiness is proven",
+        "pitr readiness is proven",
+        "rpo readiness is proven",
+        "rto readiness is proven",
+        "production readiness is proven",
+        "live-provider readiness is proven",
+        "usf-133 closure is proven",
+    ):
+        if phrase in text:
+            F.add("USF-RUNTIME-034", str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH), f"readiness overclaim present: {phrase}")
+
+
 def check_windmill_configured_proof_boundary(F: Findings, state: dict[str, Any]) -> None:
     boundary = state.get("windmillConfiguredProofBoundary")
     if not isinstance(boundary, dict):
@@ -4864,6 +5074,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_clickhouse_service_proof_boundary,
             check_redis_cache_service_proof_boundary,
             check_pgbackrest_configured_proof_boundary,
+            check_backup_restore_operational_depth,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
@@ -4897,6 +5108,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_clickhouse_service_proof_boundary,
             check_redis_cache_service_proof_boundary,
             check_pgbackrest_configured_proof_boundary,
+            check_backup_restore_operational_depth,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,

@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "usf216FinalReconciliationSetTop": {
+      "currentOpenBlockerIssues": [
+        "USF-219",
+        "USF-220"
+      ]
+    }
+  }
+}

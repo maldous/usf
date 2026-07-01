@@ -1,0 +1,15 @@
+{
+  "expectedRule": "USF-RUNTIME-034",
+  "backupRestoreOperationalDepthPatches": [
+    {
+      "op": "replace",
+      "path": "/followUpIssue",
+      "value": "USF-219"
+    },
+    {
+      "op": "replace",
+      "path": "/boundaries/1/followUpIssue",
+      "value": "USF-219"
+    }
+  ]
+}

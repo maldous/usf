@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-034",
+  "backupRestoreOperationalDepthPatches": [
+    {
+      "op": "replace",
+      "path": "/claims/backupReadinessClaim",
+      "value": true
+    }
+  ]
+}

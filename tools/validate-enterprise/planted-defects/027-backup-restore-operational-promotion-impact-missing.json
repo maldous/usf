@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-ENTERPRISE-027",
+  "backupRestoreOperationalDepthDispositionPatch": [
+    {
+      "serviceId": "postgres",
+      "drop": [
+        "promotionImpact"
+      ]
+    }
+  ]
+}

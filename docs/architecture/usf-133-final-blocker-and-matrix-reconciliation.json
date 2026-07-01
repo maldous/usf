@@ -18,7 +18,6 @@
   "sourceIssueDoneByImplication": false,
   "wrapperDoneStatesSatisfySourceIssues": false,
   "currentOpenBlockerIssues": [
-    "USF-219",
     "USF-220"
   ],
   "nonBlockingContextIssues": [
@@ -26,7 +25,8 @@
     "USF-184",
     "USF-192",
     "USF-221",
-    "USF-222"
+    "USF-222",
+    "USF-223"
   ],
   "resolvedSourceIssuesUsedAsEvidence": [
     "USF-166",
@@ -42,7 +42,8 @@
     "USF-211",
     "USF-214",
     "USF-215",
-    "USF-218"
+    "USF-218",
+    "USF-219"
   ],
   "usf133AcceptanceCriteriaMapping": [
     {
@@ -318,8 +319,12 @@
     },
     {
       "issueId": "USF-219",
-      "boundary": "backup restore DR and RPO RTO operational proof depth",
-      "blocksUsf133": true
+      "boundary": "backup restore DR and RPO RTO operational proof depth recorded with owner-backed deferral to USF-223",
+      "blocksUsf133": false,
+      "status": "resolved-by-bounded-disposition-evidence",
+      "followUpIssue": "USF-223",
+      "evidenceSource": "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
+      "nonClaimBoundary": "USF-219 does not prove backup readiness, restore readiness, DR readiness, PITR, RPO/RTO, environment readiness, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
     },
     {
       "issueId": "USF-220",
@@ -346,7 +351,8 @@
     "python3 tools/validate-parity/validate-parity.py all --json",
     "python3 tools/validate-enterprise/validate-enterprise.py all --json",
     "git diff --check",
-    "git diff --check origin/main...HEAD"
+    "git diff --check origin/main...HEAD",
+    "python3 tools/validate-runtime/validate-runtime.py all --json"
   ],
   "nonClaims": [
     "full-dev-readiness",

@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-ENTERPRISE-027",
+  "backupRestoreOperationalDepthSet": {
+    "claims.disasterRecoveryReadinessClaim": true
+  }
+}
