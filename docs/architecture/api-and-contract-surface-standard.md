@@ -140,3 +140,24 @@ Forwarded headers are trusted only from configured proxies. Client IP source is 
 The parity-api-contracts slice implements a metadata-backed route contract table, OpenAPI 3.1 generation and checking, safe error envelope, request/correlation ID propagation, tenant guard, PDP guard, API-level idempotency for side-effecting jobs and notification delivery enqueue, opaque cursor proof for file listing, synthetic examples, future UI/API metadata, and an API proof command.
 
 The implemented surface connects health/readiness, tenant context, auth/session/identity, authorization/PDP, audit/evidence, config/secrets, files/storage, jobs/workflows, and notifications/messaging. It remains local/dev/test contract proof only and does not claim public API readiness, production readiness, deployment readiness, live gateway readiness, external developer platform readiness, or external SDK readiness.
+
+## USF-155 Enterprise API/Gateway Depth Boundary
+
+USF-155 adds a bounded enterprise-depth evidence gate for API and gateway compatibility posture. The gate is recorded in `docs/architecture/api-gateway-enterprise-proof-depth-matrix.json` and exercised by `make api-proof`.
+
+The implemented and proven local controls are:
+
+- route metadata for compatibility, browser posture, security headers, field exposure, gateway posture, tenant scope, PDP policy, idempotency, pagination, and observability;
+- OpenAPI route coverage, unique operation IDs, synthetic safe examples, and no public readiness claim;
+- tenant-context fail-closed behaviour, PDP denial, tenant mismatch denial, deterministic idempotency conflict, opaque cursor posture, and value-free audit evidence;
+- explicit non-claims for public API readiness, generated SDK readiness, GraphQL or federation readiness, gateway-live readiness, WAF readiness, TLS termination readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure.
+
+The explicitly reclassified or deferred controls are:
+
+- GraphQL and federation lineage are inventoried and out of current foundation runtime scope unless USF-214 authorises them.
+- Generated external clients and SDK distribution remain deferred to USF-214; OpenAPI generation is not generated-client readiness.
+- Browser-session cookies and CSRF runtime controls remain deferred to identity/browser-session authority and future UI/API work; route metadata is not browser session readiness.
+- Public API compatibility remains deferred to USF-213. Gateway, trusted proxy, TLS termination, WAF, edge, and public exposure remain deferred to future gateway route-proof work. The service catalogue and gateway-clickthrough substrate are local/profile-gated posture only.
+- Broad import/export/bulk API surface depth remains owned by USF-163.
+
+This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, gateway-live readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.

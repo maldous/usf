@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-API-017",
+  "mutation": {
+    "removeEnterpriseRow": {
+      "section": "evidenceRegister",
+      "id": "evidence-usf-155-api-gateway-enterprise-depth"
+    }
+  }
+}

@@ -13,10 +13,50 @@ interface ApiContractsProofResult {
   readonly proofLevelObserved: "behaviour-proven";
   readonly publicApiReadinessClaim: false;
   readonly externalSdkReadinessClaim: false;
+  readonly gatewayLiveReadinessClaim: false;
+  readonly publicCompatibilityReadinessClaim: false;
+  readonly browserSessionReadinessClaim: false;
+  readonly graphqlFederationReadinessClaim: false;
+  readonly generatedClientReadinessClaim: false;
+  readonly stagingReadinessClaim: false;
   readonly productionLiveClaim: false;
+  readonly socReadinessClaim: false;
+  readonly iso27001CertificationClaim: false;
+  readonly fullDevReadinessClaim: false;
+  readonly fullReactParityClaim: false;
+  readonly usf133ClosureClaim: false;
+  readonly enterpriseApiGatewayDepthProven: true;
+  readonly apiGatewayDepthEvidence: ApiGatewayDepthEvidence;
   readonly routeCount: number;
   readonly operationCount: number;
   readonly checks: readonly string[];
+}
+
+interface ApiGatewayDepthEvidence {
+  readonly issueId: "USF-155";
+  readonly routeMetadataChecked: true;
+  readonly openApiCoverageChecked: true;
+  readonly safeExampleBoundaryChecked: true;
+  readonly compatibilityMetadataChecked: true;
+  readonly browserSessionBoundaryExplicit: true;
+  readonly graphqlFederationReclassified: true;
+  readonly generatedClientReclassified: true;
+  readonly gatewayEdgeReclassified: true;
+  readonly bulkApiTransferred: true;
+  readonly tenantBoundaryChecked: true;
+  readonly accessBoundaryChecked: true;
+  readonly auditEvidenceCaptured: true;
+  readonly secretBoundaryChecked: true;
+  readonly redactionChecked: true;
+  readonly publicApiReadinessClaim: false;
+  readonly gatewayLiveReadinessClaim: false;
+  readonly productionReadinessClaim: false;
+  readonly stagingReadinessClaim: false;
+  readonly socReadinessClaim: false;
+  readonly iso27001CertificationClaim: false;
+  readonly fullDevReadinessClaim: false;
+  readonly fullReactParityClaim: false;
+  readonly usf133ClosureClaim: false;
 }
 
 const headers = {
@@ -76,6 +116,22 @@ function assertOpenApiSafe(openapi: ReturnType<typeof buildOpenApiDocument>): vo
   }
 }
 
+function assertRouteMetadataDepth(): void {
+  for (const route of API_ROUTE_CONTRACTS) {
+    assert(
+      route.compatibilityPolicy.trim().length > 0,
+      `compatibility policy missing ${route.routeId}`,
+    );
+    assert(route.csrfPolicy.trim().length > 0, `CSRF policy missing ${route.routeId}`);
+    assert(route.gatewayPolicy.trim().length > 0, `gateway policy missing ${route.routeId}`);
+    assert(
+      route.securityHeadersPolicy.trim().length > 0,
+      `security headers missing ${route.routeId}`,
+    );
+    assert(route.fieldExposurePolicy.trim().length > 0, `field exposure missing ${route.routeId}`);
+  }
+}
+
 export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
   checkOpenApiContract();
   const runtime = createDevRuntime();
@@ -86,6 +142,10 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
     const openapi = buildOpenApiDocument();
     assertOpenApiSafe(openapi);
     checks.push("OpenAPI validates, operation IDs are unique, and examples are synthetic/safe");
+    assertRouteMetadataDepth();
+    checks.push(
+      "route metadata records compatibility, browser, security, field exposure, and gateway posture",
+    );
 
     for (const route of API_ROUTE_CONTRACTS) {
       assert(
@@ -255,6 +315,30 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
     assert(!notificationText.includes("recipient-ref-api-proof"), "recipient address ref leaked");
     checks.push("notifications API uses safe views and idempotent delivery job enqueue");
 
+    const auditPage = await runtime.auditEvents.query(
+      {
+        tenantId: DEV_TENANT_ID,
+        actorId: DEV_ACTOR_ID,
+        roles: ["tenant-admin"],
+        providerMode: "hermetic-mock",
+        environment: "local",
+      },
+      { tenantId: DEV_TENANT_ID, limit: 100 },
+    );
+    assert(auditPage.events.length > 0, "API proof did not capture audit evidence");
+    const auditText = JSON.stringify(auditPage).toLowerCase();
+    for (const forbidden of [
+      "bearer ",
+      "private_key",
+      "client_secret",
+      "object_key",
+      "recipient-ref-api-proof",
+      "stack trace",
+    ]) {
+      assert(!auditText.includes(forbidden), `API audit evidence leaked ${forbidden}`);
+    }
+    checks.push("API proof captures value-free tenant/access audit evidence");
+
     return {
       status: "pass",
       proof: "api-contracts",
@@ -263,7 +347,45 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
       proofLevelObserved: "behaviour-proven",
       publicApiReadinessClaim: false,
       externalSdkReadinessClaim: false,
+      gatewayLiveReadinessClaim: false,
+      publicCompatibilityReadinessClaim: false,
+      browserSessionReadinessClaim: false,
+      graphqlFederationReadinessClaim: false,
+      generatedClientReadinessClaim: false,
+      stagingReadinessClaim: false,
       productionLiveClaim: false,
+      socReadinessClaim: false,
+      iso27001CertificationClaim: false,
+      fullDevReadinessClaim: false,
+      fullReactParityClaim: false,
+      usf133ClosureClaim: false,
+      enterpriseApiGatewayDepthProven: true,
+      apiGatewayDepthEvidence: {
+        issueId: "USF-155",
+        routeMetadataChecked: true,
+        openApiCoverageChecked: true,
+        safeExampleBoundaryChecked: true,
+        compatibilityMetadataChecked: true,
+        browserSessionBoundaryExplicit: true,
+        graphqlFederationReclassified: true,
+        generatedClientReclassified: true,
+        gatewayEdgeReclassified: true,
+        bulkApiTransferred: true,
+        tenantBoundaryChecked: true,
+        accessBoundaryChecked: true,
+        auditEvidenceCaptured: true,
+        secretBoundaryChecked: true,
+        redactionChecked: true,
+        publicApiReadinessClaim: false,
+        gatewayLiveReadinessClaim: false,
+        productionReadinessClaim: false,
+        stagingReadinessClaim: false,
+        socReadinessClaim: false,
+        iso27001CertificationClaim: false,
+        fullDevReadinessClaim: false,
+        fullReactParityClaim: false,
+        usf133ClosureClaim: false,
+      },
       routeCount: API_ROUTE_CONTRACTS.length,
       operationCount: countOperations(openapi),
       checks,

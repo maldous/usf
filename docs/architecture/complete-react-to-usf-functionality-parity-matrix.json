@@ -176,9 +176,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "REST/GraphQL/OpenAPI lineage",
-      "readiness_impact": "OpenAPI/local REST covered; GraphQL/browser-client parity requires decision.",
+      "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. GraphQL, generated clients, browser-session runtime, public compatibility, gateway-live, edge/WAF/TLS, and bulk API readiness remain explicitly reclassified, transferred, or deferred without readiness claims.",
       "tracking_carrier_or_recommendation": "USF-154/USF-155",
-      "usf_evidence_summary": "USF API proof",
+      "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix and validate-api USF-API-001..019",
       "usf_status": "partial"
     },
     {

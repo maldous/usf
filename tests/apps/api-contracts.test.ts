@@ -52,6 +52,24 @@ describe("API contracts runtime surface", () => {
     await app.close();
   });
 
+  it("records enterprise API gateway depth boundaries without public readiness claims", () => {
+    for (const route of API_ROUTE_CONTRACTS) {
+      expect(route.compatibilityPolicy).toEqual(expect.any(String));
+      expect(route.compatibilityPolicy.length).toBeGreaterThan(0);
+      expect(route.csrfPolicy).toContain("browser-session-routes-deferred");
+      expect(route.gatewayPolicy).toContain("deferred");
+      expect(route.securityHeadersPolicy).toContain("no-store");
+      expect(route.fieldExposurePolicy.length).toBeGreaterThan(0);
+    }
+
+    const metadataText = JSON.stringify(API_ROUTE_CONTRACTS).toLowerCase();
+    expect(metadataText).toContain("gateway-edge-waf-tls-production-posture-deferred");
+    expect(metadataText).not.toContain("public api readiness is proven");
+    expect(metadataText).not.toContain("gateway-live readiness is proven");
+    expect(metadataText).not.toContain("production readiness is proven");
+    expect(metadataText).not.toContain("generated client readiness is proven");
+  });
+
   it("denies protected and tenant-scoped routes without leaking resource existence", async () => {
     const app = buildApi();
     await app.ready();

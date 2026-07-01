@@ -4927,6 +4927,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-155-api-gateway-enterprise-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-155 enterprise API/gateway depth controls for route metadata, OpenAPI coverage, safe examples, compatibility metadata, browser-session boundary, gateway/edge non-equivalence, GraphQL and generated-client reclassification, bulk API transfer, tenant/access/audit/redaction evidence, and explicit public API/gateway-live non-claims.",
+      "riskTreated": "Deferred API and gateway depth could be hidden behind the core API proof, allowing unsupported public API, generated SDK, browser-session, gateway-live, production, certification, or full-parity claims.",
+      "assetServiceAffected": "API contract surface; OpenAPI surface; gateway substrate boundary; route metadata; API proof",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-155; currentEvidence=evidence-usf-155-api-gateway-enterprise-depth; deferredBoundary=public API readiness, generated clients, GraphQL/federation, browser-session runtime, gateway-live, WAF, TLS termination, edge readiness, broad bulk routes, environment promotion, and production operation; noReactRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json; packages/proof/src/api-contracts-proof.ts; tools/validate-parity/validate-api.py",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "riskStatement=Enterprise API/gateway depth needs bounded local proof without implying public API, generated SDK, browser-session, gateway-live, production, or certification readiness.; threatFailureScenario=Core hermetic API proof is mistaken for public API readiness, generated client readiness, browser session runtime readiness, live gateway/edge readiness, or production API operation.; affectedAssetService=API contract and gateway boundaries; impact=high; likelihood=medium; owner=platform-api-foundation; treatment=mitigate with local proof, explicit reclassification, and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-149 for browser-session identity runtime, USF-161 for distributed guardrail/edge controls, USF-163 for bulk/import/export API depth, USF-193 for promotion semantics, and future public API/gateway issue before public or gateway-live claims; exceptionOwner=platform-api-risk-owner; exceptionReason=public API readiness, generated clients, GraphQL/federation, browser-session runtime, live gateway/edge, WAF/TLS, broad bulk routes, and production operations remain outside USF-155 bounded local proof; compensatingControl=validate-api plus api-gateway-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-api.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7162,6 +7188,33 @@
       ],
       "prOrMergeSha": "3dafec00898a75f333aea08e0fb54946c65b2eec",
       "retentionPosture": "Retain committed proof code, notifications messaging enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw message body, raw recipient address, credential, token, provider endpoint, provider payload, provider error, stack trace, customer data, or production data is retained."
+    },
+    {
+      "id": "evidence-usf-155-api-gateway-enterprise-depth",
+      "proofResult": "proof:api",
+      "whatWasProven": "make api-proof is the command-pinned bounded local hermetic proof for USF-155. It proves the existing API/contracts controls plus route metadata depth for compatibility, browser, security, field exposure, and gateway posture, OpenAPI coverage, safe synthetic examples, tenant-context fail-closed behaviour, PDP denial, tenant mismatch denial, deterministic idempotency, opaque cursor posture, safe notification/job route views, value-free audit evidence, and explicit API/gateway non-claims.",
+      "whatWasNotProven": "No public API readiness, external developer platform readiness, generated SDK readiness, GraphQL/federation readiness, browser-session runtime readiness, gateway-live readiness, trusted proxy readiness, WAF readiness, TLS termination readiness, edge readiness, broad bulk API readiness, environment promotion, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-api-contract-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#external-caddy",
+      "adapterProviderId": "api-contract-surface; openapi-local-generator; gateway-substrate-non-equivalent",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "commandPin": "tsx packages/proof/src/api-contracts-proof.ts",
+      "commitPin": "1bb897e8d8ca6742d6aba7a7bdef10bd010ef807",
+      "issueLinks": [
+        "USF-155",
+        "USF-133",
+        "USF-149",
+        "USF-161",
+        "USF-163",
+        "USF-180",
+        "USF-184",
+        "USF-191",
+        "USF-192",
+        "USF-193"
+      ],
+      "prOrMergeSha": "1bb897e8d8ca6742d6aba7a7bdef10bd010ef807",
+      "retentionPosture": "Retain committed proof code, API/gateway enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw payload, credential, token, cookie, authorization header, provider endpoint, raw forwarded header, stack trace, customer data, or production data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -9107,6 +9160,34 @@
       "failClosedBehaviour": "validate-notify USF-NOTIFY-017 through USF-NOTIFY-021 block missing enterprise control plane, missing proof markers, incomplete USF-153 matrix, missing enterprise evidence linkage, and prohibited live/deliverability/readiness claims.",
       "monitoringAuditEvidence": "make notify-proof output, notify validator findings, value-free notification lifecycle, persistence, feedback, unsubscribe, bulk, retention, and audit events only; no live monitoring backend.",
       "residualRisk": "Live delivery providers, deliverability, provider callback replay, public notification API, browser UI, distributed campaign/rate-limit operation, data residency, environment promotion, and production operation remain non-claims."
+    },
+    {
+      "id": "threat-usf-155-api-gateway-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-155 enterprise API/gateway proof depth",
+      "trustBoundary": "Hermetic in-memory API runtime, local route metadata, local OpenAPI generator/checker, and gateway substrate evidence only; no public API, generated client, browser-session runtime, live gateway, WAF, TLS termination, edge, or production boundary claim.",
+      "tenantBoundary": "Tenant-scoped API routes require explicit tenant context, PDP authorization, safe tenant mismatch denial, and no cross-tenant enumeration through errors, cursors, audit evidence, or examples.",
+      "credentialBoundary": "Raw authorization headers, cookies, tokens, credentials, endpoint refs, forwarded header trust material, provider payloads, stack traces, and secrets are not emitted in proof output, audit metadata, OpenAPI examples, validator findings, or evidence rows.",
+      "dataClassification": "synthetic local API contract, route metadata, OpenAPI example, job, notification, file cursor, and audit metadata only; no production-derived API payload or customer data.",
+      "abuseCases": [
+        "hermetic API proof treated as public API readiness",
+        "OpenAPI generation treated as generated SDK readiness",
+        "route CSRF metadata treated as browser-session runtime readiness",
+        "gateway metadata or service catalogue row treated as live gateway, trusted proxy, WAF, TLS, or edge readiness",
+        "GraphQL/federation lineage treated as implemented runtime support",
+        "bulk API posture treated as broad import/export/bulk API readiness",
+        "safe error or audit evidence leaks token, cookie, payload, stack trace, endpoint, or tenant data"
+      ],
+      "failureModes": [
+        "enterprise API/gateway proof markers removed",
+        "USF-155 matrix control removed or made self-referential",
+        "readiness claim set true in proof output, matrix, OpenAPI, standard, or evidence row",
+        "deferred browser, GraphQL, generated-client, bulk, or gateway boundary lacks owner or follow-up",
+        "audit evidence leaks sensitive request, provider, credential, endpoint, cookie, token, or stack-trace material"
+      ],
+      "failClosedBehaviour": "validate-api USF-API-015 through USF-API-019 block missing proof markers, incomplete USF-155 matrix, missing enterprise evidence linkage, incomplete deferred/reclassified boundaries, and prohibited API/gateway readiness claims.",
+      "monitoringAuditEvidence": "make api-proof output, API validator findings, route metadata, OpenAPI checker output, safe API denial evidence, and value-free audit events only; no live monitoring backend.",
+      "residualRisk": "Public API readiness, generated clients, GraphQL/federation, browser-session runtime, live gateway/edge/TLS/WAF, broad bulk API, environment promotion, and production API operation remain non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -11805,6 +11886,37 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-155-api-gateway-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-155 API/gateway privileged and public exposure posture",
+      "posture": [
+        "accessModel=local-synthetic-API-contract-proof-only",
+        "authRequirement=tenant-scoped-and-protected-routes-require-explicit-dev-identity-and-synchronous-PDP",
+        "leastPrivilegePosture=route-required-action-metadata-no-token-claims-as-authorization",
+        "breakGlassRelevance=route-metadata-only-no-production-break-glass-or-support-access-claim",
+        "auditRequirement=value-free-route-denial-guardrail-and-capability-audit-evidence-where-represented",
+        "reviewCadence=2026-09-30-before-public-API-or-gateway-readiness-claim",
+        "deprovisioningPosture=membership-refresh-fail-closed-before-PDP-decision-where-supported",
+        "no-public-exposure-claim",
+        "no-gateway-live-readiness-claim"
+      ],
+      "evidenceSource": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "Public API access reviews, generated client distribution, browser-session operation, service-console clickthrough, gateway route auth, trusted proxy allowlist proof, public exposure, support access approvals, executed access reviews, and production break-glass evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -13819,6 +13931,41 @@
       "evidenceSource": "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json",
       "validationCommand": "make notify-proof; python3 tools/validate-parity/validate-notify.py all --json",
       "deferredReason": "Live provider resilience, provider callback replay, distributed outbox, backup service readiness, restore readiness, DR, RPO/RTO, live observability, and production incident operation remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-155-api-gateway-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-155 API/gateway local proof resilience posture",
+      "posture": [
+        "backupRequirement=not-applicable-for-local-API-contract-metadata-proof",
+        "restoreProofRequirement=restore-readiness-not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=OpenAPI-route-metadata-or-proof-drift-must-not-be-treated-as-readiness",
+        "cleanupTeardownProof=Fastify-app-closed-in-proof-finally-path",
+        "readinessChecks=openapi-check-plus-hermetic-proof-and-validator-markers-only",
+        "retryTimeoutBehaviour=API-idempotency-and-guardrail-safe-retry-posture-only-no-live-gateway-timeout-claim",
+        "failClosedMode=missing-tenant-PDP-denial-tenant-mismatch-idempotency-conflict-validation-error-and-rate-limit-denials",
+        "structuredLogging=proof-output-value-free",
+        "tracingCorrelation=request-correlation-and-trace-id-propagation-local-only",
+        "metrics=validator-and-proof-check-counts-plus-local-observability-signals-only",
+        "auditEvents=value-free-route-denial-guardrail-capability-and-access-events-where-represented",
+        "redaction=raw-token-cookie-authorization-header-endpoint-forwarded-header-payload-secret-provider-error-provider-payload-and-stack-trace-not-retained"
+      ],
+      "evidenceSource": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+      "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "Live gateway resilience, trusted proxy failover, WAF resilience, TLS renewal, public API uptime, generated client compatibility, backup service readiness, restore readiness, DR, RPO/RTO, live observability, and production incident operation remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16599,6 +16746,34 @@
       "evidenceSource": "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
       "deferredReason": "Production notification incident hooks, paging, escalation execution, provider incident workflow, patch SLA evidence, live provider advisory response, SIEM forwarding, deliverability incident evidence, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-155-api-gateway-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-155 API/gateway incident and vulnerability evidence posture",
+      "posture": [
+        "incidentDetectionHook=local-API-denial-validation-idempotency-openapi-drift-and-gateway-overclaim-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-api-risk-owner",
+        "vulnerabilityAdvisoryReview=API-gateway-generated-client-browser-session-and-edge-dependency-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-SDK-or-provider-dependency-added-by-USF-155",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "deferredReason": "Production API incident hooks, paging, escalation execution, public API advisory response, gateway/WAF/TLS incident workflow, patch SLA evidence, SIEM forwarding, generated-client advisory workflow, and post-incident evidence remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -19759,6 +19934,35 @@
       "evidenceSource": "packages/proof/src/notifications-messaging-proof.ts",
       "validationCommand": "make notify-proof",
       "deferredReason": "Customer recipient data privacy, live provider privacy, DSR, data residency, legal hold service operation, custom retention, public unsubscribe data flow, and production messaging data recovery privacy remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-155-api-gateway-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-155 proof:api synthetic API contract data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=internal-and-security-sensitive-API-route-metadata-openapi-examples-job-notification-file-cursor-and-audit-metadata",
+        "redactionPolicy=no-raw-token-cookie-authorization-header-endpoint-forwarded-header-payload-secret-provider-error-provider-payload-or-stack-trace-in-proof-output",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed-for-public-API-or-gateway-operation",
+        "dataResidencyCrossBorderBoundary=hermetic-local-only-no-production-residency-claim"
+      ],
+      "evidenceSource": "packages/proof/src/api-contracts-proof.ts",
+      "validationCommand": "make api-proof",
+      "deferredReason": "Customer API payload privacy, public API privacy posture, generated client distribution, browser session data flow, gateway logs, DSR, data residency, legal hold workflow, custom retention, and production API data recovery privacy remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

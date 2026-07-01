@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-018",
+  "mutation": {
+    "file": "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+    "replace": {
+      "old": "\"followUpIssue\": \"USF-180 records local gateway substrate; USF-161 and USF-213 are required before live gateway, edge, or public exposure readiness\",",
+      "new": "\"followUpIssue\": \"\","
+    }
+  }
+}
