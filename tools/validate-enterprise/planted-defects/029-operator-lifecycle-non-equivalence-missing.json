@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-ENTERPRISE-029",
+  "operatorAccessLifecycleServicePatch": [
+    {
+      "serviceId": "keycloak",
+      "set": {
+        "nonEquivalenceBoundary": ""
+      }
+    }
+  ]
+}

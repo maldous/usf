@@ -38,6 +38,9 @@ OPERATOR_ACCESS_MATRIX_PATH = Path("docs/architecture/operator-access-gateway-po
 OPERATOR_ACCESS_REVIEW_DEPTH_PATH = Path(
     "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json"
 )
+OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH = Path(
+    "docs/architecture/operator-access-review-deprovisioning-execution-proof.json"
+)
 GATEWAY_CLICKTHROUGH_MATRIX_PATH = Path("docs/architecture/gateway-clickthrough-access-substrate-matrix.json")
 STATIC_ANALYSIS_MATRIX_PATH = Path("docs/architecture/static-analysis-quality-gate-disposition-matrix.json")
 SONARQUBE_PROOF_BOUNDARY_PATH = Path("docs/architecture/sonarqube-service-semantic-proof-boundary.json")
@@ -54,6 +57,7 @@ GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH = Path(
 )
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
+OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH = Path("packages/proof/src/operator-access-lifecycle-proof.ts")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PLANTED_DEFECT_DIR = Path("tools/validate-enterprise/planted-defects")
@@ -98,6 +102,10 @@ RULES = {
     "USF-ENTERPRISE-028": (
         "blocking",
         "generated-client external-developer GraphQL federation delivery depth is incomplete or overclaimed",
+    ),
+    "USF-ENTERPRISE-029": (
+        "blocking",
+        "operator access-review and deprovisioning execution proof is incomplete or overclaimed",
     ),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
@@ -661,6 +669,32 @@ GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS 
     "federation-readiness",
     "public-api-readiness",
 }
+OPERATOR_ACCESS_LIFECYCLE_REQUIRED_EVIDENCE_ROWS = {
+    "soaSupportMappings": {"soa-usf-221-operator-lifecycle-execution-proof"},
+    "evidenceRegister": {"evidence-usf-221-operator-lifecycle-execution-proof"},
+    "threatModelAbuseCaseRegister": {"threat-usf-221-operator-lifecycle-overclaim"},
+    "accessReviewPrivilegedOperationPosture": {"access-usf-221-operator-lifecycle-proof-boundary"},
+    "backupRestoreResiliencePosture": {"resilience-usf-221-operator-lifecycle-proof-boundary"},
+    "incidentVulnerabilityManagementEvidence": {"incident-usf-221-operator-lifecycle-boundary"},
+    "privacyDataMinimisationPosture": {"privacy-usf-221-operator-lifecycle-boundary"},
+}
+OPERATOR_ACCESS_LIFECYCLE_REQUIRED_ISSUES = {
+    "USF-221",
+    "USF-217",
+    "USF-169",
+    "USF-180",
+    "USF-184",
+    "USF-192",
+    "USF-193",
+    "USF-133",
+}
+OPERATOR_ACCESS_LIFECYCLE_PROHIBITED_CLAIMS = REQUIRED_NON_CLAIMS | {
+    "usf-133-closure",
+    "operator-console-readiness",
+    "public-operator-exposure",
+    "provider-console-readiness",
+    "identity-provider-lifecycle-readiness",
+}
 OBSERVABILITY_SERVICE_DEPTH_REQUIRED_ISSUES = {
     "USF-218",
     "USF-222",
@@ -879,6 +913,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     operator_access_review_depth = (
         read_json(OPERATOR_ACCESS_REVIEW_DEPTH_PATH) if (ROOT / OPERATOR_ACCESS_REVIEW_DEPTH_PATH).exists() else None
     )
+    operator_access_lifecycle_proof = (
+        read_json(OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH)
+        if (ROOT / OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH).exists()
+        else None
+    )
     gateway_clickthrough_matrix = (
         read_json(GATEWAY_CLICKTHROUGH_MATRIX_PATH) if (ROOT / GATEWAY_CLICKTHROUGH_MATRIX_PATH).exists() else None
     )
@@ -913,6 +952,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         if (ROOT / OPERATOR_ACCESS_PROOF_PATH).exists()
         else None
     )
+    operator_access_lifecycle_proof_text = (
+        (ROOT / OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH).read_text(encoding="utf-8")
+        if (ROOT / OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH).exists()
+        else None
+    )
 
     model = apply_model_defect(model, defect)
     if closure_matrix is not None:
@@ -925,6 +969,13 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         operator_access_review_depth = None
     elif operator_access_review_depth is not None:
         operator_access_review_depth = apply_operator_access_review_depth_defect(operator_access_review_depth, defect)
+    if defect.get("removeOperatorAccessLifecycleProof"):
+        operator_access_lifecycle_proof = None
+    elif operator_access_lifecycle_proof is not None:
+        operator_access_lifecycle_proof = apply_operator_access_lifecycle_proof_defect(
+            operator_access_lifecycle_proof,
+            defect,
+        )
     if defect.get("removeGatewayClickthroughMatrix"):
         gateway_clickthrough_matrix = None
     elif gateway_clickthrough_matrix is not None:
@@ -968,6 +1019,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     package = apply_package_defect(package, defect)
     if operator_access_proof_text is not None:
         operator_access_proof_text = apply_operator_access_proof_defect(operator_access_proof_text, defect)
+    if operator_access_lifecycle_proof_text is not None:
+        operator_access_lifecycle_proof_text = apply_operator_access_proof_defect(
+            operator_access_lifecycle_proof_text,
+            defect,
+        )
     return {
         "model": model,
         "schema": schema,
@@ -979,6 +1035,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "usf133ClosureTierGate": usf133_closure_tier_gate,
         "operatorAccessMatrix": operator_access_matrix,
         "operatorAccessReviewDepth": operator_access_review_depth,
+        "operatorAccessLifecycleProof": operator_access_lifecycle_proof,
         "gatewayClickthroughMatrix": gateway_clickthrough_matrix,
         "staticAnalysisMatrix": static_analysis_matrix,
         "sonarqubeProofBoundary": sonarqube_proof_boundary,
@@ -989,6 +1046,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "generatedClientGraphqlDeliveryDepth": generated_client_graphql_delivery_depth,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
+        "operatorAccessLifecycleProofText": operator_access_lifecycle_proof_text,
     }
 
 
@@ -1170,6 +1228,33 @@ def apply_operator_access_review_depth_defect(matrix: dict[str, Any], defect: di
                     drop_nested_value(row, key)
                 for key, value in patch.get("set", {}).items():
                     set_nested_value(row, key, value)
+    return out
+
+
+def apply_operator_access_lifecycle_proof_defect(matrix: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(matrix)
+    for key, value in defect.get("operatorAccessLifecycleTopSet", {}).items():
+        set_nested_value(out, key, value)
+    for key in defect.get("operatorAccessLifecycleTopDrop", []):
+        drop_nested_value(out, key)
+    remove_service_id = defect.get("removeOperatorAccessLifecycleServiceRow")
+    if remove_service_id:
+        out["serviceExecutionRows"] = [
+            row for row in out.get("serviceExecutionRows", []) if row.get("serviceId") != remove_service_id
+        ]
+    if defect.get("dropOperatorAccessLifecycleEnterpriseEvidenceRef"):
+        dropped = defect["dropOperatorAccessLifecycleEnterpriseEvidenceRef"]
+        out["enterpriseEvidenceRefs"] = [
+            item for item in out.get("enterpriseEvidenceRefs", []) if item != dropped
+        ]
+    for patch in defect.get("operatorAccessLifecycleServicePatch", []):
+        for row in out.get("serviceExecutionRows", []):
+            if row.get("serviceId") != patch.get("serviceId"):
+                continue
+            for key in patch.get("drop", []):
+                drop_nested_value(row, key)
+            for key, value in patch.get("set", {}).items():
+                set_nested_value(row, key, value)
     return out
 
 
@@ -2055,6 +2140,296 @@ def check_operator_access_review_deprovisioning_depth(F: Findings, state: dict[s
                 F.add("USF-ENTERPRISE-025", enterprise_row.get("id", service_id), f"missing enterprise posture token {token}")
         if REQUIRED_NON_CLAIMS - set(enterprise_row.get("nonClaims", [])):
             F.add("USF-ENTERPRISE-025", enterprise_row.get("id", service_id), "enterprise row non-claims are incomplete")
+
+
+def check_operator_access_lifecycle_execution_proof(F: Findings, state: dict[str, Any]) -> None:
+    proof = state.get("operatorAccessLifecycleProof")
+    operator_matrix = state.get("operatorAccessMatrix")
+    depth = state.get("operatorAccessReviewDepth")
+    if not isinstance(proof, dict):
+        F.add("USF-ENTERPRISE-029", str(OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH), "USF-221 proof artefact is missing")
+        return
+    if not isinstance(operator_matrix, dict) or not isinstance(depth, dict):
+        F.add("USF-ENTERPRISE-029", str(OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH), "USF-217 and operator matrix inputs are required")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-221",
+        "predecessorIssue": "USF-217",
+        "parentIssue": "USF-133",
+        "dashboardIssue": "USF-184",
+        "coordinatorIssue": "USF-192",
+        "status": "bounded-local-execution-proof-recorded",
+        "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
+        "operatorAccessMatrix": str(OPERATOR_ACCESS_MATRIX_PATH),
+        "predecessorDepthMatrix": str(OPERATOR_ACCESS_REVIEW_DEPTH_PATH),
+        "enterpriseEvidenceModel": str(MODEL_PATH),
+        "proofPath": str(OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH),
+        "proofCommand": "corepack pnpm proof:operator-lifecycle",
+        "packageScript": "proof:operator-lifecycle",
+        "makeTarget": "operator-lifecycle-proof",
+    }
+    for key, expected in expected_top.items():
+        if proof.get(key) != expected:
+            F.add("USF-ENTERPRISE-029", key, f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate"):
+        if not proof.get(field):
+            F.add("USF-ENTERPRISE-029", field, f"missing {field}")
+    if not DATE_RE.fullmatch(str(proof.get("reviewDate", ""))):
+        F.add("USF-ENTERPRISE-029", "reviewDate", "review date must be YYYY-MM-DD")
+
+    issue_links = set(proof.get("issueLinks", []))
+    missing_issues = OPERATOR_ACCESS_LIFECYCLE_REQUIRED_ISSUES - issue_links
+    if missing_issues:
+        F.add("USF-ENTERPRISE-029", "issueLinks", f"missing issue links: {sorted(missing_issues)}")
+    validation_commands = set(proof.get("validationCommands", []))
+    for command in (
+        "corepack pnpm proof:operator-lifecycle",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "corepack pnpm verify",
+    ):
+        if command not in validation_commands:
+            F.add("USF-ENTERPRISE-029", "validationCommands", f"missing {command}")
+    missing_non_claims = OPERATOR_ACCESS_LIFECYCLE_PROHIBITED_CLAIMS - {
+        str(item).lower() for item in proof.get("nonClaims", [])
+    }
+    if missing_non_claims:
+        F.add("USF-ENTERPRISE-029", "nonClaims", f"missing non-claims: {sorted(missing_non_claims)}")
+
+    required_enterprise_refs = {
+        row_id
+        for row_ids in OPERATOR_ACCESS_LIFECYCLE_REQUIRED_EVIDENCE_ROWS.values()
+        for row_id in row_ids
+    }
+    refs = set(proof.get("enterpriseEvidenceRefs", []))
+    if refs != required_enterprise_refs:
+        F.add(
+            "USF-ENTERPRISE-029",
+            "enterpriseEvidenceRefs",
+            f"missing={sorted(required_enterprise_refs - refs)} extra={sorted(refs - required_enterprise_refs)}",
+        )
+
+    claims = proof.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-ENTERPRISE-029", "claims", "claims must be an object")
+        claims = {}
+    for field in (
+        "boundedLocalAccessReviewWorkflowExecuted",
+        "boundedLocalDeprovisioningWorkflowExecuted",
+        "revokedMembershipFailClosedBehaviourProven",
+        "valueFreeAuditEvidenceCaptured",
+    ):
+        if claims.get(field) is not True:
+            F.add("USF-ENTERPRISE-029", f"claims.{field}", "bounded local proof claim must be true")
+    for field in (
+        "providerConsoleDeprovisioningClaim",
+        "identityProviderLifecycleIntegrationClaim",
+        "publicExposureClaim",
+        "operatorConsoleReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(field) is not False:
+            F.add("USF-ENTERPRISE-029", f"claims.{field}", "readiness or certification claim must remain false")
+
+    semantics = proof.get("executionSemantics", {})
+    if not isinstance(semantics, dict):
+        F.add("USF-ENTERPRISE-029", "executionSemantics", "execution semantics must be an object")
+        semantics = {}
+    if semantics.get("runtimeMode") != "hermetic-local-proof":
+        F.add("USF-ENTERPRISE-029", "executionSemantics.runtimeMode", "runtime mode must remain hermetic-local-proof")
+    if semantics.get("providerMode") != "hermetic-mock":
+        F.add("USF-ENTERPRISE-029", "executionSemantics.providerMode", "provider mode must remain hermetic-mock")
+    semantics_text = json.dumps(semantics, sort_keys=True).lower()
+    for token in (
+        "synthetic",
+        "security-admin",
+        "tenant-admin denial",
+        "cross-tenant denial",
+        "revoked",
+        "audit",
+        "hash-chain",
+        "raw endpoints",
+        "tokens",
+        "credentials",
+        "stack traces",
+    ):
+        if token not in semantics_text:
+            F.add("USF-ENTERPRISE-029", "executionSemantics", f"missing semantic proof token {token}")
+
+    services = {
+        service.get("serviceId"): service
+        for service in state["serviceCatalogue"].get("services", [])
+        if isinstance(service, dict) and isinstance(service.get("serviceId"), str)
+    }
+    expected_services = {
+        service_id for service_id, service in services.items() if service_needs_operator_access_decision(service)
+    }
+    operator_rows = {
+        row.get("serviceId"): row for row in operator_matrix.get("rows", []) if isinstance(row, dict)
+    }
+    depth_rows = {row.get("serviceId"): row for row in depth.get("rows", []) if isinstance(row, dict)}
+    execution_rows = {
+        row.get("serviceId"): row
+        for row in proof.get("serviceExecutionRows", [])
+        if isinstance(row, dict) and isinstance(row.get("serviceId"), str)
+    }
+    if set(execution_rows) != expected_services:
+        F.add(
+            "USF-ENTERPRISE-029",
+            "serviceExecutionRows",
+            f"missing={sorted(expected_services - set(execution_rows))} extra={sorted(set(execution_rows) - expected_services)}",
+        )
+
+    for service_id in sorted(expected_services):
+        row = execution_rows.get(service_id)
+        operator_row = operator_rows.get(service_id, {})
+        depth_row = depth_rows.get(service_id, {})
+        if not isinstance(row, dict):
+            continue
+        subject = f"serviceExecutionRows.{service_id}"
+        if row.get("matrixRowId") != operator_row.get("id"):
+            F.add("USF-ENTERPRISE-029", subject, "operator matrix row linkage is stale")
+        if row.get("serviceCatalogueRow") != f"{SERVICE_CATALOGUE_PATH}#{service_id}":
+            F.add("USF-ENTERPRISE-029", subject, "service catalogue row linkage is stale")
+        if row.get("status") != "proven-local":
+            F.add("USF-ENTERPRISE-029", subject, "status must be proven-local")
+        for field in ("owner", "riskOwner", "controlOwner"):
+            expected = operator_row.get("accessReviewOwner") if field == "owner" else operator_row.get(field)
+            if row.get(field) != expected:
+                F.add("USF-ENTERPRISE-029", f"{subject}.{field}", "owner metadata must match operator matrix")
+        if depth_row.get("accessReviewCadence", {}).get("followUpIssue") != "USF-221":
+            F.add("USF-ENTERPRISE-029", subject, "USF-217 access-review handoff is missing")
+        if depth_row.get("deprovisioningPosture", {}).get("followUpIssue") != "USF-221":
+            F.add("USF-ENTERPRISE-029", subject, "USF-217 deprovisioning handoff is missing")
+        if "corepack pnpm proof:operator-lifecycle" not in str(row.get("accessReviewWorkflowEvidence", "")):
+            F.add("USF-ENTERPRISE-029", subject, "access-review workflow proof command is missing")
+        if "corepack pnpm proof:operator-lifecycle" not in str(row.get("deprovisioningWorkflowEvidence", "")):
+            F.add("USF-ENTERPRISE-029", subject, "deprovisioning workflow proof command is missing")
+        if row.get("providerConsoleIntegrationStatus") != "not-proven":
+            F.add("USF-ENTERPRISE-029", subject, "provider-console integration must remain not-proven")
+        if row.get("publicExposureClaim") is not False or row.get("operatorConsoleReadinessClaim") is not False:
+            F.add("USF-ENTERPRISE-029", subject, "public exposure and operator-console readiness claims must be false")
+        boundary = str(row.get("nonEquivalenceBoundary", "")).lower()
+        for token in ("provider-console", "external idp", "public gateway", "environment promotion", "production operator readiness"):
+            if token not in boundary:
+                F.add("USF-ENTERPRISE-029", subject, f"non-equivalence boundary lacks {token}")
+
+    boundaries = {
+        row.get("id"): row
+        for row in proof.get("remainingBoundaries", [])
+        if isinstance(row, dict) and isinstance(row.get("id"), str)
+    }
+    for boundary_id in ("provider-console-sso-and-clickthrough", "external-idp-provider-lifecycle-integration"):
+        boundary = boundaries.get(boundary_id)
+        if not isinstance(boundary, dict):
+            F.add("USF-ENTERPRISE-029", boundary_id, "remaining boundary is missing")
+            continue
+        for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "followUpIssues", "reviewDate", "promotionImpact", "nonClaimBoundary"):
+            if not boundary.get(field):
+                F.add("USF-ENTERPRISE-029", boundary_id, f"missing {field}")
+        if boundary.get("status") != "deferred-with-owner":
+            F.add("USF-ENTERPRISE-029", boundary_id, "remaining boundary must be deferred-with-owner")
+        if not DATE_RE.fullmatch(str(boundary.get("reviewDate", ""))):
+            F.add("USF-ENTERPRISE-029", boundary_id, "review date must be YYYY-MM-DD")
+        if not all(str(issue).startswith("USF-") for issue in boundary.get("followUpIssues", [])):
+            F.add("USF-ENTERPRISE-029", boundary_id, "follow-up issues must be USF issue refs")
+
+    package = state.get("package")
+    scripts = package.get("scripts", {}) if isinstance(package, dict) else {}
+    if scripts.get("proof:operator-lifecycle") != "tsx packages/proof/src/operator-access-lifecycle-proof.ts":
+        F.add("USF-ENTERPRISE-029", "package.scripts.proof:operator-lifecycle", "proof script is missing or stale")
+    if "proof:operator-lifecycle" not in str(scripts.get("verify", "")):
+        F.add("USF-ENTERPRISE-029", "package.scripts.verify", "verify must run the USF-221 proof")
+    if "\noperator-lifecycle-proof:" not in f"\n{state['makefile']}":
+        F.add("USF-ENTERPRISE-029", "Makefile#operator-lifecycle-proof", "Make target is missing")
+
+    proof_text = state.get("operatorAccessLifecycleProofText")
+    if not isinstance(proof_text, str):
+        F.add("USF-ENTERPRISE-029", str(OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH), "proof source text is missing")
+    else:
+        for marker in (
+            "runOperatorAccessLifecycleProof",
+            "USF-221",
+            "USF-133",
+            "provider.readiness.read",
+            "tenant.members.delete",
+            "revokedMembershipFailsClosed",
+            "providerConsoleIntegrationClaim: false",
+            "operatorConsoleReadinessClaim: false",
+            "FORBIDDEN_SAFE_OUTPUT_RE",
+            "auditChainVerified",
+        ):
+            if marker not in proof_text:
+                F.add("USF-ENTERPRISE-029", str(OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH), f"proof source lacks {marker}")
+        compact = proof_text.lower().replace(" ", "")
+        for prohibited in (
+            "providerconsoleintegrationclaim:true",
+            "publicexposureclaim:true",
+            "operatorconsolereadinessclaim:true",
+            "productionreadinessclaim:true",
+            "liveproviderreadinessclaim:true",
+            "usf133closureclaim:true",
+        ):
+            if prohibited in compact:
+                F.add("USF-ENTERPRISE-029", str(OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH), "proof source overclaims readiness")
+
+    model = state["model"]
+    for section, required_ids in OPERATOR_ACCESS_LIFECYCLE_REQUIRED_EVIDENCE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in required_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-029", row_id, f"missing USF-221 enterprise row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            row_text_lower = row_text.lower()
+            expected_link = (
+                str(OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH)
+                if section == "evidenceRegister"
+                else str(OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH)
+            )
+            if "USF-221" not in row_text or expected_link not in row_text:
+                F.add("USF-ENTERPRISE-029", row_id, "enterprise row lacks USF-221 or proof linkage")
+            if "USF-133" not in row_text:
+                F.add("USF-ENTERPRISE-029", row_id, "enterprise row lacks USF-133 linkage")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-029", row_id, "enterprise row lacks validation command")
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-029", row_id, "enterprise row base non-claims are incomplete")
+            for claim in OPERATOR_ACCESS_LIFECYCLE_PROHIBITED_CLAIMS:
+                if claim not in row_text_lower and claim.replace("-", " ") not in row_text_lower:
+                    F.add("USF-ENTERPRISE-029", row_id, f"enterprise row lacks non-claim or boundary for {claim}")
+            if section == "evidenceRegister":
+                for issue in OPERATOR_ACCESS_LIFECYCLE_REQUIRED_ISSUES:
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-029", row_id, f"evidence row lacks {issue}")
+                negative = str(row.get("whatWasNotProven", "")).lower()
+                if "does not prove" not in negative and "not prove" not in negative:
+                    F.add("USF-ENTERPRISE-029", row_id, "evidence row must preserve explicit non-proof boundary")
+
+    source_text = json.dumps(proof, sort_keys=True).lower()
+    for phrase in (
+        "operator console readiness is proven",
+        "public operator exposure is proven",
+        "provider console readiness is proven",
+        "identity provider lifecycle readiness is proven",
+        "production readiness is proven",
+        "live provider readiness is proven",
+        "usf-133 closure is proven",
+        "iso certification is proven",
+    ):
+        if phrase in source_text:
+            F.add("USF-ENTERPRISE-029", str(OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH), f"readiness overclaim present: {phrase}")
 
 
 def check_lane4_observability(F: Findings, state: dict[str, Any]) -> None:
@@ -4102,6 +4477,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_closure_matrix_linkage(F, state)
     check_operator_access_gateway_matrix(F, state)
     check_operator_access_review_deprovisioning_depth(F, state)
+    check_operator_access_lifecycle_execution_proof(F, state)
     check_lane4_observability(F, state)
     check_assurance_control_plane_disposition(F, state)
     check_environment_promotion_standard(F, state)
