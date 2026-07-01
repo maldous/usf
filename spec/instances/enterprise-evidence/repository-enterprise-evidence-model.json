@@ -6902,7 +6902,7 @@
       "adapterProviderId": "audit-ledger-postgres-composed-boundary-plus-local-proof-adapters",
       "validationCommand": "make audit-proof; python3 tools/validate-parity/validate-audit.py all --json",
       "commandPin": "tsx packages/proof/src/audit-evidence-proof.ts",
-      "commitPin": "cfd9db6e086429aa39e14f756e8ea8d7e5682563",
+      "commitPin": "069c1a1fdd1d622215d435ba34423e8387ba2ef0",
       "issueLinks": [
         "USF-143",
         "USF-190",
@@ -6910,7 +6910,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "cfd9db6e086429aa39e14f756e8ea8d7e5682563",
+      "prOrMergeSha": "069c1a1fdd1d622215d435ba34423e8387ba2ef0",
       "retentionPosture": "Retain committed proof code, audit-enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw audit payload, key material, secret value, provider payload, or production data is retained."
     }
   ],
