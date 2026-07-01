@@ -136,9 +136,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Temporal and Windmill lineage",
-      "readiness_impact": "Temporal local is present; USF-212 adds bounded local Windmill configured proof, but Windmill readiness, operator automation readiness, API/worker runtime integration, and live/provider-managed operation remain non-claims.",
+      "readiness_impact": "Temporal local is present; USF-151 adds bounded local enterprise workflow controls for replay, migration policy, outbox/inbox, quota/backpressure, pause/drain, dry-run impact gates, heartbeat/concurrency, egress circuit breakers, and snapshot replay authorization; USF-212 adds bounded local Windmill configured proof. Windmill readiness, operator automation readiness, API/worker runtime integration, HTTP job API readiness, environment promotion, and live/provider-managed operation remain non-claims.",
       "tracking_carrier_or_recommendation": "USF-150/USF-151",
-      "usf_evidence_summary": "USF jobs proof",
+      "usf_evidence_summary": "USF jobs proof plus jobs workflows enterprise proof-depth matrix and validate-jobs USF-JOBS-001..025",
       "usf_status": "partial"
     },
     {

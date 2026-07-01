@@ -7,7 +7,7 @@
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010 (PDP); companion to ADR 0011 (workflow/job port family) and ADR 0013 (jobs/workflows execution model); consistent with the tenant-authorization standard, the config-and-secrets standard, the files-and-object-storage standard, and the audit-evidence standard |
 | Issue scope | Jobs, workflows, scheduling, and operational automation parity under USF-133; enterprise breadth defined here, live execution deferred to named Linear child blockers |
 | Evidence basis | Historical `../react` jobs / workers / schedulers / workflows / automation behaviour as lineage only; PR #92 DB/RLS; PR #93 PDP; PR #94 audit/evidence; PR #95 config/secrets; PR #96 files/storage |
-| Proof basis | Hermetic only. Proven by `make jobs-proof` over `adapters/wf` and `capabilities/jobs`; no live Temporal, no live Windmill, no live external queue, no live scheduler, no live worker cluster, no production-live claim. |
+| Proof basis | Hermetic only. Proven by `make jobs-proof` over `adapters/wf`, `capabilities/jobs`, and the USF-151 enterprise workflow control plane; no live Temporal, no live Windmill, no live external queue, no live scheduler, no live worker cluster, no production-live claim. |
 | Compliance note | ISO 27001-supporting **technical control evidence** (operations security, change management, logging and monitoring, separation of duties). **No certification claim.** |
 
 > **Normative language.** **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL** carry BCP 14 (RFC 2119 / RFC 8174) intent and are normative only when written in uppercase.
@@ -126,7 +126,7 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - **Overlapping runs** of the same schedule **MUST** be forbidden unless explicitly allowed (window dedupe, §6).
 - Schedule changes are **privileged** and **MUST** be audited (§16, §17).
 
-**Status.** IMPLEMENTED: deterministic UTC interval scheduling with scheduled-window deduplication and a `missed_run_policy` of **skip / run-once / fail-closed**, plus bounded catch-up (`max_catchup_runs`). **DEFERRED:** cron expressions, tenant-local / DST interpretation, and blackout / maintenance windows.
+**Status.** IMPLEMENTED: deterministic UTC interval scheduling with scheduled-window deduplication and a `missed_run_policy` of **skip / run-once / fail-closed**, plus bounded catch-up (`max_catchup_runs`). **BOUNDED LOCAL PROOF:** USF-151 records the tenant-local/cron scheduling non-equivalence boundary so it cannot be mistaken for implemented cron/DST support. **DEFERRED:** cron expressions, tenant-local / DST interpretation, and blackout / maintenance windows.
 
 ## 6. Idempotency and side-effect safety
 
@@ -173,7 +173,7 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - **Tenant-level concurrency MUST** be enforceable where represented.
 - A **global concurrency limit MUST NOT starve a tenant** (fairness, §20).
 
-**Status.** IMPLEMENTED: lease exclusivity (only the lease owner completes) and safe re-acquire of an expired lease (`adapters/wf`), proven hermetically. **DEFERRED:** heartbeat interval, concurrency keys, and tenant / global concurrency limits.
+**Status.** IMPLEMENTED: lease exclusivity (only the lease owner completes) and safe re-acquire of an expired lease (`adapters/wf`), proven hermetically. **BOUNDED LOCAL PROOF:** USF-151 proves local heartbeat-miss detection and tenant-scoped concurrency-key admission/release. **DEFERRED:** distributed heartbeat interval, scheduler/worker-cluster concurrency, and tenant / global concurrency limits.
 
 ## 9. Workflow versioning and deterministic replay
 
@@ -187,7 +187,7 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - An **unknown version MUST fail safely** (never run against a mismatched definition).
 - A **state migration MUST be audited**.
 
-**Status.** **PARTIAL:** `workflow_version` is pinned on running workflows (`capabilities/jobs`). **DEFERRED:** `workflow_definition_hash`, deterministic replay, and the migration runtime.
+**Status.** **BOUNDED LOCAL PROOF:** `workflow_version` is pinned on running workflows (`capabilities/jobs`), and USF-151 proves local definition registration with `workflow_definition_hash`, deterministic replay mismatch denial, and explicit migration-policy acceptance. **DEFERRED:** live Temporal replay/migration, distributed workflow-state migration, worker-cluster rollout, and production migration operation.
 
 ## 10. Human approvals and separation of duties
 
@@ -216,7 +216,7 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - It **MUST** carry **audit evidence** and a **rollback / compensation** posture.
 - A **bulk operation MUST be tenant-scoped** (cross-tenant bulk action is forbidden; cross-tenant orchestration schedules tenant-by-tenant, §3).
 
-**Status.** The high-risk operation set and rules are **DEFINED**. **DEFERRED:** the high-risk operational-automation runtime.
+**Status.** **BOUNDED LOCAL PROOF:** USF-151 proves the local high-risk automation control gate: ordinary tenant admins cannot perform workflow admin override, security-admin override is PDP-gated, dry-run approval is required, impact mismatch fails closed, and value-free audit is captured. **DEFERRED:** operator automation readiness, Windmill runtime integration, support console operation, live runbook execution, and production automation runtime.
 
 ## 12. Dry-run, preview, and approval gates
 
@@ -229,7 +229,7 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - An **approval MAY bind to a** `dry_run_result_hash` so the approver approves a specific previewed impact.
 - An **execution whose impact differs** from `approved_impact_hash` **MUST fail closed** where the binding is represented.
 
-**Status.** Dry-run / preview / approval-gate semantics are **DEFINED**. **DEFERRED:** the dry-run, preview, and impact-gate runtime.
+**Status.** **BOUNDED LOCAL PROOF:** USF-151 proves synthetic dry-run creation, separate approval, approved-impact-hash binding, and mismatch denial. **DEFERRED:** operator UI, HTTP API wiring, customer-impact reporting, production dry-run execution, and support workflow operation.
 
 ## 13. Transactional outbox and delivery reliability
 
@@ -243,7 +243,7 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - **Inbound provider events MUST be deduplicated** on the inbox boundary (`inbox_event_id`) — an event-triggered job (§1) is submitted once per logical inbound event.
 - A **delivery failure MUST be audited or dead-lettered** (§7, §17), never silently dropped.
 
-**Status.** The transactional-outbox / inbox **port and posture are DEFINED**. **DEFERRED:** the outbox / inbox delivery runtime, tracked to a Linear child blocker.
+**Status.** **BOUNDED LOCAL PROOF:** USF-151 proves local transactional-outbox idempotent commit and inbound-inbox dedupe before job submission. **DEFERRED:** database-backed distributed outbox delivery, provider message delivery, DLQ delivery runtime, and live provider delivery readiness.
 
 ## 14. Payload safety and data minimisation (IMPLEMENTED)
 
@@ -271,9 +271,9 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - A **provider failure MUST leak no secrets** (redacted error, §14, §18).
 - **Live provider readiness MUST NOT be claimed** unless explicitly authorised.
 
-**Status.** **PARTIAL:** secret-reference reuse and redaction (`packages/core`). **DEFERRED:** endpoint allow-listing, circuit breakers, and live provider egress.
+**Status.** **BOUNDED LOCAL PROOF:** secret-reference reuse and redaction (`packages/core`), plus USF-151 local endpoint-reference allow-list denial and circuit-breaker fail-closed behaviour. **DEFERRED:** live provider egress, network enforcement, supplier-managed provider resilience, and production circuit operation.
 
-## 16. Job access model (IMPLEMENTED core; admin override RESERVED)
+## 16. Job access model (IMPLEMENTED core; admin override bounded locally)
 
 **Privileged actions** (every one PDP-gated, ADR 0010):
 
@@ -287,7 +287,7 @@ Every job and workflow carries an execution context. **Context fields:** `job_id
 - **Retry-from-dead-letter** (`job.dead_letter.retry`) **MUST be privileged**.
 - **Workflow admin override** (`workflow.admin.override`) **MUST be privileged and audited**.
 
-**Status.** IMPLEMENTED for the core actions (`job.*` and `workflow.*` create/read/list/run/cancel/retry/schedule/start/signal/query/approve/reject) through the PDP (`capabilities/tenant`). **RESERVED:** `workflow.admin.override` — defined and present in the action set but not yet enforced or emitted.
+**Status.** IMPLEMENTED for the core actions (`job.*` and `workflow.*` create/read/list/run/cancel/retry/schedule/start/signal/query/approve/reject) through the PDP (`capabilities/tenant`). **BOUNDED LOCAL PROOF:** USF-151 maps `job.schedule.create`, `job.schedule.update`, `job.schedule.disable`, and `workflow.admin.override` into the PDP; `workflow.admin.override` is security-admin only and emitted as value-free audit evidence. **DEFERRED:** production privileged-operation review, support-console execution, and operator access review cadence.
 
 ## 17. Job audit and audit-of-job-access
 
@@ -359,7 +359,7 @@ The following signals are **defined** so future operations can be built on them;
 - **Backpressure MUST resolve to a safe failure or delayed scheduling**, never silent loss.
 - **Quota failures MUST be audited** (§17).
 
-**Status.** The quota / fairness model is **DEFINED**. **DEFERRED:** quota, concurrency-limit, priority, fairness, and rate-limit enforcement.
+**Status.** **BOUNDED LOCAL PROOF:** USF-151 proves tenant quota/backpressure admission and denial for excess work. **DEFERRED:** distributed quota storage, tenant-fair scheduler, priority queueing, global capacity allocation, and production rate-limit enforcement.
 
 ## 21. Pause, resume, drain, and maintenance mode
 
@@ -372,7 +372,7 @@ The following signals are **defined** so future operations can be built on them;
 - **Running work MUST drain per policy** (no abrupt loss of in-flight units).
 - **Maintenance mode MUST be audited**.
 
-**Status.** The pause / resume / drain / maintenance-mode model is **DEFINED**. **DEFERRED:** the runtime.
+**Status.** **BOUNDED LOCAL PROOF:** USF-151 proves tenant queue pause, resume, and drain admission states through PDP-gated schedule actions. **DEFERRED:** distributed drain orchestration, maintenance-window runtime, worker-cluster draining, and production change-management execution.
 
 ## 22. Backup, restore, and replay
 
@@ -384,7 +384,7 @@ The following signals are **defined** so future operations can be built on them;
 - **Replay MUST use idempotency and versioned definitions** (§6, §9).
 - **No disaster-recovery or readiness claim MUST be made without proof** (proof honesty, §0).
 
-**Status.** Backup / restore / replay semantics are **DEFINED**. **DEFERRED:** the runtime.
+**Status.** **BOUNDED LOCAL PROOF:** USF-151 proves local workflow snapshot hash creation, restore authorization via `job.dead_letter.retry`, and replay-authorization fail-closed behaviour. **DEFERRED:** backup service readiness, restore readiness, DR, RPO/RTO, corruption drills, and production recovery operation.
 
 ## 23. Safe future API surfaces
 
@@ -413,18 +413,20 @@ Every surface **MUST NOT** expose: raw secrets, provider internals, worker crede
 | Classification — exactly one of thirteen; unclassified fails validation — `packages/core` | Live Windmill (canonical historical-lineage operational-automation provider) |
 | Tenant-scoped execution (exactly one tenant context; tenant-by-tenant orchestration; no leakage) — `capabilities/jobs` | Live external queue / scheduler / worker cluster |
 | Concrete service actors (`urn:usf:service:`; not a global bypass) — `packages/core`, `capabilities/tenant` | Browser / admin UI (no Playwright) |
-| PDP authorization for job/workflow actions (default deny) — `capabilities/tenant` | Transactional outbox / inbox delivery runtime |
-| Bounded retry + deterministic backoff — `packages/core`, `capabilities/jobs` | Workflow versioning / deterministic replay / migration runtime |
-| Idempotency + scheduled-window deduplication — `capabilities/jobs`, `adapters/wf` | Dry-run / preview / approved-impact gates |
-| Dead-letter with preserved evidence — `capabilities/jobs` | Quotas / backpressure / fairness enforcement |
-| Lease exclusivity + safe re-acquire — `adapters/wf` | Pause / resume / drain / maintenance mode |
-| Deterministic UTC scheduling + missed-run policy (skip / run-once / fail-closed) + fail-closed unknown schedule + bounded catch-up — `packages/core`, `capabilities/jobs` | Backup / restore / replay of job state |
-| Approval separation of duties (requester cannot self-approve; PDP-gated approve/reject) — `capabilities/jobs` | Cron + tenant-local / DST schedules; blackout / maintenance windows |
-| Failure taxonomy (fifteen classes) + redaction — `packages/core` | Concurrency keys + heartbeat interval; tenant / global concurrency limits |
-| Payload / secret redaction (blocked patterns) — `packages/core` | High-risk operational-automation runtime |
-| Value-free lifecycle audit events (§17) — `packages/core`, `capabilities/jobs` | Provider egress allow-listing + circuit breakers; live provider egress |
-| Hermetic behaviour proof of the full matrix — `packages/proof/src/jobs-workflows-proof.ts`, `make jobs-proof` | Live observability metrics / dashboards / alerting |
-| | HTTP API surfaces (`/v1/jobs`, `/v1/workflows`) |
+| PDP authorization for job/workflow actions, schedule mutation actions, and high-risk workflow admin override (default deny) — `capabilities/tenant` | Distributed transactional outbox / inbox delivery runtime |
+| Bounded retry + deterministic backoff — `packages/core`, `capabilities/jobs` | Live Temporal replay/migration and worker-cluster rollout |
+| Idempotency + scheduled-window deduplication — `capabilities/jobs`, `adapters/wf` | Distributed transactional outbox / inbox delivery runtime |
+| Dead-letter with preserved evidence — `capabilities/jobs` | Production backup service readiness, restore readiness, DR, RPO/RTO, and recovery operation |
+| Lease exclusivity + safe re-acquire — `adapters/wf` | Distributed pause / resume / drain / maintenance-mode runtime |
+| Deterministic UTC scheduling + missed-run policy (skip / run-once / fail-closed) + fail-closed unknown schedule + bounded catch-up — `packages/core`, `capabilities/jobs` | Backup service readiness, restore readiness, DR, RPO/RTO, and production recovery operation |
+| Approval separation of duties (requester cannot self-approve; PDP-gated approve/reject) — `capabilities/jobs` | Multi-step approval policy and approval expiry |
+| Failure taxonomy (fifteen classes) + redaction — `packages/core` | Distributed worker heartbeat and scheduler/worker-cluster concurrency |
+| Payload / secret redaction (blocked patterns) — `packages/core` | HTTP API surfaces (`/v1/jobs`, `/v1/workflows`) |
+| Workflow definition hash, deterministic replay, and explicit migration-policy gate — `capabilities/jobs/src/enterprise-workflow-controls.ts` | Operator console, support workflow operation, and production migration operation |
+| Local transactional outbox commit + inbound inbox dedupe — `capabilities/jobs/src/enterprise-workflow-controls.ts` | Live provider delivery runtime and distributed outbox processing |
+| Tenant quota/backpressure, pause/resume/drain admission, heartbeat miss, concurrency-key gate, dry-run impact gate, high-risk automation override, provider egress allow-list, circuit breaker, and snapshot replay-authorization posture — `capabilities/jobs/src/enterprise-workflow-controls.ts` | Cron + tenant-local / DST schedules; blackout / maintenance windows |
+| Value-free lifecycle and enterprise workflow-control audit events (§17) — `packages/core`, `capabilities/jobs` | Live observability metrics / dashboards / alerting |
+| Hermetic behaviour proof of the full matrix — `packages/proof/src/jobs-workflows-proof.ts`, `make jobs-proof` | Environment promotion, live-provider, staging, production, SOC, ISO, full dev readiness, full React parity, and USF-133 closure claims |
 
 No DEFERRED item above is overclaimed as IMPLEMENTED, live, or production-live anywhere in USF while its blocker is open. Hermetic / in-memory proof never satisfies a live-external-provider claim, and production-shaped never satisfies production-live.
 

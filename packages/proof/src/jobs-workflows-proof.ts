@@ -16,7 +16,11 @@
 import { fileURLToPath } from "node:url";
 import { InMemoryDurableWorkflow, InMemoryOperationalJobStore } from "@foundation/adapter-wf";
 import { InMemoryAuditEventStore } from "@foundation/capability-audit";
-import { createJobService, createWorkflowService } from "@foundation/capability-jobs";
+import {
+  createEnterpriseWorkflowControlPlane,
+  createJobService,
+  createWorkflowService,
+} from "@foundation/capability-jobs";
 import {
   createPolicyDecisionPoint,
   InMemoryTenantMembershipDirectory,
@@ -85,6 +89,13 @@ async function main() {
     roles: ["tenant-member"],
   });
   memberships.upsert({
+    membershipId: "m-seca",
+    tenantId: TENANT_A,
+    actorId: "security-a",
+    status: "active",
+    roles: ["security-admin"],
+  });
+  memberships.upsert({
     membershipId: "m-sa",
     tenantId: TENANT_A,
     actorId: svcActor,
@@ -112,6 +123,11 @@ async function main() {
     defaultBackoff: BACKOFF,
   });
   const workflows = createWorkflowService({ workflows: wfStore, pdp, audit, now: () => clockSec });
+  const enterpriseWorkflows = createEnterpriseWorkflowControlPlane({
+    pdp,
+    audit,
+    now: () => clockSec,
+  });
 
   const ctxAdminA = createTenantContext({
     tenantId: TENANT_A,
@@ -127,6 +143,11 @@ async function main() {
     tenantId: TENANT_A,
     actorId: "member-a",
     roles: ["tenant-member"],
+  });
+  const ctxSecurityA = createTenantContext({
+    tenantId: TENANT_A,
+    actorId: "security-a",
+    roles: ["security-admin"],
   });
   const ctxAdminB = createTenantContext({
     tenantId: TENANT_B,
@@ -475,6 +496,261 @@ async function main() {
     throw new Error("workflow accessible cross-tenant");
   pass("workflow is tenant-bound (cross-tenant access denied)");
 
+  // ---- Enterprise workflow depth: versioning, replay, migration -----------------
+  const definition = await enterpriseWorkflows.registerDefinition(ctxSecurityA, {
+    workflowType: "tenant-bulk-repair",
+    workflowVersion: "2026-06-28",
+    definitionHash: "hash-tenant-bulk-repair-v1",
+    migrationPolicy: "explicit-migration-required",
+  });
+  if (!definition.ok)
+    throw new Error(`workflow definition register denied: ${definition.reasonCode}`);
+  pass("workflow definition registration requires high-risk admin permission and pins version");
+
+  const definitionDenied = await enterpriseWorkflows.registerDefinition(ctxAdminA, {
+    workflowType: "tenant-bulk-repair-denied",
+    workflowVersion: "2026-06-28",
+    definitionHash: "hash-denied",
+    migrationPolicy: "compatible",
+  });
+  if (definitionDenied.ok)
+    throw new Error("ordinary tenant admin registered admin-only workflow definition");
+  pass("workflow admin override is stronger than ordinary tenant-admin access");
+
+  const replayOk = await enterpriseWorkflows.replayWorkflow({
+    context: ctxSecurityA,
+    workflowType: "tenant-bulk-repair",
+    workflowVersion: "2026-06-28",
+    eventHistoryHash: "history-1",
+    expectedHistoryHash: "history-1",
+  });
+  const replayMismatch = await enterpriseWorkflows.replayWorkflow({
+    context: ctxSecurityA,
+    workflowType: "tenant-bulk-repair",
+    workflowVersion: "2026-06-28",
+    eventHistoryHash: "history-2",
+    expectedHistoryHash: "history-1",
+  });
+  if (!replayOk.ok || replayMismatch.ok)
+    throw new Error("workflow replay determinism was not enforced");
+  pass("workflow replay is deterministic and fails closed on history mismatch");
+
+  const migrationDenied = await enterpriseWorkflows.migrateWorkflow({
+    context: ctxSecurityA,
+    workflowType: "tenant-bulk-repair",
+    fromVersion: "2026-06-28",
+    toVersion: "2026-07-01",
+    migrationPolicyAccepted: false,
+  });
+  const migrationOk = await enterpriseWorkflows.migrateWorkflow({
+    context: ctxSecurityA,
+    workflowType: "tenant-bulk-repair",
+    fromVersion: "2026-06-28",
+    toVersion: "2026-07-01",
+    migrationPolicyAccepted: true,
+  });
+  if (migrationDenied.ok || !migrationOk.ok)
+    throw new Error("workflow migration policy gate failed");
+  pass("workflow migration requires an explicit accepted migration policy");
+
+  // ---- Enterprise workflow depth: outbox, inbox, quota/backpressure -------------
+  const outboxOne = await enterpriseWorkflows.commitOutbox({
+    context: ctxAdminA,
+    mutationId: "mutation-1",
+    outboxEventId: "evt-1",
+  });
+  const outboxDup = await enterpriseWorkflows.commitOutbox({
+    context: ctxAdminA,
+    mutationId: "mutation-1",
+    outboxEventId: "evt-1",
+  });
+  if (!outboxOne.ok || !outboxOne.committed || !outboxDup.ok || outboxDup.committed) {
+    throw new Error("transactional outbox duplicate suppression failed");
+  }
+  pass("transactional outbox commit is idempotent and suppresses duplicates");
+
+  const inboxOne = await enterpriseWorkflows.recordInboundEvent({
+    context: ctxAdminA,
+    inboxEventId: "provider-event-1",
+  });
+  const inboxDup = await enterpriseWorkflows.recordInboundEvent({
+    context: ctxAdminA,
+    inboxEventId: "provider-event-1",
+  });
+  if (!inboxOne.ok || inboxOne.deduplicated || !inboxDup.ok || !inboxDup.deduplicated) {
+    throw new Error("inbound inbox dedupe failed");
+  }
+  pass("inbound inbox deduplicates provider events before job submission");
+
+  const quotaOne = await enterpriseWorkflows.admitWithQuota({
+    context: ctxAdminA,
+    quota: 1,
+    priority: 10,
+  });
+  const quotaDenied = await enterpriseWorkflows.admitWithQuota({
+    context: ctxAdminA,
+    quota: 1,
+    priority: 1,
+  });
+  if (!quotaOne.ok || quotaDenied.ok || quotaDenied.reasonCode !== "tenant-job-quota-exceeded") {
+    throw new Error("tenant quota/backpressure did not fail closed");
+  }
+  pass("tenant quota/backpressure denies excess work without starving other tenant state");
+
+  // ---- Enterprise workflow depth: pause/resume/drain + dry-run impact gate ------
+  const paused = await enterpriseWorkflows.pauseQueue(ctxAdminA, "maintenance-window");
+  if (!paused.ok || enterpriseWorkflows.canStartWork(ctxAdminA)) {
+    throw new Error("paused tenant queue still allowed work");
+  }
+  const resumed = await enterpriseWorkflows.resumeQueue(ctxAdminA);
+  if (!resumed.ok || !enterpriseWorkflows.canStartWork(ctxAdminA)) {
+    throw new Error("resumed tenant queue did not allow work");
+  }
+  const draining = await enterpriseWorkflows.drainQueue(ctxAdminA);
+  if (!draining.ok || enterpriseWorkflows.canStartWork(ctxAdminA)) {
+    throw new Error("draining tenant queue still allowed new work");
+  }
+  pass("pause/resume/drain controls tenant queue admission");
+
+  const dryRun = await enterpriseWorkflows.createDryRun({
+    context: ctxAdminA,
+    operationId: "bulk-repair",
+    estimatedImpact: { tenants: "1", records: "3" },
+  });
+  if (!dryRun.ok) throw new Error(`dry-run creation denied: ${dryRun.reasonCode}`);
+  const unapprovedImpact = await enterpriseWorkflows.executeHighRiskAutomation({
+    context: ctxSecurityA,
+    previewId: dryRun.previewId,
+    observedImpact: { tenants: "1", records: "3" },
+  });
+  if (unapprovedImpact.ok) throw new Error("high-risk automation ran without approval");
+  const approvedDryRun = await enterpriseWorkflows.approveDryRun(ctxAdminA2, dryRun.previewId);
+  if (!approvedDryRun.ok) throw new Error(`dry-run approval denied: ${approvedDryRun.reasonCode}`);
+  const mismatchedImpact = await enterpriseWorkflows.executeHighRiskAutomation({
+    context: ctxSecurityA,
+    previewId: dryRun.previewId,
+    observedImpact: { tenants: "1", records: "4" },
+  });
+  const matchedImpact = await enterpriseWorkflows.executeHighRiskAutomation({
+    context: ctxSecurityA,
+    previewId: dryRun.previewId,
+    observedImpact: { tenants: "1", records: "3" },
+  });
+  if (mismatchedImpact.ok || !matchedImpact.ok) {
+    throw new Error("high-risk automation impact binding did not fail closed");
+  }
+  pass("dry-run approval binds high-risk automation to the approved impact hash");
+
+  // ---- Enterprise workflow depth: heartbeat, concurrency, egress/circuit --------
+  const hb = await enterpriseWorkflows.recordHeartbeat(ctxServiceA, "worker-a");
+  if (!hb.ok || enterpriseWorkflows.detectHeartbeatMiss(ctxServiceA, "worker-a", 60)) {
+    throw new Error("fresh worker heartbeat was treated as missed");
+  }
+  clockSec += 120;
+  if (!enterpriseWorkflows.detectHeartbeatMiss(ctxServiceA, "worker-a", 60)) {
+    throw new Error("stale worker heartbeat was not detected");
+  }
+  const keyOne = enterpriseWorkflows.acquireConcurrencyKey(ctxServiceA, "tenant-export");
+  const keyDup = enterpriseWorkflows.acquireConcurrencyKey(ctxServiceA, "tenant-export");
+  enterpriseWorkflows.releaseConcurrencyKey(ctxServiceA, "tenant-export");
+  const keyAfterRelease = enterpriseWorkflows.acquireConcurrencyKey(ctxServiceA, "tenant-export");
+  if (!keyOne.ok || keyDup.ok || !keyAfterRelease.ok) {
+    throw new Error("concurrency-key fail-closed/release behaviour failed");
+  }
+  pass("heartbeat miss and concurrency-key controls are exercised locally");
+
+  const egressDenied = await enterpriseWorkflows.checkEgress({
+    context: ctxAdminA,
+    endpointRef: "provider:unlisted",
+    allowList: ["provider:allowed"],
+  });
+  const egressFailureOne = await enterpriseWorkflows.checkEgress({
+    context: ctxAdminA,
+    endpointRef: "provider:allowed",
+    allowList: ["provider:allowed"],
+    failed: true,
+  });
+  const egressFailureTwo = await enterpriseWorkflows.checkEgress({
+    context: ctxAdminA,
+    endpointRef: "provider:allowed",
+    allowList: ["provider:allowed"],
+    failed: true,
+  });
+  const egressCircuitOpen = await enterpriseWorkflows.checkEgress({
+    context: ctxAdminA,
+    endpointRef: "provider:allowed",
+    allowList: ["provider:allowed"],
+  });
+  if (
+    egressDenied.ok ||
+    egressFailureOne.ok ||
+    egressFailureTwo.ok ||
+    egressCircuitOpen.ok ||
+    egressCircuitOpen.reasonCode !== "provider-circuit-open"
+  ) {
+    throw new Error("provider egress allow-list or circuit breaker failed");
+  }
+  pass("provider egress allow-list and circuit breaker fail closed");
+
+  // ---- Enterprise workflow depth: backup/restore posture + explicit boundaries --
+  const snapshot = await enterpriseWorkflows.snapshotState(ctxSecurityA);
+  const restoreDenied = await enterpriseWorkflows.restoreSnapshot({
+    context: ctxAdminA,
+    snapshotHash: snapshot.snapshotHash,
+    replayAuthorised: true,
+  });
+  const restoreNeedsReplay = await enterpriseWorkflows.restoreSnapshot({
+    context: ctxSecurityA,
+    snapshotHash: snapshot.snapshotHash,
+    replayAuthorised: false,
+  });
+  const restoreOk = await enterpriseWorkflows.restoreSnapshot({
+    context: ctxSecurityA,
+    snapshotHash: snapshot.snapshotHash,
+    replayAuthorised: true,
+  });
+  if (restoreDenied.ok || restoreNeedsReplay.ok || !restoreOk.ok) {
+    throw new Error("workflow snapshot restore authorization/replay gate failed");
+  }
+  enterpriseWorkflows.recordReclassificationBoundary();
+  enterpriseWorkflows.recordLocalObservabilityEvidence();
+  if (!enterpriseWorkflows.assertTenantBoundary(ctxAdminA, ctxAdminB)) {
+    throw new Error("enterprise workflow tenant-boundary assertion failed");
+  }
+  const enterpriseEvidence = enterpriseWorkflows.evidence();
+  const requiredEnterpriseEvidence = [
+    "workflowVersionPinned",
+    "deterministicReplayChecked",
+    "migrationPolicyChecked",
+    "transactionalOutboxChecked",
+    "inboundInboxDedupeChecked",
+    "quotaBackpressureChecked",
+    "pauseResumeDrainChecked",
+    "backupRestoreReplayPostureChecked",
+    "dryRunImpactGateChecked",
+    "cronTenantLocalScheduleReclassified",
+    "heartbeatConcurrencyChecked",
+    "highRiskAutomationChecked",
+    "egressCircuitBreakerChecked",
+    "localObservabilityEvidenceChecked",
+    "httpJobApiReclassified",
+    "tenantBoundaryChecked",
+    "accessBoundaryChecked",
+    "auditEvidenceCaptured",
+    "retryTimeoutCleanupFailClosedChecked",
+    "providerSubstituteBoundaryChecked",
+  ] as const;
+  for (const key of requiredEnterpriseEvidence) {
+    if (!enterpriseEvidence[key]) throw new Error(`missing enterprise workflow evidence: ${key}`);
+  }
+  if (
+    enterpriseEvidence.liveWorkflowReadinessClaim ||
+    enterpriseEvidence.productionAutomationReadinessClaim
+  ) {
+    throw new Error("enterprise workflow evidence overclaimed readiness");
+  }
+  pass("enterprise jobs/workflows control evidence is complete and non-claim bounded");
+
   // ---- Audit lifecycle coverage + value-free ------------------------------------
   const types = new Set(recorded.map((e) => e.eventType));
   for (const required of [
@@ -512,6 +788,33 @@ async function main() {
     liveWindmillClaim: false,
     liveQueueClaim: false,
     productionLiveClaim: false,
+    enterpriseWorkflowDepthProven: true,
+    workflowVersionReplayMigrationProven: true,
+    transactionalOutboxInboxProven: true,
+    quotaBackpressureProven: true,
+    pauseResumeDrainProven: true,
+    backupRestoreReplayPostureProven: true,
+    dryRunImpactGateProven: true,
+    heartbeatConcurrencyProven: true,
+    highRiskAutomationControlsProven: true,
+    egressCircuitBreakerProven: true,
+    providerSubstituteBoundariesExplicit: true,
+    httpJobApiReclassified: true,
+    cronTenantLocalScheduleReclassified: true,
+    operatorAutomationSubstituteBoundaryExplicit: true,
+    liveWorkflowReadinessClaim: false,
+    operatorAutomationReadinessClaim: false,
+    workerClusterReadinessClaim: false,
+    httpJobApiReadinessClaim: false,
+    stagingReadinessClaim: false,
+    productionReadinessClaim: false,
+    socReadinessClaim: false,
+    iso27001CertificationClaim: false,
+    enterpriseProductionReadinessClaim: false,
+    fullDevReadinessClaim: false,
+    fullReactParityClaim: false,
+    usf133ClosureClaim: false,
+    enterpriseWorkflowEvidence: enterpriseEvidence,
     checks: checks.length,
     checkLabels: checks,
   };

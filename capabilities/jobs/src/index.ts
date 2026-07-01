@@ -24,3 +24,9 @@ export {
   type WorkflowService,
   type WorkflowServiceDeps,
 } from "./workflow-service.ts";
+export {
+  createEnterpriseWorkflowControlPlane,
+  EnterpriseWorkflowControlPlane,
+  type EnterpriseWorkflowControlEvidence,
+  type EnterpriseWorkflowControlsDeps,
+} from "./enterprise-workflow-controls.ts";

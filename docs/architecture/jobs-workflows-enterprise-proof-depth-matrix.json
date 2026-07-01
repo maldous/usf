@@ -1,0 +1,345 @@
+{
+  "id": "jobs-workflows-enterprise-proof-depth-matrix",
+  "sourceIssue": "USF-151",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-191",
+  "capabilityId": "jobs-workflows-enterprise-depth",
+  "proofCommand": "make jobs-proof",
+  "rawProofCommand": "corepack pnpm proof:jobs",
+  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises the USF jobs and enterprise workflow control planes with synthetic tenants, synchronous PDP decisions, value-free audit evidence, and no live Temporal, Windmill, external queue, scheduler, worker cluster, or production substrate.",
+  "validatorCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+  "proofFile": "packages/proof/src/jobs-workflows-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-jobs.py",
+  "sourceUseMatrix": "docs/architecture/parity-jobs-workflows-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-151-jobs-workflows-enterprise-depth",
+    "evidence-usf-151-jobs-workflows-enterprise-depth",
+    "threat-usf-151-jobs-workflows-enterprise-depth",
+    "access-usf-151-jobs-workflows-enterprise-depth",
+    "resilience-usf-151-jobs-workflows-enterprise-depth",
+    "incident-usf-151-jobs-workflows-enterprise-depth",
+    "privacy-usf-151-jobs-workflows-enterprise-depth"
+  ],
+  "serviceCatalogueRows": [
+    "spec/instances/compose-service/service-catalogue.json#temporal",
+    "spec/instances/compose-service/service-catalogue.json#windmill"
+  ],
+  "providerMode": "hermetic-mock",
+  "runtimeMode": "local-synthetic-enterprise-workflow-control-plane",
+  "claims": {
+    "enterpriseWorkflowDepthProven": true,
+    "liveWorkflowReadinessClaim": false,
+    "operatorAutomationReadinessClaim": false,
+    "workerClusterReadinessClaim": false,
+    "httpJobApiReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "Hermetic jobs/workflows proof does not prove live Temporal, live Windmill, external queue, scheduler, worker cluster, operator automation readiness, or production automation readiness.",
+    "Local workflow-control evidence does not prove API/HTTP job surfaces, operator console UI, live metrics/alerting, production incident response, or environment promotion.",
+    "Temporal and Windmill remain provider/substitute boundaries behind USF ports; no capability imports provider SDKs."
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred jobs/workflows control is implemented with proof or explicitly reclassified.",
+      "evidence": "Controls below record bounded-local-proof for workflow version/replay/migration, outbox/inbox, quota/backpressure, pause/resume/drain, backup/restore/replay posture, dry-run/impact gate, heartbeat/concurrency, high-risk automation, and egress/circuit breaker; live provider, HTTP API, cron tenant-local schedules, and operator automation readiness remain deferred or reclassified with explicit boundaries."
+    },
+    {
+      "criterion": "Workflow provider and operator automation substitute boundaries are explicit.",
+      "evidence": "temporal-durable-workflow-boundary and windmill-operator-automation-boundary rows record non-equivalence boundaries and service catalogue traceability without live provider or readiness claims."
+    },
+    {
+      "criterion": "Tenant, access, audit, retry, cleanup, and fail-closed evidence exists where claimed.",
+      "evidence": "make jobs-proof records enterpriseWorkflowEvidence flags for tenantBoundaryChecked, accessBoundaryChecked, auditEvidenceCaptured, retryTimeoutCleanupFailClosedChecked, and providerSubstituteBoundaryChecked; tests/capabilities/jobs-workflows.test.ts covers high-risk authorization and fail-closed paths."
+    },
+    {
+      "criterion": "Validator coverage exists for any new workflow claim.",
+      "evidence": "USF-JOBS-021 through USF-JOBS-025 validate the enterprise control-plane helper, proof markers, matrix completeness, enterprise evidence rows, PDP/admin override coupling, and prohibited readiness claims."
+    },
+    {
+      "criterion": "No live workflow or production automation claim is made without proof.",
+      "evidence": "claims object and proof result set liveWorkflowReadinessClaim, operatorAutomationReadinessClaim, workerClusterReadinessClaim, productionReadinessClaim, SOC readiness, ISO certification, full-dev, full-parity, and USF-133 closure claims to false."
+    }
+  ],
+  "controls": [
+    {
+      "id": "temporal-durable-workflow-boundary",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate-with-local-proof-and-explicit-live-boundary",
+      "evidenceRefs": [
+        "packages/proof/src/jobs-workflows-proof.ts",
+        "adapters/wf/src/index.ts",
+        "docs/architecture/runtime-compose-provider-binding.md"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "The durable workflow port and local Temporal binding evidence are not live Temporal readiness, worker-cluster readiness, environment readiness, or production automation readiness."
+    },
+    {
+      "id": "windmill-operator-automation-boundary",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-212 records bounded Windmill configured proof; future issue required for API/worker integration or operator automation readiness",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/windmill-configured-proof-boundary.json",
+        "docs/architecture/usf-dev-foundation-gap-register.md"
+      ],
+      "nonClaimBoundary": "Bounded local Windmill bootstrap proof is not Windmill readiness, operator automation readiness, runtime integration readiness, or live/provider-managed operation."
+    },
+    {
+      "id": "workflow-replay-migration",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "packages/proof/src/jobs-workflows-proof.ts",
+        "tests/capabilities/jobs-workflows.test.ts"
+      ],
+      "proofChecks": [
+        "workflow definition registration requires high-risk admin permission and pins version",
+        "workflow replay is deterministic and fails closed on history mismatch",
+        "workflow migration requires an explicit accepted migration policy"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Local deterministic replay and migration-policy proof does not prove live Temporal replay, production migration, or worker-cluster operation."
+    },
+    {
+      "id": "transactional-outbox-inbox",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "packages/proof/src/jobs-workflows-proof.ts"
+      ],
+      "proofChecks": [
+        "transactional outbox commit is idempotent and suppresses duplicates",
+        "inbound inbox deduplicates provider events before job submission"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Synthetic outbox/inbox dedupe is not a database-backed distributed outbox delivery runtime or live provider delivery readiness."
+    },
+    {
+      "id": "quota-backpressure-fairness",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "packages/proof/src/jobs-workflows-proof.ts",
+        "tests/capabilities/jobs-workflows.test.ts"
+      ],
+      "proofChecks": [
+        "tenant quota/backpressure denies excess work without starving other tenant state"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Local quota denial proof is not distributed fairness, global scheduler, or production capacity-management readiness."
+    },
+    {
+      "id": "pause-resume-drain",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "capabilities/tenant/src/authorization-policy.ts",
+        "packages/proof/src/jobs-workflows-proof.ts"
+      ],
+      "proofChecks": [
+        "pause/resume/drain controls tenant queue admission"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Local tenant queue admission control is not live queue drain, maintenance-window orchestration, or production change-management readiness."
+    },
+    {
+      "id": "backup-restore-replay-posture",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate-local-replay-gate-defer-dr",
+      "followUpIssue": "USF-177 for backup/restore service proof scope and future workflow DR issue before stronger claims",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "packages/proof/src/jobs-workflows-proof.ts"
+      ],
+      "proofChecks": [
+        "workflow snapshot restore authorization/replay gate failed"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Local snapshot/replay authorization proof is not backup service readiness, restore readiness, DR, RPO, RTO, or production recovery readiness."
+    },
+    {
+      "id": "dry-run-impact-gates",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "packages/proof/src/jobs-workflows-proof.ts",
+        "tests/capabilities/jobs-workflows.test.ts"
+      ],
+      "proofChecks": [
+        "dry-run approval binds high-risk automation to the approved impact hash"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Local impact-hash gate proof is not operator UI, production bulk-operation, support tooling, or customer-impact readiness."
+    },
+    {
+      "id": "cron-tenant-local-schedule-boundary",
+      "status": "explicitly-reclassified",
+      "maturity": "documented",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-cron-tenant-local-schedule-source-issue-required-before-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/jobs-and-workflows-standard.md"
+      ],
+      "nonClaimBoundary": "UTC interval scheduling remains proven; cron expression, tenant-local timezone, DST, blackout, and maintenance-window runtime remain deferred."
+    },
+    {
+      "id": "heartbeat-concurrency-keys",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "packages/proof/src/jobs-workflows-proof.ts"
+      ],
+      "proofChecks": [
+        "heartbeat miss and concurrency-key controls are exercised locally"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Local heartbeat and concurrency-key checks are not distributed worker-cluster heartbeat, scheduler leasing, or production concurrency readiness."
+    },
+    {
+      "id": "high-risk-automation-controls",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "capabilities/tenant/src/authorization-policy.ts",
+        "packages/proof/src/jobs-workflows-proof.ts"
+      ],
+      "proofChecks": [
+        "workflow admin override is stronger than ordinary tenant-admin access",
+        "dry-run approval binds high-risk automation to the approved impact hash"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "High-risk local control proof is not operator automation readiness, production support operation, or break-glass execution readiness."
+    },
+    {
+      "id": "egress-circuit-breakers",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-workflow-foundation",
+      "riskOwner": "platform-workflow-risk-owner",
+      "controlOwner": "platform-workflow-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "capabilities/jobs/src/enterprise-workflow-controls.ts",
+        "packages/proof/src/jobs-workflows-proof.ts",
+        "tests/capabilities/jobs-workflows.test.ts"
+      ],
+      "proofChecks": [
+        "provider egress allow-list and circuit breaker fail closed"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Synthetic endpoint-reference allow-list and circuit breaker proof is not live external egress, supplier readiness, or provider-managed resilience readiness."
+    },
+    {
+      "id": "live-observability-boundary",
+      "status": "bounded-local-proof",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "mitigate-local-audit-evidence-defer-live-ops",
+      "followUpIssue": "USF-159 and USF-179 for observability operations and incident depth",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "packages/proof/src/jobs-workflows-proof.ts",
+        "docs/architecture/jobs-and-workflows-standard.md"
+      ],
+      "proofChecks": [
+        "job/workflow lifecycle audited",
+        "audit evidence is value-free"
+      ],
+      "proofCommand": "make jobs-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
+      "nonClaimBoundary": "Value-free local audit evidence and proof check labels are not live metrics, tracing backend, alert routing, dashboard, or incident-response readiness."
+    },
+    {
+      "id": "http-job-api-boundary",
+      "status": "explicitly-reclassified",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "USF-155 for API/gateway compatibility proof depth",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/jobs-and-workflows-standard.md"
+      ],
+      "nonClaimBoundary": "Job and workflow HTTP surfaces remain semantic posture only; no API route, gateway, clickthrough, or production HTTP readiness claim is made."
+    }
+  ]
+}

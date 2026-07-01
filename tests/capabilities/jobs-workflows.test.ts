@@ -1,6 +1,10 @@
 import { InMemoryDurableWorkflow, InMemoryOperationalJobStore } from "@foundation/adapter-wf";
 import { InMemoryAuditEventStore } from "@foundation/capability-audit";
-import { createJobService, createWorkflowService } from "@foundation/capability-jobs";
+import {
+  createEnterpriseWorkflowControlPlane,
+  createJobService,
+  createWorkflowService,
+} from "@foundation/capability-jobs";
 import {
   createPolicyDecisionPoint,
   InMemoryTenantMembershipDirectory,
@@ -50,6 +54,13 @@ function harness() {
     roles: ["tenant-member"],
   });
   memberships.upsert({
+    membershipId: "3a",
+    tenantId: A,
+    actorId: "security-a",
+    status: "active",
+    roles: ["security-admin"],
+  });
+  memberships.upsert({
     membershipId: "4",
     tenantId: A,
     actorId: svc,
@@ -79,9 +90,14 @@ function harness() {
     audit,
     now: () => clock,
   });
+  const enterpriseWorkflows = createEnterpriseWorkflowControlPlane({
+    pdp,
+    audit,
+    now: () => clock,
+  });
   const ctx = (tenantId: string, actorId: string, roles: string[]) =>
     createTenantContext({ tenantId, actorId, roles });
-  return { jobs, workflows, svc, advance: (s: number) => (clock += s), ctx };
+  return { jobs, workflows, enterpriseWorkflows, svc, advance: (s: number) => (clock += s), ctx };
 }
 
 describe("job service authorization + classification", () => {
@@ -218,5 +234,97 @@ describe("workflow approvals (separation of duties)", () => {
     );
     expect(approved.ok && approved.workflow.status === "completed").toBe(true);
     expect(h.workflows.canAccess(wf.workflow.workflowId, B)).toBe(false);
+  });
+});
+
+describe("enterprise workflow controls", () => {
+  it("requires stronger admin override for versioning and proves deterministic replay", async () => {
+    const h = harness();
+    const admin = h.ctx(A, "admin-a", ["tenant-admin"]);
+    const security = h.ctx(A, "security-a", ["security-admin"]);
+    const denied = await h.enterpriseWorkflows.registerDefinition(admin, {
+      workflowType: "bulk-repair",
+      workflowVersion: "1",
+      definitionHash: "hash-1",
+      migrationPolicy: "compatible",
+    });
+    expect(denied.ok).toBe(false);
+
+    const registered = await h.enterpriseWorkflows.registerDefinition(security, {
+      workflowType: "bulk-repair",
+      workflowVersion: "1",
+      definitionHash: "hash-1",
+      migrationPolicy: "explicit-migration-required",
+    });
+    expect(registered.ok).toBe(true);
+
+    await expect(
+      h.enterpriseWorkflows.replayWorkflow({
+        context: security,
+        workflowType: "bulk-repair",
+        workflowVersion: "1",
+        eventHistoryHash: "history-a",
+        expectedHistoryHash: "history-b",
+      }),
+    ).resolves.toMatchObject({
+      ok: false,
+      reasonCode: "workflow-replay-nondeterministic",
+    });
+
+    await expect(
+      h.enterpriseWorkflows.migrateWorkflow({
+        context: security,
+        workflowType: "bulk-repair",
+        fromVersion: "1",
+        toVersion: "2",
+        migrationPolicyAccepted: true,
+      }),
+    ).resolves.toMatchObject({ ok: true });
+  });
+
+  it("fails closed for quota, queue draining, impact mismatch, and provider egress", async () => {
+    const h = harness();
+    const admin = h.ctx(A, "admin-a", ["tenant-admin"]);
+    const approver = h.ctx(A, "admin-a2", ["tenant-admin"]);
+    const security = h.ctx(A, "security-a", ["security-admin"]);
+
+    await expect(
+      h.enterpriseWorkflows.admitWithQuota({ context: admin, quota: 1, priority: 5 }),
+    ).resolves.toMatchObject({ ok: true });
+    await expect(
+      h.enterpriseWorkflows.admitWithQuota({ context: admin, quota: 1, priority: 1 }),
+    ).resolves.toMatchObject({ ok: false, reasonCode: "tenant-job-quota-exceeded" });
+
+    await h.enterpriseWorkflows.drainQueue(admin);
+    expect(h.enterpriseWorkflows.canStartWork(admin)).toBe(false);
+
+    const dryRun = await h.enterpriseWorkflows.createDryRun({
+      context: admin,
+      operationId: "bulk-delete-preview",
+      estimatedImpact: { records: "1" },
+    });
+    if (!dryRun.ok) throw new Error("setup");
+    await h.enterpriseWorkflows.approveDryRun(approver, dryRun.previewId);
+    await expect(
+      h.enterpriseWorkflows.executeHighRiskAutomation({
+        context: security,
+        previewId: dryRun.previewId,
+        observedImpact: { records: "2" },
+      }),
+    ).resolves.toMatchObject({
+      ok: false,
+      reasonCode: "approved-impact-hash-mismatch",
+    });
+
+    await expect(
+      h.enterpriseWorkflows.checkEgress({
+        context: admin,
+        endpointRef: "provider:unlisted",
+        allowList: ["provider:allowed"],
+      }),
+    ).resolves.toMatchObject({
+      ok: false,
+      reasonCode: "egress-endpoint-not-allowlisted",
+    });
   });
 });

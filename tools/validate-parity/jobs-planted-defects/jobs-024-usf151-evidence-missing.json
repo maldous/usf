@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-JOBS-024",
+  "mutation": {
+    "enterpriseRemoveIds": [
+      "evidence-usf-151-jobs-workflows-enterprise-depth"
+    ]
+  }
+}

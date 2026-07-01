@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-JOBS-021",
+  "mutation": {
+    "file": "capabilities/jobs/src/enterprise-workflow-controls.ts",
+    "replace": {
+      "old": "class EnterpriseWorkflowControlPlane",
+      "new": "class WorkflowControlPlaneMissing"
+    }
+  }
+}
