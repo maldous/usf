@@ -146,16 +146,16 @@ def read_text(path):
 def load_matrix():
     if not os.path.exists(MATRIX_PATH):
         return None
+    try:
+        with open(MATRIX_PATH, encoding="utf-8") as handle:
+            return json.load(handle)
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def load_json_text(text):
     try:
         return json.loads(text)
-    except Exception:  # noqa: BLE001
-        return None
-    try:
-        with open(MATRIX_PATH, encoding="utf-8") as handle:
-            return json.load(handle)
     except Exception:  # noqa: BLE001
         return None
 

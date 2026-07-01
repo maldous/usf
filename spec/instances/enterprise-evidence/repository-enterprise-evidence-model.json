@@ -4849,6 +4849,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-149-auth-identity-enterprise-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-149 enterprise auth and identity depth controls for tenant SSO lifecycle, requester/approver separation, JIT policy, domain ownership verification, invitations, assurance step-up, account linking, attribute/group mapping, privileged SSO administration, browser-flow semantics, and local threat-signal evidence.",
+      "riskTreated": "Deferred auth and identity depth could be hidden behind the core auth proof, allowing unsupported live IdP, live broker, browser UI, SIEM, production, certification, or full-parity claims.",
+      "assetServiceAffected": "Keycloak hermetic issuer; auth capability; tenant SSO control plane; synchronous PDP; identity audit evidence",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-149; currentEvidence=evidence-usf-149-auth-identity-enterprise-depth; deferredBoundary=live Keycloak admin API, live external broker/upstream IdP, live DNS/HTTP domain verification, browser UI/callback/cookie runtime, refresh-token runtime, email delivery, SCIM, live SIEM forwarding, environment promotion, and production operation; noReactRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json; packages/proof/src/auth-identity-proof.ts; tools/validate-parity/validate-auth.py",
+      "validationCommand": "make auth-proof; python3 tools/validate-parity/validate-auth.py all --json",
+      "deferredReason": "riskStatement=Enterprise auth/identity depth needs bounded proof without implying live identity-provider, browser, SIEM, production, or certification readiness.; threatFailureScenario=Core hermetic auth proof is mistaken for live SSO, browser, external IdP, or SIEM readiness.; affectedAssetService=auth identity boundary and tenant SSO control plane; impact=critical; likelihood=medium; owner=platform-identity-foundation; treatment=mitigate with local proof, explicit reclassification, and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-193 for environment-promotion semantics and future live-provider/API/UI issues where authorised; exceptionOwner=platform-identity-risk-owner; exceptionReason=live provider, browser UI, SIEM, SCIM, and production operations remain outside USF-149 bounded local proof; compensatingControl=validate-auth plus auth-identity-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-auth.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7010,6 +7036,28 @@
       ],
       "prOrMergeSha": "a63949c37778654c4f007de901a85446dcf1016c",
       "retentionPosture": "Retain committed proof code, files-storage enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw file content, object key, malware payload, credential, token, raw endpoint, provider payload, or production data is retained."
+    },
+    {
+      "id": "evidence-usf-149-auth-identity-enterprise-depth",
+      "proofResult": "proof:auth",
+      "whatWasProven": "make auth-proof is the command-pinned bounded local hermetic proof for USF-149. It proves Keycloak-issued token validation, stable actor mapping, session lifecycle, tenant handoff through the PDP, tenant SSO lifecycle, requester/approver separation, JIT policy, domain ownership collision fail-closed behaviour, invitations, assurance step-up policy, account linking and unlinking, attribute/group mapping without direct role grants, privileged SSO PDP actions, browser-flow security semantics, local threat-signal audit posture, and explicit non-claims.",
+      "whatWasNotProven": "No live Keycloak admin API readiness, external broker/upstream IdP readiness, browser UI/callback/cookie runtime readiness, refresh-token runtime readiness, email delivery, SCIM, SIEM forwarding, environment readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-enterprise-identity-control-plane",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#keycloak",
+      "adapterProviderId": "hermetic-keycloak-token-verifier; enterprise-identity-control-plane-local",
+      "validationCommand": "make auth-proof; python3 tools/validate-parity/validate-auth.py all --json",
+      "commandPin": "tsx packages/proof/src/auth-identity-proof.ts",
+      "commitPin": "2c6ba2818bd872b22c85457c30cd4fa1cf328be6",
+      "issueLinks": [
+        "USF-149",
+        "USF-133",
+        "USF-184",
+        "USF-192",
+        "USF-193"
+      ],
+      "prOrMergeSha": "2c6ba2818bd872b22c85457c30cd4fa1cf328be6",
+      "retentionPosture": "Retain committed proof code, auth identity enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw token, cookie, secret, external IdP identifier, broker payload, provider payload, email value, or production data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8874,6 +8922,33 @@
       "failClosedBehaviour": "deny or quarantine unsafe file operations, return unavailable provider state, block purge on legal hold, and preserve non-claims until separate proof exists",
       "monitoringAuditEvidence": "files proof, files validator, file audit events, MinIO and ClamAV proof summaries, and enterprise evidence rows must remain value-free and redacted",
       "residualRisk": "local composed proof does not prove live provider, staging, production, SOC, ISO, DLP, KMS, backup/DR, or enterprise production readiness"
+    },
+    {
+      "id": "threat-usf-149-auth-identity-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-149 enterprise auth and identity proof depth",
+      "trustBoundary": "Hermetic Keycloak-equivalent token issuer and local synthetic tenant SSO control plane only; no live external IdP, live Keycloak admin API, browser UI, SIEM, or production boundary claim.",
+      "tenantBoundary": "Tenant SSO connections, invitations, domain verification, JIT policy, and attribute/group mapping are tenant-scoped and must fail closed on cross-tenant domain collision, missing active membership, or mismatched actor context.",
+      "credentialBoundary": "Raw tokens, cookies, secrets, broker payloads, external IdP metadata, provider endpoints, and email values are not emitted in proof output, audit metadata, validator findings, or evidence rows.",
+      "dataClassification": "security-sensitive synthetic identity, tenant SSO, session, and audit metadata only; no production-derived identity data.",
+      "abuseCases": [
+        "hermetic auth proof treated as live external IdP readiness",
+        "tenant requester approves their own SSO connection",
+        "JIT grants a privileged tenant-admin role",
+        "domain ownership collision grants another tenant access",
+        "attribute/group mapping grants roles directly",
+        "browser-flow policy proof is mistaken for browser UI readiness"
+      ],
+      "failureModes": [
+        "tenant_sso action missing from synchronous PDP policy",
+        "enterprise identity proof marker removed",
+        "readiness claim set true in proof output or matrix",
+        "audit evidence leaks raw token, email, cookie, secret, or provider payload",
+        "live SIEM forwarding inferred from local threat signal"
+      ],
+      "failClosedBehaviour": "validate-auth USF-AUTH-019 through USF-AUTH-023 block missing control plane, missing PDP actions, missing proof markers, unsafe readiness claims, and missing USF-149 evidence linkage.",
+      "monitoringAuditEvidence": "make auth-proof output, auth validator findings, tenant_sso value-free audit events, authentication.identity events, and local security threat-signal audit events only; no live monitoring backend.",
+      "residualRisk": "Live Keycloak admin API, live external broker/upstream IdP, live DNS/HTTP verification, browser UI/callback/cookies, refresh-token runtime, email delivery, SCIM, live SIEM, environment promotion, and production operation remain non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -11482,6 +11557,36 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-149-auth-identity-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-149 tenant SSO and identity privileged controls",
+      "posture": [
+        "accessModel=local-synthetic-tenant-sso-control-plane-only",
+        "authRequirement=active-tenant-membership-plus-explicit-tenant_sso-permission",
+        "leastPrivilegePosture=tenant_sso-actions-explicit-no-wildcard-no-token-claim-grants",
+        "breakGlassRelevance=not-implemented-for-USF-149-local-proof",
+        "auditRequirement=tenant_sso-and-identity-events-value-free",
+        "reviewCadence=2026-09-30-before-stronger-readiness-claim",
+        "deprovisioningPosture=revoked-sso-connection-and-disabled-identity-semantics-local-only",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-auth.py all --json",
+      "deferredReason": "Operator console, live Keycloak admin API, executed access reviews, support recovery, public API exposure, and production deprovisioning evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -13391,6 +13496,41 @@
       "evidenceSource": "docs/architecture/db-enterprise-controls-proof-depth-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-db.py all --json",
       "deferredReason": "USF-139 does not claim backup readiness, restore readiness, DR, RPO/RTO, production operation, live-provider operation, or environment promotion readiness",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-149-auth-identity-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-149 auth and identity local proof resilience posture",
+      "posture": [
+        "backupRequirement=not-applicable-to-local-hermetic-auth-proof",
+        "restoreProofRequirement=not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=identity-or-sso-policy-drift-must-not-be-treated-as-readiness",
+        "cleanupTeardownProof=in-memory-proof-only-no-durable-provider-state",
+        "readinessChecks=hermetic-proof-and-validator-markers-only",
+        "retryTimeoutBehaviour=not-applicable-no-external-provider",
+        "failClosedMode=unknown-identity-disabled-identity-tenant-boundary-domain-conflict-and-low-assurance-denials",
+        "structuredLogging=proof-output-value-free",
+        "tracingCorrelation=not-live-telemetry",
+        "metrics=validator-and-proof-check-counts-only",
+        "auditEvents=tenant_sso-authentication-identity-and-security-signal-events",
+        "redaction=raw-tokens-cookies-secrets-email-values-and-provider-payloads-not-retained"
+      ],
+      "evidenceSource": "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json",
+      "validationCommand": "make auth-proof",
+      "deferredReason": "Live provider resilience, browser session recovery, refresh-token rotation, SIEM forwarding, backup/restore, DR, RPO/RTO, and production incident operation remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16087,6 +16227,34 @@
       "evidenceSource": "docs/architecture/files-storage-enterprise-proof-depth-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-files.py all --json",
       "deferredReason": "Production file incident hooks, paging, escalation execution, patch SLA evidence, malware signature freshness, DLP response, KMS incident evidence, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-149-auth-identity-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-149 auth identity incident and vulnerability evidence posture",
+      "posture": [
+        "incidentDetectionHook=local-auth-denial-tenant_sso-denial-and-security-threat-signal-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-identity-risk-owner",
+        "vulnerabilityAdvisoryReview=Keycloak-verifier-and-auth-dependency-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-sdk-or-provider-dependency-added-by-USF-149",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-auth.py all --json",
+      "deferredReason": "Production auth incident hooks, paging, escalation execution, patch SLA evidence, live IdP advisory response, SIEM forwarding, and post-incident evidence remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -19160,6 +19328,35 @@
       "evidenceSource": "packages/proof/src/files-storage-proof.ts",
       "validationCommand": "make files-proof",
       "deferredReason": "Customer file payload privacy posture, live provider privacy, DLP privacy, production data residency, DSR, custom retention, and object backup/DR privacy remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-149-auth-identity-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-149 proof:auth synthetic identity data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=security-sensitive-identity-session-tenant-sso-and-audit-metadata",
+        "redactionPolicy=no-raw-token-cookie-secret-email-domain-provider-payload-or-external-idp-identifier-in-proof-output",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed-for-identity-proof-data",
+        "dataResidencyCrossBorderBoundary=hermetic-local-only-no-production-residency-claim"
+      ],
+      "evidenceSource": "packages/proof/src/auth-identity-proof.ts",
+      "validationCommand": "make auth-proof",
+      "deferredReason": "Customer identity data privacy, live provider privacy, DSR, data residency, legal hold, custom retention, and production account recovery privacy remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

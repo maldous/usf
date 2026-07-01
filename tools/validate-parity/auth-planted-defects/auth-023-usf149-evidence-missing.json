@@ -4,7 +4,7 @@
     "file": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
     "replace": {
       "old": "soa-usf-149-auth-identity-enterprise-depth",
-      "new": "soa-usf-149-auth-identity-enterprise-depth-missing"
+      "new": "soa-disabled-auth-identity-enterprise-depth"
     }
   }
 }

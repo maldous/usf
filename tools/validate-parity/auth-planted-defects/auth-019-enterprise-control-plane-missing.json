@@ -4,7 +4,7 @@
     "file": "capabilities/auth/src/enterprise-identity.ts",
     "replace": {
       "old": "requestSsoConnection",
-      "new": "requestSsoConnectionMissing"
+      "new": "disabledEnterpriseRequest"
     }
   }
 }
