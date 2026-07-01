@@ -180,6 +180,26 @@ environment promotion readiness. No live edge, WAF, CDN, bot, fraud, gateway,
 production abuse-prevention, staging, production, live-provider, SOC, ISO certification,
 full dev, full React parity, or USF-133 closure claim is made.
 
+## USF-163 Import/Export/Bulk Deep Runtime Status
+
+USF-163 adds `docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json`
+as the bounded import/export/bulk deep-runtime evidence gate. The proof extends
+`packages/proof/src/import-export-bulk-proof.ts` with deterministic synthetic evidence
+for partial-success retry/resume, provider-source/provider-destination fail-closed
+posture, CSV formula and decompression-bomb parser safety, destructive rollback and
+compensation job evidence, requester self-approval denial, separate approver approval,
+legal-hold purge denial, bounded purge execution when allowed, tenant/access/audit/
+secret/privacy cleanup evidence, and cross-domain linkage to API, files, jobs,
+guardrails, audit, observability, provider, retention, and privacy boundaries.
+
+The proof and matrix remain non-equivalent to broad HTTP/OpenAPI bulk route
+implementation, public bulk API readiness, generated clients, live external transfer
+providers, full parser adapter suites, production migration, legal export, eDiscovery,
+regulatory export, production retention services, live alerting, environment promotion,
+and production operation. No production migration, legal export, eDiscovery,
+regulatory export, broad public bulk API, live external provider, staging, production,
+SOC, ISO certification, full dev, full React parity, or USF-133 closure claim is made.
+
 ## USF-187 Lane 3 Shared Assurance Control-Plane Status
 
 USF-187 appends Lane 3-owned enterprise rows with stable `usf-187` ids for:

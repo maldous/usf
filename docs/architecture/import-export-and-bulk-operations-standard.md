@@ -1,8 +1,8 @@
 # Import, Export, and Bulk Operations Standard
 
-Status: active for the USF-162 local/dev/test parity slice.
+Status: active for the USF-162 local/dev/test parity slice and the USF-163 bounded local deep-runtime proof slice.
 
-This standard defines import, export, bulk operation, evidence package, dry-run, preview, and reconciliation posture for USF foundation work. It is ISO 27001-supporting technical control evidence only. It does not claim ISO certification, legal export readiness, eDiscovery readiness, production migration readiness, regulatory export readiness, or production-live bulk operation readiness.
+This standard defines import, export, bulk operation, evidence package, dry-run, preview, and reconciliation posture for USF foundation work. It is ISO 27001-supporting technical control evidence only. It does not claim ISO certification, legal export readiness, eDiscovery readiness, production migration readiness, regulatory export readiness, live external provider readiness, or production-live bulk operation readiness.
 
 ## Import/Export As Governed Data Movement
 
@@ -23,11 +23,11 @@ Allowed classifications are low-risk, tenant-data, confidential, restricted, sec
 
 ## Operation Statuses
 
-Allowed statuses are draft, queued, validating, previewed, awaiting-approval, approved, running, succeeded, partially-succeeded, failed, cancelled, expired, rejected, quarantined, dead-lettered, and purged. Cancelled, expired, rejected, quarantined, dead-lettered, and purged operations cannot run without explicit retry or recovery policy.
+Allowed statuses are draft, queued, validating, previewed, awaiting-approval, approved, running, succeeded, partially-succeeded, failed, cancelled, expired, rejected, quarantined, dead-lettered, rolled-back, and purged. Cancelled, expired, rejected, quarantined, dead-lettered, rolled-back, and purged operations cannot run without explicit retry or recovery policy.
 
 ## Import Source/Export Destination Governance
 
-Allowed source and destination types are uploaded-file, generated-file, tenant-file, evidence-package, provider-source, provider-destination, system-internal, local-test, and manual-operator. Imports use file_id or source_ref and never raw object keys. Exports write to file_id or package_ref and never raw object keys. Provider sources and destinations are live-external-deferred unless separately authorised. Manual operator sources require actor identity and audit.
+Allowed source and destination types are uploaded-file, generated-file, tenant-file, evidence-package, provider-source, provider-destination, system-internal, local-test, and manual-operator. Imports use file_id or source_ref and never raw object keys. Exports write to file_id or package_ref and never raw object keys. Provider sources and destinations are live-external-deferred unless separately authorised. USF-163 proves only a bounded fail-closed local provider-source/provider-destination boundary with reason code provider-transfer-deferred. Manual operator sources require actor identity and audit.
 
 ## File Format Safety
 
@@ -95,7 +95,7 @@ PII and sensitive fields are classified. Raw rows are not logged. Validation err
 
 ## Provider/External Transfer Posture
 
-External import/export providers are live-external-deferred unless separately authorised. Provider credentials are SecretReferences only. Provider endpoint details are redacted. Provider transfer failures are safe. Provider transfer does not imply production readiness.
+External import/export providers are live-external-deferred unless separately authorised. Provider credentials are SecretReferences only. Provider endpoint details are redacted. Provider transfer failures are safe. Provider transfer does not imply production readiness. USF-163 does not prove live external transfer-provider readiness.
 
 ## Observability/Security Signals
 
@@ -103,8 +103,21 @@ Required signals include bulk.operation.started, bulk.operation.completed, bulk.
 
 ## API/OpenAPI Safety
 
-Future bulk routes are tenant-scoped, PDP-protected, idempotent for side effects, guardrail-protected, redacted, and non-enumerating. OpenAPI examples are synthetic and contain no raw rows, object keys, recipient addresses, provider internals, tokens, credentials, tenant data, or live provider claims. Broad HTTP surfaces are deferred in USF-162.
+Future bulk routes are tenant-scoped, PDP-protected, idempotent for side effects, guardrail-protected, redacted, and non-enumerating. OpenAPI examples are synthetic and contain no raw rows, object keys, recipient addresses, provider internals, tokens, credentials, tenant data, or live provider claims. Broad HTTP surfaces are deferred in USF-162. USF-163 records the broad API/OpenAPI surface as an explicit non-equivalence boundary linked to the API source issue family; it does not implement or claim public bulk API readiness.
+
+## USF-163 Bounded Deep Runtime Proof
+
+USF-163 adds bounded local deep-runtime proof depth for controls that were deferred or partial after USF-162. The proof remains hermetic and synthetic. It proves:
+
+- transactional resumable import posture through partial-success item outcomes and retry/resume job dispatch;
+- provider-source and provider-destination transfer attempts fail closed unless a separately authorised adapter exists;
+- parser safety depth for CSV formula injection and decompression-bomb denial;
+- destructive rollback and compensation posture with separate approval and value-free rollback audit evidence;
+- retention purge execution when allowed and legal-hold purge denial when held;
+- tenant, access, audit, secret, privacy, cleanup, guardrail, file, job, observability, and provider boundary linkage.
+
+USF-163 also records explicit non-equivalence boundaries for broad HTTP/OpenAPI surfaces, full parser adapter suites, live external transfer providers, production migration, legal export, eDiscovery, regulatory export, production retention services, live alerting, environment promotion, and production operation.
 
 ## Deferred Depth
 
-Deferred depth includes broad HTTP/OpenAPI route surfaces, production data migration, external provider transfer, parser adapters, decompression-bomb enforcement, transactional resumable DB appliers, rollback execution, approval workflow, purge workflow, legal/eDiscovery/regulatory export workflow, distributed bulk orchestration, and live alerting/SIEM integration.
+Deferred depth after USF-163 includes broad HTTP/OpenAPI route implementation, production data migration, live external provider transfer adapters, full parser adapter suites, production transactional DB appliers, production rollback execution, production approval workflow operation, production retention scheduler operation, legal/eDiscovery/regulatory export workflow readiness, distributed bulk orchestration, and live alerting/SIEM integration.

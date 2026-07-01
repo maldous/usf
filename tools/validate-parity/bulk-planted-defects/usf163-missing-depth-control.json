@@ -1,0 +1,11 @@
+{
+  "id": "bulk-usf163-missing-depth-control",
+  "expectedRuleId": "USF-BULK-010",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "\"id\": \"rollback-compensation-workflow\"",
+      "new": "\"id\": \"rollback-compensation-workflow-missing\""
+    }
+  ]
+}

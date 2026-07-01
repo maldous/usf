@@ -1,0 +1,272 @@
+{
+  "id": "import-export-bulk-deep-runtime-proof-depth-matrix",
+  "sourceIssue": "USF-163",
+  "parentIssue": "USF-133",
+  "relatedIssues": ["USF-155", "USF-159", "USF-161", "USF-162", "USF-184", "USF-192"],
+  "purpose": "Record the bounded local deep-runtime proof gate for import, export, bulk, retention, legal-hold, rollback, parser-safety, and provider-transfer posture without making environment, live-provider, legal, regulatory, production, or full-parity readiness claims.",
+  "runtimeMode": "local-synthetic-import-export-bulk-deep-runtime-proof",
+  "providerMode": "hermetic-mock",
+  "proofCommand": "make bulk-proof",
+  "packageProofCommand": "corepack pnpm proof:bulk",
+  "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+  "proofFile": "packages/proof/src/import-export-bulk-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-bulk.py",
+  "standardFile": "docs/architecture/import-export-and-bulk-operations-standard.md",
+  "sourceUseMatrix": "docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-163-import-export-bulk-deep-runtime",
+    "evidence-usf-163-import-export-bulk-deep-runtime",
+    "threat-usf-163-import-export-bulk-deep-runtime",
+    "access-usf-163-import-export-bulk-deep-runtime",
+    "resilience-usf-163-import-export-bulk-deep-runtime",
+    "incident-usf-163-import-export-bulk-deep-runtime",
+    "privacy-usf-163-import-export-bulk-deep-runtime"
+  ],
+  "owners": {
+    "owner": "platform-import-export-foundation",
+    "riskOwner": "platform-import-export-risk-owner",
+    "controlOwner": "platform-import-export-control-owner",
+    "evidenceOwner": "platform-import-export-evidence-owner"
+  },
+  "claims": {
+    "boundedDeepRuntimeProven": true,
+    "apiOpenApiSurfaceReclassified": true,
+    "transactionalResumableImportChecked": true,
+    "liveExternalTransferProviderBoundaryChecked": true,
+    "parserAdapterBoundaryChecked": true,
+    "decompressionBombRejected": true,
+    "rollbackCompensationWorkflowChecked": true,
+    "approvalSeparationOfDutiesChecked": true,
+    "exportPurgeRetentionSchedulerChecked": true,
+    "legalHoldWorkflowRuntimeChecked": true,
+    "legalEdiscoveryRegulatoryBoundaryChecked": true,
+    "productionMigrationBoundaryExplicit": true,
+    "crossDomainDependencyLinkageChecked": true,
+    "tenantAccessAuditSecretCleanupEvidenceChecked": true,
+    "unavailableProviderFailClosedChecked": true,
+    "productionMigrationReadinessClaim": false,
+    "legalExportReadinessClaim": false,
+    "eDiscoveryReadinessClaim": false,
+    "regulatoryExportReadinessClaim": false,
+    "liveExternalProviderReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "controls": [
+    {
+      "id": "local-foundation-preserved",
+      "status": "proven-local",
+      "controlPurpose": "Preserve USF-162 local hermetic import/export/bulk proof while adding USF-163 deep-runtime assertions.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "packages/proof/src/import-export-bulk-proof.ts",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "nonClaimBoundary": "The local hermetic proof is not environment promotion or live-provider readiness."
+    },
+    {
+      "id": "transactional-resumable-import-applier",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Prove partial-success item outcomes, safe retry/resume job dispatch, and value-free retry evidence for synthetic imports.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "deepRuntimeEvidence.transactionalResumableImportChecked",
+        "capabilities/bulk/src/index.ts#retry",
+        "tests/capabilities/import-export-bulk.test.ts"
+      ],
+      "nonClaimBoundary": "No production database migration, backfill, or live resumable provider readiness is claimed."
+    },
+    {
+      "id": "provider-transfer-fail-closed-boundary",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Prove provider-source and provider-destination operation attempts fail closed unless a separately authorised transfer adapter exists.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "deepRuntimeEvidence.liveExternalTransferProviderBoundaryChecked",
+        "provider-transfer-deferred"
+      ],
+      "nonClaimBoundary": "No live transfer provider, live external transfer provider, credential, customer transfer, or external egress readiness is claimed."
+    },
+    {
+      "id": "parser-adapter-and-decompression-controls",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Prove CSV formula injection and ZIP decompression-bomb checks fail closed in the local parser safety helper while broader parser adapters remain bounded.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "deepRuntimeEvidence.parserAdapterBoundaryChecked",
+        "deepRuntimeEvidence.decompressionBombRejected",
+        "decompression-bomb-blocked"
+      ],
+      "nonClaimBoundary": "No complete CSV, JSONL, XLSX, ZIP parser adapter suite or production parser operation is claimed."
+    },
+    {
+      "id": "rollback-compensation-workflow",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Prove destructive operations require rollback or compensation posture and can dispatch a synthetic rollback job with value-free audit evidence.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "deepRuntimeEvidence.rollbackCompensationWorkflowChecked",
+        "bulk.operation.rolled_back"
+      ],
+      "nonClaimBoundary": "No production data rollback, customer recovery, or migration rollback readiness is claimed."
+    },
+    {
+      "id": "approval-separation-of-duties",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Prove high-risk requester self-approval is denied and separate synthetic approver approval is required before execution.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "deepRuntimeEvidence.approvalSeparationOfDutiesChecked",
+        "requester-cannot-self-approve"
+      ],
+      "nonClaimBoundary": "No production approval workflow, separate approval operation, access review, or break-glass operation is claimed."
+    },
+    {
+      "id": "export-purge-retention-scheduler",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Prove purge execution is privileged and audited when the purge window is open, and that value-free purge evidence is emitted.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "deepRuntimeEvidence.exportPurgeRetentionSchedulerChecked",
+        "bulk.operation.purged"
+      ],
+      "nonClaimBoundary": "No production retention scheduler, DSR fulfilment, legal retention service, or custom retention readiness is claimed."
+    },
+    {
+      "id": "legal-hold-workflow-runtime",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Prove legal hold blocks purge in the local evidence package workflow.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": ["deepRuntimeEvidence.legalHoldWorkflowRuntimeChecked", "legal-hold-active"],
+      "nonClaimBoundary": "No legal export, eDiscovery, regulatory export, litigation hold, or production legal workflow readiness is claimed."
+    },
+    {
+      "id": "api-openapi-surface-boundary",
+      "status": "deferred-with-owner",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "followUpIssue": "USF-213",
+      "controlPurpose": "Record that broad HTTP/OpenAPI bulk route surfaces are reclassified outside this source issue except for local proof boundaries.",
+      "evidenceRefs": ["deepRuntimeEvidence.apiOpenApiSurfaceReclassified"],
+      "nonClaimBoundary": "No public bulk API, external developer API, generated client, gateway-live, or environment readiness is claimed."
+    },
+    {
+      "id": "legal-ediscovery-regulatory-export-boundary",
+      "status": "deferred-with-owner",
+      "owner": "platform-import-export-foundation",
+      "riskOwner": "platform-import-export-risk-owner",
+      "controlOwner": "platform-import-export-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "enterprise-readiness",
+        "ISO-supporting evidence completeness",
+        "production-readiness"
+      ],
+      "followUpIssue": "future-legal-export-or-eDiscovery-issue-if-separately-authorised",
+      "controlPurpose": "Record legal, eDiscovery, and regulatory export as non-equivalent to the bounded local evidence package and legal-hold proof.",
+      "evidenceRefs": ["deepRuntimeEvidence.legalEdiscoveryRegulatoryBoundaryChecked"],
+      "nonClaimBoundary": "No legal export readiness, eDiscovery readiness, regulatory export readiness, certification, or production operation is claimed."
+    },
+    {
+      "id": "production-migration-boundary",
+      "status": "out-of-scope-with-rationale",
+      "owner": "platform-import-export-foundation",
+      "riskOwner": "platform-import-export-risk-owner",
+      "controlOwner": "platform-import-export-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "followUpIssue": "future-production-migration-issue-if-separately-authorised",
+      "controlPurpose": "Record production migration as outside the authorised local synthetic proof boundary.",
+      "evidenceRefs": ["deepRuntimeEvidence.productionMigrationBoundaryExplicit"],
+      "nonClaimBoundary": "No production migration, production data backfill, production rollback, or customer-data migration readiness is claimed."
+    },
+    {
+      "id": "cross-domain-linkage",
+      "status": "bounded-local-proof",
+      "controlPurpose": "Link import/export/bulk proof to API, files, jobs, guardrails, audit, observability, provider, retention, and privacy boundaries without upgrading those domains.",
+      "proofCommand": "make bulk-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-bulk.py all --json",
+      "evidenceRefs": [
+        "USF-155",
+        "USF-159",
+        "USF-161",
+        "USF-162",
+        "deepRuntimeEvidence.crossDomainDependencyLinkageChecked"
+      ],
+      "nonClaimBoundary": "Cross-domain linkage does not close USF-133 or imply source issue completion outside USF-163."
+    }
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred import/export/bulk control implemented with proof or explicitly reclassified.",
+      "evidence": "controls array statuses plus make bulk-proof and validate-bulk USF-BULK-009 through USF-BULK-013",
+      "status": "satisfied-by-merged-evidence-after-pr-merge"
+    },
+    {
+      "criterion": "API, transfer provider, parser, rollback, retention, legal hold boundaries explicit where claimed.",
+      "evidence": "api-openapi-surface-boundary, provider-transfer-fail-closed-boundary, parser-adapter-and-decompression-controls, rollback-compensation-workflow, export-purge-retention-scheduler, legal-hold-workflow-runtime",
+      "status": "satisfied-by-merged-evidence-after-pr-merge"
+    },
+    {
+      "criterion": "Tenant, access, audit, secret, cleanup evidence exists where claimed.",
+      "evidence": "proof checks, enterprise evidence rows, audit and redaction assertions",
+      "status": "satisfied-by-merged-evidence-after-pr-merge"
+    },
+    {
+      "criterion": "Validator coverage exists for any new import/export/bulk claim.",
+      "evidence": "validate-bulk.py USF-BULK-009 through USF-BULK-013 and planted defects",
+      "status": "satisfied-by-merged-evidence-after-pr-merge"
+    },
+    {
+      "criterion": "No production migration, legal export, eDiscovery, regulatory, live-provider readiness claim without proof.",
+      "evidence": "claims false fields and nonClaimBoundary fields",
+      "status": "satisfied-by-merged-evidence-after-pr-merge"
+    }
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf133-closure"
+  ]
+}

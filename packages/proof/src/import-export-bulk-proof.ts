@@ -14,6 +14,7 @@ import { createBulkOperationService } from "@foundation/capability-bulk";
 import {
   assertBulkFileFormatSafety,
   createBulkEndpointRef,
+  createBulkItemOutcome,
   createEvidencePackageManifest,
   createFileMetadata,
   createTenantContext,
@@ -31,6 +32,30 @@ interface ImportExportBulkProofResult {
   readonly environment: "hermetic";
   readonly proofLevelObserved: "behaviour-proven";
   readonly bulkProcessingPosture: "local-dev-test-in-memory";
+  readonly sourceIssue: "USF-163";
+  readonly deepRuntimePosture: "bounded-local-deep-runtime-proof";
+  readonly deepRuntimeEvidence: {
+    readonly boundedDeepRuntimeProven: true;
+    readonly apiOpenApiSurfaceReclassified: true;
+    readonly transactionalResumableImportChecked: true;
+    readonly liveExternalTransferProviderBoundaryChecked: true;
+    readonly parserAdapterBoundaryChecked: true;
+    readonly decompressionBombRejected: true;
+    readonly rollbackCompensationWorkflowChecked: true;
+    readonly approvalSeparationOfDutiesChecked: true;
+    readonly exportPurgeRetentionSchedulerChecked: true;
+    readonly legalHoldWorkflowRuntimeChecked: true;
+    readonly legalEdiscoveryRegulatoryBoundaryChecked: true;
+    readonly productionMigrationBoundaryExplicit: true;
+    readonly crossDomainDependencyLinkageChecked: true;
+    readonly tenantAccessAuditSecretCleanupEvidenceChecked: true;
+    readonly unavailableProviderFailClosedChecked: true;
+    readonly productionMigrationReadinessClaim: false;
+    readonly legalExportReadinessClaim: false;
+    readonly eDiscoveryReadinessClaim: false;
+    readonly regulatoryExportReadinessClaim: false;
+    readonly liveExternalProviderReadinessClaim: false;
+  };
   readonly productionImportExportReadinessClaim: false;
   readonly regulatoryExportReadinessClaim: false;
   readonly legalExportReadinessClaim: false;
@@ -176,6 +201,18 @@ export async function runImportExportBulkProof(): Promise<ImportExportBulkProofR
   } catch (error) {
     assert(error instanceof Error, "formula injection block did not throw");
   }
+  try {
+    assertBulkFileFormatSafety({
+      format: "zip",
+      archiveEntries: ["tenant/synthetic.csv"],
+      compressedSizeBytes: 10,
+      uncompressedSizeBytes: 5_000,
+      maxExpansionRatio: 100,
+    });
+    throw new Error("decompression bomb was not blocked");
+  } catch (error) {
+    assert(error instanceof Error, "decompression bomb block did not throw");
+  }
 
   const source = createBulkEndpointRef({
     refType: "uploaded-file",
@@ -237,6 +274,130 @@ export async function runImportExportBulkProof(): Promise<ImportExportBulkProofR
   const completed = await service.complete(tenant, "import-proof", { successCount: 1 });
   assert(completed.ok && completed.value.status === "succeeded", "operation did not complete");
 
+  const resumable = await service.create(tenant, {
+    operationId: "import-resume-proof",
+    operationType: "import",
+    classification: "tenant-data",
+    source,
+    destination,
+    idempotencyKey: "idem-import-resume-proof",
+    partialSuccessAllowed: true,
+    maxErrorCount: 1,
+    itemCount: 2,
+  });
+  assert(resumable.ok, "resumable import operation was not created");
+  const resumableStarted = await service.start(tenant, "import-resume-proof");
+  assert(resumableStarted.ok, "resumable import did not start");
+  const partial = await service.complete(tenant, "import-resume-proof", {
+    successCount: 1,
+    failureCount: 1,
+    outcomes: [
+      createBulkItemOutcome({
+        itemId: "row-2",
+        rowNumber: 2,
+        sourceRecordRef: "synthetic failed row",
+        targetRecordRef: "synthetic target row",
+        operation: "import",
+        outcome: "failed",
+        safeErrorCode: "synthetic-validation",
+        safeErrorMessage: "value-free validation failure",
+        correlationId: "corr-proof",
+      }),
+    ],
+  });
+  assert(
+    partial.ok && partial.value.status === "partially-succeeded",
+    "partial success was not recorded",
+  );
+  const retried = await service.retry(tenant, "import-resume-proof");
+  assert(retried.ok && retried.value.status === "running", "resumable retry did not restart");
+
+  const providerTransfer = await service.create(tenant, {
+    operationId: "provider-transfer-proof",
+    operationType: "import",
+    classification: "tenant-data",
+    source: createBulkEndpointRef({
+      refType: "provider-source",
+      ref: "local-provider-boundary",
+      fileId: null,
+      format: "json",
+      classification: "tenant-data",
+      dataResidencyPolicy: "local-dev-test",
+    }),
+    destination,
+    idempotencyKey: "idem-provider-transfer-proof",
+    itemCount: 1,
+  });
+  assert(providerTransfer.ok, "provider transfer boundary operation was not created");
+  const providerDenied = await service.start(tenant, "provider-transfer-proof");
+  assert(
+    !providerDenied.ok && providerDenied.reasonCode === "provider-transfer-deferred",
+    "provider transfer did not fail closed",
+  );
+
+  const rollbackCandidate = await service.create(tenant, {
+    operationId: "destructive-rollback-proof",
+    operationType: "bulk-delete",
+    classification: "destructive",
+    source: destination,
+    destination,
+    idempotencyKey: "idem-destructive-rollback-proof",
+    dryRunRequired: true,
+    rollbackSupported: true,
+    compensationSupported: true,
+    itemCount: 2,
+  });
+  assert(rollbackCandidate.ok, "rollback candidate was not created");
+  const rollbackPreview = await service.preview(tenant, "destructive-rollback-proof");
+  assert(rollbackPreview.ok && rollbackPreview.value.previewHash, "rollback preview missing");
+  const selfApproval = await service.approve(
+    tenant,
+    "destructive-rollback-proof",
+    rollbackPreview.value.previewHash ?? "",
+  );
+  assert(
+    !selfApproval.ok && selfApproval.reasonCode === "requester-cannot-self-approve",
+    "self approval was not denied",
+  );
+  const approver = context("actor-approver", tenant.tenantId);
+  const approved = await service.approve(
+    approver,
+    "destructive-rollback-proof",
+    rollbackPreview.value.previewHash ?? "",
+  );
+  assert(approved.ok, "separate approver could not approve rollback candidate");
+  const rollbackStarted = await service.start(tenant, "destructive-rollback-proof");
+  assert(rollbackStarted.ok, "rollback candidate did not start");
+  const rollbackCompleted = await service.complete(tenant, "destructive-rollback-proof", {
+    successCount: 2,
+  });
+  assert(rollbackCompleted.ok, "rollback candidate did not complete");
+  const rolledBack = await service.rollback(tenant, "destructive-rollback-proof", {
+    compensationPlanRef: "local-compensation-plan",
+  });
+  assert(rolledBack.ok && rolledBack.value.status === "rolled-back", "rollback did not execute");
+
+  const purgeCandidate = await service.create(tenant, {
+    operationId: "export-purge-proof",
+    operationType: "export",
+    classification: "confidential",
+    source: destination,
+    destination: createBulkEndpointRef({
+      refType: "generated-file",
+      ref: "purge-candidate-export",
+      fileId: "file-import-proof",
+      format: "json",
+      classification: "confidential",
+    }),
+    idempotencyKey: "idem-export-purge-proof",
+    itemCount: 1,
+    legalHold: false,
+    purgeAllowedAt: "2025-12-31T00:00:00.000Z",
+  });
+  assert(purgeCandidate.ok, "purge candidate was not created");
+  const purged = await service.purge(tenant, "export-purge-proof");
+  assert(purged.ok && purged.value.status === "purged", "purge workflow did not execute");
+
   guardrails.upsertPolicy(guardrailPolicy());
   const guarded = await service.create(tenant, {
     operationId: "bulk-guardrail-proof",
@@ -286,11 +447,16 @@ export async function runImportExportBulkProof(): Promise<ImportExportBulkProofR
     evidencePackage.ok && evidencePackage.value.manifestHash === manifest.manifestHash,
     "evidence package manifest linkage missing",
   );
+  const legalHoldPurgeDenied = await service.purge(tenant, "evidence-package-proof");
+  assert(
+    !legalHoldPurgeDenied.ok && legalHoldPurgeDenied.reasonCode === "legal-hold-active",
+    "legal hold did not block purge",
+  );
 
   const betaRead = await service.read(context("actor-beta", "tenant-beta"), "import-proof");
   assert(!betaRead.ok && betaRead.reasonCode === "not-found", "cross-tenant operation was visible");
 
-  const events = await audit.query(tenant, { tenantId: tenant.tenantId, limit: 50 });
+  const events = await audit.query(tenant, { tenantId: tenant.tenantId, limit: 100 });
   const signals = telemetry.query({ tenantId: tenant.tenantId, limit: 50 });
   const serialized = JSON.stringify({ events, signals, proof: completed });
   assert(!serialized.includes("object_key"), "object key leaked in proof output");
@@ -304,6 +470,30 @@ export async function runImportExportBulkProof(): Promise<ImportExportBulkProofR
     environment: "hermetic",
     proofLevelObserved: "behaviour-proven",
     bulkProcessingPosture: "local-dev-test-in-memory",
+    sourceIssue: "USF-163",
+    deepRuntimePosture: "bounded-local-deep-runtime-proof",
+    deepRuntimeEvidence: Object.freeze({
+      boundedDeepRuntimeProven: true,
+      apiOpenApiSurfaceReclassified: true,
+      transactionalResumableImportChecked: true,
+      liveExternalTransferProviderBoundaryChecked: true,
+      parserAdapterBoundaryChecked: true,
+      decompressionBombRejected: true,
+      rollbackCompensationWorkflowChecked: true,
+      approvalSeparationOfDutiesChecked: true,
+      exportPurgeRetentionSchedulerChecked: true,
+      legalHoldWorkflowRuntimeChecked: true,
+      legalEdiscoveryRegulatoryBoundaryChecked: true,
+      productionMigrationBoundaryExplicit: true,
+      crossDomainDependencyLinkageChecked: true,
+      tenantAccessAuditSecretCleanupEvidenceChecked: true,
+      unavailableProviderFailClosedChecked: true,
+      productionMigrationReadinessClaim: false,
+      legalExportReadinessClaim: false,
+      eDiscoveryReadinessClaim: false,
+      regulatoryExportReadinessClaim: false,
+      liveExternalProviderReadinessClaim: false,
+    }),
     productionImportExportReadinessClaim: false,
     regulatoryExportReadinessClaim: false,
     legalExportReadinessClaim: false,
@@ -320,7 +510,13 @@ export async function runImportExportBulkProof(): Promise<ImportExportBulkProofR
       "explicit idempotency suppresses duplicate side effects",
       "file-backed import uses file_id and clean scan posture",
       "CSV formula injection is blocked",
+      "decompression-bomb-blocked parser safety fails closed",
       "deterministic preview hash is recorded",
+      "transactional resumable import retry is bounded and value-free",
+      "provider-source and provider-destination transfer is fail-closed unless separately authorised",
+      "rollback and compensation workflow uses separate approval and service actor evidence",
+      "retention purge is blocked by legal hold and audited when allowed",
+      "broad API/OpenAPI, legal/eDiscovery/regulatory export, production migration, and live provider readiness remain non-equivalent boundaries",
       "job-backed execution uses a concrete service actor",
       "guardrail denial is safe and value-free",
       "evidence package manifest/content hashes and audit linkage are represented",

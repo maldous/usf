@@ -1,0 +1,11 @@
+{
+  "id": "bulk-usf163-readiness-overclaim",
+  "expectedRuleId": "USF-BULK-013",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "No production migration, production data backfill, production rollback, or customer-data migration readiness is claimed.",
+      "new": "Production migration readiness is proven."
+    }
+  ]
+}

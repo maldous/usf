@@ -5005,6 +5005,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-163-import-export-bulk-deep-runtime",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-163 import/export/bulk deep-runtime controls for retry/resume, provider transfer fail-closed posture, parser safety and decompression-bomb denial, rollback and compensation, approval separation of duties, retention purge, legal hold, cross-domain linkage, and explicit production migration, legal, eDiscovery, regulatory, live-provider, and environment non-claims.",
+      "riskTreated": "Deferred import/export/bulk depth could be hidden behind the USF-162 local proof, allowing unsupported broad API, live transfer provider, production migration, legal export, eDiscovery, regulatory export, production, certification, full-readiness, or full-parity claims.",
+      "assetServiceAffected": "import-export-bulk; files/storage; jobs/workflows; guardrails; audit; observability; API/gateway; provider transfer boundary; retention/legal-hold boundary",
+      "owner": "platform-import-export-foundation",
+      "riskOwner": "platform-import-export-risk-owner",
+      "controlOwner": "platform-import-export-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-163; currentEvidence=evidence-usf-163-import-export-bulk-deep-runtime; boundedDeepRuntimeProven=true; productionMigrationReadinessClaim=false; legalExportReadinessClaim=false; eDiscoveryReadinessClaim=false; regulatoryExportReadinessClaim=false; liveExternalProviderReadinessClaim=false",
+      "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts; tools/validate-parity/validate-bulk.py",
+      "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
+      "deferredReason": "riskStatement=Broad HTTP/OpenAPI routes, live transfer providers, full parser adapter suite, production migration, legal export, eDiscovery, regulatory export, production retention services, live alerting, and environment promotion remain outside USF-163 bounded proof; owner=platform-import-export-foundation; riskOwner=platform-import-export-risk-owner; controlOwner=platform-import-export-control-owner; treatment=mitigate with bounded proof and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-213 for public API-compatible route surface plus future legal/eDiscovery/provider/migration issues if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7317,6 +7343,33 @@
       ],
       "prOrMergeSha": "43e1f077ebec0755e33ae6f8427014b39023b030",
       "retentionPosture": "Retain committed proof code, guardrails distributed enforcement proof-depth matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw IP, raw actor, customer data, production data, token, secret, provider payload, stack trace, or live provider event is retained. effectivenessState=proven-local; sourceIssue=USF-161; guardrails-distributed-enforcement-proof-depth-matrix; boundedDistributedGuardrailsProven=true; liveWafReadinessClaim=false; liveCdnReadinessClaim=false; liveBotFraudReadinessClaim=false; productionAbusePreventionReadinessClaim=false"
+    },
+    {
+      "id": "evidence-usf-163-import-export-bulk-deep-runtime",
+      "proofResult": "proof:bulk",
+      "whatWasProven": "make bulk-proof is the command-pinned bounded hermetic proof for USF-163. It proves USF-162 local foundation behaviour plus retry/resume, provider-source/provider-destination fail-closed posture, decompression-bomb denial, rollback and compensation, requester self-approval denial, separate approver approval, legal-hold purge denial, purge execution when allowed, tenant-safe audit and telemetry output, and explicit USF-163 proof markers.",
+      "whatWasNotProven": "No broad public bulk API readiness, generated client readiness, live transfer provider readiness, production migration readiness, legal export readiness, eDiscovery readiness, regulatory export readiness, production retention scheduler readiness, production legal-hold service readiness, environment promotion readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-import-export-bulk-deep-runtime-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#api,worker,postgres,nats,temporal,minio,mailpit",
+      "adapterProviderId": "in-memory-import-export-store; in-memory-operational-job-store; in-memory-file-metadata-store; in-memory-guardrail-store; non-equivalent-live-transfer-provider-boundary",
+      "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
+      "commandPin": "tsx packages/proof/src/import-export-bulk-proof.ts",
+      "commitPin": "8cacf376ed8126abade8a2448627501a84866389",
+      "issueLinks": [
+        "USF-163",
+        "USF-162",
+        "USF-155",
+        "USF-159",
+        "USF-161",
+        "USF-191",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "8cacf376ed8126abade8a2448627501a84866389",
+      "retentionPosture": "Retain committed proof code, import-export-bulk-deep-runtime-proof-depth-matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw row payload, object key, credential, token, secret, provider payload, stack trace, production data, customer data, legal production package, or live provider event is retained. effectivenessState=proven-local; sourceIssue=USF-163; boundedDeepRuntimeProven=true; productionMigrationReadinessClaim=false; legalExportReadinessClaim=false; eDiscoveryReadinessClaim=false; regulatoryExportReadinessClaim=false; liveExternalProviderReadinessClaim=false"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -9340,6 +9393,31 @@
       "failClosedBehaviour": "validate-guardrails fails when USF-161 proof markers, depth matrix controls, enterprise rows, reclassified boundaries, or non-claim false fields are missing.",
       "monitoringAuditEvidence": "proof:guardrails emits value-free synthetic audit-shaped journal evidence, security signal evidence, cleanup evidence, retention-boundary evidence, and explicit non-claims.",
       "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-161; live edge, WAF, CDN, bot, fraud, gateway, customer traffic, production abuse-control operations, public guardrail APIs, admin UI, SIEM/DLP/UEBA operations, and environment promotion remain outside current claim; owner=platform-guardrails-foundation; riskOwner=platform-guardrails-risk-owner; reviewDate=2026-09-30; followUpIssue=future live provider issue if separately authorised"
+    },
+    {
+      "id": "threat-usf-163-import-export-bulk-deep-runtime",
+      "targetType": "source-issue-control-gate",
+      "target": "import-export-bulk-deep-runtime",
+      "trustBoundary": "Hermetic synthetic proof boundary only; live transfer providers, public API gateways, production migration, legal/eDiscovery/regulatory workflows, and customer data are explicitly non-equivalent.",
+      "tenantBoundary": "Operations, files, jobs, item outcomes, evidence packages, audit events, purge actions, rollback actions, and provider-transfer denials are tenant-scoped and fail closed on missing permission, tenant mismatch, unsafe file, unapproved preview, legal hold, or unauthorised provider transfer.",
+      "credentialBoundary": "No raw endpoint, provider credential, token, secret, object key, raw row payload, provider payload, stack trace, production data, or customer data is emitted.",
+      "dataClassification": "security-sensitive synthetic import/export/bulk metadata only",
+      "abuseCases": [
+        "USF-162 local proof mistaken for USF-163 deep runtime completion",
+        "provider-transfer fail-closed proof mistaken for live external transfer readiness",
+        "local legal-hold proof mistaken for legal export, eDiscovery, or regulatory readiness",
+        "synthetic rollback proof mistaken for production migration readiness"
+      ],
+      "failureModes": [
+        "provider-source operation runs instead of failing closed",
+        "decompression bomb is accepted",
+        "requester self-approval succeeds",
+        "legal hold does not block purge",
+        "readiness claim appears"
+      ],
+      "failClosedBehaviour": "validate-bulk fails when USF-163 proof markers, deep-runtime matrix controls, enterprise rows, boundary controls, or non-claim false fields are missing.",
+      "monitoringAuditEvidence": "proof:bulk emits value-free audit and telemetry evidence for denied provider transfer, rollback, purge, legal-hold denial, guardrail denial, retry, and completion paths.",
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-163; broad HTTP routes, live transfer providers, full parser adapter suite, legal/eDiscovery/regulatory workflows, production migration, production retention services, live alerting, and environment promotion remain outside current claim; owner=platform-import-export-foundation; riskOwner=platform-import-export-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-213 and future legal/provider/migration issues if separately authorised"
     }
   ],
   "sdkDependencyGovernance": [
@@ -12134,6 +12212,39 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-163-import-export-bulk-deep-runtime",
+      "targetType": "source-issue-control-gate",
+      "target": "import-export-bulk-deep-runtime",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-163",
+        "accessModel=PDP-protected local bulk create read list validate preview approve start retry rollback purge paths only",
+        "authnAuthzBoundary=synthetic tenant context and synchronous PDP decisions",
+        "leastPrivilegePosture=requester self-approval denied and separate synthetic approver required",
+        "breakGlassRelevance=not-proven-by-USF-163",
+        "auditEvidence=value-free approval denial rollback purge legal-hold denial provider-transfer denial and lifecycle audit events",
+        "reviewCadence=2026-09-30",
+        "deprovisioningPosture=not-proven-by-USF-163",
+        "noPublicExposureClaim=true",
+        "publicBulkApiReadinessClaim=false"
+      ],
+      "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts",
+      "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
+      "deferredReason": "Public bulk APIs, admin UI, production approval workflow, break-glass operation, access review, deprovisioning, and production operator workflow are not proven by USF-163; owner=platform-import-export-foundation; reviewDate=2026-09-30; followUpIssue=USF-213",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -14255,6 +14366,42 @@
       "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts",
       "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
       "deferredReason": "Live distributed counter durability, provider-managed persistence, scheduled cleanup, DR, RPO, RTO, multi-region operation, and production abuse-control resilience are not proven by USF-161; owner=platform-guardrails-foundation; reviewDate=2026-09-30; followUpIssue=future live guardrails provider issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-163-import-export-bulk-deep-runtime",
+      "targetType": "source-issue-control-gate",
+      "target": "import-export-bulk-deep-runtime",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-163",
+        "readinessChecks=proof-local parser safety provider-transfer denial retry rollback purge and legal-hold assertions",
+        "retryTimeoutBehaviour=bounded retry/resume job dispatch only no live provider timeout claim",
+        "failClosedMode=unsafe file decompression-bomb provider-transfer preview mismatch requester self-approval legal-hold and missing permission deny safely",
+        "safeTeardown=hermetic in-memory stores only",
+        "structuredLogging=value-free proof result only",
+        "tracingCorrelation=correlation identifiers represented",
+        "metrics=operation job audit and signal counts only",
+        "auditEvents=value-free lifecycle denial rollback purge and evidence-package events",
+        "redaction=raw rows object keys endpoints credentials provider payloads stack traces and secrets excluded",
+        "backupRestorePosture=not-applicable-to-hermetic-proof-local-store",
+        "rpoRtoTarget=no-production-RPO-RTO-claim",
+        "deferredDrBoundary=production migration backup restore DR RPO RTO live provider resilience and production retention scheduler not proven"
+      ],
+      "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts",
+      "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
+      "deferredReason": "Production backup, restore, migration rollback, DR, RPO, RTO, live transfer provider resilience, and production retention scheduler operation are not proven; owner=platform-import-export-foundation; reviewDate=2026-09-30; followUpIssue=future backup/migration/provider issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -17125,6 +17272,37 @@
       "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts; tools/validate-parity/validate-guardrails.py",
       "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
       "deferredReason": "Production abuse triage, live alerting, on-call escalation, incident workflow execution, vulnerability SLA evidence, provider advisory response, corrective action operation, and post-incident evidence are not proven by USF-161; owner=platform-guardrails-foundation; reviewDate=2026-09-30; followUpIssue=future abuse-operations issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-163-import-export-bulk-deep-runtime",
+      "targetType": "source-issue-control-gate",
+      "target": "import-export-bulk-deep-runtime",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-163",
+        "incidentDetectionHook=local audit telemetry proof validator and planted-defect output only",
+        "alertingPosture=not-proven-by-USF-163",
+        "escalationOwner=platform-import-export-foundation",
+        "vulnerabilityAdvisoryReview=required-before-live-provider-or-parser-adapter-claim",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-163",
+        "correctiveActionEvidence=validator-and-PR-evidence-only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-163"
+      ],
+      "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts; tools/validate-parity/validate-bulk.py",
+      "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
+      "deferredReason": "Production incident hooks, paging, parser CVE workflow, external transfer provider advisory response, legal export incident workflow, corrective action operation, and post-incident evidence are not proven; owner=platform-import-export-foundation; reviewDate=2026-09-30; followUpIssue=future provider/parser/legal operations issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -20382,6 +20560,38 @@
       "evidenceSource": "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json; packages/proof/src/rate-limits-abuse-controls-proof.ts",
       "validationCommand": "make guardrails-proof; python3 tools/validate-parity/validate-guardrails.py all --json",
       "deferredReason": "Provider-managed privacy, raw traffic analytics, data residency, legal hold, production retention, retention purge operation, external subprocessor posture, and live abuse-provider privacy evidence are not proven by USF-161; owner=platform-guardrails-foundation; riskOwner=platform-guardrails-risk-owner; reviewDate=2026-09-30; followUpIssue=future live abuse provider issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-163-import-export-bulk-deep-runtime",
+      "targetType": "source-issue-control-gate",
+      "target": "proof:bulk synthetic import/export/bulk deep-runtime data boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-163",
+        "dataOrigin=synthetic-local-proof-data-only",
+        "piiPosture=no-production-PII-or-customer-data",
+        "dataClassification=security-sensitive-import-export-bulk-file-job-audit-retention-legal-hold-and-evidence-package-metadata",
+        "redactionPolicy=no-raw-row-object-key-endpoint-credential-token-secret-provider-error-provider-payload-stack-trace-or-production-data-in-proof-output",
+        "retentionPurgePosture=bounded-local-purge-and-legal-hold-denial-only-no-production-retention-readiness",
+        "legalHoldRelevance=bounded-local-legal-hold-purge-denial-only",
+        "dataResidencyCrossBorderBoundary=hermetic-local-only-no-production-residency-claim",
+        "providerTransferBoundary=provider-source-and-provider-destination-fail-closed-without-external-egress"
+      ],
+      "evidenceSource": "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json; packages/proof/src/import-export-bulk-proof.ts",
+      "validationCommand": "make bulk-proof; python3 tools/validate-parity/validate-bulk.py all --json",
+      "deferredReason": "Customer import/export privacy, DSR, legal export package privacy, data residency, custom retention, external transfer subprocessors, production retention purge operation, and live provider privacy evidence are not proven; owner=platform-import-export-foundation; riskOwner=platform-import-export-risk-owner; reviewDate=2026-09-30; followUpIssue=future privacy/legal/export provider issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
