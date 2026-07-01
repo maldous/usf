@@ -1,0 +1,18 @@
+{
+  "description": "USF-145 matrix claims production readiness.",
+  "expectedRule": "USF-CONFIG-022",
+  "mutation": {
+    "usf145MatrixSet": {
+      "claims": {
+        "liveSecretManagerClaim": false,
+        "kmsReadinessClaim": false,
+        "configSecretsReadinessClaim": false,
+        "productionReadinessClaim": true,
+        "iso27001CertificationClaim": false,
+        "fullDevReadinessClaim": false,
+        "fullReactParityClaim": false,
+        "usf133ClosureClaim": false
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Document type | Architecture / domain semantic standard |
-| Status | Draft / parity-config-secrets (USF-144) |
+| Status | Draft / parity-config-secrets (USF-144) plus bounded enterprise depth (USF-145) |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010; consistent with the audit-evidence standard and the Enterprise Persistence Metadata and Classification Standard |
 | Issue scope | USF-144 under USF-133; deferred depth tracked in USF-145 |
 | Evidence basis | Historical `../react` config/secrets behaviour as lineage only; PR 92 DB/RLS; PR 93 PDP; PR 94 audit/evidence |
@@ -27,7 +27,7 @@ Every config item declares: config_key, classification, scope, owner, type, requ
 
 ## 3. Precedence, override, and drift
 
-Deterministic precedence (lowest trust first): compiled-default, repository-default, environment, deployment, tenant, runtime-override, break-glass-override (`CONFIG_SCOPES`). A higher-trust permitted layer wins; a lower-trust layer MUST NOT override a higher-trust security control (`overrideAllowed`). Operator overrides are scoped/expiring/audited; break-glass overrides require reason, requester, approver, expiry, and audit evidence (fields defined; full workflow deferred, USF-145). `detectConfigDrift` reports unknown keys, missing required keys, and tenant overrides of security controls; provider mismatch, flag-out-of-schema, and stale-secret-version are reserved.
+Deterministic precedence (lowest trust first): compiled-default, repository-default, environment, deployment, tenant, runtime-override, break-glass-override (`CONFIG_SCOPES`). A higher-trust permitted layer wins; a lower-trust layer MUST NOT override a higher-trust security control (`overrideAllowed`). Operator overrides are scoped/expiring/audited; break-glass overrides require reason, requester, approver, expiry, and audit evidence. USF-145 adds bounded local separation-of-duties proof for the override workflow, including self-approval denial and security-control fail-closed behaviour. `detectConfigDrift` reports unknown keys, missing required keys, and tenant overrides of security controls; provider mismatch, flag-out-of-schema, and stale-secret-version remain stronger operational depth rather than readiness claims.
 
 ## 4. Environment separation
 
@@ -35,7 +35,7 @@ Environment classes: local-dev, local-composed-test, ci, staging, production (`E
 
 ## 5. Secret lifecycle and access
 
-Lifecycle states: created, active, deprecated, rotating, revoked, expired, destroyed, unknown (`SECRET_LIFECYCLE_STATES`). `SecretReference` carries secret_ref, secret_provider, scope, version, status, rotation_policy, last_rotated_at, next_rotation_due_at, owner — never the value. Secret values leave the secret adapter only via `SecretResolver.resolveSecretValue` to an authorised internal consumer; normal API routes never return secret values; tenant users never resolve provider credentials; expired/revoked/unknown states fail closed (no silent downgrade). Secret access requires actor/tenant/scope/purpose and is audited without value. Live external Vault/Key Vault/KMS/OpenBao is a declared, deferred port (`ExternalSecretManager`, USF-145); no live integration.
+Lifecycle states: created, active, deprecated, rotating, revoked, expired, destroyed, unknown (`SECRET_LIFECYCLE_STATES`). `SecretReference` carries secret_ref, secret_provider, scope, version, status, rotation_policy, last_rotated_at, next_rotation_due_at, owner — never the value. Secret values leave the secret adapter only via `SecretResolver.resolveSecretValue` to an authorised internal consumer; normal API routes never return secret values; tenant users never resolve provider credentials; expired/revoked/unknown states fail closed (no silent downgrade). Secret access requires actor/tenant/scope/purpose and is audited without value. USF-145 adds bounded local rotation-posture proof using versions, rotating state, authorised internal resolution, and value-free audit/evidence output. Live external Vault/Key Vault/KMS/OpenBao readiness remains a non-claim; the local OpenBao composed-test binding is reconciled only as bounded local provider evidence.
 
 ## 6. Redaction and leak prevention
 
@@ -43,7 +43,7 @@ Lifecycle states: created, active, deprecated, rotating, revoked, expired, destr
 
 ## 7. Provider configuration safety
 
-Provider config classifies provider_type, provider_mode, endpoint, allowed_hosts, allowed_schemes, tls_required, timeout/retry/circuit-breaker policy, credential_ref, tenant_scope, data_classification, egress_policy. No provider endpoint defaults to an arbitrary user URL; TLS required unless documented local-only; provider credentials are secret references; provider mode distinguishes in-memory, local-composed-test, mock, live-external. Live-external-provider readiness is NOT claimed. The full per-provider plane (allow-lists/egress/circuit breakers) lands with the files/jobs/notifications/integration domains (USF-145).
+Provider config classifies provider_type, provider_mode, endpoint, allowed_hosts, allowed_schemes, tls_required, timeout/retry/circuit-breaker policy, credential_ref, tenant_scope, data_classification, egress_policy. No provider endpoint defaults to an arbitrary user URL; TLS required unless documented local-only; provider credentials are secret references; provider mode distinguishes in-memory, local-composed-test, mock, live-external. USF-145 adds bounded local provider-configuration-plane proof for provider mode, secret-reference credential posture, local transport boundary, timeout/retry posture, OpenBao service-catalogue linkage, no external egress, and data-residency local-compose boundary. Live-external-provider, KMS, staging, and production readiness are NOT claimed.
 
 ## 8. Feature flags
 
@@ -63,20 +63,20 @@ Events (PR 94 audit model, category configuration): config.read, config.changed,
 
 ## 12. Runtime reload and cache invalidation (reserved)
 
-Reserved fields: cache_key, scope, version, ttl, invalidation_event, reload_strategy, last_loaded_at, source_hash. No live reload/cache exists in this slice; it is deferred (USF-145). When implemented, the cache MUST be scoped by tenant/environment/provider, a cache miss MUST reload-and-validate (never permit by default), and cache failure for security controls MUST fail closed.
+Reserved fields: cache_key, scope, version, ttl, invalidation_event, reload_strategy, last_loaded_at, source_hash. USF-145 adds bounded local runtime reload/cache invalidation proof: cache keys are tenant/config scoped, stale reads are version bounded, invalidation reloads and validates, and security-control failures remain fail closed. Distributed runtime reload and fleet-wide cache invalidation remain non-claims.
 
 ## 13. Schema versioning and compatibility
 
-Every config item carries a schema_version (`CONFIG_SCHEMA_VERSION`). Unknown future versions fail safely; deprecated keys remain readable only if explicitly supported; a deterministic migration tool for breaking shape changes is deferred (USF-145).
+Every config item carries a schema_version (`CONFIG_SCHEMA_VERSION`). USF-145 adds bounded local schema migration proof for deterministic config-0 to current-schema migration and unknown future-version fail-closed behaviour. Production config migration tooling, rollback, release approval, and staging readiness remain non-claims.
 
 ## 14. Data residency and tenant boundary
 
-Tenant config carries tenant scope; provider config carries tenant/global scope. Tenant A cannot read or infer tenant B config (layer provider keyed by tenant; PDP + tenant context). Cross-tenant provider sharing is explicit; residency reserved fields are defined and enforcement is deferred (USF-145).
+Tenant config carries tenant scope; provider config carries tenant/global scope. Tenant A cannot read or infer tenant B config (layer provider keyed by tenant; PDP + tenant context). Cross-tenant provider sharing is explicit. USF-145 adds bounded local data-residency proof for OpenBao local-compose provider region and allowed-region enforcement. Production residency, cross-border transfer governance, and supplier/subprocessor evidence remain non-claims.
 
 ## 15. Validator expectations
 
-`tools/validate-parity/validate-config.py` fails closed when: config lacks classification; config lacks owner/scope; required config does not fail closed; secret-reference model is missing; secret-like keys are not blocked; a secret value appears in OpenAPI; config retrieval is not PDP-protected or not tenant-scoped; secret access is not PDP-guarded/audited; feature flags lack a safe default; config-change evidence is not value-free; live secret-manager/provider/production-live is overclaimed; provider credentials are not secret references; config routes are not tenant-guarded; or the parity matrix config row lacks tests/proofs. Each rule has a planted defect under `tools/validate-parity/config-planted-defects`.
+`tools/validate-parity/validate-config.py` fails closed when: config lacks classification; config lacks owner/scope; required config does not fail closed; secret-reference model is missing; secret-like keys are not blocked; a secret value appears in OpenAPI; config retrieval is not PDP-protected or not tenant-scoped; secret access is not PDP-guarded/audited; feature flags lack a safe default; config-change evidence is not value-free; live secret-manager/provider/production-live is overclaimed; provider credentials are not secret references; config routes are not tenant-guarded; the parity matrix config row lacks tests/proofs; USF-145 enterprise depth matrix or enterprise evidence linkage is missing; USF-145 proof tokens are missing; OpenBao reconciliation is unsafe; or readiness/certification claims are overclaimed. Each rule has a planted defect under `tools/validate-parity/config-planted-defects`.
 
 ## 16. Deferred config/secrets depth (USF-145)
 
-Live external secret managers (OpenBao/Postgres/Vault/Key Vault/KMS) behind the port; secret rotation/revocation execution; DB-backed config + tenant_settings store and change history; config override approval workflow + separation of duties; runtime reload + cache invalidation; full provider configuration plane; data residency enforcement; config schema migration tooling. Each has a retry condition in USF-145. None is overclaimed in the parity matrix while open.
+USF-145 records `docs/architecture/config-secrets-enterprise-proof-depth-matrix.json` and extends `make config-proof` with bounded local evidence for OpenBao composed-test reconciliation, secret rotation posture, tenant settings and config history, override separation of duties, runtime reload/cache invalidation, provider configuration plane, local-compose data residency, config schema migration, and redaction/non-leakage. This is still bounded local proof. Live external secret-manager readiness, KMS custody, production DB-backed config store, distributed runtime reload, production residency governance, production config migration, staging/production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure are not claimed.

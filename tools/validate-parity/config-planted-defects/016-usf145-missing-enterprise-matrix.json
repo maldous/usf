@@ -1,0 +1,9 @@
+{
+  "description": "USF-145 enterprise config/secrets matrix does not identify the source issue.",
+  "expectedRule": "USF-CONFIG-016",
+  "mutation": {
+    "usf145MatrixSet": {
+      "sourceIssue": "USF-999"
+    }
+  }
+}

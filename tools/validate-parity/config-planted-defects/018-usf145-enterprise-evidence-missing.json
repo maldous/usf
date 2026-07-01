@@ -1,0 +1,7 @@
+{
+  "description": "USF-145 enterprise evidence model row is missing.",
+  "expectedRule": "USF-CONFIG-018",
+  "mutation": {
+    "enterpriseRemoveIds": ["evidence-usf-145-config-secrets-enterprise-proof-depth"]
+  }
+}

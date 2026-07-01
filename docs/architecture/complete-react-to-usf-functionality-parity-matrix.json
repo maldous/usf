@@ -76,9 +76,9 @@
       ],
       "evidence_grade": "A",
       "react_evidence_summary": "Config/runtime secret lineage",
-      "readiness_impact": "OpenBao is local; live secret-manager readiness not claimed.",
-      "tracking_carrier_or_recommendation": "USF-144/USF-145",
-      "usf_evidence_summary": "USF config proof",
+      "readiness_impact": "USF-145 adds bounded local enterprise config/secrets proof depth for OpenBao composed-test reconciliation, secret rotation posture, tenant settings, value-free change history, override separation-of-duties, runtime reload/cache invalidation, provider config plane, data residency, schema migration, and secret-reference redaction. Live secret-manager, KMS, staging, production, SOC, ISO certification, full dev readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-144/USF-145 plus environment semantics in USF-193 for stronger readiness claims",
+      "usf_evidence_summary": "USF config proof, config-secrets enterprise proof-depth matrix, validate-config USF-CONFIG-001..022 with planted defects, and enterprise evidence rows",
       "usf_status": "migrated"
     },
     {

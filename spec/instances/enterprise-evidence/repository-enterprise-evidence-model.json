@@ -4797,6 +4797,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-145-config-secrets-enterprise-proof-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-145 enterprise config and secrets depth controls for OpenBao reconciliation, secret rotation posture, DB-backed config boundary, change history, override workflow, runtime reload, provider config plane, data residency, schema migration, and redaction.",
+      "riskTreated": "Deferred config and secrets depth could be hidden behind the core config proof, allowing unsupported live secret-manager, KMS, rotation, override workflow, provider config-plane, production, or certification claims.",
+      "assetServiceAffected": "config registry; secret references; in-memory config layer provider; OpenBao composed-test provider; provider configuration plane",
+      "owner": "platform-security-foundation",
+      "riskOwner": "platform-security-risk-owner",
+      "controlOwner": "platform-security-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-145; laneIssue=USF-190; currentEvidence=evidence-usf-145-config-secrets-enterprise-proof-depth; deferredBoundary=live secret-manager, KMS, production DB-backed config store, distributed runtime reload, production residency, and production config migration; noRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/config-secrets-enterprise-proof-depth-matrix.json; packages/proof/src/config-secrets-proof.ts; tools/validate-parity/validate-config.py",
+      "validationCommand": "make config-proof; python3 tools/validate-parity/validate-config.py all --json",
+      "deferredReason": "riskStatement=Config and secrets enterprise depth needs bounded proof without implying live secret-manager or KMS readiness.; threatFailureScenario=Core config proof or OpenBao composed-test proof is mistaken for secret-manager readiness, rotation operations, provider config-plane readiness, or production config governance.; affectedAssetService=config registry and secret provider boundary; impact=critical; likelihood=medium; owner=platform-security-foundation; treatment=mitigate with bounded local proof and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-193 for environment-promotion semantics only; exceptionOwner=platform-security-risk-owner; exceptionReason=live provider, KMS, production DB, and production operations remain outside USF-145 bounded local proof; compensatingControl=validate-config plus config-secrets-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-config.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -6912,6 +6938,28 @@
       ],
       "prOrMergeSha": "069c1a1fdd1d622215d435ba34423e8387ba2ef0",
       "retentionPosture": "Retain committed proof code, audit-enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw audit payload, key material, secret value, provider payload, or production data is retained."
+    },
+    {
+      "id": "evidence-usf-145-config-secrets-enterprise-proof-depth",
+      "proofResult": "proof:config",
+      "whatWasProven": "make config-proof is the command-pinned bounded local proof for USF-145. It proves OpenBao composed-test provider registry reconciliation without live secret-manager or KMS claims, secret rotation posture with versions and value-free audit evidence, tenant-scoped config settings, hash-only config change history, override separation of duties and self-approval denial, runtime reload and cache invalidation posture, provider configuration plane credential references, local-compose data residency enforcement, deterministic schema migration, and secret-reference redaction boundaries.",
+      "whatWasNotProven": "No live external secret-manager readiness, KMS custody, production DB-backed config store, distributed runtime reload, production data residency governance, production config migration, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure is proven.",
+      "runtimeMode": "hermetic-proof-plus-composed-provider-registry-reconciliation",
+      "providerMode": "hermetic-mock-with-openbao-composed-test-reference",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#openbao",
+      "adapterProviderId": "secret-store-openbao-composed-test",
+      "validationCommand": "make config-proof; python3 tools/validate-parity/validate-config.py all --json",
+      "commandPin": "tsx packages/proof/src/config-secrets-proof.ts",
+      "commitPin": "cadfa586fcad15d673669ef65dcfc2caccd7600a",
+      "issueLinks": [
+        "USF-145",
+        "USF-190",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "cadfa586fcad15d673669ef65dcfc2caccd7600a",
+      "retentionPosture": "Retain committed proof code, config-secrets enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw secret value, credential, token, raw endpoint, provider payload, or production data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8722,6 +8770,34 @@
       "failClosedBehaviour": "validate-audit USF-AUDIT-014 through USF-AUDIT-019 block missing matrix, missing proof coverage, missing evidence linkage, unsafe deferrals, and overclaims.",
       "monitoringAuditEvidence": "make audit-proof output and validator findings only; no live monitoring backend, no raw provider payload, no production incident claim.",
       "residualRisk": "Live KMS/HSM custody, live SIEM integration, public export API, production retention operations, customer-facing evidence packages, and production incident handling remain non-claims."
+    },
+    {
+      "id": "threat-usf-145-config-secrets-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-145 enterprise config/secrets proof depth",
+      "trustBoundary": "Local config proof and provider registry metadata are trusted only for bounded local evidence; generated reports, Linear text, and proof output do not upgrade to live secret-manager, KMS, production config, or environment readiness.",
+      "tenantBoundary": "Tenant config and secret reference checks use deterministic synthetic tenant ids; cross-tenant reads and tenant-to-tenant secret resolution remain fail-closed.",
+      "credentialBoundary": "Secret values remain inside authorised resolver boundaries; proof output, audit evidence, validation errors, config output, and enterprise evidence carry secret references or hashes only.",
+      "dataClassification": "security-sensitive config metadata, synthetic secret references, value-free audit evidence, no production-derived data",
+      "abuseCases": [
+        "core config proof treated as full config/secrets readiness",
+        "OpenBao composed-test registry entry treated as live secret-manager or KMS readiness",
+        "secret value appears in proof output, audit evidence, validation error, or enterprise evidence",
+        "tenant override weakens security control",
+        "operator override self-approval bypasses separation of duties",
+        "runtime cache serves stale security-control config after invalidation",
+        "local data residency evidence mistaken for production residency governance"
+      ],
+      "failureModes": [
+        "USF-145 matrix missing a control",
+        "proof token removed while matrix still claims the control",
+        "readiness claim set true in matrix or proof output",
+        "enterprise evidence row missing commit or issue links",
+        "OpenBao reconciliation loses local-only non-claim boundary"
+      ],
+      "failClosedBehaviour": "validate-config USF-CONFIG-016 through USF-CONFIG-022 block missing matrix, missing proof coverage, missing enterprise linkage, unsafe OpenBao reconciliation, and readiness overclaims.",
+      "monitoringAuditEvidence": "make config-proof output and validator findings only; no live monitoring backend, no raw secret values, no provider payload, no production incident claim.",
+      "residualRisk": "Live secret-manager operation, KMS custody, production DB-backed config store, distributed reload, production residency governance, production config migration, environment promotion, and live-provider operation remain non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -15891,6 +15967,34 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "incident-usf-145-config-secrets-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-145 config/secrets incident and vulnerability evidence posture",
+      "posture": [
+        "incidentDetectionHook=local-config-validation-and-secret-access-denial-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-security-risk-owner",
+        "vulnerabilityAdvisoryReview=OpenBao-node-vault-and-config-provider-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-sdk-or-provider-dependency-added-by-USF-145",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/config-secrets-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-config.py all --json",
+      "deferredReason": "Production secret incident hooks, paging, escalation execution, patch SLA evidence, live secret-manager advisory response, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -18894,6 +18998,35 @@
       "evidenceSource": "packages/proof/src/audit-evidence-proof.ts",
       "validationCommand": "make audit-proof",
       "deferredReason": "Customer audit payload export, DSR, residency, retention operation, legal hold workflow, and live SIEM privacy posture remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-145-config-secrets-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-145 proof:config synthetic config and secret data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=security-sensitive-config-metadata-and-synthetic-secret-references",
+        "redactionPolicy=secret-values-never-emitted-secret-shaped-config-values-redacted",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed-for-config-secret-values",
+        "dataResidencyCrossBorderBoundary=local-compose-only-no-production-residency-claim"
+      ],
+      "evidenceSource": "packages/proof/src/config-secrets-proof.ts",
+      "validationCommand": "make config-proof",
+      "deferredReason": "Customer secret-manager privacy posture, production data residency, DSR, legal hold, custom retention, and live provider privacy remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

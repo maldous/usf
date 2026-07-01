@@ -1,0 +1,11 @@
+{
+  "description": "USF-145 OpenBao reconciliation omits live secret-manager non-claim evidence.",
+  "expectedRule": "USF-CONFIG-021",
+  "mutation": {
+    "replace": {
+      "old": "liveSecretManagerClaim: false",
+      "new": "liveSecretManagerClaim: true"
+    },
+    "file": "packages/proof/src/config-secrets-proof.ts"
+  }
+}

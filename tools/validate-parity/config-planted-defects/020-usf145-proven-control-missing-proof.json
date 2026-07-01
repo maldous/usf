@@ -1,0 +1,12 @@
+{
+  "description": "USF-145 proven config/secrets control lacks proof command metadata.",
+  "expectedRule": "USF-CONFIG-020",
+  "mutation": {
+    "usf145ControlSet": {
+      "id": "provider-configuration-plane",
+      "values": {
+        "proofCommand": "__DELETE__"
+      }
+    }
+  }
+}

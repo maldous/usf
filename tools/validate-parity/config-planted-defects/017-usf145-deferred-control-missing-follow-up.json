@@ -1,0 +1,14 @@
+{
+  "description": "USF-145 deferred config/secrets control is missing follow-up metadata.",
+  "expectedRule": "USF-CONFIG-017",
+  "mutation": {
+    "usf145ControlSet": {
+      "id": "secret-rotation-posture",
+      "values": {
+        "status": "deferred-with-owner",
+        "followUpIssue": "__DELETE__",
+        "reviewDate": "__DELETE__"
+      }
+    }
+  }
+}

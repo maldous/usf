@@ -1,0 +1,11 @@
+{
+  "description": "USF-145 config proof lacks a required enterprise-depth proof token.",
+  "expectedRule": "USF-CONFIG-019",
+  "mutation": {
+    "replace": {
+      "old": "proveRuntimeReloadCacheInvalidation",
+      "new": "runtimeReloadTokenRemovedForPlantedDefect"
+    },
+    "file": "packages/proof/src/config-secrets-proof.ts"
+  }
+}
