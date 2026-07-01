@@ -72,9 +72,7 @@ export interface TenantSsoConnection {
   readonly attributeMappingPolicy: readonly string[];
   readonly groupMappingPolicy: readonly string[];
   readonly jitProvisioningPolicy:
-    | "disabled"
-    | "pending-membership-only"
-    | "active-non-privileged-membership";
+    "disabled" | "pending-membership-only" | "active-non-privileged-membership";
 }
 
 export interface IdentityInvitation {
@@ -237,7 +235,9 @@ export interface EnterpriseIdentityControlPlane {
       | "stale_session_used"
       | "revoked_membership_used"
       | "token_replay_suspected",
-  ): Promise<EnterpriseIdentityOutcome<{ readonly signalRecorded: true; readonly liveSiemClaim: false }>>;
+  ): Promise<
+    EnterpriseIdentityOutcome<{ readonly signalRecorded: true; readonly liveSiemClaim: false }>
+  >;
   getConnection(connectionId: string): TenantSsoConnection | undefined;
 }
 
@@ -473,7 +473,9 @@ export function createEnterpriseIdentityControlPlane(
         ...owned.value,
         approvedBy: approverContext.actorId,
         connectionStatus:
-          owned.value.domainVerificationStatus === "verified" ? "pending-approval" : "pending-verification",
+          owned.value.domainVerificationStatus === "verified"
+            ? "pending-approval"
+            : "pending-verification",
       });
       await audit({
         eventType: "tenant_sso.configured",
@@ -549,7 +551,12 @@ export function createEnterpriseIdentityControlPlane(
     async activateSsoConnection(context, connectionId) {
       const owned = getOwnedConnection(context, connectionId);
       if (!owned.ok) return owned;
-      const permitted = await requirePermit(context, "tenant_sso.activate", "tenant-sso", connectionId);
+      const permitted = await requirePermit(
+        context,
+        "tenant_sso.activate",
+        "tenant-sso",
+        connectionId,
+      );
       if (!permitted.ok) return permitted;
       if (!owned.value.approvedBy || owned.value.domainVerificationStatus !== "verified") {
         return deny("approval-or-domain-verification-missing", permitted.value);
@@ -575,7 +582,12 @@ export function createEnterpriseIdentityControlPlane(
     async suspendSsoConnection(context, connectionId) {
       const owned = getOwnedConnection(context, connectionId);
       if (!owned.ok) return owned;
-      const permitted = await requirePermit(context, "tenant_sso.suspend", "tenant-sso", connectionId);
+      const permitted = await requirePermit(
+        context,
+        "tenant_sso.suspend",
+        "tenant-sso",
+        connectionId,
+      );
       if (!permitted.ok) return permitted;
       const next = update({
         ...owned.value,
@@ -598,7 +610,12 @@ export function createEnterpriseIdentityControlPlane(
     async revokeSsoConnection(context, connectionId) {
       const owned = getOwnedConnection(context, connectionId);
       if (!owned.ok) return owned;
-      const permitted = await requirePermit(context, "tenant_sso.revoke", "tenant-sso", connectionId);
+      const permitted = await requirePermit(
+        context,
+        "tenant_sso.revoke",
+        "tenant-sso",
+        connectionId,
+      );
       if (!permitted.ok) return permitted;
       const next = update({
         ...owned.value,
@@ -654,7 +671,12 @@ export function createEnterpriseIdentityControlPlane(
     },
 
     async issueInvitation(context, input) {
-      const permitted = await requirePermit(context, "tenant_sso.configure", "identity-invitation", "new");
+      const permitted = await requirePermit(
+        context,
+        "tenant_sso.configure",
+        "identity-invitation",
+        "new",
+      );
       if (!permitted.ok) return permitted;
       const invitationId = stableId("invite", [context.tenantId, input.email, input.expiresAt]);
       const invitation = freeze({
@@ -795,7 +817,10 @@ export function createEnterpriseIdentityControlPlane(
         resourceType: "tenant-sso-mapping",
         resourceId: context.tenantId,
         decision: permitted.value,
-        metadata: { mappedAttributeCount: Object.keys(mapped).length, proposedGroupCount: proposedGroups.length },
+        metadata: {
+          mappedAttributeCount: Object.keys(mapped).length,
+          proposedGroupCount: proposedGroups.length,
+        },
       });
       return permit(
         {

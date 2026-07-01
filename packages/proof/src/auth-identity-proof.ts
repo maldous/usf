@@ -597,11 +597,17 @@ async function main() {
     assuranceLevel: "loa2-mfa-or-stronger",
   });
   if (!firstLink.ok || !secondLink.ok) throw new Error("account linking setup failed");
-  const unlinkOne = await enterpriseIdentity.unlinkIdentity(requesterContext, firstLink.value.linkId);
+  const unlinkOne = await enterpriseIdentity.unlinkIdentity(
+    requesterContext,
+    firstLink.value.linkId,
+  );
   if (!unlinkOne.ok || unlinkOne.value.status !== "unlinked") {
     throw new Error("account unlink did not succeed with another login method retained");
   }
-  const unlinkLast = await enterpriseIdentity.unlinkIdentity(requesterContext, secondLink.value.linkId);
+  const unlinkLast = await enterpriseIdentity.unlinkIdentity(
+    requesterContext,
+    secondLink.value.linkId,
+  );
   if (unlinkLast.ok || unlinkLast.reasonCode !== "last-login-method-denied") {
     throw new Error("last login method unlink did not fail closed");
   }
@@ -667,7 +673,10 @@ async function main() {
   }
   pass("browser login/callback/cookie semantics are represented and fail closed locally");
 
-  const threat = await enterpriseIdentity.emitThreatSignal(requesterContext, "token_replay_suspected");
+  const threat = await enterpriseIdentity.emitThreatSignal(
+    requesterContext,
+    "token_replay_suspected",
+  );
   if (!threat.ok || threat.value.liveSiemClaim !== false) {
     throw new Error("threat signal evidence made a live SIEM claim");
   }

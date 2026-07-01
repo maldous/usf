@@ -355,10 +355,12 @@ describe("keycloak auth orchestration", () => {
       await identity.approveSsoConnection(requester, requester, requested.value.connectionId),
     ).toMatchObject({ ok: false, reasonCode: "requester-approver-same" });
     expect(
-      (await identity.verifyDomain(requester, requested.value.connectionId, {
-        domain: "example.test",
-        method: "admin-approval",
-      })).ok,
+      (
+        await identity.verifyDomain(requester, requested.value.connectionId, {
+          domain: "example.test",
+          method: "admin-approval",
+        })
+      ).ok,
     ).toBe(true);
     expect(
       (await identity.approveSsoConnection(requester, approver, requested.value.connectionId)).ok,
