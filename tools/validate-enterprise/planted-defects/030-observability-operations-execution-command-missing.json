@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-ENTERPRISE-030",
+  "packageScriptDrop": [
+    "proof:observability:operations-execution"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf222-execution-evidence-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-019",
+  "edits": [
+    {
+      "target": "operations_execution_depth",
+      "old": "\"alertRoutedToSyntheticReceiver\": true",
+      "new": "\"alertRoutedToSyntheticReceiver\": false"
+    }
+  ]
+}

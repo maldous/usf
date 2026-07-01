@@ -5,6 +5,7 @@ import {
   runDevSmoke,
   runJobsWorkflowsProof,
   runImportExportBulkProof,
+  runObservabilityOperationsExecutionProof,
   runObservabilityTelemetryProof,
   runProviderAdaptersProof,
   runRateLimitsAbuseControlsProof,
@@ -165,6 +166,40 @@ describe("observability/telemetry proof", () => {
       liveAlertingClaim: false,
       siemReadinessClaim: false,
       productionLiveClaim: false,
+    });
+  });
+});
+
+describe("observability operations execution proof", () => {
+  it("proves bounded local alert dashboard incident retention and aggregate workflows without readiness claims", async () => {
+    await expect(runObservabilityOperationsExecutionProof()).resolves.toMatchObject({
+      status: "pass",
+      issueId: "USF-222",
+      predecessorIssueId: "USF-218",
+      providerMode: "hermetic-mock",
+      evidence: {
+        alertRuleEvaluated: true,
+        alertRoutedToSyntheticReceiver: true,
+        dashboardRuntimeRendered: true,
+        incidentCreated: true,
+        incidentAcknowledged: true,
+        incidentCorrectiveActionRecorded: true,
+        incidentResolved: true,
+        sliCalculated: true,
+        sloEvaluated: true,
+        retentionPurgeExecuted: true,
+        crossTenantAggregateChecked: true,
+        crossTenantAggregateTenantNamesSuppressed: true,
+        tenantIsolationChecked: true,
+        auditEvidenceCaptured: true,
+        redactionChecked: true,
+        liveProviderReadinessClaim: false,
+        alertingReadinessClaim: false,
+        dashboardReadinessClaim: false,
+        incidentResponseReadinessClaim: false,
+        serviceReadinessClaim: false,
+        usf133ClosureClaim: false,
+      },
     });
   });
 });

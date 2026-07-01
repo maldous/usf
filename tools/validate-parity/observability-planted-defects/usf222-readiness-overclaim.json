@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf222-readiness-overclaim",
+  "expectedRuleId": "USF-OBSERVABILITY-020",
+  "edits": [
+    {
+      "target": "operations_execution_depth",
+      "old": "\"alertingReadinessClaim\": false",
+      "new": "\"alertingReadinessClaim\": true"
+    }
+  ]
+}

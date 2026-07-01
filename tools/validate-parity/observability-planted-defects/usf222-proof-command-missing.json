@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf222-proof-command-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-019",
+  "edits": [
+    {
+      "target": "package.json",
+      "old": "\"tsx packages/proof/src/observability-operations-execution-proof.ts\"",
+      "new": "\"tsx packages/proof/src/observability-operations-execution-proof-missing.ts\""
+    }
+  ]
+}
