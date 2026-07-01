@@ -375,10 +375,10 @@
       ],
       "evidence_grade": "D",
       "react_evidence_summary": "Sentry adapter and 20 compose services",
-      "readiness_impact": "Decide whether Sentry service parity is required or observability proof suffices.",
-      "tracking_carrier_or_recommendation": "draft decision required",
-      "usf_evidence_summary": "Local telemetry only",
-      "usf_status": "requires-human-decision"
+      "readiness_impact": "USF-170 records bounded Sentry/error-monitoring disposition, USF-196 records the service-semantic boundary, USF-205 proves an accepted official Sentry SDK envelope, and USF-218 owns remaining service, alert, dashboard, incident, retention, aggregate, and live monitoring depth. No Sentry service readiness or live monitoring readiness is claimed.",
+      "tracking_carrier_or_recommendation": "USF-170/USF-196/USF-205 plus current open blocker USF-218",
+      "usf_evidence_summary": "Local observability evidence plus bounded Sentry SDK-envelope proof; Sentry service readiness, alert handoff, incident workflow, dashboard runtime, and live-provider evidence remain deferred with owner.",
+      "usf_status": "bounded-sdk-envelope-proof"
     },
     {
       "blocking_level": "P1",
@@ -415,10 +415,10 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "pgbackrest compose service lineage",
-      "readiness_impact": "Backup/restore service proof remains absent.",
-      "tracking_carrier_or_recommendation": "new blocker recommended",
-      "usf_evidence_summary": "DB proof only",
-      "usf_status": "deferred"
+      "readiness_impact": "USF-177 records backup/restore provider disposition, USF-202 records the proof boundary, USF-211 proves bounded pgBackRest configured local cold backup/restore, and USF-219 owns remaining DR, RPO/RTO, PITR, scheduled backup, corruption/failure drill, and operational recovery depth. No backup/restore readiness is claimed.",
+      "tracking_carrier_or_recommendation": "USF-177/USF-202/USF-211 plus current open blocker USF-219",
+      "usf_evidence_summary": "Bounded local pgBackRest cold backup/restore evidence exists; online backup, WAL archive, PITR, DR, RPO/RTO, provider-managed operation, API/worker backup integration, and environment readiness remain deferred with owner.",
+      "usf_status": "deferred-with-owner"
     },
     {
       "blocking_level": "P1",
@@ -435,10 +435,10 @@
       ],
       "evidence_grade": "D",
       "react_evidence_summary": "Compose admin services and forward-auth comments",
-      "readiness_impact": "Need explicit operator surface set and auth model before close.",
-      "tracking_carrier_or_recommendation": "draft decision required",
-      "usf_evidence_summary": "Partial local services, missing access proof",
-      "usf_status": "requires-human-decision"
+      "readiness_impact": "USF-169 proves bounded included operator access posture, USF-180 owns gateway/clickthrough substrate depth, and USF-217 owns remaining access review, deprovisioning, break-glass, audit, tenant, secret, privacy, and console-surface depth. No operator-console readiness or public exposure claim is made.",
+      "tracking_carrier_or_recommendation": "USF-169/USF-180 plus current open blocker USF-217",
+      "usf_evidence_summary": "Operator/admin surfaces have bounded access posture evidence for included surfaces; console access review, deprovisioning, clickthrough, and public exposure remain deferred with owner.",
+      "usf_status": "deferred-with-owner"
     },
     {
       "blocking_level": "P1",
@@ -515,10 +515,10 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "infra-aws, infra-cloudflare, tooling-terraform",
-      "readiness_impact": "No live cloud/edge/deployment readiness claimed.",
-      "tracking_carrier_or_recommendation": "future environment blockers",
-      "usf_evidence_summary": "Out of local foundation scope",
-      "usf_status": "deferred"
+      "readiness_impact": "No live cloud, edge, deployment, staging, or production readiness is claimed. USF-193 owns environment promotion definitions and readiness gates; USF-220 owns generated-client and external developer delivery depth where it touches platform delivery posture.",
+      "tracking_carrier_or_recommendation": "USF-193 plus USF-220 where external developer delivery posture is implicated",
+      "usf_evidence_summary": "Out of local foundation runtime scope for USF-133; environment promotion and external delivery boundaries are explicit non-claims with current owner issues.",
+      "usf_status": "deferred-with-owner"
     },
     {
       "blocking_level": "non-blocking",
@@ -555,10 +555,10 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "i18n-runtime package lineage",
-      "readiness_impact": "Need decide if foundation requires i18n contracts before UI work.",
-      "tracking_carrier_or_recommendation": "future UI/API blocker",
-      "usf_evidence_summary": "Future UI/API posture only",
-      "usf_status": "deferred"
+      "readiness_impact": "Foundation i18n contract depth remains outside the current local runtime proof. USF-134 owns non-foundation UI/UX context and USF-220 owns generated client or external developer delivery surfaces if i18n becomes an API/client contract requirement.",
+      "tracking_carrier_or_recommendation": "USF-134 plus USF-220 if external client contract delivery is implicated",
+      "usf_evidence_summary": "Future UI/API posture only; no i18n runtime, generated client i18n, or UI readiness claim is made.",
+      "usf_status": "deferred-with-owner"
     },
     {
       "blocking_level": "P1",
@@ -575,9 +575,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "React package scripts and Makefile lineage",
-      "readiness_impact": "Commands exist, but Sonar/Sentry/compose-universal command parity remains incomplete.",
-      "tracking_carrier_or_recommendation": "USF-133 follow-up",
-      "usf_evidence_summary": "USF make proof ladder",
+      "readiness_impact": "Commands exist for bounded local proof lanes, but operator/admin, observability service, backup/restore DR, generated-client delivery, and environment-promotion proof depth remain separate owner issues before any broad command or readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-218, USF-219, and USF-220",
+      "usf_evidence_summary": "USF make proof ladder plus bounded provider/service proof commands; universal React command parity and environment readiness remain unclaimed.",
       "usf_status": "partial"
     },
     {
@@ -595,9 +595,9 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "React compose and todo enterprise requirements",
-      "readiness_impact": "Need durable service catalogue or accepted matrix before close.",
-      "tracking_carrier_or_recommendation": "new tracker recommended",
-      "usf_evidence_summary": "This review matrix only",
+      "readiness_impact": "USF-168 created the semantic service catalogue authority, USF-167 records the service disposition execution gate, and USF-216 reconciles final stale matrix and blocker wording. The catalogue remains evidence organization and does not close USF-133.",
+      "tracking_carrier_or_recommendation": "USF-168/USF-167/USF-216",
+      "usf_evidence_summary": "Semantic service catalogue, service disposition closure matrix, closure-tier gate, and final reconciliation evidence exist; broader readiness remains open.",
       "usf_status": "partial"
     },
     {
@@ -615,9 +615,9 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "React compose comments and packages",
-      "readiness_impact": "Need complete data-flow/trust-boundary review for missing optional services.",
-      "tracking_carrier_or_recommendation": "new tracker recommended",
-      "usf_evidence_summary": "Standards only",
+      "readiness_impact": "Data-flow and trust-boundary depth is represented through service catalogue posture, enterprise evidence, runtime proof manifests, and the remaining owner issues for operator/admin, observability operations, backup/restore DR, generated-client delivery, and environment promotion.",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-218, USF-219, and USF-220",
+      "usf_evidence_summary": "Standards plus governed service, provider, runtime, and enterprise evidence rows; residual cross-boundary depth remains deferred with current owner issues.",
       "usf_status": "partial"
     }
   ],
@@ -639,13 +639,14 @@
   "run_id": "20260629T053504Z-a285187",
   "status": "review-draft",
   "status_counts": {
-    "deferred": 3,
-    "deferred-with-owner": 1,
-    "migrated": 5,
+    "bounded-local-proof-and-reclassified-depth": 3,
+    "bounded-sdk-envelope-proof": 1,
+    "deferred": 1,
+    "deferred-with-owner": 5,
+    "migrated": 7,
     "not-applicable": 1,
-    "partial": 12,
-    "profile-gated-bounded-proof": 4,
-    "requires-human-decision": 5
+    "partial": 7,
+    "profile-gated-bounded-proof": 6
   },
   "usf_head": "a285187b177a922ff422858c1bf8f180336f1dff"
 }

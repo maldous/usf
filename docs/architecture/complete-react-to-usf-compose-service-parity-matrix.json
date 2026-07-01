@@ -170,7 +170,7 @@
       "criticality": "high",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF does not compose Caddy/forward-auth operator gateway.",
+      "gap_or_decision": "USF does not compose Caddy/forward-auth operator gateway. USF-169 records bounded operator access posture, USF-180 tracks gateway/clickthrough substrate proof, and USF-217 owns remaining operator/admin console access review and deprovisioning proof depth.",
       "legacy_service_category": "gateway-operator-access",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -179,8 +179,8 @@
       "react_ports": null,
       "react_service": "external-caddy",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-180 and USF-217 before any gateway/clickthrough, operator-console, public exposure, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "API security posture only"
     },
     {
@@ -489,7 +489,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF has DB proof but no operator/admin pgAdmin surface or SSO gate proof.",
+      "gap_or_decision": "USF has DB proof and bounded operator access posture, but no pgAdmin operator/admin console access-review, deprovisioning, SSO/clickthrough, or privileged-operation proof. USF-217 owns this residual depth.",
       "legacy_service_category": "operator-admin",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -500,8 +500,8 @@
       ],
       "react_service": "pgadmin",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-169 plus USF-217 before any pgAdmin operator-console, access-review, deprovisioning, public exposure, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "none"
     },
     {
@@ -1307,7 +1307,7 @@
       "criticality": "medium",
       "data_classification": "tenant-sensitive",
       "evidence_grade": "D",
-      "gap_or_decision": "USF composes Temporal but not Temporal UI.",
+      "gap_or_decision": "USF composes Temporal and has bounded jobs/workflow proof, but Temporal UI operator console access-review, deprovisioning, SSO/clickthrough, and privileged-operation proof remain deferred to USF-217.",
       "legacy_service_category": "operator-admin",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -1318,8 +1318,8 @@
       ],
       "react_service": "temporal-ui",
       "selection_class": "optional-proven",
-      "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
-      "usf_accounting_status": "requires-human-decision",
+      "tracking_recommendation": "USF-178 plus USF-217 before any Temporal UI operator-console, access-review, deprovisioning, public exposure, environment-readiness, or USF-133 closure claim",
+      "usf_accounting_status": "deferred",
       "usf_service_or_substitute": "temporal service only"
     },
     {
@@ -1450,14 +1450,13 @@
   ],
   "status": "review-draft",
   "status_counts": {
-    "blocked": 1,
+    "bounded-local-proof": 1,
     "covered-by-usf-runtime": 4,
-    "deferred": 28,
+    "deferred": 25,
     "implemented": 11,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "profile-gated-bounded-proof": 4,
-    "requires-human-decision": 3,
+    "profile-gated-bounded-proof": 10,
     "substituted-partial": 1
   },
   "usf_compose_service_count": 16,

@@ -34,12 +34,11 @@
   "closure_disposition_counts": {
     "bounded-local-proof-with-deferred-readiness-boundaries": 2,
     "covered-by-usf-runtime": 4,
-    "deferred": 7,
+    "deferred": 10,
     "implemented": 13,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
     "profile-gated-bounded-proof": 6,
-    "requires-human-decision": 3,
     "substituted-partial": 1
   },
   "rows": [
@@ -1206,7 +1205,7 @@
         "meilisearch"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -1419,7 +1418,7 @@
         "pgadmin"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -1434,7 +1433,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgadmin",
@@ -1450,14 +1449,16 @@
           "USF-167",
           "USF-182",
           "USF-185",
-          "USF-169"
+          "USF-169",
+          "USF-217"
         ],
         "non_equivalence_boundaries": [
-          "pgAdmin database inspection/admin workflow is not equivalent to application-level database tests."
+          "pgAdmin database inspection/admin workflow is not equivalent to application-level database tests.",
+          "USF-217 must prove or explicitly defer pgAdmin access review, deprovisioning, break-glass, audit, tenant, secret, privacy, SSO/clickthrough, and privileged-operation depth before any operator-console readiness claim."
         ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "future operator console SSO/clickthrough and privileged access proof"
+          "pgAdmin operator/admin console access review and deprovisioning proof",
+          "operator console SSO/clickthrough, break-glass, privileged-operation, tenant, secret, privacy, audit, retention, supplier, and incident evidence"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1488,7 +1489,8 @@
           "incident-vulnerability-pgadmin"
         ],
         "tracking_issue_rationale": {
-          "USF-169": "operator/admin access posture proof and evidence"
+          "USF-169": "operator/admin access posture proof and evidence",
+          "USF-217": "operator admin console access review and deprovisioning proof depth"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -1503,7 +1505,7 @@
         "sonar-postgres"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2838,7 +2840,7 @@
         "temporal-ui"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2853,7 +2855,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal-ui",
@@ -2870,12 +2872,16 @@
           "USF-182",
           "USF-185",
           "USF-169",
-          "USF-178"
+          "USF-178",
+          "USF-217"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "Temporal service runtime proof is not equivalent to Temporal UI operator console access-review, deprovisioning, break-glass, audit, tenant, secret, privacy, or clickthrough proof.",
+          "USF-217 must prove or explicitly defer Temporal UI privileged-operation depth before any operator-console readiness claim."
+        ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "future operator console SSO/clickthrough and privileged access proof",
+          "Temporal UI operator/admin console access review and deprovisioning proof",
+          "operator console SSO/clickthrough, break-glass, privileged-operation, tenant, secret, privacy, audit, retention, supplier, and incident evidence",
           "live external/provider-managed service evidence",
           "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
         ],
@@ -2909,7 +2915,8 @@
         ],
         "tracking_issue_rationale": {
           "USF-169": "operator/admin access posture proof and evidence",
-          "USF-178": "operator workflow service proof and evidence"
+          "USF-178": "operator workflow service proof and evidence",
+          "USF-217": "operator admin console access review and deprovisioning proof depth"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -3273,7 +3280,7 @@
         "external-caddy"
       ],
       "source_accounting_statuses": [
-        "requires-human-decision"
+        "deferred"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -3288,7 +3295,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "requires-human-decision",
+        "closure_disposition": "deferred",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#caddy",
@@ -3305,12 +3312,16 @@
           "USF-182",
           "USF-185",
           "USF-180",
-          "USF-169"
+          "USF-169",
+          "USF-217"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "API security posture and local service binding evidence are not equivalent to Caddy/forward-auth gateway, clickthrough, public exposure, or operator access proof.",
+          "USF-180 owns gateway/clickthrough substrate depth and USF-217 owns operator/admin access-review and deprovisioning depth before any gateway or operator-console readiness claim."
+        ],
         "missing_evidence": [
-          "current runtime proof stronger than catalogue classification for this service",
-          "future operator console SSO/clickthrough and privileged access proof",
+          "Caddy/forward-auth gateway and clickthrough proof",
+          "operator console SSO/clickthrough, access review, deprovisioning, break-glass, privileged-operation, tenant, secret, privacy, audit, retention, supplier, and incident evidence",
           "live external/provider-managed service evidence",
           "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
         ],
@@ -3344,7 +3355,8 @@
         ],
         "tracking_issue_rationale": {
           "USF-180": "gateway and clickthrough access substrate proof",
-          "USF-169": "operator/admin access posture proof and evidence"
+          "USF-169": "operator/admin access posture proof and evidence",
+          "USF-217": "operator admin console access review and deprovisioning proof depth"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

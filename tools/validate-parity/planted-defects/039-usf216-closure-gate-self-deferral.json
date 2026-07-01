@@ -1,0 +1,13 @@
+{
+  "description": "USF-216 closure-tier exception regresses to self-deferral on USF-166.",
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "closureTierPatchException": {
+      "id": "exception-service-caddy",
+      "set": {
+        "disposition": "requires-human-decision",
+        "followUpIssue": "USF-166"
+      }
+    }
+  }
+}
