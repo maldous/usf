@@ -364,6 +364,8 @@ export const AUDIT_EVENT_TYPES: Readonly<Record<string, AuditEventTypeDef>> = Ob
   "bulk.operation.completed": { category: "bulk-operation", severity: "notice" },
   "bulk.operation.failed": { category: "bulk-operation", severity: "warning" },
   "bulk.operation.cancelled": { category: "bulk-operation", severity: "notice" },
+  "bulk.operation.rolled_back": { category: "bulk-operation", severity: "warning" },
+  "bulk.operation.purged": { category: "bulk-operation", severity: "warning" },
   "bulk.operation.denied": { category: "bulk-operation", severity: "warning" },
   "import.created": { category: "bulk-operation", severity: "notice" },
   "import.validated": { category: "bulk-operation", severity: "notice" },
@@ -6194,6 +6196,7 @@ export const BULK_OPERATION_STATUSES = Object.freeze([
   "rejected",
   "quarantined",
   "dead-lettered",
+  "rolled-back",
   "purged",
 ] as const);
 export type BulkOperationStatus = (typeof BULK_OPERATION_STATUSES)[number];
@@ -6399,6 +6402,9 @@ export interface BulkFormatSafetyInput {
   readonly archiveEntries?: readonly string[];
   readonly sizeBytes?: number;
   readonly maxSizeBytes?: number;
+  readonly compressedSizeBytes?: number;
+  readonly uncompressedSizeBytes?: number;
+  readonly maxExpansionRatio?: number;
   readonly encoding?: string;
 }
 
@@ -6500,6 +6506,17 @@ export function assertBulkFileFormatSafety(input: BulkFormatSafetyInput): BulkFi
   const maxSize = input.maxSizeBytes ?? MAX_FILE_SIZE_BYTES;
   if (input.sizeBytes !== undefined && input.sizeBytes > maxSize) {
     throw new BulkOperationPolicyError("oversized-file", "bulk file too large");
+  }
+  if (
+    input.compressedSizeBytes !== undefined &&
+    input.uncompressedSizeBytes !== undefined &&
+    input.compressedSizeBytes > 0
+  ) {
+    const maxExpansionRatio = input.maxExpansionRatio ?? 100;
+    const expansionRatio = input.uncompressedSizeBytes / input.compressedSizeBytes;
+    if (expansionRatio > maxExpansionRatio) {
+      throw new BulkOperationPolicyError("decompression-bomb-blocked", "archive expansion denied");
+    }
   }
   if (input.encoding && !["utf-8", "utf8"].includes(input.encoding.toLowerCase())) {
     throw new BulkOperationPolicyError("encoding-mismatch", "bulk file encoding denied");

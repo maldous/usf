@@ -1,0 +1,11 @@
+{
+  "id": "bulk-usf163-missing-boundary",
+  "expectedRuleId": "USF-BULK-012",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "No live transfer provider, live external transfer provider, credential, customer transfer, or external egress readiness is claimed.",
+      "new": "No external transfer provider, credential, customer transfer, or external egress readiness is claimed."
+    }
+  ]
+}

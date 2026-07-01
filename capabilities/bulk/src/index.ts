@@ -106,6 +106,19 @@ export interface BulkOperationService {
     operationId: string,
     input?: { approvedPreviewHash?: string },
   ): Promise<BulkServiceOutcome<SafeBulkOperationView>>;
+  retry(
+    context: TenantContext,
+    operationId: string,
+  ): Promise<BulkServiceOutcome<SafeBulkOperationView>>;
+  rollback(
+    context: TenantContext,
+    operationId: string,
+    input?: { compensationPlanRef?: string | null },
+  ): Promise<BulkServiceOutcome<SafeBulkOperationView>>;
+  purge(
+    context: TenantContext,
+    operationId: string,
+  ): Promise<BulkServiceOutcome<SafeBulkOperationView>>;
   cancel(
     context: TenantContext,
     operationId: string,
@@ -325,16 +338,30 @@ export function createBulkOperationService(deps: {
     return updated;
   }
 
-  function enqueueJob(context: TenantContext, operation: BulkOperationRecord): string {
-    const existingJobId = operation.jobId;
+  function enqueueJob(
+    context: TenantContext,
+    operation: BulkOperationRecord,
+    kind: "execute" | "retry" | "rollback" = "execute",
+  ): string {
+    const existingJobId =
+      kind === "execute" ? operation.jobId : kind === "rollback" ? operation.rollbackJobId : null;
     if (existingJobId) return existingJobId;
     const created = Math.floor(now().getTime() / 1000);
-    const jobId = stableId("job", [operation.tenantId, operation.operationId, "bulk"]);
+    const jobId = stableId("job", [
+      operation.tenantId,
+      operation.operationId,
+      kind === "execute" ? "bulk" : kind,
+    ]);
     const job: JobRecord = Object.freeze({
       jobId,
       tenantId: operation.tenantId,
       classification: "import-export-job",
-      jobType: "bulk.operation.execute",
+      jobType:
+        kind === "rollback"
+          ? "bulk.operation.rollback"
+          : kind === "retry"
+            ? "bulk.operation.retry"
+            : "bulk.operation.execute",
       status: "queued",
       actorId: context.actorId,
       serviceActorId: EXECUTOR_SERVICE_ACTOR,
@@ -362,6 +389,13 @@ export function createBulkOperationService(deps: {
     }
     deps.jobs?.submit(job);
     return jobId;
+  }
+
+  function hasProviderTransferBoundary(operation: BulkOperationRecord): boolean {
+    return (
+      operation.source.refType === "provider-source" ||
+      operation.destination.refType === "provider-destination"
+    );
   }
 
   return {
@@ -524,6 +558,9 @@ export function createBulkOperationService(deps: {
       if (["cancelled", "expired", "purged"].includes(operation.status)) {
         return denied(context, operation, "bulk.start", "operation-not-runnable");
       }
+      if (hasProviderTransferBoundary(operation)) {
+        return denied(context, operation, "bulk.start", "provider-transfer-deferred");
+      }
       const unsafeFile = await rejectIfSourceFileUnsafe(context, operation);
       if (unsafeFile) return denied(context, operation, "bulk.start", unsafeFile);
       if (
@@ -570,6 +607,96 @@ export function createBulkOperationService(deps: {
         status: "running",
       });
       recordSignal("bulk.operation.started", updated);
+      return { ok: true, value: toSafeBulkOperationView(updated) };
+    },
+
+    async retry(context, operationId) {
+      const loaded = await loadForAction(context, operationId, "bulk.retry");
+      if (!loaded.ok) return loaded;
+      if (
+        !["failed", "partially-succeeded", "dead-lettered", "rejected"].includes(
+          loaded.value.status,
+        )
+      ) {
+        return denied(context, loaded.value, "bulk.retry", "operation-not-retryable");
+      }
+      if (hasProviderTransferBoundary(loaded.value)) {
+        return denied(context, loaded.value, "bulk.retry", "provider-transfer-deferred");
+      }
+      const jobId = enqueueJob(context, loaded.value, "retry");
+      const updated = persist(context, loaded.value, {
+        jobId,
+        serviceActorId: EXECUTOR_SERVICE_ACTOR,
+        status: "running",
+        safeFailureMessage: null,
+      });
+      await audit(context, updated, {
+        eventType: eventForStarted(updated.operationType),
+        action: "bulk.retry",
+        outcome: "success",
+        reasonCode: "retry-resumed",
+        status: "running",
+      });
+      recordSignal("bulk.operation.started", updated, "retry-resumed");
+      return { ok: true, value: toSafeBulkOperationView(updated) };
+    },
+
+    async rollback(context, operationId, input = {}) {
+      const loaded = await loadForAction(context, operationId, "bulk.rollback");
+      if (!loaded.ok) return loaded;
+      if (loaded.value.irreversibleOperation) {
+        return denied(context, loaded.value, "bulk.rollback", "irreversible-operation");
+      }
+      if (!loaded.value.rollbackSupported && !loaded.value.compensationSupported) {
+        return denied(context, loaded.value, "bulk.rollback", "rollback-compensation-unavailable");
+      }
+      if (
+        !["running", "succeeded", "partially-succeeded", "failed"].includes(loaded.value.status)
+      ) {
+        return denied(context, loaded.value, "bulk.rollback", "operation-not-rollbackable");
+      }
+      const rollbackJobId = enqueueJob(context, loaded.value, "rollback");
+      const updated = persist(context, loaded.value, {
+        rollbackJobId,
+        serviceActorId: EXECUTOR_SERVICE_ACTOR,
+        compensationPlanRef:
+          input.compensationPlanRef ??
+          loaded.value.compensationPlanRef ??
+          "local-compensation-plan",
+        status: "rolled-back",
+      });
+      await audit(context, updated, {
+        eventType: "bulk.operation.rolled_back",
+        action: "bulk.rollback",
+        outcome: "success",
+        reasonCode: "rolled-back",
+        status: "rolled-back",
+      });
+      recordSignal("bulk.operation.rolled_back", updated, "rolled-back");
+      return { ok: true, value: toSafeBulkOperationView(updated) };
+    },
+
+    async purge(context, operationId) {
+      const loaded = await loadForAction(context, operationId, "bulk.purge");
+      if (!loaded.ok) return loaded;
+      if (loaded.value.legalHold) {
+        return denied(context, loaded.value, "bulk.purge", "legal-hold-active");
+      }
+      if (
+        loaded.value.purgeAllowedAt &&
+        Date.parse(loaded.value.purgeAllowedAt) > now().getTime()
+      ) {
+        return denied(context, loaded.value, "bulk.purge", "purge-window-not-open");
+      }
+      const updated = persist(context, loaded.value, { status: "purged" });
+      await audit(context, updated, {
+        eventType: "bulk.operation.purged",
+        action: "bulk.purge",
+        outcome: "success",
+        reasonCode: "purged",
+        status: "purged",
+      });
+      recordSignal("bulk.operation.purged", updated, "purged");
       return { ok: true, value: toSafeBulkOperationView(updated) };
     },
 

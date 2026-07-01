@@ -1,0 +1,11 @@
+{
+  "id": "bulk-usf163-missing-enterprise-evidence",
+  "expectedRuleId": "USF-BULK-011",
+  "edits": [
+    {
+      "target": "enterprise_model",
+      "old": "\"id\": \"evidence-usf-163-import-export-bulk-deep-runtime\"",
+      "new": "\"id\": \"evidence-usf-163-import-export-bulk-deep-runtime-missing\""
+    }
+  ]
+}

@@ -68,6 +68,8 @@ const allActions = new Set([
   "bulk.start",
   "bulk.cancel",
   "bulk.retry",
+  "bulk.rollback",
+  "bulk.purge",
   "import.create",
   "import.validate",
   "import.start",
@@ -409,6 +411,19 @@ describe("import/export/bulk operations", () => {
     await expect(() =>
       assertBulkFileFormatSafety({ format: "csv", rows: [["=cmd|'/C calc'!A0"]] }),
     ).toThrow(BulkOperationPolicyError);
+    try {
+      assertBulkFileFormatSafety({
+        format: "zip",
+        archiveEntries: ["tenant/synthetic.csv"],
+        compressedSizeBytes: 10,
+        uncompressedSizeBytes: 5_000,
+        maxExpansionRatio: 100,
+      });
+      throw new Error("decompression bomb was not blocked");
+    } catch (error) {
+      expect(error).toBeInstanceOf(BulkOperationPolicyError);
+      expect(error).toMatchObject({ reasonCode: "decompression-bomb-blocked" });
+    }
 
     const validationError = createBulkValidationError({
       rowNumber: 7,
@@ -578,5 +593,169 @@ describe("import/export/bulk operations", () => {
     const events = await audit.query(context, { tenantId: context.tenantId, limit: 50 });
     expect(events.events.some((event) => event.eventType === "bulk.operation.denied")).toBe(true);
     expect(JSON.stringify(events)).not.toContain("raw payload");
+  });
+
+  it("USF-163 bounded deep runtime controls cover retry, provider deferral, rollback, and purge", async () => {
+    const { service, jobs, audit } = setup();
+    const context = tenant();
+    const system = endpoint({
+      refType: "system-internal",
+      ref: "synthetic-system",
+      fileId: null,
+      format: "system-internal",
+    });
+
+    const resumable = await service.create(context, {
+      operationId: "import-resume-deep",
+      operationType: "import",
+      classification: "tenant-data",
+      source: system,
+      destination: system,
+      idempotencyKey: "idem-import-resume-deep",
+      partialSuccessAllowed: true,
+      maxErrorCount: 1,
+      itemCount: 2,
+    });
+    expect(resumable.ok).toBe(true);
+    await service.start(context, "import-resume-deep");
+    const partial = await service.complete(context, "import-resume-deep", {
+      successCount: 1,
+      failureCount: 1,
+      outcomes: [
+        createBulkItemOutcome({
+          itemId: "row-2",
+          rowNumber: 2,
+          sourceRecordRef: "synthetic failed row",
+          targetRecordRef: "synthetic target row",
+          operation: "import",
+          outcome: "failed",
+          safeErrorCode: "synthetic-validation",
+          safeErrorMessage: "value-free validation failure",
+        }),
+      ],
+    });
+    expect(partial.ok && partial.value.status).toBe("partially-succeeded");
+    const retried = await service.retry(context, "import-resume-deep");
+    expect(retried.ok && retried.value.status).toBe("running");
+    expect(
+      jobs.forTenant(context.tenantId).some((job) => job.jobType === "bulk.operation.retry"),
+    ).toBe(true);
+
+    const providerTransfer = await service.create(context, {
+      operationId: "provider-transfer-deep",
+      operationType: "import",
+      classification: "tenant-data",
+      source: endpoint({
+        refType: "provider-source",
+        ref: "local-provider-boundary",
+        fileId: null,
+        format: "json",
+      }),
+      destination: system,
+      idempotencyKey: "idem-provider-transfer-deep",
+      itemCount: 1,
+    });
+    expect(providerTransfer.ok).toBe(true);
+    await expect(service.start(context, "provider-transfer-deep")).resolves.toMatchObject({
+      ok: false,
+      reasonCode: "provider-transfer-deferred",
+    });
+
+    const destructive = await service.create(context, {
+      operationId: "destructive-rollback-deep",
+      operationType: "bulk-delete",
+      classification: "destructive",
+      source: system,
+      destination: system,
+      idempotencyKey: "idem-destructive-rollback-deep",
+      dryRunRequired: true,
+      rollbackSupported: true,
+      compensationSupported: true,
+      itemCount: 2,
+    });
+    expect(destructive.ok).toBe(true);
+    const preview = await service.preview(context, "destructive-rollback-deep");
+    expect(preview.ok && preview.value.previewHash).toBeTruthy();
+    await expect(
+      service.approve(
+        context,
+        "destructive-rollback-deep",
+        preview.ok ? (preview.value.previewHash ?? "") : "",
+      ),
+    ).resolves.toMatchObject({
+      ok: false,
+      reasonCode: "requester-cannot-self-approve",
+    });
+    const approved = await service.approve(
+      tenant("actor-approver"),
+      "destructive-rollback-deep",
+      preview.ok ? (preview.value.previewHash ?? "") : "",
+    );
+    expect(approved.ok).toBe(true);
+    await service.start(context, "destructive-rollback-deep");
+    await service.complete(context, "destructive-rollback-deep", { successCount: 2 });
+    const rolledBack = await service.rollback(context, "destructive-rollback-deep", {
+      compensationPlanRef: "local-compensation-plan",
+    });
+    expect(rolledBack.ok && rolledBack.value.status).toBe("rolled-back");
+    expect(
+      jobs.forTenant(context.tenantId).some((job) => job.jobType === "bulk.operation.rollback"),
+    ).toBe(true);
+
+    const manifest = createEvidencePackageManifest({
+      evidencePackageId: "evidence-package-deep",
+      packageVersion: "1",
+      sourceQueryRef: "tenant-alpha audit events",
+      includedFileIds: ["file-export-alpha"],
+      includedAuditEventIds: ["audit-event-alpha"],
+      createdBy: context.actorId,
+      retentionPolicy: "classification-aware-local-dev-test",
+      chainOfCustodyRef: "custody-deep",
+      legalHold: true,
+    });
+    const held = await service.create(context, {
+      operationId: "evidence-package-held-deep",
+      operationType: "evidence-package-export",
+      classification: "audit-sensitive",
+      source: system,
+      destination: destination({
+        refType: "evidence-package",
+        fileId: "file-export-alpha",
+        format: "evidence-package",
+        classification: "audit-sensitive",
+      }),
+      idempotencyKey: "idem-evidence-package-held-deep",
+      dryRunRequired: true,
+      itemCount: 1,
+      evidencePackage: manifest,
+      legalHold: true,
+    });
+    expect(held.ok).toBe(true);
+    await expect(service.purge(context, "evidence-package-held-deep")).resolves.toMatchObject({
+      ok: false,
+      reasonCode: "legal-hold-active",
+    });
+
+    const purgeable = await service.create(context, {
+      operationId: "export-purge-deep",
+      operationType: "export",
+      classification: "confidential",
+      source: system,
+      destination: destination({ ref: "purge-candidate", fileId: "file-export-alpha" }),
+      idempotencyKey: "idem-export-purge-deep",
+      itemCount: 1,
+      legalHold: false,
+      purgeAllowedAt: "2025-12-31T00:00:00.000Z",
+    });
+    expect(purgeable.ok).toBe(true);
+    const purged = await service.purge(context, "export-purge-deep");
+    expect(purged.ok && purged.value.status).toBe("purged");
+
+    const events = await audit.query(context, { tenantId: context.tenantId, limit: 100 });
+    const eventTypes = events.events.map((event) => event.eventType);
+    expect(eventTypes).toContain("bulk.operation.rolled_back");
+    expect(eventTypes).toContain("bulk.operation.purged");
+    expect(JSON.stringify(events)).not.toContain("raw payload");
+    expect(JSON.stringify(events)).not.toContain("secret");
   });
 });

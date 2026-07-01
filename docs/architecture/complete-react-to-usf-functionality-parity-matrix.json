@@ -256,10 +256,10 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Import/export/batch lineage",
-      "readiness_impact": "Production migration/export readiness not claimed.",
-      "tracking_carrier_or_recommendation": "USF-162/USF-163",
-      "usf_evidence_summary": "USF bulk proof",
-      "usf_status": "partial"
+      "readiness_impact": "USF-163 adds bounded local import/export/bulk deep-runtime proof for partial-success retry/resume, provider-transfer fail-closed posture, parser/decompression safety, rollback/compensation, separate approval, purge, legal-hold denial, tenant/access/audit/redaction evidence, and explicit API/live-provider/legal/regulatory/production migration non-equivalence boundaries. Production migration, legal export, eDiscovery, regulatory export, broad public bulk API, live external provider, environment readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-162/USF-163; docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json",
+      "usf_evidence_summary": "USF bulk proof plus import/export/bulk deep runtime proof-depth matrix, validate-bulk USF-BULK-009 through USF-BULK-013, enterprise evidence rows, and planted defects.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
     },
     {
       "blocking_level": "P1",
