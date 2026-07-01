@@ -5635,7 +5635,7 @@
       "adapterProviderId": "observability-captured-local; observability-compose-stack; observability-sentry-sdk-envelope-local",
       "validationCommand": "corepack pnpm proof:observability:operations-execution",
       "commandPin": "tsx packages/proof/src/observability-operations-execution-proof.ts",
-      "commitPin": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "commitPin": "706790f7baac9810d31ed57a4ca0c194bf2ae954",
       "issueLinks": [
         "USF-222",
         "USF-218",
@@ -5648,7 +5648,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "prOrMergeSha": "706790f7baac9810d31ed57a4ca0c194bf2ae954",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed proof source, docs/architecture/observability-alerting-dashboard-incident-execution-proof.json, and validator metadata; do not retain raw telemetry payloads, raw endpoints, credentials, tokens, stack traces, provider payloads, tenant names, user emails, production data, or customer data as repository evidence."
     },
     {
@@ -7857,7 +7857,7 @@
       "adapterProviderId": "observability-captured-local; observability-compose-stack; observability-sentry-sdk-envelope-local",
       "validationCommand": "corepack pnpm proof:observability:operations-execution; python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "commandPin": "tsx packages/proof/src/observability-operations-execution-proof.ts",
-      "commitPin": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "commitPin": "706790f7baac9810d31ed57a4ca0c194bf2ae954",
       "issueLinks": [
         "USF-222",
         "USF-218",
@@ -7870,7 +7870,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "a7277e87329ca1c56d41eb247a53f8553b3e501d",
+      "prOrMergeSha": "706790f7baac9810d31ed57a4ca0c194bf2ae954",
       "retentionPosture": "Retain committed proof artefact at docs/architecture/observability-alerting-dashboard-incident-execution-proof.json, proof command output in PR validation summary, validator result, planted defects, and Linear reconciliation. No raw telemetry payload, tenant name, user email, endpoint, credential, token, provider payload, stack trace, production data, or customer data is retained. owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner."
     }
   ],
