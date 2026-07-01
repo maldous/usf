@@ -22,12 +22,20 @@ certification claim):
   USF-CONFIG-013  provider credentials are secret references (not embedded)
   USF-CONFIG-014  config routes are tenant-context guarded
   USF-CONFIG-015  the config parity matrix row is backed by tests and proofs
+  USF-CONFIG-016  the USF-145 enterprise config/secrets matrix exists and is complete
+  USF-CONFIG-017  deferred/reclassified USF-145 controls carry owner and follow-up metadata
+  USF-CONFIG-018  USF-145 proof and enterprise evidence linkage is present
+  USF-CONFIG-019  USF-145 config/secrets proof exercises every claimed control
+  USF-CONFIG-020  USF-145 proven controls carry proof-backed evidence
+  USF-CONFIG-021  OpenBao reconciliation remains bounded and non-live
+  USF-CONFIG-022  USF-145 config/secrets readiness/certification claims remain prohibited
 
 Live fail-closed / redaction / isolation behaviour is proven by the hermetic tests
 and the config proof (make config-proof). Planted defects under
 tools/validate-parity/config-planted-defects prove each rule fires.
 """
 import argparse
+import copy
 import json
 import os
 import sys
@@ -49,6 +57,13 @@ RULES = {
     "USF-CONFIG-013": ("blocking", "provider credentials are not secret references"),
     "USF-CONFIG-014": ("blocking", "config routes are not tenant-context guarded"),
     "USF-CONFIG-015": ("blocking", "config parity matrix row lacks tests/proofs backing"),
+    "USF-CONFIG-016": ("blocking", "USF-145 enterprise config/secrets matrix is missing or incomplete"),
+    "USF-CONFIG-017": ("blocking", "USF-145 deferred/reclassified config control lacks owner or follow-up metadata"),
+    "USF-CONFIG-018": ("blocking", "USF-145 proof or enterprise evidence linkage is incomplete"),
+    "USF-CONFIG-019": ("blocking", "USF-145 config/secrets proof lacks required control evidence"),
+    "USF-CONFIG-020": ("blocking", "USF-145 proven config/secrets control lacks proof-backed evidence"),
+    "USF-CONFIG-021": ("blocking", "USF-145 OpenBao reconciliation is missing or overclaimed"),
+    "USF-CONFIG-022": ("blocking", "USF-145 config/secrets readiness or certification claim is overclaimed"),
     "USF-CONFIG-SELFTEST": ("blocking", "planted config defect did not raise its expected rule"),
 }
 
@@ -59,12 +74,70 @@ SECRET_SVC = "capabilities/config/src/secret-service.ts"
 SERVER = "apps/api/src/server.ts"
 PROOF = "packages/proof/src/config-secrets-proof.ts"
 OPENAPI = "packages/openapi/openapi.json"
-SOURCE_FILES = (CORE, REGISTRY, CONFIG_SVC, SECRET_SVC, SERVER, PROOF, OPENAPI)
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+USF145_MATRIX_PATH = "docs/architecture/config-secrets-enterprise-proof-depth-matrix.json"
+ENTERPRISE_EVIDENCE_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+SOURCE_FILES = (
+    CORE,
+    REGISTRY,
+    CONFIG_SVC,
+    SECRET_SVC,
+    SERVER,
+    PROOF,
+    OPENAPI,
+    USF145_MATRIX_PATH,
+    ENTERPRISE_EVIDENCE_PATH,
+)
 SELFTEST_DIR = "tools/validate-parity/config-planted-defects"
 
 REQUIRED_SECRET_KEYS = ['"password"', '"secret"', '"token"', '"api_key"', '"client_secret"', '"private_key"', '"authorization"', '"cookie"']
 OPENAPI_SECRET_NEEDLES = ["Bearer ", "secret://", "-----BEGIN", '"password"', "client_secret"]
+USF145_REQUIRED_CONTROLS = {
+    "openbao-runtime-binding-reconciliation",
+    "secret-rotation-posture",
+    "db-backed-config-and-tenant-settings",
+    "config-change-history",
+    "override-workflow-separation-of-duties",
+    "runtime-reload-cache-invalidation",
+    "provider-configuration-plane",
+    "data-residency-enforcement",
+    "config-schema-migration-tooling",
+    "secret-reference-redaction-boundary",
+}
+USF145_REQUIRED_PROOF_TOKENS = {
+    "proveOpenBaoRuntimeBindingReconciliation",
+    "proveSecretRotationPosture",
+    "proveConfigChangeHistory",
+    "proveOverrideWorkflowSeparationOfDuties",
+    "proveRuntimeReloadCacheInvalidation",
+    "proveProviderConfigurationPlane",
+    "proveDataResidencyEnforcement",
+    "proveConfigSchemaMigrationTooling",
+    "enterpriseConfigSecretsDepthGate",
+}
+USF145_PROHIBITED_CLAIMS = {
+    "live-secret-manager-readiness",
+    "kms-readiness",
+    "config-secrets-readiness-beyond-bounded-local-proof",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure",
+}
+PROVEN_STATUSES = {"proven-local", "bounded-local-proof", "implemented", "implemented-bounded"}
+DEFERRED_STATUSES = {
+    "deferred-with-owner",
+    "transferred",
+    "reclassified-deferred",
+    "out-of-scope-with-rationale",
+}
 
 
 class Findings:
@@ -116,13 +189,32 @@ def load_matrix():
         return None
 
 
+def parse_json_text(text):
+    if not text:
+        return None
+    try:
+        return json.loads(text)
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     files = {path: read_text(path) for path in SOURCE_FILES}
     for path, text in overrides.get("files", {}).items():
         files[path] = text
     matrix = overrides["matrix"] if "matrix" in overrides else load_matrix()
-    return {"files": files, "matrix": matrix}
+    usf145_matrix = (
+        overrides["usf145_matrix"]
+        if "usf145_matrix" in overrides
+        else parse_json_text(files.get(USF145_MATRIX_PATH, ""))
+    )
+    enterprise = (
+        overrides["enterprise"]
+        if "enterprise" in overrides
+        else parse_json_text(files.get(ENTERPRISE_EVIDENCE_PATH, ""))
+    )
+    return {"files": files, "matrix": matrix, "usf145_matrix": usf145_matrix, "enterprise": enterprise}
 
 
 def config_row(matrix):
@@ -132,6 +224,121 @@ def config_row(matrix):
         if isinstance(row, dict) and row.get("react_item_id") == "config-secrets":
             return row
     return None
+
+
+def enterprise_ids(enterprise):
+    ids = set()
+    if not isinstance(enterprise, dict):
+        return ids
+    for section in (
+        "soaSupportMappings",
+        "evidenceRegister",
+        "threatModelAbuseCaseRegister",
+        "incidentVulnerabilityManagementEvidence",
+        "privacyDataMinimisationPosture",
+    ):
+        rows = enterprise.get(section, [])
+        if isinstance(rows, list):
+            for row in rows:
+                if isinstance(row, dict) and isinstance(row.get("id"), str):
+                    ids.add(row["id"])
+    return ids
+
+
+def check_usf145_enterprise_depth(F, state, proof):
+    matrix = state.get("usf145_matrix")
+    if not isinstance(matrix, dict):
+        F.add("USF-CONFIG-016", USF145_MATRIX_PATH, "USF-145 enterprise config/secrets matrix is missing")
+        return
+    if matrix.get("sourceIssue") != "USF-145" or matrix.get("capabilityId") != "config-secrets-enterprise-depth":
+        F.add("USF-CONFIG-016", USF145_MATRIX_PATH, "matrix does not identify USF-145 config-secrets-enterprise-depth scope")
+    if matrix.get("proofCommand") != "make config-proof" or matrix.get("validatorCommand") != "python3 tools/validate-parity/validate-config.py all --json":
+        F.add("USF-CONFIG-016", USF145_MATRIX_PATH, "matrix must pin proof and validator commands")
+    if len(matrix.get("acceptanceCriteriaMapping", [])) < 5:
+        F.add("USF-CONFIG-016", USF145_MATRIX_PATH, "acceptance criteria mapping is incomplete")
+
+    controls = matrix.get("controls", [])
+    if not isinstance(controls, list):
+        F.add("USF-CONFIG-016", USF145_MATRIX_PATH, "controls must be an array")
+        controls = []
+    by_id = {control.get("id"): control for control in controls if isinstance(control, dict)}
+    missing = sorted(USF145_REQUIRED_CONTROLS - set(by_id))
+    if missing:
+        F.add("USF-CONFIG-016", USF145_MATRIX_PATH, f"missing required controls: {missing}")
+
+    for control_id, control in by_id.items():
+        status = control.get("status")
+        for field in ("owner", "riskOwner", "controlOwner"):
+            if not control.get(field):
+                F.add("USF-CONFIG-016", control_id, f"control lacks {field}")
+        if not control.get("riskTreatment") or not control.get("nonClaimBoundary"):
+            F.add("USF-CONFIG-016", control_id, "control lacks risk treatment or non-claim boundary")
+        if status in DEFERRED_STATUSES:
+            if not control.get("followUpIssue") or not control.get("reviewDate"):
+                F.add("USF-CONFIG-017", control_id, "deferred/reclassified control lacks followUpIssue or reviewDate")
+        elif status in PROVEN_STATUSES:
+            if not control.get("proofCommand") or not control.get("validationCommand"):
+                F.add("USF-CONFIG-020", control_id, "proven control lacks proof or validation command")
+            if not control.get("proofChecks") or not control.get("evidenceRefs"):
+                F.add("USF-CONFIG-020", control_id, "proven control lacks proof checks or evidence refs")
+        else:
+            F.add("USF-CONFIG-016", control_id, f"unknown or missing control status: {status}")
+
+    refs = set(matrix.get("enterpriseEvidenceRefs", []))
+    required_refs = {
+        "soa-usf-145-config-secrets-enterprise-proof-depth",
+        "evidence-usf-145-config-secrets-enterprise-proof-depth",
+        "threat-usf-145-config-secrets-enterprise-depth",
+        "incident-usf-145-config-secrets-enterprise-depth",
+        "privacy-usf-145-config-secrets-enterprise-depth",
+    }
+    if not required_refs.issubset(refs):
+        F.add("USF-CONFIG-018", USF145_MATRIX_PATH, "matrix lacks required enterprise evidence refs")
+    missing_enterprise = sorted(required_refs - enterprise_ids(state.get("enterprise")))
+    if missing_enterprise:
+        F.add("USF-CONFIG-018", ENTERPRISE_EVIDENCE_PATH, f"enterprise model lacks refs: {missing_enterprise}")
+
+    missing_tokens = sorted(token for token in USF145_REQUIRED_PROOF_TOKENS if token not in proof)
+    if missing_tokens:
+        F.add("USF-CONFIG-019", PROOF, f"config proof missing required USF-145 tokens: {missing_tokens}")
+    for label in (
+        "USF-145 OpenBao runtime binding is reconciled",
+        "USF-145 secret rotation posture",
+        "USF-145 config-change history",
+        "USF-145 override workflow",
+        "USF-145 runtime reload",
+        "USF-145 provider configuration plane",
+        "USF-145 data residency enforcement",
+        "USF-145 config schema migration tooling",
+    ):
+        if label not in proof:
+            F.add("USF-CONFIG-019", PROOF, f"config proof missing proof label: {label}")
+
+    if "findProvider(\"secret-store-openbao-composed-test\")" not in proof:
+        F.add("USF-CONFIG-021", PROOF, "OpenBao reconciliation must inspect provider registry entry")
+    if "liveSecretManagerClaim: false" not in proof or "kmsReadinessClaim: false" not in proof:
+        F.add("USF-CONFIG-021", PROOF, "OpenBao reconciliation must preserve live secret-manager and KMS non-claims")
+
+    claims = matrix.get("claims", {})
+    for key, value in claims.items():
+        if key.endswith("Claim") and value is not False:
+            F.add("USF-CONFIG-022", f"{USF145_MATRIX_PATH}:{key}", "USF-145 claim flags must remain false")
+    non_claims = set(matrix.get("nonClaims", []))
+    missing_nonclaims = sorted(USF145_PROHIBITED_CLAIMS - non_claims)
+    if missing_nonclaims:
+        F.add("USF-CONFIG-022", USF145_MATRIX_PATH, f"missing USF-145 non-claims: {missing_nonclaims}")
+    for token in (
+        "configSecretsReadinessClaim: false",
+        "stagingReadinessClaim: false",
+        "productionReadinessClaim: false",
+        "socReadinessClaim: false",
+        "iso27001CertificationClaim: false",
+        "fullDevReadinessClaim: false",
+        "fullReactParityClaim: false",
+        "usf133ClosureClaim: false",
+    ):
+        if token not in proof:
+            F.add("USF-CONFIG-022", PROOF, f"config proof must declare {token}")
 
 
 def run_checks(F, state=None):
@@ -186,10 +393,14 @@ def run_checks(F, state=None):
     elif not (row.get("usf_tests") and row.get("usf_proofs")):
         F.add("USF-CONFIG-015", MATRIX_PATH, "config-secrets row must reference USF tests and proofs")
 
+    check_usf145_enterprise_depth(F, state, proof)
+
 
 def apply_mutation(base, mutation):
     files = dict(base["files"])
-    matrix = json.loads(json.dumps(base["matrix"])) if base["matrix"] is not None else None
+    matrix = copy.deepcopy(base["matrix"]) if base["matrix"] is not None else None
+    usf145_matrix = copy.deepcopy(base.get("usf145_matrix")) if base.get("usf145_matrix") is not None else None
+    enterprise = copy.deepcopy(base.get("enterprise")) if base.get("enterprise") is not None else None
     target = mutation.get("file")
     if "replace" in mutation and target in files:
         files[target] = files[target].replace(mutation["replace"]["old"], mutation["replace"]["new"])
@@ -200,7 +411,33 @@ def apply_mutation(base, mutation):
         if row is not None:
             for key, value in mutation["matrixConfigSet"].items():
                 row[key] = value
-    return {"files": files, "matrix": matrix}
+    if "usf145MatrixSet" in mutation and usf145_matrix is not None:
+        for key, value in mutation["usf145MatrixSet"].items():
+            usf145_matrix[key] = value
+    if "usf145ControlSet" in mutation and usf145_matrix is not None:
+        control_id = mutation["usf145ControlSet"].get("id")
+        for control in usf145_matrix.get("controls", []):
+            if isinstance(control, dict) and control.get("id") == control_id:
+                for key, value in mutation["usf145ControlSet"].get("values", {}).items():
+                    if value == "__DELETE__":
+                        control.pop(key, None)
+                    else:
+                        control[key] = value
+    if "enterpriseRemoveIds" in mutation and isinstance(enterprise, dict):
+        remove = set(mutation["enterpriseRemoveIds"])
+        for section, rows in enterprise.items():
+            if isinstance(rows, list):
+                enterprise[section] = [
+                    row
+                    for row in rows
+                    if not (isinstance(row, dict) and row.get("id") in remove)
+                ]
+    return {
+        "files": files,
+        "matrix": matrix,
+        "usf145_matrix": usf145_matrix,
+        "enterprise": enterprise,
+    }
 
 
 def load_selftest_fixtures(F):

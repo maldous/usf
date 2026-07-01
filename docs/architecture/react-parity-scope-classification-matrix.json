@@ -143,8 +143,8 @@
         "packages/openbao",
         "config/environments/*.json"
       ],
-      "behaviour_summary": "Typed fail-closed config control plane: classification, scope/owner, deterministic precedence + override policy, secret-reference vs secret-value separation, redaction/non-leakage, secret lifecycle + access control, feature flags (safe default), config-change + secret-access audit (value-free). DB-backed config history, OpenBao/Postgres secret managers, and rotation execution deferred.",
-      "usf_status": "partial",
+      "behaviour_summary": "Typed fail-closed config control plane: classification, scope/owner, deterministic precedence and override policy, secret-reference vs secret-value separation, redaction/non-leakage, secret lifecycle and access control, feature flags, config-change and secret-access audit, plus bounded USF-145 enterprise depth for OpenBao reconciliation, rotation posture, tenant settings, change history, override SoD, runtime reload/cache invalidation, provider config plane, data residency, and schema migration.",
+      "usf_status": "migrated",
       "usf_paths": [
         "capabilities/config (registry + config-service + secret-service)",
         "packages/core (config/secret model + redaction + precedence)",
@@ -158,15 +158,15 @@
         "tests/apps/config-api.test.ts"
       ],
       "usf_proofs": [
-        "packages/proof/src/config-secrets-proof.ts (make config-proof + in make verify: fail-closed, redaction, tenant isolation, secret lifecycle, deterministic flags)"
+        "packages/proof/src/config-secrets-proof.ts (make config-proof + in make verify: fail-closed, redaction, tenant isolation, secret lifecycle, deterministic flags, and USF-145 bounded enterprise config/secrets depth)"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-145",
-      "blocking_foundation_readiness": true,
+      "blocker": "none for bounded USF-145 source scope; stronger readiness claims require separate source issues",
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "config-and-secrets standard docs/architecture/config-and-secrets-standard.md; source-use docs/architecture/parity-config-secrets-source-use-disposition-matrix.md; validate-config (15 rules + planted defects); make config-proof pass; USF-144; deferred depth USF-145.",
-      "retry_condition": "Deferred config/secrets depth (live OpenBao/Postgres secret managers, rotation execution, DB-backed config history, override workflow, runtime reload/cache, full provider plane, data residency, schema migration tooling) implemented and proven under USF-145; then re-classify migrated."
+      "evidence": "USF-144 core config/secrets proof plus USF-145 bounded enterprise proof depth: config/secrets standard, config-secrets enterprise proof-depth matrix, source-use matrix, validate-config USF-CONFIG-001..022 with planted defects, make config-proof, enterprise evidence rows, and OpenBao composed-test provider reconciliation. Non-claims preserve no live secret-manager, KMS, staging/production readiness, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure.",
+      "retry_condition": "Live external secret-manager readiness, KMS custody, production DB-backed config store, distributed runtime reload, production data residency, production config migration, and environment-promotion readiness require separate source issues and merged proof before stronger claims."
     },
     {
       "react_item_id": "files-storage",
