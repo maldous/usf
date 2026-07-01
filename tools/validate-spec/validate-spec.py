@@ -2048,6 +2048,7 @@ AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "adapters/mail",
     "adapters/secrets",
     "adapters/obs",
+    "adapters/assurance",
     "adapters/guardrails",
     "adapters/bulk",
     "adapters/search",

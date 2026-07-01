@@ -1,8 +1,9 @@
 {
   "expectedRule": "USF-ENTERPRISE-023",
-  "description": "USF-195 SonarQube proof boundary does not link remaining composed proof to USF-204.",
+  "description": "USF-204 SonarQube proof boundary does not link remaining operator and environment deferrals to USF-169 and USF-193.",
   "sonarqubeBoundarySet": {
     "followUpIssue": "USF-195",
     "remainingProofBoundary.issue": "USF-195"
-  }
+  },
+  "sonarqubeBoundaryDrop": ["remainingProofBoundary.additionalFollowUpIssues"]
 }

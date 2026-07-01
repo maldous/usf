@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-204 SonarQube composed proof omits official SDK metadata and SDK governance evidence.",
+  "sonarqubeBoundarySet": {
+    "composedProof.sdkPackage": "raw-web-api",
+    "composedProof.sdkVersion": "unversioned"
+  },
+  "removeEnterpriseEvidence": "sdk-usf-204-sonarqube-composed-quality-gate-provider-at-sonar-scan"
+}

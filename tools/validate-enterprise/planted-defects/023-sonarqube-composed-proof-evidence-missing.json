@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-204 SonarQube bounded proof enterprise evidence row is missing.",
+  "removeEnterpriseEvidence": "usf-204-evidence-sonarqube-composed-proof"
+}

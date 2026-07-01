@@ -25,6 +25,9 @@ runtime-proof-in-memory:
 runtime-proof-compose:
 	corepack pnpm runtime:proof:compose
 
+sonarqube-assurance-proof:
+	corepack pnpm proof:assurance:sonarqube
+
 runtime-validate:
 	corepack pnpm runtime:validate
 

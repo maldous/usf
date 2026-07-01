@@ -1,0 +1,14 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-204 SonarQube closure row is stale and still marks the bounded proof service as deferred.",
+  "closureServicePatch": [
+    {
+      "serviceId": "sonarqube",
+      "set": {
+        "closure_disposition": "deferred",
+        "closure_blocking": true
+      },
+      "drop": ["proof_evidence_refs"]
+    }
+  ]
+}

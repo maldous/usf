@@ -5,19 +5,11 @@
   "lane_issue": "USF-185",
   "coordinator_issue": "USF-192",
   "dashboard_issue": "USF-184",
-  "source_issues": [
-    "USF-166",
-    "USF-167",
-    "USF-182"
-  ],
+  "source_issues": ["USF-166", "USF-167", "USF-182"],
   "service_catalogue_authority": "spec/instances/compose-service/service-catalogue.json",
   "react_compose_parity_matrix": "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
   "closure_claimed": false,
-  "closure_blocking_dispositions": [
-    "deferred",
-    "requires-human-decision",
-    "substituted-partial"
-  ],
+  "closure_blocking_dispositions": ["deferred", "requires-human-decision", "substituted-partial"],
   "non_claims": [
     "full-dev-readiness",
     "test-readiness",
@@ -44,12 +36,8 @@
       "service_id": "postgres",
       "display_name": "Postgres",
       "service_kind": "database",
-      "react_compose_service_names": [
-        "postgres"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["postgres"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -57,11 +45,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -76,9 +60,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "live external/provider-managed service evidence",
@@ -117,12 +99,8 @@
       "service_id": "keycloak-db",
       "display_name": "Keycloak Database",
       "service_kind": "identity-backing-store",
-      "react_compose_service_names": [
-        "keycloak-postgres"
-      ],
-      "source_accounting_statuses": [
-        "implemented-equivalent"
-      ],
+      "react_compose_service_names": ["keycloak-postgres"],
+      "source_accounting_statuses": ["implemented-equivalent"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -130,11 +108,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented-equivalent",
         "closure_blocking": false,
@@ -148,9 +122,7 @@
           "python3 tools/validate-compose/validate-compose.py all --json",
           "spec/instances/compose-service/service-catalogue.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "live external/provider-managed service evidence",
@@ -189,12 +161,8 @@
       "service_id": "keycloak",
       "display_name": "Keycloak",
       "service_kind": "identity-provider",
-      "react_compose_service_names": [
-        "keycloak"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["keycloak"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -202,11 +170,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -221,9 +185,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "future operator console SSO/clickthrough and privileged access proof",
@@ -273,11 +235,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -292,9 +250,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
@@ -334,12 +290,8 @@
       "service_id": "temporal",
       "display_name": "Temporal",
       "service_kind": "workflow-runtime",
-      "react_compose_service_names": [
-        "temporal"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["temporal"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -347,11 +299,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -366,9 +314,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [
           "Temporal is application workflow runtime infrastructure and is not a Windmill substitute."
         ],
@@ -409,12 +355,8 @@
       "service_id": "minio",
       "display_name": "MinIO",
       "service_kind": "object-storage",
-      "react_compose_service_names": [
-        "minio"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["minio"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -422,11 +364,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -441,9 +379,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "future operator console SSO/clickthrough and privileged access proof",
@@ -484,12 +420,8 @@
       "service_id": "openbao",
       "display_name": "OpenBao",
       "service_kind": "secret-store",
-      "react_compose_service_names": [
-        "openbao"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["openbao"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -497,11 +429,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -516,9 +444,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "future operator console SSO/clickthrough and privileged access proof",
@@ -559,12 +485,8 @@
       "service_id": "otel-collector",
       "display_name": "OpenTelemetry Collector",
       "service_kind": "observability-collector",
-      "react_compose_service_names": [
-        "otel-collector"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["otel-collector"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -572,11 +494,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -590,9 +508,7 @@
           "python3 tools/validate-compose/validate-compose.py all --json",
           "spec/instances/compose-service/service-catalogue.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "live external/provider-managed service evidence",
@@ -631,12 +547,8 @@
       "service_id": "prometheus",
       "display_name": "Prometheus",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
-        "prometheus"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["prometheus"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -644,11 +556,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -662,9 +570,7 @@
           "python3 tools/validate-compose/validate-compose.py all --json",
           "spec/instances/compose-service/service-catalogue.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "live external/provider-managed service evidence",
@@ -704,12 +610,8 @@
       "service_id": "grafana",
       "display_name": "Grafana",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
-        "grafana"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["grafana"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -717,11 +619,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -735,9 +633,7 @@
           "python3 tools/validate-compose/validate-compose.py all --json",
           "spec/instances/compose-service/service-catalogue.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "future operator console SSO/clickthrough and privileged access proof",
@@ -778,12 +674,8 @@
       "service_id": "loki",
       "display_name": "Loki",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
-        "loki"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["loki"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -791,11 +683,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -809,9 +697,7 @@
           "python3 tools/validate-compose/validate-compose.py all --json",
           "spec/instances/compose-service/service-catalogue.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "live external/provider-managed service evidence",
@@ -851,12 +737,8 @@
       "service_id": "tempo",
       "display_name": "Tempo",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
-        "tempo"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["tempo"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -864,11 +746,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -882,9 +760,7 @@
           "python3 tools/validate-compose/validate-compose.py all --json",
           "spec/instances/compose-service/service-catalogue.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "live external/provider-managed service evidence",
@@ -924,12 +800,8 @@
       "service_id": "mailpit",
       "display_name": "Mailpit",
       "service_kind": "notification-sink",
-      "react_compose_service_names": [
-        "mailpit"
-      ],
-      "source_accounting_statuses": [
-        "implemented"
-      ],
+      "react_compose_service_names": ["mailpit"],
+      "source_accounting_statuses": ["implemented"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -937,11 +809,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "a",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -956,9 +824,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "future operator console SSO/clickthrough and privileged access proof",
@@ -1008,11 +874,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": false,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "implemented",
         "closure_blocking": false,
@@ -1026,11 +888,7 @@
           "python3 tools/validate-compose/validate-compose.py all --json",
           "spec/instances/compose-service/service-catalogue.json"
         ],
-        "tracking_issues": [
-          "USF-185",
-          "USF-176",
-          "USF-201"
-        ],
+        "tracking_issues": ["USF-185", "USF-176", "USF-201"],
         "non_equivalence_boundaries": [
           "USF-176 records bounded mock-provider disposition only; USF-201 owns service-semantic proof and live-provider non-equivalence remains explicit."
         ],
@@ -1083,12 +941,8 @@
       "service_id": "redis",
       "display_name": "Redis",
       "service_kind": "cache",
-      "react_compose_service_names": [
-        "redis"
-      ],
-      "source_accounting_statuses": [
-        "profile-gated-bounded-proof"
-      ],
+      "react_compose_service_names": ["redis"],
+      "source_accounting_statuses": ["profile-gated-bounded-proof"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -1096,10 +950,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": true,
-      "generated_in_targets": [
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -1199,12 +1050,8 @@
       "service_id": "meilisearch",
       "display_name": "Meilisearch",
       "service_kind": "search-provider",
-      "react_compose_service_names": [
-        "meilisearch"
-      ],
-      "source_accounting_statuses": [
-        "requires-human-decision"
-      ],
+      "react_compose_service_names": ["meilisearch"],
+      "source_accounting_statuses": ["requires-human-decision"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -1212,10 +1059,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -1231,14 +1075,7 @@
           "spec/instances/runtime-proof/runtime-application-compose-parity.json",
           "python3 tools/validate-runtime/validate-runtime.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-174",
-          "USF-199"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-174", "USF-199"],
         "non_equivalence_boundaries": [
           "USF-174 records that in-memory search is not equivalent to Meilisearch composed provider indexing, ranking, filtering, async indexing visibility, persistence, deletion, retention, reindex, SDK/client, readiness retry, provider failure-mode, or wire/API behaviour.",
           "USF-199 must prove Meilisearch adapter/service semantics before any composed search, Meilisearch, search-provider, vector, AI, live-provider, or provider compatibility readiness claim."
@@ -1296,12 +1133,8 @@
       "service_id": "clickhouse",
       "display_name": "ClickHouse",
       "service_kind": "analytics-store",
-      "react_compose_service_names": [
-        "clickhouse"
-      ],
-      "source_accounting_statuses": [
-        "profile-gated-bounded-proof"
-      ],
+      "react_compose_service_names": ["clickhouse"],
+      "source_accounting_statuses": ["profile-gated-bounded-proof"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -1309,10 +1142,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": true,
-      "generated_in_targets": [
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -1412,12 +1242,8 @@
       "service_id": "pgadmin",
       "display_name": "pgAdmin",
       "service_kind": "operator-admin",
-      "react_compose_service_names": [
-        "pgadmin"
-      ],
-      "source_accounting_statuses": [
-        "requires-human-decision"
-      ],
+      "react_compose_service_names": ["pgadmin"],
+      "source_accounting_statuses": ["requires-human-decision"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "shared-cross-environment-control-plane",
@@ -1425,11 +1251,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "requires-human-decision",
         "closure_blocking": true,
@@ -1442,13 +1264,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-169"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-169"],
         "non_equivalence_boundaries": [
           "pgAdmin database inspection/admin workflow is not equivalent to application-level database tests."
         ],
@@ -1496,12 +1312,8 @@
       "service_id": "sonar-postgres",
       "display_name": "SonarQube Postgres",
       "service_kind": "assurance-backing-store",
-      "react_compose_service_names": [
-        "sonar-postgres"
-      ],
-      "source_accounting_statuses": [
-        "requires-human-decision"
-      ],
+      "react_compose_service_names": ["sonar-postgres"],
+      "source_accounting_statuses": ["requires-human-decision"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "shared-cross-environment-control-plane",
@@ -1509,14 +1321,10 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
-        "closure_disposition": "deferred",
-        "closure_blocking": true,
+        "closure_disposition": "profile-gated-bounded-proof",
+        "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-postgres",
         "react_parity_refs": [
@@ -1524,7 +1332,9 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "corepack pnpm proof:assurance:sonarqube",
+          "usf-204-evidence-sonarqube-composed-proof"
         ],
         "tracking_issues": [
           "USF-166",
@@ -1533,12 +1343,16 @@
           "USF-185",
           "USF-171",
           "USF-195",
-          "USF-204"
+          "USF-204",
+          "USF-169",
+          "USF-193"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-204 bounded local Compose proof is not SonarQube readiness, scanner readiness, vulnerability clearance, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity readiness."
+        ],
         "missing_evidence": [
-          "USF-195 records this as an explicit deferred SonarQube service-proof boundary.",
-          "USF-204 remains required for actual composed SonarQube backing-store evidence."
+          "USF-204 proves bounded local Compose SonarQube scan/readback semantics for synthetic data only.",
+          "Operator console UI clickthrough, quality-gate policy administration, security hotspot human review workflow, OIDC plugin depth, environment promotion, live-provider, and production readiness remain unclaimed."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1569,12 +1383,21 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-sonar-postgres",
           "resilience-posture-sonar-postgres",
-          "incident-vulnerability-sonar-postgres"
+          "incident-vulnerability-sonar-postgres",
+          "usf-204-evidence-sonarqube-composed-proof",
+          "usf-204-soa-sonarqube-composed-proof",
+          "usf-204-threat-sonarqube-composed-proof",
+          "usf-204-access-sonarqube-composed-proof",
+          "usf-204-resilience-sonarqube-composed-proof",
+          "usf-204-incident-vulnerability-sonarqube-composed-proof",
+          "usf-204-privacy-sonarqube-composed-proof"
         ],
         "tracking_issue_rationale": {
           "USF-171": "static analysis quality-gate disposition proof and evidence",
           "USF-195": "SonarQube service-semantic proof boundary and reclassification",
-          "USF-204": "SonarQube composed scan and operator console proof"
+          "USF-204": "SonarQube composed scan and operator console proof",
+          "USF-169": "operator access and gateway proof owns residual UI clickthrough and access-boundary evidence",
+          "USF-193": "environment promotion standard owns dev/test/staging/production readiness semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -1585,12 +1408,8 @@
       "service_id": "sonar-oidc-plugin",
       "display_name": "SonarQube OIDC Plugin Fetcher",
       "service_kind": "assurance-backing-store",
-      "react_compose_service_names": [
-        "sonar-oidc-plugin"
-      ],
-      "source_accounting_statuses": [
-        "requires-human-decision"
-      ],
+      "react_compose_service_names": ["sonar-oidc-plugin"],
+      "source_accounting_statuses": ["requires-human-decision"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "shared-cross-environment-control-plane",
@@ -1598,9 +1417,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev"
-      ],
+      "generated_in_targets": ["dev"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -1620,14 +1437,16 @@
           "USF-185",
           "USF-171",
           "USF-195",
-          "USF-204"
+          "USF-204",
+          "USF-169",
+          "USF-193"
         ],
         "non_equivalence_boundaries": [
           "Plugin fetch mechanics are deployment details, not independent semantic authority."
         ],
         "missing_evidence": [
-          "USF-195 records this as an explicit deferred SonarQube service-proof boundary.",
-          "USF-204 remains required for actual composed SonarQube plugin/bootstrap evidence."
+          "USF-204 does not exercise sonar-oidc-plugin bootstrap or brokered identity integration in the local test Compose proof.",
+          "OIDC plugin depth remains deferred to operator access/gateway or identity follow-up evidence before stronger claims."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1663,7 +1482,9 @@
         "tracking_issue_rationale": {
           "USF-171": "static analysis quality-gate disposition proof and evidence",
           "USF-195": "SonarQube service-semantic proof boundary and reclassification",
-          "USF-204": "SonarQube composed scan and operator console proof"
+          "USF-204": "SonarQube composed scan and operator console proof",
+          "USF-169": "operator access and gateway proof owns residual OIDC/operator access boundary",
+          "USF-193": "environment promotion standard owns dev/test/staging/production readiness semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -1674,12 +1495,8 @@
       "service_id": "sonarqube",
       "display_name": "SonarQube",
       "service_kind": "assurance-control-plane",
-      "react_compose_service_names": [
-        "sonarqube"
-      ],
-      "source_accounting_statuses": [
-        "requires-human-decision"
-      ],
+      "react_compose_service_names": ["sonarqube"],
+      "source_accounting_statuses": ["requires-human-decision"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "shared-cross-environment-control-plane",
@@ -1687,14 +1504,10 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
-        "closure_disposition": "deferred",
-        "closure_blocking": true,
+        "closure_disposition": "profile-gated-bounded-proof",
+        "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonarqube",
         "react_parity_refs": [
@@ -1704,7 +1517,9 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json",
           "usf-187-sonarqube-static-analysis-evidence",
-          "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+          "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+          "corepack pnpm proof:assurance:sonarqube",
+          "usf-204-evidence-sonarqube-composed-proof"
         ],
         "tracking_issues": [
           "USF-166",
@@ -1717,16 +1532,19 @@
           "USF-187",
           "USF-184",
           "USF-192",
-          "USF-133"
+          "USF-133",
+          "USF-169",
+          "USF-193"
         ],
         "non_equivalence_boundaries": [
           "Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history.",
           "Lane 3 preserves the split between mandatory local deterministic verification and deferred SonarQube service proof; local validators are not equivalent to SonarQube service-operating evidence.",
-          "SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness."
+          "SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+          "USF-204 bounded local Compose proof is not SonarQube readiness, scanner readiness, vulnerability clearance, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity readiness."
         ],
         "missing_evidence": [
-          "USF-195 records this as an explicit deferred SonarQube service-proof boundary.",
-          "USF-204 remains required for actual composed SonarQube scan execution, quality gate scope, unresolved issues, security hotspots, exceptions, operator console access, audit, retention, secret, supplier, and incident evidence."
+          "USF-204 proves bounded local Compose SonarQube scan/readback semantics for synthetic data only.",
+          "Operator console UI clickthrough, quality-gate policy administration, security hotspot human review workflow, OIDC plugin depth, environment promotion, live-provider, and production readiness remain unclaimed."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1765,12 +1583,21 @@
           "usf-187-sonarqube-static-analysis-access",
           "usf-187-sonarqube-static-analysis-risk-treatment",
           "usf-187-sonarqube-static-analysis-incident-vulnerability",
-          "usf-187-sonarqube-static-analysis-privacy"
+          "usf-187-sonarqube-static-analysis-privacy",
+          "usf-204-evidence-sonarqube-composed-proof",
+          "usf-204-soa-sonarqube-composed-proof",
+          "usf-204-threat-sonarqube-composed-proof",
+          "usf-204-access-sonarqube-composed-proof",
+          "usf-204-resilience-sonarqube-composed-proof",
+          "usf-204-incident-vulnerability-sonarqube-composed-proof",
+          "usf-204-privacy-sonarqube-composed-proof"
         ],
         "tracking_issue_rationale": {
           "USF-171": "bounded static-analysis quality-gate disposition proof and evidence",
           "USF-195": "SonarQube service-semantic proof boundary and reclassification",
-          "USF-204": "SonarQube composed scan and operator console proof"
+          "USF-204": "SonarQube composed scan and operator console proof",
+          "USF-169": "operator access and gateway proof owns residual UI clickthrough and access-boundary evidence",
+          "USF-193": "environment promotion standard owns dev/test/staging/production readiness semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -1781,12 +1608,8 @@
       "service_id": "mock-oidc",
       "display_name": "Mock OIDC",
       "service_kind": "provider-mock",
-      "react_compose_service_names": [
-        "mock-oidc"
-      ],
-      "source_accounting_statuses": [
-        "covered-by-usf-runtime"
-      ],
+      "react_compose_service_names": ["mock-oidc"],
+      "source_accounting_statuses": ["covered-by-usf-runtime"],
       "requirement_state": "deferred",
       "human_decision_state": "accepted-selected-tier-reclassification",
       "environment_disposition": "deferred",
@@ -1807,12 +1630,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185",
-          "USF-176",
-          "USF-201",
-          "USF-210"
-        ],
+        "tracking_issues": ["USF-185", "USF-176", "USF-201", "USF-210"],
         "non_equivalence_boundaries": [
           "Mock OIDC cannot prove live external identity provider readiness.",
           "USF-176 records bounded mock-provider disposition only; USF-201 proves webhook-sink capture only; USF-210 records selected-tier mock OIDC supersession and live-provider non-equivalence remains explicit."
@@ -1870,12 +1688,8 @@
       "service_id": "localstack",
       "display_name": "LocalStack",
       "service_kind": "provider-emulator",
-      "react_compose_service_names": [
-        "localstack"
-      ],
-      "source_accounting_statuses": [
-        "covered-by-usf-runtime"
-      ],
+      "react_compose_service_names": ["localstack"],
+      "source_accounting_statuses": ["covered-by-usf-runtime"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -1883,10 +1697,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "b",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test"
-      ],
+      "generated_in_targets": ["dev", "test"],
       "closure_evidence": {
         "closure_disposition": "covered-by-usf-runtime",
         "closure_blocking": false,
@@ -1979,12 +1790,8 @@
       "service_id": "wiremock",
       "display_name": "WireMock",
       "service_kind": "provider-mock",
-      "react_compose_service_names": [
-        "wiremock"
-      ],
-      "source_accounting_statuses": [
-        "covered-by-usf-runtime"
-      ],
+      "react_compose_service_names": ["wiremock"],
+      "source_accounting_statuses": ["covered-by-usf-runtime"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -1992,10 +1799,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "b",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test"
-      ],
+      "generated_in_targets": ["dev", "test"],
       "closure_evidence": {
         "closure_disposition": "covered-by-usf-runtime",
         "closure_blocking": false,
@@ -2085,12 +1889,8 @@
       "service_id": "alertmanager",
       "display_name": "Alertmanager",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
-        "alertmanager"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["alertmanager"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2098,11 +1898,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2115,14 +1911,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-179",
-          "USF-159"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-179", "USF-159"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
@@ -2171,12 +1960,8 @@
       "service_id": "alloy",
       "display_name": "Grafana Alloy",
       "service_kind": "observability-collector",
-      "react_compose_service_names": [
-        "alloy"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["alloy"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2184,11 +1969,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2201,14 +1982,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-179",
-          "USF-159"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-179", "USF-159"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
@@ -2255,12 +2029,8 @@
       "service_id": "windmill-postgres",
       "display_name": "Windmill Postgres",
       "service_kind": "workflow-backing-store",
-      "react_compose_service_names": [
-        "windmill-postgres"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["windmill-postgres"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2268,11 +2038,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2285,14 +2051,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-178",
-          "USF-203"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
         "non_equivalence_boundaries": [
           "Shared Postgres proof is not equivalent to Windmill Postgres persistence, migration, backup, access, audit, or restore proof.",
           "Service catalogue presence and generated Compose derivation are not Windmill persistence readiness, production readiness, or live-provider readiness."
@@ -2348,12 +2107,8 @@
       "service_id": "windmill-redis",
       "display_name": "Windmill Redis",
       "service_kind": "workflow-backing-store",
-      "react_compose_service_names": [
-        "windmill-redis"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["windmill-redis"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2361,11 +2116,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2378,14 +2129,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-178",
-          "USF-203"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
         "non_equivalence_boundaries": [
           "NATS or in-memory queue proof is not equivalent to Windmill Redis queue/cache semantics, access, audit, retention, or cleanup proof.",
           "Service catalogue presence and generated Compose derivation are not Windmill queue/cache readiness, production readiness, or live-provider readiness."
@@ -2441,12 +2185,8 @@
       "service_id": "windmill",
       "display_name": "Windmill",
       "service_kind": "operator-automation",
-      "react_compose_service_names": [
-        "windmill"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["windmill"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2454,11 +2194,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2471,14 +2207,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-178",
-          "USF-203"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
         "non_equivalence_boundaries": [
           "Temporal application workflow proof, jobs proof, and worker runtime proof are not equivalent to Windmill operator automation service semantics.",
           "Service catalogue presence and generated Compose derivation are not operator automation readiness, Windmill readiness, production readiness, or live-provider readiness."
@@ -2538,12 +2267,8 @@
       "service_id": "windmill-worker",
       "display_name": "Windmill Worker",
       "service_kind": "operator-automation-worker",
-      "react_compose_service_names": [
-        "windmill-worker"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["windmill-worker"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2551,11 +2276,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2568,14 +2289,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-178",
-          "USF-203"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-178", "USF-203"],
         "non_equivalence_boundaries": [
           "apps/work and Temporal application workflow proof are not equivalent to Windmill Worker operator automation execution proof.",
           "Service catalogue presence and generated Compose derivation are not Windmill worker readiness, operator automation readiness, production readiness, or live-provider readiness."
@@ -2633,12 +2347,8 @@
       "service_id": "temporal-postgres",
       "display_name": "Temporal Postgres",
       "service_kind": "workflow-backing-store",
-      "react_compose_service_names": [
-        "temporal-postgres"
-      ],
-      "source_accounting_statuses": [
-        "substituted-partial"
-      ],
+      "react_compose_service_names": ["temporal-postgres"],
+      "source_accounting_statuses": ["substituted-partial"],
       "requirement_state": true,
       "human_decision_state": "requires-human-decision",
       "environment_disposition": "deferred",
@@ -2646,11 +2356,7 @@
       "readiness_tier": "deferred",
       "evidence_grade": "b",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "substituted-partial",
         "closure_blocking": true,
@@ -2663,20 +2369,11 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-151",
-          "USF-178"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-151", "USF-178"],
         "non_equivalence_boundaries": [
           "USF dev Temporal currently uses postgres service; separate Temporal database remains an isolation decision."
         ],
-        "missing_evidence": [
-          "accepted implementation/proof decision for deferred service depth"
-        ],
+        "missing_evidence": ["accepted implementation/proof decision for deferred service depth"],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
@@ -2717,12 +2414,8 @@
       "service_id": "temporal-ui",
       "display_name": "Temporal UI",
       "service_kind": "workflow-operator-ui",
-      "react_compose_service_names": [
-        "temporal-ui"
-      ],
-      "source_accounting_statuses": [
-        "requires-human-decision"
-      ],
+      "react_compose_service_names": ["temporal-ui"],
+      "source_accounting_statuses": ["requires-human-decision"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2730,11 +2423,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "requires-human-decision",
         "closure_blocking": true,
@@ -2747,14 +2436,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-169",
-          "USF-178"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-169", "USF-178"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
@@ -2803,12 +2485,8 @@
       "service_id": "pgbackrest",
       "display_name": "pgBackRest",
       "service_kind": "backup-restore",
-      "react_compose_service_names": [
-        "pgbackrest"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["pgbackrest"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2816,11 +2494,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2833,14 +2507,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-177",
-          "USF-202"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-177", "USF-202"],
         "non_equivalence_boundaries": [
           "DB/RLS proof and files proof are not equivalent to pgBackRest backup artifact creation, restore drill, RPO/RTO, or disaster recovery proof.",
           "Service catalogue presence and generated Compose derivation are not backup readiness, restore readiness, production readiness, or live-provider readiness."
@@ -2900,12 +2567,8 @@
       "service_id": "clamav",
       "display_name": "ClamAV",
       "service_kind": "file-scanner",
-      "react_compose_service_names": [
-        "clamav"
-      ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "react_compose_service_names": ["clamav"],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -2913,11 +2576,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "c",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "deferred",
         "closure_blocking": true,
@@ -2930,13 +2589,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-175"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-175"],
         "non_equivalence_boundaries": [
           "Shared scanning engine is valid only when queues, files, scan results, and evidence are environment scoped."
         ],
@@ -3005,9 +2658,7 @@
         "sentry-taskscheduler",
         "sentry-cleanup"
       ],
-      "source_accounting_statuses": [
-        "deferred"
-      ],
+      "source_accounting_statuses": ["deferred"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "shared-cross-environment-control-plane",
@@ -3120,12 +2771,8 @@
       "service_id": "caddy",
       "display_name": "Caddy Gateway",
       "service_kind": "gateway",
-      "react_compose_service_names": [
-        "external-caddy"
-      ],
-      "source_accounting_statuses": [
-        "requires-human-decision"
-      ],
+      "react_compose_service_names": ["external-caddy"],
+      "source_accounting_statuses": ["requires-human-decision"],
       "requirement_state": true,
       "human_decision_state": "accepted",
       "environment_disposition": "environment-specific",
@@ -3133,11 +2780,7 @@
       "readiness_tier": "compose-target-catalogued",
       "evidence_grade": "d",
       "profile_gated": true,
-      "generated_in_targets": [
-        "dev",
-        "test",
-        "staging"
-      ],
+      "generated_in_targets": ["dev", "test", "staging"],
       "closure_evidence": {
         "closure_disposition": "requires-human-decision",
         "closure_blocking": true,
@@ -3150,14 +2793,7 @@
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json"
         ],
-        "tracking_issues": [
-          "USF-166",
-          "USF-167",
-          "USF-182",
-          "USF-185",
-          "USF-180",
-          "USF-169"
-        ],
+        "tracking_issues": ["USF-166", "USF-167", "USF-182", "USF-185", "USF-180", "USF-169"],
         "non_equivalence_boundaries": [],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
@@ -3206,12 +2842,8 @@
       "service_id": "platform-api",
       "display_name": "React Platform API",
       "service_kind": "application-runtime",
-      "react_compose_service_names": [
-        "platform-api"
-      ],
-      "source_accounting_statuses": [
-        "covered-by-usf-runtime"
-      ],
+      "react_compose_service_names": ["platform-api"],
+      "source_accounting_statuses": ["covered-by-usf-runtime"],
       "requirement_state": false,
       "human_decision_state": "not-required",
       "environment_disposition": "out-of-scope",
@@ -3232,9 +2864,7 @@
           "spec/instances/compose-service/service-catalogue.json",
           "spec/instances/runtime-proof/runtime-application-compose-parity.json"
         ],
-        "tracking_issues": [
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-185"],
         "non_equivalence_boundaries": [
           "Historical React runtime services are not USF implementation authority."
         ],
@@ -3273,12 +2903,8 @@
       "service_id": "react-app",
       "display_name": "React App",
       "service_kind": "implementation-ui",
-      "react_compose_service_names": [
-        "react-app"
-      ],
-      "source_accounting_statuses": [
-        "out-of-foundation-scope"
-      ],
+      "react_compose_service_names": ["react-app"],
+      "source_accounting_statuses": ["out-of-foundation-scope"],
       "requirement_state": false,
       "human_decision_state": "not-required",
       "environment_disposition": "out-of-scope",
@@ -3296,10 +2922,7 @@
           "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#react-app"
         ],
         "proof_evidence_refs": [],
-        "tracking_issues": [
-          "USF-133",
-          "USF-185"
-        ],
+        "tracking_issues": ["USF-133", "USF-185"],
         "non_equivalence_boundaries": [
           "Historical React UI service is not the USF gateway or forward-auth semantic authority."
         ],
