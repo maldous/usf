@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-usf157-enterprise-linkage-missing",
+  "expectedRuleId": "USF-PROVIDERS-014",
+  "edits": [
+    {
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "old": "\"usf-157-evidence-provider-risk-resilience-depth-matrix\"",
+      "new": "\"usf-157-evidence-provider-risk-resilience-depth-matrix-missing\""
+    }
+  ]
+}

@@ -125,6 +125,12 @@ Provider incident posture records incident reference, incident status, last inci
 
 Future-live providers represent supplier name reference, subprocessor status, data processing role, contract status, security review status, privacy review status, last review, and review expiry. This is posture metadata, not supplier approval.
 
+## USF-157 Provider Risk/Resilience Aggregate
+
+`docs/architecture/provider-risk-resilience-depth-matrix.json` records the USF-157 provider risk/resilience aggregate. It reconciles current active and profile-gated local composed-provider proof rows with the remaining provider depth controls that must stay explicit: live-external-authorised authority, supplier/subprocessor workflow, live egress allow-listing, live TLS/certificate validation, circuit-breaker/timeout/fallback/bulkhead posture, provider drift detection, incident hooks, failover/disaster-recovery proof, cache/search/gateway/observability provider depth, and composed-provider readiness aggregation.
+
+The aggregate is a source-issue evidence gate, not a readiness gate. It may record bounded local proof and explicit reclassification with owner, risk owner, control owner, review date, follow-up boundary, validation command, and non-claims. It must not be used to claim provider readiness, live-provider readiness, supplier approval, failover readiness, disaster recovery readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure.
+
 ## Capability Boundary
 
 Capabilities depend on USF ports. Adapters may depend on provider-specific implementations only inside adapter packages. Core packages do not import provider SDKs. API routes do not call provider SDKs directly. Tests may import provider fakes or mocks only from approved test adapters.

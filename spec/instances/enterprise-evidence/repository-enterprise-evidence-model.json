@@ -4692,6 +4692,33 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "usf-157-soa-provider-risk-resilience-depth",
+      "mappedType": "source-issue-provider-risk-resilience-depth",
+      "controlPurpose": "Organize provider risk and resilience depth as Statement of Applicability support for bounded local proof, explicit reclassification, and prohibited stronger claims.",
+      "riskTreated": "Provider proof rows could be overclaimed as live-provider authority, supplier approval, failover readiness, disaster recovery readiness, production readiness, certification readiness, full dev readiness, full React parity, or USF-133 closure.",
+      "assetServiceAffected": "provider registry; runtime provider proof manifest; composed-provider proof boundaries; future live provider candidates",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "implementationStatus": "effectivenessState=bounded-local-proof-plus-deferred-with-owner; sourceIssue=USF-157; liveProviderAuthority=deferred-with-owner; supplierWorkflow=deferred-with-owner; failoverDr=deferred-with-owner; composedProviderScope=reconciled",
+      "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json; docs/architecture/provider-adapters-and-modes-standard.md; tools/validate-parity/validate-providers.py; packages/proof/src/provider-adapters-proof.ts",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "deferredReason": "Live-external-authorised provider authority, supplier/subprocessor approval workflow, live egress, live TLS/certificate validation, runtime drift detection, production incident hooks, failover, DR, RPO/RTO, provider-managed operation, and promotion readiness remain deferred with owner and reviewDate=2026-09-30; followUpIssue=future-source-issue-required-or-USF-193/USF-159/USF-177 as applicable",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -6710,6 +6737,31 @@
       ],
       "prOrMergeSha": "cd9f643f8a9b36c3e3a2e907f3bbb4faa2e2c253",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
+    },
+    {
+      "id": "usf-157-evidence-provider-risk-resilience-depth-matrix",
+      "proofResult": "provider-risk-resilience-depth-reconciliation",
+      "whatWasProven": "USF-157 records a machine-checkable aggregate of active and profile-gated local composed-provider proof scope, verifies required bounded proof rows and provider registry links, and explicitly reclassifies live-provider authority, supplier/subprocessor workflow, live egress, live TLS/certificate posture, drift detection, incident hooks, failover, disaster recovery, and readiness aggregation as bounded or deferred controls rather than hidden passes.",
+      "whatWasNotProven": "Does not prove provider readiness, live-provider readiness, supplier approval, subprocessor approval, failover readiness, disaster recovery readiness, RPO/RTO, production incident hooks, live egress, live TLS/certificate validation, test readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure.",
+      "runtimeMode": "not-runtime-specific-aggregate",
+      "providerMode": "bounded-composed-test-and-live-external-deferred",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json provider service rows referenced by docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "adapterProviderId": "aggregate-provider-risk-resilience-depth",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "commandPin": "corepack pnpm proof:providers; python3 tools/validate-parity/validate-providers.py all --json",
+      "commitPin": "eac014e74bed478b558d68a29805cbeaf2223e6f",
+      "issueLinks": [
+        "USF-157",
+        "USF-156",
+        "USF-189",
+        "USF-191",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "eac014e74bed478b558d68a29805cbeaf2223e6f",
+      "retentionPosture": "Retain committed matrix and validator output in PR validation summary; record the real PR merge SHA in Linear after merge; proof output remains value-free and redacted."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8412,6 +8464,32 @@
       "failClosedBehaviour": "invalid credential denied; readiness retry times out; proof exits nonzero on missing audit, worker readiness, script execution, redaction, or teardown evidence",
       "monitoringAuditEvidence": "value-free audit row presence, structured log evidence, trace-like correlation metadata, and metrics evidence recorded by proof output",
       "residualRisk": "riskStatement=bounded proof can be overclaimed; impact=high; likelihood=medium; owner=platform-workflow-foundation; riskOwner=platform-workflow-risk-owner; controlOwner=platform-workflow-control-owner; treatment=preserve non-claims and require separate source issues before stronger claims; reviewDate=2026-09-30; followUpIssue=none-for-USF-212-bounded-proof"
+    },
+    {
+      "id": "usf-157-threat-provider-risk-resilience-overclaim",
+      "targetType": "source-issue-provider-risk-resilience-depth",
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "trustBoundary": "Local and profile-gated composed-provider proofs are local evidence only. They must not cross into live-provider, supplier, DR, promotion, certification, or USF-133 closure authority.",
+      "tenantBoundary": "Provider proof rows use synthetic tenant-safe data or metadata-only evidence; no production tenant data or live provider data transfer is claimed.",
+      "credentialBoundary": "Provider SDK and CLI proof boundaries must not expose raw credentials, tokens, connection strings, raw endpoints, provider payloads, stack traces, or SDK error payloads.",
+      "dataClassification": "synthetic-local-proof-data and provider metadata only",
+      "abuseCases": [
+        "bounded local proof overclaimed as live provider readiness",
+        "supplier posture metadata treated as supplier approval",
+        "single-provider retry or backup proof treated as failover or DR readiness",
+        "provider registry entry treated as environment promotion approval",
+        "USF-133 closure inferred from aggregate provider proof"
+      ],
+      "failureModes": [
+        "provider risk matrix missing a required binding",
+        "deferred live or DR control lacks owner review date or follow-up",
+        "readinessClaimsAllowed includes a prohibited claim",
+        "SDK import boundary evidence regresses",
+        "proof output leaks endpoint or credential material"
+      ],
+      "failClosedBehaviour": "validate-providers and proof:providers fail when the USF-157 matrix, required controls, enterprise evidence references, non-claims, SDK boundary evidence, or prohibited claim boundaries are missing or contradictory.",
+      "monitoringAuditEvidence": "PR validation output, validate-providers selftest, proof:providers output, planted defects, and Linear merge reconciliation only; no production incident or live monitoring evidence is claimed.",
+      "residualRisk": "Live-provider authority, supplier approval, production incident hooks, runtime drift, failover, DR, and promotion readiness remain deferred with owner and require later source issues before stronger claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -10921,6 +10999,45 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "usf-157-access-provider-risk-resilience",
+      "targetType": "source-issue-provider-risk-resilience-depth",
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "posture": [
+        "effectivenessState=bounded-local-proof-plus-deferred-with-owner",
+        "sourceIssue=USF-157",
+        "accessModel=operator-only-redacted-provider-status-and-adapter-contained-provider-sdk-boundaries",
+        "authnAuthzBoundary=provider-status-surfaces-remain-PDP-protected",
+        "sdkBoundary=provider-SDKs-remain-outside-core-ports-capabilities-api-routes-worker-orchestration-and-PDP-code",
+        "leastPrivilegePosture=local-proof-credentials-and-endpoint-references-are-proof-scoped-and-redacted",
+        "breakGlassRelevance=not-proven-for-live-provider-admin-operation",
+        "auditEvidence=value-free-provider-audit-taxonomy-and-proof-output-only",
+        "reviewCadence=quarterly-before-stronger-readiness-claim",
+        "deprovisioningPosture=local-proof-cleanup-only-live-deprovisioning-deferred",
+        "no-public-exposure-claim",
+        "owner=platform-provider-foundation",
+        "riskOwner=platform-provider-risk-owner",
+        "controlOwner=platform-provider-control-owner",
+        "reviewDate=2026-09-30",
+        "validationCommand=python3 tools/validate-parity/validate-providers.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json; packages/core/src/index.ts; packages/proof/src/provider-adapters-proof.ts; tools/validate-parity/validate-providers.py",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "deferredReason": "Live provider privileged operation reviews, access review execution, supplier approval, and break-glass operation evidence remain deferred; owner=platform-provider-foundation; riskOwner=platform-provider-risk-owner; reviewDate=2026-09-30; followUpIssue=future-source-issue-required",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -12755,6 +12872,45 @@
       "evidenceSource": "docs/architecture/windmill-configured-proof-boundary.json; packages/proof/src/windmill-configured-proof.ts; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/core/src/index.ts; package.json; Makefile; spec/instances/compose-service/service-catalogue.json#windmill; USF-212; USF-203; USF-178; USF-189; USF-184; USF-192; USF-133",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "Backup restore, DR, corruption drills, RPO/RTO, environment resilience, live resilience, and production recovery evidence remain unproven; owner=platform-workflow-foundation; reviewDate=2026-09-30; followUpIssue=none-for-USF-212-bounded-proof; exception=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "usf-157-resilience-provider-risk-resilience-depth",
+      "targetType": "source-issue-provider-risk-resilience-depth",
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "posture": [
+        "effectivenessState=bounded-local-proof-plus-deferred-with-owner",
+        "sourceIssue=USF-157",
+        "backupRequirement=service-specific-only-not-claimed-by-aggregate-provider-proof",
+        "restoreProofRequirement=only-where-a-bounded-source-issue-proves-it",
+        "rpoRtoTarget=explicit-non-claim-for-USF-157",
+        "corruptionFailureScenario=provider-outage-stale-registry-failed-drift-backup-restore-or-failover-must-not-be-treated-as-readiness",
+        "cleanupTeardownProof=bounded-proof-rows-record-local-cleanup-where-implemented",
+        "drBoundary=failover-and-disaster-recovery-readiness-are-prohibited-claims",
+        "readinessRetry=bounded-local-proof-rows-only",
+        "timeout=bounded-local-proof-rows-only",
+        "failClosed=provider-proof-and-validators-fail-closed-on-overclaim",
+        "owner=platform-provider-foundation",
+        "riskOwner=platform-provider-risk-owner",
+        "controlOwner=platform-provider-control-owner",
+        "reviewDate=2026-09-30",
+        "validationCommand=corepack pnpm proof:providers"
+      ],
+      "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json; packages/proof/src/provider-adapters-proof.ts; tools/validate-parity/validate-providers.py",
+      "validationCommand": "corepack pnpm proof:providers",
+      "deferredReason": "Failover, failback, disaster recovery, RPO/RTO, multi-provider reconciliation, and provider-managed backup operation remain deferred with owner; owner=platform-provider-foundation; riskOwner=platform-provider-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-177 or future source issue as applicable",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -15291,6 +15447,38 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
+      ]
+    },
+    {
+      "id": "usf-157-incident-vulnerability-provider-risk-resilience",
+      "targetType": "provider-risk-resilience-depth",
+      "target": "provider proof and future live provider candidates",
+      "posture": [
+        "effectivenessState=bounded-local-proof-plus-deferred-with-owner",
+        "sourceIssue=USF-157",
+        "incidentDetectionHook=local-proof-fail-closed-and-validator-output-only",
+        "alertingPosture=not-proven-by-USF-157",
+        "escalationOwner=platform-provider-risk-owner",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness-claim",
+        "dependencyUpdatePosture=existing SDK governance remains package-specific; no new dependency added",
+        "correctiveActionEvidenceBoundary=validator and planted defect output only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-157",
+        "reviewDate=2026-09-30"
+      ],
+      "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json; tools/validate-parity/validate-providers.py",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "deferredReason": "Production incident detection, alerting, escalation rehearsal, corrective action operation, vulnerability SLA evidence, supplier incident hooks, and provider advisory operation remain unproven; followUpIssue=USF-159 or future source issue as applicable",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -18187,6 +18375,38 @@
         "iso27001-certification",
         "enterprise-production-readiness",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-157-privacy-provider-risk-resilience",
+      "targetType": "provider-risk-resilience-depth",
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-and-metadata-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=provider-risk-metadata",
+        "redactionPolicy=value-free-proof-output-and-redacted-provider-status-only",
+        "retentionPurgePosture=committed-metadata-and-PR-validation-summary-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-157",
+        "validationCommand=python3 tools/validate-parity/validate-providers.py all --json"
+      ],
+      "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/core/src/index.ts",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "deferredReason": "Production privacy, live-provider data processing, legal hold, data residency, supplier/subprocessor approval, and custom retention evidence remain deferred; followUpIssue=future-source-issue-required; reviewDate=2026-09-30",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
       ]
     }
   ],

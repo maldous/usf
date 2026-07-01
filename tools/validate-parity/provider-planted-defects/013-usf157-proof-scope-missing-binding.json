@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-usf157-proof-scope-missing-binding",
+  "expectedRuleId": "USF-PROVIDERS-013",
+  "edits": [
+    {
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "old": "\"bindingId\": \"usf-189-windmill-automation-provider\"",
+      "new": "\"bindingId\": \"usf-189-windmill-automation-provider-missing\""
+    }
+  ]
+}

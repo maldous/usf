@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-usf157-overclaim",
+  "expectedRuleId": "USF-PROVIDERS-015",
+  "edits": [
+    {
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "old": "\"supplierApprovalClaimAllowed\": false",
+      "new": "\"supplierApprovalClaimAllowed\": true"
+    }
+  ]
+}

@@ -31,6 +31,10 @@ interface ProviderAdaptersProofResult {
   readonly liveExternalProviderReadinessClaim: false;
   readonly productionLiveClaim: false;
   readonly supplierApprovalClaim: false;
+  readonly failoverReadinessClaim: false;
+  readonly disasterRecoveryReadinessClaim: false;
+  readonly usf133ClosureClaim: false;
+  readonly providerRiskResilienceDepthReconciled: true;
   readonly iso27001CertificationClaim: false;
   readonly socCertificationClaim: false;
   readonly providerCount: number;
@@ -44,6 +48,53 @@ function assert(condition: unknown, message: string): asserts condition {
     throw new Error(message);
   }
 }
+
+const REQUIRED_RISK_MATRIX_BINDINGS = Object.freeze([
+  "runtime-database-provider-binding",
+  "mailpit-notification-provider",
+  "nats-event-bus-provider",
+  "minio-object-storage-provider",
+  "keycloak-identity-provider",
+  "openbao-secret-provider",
+  "temporal-workflow-provider",
+  "usf-189-clickhouse-analytics-provider",
+  "usf-189-redis-cache-provider",
+  "usf-189-meilisearch-search-provider",
+  "usf-189-clamav-scanner-provider",
+  "usf-189-localstack-cloud-mock-provider",
+  "usf-209-wiremock-http-mock-provider",
+  "usf-189-webhook-sink-capture-provider",
+  "usf-189-pgbackrest-backup-provider",
+  "usf-189-windmill-automation-provider",
+] as const);
+
+const REQUIRED_RISK_CONTROLS = Object.freeze([
+  "composed-provider-proof-scope-reconciliation",
+  "live-external-authorised-provider-authority",
+  "supplier-subprocessor-workflow",
+  "live-egress-allowlist",
+  "tls-certificate-validation",
+  "circuit-breaker-timeout-fallback-bulkhead-runtime",
+  "provider-drift-detection",
+  "provider-incident-hooks",
+  "failover-disaster-recovery-proof",
+  "cache-search-gateway-observability-provider-depth",
+  "composed-provider-readiness-aggregation",
+] as const);
+
+const REQUIRED_PROVIDER_NON_CLAIMS = Object.freeze([
+  "full-dev-readiness",
+  "test-readiness",
+  "staging-readiness",
+  "production-readiness",
+  "deployment-readiness",
+  "live-provider-readiness",
+  "soc-readiness",
+  "iso27001-certification",
+  "enterprise-production-readiness",
+  "full-react-parity-readiness",
+  "usf-133-closure",
+] as const);
 
 function repoRoot(): string {
   let current = process.cwd();
@@ -79,6 +130,217 @@ function filesUnder(path: string): readonly string[] {
     return Object.freeze(out);
   }
   return Object.freeze(out);
+}
+
+function asRecord(value: unknown, context: string): Record<string, unknown> {
+  assert(
+    value !== null && typeof value === "object" && !Array.isArray(value),
+    `${context} missing`,
+  );
+  return value as Record<string, unknown>;
+}
+
+function readJsonObject(path: string): Record<string, unknown> {
+  return asRecord(JSON.parse(readFileSync(path, "utf8")), path);
+}
+
+function stringArray(value: unknown): readonly string[] {
+  assert(Array.isArray(value), "expected string array");
+  return Object.freeze(
+    value.map((item) => {
+      assert(typeof item === "string", "expected string array item");
+      return item;
+    }),
+  );
+}
+
+function assertProviderRiskResilienceMatrix(root: string): void {
+  const matrixPath = join(root, "docs/architecture/provider-risk-resilience-depth-matrix.json");
+  const matrix = readJsonObject(matrixPath);
+  assert(matrix.sourceIssue === "USF-157", "provider risk matrix source issue mismatch");
+  assert(matrix.parentIssue === "USF-133", "provider risk matrix parent issue mismatch");
+  assert(
+    matrix.status === "source-issue-bounded-proof-and-reclassification-gate",
+    "provider risk matrix status mismatch",
+  );
+  assert(
+    matrix.proofCommand === "corepack pnpm proof:providers",
+    "provider risk proof command missing",
+  );
+  assert(
+    matrix.validationCommand === "python3 tools/validate-parity/validate-providers.py all --json",
+    "provider risk validation command missing",
+  );
+
+  const proofScope = matrix.currentComposedProviderProofScope;
+  assert(Array.isArray(proofScope), "provider risk proof scope missing");
+  const proofBindingIds = new Set(
+    proofScope.map((row) => {
+      const record = asRecord(row, "provider risk proof scope row");
+      const bindingId = record.bindingId;
+      assert(typeof bindingId === "string", "provider risk proof scope binding id missing");
+      assert(
+        ["proven-local", "profile-gated-proven-local"].includes(String(record.evidenceStatus)),
+        `provider risk proof scope ${bindingId} evidence status invalid`,
+      );
+      assert(
+        typeof record.proofSource === "string" && record.proofSource.length > 0,
+        `${bindingId} proof source missing`,
+      );
+      assert(
+        typeof record.proofCommand === "string" && record.proofCommand.length > 0,
+        `${bindingId} proof command missing`,
+      );
+      assert(
+        stringArray(record.providerRegistryIds).length > 0,
+        `${bindingId} provider registry ids missing`,
+      );
+      assert(
+        stringArray(record.serviceCatalogueServiceIds).length > 0,
+        `${bindingId} service catalogue ids missing`,
+      );
+      return bindingId;
+    }),
+  );
+  for (const bindingId of REQUIRED_RISK_MATRIX_BINDINGS) {
+    assert(proofBindingIds.has(bindingId), `provider risk matrix missing binding: ${bindingId}`);
+  }
+
+  const controls = matrix.riskResilienceControls;
+  assert(Array.isArray(controls), "provider risk controls missing");
+  const controlsById = new Map<string, Record<string, unknown>>();
+  for (const row of controls) {
+    const control = asRecord(row, "provider risk control");
+    const controlId = control.controlId;
+    assert(typeof controlId === "string", "provider risk control id missing");
+    controlsById.set(controlId, control);
+    for (const field of [
+      "owner",
+      "riskOwner",
+      "controlOwner",
+      "riskTreatment",
+      "reviewDate",
+      "followUpIssue",
+      "evidenceSource",
+      "validationCommand",
+      "reclassificationBoundary",
+    ]) {
+      assert(
+        typeof control[field] === "string" && String(control[field]).length > 0,
+        `${controlId} missing ${field}`,
+      );
+    }
+    assert(
+      stringArray(control.promotionImpact).length > 0,
+      `${controlId} promotion impact missing`,
+    );
+    assert(control.readinessClaimAllowed === false, `${controlId} allows a readiness claim`);
+  }
+  for (const controlId of REQUIRED_RISK_CONTROLS) {
+    assert(controlsById.has(controlId), `provider risk matrix missing control: ${controlId}`);
+  }
+  for (const controlId of [
+    "live-external-authorised-provider-authority",
+    "supplier-subprocessor-workflow",
+    "live-egress-allowlist",
+    "tls-certificate-validation",
+    "provider-drift-detection",
+    "provider-incident-hooks",
+    "failover-disaster-recovery-proof",
+  ]) {
+    const control = controlsById.get(controlId);
+    assert(control, `provider risk matrix missing deferred control: ${controlId}`);
+    assert(
+      control.effectivenessState === "deferred-with-owner",
+      `${controlId} must be explicitly deferred with owner`,
+    );
+    assert(
+      control.implementationStatus === "explicitly-reclassified",
+      `${controlId} must be explicitly reclassified`,
+    );
+  }
+
+  const syntheticProof = asRecord(
+    matrix.syntheticRiskResilienceProof,
+    "synthetic risk resilience proof",
+  );
+  assert(
+    syntheticProof.liveAuthorityUnauthorisedFailsClosed === true,
+    "live authority fail-closed proof marker missing",
+  );
+  assert(
+    syntheticProof.supplierApprovalClaimAllowed === false,
+    "supplier approval claim is allowed",
+  );
+  assert(
+    syntheticProof.liveEgressAllowedByCurrentProof === false,
+    "live egress is allowed by current proof",
+  );
+  assert(
+    syntheticProof.tlsCertificateLiveValidationClaim === false,
+    "live TLS validation claim is allowed",
+  );
+  assert(syntheticProof.failoverReadinessClaim === false, "failover readiness claim is allowed");
+  assert(syntheticProof.disasterRecoveryReadinessClaim === false, "DR readiness claim is allowed");
+  assert(
+    syntheticProof.composedReadinessAggregationClaim === "bounded-evidence-index-only",
+    "composed readiness aggregation overclaims",
+  );
+  for (const field of [
+    "boundedRetryTimeoutFallbackEvidenceRecorded",
+    "sdkBoundaryEvidenceRecorded",
+    "redactionBoundaryRecorded",
+    "tenantBoundaryRecorded",
+    "secretBoundaryRecorded",
+    "auditEvidenceBoundaryRecorded",
+    "cleanupTeardownBoundaryRecorded",
+  ]) {
+    assert(syntheticProof[field] === true, `synthetic risk resilience proof missing ${field}`);
+  }
+
+  const allowedClaims = stringArray(matrix.readinessClaimsAllowed);
+  for (const forbidden of [
+    "live-provider-readiness",
+    "supplier-approval",
+    "failover-readiness",
+    "disaster-recovery-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "enterprise-production-readiness",
+    "full-dev-readiness",
+    "full-react-parity",
+    "usf-133-closure",
+  ]) {
+    assert(
+      !allowedClaims.includes(forbidden),
+      `provider risk matrix allows prohibited claim ${forbidden}`,
+    );
+  }
+  const prohibitedClaims = new Set(stringArray(matrix.readinessClaimsProhibited));
+  for (const forbidden of [
+    "live-provider-readiness",
+    "supplier-approval",
+    "failover-readiness",
+    "disaster-recovery-readiness",
+    "usf-133-closure",
+  ]) {
+    assert(
+      prohibitedClaims.has(forbidden),
+      `provider risk matrix missing prohibited claim ${forbidden}`,
+    );
+  }
+  const nonClaims = new Set(stringArray(matrix.nonClaims));
+  for (const nonClaim of REQUIRED_PROVIDER_NON_CLAIMS) {
+    assert(nonClaims.has(nonClaim), `provider risk matrix missing non-claim ${nonClaim}`);
+  }
+  const statusIntegrity = asRecord(matrix.statusIntegrity, "provider risk status integrity");
+  assert(
+    statusIntegrity.usf133ClosureClaimed === false,
+    "provider risk matrix claims USF-133 closure",
+  );
+  assert(statusIntegrity.usf39Touched === false, "provider risk matrix touches USF-39");
 }
 
 function assertNoUnauthorisedProviderSdkImports(root: string): void {
@@ -361,6 +623,11 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
   assert(!auditText.includes("bearer proof-token"), "audit leaked raw provider failure");
   checks.push("provider audit event is value-free and redacted");
 
+  assertProviderRiskResilienceMatrix(root);
+  checks.push(
+    "USF-157 provider risk and resilience depth matrix reconciles bounded proof scope, explicit reclassifications, and non-claims",
+  );
+
   return Object.freeze({
     status: "pass",
     proof: "provider-adapters-modes",
@@ -371,6 +638,10 @@ export async function runProviderAdaptersProof(): Promise<ProviderAdaptersProofR
     liveExternalProviderReadinessClaim: false,
     productionLiveClaim: false,
     supplierApprovalClaim: false,
+    failoverReadinessClaim: false,
+    disasterRecoveryReadinessClaim: false,
+    usf133ClosureClaim: false,
+    providerRiskResilienceDepthReconciled: true,
     iso27001CertificationClaim: false,
     socCertificationClaim: false,
     providerCount: PROVIDER_REGISTRY.length,

@@ -1812,7 +1812,8 @@
         "packages/proof/src/provider-adapters-proof.ts",
         "docs/architecture/provider-adapters-and-modes-standard.md",
         "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
-        "tools/validate-parity/validate-providers.py"
+        "tools/validate-parity/validate-providers.py",
+        "docs/architecture/provider-risk-resilience-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/provider-adapters.test.ts",
@@ -1821,7 +1822,8 @@
       ],
       "usf_proofs": [
         "make providers-proof",
-        "make parity (validate-providers USF-PROVIDERS-* with planted defects)"
+        "make parity (validate-providers USF-PROVIDERS-* with planted defects)",
+        "corepack pnpm proof:providers validates USF-157 aggregate risk/resilience gate"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
@@ -1829,8 +1831,8 @@
       "blocker": "USF-157",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "USF-156 implements the local/dev/test provider trust-boundary slice: provider categories/modes/lifecycle/risk/status registry, SecretReference-only credential posture, redacted provider status views, PDP-protected provider status routes, value-free provider audit events, capability-provider import-boundary proof, make providers-proof, and validate-providers. No live-external-authorised provider, supplier approval, production readiness, or certification claim is made.",
-      "retry_condition": "USF-157 completes deferred live provider, supplier/subprocessor, egress/TLS/certificate, runtime resilience, drift, incident, failover/DR, gateway, cache/search, and deep composed-provider readiness depth."
+      "evidence": "USF-156 implements the local/dev/test provider trust-boundary slice. USF-157 adds docs/architecture/provider-risk-resilience-depth-matrix.json as the aggregate risk/resilience gate, reconciling bounded local composed-provider proof scope while explicitly reclassifying live-provider authority, supplier/subprocessor workflow, egress/TLS/certificate, drift, incident, failover, DR, and readiness aggregation depth as bounded or deferred non-claims.",
+      "retry_condition": "Later source issues prove any desired live-provider, supplier approval, failover, DR, promotion, gateway-live, SOC, ISO, or production provider readiness claim without overclaiming local proof."
     },
     {
       "react_item_id": "provider.registry",
@@ -1967,7 +1969,8 @@
       "usf_status": "deferred",
       "usf_paths": [
         "docs/architecture/provider-adapters-and-modes-standard.md",
-        "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md"
+        "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+        "docs/architecture/provider-risk-resilience-depth-matrix.json"
       ],
       "usf_tests": [
         "tests/capabilities/provider-adapters.test.ts"
@@ -1981,8 +1984,8 @@
       "blocker": "USF-157",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "Deferred depth is explicitly tracked in USF-157. The current slice makes no live provider, production, supplier approval, DR, gateway-live, SOC, ISO, or regulatory certification claim.",
-      "retry_condition": "USF-157 receives an authorised implementation directive and proves the deferred live/risk/resilience controls without overclaiming."
+      "evidence": "USF-157 aggregate matrix records each deferred provider risk/resilience control with owner, risk owner, control owner, review date, treatment, follow-up boundary, proof/evidence source, validation command, promotion impact, and non-claims. This is not live provider, supplier, failover, DR, production, SOC, ISO, full dev, full React parity, or USF-133 closure evidence.",
+      "retry_condition": "Future source issues implement and prove any stronger live/provider-managed, supplier, failover, DR, or promotion claim with merged evidence and validators."
     },
     {
       "react_item_id": "observability",
