@@ -7950,7 +7950,7 @@
       "adapterProviderId": "backup-restore-pgbackrest-composed-test",
       "validationCommand": "corepack pnpm proof:backup:operations",
       "commandPin": "tsx packages/proof/src/backup-restore-operations-execution-proof.ts",
-      "commitPin": "65560fbc84eef272c7a5d00871332db7adcd2048",
+      "commitPin": "fb7b75875e969778a3d78c2e4b659b9dec757bf9",
       "issueLinks": [
         "USF-223",
         "USF-219",
@@ -7964,8 +7964,8 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "65560fbc84eef272c7a5d00871332db7adcd2048",
-      "retentionPosture": "Retain committed metadata and PR validation summary only; do not retain backup artifacts, restore payloads, database dumps, WAL file names, raw provider output, raw endpoints, credentials, tokens, stack traces, table values, tenant data, production data, or PII. Evidence artefact retained at docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness."
+      "prOrMergeSha": "fb7b75875e969778a3d78c2e4b659b9dec757bf9",
+      "retentionPosture": "Retain committed metadata and PR validation summary only; do not retain backup artifacts, restore payloads, database dumps, WAL file names, raw provider output, raw endpoints, credentials, tokens, stack traces, table values, tenant data, production data, or PII. Evidence artefact retained at docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json. PR=https://github.com/maldous/usf/pull/189. mergeSha=fb7b75875e969778a3d78c2e4b659b9dec757bf9. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness."
     },
     {
       "id": "evidence-proof-proof-backup-operations",
@@ -7978,7 +7978,7 @@
       "adapterProviderId": "backup-restore-pgbackrest-composed-test",
       "validationCommand": "corepack pnpm proof:backup:operations",
       "commandPin": "tsx packages/proof/src/backup-restore-operations-execution-proof.ts",
-      "commitPin": "65560fbc84eef272c7a5d00871332db7adcd2048",
+      "commitPin": "fb7b75875e969778a3d78c2e4b659b9dec757bf9",
       "issueLinks": [
         "USF-223",
         "USF-219",
@@ -7987,8 +7987,8 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "65560fbc84eef272c7a5d00871332db7adcd2048",
-      "retentionPosture": "Retain value-free structured proof output in PR summary and committed metadata only; proof-created containers, volumes, temporary overrides, socket directories, and archive directories are removed. Evidence artefact retained at docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness."
+      "prOrMergeSha": "fb7b75875e969778a3d78c2e4b659b9dec757bf9",
+      "retentionPosture": "Retain value-free structured proof output in PR summary and committed metadata only; proof-created containers, volumes, temporary overrides, socket directories, and archive directories are removed. Evidence artefact retained at docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json. PR=https://github.com/maldous/usf/pull/189. mergeSha=fb7b75875e969778a3d78c2e4b659b9dec757bf9. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness."
     }
   ],
   "threatModelAbuseCaseRegister": [
