@@ -55,3 +55,21 @@ export {
   type KeycloakAuthService,
   type TenantSelectionOutcome,
 } from "./keycloak-auth.ts";
+export {
+  createEnterpriseIdentityControlPlane,
+  DOMAIN_VERIFICATION_METHODS,
+  IDENTITY_ENTERPRISE_ACTIONS,
+  tenantAdminContext,
+  TENANT_SSO_CONNECTION_STATUSES,
+  type AttributeMappingInput,
+  type BrowserFlowPolicyInput,
+  type DomainVerificationMethod,
+  type EnterpriseIdentityControlPlane,
+  type EnterpriseIdentityControlPlaneDeps,
+  type EnterpriseIdentityOutcome,
+  type IdentityEnterpriseAction,
+  type IdentityInvitation,
+  type LinkedIdentity,
+  type TenantSsoConnection,
+  type TenantSsoConnectionStatus,
+} from "./enterprise-identity.ts";

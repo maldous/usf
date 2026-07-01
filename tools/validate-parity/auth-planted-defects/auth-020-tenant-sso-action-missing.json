@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-020",
+  "mutation": {
+    "file": "capabilities/tenant/src/authorization-policy.ts",
+    "replace": {
+      "old": "\"tenant_sso.activate\": \"tenant_sso.activate\"",
+      "new": "\"tenant_sso.disabled_action\": \"tenant_sso.disabled_action\""
+    }
+  }
+}

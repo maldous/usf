@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-019",
+  "mutation": {
+    "file": "capabilities/auth/src/enterprise-identity.ts",
+    "replace": {
+      "old": "requestSsoConnection",
+      "new": "disabledEnterpriseRequest"
+    }
+  }
+}

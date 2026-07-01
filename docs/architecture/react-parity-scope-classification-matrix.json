@@ -37,6 +37,7 @@
         "adapters/idp/src/keycloak-verifier.ts",
         "adapters/idp/src/hermetic-keycloak.ts",
         "capabilities/auth/src/identity.ts",
+        "capabilities/auth/src/enterprise-identity.ts",
         "capabilities/auth/src/session.ts",
         "capabilities/auth/src/keycloak-auth.ts",
         "packages/proof/src/auth-identity-proof.ts",
@@ -50,16 +51,16 @@
         "tests/packages/proof.test.ts (auth proof in-process)"
       ],
       "usf_proofs": [
-        "make auth-proof (packages/proof/src/auth-identity-proof.ts): hermetic Keycloak token validation, identity mapping, session lifecycle, tenant handoff (28 checks, behaviour-proven)",
-        "make parity (validate-auth USF-AUTH-001..018 with planted defects)"
+        "make auth-proof (packages/proof/src/auth-identity-proof.ts): hermetic Keycloak token validation, identity mapping, session lifecycle, tenant handoff, and USF-149 bounded local enterprise identity control-plane proof (38 checks, behaviour-proven)",
+        "make parity (validate-auth USF-AUTH-001..023 with planted defects)"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
       "blocker": "USF-133",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "ADR 0012 (Keycloak sole IdP + local token validation, building on ADR 0010) and the auth-and-identity standard. Implemented hermetically: local Keycloak-issued OIDC/JWT verifier (iss/aud/sig/exp/nbf/alg/kid, fail-closed; rejects non-Keycloak and brokered-upstream issuers), stable actor mapping (realm+subject, never email; duplicate-email no-merge), session lifecycle (expiry/idle/revoke/logout fail-closed, value-free), identity-to-tenant handoff through the PDP (claims/roles/broker alias never grant), cross-tenant SSO with explicit memberships, value-free identity audit. Proven by make auth-proof and validate-auth. Enterprise breadth (self-service SSO, JIT, domain verification, invitations, assurance step-up, account linking, attribute mapping, live Keycloak/broker/browser flows) is DEFINED in the auth-and-identity standard and DEFERRED.",
-      "retry_condition": "Deferred auth/identity depth blocker completes the self-service SSO control plane runtime, JIT provisioning, domain verification (live DNS/HTTP), invitations, MFA/step-up live flow, account linking, attribute/group mapping, privileged SSO admin runtime, live Keycloak/broker/upstream integration, and browser login/callback; full auth/identity parity then moves to migrated."
+      "evidence": "ADR 0012 (Keycloak sole IdP + local token validation, building on ADR 0010) and the auth-and-identity standard. Implemented hermetically: local Keycloak-issued OIDC/JWT verifier (iss/aud/sig/exp/nbf/alg/kid, fail-closed; rejects non-Keycloak and brokered-upstream issuers), stable actor mapping (realm+subject, never email; duplicate-email no-merge), session lifecycle (expiry/idle/revoke/logout fail-closed, value-free), identity-to-tenant handoff through the PDP (claims/roles/broker alias never grant), cross-tenant SSO with explicit memberships, value-free identity audit, and USF-149 bounded local enterprise identity control plane for tenant SSO lifecycle, requester/approver separation, JIT policy, domain collision fail-closed, invitations, assurance step-up policy, account linking, attribute/group mapping without direct role grants, privileged SSO PDP actions, browser-flow security semantics, and local threat-signal audit posture. Proven by make auth-proof and validate-auth.",
+      "retry_condition": "Live Keycloak admin API, live external broker/upstream IdP integration, live DNS/HTTP domain verification, browser UI/callback/cookie runtime, refresh-token runtime, email delivery, SCIM, live SIEM forwarding, environment promotion, and production operation remain deferred and non-claimed."
     },
     {
       "react_item_id": "tenant-rbac-abac",
