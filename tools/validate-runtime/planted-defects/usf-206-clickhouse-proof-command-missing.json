@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-RUNTIME-030",
+  "removePackageScripts": [
+    "proof:analytics:clickhouse"
+  ]
+}

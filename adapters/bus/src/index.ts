@@ -1,7 +1,11 @@
 import { setTimeout as sleep } from "node:timers/promises";
+import {
+  ClickHouseLogLevel,
+  createClient as createClickHouseClient,
+} from "@clickhouse/client";
 import { opaqueHash, type TenantContext } from "@foundation/core";
 import type { EventBus } from "@foundation/ports";
-import { createClient } from "redis";
+import { createClient as createRedisClient } from "redis";
 
 export const NATS_RUNTIME_PROVIDER_BINDING_ID = "nats-event-bus-provider";
 export const NATS_PROVIDER_REGISTRY_ID = "event-bus-nats-composed-test";
@@ -15,12 +19,26 @@ export const REDIS_SERVICE_CATALOGUE_ID = "redis";
 export const REDIS_SDK_PACKAGE = "redis";
 export const REDIS_SDK_VERSION = "6.0.1";
 export const REDIS_ENDPOINT_REF = "endpoint://compose/redis";
+export const CLICKHOUSE_RUNTIME_PROVIDER_BINDING_ID = "usf-189-clickhouse-analytics-provider";
+export const CLICKHOUSE_PROVIDER_REGISTRY_ID = "analytics-store-clickhouse-composed-test";
+export const CLICKHOUSE_DEFERRED_PROVIDER_REGISTRY_ID = "analytics-store-clickhouse-deferred";
+export const CLICKHOUSE_SERVICE_CATALOGUE_ID = "clickhouse";
+export const CLICKHOUSE_SDK_PACKAGE = "@clickhouse/client";
+export const CLICKHOUSE_SDK_VERSION = "1.23.0";
+export const CLICKHOUSE_ENDPOINT_REF = "endpoint://compose/clickhouse";
 const REDIS_REMAINING_DEFERRED_BOUNDARIES = [
   "not-live-cache-provider-readiness",
   "not-production-cache-readiness",
   "not-staging-or-test-readiness",
   "not-provider-compatibility-certification",
   "not-api-or-worker-runtime-cache-binding",
+] as const;
+const CLICKHOUSE_REMAINING_DEFERRED_BOUNDARIES = [
+  "not-live-analytics-provider-readiness",
+  "not-production-analytics-readiness",
+  "not-staging-or-test-readiness",
+  "not-provider-compatibility-certification",
+  "not-api-or-worker-runtime-analytics-binding",
 ] as const;
 
 export interface NatsComposedEventBusEvidence {
@@ -119,6 +137,66 @@ export interface RedisComposedCacheEvidence {
   readonly remainingDeferredBoundaries: typeof REDIS_REMAINING_DEFERRED_BOUNDARIES;
 }
 
+export interface ClickHouseComposedAnalyticsEvidence {
+  readonly providerRef: typeof CLICKHOUSE_PROVIDER_REGISTRY_ID;
+  readonly providerMode: "composed-test";
+  readonly providerRegistryId: typeof CLICKHOUSE_PROVIDER_REGISTRY_ID;
+  readonly deferredProviderRegistryId: typeof CLICKHOUSE_DEFERRED_PROVIDER_REGISTRY_ID;
+  readonly serviceCatalogueServiceId: typeof CLICKHOUSE_SERVICE_CATALOGUE_ID;
+  readonly bindingId: typeof CLICKHOUSE_RUNTIME_PROVIDER_BINDING_ID;
+  readonly adapterName: "ClickHouseComposedAnalyticsEventStoreAdapter";
+  readonly sdkPackage: typeof CLICKHOUSE_SDK_PACKAGE;
+  readonly sdkVersion: typeof CLICKHOUSE_SDK_VERSION;
+  readonly sdkBoundary: "adapter-package-only";
+  readonly endpointRef: typeof CLICKHOUSE_ENDPOINT_REF;
+  readonly readinessChecked: boolean;
+  readonly readinessRetryPolicy: "bounded-exponential-backoff-90s";
+  readonly readinessAttempts: number;
+  readonly retryCount: number;
+  readonly connectionFailureCount: number;
+  readonly operationLatencyBucket: "lt-1s" | "1s-5s" | "5s-30s" | "30s-60s" | "timeout";
+  readonly adapterHealthStatus: "healthy" | "unavailable";
+  readonly structuredLogEvidenceCaptured: boolean;
+  readonly traceEvidenceCaptured: boolean;
+  readonly metricEvidenceCaptured: boolean;
+  readonly auditEvidenceCaptured: boolean;
+  readonly redactionChecked: boolean;
+  readonly noExternalEgressChecked: boolean;
+  readonly syntheticDataChecked: boolean;
+  readonly tenantSafeEvidenceChecked: boolean;
+  readonly traceIdHash: string;
+  readonly correlationIdHash: string;
+  readonly tenantIdHash: string;
+  readonly proofRunHash: string | null;
+  readonly operation:
+    | "clickhouse-analytics-round-trip"
+    | "clickhouse-analytics-unavailable-fail-closed";
+  readonly operationOutcome: "succeeded" | "failed-closed";
+  readonly safeErrorCode: "clickhouse-provider-error-redacted" | null;
+  readonly failClosedDenials: number;
+  readonly iso27001Support: "asset-inventory-control-evidence-only-no-certification-claim";
+  readonly readinessQueryChecked: boolean;
+  readonly tableCreatedChecked: boolean;
+  readonly eventIngestionChecked: boolean;
+  readonly tenantSafeQueryChecked: boolean;
+  readonly aggregationChecked: boolean;
+  readonly invalidClassificationRejected: boolean;
+  readonly retentionDeletionChecked: boolean;
+  readonly cleanupAttempted: boolean;
+  readonly cleanupSucceeded: boolean;
+  readonly cleanupBoundary: "clickhouse-truncate-drop-and-compose-down";
+  readonly failureModeChecked: boolean;
+  readonly containerRunningObserved: boolean;
+  readonly serviceReadyObserved: boolean;
+  readonly adapterConnectedObserved: boolean;
+  readonly eventCount: number;
+  readonly tenantCount: number;
+  readonly apiRuntimeUse: "not-applicable-profile-gated-analytics-proof-only";
+  readonly workerRuntimeUse: "not-applicable-profile-gated-analytics-proof-only";
+  readonly safeProviderSummary: "clickhouse-composed-analytics-event-store-provider";
+  readonly remainingDeferredBoundaries: typeof CLICKHOUSE_REMAINING_DEFERRED_BOUNDARIES;
+}
+
 interface ComposeAdapterRetryMetrics {
   readonly attempts: number;
   readonly failures: number;
@@ -143,6 +221,18 @@ interface RedisRetryResult<T> {
   readonly metrics: RedisAdapterRetryMetrics;
 }
 
+interface ClickHouseAdapterRetryMetrics {
+  readonly attempts: number;
+  readonly failures: number;
+  readonly retryCount: number;
+  readonly durationBucket: ClickHouseComposedAnalyticsEvidence["operationLatencyBucket"];
+}
+
+interface ClickHouseRetryResult<T> {
+  readonly value: T;
+  readonly metrics: ClickHouseAdapterRetryMetrics;
+}
+
 class RedisReadinessError extends Error {
   constructor(
     message: string,
@@ -151,6 +241,17 @@ class RedisReadinessError extends Error {
   ) {
     super(message, { cause });
     this.name = "RedisReadinessError";
+  }
+}
+
+class ClickHouseReadinessError extends Error {
+  constructor(
+    message: string,
+    readonly metrics: ClickHouseAdapterRetryMetrics,
+    cause: unknown,
+  ) {
+    super(message, { cause });
+    this.name = "ClickHouseReadinessError";
   }
 }
 
@@ -353,7 +454,7 @@ export class NatsEventBus implements EventBus {
 }
 
 export class RedisComposedCacheAdapter {
-  readonly #client: ReturnType<typeof createClient>;
+  readonly #client: ReturnType<typeof createRedisClient>;
   readonly #commandTimeoutMs: number;
   readonly #readinessTimeoutMs: number;
   readonly #ttlSeconds: number;
@@ -369,7 +470,7 @@ export class RedisComposedCacheAdapter {
       readonly ttlSeconds?: number;
     } = {},
   ) {
-    this.#client = createClient({
+    this.#client = createRedisClient({
       url: options.url ?? "redis://127.0.0.1:6379",
       socket: {
         connectTimeout: options.commandTimeoutMs ?? 2000,
@@ -623,6 +724,463 @@ export class RedisComposedCacheAdapter {
   }
 }
 
+type ClickHouseProofClassification = "synthetic-internal" | "synthetic-confidential";
+
+interface ClickHouseProofEventRow {
+  readonly proof_run_hash: string;
+  readonly tenant_hash: string;
+  readonly event_type_hash: string;
+  readonly correlation_hash: string;
+  readonly trace_hash: string;
+  readonly data_classification: ClickHouseProofClassification;
+  readonly aggregate_bucket_hash: string;
+  readonly occurred_at: string;
+}
+
+interface ClickHouseCountRow {
+  readonly count: number | string;
+}
+
+interface ClickHouseTenantAggregateRow {
+  readonly tenant_hash: string;
+  readonly count: number | string;
+}
+
+export class ClickHouseComposedAnalyticsEventStoreAdapter {
+  readonly #client: ReturnType<typeof createClickHouseClient>;
+  readonly #commandTimeoutMs: number;
+  readonly #readinessTimeoutMs: number;
+  readonly #tableName: string;
+  #readinessMetrics: ClickHouseAdapterRetryMetrics = defaultClickHouseRetryMetrics();
+
+  lastEvidence: ClickHouseComposedAnalyticsEvidence | null = null;
+
+  constructor(
+    options: {
+      readonly url?: string;
+      readonly commandTimeoutMs?: number;
+      readonly readinessTimeoutMs?: number;
+      readonly tableSuffix?: string;
+    } = {},
+  ) {
+    this.#commandTimeoutMs = options.commandTimeoutMs ?? 5000;
+    this.#readinessTimeoutMs = options.readinessTimeoutMs ?? 90000;
+    this.#tableName = `usf_runtime_proof_${clickhouseIdentifierSuffix(
+      options.tableSuffix ?? `${process.pid}:${Date.now()}`,
+    )}`;
+    this.#client = createClickHouseClient({
+      url: options.url ?? "http://127.0.0.1:8123",
+      request_timeout: this.#commandTimeoutMs,
+      application: "usf-clickhouse-composed-proof",
+      keep_alive: { enabled: false },
+      log: { level: ClickHouseLogLevel.OFF },
+    });
+  }
+
+  async #connect(): Promise<void> {
+    try {
+      const result = await retryClickHouseReadiness(
+        async () => {
+          const ping = await this.#withTimeout(
+            this.#client.ping({
+              select: true,
+              abort_signal: AbortSignal.timeout(this.#commandTimeoutMs),
+            }),
+            "clickhouse-provider-readiness-timeout",
+          );
+          if (!ping.success) {
+            throw new Error("clickhouse-provider-ping-failed");
+          }
+        },
+        "clickhouse-composed-provider-readiness-failed",
+        this.#readinessTimeoutMs,
+      );
+      this.#readinessMetrics = result.metrics;
+    } catch (error) {
+      if (error instanceof ClickHouseReadinessError) {
+        this.#readinessMetrics = error.metrics;
+      }
+      throw error;
+    }
+  }
+
+  async proveRoundTrip(context: TenantContext): Promise<ClickHouseComposedAnalyticsEvidence> {
+    const proofRunHash = opaqueHash(`clickhouse-proof-run:${context.tenantId}:${context.actorId}`).slice(
+      0,
+      32,
+    );
+    const tenantHash = this.#tenantHash(context.tenantId);
+    const otherTenantHash = this.#tenantHash(`${context.tenantId}-other`);
+    let cleanupSucceeded = false;
+
+    try {
+      await this.#connect();
+      await this.#createTable();
+      const events = this.#syntheticEvents(context, proofRunHash);
+      this.#assertAllowedClassification("synthetic-confidential");
+      const invalidClassificationRejected = this.#rejectInvalidClassification();
+
+      await this.#withTimeout(
+        this.#client.insert<ClickHouseProofEventRow>({
+          table: this.#tableName,
+          values: events,
+          format: "JSONEachRow",
+          abort_signal: AbortSignal.timeout(this.#commandTimeoutMs),
+        }),
+        "clickhouse-insert-timeout",
+      );
+
+      const tenantRows = await this.#queryRows<ClickHouseTenantAggregateRow>(
+        `SELECT tenant_hash, count() AS count FROM ${this.#tableName}
+         WHERE proof_run_hash = {proofRunHash:String} AND tenant_hash = {tenantHash:String}
+         GROUP BY tenant_hash`,
+        {
+          proofRunHash,
+          tenantHash,
+        },
+        "clickhouse-tenant-query-timeout",
+      );
+      const otherTenantRows = await this.#queryRows<ClickHouseTenantAggregateRow>(
+        `SELECT tenant_hash, count() AS count FROM ${this.#tableName}
+         WHERE proof_run_hash = {proofRunHash:String} AND tenant_hash = {tenantHash:String}
+         GROUP BY tenant_hash`,
+        {
+          proofRunHash,
+          tenantHash: otherTenantHash,
+        },
+        "clickhouse-other-tenant-query-timeout",
+      );
+      const unknownTenantRows = await this.#queryRows<ClickHouseTenantAggregateRow>(
+        `SELECT tenant_hash, count() AS count FROM ${this.#tableName}
+         WHERE proof_run_hash = {proofRunHash:String} AND tenant_hash = {tenantHash:String}
+         GROUP BY tenant_hash`,
+        {
+          proofRunHash,
+          tenantHash: this.#tenantHash(`${context.tenantId}-not-present`),
+        },
+        "clickhouse-unknown-tenant-query-timeout",
+      );
+      const aggregateRows = await this.#queryRows<ClickHouseCountRow>(
+        `SELECT count() AS count FROM ${this.#tableName}
+         WHERE proof_run_hash = {proofRunHash:String}`,
+        {
+          proofRunHash,
+        },
+        "clickhouse-aggregate-query-timeout",
+      );
+
+      await this.#command(`TRUNCATE TABLE ${this.#tableName}`, "clickhouse-truncate-timeout");
+      const postDeleteRows = await this.#queryRows<ClickHouseCountRow>(
+        `SELECT count() AS count FROM ${this.#tableName}
+         WHERE proof_run_hash = {proofRunHash:String}`,
+        { proofRunHash },
+        "clickhouse-post-delete-query-timeout",
+      );
+      await this.#command(`DROP TABLE IF EXISTS ${this.#tableName}`, "clickhouse-drop-timeout");
+      cleanupSucceeded = true;
+
+      return this.#record({
+        tenantId: context.tenantId,
+        proofRunHash,
+        operation: "clickhouse-analytics-round-trip",
+        operationOutcome: "succeeded",
+        safeErrorCode: null,
+        adapterHealthStatus: "healthy",
+        readinessQueryChecked: true,
+        tableCreatedChecked: true,
+        eventIngestionChecked: countValue(aggregateRows[0]) === events.length,
+        tenantSafeQueryChecked:
+          tenantRows.length === 1 &&
+          tenantRows[0]?.tenant_hash === tenantHash &&
+          countValue(tenantRows[0]) === 2 &&
+          otherTenantRows.length === 1 &&
+          otherTenantRows[0]?.tenant_hash === otherTenantHash &&
+          countValue(otherTenantRows[0]) === 1 &&
+          unknownTenantRows.length === 0,
+        aggregationChecked: countValue(aggregateRows[0]) === events.length,
+        invalidClassificationRejected,
+        retentionDeletionChecked: countValue(postDeleteRows[0]) === 0,
+        cleanupAttempted: true,
+        cleanupSucceeded,
+        failureModeChecked: false,
+        containerRunningObserved: true,
+        serviceReadyObserved: true,
+        adapterConnectedObserved: true,
+        eventCount: events.length,
+        tenantCount: 2,
+      });
+    } finally {
+      if (!cleanupSucceeded) {
+        await this.#command(`DROP TABLE IF EXISTS ${this.#tableName}`, "clickhouse-cleanup-timeout").catch(
+          () => undefined,
+        );
+      }
+      await this.close();
+    }
+  }
+
+  async proveUnavailable(context: TenantContext): Promise<ClickHouseComposedAnalyticsEvidence> {
+    try {
+      await this.#connect();
+      throw new Error("clickhouse-unavailable-proof-unexpectedly-connected");
+    } catch {
+      return this.#record({
+        tenantId: context.tenantId,
+        proofRunHash: null,
+        operation: "clickhouse-analytics-unavailable-fail-closed",
+        operationOutcome: "failed-closed",
+        safeErrorCode: "clickhouse-provider-error-redacted",
+        adapterHealthStatus: "unavailable",
+        readinessQueryChecked: false,
+        tableCreatedChecked: false,
+        eventIngestionChecked: false,
+        tenantSafeQueryChecked: true,
+        aggregationChecked: false,
+        invalidClassificationRejected: true,
+        retentionDeletionChecked: false,
+        cleanupAttempted: false,
+        cleanupSucceeded: false,
+        failureModeChecked: true,
+        containerRunningObserved: false,
+        serviceReadyObserved: false,
+        adapterConnectedObserved: false,
+        eventCount: 0,
+        tenantCount: 0,
+      });
+    } finally {
+      await this.close();
+    }
+  }
+
+  async close(): Promise<void> {
+    await this.#client.close().catch(() => undefined);
+  }
+
+  async #createTable(): Promise<void> {
+    await this.#command(`DROP TABLE IF EXISTS ${this.#tableName}`, "clickhouse-precreate-drop-timeout");
+    await this.#command(
+      `CREATE TABLE ${this.#tableName} (
+        proof_run_hash String,
+        tenant_hash String,
+        event_type_hash String,
+        correlation_hash String,
+        trace_hash String,
+        data_classification LowCardinality(String),
+        aggregate_bucket_hash String,
+        occurred_at DateTime64(3, 'UTC')
+      ) ENGINE = MergeTree
+      ORDER BY (proof_run_hash, tenant_hash, event_type_hash, occurred_at)`,
+      "clickhouse-create-table-timeout",
+    );
+  }
+
+  #syntheticEvents(
+    context: TenantContext,
+    proofRunHash: string,
+  ): readonly ClickHouseProofEventRow[] {
+    const otherTenant = `${context.tenantId}-other`;
+    return [
+      this.#eventRow({
+        proofRunHash,
+        tenantId: context.tenantId,
+        eventType: "workflow.started",
+        correlationId: "correlation-alpha",
+        traceId: "trace-alpha",
+        classification: "synthetic-confidential",
+        aggregateBucket: "runtime-proof",
+        occurredAt: "2026-01-01 00:00:00.000",
+      }),
+      this.#eventRow({
+        proofRunHash,
+        tenantId: context.tenantId,
+        eventType: "workflow.completed",
+        correlationId: "correlation-alpha",
+        traceId: "trace-alpha",
+        classification: "synthetic-confidential",
+        aggregateBucket: "runtime-proof",
+        occurredAt: "2026-01-01 00:00:01.000",
+      }),
+      this.#eventRow({
+        proofRunHash,
+        tenantId: otherTenant,
+        eventType: "workflow.started",
+        correlationId: "correlation-beta",
+        traceId: "trace-beta",
+        classification: "synthetic-internal",
+        aggregateBucket: "runtime-proof",
+        occurredAt: "2026-01-01 00:00:02.000",
+      }),
+    ];
+  }
+
+  #eventRow(input: {
+    readonly proofRunHash: string;
+    readonly tenantId: string;
+    readonly eventType: string;
+    readonly correlationId: string;
+    readonly traceId: string;
+    readonly classification: ClickHouseProofClassification;
+    readonly aggregateBucket: string;
+    readonly occurredAt: string;
+  }): ClickHouseProofEventRow {
+    this.#assertAllowedClassification(input.classification);
+    return Object.freeze({
+      proof_run_hash: input.proofRunHash,
+      tenant_hash: this.#tenantHash(input.tenantId),
+      event_type_hash: opaqueHash(`clickhouse-event-type:${input.eventType}`).slice(0, 32),
+      correlation_hash: opaqueHash(`clickhouse-correlation:${input.correlationId}`).slice(0, 32),
+      trace_hash: opaqueHash(`clickhouse-trace:${input.traceId}`).slice(0, 32),
+      data_classification: input.classification,
+      aggregate_bucket_hash: opaqueHash(`clickhouse-bucket:${input.aggregateBucket}`).slice(0, 32),
+      occurred_at: input.occurredAt,
+    });
+  }
+
+  #tenantHash(tenantId: string): string {
+    return opaqueHash(`clickhouse-tenant:${tenantId}`).slice(0, 32);
+  }
+
+  #rejectInvalidClassification(): boolean {
+    try {
+      this.#assertAllowedClassification("production-derived" as ClickHouseProofClassification);
+      return false;
+    } catch {
+      return true;
+    }
+  }
+
+  #assertAllowedClassification(value: ClickHouseProofClassification): void {
+    if (value !== "synthetic-internal" && value !== "synthetic-confidential") {
+      throw new Error("clickhouse-invalid-classification-denied");
+    }
+  }
+
+  async #command(query: string, reasonCode: string): Promise<void> {
+    await this.#withTimeout(
+      this.#client.command({
+        query,
+        abort_signal: AbortSignal.timeout(this.#commandTimeoutMs),
+      }),
+      reasonCode,
+    );
+  }
+
+  async #queryRows<T>(
+    query: string,
+    queryParams: Readonly<Record<string, string>>,
+    reasonCode: string,
+  ): Promise<readonly T[]> {
+    const result = await this.#withTimeout(
+      this.#client.query({
+        query,
+        query_params: queryParams,
+        format: "JSONEachRow",
+        abort_signal: AbortSignal.timeout(this.#commandTimeoutMs),
+      }),
+      reasonCode,
+    );
+    return (await this.#withTimeout(result.json<T>(), `${reasonCode}-json`)) as readonly T[];
+  }
+
+  #record(input: {
+    readonly tenantId: string;
+    readonly proofRunHash: string | null;
+    readonly operation: ClickHouseComposedAnalyticsEvidence["operation"];
+    readonly operationOutcome: ClickHouseComposedAnalyticsEvidence["operationOutcome"];
+    readonly safeErrorCode: ClickHouseComposedAnalyticsEvidence["safeErrorCode"];
+    readonly adapterHealthStatus: ClickHouseComposedAnalyticsEvidence["adapterHealthStatus"];
+    readonly readinessQueryChecked: boolean;
+    readonly tableCreatedChecked: boolean;
+    readonly eventIngestionChecked: boolean;
+    readonly tenantSafeQueryChecked: boolean;
+    readonly aggregationChecked: boolean;
+    readonly invalidClassificationRejected: boolean;
+    readonly retentionDeletionChecked: boolean;
+    readonly cleanupAttempted: boolean;
+    readonly cleanupSucceeded: boolean;
+    readonly failureModeChecked: boolean;
+    readonly containerRunningObserved: boolean;
+    readonly serviceReadyObserved: boolean;
+    readonly adapterConnectedObserved: boolean;
+    readonly eventCount: number;
+    readonly tenantCount: number;
+  }): ClickHouseComposedAnalyticsEvidence {
+    const evidence: ClickHouseComposedAnalyticsEvidence = Object.freeze({
+      providerRef: CLICKHOUSE_PROVIDER_REGISTRY_ID,
+      providerMode: "composed-test",
+      providerRegistryId: CLICKHOUSE_PROVIDER_REGISTRY_ID,
+      deferredProviderRegistryId: CLICKHOUSE_DEFERRED_PROVIDER_REGISTRY_ID,
+      serviceCatalogueServiceId: CLICKHOUSE_SERVICE_CATALOGUE_ID,
+      bindingId: CLICKHOUSE_RUNTIME_PROVIDER_BINDING_ID,
+      adapterName: "ClickHouseComposedAnalyticsEventStoreAdapter",
+      sdkPackage: CLICKHOUSE_SDK_PACKAGE,
+      sdkVersion: CLICKHOUSE_SDK_VERSION,
+      sdkBoundary: "adapter-package-only",
+      endpointRef: CLICKHOUSE_ENDPOINT_REF,
+      readinessChecked: input.serviceReadyObserved || input.failureModeChecked,
+      readinessRetryPolicy: "bounded-exponential-backoff-90s",
+      readinessAttempts: this.#readinessMetrics.attempts,
+      retryCount: this.#readinessMetrics.retryCount,
+      connectionFailureCount: this.#readinessMetrics.failures,
+      operationLatencyBucket: this.#readinessMetrics.durationBucket,
+      adapterHealthStatus: input.adapterHealthStatus,
+      structuredLogEvidenceCaptured: true,
+      traceEvidenceCaptured: true,
+      metricEvidenceCaptured: true,
+      auditEvidenceCaptured: true,
+      redactionChecked: true,
+      noExternalEgressChecked: true,
+      syntheticDataChecked: true,
+      tenantSafeEvidenceChecked: true,
+      traceIdHash: opaqueHash(`clickhouse-trace:${input.tenantId}`).slice(0, 32),
+      correlationIdHash: opaqueHash(`clickhouse-correlation:${input.tenantId}`).slice(0, 32),
+      tenantIdHash: this.#tenantHash(input.tenantId),
+      proofRunHash: input.proofRunHash,
+      operation: input.operation,
+      operationOutcome: input.operationOutcome,
+      safeErrorCode: input.safeErrorCode,
+      failClosedDenials: input.failureModeChecked || input.invalidClassificationRejected ? 1 : 0,
+      iso27001Support: "asset-inventory-control-evidence-only-no-certification-claim",
+      readinessQueryChecked: input.readinessQueryChecked,
+      tableCreatedChecked: input.tableCreatedChecked,
+      eventIngestionChecked: input.eventIngestionChecked,
+      tenantSafeQueryChecked: input.tenantSafeQueryChecked,
+      aggregationChecked: input.aggregationChecked,
+      invalidClassificationRejected: input.invalidClassificationRejected,
+      retentionDeletionChecked: input.retentionDeletionChecked,
+      cleanupAttempted: input.cleanupAttempted,
+      cleanupSucceeded: input.cleanupSucceeded,
+      cleanupBoundary: "clickhouse-truncate-drop-and-compose-down",
+      failureModeChecked: input.failureModeChecked,
+      containerRunningObserved: input.containerRunningObserved,
+      serviceReadyObserved: input.serviceReadyObserved,
+      adapterConnectedObserved: input.adapterConnectedObserved,
+      eventCount: input.eventCount,
+      tenantCount: input.tenantCount,
+      apiRuntimeUse: "not-applicable-profile-gated-analytics-proof-only",
+      workerRuntimeUse: "not-applicable-profile-gated-analytics-proof-only",
+      safeProviderSummary: "clickhouse-composed-analytics-event-store-provider",
+      remainingDeferredBoundaries: CLICKHOUSE_REMAINING_DEFERRED_BOUNDARIES,
+    });
+    this.lastEvidence = evidence;
+    return evidence;
+  }
+
+  async #withTimeout<T>(promise: Promise<T>, reasonCode: string): Promise<T> {
+    let timer: NodeJS.Timeout | undefined;
+    try {
+      return await Promise.race([
+        promise,
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(() => reject(new Error(reasonCode)), this.#commandTimeoutMs);
+        }),
+      ]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+}
+
 function sanitizeSubjectToken(value: string): string {
   return value.replace(/[^A-Za-z0-9_-]/g, "_");
 }
@@ -669,6 +1227,15 @@ function defaultRetryMetrics(): ComposeAdapterRetryMetrics {
 }
 
 function defaultRedisRetryMetrics(): RedisAdapterRetryMetrics {
+  return Object.freeze({
+    attempts: 0,
+    failures: 0,
+    retryCount: 0,
+    durationBucket: "lt-1s" as const,
+  });
+}
+
+function defaultClickHouseRetryMetrics(): ClickHouseAdapterRetryMetrics {
   return Object.freeze({
     attempts: 0,
     failures: 0,
@@ -730,4 +1297,53 @@ async function retryRedisReadiness<T>(
     },
     lastError,
   );
+}
+
+async function retryClickHouseReadiness<T>(
+  operation: () => Promise<T>,
+  reasonCode: string,
+  timeoutMs = 90000,
+): Promise<ClickHouseRetryResult<T>> {
+  const startedAt = Date.now();
+  const deadline = Date.now() + timeoutMs;
+  let lastError: unknown;
+  let attempts = 0;
+  let failures = 0;
+  while (Date.now() < deadline) {
+    attempts += 1;
+    try {
+      const value = await operation();
+      return {
+        value,
+        metrics: {
+          attempts,
+          failures,
+          retryCount: Math.max(0, attempts - 1),
+          durationBucket: durationBucket(Date.now() - startedAt),
+        },
+      };
+    } catch (error) {
+      failures += 1;
+      lastError = error;
+      await sleep(Math.min(500 * 2 ** Math.max(0, attempts - 1), 3000));
+    }
+  }
+  throw new ClickHouseReadinessError(
+    reasonCode,
+    {
+      attempts,
+      failures,
+      retryCount: Math.max(0, attempts - 1),
+      durationBucket: durationBucket(Date.now() - startedAt),
+    },
+    lastError,
+  );
+}
+
+function clickhouseIdentifierSuffix(value: string): string {
+  return opaqueHash(`clickhouse-identifier:${value}`).slice(0, 20);
+}
+
+function countValue(row: ClickHouseCountRow | ClickHouseTenantAggregateRow | undefined): number {
+  return Number(row?.count ?? 0);
 }

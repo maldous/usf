@@ -97,6 +97,7 @@ CLAMAV_PROOF_SOURCE_PATH = Path("packages/proof/src/clamav-composed-proof.ts")
 MOCK_PROVIDER_PROOF_SOURCE_PATH = Path("packages/proof/src/mock-provider-substrate-proof.ts")
 WIREMOCK_PROOF_SOURCE_PATH = Path("packages/proof/src/wiremock-composed-proof.ts")
 LOCALSTACK_PROOF_SOURCE_PATH = Path("packages/proof/src/localstack-composed-proof.ts")
+CLICKHOUSE_PROOF_SOURCE_PATH = Path("packages/proof/src/clickhouse-composed-proof.ts")
 REDIS_PROOF_SOURCE_PATH = Path("packages/proof/src/redis-composed-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
@@ -213,7 +214,7 @@ REQUIRED_PROHIBITED_CLAIMS = {
     "full-react-parity",
     "test-readiness",
 }
-ANALYTICS_EVENT_STORE_REQUIRED_ISSUES = {"USF-172", "USF-197", "USF-189", "USF-184", "USF-192", "USF-133"}
+ANALYTICS_EVENT_STORE_REQUIRED_ISSUES = {"USF-172", "USF-197", "USF-206", "USF-189", "USF-184", "USF-192", "USF-133"}
 ANALYTICS_EVENT_STORE_REQUIRED_EVIDENCE_REFS = {
     "usf-172-soa-analytics-event-store-disposition",
     "usf-172-evidence-analytics-event-store-disposition",
@@ -221,6 +222,20 @@ ANALYTICS_EVENT_STORE_REQUIRED_EVIDENCE_REFS = {
     "usf-172-access-analytics-event-store",
     "usf-172-incident-vulnerability-analytics-event-store",
     "usf-172-privacy-analytics-event-store",
+    "usf-197-soa-clickhouse-proof-boundary",
+    "usf-197-evidence-clickhouse-proof-boundary",
+    "usf-197-threat-clickhouse-overclaim",
+    "usf-197-access-clickhouse-proof-boundary",
+    "usf-197-incident-vulnerability-clickhouse-proof-boundary",
+    "usf-197-privacy-clickhouse-proof-boundary",
+    "usf-206-soa-clickhouse-composed-proof",
+    "usf-206-evidence-clickhouse-composed-proof",
+    "usf-206-threat-clickhouse-overclaim",
+    "usf-206-access-clickhouse-composed-proof",
+    "usf-206-resilience-clickhouse-composed-proof",
+    "usf-206-incident-vulnerability-clickhouse-composed-proof",
+    "usf-206-privacy-clickhouse-composed-proof",
+    "sdk-usf-189-clickhouse-analytics-provider-at-clickhouse-client",
 }
 CLICKHOUSE_BOUNDARY_REQUIRED_ISSUES = {"USF-197", "USF-206", "USF-172", "USF-189", "USF-184", "USF-192", "USF-133"}
 CLICKHOUSE_BOUNDARY_REQUIRED_EVIDENCE_REFS = {
@@ -230,6 +245,14 @@ CLICKHOUSE_BOUNDARY_REQUIRED_EVIDENCE_REFS = {
     "usf-197-access-clickhouse-proof-boundary",
     "usf-197-incident-vulnerability-clickhouse-proof-boundary",
     "usf-197-privacy-clickhouse-proof-boundary",
+    "usf-206-soa-clickhouse-composed-proof",
+    "usf-206-evidence-clickhouse-composed-proof",
+    "usf-206-threat-clickhouse-overclaim",
+    "usf-206-access-clickhouse-composed-proof",
+    "usf-206-resilience-clickhouse-composed-proof",
+    "usf-206-incident-vulnerability-clickhouse-composed-proof",
+    "usf-206-privacy-clickhouse-composed-proof",
+    "sdk-usf-189-clickhouse-analytics-provider-at-clickhouse-client",
 }
 REDIS_CACHE_BOUNDARY_REQUIRED_ISSUES = {"USF-198", "USF-207", "USF-173", "USF-189", "USF-184", "USF-192", "USF-133"}
 REDIS_CACHE_BOUNDARY_REQUIRED_EVIDENCE_REFS = {
@@ -483,10 +506,10 @@ OPERATOR_WORKFLOW_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
 LANE5_PROVIDER_DISPOSITIONS = {
     "usf-189-clickhouse-analytics-provider": {
         "serviceIds": ["clickhouse"],
-        "providerIds": ["analytics-store-clickhouse-deferred"],
-        "followUpIssue": "USF-172",
+        "providerIds": ["analytics-store-clickhouse-composed-test", "analytics-store-clickhouse-deferred"],
+        "followUpIssue": "USF-206",
         "boundaryRef": "usf-189-analytics-provider-deferred",
-        "allowedStatuses": {"unsupported-deferred"},
+        "allowedStatuses": {"profile-gated-proven"},
     },
     "usf-189-redis-cache-provider": {
         "serviceIds": ["redis"],
@@ -595,7 +618,7 @@ SOURCE_TEARDOWN_MARKERS = (
     "USF_WORKER_RUN_ONCE",
 )
 PROVIDER_SDK_IMPORT_RE = re.compile(
-    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@aws-sdk(?:/[^\"']+)?|aws-sdk|minio|mailpit-api|meilisearch|clamscan|wiremock-captain|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
+    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@clickhouse/client|@aws-sdk(?:/[^\"']+)?|aws-sdk|minio|mailpit-api|meilisearch|clamscan|wiremock-captain|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
 )
 FORBIDDEN_SDK_IMPORT_PATHS = (
     Path("packages/core/src/index.ts"),
@@ -1248,11 +1271,15 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
 
     expected_top = {
         "sourceIssue": "USF-172",
-        "followUpIssue": "USF-197",
+        "proofBoundaryIssue": "USF-197",
+        "composedProofIssue": "USF-206",
+        "followUpIssue": None,
         "laneIssue": "USF-189",
         "parentIssue": "USF-133",
         "serviceId": "clickhouse",
-        "providerRegistryId": "analytics-store-clickhouse-deferred",
+        "providerRegistryId": "analytics-store-clickhouse-composed-test",
+        "deferredProviderRegistryId": "analytics-store-clickhouse-deferred",
+        "remainingProofIssue": None,
         "runtimeManifest": str(MANIFEST_PATH),
         "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
         "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
@@ -1281,14 +1308,16 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
         F.add("USF-RUNTIME-023", "analyticsEventStoreDisposition", "analytics event-store disposition must be an object")
     else:
         expected_disposition = {
-            "disposition": "explicit-deferral-with-owner",
-            "clickhouseServiceSemanticProofPresent": False,
+            "disposition": "profile-gated-bounded-local-compose-proof",
+            "clickhouseServiceSemanticProofPresent": True,
             "analyticsReadinessClaim": False,
             "eventStoreReadinessClaim": False,
             "providerCompatibilityClaim": False,
             "serviceCatalogueServiceId": "clickhouse",
-            "providerRegistryId": "analytics-store-clickhouse-deferred",
-            "followUpIssue": "USF-197",
+            "providerRegistryId": "analytics-store-clickhouse-composed-test",
+            "deferredProviderRegistryId": "analytics-store-clickhouse-deferred",
+            "proofCommand": "corepack pnpm proof:analytics:clickhouse",
+            "followUpIssue": None,
             "owner": "platform-data-foundation",
             "riskOwner": "platform-data-risk-owner",
             "controlOwner": "platform-data-control-owner",
@@ -1298,9 +1327,9 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
             observed = disposition.get(key)
             if observed is not expected if isinstance(expected, bool) else observed != expected:
                 F.add("USF-RUNTIME-023", f"analyticsEventStoreDisposition.{key}", f"expected {expected!r}")
-        for field in ("riskStatement", "treatment", "deferredEvidence"):
+        for field in ("riskStatement", "treatment", "provenEvidence", "remainingBoundaries"):
             if disposition.get(field) in (None, "", []):
-                F.add("USF-RUNTIME-023", f"analyticsEventStoreDisposition.{field}", "deferral field is required")
+                F.add("USF-RUNTIME-023", f"analyticsEventStoreDisposition.{field}", "proof disposition field is required")
 
     substitute = matrix.get("inMemorySubstituteBoundary", {})
     if not isinstance(substitute, dict):
@@ -1314,6 +1343,7 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
             F.add("USF-RUNTIME-023", "inMemorySubstituteBoundary.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
         commands = set(substitute.get("commands", []))
         for command in (
+            "corepack pnpm proof:analytics:clickhouse",
             "corepack pnpm runtime:proof",
             "corepack pnpm providers-proof",
             "python3 tools/validate-runtime/validate-runtime.py all --json",
@@ -1329,13 +1359,17 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
     else:
         expected_provider = {
             "providerBindingId": "usf-189-clickhouse-analytics-provider",
-            "providerRegistryId": "analytics-store-clickhouse-deferred",
-            "bindingStatus": "unsupported-deferred",
-            "providerMode": "live-external-deferred",
-            "runtimeProviderBindingActive": False,
-            "sdkPackage": None,
-            "sdkVersion": None,
-            "endpointRef": None,
+            "providerRegistryId": "analytics-store-clickhouse-composed-test",
+            "deferredProviderRegistryId": "analytics-store-clickhouse-deferred",
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "runtimeProviderBindingActive": True,
+            "sdkPackage": "@clickhouse/client",
+            "sdkVersion": "1.23.0",
+            "sdkBoundary": "adapter-package-only",
+            "endpointRef": "endpoint://compose/clickhouse",
+            "proofCommand": "corepack pnpm proof:analytics:clickhouse",
         }
         for key, expected in expected_provider.items():
             observed = provider_boundary.get(key)
@@ -1351,23 +1385,35 @@ def check_analytics_event_store_disposition(F: Findings, state: dict[str, Any]) 
     if not binding:
         F.add("USF-RUNTIME-023", "providerBindingMatrix", "ClickHouse provider disposition is missing from runtime manifest")
     else:
-        if "USF-197" not in binding.get("followUpIssueRefs", []):
-            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "runtime manifest must link USF-197")
-        if "USF-197" not in str(binding.get("deferredReason", "")):
-            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-197")
-        if binding.get("bindingStatus") != "unsupported-deferred" or binding.get("endpointRef") is not None:
-            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "ClickHouse must remain explicitly deferred without endpoint binding")
+        if "USF-206" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "runtime manifest must link USF-206")
+        if binding.get("bindingStatus") != "profile-gated-proven" or binding.get("endpointRef") != "endpoint://compose/clickhouse":
+            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "ClickHouse must be profile-gated proven with redacted endpoint ref")
+        if binding.get("sdkPackage") != "@clickhouse/client" or binding.get("sdkVersion") != "1.23.0":
+            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "ClickHouse must name exact pinned SDK/client package")
+        if binding.get("proofCommand") != "corepack pnpm proof:analytics:clickhouse":
+            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "ClickHouse must reference proof:analytics:clickhouse")
+        if "USF-206 proof:analytics:clickhouse" not in str(binding.get("proofEvidence", "")):
+            F.add("USF-RUNTIME-023", "providerBindingMatrix.usf-189-clickhouse-analytics-provider.proofEvidence", "runtime manifest must record ClickHouse proof evidence")
 
     deferred = {
         item.get("id"): item
         for item in state["manifest"].get("deferredBoundaries", [])
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }.get("usf-189-analytics-provider-deferred")
-    if not deferred or "USF-197" not in deferred.get("followUpIssueRefs", []):
-        F.add("USF-RUNTIME-023", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must link USF-197")
+    if not deferred or "USF-206" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-023", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must link USF-206 lineage")
+    if deferred and "USF-206 resolves bounded local Compose ClickHouse" not in str(deferred.get("boundary", "")):
+        F.add("USF-RUNTIME-023", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must distinguish resolved local proof from remaining readiness boundaries")
 
     matrix_text = json.dumps(matrix, sort_keys=True)
-    for stale in ("until USF-172 closes", "followUpIssue=USF-172", "\"followUpIssue\": \"USF-172\""):
+    for stale in (
+        "until USF-172 closes",
+        "followUpIssue=USF-172",
+        "\"followUpIssue\": \"USF-172\"",
+        "actual ClickHouse adapter proof remains",
+        "ClickHouse SDK/client selection and adapter boundary evidence",
+    ):
         if stale in matrix_text:
             F.add("USF-RUNTIME-023", "analytics-event-store-stale-self-deferral", f"stale self-deferral remains: {stale}")
 
@@ -1379,12 +1425,13 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
         return
 
     expected_top = {
-        "sourceIssue": "USF-197",
-        "followUpIssue": "USF-206",
+        "sourceIssue": "USF-206",
+        "followUpIssue": None,
         "sourceDispositionIssue": "USF-172",
+        "predecessorIssue": "USF-197",
         "laneIssue": "USF-189",
         "parentIssue": "USF-133",
-        "status": "reclassified-deferred-with-owner",
+        "status": "profile-gated-bounded-proof-present",
         "serviceCatalogueAuthority": SERVICE_CATALOGUE_PATH,
         "runtimeManifest": str(MANIFEST_PATH),
         "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
@@ -1400,7 +1447,7 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
         F.add("USF-RUNTIME-030", "serviceIds", "ClickHouse boundary service ids are incomplete")
     if set(boundary.get("providerBindingIds", [])) != {"usf-189-clickhouse-analytics-provider"}:
         F.add("USF-RUNTIME-030", "providerBindingIds", "ClickHouse boundary provider binding ids are incomplete")
-    if set(boundary.get("providerRegistryIds", [])) != {"analytics-store-clickhouse-deferred"}:
+    if set(boundary.get("providerRegistryIds", [])) != {"analytics-store-clickhouse-composed-test", "analytics-store-clickhouse-deferred"}:
         F.add("USF-RUNTIME-030", "providerRegistryIds", "ClickHouse boundary provider registry ids are incomplete")
     if CLICKHOUSE_BOUNDARY_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
         F.add("USF-RUNTIME-030", "issueLinks", "ClickHouse boundary issue links are incomplete")
@@ -1416,10 +1463,10 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
         F.add("USF-RUNTIME-030", "reclassification", "ClickHouse reclassification must be an object")
     else:
         expected_reclassification = {
-            "from": "explicit-deferral-with-owner",
-            "to": "explicit-deferred-service-proof",
+            "from": "explicit-deferred-service-proof",
+            "to": "profile-gated-bounded-local-compose-proof",
             "decisionAcceptedDoesNotMeanWorkComplete": True,
-            "serviceSemanticProofImplemented": False,
+            "serviceSemanticProofImplemented": True,
             "clickhouseServiceReadinessClaim": False,
             "analyticsReadinessClaim": False,
             "eventStoreReadinessClaim": False,
@@ -1430,7 +1477,14 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
             observed = reclassification.get(key)
             if observed is not expected if isinstance(expected, bool) else observed != expected:
                 F.add("USF-RUNTIME-030", f"reclassification.{key}", f"expected {expected!r}")
-        if len(reclassification.get("repositoryEvidence", [])) < 6:
+        required_refs = {
+            "adapters/bus/src/index.ts#ClickHouseComposedAnalyticsEventStoreAdapter",
+            "packages/proof/src/clickhouse-composed-proof.ts",
+            "package.json#proof:analytics:clickhouse",
+            "Makefile#clickhouse-analytics-proof",
+            "tools/validate-runtime/validate-runtime.py",
+        }
+        if required_refs - set(reclassification.get("repositoryEvidence", [])):
             F.add("USF-RUNTIME-030", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
 
     remaining = boundary.get("remainingProofBoundary", {})
@@ -1438,7 +1492,7 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
         F.add("USF-RUNTIME-030", "remainingProofBoundary", "remaining proof boundary must be an object")
     else:
         expected_remaining = {
-            "issue": "USF-206",
+            "issue": "none-for-USF-206-bounded-proof",
             "owner": "platform-data-foundation",
             "riskOwner": "platform-data-risk-owner",
             "controlOwner": "platform-data-control-owner",
@@ -1450,32 +1504,45 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
         for field in ("riskStatement", "treatment", "requiredEvidence"):
             if remaining.get(field) in (None, "", []):
                 F.add("USF-RUNTIME-030", f"remainingProofBoundary.{field}", "remaining proof field is required")
-        if len(remaining.get("requiredEvidence", [])) < 8:
+        required_remaining = {
+            "environment-specific ClickHouse readiness and promotion gates before any dev/test/staging/production readiness claim",
+            "live/provider-managed ClickHouse supplier and credential evidence before any live-provider claim",
+            "API runtime analytics-port integration proof before any API ClickHouse runtime-use claim",
+            "worker runtime analytics-port integration proof before any worker ClickHouse runtime-use claim",
+        }
+        if required_remaining - set(remaining.get("requiredEvidence", [])):
             F.add("USF-RUNTIME-030", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
 
     analytics = boundary.get("analyticsEventStoreBoundary", {})
-    for field in (
-        "eventIngestionStatus",
-        "tenantSafeQueryStatus",
-        "retentionDeletionStatus",
-        "auditEvidenceStatus",
-        "readinessRetryStatus",
-        "teardownCleanupStatus",
-        "providerFailureHandlingStatus",
-    ):
-        if analytics.get(field) != "deferred-to-USF-206":
-            F.add("USF-RUNTIME-030", f"analyticsEventStoreBoundary.{field}", "analytics boundary must defer to USF-206")
+    expected_analytics = {
+        "eventIngestionStatus": "proven-by-USF-206-profile-gated-local-compose",
+        "tenantSafeQueryStatus": "proven-by-USF-206-profile-gated-local-compose",
+        "aggregationStatus": "proven-by-USF-206-profile-gated-local-compose",
+        "retentionDeletionStatus": "clickhouse-truncate-drop-and-compose-down-proven-by-USF-206",
+        "auditEvidenceStatus": "value-free-audit-shaped-evidence-proven-by-USF-206",
+        "readinessRetryStatus": "bounded-exponential-backoff-90s-proven-by-USF-206",
+        "teardownCleanupStatus": "clickhouse-truncate-drop-and-compose-down-proven-by-USF-206",
+        "providerFailureHandlingStatus": "unavailable-provider-fail-closed-proven-by-USF-206",
+    }
+    for field, expected in expected_analytics.items():
+        if analytics.get(field) != expected:
+            F.add("USF-RUNTIME-030", f"analyticsEventStoreBoundary.{field}", f"expected {expected!r}")
     for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
         if not analytics.get(field):
             F.add("USF-RUNTIME-030", f"analyticsEventStoreBoundary.{field}", "analytics boundary owner metadata is required")
 
     sdk = boundary.get("sdkProviderBoundary", {})
-    if sdk.get("sdkSelectionStatus") != "deferred-to-USF-206":
-        F.add("USF-RUNTIME-030", "sdkProviderBoundary.sdkSelectionStatus", "SDK selection must defer to USF-206")
-    if sdk.get("sdkPackage") is not None or sdk.get("sdkVersion") is not None:
-        F.add("USF-RUNTIME-030", "sdkProviderBoundary", "deferred ClickHouse boundary must not name an SDK package")
-    if sdk.get("sdkBoundary") != "adapter-package-only-when-implemented":
-        F.add("USF-RUNTIME-030", "sdkProviderBoundary.sdkBoundary", "SDK boundary must remain adapter-only when implemented")
+    expected_sdk = {
+        "sdkSelectionStatus": "official-sdk-selected-and-pinned",
+        "sdkPackage": "@clickhouse/client",
+        "sdkVersion": "1.23.0",
+        "sdkBoundary": "adapter-package-only",
+    }
+    for field, expected in expected_sdk.items():
+        if sdk.get(field) != expected:
+            F.add("USF-RUNTIME-030", f"sdkProviderBoundary.{field}", f"expected {expected!r}")
+    if "official ClickHouse JS client" not in str(sdk.get("sdkSelectionRationale", "")):
+        F.add("USF-RUNTIME-030", "sdkProviderBoundary.sdkSelectionRationale", "ClickHouse SDK rationale must name official ClickHouse JS client")
     for field in ("secretBoundary", "supplierBoundary"):
         if not sdk.get(field):
             F.add("USF-RUNTIME-030", f"sdkProviderBoundary.{field}", "SDK/provider boundary field is required")
@@ -1489,6 +1556,7 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
         F.add("USF-RUNTIME-030", "inMemoryAnalyticsGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
     commands = set(in_memory_gate.get("commands", []))
     for command in (
+        "corepack pnpm proof:analytics:clickhouse",
         "corepack pnpm runtime:proof",
         "corepack pnpm providers-proof",
         "python3 tools/validate-runtime/validate-runtime.py all --json",
@@ -1501,18 +1569,89 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
     if declared_evidence != CLICKHOUSE_BOUNDARY_REQUIRED_EVIDENCE_REFS:
         F.add("USF-RUNTIME-030", "enterpriseEvidenceRefs", "ClickHouse boundary enterprise evidence refs are incomplete")
 
+    package = state["package"]
+    scripts = package.get("scripts") if isinstance(package.get("scripts"), dict) else {}
+    if scripts.get("proof:analytics:clickhouse") != "tsx packages/proof/src/clickhouse-composed-proof.ts":
+        F.add("USF-RUNTIME-030", "package.json#proof:analytics:clickhouse", "ClickHouse proof package script is missing or stale")
+    if package.get("dependencies", {}).get("@clickhouse/client") != "1.23.0":
+        F.add("USF-RUNTIME-016", "package.json#@clickhouse/client", "ClickHouse SDK dependency must be exact-version pinned")
+    if "clickhouse-analytics-proof" not in make_targets(state["makefile"]):
+        F.add("USF-RUNTIME-030", "Makefile#clickhouse-analytics-proof", "ClickHouse proof Make target is missing")
+
+    adapter_source = state_text(state, ADAPTER_BUS_SOURCE_PATH)
+    proof_source = state_text(state, CLICKHOUSE_PROOF_SOURCE_PATH)
+    adapter_markers = (
+        "@clickhouse/client",
+        "ClickHouseComposedAnalyticsEventStoreAdapter",
+        "retryClickHouseReadiness",
+        "this.#client.ping",
+        "this.#client.command",
+        "this.#client.insert",
+        "this.#client.query",
+        "tenantSafeQueryChecked",
+        "retentionDeletionChecked",
+        "invalidClassificationRejected",
+        "cleanupSucceeded",
+        "proveUnavailable",
+        "safeErrorCode",
+        "endpoint://compose/clickhouse",
+    )
+    for marker in adapter_markers:
+        if marker not in adapter_source:
+            F.add("USF-RUNTIME-030", str(ADAPTER_BUS_SOURCE_PATH), f"ClickHouse adapter missing proof marker: {marker}")
+    proof_markers = (
+        "compose/compose.test.generated.yaml",
+        "runtime-providers",
+        "clickhouse",
+        "host_ip: 127.0.0.1",
+        "published: \"0\"",
+        "CLICKHOUSE_SKIP_USER_SETUP",
+        "ClickHouseComposedAnalyticsEventStoreAdapter",
+        "proveRoundTrip",
+        "proveUnavailable",
+        "composeDown",
+        "assertSafeEvidence",
+    )
+    for marker in proof_markers:
+        if marker not in proof_source:
+            F.add("USF-RUNTIME-030", str(CLICKHOUSE_PROOF_SOURCE_PATH), f"ClickHouse proof source missing marker: {marker}")
+
     matrix = state.get("analyticsEventStoreMatrix") or {}
     if "USF-206" not in set(matrix.get("issueLinks", [])):
         F.add("USF-RUNTIME-030", "analyticsEventStoreMatrix.issueLinks", "analytics matrix must link USF-206")
-    if matrix.get("remainingProofIssue") != "USF-206":
-        F.add("USF-RUNTIME-030", "analyticsEventStoreMatrix.remainingProofIssue", "analytics matrix must carry USF-206 as remaining proof")
+    if matrix.get("remainingProofIssue") is not None:
+        F.add("USF-RUNTIME-030", "analyticsEventStoreMatrix.remainingProofIssue", "analytics matrix must not carry USF-206 as unresolved remaining proof")
 
     bindings = binding_records(state["manifest"])
     binding = bindings.get("usf-189-clickhouse-analytics-provider")
-    if not binding or "USF-206" not in binding.get("followUpIssueRefs", []):
-        F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "runtime manifest must link USF-206")
-    if binding and "USF-206" not in str(binding.get("deferredReason", "")):
-        F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider.deferredReason", "runtime manifest must defer actual proof to USF-206")
+    if not binding:
+        F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "runtime manifest must include ClickHouse provider binding")
+    else:
+        expected_binding = {
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkBoundary": "adapter-package-only",
+            "sourceUseDisposition": "runtime-proof-support",
+            "adapterName": "ClickHouseComposedAnalyticsEventStoreAdapter",
+            "portName": "AnalyticsEventStore",
+            "endpointRef": "endpoint://compose/clickhouse",
+            "sdkPackage": "@clickhouse/client",
+            "sdkVersion": "1.23.0",
+            "proofCommand": "corepack pnpm proof:analytics:clickhouse",
+        }
+        for field, expected in expected_binding.items():
+            if binding.get(field) != expected:
+                F.add("USF-RUNTIME-030", f"providerBindingMatrix.usf-189-clickhouse-analytics-provider.{field}", f"expected {expected!r}")
+        if set(binding.get("providerRegistryIds", [])) != {"analytics-store-clickhouse-composed-test", "analytics-store-clickhouse-deferred"}:
+            F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider.providerRegistryIds", "ClickHouse binding must carry composed and deferred provider registry ids")
+        if "USF-206" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "runtime manifest must link USF-206")
+        if "USF-206 proof:analytics:clickhouse" not in str(binding.get("proofEvidence", "")):
+            F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider.proofEvidence", "runtime manifest must record ClickHouse proof evidence")
+        stale_text = json.dumps(binding, sort_keys=True).lower()
+        if "actual adapter proof" in stale_text or "defer actual" in stale_text:
+            F.add("USF-RUNTIME-030", "providerBindingMatrix.usf-189-clickhouse-analytics-provider", "runtime manifest still carries stale ClickHouse deferral wording")
 
     deferred = {
         item.get("id"): item
@@ -1520,7 +1659,9 @@ def check_clickhouse_service_proof_boundary(F: Findings, state: dict[str, Any]) 
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }.get("usf-189-analytics-provider-deferred")
     if not deferred or "USF-206" not in deferred.get("followUpIssueRefs", []):
-        F.add("USF-RUNTIME-030", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must link USF-206")
+        F.add("USF-RUNTIME-030", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must link USF-206 lineage")
+    if deferred and "USF-206 resolves bounded local Compose ClickHouse" not in str(deferred.get("boundary", "")):
+        F.add("USF-RUNTIME-030", "deferredBoundaries.usf-189-analytics-provider-deferred", "runtime deferred boundary must distinguish resolved local proof from remaining readiness boundaries")
 
 
 def check_redis_cache_service_proof_boundary(F: Findings, state: dict[str, Any]) -> None:

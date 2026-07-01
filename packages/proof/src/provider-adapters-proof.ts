@@ -91,7 +91,7 @@ function assertNoUnauthorisedProviderSdkImports(root: string): void {
     ...filesUnder(join(root, "capabilities")),
   ];
   const forbiddenImport =
-    /(?:from\s+|import\()["'](?:pg|postgres|redis|ioredis|@aws-sdk|aws-sdk|minio|mailpit-api|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio\/[^"']+|@nats-io\/transport-node|nats|keycloak-js|@keycloak\/keycloak-admin-client|node-vault)["']/;
+    /(?:from\s+|import\()["'](?:pg|postgres|redis|ioredis|@clickhouse\/client|@aws-sdk|aws-sdk|minio|mailpit-api|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio\/[^"']+|@nats-io\/transport-node|nats|keycloak-js|@keycloak\/keycloak-admin-client|node-vault)["']/;
   for (const path of scanned) {
     const text = readFileSync(path, "utf8");
     assert(!forbiddenImport.test(text), `unauthorised provider SDK import in ${path}`);

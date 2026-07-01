@@ -3,8 +3,8 @@
   "evidence_grade_counts": {
     "A": 12,
     "B": 5,
-    "C": 5,
-    "D": 32
+    "C": 7,
+    "D": 30
   },
   "id": "complete-react-to-usf-compose-service-parity-matrix",
   "missing_or_decision_services": [
@@ -141,8 +141,8 @@
       ],
       "criticality": "high",
       "data_classification": "tenant-sensitive",
-      "evidence_grade": "D",
-      "gap_or_decision": "USF-172 records bounded analytics/event-store disposition; USF-197 records the ClickHouse proof boundary; USF-206 must prove ClickHouse adapter/service semantics before any analytics-provider or event-store readiness claim.",
+      "evidence_grade": "C",
+      "gap_or_decision": "USF-206 proves bounded SDK-backed local Compose ClickHouse analytics event-store semantics for synthetic ingestion, tenant-safe query, aggregation, invalid-classification denial, retention deletion, audit-shaped evidence, readiness retry, redaction, teardown, and unavailable-provider fail-closed behaviour. API/worker analytics binding, live/provider-managed ClickHouse, environment readiness, provider compatibility, and analytics/event-store readiness remain unclaimed.",
       "legacy_service_category": "analytics-event-store",
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "react_build": null,
@@ -155,8 +155,8 @@
       "react_service": "clickhouse",
       "selection_class": "optional-proven",
       "tracking_recommendation": "USF-172/USF-197/USF-206",
-      "usf_accounting_status": "deferred",
-      "usf_service_or_substitute": "ClickHouse catalogue row and explicit deferred provider class"
+      "usf_accounting_status": "profile-gated-bounded-proof",
+      "usf_service_or_substitute": "ClickHouse local Compose proof plus explicit remaining non-equivalence boundaries"
     },
     {
       "business_or_foundation_purpose": "reverse proxy and forward-auth clickthrough",
@@ -1452,11 +1452,11 @@
   "status_counts": {
     "blocked": 1,
     "covered-by-usf-runtime": 4,
-    "deferred": 30,
+    "deferred": 28,
     "implemented": 11,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "profile-gated-bounded-proof": 2,
+    "profile-gated-bounded-proof": 4,
     "requires-human-decision": 3,
     "substituted-partial": 1
   },

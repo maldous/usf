@@ -1,56 +1,78 @@
 {
   "id": "usf-172-analytics-event-store-provider-disposition-matrix",
   "title": "USF-172 Analytics Event-Store Provider Disposition Matrix",
-  "status": "draft",
+  "status": "bounded-local-compose-proof-present",
   "sourceIssue": "USF-172",
-  "followUpIssue": "USF-197",
+  "proofBoundaryIssue": "USF-197",
+  "composedProofIssue": "USF-206",
+  "followUpIssue": null,
   "laneIssue": "USF-189",
   "parentIssue": "USF-133",
   "serviceId": "clickhouse",
-  "providerRegistryId": "analytics-store-clickhouse-deferred",
-  "remainingProofIssue": "USF-206",
+  "providerRegistryId": "analytics-store-clickhouse-composed-test",
+  "deferredProviderRegistryId": "analytics-store-clickhouse-deferred",
+  "remainingProofIssue": null,
   "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
   "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
-  "issueLinks": ["USF-172", "USF-197", "USF-206", "USF-189", "USF-184", "USF-192", "USF-133"],
+  "issueLinks": [
+    "USF-172",
+    "USF-197",
+    "USF-206",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
   "humanDecision": {
     "decisionState": "accepted",
-    "summary": "Analytics/event-store decision is not completion evidence. USF-172 records a bounded disposition gate: deterministic in-memory analytics proof is allowed only where semantically permitted and is not equivalent to ClickHouse provider semantics. USF-197 records the service-semantic proof boundary, while actual ClickHouse adapter proof remains tracked by USF-206.",
+    "summary": "Analytics/event-store decision is not completion evidence. USF-172 records a bounded disposition gate, USF-197 records the ClickHouse proof boundary, and USF-206 proves bounded local Compose ClickHouse analytics event-store semantics. This does not claim analytics readiness, event-store readiness, live provider readiness, environment promotion readiness, full dev readiness, full React parity, or USF-133 closure.",
     "decisionIsWorkComplete": false
   },
   "analyticsEventStoreDisposition": {
-    "disposition": "explicit-deferral-with-owner",
-    "clickhouseServiceSemanticProofPresent": false,
+    "disposition": "profile-gated-bounded-local-compose-proof",
+    "clickhouseServiceSemanticProofPresent": true,
     "analyticsReadinessClaim": false,
     "eventStoreReadinessClaim": false,
     "providerCompatibilityClaim": false,
     "serviceCatalogueServiceId": "clickhouse",
-    "providerRegistryId": "analytics-store-clickhouse-deferred",
-    "followUpIssue": "USF-197",
+    "providerRegistryId": "analytics-store-clickhouse-composed-test",
+    "deferredProviderRegistryId": "analytics-store-clickhouse-deferred",
+    "proofCommand": "corepack pnpm proof:analytics:clickhouse",
+    "followUpIssue": null,
     "owner": "platform-data-foundation",
     "riskOwner": "platform-data-risk-owner",
     "controlOwner": "platform-data-control-owner",
-    "riskStatement": "ClickHouse analytics/event-store provider semantics, persisted event ingestion, tenant-safe query, retention, replay, aggregation, provider failure modes, and cross-process visibility could be overclaimed from catalogue-only or in-memory evidence.",
-    "treatment": "defer ClickHouse service-semantic adapter proof through USF-197 to USF-206 and keep in-memory analytics proof non-equivalent",
+    "riskStatement": "ClickHouse local Compose proof could be overclaimed as analytics readiness, event-store readiness, environment promotion readiness, live/provider-managed ClickHouse compatibility, API runtime analytics binding, or worker runtime analytics binding.",
+    "treatment": "prove bounded local SDK-backed ClickHouse event ingestion, tenant-safe query, aggregation, retention cleanup, unavailable fail-closed behaviour, and redacted evidence while preserving stronger non-claims",
     "reviewDate": "2026-09-30",
-    "deferredEvidence": [
-      "ClickHouse SDK/client selection and adapter boundary evidence",
-      "persisted event ingestion evidence",
+    "provenEvidence": [
+      "official ClickHouse JS SDK/client selection and adapter boundary evidence",
+      "persisted synthetic event ingestion evidence",
       "tenant-safe query and aggregation evidence",
-      "retention, replay, and deletion boundary evidence",
+      "retention deletion and cleanup boundary evidence",
       "audit event evidence for analytics operations",
       "readiness retry, timeout, teardown, and failure-mode evidence",
-      "supplier, secret, privacy, backup, incident, and vulnerability posture evidence"
+      "supplier, secret, privacy, incident, and vulnerability posture evidence"
     ],
-    "remainingProofIssue": "USF-206"
+    "remainingBoundaries": [
+      "API runtime analytics-port integration proof",
+      "worker runtime analytics-port integration proof",
+      "live/provider-managed ClickHouse supplier and credential evidence",
+      "environment promotion readiness gates",
+      "backup/restore and DR readiness evidence",
+      "production alerting and operator access readiness evidence"
+    ],
+    "remainingProofIssue": null
   },
   "inMemorySubstituteBoundary": {
     "usedWhereSemanticallyPermitted": true,
     "clickhouseServiceEquivalent": false,
-    "substitutionNonEquivalenceBoundary": "Deterministic in-memory analytics or event evidence may prove local semantic paths only when the relevant catalogue and proof row permit it. It is not equivalent to ClickHouse persisted event ingestion, queryable event history, aggregation, retention/replay, provider failure modes, SDK/client boundary, or cross-process/runtime visibility.",
+    "substitutionNonEquivalenceBoundary": "USF-206 proves ClickHouse local Compose provider behaviour directly. Deterministic in-memory analytics or event evidence remains non-equivalent and may be used only where the relevant proof row permits hermetic local behaviour.",
     "commands": [
+      "corepack pnpm proof:analytics:clickhouse",
       "corepack pnpm runtime:proof",
       "corepack pnpm providers-proof",
       "corepack pnpm parity",
@@ -59,36 +81,38 @@
       "python3 tools/validate-enterprise/validate-enterprise.py all --json"
     ],
     "scopeCovered": [
-      "repository records ClickHouse as an explicit deferred provider class",
-      "runtime provider manifest keeps ClickHouse unsupported-deferred",
-      "provider registry uses evidence-only support without endpoint or SDK",
+      "repository records ClickHouse as profile-gated bounded local Compose proof",
+      "runtime provider manifest records ClickHouse profile-gated proof with composed-test provider mode",
+      "provider registry records analytics-store-clickhouse-composed-test with redacted endpoint ref",
       "validator rejects in-memory equivalence and readiness overclaim",
-      "enterprise evidence rows record tenant, retention, audit, privacy, supplier, and incident boundaries"
+      "enterprise evidence rows record tenant, retention, audit, privacy, supplier, incident, SDK, and non-claim boundaries"
     ],
     "limits": [
-      "no ClickHouse SDK/client selected",
-      "no ClickHouse adapter implementation",
-      "no persisted event ingestion proof",
-      "no tenant-safe ClickHouse query or aggregation proof",
-      "no retention, replay, purge, or restore proof",
       "no API or worker runtime use of ClickHouse",
-      "no supplier or live-provider evidence",
-      "no analytics readiness or event-store readiness claim"
+      "no live/provider-managed ClickHouse supplier evidence",
+      "no environment promotion readiness",
+      "no backup, restore, DR, or production alerting readiness",
+      "no analytics readiness or event-store readiness claim",
+      "no provider compatibility or live ClickHouse certification claim"
     ]
   },
   "providerBoundary": {
     "providerBindingId": "usf-189-clickhouse-analytics-provider",
-    "providerRegistryId": "analytics-store-clickhouse-deferred",
-    "bindingStatus": "unsupported-deferred",
-    "providerMode": "live-external-deferred",
-    "runtimeProviderBindingActive": false,
-    "sdkPackage": null,
-    "sdkVersion": null,
-    "endpointRef": null,
+    "providerRegistryId": "analytics-store-clickhouse-composed-test",
+    "deferredProviderRegistryId": "analytics-store-clickhouse-deferred",
+    "bindingStatus": "profile-gated-proven",
+    "providerMode": "composed-test",
+    "providerClass": "local-composed-real-service",
+    "runtimeProviderBindingActive": true,
+    "sdkPackage": "@clickhouse/client",
+    "sdkVersion": "1.23.0",
+    "sdkBoundary": "adapter-package-only",
+    "endpointRef": "endpoint://compose/clickhouse",
+    "proofCommand": "corepack pnpm proof:analytics:clickhouse",
     "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#clickhouse",
     "runtimeManifestBinding": "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-clickhouse-analytics-provider",
-    "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-deferred as deferred evidence-only support linked to the ClickHouse service catalogue row.",
-    "remainingProofIssue": "USF-206"
+    "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-composed-test as bounded local Compose proof and analytics-store-clickhouse-deferred as the non-live stronger-readiness boundary.",
+    "remainingProofIssue": null
   },
   "enterpriseEvidenceRefs": [
     "usf-172-soa-analytics-event-store-disposition",
@@ -102,9 +126,22 @@
     "usf-197-threat-clickhouse-overclaim",
     "usf-197-access-clickhouse-proof-boundary",
     "usf-197-incident-vulnerability-clickhouse-proof-boundary",
-    "usf-197-privacy-clickhouse-proof-boundary"
+    "usf-197-privacy-clickhouse-proof-boundary",
+    "usf-206-soa-clickhouse-composed-proof",
+    "usf-206-evidence-clickhouse-composed-proof",
+    "usf-206-threat-clickhouse-overclaim",
+    "usf-206-access-clickhouse-composed-proof",
+    "usf-206-resilience-clickhouse-composed-proof",
+    "usf-206-incident-vulnerability-clickhouse-composed-proof",
+    "usf-206-privacy-clickhouse-composed-proof",
+    "sdk-usf-189-clickhouse-analytics-provider-at-clickhouse-client"
   ],
-  "readinessClaimsAllowed": ["analytics-event-store-disposition-recorded", "clickhouse-service-proof-deferred", "in-memory-non-equivalence-recorded"],
+  "readinessClaimsAllowed": [
+    "analytics-event-store-disposition-recorded",
+    "clickhouse-profile-gated-local-compose-proof-recorded",
+    "clickhouse-sdk-boundary-recorded",
+    "in-memory-non-equivalence-recorded"
+  ],
   "readinessClaimsProhibited": [
     "analytics-readiness",
     "analytics-provider-readiness",
