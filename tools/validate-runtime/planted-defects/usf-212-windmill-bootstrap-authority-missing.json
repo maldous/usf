@@ -1,0 +1,11 @@
+{
+  "name": "usf-212-windmill-bootstrap-authority-missing",
+  "expectedRule": "USF-RUNTIME-033",
+  "windmillConfiguredProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/localComposeBoundary/workerModeStatus",
+      "value": "not-proven"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "usf-212-windmill-enterprise-evidence-missing",
+  "expectedRule": "USF-RUNTIME-033",
+  "windmillConfiguredProofBoundaryPatches": [
+    {
+      "op": "remove",
+      "path": "/enterpriseEvidenceRefs/0"
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "id": "usf-212-windmill-configured-proof-boundary",
+  "title": "USF-212 Windmill Configured Local Bootstrap SDK Proof Boundary",
+  "sourceIssue": "USF-212",
+  "followUpIssue": null,
+  "sourceDispositionIssue": "USF-178",
+  "predecessorIssue": "USF-203",
+  "laneIssue": "USF-189",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "parentIssue": "USF-133",
+  "status": "profile-gated-bounded-proof-present",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "runtimeManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+  "operatorWorkflowProviderDispositionMatrix": "docs/architecture/operator-workflow-provider-disposition-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+  "proofCommand": "corepack pnpm proof:workflow:windmill",
+  "serviceIds": [
+    "windmill",
+    "windmill-worker",
+    "windmill-postgres",
+    "windmill-redis"
+  ],
+  "providerBindingIds": [
+    "usf-189-windmill-automation-provider"
+  ],
+  "providerRegistryIds": [
+    "operational-job-engine-windmill-composed-test",
+    "operational-job-engine-windmill-deferred"
+  ],
+  "issueLinks": [
+    "USF-178",
+    "USF-203",
+    "USF-212",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-169",
+    "USF-180",
+    "USF-133"
+  ],
+  "reclassification": {
+    "from": "blocked-until-USF-212",
+    "to": "profile-gated-bounded-local-compose-proof",
+    "decisionAcceptedDoesNotMeanWorkComplete": true,
+    "serviceSemanticProofImplemented": true,
+    "windmillServiceReadinessClaim": false,
+    "operatorAutomationReadinessClaim": false,
+    "providerCompatibilityClaim": false,
+    "apiRuntimeBindingClaim": false,
+    "workerRuntimeBindingClaim": false,
+    "repositoryEvidence": [
+      "spec/instances/compose-service/service-catalogue.json#windmill",
+      "spec/instances/compose-service/service-catalogue.json#windmill-worker",
+      "spec/instances/compose-service/service-catalogue.json#windmill-postgres",
+      "spec/instances/compose-service/service-catalogue.json#windmill-redis",
+      "compose/compose.test.generated.yaml#windmill",
+      "compose/compose.test.generated.yaml#windmill-worker",
+      "packages/proof/src/windmill-configured-proof.ts",
+      "package.json#proof:workflow:windmill",
+      "Makefile#windmill-workflow-proof",
+      "docs/architecture/windmill-configured-proof-boundary.json",
+      "docs/architecture/windmill-operator-automation-proof-blocker-matrix.json",
+      "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-windmill-automation-provider",
+      "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "packages/core/src/index.ts#operational-job-engine-windmill-composed-test",
+      "tools/validate-runtime/validate-runtime.py"
+    ]
+  },
+  "remainingProofBoundary": {
+    "issue": "none-for-USF-212-bounded-proof",
+    "owner": "platform-workflow-foundation",
+    "riskOwner": "platform-workflow-risk-owner",
+    "controlOwner": "platform-workflow-control-owner",
+    "riskStatement": "Bounded local Windmill proof could be overclaimed as Windmill readiness, operator automation readiness, environment promotion readiness, API or worker runtime integration, live provider compatibility, or USF-133 closure.",
+    "treatment": "USF-212 resolves only the configured local Compose proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, and teardown. Separate source issues and proof are required before broader readiness or runtime integration claims.",
+    "reviewDate": "2026-09-30",
+    "requiredEvidence": [
+      "environment-specific Windmill promotion gates before any dev, test, staging, or production readiness claim",
+      "live/provider-managed Windmill supplier and credential evidence before any live-provider claim",
+      "API runtime Windmill port integration proof before any API runtime-use claim",
+      "worker runtime Windmill port integration proof before any USF worker runtime-use claim",
+      "full operator approval workflow proof before any operator automation readiness claim",
+      "production alerting, access review, and break-glass proof before any operational readiness claim"
+    ]
+  },
+  "localComposeBoundary": {
+    "imageSelectionStatus": "service-catalogue-digest-pinned",
+    "serverModeStatus": "MODE=server-generated-by-service-catalogue",
+    "workerModeStatus": "MODE=worker-generated-by-service-catalogue",
+    "postgresReadinessStatus": "service_healthy-pg-isready-generated",
+    "redisReadinessStatus": "service_healthy-redis-cli-ping-generated",
+    "serverReadinessStatus": "loopback-version-healthcheck-and-SDK-health-status-proven",
+    "workerReadinessStatus": "SDK-health-workers-alive-proven",
+    "hostExposure": "ephemeral-loopback-port-in-proof; generated fixed port remains loopback-only",
+    "dataBoundary": "synthetic-workspace-only",
+    "secretBoundary": "local-superadmin-placeholder-reference-redacted",
+    "teardownCleanupStatus": "compose-down-volume-removal-and-temp-override-removal-proven-by-USF-212",
+    "owner": "platform-workflow-foundation",
+    "riskOwner": "platform-workflow-risk-owner",
+    "controlOwner": "platform-workflow-control-owner",
+    "reviewDate": "2026-09-30"
+  },
+  "sdkClientBoundary": {
+    "selectionStatus": "official-sdk-selected-and-pinned",
+    "sdkPackage": "windmill-client",
+    "sdkVersion": "1.743.0",
+    "sdkBoundary": "proof-provider-integration-boundary",
+    "approvedImportBoundary": "packages/proof/src/windmill-configured-proof.ts",
+    "protocolException": false,
+    "sdkSelectionRationale": "windmill-client is the official Windmill TypeScript client from the windmill-labs/windmill repository. Version 1.743.0 is exact pinned, ships TypeScript declarations and ESM/CJS exports, carries Apache 2.0 licence metadata, has no runtime dependency fanout, and supports local Compose proof through the public SDK service classes and helpers.",
+    "licencePosture": "Apache 2.0 package metadata inspected from npm registry and package tarball on 2026-06-30.",
+    "maintenancePosture": "platform-workflow-dependency-owner reviews upstream Windmill client release and advisory posture before version changes or stronger claims.",
+    "securityAdvisoryPosture": "Dependency and container advisory review is required before stronger environment, live-provider, or production claims.",
+    "typescriptRuntimeCompatibility": "The SDK ships TypeScript declaration files and runs under the repository Node and tsx proof tooling.",
+    "forbiddenLayerImports": [
+      "core",
+      "ports",
+      "capabilities",
+      "api-routes",
+      "worker-orchestration",
+      "pdp"
+    ],
+    "alternativesRejected": [
+      "raw HTTP because a suitable official SDK exists",
+      "direct socket or shell protocol implementation because Windmill exposes an SDK client boundary",
+      "Windmill CLI because the TypeScript client provides a smaller deterministic proof boundary",
+      "Temporal SDK as a substitute because Temporal application workflow proof is not equivalent to Windmill operator automation proof"
+    ],
+    "supplierBoundary": "Local Compose Windmill and official SDK proof are local evidence only; no live/provider-managed supplier readiness or subprocessor claim is made."
+  },
+  "operatorAutomationBoundary": {
+    "workspaceBootstrapStatus": "synthetic-workspace-created-by-USF-212",
+    "variableRoundTripStatus": "synthetic-variable-write-read-proven",
+    "scriptSeedStatus": "synthetic-script-created-by-USF-212",
+    "deploymentHistoryStatus": "synthetic-script-deployment-history-update-proven",
+    "scriptExecutionStatus": "synthetic-script-executed-by-hash-and-path-on-Windmill-worker",
+    "approvalBoundaryStatus": "synthetic-approval-reference-validated-by-proof-script; no full approval workflow readiness claim",
+    "privilegedOperationBoundaryStatus": "local-superadmin-placeholder-required-and-invalid-credential-denied",
+    "tenantBoundaryStatus": "synthetic-tenant-reference-validated-by-proof-script",
+    "auditEvidenceStatus": "value-free-audit-log-row-presence-proven",
+    "retentionCleanupStatus": "script-and-variable-cleanup-attempted-plus-compose-volume-removal-proven",
+    "providerFailureHandlingStatus": "invalid-credential-fail-closed-proven",
+    "timeoutRetryStatus": "bounded-readiness-retry-and-process-timeouts-proven"
+  },
+  "temporalJobsSubstituteGate": {
+    "repositoryValidationRequired": true,
+    "temporalJobsEquivalentToWindmill": false,
+    "substitutionNonEquivalenceBoundary": "USF-212 proves Windmill local Compose behaviour directly. Temporal application workflow proof remains non-equivalent and may not satisfy Windmill operator automation access, approval, privileged operation, tenant, secret, audit, retention, cleanup, fail-closed, or readiness claims.",
+    "commands": [
+      "corepack pnpm proof:workflow:windmill",
+      "corepack pnpm runtime:validate",
+      "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ]
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-212-soa-windmill-configured-proof",
+    "usf-212-evidence-windmill-configured-proof",
+    "usf-212-threat-windmill-overclaim",
+    "usf-212-access-windmill-configured-proof",
+    "usf-212-resilience-windmill-configured-proof",
+    "usf-212-incident-vulnerability-windmill-configured-proof",
+    "usf-212-privacy-windmill-configured-proof",
+    "sdk-usf-212-windmill-client"
+  ],
+  "readinessClaimsAllowed": [
+    "windmill-profile-gated-local-configured-proof-recorded",
+    "windmill-official-sdk-boundary-recorded",
+    "windmill-synthetic-workspace-script-execution-evidence-recorded",
+    "windmill-invalid-credential-fail-closed-evidence-recorded",
+    "temporal-jobs-non-equivalence-recorded"
+  ],
+  "readinessClaimsProhibited": [
+    "windmill-readiness",
+    "operator-automation-readiness",
+    "workflow-automation-readiness",
+    "operator-workflow-readiness",
+    "privileged-operation-readiness",
+    "provider-compatibility-readiness",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity",
+    "usf-133-closure"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity",
+    "windmill-readiness",
+    "operator-automation-readiness",
+    "usf-133-closure"
+  ],
+  "operationalEvidencePosture": {
+    "readinessRetry": "bounded-health-and-worker-readiness-retry-proven-by-USF-212",
+    "timeout": "windmill-proof-process-timeouts-up-to-300s-proven-by-USF-212",
+    "safeTeardown": "compose-down-volume-removal-and-temp-dir-cleanup-proven-by-USF-212",
+    "failClosed": "invalid-credential-safe-reason-code-proven-by-USF-212",
+    "structuredLogging": "value-free-proof-structured-log-fields-recorded",
+    "tracingCorrelation": "span-like-provider-operation-correlation-evidence-recorded",
+    "metrics": "readiness-attempt-retry-failure-latency-health-cleanup-metrics-recorded",
+    "auditEvents": "value-free-audit-row-presence-proven",
+    "redaction": "raw-endpoint-credential-connection-string-provider-payload-error-and-stack-trace-redaction-checked"
+  }
+}

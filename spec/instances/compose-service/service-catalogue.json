@@ -85,6 +85,7 @@
     "postgres://windmill:windmill_password@windmill-postgres:5432/windmill",
     "sonar_password",
     "temporal_password",
+    "usf-local-windmill-superadmin-placeholder",
     "windmill_password"
   ],
   "services": [
@@ -9702,7 +9703,15 @@
         "ports": [],
         "volumes": [],
         "dependsOn": [],
-        "healthcheck": null
+        "healthcheck": {
+          "test": [
+            "CMD-SHELL",
+            "pg_isready -U windmill -d windmill"
+          ],
+          "interval": "10s",
+          "timeout": "5s",
+          "retries": 30
+        }
       }
     },
     {
@@ -9995,7 +10004,16 @@
         "ports": [],
         "volumes": [],
         "dependsOn": [],
-        "healthcheck": null
+        "healthcheck": {
+          "test": [
+            "CMD",
+            "redis-cli",
+            "ping"
+          ],
+          "interval": "10s",
+          "timeout": "5s",
+          "retries": 30
+        }
       }
     },
     {
@@ -10352,7 +10370,7 @@
       ],
       "composeService": {
         "serviceName": "windmill",
-        "image": "ghcr.io/windmill-labs/windmill:1.734",
+        "image": "ghcr.io/windmill-labs/windmill:1.734@sha256:93aca0f0954c86d85c88ce1f82c628be1f9bc1b310b648a239ca40d4dcbe390b",
         "profiles": [
           "workflow-provider"
         ],
@@ -10365,6 +10383,22 @@
           {
             "name": "REDIS_URL",
             "value": "redis://windmill-redis:6379"
+          },
+          {
+            "name": "MODE",
+            "value": "server"
+          },
+          {
+            "name": "BASE_URL",
+            "value": "http://127.0.0.1:8000"
+          },
+          {
+            "name": "SUPERADMIN_SECRET",
+            "value": "usf-local-windmill-superadmin-placeholder"
+          },
+          {
+            "name": "JSON_FMT",
+            "value": "true"
           }
         ],
         "ports": [],
@@ -10372,14 +10406,22 @@
         "dependsOn": [
           {
             "serviceName": "windmill-postgres",
-            "condition": "service_started"
+            "condition": "service_healthy"
           },
           {
             "serviceName": "windmill-redis",
-            "condition": "service_started"
+            "condition": "service_healthy"
           }
         ],
-        "healthcheck": null
+        "healthcheck": {
+          "test": [
+            "CMD-SHELL",
+            "curl -fsS http://127.0.0.1:8000/api/version >/dev/null || exit 1"
+          ],
+          "interval": "10s",
+          "timeout": "5s",
+          "retries": 30
+        }
       }
     },
     {
@@ -10664,12 +10706,12 @@
       ],
       "composeService": {
         "serviceName": "windmill-worker",
-        "image": "ghcr.io/windmill-labs/windmill:1.734",
+        "image": "ghcr.io/windmill-labs/windmill:1.734@sha256:93aca0f0954c86d85c88ce1f82c628be1f9bc1b310b648a239ca40d4dcbe390b",
         "profiles": [
           "workflow-provider"
         ],
         "command": [
-          "worker"
+          "windmill"
         ],
         "environment": [
           {
@@ -10679,6 +10721,22 @@
           {
             "name": "REDIS_URL",
             "value": "redis://windmill-redis:6379"
+          },
+          {
+            "name": "MODE",
+            "value": "worker"
+          },
+          {
+            "name": "BASE_URL",
+            "value": "http://127.0.0.1:8000"
+          },
+          {
+            "name": "SUPERADMIN_SECRET",
+            "value": "usf-local-windmill-superadmin-placeholder"
+          },
+          {
+            "name": "JSON_FMT",
+            "value": "true"
           }
         ],
         "ports": [],
@@ -10686,14 +10744,26 @@
         "dependsOn": [
           {
             "serviceName": "windmill-postgres",
-            "condition": "service_started"
+            "condition": "service_healthy"
           },
           {
             "serviceName": "windmill-redis",
-            "condition": "service_started"
+            "condition": "service_healthy"
+          },
+          {
+            "serviceName": "windmill",
+            "condition": "service_healthy"
           }
         ],
-        "healthcheck": null
+        "healthcheck": {
+          "test": [
+            "CMD-SHELL",
+            "windmill --version >/dev/null 2>&1 || exit 1"
+          ],
+          "interval": "10s",
+          "timeout": "5s",
+          "retries": 30
+        }
       }
     },
     {

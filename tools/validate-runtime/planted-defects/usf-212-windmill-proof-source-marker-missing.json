@@ -1,0 +1,11 @@
+{
+  "name": "usf-212-windmill-proof-source-marker-missing",
+  "expectedRule": "USF-RUNTIME-033",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/windmill-configured-proof.ts",
+      "old": "runScriptByPath",
+      "new": "pathRunnerMissing"
+    }
+  ]
+}

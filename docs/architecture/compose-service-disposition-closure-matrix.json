@@ -34,11 +34,11 @@
   "closure_disposition_counts": {
     "bounded-local-proof-with-deferred-readiness-boundaries": 2,
     "covered-by-usf-runtime": 4,
-    "deferred": 11,
+    "deferred": 7,
     "implemented": 13,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
-    "profile-gated-bounded-proof": 2,
+    "profile-gated-bounded-proof": 6,
     "requires-human-decision": 3,
     "substituted-partial": 1
   },
@@ -2295,7 +2295,7 @@
         "windmill-postgres"
       ],
       "source_accounting_statuses": [
-        "deferred"
+        "profile-gated-bounded-proof"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2310,8 +2310,8 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "deferred",
-        "closure_blocking": true,
+        "closure_disposition": "profile-gated-bounded-proof",
+        "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-postgres",
         "react_parity_refs": [
@@ -2319,7 +2319,10 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "corepack pnpm proof:workflow:windmill",
+          "usf-212-evidence-windmill-configured-proof",
+          "docs/architecture/windmill-configured-proof-boundary.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2327,16 +2330,18 @@
           "USF-182",
           "USF-185",
           "USF-178",
-          "USF-203"
+          "USF-203",
+          "USF-212"
         ],
         "non_equivalence_boundaries": [
-          "Shared Postgres proof is not equivalent to Windmill Postgres persistence, migration, backup, access, audit, or restore proof.",
-          "Service catalogue presence and generated Compose derivation are not Windmill persistence readiness, production readiness, or live-provider readiness."
+          "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
+          "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
         ],
         "missing_evidence": [
-          "Windmill Postgres persistence proof",
-          "Windmill-specific tenant, audit, backup, restore, retention, cleanup, timeout, retry, and teardown evidence",
-          "supplier, incident, vulnerability, privacy, and resilience posture proof"
+          "USF-212 proves configured local Windmill bootstrap depends on a healthy Windmill Postgres service, but it does not prove independent Windmill persistence migrations, backup, restore, PITR, or production data resilience.",
+          "Environment promotion, live/provider-managed database operation, production incident response, and production retention evidence remain unclaimed.",
+          "Windmill persistence readiness remains a non-claim outside the bounded proof."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2354,7 +2359,13 @@
           "live-provider-readiness",
           "soc-readiness",
           "iso27001-certification",
-          "enterprise-production-readiness"
+          "enterprise-production-readiness",
+          "operator-automation-readiness",
+          "windmill-readiness",
+          "workflow-automation-readiness",
+          "operator-workflow-readiness",
+          "privileged-operation-readiness",
+          "provider-compatibility-readiness"
         ],
         "enterprise_evidence_refs": [
           "soa-service-windmill-postgres",
@@ -2369,11 +2380,21 @@
           "usf-178-threat-windmill-overclaim",
           "usf-178-resilience-operator-workflow-provider",
           "usf-178-incident-vulnerability-operator-workflow-provider",
-          "usf-178-privacy-operator-workflow-provider"
+          "usf-178-privacy-operator-workflow-provider",
+          "usf-212-soa-windmill-configured-proof",
+          "usf-212-evidence-windmill-configured-proof",
+          "usf-212-threat-windmill-overclaim",
+          "usf-212-access-windmill-configured-proof",
+          "usf-212-resilience-windmill-configured-proof",
+          "usf-212-incident-vulnerability-windmill-configured-proof",
+          "usf-212-privacy-windmill-configured-proof",
+          "sdk-usf-212-windmill-client"
         ],
         "tracking_issue_rationale": {
           "USF-178": "bounded operator workflow service disposition gate",
-          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up",
+          "USF-212": "bounded configured local Windmill bootstrap, SDK, synthetic workspace/script, audit, fail-closed, readiness retry, and teardown proof",
+          "USF-193": "environment promotion standard owns dev/test/staging/production readiness semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2388,7 +2409,7 @@
         "windmill-redis"
       ],
       "source_accounting_statuses": [
-        "deferred"
+        "profile-gated-bounded-proof"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2403,8 +2424,8 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "deferred",
-        "closure_blocking": true,
+        "closure_disposition": "profile-gated-bounded-proof",
+        "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-redis",
         "react_parity_refs": [
@@ -2412,7 +2433,10 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "corepack pnpm proof:workflow:windmill",
+          "usf-212-evidence-windmill-configured-proof",
+          "docs/architecture/windmill-configured-proof-boundary.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2420,16 +2444,18 @@
           "USF-182",
           "USF-185",
           "USF-178",
-          "USF-203"
+          "USF-203",
+          "USF-212"
         ],
         "non_equivalence_boundaries": [
-          "NATS or in-memory queue proof is not equivalent to Windmill Redis queue/cache semantics, access, audit, retention, or cleanup proof.",
-          "Service catalogue presence and generated Compose derivation are not Windmill queue/cache readiness, production readiness, or live-provider readiness."
+          "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
+          "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
         ],
         "missing_evidence": [
-          "Windmill Redis queue/cache proof",
-          "Windmill-specific tenant, audit, retention, cleanup, timeout, retry, and teardown evidence",
-          "supplier, incident, vulnerability, privacy, and resilience posture proof"
+          "USF-212 proves configured local Windmill bootstrap depends on a healthy Windmill Redis service and worker execution path, but it does not prove independent queue/cache durability, recovery, or production operations.",
+          "Environment promotion, live/provider-managed cache operation, production incident response, and production retention evidence remain unclaimed.",
+          "Windmill queue/cache readiness remains a non-claim outside the bounded proof."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2447,7 +2473,13 @@
           "live-provider-readiness",
           "soc-readiness",
           "iso27001-certification",
-          "enterprise-production-readiness"
+          "enterprise-production-readiness",
+          "operator-automation-readiness",
+          "windmill-readiness",
+          "workflow-automation-readiness",
+          "operator-workflow-readiness",
+          "privileged-operation-readiness",
+          "provider-compatibility-readiness"
         ],
         "enterprise_evidence_refs": [
           "soa-service-windmill-redis",
@@ -2462,11 +2494,21 @@
           "usf-178-threat-windmill-overclaim",
           "usf-178-resilience-operator-workflow-provider",
           "usf-178-incident-vulnerability-operator-workflow-provider",
-          "usf-178-privacy-operator-workflow-provider"
+          "usf-178-privacy-operator-workflow-provider",
+          "usf-212-soa-windmill-configured-proof",
+          "usf-212-evidence-windmill-configured-proof",
+          "usf-212-threat-windmill-overclaim",
+          "usf-212-access-windmill-configured-proof",
+          "usf-212-resilience-windmill-configured-proof",
+          "usf-212-incident-vulnerability-windmill-configured-proof",
+          "usf-212-privacy-windmill-configured-proof",
+          "sdk-usf-212-windmill-client"
         ],
         "tracking_issue_rationale": {
           "USF-178": "bounded operator workflow service disposition gate",
-          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up",
+          "USF-212": "bounded configured local Windmill bootstrap, SDK, synthetic workspace/script, audit, fail-closed, readiness retry, and teardown proof",
+          "USF-193": "environment promotion standard owns dev/test/staging/production readiness semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2481,7 +2523,7 @@
         "windmill"
       ],
       "source_accounting_statuses": [
-        "deferred"
+        "profile-gated-bounded-proof"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2496,8 +2538,8 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "deferred",
-        "closure_blocking": true,
+        "closure_disposition": "profile-gated-bounded-proof",
+        "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill",
         "react_parity_refs": [
@@ -2505,7 +2547,10 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "corepack pnpm proof:workflow:windmill",
+          "usf-212-evidence-windmill-configured-proof",
+          "docs/architecture/windmill-configured-proof-boundary.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2513,18 +2558,18 @@
           "USF-182",
           "USF-185",
           "USF-178",
-          "USF-203"
+          "USF-203",
+          "USF-212"
         ],
         "non_equivalence_boundaries": [
-          "Temporal application workflow proof, jobs proof, and worker runtime proof are not equivalent to Windmill operator automation service semantics.",
-          "Service catalogue presence and generated Compose derivation are not operator automation readiness, Windmill readiness, production readiness, or live-provider readiness."
+          "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
+          "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
         ],
         "missing_evidence": [
-          "Windmill service-semantic proof",
-          "operator console access and approval workflow proof",
-          "privileged operation boundary proof",
-          "tenant, secret, audit, retention, cleanup, failure-mode, timeout, retry, and teardown evidence",
-          "supplier, access review, break-glass, incident, vulnerability, and privacy posture proof"
+          "Operator console UI clickthrough and access-review execution remain unproven.",
+          "Environment promotion, live/provider-managed Windmill operation, supplier/subprocessor operation, production incident response, and production retention evidence remain unclaimed.",
+          "API/worker runtime integration with Windmill remains unproven; USF-212 is a proof/provider boundary only."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2542,7 +2587,13 @@
           "live-provider-readiness",
           "soc-readiness",
           "iso27001-certification",
-          "enterprise-production-readiness"
+          "enterprise-production-readiness",
+          "operator-automation-readiness",
+          "windmill-readiness",
+          "workflow-automation-readiness",
+          "operator-workflow-readiness",
+          "privileged-operation-readiness",
+          "provider-compatibility-readiness"
         ],
         "enterprise_evidence_refs": [
           "soa-service-windmill",
@@ -2559,11 +2610,21 @@
           "usf-178-access-operator-workflow-provider",
           "usf-178-resilience-operator-workflow-provider",
           "usf-178-incident-vulnerability-operator-workflow-provider",
-          "usf-178-privacy-operator-workflow-provider"
+          "usf-178-privacy-operator-workflow-provider",
+          "usf-212-soa-windmill-configured-proof",
+          "usf-212-evidence-windmill-configured-proof",
+          "usf-212-threat-windmill-overclaim",
+          "usf-212-access-windmill-configured-proof",
+          "usf-212-resilience-windmill-configured-proof",
+          "usf-212-incident-vulnerability-windmill-configured-proof",
+          "usf-212-privacy-windmill-configured-proof",
+          "sdk-usf-212-windmill-client"
         ],
         "tracking_issue_rationale": {
           "USF-178": "bounded operator workflow service disposition gate",
-          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up",
+          "USF-212": "bounded configured local Windmill bootstrap, SDK, synthetic workspace/script, audit, fail-closed, readiness retry, and teardown proof",
+          "USF-193": "environment promotion standard owns dev/test/staging/production readiness semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2578,7 +2639,7 @@
         "windmill-worker"
       ],
       "source_accounting_statuses": [
-        "deferred"
+        "profile-gated-bounded-proof"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2593,8 +2654,8 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "deferred",
-        "closure_blocking": true,
+        "closure_disposition": "profile-gated-bounded-proof",
+        "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-worker",
         "react_parity_refs": [
@@ -2602,7 +2663,10 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "corepack pnpm proof:workflow:windmill",
+          "usf-212-evidence-windmill-configured-proof",
+          "docs/architecture/windmill-configured-proof-boundary.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2610,17 +2674,18 @@
           "USF-182",
           "USF-185",
           "USF-178",
-          "USF-203"
+          "USF-203",
+          "USF-212"
         ],
         "non_equivalence_boundaries": [
-          "apps/work and Temporal application workflow proof are not equivalent to Windmill Worker operator automation execution proof.",
-          "Service catalogue presence and generated Compose derivation are not Windmill worker readiness, operator automation readiness, production readiness, or live-provider readiness."
+          "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
+          "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
         ],
         "missing_evidence": [
-          "Windmill Worker service-semantic proof",
-          "operator automation execution proof",
-          "tenant, secret, audit, retention, cleanup, failure-mode, timeout, retry, and teardown evidence",
-          "supplier, incident, vulnerability, privacy, and resilience posture proof"
+          "USF-212 proves synthetic script execution reaches a composed Windmill worker, but it does not prove USF worker runtime integration with Windmill.",
+          "Environment promotion, live/provider-managed worker operation, production incident response, and production retention evidence remain unclaimed.",
+          "Operator automation readiness and broader Windmill worker readiness remain non-claims."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2638,7 +2703,13 @@
           "live-provider-readiness",
           "soc-readiness",
           "iso27001-certification",
-          "enterprise-production-readiness"
+          "enterprise-production-readiness",
+          "operator-automation-readiness",
+          "windmill-readiness",
+          "workflow-automation-readiness",
+          "operator-workflow-readiness",
+          "privileged-operation-readiness",
+          "provider-compatibility-readiness"
         ],
         "enterprise_evidence_refs": [
           "soa-service-windmill-worker",
@@ -2654,11 +2725,21 @@
           "usf-178-threat-windmill-overclaim",
           "usf-178-resilience-operator-workflow-provider",
           "usf-178-incident-vulnerability-operator-workflow-provider",
-          "usf-178-privacy-operator-workflow-provider"
+          "usf-178-privacy-operator-workflow-provider",
+          "usf-212-soa-windmill-configured-proof",
+          "usf-212-evidence-windmill-configured-proof",
+          "usf-212-threat-windmill-overclaim",
+          "usf-212-access-windmill-configured-proof",
+          "usf-212-resilience-windmill-configured-proof",
+          "usf-212-incident-vulnerability-windmill-configured-proof",
+          "usf-212-privacy-windmill-configured-proof",
+          "sdk-usf-212-windmill-client"
         ],
         "tracking_issue_rationale": {
           "USF-178": "bounded operator workflow service disposition gate",
-          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up"
+          "USF-203": "Windmill operator automation service semantics and adapter proof follow-up",
+          "USF-212": "bounded configured local Windmill bootstrap, SDK, synthetic workspace/script, audit, fail-closed, readiness retry, and teardown proof",
+          "USF-193": "environment promotion standard owns dev/test/staging/production readiness semantics"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

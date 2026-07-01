@@ -74,6 +74,9 @@ importers:
       redis:
         specifier: 6.0.1
         version: 6.0.1(@opentelemetry/api@1.9.1)
+      windmill-client:
+        specifier: 1.743.0
+        version: 1.743.0
       wiremock-captain:
         specifier: 4.1.3
         version: 4.1.3
@@ -2684,6 +2687,9 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
+  windmill-client@1.743.0:
+    resolution: {integrity: sha512-mumcpG8XYRCO8Lkcz3MVCR5wOJZou3KyqaRNDVPVEZOS4/8u0swMuMCvHTesW/mOgAz3gqcUu9Xpo7XvvMbDGw==}
+
   wiremock-captain@4.1.3:
     resolution: {integrity: sha512-kZCYxi/jwZJkGBm014mCHLFn0N2eLLygfrn8s21H69W+xA740lmgkCRyyPXrbdU1Z5wFBvpx3Ky9ydCmETlq7Q==}
     engines: {node: '>=22.11.0', npm: '>=10.9.2'}
@@ -5269,6 +5275,8 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
+
+  windmill-client@1.743.0: {}
 
   wiremock-captain@4.1.3: {}
 

@@ -61,6 +61,7 @@ RULES = {
     "USF-RUNTIME-030": ("blocking", "ClickHouse service proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-031": ("blocking", "Redis cache service proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-032": ("blocking", "pgBackRest configured proof boundary is incomplete or unsafe"),
+    "USF-RUNTIME-033": ("blocking", "Windmill configured proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -79,6 +80,7 @@ PGBACKREST_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/pgbackrest-backup
 PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH = Path("docs/architecture/pgbackrest-configured-proof-boundary.json")
 OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH = Path("docs/architecture/operator-workflow-provider-disposition-matrix.json")
 WINDMILL_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/windmill-operator-automation-proof-blocker-matrix.json")
+WINDMILL_CONFIGURED_PROOF_BOUNDARY_PATH = Path("docs/architecture/windmill-configured-proof-boundary.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PROOF_SOURCE_PATH = Path("packages/proof/src/runtime-application-proof.ts")
@@ -102,6 +104,7 @@ LOCALSTACK_PROOF_SOURCE_PATH = Path("packages/proof/src/localstack-composed-proo
 CLICKHOUSE_PROOF_SOURCE_PATH = Path("packages/proof/src/clickhouse-composed-proof.ts")
 REDIS_PROOF_SOURCE_PATH = Path("packages/proof/src/redis-composed-proof.ts")
 PGBACKREST_PROOF_SOURCE_PATH = Path("packages/proof/src/pgbackrest-configured-proof.ts")
+WINDMILL_PROOF_SOURCE_PATH = Path("packages/proof/src/windmill-configured-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
@@ -517,6 +520,27 @@ WINDMILL_PROOF_BLOCKER_REQUIRED_EVIDENCE_REFS = {
     "usf-203-privacy-windmill-proof-blocker",
     "sdk-usf-203-windmill-client-blocked",
 }
+WINDMILL_CONFIGURED_PROOF_REQUIRED_ISSUES = {
+    "USF-178",
+    "USF-203",
+    "USF-212",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-169",
+    "USF-180",
+    "USF-133",
+}
+WINDMILL_CONFIGURED_PROOF_REQUIRED_EVIDENCE_REFS = {
+    "usf-212-soa-windmill-configured-proof",
+    "usf-212-evidence-windmill-configured-proof",
+    "usf-212-threat-windmill-overclaim",
+    "usf-212-access-windmill-configured-proof",
+    "usf-212-resilience-windmill-configured-proof",
+    "usf-212-incident-vulnerability-windmill-configured-proof",
+    "usf-212-privacy-windmill-configured-proof",
+    "sdk-usf-212-windmill-client",
+}
 OPERATOR_WORKFLOW_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "operator-automation-readiness",
     "windmill-readiness",
@@ -587,10 +611,10 @@ LANE5_PROVIDER_DISPOSITIONS = {
     },
     "usf-189-windmill-automation-provider": {
         "serviceIds": ["windmill", "windmill-worker", "windmill-postgres", "windmill-redis"],
-        "providerIds": ["operational-job-engine-windmill-deferred"],
-        "followUpIssue": "USF-203",
+        "providerIds": ["operational-job-engine-windmill-composed-test", "operational-job-engine-windmill-deferred"],
+        "followUpIssue": "USF-212",
         "boundaryRef": "usf-189-workflow-automation-provider-deferred",
-        "allowedStatuses": {"profile-gated"},
+        "allowedStatuses": {"profile-gated-proven"},
     },
 }
 LANE5_RISK_TOKENS = (
@@ -640,7 +664,7 @@ SOURCE_TEARDOWN_MARKERS = (
     "USF_WORKER_RUN_ONCE",
 )
 PROVIDER_SDK_IMPORT_RE = re.compile(
-    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@clickhouse/client|@sonar/scan|@sentry/node|@aws-sdk(?:/[^\"']+)?|aws-sdk|minio|mailpit-api|meilisearch|clamscan|wiremock-captain|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
+    r"(?:from\s+|import\()[\"'](?:pg|postgres|redis|ioredis|@clickhouse/client|@sonar/scan|@sentry/node|@aws-sdk(?:/[^\"']+)?|aws-sdk|minio|mailpit-api|meilisearch|clamscan|wiremock-captain|windmill-client|nodemailer|twilio|@sendgrid|sendgrid|stripe|@temporalio/[^\"']+|@nats-io/transport-node|nats|keycloak-js|@keycloak/keycloak-admin-client|node-vault)[\"']"
 )
 FORBIDDEN_SDK_IMPORT_PATHS = (
     Path("packages/core/src/index.ts"),
@@ -836,6 +860,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 windmill_proof_blocker_matrix,
                 defect["windmillProofBlockerMatrixPatches"],
             )
+    windmill_configured_proof_boundary: Any = None
+    if not defect.get("removeWindmillConfiguredProofBoundary"):
+        windmill_configured_proof_boundary = read_json(WINDMILL_CONFIGURED_PROOF_BOUNDARY_PATH)
+        if defect.get("windmillConfiguredProofBoundaryPatches"):
+            windmill_configured_proof_boundary = apply_manifest_patches(
+                windmill_configured_proof_boundary,
+                defect["windmillConfiguredProofBoundaryPatches"],
+            )
     package = read_json(PACKAGE_PATH)
     service_catalogue = read_json(Path(SERVICE_CATALOGUE_PATH))
     if defect.get("serviceCataloguePatches"):
@@ -872,6 +904,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "pgbackrestConfiguredProofBoundary": pgbackrest_configured_proof_boundary,
         "operatorWorkflowProviderMatrix": operator_workflow_provider_matrix,
         "windmillProofBlockerMatrix": windmill_proof_blocker_matrix,
+        "windmillConfiguredProofBoundary": windmill_configured_proof_boundary,
         "serviceCatalogue": service_catalogue,
         "package": package,
         "makefile": makefile,
@@ -1230,7 +1263,10 @@ def check_lane5_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
                 "official-cli-proof-boundary",
                 "protocol-exception-official-cli",
             }
-            if not protocol_exception and binding.get("sdkBoundary") != "adapter-package-only":
+            allowed_sdk_boundaries = {"adapter-package-only"}
+            if binding_id == "usf-189-windmill-automation-provider":
+                allowed_sdk_boundaries.add("proof-provider-integration-boundary")
+            if not protocol_exception and binding.get("sdkBoundary") not in allowed_sdk_boundaries:
                 F.add("USF-RUNTIME-020", binding_id, "implemented provider lacks adapter-package-only SDK boundary")
             if protocol_exception and binding.get("sdkBoundary") not in {
                 "adapter-package-only",
@@ -3998,6 +4034,302 @@ def check_pgbackrest_configured_proof_boundary(F: Findings, state: dict[str, Any
         F.add("USF-RUNTIME-032", "deferredBoundaries.usf-189-backup-provider-deferred", "runtime deferred boundary must distinguish resolved local proof from remaining readiness boundaries")
 
 
+def check_windmill_configured_proof_boundary(F: Findings, state: dict[str, Any]) -> None:
+    boundary = state.get("windmillConfiguredProofBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-RUNTIME-033", str(WINDMILL_CONFIGURED_PROOF_BOUNDARY_PATH), "Windmill configured proof boundary is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-212",
+        "followUpIssue": None,
+        "sourceDispositionIssue": "USF-178",
+        "predecessorIssue": "USF-203",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "status": "profile-gated-bounded-proof-present",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "proofCommand": "corepack pnpm proof:workflow:windmill",
+    }
+    for key, expected in expected_top.items():
+        observed = boundary.get(key)
+        if observed is not expected if expected is None else observed != expected:
+            F.add("USF-RUNTIME-033", key, f"expected {expected!r}")
+
+    expected_service_ids = {"windmill", "windmill-worker", "windmill-postgres", "windmill-redis"}
+    if set(boundary.get("serviceIds", [])) != expected_service_ids:
+        F.add("USF-RUNTIME-033", "serviceIds", "Windmill configured proof service ids are incomplete")
+    if WINDMILL_CONFIGURED_PROOF_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
+        F.add("USF-RUNTIME-033", "issueLinks", "Windmill configured proof issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(boundary.get("nonClaims", [])):
+        F.add("USF-RUNTIME-033", "nonClaims", "Windmill configured proof non-claims are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS & set(boundary.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-033", "readinessClaimsAllowed", "Windmill configured proof allows a prohibited readiness claim")
+    if OPERATOR_WORKFLOW_PROVIDER_PROHIBITED_CLAIMS - set(boundary.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-033", "readinessClaimsProhibited", "Windmill configured proof prohibited claims are incomplete")
+
+    reclassification = boundary.get("reclassification", {})
+    if not isinstance(reclassification, dict):
+        F.add("USF-RUNTIME-033", "reclassification", "Windmill reclassification must be an object")
+    else:
+        expected_reclassification = {
+            "from": "blocked-until-USF-212",
+            "to": "profile-gated-bounded-local-compose-proof",
+            "decisionAcceptedDoesNotMeanWorkComplete": True,
+            "serviceSemanticProofImplemented": True,
+            "windmillServiceReadinessClaim": False,
+            "operatorAutomationReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+            "apiRuntimeBindingClaim": False,
+            "workerRuntimeBindingClaim": False,
+        }
+        for key, expected in expected_reclassification.items():
+            observed = reclassification.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-033", f"reclassification.{key}", f"expected {expected!r}")
+        required_refs = {
+            "spec/instances/compose-service/service-catalogue.json#windmill",
+            "compose/compose.test.generated.yaml#windmill",
+            "packages/proof/src/windmill-configured-proof.ts",
+            "package.json#proof:workflow:windmill",
+            "Makefile#windmill-workflow-proof",
+            "docs/architecture/windmill-configured-proof-boundary.json",
+            "tools/validate-runtime/validate-runtime.py",
+        }
+        if required_refs - set(reclassification.get("repositoryEvidence", [])):
+            F.add("USF-RUNTIME-033", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
+
+    remaining = boundary.get("remainingProofBoundary", {})
+    if not isinstance(remaining, dict):
+        F.add("USF-RUNTIME-033", "remainingProofBoundary", "remaining proof boundary must be an object")
+    else:
+        expected_remaining = {
+            "issue": "none-for-USF-212-bounded-proof",
+            "owner": "platform-workflow-foundation",
+            "riskOwner": "platform-workflow-risk-owner",
+            "controlOwner": "platform-workflow-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_remaining.items():
+            if remaining.get(key) != expected:
+                F.add("USF-RUNTIME-033", f"remainingProofBoundary.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "requiredEvidence"):
+            if remaining.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-033", f"remainingProofBoundary.{field}", "remaining proof field is required")
+        required_remaining = {
+            "API runtime Windmill port integration proof before any API runtime-use claim",
+            "worker runtime Windmill port integration proof before any USF worker runtime-use claim",
+            "full operator approval workflow proof before any operator automation readiness claim",
+        }
+        if required_remaining - set(remaining.get("requiredEvidence", [])):
+            F.add("USF-RUNTIME-033", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
+
+    local = boundary.get("localComposeBoundary", {})
+    expected_local = {
+        "imageSelectionStatus": "service-catalogue-digest-pinned",
+        "serverModeStatus": "MODE=server-generated-by-service-catalogue",
+        "workerModeStatus": "MODE=worker-generated-by-service-catalogue",
+        "postgresReadinessStatus": "service_healthy-pg-isready-generated",
+        "redisReadinessStatus": "service_healthy-redis-cli-ping-generated",
+        "serverReadinessStatus": "loopback-version-healthcheck-and-SDK-health-status-proven",
+        "workerReadinessStatus": "SDK-health-workers-alive-proven",
+        "dataBoundary": "synthetic-workspace-only",
+        "secretBoundary": "local-superadmin-placeholder-reference-redacted",
+        "teardownCleanupStatus": "compose-down-volume-removal-and-temp-override-removal-proven-by-USF-212",
+    }
+    for field, expected in expected_local.items():
+        if local.get(field) != expected:
+            F.add("USF-RUNTIME-033", f"localComposeBoundary.{field}", f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
+        if not local.get(field):
+            F.add("USF-RUNTIME-033", f"localComposeBoundary.{field}", "local Compose owner metadata is required")
+
+    sdk = boundary.get("sdkClientBoundary", {})
+    expected_sdk = {
+        "selectionStatus": "official-sdk-selected-and-pinned",
+        "sdkPackage": "windmill-client",
+        "sdkVersion": "1.743.0",
+        "sdkBoundary": "proof-provider-integration-boundary",
+        "approvedImportBoundary": str(WINDMILL_PROOF_SOURCE_PATH),
+        "protocolException": False,
+    }
+    for field, expected in expected_sdk.items():
+        observed = sdk.get(field)
+        if observed is not expected if isinstance(expected, bool) else observed != expected:
+            F.add("USF-RUNTIME-033", f"sdkClientBoundary.{field}", f"expected {expected!r}")
+    if "official Windmill TypeScript client" not in str(sdk.get("sdkSelectionRationale", "")):
+        F.add("USF-RUNTIME-033", "sdkClientBoundary.sdkSelectionRationale", "Windmill SDK rationale must name official client")
+    for field in (
+        "licencePosture",
+        "maintenancePosture",
+        "securityAdvisoryPosture",
+        "typescriptRuntimeCompatibility",
+        "forbiddenLayerImports",
+        "alternativesRejected",
+        "supplierBoundary",
+    ):
+        if not sdk.get(field):
+            F.add("USF-RUNTIME-033", f"sdkClientBoundary.{field}", "SDK/client governance field is required")
+
+    operator = boundary.get("operatorAutomationBoundary", {})
+    expected_operator = {
+        "workspaceBootstrapStatus": "synthetic-workspace-created-by-USF-212",
+        "variableRoundTripStatus": "synthetic-variable-write-read-proven",
+        "scriptSeedStatus": "synthetic-script-created-by-USF-212",
+        "deploymentHistoryStatus": "synthetic-script-deployment-history-update-proven",
+        "scriptExecutionStatus": "synthetic-script-executed-by-hash-and-path-on-Windmill-worker",
+        "approvalBoundaryStatus": "synthetic-approval-reference-validated-by-proof-script; no full approval workflow readiness claim",
+        "privilegedOperationBoundaryStatus": "local-superadmin-placeholder-required-and-invalid-credential-denied",
+        "tenantBoundaryStatus": "synthetic-tenant-reference-validated-by-proof-script",
+        "auditEvidenceStatus": "value-free-audit-log-row-presence-proven",
+        "retentionCleanupStatus": "script-and-variable-cleanup-attempted-plus-compose-volume-removal-proven",
+        "providerFailureHandlingStatus": "invalid-credential-fail-closed-proven",
+        "timeoutRetryStatus": "bounded-readiness-retry-and-process-timeouts-proven",
+    }
+    for field, expected in expected_operator.items():
+        if operator.get(field) != expected:
+            F.add("USF-RUNTIME-033", f"operatorAutomationBoundary.{field}", f"expected {expected!r}")
+
+    substitute = boundary.get("temporalJobsSubstituteGate", {})
+    if substitute.get("repositoryValidationRequired") is not True:
+        F.add("USF-RUNTIME-033", "temporalJobsSubstituteGate.repositoryValidationRequired", "repository validation must remain required")
+    if substitute.get("temporalJobsEquivalentToWindmill") is not False:
+        F.add("USF-RUNTIME-033", "temporalJobsSubstituteGate.temporalJobsEquivalentToWindmill", "Temporal proof must not be Windmill equivalent")
+    if "non-equivalent" not in str(substitute.get("substitutionNonEquivalenceBoundary", "")):
+        F.add("USF-RUNTIME-033", "temporalJobsSubstituteGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+    commands = set(substitute.get("commands", []))
+    for command in (
+        "corepack pnpm proof:workflow:windmill",
+        "corepack pnpm runtime:validate",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    ):
+        if command not in commands:
+            F.add("USF-RUNTIME-033", "temporalJobsSubstituteGate.commands", f"missing {command}")
+
+    declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != WINDMILL_CONFIGURED_PROOF_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-033", "enterpriseEvidenceRefs", "Windmill configured proof enterprise evidence refs are incomplete")
+
+    package = state["package"]
+    scripts = package.get("scripts") if isinstance(package.get("scripts"), dict) else {}
+    if scripts.get("proof:workflow:windmill") != "tsx packages/proof/src/windmill-configured-proof.ts":
+        F.add("USF-RUNTIME-033", "package.json#proof:workflow:windmill", "Windmill proof package script is missing or stale")
+    deps = package.get("dependencies") if isinstance(package.get("dependencies"), dict) else {}
+    if deps.get("windmill-client") != "1.743.0":
+        F.add("USF-RUNTIME-033", "package.json#windmill-client", "windmill-client must be exact-version pinned to 1.743.0")
+    if "windmill-workflow-proof" not in make_targets(state["makefile"]):
+        F.add("USF-RUNTIME-033", "Makefile#windmill-workflow-proof", "Windmill proof Make target is missing")
+
+    service_catalogue = state.get("serviceCatalogue", {})
+    services = service_catalogue.get("services", []) if isinstance(service_catalogue, dict) else []
+    by_id = {service.get("serviceId"): service for service in services if isinstance(service, dict)}
+    windmill = by_id.get("windmill")
+    worker = by_id.get("windmill-worker")
+    postgres = by_id.get("windmill-postgres")
+    redis = by_id.get("windmill-redis")
+    for service_id, service in (
+        ("windmill", windmill),
+        ("windmill-worker", worker),
+        ("windmill-postgres", postgres),
+        ("windmill-redis", redis),
+    ):
+        if not isinstance(service, dict):
+            F.add("USF-RUNTIME-033", SERVICE_CATALOGUE_PATH, f"{service_id} service catalogue row is missing")
+    if isinstance(windmill, dict):
+        compose = windmill.get("composeService", {})
+        if "@sha256:" not in str(compose.get("image", "")):
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill.composeService.image", "Windmill image must be digest-pinned")
+        env = {item.get("name"): item.get("value") for item in compose.get("environment", []) if isinstance(item, dict)}
+        if env.get("MODE") != "server" or env.get("SUPERADMIN_SECRET") != "usf-local-windmill-superadmin-placeholder":
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill.composeService.environment", "Windmill server mode and local placeholder secret must be generated")
+        healthcheck_text = json.dumps(compose.get("healthcheck"), sort_keys=True)
+        if "/api/version" not in healthcheck_text or "retries" not in healthcheck_text:
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill.composeService.healthcheck", "Windmill server healthcheck is required")
+    if isinstance(worker, dict):
+        compose = worker.get("composeService", {})
+        if "@sha256:" not in str(compose.get("image", "")):
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill-worker.composeService.image", "Windmill worker image must be digest-pinned")
+        if compose.get("command") != ["windmill"]:
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill-worker.composeService.command", "Windmill worker command must invoke windmill binary")
+        env = {item.get("name"): item.get("value") for item in compose.get("environment", []) if isinstance(item, dict)}
+        if env.get("MODE") != "worker":
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill-worker.composeService.environment", "Windmill worker mode must be generated")
+        depends = {(dep.get("serviceName"), dep.get("condition")) for dep in compose.get("dependsOn", []) if isinstance(dep, dict)}
+        if ("windmill", "service_healthy") not in depends:
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill-worker.composeService.dependsOn", "Windmill worker must depend on healthy Windmill server")
+    if isinstance(postgres, dict):
+        healthcheck_text = json.dumps(postgres.get("composeService", {}).get("healthcheck"), sort_keys=True)
+        if "pg_isready -U windmill -d windmill" not in healthcheck_text:
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill-postgres.composeService.healthcheck", "Windmill Postgres healthcheck is required")
+    if isinstance(redis, dict):
+        healthcheck_text = json.dumps(redis.get("composeService", {}).get("healthcheck"), sort_keys=True)
+        if "redis-cli" not in healthcheck_text or "ping" not in healthcheck_text:
+            F.add("USF-RUNTIME-033", "serviceCatalogue.windmill-redis.composeService.healthcheck", "Windmill Redis healthcheck is required")
+
+    provider_source = state_text(state, PROVIDER_REGISTRY_SOURCE_PATH)
+    for marker in (
+        "operational-job-engine-windmill-composed-test",
+        "Windmill configured proof provider boundary",
+        "endpoint://compose/windmill",
+        "windmill-client",
+        "1.743.0",
+        "bounded-exponential-backoff-no-unbounded-retry",
+        "healthy-for-USF-212-proof-only",
+    ):
+        if marker not in provider_source:
+            F.add("USF-RUNTIME-033", str(PROVIDER_REGISTRY_SOURCE_PATH), f"Windmill provider registry marker is missing: {marker}")
+
+    proof_source = state_text(state, WINDMILL_PROOF_SOURCE_PATH)
+    proof_markers = (
+        "windmill-client",
+        "HealthService.getHealthStatus",
+        "workers_alive",
+        "WorkspaceService.createWorkspace",
+        "VariableService.createVariable",
+        "VariableService.getVariableValue",
+        "ScriptService.createScript",
+        "ScriptService.updateScriptHistory",
+        "runScriptByHash",
+        "runScriptByPath",
+        "AuditService.listAuditLogs",
+        "assertInvalidTokenFailsClosed",
+        "assertSafeEvidence",
+        "FORBIDDEN_EVIDENCE_PATTERN",
+        "docker",
+        "down",
+        "--remove-orphans",
+        "-v",
+    )
+    for marker in proof_markers:
+        if marker not in proof_source:
+            F.add("USF-RUNTIME-033", str(WINDMILL_PROOF_SOURCE_PATH), f"Windmill proof source missing marker: {marker}")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-windmill-automation-provider")
+    if not binding:
+        F.add("USF-RUNTIME-033", "providerBindingMatrix.usf-189-windmill-automation-provider", "runtime manifest must include Windmill provider binding")
+    else:
+        expected_binding = {
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkBoundary": "proof-provider-integration-boundary",
+            "endpointRef": "endpoint://compose/windmill",
+            "sdkPackage": "windmill-client",
+            "sdkVersion": "1.743.0",
+        }
+        for field, expected in expected_binding.items():
+            if binding.get(field) != expected:
+                F.add("USF-RUNTIME-033", f"providerBindingMatrix.usf-189-windmill-automation-provider.{field}", f"expected {expected!r}")
+        for provider_id in ("operational-job-engine-windmill-composed-test", "operational-job-engine-windmill-deferred"):
+            if provider_id not in binding.get("providerRegistryIds", []):
+                F.add("USF-RUNTIME-033", "providerBindingMatrix.usf-189-windmill-automation-provider.providerRegistryIds", f"missing {provider_id}")
+        for field in ("providerRegistryEvidence", "apiProofEvidence", "workerProofEvidence", "proofCommand", "proofEvidence", "claimBoundary"):
+            if not binding.get(field):
+                F.add("USF-RUNTIME-033", f"providerBindingMatrix.usf-189-windmill-automation-provider.{field}", "binding evidence field is required")
+
+
 def check_operator_workflow_provider_disposition(F: Findings, state: dict[str, Any]) -> None:
     matrix = state.get("operatorWorkflowProviderMatrix")
     if not isinstance(matrix, dict):
@@ -4156,6 +4488,13 @@ def check_operator_workflow_provider_disposition(F: Findings, state: dict[str, A
     if declared_evidence != OPERATOR_WORKFLOW_PROVIDER_REQUIRED_EVIDENCE_REFS:
         F.add("USF-RUNTIME-029", "enterpriseEvidenceRefs", "operator workflow provider enterprise evidence refs are incomplete")
 
+    configured_boundary = state.get("windmillConfiguredProofBoundary")
+    configured_proof_present = (
+        isinstance(configured_boundary, dict)
+        and configured_boundary.get("sourceIssue") == "USF-212"
+        and configured_boundary.get("status") == "profile-gated-bounded-proof-present"
+    )
+
     bindings = binding_records(state["manifest"])
     binding = bindings.get("usf-189-windmill-automation-provider")
     if not binding:
@@ -4163,12 +4502,22 @@ def check_operator_workflow_provider_disposition(F: Findings, state: dict[str, A
     else:
         if "USF-203" not in binding.get("followUpIssueRefs", []):
             F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "runtime manifest must link USF-203")
-        if "USF-203" not in str(binding.get("deferredReason", "")):
-            F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-203")
-        if binding.get("bindingStatus") != "profile-gated" or binding.get("endpointRef") is not None:
-            F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "Windmill must remain explicitly deferred/profile-gated without endpoint binding")
-        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
-            F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "deferred Windmill must not name an SDK/client package")
+        if configured_proof_present:
+            if "USF-212" not in binding.get("followUpIssueRefs", []):
+                F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "runtime manifest must link USF-212 configured proof")
+            if "USF-203" not in str(binding.get("claimBoundary", "")):
+                F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider.claimBoundary", "runtime manifest must preserve USF-203 non-equivalence context")
+            if binding.get("bindingStatus") != "profile-gated-proven" or binding.get("endpointRef") != "endpoint://compose/windmill":
+                F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "Windmill configured proof must be profile-gated-proven with safe endpoint ref")
+            if binding.get("sdkPackage") != "windmill-client" or binding.get("sdkVersion") != "1.743.0":
+                F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "Windmill configured proof must name exact SDK package")
+        else:
+            if "USF-203" not in str(binding.get("deferredReason", "")):
+                F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-203")
+            if binding.get("bindingStatus") != "profile-gated" or binding.get("endpointRef") is not None:
+                F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "Windmill must remain explicitly deferred/profile-gated without endpoint binding")
+            if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+                F.add("USF-RUNTIME-029", "providerBindingMatrix.usf-189-windmill-automation-provider", "deferred Windmill must not name an SDK/client package")
 
     deferred = {
         item.get("id"): item
@@ -4521,6 +4870,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_mock_provider_substrate_disposition,
             check_backup_restore_provider_disposition,
             check_operator_workflow_provider_disposition,
+            check_windmill_configured_proof_boundary,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -4553,6 +4903,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_mock_provider_substrate_disposition,
             check_backup_restore_provider_disposition,
             check_operator_workflow_provider_disposition,
+            check_windmill_configured_proof_boundary,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

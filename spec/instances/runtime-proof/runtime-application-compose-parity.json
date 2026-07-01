@@ -662,19 +662,19 @@
       "proofEvidence": "USF-211 evidence id usf-211-evidence-pgbackrest-configured-proof: profile-gated local Compose proof starts canonical test Postgres and pgBackRest with backup-restore profile, verifies pgBackRest 2.58.0 digest-pinned image, creates a local repository and stanza, writes synthetic Postgres data, stops Postgres cleanly, creates an offline full backup, restores into an isolated volume, starts a fresh Postgres container from restored data, verifies value-free readback, proves missing repository fail-closed behaviour, and tears down containers, volumes, and temp overrides."
     },
     {
-      "bindingStatus": "profile-gated",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=blocked-with-owner-and-follow-up; riskStatement=Windmill operator automation semantics are catalogued but not proven and must not be substituted by Temporal application workflows; threatFailureScenario=operator automation access, approval, tenant, credential, audit, cleanup, or fail-closed boundaries are overclaimed; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-203 records blocked reclassification and USF-212 owns Windmill bootstrap, SDK/client, readiness, operator workflow, and teardown proof; reviewDate=2026-09-30; linkedFollowUpIssue=USF-212",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "proof-provider-integration-boundary",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=proven-local; riskStatement=Windmill bounded local Compose proof could be overclaimed as Windmill readiness, operator automation readiness, environment readiness, live-provider readiness, or USF-133 closure; threatFailureScenario=local SDK bootstrap and synthetic job execution are treated as production/staging/test/live/provider or full-dev-readiness; affectedAssetService=windmill,windmill-worker,windmill-postgres,windmill-redis; impact=high; likelihood=medium; owner=platform-workflow-foundation; treatment=USF-212 resolves the configured local bootstrap, SDK/client, readiness retry, synthetic workspace/script/job, audit, tenant, secret, privileged operation, cleanup, timeout, retry, unavailable fail-closed, and teardown proof boundary while preserving all broader non-claims; reviewDate=2026-09-30; linkedFollowUpIssue=none-for-USF-212-bounded-proof",
       "followUpIssueRefs": [
         "USF-178",
         "USF-203",
         "USF-212",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; Temporal application workflow proof is not Windmill operator automation proof; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-212 bounded local Compose proof only; USF-203 remains the historical blocked reclassification and non-equivalence context; Temporal application workflow proof remains non-equivalent to Windmill operator automation proof; Windmill local proof is not production-readiness, staging-readiness, test-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, operator-automation-readiness, Windmill-readiness, or USF-133 closure.",
       "bindingId": "usf-189-windmill-automation-provider",
       "serviceCatalogueServiceIds": [
         "windmill",
@@ -683,16 +683,19 @@
         "windmill-redis"
       ],
       "providerRegistryIds": [
+        "operational-job-engine-windmill-composed-test",
         "operational-job-engine-windmill-deferred"
       ],
-      "adapterName": "Windmill provider deferred",
+      "adapterName": "Windmill configured proof provider boundary",
       "portName": "OperationalJobEngine",
-      "endpointRef": null,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records operational-job-engine-windmill-deferred as deferred evidence-only support linked to the Windmill service catalogue rows.",
-      "apiProofEvidence": "No API proof is claimed for Windmill operator automation, access, approval, privileged operation, tenant, audit, retention, or cleanup semantics; USF-178 records the disposition gate, USF-203 records blocked reclassification, and USF-212 owns proof.",
-      "workerProofEvidence": "Temporal composed workflow proof remains application-workflow proof only; no worker proof is claimed for Windmill operator automation provider semantics; this remains blocked until USF-212 provides bootstrap and proof authority."
+      "endpointRef": "endpoint://compose/windmill",
+      "sdkPackage": "windmill-client",
+      "sdkVersion": "1.743.0",
+      "providerRegistryEvidence": "packages/core/src/index.ts records operational-job-engine-windmill-composed-test as a proof-only composed-test provider linked to the Windmill service catalogue rows, while retaining operational-job-engine-windmill-deferred for live/provider-managed and broader operator automation readiness non-claims.",
+      "apiProofEvidence": "No API runtime Windmill provider use is claimed by USF-212; profile-gated proof exercises the Windmill configured proof provider boundary directly against local Compose Windmill, worker, Postgres, and Redis using windmill-client 1.743.0.",
+      "workerProofEvidence": "No USF worker runtime Windmill provider use is claimed by USF-212; profile-gated proof exercises SDK auth, workspace bootstrap, synthetic variable/script seed, deployment history update, script execution by hash and path on the Windmill worker, audit evidence, invalid credential fail-closed behaviour, redaction, and Compose teardown.",
+      "proofCommand": "corepack pnpm proof:workflow:windmill",
+      "proofEvidence": "USF-212 evidence id usf-212-evidence-windmill-configured-proof: profile-gated local Compose proof starts canonical test Windmill, Windmill worker, Windmill Postgres, and Windmill Redis with workflow-provider profile; validates digest-pinned Windmill image reference, server MODE=server, worker MODE=worker, healthchecks, bounded readiness retry until database and worker are ready, official windmill-client 1.743.0 auth through local superadmin placeholder, synthetic workspace and variable round trip, script seed, deployment history update, script execution by hash and path, value-free audit evidence, invalid credential fail-closed behaviour, proof-output redaction, and Compose teardown."
     }
   ],
   "providerSdkBoundary": [
@@ -829,6 +832,22 @@
         "Ad hoc workflow execution was rejected because the official Temporal workflow runtime exists."
       ],
       "approvedImportBoundary": "adapters/wf/src/index.ts"
+    },
+    {
+      "dependencyPinning": "exact-version-pinned",
+      "selectedPackage": "windmill-client",
+      "selectedVersion": "1.743.0",
+      "officialOrDefactoStatus": "Official Windmill TypeScript client selected for the bounded local Windmill Compose proof.",
+      "maintenanceEvidence": "npm registry metadata inspected on 2026-06-30 reported latest version 1.743.0, Apache 2.0 license, GitHub repository under windmill-labs/windmill, ESM/CJS exports, TypeScript declarations, and no runtime dependency fanout.",
+      "securityPosture": "Proof output stores endpoint_ref, booleans, counts, buckets, and safe reason codes only; raw endpoint, superadmin placeholder, connection string, token, workflow payload, SDK error payload, or stack trace is not emitted.",
+      "typescriptSupport": "Package ships TypeScript declaration files and is imported only inside packages/proof/src/windmill-configured-proof.ts as a proof/provider-integration boundary; it is not imported by core, ports, capabilities, API routes, worker orchestration, or PDP code.",
+      "localComposeCompatibility": "Client authenticates to the loopback-bound Windmill service in compose.test.generated.yaml using the local superadmin placeholder and no external network egress; proof validates worker readiness before running synthetic scripts.",
+      "alternativesRejected": [
+        "Raw HTTP was rejected because the official Windmill client is available.",
+        "The Windmill CLI was rejected because it carries heavier local tooling and the TypeScript client provides the deterministic SDK boundary required for proof.",
+        "Temporal SDK proof was rejected as a substitute because Temporal application workflows are not equivalent to Windmill operator automation semantics."
+      ],
+      "approvedImportBoundary": "packages/proof/src/windmill-configured-proof.ts"
     }
   ],
   "proofCommands": [
@@ -860,6 +879,12 @@
       "packageScript": "proof:mock-substrate",
       "makeTarget": "mock-substrate-proof",
       "invocation": "tsx packages/proof/src/mock-provider-substrate-proof.ts",
+      "mode": "dev-compose-backed"
+    },
+    {
+      "packageScript": "proof:workflow:windmill",
+      "makeTarget": "windmill-workflow-proof",
+      "invocation": "tsx packages/proof/src/windmill-configured-proof.ts",
       "mode": "dev-compose-backed"
     }
   ],
@@ -1017,7 +1042,7 @@
     {
       "id": "usf-189-workflow-automation-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-189 records Windmill operator automation provider semantics as blocked-with-owner-and-follow-up after USF-203 reclassification; risk is treating Temporal application workflow proof as Windmill operator automation access, approval, tenant, credential, audit, retention, cleanup, and fail-closed proof; affected services windmill, windmill-worker, windmill-postgres, windmill-redis; impact high; likelihood medium; owner platform-workflow-foundation; treatment defer actual Windmill bootstrap and proof to USF-212 while USF-178 records bounded disposition and USF-203 records blocked reclassification; review date 2026-09-30.",
+      "boundary": "USF-212 resolves the bounded local Compose Windmill configured bootstrap and SDK proof for synthetic workspace, variable, script seed, deployment history update, script execution by hash/path, audit, tenant, secret, privileged operation, readiness retry, invalid credential fail-closed behaviour, and teardown. Remaining boundary is no Windmill readiness, operator automation readiness, API runtime Windmill binding, worker runtime Windmill binding, live/provider-managed Windmill supplier evidence, environment promotion readiness, production/staging/test readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure; owner platform-workflow-foundation; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-178",
         "USF-203",
@@ -1037,7 +1062,7 @@
     }
   ],
   "enterpriseEvidenceSupport": {
-    "runtimeAssetEvidence": "API and worker runtime assets are named by entry point and command; Postgres, Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal active provider asset traceability is recorded in the provider binding matrix, with USF-189 explicit deferrals for ClickHouse, Redis, Meilisearch, ClamAV, LocalStack, WireMock, webhook sink, pgBackRest, and Windmill.",
+    "runtimeAssetEvidence": "API and worker runtime assets are named by entry point and command; Postgres, Keycloak, Mailpit, MinIO, NATS, OpenBao, Temporal, ClickHouse, Redis, Meilisearch, ClamAV, LocalStack, WireMock, webhook sink, pgBackRest, and Windmill bounded local proof asset traceability is recorded in the provider binding matrix, with explicit residual non-readiness boundaries for stronger environment, live-provider, and source-depth claims.",
     "ownerLinkage": "Owner, risk owner, and control owner trace through the service catalogue entries and provider registry entries for platform API, worker, Postgres, Mailpit, and deferred composed dependencies.",
     "auditEventProduction": "Proof code requires API tenant-context evidence plus value-free provider evidence for Postgres, Keycloak, Mailpit, MinIO, NATS, OpenBao, and Temporal; worker proof also verifies job lifecycle and denial audit evidence.",
     "healthReadinessEvidence": "Proof code requires health, readiness, and OpenAPI route exposure for the API runtime.",

@@ -1,0 +1,7 @@
+{
+  "name": "usf-212-windmill-proof-command-missing",
+  "expectedRule": "USF-RUNTIME-033",
+  "removePackageScripts": [
+    "proof:workflow:windmill"
+  ]
+}

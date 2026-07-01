@@ -136,7 +136,7 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Temporal and Windmill lineage",
-      "readiness_impact": "Temporal local is present; Windmill operator automation is not equivalent.",
+      "readiness_impact": "Temporal local is present; USF-212 adds bounded local Windmill configured proof, but Windmill readiness, operator automation readiness, API/worker runtime integration, and live/provider-managed operation remain non-claims.",
       "tracking_carrier_or_recommendation": "USF-150/USF-151",
       "usf_evidence_summary": "USF jobs proof",
       "usf_status": "partial"
@@ -495,10 +495,10 @@
       ],
       "evidence_grade": "D",
       "react_evidence_summary": "Windmill services and worker lineage",
-      "readiness_impact": "Windmill is not substituted by Temporal/jobs alone.",
-      "tracking_carrier_or_recommendation": "draft decision required",
-      "usf_evidence_summary": "jobs/workflows proof only",
-      "usf_status": "requires-human-decision"
+      "readiness_impact": "USF-212 proves bounded local Windmill bootstrap, official SDK use, synthetic workspace and script execution, audit, invalid credential fail-closed behaviour, readiness retry, and teardown. Temporal/jobs remains non-equivalent outside this bounded proof; readiness and live/provider-managed operation remain unclaimed.",
+      "tracking_carrier_or_recommendation": "USF-178/USF-203/USF-212",
+      "usf_evidence_summary": "USF-212 bounded local Windmill configured proof",
+      "usf_status": "profile-gated-bounded-proof"
     },
     {
       "blocking_level": "P2",
