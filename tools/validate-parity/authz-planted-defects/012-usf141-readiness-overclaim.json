@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-AUTHZ-012",
+  "mutation": {
+    "matrixSetClaim": {
+      "claim": "productionReadinessClaim",
+      "value": true
+    }
+  }
+}

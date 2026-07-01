@@ -36,9 +36,9 @@
       ],
       "evidence_grade": "A",
       "react_evidence_summary": "Tenant/RBAC/ABAC lineage",
-      "readiness_impact": "Core PDP migrated; ABAC depth remains deferred.",
-      "tracking_carrier_or_recommendation": "USF-140/USF-141",
-      "usf_evidence_summary": "USF PDP, make authz-proof",
+      "readiness_impact": "Core PDP migrated; USF-141 adds bounded enterprise authorization proof depth and reclassifies remaining delegation, impersonation, token/session, rate-limit, field-level, workflow, and gateway depth to linked source issues without readiness overclaim.",
+      "tracking_carrier_or_recommendation": "USF-140/USF-141 plus linked source-depth follow-ups",
+      "usf_evidence_summary": "USF PDP, make authz-proof, authz enterprise proof-depth matrix, validate-authz USF-AUTHZ-001..013 with planted defects",
       "usf_status": "migrated"
     },
     {

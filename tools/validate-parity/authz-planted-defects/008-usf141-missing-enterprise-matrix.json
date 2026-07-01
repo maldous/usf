@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-AUTHZ-008",
+  "mutation": {
+    "matrixOmit": true
+  }
+}

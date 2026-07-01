@@ -4745,6 +4745,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-141-authz-enterprise-proof-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Organise bounded enterprise authorization proof-depth evidence for synchronous PDP evaluation, tenant membership lifecycle fail-closed posture, cache/revalidation posture, classification ABAC, break-glass separation of duties, and explicit authorization non-claims.",
+      "riskTreated": "A local PDP/RLS proof could be overread as full authorization parity, live-provider readiness, production operation, SOC, ISO, or USF-133 readiness without explicit evidence boundaries.",
+      "assetServiceAffected": "PDP, tenant membership directory, authorization decisions, and authorization audit evidence",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "implementationStatus": "bounded-local-proof-and-reclassification-gate",
+      "evidenceSource": "docs/architecture/authz-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "deferredReason": "delegation and impersonation, field-level policy, token/session depth, distributed authorization rate limits, workflow revalidation, API/gateway surfaces, and operator access remain transferred or deferred to linked source issues",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -6812,6 +6838,32 @@
       ],
       "prOrMergeSha": "10f50e7aa873bfa4466b2d9e024a558c87eed8b8",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed matrix, validator, and enterprise evidence metadata; no raw tenant values or credentials are retained."
+    },
+    {
+      "id": "evidence-usf-141-authz-enterprise-proof-depth",
+      "proofResult": "proof:authz",
+      "whatWasProven": "make authz-proof is the command-pinned bounded local Compose Postgres proof for USF-141. It proves PDP/RLS tenant consistency, synchronous PDP decisions, tenant membership lifecycle fail-closed behaviour, no cached permit after membership suspension, decision-time membership revalidation, restricted classification ABAC requiring stronger permission and audit obligation, break-glass self-approval denial, policy version/context hash evidence, and explicit non-claims.",
+      "whatWasNotProven": "No delegation or impersonation runtime, broad field-level policy, live IdP authorization, browser session authorization, distributed authorization cache, distributed rate limiting, long-running workflow authorization replay, API gateway readiness, operator access readiness, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is proven.",
+      "runtimeMode": "compose-local-proof",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "not-applicable-pdp-capability-with-postgres-rls-proof-boundary",
+      "adapterProviderId": "not-applicable-pdp-no-provider-sdk",
+      "validationCommand": "make authz-proof; python3 tools/validate-parity/validate-authz.py all --json",
+      "commandPin": "tsx packages/proof/src/authz-rls-consistency-proof.ts",
+      "commitPin": "8a06340077324341ff1fcd3e6daabde899f63176",
+      "issueLinks": [
+        "USF-141",
+        "USF-133",
+        "USF-184",
+        "USF-190",
+        "USF-192",
+        "USF-149",
+        "USF-151",
+        "USF-155",
+        "USF-161"
+      ],
+      "prOrMergeSha": "8a06340077324341ff1fcd3e6daabde899f63176",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed matrix, validator, planted defects, and enterprise evidence metadata; no raw tenant values, credentials, tokens, or policy payloads are retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8568,6 +8620,33 @@
       "failClosedBehaviour": "validate-db USF-DB-001 through USF-DB-016, proof:db, runtime validators, and enterprise validators must fail or preserve explicit deferral before any stronger DB claim is made.",
       "monitoringAuditEvidence": "proof:db emits value-free catalog and check-label evidence; PR validation summary records validator output and non-claims.",
       "residualRisk": "Production operation, live-provider DB operation, backup/restore readiness, DR, RPO/RTO, export/legal-hold workflows, and environment promotion remain follow-up-scoped non-claims."
+    },
+    {
+      "id": "threat-usf-141-authz-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-141 enterprise authorization proof depth",
+      "trustBoundary": "Local PDP plus local Compose Postgres RLS proof boundary with synthetic tenants only; no live IdP, browser session, external provider, or production authorization boundary claim.",
+      "tenantBoundary": "PDP resource tenant must equal context tenant, active tenant membership is required, and RLS backstop blocks cross-tenant data access even if application context is wrong.",
+      "credentialBoundary": "Identity claims are authorization inputs only; no IdP credential, token, raw endpoint, provider SDK, or live provider credential is accepted as authorization evidence.",
+      "dataClassification": "Synthetic identity metadata, tenant membership metadata, authorization decision metadata, and restricted/security-sensitive classification flags only.",
+      "abuseCases": [
+        "IdP role or token claim treated as final authorization",
+        "cached authorization permit survives membership suspension or revocation",
+        "async provider lookup changes PDP fail-closed behaviour",
+        "restricted data read uses ordinary permission instead of stronger ABAC permission",
+        "break-glass requester approves their own access",
+        "delegation or impersonation inferred without explicit original and effective actor evidence"
+      ],
+      "failureModes": [
+        "PDP decide becomes async",
+        "PDP imports provider adapter or SDK boundary",
+        "USF-141 matrix omits transferred or deferred controls",
+        "proven authorization control lacks proof command or validator linkage",
+        "readiness or certification claim appears from local proof only"
+      ],
+      "failClosedBehaviour": "validate-authz USF-AUTHZ-001 through USF-AUTHZ-013, make authz-proof, enterprise validators, and planted defects must fail or preserve explicit deferral before stronger authorization claims are made.",
+      "monitoringAuditEvidence": "authorization.decision audit records, break_glass.used or break_glass.denied evidence, proof check labels, and PR validation summary are the bounded evidence surfaces.",
+      "residualRisk": "Delegation, impersonation, field-level policy, token/session runtime, distributed rate limits, workflow revalidation, gateway/browser-session authorization, and operator access remain linked source-issue work."
     }
   ],
   "sdkDependencyGovernance": [
@@ -11134,6 +11213,36 @@
       "evidenceSource": "packages/proof/src/db-rls-isolation-proof.ts",
       "validationCommand": "corepack pnpm proof:db",
       "deferredReason": "operator database access review, managed-provider access, and production deprovisioning evidence remain non-claims",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "access-usf-141-authz-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-141 PDP and break-glass authorization controls",
+      "posture": [
+        "accessModel=local-pdp-proof-only",
+        "authRequirement=active-tenant-membership-plus-explicit-permission",
+        "leastPrivilegePosture=default-deny-no-wildcard-no-implicit-global-admin",
+        "breakGlassRelevance=requester-not-approver-in-scope-expiring-audited-grant",
+        "auditRequirement=authorization-decision-and-break-glass-audit-evidence",
+        "reviewCadence=2026-09-30-before-stronger-readiness-claim",
+        "deprovisioningPosture=membership-suspension-revocation-fails-closed-in-local-proof",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "packages/proof/src/authz-rls-consistency-proof.ts",
+      "validationCommand": "make authz-proof",
+      "deferredReason": "Executed access reviews, delegated admin surfaces, impersonation, browser-session authorization, operator consoles, and production deprovisioning evidence remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -15651,6 +15760,34 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "incident-usf-141-authz-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-141 enterprise authorization proof depth",
+      "posture": [
+        "incidentDetectionHook=authorization-denial-and-break-glass-audit-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-identity-risk-owner",
+        "vulnerabilityAdvisoryReview=authorization-policy-and-identity-dependency-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-sdk-or-provider-dependency-added",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/authz-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
+      "deferredReason": "Production authorization incident hooks, live SIEM forwarding, external IdP advisory workflow, and patch SLA evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -18596,6 +18733,35 @@
       "evidenceSource": "packages/proof/src/db-rls-isolation-proof.ts",
       "validationCommand": "corepack pnpm proof:db",
       "deferredReason": "customer data retention, export, deletion, residency, and legal-hold operating workflows remain source-issue follow-ups",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-141-authz-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-141 proof:authz synthetic authorization data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=identity-metadata-tenant-membership-and-authorization-decision-metadata",
+        "redactionPolicy=value-free-decision-output-no-tokens-no-provider-payloads",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-applicable-to-authorization-proof",
+        "dataResidencyCrossBorderBoundary=not-claimed"
+      ],
+      "evidenceSource": "packages/proof/src/authz-rls-consistency-proof.ts",
+      "validationCommand": "make authz-proof",
+      "deferredReason": "Customer identity data residency, legal hold, deletion workflows, and live IdP privacy posture remain source-issue follow-ups.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
