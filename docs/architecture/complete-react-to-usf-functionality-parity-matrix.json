@@ -122,7 +122,7 @@
       "usf_status": "migrated"
     },
     {
-      "blocking_level": "P1",
+      "blocking_level": "none",
       "capability_group": "durable jobs, workflows, retries, dead-letter",
       "capability_id": "jobs-workflows",
       "capability_name": "Jobs/workflows",
@@ -216,10 +216,10 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "OTEL/Prometheus/Loki/Tempo/Grafana/Sentry lineage",
-      "readiness_impact": "Sentry/Alertmanager/Alloy not equivalent; live monitoring not claimed.",
+      "readiness_impact": "USF-159 adds bounded local observability operations proof depth and explicitly reclassifies live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, and cross-tenant aggregate analytics as unproven and unclaimed.",
       "tracking_carrier_or_recommendation": "USF-158/USF-159",
-      "usf_evidence_summary": "USF observability proof",
-      "usf_status": "partial"
+      "usf_evidence_summary": "USF observability proof plus observability operations enterprise proof-depth matrix, validate-observability USF-OBSERVABILITY-013 through USF-OBSERVABILITY-017, and explicit live/deep operations non-claims",
+      "usf_status": "migrated"
     },
     {
       "blocking_level": "P1",

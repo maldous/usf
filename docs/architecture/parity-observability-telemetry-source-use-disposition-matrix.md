@@ -30,6 +30,7 @@ Linear child issue: USF-158.
 | `spec/instances/observability-signal/observability-operations-posture.json` | source-derived-metadata | React ADR-0062, tenant observability readiness evidence, alerting and incident runtime proof lineage | Records Lane 4 logging, tracing, metrics, correlation, alerting, dashboard, incident, and redaction posture using the existing observability-signal schema without claiming live operations readiness. |
 | `spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json` | lane-owned-append | Lane 1 enterprise evidence model plus USF-188/USF-179/USF-159 requirements | Appends `usf-188` enterprise evidence rows for SoA support, evidence register, threat/abuse posture, access posture, resilience/retention posture, incident/vulnerability posture, privacy posture, risk treatment, deferral boundaries, and non-claims. |
 | `tools/validate-enterprise/validate-enterprise.py` | lane-scoped-validator-extension | Lane 1 enterprise validator pattern | Adds Lane 4 enterprise evidence checks for effectiveness state, deferred owner/risk/treatment metadata, redaction/leakage posture, and alert/dashboard/incident boundaries. |
+| `docs/architecture/observability-operations-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-159 source issue acceptance and existing enterprise proof-depth matrix pattern | Records bounded local observability operations proof, explicit reclassification of live/deep observability operations, service catalogue traceability, enterprise evidence rows, and non-claims. |
 
 ## Lane 4 Operations Additions
 
@@ -39,9 +40,12 @@ Lane 4 uses historical React observability evidence as lineage only:
 - `../react/docs/evidence/observability/tenant-observability-readiness.md` for tenant-safe query, label guard, dashboard reachability, and no-fake-readiness posture.
 - `../react/apps/platform-api/scripts/alerting-runtime-proof.ts` and `../react/apps/platform-api/scripts/incident-foundation-runtime-proof.ts` for alert/incident proof expectations and no secret-bearing-column checks.
 
-Lane 4 does not copy React runtime/application code. The USF deliverable is metadata, evidence
-organisation, validator coverage, planted defects, and explicit deferral of alert delivery,
-dashboard runtime, and incident workflow readiness.
+Lane 4 does not copy React runtime/application code. USF-159 converts the previous Lane 4 source
+issue deferral into a bounded source-issue evidence gate. The USF deliverable is local operations
+evidence, validator coverage, planted defects, enterprise evidence rows, and explicit
+reclassification of live telemetry backends, alert delivery, dashboard runtime, incident workflow,
+SIEM export, retention purge, SLI/SLO operation, and cross-tenant aggregate analytics as unproven
+and not claimed.
 
 ## Lineage Classification
 
@@ -51,9 +55,9 @@ dashboard runtime, and incident workflow readiness.
 | Structured logging and redaction | rewrite-from-behaviour | Redaction helpers, structured log collector path, tests/proof. |
 | Tenant observability readiness and label policy | rewrite-from-behaviour | Tenant-scoped query isolation, allow-listed metric labels, safe API routes. |
 | Provider status and readiness observability | covered-and-extended | Provider registry plus telemetry readiness/status view. |
-| Alerting, escalation, incident lifecycle, dashboards, SIEM export, live telemetry backends | deferred | Standard posture and USF-158 notes; future blocker required before live/deep implementation. |
+| Alerting, escalation, incident lifecycle, dashboards, SIEM export, live telemetry backends | out-of-scope-with-rationale | USF-159 records bounded local proof plus non-equivalence boundaries. Future live/deep implementation requires separate authority before any readiness claim. |
 | React UI/Playwright observability behaviours | foundation-behaviour-rewritten-from-ui-test | API/capability/proof tests; UI/UX assertions remain out of scope. |
 
 ## Boundary Confirmation
 
-No runtime/application code is copied from `../react`. No USF path mirrors a React path. No OpenTelemetry, Prometheus, Loki, Tempo, Sentry, SIEM, alerting, dashboard, external provider, production, SOC, ISO, or live monitoring readiness is claimed.
+No runtime/application code is copied from `../react`. No USF path mirrors a React path. No OpenTelemetry, Prometheus, Loki, Tempo, Sentry, SIEM, alerting, dashboard, incident-response, external provider, staging, production, SOC, ISO, full dev readiness, full React parity, enterprise production readiness, or live monitoring readiness is claimed.

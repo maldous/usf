@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf159-readiness-overclaim",
+  "expectedRuleId": "USF-OBSERVABILITY-017",
+  "edits": [
+    {
+      "target": "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json",
+      "old": "No live observability backend",
+      "new": "live observability readiness is proven"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "description": "partial item with empty carrier",
   "mutation": {
     "domainPatch": {
-      "index": 0,
+      "index": 5,
       "set": {
         "blocker": ""
       }

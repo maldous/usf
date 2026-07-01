@@ -27,6 +27,11 @@ RULES = {
     "USF-OBSERVABILITY-010": ("blocking", "Lane 4 operations telemetry posture missing"),
     "USF-OBSERVABILITY-011": ("blocking", "Lane 4 redaction or unsafe log boundary missing"),
     "USF-OBSERVABILITY-012": ("blocking", "Lane 4 alert dashboard or incident boundary missing"),
+    "USF-OBSERVABILITY-013": ("blocking", "USF-159 observability operations proof-depth markers are missing"),
+    "USF-OBSERVABILITY-014": ("blocking", "USF-159 observability operations proof-depth matrix is missing or incomplete"),
+    "USF-OBSERVABILITY-015": ("blocking", "USF-159 enterprise evidence rows are missing"),
+    "USF-OBSERVABILITY-016": ("blocking", "USF-159 reclassified observability boundary is incomplete"),
+    "USF-OBSERVABILITY-017": ("blocking", "USF-159 observability readiness claim is overclaimed"),
     "USF-OBSERVABILITY-SELFTEST": ("blocking", "planted observability defect did not raise its expected rule"),
 }
 
@@ -49,6 +54,7 @@ SOURCE_USE = "docs/architecture/parity-observability-telemetry-source-use-dispos
 BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
 OPERATIONS_SIGNAL = "spec/instances/observability-signal/observability-operations-posture.json"
 ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+DEPTH_MATRIX = "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json"
 MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
@@ -74,6 +80,7 @@ SOURCE_FILES = (
     BOOTSTRAP_SOURCE_USE,
     OPERATIONS_SIGNAL,
     ENTERPRISE_MODEL,
+    DEPTH_MATRIX,
     PACKAGE,
     MAKEFILE,
 )
@@ -161,12 +168,14 @@ def build_state(overrides=None):
     openapi = overrides.get("openapi", read_json(OPENAPI_JSON))
     operations_signal = overrides.get("operations_signal", parse_json_text(files.get(OPERATIONS_SIGNAL, "")))
     enterprise_model = overrides.get("enterprise_model", parse_json_text(files.get(ENTERPRISE_MODEL, "")))
+    depth_matrix = overrides.get("depth_matrix", parse_json_text(files.get(DEPTH_MATRIX, "")))
     return {
         "files": files,
         "matrix": matrix,
         "openapi": openapi,
         "operations_signal": operations_signal,
         "enterprise_model": enterprise_model,
+        "depth_matrix": depth_matrix,
     }
 
 
@@ -206,6 +215,7 @@ def run_checks(F, state=None):
     bootstrap_source_use = files[BOOTSTRAP_SOURCE_USE]
     operations_signal = state.get("operations_signal")
     enterprise_model = state.get("enterprise_model")
+    depth_matrix = state.get("depth_matrix")
     package = files[PACKAGE]
     makefile = files[MAKEFILE]
     matrix = state["matrix"]
@@ -338,8 +348,8 @@ def run_checks(F, state=None):
     main = [row for row in rows if row.get("react_item_id") == "observability"]
     if not main or main[0].get("domain_authorised") is not True:
         F.add("USF-OBSERVABILITY-008", MATRIX, "observability main row not domain-authorised")
-    if not any(row.get("blocker") == "USF-159" for row in rows):
-        F.add("USF-OBSERVABILITY-008", MATRIX, "deferred observability depth lacks USF-159 blocker")
+    if not any("USF-159" in str(row.get("linear_issue", "")) or "USF-159" in str(row.get("evidence", "")) for row in rows):
+        F.add("USF-OBSERVABILITY-008", MATRIX, "observability depth lacks USF-159 linkage")
     if not any(row.get("react_item_id") == "observability.alerting-incident-dashboard-live-depth" for row in rows):
         F.add("USF-OBSERVABILITY-008", MATRIX, "deferred observability depth row missing")
 
@@ -430,6 +440,155 @@ def run_checks(F, state=None):
         if token not in standard:
             F.add("USF-OBSERVABILITY-012", STANDARD, f"Lane 4 standard token missing {token}")
 
+    for token in [
+        'sourceIssue: "USF-159"',
+        "operationsDepthEvidence",
+        "localOperationsDepthProven: true",
+        "liveBackendBoundaryReclassified: true",
+        "providerCredentialsSecretReferenceChecked: true",
+        "tenantSafeLabelsChecked: true",
+        "redactionChecked: true",
+        "retentionBoundaryExplicit: true",
+        "accessBoundaryChecked: true",
+        "auditEvidenceBoundaryChecked: true",
+        "alertDeliveryReclassified: true",
+        "dashboardRuntimeReclassified: true",
+        "incidentWorkflowReclassified: true",
+        "sliSloMeasurementReclassified: true",
+        "crossTenantAggregateBoundaryChecked: true",
+        "liveOperationsReadinessClaim: false",
+        "USF-159 operations depth evidence reclassifies live backends alerting dashboards incident workflow retention purge SLI SLO and cross-tenant aggregate depth without readiness claims",
+    ]:
+        if token not in proof:
+            F.add("USF-OBSERVABILITY-013", PROOF, f"USF-159 proof marker missing {token}")
+    for token in [
+        'sourceIssue: "USF-159"',
+        "localOperationsDepthProven: true",
+        "liveBackendBoundaryReclassified: true",
+        "alertDeliveryReclassified: true",
+        "dashboardRuntimeReclassified: true",
+        "incidentWorkflowReclassified: true",
+    ]:
+        if token not in proof_tests:
+            F.add("USF-OBSERVABILITY-013", PROOF_TESTS, f"USF-159 proof test marker missing {token}")
+
+    if not isinstance(depth_matrix, dict):
+        F.add("USF-OBSERVABILITY-014", DEPTH_MATRIX, "USF-159 proof-depth matrix must exist and parse")
+        depth_matrix = {}
+    if depth_matrix.get("sourceIssue") != "USF-159":
+        F.add("USF-OBSERVABILITY-014", DEPTH_MATRIX, "matrix must be scoped to USF-159")
+    if depth_matrix.get("proofCommand") != "make observability-proof":
+        F.add("USF-OBSERVABILITY-014", DEPTH_MATRIX, "matrix proof command must be make observability-proof")
+    claims = depth_matrix.get("claims", {})
+    if not isinstance(claims, dict) or claims.get("localOperationsDepthProven") is not True:
+        F.add("USF-OBSERVABILITY-014", DEPTH_MATRIX, "matrix must record localOperationsDepthProven=true")
+    for false_claim in (
+        "liveMonitoringReadinessClaim",
+        "liveAlertingClaim",
+        "dashboardReadinessClaim",
+        "incidentResponseReadinessClaim",
+        "siemReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(false_claim) is not False:
+            F.add("USF-OBSERVABILITY-017", DEPTH_MATRIX, f"matrix claim must be false: {false_claim}")
+    controls = depth_matrix.get("controls", [])
+    if not isinstance(controls, list):
+        F.add("USF-OBSERVABILITY-014", DEPTH_MATRIX, "matrix controls must be a list")
+        controls = []
+    control_ids = {item.get("id") for item in controls if isinstance(item, dict)}
+    for required in (
+        "local-telemetry-operations-depth",
+        "provider-credential-boundary",
+        "tenant-redaction-access-audit-retention",
+        "live-backend-export-boundary",
+        "alert-dashboard-incident-boundary",
+        "sli-slo-cross-tenant-aggregate-boundary",
+    ):
+        if required not in control_ids:
+            F.add("USF-OBSERVABILITY-014", DEPTH_MATRIX, f"missing control {required}")
+    for item in controls:
+        if not isinstance(item, dict):
+            continue
+        status = item.get("status")
+        if status in {"out-of-scope-with-rationale", "deferred-with-owner"}:
+            for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "promotionImpact", "nonClaimBoundary"):
+                if not item.get(field):
+                    F.add("USF-OBSERVABILITY-016", f"{DEPTH_MATRIX}#{item.get('id')}", f"reclassified control missing {field}")
+        if item.get("status") in {"proven-local", "bounded-local-proof"}:
+            for field in ("proofCommand", "validationCommand", "evidenceRefs", "nonClaimBoundary"):
+                if not item.get(field):
+                    F.add("USF-OBSERVABILITY-014", f"{DEPTH_MATRIX}#{item.get('id')}", f"proven control missing {field}")
+    for token in (
+        "live telemetry backends",
+        "SIEM export",
+        "alert delivery",
+        "dashboard runtime",
+        "incident workflow",
+        "retention purge",
+        "SLI/SLO operation",
+        "cross-tenant aggregate analytics",
+        "No live observability backend",
+    ):
+        if token not in json.dumps(depth_matrix):
+            F.add("USF-OBSERVABILITY-016", DEPTH_MATRIX, f"reclassified boundary missing {token}")
+
+    enterprise_row_ids = set()
+    if isinstance(enterprise_model, dict):
+        for key in (
+            "soaSupportMappings",
+            "evidenceRegister",
+            "threatModelAbuseCaseRegister",
+            "accessReviewPrivilegedOperationPosture",
+            "backupRestoreResiliencePosture",
+            "incidentVulnerabilityManagementEvidence",
+            "privacyDataMinimisationPosture",
+        ):
+            rows_for_key = enterprise_model.get(key, [])
+            if isinstance(rows_for_key, list):
+                enterprise_row_ids.update(
+                    row.get("id") for row in rows_for_key if isinstance(row, dict)
+                )
+    for row_id in (
+        "soa-usf-159-observability-operations-depth",
+        "evidence-usf-159-observability-operations-depth",
+        "threat-usf-159-observability-operations-depth",
+        "access-usf-159-observability-operations-depth",
+        "resilience-usf-159-observability-operations-depth",
+        "incident-usf-159-observability-operations-depth",
+        "privacy-usf-159-observability-operations-depth",
+    ):
+        if row_id not in enterprise_row_ids:
+            F.add("USF-OBSERVABILITY-015", ENTERPRISE_MODEL, f"enterprise row missing {row_id}")
+    for token in (
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-159",
+        "observability-operations-enterprise-proof-depth-matrix",
+        "liveMonitoringReadinessClaim=false",
+        "dashboardReadinessClaim=false",
+        "incidentResponseReadinessClaim=false",
+    ):
+        if token.lower() not in enterprise_text:
+            F.add("USF-OBSERVABILITY-015", ENTERPRISE_MODEL, f"enterprise evidence token missing {token}")
+
+    usf159_sources = "\n".join([standard, source_use, files[DEPTH_MATRIX], proof, json.dumps(depth_matrix)])
+    for phrase in (
+        "live observability readiness is proven",
+        "incident-response readiness is proven",
+        "dashboard readiness is proven by usf-159",
+        "alerting readiness is proven by usf-159",
+        "siem readiness is proven by usf-159",
+        "usf-133 closure is proven",
+    ):
+        if phrase in usf159_sources.lower():
+            F.add("USF-OBSERVABILITY-017", "USF-159", f"readiness overclaim present: {phrase}")
+
 
 def apply_defect(state, defect):
     mutated = {
@@ -438,6 +597,7 @@ def apply_defect(state, defect):
         "openapi": json.loads(json.dumps(state["openapi"])),
         "operations_signal": json.loads(json.dumps(state["operations_signal"])),
         "enterprise_model": json.loads(json.dumps(state["enterprise_model"])),
+        "depth_matrix": json.loads(json.dumps(state["depth_matrix"])),
     }
     for edit in defect.get("edits", []):
         target = edit["target"]
@@ -448,6 +608,12 @@ def apply_defect(state, defect):
             if old not in text:
                 raise AssertionError(f"old text not found in matrix for defect {defect.get('id')}")
             mutated["matrix"] = json.loads(text.replace(old, new, 1))
+        elif target == "depth_matrix":
+            text = json.dumps(mutated["depth_matrix"])
+            if old not in text:
+                raise AssertionError(f"old text not found in depth matrix for defect {defect.get('id')}")
+            mutated["depth_matrix"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][DEPTH_MATRIX] = json.dumps(mutated["depth_matrix"])
         elif target == "openapi":
             text = json.dumps(mutated["openapi"])
             if old not in text:
@@ -461,6 +627,7 @@ def apply_defect(state, defect):
             mutated["files"][target] = text.replace(old, new, 1)
     mutated["operations_signal"] = parse_json_text(mutated["files"].get(OPERATIONS_SIGNAL, ""))
     mutated["enterprise_model"] = parse_json_text(mutated["files"].get(ENTERPRISE_MODEL, ""))
+    mutated["depth_matrix"] = parse_json_text(mutated["files"].get(DEPTH_MATRIX, ""))
     return mutated
 
 

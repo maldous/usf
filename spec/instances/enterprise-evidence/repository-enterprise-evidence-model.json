@@ -2973,6 +2973,32 @@
       ]
     },
     {
+      "id": "soa-usf-159-observability-operations-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-159 observability operations depth controls for local telemetry operations, tenant-safe labels, redaction, access, audit linkage, retention posture, provider credential posture, and explicit reclassification of live monitoring backends, SIEM export, alert delivery, dashboards, incident workflow, retention purge, SLI/SLO operation, and cross-tenant aggregate analytics.",
+      "riskTreated": "Deferred observability operations depth could be hidden behind local telemetry proof, allowing unsupported live monitoring, alerting, dashboard, incident-response, SIEM, staging, production, certification, or full-readiness claims.",
+      "assetServiceAffected": "observability operations; local telemetry collector; operator observability API; observability service catalogue rows",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-159; currentEvidence=evidence-usf-159-observability-operations-depth; liveMonitoringReadinessClaim=false; dashboardReadinessClaim=false; incidentResponseReadinessClaim=false; noReactRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json; packages/proof/src/observability-telemetry-proof.ts; tools/validate-parity/validate-observability.py",
+      "validationCommand": "make observability-proof; python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "riskStatement=Enterprise observability operations depth needs bounded local proof without implying live observability backend, SIEM, alerting, dashboard, incident-response, staging, production, or certification readiness.; threatFailureScenario=Local telemetry proof is mistaken for live monitoring, alert delivery, dashboard runtime, incident workflow, SLO operation, or production monitoring.; affectedAssetService=observability operations; impact=high; likelihood=medium; owner=platform-observability-foundation; treatment=mitigate with local proof, explicit reclassification, and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=future live observability provider or incident workflow issue only if separately authorised; exceptionOwner=platform-observability-risk-owner; exceptionReason=live/deep operations remain outside USF-159 bounded local proof; compensatingControl=validate-observability plus observability-operations-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-observability.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "usf-190-db-enterprise-safety-control",
       "mappedType": "enterprise-safety-control",
       "controlPurpose": "Map DB enterprise safety controls for tenant isolation, RLS, append-only ledgers, optimistic concurrency basis, tenant indexes, backup boundary, and data-classification posture.",
@@ -7215,6 +7241,32 @@
       ],
       "prOrMergeSha": "1bb897e8d8ca6742d6aba7a7bdef10bd010ef807",
       "retentionPosture": "Retain committed proof code, API/gateway enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw payload, credential, token, cookie, authorization header, provider endpoint, raw forwarded header, stack trace, customer data, or production data is retained."
+    },
+    {
+      "id": "evidence-usf-159-observability-operations-depth",
+      "proofResult": "proof:observability",
+      "whatWasProven": "make observability-proof is the command-pinned bounded local hermetic proof for USF-159. It proves tenant-safe metric labels, redaction before persistence, structured log safety, trace and correlation metadata, tenant query isolation, PDP-protected observability routes, value-free access audit posture, health/readiness/liveness separation, provider-mode non-claim posture, and explicit USF-159 sourceIssue proof markers.",
+      "whatWasNotProven": "No live observability backend readiness, OpenTelemetry collector export readiness, Prometheus readiness, Loki readiness, Tempo readiness, Grafana dashboard readiness, Alertmanager alert delivery readiness, Alloy readiness, Sentry service readiness, SIEM export readiness, incident-response workflow readiness, on-call or status-page operation, SLO operation, cross-tenant aggregate analytics, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-observability-operations-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#otel-collector,prometheus,grafana,loki,tempo,alertmanager,alloy,sentry",
+      "adapterProviderId": "in-memory-telemetry-collector; observability-operations-non-equivalent-live-backends",
+      "validationCommand": "make observability-proof; python3 tools/validate-parity/validate-observability.py all --json",
+      "commandPin": "tsx packages/proof/src/observability-telemetry-proof.ts",
+      "commitPin": "7f704d58ee47ba973e16295b992f5fa98c532a70",
+      "issueLinks": [
+        "USF-159",
+        "USF-133",
+        "USF-158",
+        "USF-179",
+        "USF-184",
+        "USF-188",
+        "USF-192",
+        "USF-193",
+        "USF-205"
+      ],
+      "prOrMergeSha": "7f704d58ee47ba973e16295b992f5fa98c532a70",
+      "retentionPosture": "Retain committed proof code, observability operations enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw log message, raw span payload, raw metric payload, credential, token, provider endpoint, provider payload, stack trace, tenant name, user email, customer data, or production data is retained. effectivenessState=proven-local; sourceIssue=USF-159; observability-operations-enterprise-proof-depth-matrix; liveMonitoringReadinessClaim=false; dashboardReadinessClaim=false; incidentResponseReadinessClaim=false"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -7579,6 +7631,30 @@
       "failClosedBehaviour": "validators fail when telemetry metadata, prohibited leakage fields, redaction tokens, or incident boundaries are missing",
       "monitoringAuditEvidence": "loggingPosture=defined-only; tracingPosture=defined-only; metricsPosture=defined-only; correlationIdPosture=defined-only; alertingWorkflow=deferred-with-owner; dashboardWorkflow=deferred-with-owner; incidentBoundary=explicit-local-evidence-only",
       "residualRisk": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness"
+    },
+    {
+      "id": "threat-usf-159-observability-operations-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "observability-operations-enterprise-depth",
+      "trustBoundary": "local hermetic telemetry collector and operator API proof boundary; live observability backends and incident workflows are explicitly non-equivalent",
+      "tenantBoundary": "tenant telemetry queries are isolated; tenantSafeLabels=allow-listed; cross-tenant aggregate analytics are not proven or claimed",
+      "credentialBoundary": "provider credentials must remain secret-reference based; proof output rejects secret, endpoint, token, raw provider response, and stack trace markers",
+      "dataClassification": "synthetic local proof telemetry and value-free operational metadata only",
+      "abuseCases": [
+        "local telemetry proof is overclaimed as live monitoring readiness",
+        "raw secrets or stack traces are exposed through logs or spans",
+        "tenant labels leak cross-tenant identifiers",
+        "dashboard or incident workflow readiness is inferred from metadata"
+      ],
+      "failureModes": [
+        "redaction removed",
+        "tenant query isolation fails",
+        "live backend boundary omitted",
+        "incident readiness overclaimed"
+      ],
+      "failClosedBehaviour": "validate-observability fails on missing USF-159 proof markers, matrix rows, enterprise evidence linkage, incomplete reclassification, and prohibited readiness claims",
+      "monitoringAuditEvidence": "proof:observability emits value-free local telemetry, access audit posture, security signals, and explicit non-claims",
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-159; live observability backend, SIEM export, alert delivery, dashboard runtime, incident workflow, SLO operation, and cross-tenant aggregate analytics remain outside current claim; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30"
     },
     {
       "id": "usf-190-threat-db-tenant-data-control",
@@ -11888,6 +11964,38 @@
       ]
     },
     {
+      "id": "access-usf-159-observability-operations-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "observability-operations-enterprise-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-159",
+        "accessModel=PDP-protected local observability routes only",
+        "authnAuthzBoundary=observability.readiness.read and observability.signal.read",
+        "leastPrivilegePosture=security-admin local proof path only",
+        "breakGlassRelevance=not-proven-by-USF-159",
+        "auditEvidence=value-free observability access audit posture",
+        "reviewCadence=2026-09-30",
+        "deprovisioningPosture=not-proven-by-USF-159",
+        "noPublicExposureClaim=true"
+      ],
+      "evidenceSource": "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json; packages/proof/src/observability-telemetry-proof.ts; tests/apps/api-contracts.test.ts",
+      "validationCommand": "make observability-proof; python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "Operator console access, live dashboard access reviews, deprovisioning workflow, break-glass workflow, and incident-console operation are not proven by USF-159; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=future live observability or operator workflow issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "access-usf-155-api-gateway-enterprise-depth",
       "targetType": "source-issue-control-gate",
       "target": "USF-155 API/gateway privileged and public exposure posture",
@@ -13945,6 +14053,42 @@
       ]
     },
     {
+      "id": "resilience-usf-159-observability-operations-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "observability-operations-enterprise-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-159",
+        "readinessChecks=local health-readiness-liveness separation",
+        "retryTimeoutBehaviour=not-live-backend-specific",
+        "failClosedMode=unsafe labels and sensitive values rejected",
+        "safeTeardown=not-runtime-provider-specific",
+        "structuredLogging=message-template-only",
+        "tracingCorrelation=correlation-request-trace identifiers proven locally",
+        "metrics=allow-listed labels only",
+        "auditEvents=value-free access audit posture",
+        "redaction=required-before-persistence",
+        "backupRestorePosture=not-applicable-local-telemetry-proof",
+        "rpoRtoTarget=no-production-RPO-RTO-claim",
+        "deferredDrBoundary=live backend retention purge and DR not proven"
+      ],
+      "evidenceSource": "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json; packages/proof/src/observability-telemetry-proof.ts",
+      "validationCommand": "make observability-proof; python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "Live backend resilience, alert delivery retries, dashboard availability, retention purge operation, DR, RPO, RTO, and production monitoring resilience are not proven by USF-159; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=future live observability provider issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "resilience-usf-155-api-gateway-enterprise-depth",
       "targetType": "source-issue-control-gate",
       "target": "USF-155 API/gateway local proof resilience posture",
@@ -15069,6 +15213,37 @@
       "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
       "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-159-observability-operations-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "observability-operations-enterprise-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-159",
+        "incidentDetectionHook=local security signal and validator output only",
+        "alertingPosture=not-proven-by-USF-159",
+        "escalationOwner=platform-observability-foundation",
+        "vulnerabilityAdvisoryReview=required-before-live-provider-claim",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-159",
+        "correctiveActionEvidence=validator-and-PR-evidence-only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-159"
+      ],
+      "evidenceSource": "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json; packages/proof/src/observability-telemetry-proof.ts",
+      "validationCommand": "make observability-proof; python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "Production incident detection, live alert delivery, on-call escalation, incident workflow execution, vulnerability SLA evidence, provider advisory response, status-page operation, corrective action operation, and post-incident evidence are not proven by USF-159; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=future incident workflow issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -17629,6 +17804,40 @@
       "evidenceSource": "spec/instances/observability-signal/observability-operations-posture.json",
       "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
       "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-159-observability-operations-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "observability-operations-enterprise-depth",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-159",
+        "dataOrigin=synthetic-local-proof-data-only",
+        "piiPosture=no-production-PII",
+        "dataClassification=tenant-sensitive-telemetry-metadata",
+        "redactionPolicy=before-persistence-before-proof-output",
+        "retentionPurgePosture=retention-boundary-only-no-live-purge-readiness",
+        "legalHoldRelevance=not-proven-by-USF-159",
+        "dataResidencyCrossBorderBoundary=not-live-provider-specific",
+        "rawSecretLeakage=blocked",
+        "tenantSafeLabels=allow-listed",
+        "unsafeLogBoundary=message-template-only"
+      ],
+      "evidenceSource": "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json; packages/proof/src/observability-telemetry-proof.ts",
+      "validationCommand": "make observability-proof; python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "Provider-managed privacy, data residency, legal hold, production retention, retention purge operation, external subprocessor posture, and live observability provider privacy evidence are not proven by USF-159; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; followUpIssue=future live provider issue if separately authorised",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

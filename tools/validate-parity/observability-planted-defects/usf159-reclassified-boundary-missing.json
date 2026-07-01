@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf159-reclassified-boundary-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-016",
+  "edits": [
+    {
+      "target": "depth_matrix",
+      "old": "\"promotionImpact\"",
+      "new": "\"promotionImpactDefect\""
+    }
+  ]
+}
