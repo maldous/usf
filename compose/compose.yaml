@@ -355,17 +355,36 @@ services:
       POSTGRES_DB: windmill
       POSTGRES_USER: windmill
       POSTGRES_PASSWORD: windmill_password
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "pg_isready -U windmill -d windmill"
+      interval: 10s
+      timeout: 5s
+      retries: 30
     profiles:
       - workflow-provider
   windmill-redis:
     image: redis:7.4.2-alpine
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      interval: 10s
+      timeout: 5s
+      retries: 30
     profiles:
       - workflow-provider
   windmill:
-    image: ghcr.io/windmill-labs/windmill:1.734
+    image: "ghcr.io/windmill-labs/windmill:1.734@sha256:93aca0f0954c86d85c88ce1f82c628be1f9bc1b310b648a239ca40d4dcbe390b"
     environment:
       DATABASE_URL: "postgres://windmill:windmill_password@windmill-postgres:5432/windmill"
       REDIS_URL: redis://windmill-redis:6379
+      MODE: server
+      BASE_URL: http://127.0.0.1:8000
+      SUPERADMIN_SECRET: usf-local-windmill-superadmin-placeholder
+      JSON_FMT: "true"
     ports:
       -
         name: windmill-http
@@ -376,23 +395,43 @@ services:
         app_protocol: http
     depends_on:
       windmill-postgres:
-        condition: service_started
+        condition: service_healthy
       windmill-redis:
-        condition: service_started
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "curl -fsS http://127.0.0.1:8000/api/version >/dev/null || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 30
     profiles:
       - workflow-provider
   windmill-worker:
-    image: ghcr.io/windmill-labs/windmill:1.734
+    image: "ghcr.io/windmill-labs/windmill:1.734@sha256:93aca0f0954c86d85c88ce1f82c628be1f9bc1b310b648a239ca40d4dcbe390b"
     command:
-      - worker
+      - windmill
     environment:
       DATABASE_URL: "postgres://windmill:windmill_password@windmill-postgres:5432/windmill"
       REDIS_URL: redis://windmill-redis:6379
+      MODE: worker
+      BASE_URL: http://127.0.0.1:8000
+      SUPERADMIN_SECRET: usf-local-windmill-superadmin-placeholder
+      JSON_FMT: "true"
     depends_on:
       windmill-postgres:
-        condition: service_started
+        condition: service_healthy
       windmill-redis:
-        condition: service_started
+        condition: service_healthy
+      windmill:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "windmill --version >/dev/null 2>&1 || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 30
     profiles:
       - workflow-provider
   temporal-postgres:

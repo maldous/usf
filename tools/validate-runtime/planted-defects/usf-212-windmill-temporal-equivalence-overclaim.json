@@ -1,0 +1,11 @@
+{
+  "name": "usf-212-windmill-temporal-equivalence-overclaim",
+  "expectedRule": "USF-RUNTIME-033",
+  "windmillConfiguredProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/temporalJobsSubstituteGate/temporalJobsEquivalentToWindmill",
+      "value": true
+    }
+  ]
+}

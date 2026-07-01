@@ -1,0 +1,5 @@
+{
+  "name": "usf-212-windmill-configured-boundary-missing",
+  "expectedRule": "USF-RUNTIME-033",
+  "removeWindmillConfiguredProofBoundary": true
+}

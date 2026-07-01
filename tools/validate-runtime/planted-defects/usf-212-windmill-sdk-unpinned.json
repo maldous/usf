@@ -1,0 +1,11 @@
+{
+  "name": "usf-212-windmill-sdk-unpinned",
+  "expectedRule": "USF-RUNTIME-033",
+  "packageDependencyPatches": [
+    {
+      "section": "dependencies",
+      "name": "windmill-client",
+      "value": "^1.743.0"
+    }
+  ]
+}

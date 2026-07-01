@@ -233,7 +233,12 @@
         },
         "sdkBoundary": {
           "type": "string",
-          "enum": ["adapter-package-only", "official-cli-proof-boundary", "not-applicable"]
+          "enum": [
+            "adapter-package-only",
+            "official-cli-proof-boundary",
+            "proof-provider-integration-boundary",
+            "not-applicable"
+          ]
         },
         "sourceUseDisposition": {
           "type": "string",
@@ -547,7 +552,8 @@
               "mailpit-api",
               "minio",
               "node-vault",
-              "pg"
+              "pg",
+              "windmill-client"
             ]
           },
           "selectedVersion": {
@@ -586,7 +592,8 @@
               "adapters/mail/src/index.ts",
               "adapters/secrets/src/index.ts",
               "adapters/store/src/index.ts",
-              "adapters/wf/src/index.ts"
+              "adapters/wf/src/index.ts",
+              "packages/proof/src/windmill-configured-proof.ts"
             ]
           },
           "dependencyPinning": {

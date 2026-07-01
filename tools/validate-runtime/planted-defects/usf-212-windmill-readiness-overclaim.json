@@ -1,0 +1,11 @@
+{
+  "name": "usf-212-windmill-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-033",
+  "windmillConfiguredProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/0",
+      "value": "production-readiness"
+    }
+  ]
+}
