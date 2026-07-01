@@ -1,11 +1,29 @@
-# USF-197 ClickHouse Service Semantic Proof Boundary
+# ClickHouse Analytics Event-Store Service Semantic Proof Boundary
 
-USF-197 records the ClickHouse analytics event-store service boundary as an explicit deferred proof with owner, risk owner, control owner, review date, and follow-up issue USF-206. It does not implement a ClickHouse adapter and does not claim ClickHouse readiness.
+USF-197 remains the historical proof-boundary issue. USF-206 now adds bounded local Compose ClickHouse analytics event-store proof for that boundary. This does not make ClickHouse ready, does not make analytics or event-store readiness true, and does not close USF-133.
 
-USF-172 remains the bounded analytics/event-store disposition gate. USF-197 narrows the next boundary: deterministic in-memory analytics evidence and generated Compose metadata are not equivalent to ClickHouse persisted event ingestion, queryable history, aggregation, retention, SDK/client use, provider failure modes, or cross-process runtime visibility.
+The semantic source remains the Compose service catalogue. The machine-readable boundary is docs/architecture/clickhouse-service-semantic-proof-boundary.json.
 
-USF-206 owns the actual deterministic composed or otherwise accepted ClickHouse proof. That proof must cover SDK/client selection, exact-version pinning where implemented, adapter-bound imports, service readiness and bounded retry, tenant-safe ingestion and query, retention or deletion, audit evidence, teardown cleanup, provider failure handling, supplier posture, secrets, privacy, backup, incident, and vulnerability posture.
+## Current Boundary
 
-USF-197 preserves non-claims for analytics readiness, event-store readiness, ClickHouse readiness, provider compatibility readiness, full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, and USF-133 closure.
+USF-172 established the analytics/event-store disposition gate. USF-197 made the ClickHouse proof boundary explicit. USF-206 implements the bounded proof slice by using the official @clickhouse/client SDK inside the adapter boundary and running a profile-gated local Compose proof.
 
-Machine-readable authority for this boundary is `docs/architecture/clickhouse-service-semantic-proof-boundary.json`.
+The proof covers synthetic tenant-safe event ingestion, tenant-filtered query, aggregate count, invalid classification denial, bounded readiness retry, timeout behaviour, cleanup through truncate/drop plus Compose down, unavailable provider fail-closed evidence, structured value-free audit evidence, redaction, metrics/tracing evidence, loopback-only Compose exposure, and teardown.
+
+The proof does not cover API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse, environment promotion readiness, backup/restore readiness, production alerting, operator access readiness, provider compatibility readiness, broader analytics readiness, or event-store readiness.
+
+## Non-Equivalence
+
+In-memory analytics evidence may be used only where a proof row explicitly permits hermetic local behaviour. It is not ClickHouse composed service proof and does not satisfy ClickHouse readiness, analytics readiness, event-store readiness, live-provider readiness, or environment promotion.
+
+Generated Compose presence and Sentry-internal ClickHouse usage are not general product analytics/event-store readiness unless separately catalogued, adapter-bound, and proven.
+
+## Enterprise Evidence Posture
+
+The boundary records owner, risk owner, control owner, service catalogue linkage, provider registry linkage, Statement of Applicability support rows, threat and abuse cases, access posture, incident and vulnerability posture, privacy posture, retention posture, secret boundary, supplier boundary, SDK dependency governance, and explicit non-claims.
+
+This is evidence organization only. It does not claim ISO certification, SOC readiness, production readiness, staging readiness, test readiness, live-provider readiness, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure.
+
+## Remaining Boundaries
+
+Future source issues are required before any claim about API or worker runtime analytics usage, live/provider-managed ClickHouse operation, environment promotion, backup/restore, production alerting, operator access, provider compatibility, analytics readiness, or event-store readiness.

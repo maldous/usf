@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-030",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/clickhouse-composed-proof.ts",
+      "old": "assertSafeEvidence",
+      "new": "assertUnsafeEvidence"
+    }
+  ]
+}

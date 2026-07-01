@@ -3,8 +3,8 @@
   "manifestPatches": [
     {
       "op": "replace",
-      "path": "/providerBindingMatrix/7/bindingStatus",
-      "value": "active"
+      "path": "/providerBindingMatrix/7/sdkBoundary",
+      "value": "not-applicable"
     }
   ]
 }

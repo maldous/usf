@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-016",
+  "packageDependencyPatches": [
+    {
+      "name": "@clickhouse/client",
+      "value": "^1.23.0"
+    }
+  ]
+}

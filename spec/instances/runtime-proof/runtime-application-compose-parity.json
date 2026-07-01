@@ -396,34 +396,37 @@
       "workerProofEvidence": "runtime:proof:compose verifies worker Temporal workflow schedule, worker execution, result readback, fail-closed input validation, and cleanup through TemporalComposedWorkflowEngine using official Temporal SDK packages."
     },
     {
-      "bindingStatus": "unsupported-deferred",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=deferred-with-owner; riskStatement=ClickHouse analytics/event-store provider semantics are catalogued but not proven; threatFailureScenario=in-memory or catalogue-only analytics is mistaken for composed event-store proof; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=USF-172 records bounded disposition, USF-197 records the service-semantic proof boundary, and USF-206 owns actual adapter proof; reviewDate=2026-09-30; linkedFollowUpIssue=USF-206",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "adapter-package-only",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=proven-local; riskStatement=ClickHouse local Compose proof could be overclaimed as analytics readiness, event-store readiness, live/provider-managed ClickHouse compatibility, API runtime analytics binding, worker runtime analytics binding, or environment promotion readiness; threatFailureScenario=proof command success or generated Compose presence is treated as broader readiness or runtime integration evidence; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; treatment=USF-206 proves bounded local SDK-backed ClickHouse analytics event-store operations and preserves stronger non-claims; reviewDate=2026-09-30; linkedFollowUpIssue=none",
       "followUpIssueRefs": [
         "USF-172",
         "USF-197",
         "USF-206",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-206 bounded local Compose ClickHouse proof only; no analytics-readiness, event-store-readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
       "bindingId": "usf-189-clickhouse-analytics-provider",
       "serviceCatalogueServiceIds": [
         "clickhouse"
       ],
       "providerRegistryIds": [
+        "analytics-store-clickhouse-composed-test",
         "analytics-store-clickhouse-deferred"
       ],
-      "adapterName": "ClickHouse provider deferred",
+      "adapterName": "ClickHouseComposedAnalyticsEventStoreAdapter",
       "portName": "AnalyticsEventStore",
-      "endpointRef": null,
-      "sdkPackage": null,
-      "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-deferred as deferred evidence-only support linked to the ClickHouse service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for ClickHouse analytics/event-store semantics; tenant, access, retention, audit, and teardown evidence remain deferred to USF-206 after USF-172 records the bounded disposition and USF-197 records the proof boundary.",
-      "workerProofEvidence": "No worker proof is claimed for ClickHouse analytics/event-store semantics; SDK/client selection, readiness retry, supplier, incident, privacy, and backup evidence remain deferred to USF-206 after USF-172 records the bounded disposition and USF-197 records the proof boundary."
+      "endpointRef": "endpoint://compose/clickhouse",
+      "sdkPackage": "@clickhouse/client",
+      "sdkVersion": "1.23.0",
+      "proofCommand": "corepack pnpm proof:analytics:clickhouse",
+      "providerRegistryEvidence": "packages/core/src/index.ts records analytics-store-clickhouse-composed-test with ClickHouseComposedAnalyticsEventStoreAdapter, composed-test mode, redacted endpoint ref, and healthy bounded local composed-test status; analytics-store-clickhouse-deferred remains the stronger-readiness non-live boundary.",
+      "proofEvidence": "USF-206 proof:analytics:clickhouse exercises official ClickHouse JS SDK readiness, proof table create/drop, synthetic tenant-safe event ingestion, tenant-filtered query, aggregation, invalid classification denial, retention deletion, redaction, cleanup, and unavailable-provider fail-closed evidence.",
+      "apiProofEvidence": "No API runtime analytics binding is claimed for ClickHouse; proof is profile-gated provider semantics only.",
+      "workerProofEvidence": "No worker runtime analytics binding is claimed for ClickHouse; proof is profile-gated provider semantics only."
     },
     {
       "bindingStatus": "profile-gated-proven",
@@ -884,7 +887,7 @@
     {
       "id": "usf-189-analytics-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-189 records ClickHouse analytics/event-store provider semantics as deferred-with-owner; risk is hidden provider proof or in-memory equivalence; affected service clickhouse; impact high; likelihood medium; owner platform-data-foundation; USF-172 records bounded disposition, USF-197 records the proof boundary, and treatment defers adapter/service-semantic proof to USF-206; review date 2026-09-30.",
+      "boundary": "USF-206 resolves bounded local Compose ClickHouse analytics event-store adapter proof through proof:analytics:clickhouse. Remaining deferred boundaries are analytics readiness, event-store readiness, API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse supplier and credential evidence, environment promotion readiness, backup/restore readiness, production alerting, and provider compatibility; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-172",
         "USF-197",

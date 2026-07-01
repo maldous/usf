@@ -3233,6 +3233,58 @@
       ]
     },
     {
+      "id": "usf-206-soa-clickhouse-composed-proof",
+      "mappedType": "source-issue-clickhouse-composed-analytics-proof",
+      "controlPurpose": "Map USF-206 as bounded local Compose ClickHouse analytics event-store proof with adapter-contained official ClickHouse JS SDK governance and explicit non-equivalence for analytics readiness, event-store readiness, live/provider-managed ClickHouse, API or worker runtime analytics binding, and environment promotion claims.",
+      "riskTreated": "effectivenessState=proven-local; riskStatement=ClickHouse local Compose proof could be overclaimed as analytics readiness, event-store readiness, live/provider-managed ClickHouse compatibility, API runtime analytics binding, worker runtime analytics binding, or environment promotion readiness; threatFailureScenario=proof command success is used as readiness evidence beyond its bounded local Compose provider boundary; affectedAssetService=clickhouse; impact=high; likelihood=medium; owner=platform-data-foundation; riskOwner=platform-data-risk-owner; controlOwner=platform-data-control-owner; treatment=prove bounded local SDK-backed analytics event ingestion/query/cleanup and preserve stronger non-claims; reviewDate=2026-09-30; followUpIssue=none",
+      "assetServiceAffected": "clickhouse",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-206; serviceCatalogueRow=clickhouse; providerRegistryId=analytics-store-clickhouse-composed-test; deferredProviderRegistryId=analytics-store-clickhouse-deferred; sdkPackage=@clickhouse/client; sdkVersion=1.23.0; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed; liveProviderManagedClickHouse=not-claimed; environmentReadiness=not-claimed",
+      "evidenceSource": "adapters/bus/src/index.ts; packages/proof/src/clickhouse-composed-proof.ts; docs/architecture/analytics-event-store-provider-disposition-matrix.json; docs/architecture/clickhouse-service-semantic-proof-boundary.json; spec/instances/runtime-proof/runtime-application-compose-parity.json; packages/core/src/index.ts; package.json; Makefile",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse; python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse supplier credential and environment promotion evidence, backup/restore readiness, production alerting, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-analytics-clickhouse",
+      "mappedType": "proof-command",
+      "controlPurpose": "Govern proof command evidence posture for proof:analytics:clickhouse.",
+      "riskTreated": "Proof output could be mistaken for ClickHouse readiness, analytics readiness, event-store readiness, API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse compatibility, or environment readiness unless command scope and non-claims are explicit.",
+      "assetServiceAffected": "proof:analytics:clickhouse",
+      "owner": "platform-data-foundation",
+      "riskOwner": "platform-data-risk-owner",
+      "controlOwner": "platform-data-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:analytics:clickhouse; sourceIssue=USF-206; clickhouse=profile-gated-local-compose-analytics-proof; apiRuntimeBinding=not-claimed; workerRuntimeBinding=not-claimed; liveProviderManagedClickHouse=not-claimed",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/clickhouse-composed-proof.ts; adapters/bus/src/index.ts; docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse",
+      "deferredReason": "ClickHouse readiness, analytics readiness, event-store readiness, API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse compatibility, environment readiness, backup/restore readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "usf-198-soa-redis-cache-proof-boundary",
       "mappedType": "source-issue-redis-cache-proof-boundary",
       "controlPurpose": "Map USF-198 as the Redis cache proof boundary, separating USF-173 cache/eventing disposition evidence from actual adapter proof under USF-207.",
@@ -5224,6 +5276,54 @@
       ],
       "prOrMergeSha": "2e8fc29c507950d53c459030a11f3c7bd11eab74",
       "retentionPosture": "Retain committed boundary document, validator rule, planted defects, validation output, and PR summary; do not retain ClickHouse event payloads, analytics payloads, raw provider results, credentials, tokens, endpoints, connection strings, tenant data, production data, or stack traces as readiness evidence."
+    },
+    {
+      "id": "usf-206-evidence-clickhouse-composed-proof",
+      "proofResult": "clickhouse-composed-analytics-event-store-provider-proof",
+      "whatWasProven": "USF-206 adds a bounded local Compose proof for ClickHouse analytics event-store semantics through the official @clickhouse/client SDK inside adapters/bus. The proof exercises readiness retry, synthetic tenant-safe event ingestion, tenant-filtered query, aggregation, invalid classification denial, retention deletion through truncate/drop cleanup, unavailable provider fail-closed behaviour, no-egress posture, redaction, metrics, trace, audit-shaped evidence, and Compose teardown.",
+      "whatWasNotProven": "This does not prove ClickHouse readiness, analytics readiness, event-store readiness, API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse compatibility, environment promotion readiness, backup/restore readiness, production alerting, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#clickhouse",
+      "adapterProviderId": "analytics-store-clickhouse-composed-test",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse",
+      "commandPin": "tsx packages/proof/src/clickhouse-composed-proof.ts",
+      "commitPin": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
+      "issueLinks": [
+        "USF-206",
+        "USF-197",
+        "USF-172",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
+      "retentionPosture": "Retain committed proof code, matrix, manifest, validator rule, planted defects, validation summary, and PR/Linear links only; do not retain raw tenant identifiers, event payloads, query results, endpoints, provider payloads, tokens, credentials, connection strings, stack traces, or production data."
+    },
+    {
+      "id": "evidence-proof-proof-analytics-clickhouse",
+      "proofResult": "proof:analytics:clickhouse",
+      "whatWasProven": "Package script proof:analytics:clickhouse is the command-pinned proof surface for bounded local Compose ClickHouse analytics event-store semantics using the adapter-contained official @clickhouse/client SDK. It starts ClickHouse from the runtime-providers profile with loopback ephemeral host exposure, uses the official image no-secret local setup flag, waits with bounded readiness retry, exercises synthetic tenant-safe event ingestion, tenant-filtered query, aggregation, invalid classification denial, retention deletion, cleanup, unavailable fail-closed behaviour, redaction, metric trace audit-shaped evidence, and Compose teardown.",
+      "whatWasNotProven": "This does not prove ClickHouse readiness, analytics readiness, event-store readiness, API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse compatibility, environment readiness, backup/restore readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "runtimeMode": "profile-gated-local-compose-proof",
+      "providerMode": "composed-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#clickhouse",
+      "adapterProviderId": "analytics-store-clickhouse-composed-test",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse",
+      "commandPin": "tsx packages/proof/src/clickhouse-composed-proof.ts",
+      "commitPin": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
+      "issueLinks": [
+        "USF-206",
+        "USF-197",
+        "USF-172",
+        "USF-189",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "283bc752f7c03ee2c2490f2dad3558bae909b7ab",
+      "retentionPosture": "Retain command output in PR validation summary and preserve committed metadata in this model; proof output must remain value-free and redacted."
     },
     {
       "id": "usf-198-evidence-redis-cache-proof-boundary",
@@ -7742,6 +7842,33 @@
       "residualRisk": "Live cloud-provider compatibility, supplier assurance, cloud IAM posture, API runtime binding, worker runtime binding, environment promotion, SOC readiness, ISO certification, and USF-133 closure remain non-claims."
     },
     {
+      "id": "usf-206-threat-clickhouse-overclaim",
+      "targetType": "provider-proof",
+      "target": "clickhouse",
+      "trustBoundary": "local Compose ClickHouse container behind loopback ephemeral host exposure and adapter-contained official @clickhouse/client SDK boundary",
+      "tenantBoundary": "synthetic tenant id only; adapter hashes tenant, event type, correlation, trace, and aggregate dimensions and proof records safe hashes without raw identifiers, event payloads, or query results",
+      "credentialBoundary": "official image no-secret local setup flag is used; no ClickHouse credential, raw endpoint, token, connection string, SDK error payload, stack trace, event payload, query result, table payload, or production data is emitted",
+      "dataClassification": "synthetic-tenant-test-data",
+      "abuseCases": [
+        "ClickHouse local proof is overclaimed as analytics readiness or event-store readiness.",
+        "In-memory analytics proof is treated as ClickHouse provider proof.",
+        "ClickHouse SDK use escapes the adapter/provider-integration boundary.",
+        "Proof output leaks raw endpoints, tenant identifiers, event payloads, query results, provider errors, or credentials.",
+        "Unavailable ClickHouse endpoint is treated as pass instead of fail-closed evidence."
+      ],
+      "failureModes": [
+        "ClickHouse container starts but SELECT readiness is not available.",
+        "Synthetic event ingestion or tenant-safe query fails.",
+        "Invalid data classification is not denied before provider insertion.",
+        "Retention deletion or cleanup fails.",
+        "Unavailable provider endpoint does not fail closed.",
+        "Proof output contains raw endpoint, connection string, event payload, query result, SDK error payload, or stack trace."
+      ],
+      "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, SDK round trip, tenant-safe query, invalid classification denial, retention deletion, cleanup, redaction, no-egress, or unavailable fail-closed evidence is not proven.",
+      "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw ClickHouse payloads.",
+      "residualRisk": "API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse compatibility, supplier assurance, environment promotion, backup/restore readiness, production alerting, SOC readiness, ISO certification, analytics readiness, event-store readiness, and USF-133 closure remain non-claims."
+    },
+    {
       "id": "usf-207-threat-redis-cache-overclaim",
       "targetType": "provider-proof",
       "target": "redis",
@@ -8104,6 +8231,22 @@
       "typescriptRuntimeCompatibility": "Package ships TypeScript declarations and supports repository TypeScript runtime proof execution through tsx on Node >=24.16.0.",
       "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and tools/validate-parity/validate-providers.py reject AWS SDK imports outside the adapter boundary.",
       "updateDeprecationOwner": "platform-integration-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-189-clickhouse-analytics-provider-at-clickhouse-client",
+      "serviceId": "clickhouse",
+      "adapterId": "ClickHouseComposedAnalyticsEventStoreAdapter",
+      "providerId": "analytics-store-clickhouse-composed-test",
+      "packageName": "@clickhouse/client",
+      "version": "1.23.0",
+      "selectionRationale": "@clickhouse/client is the official ClickHouse JS client for Node.js maintained by ClickHouse and is used for bounded local Compose proof of ClickHouse analytics event ingestion, tenant-safe query, aggregation, retention cleanup, and unavailable fail-closed behaviour. Raw HTTP calls, direct socket clients, and hand-rolled protocol code were not selected because the official maintained client satisfies the local proof boundary.",
+      "officialOrDeFactoStatus": "official-clickhouse-js-client",
+      "licencePosture": "Apache-2.0 package according to npm metadata reviewed for USF-206; exact version pinned in package.json and pnpm-lock.yaml.",
+      "maintenancePosture": "ClickHouse/clickhouse-js is actively maintained by ClickHouse; package version 1.23.0 supports Node >=20 and is compatible with repository Node >=24.16.0. Update/deprecation owner must review before stronger readiness claims or dependency upgrades.",
+      "securityAdvisoryPosture": "No known advisory is claimed by this row; dependency advisory review remains required before stronger readiness, promotion, or live-provider claims.",
+      "typescriptRuntimeCompatibility": "Package ships TypeScript declarations and supports repository TypeScript runtime proof execution through tsx on Node >=24.16.0.",
+      "forbiddenLayerImportCheck": "tools/validate-runtime/validate-runtime.py and packages/proof/src/provider-adapters-proof.ts reject ClickHouse SDK imports outside the adapter/proof/provider-integration boundary.",
+      "updateDeprecationOwner": "platform-data-dependency-owner"
     },
     {
       "id": "sdk-usf-189-redis-cache-provider-redis",
@@ -9959,6 +10102,36 @@
       ]
     },
     {
+      "id": "usf-206-access-clickhouse-composed-proof",
+      "targetType": "provider-proof",
+      "target": "clickhouse",
+      "posture": [
+        "accessModel=profile-gated-local-compose-proof-only",
+        "authnAuthzBoundary=not-public-no-operator-surface-claimed",
+        "leastPrivilegePosture=adapter-contained-official-clickhouse-sdk-against-local-compose-only",
+        "breakGlassRelevance=not-claimed",
+        "auditEvidence=value-free-proof-audit-evidence-captured",
+        "reviewCadence=2026-09-30",
+        "deprovisioningPosture=clickhouse-proof-table-truncate-drop-and-compose-down-finally-removes-proof-container-and-network",
+        "sourceIssue=USF-206"
+      ],
+      "evidenceSource": "packages/proof/src/clickhouse-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse",
+      "deferredReason": "No public/operator access, live ClickHouse access, staging access, production access, provider-managed credential posture, analytics readiness access posture, or event-store readiness access posture is claimed.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
       "id": "usf-207-access-redis-composed-proof",
       "targetType": "provider-proof",
       "target": "redis",
@@ -11609,6 +11782,38 @@
       "evidenceSource": "packages/proof/src/localstack-composed-proof.ts; adapters/resources/src/index.ts",
       "validationCommand": "corepack pnpm proof:localstack",
       "deferredReason": "Backup/restore and DR are not claimed for the ephemeral LocalStack proof; live cloud-provider operation and environment promotion remain separate.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-206-resilience-clickhouse-composed-proof",
+      "targetType": "provider-proof",
+      "target": "clickhouse",
+      "posture": [
+        "effectivenessState=proven-local",
+        "backupRequirement=not-claimed-for-ephemeral-analytics-proof",
+        "restoreProofStatus=not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=failed-event-ingestion-tenant-query-retention-cleanup-readiness-or-unavailable-fail-closed-proof",
+        "cleanupTeardownProof=clickhouse-truncate-drop-and-compose-down-finally",
+        "drBoundary=not-claimed",
+        "sourceIssue=USF-206",
+        "changeManagementEvidence=PR-validation-summary-and-runtime-validator",
+        "rollbackDeferredBoundary=disable-proof-script-or-revert-clickhouse-adapter-if-regression"
+      ],
+      "evidenceSource": "packages/proof/src/clickhouse-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse",
+      "deferredReason": "Backup/restore and DR are not claimed for the ephemeral ClickHouse analytics proof; provider-managed ClickHouse operation, persistence assurance, and environment promotion remain separate.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -13933,6 +14138,48 @@
       "evidenceSource": "package.json; pnpm-lock.yaml; tools/validate-runtime/validate-runtime.py; tools/validate-runtime/planted-defects; packages/proof/src/localstack-composed-proof.ts; adapters/resources/src/index.ts",
       "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
       "deferredReason": "No production incident readiness, live provider vulnerability SLA, production alerting, SOC readiness, ISO certification, customer assurance claim, or cloud-provider certification claim is made.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-206-incident-vulnerability-clickhouse-composed-proof",
+      "targetType": "provider-proof",
+      "target": "clickhouse",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-206",
+        "riskStatement=ClickHouse local proof could be treated as incident alerting vulnerability or live analytics provider readiness",
+        "threatFailureScenario=local proof health SDK metadata or ClickHouse evidence is overclaimed as production monitoring incident vulnerability provider certification or live analytics evidence",
+        "affectedAssetService=clickhouse",
+        "impact=high",
+        "likelihood=medium",
+        "owner=platform-data-foundation",
+        "riskOwner=platform-data-risk-owner",
+        "controlOwner=platform-data-control-owner",
+        "treatment=record local proof health SDK governance redaction and validator output while preserving non-claims",
+        "reviewDate=2026-09-30",
+        "incidentDetectionHook=proof-failure-on-readiness-sdk-round-trip-tenant-query-retention-cleanup-redaction-unavailable-or-teardown-evidence",
+        "alertingPosture=local-validation-failure-only-no-production-alerting-claim",
+        "escalationOwner=platform-data-foundation",
+        "vulnerabilityAdvisoryReview=clickhouse-client-1.23.0-advisory-review-required-before-stronger-readiness-claim",
+        "dependencyUpdatePosture=platform-data-dependency-owner-reviews-deprecation-and-advisories",
+        "correctiveActionEvidenceBoundary=runtime-validator-planted-defects-and-PR-validation-summary-only",
+        "postIncidentEvidenceBoundary=not-production-incident-ready",
+        "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ],
+      "evidenceSource": "package.json; pnpm-lock.yaml; tools/validate-runtime/validate-runtime.py; tools/validate-runtime/planted-defects; packages/proof/src/clickhouse-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "deferredReason": "No production incident readiness, live analytics vulnerability SLA, production alerting, SOC readiness, ISO certification, customer assurance claim, or provider-managed ClickHouse certification claim is made.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16484,6 +16731,69 @@
       "evidenceSource": "package.json; packages/proof/src/localstack-composed-proof.ts; adapters/resources/src/index.ts",
       "validationCommand": "corepack pnpm proof:localstack",
       "deferredReason": "Production data, live cloud-provider privacy, data residency, legal hold, custom retention, cloud IAM, and environment privacy evidence remain unproven or non-claimed; followUpIssue=none",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-206-privacy-clickhouse-composed-proof",
+      "targetType": "source-issue-proof",
+      "target": "USF-206",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "syntheticVsProductionDerived=synthetic-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-tenant-test-data",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=truncate-drop-clickhouse-proof-table-and-compose-down-finally",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-206",
+        "validationCommand=corepack pnpm proof:analytics:clickhouse"
+      ],
+      "evidenceSource": "docs/architecture/analytics-event-store-provider-disposition-matrix.json; packages/proof/src/clickhouse-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse",
+      "deferredReason": "Production data, live ClickHouse privacy, customer data residency, legal hold, custom retention, production retention, provider-managed credentials, and environment privacy evidence remain unproven or non-claimed.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-analytics-clickhouse",
+      "targetType": "proof",
+      "target": "proof:analytics:clickhouse",
+      "posture": [
+        "dataOrigin=synthetic-local-proof-only",
+        "piiPosture=no-production-pii",
+        "dataClassification=synthetic-tenant-test-data",
+        "redactionPolicy=value-free-proof-output-safe-hashes-only",
+        "retentionPurgePosture=PR-validation-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "sourceIssue=USF-206",
+        "validationCommand=corepack pnpm proof:analytics:clickhouse"
+      ],
+      "evidenceSource": "package.json; packages/proof/src/clickhouse-composed-proof.ts; adapters/bus/src/index.ts",
+      "validationCommand": "corepack pnpm proof:analytics:clickhouse",
+      "deferredReason": "Production data, live ClickHouse privacy, data residency, legal hold, custom retention, provider-managed credentials, and environment privacy evidence remain unproven or non-claimed; followUpIssue=none",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

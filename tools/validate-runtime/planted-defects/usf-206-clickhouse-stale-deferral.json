@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-030",
+  "manifestPatches": [
+    {
+      "op": "replace",
+      "path": "/providerBindingMatrix/7/proofEvidence",
+      "value": "defer actual adapter proof to USF-206"
+    }
+  ]
+}
