@@ -46,6 +46,9 @@ SENTRY_PROOF_BOUNDARY_PATH = Path("docs/architecture/sentry-service-semantic-pro
 OBSERVABILITY_SERVICE_DEPTH_PATH = Path(
     "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
 )
+BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH = Path(
+    "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
+)
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 PACKAGE_PATH = Path("package.json")
@@ -84,6 +87,10 @@ RULES = {
     "USF-ENTERPRISE-026": (
         "blocking",
         "observability service operations depth is incomplete or overclaimed",
+    ),
+    "USF-ENTERPRISE-027": (
+        "blocking",
+        "backup restore DR and RPO/RTO operational depth is incomplete or overclaimed",
     ),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
@@ -566,6 +573,50 @@ OBSERVABILITY_SERVICE_DEPTH_REQUIRED_EVIDENCE_ROWS = {
     "incidentVulnerabilityManagementEvidence": {"incident-usf-218-observability-alert-incident-boundary"},
     "privacyDataMinimisationPosture": {"privacy-usf-218-observability-service-data-boundary"},
 }
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_EVIDENCE_ROWS = {
+    "soaSupportMappings": {"soa-usf-219-backup-restore-dr-rpo-rto-depth"},
+    "evidenceRegister": {"evidence-usf-219-backup-restore-dr-rpo-rto-disposition"},
+    "threatModelAbuseCaseRegister": {"threat-usf-219-backup-dr-rpo-rto-overclaim"},
+    "backupRestoreResiliencePosture": {"resilience-usf-219-backup-restore-dr-rpo-rto-boundary"},
+    "incidentVulnerabilityManagementEvidence": {"incident-usf-219-backup-restore-dr-boundary"},
+    "privacyDataMinimisationPosture": {"privacy-usf-219-backup-restore-data-boundary"},
+}
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_ISSUES = {
+    "USF-219",
+    "USF-223",
+    "USF-211",
+    "USF-202",
+    "USF-177",
+    "USF-139",
+    "USF-147",
+    "USF-193",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_BOUNDARIES = {
+    "pgbackrest-cold-backup-restore-local-proof",
+    "online-backup-and-wal-archive",
+    "pitr-and-scheduled-backup-operation",
+    "corruption-failure-and-dr-rehearsal",
+    "rpo-rto-measurement",
+    "provider-managed-backup-and-supplier-boundary",
+}
+BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_DATA_SERVICES = {
+    "postgres",
+    "keycloak-db",
+    "minio",
+    "openbao",
+    "redis",
+    "meilisearch",
+    "clickhouse",
+    "sonar-postgres",
+    "sonar-oidc-plugin",
+    "windmill-postgres",
+    "windmill-redis",
+    "temporal-postgres",
+    "pgbackrest",
+}
 OBSERVABILITY_SERVICE_DEPTH_REQUIRED_ISSUES = {
     "USF-218",
     "USF-222",
@@ -800,6 +851,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         if (ROOT / OBSERVABILITY_SERVICE_DEPTH_PATH).exists()
         else None
     )
+    backup_restore_operational_depth = (
+        read_json(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH)
+        if (ROOT / BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH).exists()
+        else None
+    )
     environment_promotion = (
         read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
     )
@@ -844,6 +900,13 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         observability_service_depth = None
     elif observability_service_depth is not None:
         observability_service_depth = apply_observability_service_depth_defect(observability_service_depth, defect)
+    if defect.get("removeBackupRestoreOperationalDepth"):
+        backup_restore_operational_depth = None
+    elif backup_restore_operational_depth is not None:
+        backup_restore_operational_depth = apply_backup_restore_operational_depth_defect(
+            backup_restore_operational_depth,
+            defect,
+        )
     if environment_promotion is not None:
         environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
     package = apply_package_defect(package, defect)
@@ -866,6 +929,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "sentryErrorMatrix": sentry_error_matrix,
         "sentryProofBoundary": sentry_proof_boundary,
         "observabilityServiceDepth": observability_service_depth,
+        "backupRestoreOperationalDepth": backup_restore_operational_depth,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
     }
@@ -1146,6 +1210,39 @@ def apply_observability_service_depth_defect(depth: dict[str, Any], defect: dict
     for patch in defect.get("observabilityServiceDepthDispositionPatch", []):
         row = next(
             (r for r in out.get("serviceBindingDispositions", []) if r.get("serviceId") == patch["serviceId"]),
+            None,
+        )
+        if row is None:
+            continue
+        for key, value in patch.get("set", {}).items():
+            set_nested_value(row, key, value)
+        for key in patch.get("drop", []):
+            drop_nested_value(row, key)
+    return out
+
+
+def apply_backup_restore_operational_depth_defect(depth: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(depth)
+    for key, value in defect.get("backupRestoreOperationalDepthSet", {}).items():
+        set_nested_value(out, key, value)
+    for key in defect.get("backupRestoreOperationalDepthDrop", []):
+        drop_nested_value(out, key)
+    remove_boundary = defect.get("removeBackupRestoreOperationalDepthBoundary")
+    if remove_boundary:
+        out["boundaries"] = [
+            row for row in out.get("boundaries", []) if row.get("id") != remove_boundary
+        ]
+    for patch in defect.get("backupRestoreOperationalDepthBoundaryPatch", []):
+        row = next((r for r in out.get("boundaries", []) if r.get("id") == patch["id"]), None)
+        if row is None:
+            continue
+        for key, value in patch.get("set", {}).items():
+            set_nested_value(row, key, value)
+        for key in patch.get("drop", []):
+            drop_nested_value(row, key)
+    for patch in defect.get("backupRestoreOperationalDepthDispositionPatch", []):
+        row = next(
+            (r for r in out.get("dataBearingServiceDispositions", []) if r.get("serviceId") == patch["serviceId"]),
             None,
         )
         if row is None:
@@ -3607,6 +3704,169 @@ def check_observability_service_operations_depth(F: Findings, state: dict[str, A
             F.add("USF-ENTERPRISE-026", str(OBSERVABILITY_SERVICE_DEPTH_PATH), f"readiness overclaim present: {phrase}")
 
 
+def check_backup_restore_operational_depth(F: Findings, state: dict[str, Any]) -> None:
+    depth = state.get("backupRestoreOperationalDepth")
+    if not isinstance(depth, dict):
+        F.add("USF-ENTERPRISE-027", str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH), "USF-219 backup restore depth artefact is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-219",
+        "followUpIssue": "USF-223",
+        "parentIssue": "USF-133",
+        "status": "bounded-disposition-recorded-execution-proof-deferred",
+        "serviceCatalogueAuthority": str(SERVICE_CATALOGUE_PATH),
+        "enterpriseEvidenceModel": str(MODEL_PATH),
+    }
+    for key, expected in expected_top.items():
+        if depth.get(key) != expected:
+            F.add("USF-ENTERPRISE-027", key, f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate"):
+        if not depth.get(field):
+            F.add("USF-ENTERPRISE-027", field, "owner, risk, control, and review metadata are required")
+    if BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_ISSUES - set(depth.get("issueLinks", [])):
+        F.add("USF-ENTERPRISE-027", "issueLinks", "USF-219 issue links are incomplete")
+    if REQUIRED_NON_CLAIMS - set(depth.get("nonClaims", [])):
+        F.add("USF-ENTERPRISE-027", "nonClaims", "USF-219 non-claims are incomplete")
+    if set(depth.get("enterpriseEvidenceRefs", [])) != set().union(*BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_EVIDENCE_ROWS.values()):
+        F.add("USF-ENTERPRISE-027", "enterpriseEvidenceRefs", "USF-219 enterprise evidence refs are incomplete")
+
+    claims = depth.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-ENTERPRISE-027", "claims", "claims must be an object")
+        claims = {}
+    for key in (
+        "boundedDispositionRecorded",
+        "pgbackrestColdBackupRestoreProofAccepted",
+        "operationalBackupDepthExplicitlyDeferred",
+        "dataBearingPromotionImpactRecorded",
+    ):
+        if claims.get(key) is not True:
+            F.add("USF-ENTERPRISE-027", f"claims.{key}", "bounded disposition marker must be true")
+    for key in (
+        "backupReadinessClaim",
+        "restoreReadinessClaim",
+        "disasterRecoveryReadinessClaim",
+        "pitrReadinessClaim",
+        "onlineBackupReadinessClaim",
+        "scheduledBackupReadinessClaim",
+        "rpoRtoReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(key) is not False:
+            F.add("USF-ENTERPRISE-027", f"claims.{key}", "readiness or closure claim must remain false")
+
+    boundary_rows = rows_by_id(depth.get("boundaries"))
+    if BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_BOUNDARIES - set(boundary_rows):
+        F.add("USF-ENTERPRISE-027", "boundaries", "required backup/restore boundaries are missing")
+    for boundary_id, row in boundary_rows.items():
+        if boundary_id == "pgbackrest-cold-backup-restore-local-proof":
+            if row.get("status") != "proven-local" or "USF-211" not in json.dumps(row, sort_keys=True):
+                F.add("USF-ENTERPRISE-027", boundary_id, "USF-211 bounded local proof must be recorded")
+            for field in ("proofCommand", "validationCommand", "evidenceRefs", "nonEquivalenceBoundary", "nonClaimBoundary"):
+                if not row.get(field):
+                    F.add("USF-ENTERPRISE-027", f"{boundary_id}.{field}", "proven local boundary field is required")
+            continue
+        if row.get("status") != "deferred-with-owner":
+            F.add("USF-ENTERPRISE-027", boundary_id, "operational boundary must be deferred with owner")
+            continue
+        for field in (
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "riskTreatment",
+            "followUpIssue",
+            "reviewDate",
+            "promotionImpact",
+            "requiredEvidence",
+            "nonClaimBoundary",
+        ):
+            if not row.get(field):
+                F.add("USF-ENTERPRISE-027", f"{boundary_id}.{field}", "deferred boundary field is required")
+        if row.get("followUpIssue") != "USF-223":
+            F.add("USF-ENTERPRISE-027", f"{boundary_id}.followUpIssue", "deferred execution proof must link USF-223")
+
+    dispositions = rows_by_id(depth.get("dataBearingServiceDispositions"), "serviceId")
+    if BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_DATA_SERVICES - set(dispositions):
+        F.add("USF-ENTERPRISE-027", "dataBearingServiceDispositions", "data-bearing service promotion impact rows are incomplete")
+    for service_id, row in dispositions.items():
+        for field in (
+            "dataClassification",
+            "tenantBoundary",
+            "backupRestorePosture",
+            "retentionPosture",
+            "failureImpact",
+            "promotionImpact",
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "reviewDate",
+            "nonClaimBoundary",
+        ):
+            if not row.get(field):
+                F.add("USF-ENTERPRISE-027", f"{service_id}.{field}", "data-bearing promotion-impact field is required")
+
+    gate = state.get("usf133ClosureTierGate") or {}
+    service_refs = rows_by_id(gate.get("requiredServiceDispositionRefs"), "serviceId")
+    pgbackrest_refs = set((service_refs.get("pgbackrest") or {}).get("sourceIssueRefs", []))
+    if {"USF-219", "USF-223"} - pgbackrest_refs:
+        F.add("USF-ENTERPRISE-027", "serviceRef.pgbackrest", "closure-tier pgBackRest ref must link USF-219 and USF-223")
+    exceptions = rows_by_id(gate.get("enterpriseExceptionRegister"))
+    for exception_id in ("exception-service-pgbackrest", "exception-capability-backup-restore"):
+        exception = exceptions.get(exception_id) or {}
+        if exception.get("followUpIssue") != "USF-223":
+            F.add("USF-ENTERPRISE-027", exception_id, "backup/restore exception must defer execution proof to USF-223")
+
+    model = state["model"]
+    for section, row_ids in BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_EVIDENCE_ROWS.items():
+        rows = rows_by_id(model.get(section))
+        for row_id in row_ids:
+            row = rows.get(row_id)
+            if not row:
+                F.add("USF-ENTERPRISE-027", row_id, f"missing USF-219 enterprise row in {section}")
+                continue
+            row_text = json.dumps(row, sort_keys=True)
+            if missing_required_non_claims(row):
+                F.add("USF-ENTERPRISE-027", row_id, "USF-219 enterprise row non-claims are incomplete")
+            if "USF-219" not in row_text or "USF-223" not in row_text or str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH) not in row_text:
+                F.add("USF-ENTERPRISE-027", row_id, "USF-219 row lacks issue, follow-up, or artefact linkage")
+            if section != "threatModelAbuseCaseRegister" and not row.get("validationCommand"):
+                F.add("USF-ENTERPRISE-027", row_id, "USF-219 row lacks validation command")
+            if section == "evidenceRegister":
+                for issue in BACKUP_RESTORE_OPERATIONAL_DEPTH_REQUIRED_ISSUES:
+                    if issue not in row.get("issueLinks", []):
+                        F.add("USF-ENTERPRISE-027", row_id, f"evidence row lacks {issue}")
+                negative = str(row.get("whatWasNotProven", "")).lower()
+                if "not prove" not in negative and "unproven" not in negative:
+                    F.add("USF-ENTERPRISE-027", row_id, "evidence row must preserve explicit non-proof boundary")
+
+    source_text = json.dumps(depth, sort_keys=True).lower()
+    for phrase in (
+        "backup readiness is proven",
+        "restore readiness is proven",
+        "dr readiness is proven",
+        "disaster recovery readiness is proven",
+        "pitr readiness is proven",
+        "rpo readiness is proven",
+        "rto readiness is proven",
+        "production readiness is proven",
+        "live provider readiness is proven",
+        "usf-133 closure is proven",
+    ):
+        if phrase in source_text:
+            F.add("USF-ENTERPRISE-027", str(BACKUP_RESTORE_OPERATIONAL_DEPTH_PATH), f"readiness overclaim present: {phrase}")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -3633,6 +3893,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_sentry_error_monitoring_disposition(F, state)
     check_sentry_service_proof_boundary(F, state)
     check_observability_service_operations_depth(F, state)
+    check_backup_restore_operational_depth(F, state)
     return F
 
 

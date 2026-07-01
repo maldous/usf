@@ -3094,7 +3094,9 @@
           "corepack pnpm proof:backup:pgbackrest",
           "python3 tools/validate-runtime/validate-runtime.py all --json",
           "docs/architecture/pgbackrest-configured-proof-boundary.json",
-          "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#usf-211-evidence-pgbackrest-configured-proof"
+          "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#usf-211-evidence-pgbackrest-configured-proof",
+          "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
+          "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.md"
         ],
         "tracking_issues": [
           "USF-166",
@@ -3103,18 +3105,22 @@
           "USF-185",
           "USF-177",
           "USF-202",
-          "USF-211"
+          "USF-211",
+          "USF-219",
+          "USF-223"
         ],
         "non_equivalence_boundaries": [
           "DB/RLS proof and files proof are not equivalent to pgBackRest backup artifact creation, restore drill, RPO/RTO, or disaster recovery proof.",
-          "USF-211 local cold backup/restore proof is not online backup, WAL archive, PITR, scheduled backup, RPO/RTO, disaster recovery, provider-managed operation, production readiness, or live-provider readiness."
+          "USF-211 local cold backup/restore proof is not online backup, WAL archive, PITR, scheduled backup, RPO/RTO, disaster recovery, provider-managed operation, production readiness, or live-provider readiness.",
+          "USF-219 disposition evidence is not equivalent to online backup, WAL archive, PITR, scheduled backup operation, corruption/failure drill, DR rehearsal, RPO/RTO achievement, provider-managed backup operation, environment promotion, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
         ],
         "missing_evidence": [
           "online backup and WAL archive proof",
           "PITR, scheduled backup, RPO/RTO, and disaster recovery proof",
           "provider-managed/live pgBackRest supplier evidence",
           "API and worker runtime backup binding proof",
-          "environment promotion, incident, vulnerability, production privacy, and operational readiness proof"
+          "environment promotion, incident, vulnerability, production privacy, and operational readiness proof",
+          "USF-223 future execution proof for online backup, WAL archive, PITR, scheduled backup operation, corruption/failure drill, DR rehearsal, RPO/RTO measurement, provider-managed backup, and environment promotion backup gates remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -3156,12 +3162,20 @@
           "usf-211-access-pgbackrest-configured-proof",
           "usf-211-resilience-pgbackrest-configured-proof",
           "usf-211-incident-vulnerability-pgbackrest-configured-proof",
-          "usf-211-privacy-pgbackrest-configured-proof"
+          "usf-211-privacy-pgbackrest-configured-proof",
+          "soa-usf-219-backup-restore-dr-rpo-rto-depth",
+          "evidence-usf-219-backup-restore-dr-rpo-rto-disposition",
+          "threat-usf-219-backup-dr-rpo-rto-overclaim",
+          "resilience-usf-219-backup-restore-dr-rpo-rto-boundary",
+          "incident-usf-219-backup-restore-dr-boundary",
+          "privacy-usf-219-backup-restore-data-boundary"
         ],
         "tracking_issue_rationale": {
           "USF-177": "bounded backup and restore service disposition gate",
           "USF-202": "historical pgBackRest blocked proof reclassification",
-          "USF-211": "bounded pgBackRest maintained-image configured local cold backup and restore drill proof"
+          "USF-211": "bounded pgBackRest maintained-image configured local cold backup and restore drill proof",
+          "USF-219": "USF-219 records the selected closure-tier backup restore DR and RPO/RTO disposition, data-bearing promotion impact, enterprise evidence rows, and validators without claiming operational backup or DR readiness.",
+          "USF-223": "USF-223 owns future executed online backup, WAL archive, PITR, scheduled backup, corruption/failure drill, DR rehearsal, RPO/RTO, provider-managed backup, and environment promotion proof."
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

@@ -185,9 +185,10 @@ PROHIBITED_READINESS_CLAIMS = {
     "enterprise-production-readiness",
 }
 USF133_GATE_PROHIBITED_CLAIMS = PROHIBITED_READINESS_CLAIMS | {"usf-133-closure"}
-USF216_CURRENT_OPEN_BLOCKERS = {"USF-219", "USF-220"}
+USF216_CURRENT_OPEN_BLOCKERS = {"USF-220"}
 USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP = "USF-221"
 USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP = "USF-222"
+USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP = "USF-223"
 USF218_OBSERVABILITY_SERVICES = {
     "otel-collector",
     "prometheus",
@@ -1282,10 +1283,16 @@ def check_usf216_final_reconciliation(F, state):
         )
     if "USF-218" in blockers:
         F.add("USF-PARITY-039", "usf216.currentOpenBlockerIssues", "USF-218 must not remain a current blocker after bounded disposition evidence")
+    if "USF-219" in blockers:
+        F.add("USF-PARITY-039", "usf216.currentOpenBlockerIssues", "USF-219 must not remain a current blocker after bounded backup/restore disposition evidence")
     if USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP not in set(reconciliation.get("nonBlockingContextIssues") or []):
         F.add("USF-PARITY-039", "usf216.nonBlockingContextIssues", "USF-222 observability execution follow-up must remain visible")
+    if USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP not in set(reconciliation.get("nonBlockingContextIssues") or []):
+        F.add("USF-PARITY-039", "usf216.nonBlockingContextIssues", "USF-223 backup/restore execution follow-up must remain visible")
     if "USF-218" not in set(reconciliation.get("resolvedSourceIssuesUsedAsEvidence") or []):
         F.add("USF-PARITY-039", "usf216.resolvedSourceIssuesUsedAsEvidence", "USF-218 must be recorded as resolved source evidence")
+    if "USF-219" not in set(reconciliation.get("resolvedSourceIssuesUsedAsEvidence") or []):
+        F.add("USF-PARITY-039", "usf216.resolvedSourceIssuesUsedAsEvidence", "USF-219 must be recorded as resolved source evidence")
     if not _non_empty_list(reconciliation.get("validationCommands")):
         F.add("USF-PARITY-039", "usf216.validationCommands", "validation command list is required")
 
@@ -1312,6 +1319,14 @@ def check_usf216_final_reconciliation(F, state):
                     "USF-PARITY-039",
                     f"functionality:{capability_id}",
                     "observability row must carry USF-218 disposition and USF-222 execution follow-up",
+                )
+            if capability_id == "backup-restore" and (
+                "USF-219" not in carrier or USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP not in carrier
+            ):
+                F.add(
+                    "USF-PARITY-039",
+                    "functionality:backup-restore",
+                    "backup/restore row must carry USF-219 disposition and USF-223 execution follow-up",
                 )
 
     compose = state.get("composeParityMatrix")
@@ -1370,6 +1385,18 @@ def check_usf216_final_reconciliation(F, state):
                     f"closure:{service_id}",
                     "observability closure row lacks USF-218 evidence and USF-222 follow-up issue",
                 )
+        pgbackrest_row = closure_rows.get("pgbackrest")
+        pgbackrest_evidence = pgbackrest_row.get("closure_evidence", {}) if pgbackrest_row else {}
+        if not pgbackrest_row:
+            F.add("USF-PARITY-039", "closure:pgbackrest", "pgBackRest closure row is missing")
+        else:
+            tracking_issues = set(pgbackrest_evidence.get("tracking_issues") or [])
+            if not {"USF-219", USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP} <= tracking_issues:
+                F.add(
+                    "USF-PARITY-039",
+                    "closure:pgbackrest",
+                    "pgBackRest closure row lacks USF-219 evidence and USF-223 follow-up issue",
+                )
 
     gate = state.get("usf133ClosureTierGate")
     if isinstance(gate, dict):
@@ -1405,6 +1432,21 @@ def check_usf216_final_reconciliation(F, state):
                     "USF-PARITY-039",
                     f"exception:{service_id}",
                     "observability exception must defer execution proof to USF-222",
+                )
+        pgbackrest_ref = refs.get("pgbackrest") or {}
+        if not {"USF-219", USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP} <= set(pgbackrest_ref.get("sourceIssueRefs") or []):
+            F.add(
+                "USF-PARITY-039",
+                "serviceRef:pgbackrest",
+                "pgBackRest service ref lacks USF-219 evidence and USF-223 follow-up issue",
+            )
+        for exception_id in ("exception-service-pgbackrest", "exception-capability-backup-restore"):
+            exception = exceptions.get(exception_id) or {}
+            if exception.get("followUpIssue") != USF219_BACKUP_RESTORE_EXECUTION_FOLLOW_UP:
+                F.add(
+                    "USF-PARITY-039",
+                    f"exception:{exception_id}",
+                    "backup/restore exception must defer execution proof to USF-223",
                 )
 
 
@@ -1445,6 +1487,9 @@ def apply_mutation(base_state, mutation):
     if mutation.get("removeUsf216FinalReconciliation"):
         usf133_final_reconciliation = None
         overrides["usf133FinalReconciliationError"] = "missing"
+    if "usf216FinalReconciliationSetTop" in mutation:
+        for k, v in mutation["usf216FinalReconciliationSetTop"].items():
+            usf133_final_reconciliation[k] = v
     if "setTop" in mutation:
         for k, v in mutation["setTop"].items():
             matrix[k] = v

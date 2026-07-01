@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-034",
+  "backupRestoreOperationalDepthPatches": [
+    {
+      "op": "remove",
+      "path": "/dataBearingServiceDispositions/0/promotionImpact"
+    }
+  ]
+}

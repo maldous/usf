@@ -207,10 +207,20 @@
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
       "sourceIssueRefs": [
-        "USF-185"
+        "USF-185",
+        "USF-139",
+        "USF-219",
+        "USF-223"
       ],
       "assuranceMaturityLevel": "documented",
-      "promotionImpact": []
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
     },
     {
       "serviceId": "keycloak-db",
@@ -837,7 +847,12 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-177",
+        "USF-202",
+        "USF-211",
+        "USF-219",
+        "USF-223"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -1132,22 +1147,27 @@
       "owner": "platform-data-foundation",
       "riskOwner": "platform-data-risk-owner",
       "controlOwner": "platform-data-control-owner",
-      "evidenceSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "evidenceSource": "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
       "validationCommands": [
-        "corepack pnpm providers-proof",
-        "python3 tools/validate-runtime/validate-runtime.py all --json"
+        "corepack pnpm proof:backup:pgbackrest",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
       ],
       "sourceIssueRefs": [
         "USF-189",
-        "USF-177"
+        "USF-177",
+        "USF-202",
+        "USF-211",
+        "USF-219",
+        "USF-223"
       ],
       "riskTreatment": {
-        "treatment": "defer",
+        "treatment": "defer-with-owner-and-validator-boundary",
         "reviewDate": "2026-09-30",
-        "followUpIssue": "USF-177",
-        "riskStatement": "pgBackRest and restore evidence remain deferred and no backup/restore readiness is claimed."
+        "followUpIssue": "USF-223",
+        "riskStatement": "USF-211 proves bounded local cold backup/restore only; online backup, WAL archive, PITR, scheduled backup, DR rehearsal, RPO/RTO, provider-managed backup, and environment promotion remain unproven and non-claimed."
       },
-      "assuranceMaturityLevel": "designed",
+      "assuranceMaturityLevel": "documented",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -2481,15 +2501,15 @@
       "id": "exception-service-pgbackrest",
       "targetType": "service",
       "targetId": "pgbackrest",
-      "disposition": "deferred",
-      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "disposition": "bounded-local-proof-with-deferred-operational-depth",
+      "reason": "USF-211 proves bounded local profile-gated pgBackRest cold backup/restore readback. USF-219 records backup/restore DR and RPO/RTO operational depth as owner-backed deferred work. Online backup, WAL archive, PITR, scheduled backup, corruption/failure drill, DR rehearsal, RPO/RTO, provider-managed backup, environment promotion, production operation, live-provider, SOC, ISO, full-dev, full-parity, and USF-133 closure remain non-claims.",
       "owner": "platform-data-foundation",
       "riskOwner": "platform-data-risk-owner",
       "controlOwner": "platform-data-control-owner",
-      "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "treatmentPath": "bounded-proof-plus-defer-stronger-operational-claims",
+      "followUpIssue": "USF-223",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "execution-proof-deferred-with-owner-does-not-satisfy-readiness-or-promotion-claims",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -2766,15 +2786,15 @@
       "id": "exception-capability-backup-restore",
       "targetType": "capability",
       "targetId": "backup-restore",
-      "disposition": "deferred",
-      "reason": "pgBackRest and restore evidence remain deferred and no backup/restore readiness is claimed.",
+      "disposition": "deferred-with-owner",
+      "reason": "USF-219 records selected closure-tier backup/restore DR and RPO/RTO disposition and data-bearing promotion impact, but stronger operational execution proof remains deferred to USF-223.",
       "owner": "platform-data-foundation",
       "riskOwner": "platform-data-risk-owner",
       "controlOwner": "platform-data-control-owner",
-      "treatmentPath": "defer",
-      "followUpIssue": "USF-177",
+      "treatmentPath": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-223",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "execution-proof-deferred-with-owner-does-not-satisfy-readiness-or-promotion-claims",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
