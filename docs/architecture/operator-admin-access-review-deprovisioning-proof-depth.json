@@ -1,0 +1,1295 @@
+{
+  "id": "operator-admin-access-review-deprovisioning-proof-depth",
+  "title": "Operator admin console access review and deprovisioning proof depth",
+  "issueId": "USF-217",
+  "parentIssueId": "USF-133",
+  "dashboardIssueId": "USF-184",
+  "coordinatorIssueId": "USF-192",
+  "followUpIssueId": "USF-221",
+  "status": "active",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "operatorAccessMatrix": "docs/architecture/operator-access-gateway-posture-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "issueLinks": [
+    "USF-217",
+    "USF-221",
+    "USF-169",
+    "USF-180",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "selectedClosureTierDisposition": "explicitly-deferred-with-owner",
+  "accessReviewExecutionClaim": false,
+  "deprovisioningExecutionClaim": false,
+  "publicExposureClaim": false,
+  "runtimeConsoleReadinessClaim": false,
+  "readinessClaimsAllowed": [],
+  "readinessClaimsProhibited": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness"
+  ],
+  "requiredServiceIds": [
+    "keycloak",
+    "minio",
+    "openbao",
+    "prometheus",
+    "grafana",
+    "loki",
+    "tempo",
+    "mailpit",
+    "pgadmin",
+    "sonarqube",
+    "alertmanager",
+    "windmill",
+    "temporal-ui",
+    "sentry",
+    "caddy"
+  ],
+  "boundarySummary": "USF-217 makes every in-scope operator/admin/control-plane surface disposition machine-checkable for the selected closure tier. It does not prove recurring review execution, provider-console revocation, identity lifecycle integration, public exposure, environment promotion, or production operator readiness.",
+  "rows": [
+    {
+      "id": "usf-217-access-review-deprovisioning-keycloak",
+      "serviceId": "keycloak",
+      "sourceMatrixRowId": "usf-186-access-posture-keycloak",
+      "surfaceKind": "admin-surface",
+      "accessModel": "admin-only",
+      "authRequirement": "admin-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-identity-foundation",
+      "riskOwner": "platform-identity-risk-owner",
+      "controlOwner": "platform-identity-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-identity-foundation",
+        "riskOwner": "platform-identity-risk-owner",
+        "controlOwner": "platform-identity-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-identity-foundation",
+        "riskOwner": "platform-identity-risk-owner",
+        "controlOwner": "platform-identity-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "keycloak",
+        "impact": "unauthorised administrative action or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-identity-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-minio",
+      "serviceId": "minio",
+      "sourceMatrixRowId": "usf-186-access-posture-minio",
+      "surfaceKind": "admin-surface",
+      "accessModel": "admin-only",
+      "authRequirement": "admin-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-files-foundation",
+        "riskOwner": "platform-files-risk-owner",
+        "controlOwner": "platform-files-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-files-foundation",
+        "riskOwner": "platform-files-risk-owner",
+        "controlOwner": "platform-files-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "minio",
+        "impact": "unauthorised administrative action or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-files-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-openbao",
+      "serviceId": "openbao",
+      "sourceMatrixRowId": "usf-186-access-posture-openbao",
+      "surfaceKind": "admin-surface",
+      "accessModel": "admin-only",
+      "authRequirement": "admin-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-security-foundation",
+      "riskOwner": "platform-security-risk-owner",
+      "controlOwner": "platform-security-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-security-foundation",
+        "riskOwner": "platform-security-risk-owner",
+        "controlOwner": "platform-security-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-security-foundation",
+        "riskOwner": "platform-security-risk-owner",
+        "controlOwner": "platform-security-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "openbao",
+        "impact": "unauthorised administrative action or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-security-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-prometheus",
+      "serviceId": "prometheus",
+      "sourceMatrixRowId": "usf-186-access-posture-prometheus",
+      "surfaceKind": "control-plane-no-human-access",
+      "accessModel": "no-human-access",
+      "authRequirement": "local-developer-access",
+      "auditRequirement": "local-operational-logs",
+      "breakGlassRelevance": "not-applicable",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway work treats a control-plane endpoint as operator-ready or exposed beyond loopback",
+        "affectedAssetService": "prometheus",
+        "impact": "telemetry disclosure or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-observability-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-grafana",
+      "serviceId": "grafana",
+      "sourceMatrixRowId": "usf-186-access-posture-grafana",
+      "surfaceKind": "operator-surface",
+      "accessModel": "developer-access",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "operator-relevant",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "grafana",
+        "impact": "unauthorised administrative action or telemetry disclosure",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-observability-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-loki",
+      "serviceId": "loki",
+      "sourceMatrixRowId": "usf-186-access-posture-loki",
+      "surfaceKind": "control-plane-no-human-access",
+      "accessModel": "no-human-access",
+      "authRequirement": "local-developer-access",
+      "auditRequirement": "local-operational-logs",
+      "breakGlassRelevance": "not-applicable",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway work treats a control-plane endpoint as operator-ready or exposed beyond loopback",
+        "affectedAssetService": "loki",
+        "impact": "telemetry disclosure or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-observability-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-tempo",
+      "serviceId": "tempo",
+      "sourceMatrixRowId": "usf-186-access-posture-tempo",
+      "surfaceKind": "control-plane-no-human-access",
+      "accessModel": "no-human-access",
+      "authRequirement": "local-developer-access",
+      "auditRequirement": "local-operational-logs",
+      "breakGlassRelevance": "not-applicable",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway work treats a control-plane endpoint as operator-ready or exposed beyond loopback",
+        "affectedAssetService": "tempo",
+        "impact": "telemetry disclosure or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-observability-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-mailpit",
+      "serviceId": "mailpit",
+      "sourceMatrixRowId": "usf-186-access-posture-mailpit",
+      "surfaceKind": "operator-surface",
+      "accessModel": "developer-access",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "operator-relevant",
+      "owner": "platform-messaging-foundation",
+      "riskOwner": "platform-messaging-risk-owner",
+      "controlOwner": "platform-messaging-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-messaging-foundation",
+        "riskOwner": "platform-messaging-risk-owner",
+        "controlOwner": "platform-messaging-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-messaging-foundation",
+        "riskOwner": "platform-messaging-risk-owner",
+        "controlOwner": "platform-messaging-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "mailpit",
+        "impact": "captured-message disclosure or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-messaging-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-pgadmin",
+      "serviceId": "pgadmin",
+      "sourceMatrixRowId": "usf-186-access-posture-pgadmin",
+      "surfaceKind": "admin-operator-surface",
+      "accessModel": "operator-access",
+      "authRequirement": "admin-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-operations-foundation",
+        "riskOwner": "platform-operations-risk-owner",
+        "controlOwner": "platform-operations-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-operations-foundation",
+        "riskOwner": "platform-operations-risk-owner",
+        "controlOwner": "platform-operations-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "pgadmin",
+        "impact": "unauthorised database administration or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-operations-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-sonarqube",
+      "serviceId": "sonarqube",
+      "sourceMatrixRowId": "usf-186-access-posture-sonarqube",
+      "surfaceKind": "operator-surface",
+      "accessModel": "developer-access",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "operator-relevant",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-assurance-foundation",
+        "riskOwner": "platform-assurance-risk-owner",
+        "controlOwner": "platform-assurance-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-assurance-foundation",
+        "riskOwner": "platform-assurance-risk-owner",
+        "controlOwner": "platform-assurance-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "sonarqube",
+        "impact": "quality gate or project metadata exposure or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-assurance-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-alertmanager",
+      "serviceId": "alertmanager",
+      "sourceMatrixRowId": "usf-186-access-posture-alertmanager",
+      "surfaceKind": "admin-operator-surface",
+      "accessModel": "operator-access",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "alertmanager",
+        "impact": "unauthorised alert routing changes or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-observability-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-windmill",
+      "serviceId": "windmill",
+      "sourceMatrixRowId": "usf-186-access-posture-windmill",
+      "surfaceKind": "admin-operator-surface",
+      "accessModel": "operator-access",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-operations-foundation",
+        "riskOwner": "platform-operations-risk-owner",
+        "controlOwner": "platform-operations-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-operations-foundation",
+        "riskOwner": "platform-operations-risk-owner",
+        "controlOwner": "platform-operations-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "windmill",
+        "impact": "unauthorised operator automation or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-operations-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-temporal-ui",
+      "serviceId": "temporal-ui",
+      "sourceMatrixRowId": "usf-186-access-posture-temporal-ui",
+      "surfaceKind": "admin-operator-surface",
+      "accessModel": "operator-access",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-operations-foundation",
+      "riskOwner": "platform-operations-risk-owner",
+      "controlOwner": "platform-operations-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-operations-foundation",
+        "riskOwner": "platform-operations-risk-owner",
+        "controlOwner": "platform-operations-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-operations-foundation",
+        "riskOwner": "platform-operations-risk-owner",
+        "controlOwner": "platform-operations-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "temporal-ui",
+        "impact": "unauthorised workflow inspection or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-operations-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-sentry",
+      "serviceId": "sentry",
+      "sourceMatrixRowId": "usf-186-access-posture-sentry",
+      "surfaceKind": "operator-surface",
+      "accessModel": "external-provider-console",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "operator-relevant",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "external-provider-managed",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-observability-foundation",
+        "riskOwner": "platform-observability-risk-owner",
+        "controlOwner": "platform-observability-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future work treats external provider console access as locally proven or readiness-complete",
+        "affectedAssetService": "sentry",
+        "impact": "error telemetry disclosure or readiness overclaim",
+        "likelihood": "medium-before-provider-access-proof",
+        "owner": "platform-observability-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-caddy",
+      "serviceId": "caddy",
+      "sourceMatrixRowId": "usf-186-access-posture-caddy",
+      "surfaceKind": "gateway",
+      "accessModel": "operator-access",
+      "authRequirement": "operator-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-access-foundation",
+        "riskOwner": "platform-access-risk-owner",
+        "controlOwner": "platform-access-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-access-foundation",
+        "riskOwner": "platform-access-risk-owner",
+        "controlOwner": "platform-access-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future gateway work creates public/LAN route, bypasses authn/authz, misses audit, or implies clickthrough readiness",
+        "affectedAssetService": "caddy",
+        "impact": "public exposure, unauthorised administrative action, or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-access-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    }
+  ],
+  "acceptanceCriteriaEvidence": [
+    {
+      "criterion": "Every in-scope operator/admin/control-plane surface has current access review and deprovisioning posture.",
+      "evidence": "rows list covers every required service id and each row has accessReviewCadence and deprovisioningPosture objects."
+    },
+    {
+      "criterion": "Authn/authz, audit, break-glass, tenant, secret, and privacy boundaries are proven or explicitly deferred.",
+      "evidence": "rows preserve service-catalogue auth, audit, break-glass, loopback, secret, privacy, and non-equivalence boundaries; execution proof remains deferred to USF-221."
+    },
+    {
+      "criterion": "Public exposure remains a non-claim unless separately proven.",
+      "evidence": "top-level and per-row publicExposureClaim/publicExposureAllowed fields remain false."
+    },
+    {
+      "criterion": "Enterprise evidence rows and validators cover any new access claim.",
+      "evidence": "enterprise access posture rows are updated to remove TODO placeholders, link USF-217 and USF-221, and USF-ENTERPRISE-025 validates the disposition."
+    },
+    {
+      "criterion": "USF-133 remains open unless separately satisfied.",
+      "evidence": "nonClaims include full readiness and closure non-claims; USF-217 does not mark USF-133 closed."
+    }
+  ]
+}

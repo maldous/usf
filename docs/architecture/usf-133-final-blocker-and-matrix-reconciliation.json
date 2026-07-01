@@ -18,7 +18,6 @@
   "sourceIssueDoneByImplication": false,
   "wrapperDoneStatesSatisfySourceIssues": false,
   "currentOpenBlockerIssues": [
-    "USF-217",
     "USF-218",
     "USF-219",
     "USF-220"
@@ -26,7 +25,8 @@
   "nonBlockingContextIssues": [
     "USF-134",
     "USF-184",
-    "USF-192"
+    "USF-192",
+    "USF-221"
   ],
   "resolvedSourceIssuesUsedAsEvidence": [
     "USF-166",
@@ -163,7 +163,8 @@
       "evidenceState": "mapped",
       "evidenceRefs": [
         "usf133AcceptanceCriteriaMapping",
-        "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.md"
+        "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.md",
+        "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json"
       ]
     },
     {
@@ -187,7 +188,8 @@
       "evidenceState": "mapped",
       "evidenceRefs": [
         "remainingDeferredBoundaries",
-        "nonClaims"
+        "nonClaims",
+        "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json"
       ]
     },
     {
@@ -299,8 +301,9 @@
   "remainingDeferredBoundaries": [
     {
       "issueId": "USF-217",
-      "boundary": "operator admin console access review and deprovisioning proof depth",
-      "blocksUsf133": true
+      "boundary": "operator admin console access review and deprovisioning execution deferred to USF-221; USF-217 records current closure-tier disposition",
+      "blocksUsf133": true,
+      "status": "resolved-by-disposition-evidence"
     },
     {
       "issueId": "USF-218",
@@ -320,7 +323,7 @@
   ],
   "linearBlockerRelationPolicy": {
     "staleRelationsRemovedByThisIssue": [],
-    "reason": "The current USF-215 repository audit records only USF-216 through USF-220 as USF-133 blocking children. No hidden Linear relation was removed without MCP-exposed evidence. USF-216 may be marked Done only after merge and post-merge validation; then USF-217 through USF-220 remain the current closure blockers.",
+    "reason": "The current repository audit now treats USF-217 as resolved by merged disposition evidence once its PR is merged. USF-218, USF-219, and USF-220 remain selected-closure-tier blockers. USF-221 tracks future access-review and deprovisioning execution proof as a non-blocking follow-up for stronger readiness claims.",
     "noIssueMarkedDoneByImplication": true
   },
   "validationCommands": [

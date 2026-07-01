@@ -1,0 +1,6 @@
+{
+  "name": "operator-access-review-depth-row-missing",
+  "description": "USF-217 depth artefact is missing an in-scope service row.",
+  "expectedRule": "USF-ENTERPRISE-025",
+  "removeOperatorAccessReviewDepthRow": "usf-217-access-review-deprovisioning-pgadmin"
+}

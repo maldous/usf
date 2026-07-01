@@ -1,0 +1,24 @@
+{
+  "name": "operator-access-review-depth-todo-retained",
+  "description": "Enterprise access posture keeps TODO placeholders instead of explicit USF-217 and USF-221 disposition.",
+  "expectedRule": "USF-ENTERPRISE-025",
+  "posturePatch": [
+    {
+      "section": "accessReviewPrivilegedOperationPosture",
+      "id": "access-posture-keycloak",
+      "removePosturePrefix": [
+        "sourceIssue=",
+        "reviewCadence=",
+        "deprovisioningPosture=",
+        "accessReviewExecutionEvidence=",
+        "deprovisioningExecutionEvidence=",
+        "followUpIssue=",
+        "closureTierDisposition="
+      ],
+      "appendPosture": [
+        "reviewCadence=TODO-before-readiness-claim",
+        "deprovisioningPosture=TODO-before-readiness-claim"
+      ]
+    }
+  ]
+}
