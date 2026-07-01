@@ -6950,7 +6950,7 @@
       "adapterProviderId": "secret-store-openbao-composed-test",
       "validationCommand": "make config-proof; python3 tools/validate-parity/validate-config.py all --json",
       "commandPin": "tsx packages/proof/src/config-secrets-proof.ts",
-      "commitPin": "cadfa586fcad15d673669ef65dcfc2caccd7600a",
+      "commitPin": "5bcb10f4c722dabb3d304f781ae6c92e466ecaeb",
       "issueLinks": [
         "USF-145",
         "USF-190",
@@ -6958,7 +6958,7 @@
         "USF-192",
         "USF-133"
       ],
-      "prOrMergeSha": "cadfa586fcad15d673669ef65dcfc2caccd7600a",
+      "prOrMergeSha": "5bcb10f4c722dabb3d304f781ae6c92e466ecaeb",
       "retentionPosture": "Retain committed proof code, config-secrets enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw secret value, credential, token, raw endpoint, provider payload, or production data is retained."
     }
   ],
