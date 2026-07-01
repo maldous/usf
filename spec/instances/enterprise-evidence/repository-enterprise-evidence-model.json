@@ -7716,7 +7716,7 @@
       "adapterProviderId": "not-applicable-local-PDP-membership-audit-proof",
       "validationCommand": "corepack pnpm proof:operator-lifecycle",
       "commandPin": "tsx packages/proof/src/operator-access-lifecycle-proof.ts",
-      "commitPin": "392767d140691527452d3ca746aac3571b2778ee",
+      "commitPin": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
       "issueLinks": [
         "USF-221",
         "USF-217",
@@ -7727,7 +7727,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "392767d140691527452d3ca746aac3571b2778ee",
+      "prOrMergeSha": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
       "retentionPosture": "Retain committed proof artefact, proof command output in PR validation summary, validator result, planted defects, and Linear reconciliation. No raw endpoint, credential, token, connection string, stack trace, provider payload, production data, or customer data is retained."
     },
     {
@@ -7741,7 +7741,7 @@
       "adapterProviderId": "not-applicable-local-PDP-membership-audit-proof",
       "validationCommand": "corepack pnpm proof:operator-lifecycle",
       "commandPin": "tsx packages/proof/src/operator-access-lifecycle-proof.ts",
-      "commitPin": "392767d140691527452d3ca746aac3571b2778ee",
+      "commitPin": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
       "issueLinks": [
         "USF-221",
         "USF-217",
@@ -7752,7 +7752,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "392767d140691527452d3ca746aac3571b2778ee",
+      "prOrMergeSha": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
       "retentionPosture": "Retain value-free proof command output in the PR validation summary and post-merge Linear reconciliation; no raw endpoint, credential, token, connection string, stack trace, provider payload, production data, or customer data is retained."
     }
   ],
