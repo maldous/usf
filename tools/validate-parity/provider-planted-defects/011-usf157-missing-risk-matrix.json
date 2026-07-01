@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-usf157-missing-risk-matrix",
+  "expectedRuleId": "USF-PROVIDERS-011",
+  "edits": [
+    {
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "old": "\"sourceIssue\": \"USF-157\"",
+      "new": "\"sourceIssue\": \"USF-157-missing\""
+    }
+  ]
+}

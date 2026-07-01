@@ -24,6 +24,11 @@ RULES = {
     "USF-PROVIDERS-008": ("blocking", "capability/provider import boundary violated"),
     "USF-PROVIDERS-009": ("blocking", "provider parity matrix rows lack authorisation/backing"),
     "USF-PROVIDERS-010": ("blocking", "provider live/production/supplier/certification overclaim"),
+    "USF-PROVIDERS-011": ("blocking", "USF-157 provider risk/resilience matrix missing or incomplete"),
+    "USF-PROVIDERS-012": ("blocking", "USF-157 deferred provider risk/resilience control lacks reclassification metadata"),
+    "USF-PROVIDERS-013": ("blocking", "USF-157 composed-provider proof scope reconciliation is incomplete"),
+    "USF-PROVIDERS-014": ("blocking", "USF-157 proof, parity, or enterprise evidence linkage is missing"),
+    "USF-PROVIDERS-015": ("blocking", "USF-157 provider risk/resilience overclaim"),
     "USF-PROVIDERS-SELFTEST": ("blocking", "planted provider defect did not raise its expected rule"),
 }
 
@@ -45,8 +50,11 @@ API_TESTS = "tests/apps/api-contracts.test.ts"
 PROOF_TESTS = "tests/packages/proof.test.ts"
 STANDARD = "docs/architecture/provider-adapters-and-modes-standard.md"
 SOURCE_USE = "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md"
+PROVIDER_RISK_MATRIX = "docs/architecture/provider-risk-resilience-depth-matrix.json"
 BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
 MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
+FUNCTIONALITY_MATRIX = "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json"
+ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
 SELFTEST_DIR = "tools/validate-parity/provider-planted-defects"
@@ -70,6 +78,7 @@ SOURCE_FILES = (
     PROOF_TESTS,
     STANDARD,
     SOURCE_USE,
+    PROVIDER_RISK_MATRIX,
     BOOTSTRAP_SOURCE_USE,
     PACKAGE,
     MAKEFILE,
@@ -105,6 +114,92 @@ REQUIRED_MODES = {
     "live-external-authorised",
     "disabled",
     "unavailable",
+}
+
+REQUIRED_USF157_BINDINGS = {
+    "runtime-database-provider-binding",
+    "mailpit-notification-provider",
+    "nats-event-bus-provider",
+    "minio-object-storage-provider",
+    "keycloak-identity-provider",
+    "openbao-secret-provider",
+    "temporal-workflow-provider",
+    "usf-189-clickhouse-analytics-provider",
+    "usf-189-redis-cache-provider",
+    "usf-189-meilisearch-search-provider",
+    "usf-189-clamav-scanner-provider",
+    "usf-189-localstack-cloud-mock-provider",
+    "usf-209-wiremock-http-mock-provider",
+    "usf-189-webhook-sink-capture-provider",
+    "usf-189-pgbackrest-backup-provider",
+    "usf-189-windmill-automation-provider",
+}
+
+REQUIRED_USF157_CONTROLS = {
+    "composed-provider-proof-scope-reconciliation",
+    "live-external-authorised-provider-authority",
+    "supplier-subprocessor-workflow",
+    "live-egress-allowlist",
+    "tls-certificate-validation",
+    "circuit-breaker-timeout-fallback-bulkhead-runtime",
+    "provider-drift-detection",
+    "provider-incident-hooks",
+    "failover-disaster-recovery-proof",
+    "cache-search-gateway-observability-provider-depth",
+    "composed-provider-readiness-aggregation",
+}
+
+USF157_DEFERRED_CONTROLS = {
+    "live-external-authorised-provider-authority",
+    "supplier-subprocessor-workflow",
+    "live-egress-allowlist",
+    "tls-certificate-validation",
+    "provider-drift-detection",
+    "provider-incident-hooks",
+    "failover-disaster-recovery-proof",
+}
+
+USF157_REQUIRED_ENTERPRISE_REFS = {
+    "usf-157-soa-provider-risk-resilience-depth",
+    "usf-157-evidence-provider-risk-resilience-depth-matrix",
+    "usf-157-threat-provider-risk-resilience-overclaim",
+    "usf-157-access-provider-risk-resilience",
+    "usf-157-resilience-provider-risk-resilience-depth",
+    "usf-157-incident-vulnerability-provider-risk-resilience",
+    "usf-157-privacy-provider-risk-resilience",
+}
+
+USF157_REQUIRED_NON_CLAIMS = {
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure",
+}
+
+USF157_FORBIDDEN_ALLOWED_CLAIMS = {
+    "provider-readiness",
+    "live-provider-readiness",
+    "supplier-approval",
+    "subprocessor-approval",
+    "failover-readiness",
+    "disaster-recovery-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-dev-readiness",
+    "full-react-parity",
+    "usf-133-closure",
 }
 
 FORBIDDEN_IMPORT = re.compile(
@@ -163,6 +258,13 @@ def read_json(path):
         return None
 
 
+def json_from_text(text):
+    try:
+        return json.loads(text)
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     files = {path: read_text(path) for path in SOURCE_FILES}
@@ -170,7 +272,15 @@ def build_state(overrides=None):
         files[path] = text
     matrix = overrides.get("matrix", read_json(MATRIX))
     openapi = overrides.get("openapi", read_json(OPENAPI_JSON))
-    return {"files": files, "matrix": matrix, "openapi": openapi}
+    functionality_matrix = overrides.get("functionality_matrix", read_json(FUNCTIONALITY_MATRIX))
+    enterprise_model = overrides.get("enterprise_model", read_json(ENTERPRISE_MODEL))
+    return {
+        "files": files,
+        "matrix": matrix,
+        "openapi": openapi,
+        "functionality_matrix": functionality_matrix,
+        "enterprise_model": enterprise_model,
+    }
 
 
 def provider_rows(matrix):
@@ -205,6 +315,177 @@ def files_under(path):
     return out
 
 
+def rows_by_id(rows):
+    if not isinstance(rows, list):
+        return {}
+    return {row.get("id"): row for row in rows if isinstance(row, dict) and isinstance(row.get("id"), str)}
+
+
+def check_usf157_provider_risk_resilience(F, files, matrix, functionality_matrix, enterprise_model):
+    text = files.get(PROVIDER_RISK_MATRIX, "")
+    provider_risk = json_from_text(text)
+    if not isinstance(provider_risk, dict):
+        F.add("USF-PROVIDERS-011", PROVIDER_RISK_MATRIX, "USF-157 provider risk/resilience matrix is missing or invalid JSON")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-157",
+        "parentIssue": "USF-133",
+        "dashboardIssue": "USF-184",
+        "coordinatorIssue": "USF-192",
+        "providerStandard": STANDARD,
+        "providerSourceUseMatrix": SOURCE_USE,
+        "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+        "enterpriseEvidenceModel": ENTERPRISE_MODEL,
+        "proofCommand": "corepack pnpm proof:providers",
+        "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+    }
+    for field, expected in expected_top.items():
+        if provider_risk.get(field) != expected:
+            F.add("USF-PROVIDERS-011", f"{PROVIDER_RISK_MATRIX}.{field}", f"expected {expected!r}")
+    if provider_risk.get("status") != "source-issue-bounded-proof-and-reclassification-gate":
+        F.add("USF-PROVIDERS-011", f"{PROVIDER_RISK_MATRIX}.status", "USF-157 matrix has unexpected status")
+
+    issue_links = set(provider_risk.get("issueLinks", []))
+    for issue in {"USF-157", "USF-156", "USF-189", "USF-191", "USF-193", "USF-184", "USF-192", "USF-133"}:
+        if issue not in issue_links:
+            F.add("USF-PROVIDERS-011", f"{PROVIDER_RISK_MATRIX}.issueLinks", f"missing issue link {issue}")
+
+    boundary = provider_risk.get("decisionBoundary", {})
+    if not isinstance(boundary, dict):
+        F.add("USF-PROVIDERS-011", f"{PROVIDER_RISK_MATRIX}.decisionBoundary", "decision boundary missing")
+    else:
+        if boundary.get("selectedApproach") != "bounded-local-proof-plus-explicit-reclassification":
+            F.add("USF-PROVIDERS-011", "decisionBoundary.selectedApproach", "USF-157 selected approach is not explicit")
+        for flag in ("decisionAcceptedDoesNotMeanWorkComplete",):
+            if boundary.get(flag) is not True:
+                F.add("USF-PROVIDERS-011", f"decisionBoundary.{flag}", "status-integrity flag must be true")
+        for flag in ("sourceIssueDoneByImplication", "usf133ClosureClaimed"):
+            if boundary.get(flag) is not False:
+                F.add("USF-PROVIDERS-015", f"decisionBoundary.{flag}", "USF-157 must not imply Done or USF-133 closure")
+
+    proof_scope = provider_risk.get("currentComposedProviderProofScope", [])
+    if not isinstance(proof_scope, list):
+        F.add("USF-PROVIDERS-013", f"{PROVIDER_RISK_MATRIX}.currentComposedProviderProofScope", "proof scope must be a list")
+        proof_scope = []
+    bindings = rows_by_id([{**row, "id": row.get("bindingId")} for row in proof_scope if isinstance(row, dict)])
+    missing_bindings = REQUIRED_USF157_BINDINGS - set(bindings)
+    if missing_bindings:
+        F.add("USF-PROVIDERS-013", f"{PROVIDER_RISK_MATRIX}.currentComposedProviderProofScope", f"missing bindings: {sorted(missing_bindings)}")
+    for binding_id, row in bindings.items():
+        if row.get("evidenceStatus") not in {"proven-local", "profile-gated-proven-local"}:
+            F.add("USF-PROVIDERS-013", binding_id, "binding evidence status must be bounded local proof")
+        if not row.get("providerRegistryIds") or not row.get("serviceCatalogueServiceIds") or not row.get("proofCommand"):
+            F.add("USF-PROVIDERS-013", binding_id, "binding lacks registry/service/proof linkage")
+
+    controls = rows_by_id(
+        [{**row, "id": row.get("controlId")} for row in provider_risk.get("riskResilienceControls", []) if isinstance(row, dict)]
+    )
+    missing_controls = REQUIRED_USF157_CONTROLS - set(controls)
+    if missing_controls:
+        F.add("USF-PROVIDERS-011", f"{PROVIDER_RISK_MATRIX}.riskResilienceControls", f"missing controls: {sorted(missing_controls)}")
+    for control_id, row in controls.items():
+        for field in (
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "riskTreatment",
+            "reviewDate",
+            "followUpIssue",
+            "evidenceSource",
+            "validationCommand",
+            "reclassificationBoundary",
+        ):
+            if not row.get(field):
+                F.add("USF-PROVIDERS-012", control_id, f"control lacks {field}")
+        if not row.get("promotionImpact"):
+            F.add("USF-PROVIDERS-012", control_id, "control lacks promotion impact")
+        if row.get("readinessClaimAllowed") is not False:
+            F.add("USF-PROVIDERS-015", control_id, "control allows readiness claim")
+    for control_id in USF157_DEFERRED_CONTROLS:
+        row = controls.get(control_id)
+        if not row:
+            continue
+        if row.get("effectivenessState") != "deferred-with-owner" or row.get("implementationStatus") != "explicitly-reclassified":
+            F.add("USF-PROVIDERS-012", control_id, "deferred control must be explicitly reclassified with owner")
+
+    synthetic = provider_risk.get("syntheticRiskResilienceProof", {})
+    if not isinstance(synthetic, dict):
+        F.add("USF-PROVIDERS-014", "syntheticRiskResilienceProof", "synthetic proof markers are missing")
+    else:
+        expected_true = {
+            "liveAuthorityUnauthorisedFailsClosed",
+            "boundedRetryTimeoutFallbackEvidenceRecorded",
+            "sdkBoundaryEvidenceRecorded",
+            "redactionBoundaryRecorded",
+            "tenantBoundaryRecorded",
+            "secretBoundaryRecorded",
+            "auditEvidenceBoundaryRecorded",
+            "cleanupTeardownBoundaryRecorded",
+        }
+        for field in expected_true:
+            if synthetic.get(field) is not True:
+                F.add("USF-PROVIDERS-014", f"syntheticRiskResilienceProof.{field}", "expected true")
+        expected_false = {
+            "supplierApprovalClaimAllowed",
+            "liveEgressAllowedByCurrentProof",
+            "tlsCertificateLiveValidationClaim",
+            "providerDriftRuntimeDetectionClaim",
+            "incidentHookOperatingEvidenceClaim",
+            "failoverReadinessClaim",
+            "disasterRecoveryReadinessClaim",
+        }
+        for field in expected_false:
+            if synthetic.get(field) is not False:
+                F.add("USF-PROVIDERS-015", f"syntheticRiskResilienceProof.{field}", "expected false")
+        if synthetic.get("composedReadinessAggregationClaim") != "bounded-evidence-index-only":
+            F.add("USF-PROVIDERS-015", "syntheticRiskResilienceProof.composedReadinessAggregationClaim", "readiness aggregation overclaims")
+
+    allowed = set(provider_risk.get("readinessClaimsAllowed", []))
+    prohibited = set(provider_risk.get("readinessClaimsProhibited", []))
+    nonclaims = set(provider_risk.get("nonClaims", []))
+    if allowed & USF157_FORBIDDEN_ALLOWED_CLAIMS:
+        F.add("USF-PROVIDERS-015", "readinessClaimsAllowed", "USF-157 allows prohibited provider readiness claims")
+    missing_prohibited = USF157_FORBIDDEN_ALLOWED_CLAIMS - prohibited
+    if missing_prohibited:
+        F.add("USF-PROVIDERS-015", "readinessClaimsProhibited", f"missing prohibited claims: {sorted(missing_prohibited)}")
+    missing_nonclaims = USF157_REQUIRED_NON_CLAIMS - nonclaims
+    if missing_nonclaims:
+        F.add("USF-PROVIDERS-015", "nonClaims", f"missing non-claims: {sorted(missing_nonclaims)}")
+    status_integrity = provider_risk.get("statusIntegrity", {})
+    if not isinstance(status_integrity, dict):
+        F.add("USF-PROVIDERS-015", "statusIntegrity", "status-integrity block missing")
+    else:
+        if status_integrity.get("usf133ClosureClaimed") is not False:
+            F.add("USF-PROVIDERS-015", "statusIntegrity.usf133ClosureClaimed", "USF-133 closure is implied")
+        if status_integrity.get("usf39Touched") is not False:
+            F.add("USF-PROVIDERS-015", "statusIntegrity.usf39Touched", "USF-39 touch is implied")
+
+    refs = set(provider_risk.get("enterpriseEvidenceRefs", []))
+    missing_refs = USF157_REQUIRED_ENTERPRISE_REFS - refs
+    if missing_refs:
+        F.add("USF-PROVIDERS-014", "enterpriseEvidenceRefs", f"missing enterprise refs: {sorted(missing_refs)}")
+    model_text = json.dumps(enterprise_model or {}, sort_keys=True)
+    for ref in USF157_REQUIRED_ENTERPRISE_REFS:
+        if ref not in model_text:
+            F.add("USF-PROVIDERS-014", ENTERPRISE_MODEL, f"enterprise model missing {ref}")
+    if "provider risk/resilience aggregate" not in files.get(SOURCE_USE, "").lower():
+        F.add("USF-PROVIDERS-014", SOURCE_USE, "source-use matrix lacks USF-157 aggregate row")
+    if "USF-157 provider risk/resilience aggregate" not in files.get(STANDARD, ""):
+        F.add("USF-PROVIDERS-014", STANDARD, "provider standard lacks USF-157 aggregate linkage")
+
+    provider_rows_in_matrix = provider_rows(matrix)
+    provider_main = [row for row in provider_rows_in_matrix if row.get("react_item_id") == "provider-adapters-modes"]
+    if provider_main and "provider-risk-resilience-depth-matrix.json" not in json.dumps(provider_main[0]):
+        F.add("USF-PROVIDERS-014", MATRIX, "provider main row lacks USF-157 aggregate matrix evidence")
+    if isinstance(functionality_matrix, dict):
+        provider_capability = [
+            row for row in functionality_matrix.get("capabilities", []) if row.get("capability_id") == "providers"
+        ]
+        if not provider_capability or "provider-risk-resilience-depth-matrix.json" not in json.dumps(provider_capability[0]):
+            F.add("USF-PROVIDERS-014", FUNCTIONALITY_MATRIX, "functionality provider row lacks USF-157 aggregate matrix evidence")
+
+
 def run_checks(F, state=None):
     state = state or build_state()
     files = state["files"]
@@ -229,6 +510,8 @@ def run_checks(F, state=None):
     makefile = files[MAKEFILE]
     matrix = state["matrix"]
     openapi = state["openapi"]
+    functionality_matrix = state.get("functionality_matrix")
+    enterprise_model = state.get("enterprise_model")
 
     if not all(token in core for token in ["PROVIDER_CATEGORIES", "PROVIDER_MODES", "ProviderRegistryEntry"]):
         F.add("USF-PROVIDERS-001", CORE, "provider registry/model missing")
@@ -334,12 +617,16 @@ def run_checks(F, state=None):
         if phrase in overclaim_sources.lower():
             F.add("USF-PROVIDERS-010", "provider-overclaim", f"provider overclaim phrase present: {phrase}")
 
+    check_usf157_provider_risk_resilience(F, files, matrix, functionality_matrix, enterprise_model)
+
 
 def apply_defect(state, defect):
     mutated = {
         "files": dict(state["files"]),
         "matrix": json.loads(json.dumps(state["matrix"])),
         "openapi": json.loads(json.dumps(state["openapi"])),
+        "functionality_matrix": json.loads(json.dumps(state.get("functionality_matrix"))),
+        "enterprise_model": json.loads(json.dumps(state.get("enterprise_model"))),
     }
     for edit in defect.get("edits", []):
         target = edit["target"]
@@ -350,6 +637,16 @@ def apply_defect(state, defect):
             if old not in text:
                 raise AssertionError(f"old text not found in matrix for defect {defect.get('id')}")
             mutated["matrix"] = json.loads(text.replace(old, new, 1))
+        elif target == "functionality_matrix":
+            text = json.dumps(mutated["functionality_matrix"])
+            if old not in text:
+                raise AssertionError(f"old text not found in functionality_matrix for defect {defect.get('id')}")
+            mutated["functionality_matrix"] = json.loads(text.replace(old, new, 1))
+        elif target == "enterprise_model":
+            text = json.dumps(mutated["enterprise_model"])
+            if old not in text:
+                raise AssertionError(f"old text not found in enterprise_model for defect {defect.get('id')}")
+            mutated["enterprise_model"] = json.loads(text.replace(old, new, 1))
         elif target == "openapi":
             text = json.dumps(mutated["openapi"])
             if old not in text:

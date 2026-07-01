@@ -196,10 +196,10 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "Provider adapter packages and compose lineage",
-      "readiness_impact": "Several live/composed providers remain deferred or decision-bound.",
-      "tracking_carrier_or_recommendation": "USF-156/USF-157",
-      "usf_evidence_summary": "USF providers proof",
-      "usf_status": "partial"
+      "readiness_impact": "USF-157 records a machine-checkable provider risk/resilience aggregate: active and profile-gated local composed-provider proof scope is reconciled, while live-provider authority, supplier/subprocessor approval, live egress, live TLS/certificates, drift, incident hooks, failover, DR, promotion readiness, and USF-133 closure remain explicit non-claims or deferred controls.",
+      "tracking_carrier_or_recommendation": "USF-156/USF-157; docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "usf_evidence_summary": "USF providers proof plus USF-157 aggregate matrix, provider validator rules USF-PROVIDERS-011 through USF-PROVIDERS-015, enterprise evidence rows, and planted defects.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
     },
     {
       "blocking_level": "P1",

@@ -1,0 +1,542 @@
+{
+  "id": "usf-157-provider-risk-resilience-depth-matrix",
+  "title": "USF-157 Provider Risk Resilience Depth Matrix",
+  "status": "source-issue-bounded-proof-and-reclassification-gate",
+  "sourceIssue": "USF-157",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-191",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "providerStandard": "docs/architecture/provider-adapters-and-modes-standard.md",
+  "providerSourceUseMatrix": "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+  "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+  "providerRegistry": "packages/core/src/index.ts",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+  "proofCommand": "corepack pnpm proof:providers",
+  "issueLinks": [
+    "USF-157",
+    "USF-156",
+    "USF-172",
+    "USF-173",
+    "USF-174",
+    "USF-175",
+    "USF-176",
+    "USF-177",
+    "USF-178",
+    "USF-184",
+    "USF-189",
+    "USF-191",
+    "USF-192",
+    "USF-193",
+    "USF-133"
+  ],
+  "decisionBoundary": {
+    "decisionAcceptedDoesNotMeanWorkComplete": true,
+    "sourceIssueDoneByImplication": false,
+    "usf133ClosureClaimed": false,
+    "selectedApproach": "bounded-local-proof-plus-explicit-reclassification",
+    "summary": "USF-157 reconciles current bounded local composed-provider proofs with remaining provider risk and resilience controls. Local or composed proof may satisfy only the explicitly recorded local proof boundary. Live-provider authority, supplier approval, failover readiness, disaster recovery readiness, promotion readiness, and certification remain prohibited claims unless a later source issue proves them."
+  },
+  "currentComposedProviderProofScope": [
+    {
+      "bindingId": "runtime-database-provider-binding",
+      "serviceCatalogueServiceIds": ["postgres"],
+      "providerRegistryIds": ["database-postgres-composed-test"],
+      "evidenceStatus": "proven-local",
+      "proofSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "proofCommand": "corepack pnpm runtime:proof:compose"
+    },
+    {
+      "bindingId": "mailpit-notification-provider",
+      "serviceCatalogueServiceIds": ["mailpit"],
+      "providerRegistryIds": ["notification-delivery-mailpit-composed-test"],
+      "evidenceStatus": "proven-local",
+      "proofSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "proofCommand": "corepack pnpm runtime:proof:compose"
+    },
+    {
+      "bindingId": "nats-event-bus-provider",
+      "serviceCatalogueServiceIds": ["nats"],
+      "providerRegistryIds": ["event-bus-nats-composed-test"],
+      "evidenceStatus": "proven-local",
+      "proofSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "proofCommand": "corepack pnpm runtime:proof:compose"
+    },
+    {
+      "bindingId": "minio-object-storage-provider",
+      "serviceCatalogueServiceIds": ["minio"],
+      "providerRegistryIds": ["object-storage-minio-composed-test"],
+      "evidenceStatus": "proven-local",
+      "proofSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "proofCommand": "corepack pnpm runtime:proof:compose"
+    },
+    {
+      "bindingId": "keycloak-identity-provider",
+      "serviceCatalogueServiceIds": ["keycloak", "keycloak-db"],
+      "providerRegistryIds": ["identity-keycloak-composed-test"],
+      "evidenceStatus": "proven-local",
+      "proofSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "proofCommand": "corepack pnpm runtime:proof:compose"
+    },
+    {
+      "bindingId": "openbao-secret-provider",
+      "serviceCatalogueServiceIds": ["openbao"],
+      "providerRegistryIds": ["secret-store-openbao-composed-test"],
+      "evidenceStatus": "proven-local",
+      "proofSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "proofCommand": "corepack pnpm runtime:proof:compose"
+    },
+    {
+      "bindingId": "temporal-workflow-provider",
+      "serviceCatalogueServiceIds": ["temporal"],
+      "providerRegistryIds": ["workflow-engine-temporal-composed-test"],
+      "evidenceStatus": "proven-local",
+      "proofSource": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "proofCommand": "corepack pnpm runtime:proof:compose"
+    },
+    {
+      "bindingId": "usf-189-clickhouse-analytics-provider",
+      "serviceCatalogueServiceIds": ["clickhouse"],
+      "providerRegistryIds": [
+        "analytics-store-clickhouse-composed-test",
+        "analytics-store-clickhouse-deferred"
+      ],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:analytics:clickhouse"
+    },
+    {
+      "bindingId": "usf-189-redis-cache-provider",
+      "serviceCatalogueServiceIds": ["redis"],
+      "providerRegistryIds": ["cache-redis-composed-test", "cache-redis-deferred"],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/cache-eventing-service-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:cache:redis"
+    },
+    {
+      "bindingId": "usf-189-meilisearch-search-provider",
+      "serviceCatalogueServiceIds": ["meilisearch"],
+      "providerRegistryIds": [
+        "full-text-search-meilisearch-composed-test",
+        "full-text-search-meilisearch-deferred"
+      ],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/composed-search-provider-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:search:meilisearch"
+    },
+    {
+      "bindingId": "usf-189-clamav-scanner-provider",
+      "serviceCatalogueServiceIds": ["clamav"],
+      "providerRegistryIds": ["file-scan-clamav-composed-test", "file-scan-clamav-deferred"],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/file-scanner-provider-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:scanner:clamav"
+    },
+    {
+      "bindingId": "usf-189-localstack-cloud-mock-provider",
+      "serviceCatalogueServiceIds": ["localstack"],
+      "providerRegistryIds": [
+        "provider-emulator-localstack-composed-test",
+        "provider-emulator-localstack-deferred"
+      ],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:localstack"
+    },
+    {
+      "bindingId": "usf-209-wiremock-http-mock-provider",
+      "serviceCatalogueServiceIds": ["wiremock"],
+      "providerRegistryIds": [
+        "provider-mock-wiremock-composed-test",
+        "provider-mock-wiremock-deferred"
+      ],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:wiremock"
+    },
+    {
+      "bindingId": "usf-189-webhook-sink-capture-provider",
+      "serviceCatalogueServiceIds": ["webhook-sink"],
+      "providerRegistryIds": [
+        "notification-delivery-webhook-sink-composed-test",
+        "notification-delivery-webhook-sink-deferred"
+      ],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/mock-provider-substrate-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:mock-substrate"
+    },
+    {
+      "bindingId": "usf-189-pgbackrest-backup-provider",
+      "serviceCatalogueServiceIds": ["pgbackrest"],
+      "providerRegistryIds": [
+        "backup-restore-pgbackrest-composed-test",
+        "backup-restore-pgbackrest-deferred"
+      ],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/backup-restore-provider-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:backup:pgbackrest"
+    },
+    {
+      "bindingId": "usf-189-windmill-automation-provider",
+      "serviceCatalogueServiceIds": [
+        "windmill",
+        "windmill-worker",
+        "windmill-postgres",
+        "windmill-redis"
+      ],
+      "providerRegistryIds": [
+        "operational-job-engine-windmill-composed-test",
+        "operational-job-engine-windmill-deferred"
+      ],
+      "evidenceStatus": "profile-gated-proven-local",
+      "proofSource": "docs/architecture/operator-workflow-provider-disposition-matrix.json",
+      "proofCommand": "corepack pnpm proof:workflow:windmill"
+    }
+  ],
+  "riskResilienceControls": [
+    {
+      "controlId": "composed-provider-proof-scope-reconciliation",
+      "effectivenessState": "proven-local",
+      "implementationStatus": "implemented-and-proven",
+      "riskStatement": "Current composed provider bindings could be overclaimed or treated as complete provider readiness if active and profile-gated proof rows are not reconciled together.",
+      "threatFailureScenario": "A bounded local proof row is used as evidence for a service, capability, or readiness claim it did not exercise.",
+      "affectedAssetService": "runtime proof manifest and provider registry",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "mitigate",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "none-for-USF-157-bounded-reconciliation",
+      "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json#currentComposedProviderProofScope",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Only local and profile-gated composed proof scope is reconciled. Stronger provider readiness claims remain prohibited.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "live-external-authorised-provider-authority",
+      "effectivenessState": "deferred-with-owner",
+      "implementationStatus": "explicitly-reclassified",
+      "riskStatement": "A live provider could be enabled without explicit authority, egress, credential, supplier, incident, and proof evidence.",
+      "threatFailureScenario": "A local provider registry entry or compose proof is treated as live-external-authorised authority.",
+      "affectedAssetService": "provider registry and future live provider candidates",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-live-provider-authority-source-issue-required",
+      "evidenceSource": "packages/core/src/index.ts#live-external-authorised-validation",
+      "validationCommand": "corepack pnpm proof:providers",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Live provider authority is not part of the current selected local proof tier. Registry validation rejects unauthorised live providers and no live-provider readiness claim is allowed.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "supplier-subprocessor-workflow",
+      "effectivenessState": "deferred-with-owner",
+      "implementationStatus": "explicitly-reclassified",
+      "riskStatement": "Provider supplier or subprocessor approval could be inferred from local proof metadata.",
+      "threatFailureScenario": "A local or emulator provider proof is treated as legal, privacy, procurement, or subprocessor approval.",
+      "affectedAssetService": "future live providers and provider-managed services",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-supplier-subprocessor-approval-source-issue-required",
+      "evidenceSource": "packages/core/src/index.ts#supplierPosture",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Supplier fields are posture metadata only. They are not supplier approval, subprocessor approval, SOC readiness, ISO certification, or production approval.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "live-egress-allowlist",
+      "effectivenessState": "deferred-with-owner",
+      "implementationStatus": "explicitly-reclassified",
+      "riskStatement": "Provider egress could be opened to arbitrary destinations without a machine-checkable allowlist.",
+      "threatFailureScenario": "Local endpoint references or emulator endpoints are treated as live egress approval.",
+      "affectedAssetService": "future live provider network path",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-193",
+      "evidenceSource": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness"
+      ],
+      "reclassificationBoundary": "Current provider proof is loopback/local/emulator only. Live egress allowlisting remains a promotion gate and is not satisfied by composed-test evidence.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "tls-certificate-validation",
+      "effectivenessState": "deferred-with-owner",
+      "implementationStatus": "explicitly-reclassified",
+      "riskStatement": "TLS and certificate validation for live providers could be implied by local HTTP or loopback proof.",
+      "threatFailureScenario": "Local Compose or emulator transport posture is upgraded to live TLS validation.",
+      "affectedAssetService": "future live provider transport boundary",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-193",
+      "evidenceSource": "docs/architecture/provider-adapters-and-modes-standard.md#transport-security",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness"
+      ],
+      "reclassificationBoundary": "Live TLS, certificate pinning, CA bundle, and mTLS evidence remains unproven. Local Compose exceptions do not satisfy live transport readiness.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "circuit-breaker-timeout-fallback-bulkhead-runtime",
+      "effectivenessState": "bounded-local-proof",
+      "implementationStatus": "implemented-bounded",
+      "riskStatement": "Timeout, retry, unavailable provider, fallback, and bulkhead posture could be hidden behind a broad provider health claim.",
+      "threatFailureScenario": "A provider proof passes readiness while failing to record bounded retry, timeout, fail-closed unavailable state, or degraded-mode boundaries.",
+      "affectedAssetService": "provider adapters and proof harnesses",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "mitigate",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-runtime-bulkhead-source-issue-required-before-stronger-claim",
+      "evidenceSource": "provider registry resiliencePosture plus provider proof commands",
+      "validationCommand": "corepack pnpm proof:providers",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Bounded local proof records retry, timeout, unavailable fail-closed, and no readiness overclaim. Production bulkhead, fallback, and circuit-breaker operating readiness remain unclaimed.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "provider-drift-detection",
+      "effectivenessState": "deferred-with-owner",
+      "implementationStatus": "explicitly-reclassified",
+      "riskStatement": "Provider configuration drift could remain undetected in live or promoted environments.",
+      "threatFailureScenario": "Static registry posture is treated as runtime drift detection.",
+      "affectedAssetService": "provider registry and future promoted providers",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-provider-drift-detector-source-issue-required",
+      "evidenceSource": "packages/core/src/index.ts#driftPosture",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Drift posture fields exist, but runtime drift collection, exception workflow, alerting, and operating evidence are not claimed.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "provider-incident-hooks",
+      "effectivenessState": "deferred-with-owner",
+      "implementationStatus": "explicitly-reclassified",
+      "riskStatement": "Provider incident or vulnerability hooks could be claimed from local proof failure handling alone.",
+      "threatFailureScenario": "Proof failure output is treated as production incident detection, alerting, escalation, or post-incident review readiness.",
+      "affectedAssetService": "provider incident and vulnerability evidence boundary",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-159",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#incidentVulnerabilityManagementEvidence",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Local proof failure handling is corrective-action evidence only. Production incident hooks, alerting, escalation, advisory handling, and post-incident evidence remain unproven.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "failover-disaster-recovery-proof",
+      "effectivenessState": "deferred-with-owner",
+      "implementationStatus": "explicitly-reclassified",
+      "riskStatement": "Provider failover, failback, disaster recovery, RPO, or RTO could be inferred from single-provider local proof.",
+      "threatFailureScenario": "A local cold backup, emulator proof, or provider retry is treated as DR readiness.",
+      "affectedAssetService": "data-bearing and critical provider services",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-177",
+      "evidenceSource": "docs/architecture/backup-restore-provider-disposition-matrix.json",
+      "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Single-provider local proof, cold backup restore readback, retries, and cleanup do not satisfy failover, failback, DR, RPO, or RTO readiness.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "cache-search-gateway-observability-provider-depth",
+      "effectivenessState": "bounded-local-proof-and-deferred-with-owner",
+      "implementationStatus": "implemented-bounded-and-explicitly-reclassified",
+      "riskStatement": "Provider depth for cache, search, gateway, and observability could be hidden behind generic provider proof or local SDK-envelope evidence.",
+      "threatFailureScenario": "Redis, Meilisearch, Sentry, SonarQube, gateway, or operator-surface evidence is treated as broad readiness or live-provider coverage.",
+      "affectedAssetService": "redis, meilisearch, sentry, sonarqube, caddy gateway, provider status surfaces",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "mitigate-and-defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-155,USF-159,USF-173,USF-174",
+      "evidenceSource": "docs/architecture/cache-eventing-service-disposition-matrix.json; docs/architecture/composed-search-provider-disposition-matrix.json; docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "Cache and search have bounded profile-gated local proofs. Gateway and observability readiness depth remains owned by source issues and cannot be inferred from provider registry or local SDK proof.",
+      "readinessClaimAllowed": false
+    },
+    {
+      "controlId": "composed-provider-readiness-aggregation",
+      "effectivenessState": "implemented-bounded",
+      "implementationStatus": "implemented-bounded-and-explicitly-reclassified",
+      "riskStatement": "Aggregating many composed-provider proofs could imply universal dev readiness or USF-133 closure.",
+      "threatFailureScenario": "All local provider proof commands passing is treated as full dev readiness, test readiness, or full React parity.",
+      "affectedAssetService": "USF-133 provider proof set",
+      "owner": "platform-provider-foundation",
+      "riskOwner": "platform-provider-risk-owner",
+      "controlOwner": "platform-provider-control-owner",
+      "riskTreatment": "mitigate",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-133",
+      "evidenceSource": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-providers.py all --json",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "reclassificationBoundary": "The aggregation records which bounded proofs exist and which stronger claims are prohibited. It is not a readiness gate pass and does not close USF-133.",
+      "readinessClaimAllowed": false
+    }
+  ],
+  "syntheticRiskResilienceProof": {
+    "liveAuthorityUnauthorisedFailsClosed": true,
+    "supplierApprovalClaimAllowed": false,
+    "liveEgressAllowedByCurrentProof": false,
+    "tlsCertificateLiveValidationClaim": false,
+    "boundedRetryTimeoutFallbackEvidenceRecorded": true,
+    "providerDriftRuntimeDetectionClaim": false,
+    "incidentHookOperatingEvidenceClaim": false,
+    "failoverReadinessClaim": false,
+    "disasterRecoveryReadinessClaim": false,
+    "composedReadinessAggregationClaim": "bounded-evidence-index-only",
+    "sdkBoundaryEvidenceRecorded": true,
+    "redactionBoundaryRecorded": true,
+    "tenantBoundaryRecorded": true,
+    "secretBoundaryRecorded": true,
+    "auditEvidenceBoundaryRecorded": true,
+    "cleanupTeardownBoundaryRecorded": true
+  },
+  "enterpriseEvidenceRefs": [
+    "usf-157-soa-provider-risk-resilience-depth",
+    "usf-157-evidence-provider-risk-resilience-depth-matrix",
+    "usf-157-threat-provider-risk-resilience-overclaim",
+    "usf-157-access-provider-risk-resilience",
+    "usf-157-resilience-provider-risk-resilience-depth",
+    "usf-157-incident-vulnerability-provider-risk-resilience",
+    "usf-157-privacy-provider-risk-resilience"
+  ],
+  "readinessClaimsAllowed": [
+    "provider-risk-resilience-depth-reconciled",
+    "bounded-local-provider-proof-scope-indexed",
+    "live-provider-depth-explicitly-reclassified",
+    "supplier-subprocessor-depth-explicitly-reclassified",
+    "failover-dr-depth-explicitly-reclassified"
+  ],
+  "readinessClaimsProhibited": [
+    "provider-readiness",
+    "live-provider-readiness",
+    "supplier-approval",
+    "subprocessor-approval",
+    "failover-readiness",
+    "disaster-recovery-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-dev-readiness",
+    "full-react-parity",
+    "usf-133-closure"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ],
+  "statusIntegrity": {
+    "validationPassingAloneIsDone": false,
+    "wrapperDoneMeansSourceDone": false,
+    "sourceIssueDoneRequiresMergedEvidence": true,
+    "usf133ClosureClaimed": false,
+    "usf39Touched": false
+  }
+}

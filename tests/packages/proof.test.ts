@@ -80,6 +80,10 @@ describe("provider adapters/modes proof", () => {
       liveExternalProviderReadinessClaim: false,
       productionLiveClaim: false,
       supplierApprovalClaim: false,
+      failoverReadinessClaim: false,
+      disasterRecoveryReadinessClaim: false,
+      usf133ClosureClaim: false,
+      providerRiskResilienceDepthReconciled: true,
     });
   });
 });

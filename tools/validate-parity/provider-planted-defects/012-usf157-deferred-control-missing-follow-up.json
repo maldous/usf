@@ -1,0 +1,11 @@
+{
+  "id": "provider-defect-usf157-deferred-control-missing-follow-up",
+  "expectedRuleId": "USF-PROVIDERS-012",
+  "edits": [
+    {
+      "target": "docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "old": "\"future-live-provider-authority-source-issue-required\"",
+      "new": "\"\""
+    }
+  ]
+}
