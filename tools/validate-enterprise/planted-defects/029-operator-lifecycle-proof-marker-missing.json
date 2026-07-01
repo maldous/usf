@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-ENTERPRISE-029",
+  "operatorAccessProofTextReplace": [
+    {
+      "from": "revokedMembershipFailsClosed",
+      "to": "revokedMembershipBoundaryMissing"
+    }
+  ]
+}

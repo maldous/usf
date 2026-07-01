@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-ENTERPRISE-029",
+  "packageScriptDrop": [
+    "proof:operator-lifecycle"
+  ]
+}

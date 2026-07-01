@@ -5175,6 +5175,68 @@
         "usf-133-closure"
       ],
       "mappedType": "source-issue-backup-restore-dr-rpo-rto-operational-depth"
+    },
+    {
+      "id": "soa-usf-221-operator-lifecycle-execution-proof",
+      "mappedType": "source-issue-operator-access-review-deprovisioning-execution-proof",
+      "controlPurpose": "Organize bounded local operator access-review workflow, deprovisioning workflow, revocation fail-closed, and audit evidence for USF-221 without claiming operator-console readiness.",
+      "riskTreated": "Operator access-review or deprovisioning posture could be mistaken for executed workflow proof, provider-console lifecycle integration, public operator exposure, environment promotion readiness, or USF-133 closure.",
+      "assetServiceAffected": "keycloak,minio,openbao,prometheus,grafana,loki,tempo,mailpit,pgadmin,sonarqube,alertmanager,windmill,temporal-ui,sentry,caddy",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-221; proofCommand=corepack pnpm proof:operator-lifecycle; providerConsoleIntegration=false; publicExposureClaim=false; operatorConsoleReadinessClaim=false",
+      "evidenceSource": "docs/architecture/operator-access-review-deprovisioning-execution-proof.json; packages/proof/src/operator-access-lifecycle-proof.ts; USF-221; USF-217; USF-133",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "provider-console SSO, clickthrough routes, external IdP lifecycle integration, public gateway exposure, environment promotion, production operator operation, live-provider operation, and USF-133 closure remain unproven; owner=platform-access-foundation; reviewDate=2026-09-30 provider-console-readiness, identity-provider-lifecycle-readiness, public-operator-exposure, operator-console-readiness, and usf-133-closure are non-claims.",
+      "nonClaims": [
+        "public-operator-exposure",
+        "operator-console-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-dev-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "provider-console-readiness",
+        "identity-provider-lifecycle-readiness"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-operator-lifecycle",
+      "mappedType": "proof-command",
+      "controlPurpose": "Map the USF-221 bounded local operator access-review and deprovisioning lifecycle proof to SoA-support evidence without claiming operator-console readiness.",
+      "riskTreated": "Operator access-review and deprovisioning workflow evidence could be inferred from posture documentation alone, or local membership revocation could be mistaken for provider-console SSO, external IdP lifecycle integration, public operator exposure, environment promotion, or USF-133 closure.",
+      "assetServiceAffected": "operator/admin/control-plane service rows from docs/architecture/operator-access-gateway-posture-matrix.json and spec/instances/compose-service/service-catalogue.json",
+      "owner": "platform-access-foundation",
+      "riskOwner": "platform-access-risk-owner",
+      "controlOwner": "platform-access-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-221; runtimeMode=hermetic-local-proof; providerMode=hermetic-mock; providerConsoleReadinessClaim=false; identityProviderLifecycleReadinessClaim=false; publicOperatorExposureClaim=false; operatorConsoleReadinessClaim=false; usf133ClosureClaim=false",
+      "evidenceSource": "packages/proof/src/operator-access-lifecycle-proof.ts; docs/architecture/operator-access-review-deprovisioning-execution-proof.json; USF-221; USF-217; USF-133",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle",
+      "deferredReason": "Provider-console SSO, clickthrough routes, external IdP lifecycle integration, public gateway exposure, environment promotion, recurring production access review, live-provider operation, and USF-133 closure remain unproven and deferred to linked source issues.",
+      "nonClaims": [
+        "public-operator-exposure",
+        "operator-console-readiness",
+        "provider-console-readiness",
+        "identity-provider-lifecycle-readiness",
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7642,6 +7704,56 @@
       "proofResult": "backup-restore-dr-rpo-rto-operational-depth-disposition",
       "commandPin": "python3 tools/validate-runtime/validate-runtime.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json; python3 tools/validate-parity/validate-parity.py all --json",
       "commitPin": "d536438526a30ebb407bc99d359d3c9a9e2a3c30"
+    },
+    {
+      "id": "evidence-usf-221-operator-lifecycle-execution-proof",
+      "proofResult": "operator-access-review-deprovisioning-lifecycle",
+      "whatWasProven": "USF-221 proves bounded local execution of operator access-review workflow, deprovisioning authorization, revoked-membership fail-closed behaviour, tenant-admin denial, cross-tenant denial, and value-free audit-chain verification for every in-scope operator/admin/control-plane service row.",
+      "whatWasNotProven": "USF-221 does not prove provider-console-readiness, identity-provider-lifecycle-readiness, public-operator-exposure, operator-console-readiness, provider-console login, provider-console deprovisioning, clickthrough SSO, external IdP lifecycle integration, public gateway exposure, recurring production access-review operation, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-dev-readiness, full-react-parity-readiness, or usf-133-closure.",
+      "runtimeMode": "hermetic-local-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#operator-admin-services; docs/architecture/operator-access-review-deprovisioning-execution-proof.json",
+      "adapterProviderId": "not-applicable-local-PDP-membership-audit-proof",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle",
+      "commandPin": "tsx packages/proof/src/operator-access-lifecycle-proof.ts",
+      "commitPin": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
+      "issueLinks": [
+        "USF-221",
+        "USF-217",
+        "USF-169",
+        "USF-180",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
+      "retentionPosture": "Retain committed proof artefact, proof command output in PR validation summary, validator result, planted defects, and Linear reconciliation. No raw endpoint, credential, token, connection string, stack trace, provider payload, production data, or customer data is retained."
+    },
+    {
+      "id": "evidence-proof-proof-operator-lifecycle",
+      "proofResult": "proof:operator-lifecycle",
+      "whatWasProven": "USF-221 bounded local proof executes security-admin access-review decisions, tenant-admin denial, cross-tenant denial, deprovisioning authorization, revoked-membership fail-closed behaviour, value-free audit evidence, and hash-chain verification for every in-scope operator/admin/control-plane service row.",
+      "whatWasNotProven": "Does not prove provider-console-readiness, identity-provider-lifecycle-readiness, public-operator-exposure, operator-console-readiness, provider-console SSO, clickthrough routes, external IdP lifecycle integration, public gateway exposure, recurring production access-review operation, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-dev-readiness, full-react-parity-readiness, or usf-133-closure.",
+      "runtimeMode": "hermetic-local-proof",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#operator-admin-services; docs/architecture/operator-access-review-deprovisioning-execution-proof.json",
+      "adapterProviderId": "not-applicable-local-PDP-membership-audit-proof",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle",
+      "commandPin": "tsx packages/proof/src/operator-access-lifecycle-proof.ts",
+      "commitPin": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
+      "issueLinks": [
+        "USF-221",
+        "USF-217",
+        "USF-169",
+        "USF-180",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "1109f36fde8ca2459b598a1e5bdc3f6f9073a122",
+      "retentionPosture": "Retain value-free proof command output in the PR validation summary and post-merge Linear reconciliation; no raw endpoint, credential, token, connection string, stack trace, provider payload, production data, or customer data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -9819,6 +9931,31 @@
       "failClosedBehaviour": "validators fail on missing USF-219 artefact, missing USF-223 follow-up, missing promotion impact, missing enterprise evidence, or readiness overclaim",
       "monitoringAuditEvidence": "value-free repository evidence only; operational alerting and incident workflow remain deferred to USF-223 or later environment-promotion issues",
       "residualRisk": "future operational proof remains required before backup, restore, DR, PITR, RPO/RTO, environment readiness, live-provider, production, SOC, ISO, full-dev, full-parity, or USF-133 closure claims; nonClaims=backup-readiness,restore-readiness,backup-restore-readiness,disaster-recovery-readiness,dr-readiness,pitr-readiness,online-backup-readiness,scheduled-backup-readiness,rpo-readiness,rto-readiness,rpo-rto-readiness,pgbackrest-readiness,provider-compatibility-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-dev-readiness,full-react-parity-readiness,usf-133-closure; sourceIssue=USF-219; followUpIssue=USF-223; evidenceSource=docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
+    },
+    {
+      "id": "threat-usf-221-operator-lifecycle-overclaim",
+      "targetType": "source-issue-control-gate",
+      "target": "operator access review and deprovisioning execution proof",
+      "trustBoundary": "local synthetic PDP, membership, and audit execution proof only; no provider-console, external IdP, public gateway, environment promotion, or production operator boundary claim",
+      "tenantBoundary": "proof uses synthetic tenant-scoped membership records; cross-tenant access-review attempts are denied by PDP and value-free audit evidence is tenant-scoped",
+      "credentialBoundary": "proof output and evidence must not expose raw endpoints, credentials, tokens, connection strings, stack traces, raw provider payloads, or production data",
+      "dataClassification": "security-sensitive local synthetic access-review and deprovisioning evidence metadata only",
+      "abuseCases": [
+        "bounded local access-review proof treated as provider-console SSO readiness",
+        "membership revocation proof treated as live external IdP lifecycle integration",
+        "operator lifecycle proof treated as public operator exposure or environment promotion readiness",
+        "USF-221 completion treated as USF-133 closure"
+      ],
+      "failureModes": [
+        "service row missing from proof artifact",
+        "tenant-admin allowed to execute access review",
+        "cross-tenant access review permitted",
+        "revoked actor retains active tenant access",
+        "audit output leaks unsafe value or raw provider detail"
+      ],
+      "failClosedBehaviour": "USF-ENTERPRISE-029 fails on missing proof artifact, missing package script or Make target, missing service rows, missing enterprise rows, missing proof markers, unsafe output boundary, or readiness overclaim.",
+      "monitoringAuditEvidence": "corepack pnpm proof:operator-lifecycle output, hash-chain verification, enterprise validator output, and planted-defect selftests only; no live monitoring backend or provider-console audit export.",
+      "residualRisk": "provider-console SSO, clickthrough, external IdP lifecycle integration, public gateway exposure, environment promotion, and production operator operations remain non-claims; sourceIssue=USF-221; reviewDate=2026-09-30; evidenceSource=docs/architecture/operator-access-review-deprovisioning-execution-proof.json Non-claims: full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, provider-console-readiness, identity-provider-lifecycle-readiness, operator-console-readiness, public-operator-exposure, and usf-133-closure."
     }
   ],
   "sdkDependencyGovernance": [
@@ -12864,6 +13001,46 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-221-operator-lifecycle-proof-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-221 operator access-review and deprovisioning execution proof",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-221",
+        "predecessorIssue=USF-217",
+        "accessModel=local-synthetic-PDP-membership-audit-proof-only",
+        "authnAuthzBoundary=security-admin-PDP-permit-tenant-admin-deny-cross-tenant-deny",
+        "leastPrivilegePosture=provider-readiness-review-and-tenant-members-delete-authorized-through-PDP",
+        "breakGlassRelevance=metadata-preserved-no-break-glass-operation-proven",
+        "auditRequirement=value-free-authorization-decision-and-provider-readiness-audit-events",
+        "reviewCadence=local-proof-executed-reviewDate-2026-09-30-before-stronger-operator-console-claim",
+        "deprovisioningPosture=local-membership-revocation-fail-closed-proof-executed",
+        "noPublicExposureClaim=true",
+        "operatorConsoleReadinessClaim=false",
+        "providerConsoleIntegrationClaim=false"
+      ],
+      "evidenceSource": "docs/architecture/operator-access-review-deprovisioning-execution-proof.json; packages/proof/src/operator-access-lifecycle-proof.ts USF-133",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "provider-console login, clickthrough SSO, external IdP lifecycle integration, public gateway exposure, environment promotion, and production operator operation remain unproven; owner=platform-access-foundation; riskOwner=platform-access-risk-owner; reviewDate=2026-09-30 provider-console-readiness, identity-provider-lifecycle-readiness, public-operator-exposure, operator-console-readiness, and usf-133-closure are non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "public-operator-exposure",
+        "operator-console-readiness",
+        "provider-console-readiness",
+        "identity-provider-lifecycle-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -15236,6 +15413,48 @@
         "reviewDate=2026-09-30",
         "matrix=docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
         "validationCommand=python3 tools/validate-runtime/validate-runtime.py all --json"
+      ]
+    },
+    {
+      "id": "resilience-usf-221-operator-lifecycle-proof-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-221 operator access-review and deprovisioning proof resilience boundary",
+      "evidenceSource": "docs/architecture/operator-access-review-deprovisioning-execution-proof.json; packages/proof/src/operator-access-lifecycle-proof.ts USF-133",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "provider-console uptime, external IdP lifecycle integration, public gateway operation, environment promotion, live alerting, and production operator operation remain unproven; owner=platform-access-foundation; riskOwner=platform-access-risk-owner; reviewDate=2026-09-30 provider-console-readiness, identity-provider-lifecycle-readiness, public-operator-exposure, operator-console-readiness, and usf-133-closure are non-claims.",
+      "nonClaims": [
+        "operator-console-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-dev-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "public-operator-exposure",
+        "provider-console-readiness",
+        "identity-provider-lifecycle-readiness"
+      ],
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-221",
+        "backupRequirement=not-applicable-for-local-operator-lifecycle-proof",
+        "restoreProofRequirement=not-applicable",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=operator-lifecycle-evidence-drift-or-overclaim",
+        "cleanupTeardownProof=no-durable-provider-state-written",
+        "readinessChecks=proof-command-and-validator-only",
+        "retryTimeoutBehaviour=not-applicable-no-live-provider-call",
+        "failClosedMode=tenant-admin-deny-cross-tenant-deny-revoked-membership-deny",
+        "structuredLogging=value-free-proof-result-only",
+        "tracingCorrelation=stable-correlation-ids-in-PDP-and-audit-evidence",
+        "metrics=proof-check-counts-and-validator-findings-only",
+        "auditEvents=authorization-decision-and-provider-readiness-checked-local-events",
+        "redaction=no-raw-endpoints-credentials-tokens-connection-strings-stack-traces-provider-payloads-or-production-data"
       ]
     }
   ],
@@ -18316,6 +18535,46 @@
         "reviewDate=2026-09-30",
         "matrix=docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
         "validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ]
+    },
+    {
+      "id": "incident-usf-221-operator-lifecycle-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-221 operator lifecycle incident vulnerability boundary",
+      "evidenceSource": "docs/architecture/operator-access-review-deprovisioning-execution-proof.json; packages/proof/src/operator-access-lifecycle-proof.ts USF-133",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "live incident hooks, provider-console deprovisioning incident workflow, external IdP lifecycle advisory response, public gateway incident operation, and production support escalation remain unproven; owner=platform-access-foundation; riskOwner=platform-access-risk-owner; reviewDate=2026-09-30 provider-console-readiness, identity-provider-lifecycle-readiness, public-operator-exposure, operator-console-readiness, and usf-133-closure are non-claims.",
+      "nonClaims": [
+        "operator-console-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-dev-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "public-operator-exposure",
+        "provider-console-readiness",
+        "identity-provider-lifecycle-readiness"
+      ],
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-221",
+        "incidentDetectionHook=local-proof-and-validator-output-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-access-risk-owner",
+        "vulnerabilityAdvisoryReview=operator-console-and-IdP-lifecycle-advisory-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-SDK-or-provider-dependency-added-by-USF-221",
+        "correctiveActionEvidence=validator-and-PR-evidence-only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-221",
+        "owner=platform-access-foundation",
+        "riskOwner=platform-access-risk-owner",
+        "controlOwner=platform-access-control-owner",
+        "reviewDate=2026-09-30"
       ]
     }
   ],
@@ -21789,6 +22048,90 @@
         "reviewDate=2026-09-30",
         "matrix=docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
         "validationCommand=python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ]
+    },
+    {
+      "id": "privacy-usf-221-operator-lifecycle-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-221 operator lifecycle privacy data minimisation boundary",
+      "evidenceSource": "docs/architecture/operator-access-review-deprovisioning-execution-proof.json; packages/proof/src/operator-access-lifecycle-proof.ts USF-133",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "provider-console logs, external IdP lifecycle records, production user identities, support access records, public gateway logs, and production privacy operating evidence remain unproven; owner=platform-access-foundation; riskOwner=platform-access-risk-owner; reviewDate=2026-09-30 provider-console-readiness, identity-provider-lifecycle-readiness, public-operator-exposure, operator-console-readiness, and usf-133-closure are non-claims.",
+      "nonClaims": [
+        "operator-console-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-dev-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure",
+        "public-operator-exposure",
+        "provider-console-readiness",
+        "identity-provider-lifecycle-readiness"
+      ],
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-221",
+        "dataOrigin=synthetic-local-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=security-sensitive-local-proof-metadata",
+        "redactionPolicy=no-raw-endpoints-credentials-tokens-connection-strings-stack-traces-provider-payloads-provider-errors-or-production-data",
+        "retentionPurgePosture=proof-output-in-PR-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "owner=platform-access-foundation",
+        "riskOwner=platform-access-risk-owner",
+        "controlOwner=platform-access-control-owner",
+        "reviewDate=2026-09-30"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-operator-lifecycle",
+      "targetType": "proof-command",
+      "target": "proof:operator-lifecycle",
+      "posture": [
+        "sourceIssue=USF-221",
+        "parentIssue=USF-133",
+        "dataOrigin=synthetic-local-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii",
+        "dataClassification=security-sensitive-local-proof-metadata",
+        "redactionPolicy=no-raw-endpoints-credentials-tokens-connection-strings-stack-traces-provider-payloads-provider-errors-or-production-data",
+        "retentionPurgePosture=proof-output-in-PR-summary-and-committed-metadata-only",
+        "legalHoldRelevance=not-claimed",
+        "crossBorderDataResidencyBoundary=not-claimed",
+        "tenantBoundary=synthetic-tenant-context-cross-tenant-denial-and-revoked-membership-fail-closed-proof",
+        "providerConsoleReadinessClaim=false",
+        "identityProviderLifecycleReadinessClaim=false",
+        "publicOperatorExposureClaim=false",
+        "operatorConsoleReadinessClaim=false",
+        "usf133ClosureClaim=false"
+      ],
+      "evidenceSource": "packages/proof/src/operator-access-lifecycle-proof.ts; docs/architecture/operator-access-review-deprovisioning-execution-proof.json; USF-221; USF-133",
+      "validationCommand": "corepack pnpm proof:operator-lifecycle",
+      "deferredReason": "No production data, provider-console logs, external IdP lifecycle records, support access records, public gateway logs, provider-console readiness, public operator exposure, legal hold, residency, or production privacy control is proven by USF-221.",
+      "nonClaims": [
+        "public-operator-exposure",
+        "operator-console-readiness",
+        "provider-console-readiness",
+        "identity-provider-lifecycle-readiness",
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
       ]
     }
   ],
