@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-NOTIFY-021",
+  "mutation": {
+    "depthMatrixClaimsSet": {
+      "deliverabilityReadinessClaim": true
+    }
+  }
+}

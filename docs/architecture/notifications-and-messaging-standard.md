@@ -3,9 +3,9 @@
 |                       |                                                                                       |
 | --------------------- | ------------------------------------------------------------------------------------- |
 | Document type         | Architecture / controlled-communication standard                                      |
-| Status                | Draft / parity-notifications-messaging implementation authority under USF-133          |
+| Status                | Draft / parity-notifications-messaging implementation and USF-153 proof-depth authority under USF-133 |
 | Authority level       | Semantic implementation standard subordinate to Charter, Authority Model, and ADRs     |
-| Linear scope          | USF-152, child of USF-133                                                             |
+| Linear scope          | USF-152 and USF-153, child of USF-133                                                 |
 | Provider posture      | In-memory, local-test, and mock only; live external delivery providers are deferred    |
 | Certification posture | ISO 27001-supporting technical control evidence only; no certification claim is made   |
 
@@ -88,19 +88,19 @@ Every delivery attempt has evidence. Provider response is normalised and redacte
 
 ## Outbox And Jobs
 
-State mutation and notification intent should commit atomically where practical. If delivery is async, there must be durable notification intent or outbox evidence. Delivery jobs consume notification intent idempotently. Provider sends use idempotency keys where represented. The current slice uses the PR #98 operational job substrate for notification.delivery jobs. Full transactional outbox persistence is deferred.
+State mutation and notification intent should commit atomically where practical. If delivery is async, there must be durable notification intent or outbox evidence. Delivery jobs consume notification intent idempotently. Provider sends use idempotency keys where represented. The current slice uses the PR #98 operational job substrate for notification.delivery jobs. USF-153 adds a bounded local database-persistence contract and transactional outbox proof in `capabilities/notify/src/enterprise-messaging-controls.ts`, `packages/proof/src/notifications-messaging-proof.ts`, and `docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json`. That evidence is local and value-free. It is not production database persistence, distributed outbox processing, backup readiness, restore readiness, provider callback replay, or production messaging readiness.
 
 ## Provider Configuration And Deliverability Posture
 
 Required provider fields are provider_ref, provider_type, provider_mode, channel, endpoint, allowed_hosts, allowed_schemes, tls_required, credential_ref, sender_identity_ref, rate_limit_policy, retry_policy, timeout_policy, circuit_breaker_policy, and egress_policy.
 
-Provider credentials are secret references only. Sender identities are classified. No arbitrary provider endpoint is allowed by default. TLS is required except explicitly local-only. Deliverability posture may define domain authentication, sender verification, bounce handling, complaint handling, suppression lists, rate limits, and reputation controls, but this slice does not claim live deliverability readiness.
+Provider credentials are secret references only. Sender identities are classified. No arbitrary provider endpoint is allowed by default. TLS is required except explicitly local-only. Deliverability posture may define domain authentication, sender verification, bounce handling, complaint handling, suppression lists, rate limits, and reputation controls, but this slice does not claim live deliverability readiness. USF-153 proves local provider failure redaction and a local provider circuit breaker. It does not prove live provider failover, SLA, provider compatibility, inbox placement, bounce-rate, complaint-rate, unsubscribe-link, carrier certification, or provider-managed operation.
 
 ## Feedback, Bounce, Complaint, And Privacy
 
 Feedback event types are delivery.bounced, delivery.complaint.received, delivery.opened, delivery.clicked, delivery.unsubscribed, delivery.provider_failed, and delivery.provider_deferred.
 
-Bounce and complaint feedback is tenant-scoped, audit/evidence recorded, and updates suppression where represented. Open/click tracking is privacy-sensitive and disabled by default unless explicitly authorised. Live provider webhook handling is deferred unless separately authorised.
+Bounce and complaint feedback is tenant-scoped, audit/evidence recorded, and updates suppression where represented. Open/click tracking is privacy-sensitive and disabled by default unless explicitly authorised. USF-153 proves bounded local bounce feedback ingestion and unsubscribe ingestion against synthetic tenant data. The proof updates suppression or preference state and blocks later eligible delivery without retaining raw recipient address, provider payload, endpoint, credential, token, or stack trace. Live provider webhook handling, provider replay, provider SLA, provider-managed suppression lists, and deliverability analytics remain deferred unless separately authorised.
 
 ## Mandatory Security Notifications
 
@@ -110,19 +110,19 @@ Security notifications are classified. Suppression/opt-out policy is explicit. D
 
 ## Bulk And Campaign Safety
 
-Bulk send requires explicit classification, consent/suppression evaluation, bounded tenant scope, rate-limit posture, idempotency, cancellation, and audit evidence. Bulk/campaign runtime remains deferred beyond the fail-closed classification and access-control posture in this slice.
+Bulk send requires explicit classification, consent/suppression evaluation, bounded tenant scope, rate-limit posture, idempotency, cancellation, and audit evidence. USF-153 proves bounded local bulk campaign runtime posture for synthetic notifications: consent and suppression checks must be represented, tenant limits fail closed, and audit evidence is value-free. Distributed campaign management, customer-facing campaign UI, live deliverability, customer bulk-send readiness, production marketing operation readiness, and full distributed rate-limit fairness remain deferred.
 
 ## Tenant, Environment, Retention, And Protection
 
 Tenant A cannot read, list, send, retry, cancel, or inspect Tenant B notifications, templates, preferences, suppression, provider config, or delivery evidence. Environment class is represented. Local/test providers cannot be confused with live providers. Test messages are clearly marked and cannot accidentally use live provider mode.
 
-Retention fields include message_body_retention_policy, rendered_payload_retention_policy, delivery_evidence_retention_policy, legal_hold, and purge_allowed_at. Rendered message bodies should be retained only when necessary. Delivery evidence may outlive message body. Legal hold blocks purge where represented. Purge is privileged and audited. Retention policies are classification-aware.
+Retention fields include message_body_retention_policy, rendered_payload_retention_policy, delivery_evidence_retention_policy, legal_hold, and purge_allowed_at. Rendered message bodies should be retained only when necessary. Delivery evidence may outlive message body. Legal hold blocks purge where represented. Purge is privileged and audited. Retention policies are classification-aware. USF-153 proves bounded local purge and legal-hold denial posture only. Custom retention, legal hold service readiness, DSR readiness, export/delete readiness, data residency readiness, production retention readiness, and production purge operation remain non-claims.
 
 Provider transport requires TLS except local-only tests. Persisted rendered payloads are classified; sensitive rendered payloads should be encrypted where persisted or not persisted. Live KMS and provider encryption claims are deferred unless separately authorised.
 
 ## Rate Limiting, Abuse, Access, And Audit
 
-Control concepts include tenant_send_quota, recipient_send_quota, channel_rate_limit, provider_rate_limit, bulk_send_limit, suppression_threshold, complaint_threshold, and bounce_threshold. Quota failures fail closed. Quota/suppression events are audit-recorded. Repeated denied or suppressed sends may emit security events. Full rate limiting execution is deferred.
+Control concepts include tenant_send_quota, recipient_send_quota, channel_rate_limit, provider_rate_limit, bulk_send_limit, suppression_threshold, complaint_threshold, and bounce_threshold. Quota failures fail closed. Quota/suppression events are audit-recorded. Repeated denied or suppressed sends may emit security events. USF-153 proves bounded local tenant-counter rate-limit denial and local address-verification denial. Distributed quota fairness, edge enforcement, abuse-management operation, live address/domain/phone/device verification, and production capacity readiness remain deferred.
 
 Privileged actions are notification.create, notification.read, notification.list, notification.render, notification.send, notification.cancel, notification.retry, notification.dead_letter.read, notification.dead_letter.retry, notification.template.create, notification.template.update, notification.template.approve, notification.preference.read, notification.preference.update, notification.suppression.update, notification.provider.configure, and notification.bulk.send. Every privileged action goes through the USF PDP.
 

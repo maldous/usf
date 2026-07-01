@@ -2,7 +2,10 @@ import { InMemoryNotificationProvider } from "@foundation/adapter-mail";
 import { InMemoryOperationalJobStore } from "@foundation/adapter-wf";
 import { InMemoryAuditEventStore } from "@foundation/capability-audit";
 import { createJobService } from "@foundation/capability-jobs";
-import { NotificationCapability } from "@foundation/capability-notify";
+import {
+  NotificationCapability,
+  createEnterpriseNotificationControlPlane,
+} from "@foundation/capability-notify";
 import {
   createPolicyDecisionPoint,
   InMemoryTenantMembershipDirectory,
@@ -539,5 +542,153 @@ describe("delivery jobs, retry, dead-letter, and audit evidence", () => {
     expect(eventTypes).toContain("notification.rendered");
     expect(eventTypes).toContain("notification.sent");
     expect(JSON.stringify(events.events)).not.toContain("recipient-audit@example.test");
+  });
+});
+
+describe("enterprise notification depth controls", () => {
+  let h: Awaited<ReturnType<typeof harness>>;
+  beforeEach(async () => {
+    h = await harness();
+  });
+
+  it("records bounded persistence, transactional outbox, feedback, unsubscribe, and purge evidence", async () => {
+    const controls = createEnterpriseNotificationControlPlane({
+      notify: h.notify,
+      audit: h.audit,
+      now: () => "2026-01-01T00:00:00.000Z",
+    });
+    const created = await h.notify.createNotification(h.adminA, {
+      recipient: recipient(A, "recipient-enterprise-depth"),
+      channel: "email",
+      classification: "transactional",
+      templateId: "tmpl-transactional",
+    });
+    if (!created.ok) throw new Error("setup");
+    const persisted = await controls.recordPersistence(h.adminA, created.view);
+    expect(persisted.ok).toBe(true);
+    const first = await controls.commitTransactionalOutbox(h.adminA, created.view.notificationId);
+    const second = await controls.commitTransactionalOutbox(h.adminA, created.view.notificationId);
+    expect(first).toMatchObject({ ok: true, deduplicated: false });
+    expect(second).toMatchObject({ ok: true, deduplicated: true });
+
+    const bounced = await controls.ingestProviderFeedback(h.adminA, {
+      feedbackType: "delivery.bounced",
+      notificationId: created.view.notificationId,
+      recipientId: "recipient-enterprise-depth",
+      channel: "email",
+      classification: "transactional",
+      providerRef: "provider-local-feedback",
+      providerMessageIdHash: "provider-message-hash",
+      source: "provider-webhook-local-proof",
+    });
+    expect(bounced.ok).toBe(true);
+    await expect(
+      h.notify.deliverNotification(h.adminA, created.view.notificationId, {
+        displayName: "Ada",
+      }),
+    ).resolves.toMatchObject({ ok: false, reasonCode: "address-bounced" });
+
+    const marketing = await h.notify.createNotification(h.adminA, {
+      recipient: recipient(A, "recipient-unsubscribe-depth"),
+      channel: "email",
+      classification: "marketing",
+      templateId: "tmpl-transactional",
+    });
+    if (!marketing.ok) throw new Error("setup");
+    await controls.recordPersistence(h.adminA, marketing.view);
+    const unsubscribed = await controls.ingestProviderFeedback(h.adminA, {
+      feedbackType: "delivery.unsubscribed",
+      notificationId: marketing.view.notificationId,
+      recipientId: "recipient-unsubscribe-depth",
+      channel: "email",
+      classification: "marketing",
+      providerRef: "provider-local-unsubscribe",
+      providerMessageIdHash: "provider-message-hash-unsubscribe",
+      source: "unsubscribe-api-local-proof",
+    });
+    expect(unsubscribed.ok).toBe(true);
+    await expect(
+      h.notify.deliverNotification(h.adminA, marketing.view.notificationId, {
+        displayName: "Ada",
+      }),
+    ).resolves.toMatchObject({ ok: false, reasonCode: "recipient-opted-out" });
+
+    expect(await controls.purgeNotification(h.adminA, marketing.view.notificationId)).toMatchObject(
+      {
+        ok: true,
+      },
+    );
+    const legalHold = await h.notify.createNotification(h.adminA, {
+      recipient: recipient(A, "recipient-legal-hold-depth"),
+      channel: "email",
+      classification: "transactional",
+      templateId: "tmpl-transactional",
+      legalHold: true,
+    });
+    if (!legalHold.ok) throw new Error("setup");
+    await controls.recordPersistence(h.adminA, legalHold.view);
+    expect(await controls.purgeNotification(h.adminA, legalHold.view.notificationId)).toMatchObject(
+      {
+        ok: false,
+        reasonCode: "legal-hold",
+      },
+    );
+  });
+
+  it("fails closed for rate-limit, address-verification, circuit-breaker, and bulk campaign controls", async () => {
+    const controls = createEnterpriseNotificationControlPlane({
+      notify: h.notify,
+      audit: h.audit,
+      now: () => "2026-01-01T00:00:00.000Z",
+    });
+    expect(controls.checkRateLimit(h.adminA, "tenant-bulk", 1)).toMatchObject({ ok: true });
+    expect(controls.checkRateLimit(h.adminA, "tenant-bulk", 1)).toMatchObject({
+      ok: false,
+      reasonCode: "notification-rate-limited",
+    });
+    expect(
+      controls.checkAddressVerification({
+        ...recipient(A, "recipient-unverified-depth"),
+        addressVerified: false,
+        addressStatus: "unverified",
+      }),
+    ).toMatchObject({ ok: false, reasonCode: "address-verification-required" });
+    expect(controls.recordProviderFailure("provider-depth", 2)).toMatchObject({
+      circuitState: "closed",
+    });
+    expect(controls.recordProviderFailure("provider-depth", 2)).toMatchObject({
+      ok: false,
+      circuitState: "open",
+      reasonCode: "provider-circuit-open",
+    });
+
+    const bulk = await h.notify.createNotification(h.adminA, {
+      recipient: recipient(A, "recipient-bulk-depth"),
+      channel: "email",
+      classification: "bulk",
+      templateId: "tmpl-transactional",
+    });
+    if (!bulk.ok) throw new Error("setup");
+    await controls.recordPersistence(h.adminA, bulk.view);
+    expect(
+      await controls.runBulkCampaign(h.adminA, {
+        campaignId: "campaign-depth-denied",
+        classification: "bulk",
+        notificationIds: [bulk.view.notificationId],
+        tenantLimit: 10,
+        consentChecked: false,
+        suppressionChecked: true,
+      }),
+    ).toMatchObject({ ok: false, reasonCode: "bulk-policy-missing" });
+    expect(
+      await controls.runBulkCampaign(h.adminA, {
+        campaignId: "campaign-depth-ok",
+        classification: "bulk",
+        notificationIds: [bulk.view.notificationId],
+        tenantLimit: 10,
+        consentChecked: true,
+        suppressionChecked: true,
+      }),
+    ).toMatchObject({ ok: true });
   });
 });

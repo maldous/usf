@@ -4901,6 +4901,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-153-notifications-messaging-enterprise-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-153 enterprise notifications and messaging depth controls for bounded persistence/outbox, provider feedback ingestion, unsubscribe ingestion, retention purge, legal-hold denial, bulk campaign runtime, rate-limit denial, address verification, provider circuit posture, value-free audit evidence, tenant/access/secret/redaction evidence, and explicit API/UI/live-provider non-equivalence boundaries.",
+      "riskTreated": "Deferred notifications depth could be hidden behind the core notify proof, allowing unsupported live provider, deliverability, public API, UI, production, certification, or full-parity claims.",
+      "assetServiceAffected": "notifications capability; enterprise notification control plane; notification delivery provider boundary; Mailpit/local provider boundary",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-153; currentEvidence=evidence-usf-153-notifications-messaging-enterprise-depth; deferredBoundary=live email/SMS/push/webhook/SMTP providers, provider deliverability, provider callback replay, public notification API readiness, browser UI readiness, distributed campaign operation, environment promotion, and production operation; noReactRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json; packages/proof/src/notifications-messaging-proof.ts; tools/validate-parity/validate-notify.py",
+      "validationCommand": "make notify-proof; python3 tools/validate-parity/validate-notify.py all --json",
+      "deferredReason": "riskStatement=Enterprise notifications/messaging depth needs bounded local proof without implying live delivery-provider, deliverability, API, UI, production, or certification readiness.; threatFailureScenario=Core hermetic notify proof is mistaken for live provider, deliverability, campaign, unsubscribe-route, API, or UI readiness.; affectedAssetService=notifications delivery and messaging boundaries; impact=high; likelihood=medium; owner=platform-notification-foundation; treatment=mitigate with local proof, explicit reclassification, and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-155 for API surfaces, USF-161 for distributed guardrails, USF-163 for broader data movement, and future live-provider issue before live delivery claims; exceptionOwner=platform-notification-risk-owner; exceptionReason=live provider, deliverability, public API, browser UI, provider replay, and production operations remain outside USF-153 bounded local proof; compensatingControl=validate-notify plus notifications-messaging-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7111,6 +7137,31 @@
       ],
       "prOrMergeSha": "6bcd7405e7afe542cd2546acc21c1092c9ef23d7",
       "retentionPosture": "Retain committed proof code, jobs workflows enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw payload, credential, token, provider endpoint, provider payload, object content, customer data, or production data is retained."
+    },
+    {
+      "id": "evidence-usf-153-notifications-messaging-enterprise-depth",
+      "proofResult": "proof:notify",
+      "whatWasProven": "make notify-proof is the command-pinned bounded local hermetic proof for USF-153. It proves the existing notifications/messaging controls plus bounded persistence/outbox contract, transactional outbox duplicate suppression, provider feedback ingestion, unsubscribe ingestion, retention purge, legal-hold purge denial, bulk campaign runtime controls, tenant rate-limit denial, unverified-address denial, provider circuit opening, tenant/access/secret/redaction evidence, value-free audit evidence, and explicit non-claims.",
+      "whatWasNotProven": "No live email, SMS, push, webhook, SMTP, Brevo, Mailpit deliverability, provider callback replay, provider SLA, provider-managed suppression list, public notification API readiness, browser UI readiness, distributed campaign operation, distributed rate-limit fairness, environment promotion, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure is proven.",
+      "runtimeMode": "local-synthetic-enterprise-notification-control-plane",
+      "providerMode": "hermetic-mock",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#mailpit",
+      "adapterProviderId": "in-memory-notification-provider; enterprise-notification-control-plane-local",
+      "validationCommand": "make notify-proof; python3 tools/validate-parity/validate-notify.py all --json",
+      "commandPin": "tsx packages/proof/src/notifications-messaging-proof.ts",
+      "commitPin": "3dafec00898a75f333aea08e0fb54946c65b2eec",
+      "issueLinks": [
+        "USF-153",
+        "USF-133",
+        "USF-184",
+        "USF-191",
+        "USF-192",
+        "USF-155",
+        "USF-161",
+        "USF-163"
+      ],
+      "prOrMergeSha": "3dafec00898a75f333aea08e0fb54946c65b2eec",
+      "retentionPosture": "Retain committed proof code, notifications messaging enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw message body, raw recipient address, credential, token, provider endpoint, provider payload, provider error, stack trace, customer data, or production data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -9029,6 +9080,33 @@
       "failClosedBehaviour": "validate-jobs USF-JOBS-021 through USF-JOBS-025 block missing control-plane helper, missing proof markers, incomplete USF-151 matrix, missing enterprise evidence linkage, missing PDP/admin override coupling, and prohibited readiness claims.",
       "monitoringAuditEvidence": "make jobs-proof output, jobs validator findings, value-free job/workflow/control audit events, and local proof check labels only; no live monitoring backend.",
       "residualRisk": "Live Temporal, live Windmill, external queue/scheduler/worker cluster, HTTP job API, operator UI, live metrics/alerting, backup/restore readiness, DR, environment promotion, and production operation remain non-claims."
+    },
+    {
+      "id": "threat-usf-153-notifications-messaging-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-153 enterprise notifications and messaging proof depth",
+      "trustBoundary": "Hermetic in-memory notification provider and local synthetic enterprise notification control plane only; Mailpit is service-catalogue lineage but no live delivery, deliverability, callback replay, UI, API readiness, or production boundary claim.",
+      "tenantBoundary": "Notifications, templates, preferences, suppressions, provider config, outbox records, feedback, unsubscribe, retention purge, bulk campaign controls, rate counters, and audit events are tenant-scoped and must fail closed on missing membership, tenant mismatch, or insufficient PDP permission.",
+      "credentialBoundary": "Raw provider endpoints, credentials, tokens, secrets, recipient addresses, message bodies, provider payloads, raw provider errors, and stack traces are not emitted in proof output, audit metadata, validator findings, or evidence rows.",
+      "dataClassification": "security-sensitive synthetic notification, recipient hash, preference, suppression, feedback, outbox, retention, and audit metadata only; no production-derived message or recipient data.",
+      "abuseCases": [
+        "hermetic notify proof treated as live email/SMS/push/webhook provider readiness",
+        "local feedback ingestion treated as live provider callback compatibility",
+        "unsubscribe ingestion treated as public unsubscribe API or browser UI readiness",
+        "bulk local proof treated as customer campaign operation readiness",
+        "raw recipient address or provider failure leaks into audit evidence",
+        "legal hold purge denial bypassed by local retention controls"
+      ],
+      "failureModes": [
+        "enterprise notification control-plane helper removed",
+        "enterprise proof markers removed from notify proof output",
+        "readiness claim set true in proof output or matrix",
+        "API/UI/live provider boundary hidden behind partial parity language",
+        "audit evidence leaks recipient address, provider endpoint, token, secret, provider payload, or stack trace"
+      ],
+      "failClosedBehaviour": "validate-notify USF-NOTIFY-017 through USF-NOTIFY-021 block missing enterprise control plane, missing proof markers, incomplete USF-153 matrix, missing enterprise evidence linkage, and prohibited live/deliverability/readiness claims.",
+      "monitoringAuditEvidence": "make notify-proof output, notify validator findings, value-free notification lifecycle, persistence, feedback, unsubscribe, bulk, retention, and audit events only; no live monitoring backend.",
+      "residualRisk": "Live delivery providers, deliverability, provider callback replay, public notification API, browser UI, distributed campaign/rate-limit operation, data residency, environment promotion, and production operation remain non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -11697,6 +11775,36 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-153-notifications-messaging-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-153 notifications/messaging privileged controls",
+      "posture": [
+        "accessModel=local-synthetic-notification-control-plane-only",
+        "authRequirement=active-tenant-membership-plus-explicit-notification-permission-through-synchronous-PDP",
+        "leastPrivilegePosture=notification-actions-explicit-no-wildcard-no-live-provider-credential-access",
+        "breakGlassRelevance=not-implemented-for-USF-153-local-proof",
+        "auditRequirement=notification-lifecycle-feedback-unsubscribe-retention-bulk-and-provider-control-events-value-free",
+        "reviewCadence=2026-09-30-before-stronger-readiness-claim",
+        "deprovisioningPosture=membership-suspension-removes-PDP-permit-before-send-or-control-operation",
+        "no-public-exposure-claim"
+      ],
+      "evidenceSource": "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "deferredReason": "Public notification API, browser UI, customer admin messaging UI, live provider credential administration, executed access reviews, support recovery, and production break-glass evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -13676,6 +13784,41 @@
       "evidenceSource": "docs/architecture/jobs-workflows-enterprise-proof-depth-matrix.json",
       "validationCommand": "make jobs-proof",
       "deferredReason": "Live provider resilience, worker-cluster recovery, backup service readiness, restore readiness, DR, RPO/RTO, live observability, and production incident operation remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-153-notifications-messaging-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-153 notifications/messaging local proof resilience posture",
+      "posture": [
+        "backupRequirement=local-notification-persistence-contract-only",
+        "restoreProofRequirement=restore-readiness-not-claimed",
+        "rpoRtoTarget=not-claimed",
+        "corruptionFailureScenario=notification-outbox-provider-feedback-or-retention-drift-must-not-be-treated-as-readiness",
+        "cleanupTeardownProof=in-memory-proof-only-no-durable-provider-state",
+        "readinessChecks=hermetic-proof-and-validator-markers-only",
+        "retryTimeoutBehaviour=bounded-retry-existing-notify-proof-plus-local-provider-circuit-breaker-fail-closed",
+        "failClosedMode=tenant-mismatch-PDP-denial-missing-template-variable-consent-required-do-not-contact-address-bounced-recipient-opted-out-legal-hold-rate-limited-unverified-address-and-provider-circuit-open-denials",
+        "structuredLogging=proof-output-value-free",
+        "tracingCorrelation=not-live-telemetry",
+        "metrics=validator-and-proof-check-counts-only",
+        "auditEvents=notification-lifecycle-persistence-feedback-unsubscribe-retention-bulk-and-provider-control-events",
+        "redaction=raw-message-recipient-address-endpoint-credential-token-secret-provider-error-provider-payload-and-stack-trace-not-retained"
+      ],
+      "evidenceSource": "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json",
+      "validationCommand": "make notify-proof; python3 tools/validate-parity/validate-notify.py all --json",
+      "deferredReason": "Live provider resilience, provider callback replay, distributed outbox, backup service readiness, restore readiness, DR, RPO/RTO, live observability, and production incident operation remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -16428,6 +16571,34 @@
       "evidenceSource": "docs/architecture/jobs-workflows-enterprise-proof-depth-matrix.json",
       "validationCommand": "python3 tools/validate-parity/validate-jobs.py all --json",
       "deferredReason": "Production workflow incident hooks, paging, escalation execution, patch SLA evidence, live Temporal/Windmill advisory response, SIEM forwarding, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-153-notifications-messaging-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-153 notifications/messaging incident and vulnerability evidence posture",
+      "posture": [
+        "incidentDetectionHook=local-notification-denial-feedback-unsubscribe-retention-bulk-rate-limit-address-verification-and-provider-circuit-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-notification-risk-owner",
+        "vulnerabilityAdvisoryReview=notification-provider-SDK-live-provider-and-deliverability-dependency-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-SDK-or-provider-dependency-added-by-USF-153",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "deferredReason": "Production notification incident hooks, paging, escalation execution, provider incident workflow, patch SLA evidence, live provider advisory response, SIEM forwarding, deliverability incident evidence, and post-incident evidence remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -19559,6 +19730,35 @@
       "evidenceSource": "packages/proof/src/jobs-workflows-proof.ts",
       "validationCommand": "make jobs-proof",
       "deferredReason": "Customer workflow data privacy, live provider privacy, DSR, data residency, legal hold, custom retention, and production workflow-data recovery privacy remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-153-notifications-messaging-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-153 proof:notify synthetic notifications/messaging data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=security-sensitive-notification-recipient-hash-preference-suppression-feedback-outbox-retention-and-audit-metadata",
+        "redactionPolicy=no-raw-message-body-recipient-address-endpoint-credential-token-secret-provider-error-provider-payload-or-stack-trace-in-proof-output",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=bounded-local-legal-hold-purge-denial-only",
+        "dataResidencyCrossBorderBoundary=hermetic-local-only-no-production-residency-claim"
+      ],
+      "evidenceSource": "packages/proof/src/notifications-messaging-proof.ts",
+      "validationCommand": "make notify-proof",
+      "deferredReason": "Customer recipient data privacy, live provider privacy, DSR, data residency, legal hold service operation, custom retention, public unsubscribe data flow, and production messaging data recovery privacy remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

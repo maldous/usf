@@ -1099,6 +1099,15 @@ class MailProviderCompat implements NotificationProvider {
   }
 }
 
+export {
+  createEnterpriseNotificationControlPlane,
+  EnterpriseNotificationControlPlane,
+  type NotificationEnterpriseEvidence,
+  type NotificationFeedbackInput,
+  type NotificationBulkCampaignInput,
+  type NotificationEnterpriseDisposition,
+} from "./enterprise-messaging-controls.ts";
+
 const denyAllPdp: NotificationCapabilityDeps["pdp"] = {
   decide: () => ({ effect: "deny", reasonCode: "compat-mode-no-pdp" }),
 };

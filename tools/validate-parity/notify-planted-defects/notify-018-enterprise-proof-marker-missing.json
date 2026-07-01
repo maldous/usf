@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-NOTIFY-018",
+  "mutation": {
+    "file": "packages/proof/src/notifications-messaging-proof.ts",
+    "replace": {
+      "old": "enterpriseMessagingDepthProven: true",
+      "new": "enterpriseMessagingDepthProven: false"
+    }
+  }
+}

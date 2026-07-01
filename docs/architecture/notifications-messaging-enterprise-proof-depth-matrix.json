@@ -1,0 +1,320 @@
+{
+  "id": "notifications-messaging-enterprise-proof-depth-matrix",
+  "sourceIssue": "USF-153",
+  "parentIssue": "USF-133",
+  "laneIssue": "USF-191",
+  "capabilityId": "notifications-messaging-enterprise-depth",
+  "proofCommand": "make notify-proof",
+  "rawProofCommand": "corepack pnpm proof:notify",
+  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises the USF notification capability, local enterprise notification control plane, synthetic tenants, synchronous PDP decisions, value-free audit evidence, and no live email, SMS, push, webhook, SMTP, provider deliverability, UI, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure claim.",
+  "validatorCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+  "proofFile": "packages/proof/src/notifications-messaging-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-notify.py",
+  "sourceUseMatrix": "docs/architecture/parity-notifications-messaging-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-153-notifications-messaging-enterprise-depth",
+    "evidence-usf-153-notifications-messaging-enterprise-depth",
+    "threat-usf-153-notifications-messaging-enterprise-depth",
+    "access-usf-153-notifications-messaging-enterprise-depth",
+    "resilience-usf-153-notifications-messaging-enterprise-depth",
+    "incident-usf-153-notifications-messaging-enterprise-depth",
+    "privacy-usf-153-notifications-messaging-enterprise-depth"
+  ],
+  "serviceCatalogueRows": [
+    "spec/instances/compose-service/service-catalogue.json#mailpit"
+  ],
+  "providerMode": "hermetic-mock",
+  "runtimeMode": "local-synthetic-enterprise-notification-control-plane",
+  "claims": {
+    "enterpriseMessagingDepthProven": true,
+    "dbBackedPersistenceBoundaryExplicit": true,
+    "transactionalOutboxProven": true,
+    "providerFeedbackIngestionProven": true,
+    "unsubscribeIngestionProven": true,
+    "retentionPurgeProven": true,
+    "bulkCampaignRuntimeProven": true,
+    "notificationRateLimitProven": true,
+    "addressVerificationProven": true,
+    "providerCircuitBreakerProven": true,
+    "liveProviderReadinessClaim": false,
+    "deliverabilityReadinessClaim": false,
+    "uiReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "nonClaims": [
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "Hermetic notifications proof does not prove live email, SMS, push, webhook, SMTP, Brevo, Mailpit-as-deliverability-provider, or external provider readiness.",
+    "Bounded local feedback and unsubscribe ingestion proof does not prove live webhook callback compatibility, provider replay, provider SLA, bounce/complaint deliverability, or external suppression-list readiness.",
+    "Local API contract and capability proof does not prove public notification API readiness, browser UI readiness, customer messaging workflows, environment promotion, or production notification operation."
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Each deferred notifications control is implemented with proof or explicitly reclassified.",
+      "evidence": "Controls below record bounded-local-proof for persistence/outbox, provider feedback ingestion, unsubscribe ingestion, retention purge, bulk runtime, rate limit, address verification, and provider circuit breaker. API is reclassified as an explicit non-equivalent local substitute, UI and live deliverability remain deferred with owner and review date."
+    },
+    {
+      "criterion": "Provider feedback, unsubscribe, retention, and bulk boundaries are explicit where claimed.",
+      "evidence": "provider-feedback-ingestion, unsubscribe-ingestion, retention-purge-legal-hold, and bulk-campaign-runtime rows include proof commands, non-equivalence boundaries, and live/provider-deliverability non-claims."
+    },
+    {
+      "criterion": "Tenant, access, audit, secret, and redaction evidence exists where claimed.",
+      "evidence": "make notify-proof records enterpriseNotificationEvidence flags for tenantBoundaryChecked, accessBoundaryChecked, auditEvidenceCaptured, secretBoundaryChecked, redactionChecked, and providerSubstituteBoundaryChecked. Tests cover tenant denial, PDP denial, redacted audit, and value-free provider failure evidence."
+    },
+    {
+      "criterion": "Validator coverage exists for any new notification claim.",
+      "evidence": "USF-NOTIFY-017 through USF-NOTIFY-021 validate the enterprise control-plane helper, proof markers, matrix completeness, enterprise evidence rows, and prohibited readiness/live-deliverability claims."
+    },
+    {
+      "criterion": "No live provider or deliverability readiness claim is made without proof.",
+      "evidence": "claims object and proof result set liveProviderReadinessClaim, deliverabilityReadinessClaim, stagingReadinessClaim, productionReadinessClaim, SOC readiness, ISO certification, full-dev, full-parity, and USF-133 closure claims to false."
+    }
+  ],
+  "controls": [
+    {
+      "id": "bounded-db-persistence-contract",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-with-local-proof-and-explicit-db-boundary",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "proofChecks": [
+        "bounded DB persistence contract is recorded for notification views",
+        "recipient address is represented by hash only in retained evidence"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Bounded local persistence contract is not production database persistence, distributed durable outbox, backup readiness, restore readiness, or production data retention readiness."
+    },
+    {
+      "id": "transactional-outbox",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-with-local-idempotency-proof",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts"
+      ],
+      "proofChecks": [
+        "transactional outbox commit is idempotent and suppresses duplicates"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local outbox dedupe is not distributed outbox processing, provider callback replay, or production messaging queue readiness."
+    },
+    {
+      "id": "provider-feedback-ingestion",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-with-local-feedback-proof-and-live-callback-deferral",
+      "followUpIssue": "future-live-notification-provider-callback-issue-required-before-live-provider-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "proofChecks": [
+        "bounce feedback is ingested and suppresses later delivery"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local feedback ingestion is not live webhook compatibility, provider replay, provider SLA, deliverability analytics, or external suppression-list readiness."
+    },
+    {
+      "id": "unsubscribe-ingestion",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-with-local-unsubscribe-proof-and-public-api-deferral",
+      "followUpIssue": "USF-155 for API surface readiness before public unsubscribe-route claims",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "proofChecks": [
+        "unsubscribe ingestion updates preference and blocks later marketing delivery"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local unsubscribe ingestion is not public unsubscribe API readiness, email-link security readiness, browser UI readiness, or live provider webhook readiness."
+    },
+    {
+      "id": "retention-purge-legal-hold",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-local-purge-proof-defer-production-retention",
+      "followUpIssue": "USF-163 for broader import/export/bulk data movement and future DSR/export/delete depth",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts"
+      ],
+      "proofChecks": [
+        "retention purge succeeds for eligible notification",
+        "legal hold blocks purge fail-closed"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local purge/legal-hold proof is not custom retention, legal hold service readiness, DSR readiness, data residency readiness, or production retention readiness."
+    },
+    {
+      "id": "bulk-campaign-runtime",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-local-bulk-proof-defer-campaign-operations",
+      "followUpIssue": "USF-161 for distributed guardrails and future bulk campaign rate/fairness controls",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts",
+        "tests/capabilities/notifications-messaging.test.ts"
+      ],
+      "proofChecks": [
+        "bulk campaign requires consent and suppression checks",
+        "bulk campaign enforces tenant limit and fails closed"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local bulk proof is not campaign-management UI readiness, distributed rate limiting, deliverability readiness, customer bulk-send readiness, or production marketing operation readiness."
+    },
+    {
+      "id": "rate-limit-abuse-control",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-local-limit-proof-defer-distributed-edge-enforcement",
+      "followUpIssue": "USF-161 for distributed and edge guardrail enforcement",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts"
+      ],
+      "proofChecks": [
+        "notification rate limit fails closed after tenant quota"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local tenant counter proof is not distributed quota fairness, edge enforcement, abuse-management readiness, or production capacity readiness."
+    },
+    {
+      "id": "address-verification",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-with-local-fail-closed-verification-proof",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts"
+      ],
+      "proofChecks": [
+        "unverified recipient address fails closed"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local address verification flag proof is not live email, SMS, push, domain, phone, or device verification readiness."
+    },
+    {
+      "id": "provider-circuit-breaker",
+      "status": "bounded-local-proof",
+      "maturity": "tested",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "mitigate-with-local-provider-failure-proof",
+      "evidenceRefs": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "packages/proof/src/notifications-messaging-proof.ts"
+      ],
+      "proofChecks": [
+        "provider circuit breaker opens after bounded failures",
+        "raw provider failure value is redacted from evidence"
+      ],
+      "proofCommand": "make notify-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-notify.py all --json",
+      "nonClaimBoundary": "Local provider circuit proof is not live provider failover, SLA, provider compatibility, paging, or production incident readiness."
+    },
+    {
+      "id": "api-surface-non-equivalent-substitute",
+      "status": "explicit-non-equivalent-substitute",
+      "maturity": "documented",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "defer-public-api-readiness",
+      "followUpIssue": "USF-155",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "apps/api/src/server.ts",
+        "packages/proof/src/api-contracts-proof.ts",
+        "docs/architecture/runtime-application-compose-parity.md"
+      ],
+      "nonClaimBoundary": "Local capability and API contract evidence is not public notification API readiness, browser-client compatibility, webhook callback readiness, or environment promotion readiness."
+    },
+    {
+      "id": "ui-surface-deferred",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "defer-ui-implementation",
+      "followUpIssue": "future-notification-ui-surface-issue-required-before-ui-readiness-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/notifications-and-messaging-standard.md"
+      ],
+      "nonClaimBoundary": "No notification UI, browser E2E, customer admin messaging UI, or React UI parity readiness is claimed by USF-153."
+    },
+    {
+      "id": "live-provider-deliverability-deferred",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-notification-foundation",
+      "riskOwner": "platform-notification-risk-owner",
+      "controlOwner": "platform-notification-control-owner",
+      "riskTreatment": "defer-live-provider-and-deliverability",
+      "followUpIssue": "future-live-notification-provider-and-deliverability-issue-required-before-live-claim",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "docs/architecture/runtime-compose-provider-binding.md"
+      ],
+      "nonClaimBoundary": "Mailpit/local/in-memory evidence is not live email, SMS, push, webhook, SMTP, Brevo, deliverability, inbox placement, bounce-rate, complaint-rate, unsubscribe-link, or carrier/provider certification readiness."
+    }
+  ]
+}
