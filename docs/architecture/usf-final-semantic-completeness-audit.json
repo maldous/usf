@@ -1,0 +1,328 @@
+{
+  "id": "usf-final-semantic-completeness-audit",
+  "title": "USF Final Semantic Completeness Audit",
+  "issueId": "USF-215",
+  "parentIssueId": "USF-133",
+  "dashboardIssueId": "USF-184",
+  "coordinatorIssueId": "USF-192",
+  "auditDate": "2026-07-02",
+  "authorityNote": "Linear tracks work only. This audit records repository and Linear reconciliation findings; it does not define USF semantic authority.",
+  "scope": {
+    "purpose": "Post-implementation semantic completeness audit before any USF-133 readiness or full functional parity closure claim.",
+    "triggerIssues": [
+      {
+        "issueId": "USF-155",
+        "status": "Done"
+      },
+      {
+        "issueId": "USF-159",
+        "status": "Done"
+      },
+      {
+        "issueId": "USF-161",
+        "status": "Done"
+      },
+      {
+        "issueId": "USF-163",
+        "status": "Done"
+      }
+    ],
+    "implementationCodeChanged": false,
+    "runtimeCodeChanged": false,
+    "providerCodeChanged": false,
+    "reactRuntimeCodeCopied": false,
+    "usf39Mutated": false
+  },
+  "repositoryInputsInspected": [
+    "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+    "docs/architecture/usf-133-closure-tier-evidence-gate.md",
+    "docs/architecture/usf-dev-foundation-gap-register.md",
+    "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+    "docs/architecture/complete-react-to-usf-functionality-parity-review.md",
+    "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+    "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
+    "docs/architecture/compose-service-disposition-closure-matrix.json",
+    "docs/architecture/domain-deferred-depth-closure-matrix.json",
+    "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+    "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "tools/validate-parity/validate-parity.py",
+    "tools/validate-enterprise/validate-enterprise.py",
+    "package.json"
+  ],
+  "linearInputsInspected": [
+    "USF-133",
+    "USF-166",
+    "USF-167",
+    "USF-182",
+    "USF-184",
+    "USF-192",
+    "USF-193",
+    "USF-214",
+    "USF-215",
+    "USF-216",
+    "USF-217",
+    "USF-218",
+    "USF-219",
+    "USF-220"
+  ],
+  "currentOpenGraph": {
+    "usf133Status": "Backlog",
+    "usf184Status": "Backlog",
+    "usf192Status": "Backlog",
+    "usf215Status": "In Progress",
+    "openChildrenUnderUsf133": [
+      {
+        "issueId": "USF-134",
+        "title": "Future UI/UX integration surface from USF foundation contracts (non-foundation-blocking)",
+        "status": "Backlog",
+        "blocksUsf133": false
+      },
+      {
+        "issueId": "USF-216",
+        "title": "USF-133 final blocker and parity matrix consistency reconciliation",
+        "status": "Backlog",
+        "blocksUsf133": true
+      },
+      {
+        "issueId": "USF-217",
+        "title": "Operator admin console access review and deprovisioning proof depth",
+        "status": "Backlog",
+        "blocksUsf133": true
+      },
+      {
+        "issueId": "USF-218",
+        "title": "Observability service alerting dashboard and incident workflow proof depth",
+        "status": "Backlog",
+        "blocksUsf133": true
+      },
+      {
+        "issueId": "USF-219",
+        "title": "Backup restore DR and RPO RTO operational proof depth",
+        "status": "Backlog",
+        "blocksUsf133": true
+      },
+      {
+        "issueId": "USF-220",
+        "title": "Generated client external developer and GraphQL federation delivery proof depth",
+        "status": "Backlog",
+        "blocksUsf133": true
+      }
+    ]
+  },
+  "usf133AcceptanceAudit": [
+    {
+      "criterion": "Readiness directive, UI-agnostic boundary, and scope-classification matrix exist in docs/architecture and are merged.",
+      "classification": "partially-proven",
+      "evidence": [
+        "docs/architecture/full-react-parity-readiness-directive.md",
+        "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
+        "docs/architecture/react-parity-scope-classification-matrix.md"
+      ],
+      "blockerIssue": "USF-216",
+      "reason": "Base artefacts exist, but final blocker and matrix consistency still need reconciliation before USF-133 can close."
+    },
+    {
+      "criterion": "Every foundation domain has a disposition; none is unknown-unclassified.",
+      "classification": "partial",
+      "evidence": [
+        "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+        "docs/architecture/domain-deferred-depth-closure-matrix.json"
+      ],
+      "blockerIssue": "USF-216",
+      "reason": "Rows remain partial, deferred, or require current matrix reconciliation after later merged source issue evidence."
+    },
+    {
+      "criterion": "Every historical test and proof group is classified; no UI or Playwright test disappears silently.",
+      "classification": "partially-proven",
+      "evidence": [
+        "docs/architecture/complete-react-to-usf-functionality-parity-review.md",
+        "docs/architecture/react-parity-scope-classification-matrix.json"
+      ],
+      "blockerIssue": "USF-216",
+      "reason": "The classification artefacts exist, but final audit found stale decision wording and unresolved matrix rows that must be reconciled."
+    },
+    {
+      "criterion": "Foundation behaviours proven only via UI or Playwright are named for rewrite as foundation-level tests.",
+      "classification": "partially-proven",
+      "evidence": [
+        "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
+        "docs/architecture/complete-react-to-usf-functionality-parity-review.md"
+      ],
+      "blockerIssue": "USF-216",
+      "reason": "The boundary is established, but matrix and blocker reconciliation remains open before closure."
+    },
+    {
+      "criterion": "Per-domain parity children are enumerated.",
+      "classification": "partially-proven",
+      "evidence": [
+        "docs/architecture/full-parity-linear-tracking-plan.md",
+        "USF-216",
+        "USF-217",
+        "USF-218",
+        "USF-219",
+        "USF-220"
+      ],
+      "blockerIssue": "USF-216",
+      "reason": "Source children and follow-ups exist, but the final parent blocker graph still requires reconciliation."
+    },
+    {
+      "criterion": "A parity-enforcement validator and a make parity gate are tracked as a blocker.",
+      "classification": "implemented-and-proven",
+      "evidence": [
+        "package.json#scripts.parity",
+        "tools/validate-parity/validate-parity.py",
+        "USF-182"
+      ],
+      "blockerIssue": null,
+      "reason": "The parity gate is wired and validator source issues are Done with merged evidence."
+    },
+    {
+      "criterion": "Semantic-authority decisions required for parity are tracked.",
+      "classification": "partial",
+      "evidence": [
+        "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+        "USF-216"
+      ],
+      "blockerIssue": "USF-216",
+      "reason": "Some rows still use stale or ambiguous requires-human-decision wording after later decisions and bounded proofs."
+    },
+    {
+      "criterion": "A non-foundation-blocking future UI/UX issue exists.",
+      "classification": "implemented-and-proven",
+      "evidence": [
+        "USF-134"
+      ],
+      "blockerIssue": null,
+      "reason": "USF-134 exists and remains a non-foundation-blocking future UI/UX tracker."
+    },
+    {
+      "criterion": "No full foundation dev readiness claim is made while the matrix is incomplete.",
+      "classification": "implemented-and-proven",
+      "evidence": [
+        "USF-133",
+        "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+        "docs/architecture/usf-final-semantic-completeness-audit.json"
+      ],
+      "blockerIssue": null,
+      "reason": "The parent remains open and this audit preserves explicit non-claims."
+    }
+  ],
+  "materialFindings": [
+    {
+      "findingId": "USF-215-F001",
+      "title": "USF-133 blocker graph and parity matrices need final consistency reconciliation",
+      "classification": "missing-current-reconciliation",
+      "evidence": [
+        "USF-133 remains Backlog with unchecked acceptance criteria",
+        "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json contains requires-human-decision rows",
+        "docs/architecture/complete-react-to-usf-functionality-parity-review.md contains stale requires-human-decision summary text",
+        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md contains requires-human-decision rows"
+      ],
+      "followUpIssueId": "USF-216",
+      "blocksUsf133": true,
+      "nonClaimBoundary": "Matrix consistency work is required before any USF-133 closure or full parity claim."
+    },
+    {
+      "findingId": "USF-215-F002",
+      "title": "Operator admin access review and deprovisioning proof remains deferred",
+      "classification": "deferred-with-owner",
+      "evidence": [
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json records reviewCadence=TODO-before-readiness-claim",
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json records deprovisioningPosture=TODO-before-readiness-claim"
+      ],
+      "followUpIssueId": "USF-217",
+      "blocksUsf133": true,
+      "nonClaimBoundary": "No public operator/admin exposure, access-review completeness, or deprovisioning readiness claim is made."
+    },
+    {
+      "findingId": "USF-215-F003",
+      "title": "Observability alerting, dashboards, and incident workflow proof depth remains bounded",
+      "classification": "deferred-with-owner",
+      "evidence": [
+        "USF-159, USF-170, USF-179, USF-196, and USF-205 provide bounded evidence but preserve non-equivalence and deferred operations boundaries",
+        "docs/architecture/complete-react-to-usf-functionality-parity-review.md still records observability depth as non-closure work"
+      ],
+      "followUpIssueId": "USF-218",
+      "blocksUsf133": true,
+      "nonClaimBoundary": "No production observability, live Sentry readiness, alerting readiness, dashboard readiness, or incident-readiness claim is made."
+    },
+    {
+      "findingId": "USF-215-F004",
+      "title": "Backup restore DR and RPO/RTO operational proof remains bounded",
+      "classification": "deferred-with-owner",
+      "evidence": [
+        "USF-177 and USF-202 provide bounded backup/restore evidence",
+        "Operational DR, online backup, WAL archive, PITR, schedule, RPO, and RTO readiness remain outside the bounded proof"
+      ],
+      "followUpIssueId": "USF-219",
+      "blocksUsf133": true,
+      "nonClaimBoundary": "No DR readiness, production backup readiness, or RPO/RTO achievement claim is made."
+    },
+    {
+      "findingId": "USF-215-F005",
+      "title": "Generated client, external developer, GraphQL, and federation delivery remain deferred or out of foundation runtime scope",
+      "classification": "deferred-and-out-of-scope-with-owner",
+      "evidence": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "USF-214"
+      ],
+      "followUpIssueId": "USF-220",
+      "blocksUsf133": true,
+      "nonClaimBoundary": "No GraphQL readiness, federation readiness, generated client delivery readiness, external developer platform readiness, public API launch readiness, or full parity claim is made."
+    }
+  ],
+  "nonBlockingFindings": [
+    {
+      "findingId": "USF-215-N001",
+      "title": "Future UI/UX integration remains out of foundation scope",
+      "classification": "out-of-foundation-scope-with-rationale",
+      "evidence": [
+        "USF-134"
+      ],
+      "blocksUsf133": false,
+      "nonClaimBoundary": "USF foundation readiness does not include UI/UX implementation or browser E2E migration."
+    }
+  ],
+  "validationPlan": {
+    "developmentTier": "Tier 2",
+    "targetedCommands": [
+      "python3 -m json.tool docs/architecture/usf-final-semantic-completeness-audit.json",
+      "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "git diff --check",
+      "git diff --check origin/main...HEAD"
+    ],
+    "prReadyCommands": [
+      "corepack pnpm verify",
+      "corepack pnpm parity",
+      "python3 tools/validate-spec/validate-spec.py all --json",
+      "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+      "python3 tools/validate-parity/validate-parity.py all --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "git diff --check",
+      "git diff --check origin/main...HEAD"
+    ],
+    "postMergeRequirement": "Run full verify or an accepted equivalent on main before USF-215 is marked Done."
+  },
+  "statusRecommendation": {
+    "usf215CanCloseAfterMerge": true,
+    "usf133CanClose": false,
+    "usf184CanClose": false,
+    "usf192CanClose": false,
+    "reason": "USF-215 is an audit and follow-up generation gate. It can close only after this report is merged, validation is recorded, USF-184 and USF-192 are updated, and the grouped blockers remain linked. USF-133, USF-184, and USF-192 remain open because blocking source follow-ups remain open."
+  },
+  "nonClaims": {
+    "fullDevReadiness": false,
+    "testReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "deploymentReadiness": false,
+    "liveProviderReadiness": false,
+    "socReadiness": false,
+    "iso27001Certification": false,
+    "enterpriseProductionReadiness": false,
+    "fullReactParity": false,
+    "usf133Closure": false
+  }
+}
