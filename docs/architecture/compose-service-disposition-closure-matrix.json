@@ -32,14 +32,14 @@
     "full-react-parity-readiness"
   ],
   "closure_disposition_counts": {
-    "bounded-local-proof-with-deferred-readiness-boundaries": 2,
-    "covered-by-usf-runtime": 4,
-    "deferred": 10,
     "implemented": 13,
     "implemented-equivalent": 1,
-    "out-of-foundation-scope": 1,
+    "bounded-local-proof-with-deferred-readiness-boundaries": 2,
+    "deferred": 10,
     "profile-gated-bounded-proof": 6,
-    "substituted-partial": 1
+    "covered-by-usf-runtime": 4,
+    "substituted-partial": 1,
+    "out-of-foundation-scope": 1
   },
   "rows": [
     {
@@ -590,21 +590,29 @@
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json",
-          "spec/instances/compose-service/service-catalogue.json"
+          "spec/instances/compose-service/service-catalogue.json",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
-          "USF-185"
+          "USF-185",
+          "USF-218",
+          "USF-222"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
+        ],
         "missing_evidence": [
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -625,8 +633,19 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-otel-collector",
           "resilience-posture-otel-collector",
-          "incident-vulnerability-otel-collector"
-        ]
+          "incident-vulnerability-otel-collector",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
+        ],
+        "tracking_issue_rationale": {
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
+        }
       }
     },
     {
@@ -662,21 +681,29 @@
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json",
-          "spec/instances/compose-service/service-catalogue.json"
+          "spec/instances/compose-service/service-catalogue.json",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
-          "USF-185"
+          "USF-185",
+          "USF-218",
+          "USF-222"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
+        ],
         "missing_evidence": [
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -698,8 +725,19 @@
           "soa-deferred-boundary-prometheus",
           "access-posture-prometheus",
           "resilience-posture-prometheus",
-          "incident-vulnerability-prometheus"
-        ]
+          "incident-vulnerability-prometheus",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
+        ],
+        "tracking_issue_rationale": {
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
+        }
       }
     },
     {
@@ -735,22 +773,30 @@
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json",
-          "spec/instances/compose-service/service-catalogue.json"
+          "spec/instances/compose-service/service-catalogue.json",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
-          "USF-185"
+          "USF-185",
+          "USF-218",
+          "USF-222"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
+        ],
         "missing_evidence": [
           "future operator console SSO/clickthrough and privileged access proof",
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -772,8 +818,19 @@
           "soa-deferred-boundary-grafana",
           "access-posture-grafana",
           "resilience-posture-grafana",
-          "incident-vulnerability-grafana"
-        ]
+          "incident-vulnerability-grafana",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
+        ],
+        "tracking_issue_rationale": {
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
+        }
       }
     },
     {
@@ -809,21 +866,29 @@
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json",
-          "spec/instances/compose-service/service-catalogue.json"
+          "spec/instances/compose-service/service-catalogue.json",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
-          "USF-185"
+          "USF-185",
+          "USF-218",
+          "USF-222"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
+        ],
         "missing_evidence": [
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -845,8 +910,19 @@
           "soa-deferred-boundary-loki",
           "access-posture-loki",
           "resilience-posture-loki",
-          "incident-vulnerability-loki"
-        ]
+          "incident-vulnerability-loki",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
+        ],
+        "tracking_issue_rationale": {
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
+        }
       }
     },
     {
@@ -882,21 +958,29 @@
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
           "python3 tools/validate-compose/validate-compose.py all --json",
-          "spec/instances/compose-service/service-catalogue.json"
+          "spec/instances/compose-service/service-catalogue.json",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
-          "USF-185"
+          "USF-185",
+          "USF-218",
+          "USF-222"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
+        ],
         "missing_evidence": [
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -918,8 +1002,19 @@
           "soa-deferred-boundary-tempo",
           "access-posture-tempo",
           "resilience-posture-tempo",
-          "incident-vulnerability-tempo"
-        ]
+          "incident-vulnerability-tempo",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
+        ],
+        "tracking_issue_rationale": {
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
+        }
       }
     },
     {
@@ -2154,7 +2249,8 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2162,20 +2258,27 @@
           "USF-182",
           "USF-185",
           "USF-179",
-          "USF-159"
+          "USF-159",
+          "USF-218",
+          "USF-222"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
+        ],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
           "future operator console SSO/clickthrough and privileged access proof",
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -2197,11 +2300,20 @@
           "soa-deferred-boundary-alertmanager",
           "access-posture-alertmanager",
           "resilience-posture-alertmanager",
-          "incident-vulnerability-alertmanager"
+          "incident-vulnerability-alertmanager",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
         ],
         "tracking_issue_rationale": {
           "USF-179": "observability operations stack proof and evidence",
-          "USF-159": "observability deferred operations backend and incident evidence depth"
+          "USF-159": "observability deferred operations backend and incident evidence depth",
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -2240,7 +2352,8 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2248,19 +2361,26 @@
           "USF-182",
           "USF-185",
           "USF-179",
-          "USF-159"
+          "USF-159",
+          "USF-218",
+          "USF-222"
         ],
-        "non_equivalence_boundaries": [],
+        "non_equivalence_boundaries": [
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
+        ],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",
           "live external/provider-managed service evidence",
-          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
+          "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -2281,11 +2401,20 @@
           "evidence-enterprise-evidence-model-validator",
           "soa-deferred-boundary-alloy",
           "resilience-posture-alloy",
-          "incident-vulnerability-alloy"
+          "incident-vulnerability-alloy",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
         ],
         "tracking_issue_rationale": {
           "USF-179": "observability operations stack proof and evidence",
-          "USF-159": "observability deferred operations backend and incident evidence depth"
+          "USF-159": "observability deferred operations backend and incident evidence depth",
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
@@ -3173,7 +3302,8 @@
           "docs/architecture/sentry-service-semantic-proof-boundary.json",
           "corepack pnpm proof:observability:sentry",
           "packages/proof/src/sentry-sdk-envelope-proof.ts",
-          "usf-205-evidence-sentry-sdk-envelope-proof"
+          "usf-205-evidence-sentry-sdk-envelope-proof",
+          "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
         ],
         "tracking_issues": [
           "USF-166",
@@ -3189,7 +3319,9 @@
           "USF-205",
           "USF-159",
           "USF-169",
-          "USF-193"
+          "USF-193",
+          "USF-218",
+          "USF-222"
         ],
         "non_equivalence_boundaries": [
           "React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
@@ -3197,12 +3329,14 @@
           "Lane 3 records Sentry as a profile-gated shared error-assurance control plane only where Sentry semantics are claimed; local logs are not equivalent to Sentry service semantics.",
           "Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
           "USF-196 records local observability proof as non-equivalent to Sentry service readiness, event ingestion, issue lifecycle, alert handoff, incident workflow, retention, and operator-console evidence.",
-          "USF-205 records an accepted official SDK envelope proof, but that local SDK transport proof is not Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier, live-provider, or environment promotion evidence."
+          "USF-205 records an accepted official SDK envelope proof, but that local SDK transport proof is not Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier, live-provider, or environment promotion evidence.",
+          "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
         ],
         "missing_evidence": [
           "future operator console SSO/clickthrough and privileged access proof",
           "live monitoring, supplier, and production incident evidence remain unproven",
-          "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator browser console access, supplier/live-provider evidence, and environment promotion remain unproven after USF-205 accepted SDK envelope proof."
+          "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator browser console access, supplier/live-provider evidence, and environment promotion remain unproven after USF-205 accepted SDK envelope proof.",
+          "USF-222 future execution proof for alerting, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and Sentry service readiness remains unproven."
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -3212,7 +3346,9 @@
           "sentry-service-proof-deferred-to-USF-205",
           "local-observability-non-equivalence-recorded",
           "sentry-sdk-envelope-proof-recorded",
-          "sentry-service-readiness-deferred-after-sdk-proof"
+          "sentry-service-readiness-deferred-after-sdk-proof",
+          "observability-service-operations-disposition-recorded",
+          "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -3263,7 +3399,14 @@
           "usf-205-access-sentry-sdk-envelope-proof",
           "usf-205-resilience-sentry-sdk-envelope-proof",
           "usf-205-incident-vulnerability-sentry-sdk-envelope-proof",
-          "usf-205-privacy-sentry-sdk-envelope-proof"
+          "usf-205-privacy-sentry-sdk-envelope-proof",
+          "soa-usf-218-observability-service-operations-depth",
+          "evidence-usf-218-observability-service-operations-depth-disposition",
+          "threat-usf-218-observability-service-operations-overclaim",
+          "access-usf-218-observability-service-operator-boundary",
+          "resilience-usf-218-observability-service-operations-boundary",
+          "incident-usf-218-observability-alert-incident-boundary",
+          "privacy-usf-218-observability-service-data-boundary"
         ],
         "tracking_issue_rationale": {
           "USF-170": "bounded Sentry error-monitoring disposition proof and evidence",
@@ -3271,7 +3414,9 @@
           "USF-205": "accepted Sentry SDK envelope capture, redaction, tenant-label, and fail-closed local transport proof; Sentry service readiness remains deferred",
           "USF-159": "observability backend, alerting, dashboard, incident, and Sentry service readiness depth remains open",
           "USF-169": "operator access posture remains required before any Sentry operator-console or privileged access readiness claim",
-          "USF-193": "environment promotion standard remains required before any dev, test, staging, production, or promotion readiness interpretation of Sentry evidence"
+          "USF-193": "environment promotion standard remains required before any dev, test, staging, production, or promotion readiness interpretation of Sentry evidence",
+          "USF-218": "observability service, alerting, dashboard, incident, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live monitoring disposition proof depth",
+          "USF-222": "future executed observability alerting, dashboard, incident, SLI/SLO, retention purge, cross-tenant aggregate, and Sentry service readiness proof before stronger readiness claims"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

@@ -216,9 +216,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "OTEL/Prometheus/Loki/Tempo/Grafana/Sentry lineage",
-      "readiness_impact": "USF-159 adds bounded local observability operations proof depth and explicitly reclassifies live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, and cross-tenant aggregate analytics as unproven and unclaimed.",
-      "tracking_carrier_or_recommendation": "USF-158/USF-159",
-      "usf_evidence_summary": "USF observability proof plus observability operations enterprise proof-depth matrix, validate-observability USF-OBSERVABILITY-013 through USF-OBSERVABILITY-017, and explicit live/deep operations non-claims",
+      "readiness_impact": "USF-159 adds bounded local observability operations proof depth. USF-218 records current observability service, alerting, dashboard, incident workflow, retention purge, SLI/SLO, cross-tenant aggregate, and live monitoring disposition evidence and defers future execution proof to USF-222. No live monitoring, dashboard, alerting, incident-response, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure claim is made.",
+      "tracking_carrier_or_recommendation": "USF-158/USF-159 plus USF-218 disposition evidence and USF-222 future execution follow-up",
+      "usf_evidence_summary": "USF observability proof, observability operations enterprise proof-depth matrix, USF-218 observability service operations disposition gate, validate-observability USF-OBSERVABILITY-013 through USF-OBSERVABILITY-018, and explicit live/deep operations non-claims",
       "usf_status": "migrated"
     },
     {
@@ -375,9 +375,9 @@
       ],
       "evidence_grade": "D",
       "react_evidence_summary": "Sentry adapter and 20 compose services",
-      "readiness_impact": "USF-170 records bounded Sentry/error-monitoring disposition, USF-196 records the service-semantic boundary, USF-205 proves an accepted official Sentry SDK envelope, and USF-218 owns remaining service, alert, dashboard, incident, retention, aggregate, and live monitoring depth. No Sentry service readiness or live monitoring readiness is claimed.",
-      "tracking_carrier_or_recommendation": "USF-170/USF-196/USF-205 plus current open blocker USF-218",
-      "usf_evidence_summary": "Local observability evidence plus bounded Sentry SDK-envelope proof; Sentry service readiness, alert handoff, incident workflow, dashboard runtime, and live-provider evidence remain deferred with owner.",
+      "readiness_impact": "USF-170 records bounded Sentry/error-monitoring disposition, USF-196 records the service-semantic boundary, USF-205 proves an accepted official Sentry SDK envelope, and USF-218 records current service, alert, dashboard, incident, retention, aggregate, and live monitoring disposition evidence. USF-222 owns future execution proof. No Sentry service readiness or live monitoring readiness is claimed.",
+      "tracking_carrier_or_recommendation": "USF-170/USF-196/USF-205 plus USF-218 disposition evidence and USF-222 future execution follow-up",
+      "usf_evidence_summary": "Local observability evidence plus bounded Sentry SDK-envelope proof and USF-218 service-operation disposition; Sentry service readiness, alert handoff, incident workflow, dashboard runtime, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and live-provider evidence remain deferred to USF-222.",
       "usf_status": "bounded-sdk-envelope-proof"
     },
     {
@@ -575,8 +575,8 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "React package scripts and Makefile lineage",
-      "readiness_impact": "Commands exist for bounded local proof lanes, but operator/admin, observability service, backup/restore DR, generated-client delivery, and environment-promotion proof depth remain separate owner issues before any broad command or readiness claim.",
-      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-218, USF-219, and USF-220",
+      "readiness_impact": "Commands exist for bounded local proof lanes, but operator/admin, backup/restore DR, generated-client delivery, and environment-promotion proof depth remain separate owner issues before any broad command or readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219, and USF-220, with USF-222 as future observability execution-proof follow-up",
       "usf_evidence_summary": "USF make proof ladder plus bounded provider/service proof commands; universal React command parity and environment readiness remain unclaimed.",
       "usf_status": "partial"
     },
@@ -616,7 +616,7 @@
       "evidence_grade": "C",
       "react_evidence_summary": "React compose comments and packages",
       "readiness_impact": "Data-flow and trust-boundary depth is represented through service catalogue posture, enterprise evidence, runtime proof manifests, and the remaining owner issues for operator/admin, observability operations, backup/restore DR, generated-client delivery, and environment promotion.",
-      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-218, USF-219, and USF-220",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219, and USF-220, with USF-222 as future observability execution-proof follow-up",
       "usf_evidence_summary": "Standards plus governed service, provider, runtime, and enterprise evidence rows; residual cross-boundary depth remains deferred with current owner issues.",
       "usf_status": "partial"
     }

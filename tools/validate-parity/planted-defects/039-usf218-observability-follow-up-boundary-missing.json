@@ -1,0 +1,12 @@
+{
+  "description": "USF-218 observability disposition evidence is present but the future execution-proof follow-up is missing from the closure-tier exception.",
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "closureTierPatchException": {
+      "id": "exception-service-alertmanager",
+      "set": {
+        "followUpIssue": "USF-218"
+      }
+    }
+  }
+}

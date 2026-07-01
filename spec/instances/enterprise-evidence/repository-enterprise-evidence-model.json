@@ -5083,6 +5083,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-218-observability-service-operations-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-218 observability service, alerting, dashboard, incident workflow, retention, SLI/SLO, cross-tenant aggregate, Sentry service, and live provider boundaries as bounded disposition evidence with future execution proof deferred to USF-222.",
+      "riskTreated": "Local observability proof or Sentry SDK-envelope proof could be mistaken for service readiness, alerting, dashboard runtime, incident workflow, live-provider readiness, production operations, certification, full readiness, full parity, or USF-133 closure.",
+      "assetServiceAffected": "observability services; Sentry error monitoring; OTel collector; Prometheus; Grafana; Loki; Tempo; Alertmanager; Alloy; dashboard; alerting; incident workflow; telemetry retention; SLI/SLO; cross-tenant aggregate analytics",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=deferred-with-owner; sourceIssue=USF-218; currentEvidence=evidence-usf-218-observability-service-operations-depth-disposition; localOperationsProofAccepted=USF-159; sentrySdkEnvelopeProofAccepted=USF-205; futureExecutionProofIssue=USF-222; sentryServiceReadinessClaim=false; alertingReadinessClaim=false; dashboardReadinessClaim=false; incidentWorkflowReadinessClaim=false; liveMonitoringReadinessClaim=false",
+      "evidenceSource": "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json; docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.md; docs/architecture/sentry-service-semantic-proof-boundary.json; tools/validate-parity/validate-observability.py",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "riskStatement=observability service operations, alerting, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, Sentry service readiness, supplier/live-provider evidence, and environment promotion remain unproven; threatFailureScenario=bounded local proof is mistaken for live service or readiness evidence; affectedAssetService=observability-service-operations; impact=high; likelihood=medium; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; controlOwner=platform-observability-control-owner; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-222",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -7469,6 +7495,33 @@
       ],
       "prOrMergeSha": "79cafc1ef550849236554145c44f74c06d33af02",
       "retentionPosture": "Retain committed proof code, GraphQL/generated-client disposition matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw payload, credential, token, cookie, authorization header, provider endpoint, stack trace, customer data, production data, generated client artifact, SDK package, public API key, GraphQL payload, or external developer data is retained. effectivenessState=proven-local; sourceIssue=USF-214; graphqlGeneratedClientDispositionProven=true; graphqlFederationReadinessClaim=false; generatedClientReadinessClaim=false; generatedSdkReadinessClaim=false; externalDeveloperPlatformReadinessClaim=false"
+    },
+    {
+      "id": "evidence-usf-218-observability-service-operations-depth-disposition",
+      "proofResult": "observability-service-operations-disposition-gate",
+      "whatWasProven": "USF-218 records a machine-checkable bounded disposition gate. It proves that USF-159 local observability operations proof and USF-205 Sentry SDK-envelope proof are accepted as local evidence only, and that service readiness, alerting, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, live-provider, environment-promotion, certification, full readiness, full parity, and USF-133 closure claims remain prohibited. It also links future execution proof to USF-222.",
+      "whatWasNotProven": "No Sentry service readiness, Sentry ingestion, issue lifecycle, alert handoff, dashboard runtime, incident workflow, SLI/SLO operation, telemetry retention purge, cross-tenant aggregate analytics, live monitoring backend, live provider, supplier/subprocessor operation, test readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is proven. Explicit non-claims: full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live provider readiness, soc readiness, iso27001 certification, enterprise production readiness, and full react parity readiness. Evidence artefact: docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json. Source issue USF-218; follow-up issue USF-222.",
+      "runtimeMode": "repository-disposition-evidence-only",
+      "providerMode": "bounded-local-and-deferred-provider-boundary",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#otel-collector,prometheus,grafana,loki,tempo,alertmanager,alloy,sentry",
+      "adapterProviderId": "in-memory-telemetry-collector; observability-sentry-sdk-envelope-local; observability-service-operations-deferred-to-USF-222",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "commandPin": "repository evidence gate; make observability-proof; corepack pnpm proof:observability:sentry",
+      "commitPin": "6b265d651775b4717f99eac9792c5ceb2f1587c4",
+      "issueLinks": [
+        "USF-218",
+        "USF-222",
+        "USF-159",
+        "USF-170",
+        "USF-196",
+        "USF-205",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "6b265d651775b4717f99eac9792c5ceb2f1587c4",
+      "retentionPosture": "Retain committed disposition artefact, enterprise rows, validator rules, planted defects, PR validation output, and Linear reconciliation comments. No raw telemetry payload, raw log message, raw span payload, tenant name, user email, provider endpoint, credential, token, provider payload, stack trace, customer data, production data, or live provider data is retained. effectivenessState=deferred-with-owner; sourceIssue=USF-218; followUpIssue=USF-222; sentryServiceReadinessClaim=false; alertingReadinessClaim=false; dashboardReadinessClaim=false; incidentWorkflowReadinessClaim=false; liveMonitoringReadinessClaim=false"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -9569,6 +9622,30 @@
       "failClosedBehaviour": "validate-api USF-API-025 through USF-API-029 block missing USF-214 proof markers, incomplete matrix controls, missing enterprise rows, incomplete deferred boundaries, missing non-equivalence boundaries, and GraphQL/generated-client readiness overclaims.",
       "monitoringAuditEvidence": "make api-proof output, validate-api findings, disposition matrix, and value-free proof checks only; no live monitoring backend.",
       "residualRisk": "GraphQL runtime, federation gateway, generated SDK/client distribution, external developer platform, deployment, environment promotion, and production API operation remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=future generated-client or GraphQL issue if separately authorised"
+    },
+    {
+      "id": "threat-usf-218-observability-service-operations-overclaim",
+      "targetType": "source-issue-control-gate",
+      "target": "observability-service-alerting-dashboard-incident-proof-depth",
+      "trustBoundary": "Repository disposition and local synthetic proof boundary only; no live observability backend, Sentry service, alert routing, dashboard runtime, incident workflow, SLI/SLO operation, supplier, or production operation boundary claim.",
+      "tenantBoundary": "Existing local proof exercises tenant-safe labels and tenant query isolation; future alert, dashboard, incident, retention, SLI/SLO, and aggregate analytics tenant boundaries remain deferred to USF-222.",
+      "credentialBoundary": "No raw endpoint, DSN, token, credential, provider payload, stack trace, raw SDK error, raw telemetry payload, tenant name, user email, customer data, or production data is retained.",
+      "dataClassification": "internal synthetic observability metadata and disposition evidence only",
+      "abuseCases": [
+        "USF-159 local observability proof treated as live monitoring backend readiness",
+        "USF-205 Sentry SDK-envelope proof treated as Sentry service readiness",
+        "USF-218 disposition evidence treated as alerting, dashboard, or incident workflow execution proof",
+        "USF-222 future execution proof hidden behind USF-218 completion"
+      ],
+      "failureModes": [
+        "follow-up issue is missing from deferred boundaries",
+        "Sentry service readiness claim appears",
+        "alerting or dashboard readiness claim appears",
+        "enterprise evidence row omits owner, risk owner, control owner, or review date"
+      ],
+      "failClosedBehaviour": "validate-observability and validate-enterprise fail when USF-218 artefact, follow-up boundary, enterprise rows, non-equivalence boundary, or prohibited non-claims are missing or overclaimed.",
+      "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, USF-159 local proof, and USF-205 SDK-envelope proof references only; no live monitoring or incident operation evidence. Evidence artefact: docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json. Source issue USF-218; follow-up issue USF-222.",
+      "residualRisk": "effectivenessState=deferred-with-owner; sourceIssue=USF-218; followUpIssue=USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; execution proof remains future work before stronger readiness claims. Explicit non-claims: full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live provider readiness, soc readiness, iso27001 certification, enterprise production readiness, and full react parity readiness."
     }
   ],
   "sdkDependencyGovernance": [
@@ -12543,6 +12620,40 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-218-observability-service-operator-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "observability service operator dashboard and console access boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "sourceIssue=USF-218",
+        "followUpIssue=USF-222",
+        "accessModel=local-proof-and-disposition-evidence-only-no-dashboard-or-Sentry-console-operation-proven",
+        "authnAuthzBoundary=existing-PDP-local-observability-route-proof-only",
+        "leastPrivilegePosture=operator-dashboard-and-alert-routing-privilege-review-deferred-to-USF-222",
+        "breakGlassRelevance=not-proven-by-USF-218",
+        "auditEvidence=value-free-local-proof-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-observability-service-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-218",
+        "noPublicExposureClaim=true",
+        "dashboardReadinessClaim=false"
+      ],
+      "evidenceSource": "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Operator dashboard access, Sentry console access, alert-routing administration, access review, deprovisioning, break-glass, and public exposure proof are not proven by USF-218; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=USF-222",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -14774,6 +14885,43 @@
       "evidenceSource": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
       "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
       "deferredReason": "Generated client compatibility testing, SDK package rollback, GraphQL runtime resilience, federation gateway failover, deployment rollback, staging, production, DR, RPO, RTO, live observability, and production incident operation remain non-claims; owner=platform-api-foundation; reviewDate=2026-09-30; followUpIssue=future generated-client or GraphQL issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-218-observability-service-operations-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "observability service alerting dashboard incident retention and SLI/SLO resilience boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "sourceIssue=USF-218",
+        "followUpIssue=USF-222",
+        "readinessChecks=local-USF-159-and-USF-205-proof-references-only",
+        "retryTimeoutBehaviour=not-proven-for-live-observability-services-alerts-dashboards-or-incidents",
+        "failClosedMode=validator-blocks-overclaim-and-missing-follow-up-boundary",
+        "safeTeardown=not-applicable-repository-disposition-evidence-only",
+        "structuredLogging=value-free-proof-and-validator-output-only",
+        "tracingCorrelation=local-proof-correlation-evidence-only",
+        "metrics=local-proof-and-validator-counts-only",
+        "auditEvents=value-free-local-proof-and-reconciliation-comments-only",
+        "redaction=no-raw-telemetry-payload-token-endpoint-credential-provider-payload-stack-trace-tenant-name-user-email-or-customer-data",
+        "backupRestorePosture=not-proven-for-observability-service-retention-or-provider-data",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=alerting-dashboard-incident-retention-SLI-SLO-and-live-provider-DR-deferred-to-USF-222"
+      ],
+      "evidenceSource": "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Live observability service readiness, retries, dashboard availability, alert delivery, incident workflow, telemetry retention purge, SLI/SLO operation, backup/restore, DR, RPO, and RTO are not proven; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=USF-222",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -17737,6 +17885,38 @@
       "evidenceSource": "docs/architecture/api-graphql-generated-client-disposition-matrix.json; tools/validate-parity/validate-api.py",
       "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
       "deferredReason": "Production GraphQL or generated-client incident hooks, paging, escalation execution, public API advisory response, patch SLA evidence, SDK advisory workflow, generated-client revocation, and post-incident evidence remain non-claims; owner=platform-api-foundation; reviewDate=2026-09-30; followUpIssue=future generated-client or GraphQL incident issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-218-observability-alert-incident-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "observability alert delivery dashboard incident workflow and vulnerability evidence boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "sourceIssue=USF-218",
+        "followUpIssue=USF-222",
+        "incidentDetectionHook=local-validator-and-proof-reference-only",
+        "alertingPosture=not-proven-by-USF-218",
+        "escalationOwner=platform-observability-foundation",
+        "vulnerabilityAdvisoryReview=required-before-live-observability-provider-or-Sentry-service-readiness-claim",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-218",
+        "correctiveActionEvidence=validator-and-PR-evidence-only",
+        "postIncidentEvidenceBoundary=not-proven-by-USF-218"
+      ],
+      "evidenceSource": "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json; tools/validate-parity/validate-observability.py",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Alert delivery, on-call escalation, incident workflow execution, corrective-action operation, provider advisory response, status-page operation, vulnerability SLA evidence, and post-incident evidence are not proven by USF-218; owner=platform-observability-foundation; reviewDate=2026-09-30; followUpIssue=USF-222",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -21090,6 +21270,39 @@
       "evidenceSource": "docs/architecture/api-graphql-generated-client-disposition-matrix.json; packages/proof/src/api-contracts-proof.ts",
       "validationCommand": "make api-proof; python3 tools/validate-parity/validate-api.py all --json",
       "deferredReason": "GraphQL payload privacy, generated client distribution privacy, public developer data, DSR, data residency, public docs retention, legal hold workflow, custom retention, and production API data recovery privacy remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=future generated-client or GraphQL privacy issue if separately authorised",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-218-observability-service-data-boundary",
+      "targetType": "source-issue-control-gate",
+      "target": "observability service proof and disposition data boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "sourceIssue=USF-218",
+        "followUpIssue=USF-222",
+        "dataOrigin=synthetic-local-proof-and-repository-disposition-metadata-only",
+        "piiPosture=no-production-PII-customer-data-tenant-name-or-user-email-retained",
+        "dataClassification=internal-observability-metadata-and-disposition-evidence-only",
+        "redactionPolicy=no-raw-telemetry-payload-log-message-span-payload-token-endpoint-credential-provider-payload-stack-trace-tenant-name-user-email-or-customer-data-in-evidence",
+        "retentionPurgePosture=retention-purge-operation-not-proven-by-USF-218",
+        "legalHoldRelevance=not-proven-for-observability-service-retention-or-provider-data",
+        "dataResidencyCrossBorderBoundary=hermetic-local-and-repository-evidence-only-no-live-provider-residency-claim",
+        "supplierSubprocessorBoundary=not-proven-by-USF-218"
+      ],
+      "evidenceSource": "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Provider-managed privacy, data residency, legal hold, production retention, telemetry purge operation, Sentry service retention, supplier/subprocessor posture, and live observability provider privacy evidence are not proven by USF-218; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-222",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

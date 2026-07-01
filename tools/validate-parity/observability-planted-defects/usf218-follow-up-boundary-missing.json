@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf218-follow-up-boundary-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-018",
+  "edits": [
+    {
+      "target": "service_operations_depth",
+      "old": "\"followUpIssue\": \"USF-222\"",
+      "new": "\"followUpIssue\": \"USF-000\""
+    }
+  ]
+}

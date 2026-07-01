@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf218-depth-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-018",
+  "edits": [
+    {
+      "target": "service_operations_depth",
+      "old": "\"sourceIssue\": \"USF-218\"",
+      "new": "\"sourceIssue\": \"USF-000\""
+    }
+  ]
+}

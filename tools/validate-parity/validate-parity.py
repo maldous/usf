@@ -185,8 +185,19 @@ PROHIBITED_READINESS_CLAIMS = {
     "enterprise-production-readiness",
 }
 USF133_GATE_PROHIBITED_CLAIMS = PROHIBITED_READINESS_CLAIMS | {"usf-133-closure"}
-USF216_CURRENT_OPEN_BLOCKERS = {"USF-218", "USF-219", "USF-220"}
+USF216_CURRENT_OPEN_BLOCKERS = {"USF-219", "USF-220"}
 USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP = "USF-221"
+USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP = "USF-222"
+USF218_OBSERVABILITY_SERVICES = {
+    "otel-collector",
+    "prometheus",
+    "grafana",
+    "loki",
+    "tempo",
+    "alertmanager",
+    "alloy",
+    "sentry",
+}
 USF216_RECONCILED_COMPOSE_SERVICES = {
     "external-caddy": "caddy",
     "pgadmin": "pgadmin",
@@ -1269,6 +1280,12 @@ def check_usf216_final_reconciliation(F, state):
             "usf216.currentOpenBlockerIssues",
             f"missing current open blockers: {sorted(USF216_CURRENT_OPEN_BLOCKERS - blockers)}",
         )
+    if "USF-218" in blockers:
+        F.add("USF-PARITY-039", "usf216.currentOpenBlockerIssues", "USF-218 must not remain a current blocker after bounded disposition evidence")
+    if USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP not in set(reconciliation.get("nonBlockingContextIssues") or []):
+        F.add("USF-PARITY-039", "usf216.nonBlockingContextIssues", "USF-222 observability execution follow-up must remain visible")
+    if "USF-218" not in set(reconciliation.get("resolvedSourceIssuesUsedAsEvidence") or []):
+        F.add("USF-PARITY-039", "usf216.resolvedSourceIssuesUsedAsEvidence", "USF-218 must be recorded as resolved source evidence")
     if not _non_empty_list(reconciliation.get("validationCommands")):
         F.add("USF-PARITY-039", "usf216.validationCommands", "validation command list is required")
 
@@ -1288,6 +1305,14 @@ def check_usf216_final_reconciliation(F, state):
             carrier = str(row.get("tracking_carrier_or_recommendation") or "")
             if "USF-" not in carrier:
                 F.add("USF-PARITY-039", f"functionality:{capability_id}", "reconciled capability lacks current USF owner issue")
+            if capability_id in {"observability", "error-monitoring"} and (
+                "USF-218" not in carrier or USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP not in carrier
+            ):
+                F.add(
+                    "USF-PARITY-039",
+                    f"functionality:{capability_id}",
+                    "observability row must carry USF-218 disposition and USF-222 execution follow-up",
+                )
 
     compose = state.get("composeParityMatrix")
     if compose is None:
@@ -1332,6 +1357,19 @@ def check_usf216_final_reconciliation(F, state):
                     f"closure:{service_id}",
                     "operator/gateway closure row lacks USF-217 evidence and USF-221 follow-up issue",
                 )
+        for service_id in USF218_OBSERVABILITY_SERVICES:
+            row = closure_rows.get(service_id)
+            evidence = row.get("closure_evidence", {}) if row else {}
+            if not row:
+                F.add("USF-PARITY-039", f"closure:{service_id}", "observability service closure row is missing")
+                continue
+            tracking_issues = set(evidence.get("tracking_issues") or [])
+            if not {"USF-218", USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP} <= tracking_issues:
+                F.add(
+                    "USF-PARITY-039",
+                    f"closure:{service_id}",
+                    "observability closure row lacks USF-218 evidence and USF-222 follow-up issue",
+                )
 
     gate = state.get("usf133ClosureTierGate")
     if isinstance(gate, dict):
@@ -1350,6 +1388,23 @@ def check_usf216_final_reconciliation(F, state):
                     "USF-PARITY-039",
                     f"serviceRef:{service_id}",
                     "service ref lacks USF-217 evidence and USF-221 follow-up issue",
+                )
+        for service_id in USF218_OBSERVABILITY_SERVICES:
+            ref = refs.get(service_id) or {}
+            source_refs = set(ref.get("sourceIssueRefs") or [])
+            if not {"USF-218", USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP} <= source_refs:
+                F.add(
+                    "USF-PARITY-039",
+                    f"serviceRef:{service_id}",
+                    "observability service ref lacks USF-218 evidence and USF-222 follow-up issue",
+                )
+        for service_id in ("alertmanager", "alloy", "sentry"):
+            exception = exceptions.get(f"exception-service-{service_id}") or {}
+            if exception.get("followUpIssue") != USF218_OBSERVABILITY_EXECUTION_FOLLOW_UP:
+                F.add(
+                    "USF-PARITY-039",
+                    f"exception:{service_id}",
+                    "observability exception must defer execution proof to USF-222",
                 )
 
 
