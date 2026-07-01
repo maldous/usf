@@ -1,0 +1,11 @@
+{
+  "name": "usf-211-pgbackrest-readiness-overclaim",
+  "expectedRule": "USF-RUNTIME-032",
+  "pgbackrestConfiguredProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/readinessClaimsAllowed/0",
+      "value": "production-readiness"
+    }
+  ]
+}

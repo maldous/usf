@@ -467,9 +467,23 @@ services:
     profiles:
       - workflow-provider
   pgbackrest:
-    image: woblerr/docker-pgbackrest:alpine
+    image: "woblerr/pgbackrest:2.58.0@sha256:18cdff011e974308510d056b4039d9b4d21ec33d9124879882c6f05e99be2ab9"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data:ro
+      - pgbackrest-repo:/var/lib/pgbackrest
+      - pgbackrest-restore:/var/lib/postgresql/restore
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "pgbackrest version >/dev/null"
+      interval: 10s
+      timeout: 5s
+      retries: 5
     profiles:
-      - workflow-provider
+      - backup-restore
   clamav:
     image: clamav/clamav:stable
     profiles:
@@ -497,3 +511,5 @@ volumes:
   postgres-data: {}
   keycloak-db-data: {}
   sonar-postgres-data: {}
+  pgbackrest-repo: {}
+  pgbackrest-restore: {}

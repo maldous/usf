@@ -1,0 +1,5 @@
+{
+  "name": "usf-211-pgbackrest-boundary-missing",
+  "expectedRule": "USF-RUNTIME-032",
+  "removePgbackrestConfiguredProofBoundary": true
+}

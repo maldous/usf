@@ -1,0 +1,11 @@
+{
+  "name": "usf-211-pgbackrest-proof-source-marker-missing",
+  "expectedRule": "USF-RUNTIME-032",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/pgbackrest-configured-proof.ts",
+      "old": "--no-online",
+      "new": "--online"
+    }
+  ]
+}

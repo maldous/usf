@@ -629,12 +629,12 @@
       "proofEvidence": "Adapter-contained protocol-exception proof starts the canonical test Compose webhook-sink service with loopback ephemeral host exposure, waits with bounded readiness retry, posts a synthetic webhook capture, reads the echoed payload classification and body hash, verifies redacted evidence, proves unavailable fail-closed behaviour, and tears Compose down in finally."
     },
     {
-      "bindingStatus": "profile-gated",
-      "providerMode": "live-external-deferred",
-      "providerClass": "not-applicable",
-      "sdkBoundary": "not-applicable",
-      "sourceUseDisposition": "evidence-only-support",
-      "deferredReason": "effectivenessState=blocked-with-owner-and-follow-up; riskStatement=pgBackRest backup/restore semantics are catalogued but no backup artifact, restore drill, retention, secret-exclusion, audit, or cleanup proof exists; threatFailureScenario=documented backup intent or an unpullable unconfigured image is treated as restore evidence; affectedAssetService=pgbackrest; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=defer maintained pinned image and configured repository proof wiring to USF-211 while USF-202 records the blocked reclassification and USF-177 records the bounded disposition gate; reviewDate=2026-09-30; linkedFollowUpIssue=USF-211",
+      "bindingStatus": "profile-gated-proven",
+      "providerMode": "composed-test",
+      "providerClass": "local-composed-real-service",
+      "sdkBoundary": "official-cli-proof-boundary",
+      "sourceUseDisposition": "runtime-proof-support",
+      "deferredReason": "effectivenessState=proven-local; riskStatement=USF-211 proves bounded profile-gated local Compose pgBackRest cold backup and restore drill semantics while online backup, WAL archive, PITR, scheduled backup, RPO/RTO, disaster recovery, provider-managed backup service, API runtime binding, worker runtime binding, staging readiness, production readiness, and live-provider readiness remain outside scope; threatFailureScenario=local cold backup/restore drill proof is overclaimed as backup readiness, restore readiness, DR readiness, RPO/RTO, or production backup posture; affectedAssetService=pgbackrest; impact=critical; likelihood=medium; owner=platform-data-foundation; treatment=USF-211 proves pinned image, configured repository, stanza, Postgres linkage, synthetic cold full backup, restore readback, cleanup, and unavailable fail-closed evidence while broader readiness remains deferred; reviewDate=2026-09-30; linkedSourceIssue=USF-211; linkedFollowUpIssue=none",
       "followUpIssueRefs": [
         "USF-177",
         "USF-202",
@@ -647,16 +647,19 @@
         "pgbackrest"
       ],
       "providerRegistryIds": [
+        "backup-restore-pgbackrest-composed-test",
         "backup-restore-pgbackrest-deferred"
       ],
-      "adapterName": "pgBackRest provider deferred",
+      "adapterName": "pgBackRest CLI proof boundary",
       "portName": "BackupRestoreProvider",
-      "endpointRef": null,
+      "endpointRef": "endpoint://compose/pgbackrest",
       "sdkPackage": null,
       "sdkVersion": null,
-      "providerRegistryEvidence": "packages/core/src/index.ts records backup-restore-pgbackrest-deferred as deferred evidence-only support linked to the pgBackRest service catalogue row.",
-      "apiProofEvidence": "No API proof is claimed for backup creation, restore invocation, restore success, retention, RPO/RTO, or secret-exclusion semantics; USF-177 records the disposition gate, USF-202 records the blocked reclassification, and USF-211 owns the image/repository proof unblocker.",
-      "workerProofEvidence": "No worker proof is claimed for pgBackRest backup artifact creation, restore drill, failure handling, timeout, audit, or teardown semantics; this remains blocked until USF-211 provides a pullable configured proof boundary."
+      "providerRegistryEvidence": "packages/core/src/index.ts records backup-restore-pgbackrest-composed-test as a proof-only composed-test provider linked to the pgBackRest service catalogue row, while retaining backup-restore-pgbackrest-deferred for live/provider-managed, online backup, WAL/PITR, RPO/RTO, and DR non-claims.",
+      "apiProofEvidence": "No API runtime pgBackRest provider use is claimed by USF-211; profile-gated proof exercises the CLI proof boundary directly against local Compose Postgres and pgBackRest.",
+      "workerProofEvidence": "No worker runtime pgBackRest provider use is claimed by USF-211; profile-gated proof exercises pinned image, configured repository, stanza, synthetic Postgres cold full backup, restore readback, cleanup, unavailable fail-closed behaviour, redaction, value-free audit-shaped evidence, and Compose teardown.",
+      "proofCommand": "corepack pnpm proof:backup:pgbackrest",
+      "proofEvidence": "USF-211 evidence id usf-211-evidence-pgbackrest-configured-proof: profile-gated local Compose proof starts canonical test Postgres and pgBackRest with backup-restore profile, verifies pgBackRest 2.58.0 digest-pinned image, creates a local repository and stanza, writes synthetic Postgres data, stops Postgres cleanly, creates an offline full backup, restores into an isolated volume, starts a fresh Postgres container from restored data, verifies value-free readback, proves missing repository fail-closed behaviour, and tears down containers, volumes, and temp overrides."
     },
     {
       "bindingStatus": "profile-gated",
@@ -993,7 +996,7 @@
     {
       "id": "usf-189-backup-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-177 records pgBackRest backup/restore provider semantics as deferred-with-owner and USF-202 records a blocked reclassification because the current image is not pullable and the generated service lacks repository, stanza, Postgres linkage, healthcheck, timeout, retry, and teardown proof wiring; risk is treating documentation, DB/RLS proof, files proof, fixture evidence, or image presence as backup artifact and restore drill proof; affected service pgbackrest; impact critical; likelihood medium; owner platform-data-foundation; treatment defer image and configured repository proof boundary to USF-211; review date 2026-09-30.",
+      "boundary": "USF-177 records pgBackRest backup/restore provider semantics as deferred-with-owner, USF-202 records the historical blocked image/configuration reclassification, and USF-211 resolves only the bounded profile-gated local Compose cold backup/restore proof by selecting a maintained digest-pinned pgBackRest image, configured local repository, stanza, Postgres linkage, offline full backup, restore readback, cleanup, readiness retry, timeout, and unavailable fail-closed evidence. Remaining boundaries are online backup, WAL archive, PITR, scheduled backup, RPO/RTO, disaster recovery readiness, provider-managed/live backup service evidence, API runtime binding, worker runtime binding, environment promotion, and USF-133 closure; owner platform-data-foundation; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-177",
         "USF-202",
