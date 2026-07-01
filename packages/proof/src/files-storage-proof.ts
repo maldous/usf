@@ -262,9 +262,7 @@ function proveMinioRuntimeBindingReconciliation(): Readonly<Record<string, unkno
     "MinIO provider must link to service catalogue authority",
   );
   assert(
-    minio!.permissionGrants.every(
-      (grant) => grant.credentialScope === "local-compose-placeholder",
-    ),
+    minio!.permissionGrants.every((grant) => grant.credentialScope === "local-compose-placeholder"),
     "MinIO proof may use only local placeholder credential scope",
   );
   pass("USF-147 MinIO runtime binding is reconciled");
