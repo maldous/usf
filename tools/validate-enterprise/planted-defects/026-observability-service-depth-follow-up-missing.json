@@ -1,0 +1,12 @@
+{
+  "id": "026-observability-service-depth-follow-up-missing",
+  "expectedRule": "USF-ENTERPRISE-026",
+  "observabilityServiceDepthBoundaryPatch": [
+    {
+      "id": "alert-delivery-routing",
+      "drop": [
+        "followUpIssue"
+      ]
+    }
+  ]
+}

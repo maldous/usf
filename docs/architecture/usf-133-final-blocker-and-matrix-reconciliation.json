@@ -18,7 +18,6 @@
   "sourceIssueDoneByImplication": false,
   "wrapperDoneStatesSatisfySourceIssues": false,
   "currentOpenBlockerIssues": [
-    "USF-218",
     "USF-219",
     "USF-220"
   ],
@@ -26,7 +25,8 @@
     "USF-134",
     "USF-184",
     "USF-192",
-    "USF-221"
+    "USF-221",
+    "USF-222"
   ],
   "resolvedSourceIssuesUsedAsEvidence": [
     "USF-166",
@@ -41,7 +41,8 @@
     "USF-205",
     "USF-211",
     "USF-214",
-    "USF-215"
+    "USF-215",
+    "USF-218"
   ],
   "usf133AcceptanceCriteriaMapping": [
     {
@@ -66,7 +67,7 @@
         "docs/architecture/domain-deferred-depth-closure-matrix.json",
         "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
       ],
-      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "remainingBlocker": "USF-219, USF-220",
       "nonClaimBoundary": "Partial, deferred, and bounded rows remain visible and do not imply full parity or readiness."
     },
     {
@@ -78,7 +79,7 @@
         "docs/architecture/react-parity-scope-classification-matrix.json",
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md"
       ],
-      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "remainingBlocker": "USF-219, USF-220",
       "nonClaimBoundary": "Historical classification is lineage and disposition evidence only; it is not a readiness claim."
     },
     {
@@ -104,7 +105,7 @@
         "USF-219",
         "USF-220"
       ],
-      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "remainingBlocker": "USF-219, USF-220",
       "nonClaimBoundary": "Enumeration and follow-up linkage do not complete the follow-up issues."
     },
     {
@@ -130,7 +131,7 @@
         "docs/architecture/compose-service-disposition-closure-matrix.json",
         "docs/architecture/usf-133-closure-tier-evidence-gate.json"
       ],
-      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "remainingBlocker": "USF-219, USF-220",
       "nonClaimBoundary": "Accepted decisions are not completion evidence unless merged proof satisfies each source issue."
     },
     {
@@ -153,7 +154,7 @@
         "docs/architecture/usf-final-semantic-completeness-audit.json",
         "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
       ],
-      "remainingBlocker": "USF-217, USF-218, USF-219, USF-220",
+      "remainingBlocker": "USF-219, USF-220",
       "nonClaimBoundary": "USF-133 remains open."
     }
   ],
@@ -164,7 +165,8 @@
       "evidenceRefs": [
         "usf133AcceptanceCriteriaMapping",
         "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.md",
-        "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json"
+        "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json",
+        "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
       ]
     },
     {
@@ -189,7 +191,8 @@
       "evidenceRefs": [
         "remainingDeferredBoundaries",
         "nonClaims",
-        "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json"
+        "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json",
+        "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
       ]
     },
     {
@@ -210,9 +213,10 @@
         "USF-170",
         "USF-196",
         "USF-205",
-        "USF-218"
+        "USF-218",
+        "USF-222"
       ],
-      "remainingBoundary": "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment readiness remain deferred.",
+      "remainingBoundary": "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, dashboard runtime, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, operator console, supplier/live-provider, and environment readiness remain deferred to USF-222 or later authorised issues.",
       "nonClaims": [
         "live-provider-readiness",
         "full-react-parity-readiness",
@@ -307,8 +311,10 @@
     },
     {
       "issueId": "USF-218",
-      "boundary": "observability service alerting dashboard and incident workflow proof depth",
-      "blocksUsf133": true
+      "boundary": "observability service alerting dashboard incident workflow retention SLI/SLO cross-tenant aggregate and Sentry service execution proof deferred to USF-222; USF-218 records current disposition evidence",
+      "blocksUsf133": false,
+      "status": "resolved-by-disposition-evidence",
+      "followUpIssue": "USF-222"
     },
     {
       "issueId": "USF-219",

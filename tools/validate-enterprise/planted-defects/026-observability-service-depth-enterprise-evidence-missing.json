@@ -1,0 +1,5 @@
+{
+  "id": "026-observability-service-depth-enterprise-evidence-missing",
+  "expectedRule": "USF-ENTERPRISE-026",
+  "removeEnterpriseEvidence": "evidence-usf-218-observability-service-operations-depth-disposition"
+}

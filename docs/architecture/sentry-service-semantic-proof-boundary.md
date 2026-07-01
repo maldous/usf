@@ -4,6 +4,6 @@ This note records the Sentry service semantic proof boundary after USF-196 and U
 
 Local observability proof and the USF-205 SDK-envelope proof remain mandatory bounded repository evidence, but neither is equivalent to Sentry service readiness, service ingestion, issue lifecycle, dashboard readiness, alert handoff, incident workflow, live monitoring, supplier evidence, or operator-console operations.
 
-Remaining Sentry service and operations depth is deferred to linked follow-up work, primarily USF-159 for observability backend, alerting, dashboard, incident, and Sentry service readiness depth, USF-169 for operator access posture where applicable, and USF-193 for environment promotion semantics.
+USF-218 records the current bounded service and operations disposition for the Sentry/observability boundary. Remaining execution proof is deferred to USF-222 for Sentry service readiness, service ingestion, issue lifecycle, alert handoff, dashboard runtime, incident workflow, SLI/SLO operation, retention purge operation, cross-tenant aggregate analytics, operator access posture where applicable, supplier/live-provider boundary, and environment promotion evidence where applicable.
 
 This evidence supports future enterprise and ISO/IEC 27001 evidence organisation only. It does not claim Sentry readiness, live monitoring readiness, full dev readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure.

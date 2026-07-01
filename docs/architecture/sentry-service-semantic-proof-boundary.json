@@ -2,7 +2,7 @@
   "id": "usf-196-usf-205-sentry-service-semantic-proof-boundary",
   "title": "USF-196/USF-205 Sentry Service Semantic Proof Boundary",
   "sourceIssue": "USF-205",
-  "followUpIssue": "USF-159",
+  "followUpIssue": "USF-218",
   "sourceDispositionIssue": "USF-170",
   "laneIssue": "USF-187",
   "dashboardIssue": "USF-184",
@@ -48,7 +48,9 @@
     "USF-133",
     "USF-159",
     "USF-169",
-    "USF-193"
+    "USF-193",
+    "USF-218",
+    "USF-222"
   ],
   "reclassification": {
     "from": "requires-human-decision",
@@ -71,12 +73,12 @@
     "acceptedSdkEnvelopeProofImplemented": true
   },
   "remainingProofBoundary": {
-    "issue": "USF-159",
+    "issue": "USF-222",
     "owner": "platform-observability-foundation",
     "riskOwner": "platform-observability-risk-owner",
     "controlOwner": "platform-observability-control-owner",
-    "riskStatement": "Sentry SDK envelope capture is proven locally, but generated Compose does not include a local Sentry service and therefore service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, and operator console access remain unproven.",
-    "treatment": "accept USF-205 SDK envelope proof for local event-shape, redaction, tenant-label, and fail-closed evidence; defer service readiness, live monitoring, alert/incident operating evidence, operator browser console access, and environment promotion to linked follow-up issues.",
+    "riskStatement": "USF-218 records the current bounded disposition: Sentry SDK envelope capture is proven locally, but generated Compose does not include a local Sentry service and therefore service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, and operator console access remain unproven and deferred to USF-222.",
+    "treatment": "accept USF-205 SDK envelope proof for local event-shape, redaction, tenant-label, and fail-closed evidence; use USF-218 as current disposition evidence; defer service readiness, live monitoring, alert/incident operating evidence, operator browser console access, supplier/live-provider evidence, and environment promotion proof to USF-222 or later authorised issues.",
     "reviewDate": "2026-09-30",
     "requiredEvidence": [
       "Sentry service readiness proof from an authorised generated local service or accepted external provider boundary",
@@ -174,9 +176,10 @@
   ],
   "predecessorIssue": "USF-196",
   "remainingFollowUpIssues": [
-    "USF-159",
     "USF-169",
-    "USF-193"
+    "USF-193",
+    "USF-218",
+    "USF-222"
   ],
   "acceptedSdkEnvelopeProof": {
     "issue": "USF-205",

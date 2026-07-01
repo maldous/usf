@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf218-enterprise-evidence-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-018",
+  "edits": [
+    {
+      "target": "service_operations_depth",
+      "old": "evidence-usf-218-observability-service-operations-depth-disposition",
+      "new": "evidence-usf-218-observability-service-operations-depth-disposition-defect"
+    }
+  ]
+}

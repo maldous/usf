@@ -284,7 +284,9 @@
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
       "sourceIssueRefs": [
-        "USF-185"
+        "USF-185",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
@@ -295,7 +297,9 @@
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
       "sourceIssueRefs": [
-        "USF-185"
+        "USF-185",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
@@ -306,7 +310,9 @@
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
       "sourceIssueRefs": [
-        "USF-185"
+        "USF-185",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
@@ -317,7 +323,9 @@
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
       "sourceIssueRefs": [
-        "USF-185"
+        "USF-185",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
@@ -328,7 +336,9 @@
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
       "sourceIssueRefs": [
-        "USF-185"
+        "USF-185",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": []
@@ -635,7 +645,9 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -657,7 +669,9 @@
         "USF-166",
         "USF-167",
         "USF-182",
-        "USF-185"
+        "USF-185",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -874,7 +888,9 @@
         "USF-192",
         "USF-133",
         "USF-196",
-        "USF-205"
+        "USF-205",
+        "USF-218",
+        "USF-222"
       ],
       "assuranceMaturityLevel": "documented",
       "promotionImpact": [
@@ -2122,14 +2138,14 @@
       "targetType": "service",
       "targetId": "alertmanager",
       "disposition": "deferred",
-      "reason": "current runtime proof stronger than catalogue classification for this service; future operator console SSO/clickthrough and privileged access proof; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "reason": "USF-218 records current observability service operations disposition for alertmanager. Alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, service readiness, supplier/live-provider evidence, privacy, and environment promotion remain deferred to USF-222 before stronger readiness claims.",
       "owner": "platform-observability-foundation",
       "riskOwner": "platform-observability-risk-owner",
       "controlOwner": "platform-observability-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-222",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "blocks-stronger-readiness-claim-not-current-USF-218-disposition",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -2165,14 +2181,14 @@
       "targetType": "service",
       "targetId": "alloy",
       "disposition": "deferred",
-      "reason": "current runtime proof stronger than catalogue classification for this service; live external/provider-managed service evidence; supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation",
+      "reason": "USF-218 records current observability service operations disposition for alloy. Alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, service readiness, supplier/live-provider evidence, privacy, and environment promotion remain deferred to USF-222 before stronger readiness claims.",
       "owner": "platform-observability-foundation",
       "riskOwner": "platform-observability-risk-owner",
       "controlOwner": "platform-observability-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-166",
+      "followUpIssue": "USF-222",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "blocks-stronger-readiness-claim-not-current-USF-218-disposition",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",
@@ -2552,14 +2568,14 @@
       "targetType": "service",
       "targetId": "sentry",
       "disposition": "deferred",
-      "reason": "USF-196 records the Sentry service-semantic proof boundary and non-equivalence to local observability proof. Actual Sentry service readiness, event ingestion, issue lifecycle, retention, alert handoff, incident workflow, operator console access, secret, supplier, and privacy proof remains deferred to USF-205. Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, full React parity, or USF-133 closure readiness.",
+      "reason": "USF-218 records current observability service operations disposition for sentry. Alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, service readiness, supplier/live-provider evidence, privacy, and environment promotion remain deferred to USF-222 before stronger readiness claims.",
       "owner": "platform-observability-foundation",
       "riskOwner": "platform-observability-risk-owner",
       "controlOwner": "platform-observability-control-owner",
       "treatmentPath": "defer",
-      "followUpIssue": "USF-205",
+      "followUpIssue": "USF-222",
       "reviewDate": "2026-09-30",
-      "blockerStatus": "blocks-usf-133-closure-tier",
+      "blockerStatus": "blocks-stronger-readiness-claim-not-current-USF-218-disposition",
       "promotionImpact": [
         "dev-readiness",
         "test-readiness",

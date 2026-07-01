@@ -1,0 +1,414 @@
+{
+  "id": "observability-service-alerting-dashboard-incident-proof-depth",
+  "title": "USF-218 Observability Service Alerting Dashboard And Incident Workflow Proof Depth",
+  "sourceIssue": "USF-218",
+  "parentIssue": "USF-133",
+  "dashboardIssue": "USF-184",
+  "coordinatorIssue": "USF-192",
+  "localOperationsProofIssue": "USF-159",
+  "sentryDispositionIssue": "USF-170",
+  "sentryBoundaryIssue": "USF-196",
+  "sentrySdkProofIssue": "USF-205",
+  "followUpIssue": "USF-222",
+  "status": "bounded-disposition-recorded-execution-proof-deferred",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "observabilityOperationsMatrix": "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json",
+  "sentryServiceBoundary": "docs/architecture/sentry-service-semantic-proof-boundary.json",
+  "sentryDispositionMatrix": "docs/architecture/sentry-error-monitoring-disposition-matrix.json",
+  "validationCommands": [
+    "make observability-proof",
+    "corepack pnpm proof:observability:sentry",
+    "python3 tools/validate-parity/validate-observability.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "python3 tools/validate-parity/validate-parity.py all --json"
+  ],
+  "issueLinks": [
+    "USF-218",
+    "USF-222",
+    "USF-159",
+    "USF-170",
+    "USF-196",
+    "USF-205",
+    "USF-187",
+    "USF-188",
+    "USF-184",
+    "USF-192",
+    "USF-193",
+    "USF-133"
+  ],
+  "owner": "platform-observability-foundation",
+  "riskOwner": "platform-observability-risk-owner",
+  "controlOwner": "platform-observability-control-owner",
+  "reviewDate": "2026-09-30",
+  "riskTreatment": "defer-execution-proof-with-owner-and-validator-enforced-non-claims",
+  "claims": {
+    "boundedDispositionRecorded": true,
+    "localOperationsProofAccepted": true,
+    "sentrySdkEnvelopeProofAccepted": true,
+    "sdkEnvelopeEquivalentToServiceReadiness": false,
+    "localObservabilityEquivalentToLiveBackendReadiness": false,
+    "sentryServiceReadinessClaim": false,
+    "liveMonitoringReadinessClaim": false,
+    "alertingReadinessClaim": false,
+    "dashboardReadinessClaim": false,
+    "incidentWorkflowReadinessClaim": false,
+    "retentionPurgeReadinessClaim": false,
+    "sliSloOperationalReadinessClaim": false,
+    "crossTenantAggregateAnalyticsReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "serviceBindingDispositions": [
+    {
+      "serviceId": "otel-collector",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#otel-collector",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-159 local observability operations proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    },
+    {
+      "serviceId": "prometheus",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#prometheus",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-159 local observability operations proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    },
+    {
+      "serviceId": "grafana",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#grafana",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-159 local observability operations proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    },
+    {
+      "serviceId": "loki",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#loki",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-159 local observability operations proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    },
+    {
+      "serviceId": "tempo",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#tempo",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-159 local observability operations proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    },
+    {
+      "serviceId": "alertmanager",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#alertmanager",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-159 local observability operations proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    },
+    {
+      "serviceId": "alloy",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#alloy",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-159 local observability operations proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    },
+    {
+      "serviceId": "sentry",
+      "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#sentry",
+      "currentDisposition": "bounded-disposition-recorded",
+      "currentEvidence": "USF-205 Sentry SDK-envelope proof and USF-218 disposition evidence",
+      "futureExecutionProofIssue": "USF-222",
+      "readinessClaimAllowed": false,
+      "nonEquivalenceBoundary": "Current evidence is not service readiness, alert delivery, dashboard runtime, incident workflow, live-provider, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure evidence."
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "local-observability-operations-proof",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json",
+        "packages/proof/src/observability-telemetry-proof.ts",
+        "tools/validate-parity/validate-observability.py#USF-OBSERVABILITY-013..017",
+        "evidence-usf-159-observability-operations-depth"
+      ],
+      "proofCommand": "make observability-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-observability.py all --json",
+      "nonEquivalenceBoundary": "USF-159 local telemetry proof is not live observability backend, Sentry service, alerting, dashboard, incident, SLI/SLO operation, production, or USF-133 closure evidence.",
+      "nonClaimBoundary": "Local hermetic observability proof remains bounded and cannot satisfy live monitoring or readiness claims."
+    },
+    {
+      "id": "sentry-sdk-envelope-proof",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "mitigate",
+      "evidenceRefs": [
+        "docs/architecture/sentry-service-semantic-proof-boundary.json",
+        "packages/proof/src/sentry-sdk-envelope-proof.ts",
+        "tools/validate-enterprise/validate-enterprise.py#USF-ENTERPRISE-024",
+        "usf-205-evidence-sentry-sdk-envelope-proof"
+      ],
+      "proofCommand": "corepack pnpm proof:observability:sentry",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "nonEquivalenceBoundary": "USF-205 proves official SDK envelope capture and safe unavailable-transport handling only; it is not Sentry service readiness, ingestion, issue lifecycle, alert handoff, incident workflow, or operator console evidence.",
+      "nonClaimBoundary": "Sentry SDK-envelope proof is accepted local evidence only and cannot satisfy Sentry readiness or live monitoring readiness claims."
+    },
+    {
+      "id": "sentry-service-readiness",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "authorised generated local Sentry service or accepted external-provider boundary",
+        "service health/readiness",
+        "event ingestion",
+        "issue lifecycle",
+        "safe operator evidence"
+      ],
+      "nonClaimBoundary": "Sentry service readiness, ingestion, issue lifecycle, supplier, and live-provider readiness are not proven by USF-218."
+    },
+    {
+      "id": "alert-delivery-routing",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "alert rule execution",
+        "routing target proof",
+        "suppression/escalation boundary",
+        "tenant-safe audit evidence"
+      ],
+      "nonClaimBoundary": "Alert delivery and alert-routing readiness are not proven by USF-218."
+    },
+    {
+      "id": "dashboard-runtime",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "dashboard runtime proof",
+        "operator access proof",
+        "tenant-safe views",
+        "redaction and audit evidence"
+      ],
+      "nonClaimBoundary": "Grafana or Sentry dashboard runtime readiness is not proven by USF-218."
+    },
+    {
+      "id": "incident-workflow",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "incident creation/update workflow",
+        "escalation owner evidence",
+        "corrective-action evidence",
+        "post-incident evidence"
+      ],
+      "nonClaimBoundary": "Incident workflow, on-call escalation, status-page, corrective-action, and post-incident evidence are not proven by USF-218."
+    },
+    {
+      "id": "sli-slo-operation",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "SLI calculation",
+        "SLO/error-budget policy",
+        "burn-rate alerting",
+        "review cadence evidence"
+      ],
+      "nonClaimBoundary": "SLI/SLO operation, burn-rate alerting, and error-budget operation are not proven by USF-218."
+    },
+    {
+      "id": "retention-purge-operation",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "telemetry retention purge execution",
+        "legal-hold interaction",
+        "provider retention policy evidence"
+      ],
+      "nonClaimBoundary": "Live telemetry retention purge, legal-hold interaction, and provider retention operation are not proven by USF-218."
+    },
+    {
+      "id": "cross-tenant-aggregate-analytics",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "aggregate analytics policy",
+        "tenant-safe aggregation proof",
+        "privacy review evidence"
+      ],
+      "nonClaimBoundary": "Cross-tenant aggregate analytics operation is not proven by USF-218."
+    },
+    {
+      "id": "live-provider-supplier",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "riskTreatment": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-222",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "requiredEvidence": [
+        "supplier boundary",
+        "subprocessor posture",
+        "live provider advisory workflow",
+        "environment promotion evidence"
+      ],
+      "nonClaimBoundary": "Supplier, subprocessor, live-provider, and environment promotion readiness are not proven by USF-218."
+    }
+  ],
+  "enterpriseEvidenceRefs": [
+    "soa-usf-218-observability-service-operations-depth",
+    "evidence-usf-218-observability-service-operations-depth-disposition",
+    "threat-usf-218-observability-service-operations-overclaim",
+    "access-usf-218-observability-service-operator-boundary",
+    "resilience-usf-218-observability-service-operations-boundary",
+    "incident-usf-218-observability-alert-incident-boundary",
+    "privacy-usf-218-observability-service-data-boundary"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}

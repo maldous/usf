@@ -21,7 +21,9 @@
     "USF-205",
     "USF-159",
     "USF-169",
-    "USF-193"
+    "USF-193",
+    "USF-218",
+    "USF-222"
   ],
   "humanDecision": {
     "decisionState": "accepted",
@@ -39,7 +41,7 @@
     "riskOwner": "platform-observability-risk-owner",
     "controlOwner": "platform-observability-control-owner",
     "riskStatement": "Sentry service semantics, event capture, redaction, tenant-safe labels, retention, alert handoff, incident evidence, and operator console access could be overclaimed from local observability proof output.",
-    "treatment": "USF-205 proves official SDK envelope capture, redaction, tenant-safe labels, and fail-closed local transport, while service readiness, alert handoff, incident workflow, operator browser console access, supplier, live monitoring, and environment promotion remain deferred.",
+    "treatment": "USF-205 proves official SDK envelope capture, redaction, tenant-safe labels, and fail-closed local transport; USF-218 records the current bounded disposition; service readiness, alert handoff, incident workflow, dashboard runtime, operator browser console access, supplier, live monitoring, environment promotion, retention purge, SLI/SLO operation, and cross-tenant aggregate analytics remain deferred to USF-222 or later authorised issues.",
     "reviewDate": "2026-09-30",
     "deferredEvidence": [
       "Sentry event capture evidence",
@@ -47,10 +49,14 @@
       "retention and purge evidence",
       "alert handoff and incident evidence",
       "operator console access and audit evidence",
-      "supplier and live-provider boundary evidence"
+      "supplier and live-provider boundary evidence",
+      "dashboard runtime evidence",
+      "SLI/SLO operation evidence",
+      "cross-tenant aggregate analytics evidence"
     ],
-    "remainingProofIssue": "USF-159",
-    "resolvedProofIssue": "USF-205"
+    "remainingProofIssue": "USF-218",
+    "resolvedProofIssue": "USF-205",
+    "executionProofFollowUpIssue": "USF-222"
   },
   "localErrorEvidenceGate": {
     "usedAsSubstituteForLocalObservabilityChecks": true,
@@ -154,5 +160,6 @@
     "enterprise-production-readiness",
     "full-react-parity-readiness"
   ],
-  "remainingProofIssue": "USF-159"
+  "remainingProofIssue": "USF-218",
+  "executionProofFollowUpIssue": "USF-222"
 }

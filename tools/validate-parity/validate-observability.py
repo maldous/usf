@@ -32,6 +32,7 @@ RULES = {
     "USF-OBSERVABILITY-015": ("blocking", "USF-159 enterprise evidence rows are missing"),
     "USF-OBSERVABILITY-016": ("blocking", "USF-159 reclassified observability boundary is incomplete"),
     "USF-OBSERVABILITY-017": ("blocking", "USF-159 observability readiness claim is overclaimed"),
+    "USF-OBSERVABILITY-018": ("blocking", "USF-218 observability service operations disposition is missing or overclaimed"),
     "USF-OBSERVABILITY-SELFTEST": ("blocking", "planted observability defect did not raise its expected rule"),
 }
 
@@ -55,6 +56,12 @@ BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matri
 OPERATIONS_SIGNAL = "spec/instances/observability-signal/observability-operations-posture.json"
 ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 DEPTH_MATRIX = "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json"
+SERVICE_OPERATIONS_DEPTH = "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
+SENTRY_BOUNDARY = "docs/architecture/sentry-service-semantic-proof-boundary.json"
+SENTRY_ERROR_MATRIX = "docs/architecture/sentry-error-monitoring-disposition-matrix.json"
+CLOSURE_MATRIX = "docs/architecture/compose-service-disposition-closure-matrix.json"
+USF133_CLOSURE_GATE = "docs/architecture/usf-133-closure-tier-evidence-gate.json"
+USF133_FINAL_RECONCILIATION = "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
 MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
@@ -81,6 +88,12 @@ SOURCE_FILES = (
     OPERATIONS_SIGNAL,
     ENTERPRISE_MODEL,
     DEPTH_MATRIX,
+    SERVICE_OPERATIONS_DEPTH,
+    SENTRY_BOUNDARY,
+    SENTRY_ERROR_MATRIX,
+    CLOSURE_MATRIX,
+    USF133_CLOSURE_GATE,
+    USF133_FINAL_RECONCILIATION,
     PACKAGE,
     MAKEFILE,
 )
@@ -99,6 +112,27 @@ FORBIDDEN_OUTPUT_NEEDLES = [
     "soc ready",
     "iso certified",
 ]
+
+OBSERVABILITY_SERVICE_IDS = {
+    "otel-collector",
+    "prometheus",
+    "grafana",
+    "loki",
+    "tempo",
+    "alertmanager",
+    "alloy",
+    "sentry",
+}
+
+USF218_ENTERPRISE_ROW_IDS = {
+    "soa-usf-218-observability-service-operations-depth",
+    "evidence-usf-218-observability-service-operations-depth-disposition",
+    "threat-usf-218-observability-service-operations-overclaim",
+    "access-usf-218-observability-service-operator-boundary",
+    "resilience-usf-218-observability-service-operations-boundary",
+    "incident-usf-218-observability-alert-incident-boundary",
+    "privacy-usf-218-observability-service-data-boundary",
+}
 
 
 class Findings:
@@ -159,6 +193,12 @@ def parse_json_text(text):
         return None
 
 
+def rows_by_id(rows, key="id"):
+    if not isinstance(rows, list):
+        return {}
+    return {row.get(key): row for row in rows if isinstance(row, dict)}
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     files = {path: read_text(path) for path in SOURCE_FILES}
@@ -169,6 +209,21 @@ def build_state(overrides=None):
     operations_signal = overrides.get("operations_signal", parse_json_text(files.get(OPERATIONS_SIGNAL, "")))
     enterprise_model = overrides.get("enterprise_model", parse_json_text(files.get(ENTERPRISE_MODEL, "")))
     depth_matrix = overrides.get("depth_matrix", parse_json_text(files.get(DEPTH_MATRIX, "")))
+    service_operations_depth = overrides.get(
+        "service_operations_depth",
+        parse_json_text(files.get(SERVICE_OPERATIONS_DEPTH, "")),
+    )
+    sentry_boundary = overrides.get("sentry_boundary", parse_json_text(files.get(SENTRY_BOUNDARY, "")))
+    sentry_error_matrix = overrides.get(
+        "sentry_error_matrix",
+        parse_json_text(files.get(SENTRY_ERROR_MATRIX, "")),
+    )
+    closure_matrix = overrides.get("closure_matrix", parse_json_text(files.get(CLOSURE_MATRIX, "")))
+    closure_gate = overrides.get("closure_gate", parse_json_text(files.get(USF133_CLOSURE_GATE, "")))
+    final_reconciliation = overrides.get(
+        "final_reconciliation",
+        parse_json_text(files.get(USF133_FINAL_RECONCILIATION, "")),
+    )
     return {
         "files": files,
         "matrix": matrix,
@@ -176,6 +231,12 @@ def build_state(overrides=None):
         "operations_signal": operations_signal,
         "enterprise_model": enterprise_model,
         "depth_matrix": depth_matrix,
+        "service_operations_depth": service_operations_depth,
+        "sentry_boundary": sentry_boundary,
+        "sentry_error_matrix": sentry_error_matrix,
+        "closure_matrix": closure_matrix,
+        "closure_gate": closure_gate,
+        "final_reconciliation": final_reconciliation,
     }
 
 
@@ -216,6 +277,12 @@ def run_checks(F, state=None):
     operations_signal = state.get("operations_signal")
     enterprise_model = state.get("enterprise_model")
     depth_matrix = state.get("depth_matrix")
+    service_operations_depth = state.get("service_operations_depth")
+    sentry_boundary = state.get("sentry_boundary")
+    sentry_error_matrix = state.get("sentry_error_matrix")
+    closure_matrix = state.get("closure_matrix")
+    closure_gate = state.get("closure_gate")
+    final_reconciliation = state.get("final_reconciliation")
     package = files[PACKAGE]
     makefile = files[MAKEFILE]
     matrix = state["matrix"]
@@ -589,6 +656,229 @@ def run_checks(F, state=None):
         if phrase in usf159_sources.lower():
             F.add("USF-OBSERVABILITY-017", "USF-159", f"readiness overclaim present: {phrase}")
 
+    if not isinstance(service_operations_depth, dict):
+        F.add("USF-OBSERVABILITY-018", SERVICE_OPERATIONS_DEPTH, "USF-218 proof-depth artefact must exist and parse")
+        service_operations_depth = {}
+    expected_top = {
+        "sourceIssue": "USF-218",
+        "followUpIssue": "USF-222",
+        "parentIssue": "USF-133",
+        "localOperationsProofIssue": "USF-159",
+        "sentrySdkProofIssue": "USF-205",
+        "sentryDispositionIssue": "USF-170",
+        "sentryBoundaryIssue": "USF-196",
+        "status": "bounded-disposition-recorded-execution-proof-deferred",
+    }
+    for key, expected in expected_top.items():
+        if service_operations_depth.get(key) != expected:
+            F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.{key}", f"expected {expected!r}")
+    required_issue_links = {
+        "USF-218",
+        "USF-222",
+        "USF-159",
+        "USF-170",
+        "USF-196",
+        "USF-205",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133",
+    }
+    if required_issue_links - set(service_operations_depth.get("issueLinks", [])):
+        F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.issueLinks", "USF-218 issue linkage is incomplete")
+    claims = service_operations_depth.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.claims", "USF-218 claims must be an object")
+        claims = {}
+    for key in ("boundedDispositionRecorded", "localOperationsProofAccepted", "sentrySdkEnvelopeProofAccepted"):
+        if claims.get(key) is not True:
+            F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.claims.{key}", "accepted bounded evidence marker must be true")
+    for false_claim in (
+        "sdkEnvelopeEquivalentToServiceReadiness",
+        "localObservabilityEquivalentToLiveBackendReadiness",
+        "sentryServiceReadinessClaim",
+        "liveMonitoringReadinessClaim",
+        "alertingReadinessClaim",
+        "dashboardReadinessClaim",
+        "incidentWorkflowReadinessClaim",
+        "retentionPurgeReadinessClaim",
+        "sliSloOperationalReadinessClaim",
+        "crossTenantAggregateAnalyticsReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if claims.get(false_claim) is not False:
+            F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.claims.{false_claim}", "readiness claim must remain false")
+    if USF218_ENTERPRISE_ROW_IDS - set(service_operations_depth.get("enterpriseEvidenceRefs", [])):
+        F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.enterpriseEvidenceRefs", "USF-218 enterprise evidence refs are incomplete")
+
+    boundaries = service_operations_depth.get("boundaries", [])
+    if not isinstance(boundaries, list):
+        F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.boundaries", "boundaries must be a list")
+        boundaries = []
+    boundary_ids = {row.get("id") for row in boundaries if isinstance(row, dict)}
+    for required in (
+        "local-observability-operations-proof",
+        "sentry-sdk-envelope-proof",
+        "sentry-service-readiness",
+        "alert-delivery-routing",
+        "dashboard-runtime",
+        "incident-workflow",
+        "sli-slo-operation",
+        "retention-purge-operation",
+        "cross-tenant-aggregate-analytics",
+        "live-provider-supplier",
+    ):
+        if required not in boundary_ids:
+            F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}.boundaries", f"missing boundary {required}")
+    for row in boundaries:
+        if not isinstance(row, dict):
+            continue
+        status = row.get("status")
+        if status == "deferred-with-owner":
+            for field in (
+                "owner",
+                "riskOwner",
+                "controlOwner",
+                "riskTreatment",
+                "followUpIssue",
+                "reviewDate",
+                "promotionImpact",
+                "requiredEvidence",
+                "nonClaimBoundary",
+            ):
+                if not row.get(field):
+                    F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}#{row.get('id')}", f"deferred boundary missing {field}")
+            if row.get("followUpIssue") != "USF-222":
+                F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}#{row.get('id')}", "deferred execution proof must link USF-222")
+        if status == "proven-local":
+            for field in ("proofCommand", "validationCommand", "evidenceRefs", "nonEquivalenceBoundary", "nonClaimBoundary"):
+                if not row.get(field):
+                    F.add("USF-OBSERVABILITY-018", f"{SERVICE_OPERATIONS_DEPTH}#{row.get('id')}", f"proven boundary missing {field}")
+
+    service_dispositions = service_operations_depth.get("serviceBindingDispositions", [])
+    service_ids = {row.get("serviceId") for row in service_dispositions if isinstance(row, dict)}
+    if service_ids != OBSERVABILITY_SERVICE_IDS:
+        F.add(
+            "USF-OBSERVABILITY-018",
+            f"{SERVICE_OPERATIONS_DEPTH}.serviceBindingDispositions",
+            f"missing={sorted(OBSERVABILITY_SERVICE_IDS - service_ids)} extra={sorted(service_ids - OBSERVABILITY_SERVICE_IDS)}",
+        )
+    for row in service_dispositions:
+        if not isinstance(row, dict):
+            continue
+        if row.get("futureExecutionProofIssue") != "USF-222":
+            F.add("USF-OBSERVABILITY-018", row.get("serviceId"), "service disposition must link USF-222 execution proof")
+        if row.get("readinessClaimAllowed") is not False:
+            F.add("USF-OBSERVABILITY-018", row.get("serviceId"), "service disposition must not allow readiness claims")
+        if not row.get("nonEquivalenceBoundary"):
+            F.add("USF-OBSERVABILITY-018", row.get("serviceId"), "service disposition needs a non-equivalence boundary")
+
+    model_text = json.dumps(enterprise_model, sort_keys=True).lower() if isinstance(enterprise_model, dict) else ""
+    for row_id in USF218_ENTERPRISE_ROW_IDS:
+        if row_id.lower() not in model_text:
+            F.add("USF-OBSERVABILITY-018", ENTERPRISE_MODEL, f"USF-218 enterprise evidence row missing {row_id}")
+    for token in (
+        "sourceissue=usf-218",
+        "followupissue=usf-222",
+        "observability-service-alerting-dashboard-incident-proof-depth",
+        "sentryservicereadinessclaim=false",
+        "live-provider-readiness",
+    ):
+        if token not in model_text:
+            F.add("USF-OBSERVABILITY-018", ENTERPRISE_MODEL, f"USF-218 enterprise token missing {token}")
+
+    if isinstance(sentry_boundary, dict):
+        if sentry_boundary.get("followUpIssue") != "USF-218":
+            F.add("USF-OBSERVABILITY-018", SENTRY_BOUNDARY, "Sentry boundary must hand off to USF-218")
+        if (sentry_boundary.get("remainingProofBoundary") or {}).get("issue") != "USF-222":
+            F.add("USF-OBSERVABILITY-018", SENTRY_BOUNDARY, "remaining Sentry execution proof must hand off to USF-222")
+        if {"USF-218", "USF-222"} - set(sentry_boundary.get("issueLinks", [])):
+            F.add("USF-OBSERVABILITY-018", SENTRY_BOUNDARY, "Sentry boundary must link USF-218 and USF-222")
+    else:
+        F.add("USF-OBSERVABILITY-018", SENTRY_BOUNDARY, "Sentry boundary must parse")
+    if isinstance(sentry_error_matrix, dict):
+        if sentry_error_matrix.get("remainingProofIssue") != "USF-218":
+            F.add("USF-OBSERVABILITY-018", SENTRY_ERROR_MATRIX, "Sentry matrix remaining proof must be USF-218")
+        if sentry_error_matrix.get("executionProofFollowUpIssue") != "USF-222":
+            F.add("USF-OBSERVABILITY-018", SENTRY_ERROR_MATRIX, "Sentry matrix execution follow-up must be USF-222")
+        disposition = sentry_error_matrix.get("sentryDisposition") or {}
+        if disposition.get("remainingProofIssue") != "USF-218" or disposition.get("executionProofFollowUpIssue") != "USF-222":
+            F.add("USF-OBSERVABILITY-018", SENTRY_ERROR_MATRIX, "Sentry disposition handoff must include USF-218 and USF-222")
+    else:
+        F.add("USF-OBSERVABILITY-018", SENTRY_ERROR_MATRIX, "Sentry error matrix must parse")
+
+    if isinstance(closure_matrix, dict):
+        closure_rows = {row.get("service_id"): row.get("closure_evidence", {}) for row in closure_matrix.get("rows", []) if isinstance(row, dict)}
+        for service_id in OBSERVABILITY_SERVICE_IDS:
+            evidence = closure_rows.get(service_id, {})
+            if not evidence:
+                F.add("USF-OBSERVABILITY-018", f"{CLOSURE_MATRIX}:{service_id}", "observability service row is missing")
+                continue
+            tracking = set(evidence.get("tracking_issues", []))
+            if {"USF-218", "USF-222"} - tracking:
+                F.add("USF-OBSERVABILITY-018", f"{CLOSURE_MATRIX}:{service_id}", "tracking issues must include USF-218 and USF-222")
+            if USF218_ENTERPRISE_ROW_IDS - set(evidence.get("enterprise_evidence_refs", [])):
+                F.add("USF-OBSERVABILITY-018", f"{CLOSURE_MATRIX}:{service_id}", "USF-218 enterprise refs are incomplete")
+    else:
+        F.add("USF-OBSERVABILITY-018", CLOSURE_MATRIX, "closure matrix must parse")
+
+    if isinstance(closure_gate, dict):
+        service_refs = rows_by_id(closure_gate.get("requiredServiceDispositionRefs"), "serviceId")
+        exceptions = rows_by_id(closure_gate.get("enterpriseExceptionRegister"), "id")
+        for service_id in OBSERVABILITY_SERVICE_IDS:
+            ref = service_refs.get(service_id, {})
+            if {"USF-218", "USF-222"} - set(ref.get("sourceIssueRefs", [])):
+                F.add("USF-OBSERVABILITY-018", f"{USF133_CLOSURE_GATE}:serviceRef:{service_id}", "service ref must link USF-218 and USF-222")
+        for service_id in ("alertmanager", "alloy", "sentry"):
+            exception = exceptions.get(f"exception-service-{service_id}") or {}
+            if exception.get("followUpIssue") != "USF-222":
+                F.add("USF-OBSERVABILITY-018", f"{USF133_CLOSURE_GATE}:exception:{service_id}", "observability exception must defer execution proof to USF-222")
+    else:
+        F.add("USF-OBSERVABILITY-018", USF133_CLOSURE_GATE, "closure gate must parse")
+
+    if isinstance(final_reconciliation, dict):
+        blockers = set(final_reconciliation.get("currentOpenBlockerIssues", []))
+        non_blocking = set(final_reconciliation.get("nonBlockingContextIssues", []))
+        resolved = set(final_reconciliation.get("resolvedSourceIssuesUsedAsEvidence", []))
+        if "USF-218" in blockers:
+            F.add("USF-OBSERVABILITY-018", USF133_FINAL_RECONCILIATION, "USF-218 must not remain a current blocker after bounded disposition")
+        if "USF-222" not in non_blocking:
+            F.add("USF-OBSERVABILITY-018", USF133_FINAL_RECONCILIATION, "USF-222 must remain a non-blocking execution-proof follow-up")
+        if "USF-218" not in resolved:
+            F.add("USF-OBSERVABILITY-018", USF133_FINAL_RECONCILIATION, "USF-218 must be listed as resolved source evidence")
+    else:
+        F.add("USF-OBSERVABILITY-018", USF133_FINAL_RECONCILIATION, "final reconciliation must parse")
+
+    usf218_sources = "\n".join(
+        [
+            json.dumps(service_operations_depth, sort_keys=True),
+            json.dumps(sentry_boundary, sort_keys=True),
+            json.dumps(sentry_error_matrix, sort_keys=True),
+            json.dumps(final_reconciliation, sort_keys=True),
+        ]
+    ).lower()
+    for phrase in (
+        "sentry service readiness is proven",
+        "alerting readiness is proven",
+        "dashboard readiness is proven",
+        "incident workflow readiness is proven",
+        "usf-133 closure is proven",
+        "production readiness is proven",
+        "live provider readiness is proven",
+    ):
+        if phrase in usf218_sources:
+            F.add("USF-OBSERVABILITY-018", "USF-218", f"readiness overclaim present: {phrase}")
+
 
 def apply_defect(state, defect):
     mutated = {
@@ -598,6 +888,12 @@ def apply_defect(state, defect):
         "operations_signal": json.loads(json.dumps(state["operations_signal"])),
         "enterprise_model": json.loads(json.dumps(state["enterprise_model"])),
         "depth_matrix": json.loads(json.dumps(state["depth_matrix"])),
+        "service_operations_depth": json.loads(json.dumps(state["service_operations_depth"])),
+        "sentry_boundary": json.loads(json.dumps(state["sentry_boundary"])),
+        "sentry_error_matrix": json.loads(json.dumps(state["sentry_error_matrix"])),
+        "closure_matrix": json.loads(json.dumps(state["closure_matrix"])),
+        "closure_gate": json.loads(json.dumps(state["closure_gate"])),
+        "final_reconciliation": json.loads(json.dumps(state["final_reconciliation"])),
     }
     for edit in defect.get("edits", []):
         target = edit["target"]
@@ -614,6 +910,42 @@ def apply_defect(state, defect):
                 raise AssertionError(f"old text not found in depth matrix for defect {defect.get('id')}")
             mutated["depth_matrix"] = json.loads(text.replace(old, new, 1))
             mutated["files"][DEPTH_MATRIX] = json.dumps(mutated["depth_matrix"])
+        elif target == "service_operations_depth":
+            text = json.dumps(mutated["service_operations_depth"])
+            if old not in text:
+                raise AssertionError(f"old text not found in service operations depth for defect {defect.get('id')}")
+            mutated["service_operations_depth"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][SERVICE_OPERATIONS_DEPTH] = json.dumps(mutated["service_operations_depth"])
+        elif target == "sentry_boundary":
+            text = json.dumps(mutated["sentry_boundary"])
+            if old not in text:
+                raise AssertionError(f"old text not found in sentry boundary for defect {defect.get('id')}")
+            mutated["sentry_boundary"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][SENTRY_BOUNDARY] = json.dumps(mutated["sentry_boundary"])
+        elif target == "sentry_error_matrix":
+            text = json.dumps(mutated["sentry_error_matrix"])
+            if old not in text:
+                raise AssertionError(f"old text not found in sentry error matrix for defect {defect.get('id')}")
+            mutated["sentry_error_matrix"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][SENTRY_ERROR_MATRIX] = json.dumps(mutated["sentry_error_matrix"])
+        elif target == "closure_matrix":
+            text = json.dumps(mutated["closure_matrix"])
+            if old not in text:
+                raise AssertionError(f"old text not found in closure matrix for defect {defect.get('id')}")
+            mutated["closure_matrix"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][CLOSURE_MATRIX] = json.dumps(mutated["closure_matrix"])
+        elif target == "closure_gate":
+            text = json.dumps(mutated["closure_gate"])
+            if old not in text:
+                raise AssertionError(f"old text not found in closure gate for defect {defect.get('id')}")
+            mutated["closure_gate"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][USF133_CLOSURE_GATE] = json.dumps(mutated["closure_gate"])
+        elif target == "final_reconciliation":
+            text = json.dumps(mutated["final_reconciliation"])
+            if old not in text:
+                raise AssertionError(f"old text not found in final reconciliation for defect {defect.get('id')}")
+            mutated["final_reconciliation"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][USF133_FINAL_RECONCILIATION] = json.dumps(mutated["final_reconciliation"])
         elif target == "openapi":
             text = json.dumps(mutated["openapi"])
             if old not in text:
@@ -628,6 +960,12 @@ def apply_defect(state, defect):
     mutated["operations_signal"] = parse_json_text(mutated["files"].get(OPERATIONS_SIGNAL, ""))
     mutated["enterprise_model"] = parse_json_text(mutated["files"].get(ENTERPRISE_MODEL, ""))
     mutated["depth_matrix"] = parse_json_text(mutated["files"].get(DEPTH_MATRIX, ""))
+    mutated["service_operations_depth"] = parse_json_text(mutated["files"].get(SERVICE_OPERATIONS_DEPTH, ""))
+    mutated["sentry_boundary"] = parse_json_text(mutated["files"].get(SENTRY_BOUNDARY, ""))
+    mutated["sentry_error_matrix"] = parse_json_text(mutated["files"].get(SENTRY_ERROR_MATRIX, ""))
+    mutated["closure_matrix"] = parse_json_text(mutated["files"].get(CLOSURE_MATRIX, ""))
+    mutated["closure_gate"] = parse_json_text(mutated["files"].get(USF133_CLOSURE_GATE, ""))
+    mutated["final_reconciliation"] = parse_json_text(mutated["files"].get(USF133_FINAL_RECONCILIATION, ""))
     return mutated
 
 

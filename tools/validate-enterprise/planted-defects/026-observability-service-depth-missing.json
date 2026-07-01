@@ -1,0 +1,5 @@
+{
+  "id": "026-observability-service-depth-missing",
+  "expectedRule": "USF-ENTERPRISE-026",
+  "removeObservabilityServiceDepth": true
+}

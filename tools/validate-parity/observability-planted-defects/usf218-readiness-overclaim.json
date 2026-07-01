@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf218-readiness-overclaim",
+  "expectedRuleId": "USF-OBSERVABILITY-018",
+  "edits": [
+    {
+      "target": "service_operations_depth",
+      "old": "\"sentryServiceReadinessClaim\": false",
+      "new": "\"sentryServiceReadinessClaim\": true"
+    }
+  ]
+}
