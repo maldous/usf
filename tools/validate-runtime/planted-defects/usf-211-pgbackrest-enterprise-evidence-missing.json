@@ -1,0 +1,10 @@
+{
+  "name": "usf-211-pgbackrest-enterprise-evidence-missing",
+  "expectedRule": "USF-RUNTIME-032",
+  "pgbackrestConfiguredProofBoundaryPatches": [
+    {
+      "op": "remove",
+      "path": "/enterpriseEvidenceRefs/1"
+    }
+  ]
+}

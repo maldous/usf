@@ -11410,7 +11410,8 @@
       "sharedControlPlaneJustification": "not-applicable; service is not classified as a shared cross-environment control plane.",
       "breakGlassRelevance": "not-applicable",
       "missingEvidence": [
-        "current runtime proof stronger than catalogue classification for this service",
+        "bounded local cold backup/restore proof is present for synthetic Postgres data only",
+        "online backup, WAL archiving, PITR, scheduled backup operations, RPO/RTO, and disaster recovery evidence",
         "live external/provider-managed service evidence",
         "supplier, access, audit, secret, incident, and resilience evidence for provider-managed operation"
       ],
@@ -11505,7 +11506,7 @@
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
           "composeProfiles": [
-            "workflow-provider"
+            "backup-restore"
           ],
           "generated": true,
           "seedReset": "reset-per-run",
@@ -11529,7 +11530,7 @@
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
           "composeProfiles": [
-            "workflow-provider"
+            "backup-restore"
           ],
           "generated": true,
           "seedReset": "reset-per-run",
@@ -11553,7 +11554,7 @@
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
           "composeProfiles": [
-            "workflow-provider"
+            "backup-restore"
           ],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
@@ -11590,10 +11591,35 @@
         }
       },
       "composeProfiles": [
-        "workflow-provider"
+        "backup-restore"
       ],
-      "dependencies": [],
-      "volumes": [],
+      "dependencies": [
+        {
+          "serviceId": "postgres",
+          "relationship": "synthetic-local-cold-backup-source-for-proof",
+          "requiredIn": [
+            "dev",
+            "test",
+            "staging"
+          ]
+        }
+      ],
+      "volumes": [
+        {
+          "name": "pgbackrest-repo",
+          "purpose": "local pgBackRest repository for bounded synthetic backup proof",
+          "dataBoundary": "synthetic-data",
+          "lifecycle": "reset-per-run",
+          "composeVolumeName": "pgbackrest-repo"
+        },
+        {
+          "name": "pgbackrest-restore",
+          "purpose": "local restored Postgres data directory for bounded synthetic restore proof",
+          "dataBoundary": "synthetic-data",
+          "lifecycle": "reset-per-run",
+          "composeVolumeName": "pgbackrest-restore"
+        }
+      ],
       "networks": [],
       "ports": [],
       "secrets": [],
@@ -11603,7 +11629,9 @@
       ],
       "readinessChecks": [
         "compose catalogue validation",
-        "generated Compose freshness"
+        "generated Compose freshness",
+        "pgBackRest CLI version readiness check in backup-restore profile",
+        "bounded local cold backup/restore proof command"
       ],
       "identityBoundary": "none",
       "secretBoundary": "none",
@@ -11634,7 +11662,11 @@
       "proofRequirements": [
         "classification present",
         "environment policy explicit",
-        "generated Compose freshness when generated"
+        "generated Compose freshness when generated",
+        "configured repository and stanza creation proof",
+        "offline synthetic Postgres backup proof",
+        "fresh restored Postgres readback proof",
+        "missing repository fail-closed proof"
       ],
       "nonEquivalenceBoundaries": [],
       "deferredDepth": 0,
@@ -11659,16 +11691,33 @@
       ],
       "composeService": {
         "serviceName": "pgbackrest",
-        "image": "woblerr/docker-pgbackrest:alpine",
+        "image": "woblerr/pgbackrest:2.58.0@sha256:18cdff011e974308510d056b4039d9b4d21ec33d9124879882c6f05e99be2ab9",
         "profiles": [
           "backup-restore"
         ],
         "command": [],
         "environment": [],
         "ports": [],
-        "volumes": [],
-        "dependsOn": [],
-        "healthcheck": null
+        "volumes": [
+          "postgres-data:/var/lib/postgresql/data:ro",
+          "pgbackrest-repo:/var/lib/pgbackrest",
+          "pgbackrest-restore:/var/lib/postgresql/restore"
+        ],
+        "dependsOn": [
+          {
+            "serviceName": "postgres",
+            "condition": "service_healthy"
+          }
+        ],
+        "healthcheck": {
+          "test": [
+            "CMD-SHELL",
+            "pgbackrest version >/dev/null"
+          ],
+          "interval": "10s",
+          "timeout": "5s",
+          "retries": 5
+        }
       }
     },
     {

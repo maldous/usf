@@ -1,0 +1,10 @@
+{
+  "name": "usf-211-pgbackrest-catalogue-config-missing",
+  "expectedRule": "USF-RUNTIME-032",
+  "serviceCataloguePatches": [
+    {
+      "op": "remove",
+      "path": "/services/32/volumes/1"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "usf-211-pgbackrest-restore-readback-missing",
+  "expectedRule": "USF-RUNTIME-032",
+  "pgbackrestConfiguredProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/backupRestoreBoundary/restoreDrillStatus",
+      "value": "not-proven"
+    }
+  ]
+}

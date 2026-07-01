@@ -14,6 +14,7 @@
   "react_compose_parity_matrix": "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
   "closure_claimed": false,
   "closure_blocking_dispositions": [
+    "bounded-local-proof-with-deferred-readiness-boundaries",
     "deferred",
     "requires-human-decision",
     "substituted-partial"
@@ -31,11 +32,13 @@
     "full-react-parity-readiness"
   ],
   "closure_disposition_counts": {
+    "bounded-local-proof-with-deferred-readiness-boundaries": 2,
     "covered-by-usf-runtime": 4,
-    "deferred": 15,
+    "deferred": 11,
     "implemented": 13,
     "implemented-equivalent": 1,
     "out-of-foundation-scope": 1,
+    "profile-gated-bounded-proof": 2,
     "requires-human-decision": 3,
     "substituted-partial": 1
   },
@@ -1101,7 +1104,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "deferred",
+        "closure_disposition": "bounded-local-proof-with-deferred-readiness-boundaries",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#redis",
@@ -2840,7 +2843,7 @@
         "pgbackrest"
       ],
       "source_accounting_statuses": [
-        "deferred"
+        "bounded-local-proof"
       ],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -2855,7 +2858,7 @@
         "staging"
       ],
       "closure_evidence": {
-        "closure_disposition": "deferred",
+        "closure_disposition": "bounded-local-proof-with-deferred-readiness-boundaries",
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgbackrest",
@@ -2864,7 +2867,11 @@
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
-          "python3 tools/validate-compose/validate-compose.py all --json"
+          "python3 tools/validate-compose/validate-compose.py all --json",
+          "corepack pnpm proof:backup:pgbackrest",
+          "python3 tools/validate-runtime/validate-runtime.py all --json",
+          "docs/architecture/pgbackrest-configured-proof-boundary.json",
+          "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#usf-211-evidence-pgbackrest-configured-proof"
         ],
         "tracking_issues": [
           "USF-166",
@@ -2872,25 +2879,26 @@
           "USF-182",
           "USF-185",
           "USF-177",
-          "USF-202"
+          "USF-202",
+          "USF-211"
         ],
         "non_equivalence_boundaries": [
           "DB/RLS proof and files proof are not equivalent to pgBackRest backup artifact creation, restore drill, RPO/RTO, or disaster recovery proof.",
-          "Service catalogue presence and generated Compose derivation are not backup readiness, restore readiness, production readiness, or live-provider readiness."
+          "USF-211 local cold backup/restore proof is not online backup, WAL archive, PITR, scheduled backup, RPO/RTO, disaster recovery, provider-managed operation, production readiness, or live-provider readiness."
         ],
         "missing_evidence": [
-          "pgBackRest backup artifact creation proof",
-          "restore drill proof with tenant and classification preservation",
-          "secret-exclusion evidence for backup content and logs",
-          "audit evidence for backup and restore operations",
-          "retention, cleanup, failure-mode, timeout, retry, and teardown evidence",
-          "RPO/RTO, PITR, disaster recovery, supplier, incident, vulnerability, and privacy posture proof"
+          "online backup and WAL archive proof",
+          "PITR, scheduled backup, RPO/RTO, and disaster recovery proof",
+          "provider-managed/live pgBackRest supplier evidence",
+          "API and worker runtime backup binding proof",
+          "environment promotion, incident, vulnerability, production privacy, and operational readiness proof"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
           "service-catalogue-validation",
           "service-disposition-classification",
-          "generated-compose-derivation"
+          "generated-compose-derivation",
+          "profile-gated-local-cold-backup-restore-proof"
         ],
         "readiness_claims_prohibited": [
           "full-react-parity-readiness",
@@ -2918,11 +2926,19 @@
           "usf-177-access-backup-restore-provider",
           "usf-177-resilience-backup-restore-provider",
           "usf-177-incident-vulnerability-backup-restore-provider",
-          "usf-177-privacy-backup-restore-provider"
+          "usf-177-privacy-backup-restore-provider",
+          "usf-211-soa-pgbackrest-configured-proof",
+          "usf-211-evidence-pgbackrest-configured-proof",
+          "usf-211-threat-pgbackrest-overclaim",
+          "usf-211-access-pgbackrest-configured-proof",
+          "usf-211-resilience-pgbackrest-configured-proof",
+          "usf-211-incident-vulnerability-pgbackrest-configured-proof",
+          "usf-211-privacy-pgbackrest-configured-proof"
         ],
         "tracking_issue_rationale": {
           "USF-177": "bounded backup and restore service disposition gate",
-          "USF-202": "pgBackRest backup artifact, restore drill, and resilience proof follow-up"
+          "USF-202": "historical pgBackRest blocked proof reclassification",
+          "USF-211": "bounded pgBackRest maintained-image configured local cold backup and restore drill proof"
         },
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",

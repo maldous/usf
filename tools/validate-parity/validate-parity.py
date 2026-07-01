@@ -114,6 +114,8 @@ COMPOSE_CLOSURE_DISPOSITIONS = {
     "implemented",
     "implemented-equivalent",
     "covered-by-usf-runtime",
+    "bounded-local-proof",
+    "bounded-local-proof-with-deferred-readiness-boundaries",
     "profile-gated-bounded-proof",
     "substituted-partial",
     "deferred",
@@ -127,6 +129,7 @@ COMPOSE_IMPLEMENTED_DISPOSITIONS = {
     "profile-gated-bounded-proof",
 }
 COMPOSE_BLOCKING_DISPOSITIONS = {"deferred", "requires-human-decision", "substituted-partial"}
+COMPOSE_BLOCKING_DISPOSITIONS.add("bounded-local-proof-with-deferred-readiness-boundaries")
 COMPOSE_CLOSURE_META_ISSUES = {
     "USF-133",
     "USF-166",
@@ -160,6 +163,7 @@ COMPOSE_REQUIRED_DOWNSTREAM_ISSUES = {
 }
 COMPOSE_NON_EQUIVALENT_DISPOSITIONS = {
     "covered-by-usf-runtime",
+    "bounded-local-proof-with-deferred-readiness-boundaries",
     "substituted-partial",
     "deferred",
     "requires-human-decision",
@@ -743,7 +747,8 @@ def check_compose_service_closure(F, state):
                 continue
             status = react_row.get("usf_accounting_status")
             if status in COMPOSE_CLOSURE_DISPOSITIONS and disposition != status and not (
-                status == "profile-gated-bounded-proof" and disposition == "deferred"
+                status in {"profile-gated-bounded-proof", "bounded-local-proof"}
+                and disposition in {"deferred", "bounded-local-proof-with-deferred-readiness-boundaries"}
             ):
                 F.add("USF-PARITY-021", f"service:{service_id}:{react_name}", f"matrix status {status} cannot be represented as {disposition}")
             if status in {"requires-human-decision", "deferred", "substituted-partial"} and disposition not in COMPOSE_BLOCKING_DISPOSITIONS:

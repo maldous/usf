@@ -60,6 +60,7 @@ RULES = {
     "USF-RUNTIME-029": ("blocking", "operator workflow provider disposition is incomplete or unsafe"),
     "USF-RUNTIME-030": ("blocking", "ClickHouse service proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-031": ("blocking", "Redis cache service proof boundary is incomplete or unsafe"),
+    "USF-RUNTIME-032": ("blocking", "pgBackRest configured proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
@@ -75,6 +76,7 @@ FILE_SCANNER_PROVIDER_MATRIX_PATH = Path("docs/architecture/file-scanner-provide
 MOCK_PROVIDER_SUBSTRATE_MATRIX_PATH = Path("docs/architecture/mock-provider-substrate-disposition-matrix.json")
 BACKUP_RESTORE_PROVIDER_MATRIX_PATH = Path("docs/architecture/backup-restore-provider-disposition-matrix.json")
 PGBACKREST_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/pgbackrest-backup-restore-proof-blocker-matrix.json")
+PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH = Path("docs/architecture/pgbackrest-configured-proof-boundary.json")
 OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH = Path("docs/architecture/operator-workflow-provider-disposition-matrix.json")
 WINDMILL_PROOF_BLOCKER_MATRIX_PATH = Path("docs/architecture/windmill-operator-automation-proof-blocker-matrix.json")
 PACKAGE_PATH = Path("package.json")
@@ -99,6 +101,7 @@ WIREMOCK_PROOF_SOURCE_PATH = Path("packages/proof/src/wiremock-composed-proof.ts
 LOCALSTACK_PROOF_SOURCE_PATH = Path("packages/proof/src/localstack-composed-proof.ts")
 CLICKHOUSE_PROOF_SOURCE_PATH = Path("packages/proof/src/clickhouse-composed-proof.ts")
 REDIS_PROOF_SOURCE_PATH = Path("packages/proof/src/redis-composed-proof.ts")
+PGBACKREST_PROOF_SOURCE_PATH = Path("packages/proof/src/pgbackrest-configured-proof.ts")
 PROVIDER_REGISTRY_SOURCE_PATH = Path("packages/core/src/index.ts")
 SERVICE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 COMPOSE_TARGET = "compose/compose.dev.generated.yaml"
@@ -444,6 +447,25 @@ PGBACKREST_PROOF_BLOCKER_REQUIRED_EVIDENCE_REFS = {
     "usf-202-privacy-pgbackrest-proof-blocker",
     "sdk-usf-202-pgbackrest-cli-blocked",
 }
+PGBACKREST_CONFIGURED_PROOF_REQUIRED_ISSUES = {
+    "USF-177",
+    "USF-202",
+    "USF-211",
+    "USF-189",
+    "USF-184",
+    "USF-192",
+    "USF-133",
+}
+PGBACKREST_CONFIGURED_PROOF_REQUIRED_EVIDENCE_REFS = {
+    "usf-211-soa-pgbackrest-configured-proof",
+    "usf-211-evidence-pgbackrest-configured-proof",
+    "usf-211-threat-pgbackrest-overclaim",
+    "usf-211-access-pgbackrest-configured-proof",
+    "usf-211-resilience-pgbackrest-configured-proof",
+    "usf-211-incident-vulnerability-pgbackrest-configured-proof",
+    "usf-211-privacy-pgbackrest-configured-proof",
+    "sdk-usf-211-pgbackrest-official-cli",
+}
 BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS = REQUIRED_PROHIBITED_CLAIMS | {
     "backup-readiness",
     "restore-readiness",
@@ -558,10 +580,10 @@ LANE5_PROVIDER_DISPOSITIONS = {
     },
     "usf-189-pgbackrest-backup-provider": {
         "serviceIds": ["pgbackrest"],
-        "providerIds": ["backup-restore-pgbackrest-deferred"],
-        "followUpIssue": "USF-202",
+        "providerIds": ["backup-restore-pgbackrest-composed-test", "backup-restore-pgbackrest-deferred"],
+        "followUpIssue": "USF-211",
         "boundaryRef": "usf-189-backup-provider-deferred",
-        "allowedStatuses": {"profile-gated"},
+        "allowedStatuses": {"profile-gated-proven"},
     },
     "usf-189-windmill-automation-provider": {
         "serviceIds": ["windmill", "windmill-worker", "windmill-postgres", "windmill-redis"],
@@ -790,6 +812,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 pgbackrest_proof_blocker_matrix,
                 defect["pgbackrestProofBlockerMatrixPatches"],
             )
+    pgbackrest_configured_proof_boundary: Any = None
+    if not defect.get("removePgbackrestConfiguredProofBoundary"):
+        pgbackrest_configured_proof_boundary = read_json(PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH)
+        if defect.get("pgbackrestConfiguredProofBoundaryPatches"):
+            pgbackrest_configured_proof_boundary = apply_manifest_patches(
+                pgbackrest_configured_proof_boundary,
+                defect["pgbackrestConfiguredProofBoundaryPatches"],
+            )
     operator_workflow_provider_matrix: Any = None
     if not defect.get("removeOperatorWorkflowProviderMatrix"):
         operator_workflow_provider_matrix = read_json(OPERATOR_WORKFLOW_PROVIDER_MATRIX_PATH)
@@ -807,6 +837,9 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
                 defect["windmillProofBlockerMatrixPatches"],
             )
     package = read_json(PACKAGE_PATH)
+    service_catalogue = read_json(Path(SERVICE_CATALOGUE_PATH))
+    if defect.get("serviceCataloguePatches"):
+        service_catalogue = apply_manifest_patches(service_catalogue, defect["serviceCataloguePatches"])
     for script_name in defect.get("removePackageScripts", []):
         package.get("scripts", {}).pop(script_name, None)
     for dep_name in defect.get("removePackageDependencies", []):
@@ -836,8 +869,10 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "mockProviderSubstrateMatrix": mock_provider_substrate_matrix,
         "backupRestoreProviderMatrix": backup_restore_provider_matrix,
         "pgbackrestProofBlockerMatrix": pgbackrest_proof_blocker_matrix,
+        "pgbackrestConfiguredProofBoundary": pgbackrest_configured_proof_boundary,
         "operatorWorkflowProviderMatrix": operator_workflow_provider_matrix,
         "windmillProofBlockerMatrix": windmill_proof_blocker_matrix,
+        "serviceCatalogue": service_catalogue,
         "package": package,
         "makefile": makefile,
         "proofSource": proof_source,
@@ -1191,9 +1226,18 @@ def check_lane5_sdk_boundary(F: Findings, state: dict[str, Any]) -> None:
             for field in ("adapterName", "portName", "endpointRef"):
                 if not binding.get(field):
                     F.add("USF-RUNTIME-020", binding_id, f"implemented provider lacks {field}")
-            if binding.get("sdkBoundary") != "adapter-package-only":
+            protocol_exception = "protocol-exception" in lane5_binding_payload(binding) or binding.get("sdkBoundary") in {
+                "official-cli-proof-boundary",
+                "protocol-exception-official-cli",
+            }
+            if not protocol_exception and binding.get("sdkBoundary") != "adapter-package-only":
                 F.add("USF-RUNTIME-020", binding_id, "implemented provider lacks adapter-package-only SDK boundary")
-            protocol_exception = "protocol-exception" in lane5_binding_payload(binding)
+            if protocol_exception and binding.get("sdkBoundary") not in {
+                "adapter-package-only",
+                "official-cli-proof-boundary",
+                "protocol-exception-official-cli",
+            }:
+                F.add("USF-RUNTIME-020", binding_id, "protocol-exception provider lacks explicit CLI/protocol boundary")
             if not protocol_exception:
                 for field in ("sdkPackage", "sdkVersion"):
                     if not binding.get(field):
@@ -3515,12 +3559,22 @@ def check_backup_restore_provider_disposition(F: Findings, state: dict[str, Any]
     else:
         if "USF-202" not in binding.get("followUpIssueRefs", []):
             F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "runtime manifest must link USF-202")
-        if "USF-202" not in str(binding.get("deferredReason", "")):
-            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider.deferredReason", "runtime manifest must defer service-semantic proof to USF-202")
-        if binding.get("bindingStatus") != "profile-gated" or binding.get("endpointRef") is not None:
-            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "pgBackRest must remain explicitly deferred/profile-gated without endpoint binding")
-        if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
-            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "deferred pgBackRest must not name an SDK/client package")
+        if "USF-211" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "runtime manifest must link USF-211")
+        if binding.get("bindingStatus") == "profile-gated":
+            if binding.get("endpointRef") is not None:
+                F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "blocked pgBackRest must not expose endpoint binding")
+            if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+                F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "deferred pgBackRest must not name an SDK/client package")
+        elif binding.get("bindingStatus") == "profile-gated-proven":
+            if binding.get("providerMode") != "composed-test" or binding.get("endpointRef") != "endpoint://compose/pgbackrest":
+                F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "resolved pgBackRest binding must be bounded composed-test with redacted endpoint ref")
+            if "backup-restore-pgbackrest-composed-test" not in binding.get("providerRegistryIds", []):
+                F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "resolved pgBackRest binding must carry composed provider registry id")
+            if binding.get("sdkPackage") is not None or binding.get("sdkVersion") is not None:
+                F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "pgBackRest CLI proof boundary must not invent SDK package metadata")
+        else:
+            F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "pgBackRest binding has unexpected status")
 
     deferred = {
         item.get("id"): item
@@ -3686,6 +3740,262 @@ def check_backup_restore_provider_disposition(F: Findings, state: dict[str, Any]
         F.add("USF-RUNTIME-028", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "runtime manifest must link USF-211 blocker")
     if deferred and "USF-211" not in deferred.get("followUpIssueRefs", []):
         F.add("USF-RUNTIME-028", "deferredBoundaries.usf-189-backup-provider-deferred", "runtime deferred boundary must link USF-211 blocker")
+
+
+def check_pgbackrest_configured_proof_boundary(F: Findings, state: dict[str, Any]) -> None:
+    boundary = state.get("pgbackrestConfiguredProofBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-RUNTIME-032", str(PGBACKREST_CONFIGURED_PROOF_BOUNDARY_PATH), "pgBackRest configured proof boundary is missing")
+        return
+
+    expected_top = {
+        "sourceIssue": "USF-211",
+        "followUpIssue": None,
+        "sourceDispositionIssue": "USF-177",
+        "predecessorIssue": "USF-202",
+        "laneIssue": "USF-189",
+        "parentIssue": "USF-133",
+        "status": "profile-gated-bounded-proof-present",
+        "serviceCatalogueAuthority": SERVICE_CATALOGUE_PATH,
+        "runtimeManifest": str(MANIFEST_PATH),
+        "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
+        "backupRestoreProviderDispositionMatrix": str(BACKUP_RESTORE_PROVIDER_MATRIX_PATH),
+        "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+        "validationCommand": "python3 tools/validate-runtime/validate-runtime.py all --json",
+    }
+    for key, expected in expected_top.items():
+        if boundary.get(key) != expected:
+            F.add("USF-RUNTIME-032", key, f"expected {expected!r}")
+
+    if set(boundary.get("serviceIds", [])) != {"pgbackrest", "postgres"}:
+        F.add("USF-RUNTIME-032", "serviceIds", "pgBackRest boundary service ids are incomplete")
+    if set(boundary.get("providerBindingIds", [])) != {"usf-189-pgbackrest-backup-provider"}:
+        F.add("USF-RUNTIME-032", "providerBindingIds", "pgBackRest boundary provider binding ids are incomplete")
+    if set(boundary.get("providerRegistryIds", [])) != {"backup-restore-pgbackrest-composed-test", "backup-restore-pgbackrest-deferred"}:
+        F.add("USF-RUNTIME-032", "providerRegistryIds", "pgBackRest boundary provider registry ids are incomplete")
+    if PGBACKREST_CONFIGURED_PROOF_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
+        F.add("USF-RUNTIME-032", "issueLinks", "pgBackRest configured proof issue links are incomplete")
+    if REQUIRED_PROHIBITED_CLAIMS - set(boundary.get("nonClaims", [])):
+        F.add("USF-RUNTIME-032", "nonClaims", "pgBackRest configured proof non-claims are incomplete")
+    if BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS - set(boundary.get("readinessClaimsProhibited", [])):
+        F.add("USF-RUNTIME-032", "readinessClaimsProhibited", "pgBackRest configured proof prohibited claims are incomplete")
+    if BACKUP_RESTORE_PROVIDER_PROHIBITED_CLAIMS & set(boundary.get("readinessClaimsAllowed", [])):
+        F.add("USF-RUNTIME-032", "readinessClaimsAllowed", "pgBackRest configured proof allows a prohibited readiness claim")
+
+    reclassification = boundary.get("reclassification", {})
+    if not isinstance(reclassification, dict):
+        F.add("USF-RUNTIME-032", "reclassification", "pgBackRest reclassification must be an object")
+    else:
+        expected_reclassification = {
+            "from": "blocked-until-maintained-image-and-configured-repository",
+            "to": "profile-gated-bounded-local-compose-proof",
+            "decisionAcceptedDoesNotMeanWorkComplete": True,
+            "serviceSemanticProofImplemented": True,
+            "pgbackrestServiceReadinessClaim": False,
+            "backupReadinessClaim": False,
+            "restoreReadinessClaim": False,
+            "disasterRecoveryReadinessClaim": False,
+            "rpoRtoReadinessClaim": False,
+            "providerCompatibilityClaim": False,
+        }
+        for key, expected in expected_reclassification.items():
+            observed = reclassification.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-RUNTIME-032", f"reclassification.{key}", f"expected {expected!r}")
+        required_refs = {
+            "spec/instances/compose-service/service-catalogue.json#pgbackrest",
+            "packages/proof/src/pgbackrest-configured-proof.ts",
+            "package.json#proof:backup:pgbackrest",
+            "Makefile#pgbackrest-proof",
+            "tools/validate-runtime/validate-runtime.py",
+        }
+        if required_refs - set(reclassification.get("repositoryEvidence", [])):
+            F.add("USF-RUNTIME-032", "reclassification.repositoryEvidence", "repository evidence refs are incomplete")
+
+    remaining = boundary.get("remainingProofBoundary", {})
+    if not isinstance(remaining, dict):
+        F.add("USF-RUNTIME-032", "remainingProofBoundary", "remaining proof boundary must be an object")
+    else:
+        expected_remaining = {
+            "issue": "none-for-USF-211-bounded-proof",
+            "owner": "platform-data-foundation",
+            "riskOwner": "platform-data-risk-owner",
+            "controlOwner": "platform-data-control-owner",
+            "reviewDate": "2026-09-30",
+        }
+        for key, expected in expected_remaining.items():
+            if remaining.get(key) != expected:
+                F.add("USF-RUNTIME-032", f"remainingProofBoundary.{key}", f"expected {expected!r}")
+        for field in ("riskStatement", "treatment", "requiredEvidence"):
+            if remaining.get(field) in (None, "", []):
+                F.add("USF-RUNTIME-032", f"remainingProofBoundary.{field}", "remaining proof field is required")
+        required_remaining = {
+            "online backup and WAL archive evidence before any online backup or PITR claim",
+            "RPO/RTO and disaster recovery drill proof before any DR readiness claim",
+            "API runtime backup-port integration proof before any API pgBackRest runtime-use claim",
+            "worker runtime backup-port integration proof before any worker pgBackRest runtime-use claim",
+        }
+        if required_remaining - set(remaining.get("requiredEvidence", [])):
+            F.add("USF-RUNTIME-032", "remainingProofBoundary.requiredEvidence", "remaining proof evidence list is incomplete")
+
+    backup = boundary.get("backupRestoreBoundary", {})
+    expected_backup = {
+        "imageSelectionStatus": "maintained-image-selected-and-digest-pinned",
+        "repositoryConfigStatus": "local-repository-configured-by-USF-211",
+        "stanzaStatus": "stanza-created-by-USF-211",
+        "postgresLinkageStatus": "postgres-data-and-local-socket-linkage-proven-by-USF-211",
+        "backupArtifactStatus": "offline-cold-full-backup-created-by-USF-211",
+        "restoreDrillStatus": "restore-readback-proven-by-USF-211",
+        "secretExclusionStatus": "proof-output-redaction-and-no-real-secret-boundary-proven-by-USF-211",
+        "auditEvidenceStatus": "value-free-audit-shaped-evidence-proven-by-USF-211",
+        "readinessRetryStatus": "bounded-postgres-healthcheck-and-pgbackrest-version-retry-proven-by-USF-211",
+        "timeoutStatus": "bounded-process-timeouts-proven-by-USF-211",
+        "teardownCleanupStatus": "restore-container-compose-volume-and-temp-dir-cleanup-proven-by-USF-211",
+        "providerFailureHandlingStatus": "missing-repository-fail-closed-proven-by-USF-211",
+    }
+    for field, expected in expected_backup.items():
+        if backup.get(field) != expected:
+            F.add("USF-RUNTIME-032", f"backupRestoreBoundary.{field}", f"expected {expected!r}")
+    for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
+        if not backup.get(field):
+            F.add("USF-RUNTIME-032", f"backupRestoreBoundary.{field}", "backup boundary owner metadata is required")
+
+    cli = boundary.get("cliProviderBoundary", {})
+    expected_cli = {
+        "selectionStatus": "official-cli-selected-and-pinned-image-boundary",
+        "cliName": "pgbackrest",
+        "cliVersion": "2.58.0",
+        "sdkPackage": None,
+        "sdkVersion": None,
+        "protocolException": True,
+    }
+    for field, expected in expected_cli.items():
+        observed = cli.get(field)
+        if observed is not expected if isinstance(expected, bool) or expected is None else observed != expected:
+            F.add("USF-RUNTIME-032", f"cliProviderBoundary.{field}", f"expected {expected!r}")
+    if "@sha256:" not in str(cli.get("imageRef", "")):
+        F.add("USF-RUNTIME-032", "cliProviderBoundary.imageRef", "pgBackRest image must be digest-pinned")
+    if "official pgbackrest CLI" not in str(cli.get("selectionRationale", "")):
+        F.add("USF-RUNTIME-032", "cliProviderBoundary.selectionRationale", "pgBackRest CLI rationale must name official CLI")
+    for field in ("secretBoundary", "supplierBoundary", "forbiddenLayerImports"):
+        if not cli.get(field):
+            F.add("USF-RUNTIME-032", f"cliProviderBoundary.{field}", "CLI/provider boundary field is required")
+
+    substitute = boundary.get("nonEquivalentSubstituteGate", {})
+    if substitute.get("repositoryValidationRequired") is not True:
+        F.add("USF-RUNTIME-032", "nonEquivalentSubstituteGate.repositoryValidationRequired", "repository validation must remain required")
+    for field in ("dbProofEquivalentToPgBackRest", "filesProofEquivalentToPgBackRest"):
+        if substitute.get(field) is not False:
+            F.add("USF-RUNTIME-032", f"nonEquivalentSubstituteGate.{field}", "substitute proof must not be pgBackRest equivalent")
+    if not substitute.get("substitutionNonEquivalenceBoundary"):
+        F.add("USF-RUNTIME-032", "nonEquivalentSubstituteGate.substitutionNonEquivalenceBoundary", "non-equivalence boundary is required")
+    commands = set(substitute.get("commands", []))
+    for command in (
+        "corepack pnpm proof:backup:pgbackrest",
+        "corepack pnpm compose:check-generated",
+        "python3 tools/validate-runtime/validate-runtime.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    ):
+        if command not in commands:
+            F.add("USF-RUNTIME-032", "nonEquivalentSubstituteGate.commands", f"missing {command}")
+
+    declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
+    if declared_evidence != PGBACKREST_CONFIGURED_PROOF_REQUIRED_EVIDENCE_REFS:
+        F.add("USF-RUNTIME-032", "enterpriseEvidenceRefs", "pgBackRest configured proof enterprise evidence refs are incomplete")
+
+    package = state["package"]
+    scripts = package.get("scripts") if isinstance(package.get("scripts"), dict) else {}
+    if scripts.get("proof:backup:pgbackrest") != "tsx packages/proof/src/pgbackrest-configured-proof.ts":
+        F.add("USF-RUNTIME-032", "package.json#proof:backup:pgbackrest", "pgBackRest proof package script is missing or stale")
+    if "pgbackrest-proof" not in make_targets(state["makefile"]):
+        F.add("USF-RUNTIME-032", "Makefile#pgbackrest-proof", "pgBackRest proof Make target is missing")
+
+    service_catalogue = state.get("serviceCatalogue", {})
+    services = service_catalogue.get("services", []) if isinstance(service_catalogue, dict) else []
+    pgbackrest = next((service for service in services if isinstance(service, dict) and service.get("serviceId") == "pgbackrest"), None)
+    if not isinstance(pgbackrest, dict):
+        F.add("USF-RUNTIME-032", SERVICE_CATALOGUE_PATH, "pgBackRest service catalogue row is missing")
+    else:
+        compose_service = pgbackrest.get("composeService", {})
+        if compose_service.get("image") != "woblerr/pgbackrest:2.58.0@sha256:18cdff011e974308510d056b4039d9b4d21ec33d9124879882c6f05e99be2ab9":
+            F.add("USF-RUNTIME-032", "serviceCatalogue.pgbackrest.composeService.image", "pgBackRest image must be maintained version and digest-pinned")
+        if set(compose_service.get("profiles", [])) != {"backup-restore"}:
+            F.add("USF-RUNTIME-032", "serviceCatalogue.pgbackrest.composeService.profiles", "pgBackRest compose profile must be backup-restore")
+        if "postgres-data:/var/lib/postgresql/data:ro" not in compose_service.get("volumes", []):
+            F.add("USF-RUNTIME-032", "serviceCatalogue.pgbackrest.composeService.volumes", "pgBackRest must mount Postgres data read-only")
+        if not any(dep.get("serviceName") == "postgres" for dep in compose_service.get("dependsOn", []) if isinstance(dep, dict)):
+            F.add("USF-RUNTIME-032", "serviceCatalogue.pgbackrest.composeService.dependsOn", "pgBackRest must depend on Postgres")
+        healthcheck_text = json.dumps(compose_service.get("healthcheck"), sort_keys=True)
+        if "pgbackrest version" not in healthcheck_text:
+            F.add("USF-RUNTIME-032", "serviceCatalogue.pgbackrest.composeService.healthcheck", "pgBackRest version healthcheck is required")
+        volume_names = {volume.get("composeVolumeName") for volume in pgbackrest.get("volumes", []) if isinstance(volume, dict)}
+        if {"pgbackrest-repo", "pgbackrest-restore"} - volume_names:
+            F.add("USF-RUNTIME-032", "serviceCatalogue.pgbackrest.volumes", "pgBackRest repository and restore volumes are required")
+
+    provider_source = state_text(state, PROVIDER_REGISTRY_SOURCE_PATH)
+    if "backup-restore-pgbackrest-composed-test" not in provider_source or "pgBackRest CLI proof boundary" not in provider_source:
+        F.add("USF-RUNTIME-032", str(PROVIDER_REGISTRY_SOURCE_PATH), "pgBackRest composed provider registry entry is missing")
+
+    proof_source = state_text(state, PGBACKREST_PROOF_SOURCE_PATH)
+    proof_markers = (
+        "compose/compose.test.generated.yaml",
+        "backup-restore",
+        "woblerr/pgbackrest:2.58.0@sha256:",
+        "--no-online",
+        "--force",
+        "stanza-create",
+        "restore",
+        "pg_isready",
+        "chown -R 70:70",
+        "proveFailClosed",
+        "assertSafeEvidence",
+        "docker",
+        "down",
+        "--remove-orphans",
+        "-v",
+    )
+    for marker in proof_markers:
+        if marker not in proof_source:
+            F.add("USF-RUNTIME-032", str(PGBACKREST_PROOF_SOURCE_PATH), f"pgBackRest proof source missing marker: {marker}")
+
+    bindings = binding_records(state["manifest"])
+    binding = bindings.get("usf-189-pgbackrest-backup-provider")
+    if not binding:
+        F.add("USF-RUNTIME-032", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "runtime manifest must include pgBackRest provider binding")
+    else:
+        expected_binding = {
+            "bindingStatus": "profile-gated-proven",
+            "providerMode": "composed-test",
+            "providerClass": "local-composed-real-service",
+            "sdkBoundary": "official-cli-proof-boundary",
+            "sourceUseDisposition": "runtime-proof-support",
+            "adapterName": "pgBackRest CLI proof boundary",
+            "portName": "BackupRestoreProvider",
+            "endpointRef": "endpoint://compose/pgbackrest",
+            "sdkPackage": None,
+            "sdkVersion": None,
+            "proofCommand": "corepack pnpm proof:backup:pgbackrest",
+        }
+        for field, expected in expected_binding.items():
+            observed = binding.get(field)
+            if observed is not expected if expected is None else observed != expected:
+                F.add("USF-RUNTIME-032", f"providerBindingMatrix.usf-189-pgbackrest-backup-provider.{field}", f"expected {expected!r}")
+        if set(binding.get("providerRegistryIds", [])) != {"backup-restore-pgbackrest-composed-test", "backup-restore-pgbackrest-deferred"}:
+            F.add("USF-RUNTIME-032", "providerBindingMatrix.usf-189-pgbackrest-backup-provider.providerRegistryIds", "pgBackRest binding must carry composed and deferred provider registry ids")
+        if "USF-211" not in binding.get("followUpIssueRefs", []):
+            F.add("USF-RUNTIME-032", "providerBindingMatrix.usf-189-pgbackrest-backup-provider", "runtime manifest must link USF-211")
+        if "USF-211" not in str(binding.get("proofEvidence", "")):
+            F.add("USF-RUNTIME-032", "providerBindingMatrix.usf-189-pgbackrest-backup-provider.proofEvidence", "runtime manifest must record USF-211 proof evidence")
+
+    deferred = {
+        item.get("id"): item
+        for item in state["manifest"].get("deferredBoundaries", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }.get("usf-189-backup-provider-deferred")
+    if not deferred or "USF-211" not in deferred.get("followUpIssueRefs", []):
+        F.add("USF-RUNTIME-032", "deferredBoundaries.usf-189-backup-provider-deferred", "runtime deferred boundary must link USF-211 lineage")
+    if deferred and "USF-211 resolves only the bounded profile-gated local Compose cold backup/restore proof" not in str(deferred.get("boundary", "")):
+        F.add("USF-RUNTIME-032", "deferredBoundaries.usf-189-backup-provider-deferred", "runtime deferred boundary must distinguish resolved local proof from remaining readiness boundaries")
 
 
 def check_operator_workflow_provider_disposition(F: Findings, state: dict[str, Any]) -> None:
@@ -4204,6 +4514,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_analytics_event_store_disposition,
             check_clickhouse_service_proof_boundary,
             check_redis_cache_service_proof_boundary,
+            check_pgbackrest_configured_proof_boundary,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,
@@ -4235,6 +4546,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_analytics_event_store_disposition,
             check_clickhouse_service_proof_boundary,
             check_redis_cache_service_proof_boundary,
+            check_pgbackrest_configured_proof_boundary,
             check_cache_eventing_disposition,
             check_composed_search_provider_disposition,
             check_file_scanner_provider_disposition,

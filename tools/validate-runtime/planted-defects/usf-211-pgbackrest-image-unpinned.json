@@ -1,0 +1,11 @@
+{
+  "name": "usf-211-pgbackrest-image-unpinned",
+  "expectedRule": "USF-RUNTIME-032",
+  "pgbackrestConfiguredProofBoundaryPatches": [
+    {
+      "op": "replace",
+      "path": "/cliProviderBoundary/imageRef",
+      "value": "woblerr/pgbackrest:2.58.0"
+    }
+  ]
+}

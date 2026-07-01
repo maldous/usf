@@ -2,7 +2,7 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := verify
 
-.PHONY: verify install dev dev-smoke dev.work runtime-proof runtime-proof-in-memory runtime-proof-compose runtime-validate enterprise-validate compose-generate compose-validate compose-policy compose-check-generated compose-dev compose-test compose-staging compose-production compose-ports compose-ports-dev compose-ports-test compose-ports-staging compose-ports-profiles compose-hardening compose-security test-compose parity db-proof authz-proof audit-proof config-proof files-proof auth-proof jobs-proof notify-proof api-proof providers-proof observability-proof sentry-observability-proof guardrails-proof bulk-proof search-proof search-proof-meilisearch scanner-proof-clamav clickhouse-analytics-proof wiremock-proof localstack-proof redis-cache-proof mock-substrate-proof resources-proof
+.PHONY: verify install dev dev-smoke dev.work runtime-proof runtime-proof-in-memory runtime-proof-compose runtime-validate enterprise-validate compose-generate compose-validate compose-policy compose-check-generated compose-dev compose-test compose-staging compose-production compose-ports compose-ports-dev compose-ports-test compose-ports-staging compose-ports-profiles compose-hardening compose-security test-compose parity db-proof authz-proof audit-proof config-proof files-proof auth-proof jobs-proof notify-proof api-proof providers-proof observability-proof sentry-observability-proof guardrails-proof bulk-proof search-proof search-proof-meilisearch scanner-proof-clamav clickhouse-analytics-proof pgbackrest-proof wiremock-proof localstack-proof redis-cache-proof mock-substrate-proof resources-proof
 
 install:
 	corepack pnpm install --frozen-lockfile
@@ -138,6 +138,9 @@ scanner-proof-clamav:
 
 clickhouse-analytics-proof:
 	corepack pnpm proof:analytics:clickhouse
+
+pgbackrest-proof:
+	corepack pnpm proof:backup:pgbackrest
 
 wiremock-proof:
 	corepack pnpm proof:wiremock

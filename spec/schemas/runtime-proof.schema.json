@@ -233,7 +233,7 @@
         },
         "sdkBoundary": {
           "type": "string",
-          "enum": ["adapter-package-only", "not-applicable"]
+          "enum": ["adapter-package-only", "official-cli-proof-boundary", "not-applicable"]
         },
         "sourceUseDisposition": {
           "type": "string",

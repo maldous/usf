@@ -1,0 +1,7 @@
+{
+  "name": "usf-211-pgbackrest-proof-command-missing",
+  "expectedRule": "USF-RUNTIME-032",
+  "removePackageScripts": [
+    "proof:backup:pgbackrest"
+  ]
+}
