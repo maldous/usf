@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-AUDIT-018",
+  "mutation": {
+    "usf143RemoveProofCommand": "cryptographic-signing-and-key-management"
+  }
+}

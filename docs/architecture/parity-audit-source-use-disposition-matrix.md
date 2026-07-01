@@ -3,9 +3,9 @@
 | | |
 |---|---|
 | Document type | Architecture / source-use governance matrix |
-| Status | Draft / parity-audit (USF-142) implementation coverage |
+| Status | Draft / parity-audit (USF-142 core; USF-143 enterprise-depth proof coverage) |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
-| Issue scope | USF-142 under USF-133; deferred depth tracked in USF-143 |
+| Issue scope | USF-142 under USF-133; enterprise audit depth bounded by USF-143 |
 | Source row basis | `docs/architecture/audit-evidence-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), and historical `../react` audit/event/evidence behaviour as lineage only |
 | Repository state | No React runtime/application code copied; no React path mirroring; no UI; no Playwright; no live KMS/HSM/SIEM; no live/production claim |
 
@@ -22,6 +22,7 @@
 | `capabilities/audit/src/query-service.ts` | source-derived-rewrite | React audit query + admin audit-viewer lineage (deferred UI) | PDP-protected, tenant-scoped retrieval/verify/correct that records audit-of-audit access events. |
 | `capabilities/audit/src/safe-view.ts` | new-with-rationale | Safe-projection requirement | Client-safe projection: redacted metadata, a safe verification surface, no internal chain plumbing. |
 | `packages/proof/src/audit-evidence-proof.ts` | evidence-only-support | Append-only + tamper-evidence proof requirement | Composed-Postgres proof: append-only, valid-chain re-verification, tamper detection, RLS isolation. Run via `make audit-proof`. |
+| `docs/architecture/audit-enterprise-proof-depth-matrix.json` | new-with-rationale | USF-143 enterprise audit depth gate | Maps signing/key boundary, evidence package, retention/disposal, delivery reliability, Postgres linkage, forensic refs, SIEM posture, detection mapping, multi-version readers, validators, evidence rows, and non-claims. |
 | `tests/capabilities/audit-evidence.test.ts` | evidence-only-support | Audit/evidence behaviour proof requirement | Hermetic model/redaction/chain/tamper/retrieval/correction/taxonomy tests. |
 | `tests/apps/audit-api.test.ts` | evidence-only-support | Audit retrieval surface proof requirement | API tests: tenant-scoped, PDP-protected, non-enumerating audit retrieval and verify, with audit-of-audit. |
 
@@ -38,14 +39,15 @@
 | Audit-of-audit access | migrated | `capabilities/audit/src/query-service.ts` | audit.query.started/completed/denied, audit.event.viewed, audit.integrity.verified/failed, audit.correction.recorded. |
 | Hash/integrity verification + tamper evidence | migrated | `packages/core` (canonicalAuditEventHash, verifyAuditChain), `packages/proof` | App-layer chain + composed-Postgres tamper proof (make audit-proof). |
 | Redaction / metadata safety | migrated | `packages/core` (BLOCKED_METADATA_KEYS, redactAuditMetadata) | Blocks password/token/secret/api_key/cookie/authorization/private_key…; bounds keys/value size; references not snapshots. |
-| Schema evolution / event versioning | partial | `packages/core` (eventVersion, AUDIT_SCHEMA_VERSION) | Versioned; unknown future versions fail safely; a full historical multi-version reader matrix is deferred (USF-143). |
-| Retention / legal-hold / disposal | partial | DB substrate (retention_policy, legal_hold, legal-hold purge-block) + model fields | Guardrails and metadata defined; automated disposal/purge workflow deferred (USF-143). |
-| Cryptographic signing / key management | deferred | `packages/ports` (AuditSigner), model `signature`/`chainKeyId` | Signature-ready fields defined; no signer. No live KMS/HSM (USF-143). |
-| Audit export / evidence package | deferred | `packages/ports` (AuditExporter), audit.export.* reserved | Port-only; no export route. Deferred (USF-143). |
-| Durable outbox / delivery reliability | deferred | — | Transactional outbox/retry belongs to the events/jobs domain (USF-143). |
-| Forensic request/session capture (source_ip, user_agent, device_id, session_id) | partial | `packages/core` fields defined | Fields defined; capture belongs to the request/session domain (USF-143). |
-| SIEM forwarder | deferred | `packages/ports` (SiemForwarder) | Port-only; no live SIEM integration (USF-143). |
-| JavaScript Postgres audit adapter | deferred | — | Audit proven over in-memory store + composed-Postgres proof; live JS pg adapter shares USF-139 (USF-143). |
+| Schema evolution / event versioning | bounded-local-proof | `packages/core` (eventVersion, AUDIT_SCHEMA_VERSION), `packages/proof/src/audit-evidence-proof.ts` | USF-143 proves v0/v1 synthetic reader compatibility and fail-closed unknown future version handling. No full historical customer migration readiness claim. |
+| Retention / legal-hold / disposal | bounded-local-proof | DB substrate (retention_policy, legal_hold, legal-hold purge-block) + proof lifecycle fixture | USF-143 proves legal-hold disposal blocking and audited eligible disposal locally. No automated production retention, purge, or legal-hold operations readiness claim. |
+| Cryptographic signing / key management | bounded-local-proof | `packages/proof/src/audit-evidence-proof.ts`, model `signature`/`chainKeyId` | USF-143 proves local package signing/verification and forged-package rejection while excluding key material. No live KMS/HSM/custody readiness claim. |
+| Audit export / evidence package | bounded-local-proof | `packages/ports` (AuditExporter), audit.export.* reserved, `packages/proof/src/audit-evidence-proof.ts` | USF-143 proves tenant-scoped, value-free, signed local evidence packages. No public export API, customer export readiness, or live SIEM export claim. |
+| Durable outbox / delivery reliability | bounded-local-proof | `packages/proof/src/audit-evidence-proof.ts` | USF-143 proves bounded retry and dead-letter fail-closed behaviour locally. No distributed event-bus or production delivery readiness claim. |
+| Forensic request/session capture (source_ip, user_agent, device_id, session_id) | bounded-local-proof | `packages/core` fields + `packages/proof/src/audit-evidence-proof.ts` | USF-143 proves synthetic value-free request/session refs. No browser session or production IP/device collection readiness claim. |
+| SIEM forwarder | bounded-local-proof | `packages/ports` (SiemForwarder), `packages/proof/src/audit-evidence-proof.ts` | USF-143 proves local value-free SIEM envelope posture. No live SIEM, alerting, monitoring, or incident readiness claim. |
+| Security detection monitoring | bounded-local-proof | `packages/core` reserved event types + `packages/proof/src/audit-evidence-proof.ts` | USF-143 proves local mapping from audit.integrity.failed to value-free detection evidence. No production monitoring or SOC readiness claim. |
+| JavaScript Postgres audit adapter linkage | bounded-local-proof | composed-Postgres proof + app outcome mapping boundary | USF-143 proves app outcomes require explicit mapping before DB persistence and raw app-only outcomes are rejected by the DB constraint. No live JavaScript adapter readiness claim. |
 
 ## React UI/Playwright Audit Behaviours
 
@@ -53,4 +55,4 @@ The historical `../react` audit/evidence inventory (`.claude/runs/...react-audit
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live KMS/HSM/external signing. No live SIEM integration. No staging/production/deployment/live-external-provider/production-live claim. No full React functional parity readiness claim.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live KMS/HSM/external signing. No live SIEM integration. No public audit export API readiness. No staging/production/deployment/live-external-provider/production-live claim. No full React functional parity readiness claim.

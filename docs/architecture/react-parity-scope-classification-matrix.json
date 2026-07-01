@@ -106,13 +106,15 @@
         "apps/platform-api/src (audit/event recording)"
       ],
       "behaviour_summary": "Tenant-safe, append-only, tamper-evident audit/evidence: structured event taxonomy, authorization-decision + break-glass evidence, correlation/causation/trace propagation, redaction, hash-chain integrity, tenant-scoped PDP-protected retrieval, and audit-of-audit. Durable event-bus outbox/DLQ/redrive is a separate events/jobs concern (deferred).",
-      "usf_status": "partial",
+      "usf_status": "migrated",
       "usf_paths": [
         "capabilities/audit",
         "packages/core (audit event model + taxonomy + redaction + hash chain)",
-        "packages/ports (audit ledger/recorder ports)",
+        "packages/ports (audit ledger/recorder/export/signing/SIEM ports)",
         "apps/api (v1/audit retrieval surfaces)",
-        "packages/proof (audit-evidence-proof)"
+        "packages/proof/src/audit-evidence-proof.ts",
+        "docs/architecture/audit-enterprise-proof-depth-matrix.json",
+        "tools/validate-parity/validate-audit.py"
       ],
       "usf_tests": [
         "tests/capabilities/audit-evidence.test.ts",
@@ -120,16 +122,17 @@
         "tests/capabilities/authorization.test.ts"
       ],
       "usf_proofs": [
-        "packages/proof/src/audit-evidence-proof.ts (make audit-proof: append-only, valid-chain re-verify, tamper detection, RLS isolation)",
+        "make audit-proof (packages/proof/src/audit-evidence-proof.ts): append-only, valid-chain re-verify, tamper detection, RLS isolation, USF-143 local signing/key boundary, value-free export package, retention/disposal, outbox retry/dead-letter, Postgres outcome mapping, forensic refs, SIEM envelope, detection mapping, and multi-version reader proof",
+        "make parity (validate-audit USF-AUDIT-001..019 with planted defects)",
         "packages/proof/src/db-rls-isolation-proof.ts (append-only ledger + hash chain on real Postgres)"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-143",
+      "blocker": "USF-155/USF-159/USF-163 for broader API, operations, and bulk/export surfaces",
       "blocking_foundation_readiness": true,
       "domain_authorised": true,
-      "evidence": "audit/evidence standard docs/architecture/audit-evidence-standard.md; source-use docs/architecture/parity-audit-source-use-disposition-matrix.md; validate-audit (13 rules + planted defects); make audit-proof pass; USF-142 implementation; deferred depth tracked in USF-143.",
-      "retry_condition": "Deferred audit depth (signing/KMS, full export, full retention/disposal, durable outbox, JS pg audit adapter, request/session capture, SIEM forwarder, detection monitoring) implemented and proven under USF-143; then re-classify migrated."
+      "evidence": "USF-142 core audit evidence plus USF-143 bounded enterprise audit proof depth: audit/evidence standard, audit enterprise proof-depth matrix, source-use matrix, validate-audit USF-AUDIT-001..019 with planted defects, make audit-proof, enterprise evidence rows. Proven locally: package signing/verification, forged payload rejection, value-free export package, legal-hold disposal blocking, audited disposal, bounded outbox retry/dead-letter, Postgres outcome mapping, synthetic forensic refs, local SIEM envelope posture, detection mapping, v0/v1 reader compatibility, append-only/RLS/tamper evidence. Non-claims preserve no live KMS/HSM, live SIEM, public audit export API, production retention/incident readiness, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure.",
+      "retry_condition": "Broader audit-adjacent product surfaces remain explicitly linked to domain source issues: public/bulk audit export routes and file package delivery (USF-163), gateway/API compatibility (USF-155), observability alerting/incident operations (USF-159), and future environment promotion criteria (USF-193). No readiness claim upgrades from the bounded USF-143 proof."
     },
     {
       "react_item_id": "config-secrets",

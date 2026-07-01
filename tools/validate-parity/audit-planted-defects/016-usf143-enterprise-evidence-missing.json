@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-AUDIT-016",
+  "mutation": {
+    "usf143ClearEnterpriseEvidenceRefs": true
+  }
+}

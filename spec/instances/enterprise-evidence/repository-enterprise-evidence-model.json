@@ -4771,6 +4771,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-143-audit-enterprise-proof-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-143 enterprise audit depth controls for signing, value-free export evidence, retention/disposal, outbox delivery, Postgres outcome linkage, forensic refs, SIEM-posture envelope, detection mapping, and multi-version readers.",
+      "riskTreated": "Deferred audit depth could be hidden behind the core audit proof, allowing unsupported KMS, SIEM, export, retention, delivery, or production audit claims.",
+      "assetServiceAffected": "audit event model; audit ledger; audit evidence packages; local SIEM envelope; audit proof command",
+      "owner": "platform-audit-foundation",
+      "riskOwner": "platform-audit-risk-owner",
+      "controlOwner": "platform-audit-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-143; laneIssue=USF-190; currentEvidence=evidence-usf-143-audit-enterprise-proof-depth; deferredBoundary=live KMS/HSM, live SIEM, production export, production incident operations; noRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/audit-enterprise-proof-depth-matrix.json; packages/proof/src/audit-evidence-proof.ts; tools/validate-parity/validate-audit.py",
+      "validationCommand": "make audit-proof; python3 tools/validate-parity/validate-audit.py all --json",
+      "deferredReason": "riskStatement=Audit enterprise depth needs bounded proof without implying live provider readiness.; threatFailureScenario=Core audit proof is mistaken for signing, export, SIEM, retention, delivery, or production audit readiness.; affectedAssetService=audit event model and evidence package boundary; impact=high; likelihood=medium; owner=platform-audit-foundation; treatment=mitigate with bounded local proof and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-193 for environment-promotion semantics only; exceptionOwner=platform-audit-risk-owner; exceptionReason=live provider and production operations remain outside USF-143 bounded local proof; compensatingControl=validate-audit plus audit-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-audit.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -6864,6 +6890,28 @@
       ],
       "prOrMergeSha": "8a06340077324341ff1fcd3e6daabde899f63176",
       "retentionPosture": "Retain command output in PR validation summary and preserve committed matrix, validator, planted defects, and enterprise evidence metadata; no raw tenant values, credentials, tokens, or policy payloads are retained."
+    },
+    {
+      "id": "evidence-usf-143-audit-enterprise-proof-depth",
+      "proofResult": "proof:audit",
+      "whatWasProven": "make audit-proof is the command-pinned bounded local Compose Postgres proof for USF-143. It proves local evidence package signing and verification, forged package rejection, key material exclusion, value-free export package metadata, legal-hold disposal blocking, audited eligible disposal, bounded outbox retry and dead-letter fail-closed behaviour, Postgres outcome mapping boundary, synthetic forensic refs, local SIEM envelope posture, local detection mapping, multi-version reader fail-closed behaviour, append-only audit ledger, hash-chain verification, tamper detection, and tenant isolation.",
+      "whatWasNotProven": "No live KMS/HSM, live SIEM, public audit export API, production retention operation, production incident response, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is proven.",
+      "runtimeMode": "compose-local-proof",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres",
+      "adapterProviderId": "audit-ledger-postgres-composed-boundary-plus-local-proof-adapters",
+      "validationCommand": "make audit-proof; python3 tools/validate-parity/validate-audit.py all --json",
+      "commandPin": "tsx packages/proof/src/audit-evidence-proof.ts",
+      "commitPin": "069c1a1fdd1d622215d435ba34423e8387ba2ef0",
+      "issueLinks": [
+        "USF-143",
+        "USF-190",
+        "USF-184",
+        "USF-192",
+        "USF-133"
+      ],
+      "prOrMergeSha": "069c1a1fdd1d622215d435ba34423e8387ba2ef0",
+      "retentionPosture": "Retain committed proof code, audit-enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw audit payload, key material, secret value, provider payload, or production data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8647,6 +8695,33 @@
       "failClosedBehaviour": "validate-authz USF-AUTHZ-001 through USF-AUTHZ-013, make authz-proof, enterprise validators, and planted defects must fail or preserve explicit deferral before stronger authorization claims are made.",
       "monitoringAuditEvidence": "authorization.decision audit records, break_glass.used or break_glass.denied evidence, proof check labels, and PR validation summary are the bounded evidence surfaces.",
       "residualRisk": "Delegation, impersonation, field-level policy, token/session runtime, distributed rate limits, workflow revalidation, gateway/browser-session authorization, and operator access remain linked source-issue work."
+    },
+    {
+      "id": "threat-usf-143-audit-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-143 enterprise audit proof depth",
+      "trustBoundary": "Local proof code and composed Postgres audit ledger are trusted only for bounded local evidence; generated reports, Linear text, and proof output do not upgrade to live KMS, SIEM, export, or production audit readiness.",
+      "tenantBoundary": "Export/evidence package and Postgres audit ledger checks are tenant scoped to deterministic synthetic tenant ids; cross-tenant audit reads remain non-enumerating and fail closed.",
+      "credentialBoundary": "Synthetic local signing key material stays inside proof code and never appears in package/status/proof output; no real credentials, tokens, provider endpoints, or KMS/HSM material are used.",
+      "dataClassification": "security-sensitive audit metadata, value-free synthetic refs, no production-derived data",
+      "abuseCases": [
+        "core audit proof treated as full enterprise audit readiness",
+        "evidence package exposes raw event payload or secret metadata",
+        "forged evidence package verifies",
+        "audit disposal ignores legal hold",
+        "poison audit delivery silently drops without dead-letter evidence",
+        "app-only audit outcome persisted directly to Postgres without mapping",
+        "local SIEM envelope mistaken for live SIEM integration"
+      ],
+      "failureModes": [
+        "proof token removed while matrix still claims a control",
+        "USF-143 matrix missing owner or proof command",
+        "readiness claim set true in matrix or proof output",
+        "enterprise evidence row missing commit or issue links"
+      ],
+      "failClosedBehaviour": "validate-audit USF-AUDIT-014 through USF-AUDIT-019 block missing matrix, missing proof coverage, missing evidence linkage, unsafe deferrals, and overclaims.",
+      "monitoringAuditEvidence": "make audit-proof output and validator findings only; no live monitoring backend, no raw provider payload, no production incident claim.",
+      "residualRisk": "Live KMS/HSM custody, live SIEM integration, public export API, production retention operations, customer-facing evidence packages, and production incident handling remain non-claims."
     }
   ],
   "sdkDependencyGovernance": [
@@ -15788,6 +15863,34 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "incident-usf-143-audit-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-143 audit incident and vulnerability evidence posture",
+      "posture": [
+        "incidentDetectionHook=local-audit-integrity-failed-detection-mapping-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-audit-risk-owner",
+        "vulnerabilityAdvisoryReview=crypto-SIEM-export-dependency-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-sdk-or-provider-dependency-added",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/audit-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-audit.py all --json",
+      "deferredReason": "Production audit incident hooks, live SIEM forwarding, paging, escalation execution, patch SLA evidence, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -18762,6 +18865,35 @@
       "evidenceSource": "packages/proof/src/authz-rls-consistency-proof.ts",
       "validationCommand": "make authz-proof",
       "deferredReason": "Customer identity data residency, legal hold, deletion workflows, and live IdP privacy posture remain source-issue follow-ups.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-143-audit-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-143 proof:audit synthetic audit data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=security-sensitive-audit-metadata-and-value-free-synthetic-refs",
+        "redactionPolicy=blocked-secret-keys-redacted-and-evidence-packages-carry-refs-not-payloads",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=local-legal-hold-disposal-blocking-proof-only",
+        "dataResidencyCrossBorderBoundary=not-claimed"
+      ],
+      "evidenceSource": "packages/proof/src/audit-evidence-proof.ts",
+      "validationCommand": "make audit-proof",
+      "deferredReason": "Customer audit payload export, DSR, residency, retention operation, legal hold workflow, and live SIEM privacy posture remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

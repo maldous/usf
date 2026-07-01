@@ -21,12 +21,19 @@ certification claim):
   USF-AUDIT-011  a tamper-evidence proof exists (content rewrite is detected)
   USF-AUDIT-012  no SIEM/live-external/production-live readiness is overclaimed
   USF-AUDIT-013  the audit parity matrix row is backed by tests and proofs
+  USF-AUDIT-014  the USF-143 enterprise audit depth matrix exists and is complete
+  USF-AUDIT-015  deferred/reclassified USF-143 controls carry owner and follow-up metadata
+  USF-AUDIT-016  USF-143 proof and enterprise evidence linkage is present
+  USF-AUDIT-017  USF-143 enterprise audit proof exercises every claimed control
+  USF-AUDIT-018  USF-143 proven controls carry proof-backed evidence
+  USF-AUDIT-019  USF-143 audit enterprise readiness/certification claims remain prohibited
 
 Live append-only / hash-chain / tamper / RLS behaviour is proven by the hermetic
 tests and the composed-Postgres proof (make audit-proof). Planted defects under
 tools/validate-parity/audit-planted-defects prove each rule fires.
 """
 import argparse
+import copy
 import json
 import os
 import sys
@@ -46,6 +53,12 @@ RULES = {
     "USF-AUDIT-011": ("blocking", "no tamper-evidence proof"),
     "USF-AUDIT-012": ("blocking", "SIEM/live-external/production-live readiness overclaimed"),
     "USF-AUDIT-013": ("blocking", "audit parity matrix row lacks tests/proofs backing"),
+    "USF-AUDIT-014": ("blocking", "USF-143 enterprise audit depth matrix is missing or incomplete"),
+    "USF-AUDIT-015": ("blocking", "USF-143 deferred/reclassified audit control lacks owner or follow-up metadata"),
+    "USF-AUDIT-016": ("blocking", "USF-143 proof or enterprise evidence linkage is incomplete"),
+    "USF-AUDIT-017": ("blocking", "USF-143 enterprise audit proof lacks required control evidence"),
+    "USF-AUDIT-018": ("blocking", "USF-143 proven audit control lacks proof-backed evidence"),
+    "USF-AUDIT-019": ("blocking", "USF-143 audit enterprise readiness or certification claim is overclaimed"),
     "USF-AUDIT-SELFTEST": ("blocking", "planted audit defect did not raise its expected rule"),
 }
 
@@ -56,9 +69,58 @@ AUTHORIZE = "capabilities/tenant/src/authorize.ts"
 PROOF = "packages/proof/src/audit-evidence-proof.ts"
 SOURCE_FILES = (CORE, EVENT_STORE, QUERY_SERVICE, AUTHORIZE, PROOF)
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+USF143_MATRIX_PATH = "docs/architecture/audit-enterprise-proof-depth-matrix.json"
+ENTERPRISE_EVIDENCE_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 SELFTEST_DIR = "tools/validate-parity/audit-planted-defects"
 
 REQUIRED_BLOCKED_KEYS = ['"password"', '"token"', '"secret"', '"api_key"', '"cookie"', '"authorization"', '"private_key"']
+USF143_REQUIRED_CONTROLS = {
+    "cryptographic-signing-and-key-management",
+    "audit-export-evidence-package",
+    "retention-disposal-lifecycle",
+    "durable-outbox-delivery-reliability",
+    "postgres-audit-adapter-linkage",
+    "forensic-request-session-capture",
+    "siem-forwarder-posture",
+    "detection-monitoring-posture",
+    "multi-version-event-readers",
+    "value-free-redaction-boundary",
+}
+USF143_REQUIRED_PROOF_TOKENS = {
+    "proveEnterpriseSigningAndKeyBoundary",
+    "proveAuditExportEvidencePackage",
+    "proveRetentionDisposalLifecycle",
+    "proveDurableOutboxDeliveryReliability",
+    "provePostgresAdapterOutcomeBoundary",
+    "proveForensicRequestSessionCapture",
+    "proveLocalSiemForwarderPosture",
+    "proveDetectionMonitoringPosture",
+    "proveMultiVersionEventReaders",
+    "enterpriseAuditDepthGate",
+}
+USF143_PROHIBITED_CLAIMS = {
+    "siem-readiness",
+    "kms-readiness",
+    "audit-export-readiness-beyond-bounded-local-proof",
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure",
+}
+PROVEN_STATUSES = {"proven-local", "bounded-local-proof", "implemented", "implemented-bounded"}
+DEFERRED_STATUSES = {
+    "deferred-with-owner",
+    "transferred",
+    "reclassified-deferred",
+    "out-of-scope-with-rationale",
+}
 
 
 class Findings:
@@ -110,6 +172,16 @@ def load_matrix():
         return None
 
 
+def load_json_optional(path):
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as handle:
+            return json.load(handle)
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def build_state(overrides=None):
     overrides = overrides or {}
     files = {}
@@ -118,7 +190,17 @@ def build_state(overrides=None):
     for path, text in overrides.get("files", {}).items():
         files[path] = text
     matrix = overrides["matrix"] if "matrix" in overrides else load_matrix()
-    return {"files": files, "matrix": matrix}
+    usf143_matrix = (
+        overrides["usf143_matrix"]
+        if "usf143_matrix" in overrides
+        else load_json_optional(USF143_MATRIX_PATH)
+    )
+    enterprise = (
+        overrides["enterprise"]
+        if "enterprise" in overrides
+        else load_json_optional(ENTERPRISE_EVIDENCE_PATH)
+    )
+    return {"files": files, "matrix": matrix, "usf143_matrix": usf143_matrix, "enterprise": enterprise}
 
 
 def audit_row(matrix):
@@ -204,10 +286,105 @@ def run_checks(F, state=None):
     elif not (row.get("usf_tests") and row.get("usf_proofs")):
         F.add("USF-AUDIT-013", MATRIX_PATH, "audit-events row must reference USF tests and proofs")
 
+    check_usf143_matrix(F, state)
+
+
+def _control_by_id(matrix):
+    return {control.get("id"): control for control in matrix.get("controls", []) if isinstance(control, dict)}
+
+
+def _has_nonempty_list(value):
+    return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item for item in value)
+
+
+def _enterprise_ids(state):
+    enterprise = state.get("enterprise")
+    ids = set()
+    if not isinstance(enterprise, dict):
+        return ids
+    for key in ("soaSupportMappings", "evidenceRegister", "threatModelAbuseCaseRegister",
+                "incidentVulnerabilityManagementEvidence", "privacyDataMinimisationPosture"):
+        for row in enterprise.get(key, []):
+            if isinstance(row, dict) and isinstance(row.get("id"), str):
+                ids.add(row["id"])
+    return ids
+
+
+def check_usf143_matrix(F, state):
+    matrix = state.get("usf143_matrix")
+    proof = state["files"].get(PROOF, "")
+    if not isinstance(matrix, dict):
+        F.add("USF-AUDIT-014", USF143_MATRIX_PATH, "USF-143 enterprise audit depth matrix is missing")
+        return
+    if matrix.get("sourceIssue") != "USF-143" or matrix.get("capabilityId") != "audit-evidence-enterprise-depth":
+        F.add("USF-AUDIT-014", USF143_MATRIX_PATH, "matrix does not identify USF-143 audit-evidence-enterprise-depth scope")
+    if matrix.get("proofCommand") != "make audit-proof":
+        F.add("USF-AUDIT-016", USF143_MATRIX_PATH, "proof command must use the Compose startup/teardown wrapper")
+    if "Compose Postgres" not in matrix.get("rawProofCommandBoundary", ""):
+        F.add("USF-AUDIT-016", USF143_MATRIX_PATH, "raw proof command boundary is missing")
+    if len(matrix.get("acceptanceCriteriaMapping", [])) < 5:
+        F.add("USF-AUDIT-014", USF143_MATRIX_PATH, "acceptance criteria mapping is incomplete")
+
+    controls = _control_by_id(matrix)
+    missing = sorted(USF143_REQUIRED_CONTROLS - set(controls))
+    if missing:
+        F.add("USF-AUDIT-014", USF143_MATRIX_PATH, f"missing required controls: {missing}")
+
+    for token in sorted(USF143_REQUIRED_PROOF_TOKENS):
+        if token not in proof:
+            F.add("USF-AUDIT-017", PROOF, f"enterprise audit proof token missing: {token}")
+
+    if not _has_nonempty_list(matrix.get("enterpriseEvidenceRefs")):
+        F.add("USF-AUDIT-016", USF143_MATRIX_PATH, "enterprise evidence references are missing")
+    else:
+        known = _enterprise_ids(state)
+        missing_refs = [ref for ref in matrix["enterpriseEvidenceRefs"] if ref not in known]
+        if missing_refs:
+            F.add("USF-AUDIT-016", USF143_MATRIX_PATH, f"enterprise evidence refs missing from register: {missing_refs}")
+    if not matrix.get("sourceUseMatrix") or not matrix.get("parityMatrix") or not matrix.get("classificationMatrix"):
+        F.add("USF-AUDIT-016", USF143_MATRIX_PATH, "source-use, parity, or classification matrix linkage is missing")
+
+    claims = matrix.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add("USF-AUDIT-019", USF143_MATRIX_PATH, "claims object is missing")
+    else:
+        for key, value in claims.items():
+            if key.endswith("Claim") and value is not False:
+                F.add("USF-AUDIT-019", key, "readiness/certification claim must be false")
+    nonclaims = set(matrix.get("nonClaims", []))
+    missing_nonclaims = sorted(USF143_PROHIBITED_CLAIMS - nonclaims)
+    if missing_nonclaims:
+        F.add("USF-AUDIT-019", USF143_MATRIX_PATH, f"missing non-claims: {missing_nonclaims}")
+
+    for control_id, control in sorted(controls.items()):
+        status = control.get("status")
+        if not control.get("owner") or not control.get("riskOwner") or not control.get("controlOwner"):
+            F.add("USF-AUDIT-014", control_id, "control lacks owner, risk owner, or control owner")
+        if not control.get("riskTreatment") or not control.get("nonClaimBoundary"):
+            F.add("USF-AUDIT-014", control_id, "control lacks risk treatment or non-claim boundary")
+        if status in PROVEN_STATUSES:
+            if not control.get("proofCommand") or not control.get("validationCommand"):
+                F.add("USF-AUDIT-018", control_id, "proven control lacks proof or validator command")
+            if not _has_nonempty_list(control.get("evidenceRefs")):
+                F.add("USF-AUDIT-018", control_id, "proven control lacks evidence references")
+            if not _has_nonempty_list(control.get("proofChecks")):
+                F.add("USF-AUDIT-018", control_id, "proven control lacks proof check markers")
+        elif status in DEFERRED_STATUSES:
+            required = ["owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "followUpIssues"]
+            missing_fields = [field for field in required if not control.get(field)]
+            if missing_fields:
+                F.add("USF-AUDIT-015", control_id, f"deferred/reclassified control missing {missing_fields}")
+            if not _has_nonempty_list(control.get("followUpIssues")):
+                F.add("USF-AUDIT-015", control_id, "deferred/reclassified control lacks follow-up issues")
+        else:
+            F.add("USF-AUDIT-014", control_id, f"unknown or missing control status: {status}")
+
 
 def apply_mutation(base, mutation):
     files = dict(base["files"])
     matrix = json.loads(json.dumps(base["matrix"])) if base["matrix"] is not None else None
+    usf143_matrix = copy.deepcopy(base.get("usf143_matrix"))
+    enterprise = copy.deepcopy(base.get("enterprise"))
     target = mutation.get("file")
     if "replace" in mutation and target in files:
         files[target] = files[target].replace(mutation["replace"]["old"], mutation["replace"]["new"])
@@ -218,7 +395,36 @@ def apply_mutation(base, mutation):
         if row is not None:
             for key, value in mutation["matrixAuditSet"].items():
                 row[key] = value
-    return {"files": files, "matrix": matrix}
+    if mutation.get("usf143MatrixOmit"):
+        usf143_matrix = None
+    if usf143_matrix is not None and mutation.get("usf143RemoveControl"):
+        usf143_matrix["controls"] = [
+            control for control in usf143_matrix.get("controls", [])
+            if control.get("id") != mutation["usf143RemoveControl"]
+        ]
+    if usf143_matrix is not None and mutation.get("usf143ForceDeferredMissingFollowUp"):
+        target_control = mutation["usf143ForceDeferredMissingFollowUp"]
+        for control in usf143_matrix.get("controls", []):
+            if control.get("id") == target_control:
+                control["status"] = "deferred-with-owner"
+                control.pop("followUpIssues", None)
+                control.pop("reviewDate", None)
+    if usf143_matrix is not None and mutation.get("usf143ClearEnterpriseEvidenceRefs"):
+        usf143_matrix["enterpriseEvidenceRefs"] = []
+    if usf143_matrix is not None and mutation.get("usf143RemoveProofCommand"):
+        target_control = mutation["usf143RemoveProofCommand"]
+        for control in usf143_matrix.get("controls", []):
+            if control.get("id") == target_control:
+                control.pop("proofCommand", None)
+    if usf143_matrix is not None and mutation.get("usf143RemoveProofChecks"):
+        target_control = mutation["usf143RemoveProofChecks"]
+        for control in usf143_matrix.get("controls", []):
+            if control.get("id") == target_control:
+                control["proofChecks"] = []
+    if usf143_matrix is not None and "usf143SetClaim" in mutation:
+        target_claim = mutation["usf143SetClaim"]
+        usf143_matrix.setdefault("claims", {})[target_claim["claim"]] = target_claim["value"]
+    return {"files": files, "matrix": matrix, "usf143_matrix": usf143_matrix, "enterprise": enterprise}
 
 
 def load_selftest_fixtures(F):
