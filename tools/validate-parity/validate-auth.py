@@ -25,6 +25,11 @@ supporting technical control evidence only; no certification claim):
   USF-AUTH-016  the auth-identity parity matrix row is backed by tests and proofs
   USF-AUTH-017  the Auth & Identity Standard exists and states the no-certification posture
   USF-AUTH-018  no live Keycloak/broker/upstream-provider or production-live overclaim
+  USF-AUTH-019  enterprise identity control-plane depth exists for USF-149
+  USF-AUTH-020  tenant SSO privileged actions are synchronous-PDP gated
+  USF-AUTH-021  auth proof records USF-149 enterprise identity depth markers
+  USF-AUTH-022  USF-149 live IdP/broker/browser/SIEM readiness overclaims are blocked
+  USF-AUTH-023  USF-149 matrix and enterprise evidence rows exist
 
 Live fail-closed behaviour is proven by the hermetic tests and the auth proof (make
 auth-proof). Planted defects under tools/validate-parity/auth-planted-defects prove each
@@ -55,6 +60,11 @@ RULES = {
     "USF-AUTH-016": ("blocking", "auth-identity parity row lacks tests/proofs backing"),
     "USF-AUTH-017": ("blocking", "Auth & Identity Standard missing or lacks no-certification posture"),
     "USF-AUTH-018": ("blocking", "live Keycloak/broker/provider or production-live overclaim"),
+    "USF-AUTH-019": ("blocking", "USF-149 enterprise identity control-plane depth missing"),
+    "USF-AUTH-020": ("blocking", "tenant SSO privileged actions are not PDP-gated"),
+    "USF-AUTH-021": ("blocking", "USF-149 enterprise identity proof markers missing"),
+    "USF-AUTH-022": ("blocking", "USF-149 live IdP/broker/browser/SIEM readiness overclaim"),
+    "USF-AUTH-023": ("blocking", "USF-149 matrix or enterprise evidence row missing"),
     "USF-AUTH-SELFTEST": ("blocking", "planted auth defect did not raise its expected rule"),
 }
 
@@ -63,11 +73,31 @@ VERIFIER = "adapters/idp/src/keycloak-verifier.ts"
 IDENTITY = "capabilities/auth/src/identity.ts"
 SESSION = "capabilities/auth/src/session.ts"
 AUTHSVC = "capabilities/auth/src/keycloak-auth.ts"
+AUTH_INDEX = "capabilities/auth/src/index.ts"
+ENTERPRISE_IDENTITY = "capabilities/auth/src/enterprise-identity.ts"
+AUTHZ_POLICY = "capabilities/tenant/src/authorization-policy.ts"
 MEMBERSHIP = "capabilities/tenant/src/membership.ts"
 PROOF = "packages/proof/src/auth-identity-proof.ts"
 OPENAPI = "packages/openapi/openapi.json"
 STANDARD = "docs/architecture/auth-and-identity-standard.md"
-SOURCE_FILES = (CORE, VERIFIER, IDENTITY, SESSION, AUTHSVC, MEMBERSHIP, PROOF, OPENAPI, STANDARD)
+USF149_MATRIX = "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json"
+ENTERPRISE_EVIDENCE = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+SOURCE_FILES = (
+    CORE,
+    VERIFIER,
+    IDENTITY,
+    SESSION,
+    AUTHSVC,
+    AUTH_INDEX,
+    ENTERPRISE_IDENTITY,
+    AUTHZ_POLICY,
+    MEMBERSHIP,
+    PROOF,
+    OPENAPI,
+    STANDARD,
+    USF149_MATRIX,
+    ENTERPRISE_EVIDENCE,
+)
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
 SELFTEST_DIR = "tools/validate-parity/auth-planted-defects"
 
@@ -116,6 +146,13 @@ def read_text(path):
 def load_matrix():
     if not os.path.exists(MATRIX_PATH):
         return None
+
+
+def load_json_text(text):
+    try:
+        return json.loads(text)
+    except Exception:  # noqa: BLE001
+        return None
     try:
         with open(MATRIX_PATH, encoding="utf-8") as handle:
             return json.load(handle)
@@ -149,10 +186,15 @@ def run_checks(F, state=None):
     identity = files.get(IDENTITY, "")
     session = files.get(SESSION, "")
     authsvc = files.get(AUTHSVC, "")
+    auth_index = files.get(AUTH_INDEX, "")
+    enterprise_identity = files.get(ENTERPRISE_IDENTITY, "")
+    authz_policy = files.get(AUTHZ_POLICY, "")
     membership = files.get(MEMBERSHIP, "")
     proof = files.get(PROOF, "")
     openapi = files.get(OPENAPI, "")
     standard = files.get(STANDARD, "")
+    usf149_matrix = load_json_text(files.get(USF149_MATRIX, ""))
+    enterprise_evidence = load_json_text(files.get(ENTERPRISE_EVIDENCE, ""))
 
     if "issuer-not-keycloak" not in verifier or "iss !== config.issuer" not in verifier:
         F.add("USF-AUTH-001", VERIFIER, "verifier must reject any issuer that is not the Keycloak realm issuer")
@@ -203,6 +245,109 @@ def run_checks(F, state=None):
     # USF-AUTH-018: outward overclaim guards across proof + standard.
     if "productionLiveClaim: true" in proof or "liveKeycloakClaim: true" in proof:
         F.add("USF-AUTH-018", PROOF, "auth proof must not claim live Keycloak or production-live")
+
+    required_enterprise_tokens = (
+        "createEnterpriseIdentityControlPlane",
+        "requestSsoConnection",
+        "approveSsoConnection",
+        "verifyDomain",
+        "provisionJitMembership",
+        "issueInvitation",
+        "acceptInvitation",
+        "linkIdentity",
+        "unlinkIdentity",
+        "mapAttributesAndGroups",
+        "requireAssurance",
+        "evaluateBrowserFlow",
+        "emitThreatSignal",
+    )
+    missing_enterprise = [token for token in required_enterprise_tokens if token not in enterprise_identity]
+    if missing_enterprise:
+        F.add("USF-AUTH-019", ENTERPRISE_IDENTITY, f"missing enterprise identity controls: {missing_enterprise}")
+    if "createEnterpriseIdentityControlPlane" not in auth_index:
+        F.add("USF-AUTH-019", AUTH_INDEX, "enterprise identity control plane must be exported through the auth capability boundary")
+
+    tenant_sso_actions = (
+        "tenant_sso.request",
+        "tenant_sso.configure",
+        "tenant_sso.verify_domain",
+        "tenant_sso.activate",
+        "tenant_sso.suspend",
+        "tenant_sso.revoke",
+        "tenant_sso.rotate_secret",
+        "tenant_sso.update_mapping",
+        "tenant_sso.view_audit",
+    )
+    missing_actions = [action for action in tenant_sso_actions if authz_policy.count(action) < 3]
+    if missing_actions:
+        F.add("USF-AUTH-020", AUTHZ_POLICY, f"tenant SSO actions must be in role grants and ACTION_PERMISSIONS: {missing_actions}")
+    if "deps.pdp.decide" not in enterprise_identity or "requirePermit" not in enterprise_identity:
+        F.add("USF-AUTH-020", ENTERPRISE_IDENTITY, "enterprise identity privileged controls must call the synchronous PDP")
+
+    proof_markers = (
+        "enterpriseIdentityDepthProven: true",
+        "tenantSelfServiceSsoLifecycleProven: true",
+        "requesterApproverSeparationProven: true",
+        "jitProvisioningPolicyProven: true",
+        "domainVerificationConflictFailClosed: true",
+        "invitationOnboardingProven: true",
+        "assuranceStepUpSemanticsProven: true",
+        "accountLinkingProofOfControlProven: true",
+        "attributeGroupMappingNoDirectRoleGrantProven: true",
+        "privilegedSsoAdminPdpGated: true",
+        "browserFlowSecuritySemanticsProven: true",
+        "threatDetectionEventPostureProven: true",
+    )
+    for marker in proof_markers:
+        if marker not in proof:
+            F.add("USF-AUTH-021", PROOF, f"auth proof must record {marker}")
+
+    for claim in (
+        "liveExternalIdpReadinessClaim: true",
+        "liveBrokerReadinessClaim: true",
+        "liveBrowserUiReadinessClaim: true",
+        "siemForwardingReadinessClaim: true",
+    ):
+        if claim in proof:
+            F.add("USF-AUTH-022", PROOF, f"auth proof must not record {claim}")
+    if "No live IdP, live broker, browser UI, SIEM forwarding" not in files.get(USF149_MATRIX, ""):
+        F.add("USF-AUTH-022", USF149_MATRIX, "USF-149 matrix must preserve live-provider/browser/SIEM non-claims")
+
+    if not isinstance(usf149_matrix, dict) or usf149_matrix.get("issueId") != "USF-149":
+        F.add("USF-AUTH-023", USF149_MATRIX, "USF-149 enterprise identity matrix is missing or malformed")
+    else:
+        controls = {row.get("controlId") for row in usf149_matrix.get("controls", []) if isinstance(row, dict)}
+        required_controls = {
+            "tenant-self-service-sso-lifecycle",
+            "requester-approver-separation",
+            "jit-provisioning-policy",
+            "domain-ownership-verification",
+            "invitations-onboarding",
+            "assurance-step-up-mfa",
+            "account-linking-unlinking",
+            "attribute-group-mapping",
+            "privileged-sso-administration",
+            "browser-login-callback-cookie-security",
+            "siem-threat-detection-posture",
+            "live-keycloak-external-broker-boundary",
+        }
+        missing_controls = sorted(required_controls - controls)
+        if missing_controls:
+            F.add("USF-AUTH-023", USF149_MATRIX, f"USF-149 matrix missing controls: {missing_controls}")
+    evidence_text = files.get(ENTERPRISE_EVIDENCE, "")
+    if not isinstance(enterprise_evidence, dict):
+        F.add("USF-AUTH-023", ENTERPRISE_EVIDENCE, "enterprise evidence model must parse as JSON")
+    for evidence_id in (
+        "soa-usf-149-auth-identity-enterprise-depth",
+        "evidence-usf-149-auth-identity-enterprise-depth",
+        "threat-usf-149-auth-identity-enterprise-depth",
+        "access-usf-149-auth-identity-enterprise-depth",
+        "resilience-usf-149-auth-identity-enterprise-depth",
+        "incident-usf-149-auth-identity-enterprise-depth",
+        "privacy-usf-149-auth-identity-enterprise-depth",
+    ):
+        if evidence_id not in evidence_text:
+            F.add("USF-AUTH-023", ENTERPRISE_EVIDENCE, f"enterprise evidence row missing: {evidence_id}")
 
     row = auth_row(state["matrix"])
     if row is None:

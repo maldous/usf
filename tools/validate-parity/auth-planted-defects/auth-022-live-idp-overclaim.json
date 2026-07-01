@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-022",
+  "mutation": {
+    "file": "packages/proof/src/auth-identity-proof.ts",
+    "replace": {
+      "old": "liveExternalIdpReadinessClaim: false",
+      "new": "liveExternalIdpReadinessClaim: true"
+    }
+  }
+}

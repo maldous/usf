@@ -38,7 +38,8 @@ Keycloak and are never modelled, named, configured, credentialed, or accepted di
 | `capabilities/auth/src/identity.ts` | source-derived-rewrite | `../react` Keycloak claim→actor mapping (evidence only) | Maps a validated token to a stable actor keyed by realm+subject (never email); duplicate email no-merge; email change = attribute update; disabled/unknown fail closed; JIT deferred. |
 | `capabilities/auth/src/session.ts` | source-derived-rewrite | `../react` server-side session lineage (evidence only) | Tenant-bound session lifecycle: create/validate/expire (absolute+idle)/revoke/logout, all fail closed; opaque subject/session hashes only; no raw token/cookie. |
 | `capabilities/auth/src/keycloak-auth.ts` | source-derived-rewrite | `../react` login/identity-context flow (evidence only) | Orchestration: token validation → actor → session → identity-to-tenant handoff through the PDP; value-free audit. Roles come from USF membership, never token claims. |
-| `packages/proof/src/auth-identity-proof.ts` | new-with-rationale | evidence-only-support | Hermetic behaviour proof of the full token-validation/identity/session/tenant matrix. `make auth-proof`. |
+| `capabilities/auth/src/enterprise-identity.ts` | new-with-rationale | evidence-only-support | Bounded local synthetic tenant SSO and enterprise identity control-plane proof surface for USF-149. It proves request/approve/verify/activate lifecycle, requester/approver separation, JIT policy, invitations, assurance step-up policy, account linking, attribute/group mapping, browser-flow security semantics, and local threat-signal audit posture without live provider/UI/SIEM claims. |
+| `packages/proof/src/auth-identity-proof.ts` | new-with-rationale | evidence-only-support | Hermetic behaviour proof of the full token-validation/identity/session/tenant matrix plus USF-149 enterprise identity depth. `make auth-proof`. |
 | `tests/adapters/keycloak-verifier.test.ts` | new-with-rationale | evidence-only-support | Unit tests of the verifier accept/deny matrix and JWKS handling. |
 | `tests/capabilities/auth-identity.test.ts` | source-derived-rewrite | `../react` auth test lineage (evidence only) | Capability tests for identity mapping, session lifecycle, and identity-to-tenant handoff. Rewrites foundation behaviour from React unit/e2e tests; no Playwright. |
 
@@ -59,18 +60,18 @@ Extended (already source-dispositioned by prior parity matrices; no path change)
 | Keycloak provider config / secret refs | partial | `packages/core` (SecretReference), proof | client secret as opaque ref; live secret manager deferred (USF-145) |
 | Cross-tenant SSO (explicit memberships) | migrated | `capabilities/auth` | two active memberships → two tenants; no boundary collapse |
 | Assurance levels (LoA0–4) | partial | `packages/core` | model + acr mapping; step-up/MFA live flow deferred |
-| Tenant self-service SSO control plane | deferred | standard doc | states/fields/rules defined; governed runtime deferred (blocker) |
-| JIT provisioning | deferred | standard doc | posture defined (fail-closed default); provisioning runtime deferred |
-| Domain ownership verification | deferred | standard doc | methods defined; live DNS/HTTP checks deferred (blocker) |
-| Invitations / onboarding | deferred | standard doc | semantics defined; runtime deferred |
-| Account linking / unlinking | deferred | standard doc | governance defined; runtime deferred |
+| Tenant self-service SSO control plane | migrated-with-live-boundary | `capabilities/auth/src/enterprise-identity.ts`, proof | request/approve/verify/activate lifecycle, requester/approver separation, and audit proven locally; live Keycloak admin API, API route, UI, and provider operation deferred |
+| JIT provisioning | migrated-with-live-boundary | `capabilities/auth/src/enterprise-identity.ts`, proof | explicit JIT policy, no privileged role grants, pending/non-privileged posture proven locally; live unknown-user creation/SCIM deferred |
+| Domain ownership verification | bounded-local-proof | `capabilities/auth/src/enterprise-identity.ts`, proof | activation-gating and cross-tenant domain claim conflict proven locally; live DNS/HTTP/registrar/certificate evidence deferred |
+| Invitations / onboarding | migrated-with-live-boundary | `capabilities/auth/src/enterprise-identity.ts`, proof | invitation issue, actor-bound accept, expiry denial, required domain/assurance metadata proven locally; email delivery/UI/live IdP enrollment deferred |
+| Account linking / unlinking | migrated-with-live-boundary | `capabilities/auth/src/enterprise-identity.ts`, proof | proof-of-control assurance and last-login-method denial proven locally; live upstream linking and recovery UX deferred |
 | Identity lifecycle / deprovisioning | partial | `packages/core` (events reserved) | event model defined; deprovisioning runtime deferred |
-| Privileged SSO administration | deferred | standard doc | PDP-gated actions defined; runtime deferred |
-| Attribute/group mapping safety | deferred | standard doc | allow-list policy defined; mapping runtime deferred |
+| Privileged SSO administration | migrated-with-live-boundary | `capabilities/tenant/src/authorization-policy.ts`, `capabilities/auth/src/enterprise-identity.ts`, proof | tenant_sso actions are explicit PDP permissions and exercised locally; live admin API/operator console/access review execution deferred |
+| Attribute/group mapping safety | migrated-with-live-boundary | `capabilities/auth/src/enterprise-identity.ts`, proof | allow-listed attributes/groups and no direct role grants proven locally; live IdP/SCIM mapping deferred |
 | Identity threat/abuse detection hooks | partial | `packages/core` (events reserved) | structured events reserved; no live SIEM |
 | Safe identity API surfaces | partial | `apps/api` (if wired) / standard doc | session/logout/tenant-selection/providers; full SSO admin API deferred |
-| Live Keycloak / live external broker / live upstream IdP | deferred | — | blocker; hermetic only in this slice |
-| Browser login/callback (state/nonce/PKCE/cookies) | deferred | standard doc | secure semantics defined; live browser flow deferred (blocker) |
+| Live Keycloak / live external broker / live upstream IdP | deferred | — | hermetic only in this slice; no live provider readiness claim |
+| Browser login/callback (state/nonce/PKCE/cookies) | bounded-local-proof | `capabilities/auth/src/enterprise-identity.ts`, proof | state/nonce/PKCE/CSRF/redirect/cookie policy proven locally; browser UI, HTTP callback, real cookies, refresh rotation runtime, and Playwright deferred |
 
 ## React UI/Playwright Auth Behaviours
 

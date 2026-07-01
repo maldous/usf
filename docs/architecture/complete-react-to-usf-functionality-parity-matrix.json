@@ -116,9 +116,9 @@
       ],
       "evidence_grade": "A",
       "react_evidence_summary": "Keycloak/mock OIDC/session lineage",
-      "readiness_impact": "Privileged SSO administration depth remains deferred.",
+      "readiness_impact": "USF-149 adds bounded local enterprise identity proof depth for tenant SSO lifecycle, requester/approver separation, JIT policy, domain collision fail-closed, invitations, assurance step-up policy, account linking, attribute/group mapping without direct role grants, privileged SSO PDP actions, browser-flow security semantics, and local threat-signal audit posture. Live Keycloak admin API, live external broker/upstream IdP, browser UI/callback/cookie runtime, refresh-token runtime, email delivery, SCIM, SIEM forwarding, environment promotion, and production operation remain deferred and non-claimed.",
       "tracking_carrier_or_recommendation": "USF-148/USF-149",
-      "usf_evidence_summary": "USF auth proof",
+      "usf_evidence_summary": "USF auth proof plus auth identity enterprise proof-depth matrix and validate-auth USF-AUTH-001..023",
       "usf_status": "migrated"
     },
     {

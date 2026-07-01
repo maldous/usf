@@ -5,9 +5,9 @@
 | Document type | Architecture / domain semantic standard (normative) |
 | Status | Draft / parity-auth-keycloak-broker (USF-133) |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010 (PDP), ADR 0012 (Keycloak sole IdP and local token validation); companion to the tenant-authorization standard, the config-and-secrets standard, and the audit-evidence standard |
-| Issue scope | Authentication and identity parity under USF-133; enterprise breadth defined here, live execution deferred to named Linear child blockers |
+| Issue scope | Authentication and identity parity under USF-133; USF-149 adds bounded local enterprise identity control-plane proof while live/browser/provider execution remains non-claimed |
 | Evidence basis | Historical `../react` authentication/identity/OIDC/session behaviour as lineage only; PR #92 DB/RLS; PR #93 PDP; PR #94 audit/evidence; PR #95 config/secrets |
-| Proof basis | Hermetic only. Proven by `make auth-proof` over `adapters/idp` and `capabilities/auth`; no live Keycloak, no live external broker, no live upstream identity provider, no production-live claim. |
+| Proof basis | Hermetic only. Proven by `make auth-proof` over `adapters/idp` and `capabilities/auth`; includes local synthetic enterprise identity controls in `capabilities/auth/src/enterprise-identity.ts`; no live Keycloak, no live external broker, no live upstream identity provider, no browser UI, no SIEM forwarding, no production-live claim. |
 | Compliance note | ISO 27001-supporting **technical control evidence** (access control, authentication, identity lifecycle, session management). **No certification claim.** |
 
 > **Normative language.** **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL** carry BCP 14 (RFC 2119 / RFC 8174) intent and are normative only when written in uppercase.
@@ -23,7 +23,7 @@ This is one authorised parity domain among many under USF-133. It is **not** a c
 **Hermetic honesty (Charter / Standards Profile §12–13; Authority Model proof-honesty bar).**
 
 - This domain proves **hermetic behaviour only**. Hermetic-mock proof MUST NOT be read as live-external-provider proof. Production-shaped MUST NOT be read as production-live.
-- This domain makes **no live Keycloak, no live external broker, no live upstream identity provider, and no production-live readiness claim**. Where this standard defines runtime that is not executed here, it is explicitly **DEFERRED** to a Linear child blocker.
+- This domain makes **no live Keycloak, no live external broker, no live upstream identity provider, no browser UI, no SIEM forwarding, and no production-live readiness claim**. Where this standard defines runtime that is not executed here, it is explicitly **DEFERRED** or bounded to local synthetic proof.
 - A passing `make auth-proof` demonstrates the defined fail-closed behaviour under a hermetic Keycloak-equivalent issuer and JWKS fixture (`adapters/idp/src/hermetic-keycloak.ts`); it does not upgrade any DEFERRED item to live.
 
 **ISO posture.** This standard provides **ISO 27001-supporting technical control evidence only; no certification claim.** USF does **not** claim ISO 27001 certification or full ISO 27001 compliance. Per the Standards Profile, ISO support is **Adapted / Inspired-by**: USF follows access-control, authentication, and identity-lifecycle control principles and produces evidence consistent with them, but it does not assert conformance to the standard.
@@ -135,11 +135,11 @@ A session binds an authenticated actor to a selected tenant for a bounded lifeti
 - A sensitive export **MAY** require step-up assurance before it proceeds.
 - Assurance is a **PDP input**, **never** a replacement for authorization. A high assurance level does not by itself grant any action.
 
-**Status.** The assurance model and the mapping from the Keycloak `acr` claim to the ladder are IMPLEMENTED (`packages/core`). **DEFERRED:** the live step-up / MFA challenge flow.
+**Status.** The assurance model and the mapping from the Keycloak `acr` claim to the ladder are IMPLEMENTED (`packages/core`). USF-149 proves local step-up policy enforcement for privileged identity operations in `capabilities/auth/src/enterprise-identity.ts`. **DEFERRED:** the live step-up / MFA challenge flow.
 
 ## 6. Tenant self-service SSO governance
 
-A tenant may govern its own brokered SSO connection. The **model** is defined here; the **governed request/approve/verify/activate runtime is DEFERRED** to a Linear child blocker.
+A tenant may govern its own brokered SSO connection. The **model** is defined here; USF-149 implements a bounded local synthetic request/approve/verify/activate control-plane proof. Live Keycloak admin API integration, external IdP broker configuration, API routes, UI, public exposure, and environment promotion remain DEFERRED.
 
 **Connection states (exact):** `draft`, `requested`, `pending-verification`, `pending-approval`, `active`, `suspended`, `disabled`, `revoked`, `expired`, `failed`.
 
@@ -156,7 +156,7 @@ A tenant may govern its own brokered SSO connection. The **model** is defined he
 - Where approval is enabled, the **requester and approver MUST be separated** (`requested_by` ≠ `approved_by`).
 - **No tenant admin** may configure another tenant's SSO connection.
 
-**Status.** Connection model (states, fields, rules) DEFINED here. **DEFERRED:** the governed request → approve → verify → activate runtime.
+**Status.** Connection model (states, fields, rules) IMPLEMENTED for bounded local proof in `capabilities/auth/src/enterprise-identity.ts` and exercised by `make auth-proof`. **DEFERRED:** live Keycloak/external broker administration, public API/UI, operator workflow, and environment promotion.
 
 ## 7. Cross-tenant SSO and multi-tenant actor access (IMPLEMENTED hermetically)
 
@@ -193,7 +193,7 @@ JIT provisioning describes what may happen when a brokered identity arrives that
 - JIT **MUST NEVER** overwrite USF-authoritative membership or authorization.
 - An unknown brokered identity **MUST** fail closed unless a JIT policy explicitly allows a safe pending state.
 
-**Default posture in this domain:** an **unknown identity FAILS CLOSED** — **no JIT** occurs. **DEFERRED:** the JIT provisioning runtime.
+**Default posture in this domain:** an **unknown identity FAILS CLOSED** during token authentication. USF-149 proves explicit tenant SSO JIT policy handling locally: privileged grants fail closed and non-privileged JIT produces bounded pending/active posture only. **DEFERRED:** live unknown-user creation, SCIM, upstream group sync, and production onboarding.
 
 ## 9. Domain ownership verification
 
@@ -209,7 +209,7 @@ Before a domain may be used to route tenant SSO, the tenant **MUST** prove owner
 - A verified domain **does not grant membership**.
 - A domain claim conflict (two tenants claiming the same domain) **MUST** fail closed and require review (§17, `domain_claim_conflict`).
 
-**Status.** Methods and rules DEFINED. **DEFERRED:** live DNS-TXT and well-known-HTTP checks.
+**Status.** Methods and rules DEFINED. USF-149 proves local domain ownership conflict detection and activation gating. **DEFERRED:** live DNS-TXT, well-known-HTTP, certificate, registrar, or email verification checks.
 
 ## 10. Invitations and onboarding
 
@@ -224,7 +224,7 @@ An invitation binds a prospective member to a tenant before a brokered login com
 - The invitation tenant **MUST** match the selected tenant at acceptance.
 - Acceptance **MUST** be audit-recorded.
 
-**Status.** Invitation semantics DEFINED. **DEFERRED:** the invitation/onboarding runtime.
+**Status.** Invitation semantics IMPLEMENTED for local synthetic proof: issue, actor-bound accept, expiry denial, required domain, and required assurance metadata are exercised by `make auth-proof`. **DEFERRED:** email delivery, UI, live IdP enrollment, SCIM, and production onboarding operation.
 
 ## 11. Identity lifecycle and deprovisioning
 
@@ -252,7 +252,7 @@ Linking associates an additional identity with an existing actor.
 - **Automatic linking by email is FORBIDDEN** unless a high-assurance policy explicitly approves it.
 - A broker link override is a **privileged, audited** action.
 
-**Status.** Linking governance DEFINED. **DEFERRED:** the account-linking runtime.
+**Status.** Linking governance IMPLEMENTED for local synthetic proof: proof-of-control assurance is required, and unlinking fails closed when it would remove the last active login method. **DEFERRED:** live upstream account linking, browser re-auth UX, support recovery, and production identity recovery.
 
 ## 13. Privileged SSO administration
 
@@ -266,7 +266,7 @@ Linking associates an additional identity with an existing actor.
 - Every action **MUST** be audit-recorded.
 - **No cross-tenant SSO administration** is permitted (§6).
 
-**Status.** Action set and gating DEFINED. **DEFERRED:** the privileged SSO administration runtime.
+**Status.** Action set and gating IMPLEMENTED for local synthetic proof through the synchronous PDP. Tenant SSO request, configure, verify-domain, activate, suspend, revoke, rotate-secret, update-mapping, and view-audit permissions are explicit. **DEFERRED:** operator console, live Keycloak admin API, production access review execution, and public exposure.
 
 ## 14. Attribute and group mapping safety
 
@@ -279,11 +279,11 @@ Linking associates an additional identity with an existing actor.
 - Unknown attributes are ignored or fail closed per policy.
 - Mapping changes are **privileged** and **audited** (§13, `tenant_sso.update_mapping`).
 
-**Status.** Mapping safety policy DEFINED. **DEFERRED:** the attribute/group mapping runtime.
+**Status.** Mapping safety policy IMPLEMENTED for local synthetic proof: mapped attributes and proposed groups are allow-listed and never grant roles directly. **DEFERRED:** live IdP claim mapping, SCIM group sync, production role mapping, and customer-admin UI.
 
 ## 15. Token, cookie, and browser security posture
 
-The secure semantics are **DEFINED**; the **live browser login/callback/cookie flow is DEFERRED** to a Linear child blocker.
+The secure semantics are **DEFINED** and USF-149 exercises them as local policy checks; the **live browser login/callback/cookie flow is DEFERRED** to a Linear child blocker.
 
 - Access tokens **MUST** be short-lived.
 - Refresh-token handling **MUST** be explicit where represented, otherwise DEFERRED (no implicit long-lived refresh).
@@ -294,7 +294,7 @@ The secure semantics are **DEFINED**; the **live browser login/callback/cookie f
 - Redirect URIs **MUST** be allow-listed (`allowed_redirect_uris`); **open redirect is FORBIDDEN**.
 - Logout redirects **MUST** be allow-listed (`allowed_post_logout_redirect_uris`).
 
-**Status.** Secure semantics DEFINED. **DEFERRED:** the live browser login/callback/cookie flow and refresh-token rotation.
+**Status.** Secure semantics IMPLEMENTED for local synthetic proof: state, nonce, PKCE, CSRF, redirect allow-lists, post-logout redirect allow-lists, secure cookie flags, and refresh-rotation requirement are checked. **DEFERRED:** live browser UI, HTTP callback route, real `Set-Cookie`, refresh-token rotation runtime, Playwright journey, and production cookie operation.
 
 ## 16. Provider config and secrets
 
@@ -314,7 +314,7 @@ Structured audit/security detection hooks are **RESERVED** (no live SIEM in this
 
 `repeated_login_failure`, `tenant_selection_denied`, `impossible_tenant_switch`, `broker_link_collision`, `domain_claim_conflict`, `sso_connection_suspended`, `stale_session_used`, `revoked_membership_used`, `token_replay_suspected`.
 
-These are value-free structured signals intended for downstream detection. **DEFERRED:** there is **no live SIEM integration** in this domain.
+These are value-free structured signals intended for downstream detection. USF-149 emits local audit threat signals without live forwarding. **DEFERRED:** there is **no live SIEM integration** in this domain.
 
 ## 18. Safe identity API surfaces
 
@@ -338,7 +338,7 @@ All auth audit events are **value-free**: an event **MUST NEVER** carry a token,
 
 `authentication.login`, `authentication.login.failed`, `authentication.logout`, `authentication.session.created`, `authentication.session.revoked`, `authentication.session.expired`, `authentication.token.denied`, `authentication.keycloak.denied`, `authentication.brokered_identity.denied`, `authentication.tenant_selection.denied`, `tenant.context.accepted`.
 
-**Reserved (RESERVED / DEFERRED):** the identity lifecycle events (§11), the `tenant_sso.*` administration events (§13), and the threat/abuse detection hooks (§17).
+**Implemented locally by USF-149:** `tenant_sso.requested`, `tenant_sso.configured`, `tenant_sso.domain_verified`, `tenant_sso.activated`, `tenant_sso.suspended`, `tenant_sso.revoked`, `tenant_sso.denied`, `authentication.identity.linked`, `authentication.identity.unlinked`, and local security threat signals are exercised as value-free audit evidence. **Reserved / deferred:** live SIEM forwarding, production incident workflow, and live browser/provider events.
 
 Audit records use opaque hashes (e.g. `keycloak_session_id_hash`) and reason codes; detailed deny reasons go to audit/evidence, never to the client (§4, tenant-authorization standard §18).
 
@@ -350,13 +350,13 @@ Audit records use opaque hashes (e.g. `keycloak_session_id_hash`) and reason cod
 | Hermetic Keycloak-equivalent issuer + JWKS + forged-token matrix — `adapters/idp/src/hermetic-keycloak.ts` | Live external broker |
 | Stable actor mapping (realm+subject, never email; no merge-by-email; collision fails closed) — `capabilities/auth/src/identity.ts` | Live upstream identity provider |
 | Opaque brokered identity provenance (never authorization) | Live browser login / callback / cookie flow |
-| Tenant-bound session lifecycle (absolute + idle expiry, revoke, logout; opaque hashes) — `capabilities/auth/src/session.ts` | Self-service SSO request / approve / verify / activate runtime |
+| Tenant-bound session lifecycle (absolute + idle expiry, revoke, logout; opaque hashes) — `capabilities/auth/src/session.ts` | Live Keycloak admin API / external broker configuration |
 | Cross-tenant selection via explicit active memberships (no boundary collapse) | MFA / step-up live flow |
 | Assurance-level model (LoA0–4) and `acr` mapping — `packages/core` | Live DNS / HTTP domain verification |
-| Identity → tenant handoff through the PDP (claims/roles/broker alias never grant) — `capabilities/auth/src/keycloak-auth.ts` | JIT provisioning runtime (unknown identity fails closed here) |
+| Identity → tenant handoff through the PDP (claims/roles/broker alias never grant) — `capabilities/auth/src/keycloak-auth.ts` | Live browser login / callback / cookie flow |
 | Value-free emitted auth audit events (§19) | Account linking runtime |
 | Keycloak provider config + opaque `SecretReference` (no raw secret outward) | Attribute / group mapping runtime |
-| Hermetic behaviour proof of the full matrix — `packages/proof/src/auth-identity-proof.ts`, `make auth-proof` | Privileged SSO administration runtime |
+| Bounded enterprise identity control-plane proof — `capabilities/auth/src/enterprise-identity.ts`, `packages/proof/src/auth-identity-proof.ts`, `make auth-proof` | Live SIEM forwarding / production incident workflow |
 | | Refresh-token rotation |
 | | Live SIEM integration |
 

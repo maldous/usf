@@ -60,6 +60,15 @@ export const ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = Obj
     "notification.suppression.update",
     "notification.provider.configure",
     "notification.bulk.send",
+    "tenant_sso.request",
+    "tenant_sso.configure",
+    "tenant_sso.verify_domain",
+    "tenant_sso.activate",
+    "tenant_sso.suspend",
+    "tenant_sso.revoke",
+    "tenant_sso.rotate_secret",
+    "tenant_sso.update_mapping",
+    "tenant_sso.view_audit",
   ]),
   "tenant-member": Object.freeze([
     "tenant.members.read",
@@ -150,6 +159,15 @@ export const ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = Obj
     "notification.suppression.update",
     "notification.provider.configure",
     "notification.bulk.send",
+    "tenant_sso.request",
+    "tenant_sso.configure",
+    "tenant_sso.verify_domain",
+    "tenant_sso.activate",
+    "tenant_sso.suspend",
+    "tenant_sso.revoke",
+    "tenant_sso.rotate_secret",
+    "tenant_sso.update_mapping",
+    "tenant_sso.view_audit",
   ]),
   // Concrete service actor for system jobs (ADR 0013). NOT a global bypass: it has
   // exactly these explicit permissions, runs in a tenant context, and is audited.
@@ -243,6 +261,15 @@ export const ACTION_PERMISSIONS: Readonly<Record<string, string>> = Object.freez
   "notification.suppression.update": "notification.suppression.update",
   "notification.provider.configure": "notification.provider.configure",
   "notification.bulk.send": "notification.bulk.send",
+  "tenant_sso.request": "tenant_sso.request",
+  "tenant_sso.configure": "tenant_sso.configure",
+  "tenant_sso.verify_domain": "tenant_sso.verify_domain",
+  "tenant_sso.activate": "tenant_sso.activate",
+  "tenant_sso.suspend": "tenant_sso.suspend",
+  "tenant_sso.revoke": "tenant_sso.revoke",
+  "tenant_sso.rotate_secret": "tenant_sso.rotate_secret",
+  "tenant_sso.update_mapping": "tenant_sso.update_mapping",
+  "tenant_sso.view_audit": "tenant_sso.view_audit",
 });
 
 // ABAC: data classifications that require the stronger sensitive-read permission.

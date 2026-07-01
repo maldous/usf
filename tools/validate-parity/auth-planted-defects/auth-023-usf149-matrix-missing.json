@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-023",
+  "mutation": {
+    "file": "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json",
+    "replace": {
+      "old": "\"issueId\": \"USF-149\"",
+      "new": "\"issueId\": \"USF-000\""
+    }
+  }
+}

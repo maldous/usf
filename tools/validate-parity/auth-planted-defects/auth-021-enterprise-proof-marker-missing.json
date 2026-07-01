@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-AUTH-021",
+  "mutation": {
+    "file": "packages/proof/src/auth-identity-proof.ts",
+    "replace": {
+      "old": "enterpriseIdentityDepthProven: true",
+      "new": "enterpriseIdentityDepthProven: false"
+    }
+  }
+}

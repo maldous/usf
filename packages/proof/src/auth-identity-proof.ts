@@ -19,9 +19,11 @@ import { fileURLToPath } from "node:url";
 import { createKeycloakTokenVerifier, HermeticKeycloak } from "@foundation/adapter-idp";
 import { InMemoryAuditEventStore } from "@foundation/capability-audit";
 import {
+  createEnterpriseIdentityControlPlane,
   createKeycloakAuthService,
   createSessionService,
   InMemorySessionStore,
+  tenantAdminContext,
 } from "@foundation/capability-auth";
 import {
   createPolicyDecisionPoint,
@@ -31,6 +33,7 @@ import {
 import {
   type AuditEvent,
   type AuditEventDraft,
+  createTenantContext,
   KeycloakTokenError,
   keycloakExternalSubject,
 } from "@foundation/core";
@@ -231,6 +234,13 @@ async function main() {
     status: "active",
     roles: ["tenant-admin"],
   });
+  memberships.upsert({
+    membershipId: "m-b",
+    tenantId: TENANT_B,
+    actorId: "actor-bob",
+    status: "active",
+    roles: ["tenant-admin"],
+  });
 
   const pdp = createPolicyDecisionPoint({ memberships });
   const store = new InMemoryAuditEventStore();
@@ -397,6 +407,272 @@ async function main() {
     "cross-tenant SSO: an actor with two active memberships selects either tenant (explicit memberships only)",
   );
 
+  // ---- E. Enterprise identity / tenant SSO control-plane depth -------------------
+  const enterpriseIdentity = createEnterpriseIdentityControlPlane({
+    pdp,
+    audit: recorder,
+    now: () => new Date(nowSec * 1000),
+  });
+  const requesterContext = tenantAdminContext({ tenantId: TENANT_A, actorId: "actor-alice" });
+  const approverContext = tenantAdminContext({ tenantId: TENANT_A, actorId: "actor-multi" });
+  const bobTenantBContext = tenantAdminContext({ tenantId: TENANT_B, actorId: "actor-bob" });
+  const ssoRequest = await enterpriseIdentity.requestSsoConnection(requesterContext, {
+    tenantId: TENANT_A,
+    keycloakRealm: kc.realm,
+    keycloakClient: "usf-hermetic-client",
+    brokerAlias: "opaque-broker-alias",
+    connectionName: "tenant-a-local-sso",
+    expiresAt: null,
+    allowedDomains: ["example.test"],
+    domainVerificationMethod: "admin-approval",
+    requiredAssuranceLevel: "loa2-mfa-or-stronger",
+    allowedRedirectUris: ["https://app.local.invalid/callback"],
+    allowedPostLogoutRedirectUris: ["https://app.local.invalid/logout"],
+    attributeMappingPolicy: ["email", "department"],
+    groupMappingPolicy: ["staff", "security-reviewers"],
+    jitProvisioningPolicy: "pending-membership-only",
+  });
+  if (!ssoRequest.ok || ssoRequest.value.connectionStatus !== "requested") {
+    throw new Error("tenant SSO request was not recorded");
+  }
+  const selfApproval = await enterpriseIdentity.approveSsoConnection(
+    requesterContext,
+    requesterContext,
+    ssoRequest.value.connectionId,
+  );
+  if (selfApproval.ok || selfApproval.reasonCode !== "requester-approver-same") {
+    throw new Error("SSO requester was allowed to approve their own connection");
+  }
+  pass("tenant self-service SSO request recorded; requester/approver separation fails closed");
+
+  const domainVerified = await enterpriseIdentity.verifyDomain(
+    requesterContext,
+    ssoRequest.value.connectionId,
+    { domain: "example.test", method: "admin-approval" },
+  );
+  if (!domainVerified.ok || domainVerified.value.domainVerificationStatus !== "verified") {
+    throw new Error("tenant SSO domain verification did not complete");
+  }
+  const approved = await enterpriseIdentity.approveSsoConnection(
+    requesterContext,
+    approverContext,
+    ssoRequest.value.connectionId,
+  );
+  if (!approved.ok || approved.value.approvedBy !== "actor-multi") {
+    throw new Error("separate approver did not approve the SSO connection");
+  }
+  const activated = await enterpriseIdentity.activateSsoConnection(
+    approverContext,
+    ssoRequest.value.connectionId,
+  );
+  if (!activated.ok || activated.value.connectionStatus !== "active") {
+    throw new Error("verified and approved SSO connection did not activate");
+  }
+  pass("tenant SSO verify -> approve -> activate lifecycle is PDP-gated and audited");
+
+  const conflicting = await enterpriseIdentity.requestSsoConnection(bobTenantBContext, {
+    tenantId: TENANT_B,
+    keycloakRealm: kc.realm,
+    keycloakClient: "usf-hermetic-client",
+    brokerAlias: "opaque-broker-alias-b",
+    connectionName: "tenant-b-local-sso",
+    expiresAt: null,
+    allowedDomains: ["example.test"],
+    domainVerificationMethod: "admin-approval",
+    requiredAssuranceLevel: "loa2-mfa-or-stronger",
+    allowedRedirectUris: ["https://tenant-b.local.invalid/callback"],
+    allowedPostLogoutRedirectUris: ["https://tenant-b.local.invalid/logout"],
+    attributeMappingPolicy: ["email"],
+    groupMappingPolicy: ["staff"],
+    jitProvisioningPolicy: "pending-membership-only",
+  });
+  if (!conflicting.ok) throw new Error("tenant B conflict setup request failed");
+  const conflictCheck = await enterpriseIdentity.verifyDomain(
+    bobTenantBContext,
+    conflicting.value.connectionId,
+    { domain: "example.test", method: "admin-approval" },
+  );
+  if (conflictCheck.ok || !conflictCheck.reasonCode.startsWith("domain-claim-conflict")) {
+    throw new Error("cross-tenant domain ownership collision did not fail closed");
+  }
+  pass("domain ownership verification blocks cross-tenant domain claim collision");
+
+  const jitActor = {
+    actorId: "actor-jit",
+    externalSubject: keycloakExternalSubject(kc.realm, "kc-sub-jit"),
+    identityProvider: "keycloak",
+    email: "jit@example.test",
+    emailVerified: true,
+    enabled: true,
+  };
+  const jitContext = createTenantContext({
+    tenantId: TENANT_A,
+    actorId: jitActor.actorId,
+    roles: ["tenant-member"],
+  });
+  const jitPrivileged = await enterpriseIdentity.provisionJitMembership(
+    jitContext,
+    ssoRequest.value.connectionId,
+    { actor: jitActor, requestedRoles: ["tenant-admin"] },
+  );
+  if (jitPrivileged.ok || jitPrivileged.reasonCode !== "jit-privileged-role-denied") {
+    throw new Error("JIT provisioning allowed a privileged role");
+  }
+  const jitPending = await enterpriseIdentity.provisionJitMembership(
+    jitContext,
+    ssoRequest.value.connectionId,
+    { actor: jitActor, requestedRoles: ["tenant-member"] },
+  );
+  if (!jitPending.ok || jitPending.value.membershipStatus !== "invited") {
+    throw new Error("JIT provisioning did not create a pending non-privileged membership");
+  }
+  pass("JIT provisioning is explicit, non-privileged, and fails closed for tenant-admin grants");
+
+  const invitation = await enterpriseIdentity.issueInvitation(requesterContext, {
+    email: "invitee@example.test",
+    expiresAt: new Date((nowSec + 3600) * 1000).toISOString(),
+    requiredDomain: "example.test",
+    requiredAssuranceLevel: "loa2-mfa-or-stronger",
+  });
+  if (!invitation.ok) throw new Error("invitation issue failed");
+  const acceptedInvitation = await enterpriseIdentity.acceptInvitation(
+    jitContext,
+    invitation.value.invitationId,
+    jitActor,
+  );
+  if (!acceptedInvitation.ok || acceptedInvitation.value.status !== "accepted") {
+    throw new Error("invitation acceptance failed");
+  }
+  const expiredInvitation = await enterpriseIdentity.issueInvitation(requesterContext, {
+    email: "late@example.test",
+    expiresAt: new Date((nowSec - 60) * 1000).toISOString(),
+    requiredDomain: "example.test",
+    requiredAssuranceLevel: "loa2-mfa-or-stronger",
+  });
+  if (!expiredInvitation.ok) throw new Error("expired invitation setup failed");
+  const expiredAccept = await enterpriseIdentity.acceptInvitation(
+    jitContext,
+    expiredInvitation.value.invitationId,
+    jitActor,
+  );
+  if (expiredAccept.ok || expiredAccept.reasonCode !== "invitation-expired") {
+    throw new Error("expired invitation did not fail closed");
+  }
+  pass("invitation onboarding accepts valid invitations and denies expired ones");
+
+  const stepUpNeeded = await enterpriseIdentity.requireAssurance(requesterContext, {
+    current: "loa1-password-or-brokered-basic",
+    required: "loa2-mfa-or-stronger",
+    action: "tenant_sso.activate",
+  });
+  if (stepUpNeeded.ok || stepUpNeeded.reasonCode !== "step-up-required") {
+    throw new Error("low-assurance privileged SSO action did not require step-up");
+  }
+  const stepUpSatisfied = await enterpriseIdentity.requireAssurance(approverContext, {
+    current: "loa3-phishing-resistant-or-admin-approved",
+    required: "loa2-mfa-or-stronger",
+    action: "tenant_sso.activate",
+  });
+  if (!stepUpSatisfied.ok || stepUpSatisfied.value.stepUpRequired) {
+    throw new Error("sufficient assurance was not accepted");
+  }
+  pass("assurance ladder enforces step-up for privileged identity operations");
+
+  const lowAssuranceLink = await enterpriseIdentity.linkIdentity(requesterContext, {
+    actorId: "actor-alice",
+    externalSubject: "brokered-low-assurance",
+    assuranceLevel: "loa1-password-or-brokered-basic",
+  });
+  if (lowAssuranceLink.ok || lowAssuranceLink.reasonCode !== "step-up-required") {
+    throw new Error("low-assurance account linking did not fail closed");
+  }
+  const firstLink = await enterpriseIdentity.linkIdentity(requesterContext, {
+    actorId: "actor-alice",
+    externalSubject: "brokered-link-one",
+    assuranceLevel: "loa2-mfa-or-stronger",
+  });
+  const secondLink = await enterpriseIdentity.linkIdentity(requesterContext, {
+    actorId: "actor-alice",
+    externalSubject: "brokered-link-two",
+    assuranceLevel: "loa2-mfa-or-stronger",
+  });
+  if (!firstLink.ok || !secondLink.ok) throw new Error("account linking setup failed");
+  const unlinkOne = await enterpriseIdentity.unlinkIdentity(requesterContext, firstLink.value.linkId);
+  if (!unlinkOne.ok || unlinkOne.value.status !== "unlinked") {
+    throw new Error("account unlink did not succeed with another login method retained");
+  }
+  const unlinkLast = await enterpriseIdentity.unlinkIdentity(requesterContext, secondLink.value.linkId);
+  if (unlinkLast.ok || unlinkLast.reasonCode !== "last-login-method-denied") {
+    throw new Error("last login method unlink did not fail closed");
+  }
+  pass("account linking requires proof-of-control and unlinking preserves a login method");
+
+  const mapped = await enterpriseIdentity.mapAttributesAndGroups(requesterContext, {
+    attributes: { email: "alice@example.test", department: "security", role: "tenant-admin" },
+    groups: ["staff", "tenant-admin", "security-reviewers"],
+    allowedAttributes: ["email", "department"],
+    allowedGroups: ["staff", "security-reviewers"],
+  });
+  if (
+    !mapped.ok ||
+    mapped.value.directRoleGrant !== false ||
+    "role" in mapped.value.mappedAttributes ||
+    mapped.value.proposedGroups.includes("tenant-admin")
+  ) {
+    throw new Error("attribute/group mapping granted direct roles or leaked unmapped attributes");
+  }
+  pass("attribute/group mapping is allow-listed and never grants roles directly");
+
+  const browserOk = await enterpriseIdentity.evaluateBrowserFlow(requesterContext, {
+    state: "state-opaque",
+    expectedState: "state-opaque",
+    nonce: "nonce-opaque",
+    expectedNonce: "nonce-opaque",
+    pkceChallenge: "pkce-opaque",
+    redirectUri: "https://app.local.invalid/callback",
+    allowedRedirectUris: ["https://app.local.invalid/callback"],
+    logoutRedirectUri: "https://app.local.invalid/logout",
+    allowedPostLogoutRedirectUris: ["https://app.local.invalid/logout"],
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      expiresAt: new Date((nowSec + 3600) * 1000).toISOString(),
+    },
+    csrfTokenPresent: true,
+  });
+  if (!browserOk.ok || browserOk.value.liveBrowserReadinessClaim !== false) {
+    throw new Error("browser flow semantic proof did not pass without live readiness claim");
+  }
+  const browserDeny = await enterpriseIdentity.evaluateBrowserFlow(requesterContext, {
+    state: "wrong",
+    expectedState: "state-opaque",
+    nonce: "nonce-opaque",
+    expectedNonce: "nonce-opaque",
+    pkceChallenge: "pkce-opaque",
+    redirectUri: "https://evil.invalid/callback",
+    allowedRedirectUris: ["https://app.local.invalid/callback"],
+    logoutRedirectUri: "https://evil.invalid/logout",
+    allowedPostLogoutRedirectUris: ["https://app.local.invalid/logout"],
+    cookie: {
+      httpOnly: false,
+      secure: false,
+      sameSite: "none",
+      expiresAt: new Date((nowSec + 3600) * 1000).toISOString(),
+    },
+    csrfTokenPresent: false,
+  });
+  if (browserDeny.ok || browserDeny.reasonCode !== "state-mismatch") {
+    throw new Error("unsafe browser flow did not fail closed");
+  }
+  pass("browser login/callback/cookie semantics are represented and fail closed locally");
+
+  const threat = await enterpriseIdentity.emitThreatSignal(requesterContext, "token_replay_suspected");
+  if (!threat.ok || threat.value.liveSiemClaim !== false) {
+    throw new Error("threat signal evidence made a live SIEM claim");
+  }
+  pass("security threat signal is emitted as local audit evidence without SIEM readiness");
+
   // ---- E. Audit is value-free -----------------------------------------------------
   const dump = JSON.stringify(recorded);
   for (const token of issuedTokens) {
@@ -422,9 +698,25 @@ async function main() {
     proofLevelObserved: "behaviour-proven" as const,
     liveExternalProviderClaim: false,
     liveKeycloakClaim: false,
+    liveExternalIdpReadinessClaim: false,
+    liveBrokerReadinessClaim: false,
+    liveBrowserUiReadinessClaim: false,
+    siemForwardingReadinessClaim: false,
     brokeredUpstreamAcceptedDirectly: false,
     productionLiveClaim: false,
     keycloakSoleIssuer: true,
+    enterpriseIdentityDepthProven: true,
+    tenantSelfServiceSsoLifecycleProven: true,
+    requesterApproverSeparationProven: true,
+    jitProvisioningPolicyProven: true,
+    domainVerificationConflictFailClosed: true,
+    invitationOnboardingProven: true,
+    assuranceStepUpSemanticsProven: true,
+    accountLinkingProofOfControlProven: true,
+    attributeGroupMappingNoDirectRoleGrantProven: true,
+    privilegedSsoAdminPdpGated: true,
+    browserFlowSecuritySemanticsProven: true,
+    threatDetectionEventPostureProven: true,
     checks: checks.length,
     checkLabels: checks,
   };
