@@ -1,0 +1,217 @@
+{
+  "id": "api-graphql-generated-client-disposition-matrix",
+  "sourceIssue": "USF-214",
+  "parentIssue": "USF-133",
+  "predecessorIssue": "USF-155",
+  "relatedIssues": ["USF-213", "USF-184", "USF-192"],
+  "capabilityId": "graphql-federation-generated-client-disposition",
+  "proofCommand": "make api-proof",
+  "rawProofCommand": "corepack pnpm proof:api",
+  "validatorCommand": "python3 tools/validate-parity/validate-api.py all --json",
+  "proofFile": "packages/proof/src/api-contracts-proof.ts",
+  "validatorFile": "tools/validate-parity/validate-api.py",
+  "standard": "docs/architecture/api-and-contract-surface-standard.md",
+  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "serviceCatalogueDependency": "spec/instances/compose-service/service-catalogue.json#api",
+  "enterpriseEvidenceRefs": [
+    "soa-usf-214-graphql-generated-client-disposition",
+    "evidence-usf-214-graphql-generated-client-disposition",
+    "threat-usf-214-graphql-generated-client-disposition",
+    "access-usf-214-graphql-generated-client-disposition",
+    "resilience-usf-214-graphql-generated-client-disposition",
+    "incident-usf-214-graphql-generated-client-disposition",
+    "privacy-usf-214-graphql-generated-client-disposition"
+  ],
+  "runtimeMode": "local-synthetic-api-contract-proof",
+  "providerMode": "hermetic-mock",
+  "postureSummary": {
+    "graphql": "out-of-scope-with-rationale",
+    "federation": "out-of-scope-with-rationale",
+    "generatedSdk": "deferred-with-owner",
+    "generatedClient": "deferred-with-owner",
+    "externalDeveloperSurface": "deferred-with-owner",
+    "clientDistribution": "deferred-with-owner"
+  },
+  "claims": {
+    "graphqlGeneratedClientDispositionProven": true,
+    "graphqlPostureClassified": "out-of-scope-with-rationale",
+    "federationPostureClassified": "out-of-scope-with-rationale",
+    "generatedSdkPostureClassified": "deferred-with-owner",
+    "generatedClientPostureClassified": "deferred-with-owner",
+    "externalDeveloperSurfacePostureClassified": "deferred-with-owner",
+    "clientDistributionPostureClassified": "deferred-with-owner",
+    "tenantBoundaryRecorded": true,
+    "accessBoundaryRecorded": true,
+    "auditBoundaryRecorded": true,
+    "secretBoundaryRecorded": true,
+    "privacyBoundaryRecorded": true,
+    "syntheticDataBoundaryRecorded": true,
+    "nonEquivalenceBoundaryRecorded": true,
+    "graphqlFederationReadinessClaim": false,
+    "generatedClientReadinessClaim": false,
+    "generatedSdkReadinessClaim": false,
+    "externalDeveloperPlatformReadinessClaim": false,
+    "publicApiReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "GraphQL and federation posture is classified as proven, deferred, out of scope, or blocked with rationale.",
+      "evidence": "The graphql-runtime-and-federation-scope control classifies GraphQL runtime and federation as out-of-scope-with-rationale for current USF foundation runtime proof. Existing REST/OpenAPI route proof remains non-equivalent to GraphQL or federation readiness."
+    },
+    {
+      "criterion": "Generated SDK and generated client readiness posture is classified with evidence or explicit deferral.",
+      "evidence": "The generated-sdk-and-client-boundary and client-distribution-boundary controls classify SDK generation, generated clients, package publishing, documentation distribution, and external developer platform distribution as deferred-with-owner."
+    },
+    {
+      "criterion": "Any implemented proof records tenant, access, audit, secret, privacy, and synthetic-data boundaries.",
+      "evidence": "proof:api emits graphqlGeneratedClientDispositionEvidence with tenantBoundaryRecorded, accessBoundaryRecorded, auditBoundaryRecorded, secretBoundaryRecorded, privacyBoundaryRecorded, and syntheticDataBoundaryRecorded markers."
+    },
+    {
+      "criterion": "Validator coverage fails on generated client, GraphQL, federation, public API, or external developer readiness overclaim.",
+      "evidence": "validate-api rules USF-API-025 through USF-API-029 check proof markers, matrix controls, enterprise evidence rows, deferred boundaries, and overclaim wording."
+    },
+    {
+      "criterion": "Enterprise evidence rows record owner, risk owner, control owner, evidence source, validation command, and non-claims.",
+      "evidence": "enterpriseEvidenceRefs rows are required by validate-api and point at this matrix, proof:api, and validate-api."
+    },
+    {
+      "criterion": "No prohibited readiness or certification claim is made.",
+      "evidence": "All prohibited claim booleans are false and nonClaims below preserve the explicit boundary."
+    }
+  ],
+  "controls": [
+    {
+      "id": "graphql-runtime-and-federation-scope",
+      "status": "out-of-scope-with-rationale",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer-unless-separate-human-authorisation-requires-graphql-runtime",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonEquivalenceBoundary": "REST/OpenAPI route-contract proof is not GraphQL runtime proof, schema stitching proof, federation gateway proof, GraphQL resolver authorization proof, persisted-query proof, subscription proof, or generated GraphQL client readiness.",
+      "nonClaimBoundary": "GraphQL and federation are inventoried as lineage only and are out of current foundation runtime scope unless a future source issue explicitly authorises and proves them."
+    },
+    {
+      "id": "generated-sdk-and-client-boundary",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-generated-client-issue-if-public-api-client-distribution-is-authorised",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonEquivalenceBoundary": "OpenAPI JSON generation and route metadata validation are not generated SDK creation, generated client compile/run tests, package publication, multi-language client compatibility, or customer distribution readiness.",
+      "nonClaimBoundary": "No generated SDK readiness, generated client readiness, package release readiness, public documentation readiness, or external developer client compatibility is claimed."
+    },
+    {
+      "id": "external-developer-surface-and-distribution",
+      "status": "deferred-with-owner",
+      "maturity": "documented",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "followUpIssue": "future-external-developer-platform-issue-if-public-api-is-authorised",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": ["docs/architecture/api-graphql-generated-client-disposition-matrix.json"],
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonEquivalenceBoundary": "A local API proof is not a developer portal, API-key issuance workflow, SDK registry publication, public support workflow, public changelog operation, or customer onboarding proof.",
+      "nonClaimBoundary": "No external developer platform readiness, public client distribution readiness, public support readiness, or public API launch readiness is claimed."
+    },
+    {
+      "id": "tenant-access-audit-secret-privacy-synthetic-boundaries",
+      "status": "proven-local",
+      "maturity": "tested",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "mitigate-with-value-free-local-proof-and-explicit-non-equivalence",
+      "reviewDate": "2026-09-30",
+      "evidenceRefs": ["packages/proof/src/api-contracts-proof.ts", "tests/packages/proof.test.ts"],
+      "proofChecks": [
+        "USF-214 GraphQL federation and generated client posture is classified with explicit non-equivalence boundaries"
+      ],
+      "proofCommand": "make api-proof",
+      "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
+      "nonEquivalenceBoundary": "Boundary markers in a local proof are not GraphQL operation authorization tests, generated-client runtime tests, customer fixture tests, public developer data processing, or live-provider evidence.",
+      "nonClaimBoundary": "Tenant, access, audit, secret, privacy, and synthetic-data boundaries are recorded for the disposition proof only."
+    }
+  ],
+  "deferredBoundaries": [
+    {
+      "id": "generated-sdk-client-readiness",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-generated-client-issue-if-public-api-client-distribution-is-authorised",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "No generated SDK or generated client readiness is claimed."
+    },
+    {
+      "id": "graphql-federation-runtime",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer-unless-separately-authorised",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-graphql-federation-issue-if-runtime-compatibility-is-authorised",
+      "promotionImpact": [
+        "dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonClaimBoundary": "No GraphQL runtime, federation gateway, resolver authorization, persisted-query, subscription, or GraphQL client readiness is claimed."
+    },
+    {
+      "id": "external-developer-platform-client-distribution",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "future-external-developer-platform-issue-if-public-api-is-authorised",
+      "promotionImpact": ["staging-readiness", "production-readiness", "enterprise-readiness"],
+      "nonClaimBoundary": "No developer portal, API key workflow, SDK package registry, public documentation, customer onboarding, support/SLA, or public distribution readiness is claimed."
+    }
+  ],
+  "nonClaims": [
+    "No GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, client distribution readiness, public API launch readiness, public API readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure claim is made.",
+    "No full dev readiness, full React parity, USF-133 closure, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, or enterprise production readiness claim is made.",
+    "USF-214 does not implement GraphQL runtime, GraphQL federation, GraphQL gateway, schema stitching, subscriptions, persisted queries, generated SDKs, generated clients, package publishing, public developer portal, API key issuance, public documentation operation, staging deployment, production deployment, live gateway, WAF, TLS termination, or edge operation."
+  ]
+}

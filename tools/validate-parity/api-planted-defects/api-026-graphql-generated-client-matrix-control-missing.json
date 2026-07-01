@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-API-026",
+  "mutation": {
+    "removeGraphqlGeneratedClientControl": "generated-sdk-and-client-boundary"
+  }
+}

@@ -40,6 +40,11 @@ RULES = {
     "USF-API-022": ("blocking", "USF-213 enterprise evidence rows are missing"),
     "USF-API-023": ("blocking", "USF-213 deferred public compatibility or release-governance boundary is incomplete"),
     "USF-API-024": ("blocking", "USF-213 public compatibility readiness claim is overclaimed"),
+    "USF-API-025": ("blocking", "USF-214 GraphQL/generated-client disposition proof markers are missing"),
+    "USF-API-026": ("blocking", "USF-214 GraphQL/generated-client disposition matrix is missing or incomplete"),
+    "USF-API-027": ("blocking", "USF-214 enterprise evidence rows are missing"),
+    "USF-API-028": ("blocking", "USF-214 deferred or non-equivalent GraphQL/generated-client boundary is incomplete"),
+    "USF-API-029": ("blocking", "USF-214 GraphQL/generated-client readiness claim is overclaimed"),
     "USF-API-SELFTEST": ("blocking", "planted API defect did not raise its expected rule"),
 }
 
@@ -59,6 +64,7 @@ STANDARD = "docs/architecture/api-and-contract-surface-standard.md"
 SOURCE_USE = "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
 DEPTH_MATRIX = "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json"
 PUBLIC_COMPAT_MATRIX = "docs/architecture/api-public-compatibility-release-governance-matrix.json"
+GRAPHQL_GENERATED_CLIENT_MATRIX = "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
 ENTERPRISE_EVIDENCE = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
@@ -80,6 +86,7 @@ SOURCE_FILES = (
     SOURCE_USE,
     DEPTH_MATRIX,
     PUBLIC_COMPAT_MATRIX,
+    GRAPHQL_GENERATED_CLIENT_MATRIX,
     ENTERPRISE_EVIDENCE,
     PACKAGE,
     MAKEFILE,
@@ -165,6 +172,33 @@ def read_json(path):
         return None
 
 
+def contains_positive_overclaim(text, phrase):
+    lower_text = text.lower()
+    lower_phrase = phrase.lower()
+    start = 0
+    while True:
+        index = lower_text.find(lower_phrase, start)
+        if index == -1:
+            return False
+        sentence_start = max(
+            lower_text.rfind("\n", 0, index),
+            lower_text.rfind(".", 0, index),
+            lower_text.rfind(";", 0, index),
+        )
+        prefix = lower_text[max(sentence_start + 1, index - 240):index]
+        if not any(marker in prefix for marker in (
+            "no ",
+            "not ",
+            "does not prove ",
+            "do not claim ",
+            "must not be claimed",
+            "is not ",
+            "without ",
+        )):
+            return True
+        start = index + len(lower_phrase)
+
+
 def load_matrix():
     return read_json(MATRIX_PATH)
 
@@ -180,6 +214,11 @@ def build_state(overrides=None):
     public_compat_matrix = (
         overrides["publicCompatMatrix"] if "publicCompatMatrix" in overrides else read_json(PUBLIC_COMPAT_MATRIX)
     )
+    graphql_generated_client_matrix = (
+        overrides["graphqlGeneratedClientMatrix"]
+        if "graphqlGeneratedClientMatrix" in overrides
+        else read_json(GRAPHQL_GENERATED_CLIENT_MATRIX)
+    )
     enterprise = overrides["enterprise"] if "enterprise" in overrides else read_json(ENTERPRISE_EVIDENCE)
     return {
         "files": files,
@@ -187,6 +226,7 @@ def build_state(overrides=None):
         "openapi": openapi,
         "depthMatrix": depth_matrix,
         "publicCompatMatrix": public_compat_matrix,
+        "graphqlGeneratedClientMatrix": graphql_generated_client_matrix,
         "enterprise": enterprise,
     }
 
@@ -251,12 +291,14 @@ def run_checks(F, state=None):
     source_use = files.get(SOURCE_USE, "")
     depth_matrix_text = files.get(DEPTH_MATRIX, "")
     public_compat_matrix_text = files.get(PUBLIC_COMPAT_MATRIX, "")
+    graphql_generated_client_matrix_text = files.get(GRAPHQL_GENERATED_CLIENT_MATRIX, "")
     enterprise_text = files.get(ENTERPRISE_EVIDENCE, "")
     package = files.get(PACKAGE, "")
     makefile = files.get(MAKEFILE, "")
     openapi = state["openapi"]
     depth_matrix = state.get("depthMatrix")
     public_compat_matrix = state.get("publicCompatMatrix")
+    graphql_generated_client_matrix = state.get("graphqlGeneratedClientMatrix")
     enterprise = state.get("enterprise")
 
     if not re.search(r"\bAPI_ROUTE_CLASSIFICATIONS\b", api_surface) or not re.search(r"\bAPI_ROUTE_CONTRACTS\b", api_surface):
@@ -543,6 +585,43 @@ def run_checks(F, state=None):
     ):
         if token not in proof_tests:
             F.add("USF-API-020", PROOF_TESTS, f"USF-213 test marker missing {token}")
+    for token in (
+        "graphqlGeneratedClientDispositionProven: true",
+        "graphqlGeneratedClientDispositionEvidence",
+        "issueId: \"USF-214\"",
+        "graphqlPostureClassified: \"out-of-scope-with-rationale\"",
+        "federationPostureClassified: \"out-of-scope-with-rationale\"",
+        "generatedSdkPostureClassified: \"deferred-with-owner\"",
+        "generatedClientPostureClassified: \"deferred-with-owner\"",
+        "externalDeveloperSurfacePostureClassified: \"deferred-with-owner\"",
+        "clientDistributionPostureClassified: \"deferred-with-owner\"",
+        "tenantBoundaryRecorded: true",
+        "accessBoundaryRecorded: true",
+        "auditBoundaryRecorded: true",
+        "secretBoundaryRecorded: true",
+        "privacyBoundaryRecorded: true",
+        "syntheticDataBoundaryRecorded: true",
+        "nonEquivalenceBoundaryRecorded: true",
+        "graphqlFederationReadinessClaim: false",
+        "generatedClientReadinessClaim: false",
+        "generatedSdkReadinessClaim: false",
+        "externalDeveloperPlatformReadinessClaim: false",
+        "usf133ClosureClaim: false",
+    ):
+        if token not in proof:
+            F.add("USF-API-025", PROOF, f"USF-214 proof marker missing {token}")
+    for token in (
+        "graphqlGeneratedClientDispositionProven",
+        "graphqlGeneratedClientDispositionEvidence",
+        "graphqlPostureClassified",
+        "generatedSdkPostureClassified",
+        "tenantBoundaryRecorded",
+        "privacyBoundaryRecorded",
+        "generatedSdkReadinessClaim",
+        "externalDeveloperPlatformReadinessClaim",
+    ):
+        if token not in proof_tests:
+            F.add("USF-API-025", PROOF_TESTS, f"USF-214 test marker missing {token}")
 
     if not isinstance(depth_matrix, dict):
         F.add("USF-API-016", DEPTH_MATRIX, "USF-155 proof-depth matrix must exist and parse")
@@ -707,12 +786,128 @@ def run_checks(F, state=None):
         if expected_id not in enterprise_text:
             F.add("USF-API-022", ENTERPRISE_EVIDENCE, f"enterprise text missing {expected_id}")
 
+    if not isinstance(graphql_generated_client_matrix, dict):
+        F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, "USF-214 matrix must exist and parse")
+    else:
+        if graphql_generated_client_matrix.get("sourceIssue") != "USF-214":
+            F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, "matrix must be scoped to USF-214")
+        claims = graphql_generated_client_matrix.get("claims")
+        if not isinstance(claims, dict) or claims.get("graphqlGeneratedClientDispositionProven") is not True:
+            F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, "matrix must record graphqlGeneratedClientDispositionProven=true")
+        expected_claims = {
+            "graphqlPostureClassified": "out-of-scope-with-rationale",
+            "federationPostureClassified": "out-of-scope-with-rationale",
+            "generatedSdkPostureClassified": "deferred-with-owner",
+            "generatedClientPostureClassified": "deferred-with-owner",
+            "externalDeveloperSurfacePostureClassified": "deferred-with-owner",
+            "clientDistributionPostureClassified": "deferred-with-owner",
+        }
+        for claim, expected_value in expected_claims.items():
+            if not isinstance(claims, dict) or claims.get(claim) != expected_value:
+                F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, f"matrix must classify {claim}={expected_value}")
+        for claim in (
+            "tenantBoundaryRecorded",
+            "accessBoundaryRecorded",
+            "auditBoundaryRecorded",
+            "secretBoundaryRecorded",
+            "privacyBoundaryRecorded",
+            "syntheticDataBoundaryRecorded",
+            "nonEquivalenceBoundaryRecorded",
+        ):
+            if not isinstance(claims, dict) or claims.get(claim) is not True:
+                F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, f"matrix must record {claim}=true")
+        for claim in (
+            "graphqlFederationReadinessClaim",
+            "generatedClientReadinessClaim",
+            "generatedSdkReadinessClaim",
+            "externalDeveloperPlatformReadinessClaim",
+            "publicApiReadinessClaim",
+            "deploymentReadinessClaim",
+            "stagingReadinessClaim",
+            "productionReadinessClaim",
+            "socReadinessClaim",
+            "iso27001CertificationClaim",
+            "fullDevReadinessClaim",
+            "fullReactParityClaim",
+            "usf133ClosureClaim",
+        ):
+            if not isinstance(claims, dict) or claims.get(claim) is not False:
+                F.add("USF-API-029", GRAPHQL_GENERATED_CLIENT_MATRIX, f"matrix must keep {claim}=false")
+        controls = graphql_generated_client_matrix.get("controls")
+        if not isinstance(controls, list):
+            F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, "matrix controls must be a list")
+            controls = []
+        control_ids = {item.get("id") for item in controls if isinstance(item, dict)}
+        for required in (
+            "graphql-runtime-and-federation-scope",
+            "generated-sdk-and-client-boundary",
+            "external-developer-surface-and-distribution",
+            "tenant-access-audit-secret-privacy-synthetic-boundaries",
+        ):
+            if required not in control_ids:
+                F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, f"missing control {required}")
+        for item in controls:
+            if not isinstance(item, dict):
+                continue
+            for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "nonClaimBoundary"):
+                if not item.get(field):
+                    F.add("USF-API-028", f"{GRAPHQL_GENERATED_CLIENT_MATRIX}#{item.get('id')}", f"control missing {field}")
+            if item.get("status") in {"deferred-with-owner", "out-of-scope-with-rationale"} and not item.get("nonEquivalenceBoundary"):
+                F.add("USF-API-028", f"{GRAPHQL_GENERATED_CLIENT_MATRIX}#{item.get('id')}", "control missing nonEquivalenceBoundary")
+            if item.get("status") == "deferred-with-owner" and not item.get("followUpIssue"):
+                F.add("USF-API-028", f"{GRAPHQL_GENERATED_CLIENT_MATRIX}#{item.get('id')}", "deferred control missing followUpIssue")
+        for boundary in graphql_generated_client_matrix.get("deferredBoundaries", []):
+            if not isinstance(boundary, dict):
+                continue
+            for field in ("owner", "riskOwner", "controlOwner", "riskTreatment", "reviewDate", "followUpIssue", "promotionImpact", "nonClaimBoundary"):
+                if not boundary.get(field):
+                    F.add("USF-API-028", f"{GRAPHQL_GENERATED_CLIENT_MATRIX}#{boundary.get('id')}", f"deferred boundary missing {field}")
+        for required in (
+            "api-graphql-generated-client-disposition-matrix",
+            "USF-214",
+            "out-of-scope-with-rationale",
+            "deferred-with-owner",
+            "GraphQL runtime",
+            "federation gateway",
+            "generated SDK",
+            "generated client",
+            "external developer platform",
+            "No GraphQL readiness",
+            "No full dev readiness",
+        ):
+            if required not in graphql_generated_client_matrix_text:
+                F.add("USF-API-026", GRAPHQL_GENERATED_CLIENT_MATRIX, f"matrix text missing {required}")
+
+    required_usf214_enterprise_rows = {
+        "soaSupportMappings": "soa-usf-214-graphql-generated-client-disposition",
+        "evidenceRegister": "evidence-usf-214-graphql-generated-client-disposition",
+        "threatModelAbuseCaseRegister": "threat-usf-214-graphql-generated-client-disposition",
+        "accessReviewPrivilegedOperationPosture": "access-usf-214-graphql-generated-client-disposition",
+        "backupRestoreResiliencePosture": "resilience-usf-214-graphql-generated-client-disposition",
+        "incidentVulnerabilityManagementEvidence": "incident-usf-214-graphql-generated-client-disposition",
+        "privacyDataMinimisationPosture": "privacy-usf-214-graphql-generated-client-disposition",
+    }
+    if not isinstance(enterprise, dict):
+        F.add("USF-API-027", ENTERPRISE_EVIDENCE, "enterprise evidence model must exist and parse")
+    else:
+        for section, expected_id in required_usf214_enterprise_rows.items():
+            rows = enterprise.get(section)
+            if not isinstance(rows, list) or not any(
+                isinstance(row, dict) and (row.get("id") == expected_id or row.get("evidenceId") == expected_id)
+                for row in rows
+            ):
+                F.add("USF-API-027", ENTERPRISE_EVIDENCE, f"missing enterprise evidence row {expected_id}")
+    for expected_id in required_usf214_enterprise_rows.values():
+        if expected_id not in enterprise_text:
+            F.add("USF-API-027", ENTERPRISE_EVIDENCE, f"enterprise text missing {expected_id}")
+
     combined_boundary_text = "\n".join([
         proof,
         standard,
         source_use,
         depth_matrix_text,
         public_compat_matrix_text,
+        graphql_generated_client_matrix_text,
         enterprise_text,
     ])
     for phrase in (
@@ -729,7 +924,7 @@ def run_checks(F, state=None):
         "USF-133 closure is claimed",
         "USF-133 is closed",
     ):
-        if phrase.lower() in combined_boundary_text.lower():
+        if contains_positive_overclaim(combined_boundary_text, phrase):
             F.add("USF-API-019", "USF-155", f"readiness overclaim present: {phrase}")
     for phrase in (
         "public API launch readiness is proven",
@@ -744,8 +939,28 @@ def run_checks(F, state=None):
         "USF-133 closure is claimed",
         "USF-133 is closed",
     ):
-        if phrase.lower() in combined_boundary_text.lower():
+        if contains_positive_overclaim(combined_boundary_text, phrase):
             F.add("USF-API-024", "USF-213", f"readiness overclaim present: {phrase}")
+    for phrase in (
+        "GraphQL readiness is proven",
+        "federation readiness is proven",
+        "GraphQL federation readiness is proven",
+        "generated client readiness is proven",
+        "generated SDK readiness is proven",
+        "external developer platform readiness is proven",
+        "client distribution readiness is proven",
+        "public API readiness is proven",
+        "deployment readiness is proven",
+        "production readiness is proven",
+        "staging readiness is proven",
+        "SOC readiness is proven",
+        "ISO certification readiness is proven",
+        "ISO/IEC 27001 certification is proven",
+        "USF-133 closure is claimed",
+        "USF-133 is closed",
+    ):
+        if contains_positive_overclaim(combined_boundary_text, phrase):
+            F.add("USF-API-029", "USF-214", f"readiness overclaim present: {phrase}")
 
 
 def apply_mutation(base, mutation):
@@ -755,6 +970,11 @@ def apply_mutation(base, mutation):
     depth_matrix = json.loads(json.dumps(base["depthMatrix"])) if base.get("depthMatrix") is not None else None
     public_compat_matrix = (
         json.loads(json.dumps(base["publicCompatMatrix"])) if base.get("publicCompatMatrix") is not None else None
+    )
+    graphql_generated_client_matrix = (
+        json.loads(json.dumps(base["graphqlGeneratedClientMatrix"]))
+        if base.get("graphqlGeneratedClientMatrix") is not None
+        else None
     )
     enterprise = json.loads(json.dumps(base["enterprise"])) if base.get("enterprise") is not None else None
     target = mutation.get("file")
@@ -772,6 +992,11 @@ def apply_mutation(base, mutation):
             public_compat_matrix = json.loads(files[target])
         except Exception:  # noqa: BLE001
             public_compat_matrix = None
+    if target == GRAPHQL_GENERATED_CLIENT_MATRIX and target in files:
+        try:
+            graphql_generated_client_matrix = json.loads(files[target])
+        except Exception:  # noqa: BLE001
+            graphql_generated_client_matrix = None
     if target == ENTERPRISE_EVIDENCE and target in files:
         try:
             enterprise = json.loads(files[target])
@@ -809,6 +1034,17 @@ def apply_mutation(base, mutation):
             public_compat_matrix["controls"] = [
                 item for item in controls if not (isinstance(item, dict) and item.get("id") == remove_id)
             ]
+    if "graphqlGeneratedClientClaimSet" in mutation and isinstance(graphql_generated_client_matrix, dict):
+        claims = graphql_generated_client_matrix.setdefault("claims", {})
+        if isinstance(claims, dict):
+            claims.update(mutation["graphqlGeneratedClientClaimSet"])
+    if "removeGraphqlGeneratedClientControl" in mutation and isinstance(graphql_generated_client_matrix, dict):
+        remove_id = mutation["removeGraphqlGeneratedClientControl"]
+        controls = graphql_generated_client_matrix.get("controls")
+        if isinstance(controls, list):
+            graphql_generated_client_matrix["controls"] = [
+                item for item in controls if not (isinstance(item, dict) and item.get("id") == remove_id)
+            ]
     if "removeEnterpriseRow" in mutation and isinstance(enterprise, dict):
         section = mutation["removeEnterpriseRow"].get("section")
         row_id = mutation["removeEnterpriseRow"].get("id")
@@ -828,6 +1064,7 @@ def apply_mutation(base, mutation):
         "openapi": openapi,
         "depthMatrix": depth_matrix,
         "publicCompatMatrix": public_compat_matrix,
+        "graphqlGeneratedClientMatrix": graphql_generated_client_matrix,
         "enterprise": enterprise,
     }
 

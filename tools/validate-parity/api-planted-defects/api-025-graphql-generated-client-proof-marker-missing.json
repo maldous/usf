@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-025",
+  "mutation": {
+    "file": "packages/proof/src/api-contracts-proof.ts",
+    "replace": {
+      "old": "graphqlGeneratedClientDispositionProven: true",
+      "new": "graphqlGeneratedClientDispositionMissing: true"
+    }
+  }
+}

@@ -30,6 +30,8 @@ interface ApiContractsProofResult {
   readonly apiGatewayDepthEvidence: ApiGatewayDepthEvidence;
   readonly publicApiCompatibilityGovernanceProven: true;
   readonly publicApiCompatibilityGovernanceEvidence: PublicApiCompatibilityGovernanceEvidence;
+  readonly graphqlGeneratedClientDispositionProven: true;
+  readonly graphqlGeneratedClientDispositionEvidence: GraphqlGeneratedClientDispositionEvidence;
   readonly routeCount: number;
   readonly operationCount: number;
   readonly checks: readonly string[];
@@ -78,6 +80,39 @@ interface PublicApiCompatibilityGovernanceEvidence {
   readonly consumerContractReadinessClaim: false;
   readonly releaseCompatibilityReadinessClaim: false;
   readonly externalDeveloperPlatformReadinessClaim: false;
+  readonly stagingReadinessClaim: false;
+  readonly productionReadinessClaim: false;
+  readonly deploymentReadinessClaim: false;
+  readonly socReadinessClaim: false;
+  readonly iso27001CertificationClaim: false;
+  readonly fullDevReadinessClaim: false;
+  readonly fullReactParityClaim: false;
+  readonly usf133ClosureClaim: false;
+}
+
+interface GraphqlGeneratedClientDispositionEvidence {
+  readonly issueId: "USF-214";
+  readonly graphqlPostureClassified: "out-of-scope-with-rationale";
+  readonly federationPostureClassified: "out-of-scope-with-rationale";
+  readonly generatedSdkPostureClassified: "deferred-with-owner";
+  readonly generatedClientPostureClassified: "deferred-with-owner";
+  readonly externalDeveloperSurfacePostureClassified: "deferred-with-owner";
+  readonly clientDistributionPostureClassified: "deferred-with-owner";
+  readonly noGraphqlRuntimeRouteClaim: true;
+  readonly noFederationRuntimeClaim: true;
+  readonly noGeneratedClientArtifactClaim: true;
+  readonly tenantBoundaryRecorded: true;
+  readonly accessBoundaryRecorded: true;
+  readonly auditBoundaryRecorded: true;
+  readonly secretBoundaryRecorded: true;
+  readonly privacyBoundaryRecorded: true;
+  readonly syntheticDataBoundaryRecorded: true;
+  readonly nonEquivalenceBoundaryRecorded: true;
+  readonly graphqlFederationReadinessClaim: false;
+  readonly generatedClientReadinessClaim: false;
+  readonly generatedSdkReadinessClaim: false;
+  readonly externalDeveloperPlatformReadinessClaim: false;
+  readonly publicApiReadinessClaim: false;
   readonly stagingReadinessClaim: false;
   readonly productionReadinessClaim: false;
   readonly deploymentReadinessClaim: false;
@@ -195,6 +230,52 @@ function assertPublicApiCompatibilityGovernance(
   return compatibilitySnapshotHash();
 }
 
+function assertGraphqlGeneratedClientDisposition(
+  openapi: ReturnType<typeof buildOpenApiDocument>,
+): GraphqlGeneratedClientDispositionEvidence {
+  const boundary = openapi["x-usf-boundary"];
+  assert(boundary.publicApiReadinessClaim === false, "public API readiness claim must be false");
+  assert(boundary.productionReadinessClaim === false, "production readiness claim must be false");
+  const paths = Object.keys(openapi.paths);
+  assert(!paths.some((path) => path.toLowerCase().includes("graphql")), "GraphQL route claimed");
+  assert(
+    !JSON.stringify(openapi).toLowerCase().includes("federation readiness claim"),
+    "federation readiness must not be claimed",
+  );
+  return {
+    issueId: "USF-214",
+    graphqlPostureClassified: "out-of-scope-with-rationale",
+    federationPostureClassified: "out-of-scope-with-rationale",
+    generatedSdkPostureClassified: "deferred-with-owner",
+    generatedClientPostureClassified: "deferred-with-owner",
+    externalDeveloperSurfacePostureClassified: "deferred-with-owner",
+    clientDistributionPostureClassified: "deferred-with-owner",
+    noGraphqlRuntimeRouteClaim: true,
+    noFederationRuntimeClaim: true,
+    noGeneratedClientArtifactClaim: true,
+    tenantBoundaryRecorded: true,
+    accessBoundaryRecorded: true,
+    auditBoundaryRecorded: true,
+    secretBoundaryRecorded: true,
+    privacyBoundaryRecorded: true,
+    syntheticDataBoundaryRecorded: true,
+    nonEquivalenceBoundaryRecorded: true,
+    graphqlFederationReadinessClaim: false,
+    generatedClientReadinessClaim: false,
+    generatedSdkReadinessClaim: false,
+    externalDeveloperPlatformReadinessClaim: false,
+    publicApiReadinessClaim: false,
+    stagingReadinessClaim: false,
+    productionReadinessClaim: false,
+    deploymentReadinessClaim: false,
+    socReadinessClaim: false,
+    iso27001CertificationClaim: false,
+    fullDevReadinessClaim: false,
+    fullReactParityClaim: false,
+    usf133ClosureClaim: false,
+  };
+}
+
 export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
   checkOpenApiContract();
   const runtime = createDevRuntime();
@@ -212,6 +293,10 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
     const snapshotHash = assertPublicApiCompatibilityGovernance(openapi);
     checks.push(
       "USF-213 public API compatibility scope and release governance are bounded by a deterministic local snapshot",
+    );
+    const graphqlGeneratedClientDisposition = assertGraphqlGeneratedClientDisposition(openapi);
+    checks.push(
+      "USF-214 GraphQL federation and generated client posture is classified with explicit non-equivalence boundaries",
     );
 
     for (const route of API_ROUTE_CONTRACTS) {
@@ -479,6 +564,8 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
         fullReactParityClaim: false,
         usf133ClosureClaim: false,
       },
+      graphqlGeneratedClientDispositionProven: true,
+      graphqlGeneratedClientDispositionEvidence: graphqlGeneratedClientDisposition,
       routeCount: API_ROUTE_CONTRACTS.length,
       operationCount: countOperations(openapi),
       checks,
