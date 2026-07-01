@@ -4823,6 +4823,32 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-147-files-storage-enterprise-proof-depth",
+      "mappedType": "source-issue-control-gate",
+      "controlPurpose": "Map USF-147 enterprise files and object-storage depth controls for MinIO reconciliation, ClamAV scanner boundary, metadata RLS, presigned URL posture, derived objects, versioning, backup and restore, DLP, KMS, residency, quotas, object lock, and evidence package posture.",
+      "riskTreated": "Deferred files and storage depth could be hidden behind the core files proof, allowing unsupported live object-store, scanner, DLP, KMS, backup, production, or certification claims.",
+      "assetServiceAffected": "files metadata; MinIO composed-test provider; ClamAV composed-test provider; file service; object storage and scanner proof commands",
+      "owner": "platform-files-foundation",
+      "riskOwner": "platform-files-risk-owner",
+      "controlOwner": "platform-files-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-147; laneIssue=USF-190; currentEvidence=evidence-usf-147-files-storage-enterprise-proof-depth; deferredBoundary=live object-store, live scanner, DLP, KMS, object backup/DR, presigned URL runtime, production residency, object lock, and quotas; noRuntimeCodeImported=true",
+      "evidenceSource": "docs/architecture/files-storage-enterprise-proof-depth-matrix.json; packages/proof/src/files-storage-proof.ts; tools/validate-parity/validate-files.py",
+      "validationCommand": "make files-proof; python3 tools/validate-parity/validate-files.py all --json",
+      "deferredReason": "riskStatement=Files and object-storage enterprise depth needs bounded proof without implying live object-store, scanner, backup, KMS, or production readiness.; threatFailureScenario=Core files proof, MinIO composed-test proof, or ClamAV composed-test proof is mistaken for storage readiness beyond bounded local proof.; affectedAssetService=files metadata and object storage boundary; impact=critical; likelihood=medium; owner=platform-files-foundation; treatment=mitigate with bounded local proof, explicit reclassification, and validator-enforced non-claims; reviewDate=2026-09-30; followUpIssue=USF-193 for environment-promotion semantics only; exceptionOwner=platform-files-risk-owner; exceptionReason=live provider, backup/DR, KMS, DLP, and production operations remain outside USF-147 bounded local proof; compensatingControl=validate-files plus files-storage-enterprise-proof-depth-matrix; exceptionExpiry=2026-09-30; exceptionValidationCommand=python3 tools/validate-parity/validate-files.py all --json",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -6960,6 +6986,30 @@
       ],
       "prOrMergeSha": "5bcb10f4c722dabb3d304f781ae6c92e466ecaeb",
       "retentionPosture": "Retain committed proof code, config-secrets enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw secret value, credential, token, raw endpoint, provider payload, or production data is retained."
+    },
+    {
+      "id": "evidence-usf-147-files-storage-enterprise-proof-depth",
+      "proofResult": "proof:files",
+      "whatWasProven": "make files-proof is the command-pinned bounded local Compose Postgres proof for USF-147. It proves files table RLS and FORCE RLS, tenant isolation, missing tenant fail-closed behaviour, RLS insert denial, created_at immutability, legal-hold purge blocking, object-key uniqueness, MinIO composed-test provider registry reconciliation, ClamAV composed-test scanner boundary reconciliation, and explicit files/storage enterprise-depth reclassification boundaries.",
+      "whatWasNotProven": "No live S3 or provider-managed object-store readiness, presigned URL runtime readiness, live scanner readiness, DLP readiness, KMS custody, object backup/restore/DR readiness, production data residency, object lock/WORM readiness, storage quota runtime, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure is proven.",
+      "runtimeMode": "compose-local-proof-plus-composed-provider-registry-reconciliation",
+      "providerMode": "local-composed-real-service-with-minio-and-clamav-composed-test-reference",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#minio; spec/instances/compose-service/service-catalogue.json#clamav; spec/instances/compose-service/service-catalogue.json#postgres",
+      "adapterProviderId": "object-storage-minio-composed-test; file-scan-clamav-composed-test; files-postgres-rls-proof-boundary",
+      "validationCommand": "make files-proof; python3 tools/validate-parity/validate-files.py all --json",
+      "commandPin": "tsx packages/proof/src/files-storage-proof.ts",
+      "commitPin": "a63949c37778654c4f007de901a85446dcf1016c",
+      "issueLinks": [
+        "USF-147",
+        "USF-190",
+        "USF-184",
+        "USF-192",
+        "USF-133",
+        "USF-200",
+        "USF-211"
+      ],
+      "prOrMergeSha": "a63949c37778654c4f007de901a85446dcf1016c",
+      "retentionPosture": "Retain committed proof code, files-storage enterprise matrix, validator rules, planted defects, PR validation output, and Linear reconciliation comments; no raw file content, object key, malware payload, credential, token, raw endpoint, provider payload, or production data is retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -8798,6 +8848,32 @@
       "failClosedBehaviour": "validate-config USF-CONFIG-016 through USF-CONFIG-022 block missing matrix, missing proof coverage, missing enterprise linkage, unsafe OpenBao reconciliation, and readiness overclaims.",
       "monitoringAuditEvidence": "make config-proof output and validator findings only; no live monitoring backend, no raw secret values, no provider payload, no production incident claim.",
       "residualRisk": "Live secret-manager operation, KMS custody, production DB-backed config store, distributed reload, production residency governance, production config migration, environment promotion, and live-provider operation remain non-claims."
+    },
+    {
+      "id": "threat-usf-147-files-storage-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-147 files/storage enterprise proof depth",
+      "trustBoundary": "file metadata is authoritative and tenant-scoped; object and scanner providers remain bounded local composed-test unless separately proven",
+      "tenantBoundary": "tenant-scoped metadata RLS, object namespace, file service PDP, MinIO provider boundary, and scanner decisions must not allow cross-tenant access",
+      "credentialBoundary": "provider credentials remain local placeholder or no-credential posture; secret refs and endpoint refs only; no raw credentials in logs, proof, audit, or status",
+      "dataClassification": "restricted and security-sensitive synthetic file metadata; no production file payloads",
+      "abuseCases": [
+        "core files proof overclaimed as live object-store readiness",
+        "ClamAV proof overclaimed as live scanner or DLP readiness",
+        "object backup proof inferred from DB backup proof",
+        "KMS or production residency inferred from posture fields"
+      ],
+      "failureModes": [
+        "provider unavailable",
+        "readiness timeout",
+        "cross-tenant object access attempt",
+        "scanner unavailable",
+        "legal hold bypass attempt",
+        "object key leakage"
+      ],
+      "failClosedBehaviour": "deny or quarantine unsafe file operations, return unavailable provider state, block purge on legal hold, and preserve non-claims until separate proof exists",
+      "monitoringAuditEvidence": "files proof, files validator, file audit events, MinIO and ClamAV proof summaries, and enterprise evidence rows must remain value-free and redacted",
+      "residualRisk": "local composed proof does not prove live provider, staging, production, SOC, ISO, DLP, KMS, backup/DR, or enterprise production readiness"
     }
   ],
   "sdkDependencyGovernance": [
@@ -15995,6 +16071,34 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "incident-usf-147-files-storage-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-147 files/storage incident and vulnerability evidence posture",
+      "posture": [
+        "incidentDetectionHook=local-file-denial-quarantine-integrity-and-provider-unavailable-evidence-only",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-files-risk-owner",
+        "vulnerabilityAdvisoryReview=MinIO-ClamAV-clamscan-and-file-provider-review-required-before-stronger-readiness",
+        "dependencyUpdatePosture=no-new-sdk-or-provider-dependency-added-by-USF-147",
+        "correctiveActionEvidence=PR-validation-output-and-planted-defects"
+      ],
+      "evidenceSource": "docs/architecture/files-storage-enterprise-proof-depth-matrix.json",
+      "validationCommand": "python3 tools/validate-parity/validate-files.py all --json",
+      "deferredReason": "Production file incident hooks, paging, escalation execution, patch SLA evidence, malware signature freshness, DLP response, KMS incident evidence, and post-incident evidence remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "privacyDataMinimisationPosture": [
@@ -19027,6 +19131,35 @@
       "evidenceSource": "packages/proof/src/config-secrets-proof.ts",
       "validationCommand": "make config-proof",
       "deferredReason": "Customer secret-manager privacy posture, production data residency, DSR, legal hold, custom retention, and live provider privacy remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-147-files-storage-enterprise-depth",
+      "targetType": "source-issue-control-gate",
+      "target": "USF-147 proof:files synthetic file and object data boundary",
+      "posture": [
+        "dataOrigin=deterministic-synthetic-only",
+        "piiPosture=no-production-pii-or-customer-data",
+        "dataClassification=restricted-file-metadata-and-security-sensitive-synthetic-provider-refs",
+        "redactionPolicy=no-object-keys-raw-file-content-malware-payloads-credentials-or-provider-errors-in-proof-output",
+        "retentionPurgePosture=proof-output-summary-and-committed-metadata-only",
+        "legalHoldRelevance=local-legal-hold-purge-blocking-proof-only",
+        "dataResidencyCrossBorderBoundary=local-compose-only-no-production-residency-claim"
+      ],
+      "evidenceSource": "packages/proof/src/files-storage-proof.ts",
+      "validationCommand": "make files-proof",
+      "deferredReason": "Customer file payload privacy posture, live provider privacy, DLP privacy, production data residency, DSR, custom retention, and object backup/DR privacy remain non-claims.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

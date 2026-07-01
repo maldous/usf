@@ -1,0 +1,12 @@
+{
+  "description": "USF-147 proven control lacks proof checks.",
+  "expectedRule": "USF-FILES-018",
+  "mutation": {
+    "usf147ControlSet": {
+      "id": "minio-runtime-binding-reconciliation",
+      "values": {
+        "proofChecks": "__DELETE__"
+      }
+    }
+  }
+}

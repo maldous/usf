@@ -176,8 +176,8 @@
         "packages/files",
         "services (minio/clamav)"
       ],
-      "behaviour_summary": "Tenant-scoped file information assets: authoritative file metadata (RLS), opaque non-guessable object keys, upload validation (size/content-type/checksum, fail-closed), PDP-gated download with scan/lifecycle gate, soft delete/restore, legal-hold purge-block, integrity (checksum + metadata hash + tamper detect), provider config via secret refs, value-free file audit. Live MinIO/S3, ClamAV, presigned URLs, derived objects, versioning, backup/DR, DLP deferred.",
-      "usf_status": "partial",
+      "behaviour_summary": "Tenant-scoped file information assets: authoritative file metadata with RLS, opaque non-guessable object keys, upload validation, PDP-gated download with scan/lifecycle gate, soft delete/restore, legal-hold purge-block, integrity proof, provider config via secret refs, value-free file audit, bounded MinIO composed-test reconciliation, bounded ClamAV composed-test scanner reconciliation, and explicit reclassification of stronger storage-depth controls.",
+      "usf_status": "migrated",
       "usf_paths": [
         "capabilities/files (file-service)",
         "packages/core (file/object model + object-key safety + validation + integrity)",
@@ -192,16 +192,17 @@
         "tests/apps/files-api.test.ts"
       ],
       "usf_proofs": [
-        "packages/proof/src/files-storage-proof.ts (make files-proof: files RLS isolation, FORCE RLS, legal-hold purge-block, object-key uniqueness)",
-        "packages/proof/src/db-rls-isolation-proof.ts"
+        "packages/proof/src/files-storage-proof.ts (make files-proof: files RLS isolation, FORCE RLS, legal-hold purge-block, object-key uniqueness, USF-147 MinIO/ClamAV reconciliation and enterprise depth reclassification)",
+        "packages/proof/src/clamav-composed-proof.ts (profile-gated bounded local ClamAV scanner proof)",
+        "spec/instances/runtime-proof/runtime-application-compose-parity.json (MinIO composed-test runtime provider proof boundary)"
       ],
       "semantic_authority": "known",
       "source_use_disposition": "replace",
-      "blocker": "USF-147",
-      "blocking_foundation_readiness": true,
+      "blocker": "none for bounded USF-147 source scope; stronger readiness claims require separate source issues",
+      "blocking_foundation_readiness": false,
       "domain_authorised": true,
-      "evidence": "files-and-object-storage standard docs/architecture/files-and-object-storage-standard.md; source-use docs/architecture/parity-files-storage-source-use-disposition-matrix.md; validate-files (13 rules + planted defects); make files-proof pass; USF-146; deferred depth USF-147.",
-      "retry_condition": "Deferred files/storage depth (live MinIO/S3 + ClamAV + presigned URLs, DB-backed file metadata runtime adapter, derived objects, object versioning, backup/restore/DR, DLP/exfiltration, encryption/KMS, quotas) implemented and proven under USF-147; then re-classify migrated."
+      "evidence": "USF-146 core files proof plus USF-147 bounded enterprise proof depth: files-storage enterprise proof-depth matrix, files/object storage standard, source-use matrix, validate-files USF-FILES-001..020 with planted defects, make files-proof, enterprise evidence rows, MinIO composed-test reconciliation, and ClamAV composed-test reconciliation. Non-claims preserve no live object-store, live scanner, backup/restore readiness, KMS, DLP, staging/production readiness, SOC, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure.",
+      "retry_condition": "Live S3 or provider-managed object store readiness, production presigned URL runtime, derived object generation, provider object versioning, object-store backup/restore/DR, DLP, KMS custody, production data residency, quotas, temporary upload cleanup, object lock/WORM, environment-promotion readiness, and full files/storage parity require separate source issues and merged proof before stronger claims."
     },
     {
       "react_item_id": "jobs-workflows",
