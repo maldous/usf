@@ -107,6 +107,24 @@ Representative proof commands:
 
 `make foundation` runs the required representative proof set through the existing `make verify` compatibility target. If a specific proof fails, rerun the failing proof directly after checking the troubleshooting section below.
 
+## Test-Readiness Command Boundary
+
+The later test-readiness track adds current-state commands without changing the
+dev-readiness evidence recorded by USF-226:
+
+| Command | Purpose |
+| ------- | ------- |
+| `make test-ready` | Runs the bounded local test-readiness command gate. |
+| `make test-composed` | Runs the composed semantic harness and deterministic fixture lifecycle proof. |
+| `make test-assurance` | Runs the bounded local SonarQube zero-open-issue proof. |
+
+These commands are documented in
+`docs/architecture/test-readiness-command-surface-and-ci-gate.md`. They do not
+retroactively change the USF-226 dev-readiness claim, and they do not claim
+staging readiness, production readiness, deployment readiness, live-provider
+readiness, SOC readiness, ISO certification, enterprise production readiness,
+product UI readiness, browser E2E readiness, or full React product parity.
+
 ## Safe Local Configuration
 
 USF local proof commands use synthetic fixtures and local placeholder credentials. No real provider credentials, real tenant data, production data, staging data, or live-provider access are required.

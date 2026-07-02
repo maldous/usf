@@ -3,7 +3,9 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := verify
 
 .PHONY: \
-	help commands setup foundation dev-ready assurance evidence \
+	help commands setup foundation dev-ready test-ready test test-composed test-assurance \
+	test-readiness-validate test-readiness-semantic test-readiness-fixtures \
+	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
 	verify install dev dev-smoke dev.work \
 	runtime-proof runtime-proof-in-memory runtime-proof-compose runtime-validate \
@@ -31,6 +33,8 @@ help:
 		'  make setup                 Install exact pinned dependencies (alias: install)' \
 		'  make foundation            Run the full local foundation gate (alias: verify)' \
 		'  make dev-ready             Run the developer and AI-agent handover gate (alias: verify)' \
+		'  make test-ready            Run the bounded test-readiness local/CI gate' \
+		'  make test                  Alias for test-ready' \
 		'' \
 		'Current-state validators:' \
 		'  make validate-foundation   Full local foundation gate (compatibility: verify)' \
@@ -42,6 +46,8 @@ help:
 		'  make runtime-proof         API and worker runtime proof' \
 		'  make providers-proof       Provider adapter proof' \
 		'  make test-compose          Generated Compose validation and smoke' \
+		'  make test-composed         Composed semantic harness and deterministic fixtures' \
+		'  make test-assurance        Bounded local SonarQube zero-open-issue proof' \
 		'  make sonar-zero-issue-proof  Bounded local SonarQube zero-open-issue proof' \
 		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
 		'' \
@@ -54,6 +60,26 @@ setup: install
 foundation: verify
 
 dev-ready: verify
+
+test-ready:
+	corepack pnpm test-readiness
+
+test: test-ready
+
+test-composed:
+	corepack pnpm test-readiness:composed
+
+test-assurance:
+	corepack pnpm test-readiness:assurance
+
+test-readiness-validate:
+	corepack pnpm test-readiness:validate
+
+test-readiness-semantic:
+	corepack pnpm test-readiness:semantic
+
+test-readiness-fixtures:
+	corepack pnpm test-readiness:fixtures
 
 validate-foundation: verify
 

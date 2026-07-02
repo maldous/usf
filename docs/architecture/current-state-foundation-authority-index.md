@@ -27,6 +27,7 @@ Future work should start with these current artefacts:
 | Proofs | `packages/proof/`, `spec/instances/runtime-proof/`, proof scripts in `package.json` and `Makefile` | Provides executable evidence for bounded local and composed foundation behaviour. |
 | Enterprise evidence | `spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json`, `docs/architecture/enterprise-evidence-model.md` | Organises risk, control, evidence, exception, and non-claim posture. |
 | Dev handover | `README.md#developer-quickstart`, `docs/architecture/dev-readiness-validation-and-handover.md`, `docs/architecture/dev-readiness-validation-and-handover.json` | Gives the current developer and AI-agent bootstrap, validation, and contribution path. |
+| Test-readiness command gate | `docs/architecture/test-readiness-command-surface-and-ci-gate.md`, `docs/architecture/test-readiness-command-surface-and-ci-gate.json`, `make test-ready` | Routes current test-readiness validation through composed semantic proof, deterministic fixture proof, and bounded assurance proof without replacing USF-234 final acceptance. |
 | Baseline evidence | `docs/architecture/dev-ready-foundation-baseline-tag.md`, `docs/architecture/dev-ready-foundation-baseline-tag.json` | Records the immutable `v2-foundation` baseline tag and its governance exception. |
 
 ## Reclassified Lineage And Scaffolding

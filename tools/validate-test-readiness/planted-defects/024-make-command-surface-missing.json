@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-TEST-READINESS-024",
+  "makefileTextReplace": [
+    {
+      "old": "test-ready:",
+      "new": "test-ready-missing:"
+    }
+  ]
+}

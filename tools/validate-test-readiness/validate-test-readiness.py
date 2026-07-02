@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -22,9 +23,11 @@ ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = Path("docs/architecture/test-environment-service-contract.json")
 HARNESS_PATH = Path("docs/architecture/composed-semantic-test-harness.json")
 LIFECYCLE_PATH = Path("docs/architecture/deterministic-test-fixture-lifecycle.json")
+COMMAND_SURFACE_PATH = Path("docs/architecture/test-readiness-command-surface-and-ci-gate.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 ENTERPRISE_MODEL_PATH = Path("spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json")
 PACKAGE_PATH = Path("package.json")
+MAKEFILE_PATH = Path("Makefile")
 PLANTED_DEFECT_DIR = Path("tools/validate-test-readiness/planted-defects")
 
 RULES = {
@@ -49,6 +52,13 @@ RULES = {
     "USF-TEST-READINESS-019": ("blocking", "deterministic fixture lifecycle repeatability evidence is incomplete"),
     "USF-TEST-READINESS-020": ("blocking", "deterministic fixture lifecycle cleanup teardown evidence is incomplete"),
     "USF-TEST-READINESS-021": ("blocking", "deterministic fixture lifecycle preserves insufficient non-claims or overclaims readiness"),
+    "USF-TEST-READINESS-022": ("blocking", "test-readiness command surface and CI gate evidence is missing or invalid"),
+    "USF-TEST-READINESS-023": ("blocking", "test-readiness package script command surface is missing or stale"),
+    "USF-TEST-READINESS-024": ("blocking", "test-readiness Make command surface is missing or stale"),
+    "USF-TEST-READINESS-025": ("blocking", "test-readiness CI/local gate alignment evidence is incomplete"),
+    "USF-TEST-READINESS-026": ("blocking", "test-readiness Sonar zero-issue gate preservation evidence is incomplete"),
+    "USF-TEST-READINESS-027": ("blocking", "test-readiness command surface preserves insufficient non-claims or overclaims readiness"),
+    "USF-TEST-READINESS-028": ("blocking", "test-readiness command surface lacks enterprise evidence linkage"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -57,6 +67,13 @@ HARNESS_COMMAND = "corepack pnpm test-readiness:semantic"
 HARNESS_SCRIPT = "tsx packages/proof/src/composed-semantic-test-harness-proof.ts"
 LIFECYCLE_COMMAND = "corepack pnpm test-readiness:fixtures"
 LIFECYCLE_SCRIPT = "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
+TEST_READINESS_COMMAND = "corepack pnpm test-readiness"
+TEST_READINESS_SCRIPT = "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:assurance"
+TEST_READINESS_COMPOSED_COMMAND = "corepack pnpm test-readiness:composed"
+TEST_READINESS_COMPOSED_SCRIPT = "pnpm test-readiness:semantic && pnpm test-readiness:fixtures"
+TEST_READINESS_ASSURANCE_COMMAND = "corepack pnpm test-readiness:assurance"
+TEST_READINESS_ASSURANCE_SCRIPT = "pnpm proof:assurance:sonarqube"
+SONAR_COMMAND = "corepack pnpm proof:assurance:sonarqube"
 REQUIRED_HARNESS_SERVICE_IDS = {
     "postgres",
     "keycloak-db",
@@ -237,6 +254,54 @@ def apply_lifecycle_defect(lifecycle: dict[str, Any] | None, defect: dict[str, A
     return out
 
 
+def apply_command_surface_defect(command_surface: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeCommandSurface"):
+        return None
+    if command_surface is None:
+        return None
+    out = copy.deepcopy(command_surface)
+    for key, value in defect.get("commandSurfaceSet", {}).items():
+        out[key] = value
+    for key in defect.get("commandSurfaceDrop", []):
+        out.pop(key, None)
+    for command_id in defect.get("commandSurfaceDropCommandIds", []):
+        out["canonicalCommands"] = [
+            row for row in out.get("canonicalCommands", []) if row.get("id") != command_id
+        ]
+    for script_id in defect.get("commandSurfaceDropPackageScriptIds", []):
+        out["packageScripts"] = [
+            row for row in out.get("packageScripts", []) if row.get("id") != script_id
+        ]
+    for target in defect.get("commandSurfaceDropMakeTargets", []):
+        out["makeTargets"] = [
+            row for row in out.get("makeTargets", []) if row.get("target") != target
+        ]
+    for section in defect.get("commandSurfaceEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    for key, value in defect.get("commandSurfaceCiLocalSet", {}).items():
+        out.setdefault("ciLocalAlignment", {})[key] = value
+    for key in defect.get("commandSurfaceCiLocalDrop", []):
+        out.setdefault("ciLocalAlignment", {}).pop(key, None)
+    for key, value in defect.get("commandSurfaceSonarSet", {}).items():
+        out.setdefault("sonarGatePreservation", {})[key] = value
+    for key in defect.get("commandSurfaceSonarDrop", []):
+        out.setdefault("sonarGatePreservation", {}).pop(key, None)
+    composed_patch = defect.get("commandSurfaceComposedExecutionPatch", {})
+    if isinstance(composed_patch, dict):
+        target = out.get("composedExecution")
+        if isinstance(target, dict):
+            for key in composed_patch.get("drop", []):
+                target.pop(key, None)
+            for key, value in composed_patch.get("set", {}).items():
+                target[key] = value
+    if defect.get("commandSurfaceDropNonClaims"):
+        dropped = set(defect.get("commandSurfaceDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("commandSurfaceAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["commandSurfaceAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -244,6 +309,15 @@ def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dic
         scripts.pop(key, None)
     for key, value in defect.get("packageScriptSet", {}).items():
         scripts[key] = value
+    return out
+
+
+def apply_makefile_defect(makefile: str, defect: dict[str, Any]) -> str:
+    out = makefile
+    for patch in defect.get("makefileTextReplace", []):
+        out = out.replace(patch.get("old", ""), patch.get("new", ""))
+    for text in defect.get("makefileTextDrop", []):
+        out = out.replace(text, "")
     return out
 
 
@@ -255,13 +329,19 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     harness = apply_harness_defect(harness, defect)
     lifecycle = read_json(LIFECYCLE_PATH) if (ROOT / LIFECYCLE_PATH).exists() else None
     lifecycle = apply_lifecycle_defect(lifecycle, defect)
+    command_surface = read_json(COMMAND_SURFACE_PATH) if (ROOT / COMMAND_SURFACE_PATH).exists() else None
+    command_surface = apply_command_surface_defect(command_surface, defect)
+    makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
+    makefile = apply_makefile_defect(makefile, defect)
     return {
         "contract": contract,
         "harness": harness,
         "lifecycle": lifecycle,
+        "commandSurface": command_surface,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "enterpriseModel": read_json(ENTERPRISE_MODEL_PATH),
         "package": apply_package_defect(read_json(PACKAGE_PATH), defect),
+        "makefile": makefile,
     }
 
 
@@ -369,17 +449,18 @@ def check_enterprise_refs_for_artifact(
     artifact: dict[str, Any] | None,
     path: Path,
     enterprise_model: dict[str, Any],
+    rule_id: str = "USF-TEST-READINESS-009",
 ) -> None:
     if not isinstance(artifact, dict):
         return
     refs = artifact.get("enterpriseEvidenceRefs")
     if not isinstance(refs, dict):
-        F.add("USF-TEST-READINESS-009", str(path), "enterpriseEvidenceRefs must be present")
+        F.add(rule_id, str(path), "enterpriseEvidenceRefs must be present")
         return
     for section in ENTERPRISE_REF_SECTIONS:
         values = refs.get(section)
         if not isinstance(values, list) or not values:
-            F.add("USF-TEST-READINESS-009", f"{path}#{section}", "enterprise evidence ref is missing")
+            F.add(rule_id, f"{path}#{section}", "enterprise evidence ref is missing")
             continue
         model_ids = {
             row.get("id")
@@ -388,7 +469,7 @@ def check_enterprise_refs_for_artifact(
         }
         for value in values:
             if value not in model_ids:
-                F.add("USF-TEST-READINESS-009", f"{path}#{section}", f"missing enterprise row {value}")
+                F.add(rule_id, f"{path}#{section}", f"missing enterprise row {value}")
 
 
 def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
@@ -409,6 +490,13 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         state["lifecycle"],
         LIFECYCLE_PATH,
         state["enterpriseModel"],
+    )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["commandSurface"],
+        COMMAND_SURFACE_PATH,
+        state["enterpriseModel"],
+        "USF-TEST-READINESS-028",
     )
 
 
@@ -589,6 +677,153 @@ def check_lifecycle(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-021", str(LIFECYCLE_PATH), "fixture lifecycle overclaims test readiness")
 
 
+def _row_by_id(rows: Any, key: str) -> dict[str, dict[str, Any]]:
+    if not isinstance(rows, list):
+        return {}
+    return {
+        str(row.get(key)): row
+        for row in rows
+        if isinstance(row, dict) and row.get(key) is not None
+    }
+
+
+def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
+    command_surface = state["commandSurface"]
+    if not isinstance(command_surface, dict):
+        F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), "command surface file is missing")
+        return
+    for key in (
+        "id",
+        "issueId",
+        "parentIssueId",
+        "dependsOnIssueIds",
+        "testEnvironmentContract",
+        "composedSemanticHarness",
+        "deterministicFixtureLifecycle",
+        "canonicalCommands",
+        "packageScripts",
+        "makeTargets",
+        "composedExecution",
+        "ciLocalAlignment",
+        "sonarGatePreservation",
+        "validationCommands",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in command_surface:
+            F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), f"missing top-level field {key}")
+    if command_surface.get("issueId") != "USF-238" or command_surface.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), "issue linkage must be USF-238 under USF-234")
+    depends = set(command_surface.get("dependsOnIssueIds", []))
+    if not {"USF-235", "USF-236", "USF-237"}.issubset(depends):
+        F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), "command surface must depend on USF-235, USF-236, and USF-237")
+    expected_links = {
+        "testEnvironmentContract": str(CONTRACT_PATH),
+        "composedSemanticHarness": str(HARNESS_PATH),
+        "deterministicFixtureLifecycle": str(LIFECYCLE_PATH),
+    }
+    for key, expected in expected_links.items():
+        if command_surface.get(key) != expected:
+            F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), f"{key} must link {expected}")
+
+    command_rows = _row_by_id(command_surface.get("canonicalCommands"), "id")
+    expected_commands = {
+        "test-readiness-full": TEST_READINESS_COMMAND,
+        "test-readiness-composed": TEST_READINESS_COMPOSED_COMMAND,
+        "test-readiness-assurance": TEST_READINESS_ASSURANCE_COMMAND,
+        "test-readiness-semantic": HARNESS_COMMAND,
+        "test-readiness-fixtures": LIFECYCLE_COMMAND,
+        "test-readiness-validator": "corepack pnpm test-readiness:validate",
+    }
+    for command_id, expected in expected_commands.items():
+        row = command_rows.get(command_id)
+        if not row or row.get("command") != expected:
+            F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#canonicalCommands.{command_id}", "canonical command is missing or stale")
+        elif command_id in {"test-readiness-full", "test-readiness-composed"} and row.get("requiresComposedServices") is not True:
+            F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#canonicalCommands.{command_id}", "composed command must require composed services")
+        elif row.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-027", f"{COMMAND_SURFACE_PATH}#canonicalCommands.{command_id}", "canonical command must forbid in-memory service substitutes")
+
+    composed = command_surface.get("composedExecution")
+    if not isinstance(composed, dict):
+        F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#composedExecution", "composedExecution must be present")
+    else:
+        if composed.get("composeTarget") != COMPOSE_TARGET:
+            F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#composedExecution", "composed execution must use canonical test Compose target")
+        if composed.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-027", f"{COMMAND_SURFACE_PATH}#composedExecution", "composed execution must forbid in-memory service substitutes")
+        commands = set(composed.get("requiredCommands", []))
+        for expected in (HARNESS_COMMAND, LIFECYCLE_COMMAND, TEST_READINESS_COMPOSED_COMMAND):
+            if expected not in commands:
+                F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#composedExecution.requiredCommands", f"missing command {expected}")
+
+    validation_commands = set(command_surface.get("validationCommands", []))
+    for expected in (
+        TEST_READINESS_COMMAND,
+        TEST_READINESS_COMPOSED_COMMAND,
+        TEST_READINESS_ASSURANCE_COMMAND,
+        "make test-ready",
+        "make test-composed",
+        "make test-assurance",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    ):
+        if expected not in validation_commands:
+            F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#validationCommands", f"missing validation command {expected}")
+
+    ci = command_surface.get("ciLocalAlignment")
+    if not isinstance(ci, dict):
+        F.add("USF-TEST-READINESS-025", f"{COMMAND_SURFACE_PATH}#ciLocalAlignment", "ciLocalAlignment must be present")
+    else:
+        if ci.get("localCanonicalCommand") != TEST_READINESS_COMMAND:
+            F.add("USF-TEST-READINESS-025", f"{COMMAND_SURFACE_PATH}#ciLocalAlignment", "local canonical command must be test-readiness")
+        if ci.get("makeTarget") != "test-ready":
+            F.add("USF-TEST-READINESS-025", f"{COMMAND_SURFACE_PATH}#ciLocalAlignment", "make target must be test-ready")
+        if ci.get("githubSpecCheckAloneSufficient") is not False:
+            F.add("USF-TEST-READINESS-025", f"{COMMAND_SURFACE_PATH}#ciLocalAlignment", "GitHub spec check alone must not satisfy test readiness")
+        if ci.get("ciEquivalentCommand") != TEST_READINESS_COMMAND:
+            F.add("USF-TEST-READINESS-025", f"{COMMAND_SURFACE_PATH}#ciLocalAlignment", "CI equivalent command must match local canonical command")
+
+    sonar = command_surface.get("sonarGatePreservation")
+    if not isinstance(sonar, dict):
+        F.add("USF-TEST-READINESS-026", f"{COMMAND_SURFACE_PATH}#sonarGatePreservation", "sonarGatePreservation must be present")
+    else:
+        if sonar.get("command") != TEST_READINESS_ASSURANCE_COMMAND or sonar.get("proofCommand") != SONAR_COMMAND:
+            F.add("USF-TEST-READINESS-026", f"{COMMAND_SURFACE_PATH}#sonarGatePreservation", "Sonar proof command must be preserved")
+        if sonar.get("zeroIssueGatePreserved") is not True:
+            F.add("USF-TEST-READINESS-026", f"{COMMAND_SURFACE_PATH}#sonarGatePreservation", "zero-issue gate must be preserved")
+        if sonar.get("evidence") != "docs/architecture/sonarqube-zero-issue-quality-gate-assurance.json":
+            F.add("USF-TEST-READINESS-026", f"{COMMAND_SURFACE_PATH}#sonarGatePreservation", "Sonar evidence path must be linked")
+
+    non_claims = set(command_surface.get("nonClaims", []))
+    missing_non_claims = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing_non_claims:
+        F.add("USF-TEST-READINESS-027", str(COMMAND_SURFACE_PATH), f"missing non-claims: {missing_non_claims}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(command_surface.get("allowedClaims", [])))
+    if bad or command_surface.get("testReadinessClaimAllowed") is not False:
+        F.add("USF-TEST-READINESS-027", str(COMMAND_SURFACE_PATH), "command surface overclaims test readiness")
+
+
+def check_makefile_wiring(F: Findings, makefile: str) -> None:
+    expected_targets = {
+        "test-ready": "corepack pnpm test-readiness",
+        "test-composed": "corepack pnpm test-readiness:composed",
+        "test-assurance": "corepack pnpm test-readiness:assurance",
+        "test-readiness-validate": "corepack pnpm test-readiness:validate",
+        "test-readiness-semantic": "corepack pnpm test-readiness:semantic",
+        "test-readiness-fixtures": "corepack pnpm test-readiness:fixtures",
+    }
+    for target, command in expected_targets.items():
+        pattern = rf"^{re.escape(target)}:\n\t{re.escape(command)}$"
+        if not re.search(pattern, makefile, re.MULTILINE):
+            F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#{target}", "Make target is missing or stale")
+    if not re.search(r"^test:\s+test-ready$", makefile, re.MULTILINE):
+        F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#test", "make test must alias test-ready")
+    for help_text in ("make test-ready", "make test-composed", "make test-assurance"):
+        if help_text not in makefile:
+            F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#help", f"help output missing {help_text}")
+
+
 def check_package_wiring(F: Findings, package: dict[str, Any]) -> None:
     scripts = package.get("scripts", {})
     script = scripts.get("test-readiness:validate")
@@ -601,6 +836,14 @@ def check_package_wiring(F: Findings, package: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-014", "package.json#scripts", "test-readiness:semantic script is missing or stale")
     if scripts.get("test-readiness:fixtures") != LIFECYCLE_SCRIPT:
         F.add("USF-TEST-READINESS-018", "package.json#scripts", "test-readiness:fixtures script is missing or stale")
+    expected_scripts = {
+        "test-readiness": TEST_READINESS_SCRIPT,
+        "test-readiness:composed": TEST_READINESS_COMPOSED_SCRIPT,
+        "test-readiness:assurance": TEST_READINESS_ASSURANCE_SCRIPT,
+    }
+    for key, expected in expected_scripts.items():
+        if scripts.get(key) != expected:
+            F.add("USF-TEST-READINESS-023", f"package.json#scripts.{key}", "test-readiness script is missing or stale")
 
 
 def run_checks(state: dict[str, Any]) -> Findings:
@@ -609,9 +852,11 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_service_inventory(F, state)
     check_harness(F, state)
     check_lifecycle(F, state)
+    check_command_surface(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])
+    check_makefile_wiring(F, state["makefile"])
     return F
 
 
