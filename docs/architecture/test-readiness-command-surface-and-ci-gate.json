@@ -6,7 +6,8 @@
   "dependsOnIssueIds": [
     "USF-235",
     "USF-236",
-    "USF-237"
+    "USF-237",
+    "USF-242"
   ],
   "lifecycleState": "active-test-readiness-command-gate",
   "testReadinessClaimAllowed": false,
