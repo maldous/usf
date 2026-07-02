@@ -1,0 +1,280 @@
+{
+  "id": "current-state-terminology-normalisation-audit",
+  "title": "Current-State Terminology Normalisation Audit",
+  "issueId": "USF-231",
+  "priorAuthority": {
+    "issueId": "USF-230",
+    "paths": [
+      "docs/architecture/current-state-foundation-authority-index.md",
+      "docs/architecture/current-state-foundation-authority-index.json"
+    ]
+  },
+  "purpose": "Classify active command, documentation, validator, proof, and agent-facing terminology after the v2-foundation baseline so current-state aliases can be added without weakening historical compatibility or assurance evidence.",
+  "status": "strategy-input",
+  "inspectedSurfaces": [
+    {
+      "id": "make-command-surface",
+      "paths": [
+        "Makefile"
+      ],
+      "classification": "active-command-surface",
+      "disposition": "USF-232 should add help output and current-state aliases while preserving existing targets."
+    },
+    {
+      "id": "package-scripts",
+      "paths": [
+        "package.json"
+      ],
+      "classification": "active-command-surface",
+      "disposition": "Keep scripts stable for proof and validator wiring; expose clearer Make aliases first."
+    },
+    {
+      "id": "validator-directories",
+      "paths": [
+        "tools/validate-spec/",
+        "tools/validate-bootstrap/",
+        "tools/validate-parity/",
+        "tools/validate-enterprise/",
+        "tools/validate-runtime/",
+        "tools/validate-compose/"
+      ],
+      "classification": "canonical-current-with-compatibility-names",
+      "disposition": "Retain existing validator names. Prefer current-state descriptions and aliases before any future rename."
+    },
+    {
+      "id": "agent-routing",
+      "paths": [
+        "AGENTS.md",
+        "CODEX.md",
+        "docs/architecture/current-state-foundation-authority-index.md",
+        "docs/architecture/current-state-foundation-authority-index.json"
+      ],
+      "classification": "canonical-current",
+      "disposition": "Route future work to current-state authority and treat historical terms as lineage or compatibility."
+    },
+    {
+      "id": "developer-handover",
+      "paths": [
+        "README.md",
+        "docs/architecture/dev-readiness-validation-and-handover.md",
+        "docs/architecture/dev-readiness-validation-and-handover.json"
+      ],
+      "classification": "canonical-current",
+      "disposition": "Update after USF-232 to prefer current-state Make aliases while preserving verify compatibility."
+    },
+    {
+      "id": "historical-matrices-and-closure-docs",
+      "pathsOrPatterns": [
+        "docs/architecture/parity-*",
+        "docs/architecture/complete-react-to-usf-*",
+        "docs/architecture/react-*",
+        "docs/architecture/usf-133-*",
+        "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
+        "docs/architecture/usf-dev-foundation-gap-register.md"
+      ],
+      "classification": "historical-lineage-or-transitional-scaffolding",
+      "disposition": "Retain for audit and source disposition only. Do not treat as future active authority."
+    },
+    {
+      "id": "sonarqube-assurance-proof",
+      "paths": [
+        "docs/architecture/sonarqube-service-semantic-proof-boundary.md",
+        "docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+        "docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
+        "packages/proof/src/sonarqube-composed-proof.ts",
+        "adapters/assurance/src/index.ts"
+      ],
+      "classification": "canonical-current-bounded-assurance",
+      "disposition": "USF-233 should make zero-open-issue proof explicit for the supported local scan scope."
+    }
+  ],
+  "termDispositions": [
+    {
+      "term": "verify",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "decision": "Keep as stable compatibility full gate and add a descriptive current-state alias in USF-232.",
+      "recommendedAliases": [
+        "foundation",
+        "dev-ready"
+      ]
+    },
+    {
+      "term": "repo:validate",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "decision": "Keep package script and expose Make alias validate-evidence in USF-232.",
+      "recommendedAliases": [
+        "validate-evidence"
+      ]
+    },
+    {
+      "term": "enterprise",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "decision": "Keep for enterprise and ISMS-supporting assurance evidence. Add validate-assurance alias where clearer.",
+      "recommendedAliases": [
+        "assurance",
+        "validate-assurance"
+      ]
+    },
+    {
+      "term": "parity",
+      "classification": "compatibility-alias",
+      "activeAuthority": false,
+      "decision": "Keep existing validators and scripts, but describe as foundation coverage validation rather than full React parity.",
+      "recommendedAliases": [
+        "validate-coverage"
+      ]
+    },
+    {
+      "term": "bootstrap",
+      "classification": "compatibility-alias",
+      "activeAuthority": false,
+      "decision": "Keep proof and validator names until replacement authority exists. Prefer foundation-baseline language in docs and aliases.",
+      "recommendedAliases": [
+        "foundation-baseline"
+      ]
+    },
+    {
+      "term": "lane",
+      "classification": "transitional-scaffolding",
+      "activeAuthority": false,
+      "decision": "Retain only in orchestration history and audit evidence. Do not use in new active command names.",
+      "recommendedAliases": []
+    },
+    {
+      "term": "closure-tier",
+      "classification": "transitional-scaffolding",
+      "activeAuthority": false,
+      "decision": "Retain as USF-133 closure gate lineage only. Do not use as a readiness shortcut.",
+      "recommendedAliases": []
+    },
+    {
+      "term": "React parity",
+      "classification": "historical-lineage",
+      "activeAuthority": false,
+      "decision": "Retain in historical matrices and non-claims. Do not present as current product parity.",
+      "recommendedAliases": []
+    },
+    {
+      "term": "../react",
+      "classification": "historical-lineage",
+      "activeAuthority": false,
+      "decision": "Retain as historical source evidence only. Do not copy or mirror runtime/application paths.",
+      "recommendedAliases": []
+    },
+    {
+      "term": "v2-bootstrap",
+      "classification": "historical-lineage",
+      "activeAuthority": false,
+      "decision": "Retain as historical ancestry marker only. Do not introduce current-state names using this token.",
+      "recommendedAliases": []
+    },
+    {
+      "term": "v2-foundation",
+      "classification": "canonical-current-baseline-anchor",
+      "activeAuthority": true,
+      "decision": "Keep only as the exact one-off annotated baseline tag. It is not a general naming exception.",
+      "recommendedAliases": []
+    },
+    {
+      "term": "dev-readiness",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "decision": "Keep when bounded to local developer and AI-agent handover evidence.",
+      "recommendedAliases": [
+        "dev-ready"
+      ]
+    },
+    {
+      "term": "SonarQube assurance",
+      "classification": "canonical-current-bounded-assurance",
+      "activeAuthority": true,
+      "decision": "Keep as bounded local assurance proof. USF-233 should add explicit zero-open-issue proof for supported scan scope.",
+      "recommendedAliases": [
+        "sonar-quality-gate-proof"
+      ]
+    }
+  ],
+  "commandNamingStrategy": {
+    "preserveExistingTargets": true,
+    "firstPassRemovesTargets": false,
+    "recommendedMakeAliases": [
+      {
+        "alias": "setup",
+        "existingTargetOrScript": "install",
+        "purpose": "Frozen dependency install path."
+      },
+      {
+        "alias": "foundation",
+        "existingTargetOrScript": "verify",
+        "purpose": "Full local current-state foundation validation gate."
+      },
+      {
+        "alias": "dev-ready",
+        "existingTargetOrScript": "verify",
+        "purpose": "Developer and AI-agent handover gate."
+      },
+      {
+        "alias": "validate-coverage",
+        "existingTargetOrScript": "parity",
+        "purpose": "Foundation coverage validator suite without implying full React parity."
+      },
+      {
+        "alias": "validate-assurance",
+        "existingTargetOrScript": "enterprise-validate",
+        "purpose": "Enterprise evidence and assurance validator."
+      },
+      {
+        "alias": "validate-evidence",
+        "existingTargetOrScript": "corepack pnpm repo:validate",
+        "purpose": "Repository evidence and governance validation."
+      },
+      {
+        "alias": "sonar-quality-gate-proof",
+        "existingTargetOrScript": "sonarqube-assurance-proof",
+        "purpose": "Bounded local Sonar quality gate proof after USF-233."
+      }
+    ]
+  },
+  "compatibilityRequirements": [
+    "Keep make verify as a stable full local gate.",
+    "Keep make parity and corepack pnpm parity as compatibility aliases for the current validator suite.",
+    "Keep proof:bootstrap and validate-bootstrap until separately replaced with equivalent evidence and validator coverage.",
+    "Keep sonarqube-assurance-proof while adding any clearer Sonar quality gate alias.",
+    "Do not rename validators, proof scripts, or high-conflict command files without updating references, planted defects, docs, and validation wiring in the same issue."
+  ],
+  "executionRecommendations": [
+    {
+      "issueId": "USF-232",
+      "summary": "Add Make help output and current-state aliases for setup, foundation validation, coverage validation, assurance validation, and evidence validation while retaining compatibility targets."
+    },
+    {
+      "issueId": "USF-233",
+      "summary": "Make the bounded local Sonar zero-open-issue quality gate explicit in proof output, evidence artefacts, and validators without broad readiness claims."
+    }
+  ],
+  "preservationCommitments": {
+    "runtimeBehaviourChanged": false,
+    "providerBehaviourChanged": false,
+    "proofCoverageWeakened": false,
+    "validatorsWeakened": false,
+    "plantedDefectsWeakened": false,
+    "historicalLineageRemoved": false,
+    "generatedOutputsChanged": false
+  },
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-react-product-parity"
+  ]
+}

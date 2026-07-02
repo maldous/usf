@@ -632,6 +632,15 @@ permit the use. Historical lineage remains retained evidence, not a shortcut for
 copying source paths, implementation structure, readiness claims, or product
 parity claims.
 
+When a current-state command alias exists, agents SHOULD prefer the current-state
+alias in human-facing instructions and keep the historical command name as an
+explicit compatibility alias. Until a replacement is separately authorised and
+validated, existing command names such as `verify`, `parity`, `proof:bootstrap`,
+`validate-bootstrap`, and Sonar assurance targets remain valid compatibility
+entry points and MUST NOT be treated as full React parity, staging, production,
+deployment, live-provider, SOC, ISO certification, enterprise production, or
+product UI readiness claims.
+
 ## Provider, Environment, Proof, and Report Safety
 
 Agents MUST preserve these safety rules:
