@@ -4,8 +4,16 @@
   "sourceIssue": "USF-220",
   "parentIssue": "USF-133",
   "followUpIssue": "USF-224",
-  "predecessorIssues": ["USF-155", "USF-213", "USF-214"],
-  "relatedIssues": ["USF-184", "USF-192", "USF-193"],
+  "predecessorIssues": [
+    "USF-155",
+    "USF-213",
+    "USF-214"
+  ],
+  "relatedIssues": [
+    "USF-184",
+    "USF-192",
+    "USF-193"
+  ],
   "status": "bounded-disposition-recorded-execution-proof-deferred",
   "owner": "platform-api-foundation",
   "riskOwner": "platform-api-risk-owner",
@@ -217,7 +225,7 @@
     },
     {
       "criterion": "Any new runtime or client claim has proof, validator coverage, and planted defects.",
-      "evidence": "USF-220 makes no new runtime or client readiness claim. The repository records disposition evidence only and validator coverage prevents claim promotion without future proof."
+      "evidence": "USF-220 made no runtime/client readiness claim. USF-224 now records bounded local execution proof and validator coverage, while preserving readiness non-claims and keeping USF-220 as the historical disposition record."
     },
     {
       "criterion": "Non-equivalence boundaries remain explicit.",
@@ -225,7 +233,7 @@
     },
     {
       "criterion": "Enterprise evidence and API matrices are current.",
-      "evidence": "enterpriseEvidenceRefs points to current USF-220 rows; API disposition matrices link USF-224 as the concrete execution-proof follow-up; final reconciliation removes USF-220 as the current blocker only after recording the deferred execution boundary."
+      "evidence": "enterpriseEvidenceRefs points to current USF-220 rows, and successorExecutionProof points to the USF-224 execution artefact and validator rules that now own the bounded local execution proof."
     },
     {
       "criterion": "USF-133 remains open unless separately satisfied.",
@@ -250,5 +258,18 @@
     "graphql-runtime-readiness",
     "federation-readiness",
     "public-api-readiness"
-  ]
+  ],
+  "successorExecutionProof": {
+    "sourceIssue": "USF-224",
+    "artefact": "docs/architecture/generated-client-external-developer-graphql-federation-execution-proof.json",
+    "proofCommand": "corepack pnpm proof:api:graphql-generated-client",
+    "validatorRules": [
+      "USF-API-030",
+      "USF-API-031",
+      "USF-API-032",
+      "USF-API-033",
+      "USF-API-034"
+    ],
+    "nonEquivalenceBoundary": "USF-224 successor proof is bounded local execution evidence only and remains non-equivalent to public package publication, deployed GraphQL service, deployed federation gateway, public API readiness, environment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure."
+  }
 }

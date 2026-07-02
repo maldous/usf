@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-API-030",
+  "mutation": {
+    "file": "packages/proof/src/graphql-generated-client-execution-proof.ts",
+    "replace": {
+      "old": "graphqlRuntimeProofPassed: true",
+      "new": "graphqlRuntimeProofMissing: true"
+    }
+  }
+}

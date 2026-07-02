@@ -1,0 +1,274 @@
+{
+  "id": "generated-client-external-developer-graphql-federation-execution-proof",
+  "title": "Generated Client External Developer GraphQL Federation Execution Proof",
+  "sourceIssue": "USF-224",
+  "parentIssue": "USF-133",
+  "predecessorIssues": [
+    "USF-155",
+    "USF-213",
+    "USF-214",
+    "USF-220"
+  ],
+  "relatedIssues": [
+    "USF-184",
+    "USF-192",
+    "USF-193"
+  ],
+  "status": "bounded-local-execution-proof-present",
+  "owner": "platform-api-foundation",
+  "riskOwner": "platform-api-risk-owner",
+  "controlOwner": "platform-api-control-owner",
+  "riskTreatment": "mitigate-with-bounded-local-proof-and-preserved-non-claims",
+  "reviewDate": "2026-09-30",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json#api",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "apiDispositionMatrix": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+  "deliveryDepthMatrix": "docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json",
+  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "functionalityParityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "proofCommand": "make api-graphql-generated-client-proof",
+  "rawProofCommand": "corepack pnpm proof:api:graphql-generated-client",
+  "proofFile": "packages/proof/src/graphql-generated-client-execution-proof.ts",
+  "validatorCommand": "python3 tools/validate-parity/validate-api.py all --json",
+  "validatorFile": "tools/validate-parity/validate-api.py",
+  "testFile": "tests/packages/proof.test.ts",
+  "issueLinks": [
+    "USF-224",
+    "USF-220",
+    "USF-214",
+    "USF-213",
+    "USF-155",
+    "USF-184",
+    "USF-192",
+    "USF-133"
+  ],
+  "enterpriseEvidenceRefs": [
+    "soa-usf-224-graphql-generated-client-execution-proof",
+    "evidence-usf-224-graphql-generated-client-execution-proof",
+    "threat-usf-224-graphql-generated-client-execution-overclaim",
+    "sdk-usf-224-graphql-js-reference-client",
+    "access-usf-224-graphql-generated-client-execution-boundary",
+    "resilience-usf-224-graphql-generated-client-execution-boundary",
+    "incident-usf-224-graphql-generated-client-execution-boundary",
+    "privacy-usf-224-graphql-generated-client-execution-boundary"
+  ],
+  "sdkDependencyGovernanceRef": "sdk-usf-224-graphql-js-reference-client",
+  "sdkSelection": {
+    "packageName": "graphql",
+    "version": "17.0.1",
+    "officialOrDeFactoStatus": "official-reference-graphql-js-implementation",
+    "licencePosture": "MIT package metadata inspected from npm registry on 2026-07-02",
+    "maintenancePosture": "graphql-js is the official GraphQL JavaScript reference implementation; platform-api-foundation owns update review before version changes or stronger claims",
+    "securityAdvisoryPosture": "dependency advisories require review before stronger environment public API or external developer readiness claims",
+    "typescriptRuntimeCompatibility": "bundled TypeScript declarations; proof compiles generated client with repository TypeScript 6.0.3 and executes through tsx proof tooling",
+    "alternativesRejected": [
+      "apollo-server and gateway packages rejected for this proof because USF-224 only needs local execution semantics, not a product server or deployed gateway",
+      "graphql-request rejected because the proof intentionally avoids network HTTP and validates generated client execution against an in-process executor",
+      "hand-rolled GraphQL parser rejected because a maintained official reference implementation exists"
+    ],
+    "forbiddenLayerImportBoundary": "graphql package imports are allowed only in packages/proof/src/graphql-generated-client-execution-proof.ts for this issue"
+  },
+  "claims": {
+    "generatedSdkCreated": true,
+    "generatedClientCompilePassed": true,
+    "generatedClientRuntimePassed": true,
+    "packageDistributionProofPassed": true,
+    "externalDeveloperSurfaceProofPassed": true,
+    "publicDocumentationOperationProofPassed": true,
+    "apiKeyOnboardingSupportWorkflowProofPassed": true,
+    "graphqlRuntimeProofPassed": true,
+    "federationRuntimeProofPassed": true,
+    "federationGatewayProofPassed": true,
+    "resolverAuthorizationProofPassed": true,
+    "schemaStitchingProofPassed": true,
+    "subscriptionsProofPassed": true,
+    "persistedQueryProofPassed": true,
+    "graphqlClientCompatibilityProofPassed": true,
+    "tenantBoundaryChecked": true,
+    "accessBoundaryChecked": true,
+    "auditEvidenceCaptured": true,
+    "secretBoundaryChecked": true,
+    "privacyBoundaryChecked": true,
+    "syntheticDataBoundaryChecked": true,
+    "redactionChecked": true,
+    "generatedSdkReadinessClaim": false,
+    "generatedClientReadinessClaim": false,
+    "externalDeveloperPlatformReadinessClaim": false,
+    "publicApiReadinessClaim": false,
+    "graphqlRuntimeReadinessClaim": false,
+    "federationReadinessClaim": false,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "fullDevReadinessClaim": false,
+    "fullReactParityClaim": false,
+    "usf133ClosureClaim": false
+  },
+  "surfaceProofs": [
+    {
+      "id": "generated-sdk",
+      "status": "proven-local",
+      "evidence": "Temporary TypeScript generated client package layout is created, hashed, compiled, and removed during proof.",
+      "nonEquivalenceBoundary": "Local generated artifact proof is not package registry publication, signing, SBOM publication, customer distribution, or generated SDK readiness.",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ]
+    },
+    {
+      "id": "generated-client",
+      "status": "proven-local",
+      "evidence": "Generated client class executes persisted GraphQL operations against the local synthetic executor.",
+      "nonEquivalenceBoundary": "Local generated client runtime proof is not multi-language client compatibility, public package support, customer compatibility, or generated client readiness.",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ]
+    },
+    {
+      "id": "external-developer-platform",
+      "status": "bounded-local-proof",
+      "evidence": "Synthetic developer profile, documentation, API-key onboarding, support workflow id, and value-free audit evidence execute in-process.",
+      "nonEquivalenceBoundary": "Local proof is not developer portal hosting, support SLA, public documentation operation, or external developer platform readiness.",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ]
+    },
+    {
+      "id": "graphql-runtime",
+      "status": "proven-local",
+      "evidence": "Official graphql-js executes synthetic query, mutation, subscription, persisted query, and authorization denial paths.",
+      "nonEquivalenceBoundary": "In-process local GraphQL proof is not deployed GraphQL server, public GraphQL endpoint, production schema operation, or GraphQL runtime readiness.",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ]
+    },
+    {
+      "id": "federation-runtime",
+      "status": "bounded-local-proof",
+      "evidence": "Federation-style gateway field stitches synthetic developer and documentation subgraph data through one local GraphQL schema.",
+      "nonEquivalenceBoundary": "Local federation-style composition is not Apollo Gateway deployment, subgraph service operation, gateway failover, or federation readiness.",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ]
+    },
+    {
+      "id": "persisted-query",
+      "status": "proven-local",
+      "evidence": "Known persisted operation hashes execute and an unknown hash fails closed with safe denial.",
+      "nonEquivalenceBoundary": "Local persisted-query map is not public persisted-query registry operation, CDN edge caching, abuse protection, or production readiness.",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ]
+    },
+    {
+      "id": "subscription",
+      "status": "proven-local",
+      "evidence": "Subscription iterator yields one redacted synthetic telemetry event and records audit evidence.",
+      "nonEquivalenceBoundary": "Local single-event subscription proof is not websocket service readiness, browser client readiness, live telemetry backend readiness, or production subscription operation.",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ]
+    }
+  ],
+  "deferredBoundaries": [
+    {
+      "id": "public-package-publication",
+      "status": "deferred-with-owner",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonEquivalenceBoundary": "Local temporary package layout and hashes are not public package publication, registry availability, artifact signing, SBOM publication, or customer distribution readiness.",
+      "nonClaimBoundary": "No package publication readiness, client distribution readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is claimed."
+    },
+    {
+      "id": "deployed-graphql-federation-operation",
+      "status": "deferred-with-owner",
+      "owner": "platform-api-foundation",
+      "riskOwner": "platform-api-risk-owner",
+      "controlOwner": "platform-api-control-owner",
+      "riskTreatment": "defer",
+      "reviewDate": "2026-09-30",
+      "followUpIssue": "USF-193",
+      "promotionImpact": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
+      "nonEquivalenceBoundary": "In-process graphql-js execution is not deployed GraphQL HTTP service, Apollo federation gateway, live subscriptions, provider-managed schema registry, or production runtime operation.",
+      "nonClaimBoundary": "No GraphQL runtime readiness, federation readiness, public API readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is claimed."
+    }
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "Authorisation and semantic authority exist for each implemented generated-client external-developer GraphQL or federation surface.",
+      "evidence": "USF-224 records the human authorisation; this artefact scopes the proof to local synthetic execution using the repository API contract standard and predecessor matrices."
+    },
+    {
+      "criterion": "Each implemented surface has proof validator coverage planted defects and enterprise evidence rows.",
+      "evidence": "proofCommand, validatorCommand, proofFile, validatorFile, testFile, enterpriseEvidenceRefs, and validator planted defects are recorded here and enforced by validate-api."
+    },
+    {
+      "criterion": "Deferred or out-of-scope surfaces retain owner risk owner treatment review date promotion impact and non-equivalence boundary.",
+      "evidence": "deferredBoundaries records public package publication and deployed GraphQL federation operation as deferred with owner, risk owner, control owner, treatment, review date, follow-up, promotion impact, and non-equivalence boundary."
+    },
+    {
+      "criterion": "No prohibited readiness claim is made.",
+      "evidence": "claims keep readiness and certification claims false, nonClaims lists explicit prohibited claims, and validate-api fails overclaim text."
+    },
+    {
+      "criterion": "USF-133 remains open unless separately satisfied.",
+      "evidence": "claims.usf133ClosureClaim is false and this proof does not close USF-133."
+    }
+  ],
+  "nonClaims": [
+    "generated-sdk-readiness",
+    "generated-client-readiness",
+    "external-developer-platform-readiness",
+    "public-api-readiness",
+    "graphql-runtime-readiness",
+    "federation-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-dev-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}

@@ -9,6 +9,7 @@ export { runAuthIdentityProof } from "./auth-identity-proof.ts";
 export { runJobsWorkflowsProof } from "./jobs-workflows-proof.ts";
 export { runNotificationsMessagingProof } from "./notifications-messaging-proof.ts";
 export { runApiContractsProof } from "./api-contracts-proof.ts";
+export { runGraphqlGeneratedClientExecutionProof } from "./graphql-generated-client-execution-proof.ts";
 export { runProviderAdaptersProof } from "./provider-adapters-proof.ts";
 export { runObservabilityTelemetryProof } from "./observability-telemetry-proof.ts";
 export { runObservabilityOperationsExecutionProof } from "./observability-operations-execution-proof.ts";

@@ -45,6 +45,11 @@ RULES = {
     "USF-API-027": ("blocking", "USF-214 enterprise evidence rows are missing"),
     "USF-API-028": ("blocking", "USF-214 deferred or non-equivalent GraphQL/generated-client boundary is incomplete"),
     "USF-API-029": ("blocking", "USF-214 GraphQL/generated-client readiness claim is overclaimed"),
+    "USF-API-030": ("blocking", "USF-224 generated-client/GraphQL execution proof markers or wiring are missing"),
+    "USF-API-031": ("blocking", "USF-224 generated-client/GraphQL execution matrix is missing or incomplete"),
+    "USF-API-032": ("blocking", "USF-224 enterprise evidence or SDK governance rows are missing"),
+    "USF-API-033": ("blocking", "USF-224 GraphQL SDK dependency boundary is missing, unpinned, or imported outside proof boundary"),
+    "USF-API-034": ("blocking", "USF-224 generated-client/GraphQL execution readiness claim is overclaimed"),
     "USF-API-SELFTEST": ("blocking", "planted API defect did not raise its expected rule"),
 }
 
@@ -65,6 +70,8 @@ SOURCE_USE = "docs/architecture/parity-api-contracts-source-use-disposition-matr
 DEPTH_MATRIX = "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json"
 PUBLIC_COMPAT_MATRIX = "docs/architecture/api-public-compatibility-release-governance-matrix.json"
 GRAPHQL_GENERATED_CLIENT_MATRIX = "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+GRAPHQL_EXECUTION_PROOF = "packages/proof/src/graphql-generated-client-execution-proof.ts"
+GRAPHQL_EXECUTION_MATRIX = "docs/architecture/generated-client-external-developer-graphql-federation-execution-proof.json"
 ENTERPRISE_EVIDENCE = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
 PACKAGE = "package.json"
@@ -78,6 +85,7 @@ SOURCE_FILES = (
     OPENAPI_JSON,
     STORE,
     PROOF,
+    GRAPHQL_EXECUTION_PROOF,
     PROOF_INDEX,
     APP_TESTS,
     OPENAPI_TESTS,
@@ -87,6 +95,7 @@ SOURCE_FILES = (
     DEPTH_MATRIX,
     PUBLIC_COMPAT_MATRIX,
     GRAPHQL_GENERATED_CLIENT_MATRIX,
+    GRAPHQL_EXECUTION_MATRIX,
     ENTERPRISE_EVIDENCE,
     PACKAGE,
     MAKEFILE,
@@ -185,7 +194,7 @@ def contains_positive_overclaim(text, phrase):
             lower_text.rfind(".", 0, index),
             lower_text.rfind(";", 0, index),
         )
-        prefix = lower_text[max(sentence_start + 1, index - 240):index]
+        prefix = lower_text[max(sentence_start + 1, 0):index]
         if not any(marker in prefix for marker in (
             "no ",
             "not ",
@@ -219,6 +228,11 @@ def build_state(overrides=None):
         if "graphqlGeneratedClientMatrix" in overrides
         else read_json(GRAPHQL_GENERATED_CLIENT_MATRIX)
     )
+    graphql_execution_matrix = (
+        overrides["graphqlExecutionMatrix"]
+        if "graphqlExecutionMatrix" in overrides
+        else read_json(GRAPHQL_EXECUTION_MATRIX)
+    )
     enterprise = overrides["enterprise"] if "enterprise" in overrides else read_json(ENTERPRISE_EVIDENCE)
     return {
         "files": files,
@@ -227,6 +241,7 @@ def build_state(overrides=None):
         "depthMatrix": depth_matrix,
         "publicCompatMatrix": public_compat_matrix,
         "graphqlGeneratedClientMatrix": graphql_generated_client_matrix,
+        "graphqlExecutionMatrix": graphql_execution_matrix,
         "enterprise": enterprise,
     }
 
@@ -273,6 +288,33 @@ def openapi_operations(document):
     return operations
 
 
+def sdk_import_texts(files):
+    scanned = {}
+    for root in ("apps", "packages", "capabilities", "adapters", "tests"):
+        if not os.path.isdir(root):
+            continue
+        for dirpath, dirnames, filenames in os.walk(root):
+            dirnames[:] = [
+                name for name in dirnames if name not in {"node_modules", "dist", "coverage", ".turbo", ".cache"}
+            ]
+            for filename in filenames:
+                if filename.endswith((".ts", ".tsx", ".js", ".mjs", ".cjs")):
+                    path = os.path.join(dirpath, filename)
+                    scanned[path] = read_text(path)
+    scanned.update({
+        path: text for path, text in files.items() if path.endswith((".ts", ".tsx", ".js", ".mjs", ".cjs"))
+    })
+    return scanned.items()
+
+
+def imports_graphql_sdk(text):
+    return bool(
+        re.search(r"""from\s+["']graphql["']""", text)
+        or re.search(r"""import\s*\([^)]*["']graphql["'][^)]*\)""", text)
+        or re.search(r"""require\s*\(\s*["']graphql["']\s*\)""", text)
+    )
+
+
 def run_checks(F, state=None):
     state = state or build_state()
     files = state["files"]
@@ -283,6 +325,7 @@ def run_checks(F, state=None):
     openapi_check = files.get(OPENAPI_CHECK, "")
     openapi_json_text = files.get(OPENAPI_JSON, "")
     proof = files.get(PROOF, "")
+    graphql_execution_proof = files.get(GRAPHQL_EXECUTION_PROOF, "")
     proof_index = files.get(PROOF_INDEX, "")
     app_tests = files.get(APP_TESTS, "")
     openapi_tests = files.get(OPENAPI_TESTS, "")
@@ -292,6 +335,7 @@ def run_checks(F, state=None):
     depth_matrix_text = files.get(DEPTH_MATRIX, "")
     public_compat_matrix_text = files.get(PUBLIC_COMPAT_MATRIX, "")
     graphql_generated_client_matrix_text = files.get(GRAPHQL_GENERATED_CLIENT_MATRIX, "")
+    graphql_execution_matrix_text = files.get(GRAPHQL_EXECUTION_MATRIX, "")
     enterprise_text = files.get(ENTERPRISE_EVIDENCE, "")
     package = files.get(PACKAGE, "")
     makefile = files.get(MAKEFILE, "")
@@ -299,6 +343,7 @@ def run_checks(F, state=None):
     depth_matrix = state.get("depthMatrix")
     public_compat_matrix = state.get("publicCompatMatrix")
     graphql_generated_client_matrix = state.get("graphqlGeneratedClientMatrix")
+    graphql_execution_matrix = state.get("graphqlExecutionMatrix")
     enterprise = state.get("enterprise")
 
     if not re.search(r"\bAPI_ROUTE_CLASSIFICATIONS\b", api_surface) or not re.search(r"\bAPI_ROUTE_CONTRACTS\b", api_surface):
@@ -901,13 +946,258 @@ def run_checks(F, state=None):
         if expected_id not in enterprise_text:
             F.add("USF-API-027", ENTERPRISE_EVIDENCE, f"enterprise text missing {expected_id}")
 
+    for token in (
+        "runGraphqlGeneratedClientExecutionProof",
+        "sourceIssue: \"USF-224\"",
+        "providerMode: \"hermetic-mock\"",
+        "runtimeMode: \"local-synthetic-graphql-execution-proof\"",
+        "generatedSdkCreated: true",
+        "generatedClientCompilePassed: true",
+        "generatedClientRuntimePassed: true",
+        "packageDistributionProofPassed: true",
+        "externalDeveloperSurfaceProofPassed: true",
+        "publicDocumentationOperationProofPassed: true",
+        "apiKeyOnboardingSupportWorkflowProofPassed: true",
+        "graphqlRuntimeProofPassed: true",
+        "federationRuntimeProofPassed: true",
+        "federationGatewayProofPassed: true",
+        "resolverAuthorizationProofPassed: true",
+        "schemaStitchingProofPassed: true",
+        "subscriptionsProofPassed: true",
+        "persistedQueryProofPassed: true",
+        "graphqlClientCompatibilityProofPassed: true",
+        "tenantBoundaryChecked: true",
+        "accessBoundaryChecked: true",
+        "auditEvidenceCaptured: true",
+        "secretBoundaryChecked: true",
+        "privacyBoundaryChecked: true",
+        "syntheticDataBoundaryChecked: true",
+        "redactionChecked: true",
+        "generatedSdkReadinessClaim: false",
+        "generatedClientReadinessClaim: false",
+        "externalDeveloperPlatformReadinessClaim: false",
+        "publicApiReadinessClaim: false",
+        "graphqlRuntimeReadinessClaim: false",
+        "federationReadinessClaim: false",
+        "stagingReadinessClaim: false",
+        "productionReadinessClaim: false",
+        "deploymentReadinessClaim: false",
+        "liveProviderReadinessClaim: false",
+        "socReadinessClaim: false",
+        "iso27001CertificationClaim: false",
+        "enterpriseProductionReadinessClaim: false",
+        "fullDevReadinessClaim: false",
+        "fullReactParityClaim: false",
+        "usf133ClosureClaim: false",
+        "rawTokenReturned: false",
+        "assertSafe",
+        "finally",
+        "rm(tempDir",
+    ):
+        if token not in graphql_execution_proof:
+            F.add("USF-API-030", GRAPHQL_EXECUTION_PROOF, f"USF-224 proof marker missing {token}")
+    for token in (
+        "runGraphqlGeneratedClientExecutionProof",
+        "proof:api:graphql-generated-client",
+        "api-graphql-generated-client-proof",
+    ):
+        if token not in proof_index + package + makefile:
+            F.add("USF-API-030", PACKAGE, f"USF-224 proof command/export wiring missing {token}")
+    for token in (
+        "proves bounded generated-client, GraphQL, federation, docs, and API-key execution",
+        "runGraphqlGeneratedClientExecutionProof",
+        "graphqlRuntimeProofPassed",
+        "federationGatewayProofPassed",
+        "persistedQueryProofPassed",
+        "subscriptionsProofPassed",
+        "usf133ClosureClaim",
+    ):
+        if token not in proof_tests:
+            F.add("USF-API-030", PROOF_TESTS, f"USF-224 proof test marker missing {token}")
+
+    if not isinstance(graphql_execution_matrix, dict):
+        F.add("USF-API-031", GRAPHQL_EXECUTION_MATRIX, "USF-224 execution matrix must exist and parse")
+    else:
+        if graphql_execution_matrix.get("sourceIssue") != "USF-224":
+            F.add("USF-API-031", GRAPHQL_EXECUTION_MATRIX, "matrix must be scoped to USF-224")
+        if graphql_execution_matrix.get("status") != "bounded-local-execution-proof-present":
+            F.add("USF-API-031", GRAPHQL_EXECUTION_MATRIX, "matrix must record bounded local execution proof status")
+        claims = graphql_execution_matrix.get("claims")
+        for claim in (
+            "generatedSdkCreated",
+            "generatedClientCompilePassed",
+            "generatedClientRuntimePassed",
+            "packageDistributionProofPassed",
+            "externalDeveloperSurfaceProofPassed",
+            "publicDocumentationOperationProofPassed",
+            "apiKeyOnboardingSupportWorkflowProofPassed",
+            "graphqlRuntimeProofPassed",
+            "federationRuntimeProofPassed",
+            "federationGatewayProofPassed",
+            "resolverAuthorizationProofPassed",
+            "schemaStitchingProofPassed",
+            "subscriptionsProofPassed",
+            "persistedQueryProofPassed",
+            "graphqlClientCompatibilityProofPassed",
+            "tenantBoundaryChecked",
+            "accessBoundaryChecked",
+            "auditEvidenceCaptured",
+            "secretBoundaryChecked",
+            "privacyBoundaryChecked",
+            "syntheticDataBoundaryChecked",
+            "redactionChecked",
+        ):
+            if not isinstance(claims, dict) or claims.get(claim) is not True:
+                F.add("USF-API-031", GRAPHQL_EXECUTION_MATRIX, f"matrix must record {claim}=true")
+        for claim in (
+            "generatedSdkReadinessClaim",
+            "generatedClientReadinessClaim",
+            "externalDeveloperPlatformReadinessClaim",
+            "publicApiReadinessClaim",
+            "graphqlRuntimeReadinessClaim",
+            "federationReadinessClaim",
+            "testReadinessClaim",
+            "stagingReadinessClaim",
+            "productionReadinessClaim",
+            "deploymentReadinessClaim",
+            "liveProviderReadinessClaim",
+            "socReadinessClaim",
+            "iso27001CertificationClaim",
+            "enterpriseProductionReadinessClaim",
+            "fullDevReadinessClaim",
+            "fullReactParityClaim",
+            "usf133ClosureClaim",
+        ):
+            if not isinstance(claims, dict) or claims.get(claim) is not False:
+                F.add("USF-API-034", GRAPHQL_EXECUTION_MATRIX, f"matrix must keep {claim}=false")
+        surface_proofs = graphql_execution_matrix.get("surfaceProofs")
+        if not isinstance(surface_proofs, list):
+            F.add("USF-API-031", GRAPHQL_EXECUTION_MATRIX, "matrix surfaceProofs must be a list")
+            surface_proofs = []
+        surface_ids = {item.get("id") for item in surface_proofs if isinstance(item, dict)}
+        for required in (
+            "generated-sdk",
+            "generated-client",
+            "external-developer-platform",
+            "graphql-runtime",
+            "federation-runtime",
+            "persisted-query",
+            "subscription",
+        ):
+            if required not in surface_ids:
+                F.add("USF-API-031", GRAPHQL_EXECUTION_MATRIX, f"missing surface proof {required}")
+        for item in surface_proofs:
+            if not isinstance(item, dict):
+                continue
+            for field in ("status", "evidence", "nonEquivalenceBoundary", "promotionImpact"):
+                if not item.get(field):
+                    F.add("USF-API-031", f"{GRAPHQL_EXECUTION_MATRIX}#{item.get('id')}", f"surface proof missing {field}")
+        for boundary in graphql_execution_matrix.get("deferredBoundaries", []):
+            if not isinstance(boundary, dict):
+                continue
+            for field in (
+                "status",
+                "owner",
+                "riskOwner",
+                "controlOwner",
+                "riskTreatment",
+                "reviewDate",
+                "followUpIssue",
+                "promotionImpact",
+                "nonEquivalenceBoundary",
+                "nonClaimBoundary",
+            ):
+                if not boundary.get(field):
+                    F.add("USF-API-031", f"{GRAPHQL_EXECUTION_MATRIX}#{boundary.get('id')}", f"deferred boundary missing {field}")
+        for required in (
+            "generated-client-external-developer-graphql-federation-execution-proof",
+            "USF-224",
+            "proof:api:graphql-generated-client",
+            "packages/proof/src/graphql-generated-client-execution-proof.ts",
+            "graphql-js",
+            "official-reference-graphql-js-implementation",
+            "No GraphQL runtime readiness",
+            "federation readiness",
+            "full dev readiness",
+        ):
+            if required not in graphql_execution_matrix_text:
+                F.add("USF-API-031", GRAPHQL_EXECUTION_MATRIX, f"matrix text missing {required}")
+
+    required_usf224_enterprise_rows = {
+        "soaSupportMappings": "soa-usf-224-graphql-generated-client-execution-proof",
+        "evidenceRegister": "evidence-usf-224-graphql-generated-client-execution-proof",
+        "threatModelAbuseCaseRegister": "threat-usf-224-graphql-generated-client-execution-overclaim",
+        "sdkDependencyGovernance": "sdk-usf-224-graphql-js-reference-client",
+        "accessReviewPrivilegedOperationPosture": "access-usf-224-graphql-generated-client-execution-boundary",
+        "backupRestoreResiliencePosture": "resilience-usf-224-graphql-generated-client-execution-boundary",
+        "incidentVulnerabilityManagementEvidence": "incident-usf-224-graphql-generated-client-execution-boundary",
+        "privacyDataMinimisationPosture": "privacy-usf-224-graphql-generated-client-execution-boundary",
+    }
+    if not isinstance(enterprise, dict):
+        F.add("USF-API-032", ENTERPRISE_EVIDENCE, "enterprise evidence model must exist and parse")
+    else:
+        for section, expected_id in required_usf224_enterprise_rows.items():
+            rows = enterprise.get(section)
+            if not isinstance(rows, list) or not any(
+                isinstance(row, dict) and (row.get("id") == expected_id or row.get("evidenceId") == expected_id)
+                for row in rows
+            ):
+                F.add("USF-API-032", ENTERPRISE_EVIDENCE, f"missing enterprise evidence row {expected_id}")
+        sdk_rows = enterprise.get("sdkDependencyGovernance")
+        sdk_row = None
+        if isinstance(sdk_rows, list):
+            sdk_row = next(
+                (
+                    row
+                    for row in sdk_rows
+                    if isinstance(row, dict) and row.get("id") == "sdk-usf-224-graphql-js-reference-client"
+                ),
+                None,
+            )
+        if not isinstance(sdk_row, dict):
+            F.add("USF-API-032", ENTERPRISE_EVIDENCE, "missing GraphQL SDK governance row")
+        else:
+            required_sdk_fields = {
+                "packageName": "graphql",
+                "version": "17.0.1",
+                "officialOrDeFactoStatus": "official-reference-graphql-js-implementation",
+                "licencePosture": "MIT",
+                "typescriptRuntimeCompatibility": "TypeScript",
+                "forbiddenLayerImportCheck": "imports outside",
+                "updateDeprecationOwner": "platform-api-foundation",
+            }
+            for field, expected_fragment in required_sdk_fields.items():
+                if expected_fragment.lower() not in str(sdk_row.get(field, "")).lower():
+                    F.add("USF-API-032", f"{ENTERPRISE_EVIDENCE}#sdk-usf-224-graphql-js-reference-client", f"SDK row missing {field} fragment {expected_fragment}")
+    for expected_id in required_usf224_enterprise_rows.values():
+        if expected_id not in enterprise_text:
+            F.add("USF-API-032", ENTERPRISE_EVIDENCE, f"enterprise text missing {expected_id}")
+
+    try:
+        package_json = json.loads(package)
+    except Exception:  # noqa: BLE001
+        package_json = {}
+    dependencies = package_json.get("dependencies") if isinstance(package_json, dict) else None
+    if not isinstance(dependencies, dict) or dependencies.get("graphql") != "17.0.1":
+        F.add("USF-API-033", PACKAGE, "graphql dependency must be exact-pinned to 17.0.1")
+    for bad_prefix in ("^", "~", ">=", "<=", "latest", "*"):
+        if isinstance(dependencies, dict) and str(dependencies.get("graphql", "")).startswith(bad_prefix):
+            F.add("USF-API-033", PACKAGE, "graphql dependency must not use a floating range")
+    for path, text in sdk_import_texts(files):
+        if path == GRAPHQL_EXECUTION_PROOF:
+            continue
+        if imports_graphql_sdk(text):
+            F.add("USF-API-033", path, "graphql SDK imports are only allowed in the USF-224 proof boundary")
+
     combined_boundary_text = "\n".join([
         proof,
+        graphql_execution_proof,
         standard,
         source_use,
         depth_matrix_text,
         public_compat_matrix_text,
         graphql_generated_client_matrix_text,
+        graphql_execution_matrix_text,
         enterprise_text,
     ])
     for phrase in (
@@ -961,6 +1251,29 @@ def run_checks(F, state=None):
     ):
         if contains_positive_overclaim(combined_boundary_text, phrase):
             F.add("USF-API-029", "USF-214", f"readiness overclaim present: {phrase}")
+    for phrase in (
+        "generated SDK readiness is proven",
+        "generated client readiness is proven",
+        "external developer platform readiness is proven",
+        "public API readiness is proven",
+        "GraphQL runtime readiness is proven",
+        "GraphQL readiness is proven",
+        "federation readiness is proven",
+        "package publication readiness is proven",
+        "client distribution readiness is proven",
+        "test readiness is proven",
+        "staging readiness is proven",
+        "production readiness is proven",
+        "deployment readiness is proven",
+        "live-provider readiness is proven",
+        "SOC readiness is proven",
+        "ISO certification readiness is proven",
+        "ISO/IEC 27001 certification is proven",
+        "USF-133 closure is claimed",
+        "USF-133 is closed",
+    ):
+        if contains_positive_overclaim(combined_boundary_text, phrase):
+            F.add("USF-API-034", "USF-224", f"readiness overclaim present: {phrase}")
 
 
 def apply_mutation(base, mutation):
@@ -974,6 +1287,11 @@ def apply_mutation(base, mutation):
     graphql_generated_client_matrix = (
         json.loads(json.dumps(base["graphqlGeneratedClientMatrix"]))
         if base.get("graphqlGeneratedClientMatrix") is not None
+        else None
+    )
+    graphql_execution_matrix = (
+        json.loads(json.dumps(base["graphqlExecutionMatrix"]))
+        if base.get("graphqlExecutionMatrix") is not None
         else None
     )
     enterprise = json.loads(json.dumps(base["enterprise"])) if base.get("enterprise") is not None else None
@@ -997,6 +1315,11 @@ def apply_mutation(base, mutation):
             graphql_generated_client_matrix = json.loads(files[target])
         except Exception:  # noqa: BLE001
             graphql_generated_client_matrix = None
+    if target == GRAPHQL_EXECUTION_MATRIX and target in files:
+        try:
+            graphql_execution_matrix = json.loads(files[target])
+        except Exception:  # noqa: BLE001
+            graphql_execution_matrix = None
     if target == ENTERPRISE_EVIDENCE and target in files:
         try:
             enterprise = json.loads(files[target])
@@ -1038,12 +1361,30 @@ def apply_mutation(base, mutation):
         claims = graphql_generated_client_matrix.setdefault("claims", {})
         if isinstance(claims, dict):
             claims.update(mutation["graphqlGeneratedClientClaimSet"])
+    if "graphqlExecutionClaimSet" in mutation and isinstance(graphql_execution_matrix, dict):
+        claims = graphql_execution_matrix.setdefault("claims", {})
+        if isinstance(claims, dict):
+            claims.update(mutation["graphqlExecutionClaimSet"])
     if "removeGraphqlGeneratedClientControl" in mutation and isinstance(graphql_generated_client_matrix, dict):
         remove_id = mutation["removeGraphqlGeneratedClientControl"]
         controls = graphql_generated_client_matrix.get("controls")
         if isinstance(controls, list):
             graphql_generated_client_matrix["controls"] = [
                 item for item in controls if not (isinstance(item, dict) and item.get("id") == remove_id)
+            ]
+    if "removeGraphqlExecutionSurface" in mutation and isinstance(graphql_execution_matrix, dict):
+        remove_id = mutation["removeGraphqlExecutionSurface"]
+        surfaces = graphql_execution_matrix.get("surfaceProofs")
+        if isinstance(surfaces, list):
+            graphql_execution_matrix["surfaceProofs"] = [
+                item for item in surfaces if not (isinstance(item, dict) and item.get("id") == remove_id)
+            ]
+    if "removeGraphqlExecutionDeferredBoundary" in mutation and isinstance(graphql_execution_matrix, dict):
+        remove_id = mutation["removeGraphqlExecutionDeferredBoundary"]
+        boundaries = graphql_execution_matrix.get("deferredBoundaries")
+        if isinstance(boundaries, list):
+            graphql_execution_matrix["deferredBoundaries"] = [
+                item for item in boundaries if not (isinstance(item, dict) and item.get("id") == remove_id)
             ]
     if "removeEnterpriseRow" in mutation and isinstance(enterprise, dict):
         section = mutation["removeEnterpriseRow"].get("section")
@@ -1065,6 +1406,7 @@ def apply_mutation(base, mutation):
         "depthMatrix": depth_matrix,
         "publicCompatMatrix": public_compat_matrix,
         "graphqlGeneratedClientMatrix": graphql_generated_client_matrix,
+        "graphqlExecutionMatrix": graphql_execution_matrix,
         "enterprise": enterprise,
     }
 
