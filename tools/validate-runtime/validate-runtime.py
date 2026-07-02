@@ -183,7 +183,7 @@ REQUIRED_PROVIDER_BINDINGS = {
         "adapterName": "KeycloakComposedIdentityProvider",
         "portName": "IdentityProvider,KeycloakVerifier",
         "sdkPackage": "@keycloak/keycloak-admin-client",
-        "sdkVersion": "26.2.5",
+        "sdkVersion": "26.5.6",
         "adapterPath": ADAPTER_IDP_SOURCE_PATH,
         "apiMarker": "KeycloakComposedIdentityProvider",
         "workerMarker": "Keycloak provider evidence",
