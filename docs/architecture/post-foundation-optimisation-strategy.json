@@ -1,0 +1,454 @@
+{
+  "id": "post-foundation-optimisation-strategy",
+  "title": "Post-Foundation Optimisation and Minimalisation Strategy",
+  "issueId": "USF-229",
+  "executionIssueId": "USF-230",
+  "baseline": {
+    "tag": "v2-foundation",
+    "tagType": "annotated",
+    "tagObjectSha": "0543288306394b6106b81dd2dca2629091a5299b",
+    "targetCommitSha": "4a4eb129bf8d441be512cc3a976d2d2004a4a250",
+    "tagEvidence": "docs/architecture/dev-ready-foundation-baseline-tag.json",
+    "tagEvidencePullRequest": "https://github.com/maldous/usf/pull/197",
+    "tagEvidenceMergeSha": "f8bf3000e355c84b57a9643c2a71f51674199976",
+    "currentMainAtPlanning": "f8bf3000e355c84b57a9643c2a71f51674199976"
+  },
+  "authorityNote": "This strategy is planning evidence for USF-229. It does not perform destructive optimisation, change runtime behaviour, redefine semantic authority, or turn historical lineage into active authority.",
+  "classificationVocabulary": [
+    "canonical-current",
+    "historical-lineage",
+    "transitional-scaffolding",
+    "redundant",
+    "stale",
+    "generated",
+    "removable"
+  ],
+  "inventorySummary": {
+    "schemas": 28,
+    "semanticInstances": 160,
+    "registries": 4,
+    "taxonomies": 1,
+    "vocabularies": 1,
+    "architectureMarkdownFiles": 119,
+    "architectureJsonFiles": 55,
+    "adrs": 14,
+    "validators": 23,
+    "plantedDefectFiles": 510,
+    "generatedComposeFiles": 4,
+    "proofSourceFiles": 37,
+    "packageScripts": 70,
+    "proofScripts": 33,
+    "composeScripts": 17,
+    "runtimeScripts": 4,
+    "devHandoverArtefacts": 2,
+    "baselineTagEvidenceArtefacts": 2,
+    "markerFilesWithHistoricalOrEvolutionTerms": 384
+  },
+  "artefactDispositionMatrix": [
+    {
+      "artefactClass": "constitutional-and-agent-governance",
+      "examples": [
+        "docs/architecture/charter.md",
+        "docs/architecture/authority-model.md",
+        "AGENTS.md",
+        "CODEX.md",
+        "CLAUDE.md"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain as current governance authority. USF-230 may add an authority index that points here, but must not weaken these files.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "Any change requires deliberate governance review and validation."
+    },
+    {
+      "artefactClass": "foundational-standards-and-catalogues",
+      "examples": [
+        "docs/architecture/standards-profile.md",
+        "docs/architecture/ontology.md",
+        "docs/architecture/directory-and-file-naming-standard.md",
+        "docs/architecture/schema-authoring-standard.md",
+        "docs/architecture/git-practices-standard.md",
+        "spec/taxonomies/taxonomy-catalog.json",
+        "spec/vocabularies/vocabulary-catalog.json",
+        "spec/registries/schema-registry.json"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain. Reduce future agent reliance on historical examples by pointing developers to current authority first.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "JSON catalogues must parse and validators must pass after any edit."
+    },
+    {
+      "artefactClass": "schemas",
+      "examples": [
+        "spec/schemas/*.schema.json"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain. USF-230 may document which schemas are active, draft, or planning support, but must not remove schema coverage.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "Schema lifecycle state must remain honest and validator-checkable."
+    },
+    {
+      "artefactClass": "semantic-instances",
+      "examples": [
+        "spec/instances/semantic-contract/*.json",
+        "spec/instances/compose-service/service-catalogue.json",
+        "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+        "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain as current semantic corpus. USF-230 may add an as-now index, but must not delete or collapse governed rows without replacement evidence.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "Spec, parity, runtime, compose, and enterprise validators must remain green."
+    },
+    {
+      "artefactClass": "source-use-and-parity-matrices",
+      "examples": [
+        "docs/architecture/parity-*-source-use-disposition-matrix.md",
+        "docs/architecture/complete-react-to-usf-*.json",
+        "docs/architecture/react-parity-scope-classification-matrix.json",
+        "docs/architecture/react-l5-equivalence-audit.md"
+      ],
+      "classification": "historical-lineage",
+      "activeAuthority": false,
+      "optimisationDisposition": "Retain as lineage until USF-230 creates a current authority index that makes clear these files are not active future authority.",
+      "retentionPosture": "archive-reference",
+      "safetyRequirement": "Do not remove until current semantic contracts and validators provide equivalent or stronger traceability."
+    },
+    {
+      "artefactClass": "closure-and-lane-orchestration-gates",
+      "examples": [
+        "docs/architecture/usf-133-closure-tier-evidence-gate.json",
+        "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json",
+        "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
+        "docs/architecture/usf-dev-foundation-gap-register.md"
+      ],
+      "classification": "transitional-scaffolding",
+      "activeAuthority": false,
+      "optimisationDisposition": "Keep as historical closure evidence, but remove from future developer decision path by adding current-state handover pointers.",
+      "retentionPosture": "archive-reference",
+      "safetyRequirement": "Do not let wrapper or closure evidence substitute for source issue evidence."
+    },
+    {
+      "artefactClass": "enterprise-evidence-and-assurance-model",
+      "examples": [
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+        "docs/architecture/enterprise-evidence-model.md"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain. USF-230 may add current-state cross-links, but must preserve control, risk, exception, and non-claim evidence.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "Enterprise validation must pass and no ISO/SOC readiness claim may be introduced."
+    },
+    {
+      "artefactClass": "proof-manifests-and-proof-commands",
+      "examples": [
+        "package.json",
+        "Makefile",
+        "packages/proof/src/*.ts",
+        "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain. Consolidate documentation around authoritative commands only if command coverage and proof evidence remain same-or-stronger.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "No proof command removal without validator-backed disposition and replacement evidence."
+    },
+    {
+      "artefactClass": "validators-and-planted-defects",
+      "examples": [
+        "tools/validate-*/*.py",
+        "tools/**/planted-defects/*"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain. USF-230 may remove only duplicate or obsolete planted defects after proving equivalent failure coverage.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "Do not weaken fail-closed checks, self-tests, or negative controls."
+    },
+    {
+      "artefactClass": "generated-compose-outputs",
+      "examples": [
+        "compose/compose.dev.generated.yaml",
+        "compose/compose.test.generated.yaml",
+        "compose/compose.staging.generated.yaml",
+        "compose/compose.production.generated.yaml"
+      ],
+      "classification": "generated",
+      "activeAuthority": false,
+      "optimisationDisposition": "Retain as deterministic generated projections. The service catalogue remains authority.",
+      "retentionPosture": "regenerable-current",
+      "safetyRequirement": "Generated outputs must match generator and semantic service catalogue."
+    },
+    {
+      "artefactClass": "dev-readiness-handover-and-baseline-evidence",
+      "examples": [
+        "docs/architecture/dev-readiness-validation-and-handover.json",
+        "docs/architecture/dev-readiness-validation-and-handover.md",
+        "docs/architecture/dev-ready-foundation-baseline-tag.json",
+        "docs/architecture/dev-ready-foundation-baseline-tag.md"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain as current handover and baseline evidence. Future docs should point here instead of old closure scaffolding.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "Do not change evidence pins without revalidation."
+    },
+    {
+      "artefactClass": "readiness-and-production-shaped-posture-documents",
+      "examples": [
+        "docs/architecture/production-proof-posture-matrix.md",
+        "docs/architecture/environment-promotion-enterprise-standard.md",
+        "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json"
+      ],
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "optimisationDisposition": "Retain as non-claim boundary and promotion posture. Do not turn posture into readiness claim.",
+      "retentionPosture": "permanent-current",
+      "safetyRequirement": "Promotion and production-shaped language must preserve explicit non-claims."
+    },
+    {
+      "artefactClass": "candidate-duplicate-or-stale-surfaces",
+      "examples": [
+        "older rollup docs that duplicate final handover evidence",
+        "matrix summaries superseded by current semantic instances",
+        "historical blocker lists superseded by final reconciliation"
+      ],
+      "classification": "redundant",
+      "activeAuthority": false,
+      "optimisationDisposition": "USF-230 must identify concrete files before any archive or removal. No file is immediately removable from USF-229 alone.",
+      "retentionPosture": "candidate-after-review",
+      "safetyRequirement": "Each candidate requires replacement authority, retention rationale, and validation."
+    },
+    {
+      "artefactClass": "removable-now",
+      "examples": [],
+      "classification": "removable",
+      "activeAuthority": false,
+      "optimisationDisposition": "None identified as safely removable during USF-229. Removal decisions belong to USF-230 after proof-preservation checks.",
+      "retentionPosture": "not-applicable",
+      "safetyRequirement": "Do not remove artefacts during this strategy-only issue."
+    }
+  ],
+  "legacyAndEvolutionDependencyFindings": [
+    {
+      "id": "historical-react-lineage-references",
+      "marker": "../react",
+      "classification": "historical-lineage",
+      "finding": "Historical React references remain widespread as source lineage and evidence citations.",
+      "activeAuthorityBoundary": "../react must remain lineage only and must not be a future live authority.",
+      "usf230Action": "Add current authority index and update future workflow docs to use current semantic contracts first."
+    },
+    {
+      "id": "bootstrap-evolution-wording",
+      "marker": "v2-bootstrap",
+      "classification": "transitional-scaffolding",
+      "finding": "Bootstrap evolution wording remains in governance and mapping evidence.",
+      "activeAuthorityBoundary": "Bootstrap wording may describe historical ancestry, not current implementation direction.",
+      "usf230Action": "Reclassify bootstrap mapping as lineage and ensure current docs point to dev-readiness handover and baseline tag evidence."
+    },
+    {
+      "id": "closure-tier-scaffolding",
+      "marker": "closure-tier",
+      "classification": "transitional-scaffolding",
+      "finding": "USF-133 closure gate and lane reconciliation artefacts remain useful audit evidence but are not as-now development authority.",
+      "activeAuthorityBoundary": "Closure evidence cannot imply future readiness or source issue completion.",
+      "usf230Action": "Move future agent workflow toward the current authority index while retaining closure artefacts as audit trail."
+    },
+    {
+      "id": "historical-parity-migration-language",
+      "marker": "React parity and complete-react-to-usf",
+      "classification": "historical-lineage",
+      "finding": "Parity matrices and review docs document how foundation evidence was reconciled from historical source.",
+      "activeAuthorityBoundary": "They are not full React product parity claims and must not drive future implementation by source resemblance.",
+      "usf230Action": "Create an as-now capability and proof index so future work starts from current contracts and validators."
+    }
+  ],
+  "canonicalCurrentAuthorityModel": [
+    {
+      "rank": 1,
+      "name": "constitutional-and-semantic-authority",
+      "currentSources": [
+        "docs/architecture/charter.md",
+        "docs/architecture/authority-model.md",
+        "spec/",
+        "docs/architecture/*standard*.md"
+      ],
+      "optimisedUse": "Future agents read these first for meaning and constraints."
+    },
+    {
+      "rank": 2,
+      "name": "adrs",
+      "currentSources": [
+        "docs/adr/"
+      ],
+      "optimisedUse": "Future decisions and constraints, not historical parity prose, govern allowed change."
+    },
+    {
+      "rank": 3,
+      "name": "validators",
+      "currentSources": [
+        "tools/validate-*"
+      ],
+      "optimisedUse": "Fail-closed checks remain the enforcement layer."
+    },
+    {
+      "rank": 4,
+      "name": "runtime-and-proof-evidence",
+      "currentSources": [
+        "packages/proof/",
+        "spec/instances/runtime-proof/",
+        "docs/architecture/*proof*.json",
+        "docs/architecture/dev-readiness-validation-and-handover.json"
+      ],
+      "optimisedUse": "Commit-pinned evidence supports bounded claims only."
+    },
+    {
+      "rank": 5,
+      "name": "source-implementation",
+      "currentSources": [
+        "apps/",
+        "packages/",
+        "adapters/"
+      ],
+      "optimisedUse": "Implementation conforms to semantics and proof, never defines new meaning alone."
+    },
+    {
+      "rank": 6,
+      "name": "historical-lineage",
+      "currentSources": [
+        "../react",
+        "source-use matrices",
+        "parity migration matrices"
+      ],
+      "optimisedUse": "Retained for audit and lineage, not active future authority."
+    },
+    {
+      "rank": 7,
+      "name": "generated-reports",
+      "currentSources": [
+        "generated compose outputs",
+        "generated summaries where present"
+      ],
+      "optimisedUse": "Regenerable summaries only; never canonical."
+    }
+  ],
+  "optimisationSafetyRules": [
+    "No destructive optimisation is allowed in USF-229.",
+    "USF-230 must not weaken semantic confidence, proof coverage, validators, planted defects, evidence quality, or dev-readiness guidance.",
+    "No historical lineage may be removed unless current authority, archive rationale, and validation evidence exist.",
+    "No runtime behaviour may change unless a separate issue explicitly authorises it.",
+    "No source-use or parity evidence may be removed from the active path until current-state evidence provides equivalent or stronger traceability.",
+    "Generated outputs remain derivative and must not outrank semantic service catalogue or proof evidence.",
+    "Every readiness boundary must preserve non-claims."
+  ],
+  "proofValidatorAndEvidencePreservationPlan": {
+    "preserveCommands": [
+      "make verify",
+      "corepack pnpm parity",
+      "python3 tools/validate-spec/validate-spec.py all --json",
+      "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+      "python3 tools/validate-parity/validate-parity.py all --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+    ],
+    "preserveNegativeControls": "All planted-defect coverage remains required. USF-230 may consolidate only after proving each rule still fails closed.",
+    "evidenceRetention": "Commit-pinned dev-readiness and baseline tag evidence remain current. Historical lineage artefacts may be reclassified or indexed, not silently deleted.",
+    "proofFreshness": "Any evidence pin changed by USF-230 requires revalidation and explicit merge SHA recording."
+  },
+  "executionPlanForUsf230": [
+    {
+      "wave": "authority-index",
+      "purpose": "Create a current-state authority index for developers and AI agents.",
+      "allowedWork": "Documentation and matrix updates that point future work to current semantic contracts, validators, proof commands, evidence, and dev handover.",
+      "blockedWork": "Runtime changes and removal of historical artefacts."
+    },
+    {
+      "wave": "lineage-reclassification",
+      "purpose": "Classify source-use, parity, closure, and bootstrap artefacts as historical lineage or transitional scaffolding where appropriate.",
+      "allowedWork": "Add explicit archive or reference posture and update links.",
+      "blockedWork": "Deleting lineage before archive and replacement evidence exists."
+    },
+    {
+      "wave": "documentation-minimalisation",
+      "purpose": "Reduce future workflow dependence on evolution-heavy docs by updating entrypoints to current authority.",
+      "allowedWork": "Replace active references to migration scaffolding with current-state references.",
+      "blockedWork": "Changing semantic meaning or readiness claims."
+    },
+    {
+      "wave": "validator-and-proof-preservation",
+      "purpose": "Run and record proof/validator preservation checks after optimisation edits.",
+      "allowedWork": "Add preservation checks if gaps are found.",
+      "blockedWork": "Weakening checks or dropping planted defects without replacement."
+    },
+    {
+      "wave": "final-optimisation-evidence",
+      "purpose": "Produce final optimisation evidence report and Linear reconciliation.",
+      "allowedWork": "Record PR, merge SHA, validation, retained lineage, removed or reclassified artefacts, and non-claims.",
+      "blockedWork": "USF-133 or readiness overclaim."
+    }
+  ],
+  "executionIssuePlan": {
+    "primaryExecutionIssue": "USF-230",
+    "newIssuesCreatedByUsf229": [],
+    "newIssueRationale": "USF-230 already exists as the authorised execution issue. No additional child issue is necessary at strategy time; USF-230 must create or link child issues only if execution finds separate ownership, risk, or validation boundaries."
+  },
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-react-product-parity"
+  ],
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "v2-foundation tag is present or this issue remains blocked.",
+      "evidence": "baseline.tag and baseline.tagEvidence",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Current artefact inventory is complete.",
+      "evidence": "inventorySummary and artefactDispositionMatrix",
+      "status": "satisfied-for-strategy-scope"
+    },
+    {
+      "criterion": "Artefacts are classified as canonical-current, historical-lineage, transitional-scaffolding, redundant, stale, generated, or removable.",
+      "evidence": "classificationVocabulary and artefactDispositionMatrix",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Legacy ../react and v2-bootstrap/evolution dependencies are identified.",
+      "evidence": "legacyAndEvolutionDependencyFindings",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Optimisation safety rules are recorded.",
+      "evidence": "optimisationSafetyRules",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Execution issues are created for safe minimisation.",
+      "evidence": "executionIssuePlan.primaryExecutionIssue",
+      "status": "satisfied-by-existing-usf230"
+    },
+    {
+      "criterion": "Proof, validator, planted-defect, and evidence-retention strategy is recorded.",
+      "evidence": "proofValidatorAndEvidencePreservationPlan",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Non-claims are preserved.",
+      "evidence": "nonClaims",
+      "status": "satisfied"
+    }
+  ]
+}
