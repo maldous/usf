@@ -8061,7 +8061,7 @@
       "validationCommand": "corepack pnpm proof:api:graphql-generated-client; python3 tools/validate-parity/validate-api.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "retentionPosture": "Retain value-free proof command output in the PR validation summary and post-merge Linear reconciliation; generated client package files are temporary and removed in the proof finally path; no raw endpoint, credential, token, connection string, stack trace, provider payload, production data, customer data, or raw SDK error is retained.",
       "commandPin": "tsx packages/proof/src/graphql-generated-client-execution-proof.ts",
-      "commitPin": "dd21899f35466d072b2772df1d029577de8f4257",
+      "commitPin": "6225e348520523c4187e85fa771aa42f5ea31197",
       "issueLinks": [
         "USF-224",
         "USF-220",
@@ -8073,7 +8073,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "dd21899f35466d072b2772df1d029577de8f4257"
+      "prOrMergeSha": "6225e348520523c4187e85fa771aa42f5ea31197"
     },
     {
       "id": "evidence-proof-proof-api-graphql-generated-client",
@@ -8086,7 +8086,7 @@
       "adapterProviderId": "graphql-js-reference-local-proof",
       "validationCommand": "corepack pnpm proof:api:graphql-generated-client",
       "commandPin": "tsx packages/proof/src/graphql-generated-client-execution-proof.ts",
-      "commitPin": "dd21899f35466d072b2772df1d029577de8f4257",
+      "commitPin": "6225e348520523c4187e85fa771aa42f5ea31197",
       "issueLinks": [
         "USF-224",
         "USF-220",
@@ -8098,7 +8098,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "dd21899f35466d072b2772df1d029577de8f4257",
+      "prOrMergeSha": "6225e348520523c4187e85fa771aa42f5ea31197",
       "retentionPosture": "Retain value-free proof command output in PR validation summary and committed metadata; generated client package files are temporary and removed in finally path; no raw token, endpoint, connection string, stack trace, provider payload, production data, customer data, or raw SDK error is retained."
     }
   ],
