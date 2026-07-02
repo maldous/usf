@@ -1,0 +1,67 @@
+{
+  "id": "dev-ready-foundation-baseline-tag",
+  "title": "Dev-Ready Foundation Baseline Tag Evidence",
+  "sourceIssue": "USF-228",
+  "predecessorIssue": "USF-227",
+  "followOnIssues": ["USF-229", "USF-230"],
+  "tag": {
+    "name": "v2-foundation",
+    "type": "annotated",
+    "tagObjectSha": "0543288306394b6106b81dd2dca2629091a5299b",
+    "targetCommitSha": "4a4eb129bf8d441be512cc3a976d2d2004a4a250",
+    "tagger": "Matthew Aldous",
+    "taggerDate": "2026-07-02T18:01:38+10:00",
+    "remoteRefVerified": true,
+    "remoteRef": "refs/tags/v2-foundation",
+    "remotePeeledTargetVerified": true
+  },
+  "governanceAmendment": {
+    "pullRequest": "https://github.com/maldous/usf/pull/196",
+    "mergeSha": "4a4eb129bf8d441be512cc3a976d2d2004a4a250",
+    "changedFiles": [
+      "AGENTS.md",
+      "docs/architecture/directory-and-file-naming-standard.md",
+      "docs/architecture/git-practices-standard.md"
+    ],
+    "exceptionBoundary": "Exact annotated tag name v2-foundation only; no general v2-* tag or migration-phase naming exception."
+  },
+  "validationStatus": {
+    "status": "passed",
+    "validatedCommitSha": "4a4eb129bf8d441be512cc3a976d2d2004a4a250",
+    "validationPhase": "post-merge-before-tag",
+    "commands": [
+      "corepack pnpm install --frozen-lockfile",
+      "make verify",
+      "corepack pnpm parity",
+      "python3 tools/validate-spec/validate-spec.py all --json",
+      "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+      "python3 tools/validate-parity/validate-parity.py all --json",
+      "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "git diff --check",
+      "git diff --check origin/main...HEAD"
+    ]
+  },
+  "baselinePurpose": {
+    "purpose": "Immutable dev-ready foundation baseline for post-foundation optimisation and minimalisation.",
+    "optimisationBoundary": "Later optimisation may reduce historical and transitional scaffolding only when validators, planted defects, proofs, evidence, semantic confidence, and dev-readiness guidance remain same-or-stronger.",
+    "legacyReactAuthorityBoundary": "../react remains historical semantic and source lineage evidence only, not active future authority."
+  },
+  "claims": {
+    "devReadyFoundationBaselineTagged": true,
+    "postFoundationOptimisationStartingPointRecorded": true
+  },
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-react-product-parity"
+  ]
+}
