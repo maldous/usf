@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-034",
+  "obligationServicePatch": [
+    {
+      "serviceId": "postgres",
+      "drop": [
+        "evidenceId"
+      ]
+    }
+  ]
+}

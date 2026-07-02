@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-038",
+  "obligationServicePatch": [
+    {
+      "serviceId": "nats",
+      "dropClassIds": [
+        "operational-resilience"
+      ]
+    }
+  ]
+}

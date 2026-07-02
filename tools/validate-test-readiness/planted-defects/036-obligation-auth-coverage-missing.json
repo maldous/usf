@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-036",
+  "obligationServicePatch": [
+    {
+      "serviceId": "keycloak",
+      "dropClassIds": [
+        "auth-tenant-role-permission"
+      ]
+    }
+  ]
+}

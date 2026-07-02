@@ -1859,6 +1859,73 @@
       "aiGuidance": "Use this model as evidence organisation and validator input only. Do not claim certification, staging, production, live-provider, full dev, or full React parity readiness from these rows."
     },
     {
+      "id": "test-obligation-manifest.schema.json",
+      "title": "Test Obligation Manifest Schema",
+      "path": "spec/schemas/test-obligation-manifest.schema.json",
+      "class": "semantic-schema",
+      "family": "validation-and-reporting",
+      "lifecycleState": "draft",
+      "status": "draft",
+      "governsOntologyConcepts": [
+        "Semantic Contract",
+        "Service",
+        "Capability",
+        "Validator",
+        "Proof",
+        "Evidence"
+      ],
+      "purpose": "Validates the USF test-readiness obligation manifest that maps semantic contracts, Compose service catalogue rows, generated test Compose services, profiles, owner issues, validation commands, evidence boundaries, and non-claims to required test obligations.",
+      "requiredBecause": "The expanded test-readiness track must fail closed when a semantic contract, Compose service row, profile-gated service, seeder/resetter, evidence row, coverage expectation, or future AI-delivered change lacks a matching test obligation.",
+      "sourceInputs": [
+        "spec/instances/semantic-contract/",
+        "spec/instances/compose-service/service-catalogue.json",
+        "compose/compose.test.generated.yaml",
+        "docs/architecture/test-environment-service-contract.json",
+        "docs/architecture/composed-semantic-test-harness.json",
+        "docs/architecture/deterministic-test-fixture-lifecycle.json",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "taxonomyRefs": [
+        "semantic-architecture-classification",
+        "validation-reporting-classification",
+        "evidence-classification",
+        "proof-classification",
+        "provider-classification"
+      ],
+      "vocabularyRefs": [
+        "authority-levels",
+        "lifecycle-states",
+        "evidence-kinds",
+        "proof-levels",
+        "provider-modes",
+        "environment-classes",
+        "compose-service-kinds",
+        "validation-severities"
+      ],
+      "expectedConsumers": [
+        "validators",
+        "AI agents",
+        "test authors",
+        "governance reviewers"
+      ],
+      "validationResponsibilities": [
+        "Every semantic contract instance has a test obligation row.",
+        "Every Compose service catalogue row has a service obligation row.",
+        "Every generated test Compose service and profile is covered by the manifest.",
+        "Service-backed obligations forbid in-memory, process-local, mock, or hermetic substitutes.",
+        "Every obligation has owner issue, validation command, evidence id, fixture or bounded disposition, and non-claim boundary.",
+        "Future AI-delivered service or capability changes require semantic definition, obligation, fixture, coverage, evidence, and non-claim updates together."
+      ],
+      "authorityRole": "semantic-definition",
+      "driftRisks": [
+        "A future test omits a semantic contract or service row.",
+        "A service-backed test-readiness claim is satisfied by an in-memory substitute.",
+        "A generated test Compose service or profile exists without a seed, exercise, reset, teardown, and evidence obligation.",
+        "Obligation metadata is misread as final test readiness, staging, production, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness."
+      ],
+      "aiGuidance": "Use this schema to enforce test obligations before implementation or final acceptance. Do not infer final USF-234 acceptance or any external readiness/certification claim from obligation metadata."
+    },
+    {
       "id": "provider-mode.schema.json",
       "title": "Provider Mode Schema",
       "path": "spec/schemas/provider-mode.schema.json",

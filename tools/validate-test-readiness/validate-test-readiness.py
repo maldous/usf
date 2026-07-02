@@ -18,16 +18,23 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = Path("docs/architecture/test-environment-service-contract.json")
 HARNESS_PATH = Path("docs/architecture/composed-semantic-test-harness.json")
 LIFECYCLE_PATH = Path("docs/architecture/deterministic-test-fixture-lifecycle.json")
 COMMAND_SURFACE_PATH = Path("docs/architecture/test-readiness-command-surface-and-ci-gate.json")
+OBLIGATION_MANIFEST_PATH = Path("docs/architecture/semantic-service-test-obligation-manifest.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
+TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
+SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
+SEMANTIC_CONTRACT_DIR = Path("spec/instances/semantic-contract")
 ENTERPRISE_MODEL_PATH = Path("spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
+COMPOSE_TEST_PATH = Path("compose/compose.test.generated.yaml")
 PLANTED_DEFECT_DIR = Path("tools/validate-test-readiness/planted-defects")
 
 RULES = {
@@ -59,6 +66,17 @@ RULES = {
     "USF-TEST-READINESS-026": ("blocking", "test-readiness Sonar zero-issue gate preservation evidence is incomplete"),
     "USF-TEST-READINESS-027": ("blocking", "test-readiness command surface preserves insufficient non-claims or overclaims readiness"),
     "USF-TEST-READINESS-028": ("blocking", "test-readiness command surface lacks enterprise evidence linkage"),
+    "USF-TEST-READINESS-029": ("blocking", "semantic service test obligation manifest is missing or invalid"),
+    "USF-TEST-READINESS-030": ("blocking", "semantic service test obligation manifest lacks service catalogue coverage"),
+    "USF-TEST-READINESS-031": ("blocking", "semantic service test obligation manifest lacks semantic contract coverage"),
+    "USF-TEST-READINESS-032": ("blocking", "semantic service test obligation manifest lacks generated Compose service or profile coverage"),
+    "USF-TEST-READINESS-033": ("blocking", "service-backed test obligation allows in-memory substitution or lacks fixture mapping"),
+    "USF-TEST-READINESS-034": ("blocking", "test obligation lacks owner issue, validation command, evidence id, or test mapping"),
+    "USF-TEST-READINESS-035": ("blocking", "test obligation manifest lacks future AI-delivered work guardrail"),
+    "USF-TEST-READINESS-036": ("blocking", "test obligation manifest lacks authentication authorization tenant role or permission coverage"),
+    "USF-TEST-READINESS-037": ("blocking", "test obligation manifest lacks data lifecycle backup restore bulk or migration coverage"),
+    "USF-TEST-READINESS-038": ("blocking", "test obligation manifest lacks operational resilience evidence coverage"),
+    "USF-TEST-READINESS-039": ("blocking", "test obligation manifest lacks schema registry enterprise evidence linkage or preserves insufficient non-claims"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -74,6 +92,7 @@ TEST_READINESS_COMPOSED_SCRIPT = "pnpm test-readiness:semantic && pnpm test-read
 TEST_READINESS_ASSURANCE_COMMAND = "corepack pnpm test-readiness:assurance"
 TEST_READINESS_ASSURANCE_SCRIPT = "pnpm proof:assurance:sonarqube"
 SONAR_COMMAND = "corepack pnpm proof:assurance:sonarqube"
+OBLIGATION_MANIFEST_COMMAND = "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
 REQUIRED_HARNESS_SERVICE_IDS = {
     "postgres",
     "keycloak-db",
@@ -129,6 +148,52 @@ ENTERPRISE_REF_SECTIONS = {
     "incidentVulnerabilityManagementEvidence",
     "privacyDataMinimisationPosture",
 }
+REQUIRED_OBLIGATION_CLASSES = {
+    "unit",
+    "composed-integration",
+    "enterprise-evidence",
+    "functional-regression",
+    "operational-resilience",
+    "design-contract-drift",
+    "missing-evidence-regression",
+    "seed-reset-fixture",
+    "auth-tenant-role-permission",
+    "data-lifecycle",
+    "backup-restore-bulk-migration",
+    "compose-profile-exercise",
+    "future-ai-guardrail",
+    "bounded-non-test-disposition",
+    "out-of-scope-disposition",
+}
+REQUIRED_OBLIGATION_ISSUES = {
+    "USF-239",
+    "USF-240",
+    "USF-241",
+    "USF-242",
+    "USF-243",
+    "USF-244",
+    "USF-245",
+    "USF-246",
+    "USF-247",
+    "USF-248",
+    "USF-249",
+    "USF-250",
+    "USF-251",
+    "USF-252",
+    "USF-234",
+}
+AUTH_SERVICE_IDS = {"keycloak", "keycloak-db", "postgres", "pgadmin", "openbao", "caddy"}
+DATA_SERVICE_IDS = {
+    "postgres",
+    "minio",
+    "openbao",
+    "redis",
+    "meilisearch",
+    "clickhouse",
+    "localstack",
+    "pgbackrest",
+    "clamav",
+}
 
 
 class Findings:
@@ -153,6 +218,20 @@ class Findings:
 def read_json(path: Path) -> Any:
     with (ROOT / path).open(encoding="utf-8") as fh:
         return json.load(fh)
+
+
+def read_json_like_yaml(path: Path) -> Any:
+    with (ROOT / path).open(encoding="utf-8") as fh:
+        return yaml.safe_load(fh)
+
+
+def read_semantic_contracts() -> dict[str, dict[str, Any]]:
+    contracts: dict[str, dict[str, Any]] = {}
+    for path in sorted((ROOT / SEMANTIC_CONTRACT_DIR).glob("*.json")):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["_path"] = str(path.relative_to(ROOT))
+        contracts[str(data.get("id"))] = data
+    return contracts
 
 
 def apply_contract_defect(contract: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
@@ -302,6 +381,82 @@ def apply_command_surface_defect(command_surface: dict[str, Any] | None, defect:
     return out
 
 
+def apply_obligation_manifest_defect(manifest: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeObligationManifest"):
+        return None
+    if manifest is None:
+        return None
+    out = copy.deepcopy(manifest)
+    for key, value in defect.get("obligationManifestSet", {}).items():
+        out[key] = value
+    for key in defect.get("obligationManifestDrop", []):
+        out.pop(key, None)
+    for service_id in defect.get("obligationDropServiceIds", []):
+        out["serviceObligations"] = [
+            row for row in out.get("serviceObligations", []) if row.get("serviceId") != service_id
+        ]
+    for contract_id in defect.get("obligationDropSemanticContractIds", []):
+        out["semanticContractObligations"] = [
+            row
+            for row in out.get("semanticContractObligations", [])
+            if row.get("contractId") != contract_id
+        ]
+    for profile in defect.get("obligationDropProfiles", []):
+        out["profileObligations"] = [
+            row for row in out.get("profileObligations", []) if row.get("profile") != profile
+        ]
+    for class_id in defect.get("obligationDropClassIds", []):
+        out["obligationClasses"] = [
+            row for row in out.get("obligationClasses", []) if row.get("id") != class_id
+        ]
+    for patch in defect.get("obligationServicePatch", []):
+        for row in out.get("serviceObligations", []):
+            if row.get("serviceId") != patch.get("serviceId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for class_id in patch.get("dropClassIds", []):
+                row["obligationClassIds"] = [
+                    value for value in row.get("obligationClassIds", []) if value != class_id
+                ]
+            for issue_id in patch.get("dropOwnerIssueIds", []):
+                row["ownerIssueIds"] = [
+                    value for value in row.get("ownerIssueIds", []) if value != issue_id
+                ]
+            for coverage_key, value in patch.get("testLayerCoverageSet", {}).items():
+                row.setdefault("testLayerCoverage", {})[coverage_key] = value
+    for patch in defect.get("obligationSemanticPatch", []):
+        for row in out.get("semanticContractObligations", []):
+            if row.get("contractId") != patch.get("contractId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for class_id in patch.get("dropClassIds", []):
+                row["obligationClassIds"] = [
+                    value for value in row.get("obligationClassIds", []) if value != class_id
+                ]
+            for issue_id in patch.get("dropOwnerIssueIds", []):
+                row["ownerIssueIds"] = [
+                    value for value in row.get("ownerIssueIds", []) if value != issue_id
+                ]
+    for section in defect.get("obligationEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    for key, value in defect.get("futureAiGuardrailSet", {}).items():
+        out.setdefault("futureAiChangeGuardrail", {})[key] = value
+    for key in defect.get("futureAiGuardrailDrop", []):
+        out.setdefault("futureAiChangeGuardrail", {}).pop(key, None)
+    if defect.get("obligationDropNonClaims"):
+        dropped = set(defect.get("obligationDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("obligationAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["obligationAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -321,6 +476,21 @@ def apply_makefile_defect(makefile: str, defect: dict[str, Any]) -> str:
     return out
 
 
+def apply_schema_registry_defect(registry: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(registry)
+    for schema_id in defect.get("schemaRegistryDropIds", []):
+        out["schemas"] = [row for row in out.get("schemas", []) if row.get("id") != schema_id]
+    for patch in defect.get("schemaRegistryPatch", []):
+        for row in out.get("schemas", []):
+            if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    return out
+
+
 def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     defect = defect or {}
     contract = read_json(CONTRACT_PATH) if (ROOT / CONTRACT_PATH).exists() else None
@@ -331,6 +501,8 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     lifecycle = apply_lifecycle_defect(lifecycle, defect)
     command_surface = read_json(COMMAND_SURFACE_PATH) if (ROOT / COMMAND_SURFACE_PATH).exists() else None
     command_surface = apply_command_surface_defect(command_surface, defect)
+    obligation_manifest = read_json(OBLIGATION_MANIFEST_PATH) if (ROOT / OBLIGATION_MANIFEST_PATH).exists() else None
+    obligation_manifest = apply_obligation_manifest_defect(obligation_manifest, defect)
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -338,7 +510,12 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "harness": harness,
         "lifecycle": lifecycle,
         "commandSurface": command_surface,
+        "obligationManifest": obligation_manifest,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
+        "semanticContracts": read_semantic_contracts(),
+        "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
+        "schemaRegistry": apply_schema_registry_defect(read_json(SCHEMA_REGISTRY_PATH), defect),
+        "testObligationSchema": read_json(TEST_OBLIGATION_SCHEMA_PATH) if (ROOT / TEST_OBLIGATION_SCHEMA_PATH).exists() else None,
         "enterpriseModel": read_json(ENTERPRISE_MODEL_PATH),
         "package": apply_package_defect(read_json(PACKAGE_PATH), defect),
         "makefile": makefile,
@@ -498,6 +675,392 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         state["enterpriseModel"],
         "USF-TEST-READINESS-028",
     )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["obligationManifest"],
+        OBLIGATION_MANIFEST_PATH,
+        state["enterpriseModel"],
+        "USF-TEST-READINESS-039",
+    )
+
+
+def _list_by_id(rows: Any, key: str) -> dict[str, dict[str, Any]]:
+    if not isinstance(rows, list):
+        return {}
+    return {
+        str(row.get(key)): row
+        for row in rows
+        if isinstance(row, dict) and row.get(key) is not None
+    }
+
+
+def _compose_test_services(state: dict[str, Any]) -> dict[str, Any]:
+    compose = state.get("composeTest")
+    if not isinstance(compose, dict):
+        return {}
+    services = compose.get("services")
+    return services if isinstance(services, dict) else {}
+
+
+def _required_profiles(compose_services: dict[str, Any]) -> dict[str, set[str]]:
+    profiles: dict[str, set[str]] = {}
+    for service_id, service in compose_services.items():
+        if not isinstance(service, dict):
+            continue
+        for profile in service.get("profiles", []) or []:
+            profiles.setdefault(str(profile), set()).add(str(service_id))
+    return profiles
+
+
+def _catalogue_test_policy(row: dict[str, Any]) -> dict[str, Any]:
+    policy = row.get("environmentPolicies", {}).get("test", {})
+    return policy if isinstance(policy, dict) else {}
+
+
+def _semantic_contract_needs_auth(row: dict[str, Any]) -> bool:
+    text = " ".join(
+        str(value).lower()
+        for value in (
+            row.get("contractId"),
+            row.get("capability"),
+            row.get("capabilityDomain"),
+            row.get("title"),
+        )
+    )
+    return any(token in text for token in ("auth", "tenant", "permission", "role", "abac", "rbac", "key"))
+
+
+def _semantic_contract_needs_data_lifecycle(row: dict[str, Any]) -> bool:
+    text = " ".join(
+        str(value).lower()
+        for value in (
+            row.get("contractId"),
+            row.get("capability"),
+            row.get("capabilityDomain"),
+            row.get("title"),
+        )
+    )
+    return any(
+        token in text
+        for token in (
+            "backup",
+            "restore",
+            "bulk",
+            "import",
+            "export",
+            "storage",
+            "search",
+            "retention",
+            "migration",
+            "data",
+            "privacy",
+        )
+    )
+
+
+def _semantic_contract_needs_operational(row: dict[str, Any]) -> bool:
+    text = " ".join(
+        str(value).lower()
+        for value in (
+            row.get("contractId"),
+            row.get("capability"),
+            row.get("capabilityDomain"),
+            row.get("title"),
+        )
+    )
+    return any(token in text for token in ("workflow", "job", "alert", "incident", "metric", "trace", "log", "event"))
+
+
+def check_obligation_manifest_shape(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), "obligation manifest is missing")
+        return
+    required = {
+        "$schema",
+        "id",
+        "description",
+        "authorityLevel",
+        "issueId",
+        "parentIssueId",
+        "serviceCatalogueAuthority",
+        "semanticContractAuthority",
+        "testComposeTarget",
+        "ontologyConcepts",
+        "taxonomyRefs",
+        "vocabularyRefs",
+        "aiGuidance",
+        "testEnvironmentContract",
+        "composedSemanticHarness",
+        "deterministicFixtureLifecycle",
+        "commandSurfaceGate",
+        "testReadinessClaimAllowed",
+        "inMemoryServiceSubstituteAllowedForServiceBackedClaims",
+        "coveragePolicy",
+        "obligationClasses",
+        "dependencyGraph",
+        "profileObligations",
+        "serviceObligations",
+        "semanticContractObligations",
+        "futureAiChangeGuardrail",
+        "validationCommands",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    }
+    for key in sorted(required):
+        if key not in manifest:
+            F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), f"missing top-level field {key}")
+    if manifest.get("issueId") != "USF-239" or manifest.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), "issue linkage must be USF-239 under USF-234")
+    if manifest.get("authorityLevel") != "semantic-definition":
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), "authorityLevel must be semantic-definition")
+    if manifest.get("serviceCatalogueAuthority") != str(SERVICE_CATALOGUE_PATH):
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), "service catalogue authority is stale")
+    if manifest.get("semanticContractAuthority") != f"{SEMANTIC_CONTRACT_DIR}/":
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), "semantic contract authority is stale")
+    if manifest.get("testComposeTarget") != COMPOSE_TARGET:
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), "test Compose target is stale")
+    if manifest.get("testReadinessClaimAllowed") is not False:
+        F.add("USF-TEST-READINESS-039", str(OBLIGATION_MANIFEST_PATH), "manifest must not allow final test-readiness claim")
+    if manifest.get("inMemoryServiceSubstituteAllowedForServiceBackedClaims") is not False:
+        F.add("USF-TEST-READINESS-033", str(OBLIGATION_MANIFEST_PATH), "service-backed claims must forbid in-memory substitution")
+
+
+def check_obligation_schema_registry(F: Findings, state: dict[str, Any]) -> None:
+    schema = state.get("testObligationSchema")
+    if not isinstance(schema, dict):
+        F.add("USF-TEST-READINESS-039", str(TEST_OBLIGATION_SCHEMA_PATH), "test obligation schema is missing")
+    else:
+        if schema.get("$id") != "urn:usf:schema:test-obligation-manifest":
+            F.add("USF-TEST-READINESS-039", str(TEST_OBLIGATION_SCHEMA_PATH), "schema id is stale")
+        if schema.get("additionalProperties") is not False:
+            F.add("USF-TEST-READINESS-039", str(TEST_OBLIGATION_SCHEMA_PATH), "schema must be closed at the top level")
+    entries = _list_by_id(state["schemaRegistry"].get("schemas", []), "id")
+    entry = entries.get("test-obligation-manifest.schema.json")
+    if not entry:
+        F.add("USF-TEST-READINESS-039", str(SCHEMA_REGISTRY_PATH), "schema registry is missing test obligation manifest schema")
+        return
+    if entry.get("path") != str(TEST_OBLIGATION_SCHEMA_PATH):
+        F.add("USF-TEST-READINESS-039", str(SCHEMA_REGISTRY_PATH), "schema registry path is stale")
+    if entry.get("lifecycleState") != "draft" or entry.get("status") != "draft":
+        F.add("USF-TEST-READINESS-039", str(SCHEMA_REGISTRY_PATH), "schema must remain draft for USF-239")
+    if entry.get("authorityRole") != "semantic-definition":
+        F.add("USF-TEST-READINESS-039", str(SCHEMA_REGISTRY_PATH), "schema registry authority role is stale")
+
+
+def check_obligation_service_coverage(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        return
+    service_rows = _list_by_id(manifest.get("serviceObligations"), "serviceId")
+    catalogue_rows = catalogue_by_id(state["serviceCatalogue"])
+    for service_id, catalogue_row in catalogue_rows.items():
+        row = service_rows.get(service_id)
+        if not row:
+            F.add("USF-TEST-READINESS-030", service_id, "service catalogue row is missing from obligation manifest")
+            continue
+        subject = f"{OBLIGATION_MANIFEST_PATH}#serviceObligations.{service_id}"
+        policy = _catalogue_test_policy(catalogue_row)
+        expected_required = policy.get("required") is True
+        if row.get("requiredInTest") is not expected_required:
+            F.add("USF-TEST-READINESS-030", subject, "requiredInTest does not match service catalogue test policy")
+        if row.get("serviceCataloguePath") != str(SERVICE_CATALOGUE_PATH):
+            F.add("USF-TEST-READINESS-030", subject, "service catalogue path is missing or stale")
+        if row.get("owner") != catalogue_row.get("serviceOwner") or row.get("riskOwner") != catalogue_row.get("riskOwner") or row.get("controlOwner") != catalogue_row.get("controlOwner"):
+            F.add("USF-TEST-READINESS-030", subject, "owner riskOwner or controlOwner does not match service catalogue")
+        if row.get("assetInventoryClass") != catalogue_row.get("assetInventoryClass"):
+            F.add("USF-TEST-READINESS-030", subject, "asset inventory class does not match service catalogue")
+        if row.get("dataClassification") != catalogue_row.get("dataClassification"):
+            F.add("USF-TEST-READINESS-030", subject, "data classification does not match service catalogue")
+        if not isinstance(row.get("testLayerCoverage"), dict):
+            F.add("USF-TEST-READINESS-030", subject, "testLayerCoverage is missing")
+        elif not all(row["testLayerCoverage"].get(key) is True for key in ("unit", "contractDesign", "functionalRegression", "enterpriseEvidence", "coverage", "negativeFailClosed", "missingEvidenceRegression")):
+            F.add("USF-TEST-READINESS-030", subject, "mandatory base test layer coverage flags must be true")
+        if not row.get("evidenceId") or not row.get("nonClaimBoundary"):
+            F.add("USF-TEST-READINESS-034", subject, "evidence id and non-claim boundary are required")
+        if not set(row.get("ownerIssueIds", [])).intersection(REQUIRED_OBLIGATION_ISSUES):
+            F.add("USF-TEST-READINESS-034", subject, "ownerIssueIds must link USF test-readiness issues")
+        if not row.get("validationCommands"):
+            F.add("USF-TEST-READINESS-034", subject, "validation commands are required")
+    extra = sorted(set(service_rows) - set(catalogue_rows))
+    for service_id in extra:
+        F.add("USF-TEST-READINESS-030", service_id, "obligation service row is not present in service catalogue")
+
+
+def check_obligation_compose_profile_coverage(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        return
+    compose_services = _compose_test_services(state)
+    service_rows = _list_by_id(manifest.get("serviceObligations"), "serviceId")
+    compose_covered = {
+        str(row.get("composeServiceId"))
+        for row in service_rows.values()
+        if row.get("generatedInTestCompose") is True and row.get("composeServiceId")
+    }
+    for compose_service_id in compose_services:
+        if compose_service_id not in compose_covered:
+            F.add("USF-TEST-READINESS-032", compose_service_id, "generated test Compose service is not covered by obligation manifest")
+    profile_rows = _list_by_id(manifest.get("profileObligations"), "profile")
+    required_profiles = _required_profiles(compose_services)
+    for profile, expected_services in required_profiles.items():
+        row = profile_rows.get(profile)
+        if not row:
+            F.add("USF-TEST-READINESS-032", profile, "generated test Compose profile is missing from obligation manifest")
+            continue
+        subject = f"{OBLIGATION_MANIFEST_PATH}#profileObligations.{profile}"
+        if row.get("composeTarget") != COMPOSE_TARGET:
+            F.add("USF-TEST-READINESS-032", subject, "profile row must use canonical test Compose target")
+        if set(row.get("serviceIds", [])) != expected_services:
+            F.add("USF-TEST-READINESS-032", subject, "profile service ids do not match generated test Compose")
+        for key in ("mustBeStarted", "mustBeSeeded", "mustBeExercised", "mustBeReset", "mustBeEvidenced"):
+            if row.get(key) is not True:
+                F.add("USF-TEST-READINESS-032", subject, f"{key} must be true")
+        if row.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-033", subject, "profile must forbid in-memory service substitutes")
+
+
+def check_obligation_semantic_coverage(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        return
+    semantic_rows = _list_by_id(manifest.get("semanticContractObligations"), "contractId")
+    for contract_id, contract in state["semanticContracts"].items():
+        row = semantic_rows.get(contract_id)
+        if not row:
+            F.add("USF-TEST-READINESS-031", contract_id, "semantic contract is missing from obligation manifest")
+            continue
+        subject = f"{OBLIGATION_MANIFEST_PATH}#semanticContractObligations.{contract_id}"
+        if row.get("path") != contract.get("_path"):
+            F.add("USF-TEST-READINESS-031", subject, "semantic contract path is stale")
+        if row.get("capabilityDomain") != contract.get("capabilityDomain"):
+            F.add("USF-TEST-READINESS-031", subject, "capability domain is stale")
+        if set(row.get("facetKeys", [])) != set((contract.get("facets") or {}).keys()):
+            F.add("USF-TEST-READINESS-031", subject, "facet keys do not match semantic contract")
+        if row.get("testMappingRequired") is not True:
+            F.add("USF-TEST-READINESS-034", subject, "semantic contract row must require a test mapping")
+        for key in ("implementedTestPath", "evidenceId", "coverageExpectation", "nonClaimBoundary"):
+            if not row.get(key):
+                F.add("USF-TEST-READINESS-034", subject, f"{key} is required")
+        class_ids = set(row.get("obligationClassIds", []))
+        for required_class in ("unit", "functional-regression", "contract-design-drift", "enterprise-evidence", "coverage", "future-ai-guardrail", "missing-evidence-regression"):
+            if required_class not in class_ids:
+                F.add("USF-TEST-READINESS-031", subject, f"missing obligation class {required_class}")
+        owner_ids = set(row.get("ownerIssueIds", []))
+        for required_issue in ("USF-241", "USF-243", "USF-244", "USF-246", "USF-247", "USF-252"):
+            if required_issue not in owner_ids:
+                F.add("USF-TEST-READINESS-034", subject, f"missing owner issue {required_issue}")
+        if _semantic_contract_needs_auth(row) and "auth-tenant-role-permission" not in class_ids:
+            F.add("USF-TEST-READINESS-036", subject, "auth tenant role permission obligation is missing")
+        if _semantic_contract_needs_data_lifecycle(row) and "data-lifecycle" not in class_ids:
+            F.add("USF-TEST-READINESS-037", subject, "data lifecycle obligation is missing")
+        if _semantic_contract_needs_operational(row) and "operational-resilience" not in class_ids:
+            F.add("USF-TEST-READINESS-038", subject, "operational resilience obligation is missing")
+
+
+def check_obligation_service_classes(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        return
+    service_rows = _list_by_id(manifest.get("serviceObligations"), "serviceId")
+    for service_id, row in service_rows.items():
+        subject = f"{OBLIGATION_MANIFEST_PATH}#serviceObligations.{service_id}"
+        class_ids = set(row.get("obligationClassIds", []))
+        owner_ids = set(row.get("ownerIssueIds", []))
+        if row.get("requiredInTest") is True and row.get("generatedInTestCompose") is True:
+            for required_class in ("composed-integration", "operational-resilience", "seed-reset-fixture", "compose-profile-exercise"):
+                if required_class not in class_ids:
+                    F.add("USF-TEST-READINESS-032", subject, f"missing service-backed obligation class {required_class}")
+            for required_issue in ("USF-242", "USF-248", "USF-251"):
+                if required_issue not in owner_ids:
+                    F.add("USF-TEST-READINESS-034", subject, f"missing owner issue {required_issue}")
+            if row.get("inMemoryServiceSubstituteAllowed") is not False:
+                F.add("USF-TEST-READINESS-033", subject, "service-backed row must forbid in-memory substitution")
+            if not row.get("fixtureSeedId") or row.get("fixtureSeedId") == "not-applicable":
+                F.add("USF-TEST-READINESS-033", subject, "service-backed row must have fixture seed id")
+            coverage = row.get("testLayerCoverage", {})
+            for key in ("composedIntegration", "operational", "seedResetFixture"):
+                if not isinstance(coverage, dict) or coverage.get(key) is not True:
+                    F.add("USF-TEST-READINESS-033", subject, f"testLayerCoverage.{key} must be true")
+        if row.get("requiredInTest") is True and row.get("generatedInTestCompose") is not True and not row.get("boundedDisposition"):
+            F.add("USF-TEST-READINESS-034", subject, "required non-generated service must have bounded disposition")
+        if service_id in AUTH_SERVICE_IDS or row.get("assetInventoryClass") in {"control-plane", "operator-surface", "gateway"}:
+            if "auth-tenant-role-permission" not in class_ids or "USF-249" not in owner_ids:
+                F.add("USF-TEST-READINESS-036", subject, "auth tenant role permission owner and class are required")
+        if service_id in DATA_SERVICE_IDS or row.get("assetInventoryClass") in {"data-store", "backup-restore"}:
+            if "data-lifecycle" not in class_ids or "backup-restore-bulk-migration" not in class_ids or "USF-250" not in owner_ids:
+                F.add("USF-TEST-READINESS-037", subject, "data lifecycle backup restore bulk migration owner and classes are required")
+        if row.get("requiredInTest") is True and row.get("generatedInTestCompose") is True:
+            if "operational-resilience" not in class_ids or "USF-245" not in owner_ids:
+                F.add("USF-TEST-READINESS-038", subject, "operational resilience owner and class are required")
+
+
+def check_obligation_classes_and_guardrail(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        return
+    class_ids = set(_list_by_id(manifest.get("obligationClasses"), "id"))
+    missing_classes = sorted(REQUIRED_OBLIGATION_CLASSES - class_ids)
+    if missing_classes:
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), f"missing obligation classes: {missing_classes}")
+    graph = _list_by_id(manifest.get("dependencyGraph"), "issueId")
+    for issue_id in ("USF-239", "USF-248", "USF-251", "USF-249", "USF-250", "USF-247", "USF-234"):
+        if issue_id not in graph:
+            F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), f"dependency graph missing {issue_id}")
+    blocks = set(graph.get("USF-239", {}).get("blocks", []))
+    missing_blocks = sorted((REQUIRED_OBLIGATION_ISSUES - {"USF-239"}) - blocks)
+    if missing_blocks:
+        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), f"USF-239 dependency graph missing blocks: {missing_blocks}")
+    guardrail = manifest.get("futureAiChangeGuardrail")
+    required_guardrail = {
+        "semanticDefinitionUpdateRequired",
+        "testObligationUpdateRequired",
+        "fixtureUpdateRequired",
+        "coverageUpdateRequired",
+        "evidenceUpdateRequired",
+        "nonClaimReviewRequired",
+    }
+    if not isinstance(guardrail, dict):
+        F.add("USF-TEST-READINESS-035", str(OBLIGATION_MANIFEST_PATH), "future AI change guardrail is missing")
+    else:
+        for key in required_guardrail:
+            if guardrail.get(key) is not True:
+                F.add("USF-TEST-READINESS-035", f"{OBLIGATION_MANIFEST_PATH}#futureAiChangeGuardrail.{key}", "future AI guardrail flag must be true")
+        if guardrail.get("validatorCommand") != OBLIGATION_MANIFEST_COMMAND or guardrail.get("ownerIssueId") != "USF-252":
+            F.add("USF-TEST-READINESS-035", str(OBLIGATION_MANIFEST_PATH), "future AI guardrail command or owner is stale")
+
+
+def check_obligation_claims(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        return
+    non_claims = set(manifest.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-039", str(OBLIGATION_MANIFEST_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(manifest.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-039", str(OBLIGATION_MANIFEST_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+    commands = set(manifest.get("validationCommands", []))
+    for expected in (
+        OBLIGATION_MANIFEST_COMMAND,
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-spec/validate-spec.py all --json",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-034", f"{OBLIGATION_MANIFEST_PATH}#validationCommands", f"missing validation command {expected}")
+
+
+def check_obligation_manifest(F: Findings, state: dict[str, Any]) -> None:
+    check_obligation_manifest_shape(F, state)
+    check_obligation_schema_registry(F, state)
+    check_obligation_service_coverage(F, state)
+    check_obligation_compose_profile_coverage(F, state)
+    check_obligation_semantic_coverage(F, state)
+    check_obligation_service_classes(F, state)
+    check_obligation_classes_and_guardrail(F, state)
+    check_obligation_claims(F, state)
 
 
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
@@ -853,6 +1416,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_harness(F, state)
     check_lifecycle(F, state)
     check_command_surface(F, state)
+    check_obligation_manifest(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-037",
+  "obligationServicePatch": [
+    {
+      "serviceId": "postgres",
+      "dropClassIds": [
+        "data-lifecycle"
+      ]
+    }
+  ]
+}
