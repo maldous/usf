@@ -70,6 +70,16 @@ Current CI alignment:
 - Pushes to `main` run `.github/workflows/proof-anchor.yml`, which publishes the proof-freshness anchor for the merge commit.
 - The repository handover gate remains the local `make verify` superset. A green GitHub spec check alone is not sufficient for Linear Done.
 
+Validation evidence is recorded in three distinct phases:
+
+| Phase                      | Commit or boundary                         | Purpose                                                                                                                                                                |
+| -------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Branch/pre-merge           | PR #193 and PR #194 branch heads           | Proves each PR branch before ready or merge. This does not substitute for post-merge validation.                                                                       |
+| Fresh clone                | `cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d` | Proves the documented clone and `make verify` path from a clean checkout before merge.                                                                                 |
+| Final post-merge on `main` | `4cc5cad6f6326f060d88a11f08014b69bc82438a` | Proves the merged dev-readiness evidence after PR #194 with install, `make verify`, audit, licence inventory, enterprise validation, spec validation, and diff checks. |
+
+The machine-readable report keeps these phases separate under `validationEvidenceByPhase` so branch validation, fresh-clone validation, and final post-merge validation cannot be conflated.
+
 ## Proof Command Guide
 
 Representative proof commands:
@@ -233,7 +243,7 @@ The USF-226 evidence pack is `docs/architecture/dev-readiness-validation-and-han
 - final git status expectation;
 - preserved non-claims.
 
-Because a pull request cannot contain the merge commit that will merge it, the report carries a merge-SHA recording boundary. The actual merge SHA must be recorded in the USF-226 post-merge Linear closure comment before the issue can be marked Done.
+The report records PR #193 and PR #194 merge SHAs and a post-merge validation row pinned to the final PR #194 merge commit. A later correction PR must record its own merge SHA in Linear after merge because a pull request cannot contain the commit that merges it.
 
 ## Non-Claims
 

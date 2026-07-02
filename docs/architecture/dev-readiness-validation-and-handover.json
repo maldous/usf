@@ -4,7 +4,7 @@
   "sourceIssue": "USF-226",
   "parentIssue": "USF-133",
   "relatedIssues": ["USF-184", "USF-192", "USF-224", "USF-225"],
-  "status": "pr-193-merged-and-post-merge-validated-enterprise-control-support-follow-up-in-progress",
+  "status": "post-merge-validation-pinned-to-pr-194-merge",
   "definitionOfDevReady": "A developer or AI agent can clone the repository, set it up from documented steps, run the local and composed foundation, execute proof and validation commands, understand failures, make a governed change, and submit a compliant PR without private knowledge, hidden local state, real secrets, or real tenant data.",
   "repositoryStateAtStart": {
     "branch": "main",
@@ -338,6 +338,98 @@
       "status": "passed from /tmp/usf-226-fresh-clone.UH4ysa at cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d"
     }
   ],
+  "validationEvidenceByPhase": {
+    "branchPreMergeValidation": {
+      "status": "passed",
+      "purpose": "Validate PR branch changes before ready or merge. This evidence is not used as a substitute for post-merge validation.",
+      "evidenceIssue": "USF-226",
+      "pullRequests": [
+        {
+          "pr": "https://github.com/maldous/usf/pull/193",
+          "headCommit": "25ec68c391b0bf0d95f0002087fbd3465e892fd1",
+          "commands": [
+            "corepack pnpm install --frozen-lockfile",
+            "make verify",
+            "corepack pnpm proof:api:graphql-generated-client",
+            "corepack pnpm proof:observability:browser-telemetry",
+            "python3 tools/validate-spec/validate-spec.py all --json",
+            "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+            "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+            "python3 tools/validate-runtime/validate-runtime.py all --json",
+            "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+            "corepack pnpm audit --audit-level low",
+            "corepack pnpm licenses list --json",
+            "git diff --check",
+            "git diff --check origin/main...HEAD"
+          ]
+        },
+        {
+          "pr": "https://github.com/maldous/usf/pull/194",
+          "headCommit": "95945f9961f89f107a4a048d5fa2fdeea44a50ad",
+          "commands": [
+            "corepack pnpm install --frozen-lockfile",
+            "make verify",
+            "corepack pnpm audit --audit-level low",
+            "corepack pnpm licenses list --json",
+            "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+            "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+            "git diff --check",
+            "git diff --check origin/main...HEAD"
+          ]
+        }
+      ]
+    },
+    "freshCloneValidation": {
+      "status": "passed",
+      "purpose": "Prove the documented clone and make verify path from a clean checkout before merge.",
+      "checkedCommit": "cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d",
+      "checkoutPath": "/tmp/usf-226-fresh-clone.UH4ysa",
+      "command": "make verify",
+      "finalGitStatusShort": "clean"
+    },
+    "finalPostMergeValidation": {
+      "status": "passed",
+      "purpose": "Prove the final merged dev-readiness evidence after PR #194 on main, distinct from branch and fresh-clone validation.",
+      "evidenceIssue": "USF-227",
+      "checkedBranch": "main",
+      "checkedCommit": "4cc5cad6f6326f060d88a11f08014b69bc82438a",
+      "recordedAt": "2026-07-02T06:31:01Z",
+      "commands": [
+        {
+          "command": "corepack pnpm install --frozen-lockfile",
+          "status": "passed"
+        },
+        {
+          "command": "make verify",
+          "status": "passed"
+        },
+        {
+          "command": "corepack pnpm audit --audit-level low",
+          "status": "passed-no-known-vulnerabilities"
+        },
+        {
+          "command": "corepack pnpm licenses list --json",
+          "status": "passed-inventory-written-to-local-temporary-output"
+        },
+        {
+          "command": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+          "status": "passed"
+        },
+        {
+          "command": "python3 tools/validate-spec/validate-spec.py all --json",
+          "status": "passed"
+        },
+        {
+          "command": "git diff --check",
+          "status": "passed"
+        }
+      ],
+      "gitStatusBeforeCorrection": "clean",
+      "openGithubPullRequestsBeforeCorrection": [],
+      "openLinearBacklogTodoInProgressBeforeCorrection": ["USF-227"],
+      "nonClaimBoundary": "This post-merge validation supports bounded dev-readiness handover evidence only and does not claim test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or broader readiness."
+    }
+  },
   "failuresFixedDuringUSF226": [
     {
       "command": "corepack pnpm audit --audit-level high",
@@ -423,7 +515,14 @@
     "prUrl": "https://github.com/maldous/usf/pull/193",
     "prHeadCommit": "cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d",
     "mergeSha": "dae5c76e767619bba94c47c9e7f30036a6b7c0f5",
-    "mergeShaBoundary": "PR #193 merge SHA is recorded from post-merge Linear reconciliation; any later follow-up PR records its own merge SHA in Linear before Done."
+    "enterpriseControlSupportFollowUp": {
+      "prUrl": "https://github.com/maldous/usf/pull/194",
+      "prHeadCommit": "95945f9961f89f107a4a048d5fa2fdeea44a50ad",
+      "mergeSha": "4cc5cad6f6326f060d88a11f08014b69bc82438a",
+      "postMergeValidationPinned": true,
+      "postMergeValidationEvidenceRef": "validationEvidenceByPhase.finalPostMergeValidation"
+    },
+    "mergeShaBoundary": "PR #193 and PR #194 merge SHAs are recorded in this report. The later USF-227 correction PR records its own merge SHA in Linear after merge because a pull request cannot contain the commit that merges it."
   },
   "finalSearchEvidence": {
     "openGithubPullRequestsBeforeWork": [],
@@ -433,7 +532,7 @@
     "archivedOnboardingIssuesExcludedFromActiveOpenCount": ["USF-1", "USF-2", "USF-3", "USF-4"]
   },
   "claims": {
-    "devReadinessHandoverClaim": "pr-193-local-and-fresh-clone-validation-passed-with-post-merge-main-validation-recorded; enterprise-control-support-follow-up-pending-merge",
+    "devReadinessHandoverClaim": "pr-193-local-and-fresh-clone-validation-passed; pr-194-enterprise-control-support-merged; final-post-merge-validation-pinned-to-4cc5cad6f6326f060d88a11f08014b69bc82438a",
     "freshCloneBootstrapProven": true,
     "oneCommandPathProven": true,
     "localCiExpectationDocumented": true,
