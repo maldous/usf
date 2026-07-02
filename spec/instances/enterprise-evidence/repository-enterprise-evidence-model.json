@@ -5480,6 +5480,33 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "soa-usf-235-test-environment-service-contract",
+      "mappedType": "test-readiness-service-contract",
+      "controlPurpose": "Organise USF-235 evidence for the test environment service contract and enforce that service-backed test-readiness claims use composed backing services instead of in-memory substitutes.",
+      "riskTreated": "Service-backed test claims may silently inherit dev in-memory proof or process-local substitutes unless the required test service inventory, Compose target, reset posture, and validation command are machine-readable.",
+      "assetServiceAffected": "compose/compose.test.generated.yaml; spec/instances/compose-service/service-catalogue.json; docs/architecture/test-environment-service-contract.json",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=defined-only; sourceIssue=USF-235; parentIssue=USF-234; serviceContractDefined=true; testReadinessClaimAllowed=false; composedBackingServiceRule=required; inMemoryServiceSubstituteAllowed=false-for-service-backed-claims",
+      "evidenceSource": "docs/architecture/test-environment-service-contract.json; docs/architecture/test-environment-service-contract.md; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-235 defines the service contract only. USF-236 must migrate the composed semantic harness, USF-237 must prove deterministic fixtures, USF-238 must add the final command surface and CI/local gate, and USF-234 must perform final acceptance before any test-readiness claim; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-236,USF-237,USF-238,USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8201,6 +8228,28 @@
       ],
       "prOrMergeSha": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
       "retentionPosture": "Retain value-free command result and validator evidence only. Browser proof data is synthetic and redacted; temp files are removed; no live telemetry endpoint, production data, customer data, or raw provider payload is retained.; faro-production-readiness=false; browser-e2e-readiness=false"
+    },
+    {
+      "id": "evidence-usf-235-test-environment-service-contract",
+      "proofResult": "test-readiness-service-contract",
+      "whatWasProven": "USF-235 records the canonical test environment service contract, inventories every service catalogue row required in the test environment, maps service-backed paths to compose/compose.test.generated.yaml, and wires a fail-closed validator that rejects missing service rows, in-memory service substitutes, missing reset/cleanup posture, missing proof commands, missing enterprise refs, and overclaims.",
+      "whatWasNotProven": "USF-235 does not prove the composed semantic harness, deterministic fixture lifecycle, final current-state test command surface, CI/local test gate, or final test readiness. Those remain owned by USF-236, USF-237, USF-238, and USF-234.",
+      "runtimeMode": "test-contract-definition",
+      "providerMode": "composed-test-required-for-service-backed-claims",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#environmentPolicies.test",
+      "adapterProviderId": "not-applicable-service-contract",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "tools/validate-test-readiness/validate-test-readiness.py",
+      "commitPin": "580ad4a5d165656280d186e89fbe94a39e3bf771",
+      "issueLinks": [
+        "USF-235",
+        "USF-236",
+        "USF-237",
+        "USF-238",
+        "USF-234"
+      ],
+      "prOrMergeSha": "580ad4a5d165656280d186e89fbe94a39e3bf771",
+      "retentionPosture": "Retain value-free repository metadata and validator output. No real tenant data, real secrets, private local state, raw endpoints, connection strings, or production data are retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10510,6 +10559,31 @@
       "failClosedBehaviour": "validate-observability fails when USF-225 proof artefact, proof command, SDK pins, minimal UI boundary, enterprise evidence refs, redaction checks, or non-claims are missing or overclaimed.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, proof command output, synthetic audit/log/trace/metric evidence, and browser-telemetry-faro-foundation-proof artefact only.",
       "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-225; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; product UI, live Faro ingestion, live monitoring, environment promotion, and USF-133 closure remain non-claims.; faro-production-readiness=false; browser-e2e-readiness=false"
+    },
+    {
+      "id": "threat-usf-235-test-environment-service-contract",
+      "targetType": "test-readiness-service-contract",
+      "target": "test environment service contract",
+      "trustBoundary": "Local composed test target, generated Compose service topology, synthetic fixtures, and repository validators. Dev in-memory proof remains outside service-backed test-readiness claims.",
+      "tenantBoundary": "All test contract rows require synthetic tenant context or value-free metadata only. No production tenant, customer, user, token, endpoint, stack trace, raw provider payload, or real secret is accepted as test evidence.",
+      "credentialBoundary": "Only documented local placeholders and generated Compose credentials are allowed. Validator and proof output must remain value-free and must not expose raw connection strings, tokens, secrets, or provider payloads.",
+      "dataClassification": "internal synthetic test-readiness contract metadata",
+      "abuseCases": [
+        "A service-backed test claim is satisfied by a dev in-memory proof",
+        "A profile-gated composed service is hidden behind a broad test-ready claim",
+        "A catalogue-only or deferred provider is treated as composed test evidence",
+        "Final test readiness is claimed before USF-234 accepts merged USF-236 through USF-238 evidence"
+      ],
+      "failureModes": [
+        "required service catalogue test row missing from service contract",
+        "inMemorySubstituteAllowed is true on a service-backed row",
+        "reset seed cleanup teardown or determinism posture is absent",
+        "enterprise evidence refs are missing",
+        "readiness or certification overclaim appears in allowedClaims"
+      ],
+      "failClosedBehaviour": "tools/validate-test-readiness/validate-test-readiness.py fails when the service contract is missing, incomplete, stale, overclaimed, or not wired into repo validation.",
+      "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, PR validation summaries, and Linear reconciliation comments only.",
+      "residualRisk": "effectivenessState=defined-only; sourceIssue=USF-235; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test readiness remains blocked on USF-236, USF-237, USF-238, and USF-234."
     }
   ],
   "sdkDependencyGovernance": [
@@ -13763,6 +13837,41 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "access-usf-235-test-environment-service-contract",
+      "targetType": "test-readiness-service-contract",
+      "target": "test environment service contract access boundary",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-235",
+        "accessModel=local-composed-test-target-loopback-and-profile-gated-services-only",
+        "authnAuthzBoundary=service-backed-test-claims-must-use-composed-auth-and-provider-boundaries-where-required",
+        "leastPrivilegePosture=synthetic-developer-or-agent-local-test-context-only",
+        "breakGlassRelevance=not-proven-by-USF-235",
+        "auditEvidence=value-free-validator-and-contract-evidence-only",
+        "reviewCadence=2026-09-30-before-final-test-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-235",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false-for-service-backed-claims",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-service-contract.json; tools/validate-test-readiness/validate-test-readiness.py; USF-235",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Runtime access, operator access, resolver auth, gateway access, and CI/local command execution proof remain owned by USF-236 and USF-238 before final USF-234 acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -16348,6 +16457,43 @@
       "evidenceSource": "docs/architecture/browser-telemetry-faro-foundation-proof.json; packages/proof/src/browser-telemetry-faro-proof.ts; USF-225",
       "validationCommand": "corepack pnpm proof:observability:browser-telemetry; python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "Live telemetry retry policy, alert routing, dashboard availability, provider data backup/restore, DR, RPO, and RTO are not proven; owner=platform-observability-foundation; reviewDate=2026-09-30.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-235-test-environment-service-contract",
+      "targetType": "test-readiness-service-contract",
+      "target": "test environment composed service reset and teardown boundary",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-235",
+        "readinessChecks=contract-requires-composed-service-readiness-before-service-backed-test-claims",
+        "retryTimeoutBehaviour=USF-236-and-USF-237-must-prove-bounded-readiness-and-repeatability-where-harness-executes-services",
+        "failClosedMode=validator-blocks-missing-service-row-in-memory-substitute-missing-reset-cleanup-and-overclaim",
+        "safeTeardown=contract-requires-Compose-down-remove-orphans-and-volume-reset-for-service-backed-test-runs",
+        "structuredLogging=value-free-validator-and-proof-output-only",
+        "tracingCorrelation=not-proven-by-USF-235",
+        "metrics=not-proven-by-USF-235",
+        "auditEvents=value-free-contract-and-validator-evidence-only",
+        "redaction=no-real-tenant-data-real-secrets-raw-endpoints-connection-strings-tokens-stack-traces-provider-payloads-or-production-data",
+        "backupRestorePosture=profile-gated-backup-restore-services-must-remain-composed-and-resettable-before-test-readiness-claim",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=DR-PITR-RPO-RTO-and-production-backup-readiness-not-proven-by-USF-235"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-service-contract.json; docs/architecture/test-environment-service-contract.md; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Repeated composed harness execution, fixture determinism, failure diagnosis, cleanup proof, and final test command gate remain owned by USF-236, USF-237, USF-238, and USF-234; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -19634,6 +19780,38 @@
       "evidenceSource": "docs/architecture/browser-telemetry-faro-foundation-proof.json; tools/validate-parity/validate-observability.py; packages/proof/src/browser-telemetry-faro-proof.ts",
       "validationCommand": "corepack pnpm proof:observability:browser-telemetry; python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "deferredReason": "Live alerting, on-call escalation, browser incident workflow, provider incident evidence, customer support incident evidence, vulnerability SLA evidence, supplier advisory response, production corrective action, and post-incident evidence are not proven by USF-225; owner=platform-observability-foundation; reviewDate=2026-09-30.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "incident-usf-235-test-environment-service-contract",
+      "targetType": "test-readiness-service-contract",
+      "target": "test environment service contract incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-235",
+        "incidentDetectionHook=validator-finding-and-proof-command-failure-only",
+        "alertingPosture=not-proven-by-USF-235",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=required-before-final-test-readiness-command-surface-or-service-backed-test-claim",
+        "dependencyUpdatePosture=no-new-runtime-or-provider-SDK-added-by-USF-235",
+        "correctiveActionEvidence=validator-and-planted-defect-coverage-for-service-contract-gaps-and-overclaims",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-235"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-service-contract.json; tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects/",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Alert routing, incident workflow operation, vulnerability SLA evidence, CI failure triage, and final test command diagnostics remain owned by USF-238 and USF-234; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -23484,6 +23662,40 @@
       "evidenceSource": "packages/proof/src/browser-telemetry-faro-proof.ts; docs/architecture/browser-telemetry-faro-foundation-proof.json; USF-225",
       "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
       "deferredReason": "Product UI privacy, browser journey privacy, live Faro ingestion data residency, legal hold, production retention, supplier/subprocessor posture, and live provider privacy evidence are not proven; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-134 and USF-193; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "privacy-usf-235-test-environment-service-contract",
+      "targetType": "test-readiness-service-contract",
+      "target": "test environment service contract synthetic data and privacy boundary",
+      "posture": [
+        "effectivenessState=defined-only",
+        "sourceIssue=USF-235",
+        "dataOrigin=synthetic-local-test-contract-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-contract-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data-in-contract-evidence",
+        "retentionPurgePosture=committed-contract-and-validator-metadata-retained-in-repository; runtime-test-fixture-data-must-be-reset-or-purged-by-USF-237",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-evidence-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-evidence-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-service-contract.json; docs/architecture/test-environment-service-contract.md; USF-235",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Runtime fixture data lifecycle, repeated seed/reset proof, legal hold posture for real data, live provider data residency, and production retention remain non-claims; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-237.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",

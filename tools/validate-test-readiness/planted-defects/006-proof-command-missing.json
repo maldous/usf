@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-006",
+  "serviceInventoryPatch": [
+    {
+      "serviceId": "postgres",
+      "drop": [
+        "validationCommands"
+      ]
+    }
+  ]
+}

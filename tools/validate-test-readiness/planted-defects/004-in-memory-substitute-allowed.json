@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-004",
+  "serviceInventoryPatch": [
+    {
+      "serviceId": "postgres",
+      "set": {
+        "inMemorySubstituteAllowed": true
+      }
+    }
+  ]
+}
