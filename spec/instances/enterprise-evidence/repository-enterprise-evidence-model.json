@@ -7481,7 +7481,7 @@
     {
       "id": "usf-212-evidence-windmill-configured-proof",
       "proofResult": "windmill-configured-local-bootstrap-sdk-proof",
-      "whatWasProven": "Package script proof:workflow:windmill is the command-pinned proof surface for bounded local Compose Windmill configured bootstrap semantics using windmill-client 1.743.0. It starts canonical test Windmill, worker, Postgres, and Redis with workflow-provider profile, uses an ephemeral loopback port, waits with bounded readiness retry until database and worker are ready, authenticates through the local superadmin placeholder, creates a synthetic workspace, writes and reads a synthetic variable, seeds a synthetic script, updates deployment history, executes the script by hash and path on the Windmill worker, observes value-free audit evidence, proves invalid credential fail-closed behaviour, checks redaction, and tears containers, volumes, and temp overrides down.",
+      "whatWasProven": "Package script proof:workflow:windmill is the command-pinned proof surface for bounded local Compose Windmill configured bootstrap semantics using windmill-client 1.743.0. It starts canonical test Windmill, worker, Postgres, and Redis with workflow-provider profile, uses a preselected Fetch-safe ephemeral loopback port, waits with bounded readiness retry until database and worker are ready, authenticates through the local superadmin placeholder, creates a synthetic workspace, writes and reads a synthetic variable, seeds a synthetic script, updates deployment history, executes the script by hash and path on the Windmill worker, observes value-free audit evidence, proves invalid credential fail-closed behaviour, checks redaction, and tears containers, volumes, and temp overrides down.",
       "whatWasNotProven": "This does not prove Windmill readiness, operator automation readiness, API runtime Windmill binding, worker runtime Windmill binding, full approval workflow readiness, live-provider compatibility, environment promotion readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
       "runtimeMode": "profile-gated-local-compose-proof",
       "providerMode": "composed-test",
@@ -7505,7 +7505,7 @@
     {
       "id": "evidence-proof-proof-workflow-windmill",
       "proofResult": "proof:workflow:windmill",
-      "whatWasProven": "Package script proof:workflow:windmill is the command-pinned proof surface for bounded local Compose Windmill configured bootstrap semantics using windmill-client 1.743.0. It starts canonical test Windmill, worker, Postgres, and Redis with workflow-provider profile, uses an ephemeral loopback port, waits with bounded readiness retry until database and worker are ready, authenticates through the local superadmin placeholder, creates a synthetic workspace, writes and reads a synthetic variable, seeds a synthetic script, updates deployment history, executes the script by hash and path on the Windmill worker, observes value-free audit evidence, proves invalid credential fail-closed behaviour, checks redaction, and tears containers, volumes, and temp overrides down.",
+      "whatWasProven": "Package script proof:workflow:windmill is the command-pinned proof surface for bounded local Compose Windmill configured bootstrap semantics using windmill-client 1.743.0. It starts canonical test Windmill, worker, Postgres, and Redis with workflow-provider profile, uses a preselected Fetch-safe ephemeral loopback port, waits with bounded readiness retry until database and worker are ready, authenticates through the local superadmin placeholder, creates a synthetic workspace, writes and reads a synthetic variable, seeds a synthetic script, updates deployment history, executes the script by hash and path on the Windmill worker, observes value-free audit evidence, proves invalid credential fail-closed behaviour, checks redaction, and tears containers, volumes, and temp overrides down.",
       "whatWasNotProven": "This does not prove Windmill readiness, operator automation readiness, API runtime Windmill binding, worker runtime Windmill binding, full approval workflow readiness, live-provider compatibility, environment promotion readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
       "runtimeMode": "profile-gated-local-compose-proof",
       "providerMode": "composed-test",
@@ -15624,7 +15624,8 @@
         "cleanupTeardownProof=compose-down-volume-removal-and-temp-dir-cleanup-proven",
         "deferredDrBoundary=explicit-non-claim",
         "readinessRetry=bounded-health-and-worker-readiness-retry",
-        "timeout=windmill-proof-command-timeouts-up-to-300s",
+        "safeLoopbackPortSelection=fetch-safe-ephemeral-loopback-port-asserted",
+        "timeout=windmill-proof-command-timeouts-and-service-specific-readiness-budget-up-to-15m",
         "failClosed=invalid-credential-safe-reason-code-proven",
         "owner=platform-workflow-foundation",
         "riskOwner=platform-workflow-risk-owner",

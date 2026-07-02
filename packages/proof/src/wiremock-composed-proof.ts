@@ -12,6 +12,10 @@ import {
   WireMockHttpProviderMock,
   type WireMockHttpProviderMockEvidence,
 } from "@foundation/adapter-mail";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 
 interface WireMockComposedProofResult {
   readonly status: "pass";
@@ -116,9 +120,14 @@ function runProcess(command: string, args: readonly string[], timeoutMs = 180000
   });
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-wiremock-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("wiremock-proof");
   await writeFile(
     path,
     [
@@ -126,14 +135,14 @@ async function writeComposeOverride(): Promise<{ readonly dir: string; readonly 
       "  wiremock:",
       "    ports: !override",
       "      - target: 8080",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 function composeArgs(projectName: string, overridePath: string): string[] {
@@ -206,6 +215,11 @@ export async function runWireMockComposedProof(): Promise<WireMockComposedProofR
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
+    assert(
+      port === override.publishedPort,
+      "WireMock proof port did not match the safe published port",
+    );
+    assertFetchSafeLoopbackPort(port, "wiremock-proof-selected-fetch-forbidden-port");
     const provider = new WireMockHttpProviderMock({
       endpoint: `http://127.0.0.1:${port}`,
     });
@@ -266,7 +280,7 @@ export async function runWireMockComposedProof(): Promise<WireMockComposedProofR
     providerUnavailableChecked: true,
     checks: [
       "WireMock container started from canonical test Compose with provider-mocks profile",
-      "WireMock host exposure used an ephemeral loopback port",
+      "WireMock host exposure used a preselected Fetch-safe ephemeral loopback port",
       "WireMock readiness used bounded retry through wiremock-captain",
       "wiremock-captain registered a synthetic tenant-safe fixture",
       "deterministic request matching was exercised",

@@ -196,6 +196,12 @@
       "failure": "Fresh-clone trial failed before repository validation because the host disallowed creating a global pnpm shim under /usr/bin",
       "fix": "Removed corepack enable from the required fresh-clone handover path because make verify invokes corepack pnpm directly",
       "result": "Fresh-clone proof rerun is pending against the corrected documented path"
+    },
+    {
+      "command": "corepack pnpm proof:workflow:windmill",
+      "failure": "Fresh-clone make verify exposed a Windmill SDK readiness timeout when Docker selected Fetch-forbidden loopback port 1720",
+      "fix": "Compose proof harnesses now preselect and assert Fetch-safe ephemeral loopback ports instead of accepting Docker's unrestricted random host port; Windmill records safeLoopbackPortChecked evidence and runtime validation enforces the marker",
+      "result": "Targeted ClickHouse, Redis, ClamAV, SonarQube, WireMock, LocalStack, mock-substrate, and Windmill proofs passed after the safe-port fix; fresh-clone make verify rerun is pending"
     }
   ],
   "freshCloneEvidence": {

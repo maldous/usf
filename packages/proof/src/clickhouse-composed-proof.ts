@@ -1,6 +1,5 @@
 import { spawn } from "node:child_process";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
-import { createServer, type AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -14,6 +13,10 @@ import {
   type ClickHouseComposedAnalyticsEvidence,
 } from "@foundation/adapter-bus";
 import { createTenantContext, opaqueHash } from "@foundation/core";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 
 interface ClickHouseComposedProofResult {
   readonly status: "pass";
@@ -122,9 +125,14 @@ function runProcess(command: string, args: readonly string[], timeoutMs = 240000
   });
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-clickhouse-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("clickhouse-proof");
   await writeFile(
     path,
     [
@@ -134,14 +142,14 @@ async function writeComposeOverride(): Promise<{ readonly dir: string; readonly 
       '      CLICKHOUSE_SKIP_USER_SETUP: "1"',
       "    ports: !override",
       "      - target: 8123",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 function composeArgs(projectName: string, overridePath: string): string[] {
@@ -212,18 +220,7 @@ async function proveUnavailable(port: number): Promise<ClickHouseComposedAnalyti
 }
 
 async function closedLoopbackPort(): Promise<number> {
-  const server = createServer();
-  await new Promise<void>((resolve, reject) => {
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => resolve());
-  });
-  const address = server.address();
-  const port = typeof address === "object" && address !== null ? (address as AddressInfo).port : 0;
-  await new Promise<void>((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
-  assert(port > 0, "clickhouse-proof-unavailable-port-allocation-failed");
-  return port;
+  return allocateFetchSafeLoopbackPort("clickhouse-unavailable-proof");
 }
 
 function assertSafeEvidence(evidence: unknown): void {
@@ -241,6 +238,11 @@ export async function runClickHouseComposedProof(): Promise<ClickHouseComposedPr
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
+    assert(
+      port === override.publishedPort,
+      "ClickHouse proof port did not match the safe published port",
+    );
+    assertFetchSafeLoopbackPort(port, "clickhouse-proof-selected-fetch-forbidden-port");
     const context = createTenantContext({
       tenantId: "tenant-clickhouse-proof",
       actorId: "actor-clickhouse-proof",
@@ -311,7 +313,7 @@ export async function runClickHouseComposedProof(): Promise<ClickHouseComposedPr
     providerUnavailableChecked: true,
     checks: [
       "ClickHouse container started from canonical test Compose with runtime-providers profile",
-      "ClickHouse host exposure used an ephemeral loopback HTTP port",
+      "ClickHouse host exposure used a preselected Fetch-safe ephemeral loopback HTTP port",
       "official ClickHouse JS client performed SELECT readiness with bounded retry",
       "official ClickHouse JS client created and dropped a proof-specific table",
       "official ClickHouse JS client inserted deterministic synthetic tenant-safe analytics events",

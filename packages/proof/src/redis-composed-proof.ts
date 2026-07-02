@@ -13,6 +13,10 @@ import {
   type RedisComposedCacheEvidence,
 } from "@foundation/adapter-bus";
 import { createTenantContext } from "@foundation/core";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 
 interface RedisComposedProofResult {
   readonly status: "pass";
@@ -121,9 +125,14 @@ function runProcess(command: string, args: readonly string[], timeoutMs = 180000
   });
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-redis-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("redis-proof");
   await writeFile(
     path,
     [
@@ -131,14 +140,14 @@ async function writeComposeOverride(): Promise<{ readonly dir: string; readonly 
       "  redis:",
       "    ports: !override",
       "      - target: 6379",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 function composeArgs(projectName: string, overridePath: string): string[] {
@@ -218,6 +227,11 @@ export async function runRedisComposedProof(): Promise<RedisComposedProofResult>
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
+    assert(
+      port === override.publishedPort,
+      "Redis proof port did not match the safe published port",
+    );
+    assertFetchSafeLoopbackPort(port, "redis-proof-selected-fetch-forbidden-port");
     const context = createTenantContext({
       tenantId: "tenant-redis-proof",
       actorId: "actor-redis-proof",
@@ -284,7 +298,7 @@ export async function runRedisComposedProof(): Promise<RedisComposedProofResult>
     providerUnavailableChecked: true,
     checks: [
       "Redis container started from canonical test Compose with runtime-providers profile",
-      "Redis host exposure used an ephemeral loopback port",
+      "Redis host exposure used a preselected Fetch-safe ephemeral loopback port",
       "Redis readiness used bounded official node-redis ping retry",
       "official node-redis client performed synthetic tenant-safe write read and delete",
       "official node-redis client proved TTL and expiration with bounded polling",

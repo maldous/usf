@@ -1,0 +1,11 @@
+{
+  "name": "usf-226-windmill-safe-loopback-port-marker-missing",
+  "expectedRule": "USF-RUNTIME-033",
+  "sourceReplacements": [
+    {
+      "path": "packages/proof/src/windmill-configured-proof.ts",
+      "old": "assertFetchSafeLoopbackPort",
+      "new": "missingFetchSafePortGuard"
+    }
+  ]
+}
