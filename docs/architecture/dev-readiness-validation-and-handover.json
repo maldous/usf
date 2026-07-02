@@ -3,30 +3,18 @@
   "title": "Dev Readiness Validation and Handover",
   "sourceIssue": "USF-226",
   "parentIssue": "USF-133",
-  "relatedIssues": [
-    "USF-184",
-    "USF-192",
-    "USF-224",
-    "USF-225"
-  ],
-  "status": "fresh-clone-validation-passed-pending-pr-merge",
+  "relatedIssues": ["USF-184", "USF-192", "USF-224", "USF-225"],
+  "status": "pr-193-merged-and-post-merge-validated-enterprise-control-support-follow-up-in-progress",
   "definitionOfDevReady": "A developer or AI agent can clone the repository, set it up from documented steps, run the local and composed foundation, execute proof and validation commands, understand failures, make a governed change, and submit a compliant PR without private knowledge, hidden local state, real secrets, or real tenant data.",
   "repositoryStateAtStart": {
     "branch": "main",
     "headCommit": "0669af5bceba3b3ee05181b22106dc1a191d1013",
     "originMainCommit": "0669af5bceba3b3ee05181b22106dc1a191d1013",
     "openGithubPullRequests": [],
-    "activeLinearBacklogIssues": [
-      "USF-226"
-    ],
+    "activeLinearBacklogIssues": ["USF-226"],
     "activeLinearTodoIssues": [],
     "activeLinearInProgressIssues": [],
-    "archivedLinearTodoIssuesExcluded": [
-      "USF-1",
-      "USF-2",
-      "USF-3",
-      "USF-4"
-    ],
+    "archivedLinearTodoIssuesExcluded": ["USF-1", "USF-2", "USF-3", "USF-4"],
     "gitStatus": "clean"
   },
   "repositoryOutputs": [
@@ -35,11 +23,7 @@
     "docs/architecture/dev-readiness-validation-and-handover.json"
   ],
   "handoverPath": {
-    "freshCloneSteps": [
-      "git clone https://github.com/maldous/usf.git",
-      "cd usf",
-      "make verify"
-    ],
+    "freshCloneSteps": ["git clone https://github.com/maldous/usf.git", "cd usf", "make verify"],
     "oneCommandInstallSetupVerify": "make verify",
     "separateInstallCommand": "make install",
     "localValidationSuperset": "corepack pnpm verify",
@@ -58,6 +42,184 @@
     "lockfilePosture": "pnpm-lock.yaml is committed and checked by frozen install",
     "vulnerabilityPosture": "corepack pnpm audit --audit-level low passed after exact @keycloak/keycloak-admin-client update to 26.5.6 and workspace protobufjs override to 7.6.4",
     "licencePosture": "corepack pnpm licenses list --json completed with 479 package rows across 16 license classes; one transitive Unknown package metadata row was observed for unionfs and does not create a compliance claim"
+  },
+  "enterpriseIsoControlSupport": {
+    "status": "control-support-evidence-only",
+    "iso27001CertificationReadinessClaim": false,
+    "socReadinessClaim": false,
+    "externalFrameworkAlignment": [
+      {
+        "framework": "ISO/IEC 27001 ISMS",
+        "alignment": "evidence-organization-support",
+        "claim": "no-certification-or-certification-readiness-claim"
+      },
+      {
+        "framework": "NIST CSF-style governance risk and security outcomes",
+        "alignment": "governance-identify-protect-detect-respond-recover-themed-evidence",
+        "claim": "no-nist-csf-conformance-claim"
+      },
+      {
+        "framework": "NIST SSDF-style secure development",
+        "alignment": "source-proof-validator-dependency-pr-workflow-evidence",
+        "claim": "no-ssdf-conformance-claim"
+      },
+      {
+        "framework": "OWASP ASVS-style application security verification categories",
+        "alignment": "authentication-access-control-audit-data-protection-validation-themes-visible-through-existing-proof",
+        "claim": "no-asvs-conformance-claim"
+      }
+    ],
+    "controlSupportRows": [
+      {
+        "id": "usf226-control-asset-evidence-register",
+        "controlPurpose": "Record developer handover evidence with stable issue, PR, command, validation, dependency, licence, and status references.",
+        "riskTreated": "Developer or AI agent relies on undocumented local state or unverifiable completion claims.",
+        "evidenceSource": "docs/architecture/dev-readiness-validation-and-handover.json",
+        "validationCommand": "make verify",
+        "implementationStatus": "documented-and-validated-local",
+        "boundary": "not-a-formal-customer-assurance-pack"
+      },
+      {
+        "id": "usf226-control-access-boundary",
+        "controlPurpose": "Document repository, toolchain, Docker, Linear MCP, synthetic actor, and synthetic tenant boundaries for local development.",
+        "riskTreated": "Local proof is mistaken for production IAM, public access review, or customer operator access readiness.",
+        "evidenceSource": "docs/architecture/dev-readiness-validation-and-handover.md#safe-local-configuration",
+        "validationCommand": "make verify",
+        "implementationStatus": "documented-and-bounded",
+        "boundary": "no-production-iam-or-public-access-review-claim"
+      },
+      {
+        "id": "usf226-control-secrets-boundary",
+        "controlPurpose": "Record that local proof uses placeholders and redaction with no real provider credentials or tenant secrets.",
+        "riskTreated": "Real secrets leak into committed evidence or local proof output.",
+        "evidenceSource": "safeLocalConfiguration.redactionBoundary",
+        "validationCommand": "make verify",
+        "implementationStatus": "validated-local",
+        "boundary": "no-live-secrets-manager-kms-hsm-or-production-credential-rotation-claim"
+      },
+      {
+        "id": "usf226-control-change-control",
+        "controlPurpose": "Document the governed branch, draft PR, validation, merge SHA, post-merge validation, and Linear acceptance-mapping workflow.",
+        "riskTreated": "A change is treated as Done without merged evidence mapped to acceptance criteria.",
+        "evidenceSource": "contributionWorkflowEvidence",
+        "validationCommand": "make verify",
+        "implementationStatus": "documented-and-exercised-by-usf-226",
+        "boundary": "no-production-release-approval-claim"
+      },
+      {
+        "id": "usf226-control-supplier-dependency-boundary",
+        "controlPurpose": "Record audit, licence inventory, exact dependency pins, lockfile reproducibility, and SDK boundary posture.",
+        "riskTreated": "Dependency or supplier posture is overclaimed from local package checks.",
+        "evidenceSource": "toolchainEvidence",
+        "validationCommand": "corepack pnpm audit --audit-level low",
+        "implementationStatus": "validated-local-with-boundary",
+        "boundary": "no-supplier-risk-review-sbom-publication-or-release-provenance-readiness-claim"
+      },
+      {
+        "id": "usf226-control-incident-boundary",
+        "controlPurpose": "Document setup, proof, validator, provider, redaction, and browser-telemetry failure diagnostics.",
+        "riskTreated": "Local proof diagnostics are mistaken for production incident response readiness.",
+        "evidenceSource": "diagnosticsEvidence",
+        "validationCommand": "make verify",
+        "implementationStatus": "documented-and-bounded",
+        "boundary": "no-production-incident-or-alert-routing-readiness-claim"
+      },
+      {
+        "id": "usf226-control-backup-restore-boundary",
+        "controlPurpose": "Link bounded local backup and restore proof commands to dev handover.",
+        "riskTreated": "Local backup proof is overclaimed as backup, restore, DR, PITR, or RPO/RTO readiness.",
+        "evidenceSource": "representativeProofCommands",
+        "validationCommand": "corepack pnpm proof:backup:operations",
+        "implementationStatus": "validated-local-with-non-claims",
+        "boundary": "no-backup-restore-disaster-recovery-pitr-or-rpo-rto-readiness-claim"
+      },
+      {
+        "id": "usf226-control-auditability",
+        "controlPurpose": "Record value-free audit evidence and redaction expectations across proof and validation output.",
+        "riskTreated": "Audit proof leaks sensitive data or is confused with formal SOC readiness.",
+        "evidenceSource": "validationResults and diagnosticsEvidence",
+        "validationCommand": "make verify",
+        "implementationStatus": "validated-local",
+        "boundary": "no-soc-or-production-forensic-readiness-claim"
+      },
+      {
+        "id": "usf226-control-retention-purge",
+        "controlPurpose": "Document synthetic-data and local cleanup boundaries for developer proof.",
+        "riskTreated": "Temporary local proof data is mistaken for production retention, purge, legal-hold, or data subject request readiness.",
+        "evidenceSource": "safeLocalConfiguration and docs/architecture/dev-readiness-validation-and-handover.md#synthetic-fixture-and-data-readiness",
+        "validationCommand": "make verify",
+        "implementationStatus": "documented-and-bounded",
+        "boundary": "no-production-retention-purge-legal-hold-or-dsr-readiness-claim"
+      },
+      {
+        "id": "usf226-control-secure-development",
+        "controlPurpose": "Document AI-agent and human contribution workflow, validation gates, planted-defect posture, and coupled artefact updates.",
+        "riskTreated": "Future changes bypass semantic, proof, validator, enterprise evidence, or Linear governance.",
+        "evidenceSource": "contributionWorkflowEvidence",
+        "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "implementationStatus": "documented-and-validated-local",
+        "boundary": "no-nist-ssdf-conformance-claim"
+      },
+      {
+        "id": "usf226-control-vulnerability-handling",
+        "controlPurpose": "Record vulnerability audit result, dependency fixes, and bounded future vulnerability handling.",
+        "riskTreated": "Passing local audit is mistaken for patch SLA, public vulnerability-disclosure, or production vulnerability-management maturity.",
+        "evidenceSource": "toolchainEvidence.vulnerabilityPosture",
+        "validationCommand": "corepack pnpm audit --audit-level low",
+        "implementationStatus": "validated-local-with-boundary",
+        "boundary": "no-patch-sla-or-public-vulnerability-disclosure-readiness-claim"
+      },
+      {
+        "id": "usf226-control-continual-improvement",
+        "controlPurpose": "Preserve failures fixed during USF-226 and require future gaps to use governed issues and PR evidence.",
+        "riskTreated": "Known dev-readiness failures are lost after merge or handled outside governance.",
+        "evidenceSource": "failuresFixedDuringUSF226",
+        "validationCommand": "make verify",
+        "implementationStatus": "documented-and-bounded",
+        "boundary": "no-management-review-certification-surveillance-or-continuous-control-monitoring-claim"
+      }
+    ],
+    "nonClaims": [
+      "iso27001-certification-readiness",
+      "soc-readiness",
+      "production-readiness",
+      "staging-readiness",
+      "deployment-readiness",
+      "live-provider-readiness",
+      "enterprise-production-readiness"
+    ]
+  },
+  "supplyChainGovernance": {
+    "dependencyAuditOutcome": "corepack pnpm audit --audit-level low passed after exact dependency fixes",
+    "licenceInventoryOutcome": "corepack pnpm licenses list --json completed with inventory summary recorded and no licence-compliance claim",
+    "lockfileReproducibility": "pnpm-lock.yaml is committed and corepack pnpm install --frozen-lockfile passed",
+    "packageManagerPinning": "packageManager pins pnpm@11.9.0",
+    "exactDependencyPinning": "package.json dependencies and devDependencies use exact versions",
+    "sbomPosture": "SBOM-capable semantic posture exists elsewhere in repository governance, but USF-226 does not publish a fresh SBOM artefact",
+    "provenancePosture": "proof-anchor publication exists for main pushes where CI succeeds; USF-226 does not claim released artefact provenance readiness",
+    "signingReleaseAttestationPosture": "proof-anchor CI attestation is documented separately; USF-226 does not produce package or container release signing",
+    "futureConditions": [
+      "fresh SBOM publication before any SBOM readiness claim",
+      "release artefact provenance before any release provenance readiness claim",
+      "package or container signing evidence before any signing readiness claim",
+      "licence review approval before any licence compliance clearance claim"
+    ]
+  },
+  "repositoryGovernance": {
+    "branchProtectionPosture": "external GitHub repository setting not asserted by committed evidence; PR #193 used GitHub checks plus local validation evidence",
+    "pullRequestTemplatePosture": "no committed .github/PULL_REQUEST_TEMPLATE file is present; PR expectations are documented in this handover guide",
+    "codeownersPosture": "no committed CODEOWNERS file is present; ownership is represented by issues, PRs, and evidence metadata where available",
+    "securityContactPosture": "no committed SECURITY file is present; vulnerability handling is bounded to audit evidence and governed issue/PR response",
+    "hiddenLocalStateRequired": false,
+    "committedCodexOrClaudeArtifacts": false,
+    "realSecretsRequired": false,
+    "realTenantDataRequired": false,
+    "futureConditions": [
+      "branch protection verification before branch-protection readiness claim",
+      "committed PR template before template-readiness claim",
+      "committed CODEOWNERS before reviewer-automation readiness claim",
+      "committed SECURITY or approved disclosure process before public vulnerability-disclosure readiness claim"
+    ]
   },
   "safeLocalConfiguration": {
     "realSecretsRequired": false,
@@ -224,6 +386,22 @@
   "contributionWorkflowEvidence": {
     "status": "documented-controlled-change-in-this-pr",
     "controlledChange": "README handover entry point, dev-readiness guide, and machine-readable evidence report only",
+    "pullRequestTemplatePosture": "documented-pr-expectations-no-committed-template-file",
+    "validationGates": [
+      "targeted checks during development",
+      "make verify before PR ready state",
+      "GitHub checks before merge",
+      "post-merge validation before Done"
+    ],
+    "plantedDefectExpectations": "Validator and proof changes must include planted defects or existing selftest coverage where the issue scope changes validator behaviour.",
+    "governedChangeUpdates": [
+      "semantic contracts when semantics change",
+      "proof commands when proof scope changes",
+      "validators and planted defects when enforcement changes",
+      "enterprise evidence when readiness or assurance posture changes",
+      "Linear issue acceptance mapping after merge"
+    ],
+    "nonClaimLanguageRequired": true,
     "forbiddenScopeAvoided": [
       "foundation parity reopening",
       "runtime implementation",
@@ -244,25 +422,18 @@
   "pullRequestEvidence": {
     "prUrl": "https://github.com/maldous/usf/pull/193",
     "prHeadCommit": "cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d",
-    "mergeSha": "pending-post-merge-linear-closure-comment",
-    "mergeShaBoundary": "A pull request cannot contain the merge commit that merges it. The actual merge SHA must be recorded on USF-226 after merge before Done."
+    "mergeSha": "dae5c76e767619bba94c47c9e7f30036a6b7c0f5",
+    "mergeShaBoundary": "PR #193 merge SHA is recorded from post-merge Linear reconciliation; any later follow-up PR records its own merge SHA in Linear before Done."
   },
   "finalSearchEvidence": {
     "openGithubPullRequestsBeforeWork": [],
-    "openGithubPullRequestsBeforeClosure": "pending",
-    "openLinearBacklogTodoInProgressBeforeWork": [
-      "USF-226"
-    ],
-    "openLinearBacklogTodoInProgressBeforeClosure": "pending",
-    "archivedOnboardingIssuesExcludedFromActiveOpenCount": [
-      "USF-1",
-      "USF-2",
-      "USF-3",
-      "USF-4"
-    ]
+    "openGithubPullRequestsBeforeClosure": [],
+    "openLinearBacklogTodoInProgressBeforeWork": ["USF-226"],
+    "openLinearBacklogTodoInProgressBeforeClosure": ["USF-226"],
+    "archivedOnboardingIssuesExcludedFromActiveOpenCount": ["USF-1", "USF-2", "USF-3", "USF-4"]
   },
   "claims": {
-    "devReadinessHandoverClaim": "local-and-fresh-clone-validation-passed-pending-pr-merge-post-merge-reconciliation",
+    "devReadinessHandoverClaim": "pr-193-local-and-fresh-clone-validation-passed-with-post-merge-main-validation-recorded; enterprise-control-support-follow-up-pending-merge",
     "freshCloneBootstrapProven": true,
     "oneCommandPathProven": true,
     "localCiExpectationDocumented": true,
@@ -271,6 +442,9 @@
     "diagnosticsDocumented": true,
     "contributionWorkflowDocumented": true,
     "dependencyHygieneChecked": true,
+    "enterpriseIsoControlSupportDocumented": true,
+    "repositoryGovernanceBounded": true,
+    "supplyChainBoundariesDocumented": true,
     "testReadinessClaim": false,
     "stagingReadinessClaim": false,
     "productionReadinessClaim": false,
