@@ -125,6 +125,9 @@ export type DevRuntimeMode = (typeof DEV_RUNTIME_MODES)[number];
 export const SERVICE_CATALOGUE_AUTHORITY_PATH =
   "spec/instances/compose-service/service-catalogue.json";
 export const DEV_COMPOSE_TARGET = "compose/compose.dev.generated.yaml";
+export const TEST_COMPOSE_TARGET = "compose/compose.test.generated.yaml";
+export const RUNTIME_COMPOSE_TARGETS = [DEV_COMPOSE_TARGET, TEST_COMPOSE_TARGET] as const;
+export type RuntimeComposeTarget = (typeof RUNTIME_COMPOSE_TARGETS)[number];
 export const MAILPIT_PROVIDER_REGISTRY_ID = "notification-delivery-mailpit-composed-test";
 export const MAILPIT_SERVICE_CATALOGUE_ID = "mailpit";
 
@@ -143,7 +146,7 @@ export interface RuntimeProviderBinding {
   readonly providerMode: "composed-test" | "in-memory" | "live-external-deferred";
   readonly providerClass: DevProviderClass | "not-applicable";
   readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY_PATH;
-  readonly composeTarget: typeof DEV_COMPOSE_TARGET;
+  readonly composeTarget: RuntimeComposeTarget;
   readonly endpointRef: string | null;
   readonly sdkPackage: string | null;
   readonly sdkVersion: string | null;
@@ -316,7 +319,7 @@ export interface DevRuntime {
   readonly providerClass: DevProviderClass;
   readonly environment: "local";
   readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY_PATH;
-  readonly composeTarget: typeof DEV_COMPOSE_TARGET | null;
+  readonly composeTarget: RuntimeComposeTarget | null;
   readonly deferredBoundaries: readonly string[];
   readonly providers: Readonly<Record<string, string>>;
   readonly composedProviderBindings: readonly RuntimeProviderBinding[];
@@ -398,10 +401,27 @@ export function runtimeModeFromEnv(env: NodeJS.ProcessEnv = process.env): DevRun
   throw new Error(`unsupported USF_DEV_RUNTIME_MODE: ${mode}`);
 }
 
+export function runtimeComposeTargetFromEnv(
+  env: NodeJS.ProcessEnv = process.env,
+): RuntimeComposeTarget {
+  const target = env.USF_RUNTIME_COMPOSE_TARGET ?? DEV_COMPOSE_TARGET;
+  if ((RUNTIME_COMPOSE_TARGETS as readonly string[]).includes(target)) {
+    return target as RuntimeComposeTarget;
+  }
+  throw new Error(`unsupported USF_RUNTIME_COMPOSE_TARGET: ${target}`);
+}
+
 export function createDevRuntime(
-  options: { readonly runtimeMode?: DevRuntimeMode } = {},
+  options: {
+    readonly runtimeMode?: DevRuntimeMode;
+    readonly composeTarget?: RuntimeComposeTarget;
+  } = {},
 ): DevRuntime {
   const runtimeMode = options.runtimeMode ?? runtimeModeFromEnv();
+  const composeTarget =
+    runtimeMode === "dev-compose-backed"
+      ? (options.composeTarget ?? runtimeComposeTargetFromEnv())
+      : null;
   const auditLedger = new InMemoryAuditLedger();
   const identityProvider: IdentityProvider =
     runtimeMode === "dev-compose-backed"
@@ -503,7 +523,7 @@ export function createDevRuntime(
       runtimeMode === "dev-compose-backed" ? "local-composed-real-service" : "hermetic-mock",
     environment: "local",
     serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY_PATH,
-    composeTarget: runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_TARGET : null,
+    composeTarget,
     deferredBoundaries:
       runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_BACKED_DEFERRED_BOUNDARIES : [],
     providers:
@@ -520,7 +540,11 @@ export function createDevRuntime(
           })
         : devProviderPlan,
     composedProviderBindings:
-      runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_ACTIVE_PROVIDER_BINDINGS : [],
+      runtimeMode === "dev-compose-backed" && composeTarget
+        ? DEV_COMPOSE_ACTIVE_PROVIDER_BINDINGS.map((binding) =>
+            Object.freeze({ ...binding, composeTarget }),
+          )
+        : [],
     deferredProviderBindings:
       runtimeMode === "dev-compose-backed" ? DEV_COMPOSE_DEFERRED_PROVIDER_BINDINGS : [],
     databaseProviderEvidence: () =>

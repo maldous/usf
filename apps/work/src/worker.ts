@@ -5,10 +5,12 @@ import {
   configureRuntimeNotificationProvider,
   createDevRuntime,
   mailpitDeliveryEvidence,
+  runtimeComposeTargetFromEnv,
   runtimeModeFromEnv,
   type DevProviderModeLabel,
   type DevRuntime,
   type DevRuntimeMode,
+  type RuntimeComposeTarget,
 } from "@foundation/app-api/runtime";
 import type { PostgresComposedMembershipEvidence } from "@foundation/adapter-db";
 import type { NatsComposedEventBusEvidence } from "@foundation/adapter-bus";
@@ -54,9 +56,22 @@ export interface WorkerSmokeSummary {
 }
 
 export async function runWorkerSmoke(
-  options: { readonly runtimeMode?: DevRuntimeMode } = {},
+  options: {
+    readonly runtimeMode?: DevRuntimeMode;
+    readonly composeTarget?: RuntimeComposeTarget;
+  } = {},
 ): Promise<WorkerSmokeSummary> {
-  const runtime = createDevRuntime({ runtimeMode: options.runtimeMode ?? runtimeModeFromEnv() });
+  const runtimeMode = options.runtimeMode ?? runtimeModeFromEnv();
+  const runtime = createDevRuntime(
+    runtimeMode === "dev-compose-backed"
+      ? {
+          runtimeMode,
+          composeTarget: options.composeTarget ?? runtimeComposeTargetFromEnv(),
+        }
+      : {
+          runtimeMode,
+        },
+  );
   try {
     const context = createTenantContext({
       tenantId: DEV_TENANT_ID,

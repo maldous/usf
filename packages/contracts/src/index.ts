@@ -8,6 +8,10 @@ const RuntimeProviderClassSchema = Type.Union([
   Type.Literal("hermetic-mock"),
   Type.Literal("local-composed-real-service"),
 ]);
+const RuntimeComposeTargetSchema = Type.Union([
+  Type.Literal("compose/compose.dev.generated.yaml"),
+  Type.Literal("compose/compose.test.generated.yaml"),
+]);
 const RuntimeProviderBindingSchema = Type.Object({
   bindingId: Type.String({ minLength: 1 }),
   bindingStatus: Type.String({ minLength: 1 }),
@@ -18,7 +22,7 @@ const RuntimeProviderBindingSchema = Type.Object({
   providerMode: Type.String({ minLength: 1 }),
   providerClass: Type.String({ minLength: 1 }),
   serviceCatalogueAuthority: Type.Literal("spec/instances/compose-service/service-catalogue.json"),
-  composeTarget: Type.Literal("compose/compose.dev.generated.yaml"),
+  composeTarget: RuntimeComposeTargetSchema,
   endpointRef: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
   sdkPackage: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
   sdkVersion: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
@@ -193,7 +197,7 @@ export const HealthResponseSchema = Type.Object({
   providerClass: RuntimeProviderClassSchema,
   environment: Type.Literal("local"),
   serviceCatalogueAuthority: Type.Literal("spec/instances/compose-service/service-catalogue.json"),
-  composeTarget: Type.Union([Type.Literal("compose/compose.dev.generated.yaml"), Type.Null()]),
+  composeTarget: Type.Union([RuntimeComposeTargetSchema, Type.Null()]),
   deferredBoundaries: Type.Array(Type.String()),
   composedProviderBindings: Type.Array(RuntimeProviderBindingSchema),
   deferredProviderBindings: Type.Array(RuntimeProviderBindingSchema),
@@ -214,7 +218,7 @@ export const ReadyResponseSchema = Type.Object({
   providerClass: RuntimeProviderClassSchema,
   environment: Type.Literal("local"),
   serviceCatalogueAuthority: Type.Literal("spec/instances/compose-service/service-catalogue.json"),
-  composeTarget: Type.Union([Type.Literal("compose/compose.dev.generated.yaml"), Type.Null()]),
+  composeTarget: Type.Union([RuntimeComposeTargetSchema, Type.Null()]),
   deferredBoundaries: Type.Array(Type.String()),
   composedProviderBindings: Type.Array(RuntimeProviderBindingSchema),
   deferredProviderBindings: Type.Array(RuntimeProviderBindingSchema),

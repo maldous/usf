@@ -3,8 +3,10 @@ export { runDevSmoke } from "./dev-smoke.ts";
 export {
   runRuntimeProofAll,
   runRuntimeProofCompose,
+  runRuntimeProofComposeOnTarget,
   runRuntimeProofInMemory,
 } from "./runtime-application-proof.ts";
+export { runComposedSemanticTestHarnessProof } from "./composed-semantic-test-harness-proof.ts";
 export { runAuthIdentityProof } from "./auth-identity-proof.ts";
 export { runJobsWorkflowsProof } from "./jobs-workflows-proof.ts";
 export { runNotificationsMessagingProof } from "./notifications-messaging-proof.ts";

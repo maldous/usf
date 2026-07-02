@@ -1,0 +1,94 @@
+{
+  "id": "composed-semantic-test-harness",
+  "title": "Composed Semantic Test Harness",
+  "issueId": "USF-236",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": ["USF-235"],
+  "lifecycleState": "active-test-readiness-proof",
+  "testReadinessClaimAllowed": false,
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "testEnvironmentContract": "docs/architecture/test-environment-service-contract.json",
+  "composeTarget": "compose/compose.test.generated.yaml",
+  "proofCommand": "corepack pnpm test-readiness:semantic",
+  "sourceDevProofCommand": "corepack pnpm runtime:proof:compose",
+  "sourceDevProofBoundary": "The existing compose-backed dev runtime proof is trusted as dev foundation evidence, but it does not satisfy service-backed test-readiness claims by itself.",
+  "semanticTestBoundary": "The composed semantic test harness executes the supported service-backed semantic path against the canonical generated test Compose target and records bounded evidence only.",
+  "runtimeMode": "dev-compose-backed",
+  "providerMode": "local-composed-real-service",
+  "inMemoryServiceSubstituteAllowed": false,
+  "requiredServiceIds": [
+    "postgres",
+    "keycloak-db",
+    "keycloak",
+    "nats",
+    "temporal",
+    "minio",
+    "openbao",
+    "mailpit"
+  ],
+  "semanticPathEvidence": {
+    "api": {
+      "healthRouteChecked": true,
+      "readinessRouteChecked": true,
+      "openapiRouteChecked": true,
+      "tenantMismatchFailClosed": true,
+      "authorizationFailClosed": true,
+      "auditEvidenceRequired": true,
+      "composedProviderBindingsRequired": true
+    },
+    "worker": {
+      "syntheticJobExecuted": true,
+      "tenantBoundaryDenied": true,
+      "authorizationDenied": true,
+      "auditEvidenceRequired": true,
+      "composedProviderEvidenceRequired": true
+    },
+      "providerEvidence": {
+        "postgres": "database-backed membership and permission evidence",
+        "keycloak-db": "Keycloak backing database starts as a required composed dependency for identity provider evidence",
+        "keycloak": "composed identity provider evidence",
+      "nats": "composed event bus evidence",
+      "temporal": "composed workflow provider evidence",
+      "minio": "composed object-store evidence",
+      "openbao": "composed secret-store evidence",
+      "mailpit": "composed notification sink evidence"
+    }
+  },
+  "currentStateCommands": {
+    "semanticHarness": "corepack pnpm test-readiness:semantic",
+    "validator": "corepack pnpm test-readiness:validate",
+    "futureCommandSurfaceOwner": "USF-238"
+  },
+  "validationCommands": [
+    "corepack pnpm test-readiness:semantic",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+  ],
+  "fixtureLifecycleBoundary": "USF-236 proves the composed semantic path with synthetic data and teardown inherited from the proof harness. USF-237 owns repeated deterministic fixture lifecycle proof.",
+  "ciLocalGateBoundary": "USF-236 exposes the proof command. USF-238 owns the final canonical test command surface and CI/local gate.",
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": ["soa-usf-236-composed-semantic-test-harness"],
+    "evidenceRegister": ["evidence-usf-236-composed-semantic-test-harness"],
+    "threatModelAbuseCaseRegister": ["threat-usf-236-composed-semantic-test-harness"],
+    "accessReviewPrivilegedOperationPosture": ["access-usf-236-composed-semantic-test-harness"],
+    "backupRestoreResiliencePosture": ["resilience-usf-236-composed-semantic-test-harness"],
+    "incidentVulnerabilityManagementEvidence": ["incident-usf-236-composed-semantic-test-harness"],
+    "privacyDataMinimisationPosture": ["privacy-usf-236-composed-semantic-test-harness"]
+  },
+  "allowedClaims": ["bounded-composed-semantic-test-harness-proof"],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ],
+  "followUpIssueIds": ["USF-237", "USF-238", "USF-234"]
+}

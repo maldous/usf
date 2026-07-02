@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-TEST-READINESS-012",
+  "harnessSet": {
+    "composeTarget": "compose/compose.dev.generated.yaml"
+  }
+}

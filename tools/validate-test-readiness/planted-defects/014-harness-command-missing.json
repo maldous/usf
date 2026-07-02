@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-TEST-READINESS-014",
+  "packageScriptDrop": [
+    "test-readiness:semantic"
+  ]
+}

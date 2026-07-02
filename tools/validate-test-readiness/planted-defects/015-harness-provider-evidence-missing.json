@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-TEST-READINESS-015",
+  "harnessSemanticEvidencePatch": {
+    "providerEvidence": {
+      "drop": [
+        "openbao"
+      ]
+    }
+  }
+}
