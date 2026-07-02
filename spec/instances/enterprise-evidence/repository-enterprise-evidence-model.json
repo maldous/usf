@@ -8166,7 +8166,7 @@
       "adapterProviderId": "browser-telemetry-faro-local-proof",
       "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
       "commandPin": "tsx packages/proof/src/browser-telemetry-faro-proof.ts",
-      "commitPin": "91087e33315e5569b011787396d870bfbdf2df3d",
+      "commitPin": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
       "issueLinks": [
         "USF-225",
         "USF-134",
@@ -8175,7 +8175,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "91087e33315e5569b011787396d870bfbdf2df3d",
+      "prOrMergeSha": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
       "retentionPosture": "Retain value-free proof command output in PR validation summary and committed metadata. Transient browser page, HTTP server, browser context, browser process, and temporary directory are removed in finally paths. No raw token, endpoint, tenant value, actor value, stack trace, provider payload, production data, customer data, raw SDK error, or live-provider credential is retained.; faro-production-readiness=false; browser-e2e-readiness=false"
     },
     {
@@ -8189,7 +8189,7 @@
       "adapterProviderId": "browser-telemetry-faro-local-proof",
       "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
       "commandPin": "tsx packages/proof/src/browser-telemetry-faro-proof.ts",
-      "commitPin": "91087e33315e5569b011787396d870bfbdf2df3d",
+      "commitPin": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
       "issueLinks": [
         "USF-225",
         "USF-184",
@@ -8197,7 +8197,7 @@
         "USF-193",
         "USF-133"
       ],
-      "prOrMergeSha": "91087e33315e5569b011787396d870bfbdf2df3d",
+      "prOrMergeSha": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
       "retentionPosture": "Retain value-free command result and validator evidence only. Browser proof data is synthetic and redacted; temp files are removed; no live telemetry endpoint, production data, customer data, or raw provider payload is retained.; faro-production-readiness=false; browser-e2e-readiness=false"
     }
   ],
