@@ -21,11 +21,12 @@
     "USF-192",
     "USF-133",
     "USF-169",
-    "USF-193"
+    "USF-193",
+    "USF-233"
   ],
   "humanDecision": {
     "decisionState": "accepted",
-    "summary": "SonarQube/static-analysis decision is not completion evidence. USF-171 records a bounded disposition gate: local deterministic repository verification is mandatory but not SonarQube service equivalence. USF-195 records the explicit service-proof boundary lineage. USF-204 records a bounded local Compose SonarQube scanner and quality-gate proof, while operator UI clickthrough, quality-gate policy administration, hotspot human review, OIDC plugin depth, and environment promotion remain explicitly deferred.",
+    "summary": "SonarQube/static-analysis decision is not completion evidence. USF-171 records a bounded disposition gate: local deterministic repository verification is mandatory but not SonarQube service equivalence. USF-195 records the explicit service-proof boundary lineage. USF-204 records a bounded local Compose SonarQube scanner and quality-gate proof. USF-233 records the zero-open-issue gate for the supported local synthetic scan scope only, while operator UI clickthrough, quality-gate policy administration, hotspot human review, OIDC plugin depth, and environment promotion remain explicitly deferred.",
     "decisionIsWorkComplete": false
   },
   "sonarqubeDisposition": {
@@ -33,6 +34,8 @@
     "serviceSemanticProofPresent": true,
     "serviceReadinessClaim": false,
     "qualityGateReadinessClaim": false,
+    "zeroIssueAssuranceIssue": "USF-233",
+    "zeroIssueGateStatus": "enforced-by-proof-for-supported-local-synthetic-scan-scope",
     "serviceCatalogueServiceId": "sonarqube",
     "followUpIssue": "USF-195",
     "remainingProofIssue": "USF-169",
@@ -40,7 +43,7 @@
     "riskOwner": "platform-assurance-risk-owner",
     "controlOwner": "platform-assurance-control-owner",
     "riskStatement": "SonarQube service semantics, unresolved issue handling, security hotspot treatment, and quality-gate exception workflow could be overclaimed from local repository verification output.",
-    "treatment": "USF-204 proves bounded local Compose scanner submission and quality-gate readback while preserving non-equivalence to full readiness; UI clickthrough, policy administration, hotspot human review, OIDC plugin depth, and environment promotion remain deferred.",
+    "treatment": "USF-204 proves bounded local Compose scanner submission and quality-gate readback. USF-233 enforces quality-gate OK, zero unresolved issues, and zero security hotspots for the supported local synthetic scan scope. UI clickthrough, policy administration, hotspot human review, OIDC plugin depth, live-provider operation, repository-wide SonarQube readiness, and environment promotion remain deferred or prohibited.",
     "reviewDate": "2026-09-30",
     "deferredEvidence": [
       "operator console UI clickthrough proof",
@@ -79,7 +82,7 @@
     "limits": [
       "no SonarQube scan result",
       "no SonarQube service UI proof",
-      "no absolute-zero quality gate",
+      "no repository-wide or live-provider zero-issue quality gate beyond the USF-233 supported local synthetic scan scope",
       "no unresolved issue lifecycle proof",
       "no security hotspot treatment proof",
       "no live scanner provider proof",

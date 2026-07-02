@@ -20,6 +20,7 @@ This document records the current-state command surface introduced by USF-232. I
 | `make validate-coverage` | `make parity` | Run the foundation coverage validator suite without implying full React parity. |
 | `make validate-assurance` | `make enterprise-validate` | Run the enterprise assurance and evidence validator. |
 | `make validate-evidence` | `corepack pnpm repo:validate` | Run repository evidence and governance validators. |
+| `make sonar-zero-issue-proof` | `make sonarqube-assurance-proof` | Run the bounded local SonarQube zero-open-issue proof for the supported synthetic scan scope. |
 | `make assurance` | `make validate-assurance` | Short current-state alias for assurance evidence validation. |
 | `make evidence` | `make validate-evidence` | Short current-state alias for evidence validation. |
 
@@ -35,6 +36,7 @@ The following existing names remain valid and intentionally unchanged:
 - `make runtime-proof`
 - `make runtime-validate`
 - `make test-compose`
+- `make sonar-zero-issue-proof`
 - `make sonarqube-assurance-proof`
 - package scripts including `verify`, `parity`, `repo:validate`, `proof:bootstrap`, and `proof:assurance:sonarqube`
 
@@ -53,7 +55,7 @@ These names are compatibility entry points. They do not imply full React parity,
 
 ## Follow-Up Boundary
 
-USF-233 owns Sonar zero-open-issue quality gate assurance. USF-232 keeps `make sonarqube-assurance-proof` unchanged and does not add a stronger Sonar claim.
+USF-233 owns Sonar zero-open-issue quality gate assurance. `make sonar-zero-issue-proof` is the current-state entry point for the supported local synthetic scan scope and routes to the compatibility target `make sonarqube-assurance-proof`; it does not claim broader SonarQube readiness.
 
 ## Non-Claims
 

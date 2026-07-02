@@ -44,6 +44,9 @@ OPERATOR_ACCESS_LIFECYCLE_PROOF_PATH = Path(
 GATEWAY_CLICKTHROUGH_MATRIX_PATH = Path("docs/architecture/gateway-clickthrough-access-substrate-matrix.json")
 STATIC_ANALYSIS_MATRIX_PATH = Path("docs/architecture/static-analysis-quality-gate-disposition-matrix.json")
 SONARQUBE_PROOF_BOUNDARY_PATH = Path("docs/architecture/sonarqube-service-semantic-proof-boundary.json")
+SONARQUBE_ZERO_ISSUE_ASSURANCE_PATH = Path(
+    "docs/architecture/sonarqube-zero-issue-quality-gate-assurance.json"
+)
 SENTRY_ERROR_MATRIX_PATH = Path("docs/architecture/sentry-error-monitoring-disposition-matrix.json")
 SENTRY_PROOF_BOUNDARY_PATH = Path("docs/architecture/sentry-service-semantic-proof-boundary.json")
 OBSERVABILITY_SERVICE_DEPTH_PATH = Path(
@@ -528,6 +531,7 @@ SONARQUBE_BOUNDARY_REQUIRED_EVIDENCE_ROWS = {
 SONARQUBE_BOUNDARY_REQUIRED_ISSUES = {
     "USF-195",
     "USF-204",
+    "USF-233",
     "USF-171",
     "USF-169",
     "USF-193",
@@ -995,6 +999,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     sonarqube_proof_boundary = (
         read_json(SONARQUBE_PROOF_BOUNDARY_PATH) if (ROOT / SONARQUBE_PROOF_BOUNDARY_PATH).exists() else None
     )
+    sonarqube_zero_issue_assurance = (
+        read_json(SONARQUBE_ZERO_ISSUE_ASSURANCE_PATH)
+        if (ROOT / SONARQUBE_ZERO_ISSUE_ASSURANCE_PATH).exists()
+        else None
+    )
     sentry_error_matrix = read_json(SENTRY_ERROR_MATRIX_PATH) if (ROOT / SENTRY_ERROR_MATRIX_PATH).exists() else None
     sentry_proof_boundary = (
         read_json(SENTRY_PROOF_BOUNDARY_PATH) if (ROOT / SENTRY_PROOF_BOUNDARY_PATH).exists() else None
@@ -1073,6 +1082,13 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         sonarqube_proof_boundary = None
     elif sonarqube_proof_boundary is not None:
         sonarqube_proof_boundary = apply_sonarqube_boundary_defect(sonarqube_proof_boundary, defect)
+    if defect.get("removeSonarqubeZeroIssueAssurance"):
+        sonarqube_zero_issue_assurance = None
+    elif sonarqube_zero_issue_assurance is not None:
+        sonarqube_zero_issue_assurance = apply_sonarqube_zero_issue_defect(
+            sonarqube_zero_issue_assurance,
+            defect,
+        )
     if defect.get("removeSentryErrorMatrix"):
         sentry_error_matrix = None
     elif sentry_error_matrix is not None:
@@ -1146,6 +1162,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "gatewayClickthroughMatrix": gateway_clickthrough_matrix,
         "staticAnalysisMatrix": static_analysis_matrix,
         "sonarqubeProofBoundary": sonarqube_proof_boundary,
+        "sonarqubeZeroIssueAssurance": sonarqube_zero_issue_assurance,
         "sentryErrorMatrix": sentry_error_matrix,
         "sentryProofBoundary": sentry_proof_boundary,
         "observabilityServiceDepth": observability_service_depth,
@@ -1418,6 +1435,15 @@ def apply_sonarqube_boundary_defect(boundary: dict[str, Any], defect: dict[str, 
     for key, value in defect.get("sonarqubeBoundarySet", {}).items():
         set_nested_value(out, key, value)
     for key in defect.get("sonarqubeBoundaryDrop", []):
+        drop_nested_value(out, key)
+    return out
+
+
+def apply_sonarqube_zero_issue_defect(assurance: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(assurance)
+    for key, value in defect.get("sonarqubeZeroIssueSet", {}).items():
+        set_nested_value(out, key, value)
+    for key in defect.get("sonarqubeZeroIssueDrop", []):
         drop_nested_value(out, key)
     return out
 
@@ -3344,6 +3370,7 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
 
     expected_top = {
         "sourceIssue": "USF-204",
+        "zeroIssueAssuranceIssue": "USF-233",
         "followUpIssue": "USF-169",
         "sourceDispositionIssue": "USF-171",
         "laneIssue": "USF-187",
@@ -3353,6 +3380,7 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         "closureMatrix": str(CLOSURE_MATRIX_PATH),
         "staticAnalysisDispositionMatrix": str(STATIC_ANALYSIS_MATRIX_PATH),
         "enterpriseEvidenceModel": str(MODEL_PATH),
+        "zeroIssueAssurance": str(SONARQUBE_ZERO_ISSUE_ASSURANCE_PATH),
         "validationCommand": "corepack pnpm proof:assurance:sonarqube",
     }
     for key, expected in expected_top.items():
@@ -3427,16 +3455,26 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
     quality = boundary.get("qualityGateBoundary", {})
     expected_quality = {
         "scopeStatus": "profile-gated-bounded-proof",
+        "zeroIssueAssuranceIssue": "USF-233",
+        "supportedScanScope": "local-synthetic-typescript-project",
+        "zeroIssueRequirementStatus": "enforced-by-proof-for-supported-local-synthetic-scan-scope",
+        "zeroIssueRequirement": "quality-gate-status-OK-and-zero-unresolved-issues-and-zero-security-hotspots",
         "unresolvedIssueHandlingStatus": "query-path-proven-zero-open-for-synthetic-project",
         "exceptionHandlingStatus": "quality-gate-fail-closed-readback-proven-policy-administration-deferred",
         "securityHotspotTreatmentStatus": "query-path-proven-zero-hotspots-human-review-deferred",
+        "qualityGatePolicyAdministrationClaim": False,
+        "vulnerabilityClearanceClaim": False,
+        "repositoryWideZeroIssueReadinessClaim": False,
     }
     for field, expected in expected_quality.items():
-        if quality.get(field) != expected:
+        observed = quality.get(field)
+        if observed is not expected if isinstance(expected, bool) else observed != expected:
             F.add("USF-ENTERPRISE-023", f"qualityGateBoundary.{field}", f"expected {expected!r}")
     for field in ("owner", "riskOwner", "controlOwner", "reviewDate"):
         if not quality.get(field):
             F.add("USF-ENTERPRISE-023", f"qualityGateBoundary.{field}", "quality gate owner metadata is required")
+    if not quality.get("exclusionsJustification"):
+        F.add("USF-ENTERPRISE-023", "qualityGateBoundary.exclusionsJustification", "zero-issue exclusions must be justified")
 
     operator = boundary.get("operatorAccessAuditRetentionSupplierBoundary", {})
     for field in (
@@ -3477,6 +3515,7 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
     else:
         expected_composed = {
             "issue": "USF-204",
+            "zeroIssueAssuranceIssue": "USF-233",
             "proofCommand": "corepack pnpm proof:assurance:sonarqube",
             "packageScript": "proof:assurance:sonarqube",
             "makeTarget": "sonarqube-assurance-proof",
@@ -3485,10 +3524,16 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
             "sdkPackage": "@sonar/scan",
             "sdkVersion": "4.3.8",
             "webApiBoundary": "sonarqube-web-api-no-maintained-js-admin-sdk-exception; Web API calls are confined to adapters/assurance for readiness, temporary credential lifecycle, quality gate readback, issue and hotspot query, and cleanup.",
+            "zeroIssueGateScope": "local-synthetic-typescript-project",
+            "zeroIssueRequirement": "quality-gate-ok-and-zero-unresolved-issues-and-zero-security-hotspots",
+            "zeroIssueRequirementEnforced": True,
+            "qualityGatePolicyAdministrationClaim": False,
+            "vulnerabilityClearanceClaim": False,
             "reviewDate": "2026-09-30",
         }
         for key, expected in expected_composed.items():
-            if composed.get(key) != expected:
+            observed = composed.get(key)
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
                 F.add("USF-ENTERPRISE-023", f"composedProof.{key}", f"expected {expected!r}")
         if "official SonarSource" not in str(composed.get("sdkSelectionRationale", "")):
             F.add("USF-ENTERPRISE-023", "composedProof.sdkSelectionRationale", "official SonarSource SDK rationale is required")
@@ -3498,6 +3543,7 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
             "qualityGateProof",
             "unresolvedIssueHandlingProof",
             "securityHotspotTreatmentProof",
+            "zeroIssueGateProof",
             "operatorAccessProof",
             "retentionCleanupProof",
             "redactionProof",
@@ -3515,6 +3561,8 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         F.add("USF-ENTERPRISE-023", "package.json#@sonar/scan", "SonarQube SDK dependency must be exact-version pinned")
     if "\nsonarqube-assurance-proof:" not in f"\n{state['makefile']}":
         F.add("USF-ENTERPRISE-023", "Makefile#sonarqube-assurance-proof", "SonarQube proof Make target is missing")
+    if "\nsonar-zero-issue-proof:" not in f"\n{state['makefile']}":
+        F.add("USF-ENTERPRISE-023", "Makefile#sonar-zero-issue-proof", "SonarQube zero-issue proof Make target is missing")
     proof_source = (ROOT / "packages/proof/src/sonarqube-composed-proof.ts").read_text(encoding="utf-8")
     adapter_source = (ROOT / "adapters/assurance/src/index.ts").read_text(encoding="utf-8")
     for marker in (
@@ -3528,6 +3576,11 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         "suppressScannerOutput",
         "credentialRevocationChecked",
         "projectDeletionChecked",
+        "supportedScanScope",
+        "zeroOpenIssueQualityGateChecked",
+        "zeroOpenIssueRequirementEnforced",
+        "qualityGatePolicyAdministrationClaim",
+        "vulnerabilityClearanceClaim",
     ):
         if marker not in adapter_source:
             F.add("USF-ENTERPRISE-023", "adapters/assurance/src/index.ts", f"adapter marker is missing: {marker}")
@@ -3541,9 +3594,86 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
         "-v",
         "assertSafeEvidence",
         "proof:assurance:sonarqube",
+        "zeroOpenIssueQualityGateChecked",
+        'unresolvedIssueCountBucket === "zero"',
+        'securityHotspotCountBucket === "zero"',
     ):
         if marker not in proof_source:
             F.add("USF-ENTERPRISE-023", "packages/proof/src/sonarqube-composed-proof.ts", f"proof marker is missing: {marker}")
+
+    zero_issue = state.get("sonarqubeZeroIssueAssurance")
+    if not isinstance(zero_issue, dict):
+        F.add(
+            "USF-ENTERPRISE-023",
+            str(SONARQUBE_ZERO_ISSUE_ASSURANCE_PATH),
+            "SonarQube zero-issue assurance artefact is missing",
+        )
+    else:
+        expected_zero_top = {
+            "issueId": "USF-233",
+            "parentIssue": "USF-133",
+            "status": "profile-gated-bounded-local-compose-proof",
+            "serviceCatalogueAuthority": f"{SERVICE_CATALOGUE_PATH}#sonarqube",
+            "proofBoundary": str(SONARQUBE_PROOF_BOUNDARY_PATH),
+            "staticAnalysisDispositionMatrix": str(STATIC_ANALYSIS_MATRIX_PATH),
+            "enterpriseEvidenceModel": str(MODEL_PATH),
+            "supportedScanScope": "local-synthetic-typescript-project",
+        }
+        for key, expected in expected_zero_top.items():
+            if zero_issue.get(key) != expected:
+                F.add("USF-ENTERPRISE-023", f"zeroIssueAssurance.{key}", f"expected {expected!r}")
+        if "USF-204" not in set(zero_issue.get("predecessorIssues", [])):
+            F.add("USF-ENTERPRISE-023", "zeroIssueAssurance.predecessorIssues", "USF-204 predecessor is required")
+        requirement = zero_issue.get("qualityGateRequirement", {})
+        expected_requirement = {
+            "enforcedByProof": True,
+            "qualityGateStatusRequired": "OK",
+            "unresolvedIssueCountRequired": 0,
+            "securityHotspotCountRequired": 0,
+            "scope": "supported-local-synthetic-scan-scope",
+            "policyAdministrationClaim": False,
+            "vulnerabilityClearanceClaim": False,
+            "serviceReadinessClaim": False,
+        }
+        for key, expected in expected_requirement.items():
+            observed = requirement.get(key) if isinstance(requirement, dict) else None
+            if observed is not expected if isinstance(expected, bool) else observed != expected:
+                F.add("USF-ENTERPRISE-023", f"zeroIssueAssurance.qualityGateRequirement.{key}", f"expected {expected!r}")
+        proof = zero_issue.get("proofEvidence", {})
+        expected_proof = {
+            "proofCommand": "corepack pnpm proof:assurance:sonarqube",
+            "makeTarget": "sonar-zero-issue-proof",
+            "compatibilityMakeTarget": "sonarqube-assurance-proof",
+            "packageScript": "proof:assurance:sonarqube",
+            "sdkPackage": "@sonar/scan",
+            "sdkVersion": "4.3.8",
+        }
+        for key, expected in expected_proof.items():
+            if not isinstance(proof, dict) or proof.get(key) != expected:
+                F.add("USF-ENTERPRISE-023", f"zeroIssueAssurance.proofEvidence.{key}", f"expected {expected!r}")
+        required_fields = {
+            "zeroOpenIssueQualityGateChecked",
+            "zeroOpenIssueRequirement",
+            "zeroOpenIssueRequirementEnforced",
+            "qualityGatePolicyAdministrationClaim",
+            "vulnerabilityClearanceClaim",
+        }
+        if required_fields - set(proof.get("requiredEvidenceFields", []) if isinstance(proof, dict) else []):
+            F.add("USF-ENTERPRISE-023", "zeroIssueAssurance.proofEvidence.requiredEvidenceFields", "zero-issue evidence fields are incomplete")
+        boundaries = zero_issue.get("exclusionsAndBoundaries", {})
+        if not isinstance(boundaries, dict) or not boundaries.get("justification"):
+            F.add("USF-ENTERPRISE-023", "zeroIssueAssurance.exclusionsAndBoundaries.justification", "zero-issue exclusions must be justified")
+        if len(boundaries.get("excludedFromZeroIssueClaim", []) if isinstance(boundaries, dict) else []) < 6:
+            F.add("USF-ENTERPRISE-023", "zeroIssueAssurance.exclusionsAndBoundaries.excludedFromZeroIssueClaim", "zero-issue exclusions are incomplete")
+        if REQUIRED_NON_CLAIMS - set(zero_issue.get("nonClaims", [])):
+            F.add("USF-ENTERPRISE-023", "zeroIssueAssurance.nonClaims", "zero-issue non-claims are incomplete")
+        if {
+            "sonarqube-readiness",
+            "quality-gate-readiness",
+            "repository-wide-zero-issue-readiness",
+            "vulnerability-clearance-readiness",
+        } - set(zero_issue.get("readinessClaimsProhibited", [])):
+            F.add("USF-ENTERPRISE-023", "zeroIssueAssurance.readinessClaimsProhibited", "zero-issue prohibited claims are incomplete")
 
     declared_evidence = set(boundary.get("enterpriseEvidenceRefs", []))
     required_evidence = set().union(*SONARQUBE_BOUNDARY_REQUIRED_EVIDENCE_ROWS.values())

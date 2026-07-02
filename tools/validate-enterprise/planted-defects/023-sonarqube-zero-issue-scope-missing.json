@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-233 SonarQube zero-open-issue gate lacks its supported scan scope and exclusions.",
+  "sonarqubeBoundaryDrop": [
+    "qualityGateBoundary.supportedScanScope",
+    "qualityGateBoundary.exclusionsJustification",
+    "composedProof.zeroIssueGateScope"
+  ],
+  "sonarqubeZeroIssueDrop": [
+    "supportedScanScope",
+    "exclusionsAndBoundaries.justification"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-233 SonarQube zero-issue assurance artefact is missing.",
+  "removeSonarqubeZeroIssueAssurance": true
+}

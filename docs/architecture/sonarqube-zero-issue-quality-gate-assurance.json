@@ -1,0 +1,134 @@
+{
+  "id": "sonarqube-zero-issue-quality-gate-assurance",
+  "title": "SonarQube Zero-Issue Quality Gate Assurance",
+  "issueId": "USF-233",
+  "parentIssue": "USF-133",
+  "predecessorIssues": [
+    "USF-195",
+    "USF-204"
+  ],
+  "status": "profile-gated-bounded-local-compose-proof",
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json#sonarqube",
+  "proofBoundary": "docs/architecture/sonarqube-service-semantic-proof-boundary.json",
+  "staticAnalysisDispositionMatrix": "docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
+  "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "supportedScanScope": "local-synthetic-typescript-project",
+  "scanScopeDefinition": "The proof creates a temporary synthetic TypeScript project inside an isolated temp directory, scans it against local Compose SonarQube through the official SonarSource scanner package, reads the project quality-gate result, queries unresolved issues and security hotspots, then deletes the temporary project and revokes the temporary proof credential.",
+  "qualityGateRequirement": {
+    "enforcedByProof": true,
+    "qualityGateStatusRequired": "OK",
+    "unresolvedIssueCountRequired": 0,
+    "securityHotspotCountRequired": 0,
+    "scope": "supported-local-synthetic-scan-scope",
+    "policyAdministrationClaim": false,
+    "vulnerabilityClearanceClaim": false,
+    "serviceReadinessClaim": false
+  },
+  "proofEvidence": {
+    "proofCommand": "corepack pnpm proof:assurance:sonarqube",
+    "makeTarget": "sonar-zero-issue-proof",
+    "compatibilityMakeTarget": "sonarqube-assurance-proof",
+    "packageScript": "proof:assurance:sonarqube",
+    "composeTarget": "compose/compose.test.generated.yaml",
+    "composeProfile": "assurance",
+    "composeServices": [
+      "sonarqube",
+      "sonar-postgres"
+    ],
+    "sdkPackage": "@sonar/scan",
+    "sdkVersion": "4.3.8",
+    "adapterBoundary": "adapters/assurance/src/index.ts",
+    "proofSource": "packages/proof/src/sonarqube-composed-proof.ts",
+    "requiredEvidenceFields": [
+      "supportedScanScope",
+      "qualityGateStatus",
+      "unresolvedIssueCountBucket",
+      "securityHotspotCountBucket",
+      "zeroOpenIssueQualityGateChecked",
+      "zeroOpenIssueRequirement",
+      "zeroOpenIssueRequirementEnforced",
+      "zeroOpenIssueScope",
+      "qualityGatePolicyAdministrationClaim",
+      "vulnerabilityClearanceClaim",
+      "retentionCleanupChecked",
+      "credentialRevocationChecked",
+      "projectDeletionChecked",
+      "redactionChecked",
+      "providerUnavailableChecked"
+    ]
+  },
+  "exclusionsAndBoundaries": {
+    "justification": "USF-233 proves only the supported local synthetic scan scope. It does not retain raw scanner logs or provider payloads and does not claim policy administration, human hotspot workflow, live-provider operation, environment promotion, vulnerability clearance, or repository-wide SonarQube readiness.",
+    "excludedFromZeroIssueClaim": [
+      "production or staging codebases",
+      "live SonarQube providers",
+      "SonarQube policy administration",
+      "security hotspot human review workflow",
+      "operator browser UI clickthrough",
+      "sonar-oidc-plugin identity integration",
+      "repository-wide historical SonarQube issue lifecycle",
+      "vulnerability advisory clearance",
+      "SOC or ISO certification evidence"
+    ],
+    "deferredFollowUpIssues": [
+      "USF-169",
+      "USF-193"
+    ]
+  },
+  "enterpriseEvidenceRefs": [
+    "soa-proof-proof-assurance-sonarqube",
+    "evidence-proof-proof-assurance-sonarqube",
+    "usf-204-soa-sonarqube-composed-proof",
+    "usf-204-evidence-sonarqube-composed-proof",
+    "usf-204-threat-sonarqube-composed-proof",
+    "usf-204-resilience-sonarqube-composed-proof",
+    "usf-204-incident-vulnerability-sonarqube-composed-proof",
+    "usf-204-privacy-sonarqube-composed-proof",
+    "sdk-usf-204-sonarqube-composed-quality-gate-provider-at-sonar-scan"
+  ],
+  "validationCommands": [
+    "corepack pnpm proof:assurance:sonarqube",
+    "make sonar-zero-issue-proof",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "python3 tools/validate-spec/validate-spec.py all --json",
+    "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+    "git diff --check",
+    "git diff --check origin/main...HEAD"
+  ],
+  "readinessClaimsAllowed": [
+    "sonarqube-supported-local-synthetic-zero-open-issue-gate-recorded",
+    "sonarqube-bounded-local-compose-proof-recorded"
+  ],
+  "readinessClaimsProhibited": [
+    "sonarqube-readiness",
+    "quality-gate-readiness",
+    "scanner-readiness",
+    "vulnerability-clearance-readiness",
+    "repository-wide-zero-issue-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-parity-readiness",
+    "usf-133-closure"
+  ]
+}

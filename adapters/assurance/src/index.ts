@@ -40,6 +40,7 @@ export interface SonarQubeComposedQualityGateEvidence {
   readonly tenantSafeEvidenceChecked: boolean;
   readonly operatorConsoleAccessChecked: boolean;
   readonly operatorConsoleUiClickthroughClaim: false;
+  readonly supportedScanScope: "local-synthetic-typescript-project";
   readonly scannerExecutionChecked: boolean;
   readonly qualityGateResultChecked: boolean;
   readonly qualityGateStatus: "OK" | "ERROR" | "UNKNOWN" | "not-checked";
@@ -47,6 +48,12 @@ export interface SonarQubeComposedQualityGateEvidence {
   readonly unresolvedIssueCountBucket: "zero" | "non-zero" | "not-checked";
   readonly securityHotspotTreatmentChecked: boolean;
   readonly securityHotspotCountBucket: "zero" | "non-zero" | "not-checked";
+  readonly zeroOpenIssueQualityGateChecked: boolean;
+  readonly zeroOpenIssueRequirement: "quality-gate-ok-and-zero-unresolved-issues-and-zero-security-hotspots";
+  readonly zeroOpenIssueRequirementEnforced: boolean;
+  readonly zeroOpenIssueScope: "supported-local-synthetic-scan-scope";
+  readonly qualityGatePolicyAdministrationClaim: false;
+  readonly vulnerabilityClearanceClaim: false;
   readonly exceptionHandlingChecked: boolean;
   readonly retentionCleanupChecked: boolean;
   readonly credentialRevocationChecked: boolean;
@@ -413,6 +420,7 @@ export class SonarQubeComposedQualityGateAdapter {
       tenantSafeEvidenceChecked: true,
       operatorConsoleAccessChecked: input.operationOutcome === "succeeded",
       operatorConsoleUiClickthroughClaim: false,
+      supportedScanScope: "local-synthetic-typescript-project",
       scannerExecutionChecked: input.operationOutcome === "succeeded",
       qualityGateResultChecked: input.qualityGateStatus !== "not-checked",
       qualityGateStatus: input.qualityGateStatus,
@@ -420,6 +428,16 @@ export class SonarQubeComposedQualityGateAdapter {
       unresolvedIssueCountBucket: countBucket(input.unresolvedIssueCount),
       securityHotspotTreatmentChecked: input.securityHotspotCount !== null,
       securityHotspotCountBucket: countBucket(input.securityHotspotCount),
+      zeroOpenIssueQualityGateChecked:
+        input.qualityGateStatus === "OK" &&
+        input.unresolvedIssueCount === 0 &&
+        input.securityHotspotCount === 0,
+      zeroOpenIssueRequirement:
+        "quality-gate-ok-and-zero-unresolved-issues-and-zero-security-hotspots",
+      zeroOpenIssueRequirementEnforced: input.operationOutcome === "succeeded",
+      zeroOpenIssueScope: "supported-local-synthetic-scan-scope",
+      qualityGatePolicyAdministrationClaim: false,
+      vulnerabilityClearanceClaim: false,
       exceptionHandlingChecked: input.qualityGateStatus !== "not-checked",
       retentionCleanupChecked: input.retentionCleanupChecked,
       credentialRevocationChecked: input.credentialRevocationChecked,

@@ -1,0 +1,16 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-233 SonarQube zero-open-issue gate overclaims policy administration, service readiness, or vulnerability clearance.",
+  "sonarqubeBoundarySet": {
+    "qualityGateBoundary.qualityGatePolicyAdministrationClaim": true,
+    "qualityGateBoundary.vulnerabilityClearanceClaim": true,
+    "qualityGateBoundary.repositoryWideZeroIssueReadinessClaim": true,
+    "composedProof.qualityGatePolicyAdministrationClaim": true,
+    "composedProof.vulnerabilityClearanceClaim": true
+  },
+  "sonarqubeZeroIssueSet": {
+    "qualityGateRequirement.policyAdministrationClaim": true,
+    "qualityGateRequirement.vulnerabilityClearanceClaim": true,
+    "qualityGateRequirement.serviceReadinessClaim": true
+  }
+}

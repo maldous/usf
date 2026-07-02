@@ -55,6 +55,12 @@
       "coverageChanged": false
     },
     {
+      "target": "sonar-zero-issue-proof",
+      "routesTo": "sonarqube-assurance-proof",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
       "target": "assurance",
       "routesTo": "validate-assurance",
       "classification": "short-current-alias",
@@ -75,6 +81,7 @@
     "runtime-proof",
     "runtime-validate",
     "test-compose",
+    "sonar-zero-issue-proof",
     "sonarqube-assurance-proof"
   ],
   "packageScriptsChanged": false,
@@ -84,8 +91,9 @@
   "runtimeBehaviourChanged": false,
   "providerBehaviourChanged": false,
   "generatedComposeChanged": false,
-  "sonarZeroIssueClaimChanged": false,
+  "sonarZeroIssueClaimChanged": true,
   "sonarFollowUpIssueId": "USF-233",
+  "sonarZeroIssueProofBoundary": "docs/architecture/sonarqube-zero-issue-quality-gate-assurance.json",
   "nonClaims": [
     "no-test-readiness",
     "no-staging-readiness",
