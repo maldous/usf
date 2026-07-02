@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-052",
+  "integrationMatrixServicePatch": [
+    {
+      "serviceId": "postgres",
+      "set": {
+        "inMemoryServiceSubstituteAllowed": true
+      }
+    }
+  ]
+}

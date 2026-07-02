@@ -5658,6 +5658,37 @@
         "full-react-product-parity",
         "USF-234-closure"
       ]
+    },
+    {
+      "id": "soa-usf-242-composed-service-integration-matrix",
+      "mappedType": "composed-service-integration-matrix",
+      "controlPurpose": "Organise USF-242 composed integration evidence for every generated test Compose service, generated profile, and service catalogue disposition against the canonical test Compose target.",
+      "riskTreated": "Service-backed test-readiness work could omit generated services or profiles, skip profile-gated services, rely on in-memory substitutes, or overclaim final test readiness from matrix evidence alone.",
+      "assetServiceAffected": "docs/architecture/composed-service-integration-test-matrix.json; compose/compose.test.generated.yaml; spec/instances/compose-service/service-catalogue.json; tests/packages/fixtures/service-fixture-corpus.json",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-242; parentIssue=USF-234; treatment=prove matrix coverage for generated test Compose services profiles and service catalogue dispositions; reviewDate=2026-09-30; followUpIssue=USF-251 for executable every-service orchestration and USF-234 for final acceptance",
+      "evidenceSource": "docs/architecture/composed-service-integration-test-matrix.json; docs/architecture/composed-service-integration-test-matrix.md; packages/proof/src/composed-service-integration-matrix-proof.ts; tests/packages/composed-service-integration-matrix.test.ts; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:integration; corepack pnpm test-readiness:validate; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-242 proves the composed integration matrix and validator gate only. USF-251 owns runtime every-service start seed exercise reset teardown orchestration and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-251,USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8518,6 +8549,28 @@
         "USF-234"
       ],
       "prOrMergeSha": "27faf2853426c3dc289bfcba6f7cb0f5a4380aa7"
+    },
+    {
+      "id": "evidence-usf-242-composed-service-integration-matrix",
+      "proofResult": "composed-service-integration-matrix-defined-and-validator-enforced",
+      "whatWasProven": "USF-242 defines and executes a composed service integration matrix proof covering every generated test Compose service, every generated test Compose profile including default, and every service catalogue row disposition, with deterministic fixture linkage, canonical compose target linkage, no in-memory substitute allowance, and non-claim preservation.",
+      "whatWasNotProven": "USF-242 does not perform final USF-234 acceptance, does not fully execute the later USF-251 every-service orchestration gate, and does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#all-services; compose/compose.test.generated.yaml#services",
+      "adapterProviderId": "all-generated-test-compose-services",
+      "validationCommand": "corepack pnpm test-readiness:integration; corepack pnpm test-readiness:validate",
+      "commandPin": "package.json#scripts.test-readiness:integration",
+      "commitPin": "bbef6a33054ca621dd91c741af2f5d1f4e683dcb",
+      "prOrMergeSha": "bbef6a33054ca621dd91c741af2f5d1f4e683dcb",
+      "issueLinks": [
+        "USF-242",
+        "USF-234",
+        "USF-239",
+        "USF-248",
+        "USF-251"
+      ],
+      "retentionPosture": "Retain committed matrix, value-free proof output, validator findings, planted defects, and PR validation output. Do not retain provider payloads, raw endpoints, credentials, tokens, connection strings, stack traces, real tenant data, production data, or live provider data."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10981,6 +11034,32 @@
       "failClosedBehaviour": "Test-readiness validator and fixture corpus unit tests fail on missing rows, unsafe provenance, lifecycle mapping gaps, in-memory substitution, or overclaims.",
       "monitoringAuditEvidence": "Validator output, PR evidence, and proof summary only; no production monitoring claim.",
       "residualRisk": "Downstream child issues still own execution of every composed service matrix, auth, data lifecycle, operational, design, coverage, and final acceptance obligation."
+    },
+    {
+      "id": "threat-usf-242-composed-service-integration-overclaim",
+      "targetType": "composed-service-integration-matrix",
+      "target": "USF-242 composed service integration matrix",
+      "trustBoundary": "Local repository matrix, canonical generated test Compose target, service catalogue, deterministic fixture corpus, and validator/proof commands. The matrix is local test-readiness evidence only and does not prove live, staging, production, SOC, ISO, or final test readiness.",
+      "tenantBoundary": "Synthetic tenant and fixture metadata only. Downstream executable service tests must prove service-backed tenant isolation through composed services where claims are made.",
+      "credentialBoundary": "Only repository metadata and local placeholder Compose boundaries are represented. Matrix, proof, and validator output must not expose secrets, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, or provider payloads.",
+      "dataClassification": "internal synthetic test-readiness integration metadata",
+      "abuseCases": [
+        "A generated test Compose service is omitted from the integration matrix",
+        "A generated test Compose profile is not started seeded exercised reset or evidenced",
+        "A service catalogue row is treated as tested without an explicit disposition",
+        "A service-backed test-readiness claim is satisfied by an in-memory substitute",
+        "USF-242 matrix evidence is mistaken for final USF-234 acceptance or external readiness"
+      ],
+      "failureModes": [
+        "missing generated service row",
+        "missing profile row",
+        "missing catalogue disposition",
+        "stale proof command",
+        "unsafe readiness overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails on missing matrix, missing service or profile coverage, missing catalogue disposition, in-memory substitute allowance, stale command linkage, missing enterprise refs, and prohibited claims.",
+      "monitoringAuditEvidence": "Value-free validator findings, proof summary, PR validation output, and planted-defect selftest output only.",
+      "residualRisk": "USF-251 must still execute the every-service orchestration gate before final USF-234 acceptance; this row preserves that boundary."
     }
   ],
   "sdkDependencyGovernance": [
@@ -14460,6 +14539,45 @@
         "full-react-product-parity",
         "USF-234-closure"
       ]
+    },
+    {
+      "id": "access-usf-242-composed-service-integration-boundary",
+      "targetType": "composed-service-integration-matrix",
+      "target": "USF-242 composed integration access boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-242",
+        "accessModel=local-repository-proof-and-validator-only",
+        "authnAuthzBoundary=matrix-records-auth-sensitive-service-obligations-USF-249-owns-executable-auth-proof",
+        "leastPrivilegePosture=synthetic-local-test-context-only",
+        "breakGlassRelevance=not-proven-by-USF-242",
+        "auditEvidence=value-free-proof-summary-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=not-proven-by-USF-242",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/composed-service-integration-test-matrix.json; packages/proof/src/composed-service-integration-matrix-proof.ts",
+      "validationCommand": "corepack pnpm test-readiness:integration; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-249 owns executable auth tenant role permission proof and USF-251 owns runtime every-service exercise; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -17295,6 +17413,47 @@
         "browser-e2e-readiness",
         "full-react-product-parity",
         "USF-234-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-242-composed-service-integration-boundary",
+      "targetType": "composed-service-integration-matrix",
+      "target": "USF-242 composed integration resilience boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-242",
+        "readinessChecks=matrix-requires-start-readiness-service-specific-readiness-profile-readiness-and-canonical-compose-target-metadata-for-every-generated-service",
+        "retryTimeoutBehaviour=not-runtime-implemented-by-USF-242-USF-251-owns-executable-orchestration",
+        "failClosedMode=validator-and-proof-fail-on-missing-service-profile-disposition-command-enterprise-or-nonclaim-evidence",
+        "safeTeardown=matrix-requires-teardown-reset-cleanup-evidence-fields-USF-251-owns-execution",
+        "structuredLogging=value-free-proof-output-only",
+        "tracingCorrelation=matrix-metadata-only-no-live-tracing-claim",
+        "metrics=proof-summary-and-validator-result-metadata-only",
+        "auditEvents=matrix-requires-audit-observability-evidence-fields-for-every-generated-service",
+        "redaction=no-real-tenant-data-real-secrets-raw-endpoints-connection-strings-tokens-stack-traces-raw-SDK-errors-or-provider-payloads",
+        "backupRestorePosture=backup-restore-service-dispositions-recorded-USF-250-owns-executable-data-lifecycle-proof",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=USF-250-and-USF-234-own-executable-proof-and-final-acceptance"
+      ],
+      "evidenceSource": "docs/architecture/composed-service-integration-test-matrix.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:integration; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-251 owns executable every-service orchestration and USF-250 owns backup restore bulk migration execution tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -20789,6 +20948,42 @@
         "browser-e2e-readiness",
         "full-react-product-parity",
         "USF-234-closure"
+      ]
+    },
+    {
+      "id": "incident-usf-242-composed-service-integration-boundary",
+      "targetType": "composed-service-integration-matrix",
+      "target": "USF-242 composed integration incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-242",
+        "incidentDetectionHook=validator-finding-unit-test-failure-proof-failure-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-242",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-runtime-dependency-added-by-USF-242",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-242",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-integration-matrix-service-profile-disposition-command-enterprise-and-overclaim-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-242"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects; docs/architecture/composed-service-integration-test-matrix.json",
+      "validationCommand": "corepack pnpm test-readiness:validate; corepack pnpm test-readiness:integration",
+      "deferredReason": "USF-245 owns operational failure-mode execution and incident evidence tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -24859,6 +25054,44 @@
         "browser-e2e-readiness",
         "full-react-product-parity",
         "USF-234-closure"
+      ]
+    },
+    {
+      "id": "privacy-usf-242-composed-service-integration-boundary",
+      "targetType": "composed-service-integration-matrix",
+      "target": "USF-242 composed integration synthetic data boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-242",
+        "dataOrigin=synthetic-local-test-readiness-matrix-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-integration-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-matrix-and-proof-definitions-retained-runtime-data-cleaned-by-underlying-proof-teardown",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/composed-service-integration-test-matrix.json; docs/architecture/composed-service-integration-test-matrix.md",
+      "validationCommand": "corepack pnpm test-readiness:integration; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-250 owns executable privacy lifecycle and deletion tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
       ]
     }
   ],

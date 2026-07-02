@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-053",
+  "integrationMatrixDispositionPatch": [
+    {
+      "serviceCatalogueId": "alertmanager",
+      "set": {
+        "testDisposition": "tested"
+      }
+    }
+  ]
+}

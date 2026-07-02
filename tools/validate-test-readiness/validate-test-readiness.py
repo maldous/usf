@@ -28,6 +28,7 @@ LIFECYCLE_PATH = Path("docs/architecture/deterministic-test-fixture-lifecycle.js
 COMMAND_SURFACE_PATH = Path("docs/architecture/test-readiness-command-surface-and-ci-gate.json")
 OBLIGATION_MANIFEST_PATH = Path("docs/architecture/semantic-service-test-obligation-manifest.json")
 FIXTURE_CORPUS_PATH = Path("tests/packages/fixtures/service-fixture-corpus.json")
+INTEGRATION_MATRIX_PATH = Path("docs/architecture/composed-service-integration-test-matrix.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -85,6 +86,14 @@ RULES = {
     "USF-TEST-READINESS-044": ("blocking", "fixture corpus lacks repeatability or failure recovery evidence"),
     "USF-TEST-READINESS-045": ("blocking", "fixture corpus lacks test-layer wiring"),
     "USF-TEST-READINESS-046": ("blocking", "fixture corpus lacks enterprise evidence linkage or preserves insufficient non-claims"),
+    "USF-TEST-READINESS-047": ("blocking", "composed service integration matrix is missing or invalid"),
+    "USF-TEST-READINESS-048": ("blocking", "generated test Compose service lacks integration coverage or disposition"),
+    "USF-TEST-READINESS-049": ("blocking", "generated test Compose profile lacks integration coverage"),
+    "USF-TEST-READINESS-050": ("blocking", "service catalogue row lacks test integration disposition"),
+    "USF-TEST-READINESS-051": ("blocking", "composed service integration matrix does not use canonical test Compose target or proof command"),
+    "USF-TEST-READINESS-052": ("blocking", "composed service integration matrix allows in-memory service-backed substitutes"),
+    "USF-TEST-READINESS-053": ("blocking", "profile-gated service is skipped without bounded disposition"),
+    "USF-TEST-READINESS-054": ("blocking", "composed service integration matrix lacks enterprise evidence linkage or preserves insufficient non-claims"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -94,14 +103,41 @@ HARNESS_SCRIPT = "tsx packages/proof/src/composed-semantic-test-harness-proof.ts
 LIFECYCLE_COMMAND = "corepack pnpm test-readiness:fixtures"
 LIFECYCLE_SCRIPT = "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
 TEST_READINESS_COMMAND = "corepack pnpm test-readiness"
-TEST_READINESS_SCRIPT = "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:assurance"
+TEST_READINESS_SCRIPT = "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:assurance"
 TEST_READINESS_COMPOSED_COMMAND = "corepack pnpm test-readiness:composed"
-TEST_READINESS_COMPOSED_SCRIPT = "pnpm test-readiness:semantic && pnpm test-readiness:fixtures"
+TEST_READINESS_COMPOSED_SCRIPT = "pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration"
 TEST_READINESS_ASSURANCE_COMMAND = "corepack pnpm test-readiness:assurance"
 TEST_READINESS_ASSURANCE_SCRIPT = "pnpm proof:assurance:sonarqube"
 SONAR_COMMAND = "corepack pnpm proof:assurance:sonarqube"
 OBLIGATION_MANIFEST_COMMAND = "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
 FIXTURE_CORPUS_COMMAND = "corepack pnpm test-readiness:fixtures"
+INTEGRATION_MATRIX_COMMAND = "corepack pnpm test-readiness:integration"
+INTEGRATION_MATRIX_SCRIPT = "tsx packages/proof/src/composed-service-integration-matrix-proof.ts"
+REQUIRED_INTEGRATION_SERVICE_COVERAGE = {
+    "startReadiness",
+    "seed",
+    "positiveOperation",
+    "negativeOperation",
+    "degradedUnavailable",
+    "cleanup",
+    "teardown",
+    "reset",
+    "auditObservability",
+    "composeTargetMetadata",
+    "serviceSpecificReadiness",
+    "hostBindingPosture",
+    "generatedComposeDerivation",
+    "redaction",
+}
+REQUIRED_INTEGRATION_PROFILE_FLAGS = {
+    "mustStart",
+    "mustReadinessCheck",
+    "mustSeed",
+    "mustExercise",
+    "mustTeardown",
+    "mustReset",
+    "mustEvidence",
+}
 REQUIRED_HARNESS_SERVICE_IDS = {
     "postgres",
     "keycloak-db",
@@ -528,6 +564,70 @@ def apply_fixture_corpus_defect(corpus: dict[str, Any] | None, defect: dict[str,
     return out
 
 
+def apply_integration_matrix_defect(matrix: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeIntegrationMatrix"):
+        return None
+    if matrix is None:
+        return None
+    out = copy.deepcopy(matrix)
+    for key, value in defect.get("integrationMatrixSet", {}).items():
+        out[key] = value
+    for key in defect.get("integrationMatrixDrop", []):
+        out.pop(key, None)
+    for service_id in defect.get("integrationMatrixDropServiceIds", []):
+        out["serviceIntegrationRows"] = [
+            row for row in out.get("serviceIntegrationRows", []) if row.get("serviceId") != service_id
+        ]
+    for profile in defect.get("integrationMatrixDropProfiles", []):
+        out["profileIntegrationRows"] = [
+            row for row in out.get("profileIntegrationRows", []) if row.get("profile") != profile
+        ]
+    for service_id in defect.get("integrationMatrixDropDispositionIds", []):
+        out["serviceCatalogueDispositionRows"] = [
+            row
+            for row in out.get("serviceCatalogueDispositionRows", [])
+            if row.get("serviceCatalogueId") != service_id
+        ]
+    for patch in defect.get("integrationMatrixServicePatch", []):
+        for row in out.get("serviceIntegrationRows", []):
+            if row.get("serviceId") != patch.get("serviceId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            evidence = row.get("evidenceTests")
+            if isinstance(evidence, dict):
+                for key in patch.get("dropEvidenceTests", []):
+                    evidence.pop(key, None)
+                for key, value in patch.get("setEvidenceTests", {}).items():
+                    evidence[key] = value
+    for patch in defect.get("integrationMatrixProfilePatch", []):
+        for row in out.get("profileIntegrationRows", []):
+            if row.get("profile") != patch.get("profile"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for patch in defect.get("integrationMatrixDispositionPatch", []):
+        for row in out.get("serviceCatalogueDispositionRows", []):
+            if row.get("serviceCatalogueId") != patch.get("serviceCatalogueId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for section in defect.get("integrationMatrixEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("integrationMatrixDropNonClaims"):
+        dropped = set(defect.get("integrationMatrixDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("integrationMatrixAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["integrationMatrixAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -576,6 +676,8 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     obligation_manifest = apply_obligation_manifest_defect(obligation_manifest, defect)
     fixture_corpus = read_json(FIXTURE_CORPUS_PATH) if (ROOT / FIXTURE_CORPUS_PATH).exists() else None
     fixture_corpus = apply_fixture_corpus_defect(fixture_corpus, defect)
+    integration_matrix = read_json(INTEGRATION_MATRIX_PATH) if (ROOT / INTEGRATION_MATRIX_PATH).exists() else None
+    integration_matrix = apply_integration_matrix_defect(integration_matrix, defect)
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -585,6 +687,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "commandSurface": command_surface,
         "obligationManifest": obligation_manifest,
         "fixtureCorpus": fixture_corpus,
+        "integrationMatrix": integration_matrix,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -762,6 +865,13 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         FIXTURE_CORPUS_PATH,
         state["enterpriseModel"],
         "USF-TEST-READINESS-046",
+    )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["integrationMatrix"],
+        INTEGRATION_MATRIX_PATH,
+        state["enterpriseModel"],
+        "USF-TEST-READINESS-054",
     )
 
 
@@ -1375,6 +1485,212 @@ def check_fixture_corpus(F: Findings, state: dict[str, Any]) -> None:
     check_fixture_corpus_evidence(F, state)
 
 
+def _compose_profiles_with_default(compose_services: dict[str, Any]) -> dict[str, set[str]]:
+    profiles: dict[str, set[str]] = {}
+    for service_id, service in compose_services.items():
+        if not isinstance(service, dict):
+            continue
+        service_profiles = service.get("profiles") or ["default"]
+        for profile in service_profiles:
+            profiles.setdefault(str(profile), set()).add(str(service_id))
+    return profiles
+
+
+def check_integration_matrix_shape(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state["integrationMatrix"]
+    if not isinstance(matrix, dict):
+        F.add("USF-TEST-READINESS-047", str(INTEGRATION_MATRIX_PATH), "integration matrix is missing")
+        return
+    for key in (
+        "id",
+        "issueId",
+        "parentIssueId",
+        "composeTarget",
+        "testSuitePath",
+        "proofCommand",
+        "proofScript",
+        "sourceAuthorities",
+        "generatedServiceCount",
+        "profileCount",
+        "serviceCatalogueDispositionCount",
+        "inMemoryServiceSubstituteAllowedForServiceBackedClaims",
+        "testReadinessClaimAllowed",
+        "serviceIntegrationRows",
+        "profileIntegrationRows",
+        "serviceCatalogueDispositionRows",
+        "enterpriseEvidenceRefs",
+        "validationCommands",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in matrix:
+            F.add("USF-TEST-READINESS-047", str(INTEGRATION_MATRIX_PATH), f"missing top-level field {key}")
+    if matrix.get("issueId") != "USF-242" or matrix.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-047", str(INTEGRATION_MATRIX_PATH), "issue linkage must be USF-242 under USF-234")
+    if matrix.get("composeTarget") != COMPOSE_TARGET or matrix.get("proofCommand") != INTEGRATION_MATRIX_COMMAND:
+        F.add("USF-TEST-READINESS-051", str(INTEGRATION_MATRIX_PATH), "Compose target or proof command is stale")
+    if matrix.get("proofScript") != INTEGRATION_MATRIX_SCRIPT:
+        F.add("USF-TEST-READINESS-051", str(INTEGRATION_MATRIX_PATH), "proof script is stale")
+    if matrix.get("testSuitePath") != "tests/packages/composed-service-integration-matrix.test.ts":
+        F.add("USF-TEST-READINESS-047", str(INTEGRATION_MATRIX_PATH), "test suite path is stale")
+    if matrix.get("inMemoryServiceSubstituteAllowedForServiceBackedClaims") is not False:
+        F.add("USF-TEST-READINESS-052", str(INTEGRATION_MATRIX_PATH), "service-backed claims must forbid in-memory substitution")
+    if matrix.get("testReadinessClaimAllowed") is not False:
+        F.add("USF-TEST-READINESS-054", str(INTEGRATION_MATRIX_PATH), "matrix must not allow final test-readiness claim")
+    commands = set(matrix.get("validationCommands", []))
+    for expected in (
+        INTEGRATION_MATRIX_COMMAND,
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-051", f"{INTEGRATION_MATRIX_PATH}#validationCommands", f"missing validation command {expected}")
+
+
+def check_integration_service_coverage(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state["integrationMatrix"]
+    if not isinstance(matrix, dict):
+        return
+    compose_services = _compose_test_services(state)
+    service_rows = _list_by_id(matrix.get("serviceIntegrationRows"), "serviceId")
+    if matrix.get("generatedServiceCount") != len(compose_services) or matrix.get("generatedServiceCount") != len(service_rows):
+        F.add("USF-TEST-READINESS-048", str(INTEGRATION_MATRIX_PATH), "generated service count must match test Compose and matrix rows")
+    fixture_rows = _list_by_id(state.get("fixtureCorpus", {}).get("serviceFixtures") if isinstance(state.get("fixtureCorpus"), dict) else [], "serviceId")
+    for compose_service_id in compose_services:
+        row = service_rows.get(compose_service_id)
+        if not row:
+            F.add("USF-TEST-READINESS-048", compose_service_id, "generated test Compose service is missing integration row")
+            continue
+        subject = f"{INTEGRATION_MATRIX_PATH}#serviceIntegrationRows.{compose_service_id}"
+        if row.get("composeTarget") != COMPOSE_TARGET or row.get("generatedInTestCompose") is not True:
+            F.add("USF-TEST-READINESS-051", subject, "service row must use canonical generated test Compose")
+        if row.get("inMemoryServiceSubstituteAllowed") is not False or row.get("testReadinessClaimAllowed") is not False:
+            F.add("USF-TEST-READINESS-052", subject, "service row allows unsafe substitute or claim")
+        if row.get("proofCommand") != INTEGRATION_MATRIX_COMMAND or row.get("proofScript") != INTEGRATION_MATRIX_SCRIPT:
+            F.add("USF-TEST-READINESS-051", subject, "service row proof command or script is stale")
+        if not row.get("fixtureSeedId") or not isinstance(row.get("lifecycleApi"), dict):
+            F.add("USF-TEST-READINESS-048", subject, "fixture seed and lifecycle API are required")
+        if row.get("serviceCatalogueId") not in catalogue_by_id(state["serviceCatalogue"]):
+            F.add("USF-TEST-READINESS-048", subject, "service catalogue linkage is missing")
+        fixture_id = row.get("serviceCatalogueId")
+        if fixture_id not in fixture_rows and compose_service_id not in fixture_rows:
+            F.add("USF-TEST-READINESS-048", subject, "fixture corpus linkage is missing")
+        lifecycle = row.get("lifecycleApi") if isinstance(row.get("lifecycleApi"), dict) else {}
+        for key in ("seederId", "resetterId", "cleanupId", "teardownId"):
+            if not lifecycle.get(key):
+                F.add("USF-TEST-READINESS-048", subject, f"lifecycle API missing {key}")
+        evidence = row.get("evidenceTests")
+        if not isinstance(evidence, dict):
+            F.add("USF-TEST-READINESS-048", subject, "evidenceTests must be present")
+        else:
+            for key in REQUIRED_INTEGRATION_SERVICE_COVERAGE:
+                if evidence.get(key) != "matrix-covered":
+                    F.add("USF-TEST-READINESS-048", subject, f"missing integration evidence test {key}")
+        non_claims = set(row.get("nonClaims", []))
+        if REQUIRED_HARNESS_NON_CLAIMS - non_claims:
+            F.add("USF-TEST-READINESS-054", subject, "service row preserves insufficient non-claims")
+    extra = sorted(set(service_rows) - set(compose_services))
+    for service_id in extra:
+        F.add("USF-TEST-READINESS-048", service_id, "integration service row is not generated in test Compose")
+
+
+def check_integration_profile_coverage(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state["integrationMatrix"]
+    if not isinstance(matrix, dict):
+        return
+    expected_profiles = _compose_profiles_with_default(_compose_test_services(state))
+    profile_rows = _list_by_id(matrix.get("profileIntegrationRows"), "profile")
+    if matrix.get("profileCount") != len(expected_profiles) or matrix.get("profileCount") != len(profile_rows):
+        F.add("USF-TEST-READINESS-049", str(INTEGRATION_MATRIX_PATH), "profile count must match generated test Compose and matrix rows")
+    for profile, service_ids in expected_profiles.items():
+        row = profile_rows.get(profile)
+        if not row:
+            F.add("USF-TEST-READINESS-049", profile, "generated test Compose profile is missing integration row")
+            continue
+        subject = f"{INTEGRATION_MATRIX_PATH}#profileIntegrationRows.{profile}"
+        if row.get("composeTarget") != COMPOSE_TARGET or row.get("proofCommand") != INTEGRATION_MATRIX_COMMAND:
+            F.add("USF-TEST-READINESS-051", subject, "profile row has stale Compose target or proof command")
+        if set(row.get("serviceIds", [])) != service_ids:
+            F.add("USF-TEST-READINESS-049", subject, "profile service ids do not match generated test Compose")
+        if row.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-052", subject, "profile row allows in-memory substitution")
+        for key in REQUIRED_INTEGRATION_PROFILE_FLAGS:
+            if row.get(key) is not True:
+                F.add("USF-TEST-READINESS-049", subject, f"{key} must be true")
+        non_claims = set(row.get("nonClaims", []))
+        if REQUIRED_HARNESS_NON_CLAIMS - non_claims:
+            F.add("USF-TEST-READINESS-054", subject, "profile row preserves insufficient non-claims")
+    for profile in sorted(set(profile_rows) - set(expected_profiles)):
+        F.add("USF-TEST-READINESS-049", profile, "profile row is not generated by test Compose")
+
+
+def check_integration_catalogue_dispositions(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state["integrationMatrix"]
+    if not isinstance(matrix, dict):
+        return
+    catalogue_rows = catalogue_by_id(state["serviceCatalogue"])
+    disposition_rows = _list_by_id(matrix.get("serviceCatalogueDispositionRows"), "serviceCatalogueId")
+    if matrix.get("serviceCatalogueDispositionCount") != len(catalogue_rows) or matrix.get("serviceCatalogueDispositionCount") != len(disposition_rows):
+        F.add("USF-TEST-READINESS-050", str(INTEGRATION_MATRIX_PATH), "catalogue disposition count must match service catalogue and matrix rows")
+    allowed_dispositions = {
+        "tested",
+        "profile-gated-tested",
+        "external-live-out-of-scope",
+        "historical-dev-only",
+        "unsupported",
+        "deferred-with-follow-up",
+    }
+    for service_id, catalogue_row in catalogue_rows.items():
+        row = disposition_rows.get(service_id)
+        if not row:
+            F.add("USF-TEST-READINESS-050", service_id, "service catalogue row is missing test integration disposition")
+            continue
+        subject = f"{INTEGRATION_MATRIX_PATH}#serviceCatalogueDispositionRows.{service_id}"
+        disposition = row.get("testDisposition")
+        if disposition not in allowed_dispositions:
+            F.add("USF-TEST-READINESS-050", subject, "unknown test integration disposition")
+        if not row.get("boundedRationale"):
+            F.add("USF-TEST-READINESS-050", subject, "bounded rationale is required")
+        if row.get("owner") != catalogue_row.get("serviceOwner") or row.get("riskOwner") != catalogue_row.get("riskOwner") or row.get("controlOwner") != catalogue_row.get("controlOwner"):
+            F.add("USF-TEST-READINESS-050", subject, "owner riskOwner or controlOwner does not match service catalogue")
+        if row.get("dataClassification") != catalogue_row.get("dataClassification"):
+            F.add("USF-TEST-READINESS-050", subject, "data classification does not match service catalogue")
+        if row.get("inMemoryServiceSubstituteAllowed") is not False or row.get("testReadinessClaimAllowed") is not False:
+            F.add("USF-TEST-READINESS-052", subject, "catalogue disposition allows unsafe substitute or claim")
+        policy_profiles = _catalogue_test_policy(catalogue_row).get("composeProfiles", [])
+        if policy_profiles and disposition != "profile-gated-tested":
+            F.add("USF-TEST-READINESS-053", subject, "profile-gated service lacks profile-gated tested disposition")
+        if disposition == "deferred-with-follow-up" and not row.get("followUpIssueIds"):
+            F.add("USF-TEST-READINESS-050", subject, "deferred disposition requires follow-up issue")
+        non_claims = set(row.get("nonClaims", []))
+        if REQUIRED_HARNESS_NON_CLAIMS - non_claims:
+            F.add("USF-TEST-READINESS-054", subject, "catalogue disposition preserves insufficient non-claims")
+    for service_id in sorted(set(disposition_rows) - set(catalogue_rows)):
+        F.add("USF-TEST-READINESS-050", service_id, "catalogue disposition row is not in service catalogue")
+
+
+def check_integration_claims(F: Findings, state: dict[str, Any]) -> None:
+    matrix = state["integrationMatrix"]
+    if not isinstance(matrix, dict):
+        return
+    non_claims = set(matrix.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-054", str(INTEGRATION_MATRIX_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(matrix.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-054", str(INTEGRATION_MATRIX_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
+def check_integration_matrix(F: Findings, state: dict[str, Any]) -> None:
+    check_integration_matrix_shape(F, state)
+    check_integration_service_coverage(F, state)
+    check_integration_profile_coverage(F, state)
+    check_integration_catalogue_dispositions(F, state)
+    check_integration_claims(F, state)
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -1609,6 +1925,7 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         "test-readiness-assurance": TEST_READINESS_ASSURANCE_COMMAND,
         "test-readiness-semantic": HARNESS_COMMAND,
         "test-readiness-fixtures": LIFECYCLE_COMMAND,
+        "test-readiness-integration": INTEGRATION_MATRIX_COMMAND,
         "test-readiness-validator": "corepack pnpm test-readiness:validate",
     }
     for command_id, expected in expected_commands.items():
@@ -1629,7 +1946,7 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         if composed.get("inMemoryServiceSubstituteAllowed") is not False:
             F.add("USF-TEST-READINESS-027", f"{COMMAND_SURFACE_PATH}#composedExecution", "composed execution must forbid in-memory service substitutes")
         commands = set(composed.get("requiredCommands", []))
-        for expected in (HARNESS_COMMAND, LIFECYCLE_COMMAND, TEST_READINESS_COMPOSED_COMMAND):
+        for expected in (HARNESS_COMMAND, LIFECYCLE_COMMAND, INTEGRATION_MATRIX_COMMAND, TEST_READINESS_COMPOSED_COMMAND):
             if expected not in commands:
                 F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#composedExecution.requiredCommands", f"missing command {expected}")
 
@@ -1638,8 +1955,10 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         TEST_READINESS_COMMAND,
         TEST_READINESS_COMPOSED_COMMAND,
         TEST_READINESS_ASSURANCE_COMMAND,
+        INTEGRATION_MATRIX_COMMAND,
         "make test-ready",
         "make test-composed",
+        "make test-readiness-integration",
         "make test-assurance",
         "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
     ):
@@ -1687,6 +2006,7 @@ def check_makefile_wiring(F: Findings, makefile: str) -> None:
         "test-readiness-validate": "corepack pnpm test-readiness:validate",
         "test-readiness-semantic": "corepack pnpm test-readiness:semantic",
         "test-readiness-fixtures": "corepack pnpm test-readiness:fixtures",
+        "test-readiness-integration": "corepack pnpm test-readiness:integration",
     }
     for target, command in expected_targets.items():
         pattern = rf"^{re.escape(target)}:\n\t{re.escape(command)}$"
@@ -1711,6 +2031,8 @@ def check_package_wiring(F: Findings, package: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-014", "package.json#scripts", "test-readiness:semantic script is missing or stale")
     if scripts.get("test-readiness:fixtures") != LIFECYCLE_SCRIPT:
         F.add("USF-TEST-READINESS-018", "package.json#scripts", "test-readiness:fixtures script is missing or stale")
+    if scripts.get("test-readiness:integration") != INTEGRATION_MATRIX_SCRIPT:
+        F.add("USF-TEST-READINESS-051", "package.json#scripts", "test-readiness:integration script is missing or stale")
     expected_scripts = {
         "test-readiness": TEST_READINESS_SCRIPT,
         "test-readiness:composed": TEST_READINESS_COMPOSED_SCRIPT,
@@ -1730,6 +2052,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_command_surface(F, state)
     check_obligation_manifest(F, state)
     check_fixture_corpus(F, state)
+    check_integration_matrix(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

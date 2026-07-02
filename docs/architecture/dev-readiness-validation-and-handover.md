@@ -115,7 +115,8 @@ dev-readiness evidence recorded by USF-226:
 | Command | Purpose |
 | ------- | ------- |
 | `make test-ready` | Runs the bounded local test-readiness command gate. |
-| `make test-composed` | Runs the composed semantic harness and deterministic fixture lifecycle proof. |
+| `make test-composed` | Runs the composed semantic harness, deterministic fixture lifecycle proof, and composed service integration matrix. |
+| `make test-readiness-integration` | Runs the composed service integration matrix proof. |
 | `make test-assurance` | Runs the bounded local SonarQube zero-open-issue proof. |
 
 These commands are documented in
