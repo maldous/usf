@@ -71,6 +71,34 @@
       "routesTo": "validate-evidence",
       "classification": "short-current-alias",
       "coverageChanged": false
+    },
+    {
+      "target": "test-ready",
+      "routesTo": "corepack pnpm test-readiness",
+      "classification": "canonical-current-test-readiness-gate",
+      "coverageChanged": false,
+      "evidence": "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+    },
+    {
+      "target": "test",
+      "routesTo": "test-ready",
+      "classification": "short-current-test-readiness-alias",
+      "coverageChanged": false,
+      "evidence": "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+    },
+    {
+      "target": "test-composed",
+      "routesTo": "corepack pnpm test-readiness:composed",
+      "classification": "canonical-current-composed-test-gate",
+      "coverageChanged": false,
+      "evidence": "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+    },
+    {
+      "target": "test-assurance",
+      "routesTo": "corepack pnpm test-readiness:assurance",
+      "classification": "canonical-current-assurance-test-gate",
+      "coverageChanged": false,
+      "evidence": "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
     }
   ],
   "compatibilityTargetsRetained": [
@@ -82,9 +110,13 @@
     "runtime-validate",
     "test-compose",
     "sonar-zero-issue-proof",
-    "sonarqube-assurance-proof"
+    "sonarqube-assurance-proof",
+    "test-ready",
+    "test",
+    "test-composed",
+    "test-assurance"
   ],
-  "packageScriptsChanged": false,
+  "packageScriptsChanged": true,
   "proofCommandsRemoved": false,
   "validatorsWeakened": false,
   "plantedDefectsRemoved": false,
@@ -105,6 +137,10 @@
     "no-enterprise-production-readiness",
     "no-product-ui-readiness",
     "no-browser-e2e-readiness",
-    "no-full-react-product-parity"
-  ]
+    "no-full-react-product-parity",
+    "no-final-test-readiness"
+  ],
+  "testReadinessCommandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+  "testReadinessCommandSurfaceIssue": "USF-238",
+  "testReadinessClaimChanged": false
 }

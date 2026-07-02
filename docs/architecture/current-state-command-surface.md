@@ -16,6 +16,10 @@ This document records the current-state command surface introduced by USF-232. I
 | `make setup` | `make install` | Install exact pinned dependencies with the frozen lockfile. |
 | `make foundation` | `make verify` | Run the full local foundation proof and validation gate. |
 | `make dev-ready` | `make verify` | Run the developer and AI-agent handover gate. |
+| `make test-ready` | `corepack pnpm test-readiness` | Run the bounded local test-readiness command gate. |
+| `make test` | `make test-ready` | Short alias for the bounded local test-readiness command gate. |
+| `make test-composed` | `corepack pnpm test-readiness:composed` | Run the composed semantic harness and deterministic fixture lifecycle proof. |
+| `make test-assurance` | `corepack pnpm test-readiness:assurance` | Run the bounded local SonarQube zero-open-issue proof. |
 | `make validate-foundation` | `make verify` | Compatibility-stable full local foundation validation. |
 | `make validate-coverage` | `make parity` | Run the foundation coverage validator suite without implying full React parity. |
 | `make validate-assurance` | `make enterprise-validate` | Run the enterprise assurance and evidence validator. |
@@ -36,9 +40,12 @@ The following existing names remain valid and intentionally unchanged:
 - `make runtime-proof`
 - `make runtime-validate`
 - `make test-compose`
+- `make test-ready`
+- `make test-composed`
+- `make test-assurance`
 - `make sonar-zero-issue-proof`
 - `make sonarqube-assurance-proof`
-- package scripts including `verify`, `parity`, `repo:validate`, `proof:bootstrap`, and `proof:assurance:sonarqube`
+- package scripts including `verify`, `parity`, `repo:validate`, `test-readiness`, `test-readiness:composed`, `test-readiness:assurance`, `proof:bootstrap`, and `proof:assurance:sonarqube`
 
 These names are compatibility entry points. They do not imply full React parity, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or broader readiness than the merged evidence supports.
 
@@ -55,7 +62,15 @@ These names are compatibility entry points. They do not imply full React parity,
 
 ## Follow-Up Boundary
 
-USF-233 owns Sonar zero-open-issue quality gate assurance. `make sonar-zero-issue-proof` is the current-state entry point for the supported local synthetic scan scope and routes to the compatibility target `make sonarqube-assurance-proof`; it does not claim broader SonarQube readiness.
+USF-238 owns the test-readiness command surface. `make test-ready` is the
+bounded local command gate for the test-readiness track and routes to
+`corepack pnpm test-readiness`. It does not claim final test readiness before
+USF-234 acceptance.
+
+USF-233 owns Sonar zero-open-issue quality gate assurance. `make sonar-zero-issue-proof`
+and `make test-assurance` are current-state entry points for the supported local
+synthetic scan scope and route to the same SonarQube proof; they do not claim
+broader SonarQube readiness.
 
 ## Non-Claims
 

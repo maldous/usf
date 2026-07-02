@@ -3,7 +3,10 @@
   "title": "Deterministic Test Fixture Lifecycle",
   "issueId": "USF-237",
   "parentIssueId": "USF-234",
-  "dependsOnIssueIds": ["USF-235", "USF-236"],
+  "dependsOnIssueIds": [
+    "USF-235",
+    "USF-236"
+  ],
   "lifecycleState": "active-test-readiness-proof",
   "testReadinessClaimAllowed": false,
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
@@ -66,15 +69,31 @@
     "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
   ],
   "enterpriseEvidenceRefs": {
-    "soaSupportMappings": ["soa-usf-237-deterministic-test-fixture-lifecycle"],
-    "evidenceRegister": ["evidence-usf-237-deterministic-test-fixture-lifecycle"],
-    "threatModelAbuseCaseRegister": ["threat-usf-237-deterministic-test-fixture-lifecycle"],
-    "accessReviewPrivilegedOperationPosture": ["access-usf-237-deterministic-test-fixture-lifecycle"],
-    "backupRestoreResiliencePosture": ["resilience-usf-237-deterministic-test-fixture-lifecycle"],
-    "incidentVulnerabilityManagementEvidence": ["incident-usf-237-deterministic-test-fixture-lifecycle"],
-    "privacyDataMinimisationPosture": ["privacy-usf-237-deterministic-test-fixture-lifecycle"]
+    "soaSupportMappings": [
+      "soa-usf-237-deterministic-test-fixture-lifecycle"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-237-deterministic-test-fixture-lifecycle"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-237-deterministic-test-fixture-lifecycle"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-237-deterministic-test-fixture-lifecycle"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-237-deterministic-test-fixture-lifecycle"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-237-deterministic-test-fixture-lifecycle"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-237-deterministic-test-fixture-lifecycle"
+    ]
   },
-  "allowedClaims": ["bounded-deterministic-fixture-lifecycle-proof"],
+  "allowedClaims": [
+    "bounded-deterministic-fixture-lifecycle-proof"
+  ],
   "nonClaims": [
     "final-test-readiness",
     "test-readiness",
@@ -89,5 +108,13 @@
     "browser-e2e-readiness",
     "full-react-product-parity"
   ],
-  "followUpIssueIds": ["USF-238", "USF-234"]
+  "followUpIssueIds": [
+    "USF-234"
+  ],
+  "currentStateCommands": {
+    "fixtureLifecycle": "corepack pnpm test-readiness:fixtures",
+    "canonicalComposedGate": "corepack pnpm test-readiness:composed",
+    "canonicalFullGate": "corepack pnpm test-readiness",
+    "commandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+  }
 }

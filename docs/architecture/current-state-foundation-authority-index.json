@@ -83,7 +83,8 @@
         "tools/validate-parity/",
         "tools/validate-enterprise/",
         "tools/validate-runtime/",
-        "tools/validate-compose/"
+        "tools/validate-compose/",
+        "tools/validate-test-readiness/"
       ],
       "futureUse": "Use as the fail-closed enforcement layer."
     },
@@ -118,6 +119,19 @@
         "docs/architecture/dev-readiness-validation-and-handover.json"
       ],
       "futureUse": "Use as the current clone, setup, validation, diagnostics, and governed contribution path."
+    },
+    {
+      "id": "test-readiness-command-gate",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.md",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+        "tools/validate-test-readiness/",
+        "Makefile",
+        "package.json"
+      ],
+      "futureUse": "Use make test-ready or corepack pnpm test-readiness for the bounded test-readiness command gate after the USF-235 through USF-238 evidence is in scope. USF-234 remains the final acceptance gate."
     },
     {
       "id": "baseline-evidence",
@@ -261,6 +275,7 @@
     "no-enterprise-production-readiness",
     "no-product-ui-readiness",
     "no-browser-e2e-readiness",
-    "no-full-react-product-parity"
+    "no-full-react-product-parity",
+    "no-final-test-readiness"
   ]
 }

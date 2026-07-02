@@ -643,13 +643,16 @@ product UI readiness claims.
 
 The current preferred Make entry points are `make foundation` for the full local
 foundation gate, `make setup` for frozen dependency install, `make dev-ready` for
-developer and AI-agent handover validation, `make validate-coverage` for the
-coverage validator suite, `make validate-assurance` for enterprise assurance
-evidence validation, and `make validate-evidence` for repository evidence
-validation. `make sonar-zero-issue-proof` is the bounded local SonarQube
-zero-open-issue proof for the supported synthetic scan scope. These aliases route
-to existing compatibility targets and do not upgrade any readiness claim beyond
-their merged evidence.
+developer and AI-agent handover validation, and `make test-ready` for the
+bounded test-readiness command gate once the test-readiness track is in scope.
+Use `make validate-coverage` for the coverage validator suite,
+`make validate-assurance` for enterprise assurance evidence validation, and
+`make validate-evidence` for repository evidence validation. `make test-composed`
+runs the composed semantic harness and deterministic fixture lifecycle proof,
+`make test-assurance` runs the bounded local SonarQube zero-open-issue proof,
+and `make sonar-zero-issue-proof` remains the compatibility entry point for that
+supported synthetic scan scope. These aliases route to existing compatibility
+targets and do not upgrade any readiness claim beyond their merged evidence.
 
 ## Provider, Environment, Proof, and Report Safety
 

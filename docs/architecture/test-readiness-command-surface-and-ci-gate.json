@@ -1,0 +1,266 @@
+{
+  "id": "test-readiness-command-surface-and-ci-gate",
+  "title": "Test Readiness Command Surface and CI Gate",
+  "issueId": "USF-238",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": [
+    "USF-235",
+    "USF-236",
+    "USF-237"
+  ],
+  "lifecycleState": "active-test-readiness-command-gate",
+  "testReadinessClaimAllowed": false,
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "testEnvironmentContract": "docs/architecture/test-environment-service-contract.json",
+  "composedSemanticHarness": "docs/architecture/composed-semantic-test-harness.json",
+  "deterministicFixtureLifecycle": "docs/architecture/deterministic-test-fixture-lifecycle.json",
+  "purpose": "Define the current-state command surface and CI/local gate for the bounded test-readiness track while USF-234 remains the final acceptance gate.",
+  "canonicalCommands": [
+    {
+      "id": "test-readiness-full",
+      "command": "corepack pnpm test-readiness",
+      "makeTarget": "test-ready",
+      "classification": "canonical-current-test-readiness-gate",
+      "requiresComposedServices": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "test-readiness:validate",
+        "test-readiness:semantic",
+        "test-readiness:fixtures",
+        "test-readiness:assurance"
+      ],
+      "claimBoundary": "Runs the bounded local test-readiness command gate. USF-234 still owns final acceptance and final test-readiness claim."
+    },
+    {
+      "id": "test-readiness-composed",
+      "command": "corepack pnpm test-readiness:composed",
+      "makeTarget": "test-composed",
+      "classification": "canonical-current-composed-test-gate",
+      "requiresComposedServices": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "test-readiness:semantic",
+        "test-readiness:fixtures"
+      ],
+      "claimBoundary": "Runs the composed semantic harness and deterministic fixture lifecycle only."
+    },
+    {
+      "id": "test-readiness-assurance",
+      "command": "corepack pnpm test-readiness:assurance",
+      "makeTarget": "test-assurance",
+      "classification": "canonical-current-assurance-test-gate",
+      "requiresComposedServices": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "proof:assurance:sonarqube"
+      ],
+      "claimBoundary": "Runs the bounded local SonarQube zero-open-issue proof for the supported synthetic scan scope."
+    },
+    {
+      "id": "test-readiness-semantic",
+      "command": "corepack pnpm test-readiness:semantic",
+      "makeTarget": "test-readiness-semantic",
+      "classification": "canonical-current-semantic-test-proof",
+      "requiresComposedServices": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "composed-semantic-test-harness-proof"
+      ],
+      "claimBoundary": "Executes the supported composed semantic path against the generated test Compose target."
+    },
+    {
+      "id": "test-readiness-fixtures",
+      "command": "corepack pnpm test-readiness:fixtures",
+      "makeTarget": "test-readiness-fixtures",
+      "classification": "canonical-current-fixture-lifecycle-proof",
+      "requiresComposedServices": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "deterministic-test-fixture-lifecycle-proof"
+      ],
+      "claimBoundary": "Executes two sequential composed semantic harness runs and verifies deterministic fixture cleanup."
+    },
+    {
+      "id": "test-readiness-validator",
+      "command": "corepack pnpm test-readiness:validate",
+      "makeTarget": "test-readiness-validate",
+      "classification": "canonical-current-test-readiness-validator",
+      "requiresComposedServices": false,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "tools/validate-test-readiness/validate-test-readiness.py"
+      ],
+      "claimBoundary": "Validates command, service, harness, fixture, Sonar, enterprise evidence, and non-claim metadata. It does not execute Compose by itself."
+    }
+  ],
+  "packageScripts": [
+    {
+      "id": "test-readiness",
+      "script": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:assurance"
+    },
+    {
+      "id": "test-readiness:composed",
+      "script": "pnpm test-readiness:semantic && pnpm test-readiness:fixtures"
+    },
+    {
+      "id": "test-readiness:assurance",
+      "script": "pnpm proof:assurance:sonarqube"
+    },
+    {
+      "id": "test-readiness:semantic",
+      "script": "tsx packages/proof/src/composed-semantic-test-harness-proof.ts"
+    },
+    {
+      "id": "test-readiness:fixtures",
+      "script": "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
+    },
+    {
+      "id": "test-readiness:validate",
+      "script": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+    }
+  ],
+  "makeTargets": [
+    {
+      "target": "test-ready",
+      "routesTo": "corepack pnpm test-readiness",
+      "classification": "canonical-current-test-readiness-gate"
+    },
+    {
+      "target": "test",
+      "routesTo": "test-ready",
+      "classification": "short-current-test-readiness-alias"
+    },
+    {
+      "target": "test-composed",
+      "routesTo": "corepack pnpm test-readiness:composed",
+      "classification": "canonical-current-composed-test-gate"
+    },
+    {
+      "target": "test-assurance",
+      "routesTo": "corepack pnpm test-readiness:assurance",
+      "classification": "canonical-current-assurance-test-gate"
+    },
+    {
+      "target": "test-readiness-validate",
+      "routesTo": "corepack pnpm test-readiness:validate",
+      "classification": "explicit-validator-alias"
+    },
+    {
+      "target": "test-readiness-semantic",
+      "routesTo": "corepack pnpm test-readiness:semantic",
+      "classification": "explicit-semantic-proof-alias"
+    },
+    {
+      "target": "test-readiness-fixtures",
+      "routesTo": "corepack pnpm test-readiness:fixtures",
+      "classification": "explicit-fixture-proof-alias"
+    }
+  ],
+  "composedExecution": {
+    "composeTarget": "compose/compose.test.generated.yaml",
+    "requiredCommands": [
+      "corepack pnpm test-readiness:semantic",
+      "corepack pnpm test-readiness:fixtures",
+      "corepack pnpm test-readiness:composed"
+    ],
+    "requiredServiceIds": [
+      "postgres",
+      "keycloak-db",
+      "keycloak",
+      "nats",
+      "temporal",
+      "minio",
+      "openbao",
+      "mailpit"
+    ],
+    "providerMode": "local-composed-real-service",
+    "runtimeMode": "dev-compose-backed",
+    "inMemoryServiceSubstituteAllowed": false,
+    "failureMode": "The composed commands fail closed when the canonical test Compose target is unavailable, provider mode is not local-composed-real-service, in-memory service substitutes are allowed, audit evidence is missing, deterministic fingerprints differ, or Compose teardown leaves resources behind."
+  },
+  "ciLocalAlignment": {
+    "localCanonicalCommand": "corepack pnpm test-readiness",
+    "makeTarget": "test-ready",
+    "ciEquivalentCommand": "corepack pnpm test-readiness",
+    "githubSpecCheckAloneSufficient": false,
+    "ciExpectation": "CI may run the same package command or the make target. The current GitHub spec workflow remains narrower and must not be treated as test-readiness completion by itself.",
+    "postMergeExpectation": "USF-238 and USF-234 require merged-evidence reconciliation before Done. Validation passing alone is insufficient."
+  },
+  "sonarGatePreservation": {
+    "command": "corepack pnpm test-readiness:assurance",
+    "makeTarget": "test-assurance",
+    "proofCommand": "corepack pnpm proof:assurance:sonarqube",
+    "compatibilityMakeTarget": "sonar-zero-issue-proof",
+    "evidence": "docs/architecture/sonarqube-zero-issue-quality-gate-assurance.json",
+    "zeroIssueGatePreserved": true,
+    "scope": "local-synthetic-typescript-project",
+    "boundary": "The Sonar command preserves USF-233 bounded local synthetic scan evidence. It does not claim live SonarQube provider readiness, staging, production, SOC, ISO, vulnerability-clearance, or repository-wide zero-issue readiness."
+  },
+  "validationCommands": [
+    "corepack pnpm install --frozen-lockfile",
+    "corepack pnpm test-readiness",
+    "corepack pnpm test-readiness:composed",
+    "corepack pnpm test-readiness:semantic",
+    "corepack pnpm test-readiness:fixtures",
+    "corepack pnpm test-readiness:assurance",
+    "make test-ready",
+    "make test",
+    "make test-composed",
+    "make test-assurance",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "corepack pnpm verify",
+    "corepack pnpm parity",
+    "python3 tools/validate-spec/validate-spec.py all --json",
+    "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+    "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+    "python3 tools/validate-parity/validate-parity.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "python3 tools/validate-runtime/validate-runtime.py all --json",
+    "python3 tools/validate-compose/validate-compose.py all --json",
+    "git diff --check",
+    "git diff --check origin/main...HEAD"
+  ],
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": [
+      "soa-usf-238-test-readiness-command-surface-ci-gate"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-238-test-readiness-command-surface-ci-gate"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-238-test-readiness-command-surface-ci-gate"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-238-test-readiness-command-surface-ci-gate"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-238-test-readiness-command-surface-ci-gate"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-238-test-readiness-command-surface-ci-gate"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-238-test-readiness-command-surface-ci-gate"
+    ]
+  },
+  "allowedClaims": [
+    "bounded-test-readiness-command-surface-and-ci-local-gate-recorded"
+  ],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ],
+  "followUpIssueIds": [
+    "USF-234"
+  ]
+}

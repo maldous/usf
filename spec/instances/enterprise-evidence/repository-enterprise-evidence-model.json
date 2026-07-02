@@ -5567,6 +5567,36 @@
         "browser-e2e-readiness",
         "full-react-product-parity"
       ]
+    },
+    {
+      "id": "soa-usf-238-test-readiness-command-surface-ci-gate",
+      "mappedType": "test-readiness-command-surface-ci-gate",
+      "controlPurpose": "Organise USF-238 evidence for a current-state test-readiness command surface, CI/local gate alignment, composed execution, Sonar proof preservation, and non-claim boundaries.",
+      "riskTreated": "Developers, AI agents, or CI could use unclear historical commands, skip composed service-backed test evidence, treat GitHub spec checks as sufficient, or overclaim final test readiness before USF-234 acceptance.",
+      "assetServiceAffected": "Makefile; package.json; docs/architecture/test-readiness-command-surface-and-ci-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-238; parentIssue=USF-234; commandSurface=corepack pnpm test-readiness; makeTarget=test-ready; inMemoryServiceSubstituteAllowed=false; testReadinessClaimAllowed=false",
+      "evidenceSource": "docs/architecture/test-readiness-command-surface-and-ci-gate.json; docs/architecture/test-readiness-command-surface-and-ci-gate.md; Makefile; package.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness; make test-ready; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-238 records the command surface and CI/local gate only. USF-234 must perform final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8354,6 +8384,28 @@
       ],
       "prOrMergeSha": "36ae363b33a31e560d880ac09ec052ec2a1c4cca",
       "retentionPosture": "Retain value-free lifecycle proof metadata and validator output. Runtime fixtures are synthetic only and removed by Compose teardown; no real tenant data, real secrets, private local state, raw endpoints, connection strings, tokens, stack traces, provider payloads, or production data are retained."
+    },
+    {
+      "id": "evidence-usf-238-test-readiness-command-surface-ci-gate",
+      "proofResult": "test-readiness-command-surface-ci-gate",
+      "whatWasProven": "USF-238 defines a current-state package and Make command surface for the bounded test-readiness track. The full command runs the test-readiness validator, composed semantic harness, deterministic fixture lifecycle proof, and bounded SonarQube zero-open-issue assurance proof. The evidence records CI/local alignment and fails closed on in-memory service substitution for required service-backed test claims.",
+      "whatWasNotProven": "USF-238 does not perform final USF-234 acceptance and does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "docs/architecture/test-environment-service-contract.json#composed-runtime-provider-proof",
+      "adapterProviderId": "postgres,keycloak,nats,temporal,minio,openbao,mailpit,sonarqube",
+      "validationCommand": "corepack pnpm test-readiness; corepack pnpm test-readiness:composed; corepack pnpm test-readiness:assurance; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "package.json#scripts.test-readiness; Makefile#test-ready",
+      "commitPin": "f447fc33bdae2beaaa74e365d35c71eb344b6604",
+      "issueLinks": [
+        "USF-238",
+        "USF-235",
+        "USF-236",
+        "USF-237",
+        "USF-234"
+      ],
+      "prOrMergeSha": "f447fc33bdae2beaaa74e365d35c71eb344b6604",
+      "retentionPosture": "Retain value-free command, CI/local alignment, proof command, and validator metadata. Runtime fixtures are synthetic only and removed by proof teardown; no real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, provider payloads, or production data are retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10738,6 +10790,33 @@
       "failClosedBehaviour": "The lifecycle proof throws when either composed harness run fails, provider mode is not local-composed-real-service, in-memory service substitutes are allowed, stable fingerprints differ, or Compose project cleanup is not proven. The validator fails missing lifecycle metadata, command wiring, repeatability fields, cleanup evidence, enterprise refs, or overclaims.",
       "monitoringAuditEvidence": "Value-free lifecycle proof summary, runtime audit event counts inherited from the composed harness, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
       "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-237; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final CI/local command gate remains owned by USF-238 and final test-readiness acceptance remains owned by USF-234."
+    },
+    {
+      "id": "threat-usf-238-test-readiness-command-surface-ci-gate",
+      "targetType": "test-readiness-command-surface-ci-gate",
+      "target": "USF-238 test-readiness command surface and CI/local gate",
+      "trustBoundary": "Local developer or CI runner executing current-state package scripts and Make targets against canonical repository validators, generated test Compose target, and bounded local SonarQube proof. No live provider, staging, production, or external tenant boundary is proven.",
+      "tenantBoundary": "Synthetic tenant context only, inherited from the composed semantic harness and deterministic fixture lifecycle proof. Tenant mismatch and authorization failures must remain fail closed in composed proof output.",
+      "credentialBoundary": "Only generated local Compose placeholder credentials and temporary Sonar proof credentials are allowed. Command, proof, and validator output must not expose secrets, tokens, endpoints, connection strings, stack traces, raw SDK errors, or provider payloads.",
+      "dataClassification": "internal synthetic test-readiness command-surface evidence metadata",
+      "abuseCases": [
+        "A developer or AI agent treats make verify or a GitHub spec check as sufficient final test readiness",
+        "The full test-readiness command omits composed semantic execution or deterministic fixture lifecycle proof",
+        "The Sonar zero-open-issue proof is dropped from the test assurance gate",
+        "A service-backed test path silently falls back to in-memory provider mode",
+        "Command documentation overclaims staging, production, live-provider, SOC, ISO, product UI, or full React product parity readiness"
+      ],
+      "failureModes": [
+        "package script missing or stale",
+        "Make target missing or stale",
+        "CI/local alignment absent",
+        "Sonar gate preservation absent",
+        "validator or planted defect does not catch command drift",
+        "non-claims missing or prohibited allowed claim present"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails when command surface evidence is missing, package scripts or Make targets drift, CI/local alignment is incomplete, Sonar preservation is missing, enterprise evidence is absent, in-memory substitution is allowed, or readiness is overclaimed.",
+      "monitoringAuditEvidence": "Value-free command output, composed harness proof output, fixture lifecycle proof output, Sonar assurance proof output, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
+      "residualRisk": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-238; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test-readiness acceptance remains owned by USF-234."
     }
   ],
   "sdkDependencyGovernance": [
@@ -14102,6 +14181,44 @@
         "browser-e2e-readiness",
         "full-react-product-parity"
       ]
+    },
+    {
+      "id": "access-usf-238-test-readiness-command-surface-ci-gate",
+      "targetType": "test-readiness-command-surface-ci-gate",
+      "target": "USF-238 test-readiness command access boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-238",
+        "accessModel=local-developer-or-ci-runner-executing-current-state-commands",
+        "authnAuthzBoundary=runtime-tenant-context-and-job-permission-paths-must-fail-closed-through-composed-harness",
+        "leastPrivilegePosture=synthetic-local-test-context-only",
+        "breakGlassRelevance=not-proven-by-USF-238",
+        "auditEvidence=API-worker-and-Sonar-proof-value-free-evidence-required-by-underlying-proofs",
+        "reviewCadence=2026-09-30-before-final-test-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-238",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/test-readiness-command-surface-and-ci-gate.json; Makefile; package.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness; make test-ready; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -16801,6 +16918,46 @@
       "evidenceSource": "packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; docs/architecture/deterministic-test-fixture-lifecycle.json; docs/architecture/test-environment-service-contract.json",
       "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "deferredReason": "USF-238 owns final command gate and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "resilience-usf-238-test-readiness-command-surface-ci-gate",
+      "targetType": "test-readiness-command-surface-ci-gate",
+      "target": "USF-238 test-readiness command resilience boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-238",
+        "readinessChecks=validator-plus-composed-semantic-harness-plus-deterministic-fixture-lifecycle-plus-Sonar-assurance-proof",
+        "retryTimeoutBehaviour=bounded-compose-wait-timeout-and-existing-adapter-readiness-retry-policies-inherited-from-underlying-proofs",
+        "failClosedMode=command-chain-stops-on-first-failing-validator-proof-or-Sonar-gate",
+        "safeTeardown=underlying-composed-proofs-perform-Compose-teardown-and-fixture-cleanup",
+        "structuredLogging=value-free-command-and-proof-output-only",
+        "tracingCorrelation=provider-evidence-correlation-fields-retained-where-existing-adapters-provide-them",
+        "metrics=proof-summary-and-validator-result-metadata-only",
+        "auditEvents=API-worker-and-Sonar-proof-audit-or-evidence-markers-required-by-underlying-proofs",
+        "redaction=no-real-tenant-data-real-secrets-raw-endpoints-connection-strings-tokens-stack-traces-or-provider-payloads",
+        "backupRestorePosture=not-proven-by-USF-238",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=backup-restore-DR-and-final-test-readiness-acceptance-remain-outside-USF-238"
+      ],
+      "evidenceSource": "docs/architecture/test-readiness-command-surface-and-ci-gate.json; docs/architecture/deterministic-test-fixture-lifecycle.json; docs/architecture/sonarqube-zero-issue-quality-gate-assurance.json",
+      "validationCommand": "corepack pnpm test-readiness; make test-ready; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-234 owns final acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -20189,6 +20346,41 @@
       "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects/; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts",
       "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "deferredReason": "USF-238 owns final CI/local diagnostic gate and USF-234 owns final acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "incident-usf-238-test-readiness-command-surface-ci-gate",
+      "targetType": "test-readiness-command-surface-ci-gate",
+      "target": "USF-238 test-readiness command incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-238",
+        "incidentDetectionHook=command-failure-validator-finding-proof-failure-Sonar-gate-failure-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-238",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-SDK-or-provider-dependency-added-by-USF-238",
+        "dependencyUpdatePosture=existing-exact-pinned-provider-SDKs-reused-through-existing-proof-and-adapter-boundaries",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-command-surface-package-Makefile-CI-Sonar-enterprise-and-overclaim-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-238"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects/; docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+      "validationCommand": "corepack pnpm test-readiness; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-234 owns final acceptance and open issue search; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -24147,6 +24339,43 @@
       "evidenceSource": "docs/architecture/deterministic-test-fixture-lifecycle.json; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; USF-237",
       "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "deferredReason": "USF-238 owns final CI/local command gate and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-238,USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "privacy-usf-238-test-readiness-command-surface-ci-gate",
+      "targetType": "test-readiness-command-surface-ci-gate",
+      "target": "USF-238 test-readiness command synthetic data boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-238",
+        "dataOrigin=synthetic-local-test-readiness-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-command-surface-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data-in-command-proof-or-validator-evidence",
+        "retentionPurgePosture=committed-value-free-command-and-gate-metadata-retained-in-repository-runtime-fixtures-cleaned-by-underlying-proof-teardown",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/test-readiness-command-surface-and-ci-gate.json; packages/proof/src/composed-semantic-test-harness-proof.ts; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; packages/proof/src/sonarqube-composed-proof.ts",
+      "validationCommand": "corepack pnpm test-readiness; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-234.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
