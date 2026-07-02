@@ -9,7 +9,7 @@
     "USF-224",
     "USF-225"
   ],
-  "status": "local-validation-passed-pending-fresh-clone-pr-merge",
+  "status": "fresh-clone-validation-passed-pending-pr-merge",
   "definitionOfDevReady": "A developer or AI agent can clone the repository, set it up from documented steps, run the local and composed foundation, execute proof and validation commands, understand failures, make a governed change, and submit a compliant PR without private knowledge, hidden local state, real secrets, or real tenant data.",
   "repositoryStateAtStart": {
     "branch": "main",
@@ -170,6 +170,10 @@
     {
       "command": "git diff --check origin/main...HEAD",
       "status": "passed after evidence update"
+    },
+    {
+      "command": "fresh clone make verify",
+      "status": "passed from /tmp/usf-226-fresh-clone.UH4ysa at cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d"
     }
   ],
   "failuresFixedDuringUSF226": [
@@ -195,20 +199,24 @@
       "command": "corepack enable",
       "failure": "Fresh-clone trial failed before repository validation because the host disallowed creating a global pnpm shim under /usr/bin",
       "fix": "Removed corepack enable from the required fresh-clone handover path because make verify invokes corepack pnpm directly",
-      "result": "Fresh-clone proof rerun is pending against the corrected documented path"
+      "result": "Fresh-clone make verify passed from /tmp/usf-226-fresh-clone.UH4ysa without requiring corepack enable"
     },
     {
       "command": "corepack pnpm proof:workflow:windmill",
       "failure": "Fresh-clone make verify exposed a Windmill SDK readiness timeout when Docker selected Fetch-forbidden loopback port 1720",
       "fix": "Compose proof harnesses now preselect and assert Fetch-safe ephemeral loopback ports instead of accepting Docker's unrestricted random host port; Windmill records safeLoopbackPortChecked evidence and runtime validation enforces the marker",
-      "result": "Targeted ClickHouse, Redis, ClamAV, SonarQube, WireMock, LocalStack, mock-substrate, and Windmill proofs passed after the safe-port fix; fresh-clone make verify rerun is pending"
+      "result": "Targeted ClickHouse, Redis, ClamAV, SonarQube, WireMock, LocalStack, mock-substrate, and Windmill proofs passed after the safe-port fix; fresh-clone make verify then passed"
     }
   ],
   "freshCloneEvidence": {
-    "status": "pending",
+    "status": "passed",
     "cloneSource": "https://github.com/maldous/usf.git",
     "branch": "codex/usf-226-dev-readiness-validation-handover",
+    "headCommit": "cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d",
+    "checkoutPath": "/tmp/usf-226-fresh-clone.UH4ysa",
     "expectedCommand": "make verify",
+    "observedCommandOutcome": "passed",
+    "finalGitStatusShort": "clean",
     "privateLocalStateRequired": false,
     "realSecretsRequired": false,
     "realTenantDataRequired": false
@@ -234,8 +242,8 @@
     "redactionFailuresBlockReadiness": true
   },
   "pullRequestEvidence": {
-    "prUrl": "pending-draft-pr",
-    "prHeadCommit": "pending-after-commit",
+    "prUrl": "https://github.com/maldous/usf/pull/193",
+    "prHeadCommit": "cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d",
     "mergeSha": "pending-post-merge-linear-closure-comment",
     "mergeShaBoundary": "A pull request cannot contain the merge commit that merges it. The actual merge SHA must be recorded on USF-226 after merge before Done."
   },
@@ -254,8 +262,8 @@
     ]
   },
   "claims": {
-    "devReadinessHandoverClaim": "pending-validation-and-post-merge-reconciliation",
-    "freshCloneBootstrapProven": false,
+    "devReadinessHandoverClaim": "local-and-fresh-clone-validation-passed-pending-pr-merge-post-merge-reconciliation",
+    "freshCloneBootstrapProven": true,
     "oneCommandPathProven": true,
     "localCiExpectationDocumented": true,
     "safeConfigDocumented": true,
