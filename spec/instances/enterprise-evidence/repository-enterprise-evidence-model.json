@@ -5627,6 +5627,37 @@
         "full-react-product-parity",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-248-synthetic-deterministic-fixture-corpus",
+      "mappedType": "synthetic-deterministic-fixture-corpus",
+      "controlPurpose": "Organise USF-248 fixture corpus evidence for deterministic seed, reset, cleanup, teardown, repeatability, failure-recovery, provenance, service obligation coverage, and semantic contract seed coverage.",
+      "riskTreated": "Service-backed test-readiness work could rely on in-memory substitutes, missing seed/reset paths, real data, untracked fixtures, or undocumented fixture provenance while appearing complete.",
+      "assetServiceAffected": "tests/packages/fixtures/service-fixture-corpus.json; tests/packages/fixtures/synthetic-fixture-corpus.ts; docs/architecture/semantic-service-test-obligation-manifest.json; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-248; parentIssue=USF-234; serviceFixtureRows=38; semanticContractFixtureRows=67; inMemoryServiceSubstituteAllowed=false; testReadinessClaimAllowed=false",
+      "evidenceSource": "tests/packages/fixtures/service-fixture-corpus.json; docs/architecture/synthetic-deterministic-fixture-corpus.md; tests/packages/fixtures/synthetic-fixture-corpus.test.ts",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; corepack pnpm test-readiness:validate; corepack pnpm test",
+      "deferredReason": "Downstream child issues execute broader composed integration, auth, data lifecycle, operational, design, and final acceptance tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "USF-234-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8468,6 +8499,25 @@
       ],
       "prOrMergeSha": "033605bf481daf473a9eaa53b06da31d13843b04",
       "retentionPosture": "Retain value-free manifest, schema, validator, and planted-defect metadata. No real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, provider payloads, or production data are retained."
+    },
+    {
+      "id": "evidence-usf-248-synthetic-deterministic-fixture-corpus",
+      "proofResult": "synthetic-deterministic-fixture-corpus-defined-and-validator-enforced",
+      "whatWasProven": "USF-248 defines a committed synthetic fixture corpus covering every USF-239 service obligation and semantic contract obligation, with deterministic seeder/resetter/cleanup/teardown identifiers for generated test Compose services, provenance controls, repeatability and failure-recovery mapping, unit test coverage, and proof-command linkage.",
+      "whatWasNotProven": "USF-248 does not execute every downstream service integration, auth, data lifecycle, operational, design, coverage, or final acceptance test and does not claim final test readiness or external readiness.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "docs/architecture/semantic-service-test-obligation-manifest.json#serviceObligations",
+      "adapterProviderId": "synthetic-fixture-corpus",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; corepack pnpm test-readiness:validate; corepack pnpm test",
+      "commandPin": "packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts#fixtureCorpusEvidence; tests/packages/fixtures/synthetic-fixture-corpus.test.ts",
+      "retentionPosture": "Committed value-free fixture definitions retained in repository; runtime fixture data reset and cleaned by proof commands.",
+      "commitPin": "27faf2853426c3dc289bfcba6f7cb0f5a4380aa7",
+      "issueLinks": [
+        "USF-248",
+        "USF-234"
+      ],
+      "prOrMergeSha": "27faf2853426c3dc289bfcba6f7cb0f5a4380aa7"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10907,6 +10957,30 @@
       "failClosedBehaviour": "The test-readiness validator fails when required service, semantic, profile, obligation, owner, validation, future-AI, enterprise evidence, or non-claim metadata is missing or overclaimed.",
       "monitoringAuditEvidence": "Validator findings, planted-defect selftests, manifest diff, PR validation, and Linear reconciliation comments.",
       "residualRisk": "Child issues must still implement and prove the generated obligations before USF-234 final acceptance."
+    },
+    {
+      "id": "threat-usf-248-synthetic-deterministic-fixture-corpus",
+      "targetType": "synthetic-deterministic-fixture-corpus",
+      "target": "USF-248 fixture corpus and loader API",
+      "trustBoundary": "Local repository fixture definitions, tests, proof commands, service obligation manifest, and canonical test Compose target. The corpus is local evidence only and does not prove live, staging, production, SOC, ISO, or final test readiness.",
+      "tenantBoundary": "Synthetic tenant, actor, role, permission, audit, readiness, and data-shape fixture metadata only. Downstream composed tests must execute service-backed tenant boundaries.",
+      "credentialBoundary": "No real credentials, provider tokens, raw endpoints, connection strings, stack traces, raw SDK errors, or provider payloads are stored in fixture definitions.",
+      "dataClassification": "internal synthetic test-readiness fixture metadata",
+      "abuseCases": [
+        "A future test adds a service-backed claim without a seeder or resetter",
+        "A fixture row allows an in-memory substitute for a generated Compose service",
+        "A fixture corpus accidentally stores real tenant data or secrets",
+        "A downstream issue treats fixture metadata as final test-readiness acceptance"
+      ],
+      "failureModes": [
+        "Fixture corpus row missing for service obligation",
+        "Semantic contract fixture row missing",
+        "Seeder resetter cleanup teardown mapping missing",
+        "Required non-claim removed"
+      ],
+      "failClosedBehaviour": "Test-readiness validator and fixture corpus unit tests fail on missing rows, unsafe provenance, lifecycle mapping gaps, in-memory substitution, or overclaims.",
+      "monitoringAuditEvidence": "Validator output, PR evidence, and proof summary only; no production monitoring claim.",
+      "residualRisk": "Downstream child issues still own execution of every composed service matrix, auth, data lifecycle, operational, design, coverage, and final acceptance obligation."
     }
   ],
   "sdkDependencyGovernance": [
@@ -14347,6 +14421,45 @@
         "full-react-product-parity",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-248-synthetic-deterministic-fixture-corpus",
+      "targetType": "synthetic-deterministic-fixture-corpus",
+      "target": "USF-248 fixture corpus access boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-248",
+        "accessModel=local-repository-fixture-loader-and-test-command-only",
+        "authnAuthzBoundary=fixture rows define synthetic auth tenant role permission matrices; USF-249 owns execution proof",
+        "leastPrivilegePosture=synthetic-local-test-context-only",
+        "breakGlassRelevance=not-proven-by-USF-248",
+        "auditEvidence=value-free-fixture-audit-markers-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=not-proven-by-USF-248",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "tests/packages/fixtures/service-fixture-corpus.json; tests/packages/fixtures/synthetic-fixture-corpus.ts",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-249 owns executable authn authz tenant role permission proof; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "USF-234-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -17141,6 +17254,47 @@
         "browser-e2e-readiness",
         "full-react-product-parity",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-248-synthetic-deterministic-fixture-corpus",
+      "targetType": "synthetic-deterministic-fixture-corpus",
+      "target": "USF-248 fixture corpus resilience boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-248",
+        "readinessChecks=fixture-corpus-unit-test-plus-test-readiness-validator-plus-fixture-lifecycle-proof",
+        "retryTimeoutBehaviour=not-runtime-implemented-by-USF-248",
+        "failClosedMode=validator-and-unit-test-fail-on-missing-seed-reset-cleanup-teardown-or-provenance",
+        "safeTeardown=fixture-lifecycle-proof-checks-compose-cleanup-after-each-run",
+        "structuredLogging=value-free-proof-output-only",
+        "tracingCorrelation=correlation-fixture-metadata-only-no-live-tracing-claim",
+        "metrics=proof-summary-and-validator-result-metadata-only",
+        "auditEvents=value-free-fixture-audit-markers-defined-for-downstream-tests",
+        "redaction=no-real-tenant-data-real-secrets-raw-endpoints-connection-strings-tokens-stack-traces-raw-SDK-errors-or-provider-payloads",
+        "backupRestorePosture=backup-and-restore-fixture-plans-defined-for-USF-250-execution",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=USF-250-and-USF-234-own-executable-proof-and-final-acceptance"
+      ],
+      "evidenceSource": "tests/packages/fixtures/service-fixture-corpus.json; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-250 owns backup restore bulk migration execution tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "USF-234-closure"
       ]
     }
   ],
@@ -20599,6 +20753,42 @@
         "browser-e2e-readiness",
         "full-react-product-parity",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-248-synthetic-deterministic-fixture-corpus",
+      "targetType": "synthetic-deterministic-fixture-corpus",
+      "target": "USF-248 fixture corpus incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-248",
+        "incidentDetectionHook=validator-finding-unit-test-failure-proof-failure-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-248",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-runtime-dependency-added-by-USF-248",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-248",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-fixture-corpus-coverage-provenance-lifecycle-and-overclaim-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-248"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects; tests/packages/fixtures/service-fixture-corpus.json",
+      "validationCommand": "corepack pnpm test-readiness:validate; corepack pnpm test",
+      "deferredReason": "USF-245 owns operational failure-mode execution and incident evidence tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "USF-234-closure"
       ]
     }
   ],
@@ -24631,6 +24821,44 @@
         "browser-e2e-readiness",
         "full-react-product-parity",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-248-synthetic-deterministic-fixture-corpus",
+      "targetType": "synthetic-deterministic-fixture-corpus",
+      "target": "USF-248 fixture corpus synthetic data boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-248",
+        "dataOrigin=synthetic-local-test-readiness-fixture-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-fixture-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-fixture-definitions-retained-runtime-data-cleaned-by-underlying-proof-teardown",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "tests/packages/fixtures/service-fixture-corpus.json; docs/architecture/synthetic-deterministic-fixture-corpus.md",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-250 owns executable privacy lifecycle and deletion tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "USF-234-closure"
       ]
     }
   ],

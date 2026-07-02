@@ -1,0 +1,12 @@
+{
+  "expectedRule": "USF-TEST-READINESS-045",
+  "fixtureCorpusSet": {
+    "testLayerWiring": {
+      "unit": [],
+      "integration": [],
+      "regression": [],
+      "enterprise": [],
+      "operational": []
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "expectedRule": "USF-TEST-READINESS-043",
+  "fixtureServicePatch": [
+    {
+      "serviceId": "postgres",
+      "sectionPatch": {
+        "lifecycleApi": {
+          "drop": [
+            "seederId"
+          ]
+        }
+      }
+    }
+  ]
+}

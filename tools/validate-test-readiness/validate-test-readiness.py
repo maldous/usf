@@ -27,6 +27,7 @@ HARNESS_PATH = Path("docs/architecture/composed-semantic-test-harness.json")
 LIFECYCLE_PATH = Path("docs/architecture/deterministic-test-fixture-lifecycle.json")
 COMMAND_SURFACE_PATH = Path("docs/architecture/test-readiness-command-surface-and-ci-gate.json")
 OBLIGATION_MANIFEST_PATH = Path("docs/architecture/semantic-service-test-obligation-manifest.json")
+FIXTURE_CORPUS_PATH = Path("tests/packages/fixtures/service-fixture-corpus.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -77,6 +78,13 @@ RULES = {
     "USF-TEST-READINESS-037": ("blocking", "test obligation manifest lacks data lifecycle backup restore bulk or migration coverage"),
     "USF-TEST-READINESS-038": ("blocking", "test obligation manifest lacks operational resilience evidence coverage"),
     "USF-TEST-READINESS-039": ("blocking", "test obligation manifest lacks schema registry enterprise evidence linkage or preserves insufficient non-claims"),
+    "USF-TEST-READINESS-040": ("blocking", "synthetic deterministic fixture corpus is missing or invalid"),
+    "USF-TEST-READINESS-041": ("blocking", "fixture corpus lacks service obligation coverage"),
+    "USF-TEST-READINESS-042": ("blocking", "fixture corpus lacks semantic contract coverage"),
+    "USF-TEST-READINESS-043": ("blocking", "fixture corpus lacks seeder resetter cleanup teardown or provenance mapping"),
+    "USF-TEST-READINESS-044": ("blocking", "fixture corpus lacks repeatability or failure recovery evidence"),
+    "USF-TEST-READINESS-045": ("blocking", "fixture corpus lacks test-layer wiring"),
+    "USF-TEST-READINESS-046": ("blocking", "fixture corpus lacks enterprise evidence linkage or preserves insufficient non-claims"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -93,6 +101,7 @@ TEST_READINESS_ASSURANCE_COMMAND = "corepack pnpm test-readiness:assurance"
 TEST_READINESS_ASSURANCE_SCRIPT = "pnpm proof:assurance:sonarqube"
 SONAR_COMMAND = "corepack pnpm proof:assurance:sonarqube"
 OBLIGATION_MANIFEST_COMMAND = "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+FIXTURE_CORPUS_COMMAND = "corepack pnpm test-readiness:fixtures"
 REQUIRED_HARNESS_SERVICE_IDS = {
     "postgres",
     "keycloak-db",
@@ -457,6 +466,68 @@ def apply_obligation_manifest_defect(manifest: dict[str, Any] | None, defect: di
     return out
 
 
+def apply_fixture_corpus_defect(corpus: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeFixtureCorpus"):
+        return None
+    if corpus is None:
+        return None
+    out = copy.deepcopy(corpus)
+    for key, value in defect.get("fixtureCorpusSet", {}).items():
+        out[key] = value
+    for key in defect.get("fixtureCorpusDrop", []):
+        out.pop(key, None)
+    for service_id in defect.get("fixtureCorpusDropServiceIds", []):
+        out["serviceFixtures"] = [
+            row for row in out.get("serviceFixtures", []) if row.get("serviceId") != service_id
+        ]
+    for contract_id in defect.get("fixtureCorpusDropSemanticContractIds", []):
+        out["semanticContractFixtures"] = [
+            row
+            for row in out.get("semanticContractFixtures", [])
+            if row.get("contractId") != contract_id
+        ]
+    for patch in defect.get("fixtureServicePatch", []):
+        for row in out.get("serviceFixtures", []):
+            if row.get("serviceId") != patch.get("serviceId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for section, section_patch in patch.get("sectionPatch", {}).items():
+                target = row.setdefault(section, {})
+                if not isinstance(target, dict):
+                    continue
+                for key in section_patch.get("drop", []):
+                    target.pop(key, None)
+                for key, value in section_patch.get("set", {}).items():
+                    target[key] = value
+    for patch in defect.get("fixtureSemanticPatch", []):
+        for row in out.get("semanticContractFixtures", []):
+            if row.get("contractId") != patch.get("contractId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for section, section_patch in patch.get("sectionPatch", {}).items():
+                target = row.setdefault(section, {})
+                if not isinstance(target, dict):
+                    continue
+                for key in section_patch.get("drop", []):
+                    target.pop(key, None)
+                for key, value in section_patch.get("set", {}).items():
+                    target[key] = value
+    for section in defect.get("fixtureCorpusEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("fixtureCorpusDropNonClaims"):
+        dropped = set(defect.get("fixtureCorpusDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("fixtureCorpusAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["fixtureCorpusAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -503,6 +574,8 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     command_surface = apply_command_surface_defect(command_surface, defect)
     obligation_manifest = read_json(OBLIGATION_MANIFEST_PATH) if (ROOT / OBLIGATION_MANIFEST_PATH).exists() else None
     obligation_manifest = apply_obligation_manifest_defect(obligation_manifest, defect)
+    fixture_corpus = read_json(FIXTURE_CORPUS_PATH) if (ROOT / FIXTURE_CORPUS_PATH).exists() else None
+    fixture_corpus = apply_fixture_corpus_defect(fixture_corpus, defect)
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -511,6 +584,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "lifecycle": lifecycle,
         "commandSurface": command_surface,
         "obligationManifest": obligation_manifest,
+        "fixtureCorpus": fixture_corpus,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -681,6 +755,13 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         OBLIGATION_MANIFEST_PATH,
         state["enterpriseModel"],
         "USF-TEST-READINESS-039",
+    )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["fixtureCorpus"],
+        FIXTURE_CORPUS_PATH,
+        state["enterpriseModel"],
+        "USF-TEST-READINESS-046",
     )
 
 
@@ -1063,6 +1144,237 @@ def check_obligation_manifest(F: Findings, state: dict[str, Any]) -> None:
     check_obligation_claims(F, state)
 
 
+def check_fixture_corpus_shape(F: Findings, state: dict[str, Any]) -> None:
+    corpus = state["fixtureCorpus"]
+    if not isinstance(corpus, dict):
+        F.add("USF-TEST-READINESS-040", str(FIXTURE_CORPUS_PATH), "fixture corpus is missing")
+        return
+    required = {
+        "id",
+        "issueId",
+        "parentIssueId",
+        "sourceAuthorities",
+        "corpusPath",
+        "apiModule",
+        "proofCommand",
+        "serviceFixtures",
+        "semanticContractFixtures",
+        "repeatabilityEvidence",
+        "testLayerWiring",
+        "validationCommands",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    }
+    for key in sorted(required):
+        if key not in corpus:
+            F.add("USF-TEST-READINESS-040", str(FIXTURE_CORPUS_PATH), f"missing top-level field {key}")
+    if corpus.get("issueId") != "USF-248" or corpus.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-040", str(FIXTURE_CORPUS_PATH), "issue linkage must be USF-248 under USF-234")
+    if corpus.get("corpusPath") != str(FIXTURE_CORPUS_PATH):
+        F.add("USF-TEST-READINESS-040", str(FIXTURE_CORPUS_PATH), "corpus path is stale")
+    if corpus.get("proofCommand") != FIXTURE_CORPUS_COMMAND:
+        F.add("USF-TEST-READINESS-040", str(FIXTURE_CORPUS_PATH), "proof command is missing or stale")
+    authorities = corpus.get("sourceAuthorities")
+    if not isinstance(authorities, dict):
+        F.add("USF-TEST-READINESS-040", f"{FIXTURE_CORPUS_PATH}#sourceAuthorities", "source authorities are missing")
+    else:
+        expected = {
+            "serviceCatalogue": str(SERVICE_CATALOGUE_PATH),
+            "obligationManifest": str(OBLIGATION_MANIFEST_PATH),
+            "testEnvironmentContract": str(CONTRACT_PATH),
+            "deterministicFixtureLifecycle": str(LIFECYCLE_PATH),
+            "composeTarget": COMPOSE_TARGET,
+        }
+        for key, value in expected.items():
+            if authorities.get(key) != value:
+                F.add("USF-TEST-READINESS-040", f"{FIXTURE_CORPUS_PATH}#sourceAuthorities.{key}", "source authority is stale")
+
+
+def check_fixture_service_coverage(F: Findings, state: dict[str, Any]) -> None:
+    corpus = state["fixtureCorpus"]
+    manifest = state["obligationManifest"]
+    if not isinstance(corpus, dict) or not isinstance(manifest, dict):
+        return
+    rows = _list_by_id(corpus.get("serviceFixtures"), "serviceId")
+    obligation_rows = _list_by_id(manifest.get("serviceObligations"), "serviceId")
+    for service_id, obligation in obligation_rows.items():
+        row = rows.get(service_id)
+        if not row:
+            F.add("USF-TEST-READINESS-041", service_id, "service obligation is missing from fixture corpus")
+            continue
+        subject = f"{FIXTURE_CORPUS_PATH}#serviceFixtures.{service_id}"
+        for key in ("fixtureSeedId", "generatedInTestCompose", "requiredInTest"):
+            if row.get(key) != obligation.get(key):
+                F.add("USF-TEST-READINESS-041", subject, f"{key} does not match obligation manifest")
+        if row.get("sourceObligationEvidenceId") != obligation.get("evidenceId"):
+            F.add("USF-TEST-READINESS-041", subject, "source obligation evidence id is stale")
+        if "USF-248" not in set(row.get("ownerIssueIds", [])):
+            F.add("USF-TEST-READINESS-041", subject, "USF-248 owner issue is missing")
+        if row.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-043", subject, "fixture row must forbid in-memory service substitutes")
+        if row.get("testReadinessClaimAllowed") is not False:
+            F.add("USF-TEST-READINESS-046", subject, "fixture row must not allow final test readiness")
+        requires_seed = obligation.get("generatedInTestCompose") is True and obligation.get("fixtureSeedId") != "not-applicable"
+        lifecycle_api = row.get("lifecycleApi")
+        lifecycle = row.get("lifecycleCoverage")
+        provenance = row.get("provenance")
+        if requires_seed:
+            if not isinstance(lifecycle_api, dict):
+                F.add("USF-TEST-READINESS-043", subject, "lifecycle API mapping is missing")
+            else:
+                expected_ids = {
+                    "seederId": f"seeder.{service_id}",
+                    "resetterId": f"resetter.{service_id}",
+                    "cleanupId": f"cleanup.{service_id}",
+                    "teardownId": f"teardown.{service_id}",
+                    "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts",
+                }
+                for key, value in expected_ids.items():
+                    if lifecycle_api.get(key) != value:
+                        F.add("USF-TEST-READINESS-043", subject, f"{key} is missing or stale")
+            if not isinstance(lifecycle, dict):
+                F.add("USF-TEST-READINESS-044", subject, "lifecycle coverage is missing")
+            else:
+                for key in ("seed", "reset", "cleanup", "teardown", "repeatability", "failureRecovery"):
+                    if lifecycle.get(key) is not True:
+                        F.add("USF-TEST-READINESS-044", subject, f"lifecycleCoverage.{key} must be true")
+                if not str(lifecycle.get("deterministicSeed", "")).startswith(f"usf-248-{service_id}-"):
+                    F.add("USF-TEST-READINESS-044", subject, "deterministic seed is missing or stale")
+            plan = row.get("fixturePlan")
+            if not isinstance(plan, dict):
+                F.add("USF-TEST-READINESS-043", subject, "fixture plan is missing")
+            else:
+                for key in (
+                    "staticFixtures",
+                    "generatedFixtures",
+                    "tenantMatrix",
+                    "actorMatrix",
+                    "roleMatrix",
+                    "permissionMatrix",
+                    "auditFixtures",
+                    "readinessFixtures",
+                    "dataShapeFixtures",
+                ):
+                    if not isinstance(plan.get(key), list) or not plan.get(key):
+                        F.add("USF-TEST-READINESS-043", subject, f"fixture plan missing {key}")
+        elif row.get("nonTestDisposition") is None:
+            F.add("USF-TEST-READINESS-041", subject, "non-generated or not-applicable fixture row needs disposition")
+        if not isinstance(provenance, dict):
+            F.add("USF-TEST-READINESS-043", subject, "provenance is missing")
+        else:
+            if provenance.get("syntheticOnly") is not True or provenance.get("productionDerived") is not False:
+                F.add("USF-TEST-READINESS-043", subject, "fixture provenance must be synthetic and not production-derived")
+            for key in ("realTenantDataAllowed", "realSecretsAllowed", "privateLocalStateAllowed"):
+                if provenance.get(key) is not False:
+                    F.add("USF-TEST-READINESS-043", subject, f"provenance.{key} must be false")
+        if not row.get("validationCommands"):
+            F.add("USF-TEST-READINESS-043", subject, "validation commands are missing")
+    extra = sorted(set(rows) - set(obligation_rows))
+    for service_id in extra:
+        F.add("USF-TEST-READINESS-041", service_id, "fixture corpus service row is not present in obligation manifest")
+
+
+def check_fixture_semantic_coverage(F: Findings, state: dict[str, Any]) -> None:
+    corpus = state["fixtureCorpus"]
+    manifest = state["obligationManifest"]
+    if not isinstance(corpus, dict) or not isinstance(manifest, dict):
+        return
+    rows = _list_by_id(corpus.get("semanticContractFixtures"), "contractId")
+    obligation_rows = _list_by_id(manifest.get("semanticContractObligations"), "contractId")
+    required_seed_keys = {
+        "tenant",
+        "actor",
+        "role",
+        "permission",
+        "audit",
+        "readiness",
+        "dataShape",
+        "positivePath",
+        "negativeFailClosedPath",
+    }
+    for contract_id, obligation in obligation_rows.items():
+        row = rows.get(contract_id)
+        if not row:
+            F.add("USF-TEST-READINESS-042", contract_id, "semantic contract obligation is missing from fixture corpus")
+            continue
+        subject = f"{FIXTURE_CORPUS_PATH}#semanticContractFixtures.{contract_id}"
+        if row.get("path") != obligation.get("path"):
+            F.add("USF-TEST-READINESS-042", subject, "semantic contract path is stale")
+        if "USF-248" not in set(row.get("ownerIssueIds", [])):
+            F.add("USF-TEST-READINESS-042", subject, "USF-248 owner issue is missing")
+        if not isinstance(row.get("fixtureSeedIds"), list) or not row.get("fixtureSeedIds"):
+            F.add("USF-TEST-READINESS-042", subject, "fixture seed ids are missing")
+        coverage = row.get("semanticSeedCoverage")
+        if not isinstance(coverage, dict):
+            F.add("USF-TEST-READINESS-042", subject, "semantic seed coverage is missing")
+        else:
+            for key in sorted(required_seed_keys):
+                if coverage.get(key) != "covered":
+                    F.add("USF-TEST-READINESS-042", subject, f"semantic seed coverage missing {key}")
+        provenance = row.get("provenance")
+        if not isinstance(provenance, dict):
+            F.add("USF-TEST-READINESS-043", subject, "provenance is missing")
+        else:
+            if provenance.get("syntheticOnly") is not True or provenance.get("productionDerived") is not False:
+                F.add("USF-TEST-READINESS-043", subject, "semantic fixture provenance must be synthetic and not production-derived")
+            for key in ("realTenantDataAllowed", "realSecretsAllowed", "privateLocalStateAllowed"):
+                if provenance.get(key) is not False:
+                    F.add("USF-TEST-READINESS-043", subject, f"provenance.{key} must be false")
+        if not row.get("validationCommands"):
+            F.add("USF-TEST-READINESS-043", subject, "validation commands are missing")
+    extra = sorted(set(rows) - set(obligation_rows))
+    for contract_id in extra:
+        F.add("USF-TEST-READINESS-042", contract_id, "fixture corpus semantic row is not present in obligation manifest")
+
+
+def check_fixture_corpus_evidence(F: Findings, state: dict[str, Any]) -> None:
+    corpus = state["fixtureCorpus"]
+    if not isinstance(corpus, dict):
+        return
+    repeat = corpus.get("repeatabilityEvidence")
+    if not isinstance(repeat, dict):
+        F.add("USF-TEST-READINESS-044", f"{FIXTURE_CORPUS_PATH}#repeatabilityEvidence", "repeatability evidence is missing")
+    else:
+        if repeat.get("runCount") != 2:
+            F.add("USF-TEST-READINESS-044", f"{FIXTURE_CORPUS_PATH}#repeatabilityEvidence", "runCount must be two")
+        for key in ("repeatedRunDeterministicRequired", "failureRecoveryRequired", "cleanupAfterFailureRequired"):
+            if repeat.get(key) is not True:
+                F.add("USF-TEST-READINESS-044", f"{FIXTURE_CORPUS_PATH}#repeatabilityEvidence.{key}", "repeatability marker must be true")
+        if repeat.get("proofCommand") != FIXTURE_CORPUS_COMMAND:
+            F.add("USF-TEST-READINESS-044", f"{FIXTURE_CORPUS_PATH}#repeatabilityEvidence", "proof command is missing or stale")
+    wiring = corpus.get("testLayerWiring")
+    if not isinstance(wiring, dict):
+        F.add("USF-TEST-READINESS-045", f"{FIXTURE_CORPUS_PATH}#testLayerWiring", "test layer wiring is missing")
+    else:
+        for key in ("unit", "integration", "regression", "enterprise", "operational"):
+            if not isinstance(wiring.get(key), list) or not wiring.get(key):
+                F.add("USF-TEST-READINESS-045", f"{FIXTURE_CORPUS_PATH}#testLayerWiring.{key}", "test layer wiring is missing")
+    commands = set(corpus.get("validationCommands", []))
+    for expected in (
+        FIXTURE_CORPUS_COMMAND,
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+        "corepack pnpm test",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-045", f"{FIXTURE_CORPUS_PATH}#validationCommands", f"missing validation command {expected}")
+    non_claims = set(corpus.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-046", str(FIXTURE_CORPUS_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(corpus.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-046", str(FIXTURE_CORPUS_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
+def check_fixture_corpus(F: Findings, state: dict[str, Any]) -> None:
+    check_fixture_corpus_shape(F, state)
+    check_fixture_service_coverage(F, state)
+    check_fixture_semantic_coverage(F, state)
+    check_fixture_corpus_evidence(F, state)
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -1417,6 +1729,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_lifecycle(F, state)
     check_command_surface(F, state)
     check_obligation_manifest(F, state)
+    check_fixture_corpus(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

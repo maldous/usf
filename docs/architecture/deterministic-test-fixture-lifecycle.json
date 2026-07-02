@@ -12,6 +12,8 @@
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
   "testEnvironmentContract": "docs/architecture/test-environment-service-contract.json",
   "composedSemanticHarness": "docs/architecture/composed-semantic-test-harness.json",
+  "syntheticFixtureCorpus": "tests/packages/fixtures/service-fixture-corpus.json",
+  "syntheticFixtureCorpusDocumentation": "docs/architecture/synthetic-deterministic-fixture-corpus.md",
   "composeTarget": "compose/compose.test.generated.yaml",
   "proofCommand": "corepack pnpm test-readiness:fixtures",
   "repeatedHarnessCommand": "corepack pnpm test-readiness:semantic",
@@ -52,6 +54,16 @@
     "composeProjectCleanupCheckedAfterEachRun": true,
     "repeatedRunDeterministicRequired": true
   },
+  "fixtureCorpusEvidence": {
+    "issueId": "USF-248",
+    "serviceFixtureCount": 38,
+    "semanticContractFixtureCount": 67,
+    "inMemoryServiceSubstituteAllowed": false,
+    "syntheticOnly": true,
+    "seederResetterCleanupTeardownMapped": true,
+    "repeatabilityFailureRecoveryMapped": true,
+    "nonClaimsPreserved": true
+  },
   "requiredServiceIds": [
     "postgres",
     "keycloak-db",
@@ -66,6 +78,7 @@
     "corepack pnpm test-readiness:fixtures",
     "corepack pnpm test-readiness:semantic",
     "corepack pnpm test-readiness:validate",
+    "corepack pnpm test",
     "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
   ],
   "enterpriseEvidenceRefs": {

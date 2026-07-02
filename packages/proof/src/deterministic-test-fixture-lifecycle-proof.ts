@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
   DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL,
@@ -12,6 +13,7 @@ import {
 const HARNESS_AUTHORITY = "docs/architecture/composed-semantic-test-harness.json";
 const LIFECYCLE_AUTHORITY = "docs/architecture/deterministic-test-fixture-lifecycle.json";
 const CONTRACT_AUTHORITY = "docs/architecture/test-environment-service-contract.json";
+const FIXTURE_CORPUS_AUTHORITY = "tests/packages/fixtures/service-fixture-corpus.json";
 
 interface DeterministicRunFingerprint {
   readonly composeTarget: typeof TEST_COMPOSE_TARGET;
@@ -39,6 +41,7 @@ export interface DeterministicTestFixtureLifecycleSummary {
   readonly composeTarget: typeof TEST_COMPOSE_TARGET;
   readonly providerMode: typeof DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL;
   readonly lifecycleAuthority: typeof LIFECYCLE_AUTHORITY;
+  readonly fixtureCorpusAuthority: typeof FIXTURE_CORPUS_AUTHORITY;
   readonly harnessAuthority: typeof HARNESS_AUTHORITY;
   readonly testEnvironmentContract: typeof CONTRACT_AUTHORITY;
   readonly proofCommand: "corepack pnpm test-readiness:fixtures";
@@ -55,6 +58,16 @@ export interface DeterministicTestFixtureLifecycleSummary {
     readonly stableFingerprintMatched: true;
     readonly composeProjectCleanupCheckedAfterEachRun: true;
     readonly repeatedRunDeterministic: true;
+  };
+  readonly fixtureCorpusEvidence: {
+    readonly issueId: "USF-248";
+    readonly serviceFixtureCount: number;
+    readonly semanticContractFixtureCount: number;
+    readonly inMemoryServiceSubstituteAllowed: false;
+    readonly syntheticOnly: true;
+    readonly seederResetterCleanupTeardownMapped: true;
+    readonly repeatabilityFailureRecoveryMapped: true;
+    readonly nonClaimsPreserved: true;
   };
   readonly validationCommands: readonly string[];
   readonly allowedClaims: readonly ["bounded-deterministic-fixture-lifecycle-proof"];
@@ -139,6 +152,103 @@ function assertStable(
   }
 }
 
+function assertFixtureCorpusEvidence(): DeterministicTestFixtureLifecycleSummary["fixtureCorpusEvidence"] {
+  const corpus = JSON.parse(readFileSync(FIXTURE_CORPUS_AUTHORITY, "utf8")) as {
+    issueId?: string;
+    serviceFixtures?: Array<{
+      serviceId?: string;
+      generatedInTestCompose?: boolean;
+      fixtureSeedId?: string;
+      lifecycleApi?: Record<string, string>;
+      lifecycleCoverage?: Record<string, boolean | string>;
+      provenance?: Record<string, boolean>;
+      inMemoryServiceSubstituteAllowed?: boolean;
+      testReadinessClaimAllowed?: boolean;
+    }>;
+    semanticContractFixtures?: Array<{
+      contractId?: string;
+      semanticSeedCoverage?: Record<string, string>;
+      provenance?: Record<string, boolean>;
+    }>;
+    allowedClaims?: string[];
+    nonClaims?: string[];
+  };
+
+  if (corpus.issueId !== "USF-248") {
+    throw new Error("fixture corpus must link USF-248");
+  }
+  const serviceFixtures = corpus.serviceFixtures ?? [];
+  const semanticContractFixtures = corpus.semanticContractFixtures ?? [];
+  if (serviceFixtures.length < 1 || semanticContractFixtures.length < 1) {
+    throw new Error("fixture corpus must include service and semantic contract fixtures");
+  }
+
+  let mapped = true;
+  let repeatabilityMapped = true;
+  for (const row of serviceFixtures) {
+    if (row.inMemoryServiceSubstituteAllowed !== false || row.testReadinessClaimAllowed !== false) {
+      throw new Error(`fixture corpus row is unsafe: ${row.serviceId ?? "unknown"}`);
+    }
+    if (row.provenance?.syntheticOnly !== true || row.provenance?.productionDerived !== false) {
+      throw new Error(`fixture corpus row has unsafe provenance: ${row.serviceId ?? "unknown"}`);
+    }
+    const requiresSeeder =
+      row.generatedInTestCompose === true && row.fixtureSeedId !== "not-applicable";
+    if (!requiresSeeder) {
+      continue;
+    }
+    mapped &&=
+      Boolean(row.lifecycleApi?.seederId) &&
+      Boolean(row.lifecycleApi?.resetterId) &&
+      Boolean(row.lifecycleApi?.cleanupId) &&
+      Boolean(row.lifecycleApi?.teardownId);
+    repeatabilityMapped &&=
+      row.lifecycleCoverage?.repeatability === true &&
+      row.lifecycleCoverage?.failureRecovery === true;
+  }
+  if (!mapped) {
+    throw new Error(
+      "fixture corpus has a service row without seeder resetter cleanup teardown mapping",
+    );
+  }
+  if (!repeatabilityMapped) {
+    throw new Error(
+      "fixture corpus has a service row without repeatability or failure recovery mapping",
+    );
+  }
+
+  const prohibitedClaims = new Set([
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+  ]);
+  for (const claim of corpus.allowedClaims ?? []) {
+    if (prohibitedClaims.has(claim)) {
+      throw new Error(`fixture corpus allowed a prohibited claim: ${claim}`);
+    }
+  }
+  const nonClaims = new Set(corpus.nonClaims ?? []);
+  if (!nonClaims.has("final-test-readiness") || !nonClaims.has("test-readiness")) {
+    throw new Error("fixture corpus must preserve final and bounded test-readiness non-claims");
+  }
+
+  return {
+    issueId: "USF-248",
+    serviceFixtureCount: serviceFixtures.length,
+    semanticContractFixtureCount: semanticContractFixtures.length,
+    inMemoryServiceSubstituteAllowed: false,
+    syntheticOnly: true,
+    seederResetterCleanupTeardownMapped: true,
+    repeatabilityFailureRecoveryMapped: true,
+    nonClaimsPreserved: true,
+  };
+}
+
 export async function runDeterministicTestFixtureLifecycleProof(): Promise<DeterministicTestFixtureLifecycleSummary> {
   const firstSummary = await runComposedSemanticTestHarnessProof();
   assertComposeProjectClean(firstSummary);
@@ -148,6 +258,7 @@ export async function runDeterministicTestFixtureLifecycleProof(): Promise<Deter
   assertComposeProjectClean(secondSummary);
   const second = fingerprint(secondSummary);
   assertStable(first, second);
+  const fixtureCorpusEvidence = assertFixtureCorpusEvidence();
 
   return {
     issueId: "USF-237",
@@ -157,6 +268,7 @@ export async function runDeterministicTestFixtureLifecycleProof(): Promise<Deter
     composeTarget: TEST_COMPOSE_TARGET,
     providerMode: DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL,
     lifecycleAuthority: LIFECYCLE_AUTHORITY,
+    fixtureCorpusAuthority: FIXTURE_CORPUS_AUTHORITY,
     harnessAuthority: HARNESS_AUTHORITY,
     testEnvironmentContract: CONTRACT_AUTHORITY,
     proofCommand: "corepack pnpm test-readiness:fixtures",
@@ -178,6 +290,7 @@ export async function runDeterministicTestFixtureLifecycleProof(): Promise<Deter
       composeProjectCleanupCheckedAfterEachRun: true,
       repeatedRunDeterministic: true,
     },
+    fixtureCorpusEvidence,
     validationCommands: [
       "corepack pnpm test-readiness:fixtures",
       "corepack pnpm test-readiness:validate",
@@ -212,6 +325,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   );
   console.log(
     `Compose cleanup checked after each run: ${summary.repeatabilityEvidence.composeProjectCleanupCheckedAfterEachRun}`,
+  );
+  console.log(`Fixture corpus service rows: ${summary.fixtureCorpusEvidence.serviceFixtureCount}`);
+  console.log(
+    `Fixture corpus semantic rows: ${summary.fixtureCorpusEvidence.semanticContractFixtureCount}`,
   );
   console.log(`In-memory service substitute allowed: false`);
 }
