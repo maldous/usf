@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-003",
+  "serviceInventoryPatch": [
+    {
+      "serviceId": "postgres",
+      "set": {
+        "composeTarget": "not-generated"
+      }
+    }
+  ]
+}
