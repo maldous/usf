@@ -5597,6 +5597,36 @@
         "browser-e2e-readiness",
         "full-react-product-parity"
       ]
+    },
+    {
+      "id": "soa-usf-239-semantic-service-test-obligation-manifest",
+      "mappedType": "test-obligation-manifest",
+      "controlPurpose": "Organise USF-239 test obligation evidence for every semantic contract, service catalogue row, generated test Compose service, profile, owner issue, validator, and non-claim boundary.",
+      "riskTreated": "Future tests could omit semantic contracts, service-backed Compose obligations, seed/reset requirements, enterprise evidence, coverage expectations, or non-claim boundaries and still appear complete.",
+      "assetServiceAffected": "docs/architecture/semantic-service-test-obligation-manifest.json; spec/schemas/test-obligation-manifest.schema.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=defined-and-validator-enforced; sourceIssue=USF-239; parentIssue=USF-234; serviceRows=38; semanticContractRows=67; finalAcceptanceClaimAllowed=false",
+      "evidenceSource": "docs/architecture/semantic-service-test-obligation-manifest.json; docs/architecture/semantic-service-test-obligation-manifest.md",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-239 defines the obligation model only. Child issues USF-240 through USF-252 and final USF-234 acceptance must implement and prove the obligations; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8406,6 +8436,38 @@
       ],
       "prOrMergeSha": "f447fc33bdae2beaaa74e365d35c71eb344b6604",
       "retentionPosture": "Retain value-free command, CI/local alignment, proof command, and validator metadata. Runtime fixtures are synthetic only and removed by proof teardown; no real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, provider payloads, or production data are retained."
+    },
+    {
+      "id": "evidence-usf-239-semantic-service-test-obligation-manifest",
+      "proofResult": "test-obligation-manifest-defined",
+      "whatWasProven": "USF-239 records a machine-readable obligation manifest covering every service catalogue row, every semantic contract instance, generated test Compose profiles, issue ownership, validation commands, future-AI guardrail requirements, enterprise evidence references, and non-claim boundaries.",
+      "whatWasNotProven": "USF-239 does not implement every child test suite, does not prove final USF-234 acceptance, and does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "runtimeMode": "not-applicable-obligation-model",
+      "providerMode": "not-applicable-obligation-model",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#all-services",
+      "adapterProviderId": "not-applicable",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-029-through-036",
+      "commitPin": "033605bf481daf473a9eaa53b06da31d13843b04",
+      "issueLinks": [
+        "USF-239",
+        "USF-234",
+        "USF-240",
+        "USF-241",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-249",
+        "USF-250",
+        "USF-251",
+        "USF-252"
+      ],
+      "prOrMergeSha": "033605bf481daf473a9eaa53b06da31d13843b04",
+      "retentionPosture": "Retain value-free manifest, schema, validator, and planted-defect metadata. No real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, provider payloads, or production data are retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10817,6 +10879,34 @@
       "failClosedBehaviour": "The test-readiness validator fails when command surface evidence is missing, package scripts or Make targets drift, CI/local alignment is incomplete, Sonar preservation is missing, enterprise evidence is absent, in-memory substitution is allowed, or readiness is overclaimed.",
       "monitoringAuditEvidence": "Value-free command output, composed harness proof output, fixture lifecycle proof output, Sonar assurance proof output, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
       "residualRisk": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-238; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test-readiness acceptance remains owned by USF-234."
+    },
+    {
+      "id": "threat-usf-239-semantic-service-test-obligation-manifest",
+      "targetType": "test-obligation-manifest",
+      "target": "USF-239 semantic service test obligation manifest",
+      "trustBoundary": "Local repository semantic contracts, service catalogue, generated test Compose target, validators, and Linear issue ownership. The manifest is repository evidence only and does not prove live, staging, production, SOC, ISO, or final test readiness.",
+      "tenantBoundary": "Synthetic tenant obligations only. Child tests must prove tenant isolation through composed services where service-backed claims are made.",
+      "credentialBoundary": "No real credentials or provider tokens are represented. The manifest records obligations and safe command references only.",
+      "dataClassification": "internal synthetic test-readiness obligation metadata",
+      "abuseCases": [
+        "A future PR changes a semantic contract without adding tests or evidence",
+        "A generated test Compose service is omitted from service-backed test obligations",
+        "A service-backed test claim is satisfied by an in-memory substitute",
+        "A profile-gated service is not seeded, exercised, reset, or evidenced",
+        "A final test-readiness or ISO/SOC/production claim is inferred from obligation metadata alone"
+      ],
+      "failureModes": [
+        "manifest row missing",
+        "semantic contract coverage stale",
+        "service catalogue coverage stale",
+        "profile obligation missing",
+        "owner issue missing",
+        "future AI guardrail absent",
+        "non-claim missing"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails when required service, semantic, profile, obligation, owner, validation, future-AI, enterprise evidence, or non-claim metadata is missing or overclaimed.",
+      "monitoringAuditEvidence": "Validator findings, planted-defect selftests, manifest diff, PR validation, and Linear reconciliation comments.",
+      "residualRisk": "Child issues must still implement and prove the generated obligations before USF-234 final acceptance."
     }
   ],
   "sdkDependencyGovernance": [
@@ -14219,6 +14309,44 @@
         "browser-e2e-readiness",
         "full-react-product-parity"
       ]
+    },
+    {
+      "id": "access-usf-239-semantic-service-test-obligation-manifest",
+      "targetType": "test-obligation-manifest",
+      "target": "USF-239 obligation manifest access boundary",
+      "posture": [
+        "effectivenessState=defined-and-validator-enforced",
+        "sourceIssue=USF-239",
+        "accessModel=local-repository-validator-and-PR-review-only",
+        "authnAuthzBoundary=child-USF-249-must-prove-authn-authz-tenant-role-permission-obligations",
+        "leastPrivilegePosture=manifest-does-not-grant-provider-or-operator-access",
+        "breakGlassRelevance=not-proven-by-USF-239",
+        "auditEvidence=validator-and-PR-evidence-only",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=not-proven-by-USF-239",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-249 owns executable authn/authz/tenant/role/permission proof; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -16973,6 +17101,46 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "resilience-usf-239-semantic-service-test-obligation-manifest",
+      "targetType": "test-obligation-manifest",
+      "target": "USF-239 obligation manifest resilience boundary",
+      "posture": [
+        "effectivenessState=defined-and-validator-enforced",
+        "sourceIssue=USF-239",
+        "readinessChecks=validator-checks-manifest-schema-service-semantic-profile-owner-and-command-coverage",
+        "retryTimeoutBehaviour=not-runtime-executed-by-USF-239",
+        "failClosedMode=validator-fails-on-missing-or-overclaimed-obligations",
+        "safeTeardown=not-runtime-executed-by-USF-239",
+        "structuredLogging=value-free-validator-output-only",
+        "tracingCorrelation=not-runtime-executed-by-USF-239",
+        "metrics=validator-result-metadata-only",
+        "auditEvents=validator-and-PR-evidence-only",
+        "redaction=no-secrets-endpoints-tokens-stack-traces-provider-payloads-real-tenant-data-or-production-data",
+        "backupRestorePosture=obligations-defined-for-USF-250-not-proven-by-USF-239",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=USF-250-and-USF-234-own-executable-proof-and-final-acceptance"
+      ],
+      "evidenceSource": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-250 owns backup restore bulk migration execution; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -20396,6 +20564,41 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "incident-usf-239-semantic-service-test-obligation-manifest",
+      "targetType": "test-obligation-manifest",
+      "target": "USF-239 obligation manifest incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=defined-and-validator-enforced",
+        "sourceIssue=USF-239",
+        "incidentDetectionHook=validator-finding-PR-check-failure-and-planted-defect-selftest-only",
+        "alertingPosture=not-proven-by-USF-239",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-runtime-dependency-added-by-USF-239",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-239",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-missing-obligation-coverage-and-overclaims",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-239"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects/; docs/architecture/semantic-service-test-obligation-manifest.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Operational incident execution remains with USF-245 and final USF-234 acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -24391,6 +24594,43 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "privacy-usf-239-semantic-service-test-obligation-manifest",
+      "targetType": "test-obligation-manifest",
+      "target": "USF-239 obligation manifest privacy boundary",
+      "posture": [
+        "effectivenessState=defined-and-validator-enforced",
+        "sourceIssue=USF-239",
+        "dataOrigin=repository-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-obligation-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-obligation-metadata-retained-in-repository",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-250 owns executable privacy/data lifecycle proof and USF-234 owns final acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
       ]
     }
   ],

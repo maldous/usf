@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-033",
+  "obligationServicePatch": [
+    {
+      "serviceId": "postgres",
+      "set": {
+        "inMemoryServiceSubstituteAllowed": true
+      }
+    }
+  ]
+}

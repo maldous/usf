@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-TEST-READINESS-032",
+  "obligationDropProfiles": [
+    "runtime-providers"
+  ]
+}

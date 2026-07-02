@@ -1,0 +1,604 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usf:schema:test-obligation-manifest",
+  "title": "USF Test Obligation Manifest Schema",
+  "description": "Draft JSON Schema for the USF test-readiness obligation manifest. It validates the repository-level mapping from semantic contracts and Compose service catalogue rows to test obligation classes, owner issues, evidence boundaries, validation commands, and explicit non-claims. This is a test-readiness planning and validation schema only; it does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or USF-234 closure.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "id",
+    "title",
+    "description",
+    "authorityLevel",
+    "issueId",
+    "parentIssueId",
+    "lifecycleState",
+    "ontologyConcepts",
+    "taxonomyRefs",
+    "vocabularyRefs",
+    "aiGuidance",
+    "authorityBoundary",
+    "serviceCatalogueAuthority",
+    "semanticContractAuthority",
+    "testComposeTarget",
+    "testEnvironmentContract",
+    "composedSemanticHarness",
+    "deterministicFixtureLifecycle",
+    "commandSurfaceGate",
+    "testReadinessClaimAllowed",
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims",
+    "coveragePolicy",
+    "obligationClasses",
+    "dependencyGraph",
+    "profileObligations",
+    "serviceObligations",
+    "semanticContractObligations",
+    "futureAiChangeGuardrail",
+    "validationCommands",
+    "enterpriseEvidenceRefs",
+    "allowedClaims",
+    "nonClaims"
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "issueList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^USF-[0-9]+$"
+      },
+      "uniqueItems": true
+    },
+    "enterpriseRefs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "soaSupportMappings",
+        "evidenceRegister",
+        "threatModelAbuseCaseRegister",
+        "accessReviewPrivilegedOperationPosture",
+        "backupRestoreResiliencePosture",
+        "incidentVulnerabilityManagementEvidence",
+        "privacyDataMinimisationPosture"
+      ],
+      "properties": {
+        "soaSupportMappings": {
+          "$ref": "#/$defs/stringList"
+        },
+        "evidenceRegister": {
+          "$ref": "#/$defs/stringList"
+        },
+        "threatModelAbuseCaseRegister": {
+          "$ref": "#/$defs/stringList"
+        },
+        "accessReviewPrivilegedOperationPosture": {
+          "$ref": "#/$defs/stringList"
+        },
+        "backupRestoreResiliencePosture": {
+          "$ref": "#/$defs/stringList"
+        },
+        "incidentVulnerabilityManagementEvidence": {
+          "$ref": "#/$defs/stringList"
+        },
+        "privacyDataMinimisationPosture": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "coverageFlags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit",
+        "composedIntegration",
+        "contractDesign",
+        "functionalRegression",
+        "operational",
+        "enterpriseEvidence",
+        "seedResetFixture",
+        "coverage",
+        "negativeFailClosed",
+        "missingEvidenceRegression"
+      ],
+      "properties": {
+        "unit": {
+          "type": "boolean"
+        },
+        "composedIntegration": {
+          "type": "boolean"
+        },
+        "contractDesign": {
+          "type": "boolean"
+        },
+        "functionalRegression": {
+          "type": "boolean"
+        },
+        "operational": {
+          "type": "boolean"
+        },
+        "enterpriseEvidence": {
+          "type": "boolean"
+        },
+        "seedResetFixture": {
+          "type": "boolean"
+        },
+        "coverage": {
+          "type": "boolean"
+        },
+        "negativeFailClosed": {
+          "type": "boolean"
+        },
+        "missingEvidenceRegression": {
+          "type": "boolean"
+        }
+      }
+    },
+    "serviceObligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serviceId",
+        "displayName",
+        "serviceCataloguePath",
+        "requiredInTest",
+        "generatedInTestCompose",
+        "dependencyDisposition",
+        "realisationMode",
+        "composeTarget",
+        "composeProfiles",
+        "profileGated",
+        "assetInventoryClass",
+        "dataClassification",
+        "owner",
+        "riskOwner",
+        "controlOwner",
+        "testLayerCoverage",
+        "obligationClassIds",
+        "ownerIssueIds",
+        "validationCommands",
+        "fixtureSeedId",
+        "evidenceId",
+        "nonClaimBoundary",
+        "inMemoryServiceSubstituteAllowed",
+        "boundedDisposition"
+      ],
+      "properties": {
+        "serviceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "displayName": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serviceCataloguePath": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "composeServiceId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requiredInTest": {
+          "type": "boolean"
+        },
+        "generatedInTestCompose": {
+          "type": "boolean"
+        },
+        "dependencyDisposition": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "realisationMode": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "composeTarget": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "composeProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "profileGated": {
+          "type": "boolean"
+        },
+        "assetInventoryClass": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "dataClassification": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "owner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "riskOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "controlOwner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "testLayerCoverage": {
+          "$ref": "#/$defs/coverageFlags"
+        },
+        "obligationClassIds": {
+          "$ref": "#/$defs/stringList"
+        },
+        "ownerIssueIds": {
+          "$ref": "#/$defs/issueList"
+        },
+        "validationCommands": {
+          "$ref": "#/$defs/stringList"
+        },
+        "fixtureSeedId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "nonClaimBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "inMemoryServiceSubstituteAllowed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "boundedDisposition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "semanticContractObligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractId",
+        "path",
+        "title",
+        "capability",
+        "capabilityDomain",
+        "facetKeys",
+        "obligationClassIds",
+        "ownerIssueIds",
+        "testMappingRequired",
+        "implementedTestPath",
+        "evidenceId",
+        "coverageExpectation",
+        "nonClaimBoundary"
+      ],
+      "properties": {
+        "contractId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "title": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "capability": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "capabilityDomain": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "facetKeys": {
+          "$ref": "#/$defs/stringList"
+        },
+        "obligationClassIds": {
+          "$ref": "#/$defs/stringList"
+        },
+        "ownerIssueIds": {
+          "$ref": "#/$defs/issueList"
+        },
+        "testMappingRequired": {
+          "type": "boolean"
+        },
+        "implementedTestPath": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "coverageExpectation": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "nonClaimBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  },
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "id": {
+      "const": "semantic-service-test-obligation-manifest"
+    },
+    "title": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "authorityLevel": {
+      "const": "semantic-definition"
+    },
+    "issueId": {
+      "const": "USF-239"
+    },
+    "parentIssueId": {
+      "const": "USF-234"
+    },
+    "lifecycleState": {
+      "const": "draft"
+    },
+    "ontologyConcepts": {
+      "$ref": "#/$defs/stringList"
+    },
+    "taxonomyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "vocabularyRefs": {
+      "$ref": "#/$defs/stringList"
+    },
+    "aiGuidance": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "authorityBoundary": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "serviceCatalogueAuthority": {
+      "const": "spec/instances/compose-service/service-catalogue.json"
+    },
+    "semanticContractAuthority": {
+      "const": "spec/instances/semantic-contract/"
+    },
+    "testComposeTarget": {
+      "const": "compose/compose.test.generated.yaml"
+    },
+    "testEnvironmentContract": {
+      "const": "docs/architecture/test-environment-service-contract.json"
+    },
+    "composedSemanticHarness": {
+      "const": "docs/architecture/composed-semantic-test-harness.json"
+    },
+    "deterministicFixtureLifecycle": {
+      "const": "docs/architecture/deterministic-test-fixture-lifecycle.json"
+    },
+    "commandSurfaceGate": {
+      "const": "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+    },
+    "testReadinessClaimAllowed": {
+      "const": false
+    },
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": {
+      "const": false
+    },
+    "coveragePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issueId",
+        "lcovRequired",
+        "sonarImportRequired",
+        "minimumLineCoveragePercent",
+        "unsupportedCoverageBoundary"
+      ],
+      "properties": {
+        "issueId": {
+          "const": "USF-240"
+        },
+        "lcovRequired": {
+          "type": "boolean"
+        },
+        "sonarImportRequired": {
+          "type": "boolean"
+        },
+        "minimumLineCoveragePercent": {
+          "type": "integer",
+          "minimum": 100
+        },
+        "unsupportedCoverageBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "obligationClasses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "purpose",
+          "ownerIssueId"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "purpose": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "ownerIssueId": {
+            "type": "string",
+            "pattern": "^USF-[0-9]+$"
+          }
+        }
+      }
+    },
+    "dependencyGraph": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "issueId"
+        ],
+        "properties": {
+          "issueId": {
+            "type": "string",
+            "pattern": "^USF-[0-9]+$"
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^USF-[0-9]+$"
+            },
+            "uniqueItems": true
+          },
+          "blocks": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^USF-[0-9]+$"
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "profileObligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "composeTarget",
+          "serviceIds",
+          "exerciseOwnerIssueIds",
+          "mustBeStarted",
+          "mustBeSeeded",
+          "mustBeExercised",
+          "mustBeReset",
+          "mustBeEvidenced",
+          "inMemoryServiceSubstituteAllowed"
+        ],
+        "properties": {
+          "profile": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "composeTarget": {
+            "const": "compose/compose.test.generated.yaml"
+          },
+          "serviceIds": {
+            "$ref": "#/$defs/stringList"
+          },
+          "exerciseOwnerIssueIds": {
+            "$ref": "#/$defs/issueList"
+          },
+          "mustBeStarted": {
+            "type": "boolean"
+          },
+          "mustBeSeeded": {
+            "type": "boolean"
+          },
+          "mustBeExercised": {
+            "type": "boolean"
+          },
+          "mustBeReset": {
+            "type": "boolean"
+          },
+          "mustBeEvidenced": {
+            "type": "boolean"
+          },
+          "inMemoryServiceSubstituteAllowed": {
+            "const": false
+          }
+        }
+      }
+    },
+    "serviceObligations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/serviceObligation"
+      }
+    },
+    "semanticContractObligations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/semanticContractObligation"
+      }
+    },
+    "futureAiChangeGuardrail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semanticDefinitionUpdateRequired",
+        "testObligationUpdateRequired",
+        "fixtureUpdateRequired",
+        "coverageUpdateRequired",
+        "evidenceUpdateRequired",
+        "nonClaimReviewRequired",
+        "validatorCommand",
+        "ownerIssueId"
+      ],
+      "properties": {
+        "semanticDefinitionUpdateRequired": {
+          "type": "boolean"
+        },
+        "testObligationUpdateRequired": {
+          "type": "boolean"
+        },
+        "fixtureUpdateRequired": {
+          "type": "boolean"
+        },
+        "coverageUpdateRequired": {
+          "type": "boolean"
+        },
+        "evidenceUpdateRequired": {
+          "type": "boolean"
+        },
+        "nonClaimReviewRequired": {
+          "type": "boolean"
+        },
+        "validatorCommand": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "ownerIssueId": {
+          "const": "USF-252"
+        }
+      }
+    },
+    "validationCommands": {
+      "$ref": "#/$defs/stringList"
+    },
+    "enterpriseEvidenceRefs": {
+      "$ref": "#/$defs/enterpriseRefs"
+    },
+    "allowedClaims": {
+      "$ref": "#/$defs/stringList"
+    },
+    "nonClaims": {
+      "$ref": "#/$defs/stringList"
+    }
+  }
+}
