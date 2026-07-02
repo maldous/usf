@@ -3,7 +3,13 @@
   "sourceIssue": "USF-214",
   "parentIssue": "USF-133",
   "predecessorIssue": "USF-155",
-  "relatedIssues": ["USF-213", "USF-220", "USF-224", "USF-184", "USF-192"],
+  "relatedIssues": [
+    "USF-213",
+    "USF-220",
+    "USF-224",
+    "USF-184",
+    "USF-192"
+  ],
   "capabilityId": "graphql-federation-generated-client-disposition",
   "proofCommand": "make api-proof",
   "rawProofCommand": "corepack pnpm proof:api",
@@ -67,11 +73,11 @@
   "acceptanceCriteriaMapping": [
     {
       "criterion": "GraphQL and federation posture is classified as proven, deferred, out of scope, or blocked with rationale.",
-      "evidence": "The graphql-runtime-and-federation-scope control classifies GraphQL runtime and federation as out-of-scope-with-rationale for current USF foundation runtime proof. Existing REST/OpenAPI route proof remains non-equivalent to GraphQL or federation readiness."
+      "evidence": "The graphql-runtime-and-federation-scope control records the original USF-214 disposition boundary. successorExecutionProof points to USF-224 for bounded local execution proof while preserving deployed GraphQL and federation readiness non-claims."
     },
     {
       "criterion": "Generated SDK and generated client readiness posture is classified with evidence or explicit deferral.",
-      "evidence": "The generated-sdk-and-client-boundary and client-distribution-boundary controls classify SDK generation, generated clients, package publishing, documentation distribution, and external developer platform distribution as deferred-with-owner."
+      "evidence": "The generated-sdk-and-client-boundary and client-distribution-boundary controls record the original USF-214 disposition boundary. successorExecutionProof points to USF-224 for bounded local generated-client compile/runtime proof while preserving public package publication and generated-client readiness non-claims."
     },
     {
       "criterion": "Any implemented proof records tenant, access, audit, secret, privacy, and synthetic-data boundaries.",
@@ -139,7 +145,9 @@
       "riskTreatment": "defer",
       "followUpIssue": "USF-224",
       "reviewDate": "2026-09-30",
-      "evidenceRefs": ["docs/architecture/api-graphql-generated-client-disposition-matrix.json"],
+      "evidenceRefs": [
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+      ],
       "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
       "nonEquivalenceBoundary": "A local API proof is not a developer portal, API-key issuance workflow, SDK registry publication, public support workflow, public changelog operation, or customer onboarding proof.",
       "nonClaimBoundary": "No external developer platform readiness, public client distribution readiness, public support readiness, or public API launch readiness is claimed."
@@ -153,7 +161,10 @@
       "controlOwner": "platform-api-control-owner",
       "riskTreatment": "mitigate-with-value-free-local-proof-and-explicit-non-equivalence",
       "reviewDate": "2026-09-30",
-      "evidenceRefs": ["packages/proof/src/api-contracts-proof.ts", "tests/packages/proof.test.ts"],
+      "evidenceRefs": [
+        "packages/proof/src/api-contracts-proof.ts",
+        "tests/packages/proof.test.ts"
+      ],
       "proofChecks": [
         "USF-214 GraphQL federation and generated client posture is classified with explicit non-equivalence boundaries"
       ],
@@ -205,7 +216,11 @@
       "riskTreatment": "defer",
       "reviewDate": "2026-09-30",
       "followUpIssue": "USF-224",
-      "promotionImpact": ["staging-readiness", "production-readiness", "enterprise-readiness"],
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness"
+      ],
       "nonClaimBoundary": "No developer portal, API key workflow, SDK package registry, public documentation, customer onboarding, support/SLA, or public distribution readiness is claimed."
     }
   ],
@@ -213,5 +228,27 @@
     "No GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, client distribution readiness, public API launch readiness, public API readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure claim is made.",
     "No full dev readiness, full React parity, USF-133 closure, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, or enterprise production readiness claim is made.",
     "USF-214 does not implement GraphQL runtime, GraphQL federation, GraphQL gateway, schema stitching, subscriptions, persisted queries, generated SDKs, generated clients, package publishing, public developer portal, API key issuance, public documentation operation, staging deployment, production deployment, live gateway, WAF, TLS termination, or edge operation."
-  ]
+  ],
+  "successorExecutionProof": {
+    "sourceIssue": "USF-224",
+    "artefact": "docs/architecture/generated-client-external-developer-graphql-federation-execution-proof.json",
+    "proofCommand": "corepack pnpm proof:api:graphql-generated-client",
+    "validatorRules": [
+      "USF-API-030",
+      "USF-API-031",
+      "USF-API-032",
+      "USF-API-033",
+      "USF-API-034"
+    ],
+    "boundedClaims": [
+      "generated SDK/client compile/runtime local proof",
+      "external developer surface local proof",
+      "public documentation operation local proof",
+      "API-key onboarding/support workflow local proof",
+      "GraphQL runtime local proof",
+      "federation-style gateway/schema stitching local proof",
+      "persisted-query and subscription local proof"
+    ],
+    "nonEquivalenceBoundary": "USF-224 does not change USF-214 disposition semantics into public package publication, deployed GraphQL service, deployed federation gateway, external developer platform readiness, public API readiness, environment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure."
+  }
 }

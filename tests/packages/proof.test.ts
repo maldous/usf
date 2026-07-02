@@ -5,6 +5,7 @@ import {
   runBootstrapProof,
   runDevSmoke,
   runJobsWorkflowsProof,
+  runGraphqlGeneratedClientExecutionProof,
   runImportExportBulkProof,
   runObservabilityOperationsExecutionProof,
   runObservabilityTelemetryProof,
@@ -117,6 +118,43 @@ describe("api/contracts proof", () => {
         usf133ClosureClaim: false,
       },
       productionLiveClaim: false,
+    });
+  });
+
+  it("proves bounded generated-client, GraphQL, federation, docs, and API-key execution without readiness claims", async () => {
+    await expect(runGraphqlGeneratedClientExecutionProof()).resolves.toMatchObject({
+      status: "pass",
+      sourceIssue: "USF-224",
+      providerMode: "hermetic-mock",
+      generatedSdkCreated: true,
+      generatedClientCompilePassed: true,
+      generatedClientRuntimePassed: true,
+      packageDistributionProofPassed: true,
+      externalDeveloperSurfaceProofPassed: true,
+      publicDocumentationOperationProofPassed: true,
+      apiKeyOnboardingSupportWorkflowProofPassed: true,
+      graphqlRuntimeProofPassed: true,
+      federationRuntimeProofPassed: true,
+      federationGatewayProofPassed: true,
+      resolverAuthorizationProofPassed: true,
+      schemaStitchingProofPassed: true,
+      subscriptionsProofPassed: true,
+      persistedQueryProofPassed: true,
+      graphqlClientCompatibilityProofPassed: true,
+      tenantBoundaryChecked: true,
+      accessBoundaryChecked: true,
+      auditEvidenceCaptured: true,
+      secretBoundaryChecked: true,
+      privacyBoundaryChecked: true,
+      syntheticDataBoundaryChecked: true,
+      redactionChecked: true,
+      generatedSdkReadinessClaim: false,
+      generatedClientReadinessClaim: false,
+      externalDeveloperPlatformReadinessClaim: false,
+      publicApiReadinessClaim: false,
+      graphqlRuntimeReadinessClaim: false,
+      federationReadinessClaim: false,
+      usf133ClosureClaim: false,
     });
   });
 });

@@ -176,9 +176,9 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "REST/GraphQL/OpenAPI lineage",
-  "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. USF-213 adds bounded public API compatibility and release-governance evidence through a deterministic local compatibility snapshot and explicit non-equivalence boundaries. USF-214 classifies GraphQL/federation as out of current foundation runtime scope and generated SDK/client/distribution as deferred-with-owner. USF-220 records the selected closure-tier delivery-depth disposition and links future generated-client, external-developer, GraphQL, or federation execution proof to USF-224. Browser-session runtime, public launch, consumer contracts, gateway-live, edge/WAF/TLS, deployment, and bulk API readiness remain explicitly reclassified, transferred, or deferred without readiness claims.",
-  "tracking_carrier_or_recommendation": "USF-154/USF-155/USF-213/USF-214/USF-220 with future execution proof tracked by USF-224",
-  "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix, public API compatibility release-governance matrix, GraphQL/generated-client disposition matrix, USF-220 delivery-depth disposition, and validate-api USF-API-001..029 plus final reconciliation coverage",
+      "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. USF-213 adds bounded public API compatibility and release-governance evidence through a deterministic local compatibility snapshot and explicit non-equivalence boundaries. USF-214 classifies GraphQL/federation and generated-client boundaries. USF-220 records the selected closure-tier delivery-depth disposition. USF-224 adds bounded local generated SDK/client compile/runtime, external developer surface, public documentation operation, API-key onboarding/support workflow, GraphQL runtime, federation-style gateway/stitching, persisted-query, subscription, and GraphQL client compatibility proof using synthetic data and the exact-pinned official graphql package. Browser-session runtime, public launch, consumer contracts, gateway-live, edge/WAF/TLS, deployment, package publication, customer distribution, staging, production, SOC, ISO, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure remain explicitly reclassified, transferred, deferred, or non-claimed.",
+      "tracking_carrier_or_recommendation": "USF-154/USF-155/USF-213/USF-214/USF-220/USF-224; USF-193 remains owner for environment promotion semantics",
+      "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix, public API compatibility release-governance matrix, GraphQL/generated-client disposition matrix, USF-220 delivery-depth disposition, USF-224 generated-client external-developer GraphQL federation execution proof, official graphql SDK governance row, and validate-api USF-API-001..034 plus final reconciliation coverage",
       "usf_status": "partial"
     },
     {
@@ -302,7 +302,7 @@
       "usf_status": "partial"
     },
     {
-      "blocking_level": "P1",
+      "blocking_level": "none",
       "capability_group": "GraphQL API runtime and browser client",
       "capability_id": "graphql-surface",
       "capability_name": "GraphQL/contracts/client",
@@ -314,12 +314,12 @@
         "provider-mode",
         "guardrails"
       ],
-      "evidence_grade": "C",
+      "evidence_grade": "B",
       "react_evidence_summary": "contracts-graphql, graphql-api-runtime, graphql-browser-client",
-  "readiness_impact": "USF-214 classifies GraphQL runtime and federation as out of current foundation runtime scope for this local REST/OpenAPI foundation, and classifies generated SDK/client/distribution as deferred-with-owner. USF-220 records the selected closure-tier delivery-depth disposition and links future GraphQL, federation, generated-client, public developer platform, staging, production, deployment, SOC, ISO, full-dev, full-parity, and USF-133 closure proof work to USF-224 if separately authorised.",
-  "tracking_carrier_or_recommendation": "USF-214/USF-220 with future execution proof tracked by USF-224",
-  "usf_evidence_summary": "USF-214 GraphQL/generated-client disposition matrix plus API proof markers, USF-220 delivery-depth disposition, and validate-api USF-API-025..029; no equivalent GraphQL runtime or generated client artifact is claimed",
-      "usf_status": "deferred"
+      "readiness_impact": "USF-214 classifies GraphQL runtime, federation, generated SDK/client, external developer platform, and distribution boundaries. USF-220 records selected closure-tier delivery-depth disposition. USF-224 now proves bounded local generated TypeScript GraphQL client creation, compile, runtime execution, public documentation operation, API-key onboarding/support workflow, GraphQL query/mutation/subscription execution, persisted-query execution and fail-closed unknown persisted query, resolver authorization denial, GraphQL client compatibility, and federation-style gateway/schema stitching through a hermetic in-process executor with synthetic data. Public package publication, deployed GraphQL service, deployed federation gateway, live subscription transport, external developer platform readiness, public API readiness, environment readiness, SOC, ISO, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-214/USF-220/USF-224; USF-193 remains owner for environment promotion semantics before any test/staging/production claim",
+      "usf_evidence_summary": "USF-224 execution proof artefact, packages/proof/src/graphql-generated-client-execution-proof.ts, tests/packages/proof.test.ts, official graphql 17.0.1 SDK governance, enterprise evidence rows, and validate-api USF-API-025..034; no deployed GraphQL, federation gateway, generated SDK/client readiness, public API readiness, or USF-133 closure claim is made",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
     },
     {
       "blocking_level": "P1",
@@ -623,10 +623,10 @@
   ],
   "capability_count": 31,
   "evidence_grade_counts": {
-    "A": 5,
-    "B": 11,
-    "C": 10,
-    "D": 5
+    "A": 6,
+    "B": 12,
+    "C": 9,
+    "D": 4
   },
   "id": "complete-react-to-usf-functionality-parity-matrix",
   "react_head": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
@@ -639,9 +639,8 @@
   "run_id": "20260629T053504Z-a285187",
   "status": "review-draft",
   "status_counts": {
-    "bounded-local-proof-and-reclassified-depth": 3,
+    "bounded-local-proof-and-reclassified-depth": 4,
     "bounded-sdk-envelope-proof": 1,
-    "deferred": 1,
     "deferred-with-owner": 5,
     "migrated": 7,
     "not-applicable": 1,

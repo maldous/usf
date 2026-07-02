@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-API-032",
+  "mutation": {
+    "removeEnterpriseRow": {
+      "section": "evidenceRegister",
+      "id": "evidence-usf-224-graphql-generated-client-execution-proof"
+    }
+  }
+}
