@@ -2,7 +2,8 @@
 
 USF-238 adds the current-state command surface for the test-readiness track. It
 builds on the USF-235 service contract, the USF-236 composed semantic harness,
-and the USF-237 deterministic fixture lifecycle proof.
+the USF-237 deterministic fixture lifecycle proof, and the USF-242 composed
+service integration matrix.
 
 Machine-readable evidence lives in
 `docs/architecture/test-readiness-command-surface-and-ci-gate.json`.
@@ -12,13 +13,15 @@ Machine-readable evidence lives in
 | Command | Make target | Purpose |
 | ------- | ----------- | ------- |
 | `corepack pnpm test-readiness` | `make test-ready` and `make test` | Runs the bounded local test-readiness command gate. |
-| `corepack pnpm test-readiness:composed` | `make test-composed` | Runs the composed semantic harness and deterministic fixture lifecycle proof. |
+| `corepack pnpm test-readiness:composed` | `make test-composed` | Runs the composed semantic harness, deterministic fixture lifecycle proof, and composed service integration matrix. |
+| `corepack pnpm test-readiness:integration` | `make test-readiness-integration` | Runs the composed service integration matrix proof for generated services, profiles, and service catalogue dispositions. |
 | `corepack pnpm test-readiness:assurance` | `make test-assurance` | Runs the bounded local SonarQube zero-open-issue proof from USF-233. |
 | `corepack pnpm test-readiness:validate` | `make test-readiness-validate` | Runs the test-readiness validator and planted-defect selftests. |
 
 The full package command runs the validator, the composed semantic harness, the
-deterministic fixture lifecycle proof, and the Sonar assurance proof. It uses the
-existing proof commands instead of changing runtime or provider behaviour.
+deterministic fixture lifecycle proof, the composed service integration matrix,
+and the Sonar assurance proof. It uses the existing proof commands instead of
+changing runtime or provider behaviour.
 
 ## CI and Local Alignment
 
@@ -29,7 +32,8 @@ test-readiness completion by itself.
 
 USF-238 records the command surface and CI/local gate. USF-234 remains the final
 acceptance gate and must reconcile merged evidence before any final
-test-readiness claim is made.
+test-readiness claim is made. USF-251 still owns executable every-service
+orchestration beyond the USF-242 matrix proof.
 
 ## Boundaries
 

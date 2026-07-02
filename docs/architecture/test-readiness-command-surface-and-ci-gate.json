@@ -27,9 +27,10 @@
         "test-readiness:validate",
         "test-readiness:semantic",
         "test-readiness:fixtures",
+        "test-readiness:integration",
         "test-readiness:assurance"
       ],
-      "claimBoundary": "Runs the bounded local test-readiness command gate. USF-234 still owns final acceptance and final test-readiness claim."
+      "claimBoundary": "Runs the bounded local test-readiness command gate, including the composed service integration matrix. USF-234 still owns final acceptance and final test-readiness claim."
     },
     {
       "id": "test-readiness-composed",
@@ -40,9 +41,10 @@
       "inMemoryServiceSubstituteAllowed": false,
       "runs": [
         "test-readiness:semantic",
-        "test-readiness:fixtures"
+        "test-readiness:fixtures",
+        "test-readiness:integration"
       ],
-      "claimBoundary": "Runs the composed semantic harness and deterministic fixture lifecycle only."
+      "claimBoundary": "Runs the composed semantic harness, deterministic fixture lifecycle, and composed service integration matrix only."
     },
     {
       "id": "test-readiness-assurance",
@@ -81,6 +83,18 @@
       "claimBoundary": "Executes two sequential composed semantic harness runs and verifies deterministic fixture cleanup."
     },
     {
+      "id": "test-readiness-integration",
+      "command": "corepack pnpm test-readiness:integration",
+      "makeTarget": "test-readiness-integration",
+      "classification": "canonical-current-composed-service-integration-matrix-proof",
+      "requiresComposedServices": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "composed-service-integration-matrix-proof"
+      ],
+      "claimBoundary": "Checks every generated test Compose service, every generated profile, and every service catalogue disposition against the canonical test Compose target. This is not final USF-234 acceptance."
+    },
+    {
       "id": "test-readiness-validator",
       "command": "corepack pnpm test-readiness:validate",
       "makeTarget": "test-readiness-validate",
@@ -96,11 +110,11 @@
   "packageScripts": [
     {
       "id": "test-readiness",
-      "script": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:assurance"
+      "script": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:assurance"
     },
     {
       "id": "test-readiness:composed",
-      "script": "pnpm test-readiness:semantic && pnpm test-readiness:fixtures"
+      "script": "pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration"
     },
     {
       "id": "test-readiness:assurance",
@@ -113,6 +127,10 @@
     {
       "id": "test-readiness:fixtures",
       "script": "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
+    },
+    {
+      "id": "test-readiness:integration",
+      "script": "tsx packages/proof/src/composed-service-integration-matrix-proof.ts"
     },
     {
       "id": "test-readiness:validate",
@@ -154,6 +172,11 @@
       "target": "test-readiness-fixtures",
       "routesTo": "corepack pnpm test-readiness:fixtures",
       "classification": "explicit-fixture-proof-alias"
+    },
+    {
+      "target": "test-readiness-integration",
+      "routesTo": "corepack pnpm test-readiness:integration",
+      "classification": "explicit-composed-service-integration-matrix-proof-alias"
     }
   ],
   "composedExecution": {
@@ -161,6 +184,7 @@
     "requiredCommands": [
       "corepack pnpm test-readiness:semantic",
       "corepack pnpm test-readiness:fixtures",
+      "corepack pnpm test-readiness:integration",
       "corepack pnpm test-readiness:composed"
     ],
     "requiredServiceIds": [
@@ -176,7 +200,7 @@
     "providerMode": "local-composed-real-service",
     "runtimeMode": "dev-compose-backed",
     "inMemoryServiceSubstituteAllowed": false,
-    "failureMode": "The composed commands fail closed when the canonical test Compose target is unavailable, provider mode is not local-composed-real-service, in-memory service substitutes are allowed, audit evidence is missing, deterministic fingerprints differ, or Compose teardown leaves resources behind."
+    "failureMode": "The composed commands fail closed when the canonical test Compose target is unavailable, provider mode is not local-composed-real-service, in-memory service substitutes are allowed, service integration matrix coverage is missing, audit evidence is missing, deterministic fingerprints differ, or Compose teardown leaves resources behind."
   },
   "ciLocalAlignment": {
     "localCanonicalCommand": "corepack pnpm test-readiness",
@@ -202,6 +226,8 @@
     "corepack pnpm test-readiness:composed",
     "corepack pnpm test-readiness:semantic",
     "corepack pnpm test-readiness:fixtures",
+    "corepack pnpm test-readiness:integration",
+    "make test-readiness-integration",
     "corepack pnpm test-readiness:assurance",
     "make test-ready",
     "make test",

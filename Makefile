@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 .PHONY: \
 	help commands setup foundation dev-ready test-ready test test-composed test-assurance \
-	test-readiness-validate test-readiness-semantic test-readiness-fixtures \
+	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
 	verify install dev dev-smoke dev.work \
@@ -46,7 +46,7 @@ help:
 		'  make runtime-proof         API and worker runtime proof' \
 		'  make providers-proof       Provider adapter proof' \
 		'  make test-compose          Generated Compose validation and smoke' \
-		'  make test-composed         Composed semantic harness and deterministic fixtures' \
+		'  make test-composed         Composed semantic harness, deterministic fixtures, and service integration matrix' \
 		'  make test-assurance        Bounded local SonarQube zero-open-issue proof' \
 		'  make sonar-zero-issue-proof  Bounded local SonarQube zero-open-issue proof' \
 		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
@@ -80,6 +80,9 @@ test-readiness-semantic:
 
 test-readiness-fixtures:
 	corepack pnpm test-readiness:fixtures
+
+test-readiness-integration:
+	corepack pnpm test-readiness:integration
 
 validate-foundation: verify
 
