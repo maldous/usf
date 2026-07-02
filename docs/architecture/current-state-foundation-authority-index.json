@@ -1,0 +1,266 @@
+{
+  "id": "current-state-foundation-authority-index",
+  "title": "Current-State Foundation Authority Index",
+  "issueId": "USF-230",
+  "strategyIssueId": "USF-229",
+  "baseline": {
+    "tag": "v2-foundation",
+    "tagType": "annotated",
+    "tagEvidence": "docs/architecture/dev-ready-foundation-baseline-tag.json",
+    "tagObjectSha": "0543288306394b6106b81dd2dca2629091a5299b",
+    "targetCommitSha": "4a4eb129bf8d441be512cc3a976d2d2004a4a250"
+  },
+  "strategySource": {
+    "path": "docs/architecture/post-foundation-optimisation-strategy.json",
+    "issueId": "USF-229",
+    "mergeSha": "f836fe40e9cad189e62699920ae3416fbd3c883b"
+  },
+  "purpose": "Route future developer and AI-agent work to the current semantic corpus, decisions, validators, proofs, evidence, and dev handover while preserving historical lineage as audit evidence.",
+  "authorityBoundary": "This index routes current work. It does not override the Charter, Authority Model, accepted ADRs, validators, proof evidence, or semantic instances.",
+  "currentAuthorityEntryPoints": [
+    {
+      "id": "constitutional-and-semantic-authority",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "docs/architecture/charter.md",
+        "docs/architecture/authority-model.md",
+        "docs/architecture/standards-profile.md",
+        "docs/architecture/ontology.md"
+      ],
+      "futureUse": "Start here for platform meaning, authority order, and semantic constraints."
+    },
+    {
+      "id": "governance-standards",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "docs/architecture/directory-and-file-naming-standard.md",
+        "docs/architecture/schema-authoring-standard.md",
+        "docs/architecture/git-practices-standard.md"
+      ],
+      "futureUse": "Use for naming, schema, and Git practice constraints before creating or changing governed artefacts."
+    },
+    {
+      "id": "machine-readable-catalogues",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "spec/taxonomies/taxonomy-catalog.json",
+        "spec/vocabularies/vocabulary-catalog.json",
+        "spec/registries/schema-registry.json"
+      ],
+      "futureUse": "Use for controlled classifications, values, and schema lifecycle before changing JSON artefacts."
+    },
+    {
+      "id": "semantic-corpus",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "spec/instances/semantic-contract/",
+        "spec/instances/compose-service/service-catalogue.json",
+        "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+        "spec/instances/runtime-proof/runtime-application-compose-parity.json"
+      ],
+      "futureUse": "Use as the current source of service, capability, provider, environment, and runtime-proof semantics."
+    },
+    {
+      "id": "decisions",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "docs/adr/"
+      ],
+      "futureUse": "Use for accepted decisions and constraints before changing implementation or proof posture."
+    },
+    {
+      "id": "validators",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "tools/validate-spec/",
+        "tools/validate-bootstrap/",
+        "tools/validate-parity/",
+        "tools/validate-enterprise/",
+        "tools/validate-runtime/",
+        "tools/validate-compose/"
+      ],
+      "futureUse": "Use as the fail-closed enforcement layer."
+    },
+    {
+      "id": "proofs-and-proof-commands",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "packages/proof/",
+        "package.json",
+        "Makefile"
+      ],
+      "futureUse": "Use for executable proof evidence and command routing."
+    },
+    {
+      "id": "enterprise-evidence",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+        "docs/architecture/enterprise-evidence-model.md"
+      ],
+      "futureUse": "Use for risk, control, exception, evidence, and non-claim posture."
+    },
+    {
+      "id": "developer-and-agent-handover",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "README.md#developer-quickstart",
+        "docs/architecture/dev-readiness-validation-and-handover.md",
+        "docs/architecture/dev-readiness-validation-and-handover.json"
+      ],
+      "futureUse": "Use as the current clone, setup, validation, diagnostics, and governed contribution path."
+    },
+    {
+      "id": "baseline-evidence",
+      "classification": "canonical-current",
+      "activeAuthority": true,
+      "paths": [
+        "docs/architecture/dev-ready-foundation-baseline-tag.md",
+        "docs/architecture/dev-ready-foundation-baseline-tag.json"
+      ],
+      "futureUse": "Use to identify the immutable dev-ready foundation baseline and exact one-off tag governance boundary."
+    }
+  ],
+  "reclassifiedLineageAndScaffolding": [
+    {
+      "id": "historical-react-source",
+      "classification": "historical-lineage",
+      "activeAuthority": false,
+      "pathsOrPatterns": [
+        "../react"
+      ],
+      "retentionPosture": "archive-reference",
+      "futureUse": "Inspect only as historical semantic/source evidence when a current issue explicitly requires lineage. Do not copy or mirror runtime/application code or paths."
+    },
+    {
+      "id": "source-use-and-parity-matrices",
+      "classification": "historical-lineage",
+      "activeAuthority": false,
+      "pathsOrPatterns": [
+        "docs/architecture/parity-*-source-use-disposition-matrix.md",
+        "docs/architecture/complete-react-to-usf-*.md",
+        "docs/architecture/complete-react-to-usf-*.json",
+        "docs/architecture/react-*.md",
+        "docs/architecture/react-*.json"
+      ],
+      "retentionPosture": "archive-reference",
+      "futureUse": "Use for audit traceability and source disposition, not as a direct future implementation recipe or full React product parity claim."
+    },
+    {
+      "id": "closure-and-lane-orchestration",
+      "classification": "transitional-scaffolding",
+      "activeAuthority": false,
+      "pathsOrPatterns": [
+        "docs/architecture/usf-133-closure-tier-evidence-gate.*",
+        "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.*",
+        "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
+        "docs/architecture/usf-dev-foundation-gap-register.md"
+      ],
+      "retentionPosture": "archive-reference",
+      "futureUse": "Use as closure audit evidence only. Do not treat wrapper completion as source issue completion or current readiness authority."
+    },
+    {
+      "id": "bootstrap-lineage",
+      "classification": "historical-lineage",
+      "activeAuthority": false,
+      "pathsOrPatterns": [
+        "spec/instances/bootstrap-mapping/",
+        "docs/architecture/bootstrap-source-use-disposition-matrix.md",
+        "docs/architecture/bootstrap-readiness-governance.md"
+      ],
+      "retentionPosture": "archive-reference",
+      "futureUse": "Use to preserve foundation ancestry and source coverage, not as current implementation naming or readiness authority."
+    },
+    {
+      "id": "generated-compose",
+      "classification": "generated",
+      "activeAuthority": false,
+      "pathsOrPatterns": [
+        "compose/compose.dev.generated.yaml",
+        "compose/compose.test.generated.yaml",
+        "compose/compose.staging.generated.yaml",
+        "compose/compose.production.generated.yaml"
+      ],
+      "retentionPosture": "regenerable-current",
+      "futureUse": "Regenerate from the service catalogue and generator. Do not treat generated files as semantic authority."
+    }
+  ],
+  "optimisationActions": [
+    {
+      "id": "authority-index-created",
+      "status": "implemented",
+      "evidence": [
+        "docs/architecture/current-state-foundation-authority-index.md",
+        "docs/architecture/current-state-foundation-authority-index.json"
+      ],
+      "assuranceImpact": "Future work has a current entry point that avoids treating historical migration artefacts as active authority."
+    },
+    {
+      "id": "lineage-reclassified",
+      "status": "implemented",
+      "evidence": [
+        "reclassifiedLineageAndScaffolding"
+      ],
+      "assuranceImpact": "Historical source-use, parity, closure, bootstrap, and generated outputs remain retained but are bounded."
+    },
+    {
+      "id": "handover-routed-to-current-state",
+      "status": "implemented",
+      "evidence": [
+        "docs/architecture/dev-readiness-validation-and-handover.md",
+        "docs/architecture/dev-readiness-validation-and-handover.json",
+        "AGENTS.md"
+      ],
+      "assuranceImpact": "Future developer and AI-agent workflow starts from current canonical authority and evidence."
+    },
+    {
+      "id": "no-destructive-optimisation",
+      "status": "implemented",
+      "evidence": [
+        "docs/architecture/foundation-optimisation-evidence.json"
+      ],
+      "assuranceImpact": "No files are removed and no validators, planted defects, proofs, runtime code, provider code, or generated outputs are weakened."
+    }
+  ],
+  "futureWorkflowRules": [
+    "Read current semantic contracts, ADRs, validators, proof evidence, and enterprise evidence before implementation.",
+    "Use historical React, source-use, parity, closure, and bootstrap artefacts only as lineage or audit inputs when explicitly needed.",
+    "Do not infer readiness or source issue completion from wrapper, closure, or generated reports.",
+    "Update semantic contracts, proofs, validators, planted defects, enterprise evidence, and Linear acceptance mapping together when behaviour or assurance posture changes.",
+    "Preserve explicit non-claims unless a later issue separately proves and authorises a stronger claim."
+  ],
+  "preservationCommitments": {
+    "semanticAuthorityChanged": false,
+    "runtimeBehaviourChanged": false,
+    "validatorsWeakened": false,
+    "plantedDefectsWeakened": false,
+    "proofCommandsRemoved": false,
+    "evidenceRowsRemoved": false,
+    "historicalLineageRemoved": false,
+    "generatedOutputsChanged": false,
+    "devReadinessGuidancePreserved": true,
+    "assuranceLevelPreservedOrImproved": true
+  },
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-react-product-parity"
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "id": "foundation-optimisation-evidence-report",
+  "title": "Foundation Optimisation Evidence Report",
+  "issueId": "USF-230",
+  "strategyIssueId": "USF-229",
+  "baseline": {
+    "tag": "v2-foundation",
+    "tagType": "annotated",
+    "tagEvidence": "docs/architecture/dev-ready-foundation-baseline-tag.json",
+    "tagObjectSha": "0543288306394b6106b81dd2dca2629091a5299b",
+    "targetCommitSha": "4a4eb129bf8d441be512cc3a976d2d2004a4a250"
+  },
+  "sourceStrategy": {
+    "path": "docs/architecture/post-foundation-optimisation-strategy.json",
+    "issueId": "USF-229",
+    "mergeSha": "f836fe40e9cad189e62699920ae3416fbd3c883b"
+  },
+  "executionState": {
+    "status": "ready-for-pr-validation",
+    "branch": "codex/usf-230-current-state-foundation-optimisation",
+    "baseMainAtStart": "f836fe40e9cad189e62699920ae3416fbd3c883b",
+    "pullRequestUrl": "pending-pr-creation",
+    "mergeSha": "pending-post-merge-linear-reconciliation",
+    "postMergeValidation": "pending-post-merge-linear-reconciliation"
+  },
+  "filesChanged": [
+    {
+      "path": "docs/architecture/current-state-foundation-authority-index.md",
+      "changeType": "created",
+      "purpose": "Human-readable current-state routing index."
+    },
+    {
+      "path": "docs/architecture/current-state-foundation-authority-index.json",
+      "changeType": "created",
+      "purpose": "Machine-readable current-state authority and lineage classification."
+    },
+    {
+      "path": "docs/architecture/foundation-optimisation-evidence-report.md",
+      "changeType": "created",
+      "purpose": "Human-readable USF-230 execution evidence."
+    },
+    {
+      "path": "docs/architecture/foundation-optimisation-evidence.json",
+      "changeType": "created",
+      "purpose": "Machine-readable USF-230 execution evidence."
+    },
+    {
+      "path": "docs/architecture/dev-readiness-validation-and-handover.md",
+      "changeType": "updated",
+      "purpose": "Adds current-state workflow handover pointer."
+    },
+    {
+      "path": "docs/architecture/dev-readiness-validation-and-handover.json",
+      "changeType": "updated",
+      "purpose": "Adds machine-readable current-state workflow pointer."
+    },
+    {
+      "path": "AGENTS.md",
+      "changeType": "updated",
+      "purpose": "Adds agent routing guidance to use the current-state authority index after the baseline."
+    }
+  ],
+  "optimisationActions": [
+    {
+      "id": "apply-usf-229-plan",
+      "status": "implemented",
+      "evidence": [
+        "docs/architecture/post-foundation-optimisation-strategy.json",
+        "docs/architecture/current-state-foundation-authority-index.json"
+      ]
+    },
+    {
+      "id": "create-current-state-authority-map",
+      "status": "implemented",
+      "evidence": [
+        "docs/architecture/current-state-foundation-authority-index.md",
+        "docs/architecture/current-state-foundation-authority-index.json"
+      ]
+    },
+    {
+      "id": "reconcile-transitional-and-historical-artefacts",
+      "status": "implemented-by-classification",
+      "evidence": [
+        "docs/architecture/current-state-foundation-authority-index.json#reclassifiedLineageAndScaffolding"
+      ],
+      "physicalRemoval": false,
+      "rationale": "No file is safe to remove without later replacement evidence, archive rationale, and validation. USF-230 reconciles active use by classification and routing."
+    },
+    {
+      "id": "route-future-dev-and-ai-workflow",
+      "status": "implemented",
+      "evidence": [
+        "AGENTS.md",
+        "docs/architecture/dev-readiness-validation-and-handover.md",
+        "docs/architecture/dev-readiness-validation-and-handover.json"
+      ]
+    },
+    {
+      "id": "preserve-assurance-level",
+      "status": "implemented",
+      "evidence": [
+        "assurancePreservation",
+        "validationPlan"
+      ]
+    },
+    {
+      "id": "produce-final-optimisation-evidence-report",
+      "status": "implemented",
+      "evidence": [
+        "docs/architecture/foundation-optimisation-evidence-report.md",
+        "docs/architecture/foundation-optimisation-evidence.json"
+      ]
+    }
+  ],
+  "assurancePreservation": {
+    "semanticConfidenceWeakened": false,
+    "proofCoverageWeakened": false,
+    "validatorsWeakened": false,
+    "plantedDefectsWeakened": false,
+    "evidenceQualityReduced": false,
+    "runtimeBehaviourChanged": false,
+    "providerBehaviourChanged": false,
+    "generatedComposeChanged": false,
+    "historicalLineageRemoved": false,
+    "devReadinessGuidancePreservedOrImproved": true,
+    "currentStateRoutingImproved": true
+  },
+  "lineageRetention": [
+    {
+      "id": "react-lineage",
+      "retained": true,
+      "activeAuthority": false,
+      "futureUse": "Historical semantic/source evidence only."
+    },
+    {
+      "id": "parity-and-source-use-matrices",
+      "retained": true,
+      "activeAuthority": false,
+      "futureUse": "Audit traceability and historical source disposition."
+    },
+    {
+      "id": "closure-tier-and-lane-scaffolding",
+      "retained": true,
+      "activeAuthority": false,
+      "futureUse": "Historical closure audit trail only."
+    },
+    {
+      "id": "bootstrap-mapping",
+      "retained": true,
+      "activeAuthority": false,
+      "futureUse": "Foundation ancestry and source coverage evidence."
+    },
+    {
+      "id": "generated-compose",
+      "retained": true,
+      "activeAuthority": false,
+      "futureUse": "Deterministic generated projections."
+    }
+  ],
+  "validationPlan": [
+    {
+      "command": "corepack pnpm install --frozen-lockfile",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "make verify",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "corepack pnpm parity",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "python3 tools/validate-spec/validate-spec.py all --json",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "python3 tools/validate-parity/validate-parity.py all --json",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "git diff --check",
+      "status": "pending-pr-ready-validation"
+    },
+    {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "pending-pr-ready-validation"
+    }
+  ],
+  "postMergeReconciliation": {
+    "recordInLinear": true,
+    "requiredFields": [
+      "pullRequestUrl",
+      "mergeSha",
+      "postMergeValidationSummary",
+      "openGithubPullRequestSearch",
+      "openLinearBacklogTodoInProgressSearch",
+      "finalGitStatus",
+      "acceptanceCriteriaMapping",
+      "nonClaims"
+    ],
+    "reason": "A pull request cannot contain the merge commit that merges it; final merge SHA evidence is recorded during Linear reconciliation after merge."
+  },
+  "acceptanceCriteriaMapping": [
+    {
+      "criterion": "USF-229 strategy is complete and referenced.",
+      "evidence": "sourceStrategy",
+      "status": "satisfied-before-merge"
+    },
+    {
+      "criterion": "v2-foundation tag is referenced.",
+      "evidence": "baseline",
+      "status": "satisfied-before-merge"
+    },
+    {
+      "criterion": "Current-state authority map is merged.",
+      "evidence": "docs/architecture/current-state-foundation-authority-index.json",
+      "status": "pending-merge"
+    },
+    {
+      "criterion": "Transitional or historical artefacts are reconciled according to the approved plan.",
+      "evidence": "lineageRetention and current-state authority index reclassifiedLineageAndScaffolding",
+      "status": "pending-merge"
+    },
+    {
+      "criterion": "Future dev/AI workflow uses current canonical contracts and evidence.",
+      "evidence": "AGENTS.md and dev-readiness handover updates",
+      "status": "pending-merge"
+    },
+    {
+      "criterion": "Assurance level is preserved or improved.",
+      "evidence": "assurancePreservation and full validation",
+      "status": "pending-validation-and-merge"
+    },
+    {
+      "criterion": "Full validation passes.",
+      "evidence": "validationPlan and Linear post-merge reconciliation",
+      "status": "pending-validation"
+    },
+    {
+      "criterion": "Final optimisation evidence report is merged.",
+      "evidence": "docs/architecture/foundation-optimisation-evidence.json",
+      "status": "pending-merge"
+    },
+    {
+      "criterion": "Non-claims are preserved.",
+      "evidence": "nonClaims",
+      "status": "satisfied-before-merge"
+    }
+  ],
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-react-product-parity"
+  ]
+}

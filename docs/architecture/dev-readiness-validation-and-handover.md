@@ -14,6 +14,17 @@ This guide defines the USF local developer and AI-agent handover path after foun
 
 For USF-226, dev ready means a developer or AI agent can clone the repository, set it up from documented steps, run the local and composed foundation, execute proof and validation commands, understand failures, make a governed change, and submit a compliant PR without private knowledge, hidden local state, real secrets, or real tenant data.
 
+## Current-State Authority After Baseline
+
+After the `v2-foundation` baseline, future developer and AI-agent work should start from the current-state authority index:
+
+- `docs/architecture/current-state-foundation-authority-index.md`
+- `docs/architecture/current-state-foundation-authority-index.json`
+
+The index routes future work to the current semantic corpus, accepted ADRs, validators, proof evidence, enterprise evidence, and this handover path. Historical `../react` source, source-use matrices, parity migration matrices, closure-tier artefacts, and bootstrap mapping remain available as retained lineage and audit evidence, but they are not active future authority.
+
+Do not infer implementation shape, readiness state, or full React product parity from historical lineage or closure scaffolding. Use current semantic contracts, proof commands, validators, and enterprise evidence first, then inspect lineage only when the current issue explicitly requires it.
+
 ## Prerequisites
 
 Install these tools before running the local handover path:

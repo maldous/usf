@@ -612,6 +612,26 @@ No source element from `../react` should disappear without later disposition.
 
 Source paths from `../react` MUST NOT dictate future USF paths.
 
+## Post-Baseline Current-State Routing
+
+After the one-off `v2-foundation` baseline, agents SHOULD use
+`docs/architecture/current-state-foundation-authority-index.md` and
+`docs/architecture/current-state-foundation-authority-index.json` as the current
+workflow router for future development and audit work.
+
+This routing index does not override the Charter, Authority Model, accepted ADRs,
+validator rules, runtime proof evidence, semantic instances, or this directive.
+It identifies the current canonical entry points and classifies historical React,
+source-use, parity, closure, bootstrap, and generated artefacts as lineage,
+transitional scaffolding, or generated projections where appropriate.
+
+Agents MUST NOT use historical `../react`, source-use matrices, parity migration
+matrices, or closure-tier artefacts as active future authority unless the current
+issue explicitly requires lineage review and the higher-authority USF artefacts
+permit the use. Historical lineage remains retained evidence, not a shortcut for
+copying source paths, implementation structure, readiness claims, or product
+parity claims.
+
 ## Provider, Environment, Proof, and Report Safety
 
 Agents MUST preserve these safety rules:
