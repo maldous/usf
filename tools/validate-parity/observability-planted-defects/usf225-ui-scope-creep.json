@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf225-ui-scope-creep",
+  "expectedRuleId": "USF-OBSERVABILITY-022",
+  "edits": [
+    {
+      "target": "browser_telemetry_depth",
+      "old": "\"productUiCreated\": false",
+      "new": "\"productUiCreated\": true"
+    }
+  ]
+}

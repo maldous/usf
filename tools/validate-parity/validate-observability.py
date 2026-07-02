@@ -35,6 +35,11 @@ RULES = {
     "USF-OBSERVABILITY-018": ("blocking", "USF-218 observability service operations disposition is missing or overclaimed"),
     "USF-OBSERVABILITY-019": ("blocking", "USF-222 observability operations execution proof is missing or incomplete"),
     "USF-OBSERVABILITY-020": ("blocking", "USF-222 observability operations execution proof overclaims readiness"),
+    "USF-OBSERVABILITY-021": ("blocking", "USF-225 browser telemetry proof is missing or incomplete"),
+    "USF-OBSERVABILITY-022": ("blocking", "USF-225 browser telemetry proof exceeds minimal UI harness scope"),
+    "USF-OBSERVABILITY-023": ("blocking", "USF-225 browser telemetry SDK dependency or import boundary is unsafe"),
+    "USF-OBSERVABILITY-024": ("blocking", "USF-225 enterprise evidence or source-use linkage is incomplete"),
+    "USF-OBSERVABILITY-025": ("blocking", "USF-225 browser telemetry proof overclaims readiness or leaks raw values"),
     "USF-OBSERVABILITY-SELFTEST": ("blocking", "planted observability defect did not raise its expected rule"),
 }
 
@@ -62,6 +67,7 @@ OPENAPI_BUILDER = "packages/openapi/src/index.ts"
 OPENAPI_JSON = "packages/openapi/openapi.json"
 PROOF = "packages/proof/src/observability-telemetry-proof.ts"
 OPERATIONS_EXECUTION_PROOF = "packages/proof/src/observability-operations-execution-proof.ts"
+BROWSER_TELEMETRY_PROOF = "packages/proof/src/browser-telemetry-faro-proof.ts"
 PROOF_INDEX = "packages/proof/src/index.ts"
 TESTS = "tests/capabilities/observability-telemetry.test.ts"
 API_TESTS = "tests/apps/api-contracts.test.ts"
@@ -74,6 +80,8 @@ ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evi
 DEPTH_MATRIX = "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json"
 SERVICE_OPERATIONS_DEPTH = "docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json"
 OPERATIONS_EXECUTION_DEPTH = "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json"
+BROWSER_TELEMETRY_DEPTH = "docs/architecture/browser-telemetry-faro-foundation-proof.json"
+BROWSER_TELEMETRY_NOTE = "docs/architecture/browser-telemetry-faro-foundation-proof.md"
 SENTRY_BOUNDARY = "docs/architecture/sentry-service-semantic-proof-boundary.json"
 SENTRY_ERROR_MATRIX = "docs/architecture/sentry-error-monitoring-disposition-matrix.json"
 CLOSURE_MATRIX = "docs/architecture/compose-service-disposition-closure-matrix.json"
@@ -96,6 +104,7 @@ SOURCE_FILES = (
     OPENAPI_JSON,
     PROOF,
     OPERATIONS_EXECUTION_PROOF,
+    BROWSER_TELEMETRY_PROOF,
     PROOF_INDEX,
     TESTS,
     API_TESTS,
@@ -108,6 +117,8 @@ SOURCE_FILES = (
     DEPTH_MATRIX,
     SERVICE_OPERATIONS_DEPTH,
     OPERATIONS_EXECUTION_DEPTH,
+    BROWSER_TELEMETRY_DEPTH,
+    BROWSER_TELEMETRY_NOTE,
     SENTRY_BOUNDARY,
     SENTRY_ERROR_MATRIX,
     CLOSURE_MATRIX,
@@ -236,6 +247,10 @@ def build_state(overrides=None):
         "operations_execution_depth",
         parse_json_text(files.get(OPERATIONS_EXECUTION_DEPTH, "")),
     )
+    browser_telemetry_depth = overrides.get(
+        "browser_telemetry_depth",
+        parse_json_text(files.get(BROWSER_TELEMETRY_DEPTH, "")),
+    )
     sentry_boundary = overrides.get("sentry_boundary", parse_json_text(files.get(SENTRY_BOUNDARY, "")))
     sentry_error_matrix = overrides.get(
         "sentry_error_matrix",
@@ -256,6 +271,7 @@ def build_state(overrides=None):
         "depth_matrix": depth_matrix,
         "service_operations_depth": service_operations_depth,
         "operations_execution_depth": operations_execution_depth,
+        "browser_telemetry_depth": browser_telemetry_depth,
         "sentry_boundary": sentry_boundary,
         "sentry_error_matrix": sentry_error_matrix,
         "closure_matrix": closure_matrix,
@@ -292,18 +308,21 @@ def run_checks(F, state=None):
     openapi_text = files[OPENAPI_JSON]
     proof = files[PROOF]
     operations_execution_proof = files[OPERATIONS_EXECUTION_PROOF]
+    browser_telemetry_proof = files[BROWSER_TELEMETRY_PROOF]
     proof_index = files[PROOF_INDEX]
     tests = files[TESTS]
     api_tests = files[API_TESTS]
     proof_tests = files[PROOF_TESTS]
     standard = files[STANDARD]
     source_use = files[SOURCE_USE]
+    browser_telemetry_note = files[BROWSER_TELEMETRY_NOTE]
     bootstrap_source_use = files[BOOTSTRAP_SOURCE_USE]
     operations_signal = state.get("operations_signal")
     enterprise_model = state.get("enterprise_model")
     depth_matrix = state.get("depth_matrix")
     service_operations_depth = state.get("service_operations_depth")
     operations_execution_depth = state.get("operations_execution_depth")
+    browser_telemetry_depth = state.get("browser_telemetry_depth")
     sentry_boundary = state.get("sentry_boundary")
     sentry_error_matrix = state.get("sentry_error_matrix")
     closure_matrix = state.get("closure_matrix")
@@ -1073,6 +1092,251 @@ def run_checks(F, state=None):
         if phrase in usf222_sources:
             F.add("USF-OBSERVABILITY-020", "USF-222", f"readiness overclaim present: {phrase}")
 
+    if not browser_telemetry_proof:
+        F.add("USF-OBSERVABILITY-021", BROWSER_TELEMETRY_PROOF, "USF-225 browser telemetry proof source is missing")
+    for token in (
+        'issueId: "USF-225"',
+        'parentIssueId: "USF-133"',
+        'proof: "browser-telemetry-faro-foundation-proof"',
+        'runtimeMode: "minimal-static-browser-proof"',
+        'providerMode: "local-test"',
+        '"@grafana/faro-web-sdk/dist/bundle/faro-web-sdk.iife.js"',
+        'require("playwright-core")',
+        "findChromiumExecutable",
+        "syntheticBrowserErrorCaptured: true",
+        "syntheticBrowserEventCaptured: true",
+        "syntheticBrowserTraceCaptured: true,\n      syntheticBrowserSessionCaptured: true",
+        "backendRootCauseCorrelationChecked: true",
+        "structuredLogEvidenceCaptured: true",
+        "traceEvidenceCaptured: true",
+        "metricEvidenceCaptured: true",
+        "auditEvidenceCaptured: true",
+        "redactionChecked: true",
+        "rawMarkerLeakCount: 0",
+        "tenantBoundaryChecked: true",
+        "actorBoundaryChecked: true",
+        "tokenBoundaryChecked: true",
+        "endpointBoundaryChecked: true",
+        "stackBoundaryChecked: true",
+        "providerPayloadBoundaryChecked: true",
+        "uiReadinessClaim: false",
+        "reactReadinessClaim: false",
+        "browserE2EReadinessClaim: false",
+        "faroProductionReadinessClaim: false",
+        "liveMonitoringReadinessClaim: false",
+        "testReadinessClaim: false",
+        "stagingReadinessClaim: false",
+        "productionReadinessClaim: false",
+        "deploymentReadinessClaim: false",
+        "liveProviderReadinessClaim: false",
+        "socReadinessClaim: false",
+        "iso27001CertificationClaim: false",
+        "enterpriseProductionReadinessClaim: false",
+        "fullDevReadinessClaim: false",
+        "fullReactParityClaim: false",
+        "usf133ClosureClaim: false",
+    ):
+        if token not in browser_telemetry_proof:
+            F.add("USF-OBSERVABILITY-021", BROWSER_TELEMETRY_PROOF, f"USF-225 proof marker missing {token}")
+    for token in (
+        "proof:observability:browser-telemetry",
+        "browser-telemetry-faro-proof.ts",
+        '"@grafana/faro-web-sdk": "2.8.2"',
+        '"playwright-core": "1.61.1"',
+    ):
+        if token not in package:
+            F.add("USF-OBSERVABILITY-021", PACKAGE, f"USF-225 package command or dependency missing {token}")
+    if not re.search(r"(?m)^observability-browser-telemetry-proof:", makefile):
+        F.add("USF-OBSERVABILITY-021", MAKEFILE, "USF-225 make target missing")
+    if "runBrowserTelemetryFaroProof" not in proof_index or "runBrowserTelemetryFaroProof" not in proof_tests:
+        F.add("USF-OBSERVABILITY-021", PROOF_TESTS, "USF-225 proof export or test missing")
+    for token in (
+        "proves minimal Faro browser telemetry capture without UI readiness claims",
+        'runtimeMode: "minimal-static-browser-proof"',
+        "faroProductionReadinessClaim: false",
+        "liveMonitoringReadinessClaim: false",
+    ):
+        if token not in proof_tests:
+            F.add("USF-OBSERVABILITY-021", PROOF_TESTS, f"USF-225 proof test marker missing {token}")
+
+    if not isinstance(browser_telemetry_depth, dict):
+        F.add("USF-OBSERVABILITY-021", BROWSER_TELEMETRY_DEPTH, "USF-225 proof artefact must exist and parse")
+        browser_telemetry_depth = {}
+    expected_usf225_top = {
+        "sourceIssue": "USF-225",
+        "parentIssue": "USF-133",
+        "status": "bounded-local-browser-telemetry-proof-recorded-ui-readiness-deferred",
+        "proofFile": BROWSER_TELEMETRY_PROOF,
+        "proofCommand": "corepack pnpm proof:observability:browser-telemetry",
+        "runtimeMode": "minimal-static-browser-proof",
+        "providerMode": "local-test",
+    }
+    for key, expected in expected_usf225_top.items():
+        if browser_telemetry_depth.get(key) != expected:
+            F.add("USF-OBSERVABILITY-021", f"{BROWSER_TELEMETRY_DEPTH}.{key}", f"expected {expected!r}")
+    execution_evidence = browser_telemetry_depth.get("executionEvidence", {})
+    if not isinstance(execution_evidence, dict):
+        F.add("USF-OBSERVABILITY-021", f"{BROWSER_TELEMETRY_DEPTH}.executionEvidence", "USF-225 execution evidence must be an object")
+        execution_evidence = {}
+    for key in (
+        "faroInitialized",
+        "browserAutomationProofPassed",
+        "syntheticBrowserErrorCaptured",
+        "syntheticBrowserEventCaptured",
+        "syntheticBrowserTraceCaptured",
+        "syntheticBrowserSessionCaptured",
+        "backendRootCauseCorrelationChecked",
+        "structuredLogEvidenceCaptured",
+        "traceEvidenceCaptured",
+        "metricEvidenceCaptured",
+        "auditEvidenceCaptured",
+        "redactionChecked",
+        "syntheticDataBoundaryChecked",
+        "tenantBoundaryChecked",
+        "actorBoundaryChecked",
+        "tokenBoundaryChecked",
+        "endpointBoundaryChecked",
+        "stackBoundaryChecked",
+        "providerPayloadBoundaryChecked",
+    ):
+        if execution_evidence.get(key) is not True:
+            F.add("USF-OBSERVABILITY-021", f"{BROWSER_TELEMETRY_DEPTH}.executionEvidence.{key}", "USF-225 execution marker must be true")
+    if execution_evidence.get("rawMarkerLeakCount") != 0:
+        F.add("USF-OBSERVABILITY-025", f"{BROWSER_TELEMETRY_DEPTH}.executionEvidence.rawMarkerLeakCount", "raw marker leak count must be zero")
+
+    minimal_scope = browser_telemetry_depth.get("minimalHarnessScope", {})
+    if not isinstance(minimal_scope, dict):
+        F.add("USF-OBSERVABILITY-022", f"{BROWSER_TELEMETRY_DEPTH}.minimalHarnessScope", "USF-225 minimal harness scope must be an object")
+        minimal_scope = {}
+    for key in (
+        "productUiCreated",
+        "reactApplicationCreated",
+        "routeArchitectureCreated",
+        "componentSystemCreated",
+        "visualSnapshotCoverageCreated",
+        "accessibilityJourneyCoverageCreated",
+        "broadBrowserE2ECoverageCreated",
+    ):
+        if minimal_scope.get(key) is not False:
+            F.add("USF-OBSERVABILITY-022", f"{BROWSER_TELEMETRY_DEPTH}.minimalHarnessScope.{key}", "USF-225 must not create UI product scope")
+    if minimal_scope.get("uiSurfaceDisposition") != "proof-only-minimal-static-browser-surface":
+        F.add("USF-OBSERVABILITY-022", f"{BROWSER_TELEMETRY_DEPTH}.minimalHarnessScope.uiSurfaceDisposition", "minimal proof-only UI disposition is required")
+    for forbidden_path in ("apps/web", "apps/ui", "apps/browser", "packages/ui", "packages/web"):
+        if os.path.exists(forbidden_path):
+            F.add("USF-OBSERVABILITY-022", forbidden_path, "USF-225 must not add product UI/browser app paths")
+
+    package_json = parse_json_text(package) or {}
+    dependencies = package_json.get("dependencies", {}) if isinstance(package_json, dict) else {}
+    dev_dependencies = package_json.get("devDependencies", {}) if isinstance(package_json, dict) else {}
+    if dependencies.get("@grafana/faro-web-sdk") != "2.8.2":
+        F.add("USF-OBSERVABILITY-023", PACKAGE, "Grafana Faro SDK must be exact-pinned at 2.8.2")
+    if dev_dependencies.get("playwright-core") != "1.61.1":
+        F.add("USF-OBSERVABILITY-023", PACKAGE, "Playwright Core must be exact-pinned at 1.61.1")
+    for package_name, expected in (("@grafana/faro-web-sdk", "2.8.2"), ("playwright-core", "1.61.1")):
+        if f"{package_name}@{expected}" not in read_text("pnpm-lock.yaml"):
+            F.add("USF-OBSERVABILITY-023", "pnpm-lock.yaml", f"lockfile missing {package_name}@{expected}")
+    for root in ("apps", "capabilities", "adapters", "packages/core", "packages/ports"):
+        if not os.path.isdir(root):
+            continue
+        for dirpath, _, filenames in os.walk(root):
+            for filename in filenames:
+                if not filename.endswith((".ts", ".tsx", ".js", ".mjs", ".cjs")):
+                    continue
+                path = os.path.join(dirpath, filename)
+                text = read_text(path)
+                for sdk_name in ("@grafana/faro-web-sdk", "playwright-core"):
+                    if sdk_name in text:
+                        F.add("USF-OBSERVABILITY-023", path, f"USF-225 SDK import leaked outside proof boundary: {sdk_name}")
+
+    expected_usf225_enterprise_refs = {
+        "soa-usf-225-browser-telemetry-faro-proof",
+        "evidence-usf-225-browser-telemetry-faro-proof",
+        "evidence-proof-proof-observability-browser-telemetry",
+        "threat-usf-225-browser-telemetry-overclaim",
+        "sdk-usf-225-grafana-faro-web-sdk",
+        "sdk-usf-225-playwright-core-browser-automation",
+        "access-usf-225-browser-telemetry-boundary",
+        "resilience-usf-225-browser-telemetry-proof-boundary",
+        "incident-usf-225-browser-telemetry-root-cause-boundary",
+        "privacy-usf-225-browser-telemetry-redaction-boundary",
+    }
+    if expected_usf225_enterprise_refs - set(browser_telemetry_depth.get("enterpriseEvidenceRefs", [])):
+        F.add("USF-OBSERVABILITY-024", f"{BROWSER_TELEMETRY_DEPTH}.enterpriseEvidenceRefs", "USF-225 enterprise evidence refs are incomplete")
+    if "packages/proof/src/browser-telemetry-faro-proof.ts" not in source_use:
+        F.add("USF-OBSERVABILITY-024", SOURCE_USE, "USF-225 source-use row missing")
+    model_text = json.dumps(enterprise_model, sort_keys=True).lower() if isinstance(enterprise_model, dict) else ""
+    for row_id in expected_usf225_enterprise_refs:
+        if row_id.lower() not in model_text:
+            F.add("USF-OBSERVABILITY-024", ENTERPRISE_MODEL, f"USF-225 enterprise evidence row missing {row_id}")
+    for token in (
+        "sourceissue=usf-225",
+        "effectivenessstate=proven-local",
+        "browser-telemetry-faro-foundation-proof",
+        "faro-production-readiness",
+        "browser-e2e-readiness",
+        "rawmarkerleakcount=0",
+    ):
+        if token not in model_text:
+            F.add("USF-OBSERVABILITY-024", ENTERPRISE_MODEL, f"USF-225 enterprise token missing {token}")
+
+    usf225_claims = browser_telemetry_depth.get("claims", {})
+    if not isinstance(usf225_claims, dict):
+        F.add("USF-OBSERVABILITY-025", f"{BROWSER_TELEMETRY_DEPTH}.claims", "USF-225 claims must be an object")
+        usf225_claims = {}
+    for key in (
+        "boundedLocalBrowserTelemetryProofRecorded",
+        "minimalStaticBrowserHarnessCreated",
+        "faroBrowserSdkInitialized",
+        "browserAutomationExecuted",
+        "backendRootCauseCorrelationRecorded",
+        "redactionProofRecorded",
+    ):
+        if usf225_claims.get(key) is not True:
+            F.add("USF-OBSERVABILITY-021", f"{BROWSER_TELEMETRY_DEPTH}.claims.{key}", "USF-225 proof marker must be true")
+    for key in (
+        "uiReadinessClaim",
+        "reactReadinessClaim",
+        "browserE2EReadinessClaim",
+        "faroProductionReadinessClaim",
+        "liveMonitoringReadinessClaim",
+        "testReadinessClaim",
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "socReadinessClaim",
+        "iso27001CertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "fullDevReadinessClaim",
+        "fullReactParityClaim",
+        "usf133ClosureClaim",
+    ):
+        if usf225_claims.get(key) is not False:
+            F.add("USF-OBSERVABILITY-025", f"{BROWSER_TELEMETRY_DEPTH}.claims.{key}", "USF-225 readiness claim must remain false")
+    if REQUIRED_NON_CLAIMS - set(browser_telemetry_depth.get("nonClaims", [])):
+        F.add("USF-OBSERVABILITY-025", f"{BROWSER_TELEMETRY_DEPTH}.nonClaims", "USF-225 non-claims are incomplete")
+    usf225_sources = "\n".join(
+        [
+            browser_telemetry_proof,
+            browser_telemetry_note,
+            json.dumps(browser_telemetry_depth, sort_keys=True),
+        ]
+    ).lower()
+    for phrase in (
+        "ui readiness is proven",
+        "product ui readiness is proven",
+        "browser e2e readiness is proven",
+        "faro production readiness is proven",
+        "live faro readiness is proven",
+        "live monitoring readiness is proven",
+        "usf-133 closure is proven",
+        "production readiness is proven",
+        "live provider readiness is proven",
+        "full react parity is proven",
+    ):
+        if phrase in usf225_sources:
+            F.add("USF-OBSERVABILITY-025", "USF-225", f"readiness overclaim present: {phrase}")
+
 
 def apply_defect(state, defect):
     mutated = {
@@ -1084,6 +1348,7 @@ def apply_defect(state, defect):
         "depth_matrix": json.loads(json.dumps(state["depth_matrix"])),
         "service_operations_depth": json.loads(json.dumps(state["service_operations_depth"])),
         "operations_execution_depth": json.loads(json.dumps(state["operations_execution_depth"])),
+        "browser_telemetry_depth": json.loads(json.dumps(state["browser_telemetry_depth"])),
         "sentry_boundary": json.loads(json.dumps(state["sentry_boundary"])),
         "sentry_error_matrix": json.loads(json.dumps(state["sentry_error_matrix"])),
         "closure_matrix": json.loads(json.dumps(state["closure_matrix"])),
@@ -1117,6 +1382,12 @@ def apply_defect(state, defect):
                 raise AssertionError(f"old text not found in operations execution depth for defect {defect.get('id')}")
             mutated["operations_execution_depth"] = json.loads(text.replace(old, new, 1))
             mutated["files"][OPERATIONS_EXECUTION_DEPTH] = json.dumps(mutated["operations_execution_depth"])
+        elif target == "browser_telemetry_depth":
+            text = json.dumps(mutated["browser_telemetry_depth"])
+            if old not in text:
+                raise AssertionError(f"old text not found in browser telemetry depth for defect {defect.get('id')}")
+            mutated["browser_telemetry_depth"] = json.loads(text.replace(old, new, 1))
+            mutated["files"][BROWSER_TELEMETRY_DEPTH] = json.dumps(mutated["browser_telemetry_depth"])
         elif target == "sentry_boundary":
             text = json.dumps(mutated["sentry_boundary"])
             if old not in text:
@@ -1163,6 +1434,7 @@ def apply_defect(state, defect):
     mutated["depth_matrix"] = parse_json_text(mutated["files"].get(DEPTH_MATRIX, ""))
     mutated["service_operations_depth"] = parse_json_text(mutated["files"].get(SERVICE_OPERATIONS_DEPTH, ""))
     mutated["operations_execution_depth"] = parse_json_text(mutated["files"].get(OPERATIONS_EXECUTION_DEPTH, ""))
+    mutated["browser_telemetry_depth"] = parse_json_text(mutated["files"].get(BROWSER_TELEMETRY_DEPTH, ""))
     mutated["sentry_boundary"] = parse_json_text(mutated["files"].get(SENTRY_BOUNDARY, ""))
     mutated["sentry_error_matrix"] = parse_json_text(mutated["files"].get(SENTRY_ERROR_MATRIX, ""))
     mutated["closure_matrix"] = parse_json_text(mutated["files"].get(CLOSURE_MATRIX, ""))

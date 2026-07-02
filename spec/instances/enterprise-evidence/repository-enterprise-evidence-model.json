@@ -5426,6 +5426,60 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-225-browser-telemetry-faro-proof",
+      "mappedType": "source-issue-browser-telemetry-proof",
+      "controlPurpose": "Organise USF-225 browser telemetry proof evidence for a minimal static browser harness using the official Grafana Faro browser SDK and Playwright Core without creating product UI or broad browser E2E scope.",
+      "riskTreated": "Browser telemetry may be treated as covered by server-side observability or UI readiness unless a bounded browser SDK proof, redaction boundary, and non-claim boundary are recorded.",
+      "assetServiceAffected": "browser telemetry proof boundary; observability telemetry; API root-cause correlation evidence",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-225; runtimeMode=minimal-static-browser-proof; providerMode=local-test; productUiCreated=false; broadBrowserE2EReadinessClaim=false; faroProductionReadinessClaim=false; faro-production-readiness=false; browser-e2e-readiness=false",
+      "evidenceSource": "docs/architecture/browser-telemetry-faro-foundation-proof.json; packages/proof/src/browser-telemetry-faro-proof.ts; tests/packages/proof.test.ts",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry; python3 tools/validate-parity/validate-observability.py all --json",
+      "deferredReason": "Product UI, React application delivery, broad browser E2E, accessibility journeys, live Faro ingestion, live monitoring, environment promotion, and USF-133 closure remain non-claims; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-134 for UI disposition and USF-193 for environment promotion semantics.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-observability-browser-telemetry",
+      "mappedType": "proof",
+      "controlPurpose": "Govern proof command evidence posture for proof:observability:browser-telemetry and its bounded local browser telemetry execution scope.",
+      "riskTreated": "A browser telemetry proof command must not be absent, silently mapped to server-side telemetry, or treated as live monitoring or UI readiness evidence.",
+      "assetServiceAffected": "proof:observability:browser-telemetry",
+      "owner": "platform-observability-foundation",
+      "riskOwner": "platform-observability-risk-owner",
+      "controlOwner": "platform-observability-control-owner",
+      "implementationStatus": "proof-command-wired; effectivenessState=proven-local; sourceIssue=USF-225; providerMode=local-test; runtimeMode=minimal-static-browser-proof; rawMarkerLeakCount=0; faro-production-readiness=false; browser-e2e-readiness=false",
+      "evidenceSource": "package.json; Makefile; packages/proof/src/browser-telemetry-faro-proof.ts; docs/architecture/browser-telemetry-faro-foundation-proof.json",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
+      "deferredReason": "Live Faro ingestion, product UI, browser journey parity, broad browser E2E, environment promotion readiness, live-provider readiness, SOC, ISO, full dev readiness, full React parity, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=USF-193 for environment promotion semantics.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8100,6 +8154,51 @@
       ],
       "prOrMergeSha": "6225e348520523c4187e85fa771aa42f5ea31197",
       "retentionPosture": "Retain value-free proof command output in PR validation summary and committed metadata; generated client package files are temporary and removed in finally path; no raw token, endpoint, connection string, stack trace, provider payload, production data, customer data, or raw SDK error is retained."
+    },
+    {
+      "id": "evidence-usf-225-browser-telemetry-faro-proof",
+      "proofResult": "browser-telemetry-faro-foundation-proof",
+      "whatWasProven": "USF-225 proves that a transient loopback-only minimal browser surface can initialize the official Grafana Faro browser SDK, emit synthetic browser event, log, error, trace, measurement, and session evidence, correlate to a bounded backend/root-cause endpoint, redact raw tenant actor token endpoint stack and provider payload markers, and tear down browser/server resources.",
+      "whatWasNotProven": "No product UI, React application delivery, page system, component system, visual snapshot, accessibility journey, broad browser E2E, live Faro ingestion, live monitoring, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is proven.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "runtimeMode": "minimal-static-browser-proof",
+      "providerMode": "local-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#api; spec/instances/compose-service/service-catalogue.json#sentry; spec/instances/compose-service/service-catalogue.json#otel-collector",
+      "adapterProviderId": "browser-telemetry-faro-local-proof",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
+      "commandPin": "tsx packages/proof/src/browser-telemetry-faro-proof.ts",
+      "commitPin": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
+      "issueLinks": [
+        "USF-225",
+        "USF-134",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
+      "retentionPosture": "Retain value-free proof command output in PR validation summary and committed metadata. Transient browser page, HTTP server, browser context, browser process, and temporary directory are removed in finally paths. No raw token, endpoint, tenant value, actor value, stack trace, provider payload, production data, customer data, raw SDK error, or live-provider credential is retained.; faro-production-readiness=false; browser-e2e-readiness=false"
+    },
+    {
+      "id": "evidence-proof-proof-observability-browser-telemetry",
+      "proofResult": "proof:observability:browser-telemetry",
+      "whatWasProven": "Package script proof:observability:browser-telemetry is command-pinned to a bounded local browser telemetry proof that initializes Faro through a browser SDK boundary, drives local Chromium through Playwright Core, captures synthetic browser telemetry, checks backend/root-cause correlation, verifies redaction, and preserves non-claims.",
+      "whatWasNotProven": "No UI readiness, product UI, React readiness, browser E2E readiness, Faro production readiness, live monitoring readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is proven.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "runtimeMode": "minimal-static-browser-proof",
+      "providerMode": "local-test",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#api",
+      "adapterProviderId": "browser-telemetry-faro-local-proof",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
+      "commandPin": "tsx packages/proof/src/browser-telemetry-faro-proof.ts",
+      "commitPin": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
+      "issueLinks": [
+        "USF-225",
+        "USF-184",
+        "USF-192",
+        "USF-193",
+        "USF-133"
+      ],
+      "prOrMergeSha": "e607472e0ba6c0c2ea5d5cfe302a3b3d2a32103f",
+      "retentionPosture": "Retain value-free command result and validator evidence only. Browser proof data is synthetic and redacted; temp files are removed; no live telemetry endpoint, production data, customer data, or raw provider payload is retained.; faro-production-readiness=false; browser-e2e-readiness=false"
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10381,6 +10480,33 @@
       "failClosedBehaviour": "validate-api and validate-enterprise fail when USF-224 proof artefact, command wiring, execution matrix, enterprise rows, SDK governance, redaction boundary, deferred boundary, or non-claims are missing or overclaimed.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, proof command output, and value-free synthetic audit events only. Evidence artefact: docs/architecture/generated-client-external-developer-graphql-federation-execution-proof.json. Source issue USF-224. Validator command: python3 tools/validate-parity/validate-api.py all --json and python3 tools/validate-enterprise/validate-enterprise.py all --json.",
       "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-224; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; public package, deployed GraphQL, federation, external developer platform, environment readiness, and USF-133 closure remain non-claims. nonClaims=generated-sdk-readiness,generated-client-readiness,external-developer-platform-readiness,public-api-readiness,graphql-runtime-readiness,federation-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-dev-readiness,full-react-parity-readiness,usf-133-closure."
+    },
+    {
+      "id": "threat-usf-225-browser-telemetry-overclaim",
+      "targetType": "source-issue-browser-telemetry-proof",
+      "target": "browser telemetry Faro foundation proof",
+      "trustBoundary": "Transient local browser page, local Chromium, in-page Faro SDK transport, and loopback-only root-cause endpoint. No product UI, public browser route, live Faro ingestion, live monitoring backend, staging, production, or external provider boundary is proven.",
+      "tenantBoundary": "Synthetic tenant and actor markers are hashed or redacted before evidence capture. No production tenant data, customer data, user email, tenant name, token, endpoint, stack trace, provider payload, or live provider data is retained.",
+      "credentialBoundary": "Synthetic token and endpoint markers are deliberately injected and must be redacted from captured telemetry; proof output is value-free and must not expose raw credentials, endpoints, stack traces, provider payloads, tokens, or raw SDK errors.",
+      "dataClassification": "internal synthetic browser telemetry proof evidence only",
+      "abuseCases": [
+        "Server-side observability proof is incorrectly treated as browser telemetry proof",
+        "Minimal browser proof is treated as product UI readiness",
+        "Faro local SDK initialization is treated as live Faro production readiness",
+        "Playwright proof is expanded into broad browser E2E without authority",
+        "USF-225 proof is treated as USF-133 closure evidence"
+      ],
+      "failureModes": [
+        "proof command wiring is missing",
+        "Faro SDK is not initialized",
+        "browser automation is unavailable",
+        "raw markers leak into proof output",
+        "enterprise evidence refs are missing",
+        "readiness claim appears in proof docs or evidence output"
+      ],
+      "failClosedBehaviour": "validate-observability fails when USF-225 proof artefact, proof command, SDK pins, minimal UI boundary, enterprise evidence refs, redaction checks, or non-claims are missing or overclaimed.",
+      "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, proof command output, synthetic audit/log/trace/metric evidence, and browser-telemetry-faro-foundation-proof artefact only.",
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-225; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; product UI, live Faro ingestion, live monitoring, environment promotion, and USF-133 closure remain non-claims.; faro-production-readiness=false; browser-e2e-readiness=false"
     }
   ],
   "sdkDependencyGovernance": [
@@ -10847,6 +10973,38 @@
       "typescriptRuntimeCompatibility": "Package ships TypeScript declaration files and proof compiles generated client with repository TypeScript 6.0.3 under Node 24.16.0.",
       "forbiddenLayerImportCheck": "tools/validate-parity/validate-api.py rejects graphql imports outside packages/proof/src/graphql-generated-client-execution-proof.ts for USF-224; forbidden-layer imports into core, ports, capability packages, API route handlers, worker orchestration, or PDP code are not allowed.",
       "updateDeprecationOwner": "platform-api-foundation"
+    },
+    {
+      "id": "sdk-usf-225-grafana-faro-web-sdk",
+      "serviceId": "browser-telemetry",
+      "adapterId": "BrowserTelemetryFaroProofHarness",
+      "providerId": "browser-telemetry-faro-local-proof",
+      "packageName": "@grafana/faro-web-sdk",
+      "version": "2.8.2",
+      "selectionRationale": "@grafana/faro-web-sdk is the official Grafana Faro browser SDK. Version 2.8.2 is exact pinned, Apache 2.0 licensed according to npm package metadata, ships TypeScript support, and supports local browser initialization without live ingestion credentials.",
+      "officialOrDeFactoStatus": "official-grafana-faro-web-sdk",
+      "licencePosture": "Apache 2.0 package metadata inspected from npm registry and installed package metadata for USF-225.",
+      "maintenancePosture": "platform-observability-dependency-owner reviews upstream Grafana Faro releases before version changes or stronger readiness claims.",
+      "securityAdvisoryPosture": "Dependency advisories require review before live monitoring, staging, production, live-provider, SOC, ISO, enterprise readiness, or customer assurance claims; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness,usf-133-closure.",
+      "typescriptRuntimeCompatibility": "Package ships TypeScript support and browser IIFE bundle; USF-225 serves the IIFE only through the transient proof server and keeps SDK use in packages/proof/src/browser-telemetry-faro-proof.ts.",
+      "forbiddenLayerImportCheck": "tools/validate-parity/validate-observability.py rejects @grafana/faro-web-sdk usage in apps, capabilities, adapters, packages/core, and packages/ports for USF-225; SDK use is confined to the proof boundary.",
+      "updateDeprecationOwner": "platform-observability-dependency-owner"
+    },
+    {
+      "id": "sdk-usf-225-playwright-core-browser-automation",
+      "serviceId": "browser-automation",
+      "adapterId": "BrowserTelemetryFaroProofHarness",
+      "providerId": "browser-automation-local-chromium-proof",
+      "packageName": "playwright-core",
+      "version": "1.61.1",
+      "selectionRationale": "playwright-core is the maintained de-facto standard Playwright client package without bundled browser provisioning. Version 1.61.1 is exact pinned, Apache 2.0 licensed, TypeScript-compatible, and supports local Chromium automation for a proof-only browser harness.",
+      "officialOrDeFactoStatus": "de-facto-standard-browser-automation-library",
+      "licencePosture": "Apache 2.0 package metadata inspected from npm registry and installed package metadata for USF-225.",
+      "maintenancePosture": "platform-observability-dependency-owner reviews upstream Playwright releases before version changes or broader browser proof claims.",
+      "securityAdvisoryPosture": "Dependency advisories require review before browser E2E, UI readiness, staging, production, live-provider, SOC, ISO, enterprise readiness, or customer assurance claims; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness,usf-133-closure.",
+      "typescriptRuntimeCompatibility": "Proof uses proof-local TypeScript interface shims and dynamic require so Playwright DOM types do not leak into product TypeScript configuration.",
+      "forbiddenLayerImportCheck": "tools/validate-parity/validate-observability.py rejects playwright-core usage in apps, capabilities, adapters, packages/core, and packages/ports for USF-225; browser automation stays inside packages/proof/src/browser-telemetry-faro-proof.ts.",
+      "updateDeprecationOwner": "platform-observability-dependency-owner"
     }
   ],
   "observabilityEvidenceStandard": {
@@ -13565,6 +13723,43 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "access-usf-225-browser-telemetry-boundary",
+      "targetType": "source-issue-browser-telemetry-proof",
+      "target": "minimal browser telemetry proof access boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-225",
+        "accessModel=local-loopback-proof-only-no-public-browser-surface",
+        "authnAuthzBoundary=not-product-auth-no-operator-console-no-public-exposure",
+        "leastPrivilegePosture=proof-process-only",
+        "breakGlassRelevance=not-proven-by-USF-225",
+        "auditEvidence=value-free-local-proof-events-only",
+        "reviewCadence=2026-09-30-before-ui-or-live-monitoring-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-225",
+        "noPublicExposureClaim=true",
+        "uiReadinessClaim=false",
+        "browserE2EReadinessClaim=false",
+        "faro-production-readiness=false",
+        "browser-e2e-readiness=false"
+      ],
+      "evidenceSource": "docs/architecture/browser-telemetry-faro-foundation-proof.json; packages/proof/src/browser-telemetry-faro-proof.ts; USF-225",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Product UI access, browser session auth, public route exposure, operator access review, deprovisioning, live dashboard access, and break-glass flows are not proven by USF-225; owner=platform-observability-foundation; reviewDate=2026-09-30.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -16120,6 +16315,45 @@
         "iso27001-certification",
         "enterprise-production-readiness",
         "full-dev-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-225-browser-telemetry-proof-boundary",
+      "targetType": "source-issue-browser-telemetry-proof",
+      "target": "browser telemetry proof resilience boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-225",
+        "readinessChecks=local-browser-sdk-initialization-and-proof-payload-check-only",
+        "retryTimeoutBehaviour=not-proven-for-live-browser-telemetry-backend-or-production-monitoring",
+        "failClosedMode=missing-payload-missing-sdk-missing-redaction-or-leak-detection-throws-proof-failure",
+        "safeTeardown=browser-context-browser-server-temp-directory-closed-in-finally-path",
+        "structuredLogging=value-free-proof-output-only",
+        "tracingCorrelation=synthetic-trace-and-root-cause-correlation-evidence-only",
+        "metrics=synthetic-measurement-evidence-only",
+        "auditEvents=value-free-local-proof-events-only",
+        "redaction=rawMarkerLeakCount=0; tenant actor token endpoint stack provider payload redacted",
+        "backupRestorePosture=not-applicable-to-transient-browser-proof-artifacts-and-not-proven-for-provider-data",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=live-Faro-ingestion-and-monitoring-provider-DR-deferred",
+        "faro-production-readiness=false",
+        "browser-e2e-readiness=false"
+      ],
+      "evidenceSource": "docs/architecture/browser-telemetry-faro-foundation-proof.json; packages/proof/src/browser-telemetry-faro-proof.ts; USF-225",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Live telemetry retry policy, alert routing, dashboard availability, provider data backup/restore, DR, RPO, and RTO are not proven; owner=platform-observability-foundation; reviewDate=2026-09-30.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
@@ -19372,6 +19606,40 @@
         "iso27001-certification",
         "enterprise-production-readiness",
         "full-dev-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "incident-usf-225-browser-telemetry-root-cause-boundary",
+      "targetType": "source-issue-browser-telemetry-proof",
+      "target": "browser telemetry root-cause correlation evidence boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-225",
+        "incidentDetectionHook=local-proof-fail-closed-and-validator-finding-only",
+        "alertingPosture=not-proven-by-USF-225",
+        "escalationOwner=platform-observability-foundation",
+        "vulnerabilityAdvisoryReview=required-before-Faro-browser-telemetry-or-browser-automation-readiness-claim",
+        "dependencyUpdatePosture=grafana-faro-web-sdk-2.8.2-and-playwright-core-1.61.1-exact-pins-reviewed-before-readiness-claim",
+        "correctiveActionEvidence=validator-and-planted-defect-coverage-for-overclaim-boundary-loss-redaction-loss-and-SDK-boundary-loss",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-225",
+        "faro-production-readiness=false",
+        "browser-e2e-readiness=false"
+      ],
+      "evidenceSource": "docs/architecture/browser-telemetry-faro-foundation-proof.json; tools/validate-parity/validate-observability.py; packages/proof/src/browser-telemetry-faro-proof.ts",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry; python3 tools/validate-parity/validate-observability.py all --json; python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "Live alerting, on-call escalation, browser incident workflow, provider incident evidence, customer support incident evidence, vulnerability SLA evidence, supplier advisory response, production corrective action, and post-incident evidence are not proven by USF-225; owner=platform-observability-foundation; reviewDate=2026-09-30.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
@@ -23152,6 +23420,78 @@
         "iso27001-certification",
         "enterprise-production-readiness",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-225-browser-telemetry-redaction-boundary",
+      "targetType": "source-issue-browser-telemetry-proof",
+      "target": "browser telemetry synthetic data and redaction boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-225",
+        "dataOrigin=synthetic-local-browser-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-browser-telemetry-proof-evidence-only",
+        "redactionPolicy=rawMarkerLeakCount=0; no raw token endpoint stack provider payload tenant value actor value customer data or production data in evidence",
+        "retentionPurgePosture=transient-browser-page-server-browser-context-browser-process-and-temp-directory-purged-in-finally-path; committed-evidence-retained-as-repository-metadata",
+        "legalHoldRelevance=not-proven-for-product-ui-live-monitoring-or-provider-data",
+        "crossBorderDataResidencyBoundary=local-browser-proof-and-repository-evidence-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-browser-proof-and-repository-evidence-only-no-live-provider-residency-claim",
+        "faro-production-readiness=false",
+        "browser-e2e-readiness=false"
+      ],
+      "evidenceSource": "packages/proof/src/browser-telemetry-faro-proof.ts; docs/architecture/browser-telemetry-faro-foundation-proof.json; USF-225",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
+      "deferredReason": "Product UI privacy, live Faro ingestion data residency, browser user journey data minimisation, legal hold, production retention, supplier/subprocessor posture, and live provider privacy evidence are not proven; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30.; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-observability-browser-telemetry",
+      "targetType": "proof",
+      "target": "proof:observability:browser-telemetry",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-225",
+        "dataOrigin=synthetic-local-browser-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-pii-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-browser-telemetry-proof-evidence-only",
+        "redactionPolicy=rawMarkerLeakCount=0; no raw token endpoint stack provider payload tenant value actor value customer data or production data in evidence",
+        "retentionPurgePosture=transient-browser-page-server-browser-context-browser-process-and-temp-directory-purged-in-finally-path; committed-evidence-retained-as-repository-metadata",
+        "legalHoldRelevance=not-proven-for-product-ui-live-monitoring-or-provider-data",
+        "crossBorderDataResidencyBoundary=local-browser-proof-and-repository-evidence-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-browser-proof-and-repository-evidence-only-no-live-provider-residency-claim",
+        "faro-production-readiness=false",
+        "browser-e2e-readiness=false"
+      ],
+      "evidenceSource": "packages/proof/src/browser-telemetry-faro-proof.ts; docs/architecture/browser-telemetry-faro-foundation-proof.json; USF-225",
+      "validationCommand": "corepack pnpm proof:observability:browser-telemetry",
+      "deferredReason": "Product UI privacy, browser journey privacy, live Faro ingestion data residency, legal hold, production retention, supplier/subprocessor posture, and live provider privacy evidence are not proven; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-134 and USF-193; faro-production-readiness=false; browser-e2e-readiness=false",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "usf-133-closure"
       ]
     }
   ],

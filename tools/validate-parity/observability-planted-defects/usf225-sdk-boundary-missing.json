@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf225-sdk-boundary-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-023",
+  "edits": [
+    {
+      "target": "package.json",
+      "old": "\"@grafana/faro-web-sdk\": \"2.8.2\"",
+      "new": "\"@grafana/faro-web-sdk\": \"^2.8.2\""
+    }
+  ]
+}

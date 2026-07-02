@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf225-proof-marker-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-021",
+  "edits": [
+    {
+      "target": "packages/proof/src/browser-telemetry-faro-proof.ts",
+      "old": "syntheticBrowserTraceCaptured: true,\n      syntheticBrowserSessionCaptured: true",
+      "new": "syntheticBrowserTraceCaptured: false,\n      syntheticBrowserSessionCaptured: true"
+    }
+  ]
+}

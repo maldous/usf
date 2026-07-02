@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf225-enterprise-evidence-missing",
+  "expectedRuleId": "USF-OBSERVABILITY-024",
+  "edits": [
+    {
+      "target": "browser_telemetry_depth",
+      "old": "\"evidence-usf-225-browser-telemetry-faro-proof\"",
+      "new": "\"evidence-usf-225-browser-telemetry-faro-proof-missing\""
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import {
   runJobsWorkflowsProof,
   runGraphqlGeneratedClientExecutionProof,
   runImportExportBulkProof,
+  runBrowserTelemetryFaroProof,
   runObservabilityOperationsExecutionProof,
   runObservabilityTelemetryProof,
   runProviderAdaptersProof,
@@ -205,6 +206,44 @@ describe("observability/telemetry proof", () => {
       liveAlertingClaim: false,
       siemReadinessClaim: false,
       productionLiveClaim: false,
+    });
+  });
+
+  it("proves minimal Faro browser telemetry capture without UI readiness claims", async () => {
+    await expect(runBrowserTelemetryFaroProof()).resolves.toMatchObject({
+      status: "pass",
+      issueId: "USF-225",
+      runtimeMode: "minimal-static-browser-proof",
+      providerMode: "local-test",
+      browserAutomation: {
+        packageName: "playwright-core",
+        version: "1.61.1",
+      },
+      browserTelemetrySdk: {
+        packageName: "@grafana/faro-web-sdk",
+        version: "2.8.2",
+        officialOrDeFactoStatus: "official-grafana-faro-web-sdk",
+      },
+      minimalHarnessCreated: true,
+      faroInitialized: true,
+      browserAutomationProofPassed: true,
+      syntheticBrowserErrorCaptured: true,
+      syntheticBrowserEventCaptured: true,
+      syntheticBrowserTraceCaptured: true,
+      syntheticBrowserSessionCaptured: true,
+      backendRootCauseCorrelationChecked: true,
+      redactionChecked: true,
+      noProductUiClaim: true,
+      uiReadinessClaim: false,
+      reactReadinessClaim: false,
+      browserE2EReadinessClaim: false,
+      faroProductionReadinessClaim: false,
+      liveMonitoringReadinessClaim: false,
+      usf133ClosureClaim: false,
+      evidence: {
+        rawMarkerLeakCount: 0,
+        sessionObserved: true,
+      },
     });
   });
 });
