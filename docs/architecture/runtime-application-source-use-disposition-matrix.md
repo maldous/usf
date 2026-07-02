@@ -29,6 +29,7 @@ live-provider readiness, SOC readiness, or ISO/IEC 27001 certification is claime
 | `packages/proof/src/dev-smoke.ts` | new-with-rationale | Existing USF dev smoke proof and React runtime proof command lineage as evidence only | Delegates to the in-memory runtime proof so dev smoke covers API and worker paths. |
 | `packages/proof/src/index.ts` | new-with-rationale | Existing USF proof export pattern | Exports runtime proof functions for local proof reuse. |
 | `packages/proof/src/runtime-application-proof.ts` | new-with-rationale | `../react` runtime proof command and compose proof lineage as evidence only | New USF proof-only harness for API/worker in-memory and compose-boundary dev runtime proof with deterministic teardown. |
+| `packages/proof/src/composed-semantic-test-harness-proof.ts` | new-with-rationale | USF-236 test-readiness harness acceptance and the USF-235 service contract | Runs the existing composed runtime proof path against the canonical generated test Compose target, rejects in-memory service substitutes, and records bounded semantic test evidence without claiming final test readiness. |
 | `tests/apps/worker.test.ts` | new-with-rationale | Existing USF worker test and React worker proof lineage as evidence only | Verifies the worker smoke proof summary, audit evidence, and fail-closed boundaries. |
 
 ## Governance And Validator Files

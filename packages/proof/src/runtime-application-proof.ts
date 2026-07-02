@@ -5,13 +5,16 @@ import { fileURLToPath } from "node:url";
 import {
   DEV_ACTOR_ID,
   DEV_COMPOSE_BACKED_PROVIDER_MODE_LABEL,
+  DEV_COMPOSE_TARGET,
   DEV_IN_MEMORY_PROVIDER_MODE_LABEL,
   DEV_SECURITY_ACTOR_ID,
   DEV_TENANT_ID,
   MAILPIT_PROVIDER_REGISTRY_ID,
+  TEST_COMPOSE_TARGET,
   type DevProviderClass,
   type DevProviderModeLabel,
   type DevRuntimeMode,
+  type RuntimeComposeTarget,
 } from "@foundation/app-api/runtime";
 import {
   PG_SDK_PACKAGE,
@@ -60,7 +63,6 @@ import {
 
 type ProofProcess = ChildProcessByStdio<null, Readable, Readable>;
 
-const COMPOSE_TARGET = "compose/compose.dev.generated.yaml";
 const SERVICE_CATALOGUE_AUTHORITY = "spec/instances/compose-service/service-catalogue.json";
 const POSTGRES_PROOF_OTHER_TENANT_ID = "22222222-2222-4222-8222-222222222222";
 const WORKER_SUMMARY_PREFIX = "Worker proof summary: ";
@@ -103,7 +105,7 @@ interface ApiProofSummary {
   readonly identityProviderEvidence: KeycloakComposedIdentityEvidence | null;
   readonly auditEvents: number;
   readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY;
-  readonly composeTarget: typeof COMPOSE_TARGET | null;
+  readonly composeTarget: RuntimeComposeTarget | null;
   readonly deferredBoundaries: readonly string[];
 }
 
@@ -143,7 +145,7 @@ export interface RuntimeProofSummary {
   readonly composeBoundary:
     | {
         readonly started: true;
-        readonly target: typeof COMPOSE_TARGET;
+        readonly target: RuntimeComposeTarget;
         readonly projectName: string;
         readonly serviceCatalogueAuthority: typeof SERVICE_CATALOGUE_AUTHORITY;
       }
@@ -177,20 +179,32 @@ function startProcess(
   });
 }
 
-function startApiRuntime(mode: DevRuntimeMode): ProofProcess {
+function composeTargetEnv(
+  mode: DevRuntimeMode,
+  composeTarget: RuntimeComposeTarget,
+): NodeJS.ProcessEnv {
+  return mode === "dev-compose-backed" ? { USF_RUNTIME_COMPOSE_TARGET: composeTarget } : {};
+}
+
+function startApiRuntime(mode: DevRuntimeMode, composeTarget: RuntimeComposeTarget): ProofProcess {
   return startProcess("corepack", ["pnpm", "dev"], {
     ...process.env,
     HOST: "127.0.0.1",
     PORT: "0",
     USF_DEV_RUNTIME_MODE: mode,
+    ...composeTargetEnv(mode, composeTarget),
   });
 }
 
-function startWorkerRuntime(mode: DevRuntimeMode): ProofProcess {
+function startWorkerRuntime(
+  mode: DevRuntimeMode,
+  composeTarget: RuntimeComposeTarget,
+): ProofProcess {
   return startProcess("corepack", ["pnpm", "dev:work"], {
     ...process.env,
     USF_DEV_RUNTIME_MODE: mode,
     USF_WORKER_RUN_ONCE: "1",
+    ...composeTargetEnv(mode, composeTarget),
   });
 }
 
@@ -782,8 +796,11 @@ function assertNoProhibitedClaims(value: unknown): void {
   }
 }
 
-async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
-  const child = startApiRuntime(mode);
+async function runApiProof(
+  mode: DevRuntimeMode,
+  composeTarget: RuntimeComposeTarget,
+): Promise<ApiProofSummary> {
+  const child = startApiRuntime(mode, composeTarget);
   try {
     const baseUrl = await waitForApi(child);
     if (!baseUrl.startsWith("http://127.0.0.1:")) {
@@ -1041,7 +1058,7 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
       identityProviderEvidence,
       auditEvents,
       serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY,
-      composeTarget: mode === "dev-compose-backed" ? COMPOSE_TARGET : null,
+      composeTarget: mode === "dev-compose-backed" ? composeTarget : null,
       deferredBoundaries: Array.isArray(ready.body.deferredBoundaries)
         ? ready.body.deferredBoundaries.filter((item): item is string => typeof item === "string")
         : [],
@@ -1065,8 +1082,11 @@ async function runApiProof(mode: DevRuntimeMode): Promise<ApiProofSummary> {
   }
 }
 
-async function runWorkerProof(mode: DevRuntimeMode): Promise<WorkerProofSummary> {
-  const child = startWorkerRuntime(mode);
+async function runWorkerProof(
+  mode: DevRuntimeMode,
+  composeTarget: RuntimeComposeTarget,
+): Promise<WorkerProofSummary> {
+  const child = startWorkerRuntime(mode, composeTarget);
   try {
     const summary = await waitForWorker(child);
     if (summary.runtimeMode !== mode) {
@@ -1178,7 +1198,11 @@ function runCommand(command: string, args: readonly string[], timeoutMs: number)
   });
 }
 
-async function withComposeBoundary<T>(projectName: string, callback: () => Promise<T>): Promise<T> {
+async function withComposeBoundary<T>(
+  projectName: string,
+  composeTarget: RuntimeComposeTarget,
+  callback: () => Promise<T>,
+): Promise<T> {
   let proofError: unknown;
   let result: T | undefined;
   try {
@@ -1189,7 +1213,7 @@ async function withComposeBoundary<T>(projectName: string, callback: () => Promi
         "-p",
         projectName,
         "-f",
-        COMPOSE_TARGET,
+        composeTarget,
         "up",
         "-d",
         "--wait",
@@ -1207,7 +1231,7 @@ async function withComposeBoundary<T>(projectName: string, callback: () => Promi
   try {
     await runCommand(
       "docker",
-      ["compose", "-p", projectName, "-f", COMPOSE_TARGET, "down", "-v", "--remove-orphans"],
+      ["compose", "-p", projectName, "-f", composeTarget, "down", "-v", "--remove-orphans"],
       120000,
     );
   } catch (error) {
@@ -1234,9 +1258,10 @@ async function withComposeBoundary<T>(projectName: string, callback: () => Promi
 async function runModeProof(
   mode: DevRuntimeMode,
   composeProjectName: string | null = null,
+  composeTarget: RuntimeComposeTarget = DEV_COMPOSE_TARGET,
 ): Promise<RuntimeProofSummary> {
-  const api = await runApiProof(mode);
-  const worker = await runWorkerProof(mode);
+  const api = await runApiProof(mode, composeTarget);
+  const worker = await runWorkerProof(mode, composeTarget);
   const deferredBoundaries = [
     ...new Set([...api.deferredBoundaries, ...worker.deferredBoundaries]),
   ];
@@ -1274,7 +1299,7 @@ async function runModeProof(
       mode === "dev-compose-backed"
         ? {
             started: true,
-            target: COMPOSE_TARGET,
+            target: composeTarget,
             projectName: composeProjectName ?? "unknown",
             serviceCatalogueAuthority: SERVICE_CATALOGUE_AUTHORITY,
           }
@@ -1314,10 +1339,16 @@ export async function runRuntimeProofInMemory(): Promise<RuntimeProofSummary> {
 }
 
 export async function runRuntimeProofCompose(): Promise<RuntimeProofSummary> {
+  return runRuntimeProofComposeOnTarget(DEV_COMPOSE_TARGET);
+}
+
+export async function runRuntimeProofComposeOnTarget(
+  composeTarget: RuntimeComposeTarget,
+): Promise<RuntimeProofSummary> {
   const projectName = `foundation-runtime-proof-${process.pid}`;
-  return withComposeBoundary(projectName, async () => {
+  return withComposeBoundary(projectName, composeTarget, async () => {
     await preparePostgresRuntimeProofDatabase(runtimeProofDatabaseSeed());
-    return runModeProof("dev-compose-backed", projectName);
+    return runModeProof("dev-compose-backed", projectName, composeTarget);
   });
 }
 
@@ -1384,6 +1415,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     printSummary(await runRuntimeProofInMemory());
   } else if (mode === "compose" || mode === "dev-compose-backed") {
     printSummary(await runRuntimeProofCompose());
+  } else if (mode === "compose-test" || mode === "test-compose-backed") {
+    printSummary(await runRuntimeProofComposeOnTarget(TEST_COMPOSE_TARGET));
   } else if (mode === "all") {
     for (const summary of await runRuntimeProofAll()) {
       printSummary(summary);

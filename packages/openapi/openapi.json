@@ -7469,8 +7469,16 @@
           "composeTarget": {
             "anyOf": [
               {
-                "const": "compose/compose.dev.generated.yaml",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "const": "compose/compose.dev.generated.yaml",
+                    "type": "string"
+                  },
+                  {
+                    "const": "compose/compose.test.generated.yaml",
+                    "type": "string"
+                  }
+                ]
               },
               {
                 "type": "null"
@@ -7565,8 +7573,16 @@
                   "type": "string"
                 },
                 "composeTarget": {
-                  "const": "compose/compose.dev.generated.yaml",
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "const": "compose/compose.dev.generated.yaml",
+                      "type": "string"
+                    },
+                    {
+                      "const": "compose/compose.test.generated.yaml",
+                      "type": "string"
+                    }
+                  ]
                 },
                 "endpointRef": {
                   "anyOf": [
@@ -7719,8 +7735,16 @@
                   "type": "string"
                 },
                 "composeTarget": {
-                  "const": "compose/compose.dev.generated.yaml",
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "const": "compose/compose.dev.generated.yaml",
+                      "type": "string"
+                    },
+                    {
+                      "const": "compose/compose.test.generated.yaml",
+                      "type": "string"
+                    }
+                  ]
                 },
                 "endpointRef": {
                   "anyOf": [
@@ -12880,8 +12904,16 @@
           "composeTarget": {
             "anyOf": [
               {
-                "const": "compose/compose.dev.generated.yaml",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "const": "compose/compose.dev.generated.yaml",
+                    "type": "string"
+                  },
+                  {
+                    "const": "compose/compose.test.generated.yaml",
+                    "type": "string"
+                  }
+                ]
               },
               {
                 "type": "null"
@@ -12976,8 +13008,16 @@
                   "type": "string"
                 },
                 "composeTarget": {
-                  "const": "compose/compose.dev.generated.yaml",
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "const": "compose/compose.dev.generated.yaml",
+                      "type": "string"
+                    },
+                    {
+                      "const": "compose/compose.test.generated.yaml",
+                      "type": "string"
+                    }
+                  ]
                 },
                 "endpointRef": {
                   "anyOf": [
@@ -13130,8 +13170,16 @@
                   "type": "string"
                 },
                 "composeTarget": {
-                  "const": "compose/compose.dev.generated.yaml",
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "const": "compose/compose.dev.generated.yaml",
+                      "type": "string"
+                    },
+                    {
+                      "const": "compose/compose.test.generated.yaml",
+                      "type": "string"
+                    }
+                  ]
                 },
                 "endpointRef": {
                   "anyOf": [

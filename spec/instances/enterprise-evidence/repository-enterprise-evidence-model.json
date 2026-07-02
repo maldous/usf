@@ -5507,6 +5507,36 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "soa-usf-236-composed-semantic-test-harness",
+      "mappedType": "composed-semantic-test-harness",
+      "controlPurpose": "Organise USF-236 evidence for executing the supported service-backed semantic path against the canonical generated test Compose target without using in-memory service substitutes.",
+      "riskTreated": "A test-readiness semantic proof could silently inherit the dev Compose target or in-memory provider mode unless the harness records the test target, required services, proof command, provider mode, and non-claim boundary.",
+      "assetServiceAffected": "docs/architecture/composed-semantic-test-harness.json; compose/compose.test.generated.yaml; packages/proof/src/composed-semantic-test-harness-proof.ts; packages/proof/src/runtime-application-proof.ts",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-236; parentIssue=USF-234; composedSemanticHarnessDefined=true; testReadinessClaimAllowed=false; inMemoryServiceSubstituteAllowed=false; composeTarget=compose/compose.test.generated.yaml",
+      "evidenceSource": "docs/architecture/composed-semantic-test-harness.json; docs/architecture/composed-semantic-test-harness.md; packages/proof/src/composed-semantic-test-harness-proof.ts; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-236 proves the composed semantic harness only. USF-237 must prove repeated deterministic fixture lifecycle, USF-238 must finalize CI/local command gates, and USF-234 must perform final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-237,USF-238,USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8250,6 +8280,28 @@
       ],
       "prOrMergeSha": "580ad4a5d165656280d186e89fbe94a39e3bf771",
       "retentionPosture": "Retain value-free repository metadata and validator output. No real tenant data, real secrets, private local state, raw endpoints, connection strings, or production data are retained."
+    },
+    {
+      "id": "evidence-usf-236-composed-semantic-test-harness",
+      "proofResult": "composed-semantic-test-harness-proof",
+      "whatWasProven": "USF-236 defines and executes a composed semantic test harness command that starts the canonical generated test Compose target, runs the API and worker service-backed semantic path, requires local-composed-real-service provider mode, rejects in-memory provider substitutes, checks fail-closed tenant and authorization paths, captures audit evidence, and records composed provider evidence.",
+      "whatWasNotProven": "USF-236 does not prove final test readiness, repeated deterministic fixture lifecycle, final CI/local command gate, Sonar scope changes, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "docs/architecture/test-environment-service-contract.json#composed-runtime-provider-proof",
+      "adapterProviderId": "postgres,keycloak,nats,temporal,minio,openbao,mailpit",
+      "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "package.json#scripts.test-readiness:semantic",
+      "commitPin": "3501bf84279e155d5c271b49d1f4dc174b8c9203",
+      "issueLinks": [
+        "USF-236",
+        "USF-235",
+        "USF-237",
+        "USF-238",
+        "USF-234"
+      ],
+      "prOrMergeSha": "3501bf84279e155d5c271b49d1f4dc174b8c9203",
+      "retentionPosture": "Retain value-free proof metadata and validator output. Runtime data is synthetic only and removed by Compose teardown; no real tenant data, real secrets, private local state, raw endpoints, connection strings, tokens, stack traces, provider payloads, or production data are retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10584,6 +10636,31 @@
       "failClosedBehaviour": "tools/validate-test-readiness/validate-test-readiness.py fails when the service contract is missing, incomplete, stale, overclaimed, or not wired into repo validation.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, PR validation summaries, and Linear reconciliation comments only.",
       "residualRisk": "effectivenessState=defined-only; sourceIssue=USF-235; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test readiness remains blocked on USF-236, USF-237, USF-238, and USF-234."
+    },
+    {
+      "id": "threat-usf-236-composed-semantic-test-harness",
+      "targetType": "composed-semantic-test-harness",
+      "target": "USF-236 composed semantic test harness",
+      "trustBoundary": "Local generated test Compose target, loopback-bound composed services, API and worker proof processes, synthetic tenant and actor data, and repository validators.",
+      "tenantBoundary": "Synthetic tenant context only. Tenant mismatch and cross-tenant worker read paths must fail closed before evidence can satisfy USF-236.",
+      "credentialBoundary": "Only generated local Compose placeholder credentials are allowed. Proof and validator output must not expose raw secrets, tokens, endpoints, connection strings, stack traces, raw SDK errors, or provider payloads.",
+      "dataClassification": "internal synthetic test-readiness proof metadata",
+      "abuseCases": [
+        "The semantic harness silently runs against compose/compose.dev.generated.yaml",
+        "A service-backed test path falls back to dev in-memory provider mode",
+        "The proof omits fail-closed tenant or authorization checks",
+        "The harness proof is treated as final test readiness before USF-237, USF-238, and USF-234 complete"
+      ],
+      "failureModes": [
+        "test Compose target not started",
+        "API or worker reports dev in-memory provider mode",
+        "required provider evidence is missing",
+        "audit evidence is absent",
+        "teardown fails or leaves composed resources behind"
+      ],
+      "failClosedBehaviour": "The proof throws on wrong Compose target, in-memory provider mode, deferred provider boundary, missing composed provider evidence, missing audit evidence, or fail-closed path gaps. The validator fails missing harness metadata, command wiring, service coverage, enterprise refs, or overclaims.",
+      "monitoringAuditEvidence": "Value-free proof summary, runtime audit event counts, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
+      "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-236; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; deterministic repeated fixture lifecycle remains owned by USF-237 and final gate remains owned by USF-234."
     }
   ],
   "sdkDependencyGovernance": [
@@ -13872,6 +13949,44 @@
         "full-react-parity-readiness",
         "usf-133-closure"
       ]
+    },
+    {
+      "id": "access-usf-236-composed-semantic-test-harness",
+      "targetType": "composed-semantic-test-harness",
+      "target": "USF-236 composed semantic test harness access boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-236",
+        "accessModel=local-loopback-generated-test-compose-only",
+        "authnAuthzBoundary=runtime-tenant-context-and-job-permission-paths-must-fail-closed",
+        "leastPrivilegePosture=synthetic-developer-or-agent-local-test-context-only",
+        "breakGlassRelevance=not-proven-by-USF-236",
+        "auditEvidence=API-and-worker-audit-event-counts-required",
+        "reviewCadence=2026-09-30-before-final-test-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-236",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "packages/proof/src/composed-semantic-test-harness-proof.ts; docs/architecture/composed-semantic-test-harness.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-238 owns final CI/local command gate and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -15668,7 +15783,7 @@
         "backupRequirement=no-backup-requirement-claimed-for-temporary-synthetic-proof-data",
         "restoreProofRequirement=no-restore-readiness-claimed-temporary-project-deletion-proof-checked",
         "rpoRtoTarget=no-rpo-rto-target-explicit-non-claim-for-environment-and-production-readiness",
-      "corruptionFailureScenario=sonarqube-startup-scanner-quality-gate-zero-unresolved-zero-hotspot-cleanup-or-unavailable-endpoint-failure-must-fail-closed",
+        "corruptionFailureScenario=sonarqube-startup-scanner-quality-gate-zero-unresolved-zero-hotspot-cleanup-or-unavailable-endpoint-failure-must-fail-closed",
         "cleanupTeardownProof=temporary-project-deletion-credential-revocation-unavailable-provider-denial-compose-down-volumes-proof-checked",
         "deferredDrBoundary=backup-restore-dr-production-retention-and-migration-rollback-outside-USF-204"
       ],
@@ -16506,6 +16621,46 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-236-composed-semantic-test-harness",
+      "targetType": "composed-semantic-test-harness",
+      "target": "USF-236 composed semantic test harness resilience boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-236",
+        "readinessChecks=docker-compose-wait-plus-adapter-round-trip-proof",
+        "retryTimeoutBehaviour=bounded-compose-wait-timeout-and-adapter-readiness-retry-policies-in-existing-adapters",
+        "failClosedMode=proof-throws-on-unready-wrong-target-in-memory-provider-deferred-boundary-or-missing-evidence",
+        "safeTeardown=Compose-down-volume-removal-in-finally-equivalent-runtime-proof-boundary",
+        "structuredLogging=value-free-proof-output-only",
+        "tracingCorrelation=provider-evidence-correlation-fields-retained-where-existing-adapters-provide-them",
+        "metrics=adapter-evidence-metric-fields-retained-where-existing-adapters-provide-them",
+        "auditEvents=API-and-worker-audit-event-counts-required",
+        "redaction=no-real-tenant-data-real-secrets-raw-endpoints-connection-strings-tokens-stack-traces-or-provider-payloads",
+        "backupRestorePosture=not-proven-by-USF-236",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=backup-restore-DR-and-repeated-fixture-determinism-remain-outside-USF-236"
+      ],
+      "evidenceSource": "packages/proof/src/runtime-application-proof.ts; packages/proof/src/composed-semantic-test-harness-proof.ts; docs/architecture/composed-semantic-test-harness.json",
+      "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-237 owns repeated deterministic fixture lifecycle and USF-238 owns final command gate; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
       ]
     }
   ],
@@ -19000,7 +19155,7 @@
       "targetType": "source-issue-sonarqube-composed-proof",
       "target": "sonarqube",
       "posture": [
-      "incidentDetectionHook=local-proof-detects-scanner-quality-gate-zero-unresolved-zero-hotspot-cleanup-and-unavailable-provider-failures-through-fail-closed-assertions",
+        "incidentDetectionHook=local-proof-detects-scanner-quality-gate-zero-unresolved-zero-hotspot-cleanup-and-unavailable-provider-failures-through-fail-closed-assertions",
         "alertingPosture=no-production-alerting-or-incident-readiness-claim",
         "escalationOwner=platform-assurance-foundation",
         "vulnerabilityAdvisoryReview=sonar-scan-and-sonarqube-image-advisory-review-required-before-stronger-readiness-or-promotion-claims",
@@ -19824,6 +19979,41 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
+      ]
+    },
+    {
+      "id": "incident-usf-236-composed-semantic-test-harness",
+      "targetType": "composed-semantic-test-harness",
+      "target": "USF-236 composed semantic test harness incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-236",
+        "incidentDetectionHook=proof-command-failure-validator-finding-and-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-236",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-SDK-or-provider-dependency-added-by-USF-236",
+        "dependencyUpdatePosture=existing-exact-pinned-provider-SDKs-reused-through-adapter-boundaries",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-harness-gaps-and-overclaims",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-236"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects/; packages/proof/src/composed-semantic-test-harness-proof.ts",
+      "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-238 owns final CI/local diagnostic gate and USF-234 owns final acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
       ]
     }
   ],
@@ -22654,7 +22844,7 @@
       "targetType": "source-issue-sonarqube-composed-proof",
       "target": "sonarqube",
       "posture": [
-      "dataOrigin=synthetic-only-typescript-proof-source-no-production-derived-data-supported-zero-issue-scope",
+        "dataOrigin=synthetic-only-typescript-proof-source-no-production-derived-data-supported-zero-issue-scope",
         "piiPosture=no-pii-intended-or-retained-value-free-hashes-only",
         "dataClassification=synthetic-confidential",
         "redactionPolicy=suppress-scanner-stdout-stderr-proof-output-uses-endpoint-refs-hashes-buckets-booleans-safe-reason-codes-only",
@@ -23708,6 +23898,43 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
+      ]
+    },
+    {
+      "id": "privacy-usf-236-composed-semantic-test-harness",
+      "targetType": "composed-semantic-test-harness",
+      "target": "USF-236 composed semantic test harness synthetic data boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-236",
+        "dataOrigin=synthetic-local-test-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-proof-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data-in-proof-evidence",
+        "retentionPurgePosture=committed-value-free-proof-metadata-retained-in-repository-runtime-fixtures-cleaned-by-compose-teardown",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/composed-semantic-test-harness.json; packages/proof/src/composed-semantic-test-harness-proof.ts; USF-236",
+      "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-237 owns repeated fixture purge/reset proof and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-237.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
       ]
     }
   ],
