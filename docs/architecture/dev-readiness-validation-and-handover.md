@@ -36,11 +36,12 @@ From a clean environment:
 ```bash
 git clone https://github.com/maldous/usf.git
 cd usf
-corepack enable
 make verify
 ```
 
 `make verify` depends on `make install`, which runs the frozen pnpm install before executing the full local proof and validation gate. It is the supported one-command install, setup, and verification path for USF-226.
+
+Do not require a privileged global pnpm shim for the handover path. `make verify` invokes `corepack pnpm` directly. Running `corepack enable` is optional for developers who want a global pnpm shim and whose workstation permits creating it.
 
 If you want to separate install from proof while debugging, run:
 

@@ -38,7 +38,6 @@
     "freshCloneSteps": [
       "git clone https://github.com/maldous/usf.git",
       "cd usf",
-      "corepack enable",
       "make verify"
     ],
     "oneCommandInstallSetupVerify": "make verify",
@@ -191,6 +190,12 @@
       "failure": "USF-RUNTIME-016 initially expected the old Keycloak client exact version after the audit fix",
       "fix": "Updated runtime validator and evidence metadata to require @keycloak/keycloak-admin-client 26.5.6",
       "result": "Final make verify passed"
+    },
+    {
+      "command": "corepack enable",
+      "failure": "Fresh-clone trial failed before repository validation because the host disallowed creating a global pnpm shim under /usr/bin",
+      "fix": "Removed corepack enable from the required fresh-clone handover path because make verify invokes corepack pnpm directly",
+      "result": "Fresh-clone proof rerun is pending against the corrected documented path"
     }
   ],
   "freshCloneEvidence": {
