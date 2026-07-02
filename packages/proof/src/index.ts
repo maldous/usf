@@ -12,6 +12,7 @@ export { runApiContractsProof } from "./api-contracts-proof.ts";
 export { runGraphqlGeneratedClientExecutionProof } from "./graphql-generated-client-execution-proof.ts";
 export { runProviderAdaptersProof } from "./provider-adapters-proof.ts";
 export { runObservabilityTelemetryProof } from "./observability-telemetry-proof.ts";
+export { runBrowserTelemetryFaroProof } from "./browser-telemetry-faro-proof.ts";
 export { runObservabilityOperationsExecutionProof } from "./observability-operations-execution-proof.ts";
 export { runSentryAcceptedProof } from "./sentry-sdk-envelope-proof.ts";
 export { runRateLimitsAbuseControlsProof } from "./rate-limits-abuse-controls-proof.ts";

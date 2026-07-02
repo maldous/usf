@@ -1,0 +1,11 @@
+{
+  "id": "observability.usf225-readiness-overclaim",
+  "expectedRuleId": "USF-OBSERVABILITY-025",
+  "edits": [
+    {
+      "target": "browser_telemetry_depth",
+      "old": "\"faroProductionReadinessClaim\": false",
+      "new": "\"faroProductionReadinessClaim\": true"
+    }
+  ]
+}

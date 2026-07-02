@@ -216,10 +216,10 @@
       ],
       "evidence_grade": "B",
       "react_evidence_summary": "OTEL/Prometheus/Loki/Tempo/Grafana/Sentry lineage",
-      "readiness_impact": "USF-159 adds bounded local observability operations proof depth. USF-218 records current observability service, alerting, dashboard, incident workflow, retention purge, SLI/SLO, cross-tenant aggregate, and live monitoring disposition evidence and defers future execution proof to USF-222. No live monitoring, dashboard, alerting, incident-response, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure claim is made.",
-      "tracking_carrier_or_recommendation": "USF-158/USF-159 plus USF-218 disposition evidence and USF-222 future execution follow-up",
-      "usf_evidence_summary": "USF observability proof, observability operations enterprise proof-depth matrix, USF-218 observability service operations disposition gate, validate-observability USF-OBSERVABILITY-013 through USF-OBSERVABILITY-018, and explicit live/deep operations non-claims",
-      "usf_status": "migrated"
+      "readiness_impact": "USF-159 adds bounded local observability operations proof depth. USF-218 records current observability service, alerting, dashboard, incident workflow, retention purge, SLI/SLO, cross-tenant aggregate, and live monitoring disposition evidence. USF-222 proves bounded local alert/dashboard/incident operations execution. USF-225 proves a minimal Faro-style browser telemetry capture harness with official Grafana Faro browser SDK and Playwright Core, synthetic browser event/log/error/trace/measurement/session evidence, backend/root-cause correlation, redaction, and no UI/live monitoring readiness claim. No product UI, broad browser E2E, live monitoring, dashboard, alerting, incident-response, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure claim is made.",
+      "tracking_carrier_or_recommendation": "USF-158/USF-159 plus USF-218, USF-222, and USF-225 bounded observability/browser telemetry evidence; USF-193 remains owner for environment promotion semantics.",
+      "usf_evidence_summary": "USF observability proof, observability operations enterprise proof-depth matrix, USF-218 disposition gate, USF-222 execution proof, USF-225 browser telemetry Faro foundation proof, validate-observability USF-OBSERVABILITY-013 through USF-OBSERVABILITY-025, enterprise evidence rows, and explicit live/deep operations/UI non-claims.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
     },
     {
       "blocking_level": "none",
@@ -535,9 +535,9 @@
       ],
       "evidence_grade": "C",
       "react_evidence_summary": "react-app and ui-design-system lineage",
-      "readiness_impact": "UI/UX is future non-foundation scope.",
-      "tracking_carrier_or_recommendation": "USF-134",
-      "usf_evidence_summary": "USF-134 future UI",
+      "readiness_impact": "UI/UX remains future non-foundation scope. USF-225 adds only the absolute minimum transient browser telemetry harness needed for Faro-style browser telemetry proof; it does not create product UI, React application delivery, page/component architecture, visual snapshots, accessibility journeys, broad browser E2E, or user journey parity.",
+      "tracking_carrier_or_recommendation": "USF-134 remains a disposition record for future UI/UX context; USF-225 covers only bounded browser telemetry proof and does not reopen UI backlog.",
+      "usf_evidence_summary": "USF-225 browser telemetry proof artefact and validator coverage record browser telemetry evidence without UI readiness or React parity claims.",
       "usf_status": "not-applicable"
     },
     {
@@ -639,10 +639,10 @@
   "run_id": "20260629T053504Z-a285187",
   "status": "review-draft",
   "status_counts": {
-    "bounded-local-proof-and-reclassified-depth": 4,
+    "bounded-local-proof-and-reclassified-depth": 5,
     "bounded-sdk-envelope-proof": 1,
     "deferred-with-owner": 5,
-    "migrated": 7,
+    "migrated": 6,
     "not-applicable": 1,
     "partial": 7,
     "profile-gated-bounded-proof": 6

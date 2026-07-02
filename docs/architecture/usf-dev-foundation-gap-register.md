@@ -241,3 +241,26 @@ USF-ENTERPRISE-011 and assurance overclaim prevention with USF-ENTERPRISE-012. P
 `008-assurance-disposition-missing.json` and
 `009-assurance-certification-overclaim.json` prove the validator catches hidden assurance gaps
 and certification overclaims.
+
+## USF-225 Browser Telemetry Proof Status
+
+USF-225 adds `docs/architecture/browser-telemetry-faro-foundation-proof.json` as the bounded
+browser telemetry evidence gate. The proof command
+`corepack pnpm proof:observability:browser-telemetry` starts a transient loopback-only static
+browser page, initializes the official Grafana Faro browser SDK, drives local Chromium with
+Playwright Core, captures synthetic browser event, log, error, trace, measurement, and session
+evidence, checks bounded backend/root-cause correlation, verifies redaction of tenant, actor,
+token, endpoint, stack, and provider payload markers, and tears down browser/server resources.
+
+This is not product UI, React application delivery, page/component architecture, visual snapshot
+coverage, accessibility journey coverage, broad Playwright/browser E2E, live Faro ingestion, live
+monitoring provider readiness, staging readiness, production readiness, SOC readiness, ISO/IEC
+27001 certification, full dev readiness, full React parity, enterprise production readiness, or
+USF-133 closure evidence.
+
+USF-225 appends enterprise evidence rows for SoA support, command-pinned evidence, threat/abuse
+posture, SDK/dependency governance for `@grafana/faro-web-sdk` and `playwright-core`, access
+boundary, resilience/teardown posture, incident/root-cause evidence boundary, privacy/redaction
+boundary, and explicit non-claims. Product UI scope remains disposition context under USF-134.
+Environment promotion and live-monitoring readiness remain outside USF-225 and require separate
+merged evidence before any stronger claim.
