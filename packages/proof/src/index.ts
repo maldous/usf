@@ -7,6 +7,7 @@ export {
   runRuntimeProofInMemory,
 } from "./runtime-application-proof.ts";
 export { runComposedSemanticTestHarnessProof } from "./composed-semantic-test-harness-proof.ts";
+export { runDeterministicTestFixtureLifecycleProof } from "./deterministic-test-fixture-lifecycle-proof.ts";
 export { runAuthIdentityProof } from "./auth-identity-proof.ts";
 export { runJobsWorkflowsProof } from "./jobs-workflows-proof.ts";
 export { runNotificationsMessagingProof } from "./notifications-messaging-proof.ts";

@@ -19,6 +19,7 @@
     "enterprise:validate": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
     "test-readiness:validate": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
     "test-readiness:semantic": "tsx packages/proof/src/composed-semantic-test-harness-proof.ts",
+    "test-readiness:fixtures": "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts",
     "format:check": "prettier --check \"{apps,capabilities,adapters,packages,tests}/**/*.{ts,json,yaml,yml}\" package.json pnpm-workspace.yaml tsconfig.json tsconfig.base.json eslint.config.js vitest.config.ts .prettierrc.json docs/architecture/bootstrap-start.json",
     "format:write": "prettier --write \"{apps,capabilities,adapters,packages,tests}/**/*.{ts,json,yaml,yml}\" package.json pnpm-workspace.yaml tsconfig.json tsconfig.base.json eslint.config.js vitest.config.ts .prettierrc.json docs/architecture/bootstrap-start.json",
     "lint": "eslint .",

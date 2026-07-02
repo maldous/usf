@@ -1,0 +1,93 @@
+{
+  "id": "deterministic-test-fixture-lifecycle",
+  "title": "Deterministic Test Fixture Lifecycle",
+  "issueId": "USF-237",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": ["USF-235", "USF-236"],
+  "lifecycleState": "active-test-readiness-proof",
+  "testReadinessClaimAllowed": false,
+  "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+  "testEnvironmentContract": "docs/architecture/test-environment-service-contract.json",
+  "composedSemanticHarness": "docs/architecture/composed-semantic-test-harness.json",
+  "composeTarget": "compose/compose.test.generated.yaml",
+  "proofCommand": "corepack pnpm test-readiness:fixtures",
+  "repeatedHarnessCommand": "corepack pnpm test-readiness:semantic",
+  "runtimeMode": "dev-compose-backed",
+  "providerMode": "local-composed-real-service",
+  "inMemoryServiceSubstituteAllowed": false,
+  "runCount": 2,
+  "fixtureLifecycle": {
+    "seed": "Synthetic tenant, actor, job, provider, object, secret, and notification fixtures only.",
+    "reset": "Each run starts the canonical generated test Compose target after the prior run completed Compose down with volume removal.",
+    "cleanup": "Runtime state, containers, networks, volumes, proof-owned records, temporary files, and local credentials are removed between runs.",
+    "teardown": "The lifecycle proof checks the Compose project after every run and fails if containers remain.",
+    "determinism": "The lifecycle proof compares stable semantic fingerprints across two sequential composed harness runs.",
+    "orderIndependence": "No evidence is accepted merely because a run executes after another run; stable fingerprints and cleanup checks are required.",
+    "failureDiagnosis": "Failures identify whether seed, reset, cleanup, teardown, provider mode, Compose target, audit evidence, or stable fingerprint checks failed.",
+    "realDataBoundary": "No real tenant data, real user data, real secrets, private local state, live provider credentials, raw endpoints, tokens, connection strings, stack traces, raw SDK errors, provider payloads, or production data are used or retained."
+  },
+  "repeatabilityEvidence": {
+    "firstRunRequired": true,
+    "secondRunRequired": true,
+    "stableFingerprintFields": [
+      "composeTarget",
+      "providerMode",
+      "requiredServiceIds",
+      "apiTenantAcceptedStatus",
+      "apiTenantMismatchStatus",
+      "apiAuthorizationFailureStatus",
+      "apiComposedProviderBindingsActive",
+      "workerJobStatus",
+      "workerTenantBoundaryDenied",
+      "workerAuthorizationDenied",
+      "workerComposedProviderEvidenceCount",
+      "apiAuditEvidencePresent",
+      "workerAuditEvidencePresent",
+      "deferredBoundaryCount"
+    ],
+    "stableFingerprintMatchedRequired": true,
+    "composeProjectCleanupCheckedAfterEachRun": true,
+    "repeatedRunDeterministicRequired": true
+  },
+  "requiredServiceIds": [
+    "postgres",
+    "keycloak-db",
+    "keycloak",
+    "nats",
+    "temporal",
+    "minio",
+    "openbao",
+    "mailpit"
+  ],
+  "validationCommands": [
+    "corepack pnpm test-readiness:fixtures",
+    "corepack pnpm test-readiness:semantic",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+  ],
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": ["soa-usf-237-deterministic-test-fixture-lifecycle"],
+    "evidenceRegister": ["evidence-usf-237-deterministic-test-fixture-lifecycle"],
+    "threatModelAbuseCaseRegister": ["threat-usf-237-deterministic-test-fixture-lifecycle"],
+    "accessReviewPrivilegedOperationPosture": ["access-usf-237-deterministic-test-fixture-lifecycle"],
+    "backupRestoreResiliencePosture": ["resilience-usf-237-deterministic-test-fixture-lifecycle"],
+    "incidentVulnerabilityManagementEvidence": ["incident-usf-237-deterministic-test-fixture-lifecycle"],
+    "privacyDataMinimisationPosture": ["privacy-usf-237-deterministic-test-fixture-lifecycle"]
+  },
+  "allowedClaims": ["bounded-deterministic-fixture-lifecycle-proof"],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ],
+  "followUpIssueIds": ["USF-238", "USF-234"]
+}

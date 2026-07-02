@@ -8,6 +8,9 @@ The machine-readable authority for this harness is `docs/architecture/composed-s
 
 The proof command is `corepack pnpm test-readiness:semantic`.
 
+USF-237 adds the repeatable fixture lifecycle proof command
+`corepack pnpm test-readiness:fixtures`.
+
 The command executes the existing API and worker runtime proof path with the explicit test Compose target `compose/compose.test.generated.yaml`. It requires the compose-backed provider mode `local-composed-real-service`, forbids in-memory service substitutes, and checks:
 
 - API health, readiness, and OpenAPI route exposure.
@@ -17,7 +20,10 @@ The command executes the existing API and worker runtime proof path with the exp
 - Composed provider evidence for Postgres, Keycloak, NATS, Temporal, MinIO, OpenBao, and Mailpit.
 - Teardown through the proof harness.
 
-USF-237 owns repeated deterministic fixture lifecycle proof. USF-238 owns the final current-state test command surface and CI/local gate. USF-234 remains the final acceptance gate.
+USF-237 records repeated deterministic fixture lifecycle evidence in
+`docs/architecture/deterministic-test-fixture-lifecycle.json`. USF-238 owns the
+final current-state test command surface and CI/local gate. USF-234 remains the
+final acceptance gate.
 
 ## Non-Claims
 
