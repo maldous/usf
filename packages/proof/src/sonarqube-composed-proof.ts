@@ -45,6 +45,9 @@ interface SonarQubeComposedProofResult {
   readonly webApiBoundary: typeof SONARQUBE_WEB_API_BOUNDARY;
   readonly endpointRef: typeof SONARQUBE_ENDPOINT_REF;
   readonly sourceUse: "official-sonarsource-npm-scanner";
+  readonly zeroIssueAssuranceIssueId: "USF-233";
+  readonly supportedScanScope: "local-synthetic-typescript-project";
+  readonly zeroOpenIssueRequirement: "quality-gate-ok-and-zero-unresolved-issues-and-zero-security-hotspots";
   readonly evidence: SonarQubeComposedQualityGateEvidence;
   readonly unavailableEvidence: SonarQubeComposedQualityGateEvidence;
   readonly providerUnavailableChecked: true;
@@ -314,7 +317,29 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
     "SonarQube quality gate did not pass for synthetic proof",
   );
   assert(evidence.unresolvedIssueHandlingChecked, "SonarQube unresolved issue query missing");
+  assert(
+    evidence.unresolvedIssueCountBucket === "zero",
+    "SonarQube unresolved issue count was not zero for supported synthetic scan scope",
+  );
   assert(evidence.securityHotspotTreatmentChecked, "SonarQube security hotspot query missing");
+  assert(
+    evidence.securityHotspotCountBucket === "zero",
+    "SonarQube security hotspot count was not zero for supported synthetic scan scope",
+  );
+  assert(evidence.zeroOpenIssueQualityGateChecked, "SonarQube zero-open-issue gate missing");
+  assert(evidence.zeroOpenIssueRequirementEnforced, "SonarQube zero-open-issue gate not enforced");
+  assert(
+    evidence.zeroOpenIssueScope === "supported-local-synthetic-scan-scope",
+    "SonarQube zero-open-issue scope mismatch",
+  );
+  assert(
+    evidence.qualityGatePolicyAdministrationClaim === false,
+    "SonarQube policy administration was overclaimed",
+  );
+  assert(
+    evidence.vulnerabilityClearanceClaim === false,
+    "SonarQube vulnerability clearance was overclaimed",
+  );
   assert(evidence.operatorConsoleAccessChecked, "SonarQube operator access validation missing");
   assert(evidence.projectDeletionChecked, "SonarQube project cleanup missing");
   assert(evidence.credentialRevocationChecked, "SonarQube credential revocation missing");
@@ -346,6 +371,10 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
     webApiBoundary: SONARQUBE_WEB_API_BOUNDARY,
     endpointRef: SONARQUBE_ENDPOINT_REF,
     sourceUse: "official-sonarsource-npm-scanner",
+    zeroIssueAssuranceIssueId: "USF-233",
+    supportedScanScope: "local-synthetic-typescript-project",
+    zeroOpenIssueRequirement:
+      "quality-gate-ok-and-zero-unresolved-issues-and-zero-security-hotspots",
     evidence,
     unavailableEvidence,
     providerUnavailableChecked: true,
@@ -356,6 +385,7 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
       "SonarQube readiness used bounded Web API retry inside the adapter boundary",
       "official SonarSource npm scanner submitted a synthetic TypeScript project",
       "quality-gate result was read back from the local SonarQube service",
+      "zero-open-issue gate required quality-gate OK plus zero unresolved issues and zero security hotspots for the supported synthetic scan scope",
       "unresolved issue and security hotspot query paths were exercised without claiming vulnerability clearance",
       "operator access was checked through authenticated local SonarQube API without UI clickthrough claim",
       "temporary credential was revoked and temporary project was deleted",

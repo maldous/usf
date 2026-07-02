@@ -34,6 +34,7 @@ make setup
 make validate-coverage
 make validate-assurance
 make validate-evidence
+make sonar-zero-issue-proof
 corepack pnpm dev:smoke
 corepack pnpm runtime:proof
 corepack pnpm proof:observability:browser-telemetry

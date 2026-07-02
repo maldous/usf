@@ -2,6 +2,7 @@
   "id": "usf-195-sonarqube-service-semantic-proof-boundary",
   "title": "USF-195/USF-204 SonarQube Service Semantic Proof Boundary",
   "sourceIssue": "USF-204",
+  "zeroIssueAssuranceIssue": "USF-233",
   "followUpIssue": "USF-169",
   "sourceDispositionIssue": "USF-171",
   "laneIssue": "USF-187",
@@ -13,6 +14,7 @@
   "closureMatrix": "docs/architecture/compose-service-disposition-closure-matrix.json",
   "staticAnalysisDispositionMatrix": "docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+  "zeroIssueAssurance": "docs/architecture/sonarqube-zero-issue-quality-gate-assurance.json",
   "validationCommand": "corepack pnpm proof:assurance:sonarqube",
   "serviceIds": ["sonarqube", "sonar-postgres", "sonar-oidc-plugin"],
   "issueLinks": [
@@ -24,7 +26,8 @@
     "USF-192",
     "USF-133",
     "USF-169",
-    "USF-193"
+    "USF-193",
+    "USF-233"
   ],
   "reclassification": {
     "from": "requires-human-decision",
@@ -65,9 +68,17 @@
   },
   "qualityGateBoundary": {
     "scopeStatus": "profile-gated-bounded-proof",
+    "zeroIssueAssuranceIssue": "USF-233",
+    "supportedScanScope": "local-synthetic-typescript-project",
+    "zeroIssueRequirementStatus": "enforced-by-proof-for-supported-local-synthetic-scan-scope",
+    "zeroIssueRequirement": "quality-gate-status-OK-and-zero-unresolved-issues-and-zero-security-hotspots",
     "unresolvedIssueHandlingStatus": "query-path-proven-zero-open-for-synthetic-project",
     "exceptionHandlingStatus": "quality-gate-fail-closed-readback-proven-policy-administration-deferred",
     "securityHotspotTreatmentStatus": "query-path-proven-zero-hotspots-human-review-deferred",
+    "qualityGatePolicyAdministrationClaim": false,
+    "vulnerabilityClearanceClaim": false,
+    "repositoryWideZeroIssueReadinessClaim": false,
+    "exclusionsJustification": "The zero-open-issue gate applies only to the local synthetic TypeScript scan scope executed by proof:assurance:sonarqube. Policy administration, human hotspot review, live-provider evidence, environment promotion, and repository-wide historical issue lifecycle remain outside this claim.",
     "owner": "platform-assurance-foundation",
     "riskOwner": "platform-assurance-risk-owner",
     "controlOwner": "platform-assurance-control-owner",
@@ -114,6 +125,7 @@
   "readinessClaimsAllowed": [
     "sonarqube-bounded-local-compose-proof-recorded",
     "sonarqube-synthetic-scan-proof-recorded",
+    "sonarqube-supported-local-synthetic-zero-open-issue-gate-recorded",
     "local-deterministic-verification-non-equivalence-recorded"
   ],
   "readinessClaimsProhibited": [
@@ -149,6 +161,7 @@
   "predecessorIssue": "USF-195",
   "composedProof": {
     "issue": "USF-204",
+    "zeroIssueAssuranceIssue": "USF-233",
     "owner": "platform-assurance-foundation",
     "riskOwner": "platform-assurance-risk-owner",
     "controlOwner": "platform-assurance-control-owner",
@@ -166,6 +179,12 @@
     "qualityGateProof": "quality gate status readback returns OK for the synthetic project",
     "unresolvedIssueHandlingProof": "unresolved issue query path exercised and value-free count bucket recorded",
     "securityHotspotTreatmentProof": "security hotspot query path exercised and value-free count bucket recorded; human review workflow remains deferred",
+    "zeroIssueGateProof": "proof fails unless quality gate status is OK, unresolved issue count bucket is zero, and security hotspot count bucket is zero for the supported local synthetic scan scope",
+    "zeroIssueGateScope": "local-synthetic-typescript-project",
+    "zeroIssueRequirement": "quality-gate-ok-and-zero-unresolved-issues-and-zero-security-hotspots",
+    "zeroIssueRequirementEnforced": true,
+    "qualityGatePolicyAdministrationClaim": false,
+    "vulnerabilityClearanceClaim": false,
     "operatorAccessProof": "authenticated local API validation proves operator credential boundary; UI clickthrough is not claimed",
     "retentionCleanupProof": "temporary project deletion and temporary credential revocation are checked",
     "redactionProof": "scanner stdout and stderr are suppressed; proof output contains endpoint refs and hashes only",

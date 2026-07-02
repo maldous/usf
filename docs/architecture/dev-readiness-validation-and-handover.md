@@ -103,6 +103,7 @@ Representative proof commands:
 | `corepack pnpm proof:observability:browser-telemetry`    | Minimal browser telemetry proof from USF-225                                     |
 | `corepack pnpm proof:backup:operations`                  | Backup, restore, DR, PITR, and RPO/RTO local operations proof                    |
 | `corepack pnpm proof:observability:operations-execution` | Alerting, dashboard, incident, and observability operation proof                 |
+| `make sonar-zero-issue-proof`                            | Bounded local SonarQube zero-open-issue proof for the supported synthetic scan scope |
 
 `make foundation` runs the required representative proof set through the existing `make verify` compatibility target. If a specific proof fails, rerun the failing proof directly after checking the troubleshooting section below.
 

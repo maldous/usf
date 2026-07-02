@@ -4598,15 +4598,15 @@
       "id": "soa-proof-proof-assurance-sonarqube",
       "mappedType": "proof-command",
       "controlPurpose": "Govern proof command evidence posture for proof:assurance:sonarqube.",
-      "riskTreated": "Proof output could be mistaken for SonarQube readiness, scanner readiness, vulnerability clearance, test readiness, staging readiness, production readiness, live-provider readiness, or USF-133 closure unless scope and non-claims are explicit.",
+      "riskTreated": "Proof output could be mistaken for SonarQube readiness, scanner readiness, vulnerability clearance, repository-wide zero-issue readiness, test readiness, staging readiness, production readiness, live-provider readiness, or USF-133 closure unless scope and non-claims are explicit.",
       "assetServiceAffected": "proof:assurance:sonarqube",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
-      "implementationStatus": "effectivenessState=proven-local; command=proof:assurance:sonarqube; sourceIssue=USF-204; sonarqube=profile-gated-local-compose-proof; uiClickthrough=not-claimed; liveProvider=not-claimed",
+      "implementationStatus": "effectivenessState=proven-local; command=proof:assurance:sonarqube; sourceIssue=USF-204; zeroIssueAssuranceIssue=USF-233; sonarqube=profile-gated-local-compose-proof; supportedZeroIssueScope=local-synthetic-typescript-project; uiClickthrough=not-claimed; liveProvider=not-claimed",
       "evidenceSource": "package.json; Makefile; packages/proof/src/sonarqube-composed-proof.ts; adapters/assurance/src/index.ts; docs/architecture/sonarqube-service-semantic-proof-boundary.json",
       "validationCommand": "corepack pnpm proof:assurance:sonarqube",
-      "deferredReason": "Operator UI clickthrough, quality-gate policy administration, security hotspot human review workflow, OIDC plugin depth, environment readiness, live provider readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=USF-169,USF-193",
+      "deferredReason": "USF-233 zero-open-issue assurance is limited to the supported local synthetic scan scope. Operator UI clickthrough, quality-gate policy administration, security hotspot human review workflow, OIDC plugin depth, environment readiness, live provider readiness, repository-wide zero-issue readiness, and USF-133 closure remain non-claims; reviewDate=2026-09-30; followUpIssue=USF-169,USF-193",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -4624,12 +4624,12 @@
       "id": "usf-204-soa-sonarqube-composed-proof",
       "mappedType": "source-issue-proof",
       "controlPurpose": "Organize SoA-support evidence for USF-204 bounded SonarQube composed proof.",
-      "riskTreated": "Local repository validation or generated Compose metadata could be overclaimed as SonarQube scan, quality-gate, or vulnerability readiness evidence.",
+      "riskTreated": "Local repository validation or generated Compose metadata could be overclaimed as SonarQube scan, quality-gate, repository-wide zero-issue, or vulnerability readiness evidence.",
       "assetServiceAffected": "sonarqube; sonar-postgres; sonar-oidc-plugin deferred boundary",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
-      "implementationStatus": "effectivenessState=proven-local; boundedComposeProof=true; residualDeferrals=operator UI clickthrough, policy administration, hotspot human review, OIDC plugin depth, environment promotion",
+      "implementationStatus": "effectivenessState=proven-local; boundedComposeProof=true; zeroIssueAssuranceIssue=USF-233; supportedZeroIssueScope=local-synthetic-typescript-project; zeroIssueGate=quality-gate-OK-plus-zero-unresolved-issues-plus-zero-security-hotspots; residualDeferrals=operator UI clickthrough, policy administration, hotspot human review, OIDC plugin depth, environment promotion, repository-wide zero-issue readiness",
       "evidenceSource": "docs/architecture/sonarqube-service-semantic-proof-boundary.json; packages/proof/src/sonarqube-composed-proof.ts; adapters/assurance/src/index.ts; packages/core/src/index.ts; docs/architecture/static-analysis-quality-gate-disposition-matrix.json",
       "validationCommand": "corepack pnpm proof:assurance:sonarqube",
       "deferredReason": "Residual deferrals have owners and reviewDate=2026-09-30; followUpIssue=USF-169,USF-193; staticAnalysisSourceIssue=USF-171; remainingOperatorProof=USF-169; environmentPromotionStandard=USF-193; predecessorIssue=USF-195",
@@ -7381,8 +7381,8 @@
     {
       "id": "evidence-proof-proof-assurance-sonarqube",
       "proofResult": "proof:assurance:sonarqube",
-      "whatWasProven": "Package script proof:assurance:sonarqube is the command-pinned proof surface for bounded local Compose SonarQube semantics. It starts SonarQube and sonar-postgres from the assurance profile with ephemeral loopback host exposure, waits with bounded readiness retry, uses the official @sonar/scan package to submit a synthetic TypeScript project, reads quality-gate status, queries unresolved issues and security hotspots, validates authenticated local API access, deletes the temporary project, revokes the temporary credential, suppresses scanner output, checks redaction, proves unavailable-provider fail-closed behaviour, and tears Compose down.",
-      "whatWasNotProven": "This does not prove SonarQube readiness, scanner readiness, vulnerability clearance, operator console UI clickthrough, quality-gate policy administration, security hotspot human review workflow, sonar-oidc-plugin identity integration, live-provider-readiness, environment readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "whatWasProven": "Package script proof:assurance:sonarqube is the command-pinned proof surface for bounded local Compose SonarQube semantics. It starts SonarQube and sonar-postgres from the assurance profile with ephemeral loopback host exposure, waits with bounded readiness retry, uses the official @sonar/scan package to submit a synthetic TypeScript project, reads quality-gate status, enforces quality-gate OK plus zero unresolved issues and zero security hotspots for the supported local synthetic scan scope, validates authenticated local API access, deletes the temporary project, revokes the temporary credential, suppresses scanner output, checks redaction, proves unavailable-provider fail-closed behaviour, and tears Compose down.",
+      "whatWasNotProven": "This does not prove SonarQube readiness, scanner readiness, repository-wide zero-issue readiness, vulnerability clearance, operator console UI clickthrough, quality-gate policy administration, security hotspot human review workflow, sonar-oidc-plugin identity integration, live-provider-readiness, environment readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
       "runtimeMode": "profile-gated-local-compose-proof",
       "providerMode": "composed-test",
       "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#sonarqube",
@@ -7393,6 +7393,7 @@
       "issueLinks": [
         "USF-204",
         "USF-195",
+        "USF-233",
         "USF-171",
         "USF-187",
         "USF-184",
@@ -7405,8 +7406,8 @@
     {
       "id": "usf-204-evidence-sonarqube-composed-proof",
       "proofResult": "sonarqube-composed-quality-gate-provider-proof",
-      "whatWasProven": "Package script proof:assurance:sonarqube is the command-pinned proof surface for bounded local Compose SonarQube semantics. It starts SonarQube and sonar-postgres from the assurance profile with ephemeral loopback host exposure, waits with bounded readiness retry, uses the official @sonar/scan package to submit a synthetic TypeScript project, reads quality-gate status, queries unresolved issues and security hotspots, validates authenticated local API access, deletes the temporary project, revokes the temporary credential, suppresses scanner output, checks redaction, proves unavailable-provider fail-closed behaviour, and tears Compose down. It updates docs/architecture/static-analysis-quality-gate-disposition-matrix.json for USF-171 handoff evidence and records USF-169 and USF-193 residual boundaries.",
-      "whatWasNotProven": "This does not prove SonarQube readiness, scanner readiness, vulnerability clearance, operator console UI clickthrough, quality-gate policy administration, security hotspot human review workflow, sonar-oidc-plugin identity integration, live-provider-readiness, environment readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
+      "whatWasProven": "Package script proof:assurance:sonarqube is the command-pinned proof surface for bounded local Compose SonarQube semantics. It starts SonarQube and sonar-postgres from the assurance profile with ephemeral loopback host exposure, waits with bounded readiness retry, uses the official @sonar/scan package to submit a synthetic TypeScript project, reads quality-gate status, enforces quality-gate OK plus zero unresolved issues and zero security hotspots for the supported local synthetic scan scope, validates authenticated local API access, deletes the temporary project, revokes the temporary credential, suppresses scanner output, checks redaction, proves unavailable-provider fail-closed behaviour, and tears Compose down. It updates docs/architecture/static-analysis-quality-gate-disposition-matrix.json for USF-171 handoff evidence and records USF-169 and USF-193 residual boundaries.",
+      "whatWasNotProven": "This does not prove SonarQube readiness, scanner readiness, repository-wide zero-issue readiness, vulnerability clearance, operator console UI clickthrough, quality-gate policy administration, security hotspot human review workflow, sonar-oidc-plugin identity integration, live-provider-readiness, environment readiness, full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-react-parity-readiness, or USF-133 closure.",
       "runtimeMode": "profile-gated-local-compose-proof",
       "providerMode": "composed-test",
       "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#sonarqube",
@@ -7417,6 +7418,7 @@
       "issueLinks": [
         "USF-204",
         "USF-195",
+        "USF-233",
         "USF-171",
         "USF-187",
         "USF-184",
@@ -9884,6 +9886,7 @@
       "dataClassification": "synthetic-confidential",
       "abuseCases": [
         "bounded proof overclaimed as SonarQube readiness or vulnerability clearance",
+        "supported synthetic zero-open-issue proof overclaimed as repository-wide or live-provider zero-issue readiness",
         "scanner logs expose endpoint or credential values",
         "local deterministic validation treated as SonarQube service proof",
         "temporary project or credential not cleaned up",
@@ -9896,9 +9899,9 @@
         "cleanup or revocation fails",
         "unavailable endpoint is treated as pass"
       ],
-      "failClosedBehaviour": "Proof fails if readiness, scanner submission, quality-gate readback, redaction, cleanup, credential revocation, or unavailable-provider denial evidence is missing.",
+      "failClosedBehaviour": "Proof fails if readiness, scanner submission, quality-gate OK, zero unresolved issues, zero security hotspots, redaction, cleanup, credential revocation, or unavailable-provider denial evidence is missing.",
       "monitoringAuditEvidence": "value-free structured proof JSON records hashes, retry counts, outcome, safe reason codes, cleanup status, metric/trace/audit-shaped flags, and non-claims only.",
-      "residualRisk": "riskStatement=USF-204 bounded local Compose proof could be overclaimed as full SonarQube readiness or vulnerability clearance; impact=high; likelihood=medium; owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; controlOwner=platform-assurance-control-owner; treatment=record residual deferrals to USF-169 and USF-193; reviewDate=2026-09-30; followUpIssue=USF-169,USF-193; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness"
+      "residualRisk": "riskStatement=USF-204 bounded local Compose proof and USF-233 supported synthetic zero-open-issue gate could be overclaimed as full SonarQube readiness, repository-wide zero-issue readiness, or vulnerability clearance; impact=high; likelihood=medium; owner=platform-assurance-foundation; riskOwner=platform-assurance-risk-owner; controlOwner=platform-assurance-control-owner; treatment=record residual deferrals to USF-169 and USF-193; reviewDate=2026-09-30; followUpIssue=USF-169,USF-193; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-react-parity-readiness"
     },
     {
       "id": "usf-205-threat-sentry-sdk-envelope-proof",
@@ -15556,7 +15559,7 @@
         "backupRequirement=no-backup-requirement-claimed-for-temporary-synthetic-proof-data",
         "restoreProofRequirement=no-restore-readiness-claimed-temporary-project-deletion-proof-checked",
         "rpoRtoTarget=no-rpo-rto-target-explicit-non-claim-for-environment-and-production-readiness",
-        "corruptionFailureScenario=sonarqube-startup-scanner-quality-gate-cleanup-or-unavailable-endpoint-failure-must-fail-closed",
+      "corruptionFailureScenario=sonarqube-startup-scanner-quality-gate-zero-unresolved-zero-hotspot-cleanup-or-unavailable-endpoint-failure-must-fail-closed",
         "cleanupTeardownProof=temporary-project-deletion-credential-revocation-unavailable-provider-denial-compose-down-volumes-proof-checked",
         "deferredDrBoundary=backup-restore-dr-production-retention-and-migration-rollback-outside-USF-204"
       ],
@@ -18851,7 +18854,7 @@
       "targetType": "source-issue-sonarqube-composed-proof",
       "target": "sonarqube",
       "posture": [
-        "incidentDetectionHook=local-proof-detects-scanner-quality-gate-cleanup-and-unavailable-provider-failures-through-fail-closed-assertions",
+      "incidentDetectionHook=local-proof-detects-scanner-quality-gate-zero-unresolved-zero-hotspot-cleanup-and-unavailable-provider-failures-through-fail-closed-assertions",
         "alertingPosture=no-production-alerting-or-incident-readiness-claim",
         "escalationOwner=platform-assurance-foundation",
         "vulnerabilityAdvisoryReview=sonar-scan-and-sonarqube-image-advisory-review-required-before-stronger-readiness-or-promotion-claims",
@@ -22473,7 +22476,7 @@
       "targetType": "source-issue-sonarqube-composed-proof",
       "target": "sonarqube",
       "posture": [
-        "dataOrigin=synthetic-only-typescript-proof-source-no-production-derived-data",
+      "dataOrigin=synthetic-only-typescript-proof-source-no-production-derived-data-supported-zero-issue-scope",
         "piiPosture=no-pii-intended-or-retained-value-free-hashes-only",
         "dataClassification=synthetic-confidential",
         "redactionPolicy=suppress-scanner-stdout-stderr-proof-output-uses-endpoint-refs-hashes-buckets-booleans-safe-reason-codes-only",

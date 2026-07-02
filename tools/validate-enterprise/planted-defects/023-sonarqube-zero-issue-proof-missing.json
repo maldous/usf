@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-ENTERPRISE-023",
+  "description": "USF-233 SonarQube zero-open-issue proof field is missing from boundary metadata.",
+  "sonarqubeBoundaryDrop": [
+    "qualityGateBoundary.zeroIssueRequirementStatus",
+    "composedProof.zeroIssueGateProof"
+  ],
+  "sonarqubeZeroIssueDrop": [
+    "proofEvidence.requiredEvidenceFields"
+  ]
+}
