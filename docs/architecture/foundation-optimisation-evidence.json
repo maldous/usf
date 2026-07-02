@@ -16,10 +16,10 @@
     "mergeSha": "f836fe40e9cad189e62699920ae3416fbd3c883b"
   },
   "executionState": {
-    "status": "ready-for-pr-validation",
+    "status": "draft-pr-opened-pending-final-pr-ready-validation",
     "branch": "codex/usf-230-current-state-foundation-optimisation",
     "baseMainAtStart": "f836fe40e9cad189e62699920ae3416fbd3c883b",
-    "pullRequestUrl": "pending-pr-creation",
+    "pullRequestUrl": "https://github.com/maldous/usf/pull/199",
     "mergeSha": "pending-post-merge-linear-reconciliation",
     "postMergeValidation": "pending-post-merge-linear-reconciliation"
   },
