@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-TEST-READINESS-041",
+  "fixtureCorpusDropServiceIds": [
+    "postgres"
+  ]
+}

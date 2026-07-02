@@ -1,0 +1,15 @@
+{
+  "expectedRule": "USF-TEST-READINESS-044",
+  "fixtureServicePatch": [
+    {
+      "serviceId": "postgres",
+      "sectionPatch": {
+        "lifecycleCoverage": {
+          "set": {
+            "repeatability": false
+          }
+        }
+      }
+    }
+  ]
+}
