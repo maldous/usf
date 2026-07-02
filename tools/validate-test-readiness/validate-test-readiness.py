@@ -21,6 +21,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = Path("docs/architecture/test-environment-service-contract.json")
 HARNESS_PATH = Path("docs/architecture/composed-semantic-test-harness.json")
+LIFECYCLE_PATH = Path("docs/architecture/deterministic-test-fixture-lifecycle.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 ENTERPRISE_MODEL_PATH = Path("spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json")
 PACKAGE_PATH = Path("package.json")
@@ -43,12 +44,19 @@ RULES = {
     "USF-TEST-READINESS-014": ("blocking", "composed semantic test harness proof command is missing or stale"),
     "USF-TEST-READINESS-015": ("blocking", "composed semantic test harness lacks service-backed evidence coverage"),
     "USF-TEST-READINESS-016": ("blocking", "composed semantic test harness preserves insufficient non-claims or overclaims readiness"),
+    "USF-TEST-READINESS-017": ("blocking", "deterministic test fixture lifecycle evidence is missing or invalid"),
+    "USF-TEST-READINESS-018": ("blocking", "deterministic fixture lifecycle proof command is missing or stale"),
+    "USF-TEST-READINESS-019": ("blocking", "deterministic fixture lifecycle repeatability evidence is incomplete"),
+    "USF-TEST-READINESS-020": ("blocking", "deterministic fixture lifecycle cleanup teardown evidence is incomplete"),
+    "USF-TEST-READINESS-021": ("blocking", "deterministic fixture lifecycle preserves insufficient non-claims or overclaims readiness"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
 COMPOSE_TARGET = "compose/compose.test.generated.yaml"
 HARNESS_COMMAND = "corepack pnpm test-readiness:semantic"
 HARNESS_SCRIPT = "tsx packages/proof/src/composed-semantic-test-harness-proof.ts"
+LIFECYCLE_COMMAND = "corepack pnpm test-readiness:fixtures"
+LIFECYCLE_SCRIPT = "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
 REQUIRED_HARNESS_SERVICE_IDS = {
     "postgres",
     "keycloak-db",
@@ -193,6 +201,42 @@ def apply_harness_defect(harness: dict[str, Any] | None, defect: dict[str, Any])
     return out
 
 
+def apply_lifecycle_defect(lifecycle: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeLifecycle"):
+        return None
+    if lifecycle is None:
+        return None
+    out = copy.deepcopy(lifecycle)
+    for key, value in defect.get("lifecycleSet", {}).items():
+        out[key] = value
+    for key in defect.get("lifecycleDrop", []):
+        out.pop(key, None)
+    fixture_patch = defect.get("lifecycleFixturePatch", {})
+    if isinstance(fixture_patch, dict):
+        target = out.get("fixtureLifecycle")
+        if isinstance(target, dict):
+            for key in fixture_patch.get("drop", []):
+                target.pop(key, None)
+            for key, value in fixture_patch.get("set", {}).items():
+                target[key] = value
+    repeat_patch = defect.get("lifecycleRepeatabilityPatch", {})
+    if isinstance(repeat_patch, dict):
+        target = out.get("repeatabilityEvidence")
+        if isinstance(target, dict):
+            for key in repeat_patch.get("drop", []):
+                target.pop(key, None)
+            for key, value in repeat_patch.get("set", {}).items():
+                target[key] = value
+    for section in defect.get("lifecycleEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("lifecycleDropNonClaims"):
+        dropped = set(defect.get("lifecycleDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("lifecycleAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["lifecycleAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -209,9 +253,12 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     contract = apply_contract_defect(contract, defect)
     harness = read_json(HARNESS_PATH) if (ROOT / HARNESS_PATH).exists() else None
     harness = apply_harness_defect(harness, defect)
+    lifecycle = read_json(LIFECYCLE_PATH) if (ROOT / LIFECYCLE_PATH).exists() else None
+    lifecycle = apply_lifecycle_defect(lifecycle, defect)
     return {
         "contract": contract,
         "harness": harness,
+        "lifecycle": lifecycle,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "enterpriseModel": read_json(ENTERPRISE_MODEL_PATH),
         "package": apply_package_defect(read_json(PACKAGE_PATH), defect),
@@ -357,6 +404,12 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         HARNESS_PATH,
         state["enterpriseModel"],
     )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["lifecycle"],
+        LIFECYCLE_PATH,
+        state["enterpriseModel"],
+    )
 
 
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
@@ -440,6 +493,102 @@ def check_harness(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-016", str(HARNESS_PATH), "harness overclaims test readiness")
 
 
+def check_lifecycle(F: Findings, state: dict[str, Any]) -> None:
+    lifecycle = state["lifecycle"]
+    if not isinstance(lifecycle, dict):
+        F.add("USF-TEST-READINESS-017", str(LIFECYCLE_PATH), "lifecycle file is missing")
+        return
+    for key in (
+        "id",
+        "issueId",
+        "parentIssueId",
+        "testEnvironmentContract",
+        "composedSemanticHarness",
+        "composeTarget",
+        "proofCommand",
+        "repeatedHarnessCommand",
+        "runtimeMode",
+        "providerMode",
+        "inMemoryServiceSubstituteAllowed",
+        "runCount",
+        "fixtureLifecycle",
+        "repeatabilityEvidence",
+        "validationCommands",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in lifecycle:
+            F.add("USF-TEST-READINESS-017", str(LIFECYCLE_PATH), f"missing top-level field {key}")
+    if lifecycle.get("issueId") != "USF-237" or lifecycle.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-017", str(LIFECYCLE_PATH), "issue linkage must be USF-237 under USF-234")
+    if lifecycle.get("testEnvironmentContract") != str(CONTRACT_PATH) or lifecycle.get("composedSemanticHarness") != str(HARNESS_PATH):
+        F.add("USF-TEST-READINESS-017", str(LIFECYCLE_PATH), "lifecycle must link the service contract and harness")
+    if lifecycle.get("composeTarget") != COMPOSE_TARGET:
+        F.add("USF-TEST-READINESS-017", str(LIFECYCLE_PATH), "lifecycle must use canonical test Compose target")
+    if lifecycle.get("runtimeMode") != "dev-compose-backed" or lifecycle.get("providerMode") != "local-composed-real-service":
+        F.add("USF-TEST-READINESS-017", str(LIFECYCLE_PATH), "lifecycle must record composed runtime/provider mode")
+    if lifecycle.get("inMemoryServiceSubstituteAllowed") is not False:
+        F.add("USF-TEST-READINESS-017", str(LIFECYCLE_PATH), "lifecycle must forbid in-memory service substitutes")
+    if lifecycle.get("runCount") != 2:
+        F.add("USF-TEST-READINESS-019", str(LIFECYCLE_PATH), "lifecycle must require two sequential runs")
+    commands = set(lifecycle.get("validationCommands", []))
+    if lifecycle.get("proofCommand") != LIFECYCLE_COMMAND or LIFECYCLE_COMMAND not in commands:
+        F.add("USF-TEST-READINESS-018", str(LIFECYCLE_PATH), "fixture lifecycle proof command is missing or stale")
+    if lifecycle.get("repeatedHarnessCommand") != HARNESS_COMMAND:
+        F.add("USF-TEST-READINESS-018", str(LIFECYCLE_PATH), "fixture lifecycle must repeat the semantic harness command")
+    fixture = lifecycle.get("fixtureLifecycle")
+    required_fixture_fields = {
+        "seed",
+        "reset",
+        "cleanup",
+        "teardown",
+        "determinism",
+        "orderIndependence",
+        "failureDiagnosis",
+        "realDataBoundary",
+    }
+    if not isinstance(fixture, dict) or not required_fixture_fields.issubset(fixture):
+        F.add("USF-TEST-READINESS-020", f"{LIFECYCLE_PATH}#fixtureLifecycle", "seed reset cleanup teardown determinism and diagnostics are required")
+    else:
+        fixture_text = " ".join(str(value).lower() for value in fixture.values())
+        for token in ("synthetic", "compose down", "containers", "volumes", "stable semantic fingerprints", "no real tenant data"):
+            if token not in fixture_text:
+                F.add("USF-TEST-READINESS-020", f"{LIFECYCLE_PATH}#fixtureLifecycle", f"fixture lifecycle missing {token}")
+    repeat = lifecycle.get("repeatabilityEvidence")
+    required_repeat_fields = {
+        "firstRunRequired",
+        "secondRunRequired",
+        "stableFingerprintFields",
+        "stableFingerprintMatchedRequired",
+        "composeProjectCleanupCheckedAfterEachRun",
+        "repeatedRunDeterministicRequired",
+    }
+    if not isinstance(repeat, dict) or not required_repeat_fields.issubset(repeat):
+        F.add("USF-TEST-READINESS-019", f"{LIFECYCLE_PATH}#repeatabilityEvidence", "repeatability evidence fields are incomplete")
+    else:
+        for key in (
+            "firstRunRequired",
+            "secondRunRequired",
+            "stableFingerprintMatchedRequired",
+            "composeProjectCleanupCheckedAfterEachRun",
+            "repeatedRunDeterministicRequired",
+        ):
+            if repeat.get(key) is not True:
+                F.add("USF-TEST-READINESS-019", f"{LIFECYCLE_PATH}#repeatabilityEvidence.{key}", "repeatability marker must be true")
+        fields = set(repeat.get("stableFingerprintFields", []))
+        for required in ("composeTarget", "providerMode", "requiredServiceIds", "apiComposedProviderBindingsActive", "workerComposedProviderEvidenceCount", "deferredBoundaryCount"):
+            if required not in fields:
+                F.add("USF-TEST-READINESS-019", f"{LIFECYCLE_PATH}#repeatabilityEvidence.stableFingerprintFields", f"missing stable field {required}")
+    non_claims = set(lifecycle.get("nonClaims", []))
+    missing_non_claims = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing_non_claims:
+        F.add("USF-TEST-READINESS-021", str(LIFECYCLE_PATH), f"missing non-claims: {missing_non_claims}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(lifecycle.get("allowedClaims", [])))
+    if bad or lifecycle.get("testReadinessClaimAllowed") is not False:
+        F.add("USF-TEST-READINESS-021", str(LIFECYCLE_PATH), "fixture lifecycle overclaims test readiness")
+
+
 def check_package_wiring(F: Findings, package: dict[str, Any]) -> None:
     scripts = package.get("scripts", {})
     script = scripts.get("test-readiness:validate")
@@ -450,6 +599,8 @@ def check_package_wiring(F: Findings, package: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-010", "package.json#scripts.repo:validate", "repo:validate must include test-readiness validator")
     if scripts.get("test-readiness:semantic") != HARNESS_SCRIPT:
         F.add("USF-TEST-READINESS-014", "package.json#scripts", "test-readiness:semantic script is missing or stale")
+    if scripts.get("test-readiness:fixtures") != LIFECYCLE_SCRIPT:
+        F.add("USF-TEST-READINESS-018", "package.json#scripts", "test-readiness:fixtures script is missing or stale")
 
 
 def run_checks(state: dict[str, Any]) -> Findings:
@@ -457,6 +608,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_shape(F, state["contract"])
     check_service_inventory(F, state)
     check_harness(F, state)
+    check_lifecycle(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

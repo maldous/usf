@@ -61,10 +61,11 @@
   },
   "validationCommands": [
     "corepack pnpm test-readiness:semantic",
+    "corepack pnpm test-readiness:fixtures",
     "corepack pnpm test-readiness:validate",
     "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
   ],
-  "fixtureLifecycleBoundary": "USF-236 proves the composed semantic path with synthetic data and teardown inherited from the proof harness. USF-237 owns repeated deterministic fixture lifecycle proof.",
+  "fixtureLifecycleBoundary": "USF-236 proves the composed semantic path with synthetic data and teardown inherited from the proof harness. USF-237 adds sequential repeatability and cleanup verification through docs/architecture/deterministic-test-fixture-lifecycle.json.",
   "ciLocalGateBoundary": "USF-236 exposes the proof command. USF-238 owns the final canonical test command surface and CI/local gate.",
   "enterpriseEvidenceRefs": {
     "soaSupportMappings": ["soa-usf-236-composed-semantic-test-harness"],

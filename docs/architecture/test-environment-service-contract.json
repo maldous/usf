@@ -103,6 +103,7 @@
       "testReadinessUse": "baseline composed runtime service-backed proof surface that USF-236 builds into the composed semantic test harness",
       "validationCommands": [
         "corepack pnpm test-readiness:semantic",
+        "corepack pnpm test-readiness:fixtures",
         "corepack pnpm runtime:proof:compose",
         "corepack pnpm proof:providers"
       ],
@@ -593,6 +594,7 @@
     "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
     "corepack pnpm test-readiness:validate",
     "corepack pnpm test-readiness:semantic",
+    "corepack pnpm test-readiness:fixtures",
     "corepack pnpm repo:validate",
     "corepack pnpm compose:check-generated",
     "corepack pnpm compose:validate",

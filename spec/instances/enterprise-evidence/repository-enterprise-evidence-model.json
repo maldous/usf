@@ -5537,6 +5537,36 @@
         "browser-e2e-readiness",
         "full-react-product-parity"
       ]
+    },
+    {
+      "id": "soa-usf-237-deterministic-test-fixture-lifecycle",
+      "mappedType": "deterministic-test-fixture-lifecycle",
+      "controlPurpose": "Organise USF-237 evidence for repeatable seed, reset, cleanup, teardown, and deterministic execution of the composed semantic test harness.",
+      "riskTreated": "A composed test harness could appear to pass only because prior run state, volumes, containers, credentials, or ordering effects remain unless lifecycle evidence proves repeatability and cleanup.",
+      "assetServiceAffected": "docs/architecture/deterministic-test-fixture-lifecycle.json; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; compose/compose.test.generated.yaml",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-237; parentIssue=USF-234; repeatedRunsRequired=2; cleanupCheckedAfterEachRun=true; testReadinessClaimAllowed=false; inMemoryServiceSubstituteAllowed=false",
+      "evidenceSource": "docs/architecture/deterministic-test-fixture-lifecycle.json; docs/architecture/deterministic-test-fixture-lifecycle.md; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-237 proves deterministic fixture lifecycle only. USF-238 must finalize CI/local command gates and USF-234 must perform final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-238,USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8302,6 +8332,28 @@
       ],
       "prOrMergeSha": "3501bf84279e155d5c271b49d1f4dc174b8c9203",
       "retentionPosture": "Retain value-free proof metadata and validator output. Runtime data is synthetic only and removed by Compose teardown; no real tenant data, real secrets, private local state, raw endpoints, connection strings, tokens, stack traces, provider payloads, or production data are retained."
+    },
+    {
+      "id": "evidence-usf-237-deterministic-test-fixture-lifecycle",
+      "proofResult": "deterministic-test-fixture-lifecycle-proof",
+      "whatWasProven": "USF-237 defines and executes a deterministic fixture lifecycle proof that runs the composed semantic harness twice in sequence against the canonical generated test Compose target, requires composed provider mode, rejects in-memory provider substitutes, compares stable semantic fingerprints, verifies Compose project cleanup after every run, and records synthetic seed, reset, cleanup, teardown, and diagnostics boundaries.",
+      "whatWasNotProven": "USF-237 does not prove final test readiness, final CI/local command gate, Sonar scope changes, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "dev-compose-backed",
+      "providerMode": "local-composed-real-service",
+      "serviceCatalogueRow": "docs/architecture/test-environment-service-contract.json#composed-runtime-provider-proof",
+      "adapterProviderId": "postgres,keycloak,nats,temporal,minio,openbao,mailpit",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "package.json#scripts.test-readiness:fixtures",
+      "commitPin": "36ae363b33a31e560d880ac09ec052ec2a1c4cca",
+      "issueLinks": [
+        "USF-237",
+        "USF-235",
+        "USF-236",
+        "USF-238",
+        "USF-234"
+      ],
+      "prOrMergeSha": "36ae363b33a31e560d880ac09ec052ec2a1c4cca",
+      "retentionPosture": "Retain value-free lifecycle proof metadata and validator output. Runtime fixtures are synthetic only and removed by Compose teardown; no real tenant data, real secrets, private local state, raw endpoints, connection strings, tokens, stack traces, provider payloads, or production data are retained."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -10661,6 +10713,31 @@
       "failClosedBehaviour": "The proof throws on wrong Compose target, in-memory provider mode, deferred provider boundary, missing composed provider evidence, missing audit evidence, or fail-closed path gaps. The validator fails missing harness metadata, command wiring, service coverage, enterprise refs, or overclaims.",
       "monitoringAuditEvidence": "Value-free proof summary, runtime audit event counts, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
       "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-236; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; deterministic repeated fixture lifecycle remains owned by USF-237 and final gate remains owned by USF-234."
+    },
+    {
+      "id": "threat-usf-237-deterministic-test-fixture-lifecycle",
+      "targetType": "deterministic-test-fixture-lifecycle",
+      "target": "USF-237 deterministic test fixture lifecycle",
+      "trustBoundary": "Sequential local generated test Compose runs, synthetic fixtures, proof-owned Compose projects, repository validators, and value-free lifecycle evidence. No live provider, staging, production, or external tenant boundary is proven.",
+      "tenantBoundary": "Synthetic tenant context only. The proof compares stable semantic fingerprints and requires tenant mismatch and authorization failure paths inherited from the composed semantic harness to remain fail closed.",
+      "credentialBoundary": "Only generated local Compose placeholder credentials are allowed. Proof and validator output must not expose raw secrets, tokens, endpoints, connection strings, stack traces, raw SDK errors, or provider payloads.",
+      "dataClassification": "internal synthetic deterministic test fixture lifecycle proof metadata",
+      "abuseCases": [
+        "A single composed harness run is treated as deterministic fixture lifecycle proof",
+        "Runtime data cleanup is assumed without checking the Compose project after each run",
+        "A service-backed test path falls back to dev in-memory provider mode",
+        "Fixture lifecycle proof is treated as final test readiness before USF-238 and USF-234 complete"
+      ],
+      "failureModes": [
+        "second sequential harness run is skipped",
+        "stable semantic fingerprints differ",
+        "Compose project resources remain after teardown",
+        "required provider evidence or audit evidence is missing",
+        "proof output or documentation overclaims readiness"
+      ],
+      "failClosedBehaviour": "The lifecycle proof throws when either composed harness run fails, provider mode is not local-composed-real-service, in-memory service substitutes are allowed, stable fingerprints differ, or Compose project cleanup is not proven. The validator fails missing lifecycle metadata, command wiring, repeatability fields, cleanup evidence, enterprise refs, or overclaims.",
+      "monitoringAuditEvidence": "Value-free lifecycle proof summary, runtime audit event counts inherited from the composed harness, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
+      "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-237; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final CI/local command gate remains owned by USF-238 and final test-readiness acceptance remains owned by USF-234."
     }
   ],
   "sdkDependencyGovernance": [
@@ -13987,6 +14064,44 @@
         "browser-e2e-readiness",
         "full-react-product-parity"
       ]
+    },
+    {
+      "id": "access-usf-237-deterministic-test-fixture-lifecycle",
+      "targetType": "deterministic-test-fixture-lifecycle",
+      "target": "USF-237 deterministic fixture lifecycle access boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-237",
+        "accessModel=local-loopback-generated-test-compose-only",
+        "authnAuthzBoundary=runtime-tenant-context-and-job-permission-paths-must-fail-closed-in-each-composed-harness-run",
+        "leastPrivilegePosture=synthetic-developer-or-agent-local-test-context-only",
+        "breakGlassRelevance=not-proven-by-USF-237",
+        "auditEvidence=API-and-worker-audit-event-counts-required-in-each-harness-run",
+        "reviewCadence=2026-09-30-before-final-test-readiness-claim",
+        "deprovisioningPosture=not-proven-by-USF-237",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; docs/architecture/deterministic-test-fixture-lifecycle.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-238 owns final CI/local command gate and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -16646,6 +16761,46 @@
       "evidenceSource": "packages/proof/src/runtime-application-proof.ts; packages/proof/src/composed-semantic-test-harness-proof.ts; docs/architecture/composed-semantic-test-harness.json",
       "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "deferredReason": "USF-237 owns repeated deterministic fixture lifecycle and USF-238 owns final command gate; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "resilience-usf-237-deterministic-test-fixture-lifecycle",
+      "targetType": "deterministic-test-fixture-lifecycle",
+      "target": "USF-237 deterministic fixture lifecycle resilience boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-237",
+        "readinessChecks=two-sequential-composed-harness-runs-plus-compose-project-cleanup-check-after-each-run",
+        "retryTimeoutBehaviour=bounded-compose-wait-timeout-and-existing-adapter-readiness-retry-policies-inherited-from-composed-harness",
+        "failClosedMode=proof-throws-on-run-failure-fingerprint-mismatch-in-memory-substitute-or-leftover-compose-resources",
+        "safeTeardown=Compose-down-volume-removal-and-project-empty-check-after-each-run",
+        "structuredLogging=value-free-proof-output-only",
+        "tracingCorrelation=provider-evidence-correlation-fields-retained-where-existing-adapters-provide-them",
+        "metrics=stable-fingerprint-and-adapter-evidence-counts-retained-as-value-free-proof-metadata",
+        "auditEvents=API-and-worker-audit-event-counts-required-in-each-run",
+        "redaction=no-real-tenant-data-real-secrets-raw-endpoints-connection-strings-tokens-stack-traces-or-provider-payloads",
+        "backupRestorePosture=not-proven-by-USF-237",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=backup-restore-DR-and-final-test-command-gate-remain-outside-USF-237"
+      ],
+      "evidenceSource": "packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; docs/architecture/deterministic-test-fixture-lifecycle.json; docs/architecture/test-environment-service-contract.json",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-238 owns final command gate and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -19998,6 +20153,41 @@
       ],
       "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects/; packages/proof/src/composed-semantic-test-harness-proof.ts",
       "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-238 owns final CI/local diagnostic gate and USF-234 owns final acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "incident-usf-237-deterministic-test-fixture-lifecycle",
+      "targetType": "deterministic-test-fixture-lifecycle",
+      "target": "USF-237 deterministic fixture lifecycle incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-237",
+        "incidentDetectionHook=proof-command-failure-validator-finding-leftover-compose-resource-finding-and-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-237",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-SDK-or-provider-dependency-added-by-USF-237",
+        "dependencyUpdatePosture=existing-exact-pinned-provider-SDKs-reused-through-adapter-boundaries",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-lifecycle-gaps-repeatability-gaps-cleanup-gaps-and-overclaims",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-237"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects/; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "deferredReason": "USF-238 owns final CI/local diagnostic gate and USF-234 owns final acceptance; owner=platform-test-readiness-foundation; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
@@ -23920,6 +24110,43 @@
       "evidenceSource": "docs/architecture/composed-semantic-test-harness.json; packages/proof/src/composed-semantic-test-harness-proof.ts; USF-236",
       "validationCommand": "corepack pnpm test-readiness:semantic; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "deferredReason": "USF-237 owns repeated fixture purge/reset proof and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-237.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "final-test-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "privacy-usf-237-deterministic-test-fixture-lifecycle",
+      "targetType": "deterministic-test-fixture-lifecycle",
+      "target": "USF-237 deterministic fixture lifecycle synthetic data boundary",
+      "posture": [
+        "effectivenessState=integration-proven-after-command-pass",
+        "sourceIssue=USF-237",
+        "dataOrigin=synthetic-local-test-fixture-proof-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-deterministic-test-fixture-lifecycle-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data-in-proof-evidence",
+        "retentionPurgePosture=committed-value-free-lifecycle-metadata-retained-in-repository-runtime-fixtures-cleaned-by-compose-teardown-and-project-empty-check",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-and-loopback-compose-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/deterministic-test-fixture-lifecycle.json; packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts; USF-237",
+      "validationCommand": "corepack pnpm test-readiness:fixtures; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-238 owns final CI/local command gate and USF-234 owns final test-readiness acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-238,USF-234.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
