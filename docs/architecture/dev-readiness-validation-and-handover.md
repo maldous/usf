@@ -47,18 +47,18 @@ From a clean environment:
 ```bash
 git clone https://github.com/maldous/usf.git
 cd usf
-make verify
+make foundation
 ```
 
-`make verify` depends on `make install`, which runs the frozen pnpm install before executing the full local proof and validation gate. It is the supported one-command install, setup, and verification path for USF-226.
+`make foundation` is the current-state alias for the compatibility-stable `make verify` gate. It depends on the frozen install path and executes the full local proof and validation gate. It is the supported one-command install, setup, and verification path for USF-226 and later current-state developer handover.
 
-Do not require a privileged global pnpm shim for the handover path. `make verify` invokes `corepack pnpm` directly. Running `corepack enable` is optional for developers who want a global pnpm shim and whose workstation permits creating it.
+Do not require a privileged global pnpm shim for the handover path. `make foundation` invokes `corepack pnpm` through the existing `make verify` compatibility target. Running `corepack enable` is optional for developers who want a global pnpm shim and whose workstation permits creating it.
 
 If you want to separate install from proof while debugging, run:
 
 ```bash
-make install
-corepack pnpm verify
+make setup
+make validate-foundation
 ```
 
 ## Validation Model
@@ -67,19 +67,18 @@ Local validation is intentionally broader than the current GitHub CI workflow.
 
 | Gate                                                                                    | Scope                                                                                                                                                                                                      | When to run                                                                        |
 | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `make verify`                                                                           | Frozen install, formatting, lint, typecheck, tests, OpenAPI check, DB type check, dev smoke, compose validation, runtime proof, provider proofs, enterprise validation, spec validation, parity validation | Before a PR is ready for review and before marking an issue Done                   |
-| `corepack pnpm parity`                                                                  | Full parity validator suite, compose validator, runtime validator, enterprise validator                                                                                                                    | When architecture, source-use, parity, runtime, provider, or evidence files change |
-| `python3 tools/validate-spec/validate-spec.py all --json`                               | Spec corpus and validator self-validation                                                                                                                                                                  | For spec, ADR, command, evidence, and governance artefacts                         |
+| `make foundation`                                                                        | Frozen install, formatting, lint, typecheck, tests, OpenAPI check, DB type check, dev smoke, compose validation, runtime proof, provider proofs, enterprise validation, spec validation, coverage validation | Before a PR is ready for review and before marking an issue Done                   |
+| `make validate-coverage`                                                                | Full coverage validator suite, compose validator, runtime validator, enterprise validator                                                                                                                   | When architecture, source-use, coverage, runtime, provider, or evidence files change |
+| `make validate-evidence`                                                                | Spec corpus, bootstrap governance, runtime proof manifest, and enterprise evidence validation                                                                                                                | For spec, ADR, command, evidence, and governance artefacts                         |
+| `make validate-assurance`                                                               | Enterprise evidence and non-claim checks                                                                                                                                                                   | For readiness, evidence, provider, and assurance changes                           |
 | `python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json` | PR-scoped governance gate                                                                                                                                                                                  | Before opening or updating a PR                                                    |
-| `python3 tools/validate-bootstrap/validate-bootstrap.py all --json`                     | Bootstrap governance checks                                                                                                                                                                                | For bootstrap or proof-anchor posture changes                                      |
-| `python3 tools/validate-enterprise/validate-enterprise.py all --json`                   | Enterprise evidence and non-claim checks                                                                                                                                                                   | For readiness, evidence, provider, and assurance changes                           |
 | `git diff --check` and `git diff --check origin/main...HEAD`                            | Whitespace and diff hygiene                                                                                                                                                                                | Before commit and before PR ready                                                  |
 
 Current CI alignment:
 
 - Pull requests run `.github/workflows/validate-spec.yml`, which validates the spec corpus and PR governance gate.
 - Pushes to `main` run `.github/workflows/proof-anchor.yml`, which publishes the proof-freshness anchor for the merge commit.
-- The repository handover gate remains the local `make verify` superset. A green GitHub spec check alone is not sufficient for Linear Done.
+- The repository handover gate remains the local `make foundation` superset. `make verify` remains a compatibility alias for the same gate. A green GitHub spec check alone is not sufficient for Linear Done.
 
 Validation evidence is recorded in three distinct phases:
 
@@ -105,7 +104,7 @@ Representative proof commands:
 | `corepack pnpm proof:backup:operations`                  | Backup, restore, DR, PITR, and RPO/RTO local operations proof                    |
 | `corepack pnpm proof:observability:operations-execution` | Alerting, dashboard, incident, and observability operation proof                 |
 
-`make verify` runs the required representative proof set. If a specific proof fails, rerun the failing proof directly after checking the troubleshooting section below.
+`make foundation` runs the required representative proof set through the existing `make verify` compatibility target. If a specific proof fails, rerun the failing proof directly after checking the troubleshooting section below.
 
 ## Safe Local Configuration
 
@@ -161,7 +160,7 @@ For a bounded change:
 4. Create a branch from current `origin/main`.
 5. Make only the files authorised by the issue.
 6. Run targeted validation during development.
-7. Run the full issue-required gate before PR ready state. For USF-226, that gate is `make verify`, the spec validator, bootstrap validator, enterprise validator, parity validator, relevant proofs, and diff checks.
+7. Run the full issue-required gate before PR ready state. For current-state handover, that gate is `make foundation`, the spec PR validator, evidence and assurance validators, relevant proofs, and diff checks. Compatibility commands such as `make verify` and `make parity` remain valid.
 8. Open a draft PR with issue scope, files changed, validation summary, evidence artefacts, and explicit non-claims.
 9. Mark the PR ready only after local validation passes.
 10. Merge only after checks are acceptable.
@@ -176,7 +175,7 @@ Dev-readiness dependency hygiene is bounded to local development:
 - `package.json` pins exact dependency versions.
 - `pnpm-lock.yaml` is committed and must remain deterministic.
 - `pnpm-workspace.yaml` carries the exact `protobufjs` override used to keep Temporal's transitive protobuf dependency on the patched advisory range.
-- `corepack pnpm install --frozen-lockfile` is the install gate.
+- `make setup` and `corepack pnpm install --frozen-lockfile` are the install gates.
 - Provider SDK imports stay inside adapter or proof-authorised boundaries.
 - New dependencies require exact version pinning, selection rationale, licence posture, maintenance posture, and security posture evidence.
 - Vulnerability and licence findings must be recorded honestly. USF-226 ran `corepack pnpm audit --audit-level low` after updating the Keycloak admin client to the patched exact version and it reported no known vulnerabilities.
@@ -214,7 +213,7 @@ USF-226 checks development supply-chain posture, not release readiness.
 
 | Area                    | Current dev-readiness posture                                                                                         | Boundary or future condition                                                   |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Frozen install          | `corepack pnpm install --frozen-lockfile` passed and `make verify` invokes the frozen install path.                   | None for dev handover.                                                         |
+| Frozen install          | `corepack pnpm install --frozen-lockfile` passed and `make foundation` invokes the frozen install path through the existing `make verify` compatibility target. | None for dev handover.                                                         |
 | Exact pins              | `package.json` dependencies and dev dependencies use exact versions; `packageManager` pins pnpm.                      | Future dependency updates must preserve exact pins and update evidence.        |
 | Lockfile                | `pnpm-lock.yaml` is committed and validated by frozen install.                                                        | None for dev handover.                                                         |
 | Vulnerability audit     | `corepack pnpm audit --audit-level low` passed after exact dependency fixes.                                          | Does not establish patch SLA or production vulnerability-management readiness. |

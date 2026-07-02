@@ -641,6 +641,14 @@ entry points and MUST NOT be treated as full React parity, staging, production,
 deployment, live-provider, SOC, ISO certification, enterprise production, or
 product UI readiness claims.
 
+The current preferred Make entry points are `make foundation` for the full local
+foundation gate, `make setup` for frozen dependency install, `make dev-ready` for
+developer and AI-agent handover validation, `make validate-coverage` for the
+coverage validator suite, `make validate-assurance` for enterprise assurance
+evidence validation, and `make validate-evidence` for repository evidence
+validation. These aliases route to existing compatibility targets and do not
+upgrade any readiness claim.
+
 ## Provider, Environment, Proof, and Report Safety
 
 Agents MUST preserve these safety rules:

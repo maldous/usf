@@ -22,18 +22,21 @@ Prerequisites:
 One-command local validation:
 
 ```bash
-make verify
+make foundation
 ```
+
+`make foundation` is the current-state alias for the compatibility-stable `make verify` gate.
 
 Useful shorter commands:
 
 ```bash
-make install
+make setup
+make validate-coverage
+make validate-assurance
+make validate-evidence
 corepack pnpm dev:smoke
 corepack pnpm runtime:proof
 corepack pnpm proof:observability:browser-telemetry
-corepack pnpm parity
-python3 tools/validate-spec/validate-spec.py all --json
 ```
 
 Local proofs use synthetic tenants, actors, jobs, browser telemetry, and local composed services only. They do not require real tenant data, real secrets, live providers, staging, or production access.

@@ -1,0 +1,102 @@
+{
+  "id": "current-state-command-surface",
+  "title": "Current-State Command Surface",
+  "issueId": "USF-232",
+  "inputAudit": "docs/architecture/current-state-terminology-normalisation-audit.json",
+  "purpose": "Expose clear current-state Make aliases for developer and AI-agent workflows while preserving existing compatibility targets and proof coverage.",
+  "status": "implemented",
+  "defaultGoalPreserved": true,
+  "defaultGoal": "verify",
+  "helpTargets": [
+    "help",
+    "commands"
+  ],
+  "aliases": [
+    {
+      "target": "setup",
+      "routesTo": "install",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "foundation",
+      "routesTo": "verify",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "dev-ready",
+      "routesTo": "verify",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "validate-foundation",
+      "routesTo": "verify",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "validate-coverage",
+      "routesTo": "parity",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "validate-assurance",
+      "routesTo": "enterprise-validate",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "validate-evidence",
+      "routesTo": "corepack pnpm repo:validate",
+      "classification": "canonical-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "assurance",
+      "routesTo": "validate-assurance",
+      "classification": "short-current-alias",
+      "coverageChanged": false
+    },
+    {
+      "target": "evidence",
+      "routesTo": "validate-evidence",
+      "classification": "short-current-alias",
+      "coverageChanged": false
+    }
+  ],
+  "compatibilityTargetsRetained": [
+    "verify",
+    "install",
+    "parity",
+    "enterprise-validate",
+    "runtime-proof",
+    "runtime-validate",
+    "test-compose",
+    "sonarqube-assurance-proof"
+  ],
+  "packageScriptsChanged": false,
+  "proofCommandsRemoved": false,
+  "validatorsWeakened": false,
+  "plantedDefectsRemoved": false,
+  "runtimeBehaviourChanged": false,
+  "providerBehaviourChanged": false,
+  "generatedComposeChanged": false,
+  "sonarZeroIssueClaimChanged": false,
+  "sonarFollowUpIssueId": "USF-233",
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-react-product-parity"
+  ]
+}
