@@ -2,7 +2,70 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := verify
 
-.PHONY: verify install dev dev-smoke dev.work runtime-proof runtime-proof-in-memory runtime-proof-compose runtime-validate enterprise-validate compose-generate compose-validate compose-policy compose-check-generated compose-dev compose-test compose-staging compose-production compose-ports compose-ports-dev compose-ports-test compose-ports-staging compose-ports-profiles compose-hardening compose-security test-compose parity db-proof authz-proof audit-proof config-proof files-proof auth-proof jobs-proof notify-proof api-proof api-graphql-generated-client-proof providers-proof observability-proof observability-browser-telemetry-proof observability-operations-execution-proof operator-lifecycle-proof sentry-observability-proof guardrails-proof bulk-proof search-proof search-proof-meilisearch scanner-proof-clamav clickhouse-analytics-proof pgbackrest-proof backup-operations-proof windmill-workflow-proof wiremock-proof localstack-proof redis-cache-proof mock-substrate-proof resources-proof
+.PHONY: \
+	help commands setup foundation dev-ready assurance evidence \
+	validate-foundation validate-coverage validate-assurance validate-evidence \
+	verify install dev dev-smoke dev.work \
+	runtime-proof runtime-proof-in-memory runtime-proof-compose runtime-validate \
+	enterprise-validate \
+	compose-generate compose-validate compose-policy compose-check-generated \
+	compose-dev compose-test compose-staging compose-production \
+	compose-ports compose-ports-dev compose-ports-test compose-ports-staging \
+	compose-ports-profiles compose-hardening compose-security test-compose \
+	parity \
+	db-proof authz-proof audit-proof config-proof files-proof auth-proof \
+	jobs-proof notify-proof api-proof api-graphql-generated-client-proof \
+	providers-proof observability-proof observability-browser-telemetry-proof \
+	observability-operations-execution-proof operator-lifecycle-proof \
+	sentry-observability-proof guardrails-proof bulk-proof search-proof \
+	search-proof-meilisearch scanner-proof-clamav clickhouse-analytics-proof \
+	pgbackrest-proof backup-operations-proof windmill-workflow-proof \
+	wiremock-proof localstack-proof redis-cache-proof mock-substrate-proof \
+	resources-proof sonarqube-assurance-proof
+
+help:
+	@printf '%s\n' \
+		'USF current-state command surface' \
+		'' \
+		'Primary workflow:' \
+		'  make setup                 Install exact pinned dependencies (alias: install)' \
+		'  make foundation            Run the full local foundation gate (alias: verify)' \
+		'  make dev-ready             Run the developer and AI-agent handover gate (alias: verify)' \
+		'' \
+		'Current-state validators:' \
+		'  make validate-foundation   Full local foundation gate (compatibility: verify)' \
+		'  make validate-coverage     Foundation coverage validators (compatibility: parity)' \
+		'  make validate-assurance    Enterprise assurance evidence validator (compatibility: enterprise-validate)' \
+		'  make validate-evidence     Repository evidence validators (compatibility: corepack pnpm repo:validate)' \
+		'' \
+		'Common proof groups:' \
+		'  make runtime-proof         API and worker runtime proof' \
+		'  make providers-proof       Provider adapter proof' \
+		'  make test-compose          Generated Compose validation and smoke' \
+		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
+		'' \
+		'Compatibility targets remain valid. Historical names do not imply React parity, staging, production, live-provider, SOC, ISO certification, enterprise production, product UI, or browser E2E readiness.'
+
+commands: help
+
+setup: install
+
+foundation: verify
+
+dev-ready: verify
+
+validate-foundation: verify
+
+validate-coverage: parity
+
+validate-assurance: enterprise-validate
+
+validate-evidence:
+	corepack pnpm repo:validate
+
+assurance: validate-assurance
+
+evidence: validate-evidence
 
 install:
 	corepack pnpm install --frozen-lockfile
