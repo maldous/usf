@@ -290,7 +290,17 @@ import/<short-purpose>
 
 9.5 A pushed tag MUST NOT be moved except through an explicit corrective process (§13).
 
-9.6 Tag names MUST avoid forbidden migration-phase language (`v2`, `legacy`, `old`, `new`, `temp`, `transitional`, redundant local `usf`).
+9.6 Tag names MUST avoid forbidden migration-phase language (`v2`, `legacy`, `old`, `new`, `temp`, `transitional`, redundant local `usf`), except for the one-off `v2-foundation` annotated release-baseline tag authorised by §9.6.1.
+
+9.6.1 **One-off dev-ready foundation baseline tag exception.** Matthew authorised a narrow governance amendment for the exact annotated tag name `v2-foundation` to mark the immutable dev-ready foundation baseline before post-foundation optimisation/minimalisation begins. This exception:
+
+- applies only to the exact tag name `v2-foundation`;
+- applies only to the single dev-ready foundation baseline target commit recorded by USF-228;
+- does not authorise arbitrary `v2-*` tags, branches, repository paths, file names, package names, schema IDs, taxonomy IDs, vocabulary IDs, implementation names, or local value IDs;
+- does not weaken the general prohibition on migration-phase naming;
+- does not make the tag proof of correctness by itself;
+- does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity;
+- records a baseline state for later optimisation/minimalisation, not a permission to remove lineage, weaken validators, or reduce proof/evidence quality.
 
 9.7 **Recommended first tag:**
 
@@ -341,6 +351,8 @@ This tag does not create active schemas.
 This tag does not import runtime/application code from ../react.
 ../react remains historical semantic/source evidence and lineage.
 ```
+
+9.9.1 **Required `v2-foundation` annotated tag message shape.** The one-off `v2-foundation` tag MUST carry a message that identifies the dev-ready foundation baseline, the target commit, the USF-228 governance exception, and the non-claims in §9.6.1. The tag message MUST NOT claim staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.
 
 9.10 No tag is created in this task.
 

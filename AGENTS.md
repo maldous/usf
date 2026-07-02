@@ -559,6 +559,7 @@ Allowed exceptions:
 * source notes
 * historical aliases
 * explanatory text describing why these terms are forbidden
+* the exact annotated Git tag `v2-foundation`, only as the one-off dev-ready foundation baseline authorised by Matthew and governed by `docs/architecture/git-practices-standard.md` §9.6.1
 * deliberate global machine-readable artefact IDs using the `usf.` namespace
 
 Global machine-readable IDs MAY use the `usf.` namespace because they may be consumed outside the repository context.
