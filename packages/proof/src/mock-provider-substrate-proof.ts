@@ -12,6 +12,10 @@ import {
   type WebhookSinkCaptureEvidence,
 } from "@foundation/adapter-mail";
 import { runLocalStackComposedProof } from "./localstack-composed-proof.ts";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 import { runWireMockComposedProof } from "./wiremock-composed-proof.ts";
 
 interface MockProviderSubstrateProofResult {
@@ -120,24 +124,29 @@ function runProcess(command: string, args: readonly string[], timeoutMs = 180000
   });
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-webhook-sink-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("webhook-sink-proof");
   await writeFile(
     path,
     [
       "services:",
       "  webhook-sink:",
-      "    ports:",
+      "    ports: !override",
       "      - target: 8080",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 function composeArgs(projectName: string, overridePath: string): string[] {
@@ -211,6 +220,11 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
+    assert(
+      port === override.publishedPort,
+      "webhook sink proof port did not match the safe published port",
+    );
+    assertFetchSafeLoopbackPort(port, "webhook-sink-proof-selected-fetch-forbidden-port");
     const provider = new WebhookSinkCaptureProvider({
       endpoint: `http://127.0.0.1:${port}`,
     });
@@ -271,7 +285,7 @@ export async function runMockProviderSubstrateProof(): Promise<MockProviderSubst
     localstackProofStatus,
     providerUnavailableChecked: true,
     checks: [
-      "webhook sink container started from canonical test Compose with ephemeral loopback port",
+      "webhook sink container started from canonical test Compose with preselected Fetch-safe ephemeral loopback port",
       "webhook sink readiness used bounded retry",
       "adapter connected through the adapter package protocol-exception boundary",
       "synthetic webhook capture performed a POST round trip",

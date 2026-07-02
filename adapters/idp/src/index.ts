@@ -18,7 +18,7 @@ export const KEYCLOAK_SERVICE_CATALOGUE_IDS = Object.freeze([
   KEYCLOAK_DB_SERVICE_CATALOGUE_ID,
 ] as const);
 export const KEYCLOAK_ADMIN_SDK_PACKAGE = "@keycloak/keycloak-admin-client";
-export const KEYCLOAK_ADMIN_SDK_VERSION = "26.2.5";
+export const KEYCLOAK_ADMIN_SDK_VERSION = "26.5.6";
 
 const DEFAULT_KEYCLOAK_BASE_URL = "http://127.0.0.1:8090";
 const DEFAULT_KEYCLOAK_ADMIN_REALM = "master";

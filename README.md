@@ -8,6 +8,36 @@ You get a foundation built for human review and AI-assisted delivery. It gives y
 
 ![Universal Service Foundation overview](docs/assets/readme/image1.png)
 
+## Developer Quickstart
+
+The supported local handover path is documented in [Dev Readiness Validation and Handover](docs/architecture/dev-readiness-validation-and-handover.md). It is intended for a developer or AI agent starting from a fresh clone with no private local state.
+
+Prerequisites:
+
+- Node.js 24.16.0 or newer.
+- Corepack with pnpm 11.9.0.
+- Python 3.
+- Docker with the Compose plugin for composed-provider proof commands.
+
+One-command local validation:
+
+```bash
+make verify
+```
+
+Useful shorter commands:
+
+```bash
+make install
+corepack pnpm dev:smoke
+corepack pnpm runtime:proof
+corepack pnpm proof:observability:browser-telemetry
+corepack pnpm parity
+python3 tools/validate-spec/validate-spec.py all --json
+```
+
+Local proofs use synthetic tenants, actors, jobs, browser telemetry, and local composed services only. They do not require real tenant data, real secrets, live providers, staging, or production access.
+
 ## Why USF Exists
 
 ![Why USF exists](docs/assets/readme/image2.png)

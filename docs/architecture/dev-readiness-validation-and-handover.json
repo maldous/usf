@@ -1,0 +1,299 @@
+{
+  "id": "dev-readiness-validation-and-handover",
+  "title": "Dev Readiness Validation and Handover",
+  "sourceIssue": "USF-226",
+  "parentIssue": "USF-133",
+  "relatedIssues": [
+    "USF-184",
+    "USF-192",
+    "USF-224",
+    "USF-225"
+  ],
+  "status": "fresh-clone-validation-passed-pending-pr-merge",
+  "definitionOfDevReady": "A developer or AI agent can clone the repository, set it up from documented steps, run the local and composed foundation, execute proof and validation commands, understand failures, make a governed change, and submit a compliant PR without private knowledge, hidden local state, real secrets, or real tenant data.",
+  "repositoryStateAtStart": {
+    "branch": "main",
+    "headCommit": "0669af5bceba3b3ee05181b22106dc1a191d1013",
+    "originMainCommit": "0669af5bceba3b3ee05181b22106dc1a191d1013",
+    "openGithubPullRequests": [],
+    "activeLinearBacklogIssues": [
+      "USF-226"
+    ],
+    "activeLinearTodoIssues": [],
+    "activeLinearInProgressIssues": [],
+    "archivedLinearTodoIssuesExcluded": [
+      "USF-1",
+      "USF-2",
+      "USF-3",
+      "USF-4"
+    ],
+    "gitStatus": "clean"
+  },
+  "repositoryOutputs": [
+    "README.md#developer-quickstart",
+    "docs/architecture/dev-readiness-validation-and-handover.md",
+    "docs/architecture/dev-readiness-validation-and-handover.json"
+  ],
+  "handoverPath": {
+    "freshCloneSteps": [
+      "git clone https://github.com/maldous/usf.git",
+      "cd usf",
+      "make verify"
+    ],
+    "oneCommandInstallSetupVerify": "make verify",
+    "separateInstallCommand": "make install",
+    "localValidationSuperset": "corepack pnpm verify",
+    "ciExpectation": "Pull requests run validate-spec; main pushes run proof-anchor. Local make verify remains the required dev-readiness handover superset before PR ready state and before Linear Done."
+  },
+  "toolchainEvidence": {
+    "nodeEngine": ">=24.16.0",
+    "nodeVersionObserved": "v24.16.0",
+    "pnpmPackageManager": "pnpm@11.9.0",
+    "pnpmVersionObserved": "11.9.0",
+    "python": "python3 required for validators",
+    "pythonVersionObserved": "Python 3.12.3",
+    "dockerCompose": "required for composed-provider proof commands and make verify",
+    "dockerComposeVersionObserved": "Docker Compose version v5.1.4",
+    "dependencyVersionPosture": "package.json dependencies and devDependencies use exact versions",
+    "lockfilePosture": "pnpm-lock.yaml is committed and checked by frozen install",
+    "vulnerabilityPosture": "corepack pnpm audit --audit-level low passed after exact @keycloak/keycloak-admin-client update to 26.5.6 and workspace protobufjs override to 7.6.4",
+    "licencePosture": "corepack pnpm licenses list --json completed with 479 package rows across 16 license classes; one transitive Unknown package metadata row was observed for unionfs and does not create a compliance claim"
+  },
+  "safeLocalConfiguration": {
+    "realSecretsRequired": false,
+    "realTenantDataRequired": false,
+    "liveProviderRequired": false,
+    "stagingAccessRequired": false,
+    "productionAccessRequired": false,
+    "safeConfigDocumented": true,
+    "syntheticDataDocumented": true,
+    "optionalEnvironmentVariables": [
+      "USF_DEV_RUNTIME_MODE",
+      "USF_WORKER_RUN_ONCE",
+      "USF_BROWSER_EXECUTABLE",
+      "HOST",
+      "PORT"
+    ],
+    "redactionBoundary": "Secret-shaped fixture values must not appear in audit, logs, validator output, proof output, safe status, or evidence summaries."
+  },
+  "representativeProofCommands": [
+    {
+      "command": "corepack pnpm dev:smoke",
+      "purpose": "In-memory API smoke path"
+    },
+    {
+      "command": "corepack pnpm runtime:proof",
+      "purpose": "API and worker runtime proof across supported dev modes"
+    },
+    {
+      "command": "corepack pnpm providers-proof",
+      "purpose": "Provider adapter proof and SDK boundary checks"
+    },
+    {
+      "command": "corepack pnpm proof:api:graphql-generated-client",
+      "purpose": "Generated client, external developer, GraphQL, and federation execution proof"
+    },
+    {
+      "command": "corepack pnpm proof:observability:browser-telemetry",
+      "purpose": "Minimal browser telemetry proof"
+    },
+    {
+      "command": "corepack pnpm proof:backup:operations",
+      "purpose": "Backup, restore, DR, PITR, and RPO/RTO local operations proof"
+    },
+    {
+      "command": "corepack pnpm proof:observability:operations-execution",
+      "purpose": "Observability alerting, dashboard, and incident workflow proof"
+    }
+  ],
+  "validationResults": [
+    {
+      "command": "corepack pnpm install --frozen-lockfile",
+      "status": "passed"
+    },
+    {
+      "command": "make verify",
+      "status": "passed"
+    },
+    {
+      "command": "corepack pnpm verify",
+      "status": "passed via make verify"
+    },
+    {
+      "command": "corepack pnpm proof:api:graphql-generated-client",
+      "status": "passed standalone and via make verify"
+    },
+    {
+      "command": "corepack pnpm proof:observability:browser-telemetry",
+      "status": "passed standalone and via make verify"
+    },
+    {
+      "command": "python3 tools/validate-spec/validate-spec.py all --json",
+      "status": "passed"
+    },
+    {
+      "command": "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+      "status": "passed"
+    },
+    {
+      "command": "python3 tools/validate-bootstrap/validate-bootstrap.py all --json",
+      "status": "passed"
+    },
+    {
+      "command": "python3 tools/validate-parity/validate-parity.py all --json",
+      "status": "passed via parity suite in make verify"
+    },
+    {
+      "command": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "passed"
+    },
+    {
+      "command": "python3 tools/validate-runtime/validate-runtime.py all --json",
+      "status": "passed"
+    },
+    {
+      "command": "python3 tools/validate-compose/validate-compose.py all --json",
+      "status": "passed via make verify"
+    },
+    {
+      "command": "corepack pnpm audit --audit-level low",
+      "status": "passed"
+    },
+    {
+      "command": "corepack pnpm licenses list --json",
+      "status": "passed with inventory summary recorded"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed after evidence update"
+    },
+    {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "passed after evidence update"
+    },
+    {
+      "command": "fresh clone make verify",
+      "status": "passed from /tmp/usf-226-fresh-clone.UH4ysa at cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d"
+    }
+  ],
+  "failuresFixedDuringUSF226": [
+    {
+      "command": "corepack pnpm audit --audit-level high",
+      "failure": "Transitive protobufjs 7.5.8 advisory through Temporal packages",
+      "fix": "Added exact pnpm workspace override pinning protobufjs to 7.6.4",
+      "result": "corepack pnpm audit --audit-level low reports no known vulnerabilities"
+    },
+    {
+      "command": "corepack pnpm audit --audit-level low",
+      "failure": "Direct @keycloak/keycloak-admin-client 26.2.5 advisory",
+      "fix": "Updated @keycloak/keycloak-admin-client to exact patched version 26.5.6 and aligned adapter, runtime manifest, enterprise evidence, and validator expectations",
+      "result": "corepack pnpm audit --audit-level low reports no known vulnerabilities"
+    },
+    {
+      "command": "make verify",
+      "failure": "USF-RUNTIME-016 initially expected the old Keycloak client exact version after the audit fix",
+      "fix": "Updated runtime validator and evidence metadata to require @keycloak/keycloak-admin-client 26.5.6",
+      "result": "Final make verify passed"
+    },
+    {
+      "command": "corepack enable",
+      "failure": "Fresh-clone trial failed before repository validation because the host disallowed creating a global pnpm shim under /usr/bin",
+      "fix": "Removed corepack enable from the required fresh-clone handover path because make verify invokes corepack pnpm directly",
+      "result": "Fresh-clone make verify passed from /tmp/usf-226-fresh-clone.UH4ysa without requiring corepack enable"
+    },
+    {
+      "command": "corepack pnpm proof:workflow:windmill",
+      "failure": "Fresh-clone make verify exposed a Windmill SDK readiness timeout when Docker selected Fetch-forbidden loopback port 1720",
+      "fix": "Compose proof harnesses now preselect and assert Fetch-safe ephemeral loopback ports instead of accepting Docker's unrestricted random host port; Windmill records safeLoopbackPortChecked evidence and runtime validation enforces the marker",
+      "result": "Targeted ClickHouse, Redis, ClamAV, SonarQube, WireMock, LocalStack, mock-substrate, and Windmill proofs passed after the safe-port fix; fresh-clone make verify then passed"
+    }
+  ],
+  "freshCloneEvidence": {
+    "status": "passed",
+    "cloneSource": "https://github.com/maldous/usf.git",
+    "branch": "codex/usf-226-dev-readiness-validation-handover",
+    "headCommit": "cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d",
+    "checkoutPath": "/tmp/usf-226-fresh-clone.UH4ysa",
+    "expectedCommand": "make verify",
+    "observedCommandOutcome": "passed",
+    "finalGitStatusShort": "clean",
+    "privateLocalStateRequired": false,
+    "realSecretsRequired": false,
+    "realTenantDataRequired": false
+  },
+  "contributionWorkflowEvidence": {
+    "status": "documented-controlled-change-in-this-pr",
+    "controlledChange": "README handover entry point, dev-readiness guide, and machine-readable evidence report only",
+    "forbiddenScopeAvoided": [
+      "foundation parity reopening",
+      "runtime implementation",
+      "provider implementation",
+      "product UI",
+      "React migration",
+      "USF-39 mutation"
+    ],
+    "doneStateRule": "USF-226 can move Done only after merged evidence maps to every acceptance criterion and post-merge validation is recorded."
+  },
+  "diagnosticsEvidence": {
+    "setupFailuresDocumented": true,
+    "proofFailuresDocumented": true,
+    "validatorFailuresDocumented": true,
+    "browserTelemetryFailuresDocumented": true,
+    "redactionFailuresBlockReadiness": true
+  },
+  "pullRequestEvidence": {
+    "prUrl": "https://github.com/maldous/usf/pull/193",
+    "prHeadCommit": "cf135a923d6c9d9e0e4db0c1bd66fbd5b2720b0d",
+    "mergeSha": "pending-post-merge-linear-closure-comment",
+    "mergeShaBoundary": "A pull request cannot contain the merge commit that merges it. The actual merge SHA must be recorded on USF-226 after merge before Done."
+  },
+  "finalSearchEvidence": {
+    "openGithubPullRequestsBeforeWork": [],
+    "openGithubPullRequestsBeforeClosure": "pending",
+    "openLinearBacklogTodoInProgressBeforeWork": [
+      "USF-226"
+    ],
+    "openLinearBacklogTodoInProgressBeforeClosure": "pending",
+    "archivedOnboardingIssuesExcludedFromActiveOpenCount": [
+      "USF-1",
+      "USF-2",
+      "USF-3",
+      "USF-4"
+    ]
+  },
+  "claims": {
+    "devReadinessHandoverClaim": "local-and-fresh-clone-validation-passed-pending-pr-merge-post-merge-reconciliation",
+    "freshCloneBootstrapProven": true,
+    "oneCommandPathProven": true,
+    "localCiExpectationDocumented": true,
+    "safeConfigDocumented": true,
+    "syntheticDataDocumented": true,
+    "diagnosticsDocumented": true,
+    "contributionWorkflowDocumented": true,
+    "dependencyHygieneChecked": true,
+    "testReadinessClaim": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2EReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ]
+}

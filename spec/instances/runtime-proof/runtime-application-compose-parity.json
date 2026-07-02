@@ -340,7 +340,7 @@
       "portName": "IdentityProvider,KeycloakVerifier",
       "endpointRef": "endpoint://compose/keycloak",
       "sdkPackage": "@keycloak/keycloak-admin-client",
-      "sdkVersion": "26.2.5",
+      "sdkVersion": "26.5.6",
       "providerRegistryEvidence": "packages/core/src/index.ts records identity-keycloak-composed-test with KeycloakComposedIdentityProvider, composed-test mode, endpoint_ref posture, and healthy bounded local composed-test status.",
       "apiProofEvidence": "runtime:proof:compose verifies API login issues synthetic identity through KeycloakComposedIdentityProvider using @keycloak/keycloak-admin-client with service-specific readiness retry.",
       "workerProofEvidence": "runtime:proof:compose verifies worker Keycloak synthetic identity readback and fail-closed tenant-boundary evidence through KeycloakComposedIdentityProvider."
@@ -764,9 +764,9 @@
     {
       "dependencyPinning": "exact-version-pinned",
       "selectedPackage": "@keycloak/keycloak-admin-client",
-      "selectedVersion": "26.2.5",
+      "selectedVersion": "26.5.6",
       "officialOrDefactoStatus": "Official Keycloak admin client selected for composed Keycloak proof.",
-      "maintenanceEvidence": "Version 26.2.5 is pinned to match the compose Keycloak image version and is maintained by the Keycloak project.",
+      "maintenanceEvidence": "Version 26.5.6 is pinned to the patched official client version while the local compose Keycloak service image remains service-catalogue governed.",
       "securityPosture": "Adapter emits endpoint_ref, hashes, safe reason codes, and value-free summaries only; admin credentials, tokens, endpoints, and SDK error payloads are not emitted.",
       "typescriptSupport": "Official package includes TypeScript declarations and is imported only inside adapters/idp/src/index.ts.",
       "localComposeCompatibility": "Connects to loopback-bound Keycloak in compose.dev.generated.yaml with local placeholder admin credentials and no external egress.",

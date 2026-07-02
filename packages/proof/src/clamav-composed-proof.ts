@@ -1,7 +1,6 @@
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
-import net from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -23,6 +22,10 @@ import {
   createPolicyDecisionPoint,
 } from "@foundation/capability-tenant";
 import { createTenantContext, type TenantContext } from "@foundation/core";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 
 interface ClamAvComposedProofResult {
   readonly status: "pass";
@@ -121,41 +124,32 @@ function runProcess(command: string, args: readonly string[]): Promise<string> {
 }
 
 async function unusedPort(): Promise<number> {
-  const server = net.createServer();
-  server.unref();
-  return new Promise((resolve, reject) => {
-    server.once("error", reject);
-    server.listen({ host: "127.0.0.1", port: 0 }, () => {
-      const address = server.address();
-      server.close(() => {
-        if (typeof address === "object" && address) {
-          resolve(address.port);
-        } else {
-          reject(new Error("clamav-proof-port-allocation-failed"));
-        }
-      });
-    });
-  });
+  return allocateFetchSafeLoopbackPort("clamav-unavailable-proof");
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-clamav-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("clamav-proof");
   await writeFile(
     path,
     [
       "services:",
       "  clamav:",
-      "    ports:",
+      "    ports: !override",
       "      - target: 3310",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 function composeArgs(projectName: string, overridePath: string): string[] {
@@ -315,6 +309,11 @@ export async function runClamAvComposedProof(): Promise<ClamAvComposedProofResul
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
+    assert(
+      port === override.publishedPort,
+      "ClamAV proof port did not match the safe published port",
+    );
+    assertFetchSafeLoopbackPort(port, "clamav-proof-selected-fetch-forbidden-port");
     const adapter = new ClamAvScanProvider({ port });
     evidence = await adapter.proveRoundTrip(context());
     fileServiceEvidence = await proveFileServiceBoundary(adapter);

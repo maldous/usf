@@ -1,6 +1,5 @@
 import { spawn } from "node:child_process";
 import { mkdtemp, rm, writeFile, mkdir } from "node:fs/promises";
-import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -15,6 +14,10 @@ import {
   type SonarQubeComposedQualityGateEvidence,
 } from "@foundation/adapter-assurance";
 import { createTenantContext } from "@foundation/core";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 
 interface SonarQubeComposedProofResult {
   readonly status: "pass";
@@ -125,9 +128,14 @@ function runProcess(command: string, args: readonly string[], timeoutMs = 300000
   });
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-sonarqube-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("sonarqube-proof");
   await writeFile(
     path,
     [
@@ -137,14 +145,14 @@ async function writeComposeOverride(): Promise<{ readonly dir: string; readonly 
       '      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"',
       "    ports: !override",
       "      - target: 9000",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 async function writeSyntheticProject(dir: string): Promise<{
@@ -222,18 +230,7 @@ async function composeDown(projectName: string, overridePath: string): Promise<v
 }
 
 async function closedLoopbackPort(): Promise<number> {
-  const server = createServer();
-  await new Promise<void>((resolve, reject) => {
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => resolve());
-  });
-  const address = server.address();
-  assert(address && typeof address === "object", "sonarqube-unavailable-port-allocation-failed");
-  const port = address.port;
-  await new Promise<void>((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
-  return port;
+  return allocateFetchSafeLoopbackPort("sonarqube-unavailable-proof");
 }
 
 async function proveUnavailable(port: number): Promise<SonarQubeComposedQualityGateEvidence> {
@@ -270,7 +267,7 @@ function assertSafeEvidence(evidence: SonarQubeComposedQualityGateEvidence, pref
 }
 
 export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProofResult> {
-  const { dir, path } = await writeComposeOverride();
+  const { dir, path, publishedPort } = await writeComposeOverride();
   const syntheticProject = await writeSyntheticProject(dir);
   const projectName = `usf-sonarqube-proof-${process.pid}`;
   const context = createTenantContext({
@@ -286,6 +283,8 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
   try {
     await composeUp(projectName, path);
     const port = await composePort(projectName, path);
+    assert(port === publishedPort, "SonarQube proof port did not match the safe published port");
+    assertFetchSafeLoopbackPort(port, "sonarqube-proof-selected-fetch-forbidden-port");
     const provider = new SonarQubeComposedQualityGateAdapter({
       endpoint: `http://127.0.0.1:${port}`,
       adminUsername: "admin",
@@ -353,7 +352,7 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
     checks: [
       "SonarQube container started from canonical test Compose with assurance profile",
       "sonar-postgres dependency reached healthy before SonarQube startup",
-      "SonarQube host exposure used an ephemeral loopback port",
+      "SonarQube host exposure used a preselected Fetch-safe ephemeral loopback port",
       "SonarQube readiness used bounded Web API retry inside the adapter boundary",
       "official SonarSource npm scanner submitted a synthetic TypeScript project",
       "quality-gate result was read back from the local SonarQube service",

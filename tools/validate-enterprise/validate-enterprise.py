@@ -3533,7 +3533,8 @@ def check_sonarqube_service_proof_boundary(F: Findings, state: dict[str, Any]) -
             F.add("USF-ENTERPRISE-023", "adapters/assurance/src/index.ts", f"adapter marker is missing: {marker}")
     for marker in (
         "COMPOSE_PROFILE = \"assurance\"",
-        "published: \"0\"",
+        "allocateFetchSafeLoopbackPort",
+        "assertFetchSafeLoopbackPort",
         "host_ip: 127.0.0.1",
         "composeDown",
         "--remove-orphans",

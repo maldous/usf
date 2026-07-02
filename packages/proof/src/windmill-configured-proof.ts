@@ -13,6 +13,10 @@ import {
   runScriptByPath,
   setClient,
 } from "windmill-client";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 
 interface ProcessResult {
   readonly stdout: string;
@@ -25,6 +29,7 @@ interface ProcessResult {
 interface WindmillConfiguredEvidence {
   readonly imageDigestPinned: true;
   readonly generatedComposeModeChecked: true;
+  readonly safeLoopbackPortChecked: true;
   readonly readinessRetryChecked: true;
   readonly serverHealthChecked: true;
   readonly workerReadinessChecked: true;
@@ -52,7 +57,7 @@ interface WindmillConfiguredEvidence {
   readonly readinessAttempts: number;
   readonly auditEventCountBucket: "one-or-more";
   readonly failClosedReasonCode: "windmill-invalid-credential-denied";
-  readonly durationBucket: "under-5m";
+  readonly durationBucket: "under-15m";
 }
 
 interface WindmillConfiguredProofResult {
@@ -134,6 +139,8 @@ const SUPERADMIN_SECRET = "usf-local-windmill-superadmin-placeholder";
 const WORKSPACE_ID = "usfwindmillproof";
 const SCRIPT_PATH = "u/proof/usf_windmill_operator_proof";
 const VARIABLE_PATH = "u/proof/synthetic_flag";
+const WINDMILL_READINESS_MAX_ATTEMPTS = 160;
+const WINDMILL_READINESS_MAX_DELAY_MS = 5000;
 const FORBIDDEN_EVIDENCE_PATTERN =
   /usf-local-windmill-superadmin-placeholder|https?:\/\/|127\.0\.0\.1|0\.0\.0\.0|localhost|postgres:\/\/|windmill_password|password|token|connection_string|stackTrace|at\s+\w+\s+\(|tenant-windmill|approval-local|value-free-proof|raw_endpoint|provider_payload|sdk error/i;
 const PROHIBITED_CLAIMS_OBSERVED = [] as const;
@@ -171,6 +178,7 @@ function safeErrorCode(error: unknown): string {
   if (typeof error === "object" && error !== null && "status" in error) {
     return `windmill-sdk-status-${String((error as { readonly status?: unknown }).status ?? "unknown")}`;
   }
+  if (error instanceof TypeError) return "windmill-sdk-transport-unavailable";
   if (error instanceof Error && error.name) return `windmill-sdk-${error.name}`;
   return "windmill-sdk-unknown-error";
 }
@@ -223,9 +231,15 @@ function composeArgs(projectName: string, overridePath: string): string[] {
   return ["compose", "-p", projectName, "-f", COMPOSE_TARGET, "-f", overridePath];
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-windmill-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("windmill-proof");
+  assertFetchSafeLoopbackPort(publishedPort, "windmill-proof-selected-fetch-forbidden-port");
   await writeFile(
     path,
     [
@@ -233,14 +247,14 @@ async function writeComposeOverride(): Promise<{ readonly dir: string; readonly 
       "  windmill:",
       "    ports: !override",
       "      - target: 8000",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 async function composeUp(projectName: string, overridePath: string): Promise<void> {
@@ -297,7 +311,7 @@ async function waitForWindmillReady(
 ): Promise<{ readonly health: HealthStatus; readonly attempts: number }> {
   setClient(SUPERADMIN_SECRET, baseUrl);
   let lastErrorCode = "windmill-readiness-not-started";
-  for (let attempt = 1; attempt <= 80; attempt += 1) {
+  for (let attempt = 1; attempt <= WINDMILL_READINESS_MAX_ATTEMPTS; attempt += 1) {
     try {
       const health = (await HealthService.getHealthStatus({ force: true })) as HealthStatus;
       if (health.database_healthy === true && Number(health.workers_alive ?? 0) > 0) {
@@ -307,7 +321,7 @@ async function waitForWindmillReady(
     } catch (error) {
       lastErrorCode = safeErrorCode(error);
     }
-    await sleep(Math.min(5000, 500 + attempt * 250));
+    await sleep(Math.min(WINDMILL_READINESS_MAX_DELAY_MS, 500 + attempt * 250));
   }
   throw new Error(`windmill-readiness-timeout:${lastErrorCode}`);
 }
@@ -383,12 +397,14 @@ function assertScriptResult(result: unknown): void {
 }
 
 async function runWindmillConfiguredProof(): Promise<WindmillConfiguredProofResult> {
-  const { dir, path } = await writeComposeOverride();
+  const { dir, path, publishedPort } = await writeComposeOverride();
   const projectName = `usf-windmill-proof-${process.pid}`;
   let cleanupSucceeded = false;
   try {
     await composeUp(projectName, path);
     const port = await composePort(projectName, path);
+    assert(port === publishedPort, "Windmill proof port did not match the safe published port");
+    assertFetchSafeLoopbackPort(port, "windmill-proof-selected-fetch-forbidden-port");
     const baseUrl = `http://127.0.0.1:${port}`;
     const readiness = await waitForWindmillReady(baseUrl);
     assert(
@@ -517,6 +533,7 @@ async function runWindmillConfiguredProof(): Promise<WindmillConfiguredProofResu
       evidence: {
         imageDigestPinned: WINDMILL_IMAGE_REF.includes("@sha256:") as true,
         generatedComposeModeChecked: true,
+        safeLoopbackPortChecked: true,
         readinessRetryChecked: true,
         serverHealthChecked: true,
         workerReadinessChecked: true,
@@ -544,11 +561,12 @@ async function runWindmillConfiguredProof(): Promise<WindmillConfiguredProofResu
         readinessAttempts: readiness.attempts,
         auditEventCountBucket: "one-or-more",
         failClosedReasonCode: "windmill-invalid-credential-denied",
-        durationBucket: "under-5m",
+        durationBucket: "under-15m",
       },
       checks: [
         "digest-pinned Windmill image reference from service catalogue",
         "generated server MODE=server and worker MODE=worker boundary",
+        "preselected Fetch-safe ephemeral loopback port for SDK compatibility",
         "bounded SDK readiness retry until database and worker are ready",
         "official windmill-client authentication through local superadmin placeholder",
         "synthetic workspace and variable SDK round trip",

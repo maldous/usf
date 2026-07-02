@@ -12,6 +12,10 @@ import {
   LocalStackCloudEmulatorProofAdapter,
   type LocalStackCloudEmulatorEvidence,
 } from "@foundation/adapter-resources";
+import {
+  allocateFetchSafeLoopbackPort,
+  assertFetchSafeLoopbackPort,
+} from "./safe-loopback-port.ts";
 
 interface LocalStackComposedProofResult {
   readonly status: "pass";
@@ -120,9 +124,14 @@ function runProcess(command: string, args: readonly string[], timeoutMs = 180000
   });
 }
 
-async function writeComposeOverride(): Promise<{ readonly dir: string; readonly path: string }> {
+async function writeComposeOverride(): Promise<{
+  readonly dir: string;
+  readonly path: string;
+  readonly publishedPort: number;
+}> {
   const dir = await mkdtemp(join(tmpdir(), "usf-localstack-proof-"));
   const path = join(dir, "compose.override.yaml");
+  const publishedPort = await allocateFetchSafeLoopbackPort("localstack-proof");
   await writeFile(
     path,
     [
@@ -130,14 +139,14 @@ async function writeComposeOverride(): Promise<{ readonly dir: string; readonly 
       "  localstack:",
       "    ports: !override",
       "      - target: 4566",
-      '        published: "0"',
+      `        published: "${publishedPort}"`,
       "        host_ip: 127.0.0.1",
       "        protocol: tcp",
       "",
     ].join("\n"),
     "utf8",
   );
-  return { dir, path };
+  return { dir, path, publishedPort };
 }
 
 function composeArgs(projectName: string, overridePath: string): string[] {
@@ -213,6 +222,11 @@ export async function runLocalStackComposedProof(): Promise<LocalStackComposedPr
   try {
     await composeUp(projectName, override.path);
     const port = await composePort(projectName, override.path);
+    assert(
+      port === override.publishedPort,
+      "LocalStack proof port did not match the safe published port",
+    );
+    assertFetchSafeLoopbackPort(port, "localstack-proof-selected-fetch-forbidden-port");
     const provider = new LocalStackCloudEmulatorProofAdapter({
       endpoint: `http://127.0.0.1:${port}`,
     });
@@ -282,7 +296,7 @@ export async function runLocalStackComposedProof(): Promise<LocalStackComposedPr
     providerUnavailableChecked: true,
     checks: [
       "LocalStack container started from canonical test Compose with provider-emulation profile",
-      "LocalStack host exposure used an ephemeral loopback port",
+      "LocalStack host exposure used a preselected Fetch-safe ephemeral loopback port",
       "LocalStack readiness used bounded SDK-backed S3 ListBuckets retry",
       "official AWS SDK v3 S3 client performed synthetic bucket object write read and cleanup",
       "official AWS SDK v3 SQS client performed synthetic queue send receive and cleanup",

@@ -94,7 +94,7 @@
     "redisReadinessStatus": "service_healthy-redis-cli-ping-generated",
     "serverReadinessStatus": "loopback-version-healthcheck-and-SDK-health-status-proven",
     "workerReadinessStatus": "SDK-health-workers-alive-proven",
-    "hostExposure": "ephemeral-loopback-port-in-proof; generated fixed port remains loopback-only",
+    "hostExposure": "preselected-fetch-safe-ephemeral-loopback-port-in-proof; generated fixed port remains loopback-only",
     "dataBoundary": "synthetic-workspace-only",
     "secretBoundary": "local-superadmin-placeholder-reference-redacted",
     "teardownCleanupStatus": "compose-down-volume-removal-and-temp-override-removal-proven-by-USF-212",
@@ -143,7 +143,7 @@
     "auditEvidenceStatus": "value-free-audit-log-row-presence-proven",
     "retentionCleanupStatus": "script-and-variable-cleanup-attempted-plus-compose-volume-removal-proven",
     "providerFailureHandlingStatus": "invalid-credential-fail-closed-proven",
-    "timeoutRetryStatus": "bounded-readiness-retry-and-process-timeouts-proven"
+    "timeoutRetryStatus": "bounded-readiness-retry-safe-loopback-port-selection-and-process-timeouts-proven"
   },
   "temporalJobsSubstituteGate": {
     "repositoryValidationRequired": true,
@@ -209,7 +209,7 @@
   ],
   "operationalEvidencePosture": {
     "readinessRetry": "bounded-health-and-worker-readiness-retry-proven-by-USF-212",
-    "timeout": "windmill-proof-process-timeouts-up-to-300s-proven-by-USF-212",
+    "timeout": "windmill-proof-process-timeouts-and-service-specific-readiness-budget-up-to-15m-proven-by-USF-212",
     "safeTeardown": "compose-down-volume-removal-and-temp-dir-cleanup-proven-by-USF-212",
     "failClosed": "invalid-credential-safe-reason-code-proven-by-USF-212",
     "structuredLogging": "value-free-proof-structured-log-fields-recorded",
