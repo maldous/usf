@@ -20,7 +20,11 @@
   "repositoryOutputs": [
     "README.md#developer-quickstart",
     "docs/architecture/dev-readiness-validation-and-handover.md",
-    "docs/architecture/dev-readiness-validation-and-handover.json"
+    "docs/architecture/dev-readiness-validation-and-handover.json",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/foundation-optimisation-evidence-report.md",
+    "docs/architecture/foundation-optimisation-evidence.json"
   ],
   "handoverPath": {
     "freshCloneSteps": ["git clone https://github.com/maldous/usf.git", "cd usf", "make verify"],
@@ -530,6 +534,20 @@
     "openLinearBacklogTodoInProgressBeforeWork": ["USF-226"],
     "openLinearBacklogTodoInProgressBeforeClosure": ["USF-226"],
     "archivedOnboardingIssuesExcludedFromActiveOpenCount": ["USF-1", "USF-2", "USF-3", "USF-4"]
+  },
+  "postFoundationOptimisationHandover": {
+    "issueId": "USF-230",
+    "strategyIssueId": "USF-229",
+    "baselineTag": "v2-foundation",
+    "authorityIndex": "docs/architecture/current-state-foundation-authority-index.json",
+    "evidenceReport": "docs/architecture/foundation-optimisation-evidence.json",
+    "currentWorkflow": "Future developer and AI-agent work starts from current semantic contracts, ADRs, validators, proof evidence, enterprise evidence, and this handover path.",
+    "historicalLineageBoundary": "Historical ../react source, source-use matrices, parity migration matrices, closure-tier artefacts, and bootstrap mapping remain retained lineage or audit evidence, not active future authority.",
+    "runtimeBehaviourChanged": false,
+    "validatorsWeakened": false,
+    "proofCommandsRemoved": false,
+    "historicalLineageRemoved": false,
+    "nonClaimsPreserved": true
   },
   "claims": {
     "devReadinessHandoverClaim": "pr-193-local-and-fresh-clone-validation-passed; pr-194-enterprise-control-support-merged; final-post-merge-validation-pinned-to-4cc5cad6f6326f060d88a11f08014b69bc82438a",
