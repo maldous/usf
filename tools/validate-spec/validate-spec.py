@@ -2064,7 +2064,11 @@ AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "tests/apps",
     "tests/capabilities",
     "tests/adapters",
+    "tests/contract",
+    "tests/integration",
     "tests/packages",
+    "tests/regression",
+    "tests/unit",
 }
 
 
