@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-065",
+  "functionalRegressionServicePatch": [
+    {
+      "serviceId": "postgres",
+      "set": {
+        "inMemoryServiceSubstituteAllowed": true
+      }
+    }
+  ]
+}

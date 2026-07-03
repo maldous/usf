@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-064",
+  "functionalRegressionSemanticPatch": [
+    {
+      "contractId": "semantic-contract.abac-policy-decision-point",
+      "dropBehaviourCaseTypes": [
+        "audit"
+      ]
+    }
+  ]
+}

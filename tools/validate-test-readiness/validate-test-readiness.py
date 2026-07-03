@@ -30,6 +30,7 @@ OBLIGATION_MANIFEST_PATH = Path("docs/architecture/semantic-service-test-obligat
 FIXTURE_CORPUS_PATH = Path("tests/packages/fixtures/service-fixture-corpus.json")
 INTEGRATION_MATRIX_PATH = Path("docs/architecture/composed-service-integration-test-matrix.json")
 SEMANTIC_UNIT_SUITE_PATH = Path("docs/architecture/semantic-unit-test-suite.json")
+FUNCTIONAL_REGRESSION_SUITE_PATH = Path("docs/architecture/functional-service-regression-suite.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -101,6 +102,12 @@ RULES = {
     "USF-TEST-READINESS-058": ("blocking", "semantic unit suite allows service-backed substitute or unsafe coverage claim"),
     "USF-TEST-READINESS-059": ("blocking", "semantic unit suite lacks unit LCOV contribution boundary"),
     "USF-TEST-READINESS-060": ("blocking", "semantic unit suite lacks enterprise evidence linkage or preserves insufficient non-claims"),
+    "USF-TEST-READINESS-061": ("blocking", "functional regression suite evidence is missing or invalid"),
+    "USF-TEST-READINESS-062": ("blocking", "functional regression semantic obligation mapping is missing or stale"),
+    "USF-TEST-READINESS-063": ("blocking", "functional regression service obligation mapping is missing or stale"),
+    "USF-TEST-READINESS-064": ("blocking", "functional regression behaviour case coverage is incomplete"),
+    "USF-TEST-READINESS-065": ("blocking", "functional regression suite allows service-backed substitute or readiness overclaim"),
+    "USF-TEST-READINESS-066": ("blocking", "functional regression suite lacks enterprise evidence linkage or preserves insufficient non-claims"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -120,6 +127,17 @@ OBLIGATION_MANIFEST_COMMAND = "python3 tools/validate-test-readiness/validate-te
 FIXTURE_CORPUS_COMMAND = "corepack pnpm test-readiness:fixtures"
 INTEGRATION_MATRIX_COMMAND = "corepack pnpm test-readiness:integration"
 INTEGRATION_MATRIX_SCRIPT = "tsx packages/proof/src/composed-service-integration-matrix-proof.ts"
+FUNCTIONAL_REGRESSION_COMMAND = "corepack pnpm test -- tests/packages/semantic-functional-regression-suite.test.ts"
+FUNCTIONAL_REGRESSION_TEST_PATH = "tests/packages/semantic-functional-regression-suite.test.ts"
+REQUIRED_FUNCTIONAL_REGRESSION_CASES = {
+    "positive",
+    "negative",
+    "authorization",
+    "tenant-isolation",
+    "audit",
+    "readiness",
+    "provider-boundary",
+}
 REQUIRED_INTEGRATION_SERVICE_COVERAGE = {
     "startReadiness",
     "seed",
@@ -680,6 +698,66 @@ def apply_semantic_unit_suite_defect(suite: dict[str, Any] | None, defect: dict[
     return out
 
 
+def apply_functional_regression_suite_defect(suite: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeFunctionalRegressionSuite"):
+        return None
+    if suite is None:
+        return None
+    out = copy.deepcopy(suite)
+    for key, value in defect.get("functionalRegressionSuiteSet", {}).items():
+        out[key] = value
+    for key in defect.get("functionalRegressionSuiteDrop", []):
+        out.pop(key, None)
+    for contract_id in defect.get("functionalRegressionSuiteDropContractIds", []):
+        out["semanticRegressionRows"] = [
+            row
+            for row in out.get("semanticRegressionRows", [])
+            if row.get("contractId") != contract_id
+        ]
+    for service_id in defect.get("functionalRegressionSuiteDropServiceIds", []):
+        out["serviceRegressionRows"] = [
+            row
+            for row in out.get("serviceRegressionRows", [])
+            if row.get("serviceId") != service_id
+        ]
+    for patch in defect.get("functionalRegressionSemanticPatch", []):
+        for row in out.get("semanticRegressionRows", []):
+            if row.get("contractId") != patch.get("contractId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for case_type in patch.get("dropBehaviourCaseTypes", []):
+                row["behaviourCases"] = [
+                    item
+                    for item in row.get("behaviourCases", [])
+                    if item.get("caseType") != case_type
+                ]
+    for patch in defect.get("functionalRegressionServicePatch", []):
+        for row in out.get("serviceRegressionRows", []):
+            if row.get("serviceId") != patch.get("serviceId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for case_type in patch.get("dropBehaviourCaseTypes", []):
+                row["behaviourCases"] = [
+                    item
+                    for item in row.get("behaviourCases", [])
+                    if item.get("caseType") != case_type
+                ]
+    for section in defect.get("functionalRegressionSuiteEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("functionalRegressionSuiteDropNonClaims"):
+        dropped = set(defect.get("functionalRegressionSuiteDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("functionalRegressionSuiteAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["functionalRegressionSuiteAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -734,6 +812,15 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         read_json(SEMANTIC_UNIT_SUITE_PATH) if (ROOT / SEMANTIC_UNIT_SUITE_PATH).exists() else None
     )
     semantic_unit_suite = apply_semantic_unit_suite_defect(semantic_unit_suite, defect)
+    functional_regression_suite = (
+        read_json(FUNCTIONAL_REGRESSION_SUITE_PATH)
+        if (ROOT / FUNCTIONAL_REGRESSION_SUITE_PATH).exists()
+        else None
+    )
+    functional_regression_suite = apply_functional_regression_suite_defect(
+        functional_regression_suite,
+        defect,
+    )
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -745,6 +832,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "fixtureCorpus": fixture_corpus,
         "integrationMatrix": integration_matrix,
         "semanticUnitSuite": semantic_unit_suite,
+        "functionalRegressionSuite": functional_regression_suite,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -936,6 +1024,13 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         SEMANTIC_UNIT_SUITE_PATH,
         state["enterpriseModel"],
         "USF-TEST-READINESS-060",
+    )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["functionalRegressionSuite"],
+        FUNCTIONAL_REGRESSION_SUITE_PATH,
+        state["enterpriseModel"],
+        "USF-TEST-READINESS-066",
     )
 
 
@@ -1912,6 +2007,211 @@ def check_semantic_unit_suite(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-060", str(SEMANTIC_UNIT_SUITE_PATH), "semantic unit suite overclaims readiness")
 
 
+def _functional_regression_semantic_obligations(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = manifest.get("semanticContractObligations", [])
+    if not isinstance(rows, list):
+        return []
+    return [
+        row
+        for row in rows
+        if isinstance(row, dict) and "USF-244" in set(row.get("ownerIssueIds", []))
+    ]
+
+
+def _functional_regression_service_obligations(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = manifest.get("serviceObligations", [])
+    if not isinstance(rows, list):
+        return []
+    return [
+        row
+        for row in rows
+        if isinstance(row, dict) and "USF-244" in set(row.get("ownerIssueIds", []))
+    ]
+
+
+def _case_types(row: dict[str, Any]) -> set[str]:
+    cases = row.get("behaviourCases")
+    if not isinstance(cases, list):
+        return set()
+    return {str(case.get("caseType")) for case in cases if isinstance(case, dict)}
+
+
+def _cases_disallow_claims(row: dict[str, Any]) -> bool:
+    cases = row.get("behaviourCases")
+    if not isinstance(cases, list) or not cases:
+        return False
+    return all(
+        isinstance(case, dict)
+        and case.get("inMemoryServiceSubstituteAllowed") is False
+        and case.get("testReadinessClaimAllowed") is False
+        for case in cases
+    )
+
+
+def check_functional_regression_suite(F: Findings, state: dict[str, Any]) -> None:
+    suite = state["functionalRegressionSuite"]
+    manifest = state["obligationManifest"]
+    if not isinstance(suite, dict):
+        F.add("USF-TEST-READINESS-061", str(FUNCTIONAL_REGRESSION_SUITE_PATH), "functional regression suite is missing")
+        return
+    if not isinstance(manifest, dict):
+        return
+    for key in (
+        "id",
+        "issueId",
+        "parentIssueId",
+        "sourceAuthorities",
+        "scope",
+        "testFiles",
+        "semanticRegressionRows",
+        "serviceRegressionRows",
+        "driftDetection",
+        "validationCommands",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in suite:
+            F.add("USF-TEST-READINESS-061", str(FUNCTIONAL_REGRESSION_SUITE_PATH), f"missing top-level field {key}")
+    if suite.get("issueId") != "USF-244" or suite.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-061", str(FUNCTIONAL_REGRESSION_SUITE_PATH), "issue linkage must be USF-244 under USF-234")
+
+    authorities = suite.get("sourceAuthorities")
+    expected_authorities = {
+        "obligationManifest": str(OBLIGATION_MANIFEST_PATH),
+        "semanticUnitSuite": str(SEMANTIC_UNIT_SUITE_PATH),
+        "composedIntegrationMatrix": str(INTEGRATION_MATRIX_PATH),
+        "fixtureCorpus": str(FIXTURE_CORPUS_PATH),
+        "semanticContracts": str(SEMANTIC_CONTRACT_DIR),
+    }
+    if not isinstance(authorities, dict):
+        F.add("USF-TEST-READINESS-061", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#sourceAuthorities", "source authorities are missing")
+    else:
+        for key, value in expected_authorities.items():
+            if authorities.get(key) != value:
+                F.add("USF-TEST-READINESS-061", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#sourceAuthorities.{key}", "source authority is stale")
+
+    scope = suite.get("scope")
+    if not isinstance(scope, dict):
+        F.add("USF-TEST-READINESS-061", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#scope", "scope is missing")
+    else:
+        if scope.get("serviceBackedClaimsRequireComposedEvidence") is not True:
+            F.add("USF-TEST-READINESS-065", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#scope", "service-backed claims must require composed evidence")
+        if scope.get("inMemoryServiceSubstituteAllowedForServiceBackedClaims") is not False:
+            F.add("USF-TEST-READINESS-065", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#scope", "in-memory substitutes must be forbidden")
+        if scope.get("finalTestReadinessClaim") is not False:
+            F.add("USF-TEST-READINESS-065", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#scope", "final readiness claim must be false")
+        if set(scope.get("behaviourCaseTypesRequired", [])) != REQUIRED_FUNCTIONAL_REGRESSION_CASES:
+            F.add("USF-TEST-READINESS-064", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#scope", "required behaviour case inventory is incomplete")
+
+    expected_semantic = _functional_regression_semantic_obligations(manifest)
+    expected_services = _functional_regression_service_obligations(manifest)
+    if isinstance(scope, dict):
+        if scope.get("semanticContractCount") != len(expected_semantic):
+            F.add("USF-TEST-READINESS-062", str(FUNCTIONAL_REGRESSION_SUITE_PATH), "semantic contract count is stale")
+        if scope.get("serviceRegressionCount") != len(expected_services):
+            F.add("USF-TEST-READINESS-063", str(FUNCTIONAL_REGRESSION_SUITE_PATH), "service regression count is stale")
+
+    semantic_rows = _list_by_id(suite.get("semanticRegressionRows"), "contractId")
+    if len(semantic_rows) != len(expected_semantic):
+        F.add("USF-TEST-READINESS-062", str(FUNCTIONAL_REGRESSION_SUITE_PATH), "semantic regression mapping count must match manifest")
+    for row in expected_semantic:
+        contract_id = str(row.get("contractId"))
+        subject = f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#semanticRegressionRows.{contract_id}"
+        mapping = semantic_rows.get(contract_id)
+        if not mapping:
+            F.add("USF-TEST-READINESS-062", subject, "semantic contract lacks functional regression mapping")
+            continue
+        if mapping.get("semanticContractPath") != row.get("path"):
+            F.add("USF-TEST-READINESS-062", subject, "semantic contract path is stale")
+        if mapping.get("capability") != row.get("capability") or mapping.get("capabilityDomain") != row.get("capabilityDomain"):
+            F.add("USF-TEST-READINESS-062", subject, "semantic capability metadata is stale")
+        if set(mapping.get("facetKeysCovered", [])) != set(row.get("facetKeys", [])):
+            F.add("USF-TEST-READINESS-062", subject, "facet coverage mapping is stale")
+        if mapping.get("sourceObligationEvidenceId") != row.get("evidenceId"):
+            F.add("USF-TEST-READINESS-062", subject, "source obligation evidence id is stale")
+        if mapping.get("testFile") != FUNCTIONAL_REGRESSION_TEST_PATH:
+            F.add("USF-TEST-READINESS-062", subject, "test file is stale")
+        text = _source_text(str(mapping.get("testFile", "")))
+        if not text or (
+            str(mapping.get("testName", "")) not in text
+            and "functional regression obligation remains current" not in text
+        ):
+            F.add("USF-TEST-READINESS-062", subject, "mapped test name is missing from test file")
+        if _case_types(mapping) != REQUIRED_FUNCTIONAL_REGRESSION_CASES:
+            F.add("USF-TEST-READINESS-064", subject, "behaviour case coverage is incomplete")
+        if (
+            mapping.get("inMemoryServiceSubstituteAllowedForServiceBackedClaims") is not False
+            or mapping.get("testReadinessClaimAllowed") is not False
+            or not _cases_disallow_claims(mapping)
+        ):
+            F.add("USF-TEST-READINESS-065", subject, "semantic functional row allows unsafe substitute or claim")
+
+    service_rows = _list_by_id(suite.get("serviceRegressionRows"), "serviceId")
+    integration_rows = _list_by_id(state["integrationMatrix"].get("serviceIntegrationRows", []) if isinstance(state["integrationMatrix"], dict) else [], "serviceId")
+    disposition_rows = _list_by_id(state["integrationMatrix"].get("serviceCatalogueDispositionRows", []) if isinstance(state["integrationMatrix"], dict) else [], "serviceCatalogueId")
+    fixture_rows = _list_by_id(state["fixtureCorpus"].get("serviceFixtures", []) if isinstance(state["fixtureCorpus"], dict) else [], "serviceId")
+    if len(service_rows) != len(expected_services):
+        F.add("USF-TEST-READINESS-063", str(FUNCTIONAL_REGRESSION_SUITE_PATH), "service regression mapping count must match manifest")
+    for row in expected_services:
+        service_id = str(row.get("serviceId"))
+        subject = f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#serviceRegressionRows.{service_id}"
+        mapping = service_rows.get(service_id)
+        if not mapping:
+            F.add("USF-TEST-READINESS-063", subject, "service lacks functional regression mapping")
+            continue
+        if mapping.get("composeServiceId") != row.get("composeServiceId"):
+            F.add("USF-TEST-READINESS-063", subject, "compose service id is stale")
+        if mapping.get("fixtureSeedId") != row.get("fixtureSeedId"):
+            F.add("USF-TEST-READINESS-063", subject, "fixture seed id is stale")
+        fixture = fixture_rows.get(service_id)
+        if not fixture or mapping.get("fixtureCorpusSeedId") != fixture.get("fixtureSeedId"):
+            F.add("USF-TEST-READINESS-063", subject, "fixture corpus mapping is stale")
+        integration = integration_rows.get(service_id)
+        disposition = disposition_rows.get(service_id)
+        if row.get("requiredInTest") and not integration and not disposition:
+            F.add("USF-TEST-READINESS-063", subject, "service-backed row lacks composed integration or catalogue disposition mapping")
+        elif integration and mapping.get("integrationMatrixDisposition") != integration.get("integrationDisposition"):
+            F.add("USF-TEST-READINESS-063", subject, "integration matrix disposition is stale")
+        elif not integration and disposition and mapping.get("serviceCatalogueDisposition") != disposition.get("testDisposition"):
+            F.add("USF-TEST-READINESS-063", subject, "service catalogue disposition is stale")
+        if mapping.get("assetInventoryClass") != row.get("assetInventoryClass") or mapping.get("dataClassification") != row.get("dataClassification"):
+            F.add("USF-TEST-READINESS-063", subject, "service metadata is stale")
+        if mapping.get("testFile") != FUNCTIONAL_REGRESSION_TEST_PATH:
+            F.add("USF-TEST-READINESS-063", subject, "test file is stale")
+        text = _source_text(str(mapping.get("testFile", "")))
+        if not text or (
+            str(mapping.get("testName", "")) not in text
+            and "service functional regression boundary remains current" not in text
+        ):
+            F.add("USF-TEST-READINESS-063", subject, "mapped test name is missing from test file")
+        if _case_types(mapping) != REQUIRED_FUNCTIONAL_REGRESSION_CASES:
+            F.add("USF-TEST-READINESS-064", subject, "service behaviour case coverage is incomplete")
+        if (
+            mapping.get("serviceBackedClaimRequiresComposedService") != bool(row.get("requiredInTest"))
+            or mapping.get("inMemoryServiceSubstituteAllowed") is not False
+            or mapping.get("testReadinessClaimAllowed") is not False
+            or not _cases_disallow_claims(mapping)
+        ):
+            F.add("USF-TEST-READINESS-065", subject, "service functional row allows unsafe substitute or claim")
+
+    commands = set(suite.get("validationCommands", []))
+    for expected in (
+        FUNCTIONAL_REGRESSION_COMMAND,
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-061", f"{FUNCTIONAL_REGRESSION_SUITE_PATH}#validationCommands", f"missing validation command {expected}")
+    non_claims = set(suite.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-066", str(FUNCTIONAL_REGRESSION_SUITE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(suite.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-066", str(FUNCTIONAL_REGRESSION_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -2275,6 +2575,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_fixture_corpus(F, state)
     check_integration_matrix(F, state)
     check_semantic_unit_suite(F, state)
+    check_functional_regression_suite(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])
