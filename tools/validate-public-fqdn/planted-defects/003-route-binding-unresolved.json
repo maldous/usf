@@ -1,0 +1,6 @@
+{
+  "id": "003-route-binding-unresolved",
+  "description": "Point hostname rows at an undeclared public browser route binding id.",
+  "setHostnameRouteBindingId": "missing-public-route-binding",
+  "expectedRule": "USF-PUBLIC-FQDN-003"
+}

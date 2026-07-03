@@ -1,0 +1,7 @@
+{
+  "id": "selftest-duplicate-coverage-map",
+  "description": "Duplicate one valid planted-defect coverage list into another rule so selftest must reject coverage-map masking.",
+  "duplicateExpectedRuleFrom": "USF-PUBLIC-FQDN-001",
+  "duplicateExpectedRuleTo": "USF-PUBLIC-FQDN-004",
+  "expectedRule": "USF-PUBLIC-FQDN-SELFTEST"
+}

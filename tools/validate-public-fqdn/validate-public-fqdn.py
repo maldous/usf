@@ -37,6 +37,16 @@ RULES = {
     "USF-PUBLIC-FQDN-SELFTEST": ("blocking", "planted public FQDN defect did not raise its expected rule"),
 }
 
+REQUIRED_CONTRACT_RULE_IDS = {
+    "USF-PUBLIC-FQDN-001",
+    "USF-PUBLIC-FQDN-002",
+    "USF-PUBLIC-FQDN-003",
+    "USF-PUBLIC-FQDN-004",
+    "USF-PUBLIC-FQDN-005",
+    "USF-PUBLIC-FQDN-006",
+    "USF-PUBLIC-FQDN-007",
+    "USF-PUBLIC-FQDN-008",
+}
 EXPECTED_ENVIRONMENTS = {
     "staging": "1e100.network",
     "production": "aldous.info",
@@ -45,6 +55,9 @@ EXPECTED_ROOT_HOST_IDS = {
     "staging": "staging-root",
     "production": "production-root",
 }
+EXPECTED_JSON_PROOF_ENDPOINT_ID = "public-edge-json-proof"
+EXPECTED_BROWSER_ROUTE_BINDING_ID = "public-route-telemetry-proof-route"
+EXPECTED_TELEMETRY_BOOTSTRAP_ID = "public-route-telemetry-bootstrap"
 REQUIRED_PROTOCOLS = {"dns", "https"}
 REQUIRED_NON_CLAIMS = {
     "staging-readiness",
@@ -160,10 +173,43 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
             contract.pop("publicTelemetryBootstrap", None)
         if defect.get("dropProofRoute"):
             contract.setdefault("publicRouteBinding", {}).pop("route", None)
+        if defect.get("malformPublicRouteBinding"):
+            contract["publicRouteBinding"] = "not-a-route-binding"
         if defect.get("addIncompleteAdditionalHostname"):
             environments = contract.setdefault("environments", [])
             if environments:
                 environments[0].setdefault("additionalHostnames", []).append({"fqdn": "api.1e100.network"})
+        if defect.get("addCrossDomainAdditionalHostname"):
+            environments = contract.setdefault("environments", [])
+            for row in environments:
+                if row.get("environment") == "staging":
+                    row.setdefault("additionalHostnames", []).append(
+                        {
+                            "id": "staging-cross-domain",
+                            "fqdn": "api.aldous.info",
+                            "hostnameType": "service",
+                            "purpose": "Invalid cross-domain staging hostname.",
+                            "protocols": ["dns", "https"],
+                            "proofCommandId": "proof:public-fqdn:staging",
+                            "owner": "platform",
+                            "riskOwner": "platform",
+                            "controlOwner": "platform",
+                            "jsonProofEndpointId": EXPECTED_JSON_PROOF_ENDPOINT_ID,
+                            "routeBindingId": EXPECTED_BROWSER_ROUTE_BINDING_ID,
+                            "telemetryBootstrapId": EXPECTED_TELEMETRY_BOOTSTRAP_ID,
+                            "claimBoundary": "Invalid cross-domain hostname should fail validation.",
+                        }
+                    )
+        if "setHostnameJsonProofEndpointId" in defect:
+            set_hostname_field(contract, "jsonProofEndpointId", defect["setHostnameJsonProofEndpointId"])
+        if "setHostnameRouteBindingId" in defect:
+            set_hostname_field(contract, "routeBindingId", defect["setHostnameRouteBindingId"])
+        if "setHostnameTelemetryBootstrapId" in defect:
+            set_hostname_field(contract, "telemetryBootstrapId", defect["setHostnameTelemetryBootstrapId"])
+        if "duplicateExpectedRuleFrom" in defect and "duplicateExpectedRuleTo" in defect:
+            coverage = contract.setdefault("validator", {}).setdefault("plantedDefectCoverage", {})
+            source = coverage.get(defect["duplicateExpectedRuleFrom"], [])
+            coverage[defect["duplicateExpectedRuleTo"]] = list(source)
         if "packageScriptDrop" in defect:
             scripts = mutated.get("package", {}).get("scripts", {})
             for script in defect["packageScriptDrop"]:
@@ -172,6 +218,16 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
             target = defect["makeTargetDrop"]
             mutated["makefile"] = re.sub(rf"\n{re.escape(target)}:\n\t[^\n]+\n", "\n", mutated["makefile"])
     return mutated
+
+
+def set_hostname_field(contract: dict[str, Any], field: str, value: Any) -> None:
+    for row in contract.get("environments", []):
+        if not isinstance(row, dict):
+            continue
+        for collection in ("requiredHostnames", "additionalHostnames"):
+            for host in row.get(collection, []):
+                if isinstance(host, dict):
+                    host[field] = value
 
 
 def is_non_empty_string(value: Any) -> bool:
@@ -202,6 +258,7 @@ def check_contract_shape(F: Findings, contract: Any) -> None:
         "tlsHttpsSemantics",
         "publicHttpEdgeCapability",
         "cloudflareBoundary",
+        "publicJsonProofEndpoint",
         "publicRouteBinding",
         "publicTelemetryBootstrap",
         "testEnvironmentBoundary",
@@ -229,11 +286,24 @@ def check_contract_shape(F: Findings, contract: Any) -> None:
             F.add("USF-PUBLIC-FQDN-001", f"{CONTRACT_PATH}#semanticAuthority.{key}", "non-authority source is treated as authority")
 
 
+def is_domain_bounded(fqdn: str, root_domain: str) -> bool:
+    return fqdn == root_domain or fqdn.endswith(f".{root_domain}")
+
+
+def collect_declared_ids(section: Any) -> set[str]:
+    if isinstance(section, dict) and is_non_empty_string(section.get("id")):
+        return {section["id"]}
+    return set()
+
+
 def check_environments(F: Findings, contract: dict[str, Any]) -> None:
     environments = contract.get("environments")
     if not isinstance(environments, list) or len(environments) != len(EXPECTED_ENVIRONMENTS):
         F.add("USF-PUBLIC-FQDN-002", f"{CONTRACT_PATH}#environments", "staging and production environment rows are required")
         return
+    json_endpoint_ids = collect_declared_ids(contract.get("publicJsonProofEndpoint"))
+    route_binding_ids = collect_declared_ids(contract.get("publicRouteBinding"))
+    telemetry_bootstrap_ids = collect_declared_ids(contract.get("publicTelemetryBootstrap"))
     by_environment = {row.get("environment"): row for row in environments if isinstance(row, dict)}
     if set(by_environment) != set(EXPECTED_ENVIRONMENTS):
         F.add("USF-PUBLIC-FQDN-002", f"{CONTRACT_PATH}#environments", "environment set must be staging and production only")
@@ -254,13 +324,31 @@ def check_environments(F: Findings, contract: dict[str, Any]) -> None:
         if len(root_rows) != 1:
             F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#environments.{environment}.requiredHostnames", "exactly one root hostname row is required")
         for host in required_hostnames:
-            check_hostname_row(F, host, environment, expected_domain, required=True)
+            check_hostname_row(
+                F,
+                host,
+                environment,
+                expected_domain,
+                json_endpoint_ids=json_endpoint_ids,
+                route_binding_ids=route_binding_ids,
+                telemetry_bootstrap_ids=telemetry_bootstrap_ids,
+                required=True,
+            )
         additional = row.get("additionalHostnames", [])
         if not isinstance(additional, list):
             F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#environments.{environment}.additionalHostnames", "additional hostnames must be an array")
         else:
             for host in additional:
-                check_hostname_row(F, host, environment, None, required=False)
+                check_hostname_row(
+                    F,
+                    host,
+                    environment,
+                    expected_domain,
+                    json_endpoint_ids=json_endpoint_ids,
+                    route_binding_ids=route_binding_ids,
+                    telemetry_bootstrap_ids=telemetry_bootstrap_ids,
+                    required=False,
+                )
         if not is_non_empty_string(row.get("additionalHostnamePolicy")):
             F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#environments.{environment}.additionalHostnamePolicy", "additional hostname declaration policy is missing")
 
@@ -269,8 +357,11 @@ def check_hostname_row(
     F: Findings,
     host: Any,
     environment: str,
-    expected_fqdn: str | None,
+    expected_domain: str | None,
     *,
+    json_endpoint_ids: set[str],
+    route_binding_ids: set[str],
+    telemetry_bootstrap_ids: set[str],
     required: bool,
 ) -> None:
     if not isinstance(host, dict):
@@ -284,6 +375,7 @@ def check_hostname_row(
         "owner",
         "riskOwner",
         "controlOwner",
+        "jsonProofEndpointId",
         "routeBindingId",
         "telemetryBootstrapId",
         "claimBoundary",
@@ -291,17 +383,29 @@ def check_hostname_row(
     for field in sorted(required_fields):
         if not is_non_empty_string(host.get(field)) and field != "protocols":
             F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.{field}", "hostname field is missing")
-    if required and expected_fqdn and host.get("fqdn") != expected_fqdn:
+    fqdn = host.get("fqdn")
+    if required and expected_domain and fqdn != expected_domain:
         F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.fqdn", "root hostname does not match required domain")
+    if not required and expected_domain and is_non_empty_string(fqdn) and not is_domain_bounded(fqdn, expected_domain):
+        F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.fqdn", "additional hostname is outside the declared environment domain")
     protocols = host.get("protocols")
     if not isinstance(protocols, list) or set(protocols) != REQUIRED_PROTOCOLS:
         F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.protocols", "hostname protocols must be dns and https")
     if required and host.get("id") != EXPECTED_ROOT_HOST_IDS.get(environment):
         F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.id", "root hostname id is stale")
+    if is_non_empty_string(host.get("jsonProofEndpointId")) and host.get("jsonProofEndpointId") not in json_endpoint_ids:
+        F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.jsonProofEndpointId", "hostname references an unknown JSON proof endpoint")
+    if is_non_empty_string(host.get("routeBindingId")) and host.get("routeBindingId") not in route_binding_ids:
+        F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.routeBindingId", "hostname references an unknown public route binding")
+    if is_non_empty_string(host.get("telemetryBootstrapId")) and host.get("telemetryBootstrapId") not in telemetry_bootstrap_ids:
+        F.add("USF-PUBLIC-FQDN-003", f"{CONTRACT_PATH}#hostnames.{environment}.telemetryBootstrapId", "hostname references an unknown telemetry bootstrap")
 
 
 def check_semantics(F: Findings, contract: dict[str, Any]) -> None:
-    dns = contract.get("dnsResolutionSemantics", {})
+    dns = contract.get("dnsResolutionSemantics")
+    if not isinstance(dns, dict):
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#dnsResolutionSemantics", "DNS semantics must be an object")
+        dns = {}
     if dns.get("required") is not True or dns.get("publicResolutionRequired") is not True:
         F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#dnsResolutionSemantics", "public DNS semantics are incomplete")
     if dns.get("privateOnlyResolutionAllowed") is not False or dns.get("nxdomainAllowed") is not False:
@@ -309,7 +413,10 @@ def check_semantics(F: Findings, contract: dict[str, Any]) -> None:
     if not {"A", "AAAA", "CNAME"}.issubset(set(dns.get("acceptedRecordTypes", []))):
         F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#dnsResolutionSemantics.acceptedRecordTypes", "accepted DNS record types are incomplete")
 
-    tls = contract.get("tlsHttpsSemantics", {})
+    tls = contract.get("tlsHttpsSemantics")
+    if not isinstance(tls, dict):
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#tlsHttpsSemantics", "TLS HTTPS semantics must be an object")
+        tls = {}
     for key in ("httpsRequired", "validCertificateRequired", "certificateHostCoverageRequired"):
         if tls.get(key) is not True:
             F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#tlsHttpsSemantics.{key}", "TLS HTTPS requirement is missing")
@@ -317,11 +424,39 @@ def check_semantics(F: Findings, contract: dict[str, Any]) -> None:
         if tls.get(key) is not False:
             F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#tlsHttpsSemantics.{key}", "unsafe HTTPS exception is allowed")
 
-    route = contract.get("publicRouteBinding", {})
-    if route.get("required") is not True or not is_non_empty_string(route.get("route")):
-        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding", "public proof route is missing")
-    if route.get("routeClass") != "non-product-proof-endpoint":
-        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding.routeClass", "proof route class must be non-product")
+    json_endpoint = contract.get("publicJsonProofEndpoint")
+    if not isinstance(json_endpoint, dict):
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicJsonProofEndpoint", "JSON proof endpoint semantics are missing")
+        json_endpoint = {}
+    if json_endpoint.get("id") != EXPECTED_JSON_PROOF_ENDPOINT_ID:
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicJsonProofEndpoint.id", "JSON proof endpoint id is stale")
+    if json_endpoint.get("required") is not True or json_endpoint.get("route") != "/.well-known/usf-public-edge.json":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicJsonProofEndpoint", "JSON proof endpoint route is missing or stale")
+    if json_endpoint.get("routeClass") != "non-product-json-proof-endpoint":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicJsonProofEndpoint.routeClass", "JSON proof endpoint class must be non-product")
+    if json_endpoint.get("expectedContentType") != "application/json":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicJsonProofEndpoint.expectedContentType", "JSON proof endpoint content type is stale")
+    if json_endpoint.get("proofIssueId") != "USF-263":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicJsonProofEndpoint.proofIssueId", "JSON proof endpoint must be proven by USF-263")
+    if json_endpoint.get("productUiReadinessClaimAllowed") is not False or json_endpoint.get("browserE2eReadinessClaimAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-008", f"{CONTRACT_PATH}#publicJsonProofEndpoint", "JSON proof endpoint overclaims UI or browser E2E readiness")
+
+    route = contract.get("publicRouteBinding")
+    if not isinstance(route, dict):
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding", "public browser route binding semantics are missing")
+        route = {}
+    if route.get("id") != EXPECTED_BROWSER_ROUTE_BINDING_ID:
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding.id", "public browser route binding id is stale")
+    if route.get("required") is not True or route.get("route") != "/__proof/public-route":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding", "public browser proof route is missing or stale")
+    if route.get("routeClass") != "non-product-browser-telemetry-proof-route":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding.routeClass", "public browser proof route class must be non-product")
+    if route.get("expectedContentType") != "text/html":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding.expectedContentType", "public browser proof route content type is stale")
+    if route.get("telemetryBootstrapId") != EXPECTED_TELEMETRY_BOOTSTRAP_ID:
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding.telemetryBootstrapId", "public browser route must bind the telemetry bootstrap by id")
+    if route.get("proofIssueId") != "USF-264":
+        F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicRouteBinding.proofIssueId", "public browser route must be proven by USF-264")
     if route.get("productUiReadinessClaimAllowed") is not False or route.get("browserE2eReadinessClaimAllowed") is not False:
         F.add("USF-PUBLIC-FQDN-008", f"{CONTRACT_PATH}#publicRouteBinding", "public route binding overclaims UI or browser E2E readiness")
 
@@ -331,6 +466,8 @@ def check_semantics(F: Findings, contract: dict[str, Any]) -> None:
     else:
         if telemetry.get("requiredForPublicRouteProof") is not True:
             F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicTelemetryBootstrap.requiredForPublicRouteProof", "telemetry bootstrap proof boundary is not explicit")
+        if telemetry.get("id") != EXPECTED_TELEMETRY_BOOTSTRAP_ID:
+            F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicTelemetryBootstrap.id", "telemetry bootstrap id is stale")
         systems = set(telemetry.get("telemetrySystems", []))
         if not {"faro", "sentry"}.issubset(systems):
             F.add("USF-PUBLIC-FQDN-004", f"{CONTRACT_PATH}#publicTelemetryBootstrap.telemetrySystems", "Faro and Sentry telemetry boundary is incomplete")
@@ -339,7 +476,10 @@ def check_semantics(F: Findings, contract: dict[str, Any]) -> None:
 
 
 def check_gateway_and_provider(F: Findings, contract: dict[str, Any]) -> None:
-    edge = contract.get("publicHttpEdgeCapability", {})
+    edge = contract.get("publicHttpEdgeCapability")
+    if not isinstance(edge, dict):
+        F.add("USF-PUBLIC-FQDN-005", f"{CONTRACT_PATH}#publicHttpEdgeCapability", "public edge capability must be an object")
+        edge = {}
     if edge.get("gatewayNeutral") is not True or edge.get("requiredGateway") != "none":
         F.add("USF-PUBLIC-FQDN-005", f"{CONTRACT_PATH}#publicHttpEdgeCapability", "public edge semantics must be gateway neutral")
     if edge.get("caddyNonRequirement") is not True:
@@ -350,7 +490,10 @@ def check_gateway_and_provider(F: Findings, contract: dict[str, Any]) -> None:
     if edge.get("generatedComposeAuthority") is not False or edge.get("generatedGatewayConfigAuthority") is not False:
         F.add("USF-PUBLIC-FQDN-005", f"{CONTRACT_PATH}#publicHttpEdgeCapability", "generated artefact is treated as semantic authority")
 
-    cloudflare = contract.get("cloudflareBoundary", {})
+    cloudflare = contract.get("cloudflareBoundary")
+    if not isinstance(cloudflare, dict):
+        F.add("USF-PUBLIC-FQDN-006", f"{CONTRACT_PATH}#cloudflareBoundary", "Cloudflare boundary must be an object")
+        cloudflare = {}
     if cloudflare.get("declaredProvider") != "cloudflare":
         F.add("USF-PUBLIC-FQDN-006", f"{CONTRACT_PATH}#cloudflareBoundary.declaredProvider", "Cloudflare provider boundary is missing")
     if cloudflare.get("liveProviderReadinessClaimAllowed") is not False:
@@ -360,7 +503,10 @@ def check_gateway_and_provider(F: Findings, contract: dict[str, Any]) -> None:
 
 
 def check_test_boundary(F: Findings, contract: dict[str, Any]) -> None:
-    boundary = contract.get("testEnvironmentBoundary", {})
+    boundary = contract.get("testEnvironmentBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-PUBLIC-FQDN-007", f"{CONTRACT_PATH}#testEnvironmentBoundary", "Test environment boundary must be an object")
+        boundary = {}
     for key in (
         "testEnvironmentPublicInternetDependencyAllowed",
         "testEnvironmentPublicDnsDependencyAllowed",
@@ -373,15 +519,30 @@ def check_test_boundary(F: Findings, contract: dict[str, Any]) -> None:
 
 
 def check_claims_and_wiring(F: Findings, contract: dict[str, Any], package: dict[str, Any], makefile: str) -> None:
-    non_claims = set(contract.get("nonClaims", []))
+    non_claims_value = contract.get("nonClaims", [])
+    if not isinstance(non_claims_value, list):
+        F.add("USF-PUBLIC-FQDN-008", f"{CONTRACT_PATH}#nonClaims", "non-claims must be an array")
+        non_claims_value = []
+    non_claims = set(non_claims_value)
     missing = REQUIRED_NON_CLAIMS - non_claims
     if missing:
         F.add("USF-PUBLIC-FQDN-008", f"{CONTRACT_PATH}#nonClaims", f"required non-claims are missing: {sorted(missing)}")
-    allowed_claims = {str(claim).lower() for claim in contract.get("allowedClaims", [])}
+    allowed_claims_value = contract.get("allowedClaims", [])
+    if not isinstance(allowed_claims_value, list):
+        F.add("USF-PUBLIC-FQDN-008", f"{CONTRACT_PATH}#allowedClaims", "allowed claims must be an array")
+        allowed_claims_value = []
+    allowed_claims = {str(claim).lower() for claim in allowed_claims_value}
     prohibited = sorted(allowed_claims & PROHIBITED_ALLOWED_CLAIMS)
     if prohibited:
         F.add("USF-PUBLIC-FQDN-008", f"{CONTRACT_PATH}#allowedClaims", f"prohibited readiness claim is allowed: {prohibited}")
-    validator = contract.get("validator", {})
+    validator = contract.get("validator")
+    if not isinstance(validator, dict):
+        F.add("USF-PUBLIC-FQDN-001", f"{CONTRACT_PATH}#validator", "validator metadata must be an object")
+        validator = {}
+    declared_rules = set(validator.get("rules", [])) if isinstance(validator.get("rules"), list) else set()
+    if declared_rules != REQUIRED_CONTRACT_RULE_IDS:
+        F.add("USF-PUBLIC-FQDN-001", f"{CONTRACT_PATH}#validator.rules", "validator rule inventory must exactly match the required public FQDN rules")
+    check_planted_defect_coverage_map(F, validator.get("plantedDefectCoverage"))
     if validator.get("command") != "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json":
         F.add("USF-PUBLIC-FQDN-001", f"{CONTRACT_PATH}#validator.command", "validator command is stale")
     if validator.get("selftestCommand") != "python3 tools/validate-public-fqdn/validate-public-fqdn.py selftest --json":
@@ -398,6 +559,40 @@ def check_claims_and_wiring(F: Findings, contract: dict[str, Any], package: dict
     for command in (validator.get("command"), validator.get("selftestCommand")):
         if command_is_noop(command):
             F.add("USF-PUBLIC-FQDN-001", f"{CONTRACT_PATH}#validator", "validator command must not be a no-op")
+
+
+def load_planted_defect_expected_rules() -> dict[str, str]:
+    expected_by_path: dict[str, str] = {}
+    directory = ROOT / PLANTED_DEFECT_DIR
+    if not directory.exists():
+        return expected_by_path
+    for path in sorted(directory.glob("*.json")):
+        try:
+            defect = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        expected = defect.get("expectedRule")
+        if isinstance(expected, str):
+            expected_by_path[str(path.relative_to(ROOT))] = expected
+    return expected_by_path
+
+
+def check_planted_defect_coverage_map(F: Findings, coverage_map: Any) -> None:
+    if not isinstance(coverage_map, dict):
+        F.add("USF-PUBLIC-FQDN-SELFTEST", f"{CONTRACT_PATH}#validator.plantedDefectCoverage", "planted defect coverage map is missing")
+        return
+    expected_by_path = load_planted_defect_expected_rules()
+    for rule_id in sorted(REQUIRED_CONTRACT_RULE_IDS):
+        entries = coverage_map.get(rule_id)
+        if not isinstance(entries, list) or not entries:
+            F.add("USF-PUBLIC-FQDN-SELFTEST", f"{CONTRACT_PATH}#validator.plantedDefectCoverage.{rule_id}", "coverage map has no fixture list for required rule")
+            continue
+        for entry in entries:
+            if not isinstance(entry, str):
+                F.add("USF-PUBLIC-FQDN-SELFTEST", f"{CONTRACT_PATH}#validator.plantedDefectCoverage.{rule_id}", "coverage map fixture path must be a string")
+                continue
+            if expected_by_path.get(entry) != rule_id:
+                F.add("USF-PUBLIC-FQDN-SELFTEST", f"{CONTRACT_PATH}#validator.plantedDefectCoverage.{rule_id}", "coverage map claims a fixture that does not uniquely expect this rule")
 
 
 def run_checks(state: dict[str, Any]) -> Findings:
@@ -424,17 +619,102 @@ def run_selftest() -> list[dict[str, str]]:
                 "message": "planted defect directory is missing",
             }
         ]
+    canonical_contract = load_optional_json(CONTRACT_PATH)
+    declared_coverage = {}
+    if isinstance(canonical_contract, dict):
+        validator = canonical_contract.get("validator")
+        if isinstance(validator, dict) and isinstance(validator.get("plantedDefectCoverage"), dict):
+            declared_coverage = validator["plantedDefectCoverage"]
+        else:
+            findings.append(
+                {
+                    "severity": "blocking",
+                    "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
+                    "subject": f"{CONTRACT_PATH}#validator.plantedDefectCoverage",
+                    "message": "planted defect coverage map is missing",
+                }
+            )
+    coverage: dict[str, list[str]] = {rule_id: [] for rule_id in REQUIRED_CONTRACT_RULE_IDS}
+    fixture_ids: dict[str, str] = {}
     for path in sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json")):
         defect = json.loads(path.read_text(encoding="utf-8"))
         expected = defect.get("expectedRule")
+        defect_id = defect.get("id")
+        rel_path = str(path.relative_to(ROOT))
+        if not is_non_empty_string(defect_id):
+            findings.append(
+                {
+                    "severity": "blocking",
+                    "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
+                    "subject": rel_path,
+                    "message": "planted defect id is missing",
+                }
+            )
+        elif defect_id in fixture_ids:
+            findings.append(
+                {
+                    "severity": "blocking",
+                    "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
+                    "subject": rel_path,
+                    "message": f"planted defect id duplicates {fixture_ids[defect_id]}",
+                }
+            )
+        else:
+            fixture_ids[defect_id] = rel_path
+        if expected in REQUIRED_CONTRACT_RULE_IDS:
+            coverage[expected].append(rel_path)
+        elif expected == "USF-PUBLIC-FQDN-SELFTEST":
+            pass
+        else:
+            findings.append(
+                {
+                    "severity": "blocking",
+                    "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
+                    "subject": rel_path,
+                    "message": f"planted defect expectedRule is not a required public FQDN rule: {expected}",
+                }
+            )
         F = run_checks(load_state(defect))
         if expected not in F.rule_ids():
             findings.append(
                 {
                     "severity": "blocking",
                     "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
-                    "subject": str(path.relative_to(ROOT)),
+                    "subject": rel_path,
                     "message": f"expected {expected}, got {sorted(F.rule_ids())}",
+                }
+            )
+    for rule_id in sorted(REQUIRED_CONTRACT_RULE_IDS):
+        paths = coverage.get(rule_id, [])
+        if not paths:
+            findings.append(
+                {
+                    "severity": "blocking",
+                    "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
+                    "subject": str(PLANTED_DEFECT_DIR),
+                    "message": f"required rule has no distinct planted defect fixture: {rule_id}",
+                }
+            )
+        declared_paths = declared_coverage.get(rule_id)
+        if not isinstance(declared_paths, list) or not declared_paths:
+            findings.append(
+                {
+                    "severity": "blocking",
+                    "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
+                    "subject": f"{CONTRACT_PATH}#validator.plantedDefectCoverage.{rule_id}",
+                    "message": "coverage map has no fixture list for required rule",
+                }
+            )
+            continue
+        actual = set(paths)
+        declared = {path for path in declared_paths if isinstance(path, str)}
+        if not declared <= actual:
+            findings.append(
+                {
+                    "severity": "blocking",
+                    "ruleId": "USF-PUBLIC-FQDN-SELFTEST",
+                    "subject": f"{CONTRACT_PATH}#validator.plantedDefectCoverage.{rule_id}",
+                    "message": "coverage map claims fixtures that do not uniquely expect the required rule",
                 }
             )
     return findings

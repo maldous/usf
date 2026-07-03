@@ -1,0 +1,6 @@
+{
+  "id": "003-telemetry-binding-unresolved",
+  "description": "Point hostname rows at an undeclared telemetry bootstrap id.",
+  "setHostnameTelemetryBootstrapId": "missing-public-telemetry-bootstrap",
+  "expectedRule": "USF-PUBLIC-FQDN-003"
+}
