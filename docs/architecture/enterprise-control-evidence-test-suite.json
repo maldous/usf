@@ -1,0 +1,377 @@
+{
+  "id": "enterprise-control-evidence-test-suite",
+  "issueId": "USF-243",
+  "parentIssueId": "USF-234",
+  "sourceAuthorities": {
+    "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "testEnvironmentContract": "docs/architecture/test-environment-service-contract.json",
+    "composedIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "fixtureCorpus": "tests/packages/fixtures/service-fixture-corpus.json"
+  },
+  "scope": {
+    "semanticContractEnterpriseObligationCount": 67,
+    "serviceEnterpriseObligationCount": 38,
+    "requiredEnterpriseSectionCount": 10,
+    "serviceBackedClaimsRequireComposedEvidence": true,
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+    "isoCertificationClaimAllowed": false,
+    "socReadinessClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "enterpriseProductionReadinessClaimAllowed": false,
+    "finalTestReadinessClaimAllowed": false
+  },
+  "requiredEnterpriseSections": [
+    {
+      "sectionId": "soaSupportMappings",
+      "expectedRowCount": 216,
+      "requiredFields": [
+        "id",
+        "controlPurpose",
+        "riskTreated",
+        "assetServiceAffected",
+        "owner",
+        "riskOwner",
+        "controlOwner",
+        "implementationStatus",
+        "evidenceSource",
+        "validationCommand",
+        "deferredReason",
+        "nonClaims"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-068"
+    },
+    {
+      "sectionId": "evidenceRegister",
+      "expectedRowCount": 126,
+      "requiredFields": [
+        "id",
+        "proofResult",
+        "whatWasProven",
+        "whatWasNotProven",
+        "validationCommand",
+        "commandPin",
+        "commitPin",
+        "issueLinks",
+        "prOrMergeSha",
+        "retentionPosture"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-069"
+    },
+    {
+      "sectionId": "threatModelAbuseCaseRegister",
+      "expectedRowCount": 100,
+      "requiredFields": [
+        "id",
+        "trustBoundary",
+        "tenantBoundary",
+        "credentialBoundary",
+        "dataClassification",
+        "abuseCases",
+        "failureModes",
+        "failClosedBehaviour",
+        "monitoringAuditEvidence",
+        "residualRisk"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-070"
+    },
+    {
+      "sectionId": "sdkDependencyGovernance",
+      "expectedRowCount": 31,
+      "requiredFields": [
+        "id",
+        "packageName",
+        "version",
+        "selectionRationale",
+        "officialOrDeFactoStatus",
+        "licencePosture",
+        "maintenancePosture",
+        "securityAdvisoryPosture",
+        "typescriptRuntimeCompatibility",
+        "forbiddenLayerImportCheck",
+        "updateDeprecationOwner"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-067"
+    },
+    {
+      "sectionId": "observabilityEvidenceStandard",
+      "expectedRowCount": 1,
+      "requiredFields": [
+        "requiredFields",
+        "prohibitedFields",
+        "auditEvidenceRequirement",
+        "tracingEvidenceRequirement",
+        "metricsEvidenceRequirement"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-067"
+    },
+    {
+      "sectionId": "accessReviewPrivilegedOperationPosture",
+      "expectedRowCount": 83,
+      "requiredFields": [
+        "id",
+        "targetType",
+        "target",
+        "posture",
+        "evidenceSource",
+        "validationCommand",
+        "deferredReason",
+        "nonClaims"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-071"
+    },
+    {
+      "sectionId": "backupRestoreResiliencePosture",
+      "expectedRowCount": 87,
+      "requiredFields": [
+        "id",
+        "targetType",
+        "target",
+        "posture",
+        "evidenceSource",
+        "validationCommand",
+        "deferredReason",
+        "nonClaims"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-072"
+    },
+    {
+      "sectionId": "incidentVulnerabilityManagementEvidence",
+      "expectedRowCount": 107,
+      "requiredFields": [
+        "id",
+        "targetType",
+        "target",
+        "posture",
+        "evidenceSource",
+        "validationCommand",
+        "deferredReason",
+        "nonClaims"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-073"
+    },
+    {
+      "sectionId": "privacyDataMinimisationPosture",
+      "expectedRowCount": 124,
+      "requiredFields": [
+        "id",
+        "targetType",
+        "target",
+        "posture",
+        "evidenceSource",
+        "validationCommand",
+        "deferredReason",
+        "nonClaims"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-074"
+    },
+    {
+      "sectionId": "doneStateGovernance",
+      "expectedRowCount": 1,
+      "requiredFields": [
+        "acceptanceCriteriaRequireEvidence",
+        "deferredItemsRequireFollowUp",
+        "nonClaimsMustBePreserved",
+        "serviceDispositionRowsMustBeResolved",
+        "validationPassingAloneIsNotDone",
+        "doneClaimed"
+      ],
+      "negativeFixtureRuleId": "USF-TEST-READINESS-067"
+    }
+  ],
+  "semanticServiceMapping": {
+    "semanticContractIds": [
+      "semantic-contract.abac-policy-decision-point",
+      "semantic-contract.accessibility-a11y-gate",
+      "semantic-contract.alerting-incident-management-on-call-status-page",
+      "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "semantic-contract.api-keys-personal-access-tokens",
+      "semantic-contract.audit-of-privileged-access",
+      "semantic-contract.authentication-platform",
+      "semantic-contract.background-workers-job-runner",
+      "semantic-contract.backup-and-restore",
+      "semantic-contract.branding-and-theming",
+      "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "semantic-contract.build-versus-compose-decision-framework",
+      "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "semantic-contract.composed-provider-readiness-spine",
+      "semantic-contract.configuration-registry-and-history",
+      "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "semantic-contract.delegated-administration-roles",
+      "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "semantic-contract.end-user-profile-and-preferences-self-service",
+      "semantic-contract.entitlement-engine",
+      "semantic-contract.environment-registry-and-bootstrap",
+      "semantic-contract.environment-specific-vs-shared-service-model",
+      "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "semantic-contract.history-read-model-read-only-projection",
+      "semantic-contract.i18n-runtime-and-validation",
+      "semantic-contract.internal-service-catalog-and-readiness",
+      "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "semantic-contract.metrics-and-traces",
+      "semantic-contract.mock-providers-dev-test",
+      "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "semantic-contract.observability-built-in-alerting-and-incidents",
+      "semantic-contract.openapi-drift-hard-gate",
+      "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "semantic-contract.product-catalog-plans-prices",
+      "semantic-contract.provider-configuration-plane",
+      "semantic-contract.provider-environment-classification",
+      "semantic-contract.quota-enforcement",
+      "semantic-contract.rate-limiting-api",
+      "semantic-contract.rbac-roles-and-permissions",
+      "semantic-contract.relational-storage-and-migrations-and-rls",
+      "semantic-contract.runtime-secrets-management",
+      "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "semantic-contract.search-and-indexing-product-search",
+      "semantic-contract.serverless-function-runtime",
+      "semantic-contract.service-catalog-and-provider-integration-model",
+      "semantic-contract.sub-organisations",
+      "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "semantic-contract.support-mode-break-glass-access",
+      "semantic-contract.support-tickets-customer-health-announcements",
+      "semantic-contract.tenant-canonical-domain-set-unset",
+      "semantic-contract.tenant-data-import-export",
+      "semantic-contract.tenant-domain-activation-auth-client",
+      "semantic-contract.tenant-groups",
+      "semantic-contract.tenant-host-identity-resolution",
+      "semantic-contract.tenant-identity-record-and-fqdn",
+      "semantic-contract.tenant-isolation-proof",
+      "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "semantic-contract.tenant-service-clickthrough-policy",
+      "semantic-contract.universal-service-foundation-scope-and-principles",
+      "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "semantic-contract.user-identity-and-tenant-membership",
+      "semantic-contract.webhooks-developer-facing",
+      "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "semantic-contract.write-only-secret-settings"
+    ],
+    "requiredObligationClass": "enterprise-evidence",
+    "ownerIssueId": "USF-243"
+  },
+  "serviceBackedTestMapping": {
+    "serviceIds": [
+      "postgres",
+      "keycloak-db",
+      "keycloak",
+      "nats",
+      "temporal",
+      "minio",
+      "openbao",
+      "otel-collector",
+      "prometheus",
+      "grafana",
+      "loki",
+      "tempo",
+      "mailpit",
+      "webhook-sink",
+      "redis",
+      "meilisearch",
+      "clickhouse",
+      "pgadmin",
+      "sonar-postgres",
+      "sonar-oidc-plugin",
+      "sonarqube",
+      "mock-oidc",
+      "localstack",
+      "wiremock",
+      "alertmanager",
+      "alloy",
+      "windmill-postgres",
+      "windmill-redis",
+      "windmill",
+      "windmill-worker",
+      "temporal-postgres",
+      "temporal-ui",
+      "pgbackrest",
+      "clamav",
+      "sentry",
+      "caddy",
+      "platform-api",
+      "react-app"
+    ],
+    "requiredObligationClass": "enterprise-evidence",
+    "ownerIssueId": "USF-243",
+    "serviceBackedClaimsRequireComposedEvidence": true,
+    "inMemoryServiceSubstituteAllowed": false
+  },
+  "controlEffectivenessStates": [
+    "defined-only",
+    "implemented",
+    "proven-local",
+    "operating-evidence-present",
+    "deferred-with-owner",
+    "out-of-scope-with-rationale"
+  ],
+  "ciaEvidenceTests": {
+    "confidentiality": [
+      "tenant boundary recorded",
+      "credential boundary recorded",
+      "privacy minimisation recorded",
+      "observability prohibited fields reject raw secrets and tenant values"
+    ],
+    "integrity": [
+      "evidence register command pin recorded",
+      "commit pin recorded",
+      "issue linkage recorded",
+      "done-state governance rejects validation-only closure"
+    ],
+    "availability": [
+      "backup restore resilience posture recorded",
+      "incident and vulnerability posture recorded",
+      "deferred boundaries require owner and review path",
+      "readiness degradation remains bounded evidence not readiness claim"
+    ]
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+  ],
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": [
+      "soa-usf-243-enterprise-control-evidence-test-suite"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-243-enterprise-control-evidence-test-suite"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-243-enterprise-control-evidence-test-suite"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-243-enterprise-control-evidence-test-suite"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-243-enterprise-control-evidence-test-suite"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-243-enterprise-control-evidence-test-suite"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-243-enterprise-control-evidence-test-suite"
+    ]
+  },
+  "allowedClaims": [
+    "enterprise-control-evidence-suite-defined",
+    "iso-style-support-posture-tested"
+  ],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness"
+  ]
+}

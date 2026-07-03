@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-TEST-READINESS-071",
+  "enterpriseModelDropIds": [
+    {
+      "section": "accessReviewPrivilegedOperationPosture",
+      "id": "access-usf-243-enterprise-control-evidence-test-suite"
+    }
+  ]
+}
