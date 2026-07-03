@@ -148,7 +148,7 @@
   },
   "dependencyVersionPosture": {
     "expectedDependencyCount": 26,
-    "expectedDevDependencyCount": 11,
+    "expectedDevDependencyCount": 12,
     "exactSpecifierRequired": true,
     "forbiddenSpecifierForms": [
       "latest",
@@ -222,6 +222,7 @@
           "tsx",
           "typescript",
           "typescript-eslint",
+          "@vitest/coverage-v8",
           "vitest"
         ],
         "owner": "platform-tooling-foundation"
