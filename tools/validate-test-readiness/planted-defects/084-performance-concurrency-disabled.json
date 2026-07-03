@@ -1,0 +1,89 @@
+{
+  "expectedRule": "USF-TEST-READINESS-084",
+  "performanceBudgetProfilePatch": [
+    {
+      "id": "data-store-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "control-plane-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "queue-worker-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "workflow-worker-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "provider-batch-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "secret-access-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "search-index-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "observability-ingest-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "gateway-webhook-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "operator-surface-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "fixture-lifecycle-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    },
+    {
+      "id": "validator-command-pressure",
+      "set": {
+        "concurrentActors": 1,
+        "concurrencyLimit": 1
+      }
+    }
+  ]
+}

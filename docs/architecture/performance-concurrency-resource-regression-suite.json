@@ -23,7 +23,7 @@
     "serviceBackedClaimRequiresComposedEvidence": true,
     "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
     "finalTestReadinessClaim": false,
-    "literalValidatorCoverageBoundary": "The existing test-readiness validator already enforces the USF-254 expanded category from USF-259. Literal service/profile-level validator and planted-defect checks for this new suite would require edits under tools/validate-test-readiness, which are outside the USF-254 owned paths."
+    "literalValidatorCoverageBoundary": "Implemented by USF-TEST-READINESS-081 through USF-TEST-READINESS-087 and issue-scoped planted defects under tools/validate-test-readiness/planted-defects."
   },
   "requiredCoverageAxes": [
     "latency-budget",
@@ -420,16 +420,89 @@
     "corepack pnpm test-readiness:validate",
     "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
   ],
-  "requiredNonOwnedEditsForLiteralLinearAcceptance": [
+  "validatorCoverage": {
+    "ruleIds": [
+      "USF-TEST-READINESS-081",
+      "USF-TEST-READINESS-082",
+      "USF-TEST-READINESS-083",
+      "USF-TEST-READINESS-084",
+      "USF-TEST-READINESS-085",
+      "USF-TEST-READINESS-086",
+      "USF-TEST-READINESS-087"
+    ],
+    "selftestCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+    "plantedDefectCount": 9
+  },
+  "plantedDefects": [
     {
-      "path": "tools/validate-test-readiness/validate-test-readiness.py",
-      "reason": "Literal Linear acceptance asks the validator to fail when a service/profile lacks a required performance or resource-budget disposition. The current validator enforces the generic USF-254 expanded-category presence from USF-259, but it does not inspect this owned suite matrix."
+      "path": "tools/validate-test-readiness/planted-defects/081-performance-suite-validator-linkage-missing.json",
+      "expectedRule": "USF-TEST-READINESS-081",
+      "covers": "validator linkage and planted-defect inventory"
     },
     {
-      "path": "tools/validate-test-readiness/planted-defects/**",
-      "reason": "Literal Linear required scope asks for planted-defect coverage for missing baseline, missing budget, disabled concurrency case, unbounded load, missing cleanup under pressure, and unsupported overclaim. These planted defects live under a forbidden path for this issue."
+      "path": "tools/validate-test-readiness/planted-defects/082-performance-service-disposition-missing.json",
+      "expectedRule": "USF-TEST-READINESS-082",
+      "covers": "missing service budget disposition"
+    },
+    {
+      "path": "tools/validate-test-readiness/planted-defects/083-performance-baseline-missing.json",
+      "expectedRule": "USF-TEST-READINESS-083",
+      "covers": "missing baseline"
+    },
+    {
+      "path": "tools/validate-test-readiness/planted-defects/083-performance-budget-missing.json",
+      "expectedRule": "USF-TEST-READINESS-083",
+      "covers": "stale budget profile reference"
+    },
+    {
+      "path": "tools/validate-test-readiness/planted-defects/084-performance-concurrency-disabled.json",
+      "expectedRule": "USF-TEST-READINESS-084",
+      "covers": "disabled concurrency coverage"
+    },
+    {
+      "path": "tools/validate-test-readiness/planted-defects/084-performance-unbounded-load.json",
+      "expectedRule": "USF-TEST-READINESS-084",
+      "covers": "unbounded load"
+    },
+    {
+      "path": "tools/validate-test-readiness/planted-defects/085-performance-cleanup-under-pressure-missing.json",
+      "expectedRule": "USF-TEST-READINESS-085",
+      "covers": "missing cleanup under pressure"
+    },
+    {
+      "path": "tools/validate-test-readiness/planted-defects/086-performance-overclaim.json",
+      "expectedRule": "USF-TEST-READINESS-086",
+      "covers": "unsupported performance readiness overclaim"
+    },
+    {
+      "path": "tools/validate-test-readiness/planted-defects/087-performance-enterprise-ref-missing.json",
+      "expectedRule": "USF-TEST-READINESS-087",
+      "covers": "missing enterprise evidence linkage"
     }
   ],
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": [
+      "soa-usf-254-performance-concurrency-resource"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-254-performance-concurrency-resource"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-254-performance-concurrency-resource"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-254-performance-concurrency-resource"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-254-performance-concurrency-resource"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-254-performance-concurrency-resource"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-254-performance-concurrency-resource"
+    ]
+  },
   "allowedClaims": [
     "deterministic-performance-concurrency-resource-suite-defined",
     "owned-regression-test-gate-defined"

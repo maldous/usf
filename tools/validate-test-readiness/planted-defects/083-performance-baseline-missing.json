@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-083",
+  "performanceBudgetProfilePatch": [
+    {
+      "id": "data-store-pressure",
+      "drop": [
+        "baselineId"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-084",
+  "performanceBudgetProfilePatch": [
+    {
+      "id": "data-store-pressure",
+      "set": {
+        "operationCount": 49
+      }
+    }
+  ]
+}
