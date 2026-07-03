@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-080",
+  "obligationExpandedCategoryPatch": [
+    {
+      "issueId": "USF-256",
+      "set": {
+        "testReadinessClaimAllowed": true
+      }
+    }
+  ]
+}

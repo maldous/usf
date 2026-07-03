@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-078",
+  "obligationExpandedCategoryPatch": [
+    {
+      "issueId": "USF-254",
+      "drop": [
+        "requiredCommandIds"
+      ]
+    }
+  ]
+}

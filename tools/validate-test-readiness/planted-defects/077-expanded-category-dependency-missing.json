@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-077",
+  "obligationDependencyGraphPatch": [
+    {
+      "issueId": "USF-247",
+      "dropDependsOn": [
+        "USF-253"
+      ]
+    }
+  ]
+}

@@ -125,6 +125,36 @@
       "id": "out-of-scope-disposition",
       "purpose": "Historical or out-of-scope service retained only as non-test disposition",
       "ownerIssueId": "USF-234"
+    },
+    {
+      "id": "security-abuse-fuzzing",
+      "purpose": "Repo-enforce hostile input, malformed payload, tenant-boundary, provider-boundary, and fail-closed abuse testing obligations before final test-readiness acceptance.",
+      "ownerIssueId": "USF-253"
+    },
+    {
+      "id": "performance-concurrency-resource",
+      "purpose": "Repo-enforce deterministic local performance, concurrency, bounded load, resource cleanup, and profile startup budget obligations before final test-readiness acceptance.",
+      "ownerIssueId": "USF-254"
+    },
+    {
+      "id": "supply-chain-sbom-licence",
+      "purpose": "Repo-enforce dependency, lockfile, exact version, SBOM, licence, advisory, SDK governance, and image pinning obligations before final test-readiness acceptance.",
+      "ownerIssueId": "USF-255"
+    },
+    {
+      "id": "mutation-fault-injection",
+      "purpose": "Repo-enforce mutation and fault-injection adequacy obligations that prove representative semantic, evidence, fixture, command, and non-claim weakening is caught.",
+      "ownerIssueId": "USF-256"
+    },
+    {
+      "id": "adversarial-semantic-testing",
+      "purpose": "Repo-enforce adversarial semantic, cross-model consistency, authority-boundary, ambiguity, contradiction, and future-AI drift obligations before final test-readiness acceptance.",
+      "ownerIssueId": "USF-257"
+    },
+    {
+      "id": "environment-tooling-governance",
+      "purpose": "Repo-enforce environment, tooling, version-control, generated-artifact, local/CI parity, clean checkout, and private-state hygiene obligations before final test-readiness acceptance.",
+      "ownerIssueId": "USF-258"
     }
   ],
   "dependencyGraph": [
@@ -150,7 +180,15 @@
         "USF-250",
         "USF-251",
         "USF-252",
-        "USF-234"
+        "USF-234",
+        "USF-259",
+        "USF-253",
+        "USF-254",
+        "USF-255",
+        "USF-256",
+        "USF-257",
+        "USF-258",
+        "USF-260"
       ]
     },
     {
@@ -199,7 +237,14 @@
         "USF-249",
         "USF-250",
         "USF-251",
-        "USF-252"
+        "USF-252",
+        "USF-259",
+        "USF-253",
+        "USF-254",
+        "USF-255",
+        "USF-256",
+        "USF-257",
+        "USF-258"
       ]
     },
     {
@@ -218,7 +263,114 @@
         "USF-249",
         "USF-250",
         "USF-251",
-        "USF-252"
+        "USF-252",
+        "USF-259",
+        "USF-253",
+        "USF-254",
+        "USF-255",
+        "USF-256",
+        "USF-257",
+        "USF-258",
+        "USF-260"
+      ]
+    },
+    {
+      "issueId": "USF-259",
+      "dependsOn": [
+        "USF-239",
+        "USF-243"
+      ],
+      "blocks": [
+        "USF-253",
+        "USF-254",
+        "USF-255",
+        "USF-256",
+        "USF-257",
+        "USF-258",
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ]
+    },
+    {
+      "issueId": "USF-253",
+      "dependsOn": [
+        "USF-259"
+      ],
+      "blocks": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ]
+    },
+    {
+      "issueId": "USF-254",
+      "dependsOn": [
+        "USF-259"
+      ],
+      "blocks": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ]
+    },
+    {
+      "issueId": "USF-255",
+      "dependsOn": [
+        "USF-259"
+      ],
+      "blocks": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ]
+    },
+    {
+      "issueId": "USF-256",
+      "dependsOn": [
+        "USF-259"
+      ],
+      "blocks": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ]
+    },
+    {
+      "issueId": "USF-257",
+      "dependsOn": [
+        "USF-259"
+      ],
+      "blocks": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ]
+    },
+    {
+      "issueId": "USF-258",
+      "dependsOn": [
+        "USF-259"
+      ],
+      "blocks": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ]
+    },
+    {
+      "issueId": "USF-260",
+      "dependsOn": [
+        "USF-247",
+        "USF-253",
+        "USF-254",
+        "USF-255",
+        "USF-256",
+        "USF-257",
+        "USF-258"
+      ],
+      "blocks": [
+        "USF-234"
       ]
     }
   ],
@@ -5881,25 +6033,67 @@
   ],
   "enterpriseEvidenceRefs": {
     "soaSupportMappings": [
-      "soa-usf-239-semantic-service-test-obligation-manifest"
+      "soa-usf-239-semantic-service-test-obligation-manifest",
+      "soa-usf-253-security-abuse-fuzzing",
+      "soa-usf-254-performance-concurrency-resource",
+      "soa-usf-255-supply-chain-sbom-licence",
+      "soa-usf-256-mutation-fault-injection",
+      "soa-usf-257-adversarial-semantic-testing",
+      "soa-usf-258-environment-tooling-governance"
     ],
     "evidenceRegister": [
-      "evidence-usf-239-semantic-service-test-obligation-manifest"
+      "evidence-usf-239-semantic-service-test-obligation-manifest",
+      "evidence-usf-253-security-abuse-fuzzing",
+      "evidence-usf-254-performance-concurrency-resource",
+      "evidence-usf-255-supply-chain-sbom-licence",
+      "evidence-usf-256-mutation-fault-injection",
+      "evidence-usf-257-adversarial-semantic-testing",
+      "evidence-usf-258-environment-tooling-governance"
     ],
     "threatModelAbuseCaseRegister": [
-      "threat-usf-239-semantic-service-test-obligation-manifest"
+      "threat-usf-239-semantic-service-test-obligation-manifest",
+      "threat-usf-253-security-abuse-fuzzing",
+      "threat-usf-254-performance-concurrency-resource",
+      "threat-usf-255-supply-chain-sbom-licence",
+      "threat-usf-256-mutation-fault-injection",
+      "threat-usf-257-adversarial-semantic-testing",
+      "threat-usf-258-environment-tooling-governance"
     ],
     "accessReviewPrivilegedOperationPosture": [
-      "access-usf-239-semantic-service-test-obligation-manifest"
+      "access-usf-239-semantic-service-test-obligation-manifest",
+      "access-usf-253-security-abuse-fuzzing",
+      "access-usf-254-performance-concurrency-resource",
+      "access-usf-255-supply-chain-sbom-licence",
+      "access-usf-256-mutation-fault-injection",
+      "access-usf-257-adversarial-semantic-testing",
+      "access-usf-258-environment-tooling-governance"
     ],
     "backupRestoreResiliencePosture": [
-      "resilience-usf-239-semantic-service-test-obligation-manifest"
+      "resilience-usf-239-semantic-service-test-obligation-manifest",
+      "resilience-usf-253-security-abuse-fuzzing",
+      "resilience-usf-254-performance-concurrency-resource",
+      "resilience-usf-255-supply-chain-sbom-licence",
+      "resilience-usf-256-mutation-fault-injection",
+      "resilience-usf-257-adversarial-semantic-testing",
+      "resilience-usf-258-environment-tooling-governance"
     ],
     "incidentVulnerabilityManagementEvidence": [
-      "incident-usf-239-semantic-service-test-obligation-manifest"
+      "incident-usf-239-semantic-service-test-obligation-manifest",
+      "incident-usf-253-security-abuse-fuzzing",
+      "incident-usf-254-performance-concurrency-resource",
+      "incident-usf-255-supply-chain-sbom-licence",
+      "incident-usf-256-mutation-fault-injection",
+      "incident-usf-257-adversarial-semantic-testing",
+      "incident-usf-258-environment-tooling-governance"
     ],
     "privacyDataMinimisationPosture": [
-      "privacy-usf-239-semantic-service-test-obligation-manifest"
+      "privacy-usf-239-semantic-service-test-obligation-manifest",
+      "privacy-usf-253-security-abuse-fuzzing",
+      "privacy-usf-254-performance-concurrency-resource",
+      "privacy-usf-255-supply-chain-sbom-licence",
+      "privacy-usf-256-mutation-fault-injection",
+      "privacy-usf-257-adversarial-semantic-testing",
+      "privacy-usf-258-environment-tooling-governance"
     ]
   },
   "allowedClaims": [
@@ -5920,5 +6114,613 @@
     "browser-e2e-readiness",
     "full-react-product-parity",
     "full-react-parity-readiness"
+  ],
+  "expandedCategoryObligations": [
+    {
+      "categoryId": "security-abuse-fuzzing",
+      "issueId": "USF-253",
+      "title": "Security abuse and fuzzing regression suite",
+      "categoryClassId": "security-abuse-fuzzing",
+      "purpose": "Repo-enforce hostile input, malformed payload, tenant-boundary, provider-boundary, and fail-closed abuse testing obligations before final test-readiness acceptance.",
+      "status": "repo-enforced-obligation-pending-issue-implementation",
+      "implementationStatus": "deferred-with-owner-until-source-issue-merged",
+      "dependsOnIssueIds": [
+        "USF-259"
+      ],
+      "blocksIssueIds": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "semanticContractScope": [
+        "all-semantic-contract-obligations",
+        "category-worker-must-narrow-with-evidence-if-not-applicable"
+      ],
+      "serviceCatalogueScope": [
+        "all-service-catalogue-rows",
+        "category-worker-must-disposition-required-deferred-profile-gated-external-and-out-of-scope-rows"
+      ],
+      "composeProfileScope": [
+        "all-generated-test-compose-profiles",
+        "category-worker-must-disposition-non-compose-or-not-applicable-scope"
+      ],
+      "fixtureScope": [
+        "tests/packages/fixtures/service-fixture-corpus.json",
+        "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+      ],
+      "generatedArtifactScope": [
+        "compose/compose.test.generated.yaml",
+        "spec/registries/schema-registry.json",
+        "docs/architecture/semantic-service-test-obligation-manifest.json",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "futureAiGuardrailScope": [
+        "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+        "USF-252"
+      ],
+      "requiredCommandIds": [
+        "test-readiness-security-abuse-fuzzing"
+      ],
+      "validationCommands": [
+        "corepack pnpm test -- tests/packages/security-abuse-fuzzing-regression-suite.test.ts",
+        "corepack pnpm test-readiness:validate"
+      ],
+      "enterpriseEvidenceRefs": {
+        "soaSupportMappings": [
+          "soa-usf-253-security-abuse-fuzzing"
+        ],
+        "evidenceRegister": [
+          "evidence-usf-253-security-abuse-fuzzing"
+        ],
+        "threatModelAbuseCaseRegister": [
+          "threat-usf-253-security-abuse-fuzzing"
+        ],
+        "accessReviewPrivilegedOperationPosture": [
+          "access-usf-253-security-abuse-fuzzing"
+        ],
+        "backupRestoreResiliencePosture": [
+          "resilience-usf-253-security-abuse-fuzzing"
+        ],
+        "incidentVulnerabilityManagementEvidence": [
+          "incident-usf-253-security-abuse-fuzzing"
+        ],
+        "privacyDataMinimisationPosture": [
+          "privacy-usf-253-security-abuse-fuzzing"
+        ]
+      },
+      "deferredBoundary": "USF-253 owns implementation and proof. USF-259 only makes the category mandatory and visible before USF-247, USF-260, or USF-234 can close.",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "blocks-test-readiness",
+        "blocks-staging-entry",
+        "blocks-production-readiness",
+        "blocks-security-assurance-evidence-completeness"
+      ],
+      "testReadinessClaimAllowed": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "nonClaims": [
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "categoryId": "performance-concurrency-resource",
+      "issueId": "USF-254",
+      "title": "Performance concurrency load and resource regression suite",
+      "categoryClassId": "performance-concurrency-resource",
+      "purpose": "Repo-enforce deterministic local performance, concurrency, bounded load, resource cleanup, and profile startup budget obligations before final test-readiness acceptance.",
+      "status": "repo-enforced-obligation-pending-issue-implementation",
+      "implementationStatus": "deferred-with-owner-until-source-issue-merged",
+      "dependsOnIssueIds": [
+        "USF-259"
+      ],
+      "blocksIssueIds": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "semanticContractScope": [
+        "all-semantic-contract-obligations",
+        "category-worker-must-narrow-with-evidence-if-not-applicable"
+      ],
+      "serviceCatalogueScope": [
+        "all-service-catalogue-rows",
+        "category-worker-must-disposition-required-deferred-profile-gated-external-and-out-of-scope-rows"
+      ],
+      "composeProfileScope": [
+        "all-generated-test-compose-profiles",
+        "category-worker-must-disposition-non-compose-or-not-applicable-scope"
+      ],
+      "fixtureScope": [
+        "tests/packages/fixtures/service-fixture-corpus.json",
+        "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+      ],
+      "generatedArtifactScope": [
+        "compose/compose.test.generated.yaml",
+        "spec/registries/schema-registry.json",
+        "docs/architecture/semantic-service-test-obligation-manifest.json",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "futureAiGuardrailScope": [
+        "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+        "USF-252"
+      ],
+      "requiredCommandIds": [
+        "test-readiness-performance-concurrency-resource"
+      ],
+      "validationCommands": [
+        "corepack pnpm test -- tests/packages/performance-concurrency-resource-regression-suite.test.ts",
+        "corepack pnpm test-readiness:validate"
+      ],
+      "enterpriseEvidenceRefs": {
+        "soaSupportMappings": [
+          "soa-usf-254-performance-concurrency-resource"
+        ],
+        "evidenceRegister": [
+          "evidence-usf-254-performance-concurrency-resource"
+        ],
+        "threatModelAbuseCaseRegister": [
+          "threat-usf-254-performance-concurrency-resource"
+        ],
+        "accessReviewPrivilegedOperationPosture": [
+          "access-usf-254-performance-concurrency-resource"
+        ],
+        "backupRestoreResiliencePosture": [
+          "resilience-usf-254-performance-concurrency-resource"
+        ],
+        "incidentVulnerabilityManagementEvidence": [
+          "incident-usf-254-performance-concurrency-resource"
+        ],
+        "privacyDataMinimisationPosture": [
+          "privacy-usf-254-performance-concurrency-resource"
+        ]
+      },
+      "deferredBoundary": "USF-254 owns implementation and proof. USF-259 only makes the category mandatory and visible before USF-247, USF-260, or USF-234 can close.",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "blocks-test-readiness",
+        "blocks-staging-entry",
+        "blocks-production-readiness",
+        "blocks-operational-assurance-evidence-completeness"
+      ],
+      "testReadinessClaimAllowed": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "nonClaims": [
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "categoryId": "supply-chain-sbom-licence",
+      "issueId": "USF-255",
+      "title": "Supply-chain dependency SBOM and licence test gate",
+      "categoryClassId": "supply-chain-sbom-licence",
+      "purpose": "Repo-enforce dependency, lockfile, exact version, SBOM, licence, advisory, SDK governance, and image pinning obligations before final test-readiness acceptance.",
+      "status": "repo-enforced-obligation-pending-issue-implementation",
+      "implementationStatus": "deferred-with-owner-until-source-issue-merged",
+      "dependsOnIssueIds": [
+        "USF-259"
+      ],
+      "blocksIssueIds": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "semanticContractScope": [
+        "all-semantic-contract-obligations",
+        "category-worker-must-narrow-with-evidence-if-not-applicable"
+      ],
+      "serviceCatalogueScope": [
+        "all-service-catalogue-rows",
+        "category-worker-must-disposition-required-deferred-profile-gated-external-and-out-of-scope-rows"
+      ],
+      "composeProfileScope": [
+        "all-generated-test-compose-profiles",
+        "category-worker-must-disposition-non-compose-or-not-applicable-scope"
+      ],
+      "fixtureScope": [
+        "tests/packages/fixtures/service-fixture-corpus.json",
+        "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+      ],
+      "generatedArtifactScope": [
+        "compose/compose.test.generated.yaml",
+        "spec/registries/schema-registry.json",
+        "docs/architecture/semantic-service-test-obligation-manifest.json",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "futureAiGuardrailScope": [
+        "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+        "USF-252"
+      ],
+      "requiredCommandIds": [
+        "test-readiness-supply-chain-sbom-licence"
+      ],
+      "validationCommands": [
+        "corepack pnpm test -- tests/packages/supply-chain-sbom-licence-gate.test.ts",
+        "corepack pnpm test-readiness:validate"
+      ],
+      "enterpriseEvidenceRefs": {
+        "soaSupportMappings": [
+          "soa-usf-255-supply-chain-sbom-licence"
+        ],
+        "evidenceRegister": [
+          "evidence-usf-255-supply-chain-sbom-licence"
+        ],
+        "threatModelAbuseCaseRegister": [
+          "threat-usf-255-supply-chain-sbom-licence"
+        ],
+        "accessReviewPrivilegedOperationPosture": [
+          "access-usf-255-supply-chain-sbom-licence"
+        ],
+        "backupRestoreResiliencePosture": [
+          "resilience-usf-255-supply-chain-sbom-licence"
+        ],
+        "incidentVulnerabilityManagementEvidence": [
+          "incident-usf-255-supply-chain-sbom-licence"
+        ],
+        "privacyDataMinimisationPosture": [
+          "privacy-usf-255-supply-chain-sbom-licence"
+        ]
+      },
+      "deferredBoundary": "USF-255 owns implementation and proof. USF-259 only makes the category mandatory and visible before USF-247, USF-260, or USF-234 can close.",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "blocks-test-readiness",
+        "blocks-staging-entry",
+        "blocks-production-readiness",
+        "blocks-supply-chain-assurance-evidence-completeness"
+      ],
+      "testReadinessClaimAllowed": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "nonClaims": [
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "categoryId": "mutation-fault-injection",
+      "issueId": "USF-256",
+      "title": "Mutation and fault-injection test adequacy gate",
+      "categoryClassId": "mutation-fault-injection",
+      "purpose": "Repo-enforce mutation and fault-injection adequacy obligations that prove representative semantic, evidence, fixture, command, and non-claim weakening is caught.",
+      "status": "repo-enforced-obligation-pending-issue-implementation",
+      "implementationStatus": "deferred-with-owner-until-source-issue-merged",
+      "dependsOnIssueIds": [
+        "USF-259"
+      ],
+      "blocksIssueIds": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "semanticContractScope": [
+        "all-semantic-contract-obligations",
+        "category-worker-must-narrow-with-evidence-if-not-applicable"
+      ],
+      "serviceCatalogueScope": [
+        "all-service-catalogue-rows",
+        "category-worker-must-disposition-required-deferred-profile-gated-external-and-out-of-scope-rows"
+      ],
+      "composeProfileScope": [
+        "all-generated-test-compose-profiles",
+        "category-worker-must-disposition-non-compose-or-not-applicable-scope"
+      ],
+      "fixtureScope": [
+        "tests/packages/fixtures/service-fixture-corpus.json",
+        "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+      ],
+      "generatedArtifactScope": [
+        "compose/compose.test.generated.yaml",
+        "spec/registries/schema-registry.json",
+        "docs/architecture/semantic-service-test-obligation-manifest.json",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "futureAiGuardrailScope": [
+        "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+        "USF-252"
+      ],
+      "requiredCommandIds": [
+        "test-readiness-mutation-fault-injection"
+      ],
+      "validationCommands": [
+        "corepack pnpm test -- tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "corepack pnpm test-readiness:validate"
+      ],
+      "enterpriseEvidenceRefs": {
+        "soaSupportMappings": [
+          "soa-usf-256-mutation-fault-injection"
+        ],
+        "evidenceRegister": [
+          "evidence-usf-256-mutation-fault-injection"
+        ],
+        "threatModelAbuseCaseRegister": [
+          "threat-usf-256-mutation-fault-injection"
+        ],
+        "accessReviewPrivilegedOperationPosture": [
+          "access-usf-256-mutation-fault-injection"
+        ],
+        "backupRestoreResiliencePosture": [
+          "resilience-usf-256-mutation-fault-injection"
+        ],
+        "incidentVulnerabilityManagementEvidence": [
+          "incident-usf-256-mutation-fault-injection"
+        ],
+        "privacyDataMinimisationPosture": [
+          "privacy-usf-256-mutation-fault-injection"
+        ]
+      },
+      "deferredBoundary": "USF-256 owns implementation and proof. USF-259 only makes the category mandatory and visible before USF-247, USF-260, or USF-234 can close.",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "blocks-test-readiness",
+        "blocks-staging-entry",
+        "blocks-production-readiness",
+        "blocks-test-adequacy-evidence-completeness"
+      ],
+      "testReadinessClaimAllowed": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "nonClaims": [
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "categoryId": "adversarial-semantic-testing",
+      "issueId": "USF-257",
+      "title": "Adversarial formal semantic testing suite",
+      "categoryClassId": "adversarial-semantic-testing",
+      "purpose": "Repo-enforce adversarial semantic, cross-model consistency, authority-boundary, ambiguity, contradiction, and future-AI drift obligations before final test-readiness acceptance.",
+      "status": "repo-enforced-obligation-pending-issue-implementation",
+      "implementationStatus": "deferred-with-owner-until-source-issue-merged",
+      "dependsOnIssueIds": [
+        "USF-259"
+      ],
+      "blocksIssueIds": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "semanticContractScope": [
+        "all-semantic-contract-obligations",
+        "category-worker-must-narrow-with-evidence-if-not-applicable"
+      ],
+      "serviceCatalogueScope": [
+        "all-service-catalogue-rows",
+        "category-worker-must-disposition-required-deferred-profile-gated-external-and-out-of-scope-rows"
+      ],
+      "composeProfileScope": [
+        "all-generated-test-compose-profiles",
+        "category-worker-must-disposition-non-compose-or-not-applicable-scope"
+      ],
+      "fixtureScope": [
+        "tests/packages/fixtures/service-fixture-corpus.json",
+        "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+      ],
+      "generatedArtifactScope": [
+        "compose/compose.test.generated.yaml",
+        "spec/registries/schema-registry.json",
+        "docs/architecture/semantic-service-test-obligation-manifest.json",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "futureAiGuardrailScope": [
+        "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+        "USF-252"
+      ],
+      "requiredCommandIds": [
+        "test-readiness-adversarial-semantic-testing"
+      ],
+      "validationCommands": [
+        "corepack pnpm test -- tests/packages/adversarial-formal-semantic-testing-suite.test.ts",
+        "corepack pnpm test-readiness:validate"
+      ],
+      "enterpriseEvidenceRefs": {
+        "soaSupportMappings": [
+          "soa-usf-257-adversarial-semantic-testing"
+        ],
+        "evidenceRegister": [
+          "evidence-usf-257-adversarial-semantic-testing"
+        ],
+        "threatModelAbuseCaseRegister": [
+          "threat-usf-257-adversarial-semantic-testing"
+        ],
+        "accessReviewPrivilegedOperationPosture": [
+          "access-usf-257-adversarial-semantic-testing"
+        ],
+        "backupRestoreResiliencePosture": [
+          "resilience-usf-257-adversarial-semantic-testing"
+        ],
+        "incidentVulnerabilityManagementEvidence": [
+          "incident-usf-257-adversarial-semantic-testing"
+        ],
+        "privacyDataMinimisationPosture": [
+          "privacy-usf-257-adversarial-semantic-testing"
+        ]
+      },
+      "deferredBoundary": "USF-257 owns implementation and proof. USF-259 only makes the category mandatory and visible before USF-247, USF-260, or USF-234 can close.",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "blocks-test-readiness",
+        "blocks-staging-entry",
+        "blocks-production-readiness",
+        "blocks-semantic-assurance-evidence-completeness"
+      ],
+      "testReadinessClaimAllowed": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "nonClaims": [
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "categoryId": "environment-tooling-governance",
+      "issueId": "USF-258",
+      "title": "Environment compliance version-control build and tooling test gate",
+      "categoryClassId": "environment-tooling-governance",
+      "purpose": "Repo-enforce environment, tooling, version-control, generated-artifact, local/CI parity, clean checkout, and private-state hygiene obligations before final test-readiness acceptance.",
+      "status": "repo-enforced-obligation-pending-issue-implementation",
+      "implementationStatus": "deferred-with-owner-until-source-issue-merged",
+      "dependsOnIssueIds": [
+        "USF-259"
+      ],
+      "blocksIssueIds": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "semanticContractScope": [
+        "all-semantic-contract-obligations",
+        "category-worker-must-narrow-with-evidence-if-not-applicable"
+      ],
+      "serviceCatalogueScope": [
+        "all-service-catalogue-rows",
+        "category-worker-must-disposition-required-deferred-profile-gated-external-and-out-of-scope-rows"
+      ],
+      "composeProfileScope": [
+        "all-generated-test-compose-profiles",
+        "category-worker-must-disposition-non-compose-or-not-applicable-scope"
+      ],
+      "fixtureScope": [
+        "tests/packages/fixtures/service-fixture-corpus.json",
+        "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+      ],
+      "generatedArtifactScope": [
+        "compose/compose.test.generated.yaml",
+        "spec/registries/schema-registry.json",
+        "docs/architecture/semantic-service-test-obligation-manifest.json",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "futureAiGuardrailScope": [
+        "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+        "USF-252"
+      ],
+      "requiredCommandIds": [
+        "test-readiness-environment-tooling-governance"
+      ],
+      "validationCommands": [
+        "corepack pnpm test -- tests/packages/environment-tooling-governance-test-gate.test.ts",
+        "corepack pnpm test-readiness:validate"
+      ],
+      "enterpriseEvidenceRefs": {
+        "soaSupportMappings": [
+          "soa-usf-258-environment-tooling-governance"
+        ],
+        "evidenceRegister": [
+          "evidence-usf-258-environment-tooling-governance"
+        ],
+        "threatModelAbuseCaseRegister": [
+          "threat-usf-258-environment-tooling-governance"
+        ],
+        "accessReviewPrivilegedOperationPosture": [
+          "access-usf-258-environment-tooling-governance"
+        ],
+        "backupRestoreResiliencePosture": [
+          "resilience-usf-258-environment-tooling-governance"
+        ],
+        "incidentVulnerabilityManagementEvidence": [
+          "incident-usf-258-environment-tooling-governance"
+        ],
+        "privacyDataMinimisationPosture": [
+          "privacy-usf-258-environment-tooling-governance"
+        ]
+      },
+      "deferredBoundary": "USF-258 owns implementation and proof. USF-259 only makes the category mandatory and visible before USF-247, USF-260, or USF-234 can close.",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "blocks-test-readiness",
+        "blocks-staging-entry",
+        "blocks-production-readiness",
+        "blocks-environment-and-tooling-assurance-evidence-completeness"
+      ],
+      "testReadinessClaimAllowed": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "nonClaims": [
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
+    }
   ]
 }

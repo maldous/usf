@@ -118,6 +118,11 @@ RULES = {
     "USF-TEST-READINESS-073": ("blocking", "enterprise control evidence suite lacks incident vulnerability posture coverage"),
     "USF-TEST-READINESS-074": ("blocking", "enterprise control evidence suite lacks privacy data minimisation posture coverage"),
     "USF-TEST-READINESS-075": ("blocking", "enterprise control evidence suite preserves insufficient non-claims or overclaims readiness"),
+    "USF-TEST-READINESS-076": ("blocking", "expanded test-readiness obligation category is missing or stale"),
+    "USF-TEST-READINESS-077": ("blocking", "expanded test-readiness dependency graph is incomplete"),
+    "USF-TEST-READINESS-078": ("blocking", "expanded test-readiness command or surface mapping is incomplete"),
+    "USF-TEST-READINESS-079": ("blocking", "expanded test-readiness enterprise evidence linkage is incomplete"),
+    "USF-TEST-READINESS-080": ("blocking", "expanded test-readiness obligation overclaims readiness or compliance"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -247,6 +252,17 @@ REQUIRED_OBLIGATION_CLASSES = {
     "bounded-non-test-disposition",
     "out-of-scope-disposition",
 }
+EXPANDED_OBLIGATION_CATEGORIES = {
+    "USF-253": "security-abuse-fuzzing",
+    "USF-254": "performance-concurrency-resource",
+    "USF-255": "supply-chain-sbom-licence",
+    "USF-256": "mutation-fault-injection",
+    "USF-257": "adversarial-semantic-testing",
+    "USF-258": "environment-tooling-governance",
+}
+EXPANDED_OBLIGATION_CLASS_IDS = set(EXPANDED_OBLIGATION_CATEGORIES.values())
+EXPANDED_OBLIGATION_ISSUES = set(EXPANDED_OBLIGATION_CATEGORIES)
+EXPANDED_GATE_ISSUES = {"USF-259", "USF-260"}
 REQUIRED_OBLIGATION_ISSUES = {
     "USF-239",
     "USF-240",
@@ -262,6 +278,14 @@ REQUIRED_OBLIGATION_ISSUES = {
     "USF-250",
     "USF-251",
     "USF-252",
+    "USF-253",
+    "USF-254",
+    "USF-255",
+    "USF-256",
+    "USF-257",
+    "USF-258",
+    "USF-259",
+    "USF-260",
     "USF-234",
 }
 AUTH_SERVICE_IDS = {"keycloak", "keycloak-db", "postgres", "pgadmin", "openbao", "caddy"}
@@ -491,6 +515,54 @@ def apply_obligation_manifest_defect(manifest: dict[str, Any] | None, defect: di
         out["obligationClasses"] = [
             row for row in out.get("obligationClasses", []) if row.get("id") != class_id
         ]
+    for issue_id in defect.get("obligationDropDependencyGraphIssueIds", []):
+        out["dependencyGraph"] = [
+            row for row in out.get("dependencyGraph", []) if row.get("issueId") != issue_id
+        ]
+    for issue_id in defect.get("obligationDropExpandedCategoryIssueIds", []):
+        out["expandedCategoryObligations"] = [
+            row
+            for row in out.get("expandedCategoryObligations", [])
+            if row.get("issueId") != issue_id
+        ]
+    for category_id in defect.get("obligationDropExpandedCategoryIds", []):
+        out["expandedCategoryObligations"] = [
+            row
+            for row in out.get("expandedCategoryObligations", [])
+            if row.get("categoryId") != category_id
+        ]
+    for patch in defect.get("obligationDependencyGraphPatch", []):
+        for row in out.get("dependencyGraph", []):
+            if row.get("issueId") != patch.get("issueId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for issue_id in patch.get("dropDependsOn", []):
+                row["dependsOn"] = [
+                    value for value in row.get("dependsOn", []) if value != issue_id
+                ]
+            for issue_id in patch.get("dropBlocks", []):
+                row["blocks"] = [
+                    value for value in row.get("blocks", []) if value != issue_id
+                ]
+    for patch in defect.get("obligationExpandedCategoryPatch", []):
+        for row in out.get("expandedCategoryObligations", []):
+            if row.get("issueId") != patch.get("issueId") and row.get("categoryId") != patch.get("categoryId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for key, value in patch.get("append", {}).items():
+                row.setdefault(key, []).append(value)
+            for section in patch.get("enterpriseRefDrop", []):
+                row.get("enterpriseEvidenceRefs", {}).pop(section, None)
+            for claim in patch.get("dropNonClaims", []):
+                row["nonClaims"] = [
+                    value for value in row.get("nonClaims", []) if value != claim
+                ]
     for patch in defect.get("obligationServicePatch", []):
         for row in out.get("serviceObligations", []):
             if row.get("serviceId") != patch.get("serviceId"):
@@ -1240,6 +1312,7 @@ def check_obligation_manifest_shape(F: Findings, state: dict[str, Any]) -> None:
         "coveragePolicy",
         "obligationClasses",
         "dependencyGraph",
+        "expandedCategoryObligations",
         "profileObligations",
         "serviceObligations",
         "semanticContractObligations",
@@ -1445,14 +1518,30 @@ def check_obligation_classes_and_guardrail(F: Findings, state: dict[str, Any]) -
     missing_classes = sorted(REQUIRED_OBLIGATION_CLASSES - class_ids)
     if missing_classes:
         F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), f"missing obligation classes: {missing_classes}")
+    missing_expanded_classes = sorted(EXPANDED_OBLIGATION_CLASS_IDS - class_ids)
+    if missing_expanded_classes:
+        F.add("USF-TEST-READINESS-076", str(OBLIGATION_MANIFEST_PATH), f"missing expanded obligation classes: {missing_expanded_classes}")
     graph = _list_by_id(manifest.get("dependencyGraph"), "issueId")
-    for issue_id in ("USF-239", "USF-248", "USF-251", "USF-249", "USF-250", "USF-247", "USF-234"):
+    for issue_id in (
+        "USF-239",
+        "USF-248",
+        "USF-251",
+        "USF-249",
+        "USF-250",
+        "USF-247",
+        "USF-234",
+        "USF-259",
+        "USF-260",
+        *sorted(EXPANDED_OBLIGATION_ISSUES),
+    ):
         if issue_id not in graph:
-            F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), f"dependency graph missing {issue_id}")
+            rule = "USF-TEST-READINESS-077" if issue_id in EXPANDED_OBLIGATION_ISSUES | EXPANDED_GATE_ISSUES else "USF-TEST-READINESS-029"
+            F.add(rule, str(OBLIGATION_MANIFEST_PATH), f"dependency graph missing {issue_id}")
     blocks = set(graph.get("USF-239", {}).get("blocks", []))
     missing_blocks = sorted((REQUIRED_OBLIGATION_ISSUES - {"USF-239"}) - blocks)
     if missing_blocks:
-        F.add("USF-TEST-READINESS-029", str(OBLIGATION_MANIFEST_PATH), f"USF-239 dependency graph missing blocks: {missing_blocks}")
+        rule = "USF-TEST-READINESS-077" if set(missing_blocks).intersection(EXPANDED_OBLIGATION_ISSUES | EXPANDED_GATE_ISSUES) else "USF-TEST-READINESS-029"
+        F.add(rule, str(OBLIGATION_MANIFEST_PATH), f"USF-239 dependency graph missing blocks: {missing_blocks}")
     guardrail = manifest.get("futureAiChangeGuardrail")
     required_guardrail = {
         "semanticDefinitionUpdateRequired",
@@ -1470,6 +1559,95 @@ def check_obligation_classes_and_guardrail(F: Findings, state: dict[str, Any]) -
                 F.add("USF-TEST-READINESS-035", f"{OBLIGATION_MANIFEST_PATH}#futureAiChangeGuardrail.{key}", "future AI guardrail flag must be true")
         if guardrail.get("validatorCommand") != OBLIGATION_MANIFEST_COMMAND or guardrail.get("ownerIssueId") != "USF-252":
             F.add("USF-TEST-READINESS-035", str(OBLIGATION_MANIFEST_PATH), "future AI guardrail command or owner is stale")
+
+
+def _enterprise_ids(state: dict[str, Any], section: str) -> set[str]:
+    rows = state["enterpriseModel"].get(section, [])
+    if not isinstance(rows, list):
+        return set()
+    return {str(row.get("id")) for row in rows if row.get("id")}
+
+
+def check_expanded_category_obligations(F: Findings, state: dict[str, Any]) -> None:
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        return
+    rows = _list_by_id(manifest.get("expandedCategoryObligations"), "issueId")
+    class_rows = _list_by_id(manifest.get("obligationClasses"), "id")
+    graph = _list_by_id(manifest.get("dependencyGraph"), "issueId")
+    required_blocks = {"USF-247", "USF-260", "USF-234"}
+    usf259_blocks = set(graph.get("USF-259", {}).get("blocks", []))
+    missing_259_blocks = sorted((EXPANDED_OBLIGATION_ISSUES | required_blocks) - usf259_blocks)
+    if missing_259_blocks:
+        F.add("USF-TEST-READINESS-077", str(OBLIGATION_MANIFEST_PATH), f"USF-259 dependency graph missing blocks: {missing_259_blocks}")
+    for gate_issue in ("USF-247", "USF-260", "USF-234"):
+        depends = set(graph.get(gate_issue, {}).get("dependsOn", []))
+        missing_gate_dependencies = sorted(EXPANDED_OBLIGATION_ISSUES - depends)
+        if missing_gate_dependencies:
+            F.add(
+                "USF-TEST-READINESS-077",
+                f"{OBLIGATION_MANIFEST_PATH}#dependencyGraph.{gate_issue}",
+                f"{gate_issue} dependency graph missing expanded categories: {missing_gate_dependencies}",
+            )
+    for issue_id, category_id in sorted(EXPANDED_OBLIGATION_CATEGORIES.items()):
+        class_row = class_rows.get(category_id)
+        if not class_row or class_row.get("ownerIssueId") != issue_id:
+            F.add("USF-TEST-READINESS-076", str(OBLIGATION_MANIFEST_PATH), f"expanded class {category_id} must be owned by {issue_id}")
+        row = rows.get(issue_id)
+        if not row:
+            F.add("USF-TEST-READINESS-076", str(OBLIGATION_MANIFEST_PATH), f"expanded category row missing {issue_id}")
+            continue
+        subject = f"{OBLIGATION_MANIFEST_PATH}#expandedCategoryObligations.{issue_id}"
+        if row.get("categoryId") != category_id or row.get("categoryClassId") != category_id:
+            F.add("USF-TEST-READINESS-076", subject, "category id or class id is stale")
+        if row.get("status") != "repo-enforced-obligation-pending-issue-implementation":
+            F.add("USF-TEST-READINESS-076", subject, "expanded category status must remain pending source issue implementation")
+        if row.get("implementationStatus") != "deferred-with-owner-until-source-issue-merged":
+            F.add("USF-TEST-READINESS-076", subject, "implementation status must not imply category completion")
+        if "USF-259" not in set(row.get("dependsOnIssueIds", [])):
+            F.add("USF-TEST-READINESS-077", subject, "expanded category must depend on USF-259")
+        if not required_blocks.issubset(set(row.get("blocksIssueIds", []))):
+            F.add("USF-TEST-READINESS-077", subject, "expanded category must block USF-247, USF-260, and USF-234")
+        graph_row = graph.get(issue_id, {})
+        if "USF-259" not in set(graph_row.get("dependsOn", [])):
+            F.add("USF-TEST-READINESS-077", subject, "dependency graph row must depend on USF-259")
+        if not required_blocks.issubset(set(graph_row.get("blocks", []))):
+            F.add("USF-TEST-READINESS-077", subject, "dependency graph row must block USF-247, USF-260, and USF-234")
+        for scope_key in (
+            "semanticContractScope",
+            "serviceCatalogueScope",
+            "composeProfileScope",
+            "fixtureScope",
+            "generatedArtifactScope",
+            "futureAiGuardrailScope",
+        ):
+            values = row.get(scope_key)
+            if not isinstance(values, list) or not values:
+                F.add("USF-TEST-READINESS-078", subject, f"{scope_key} is missing")
+        if not row.get("requiredCommandIds") or not row.get("validationCommands"):
+            F.add("USF-TEST-READINESS-078", subject, "command mapping is missing")
+        if not {"owner", "riskOwner", "controlOwner", "reviewDate", "deferredBoundary", "promotionImpact"}.issubset(row):
+            F.add("USF-TEST-READINESS-076", subject, "owner, review, promotion impact, or deferred boundary metadata is missing")
+        refs = row.get("enterpriseEvidenceRefs")
+        if not isinstance(refs, dict):
+            F.add("USF-TEST-READINESS-079", subject, "enterprise evidence refs are missing")
+        else:
+            for section in ENTERPRISE_REF_SECTIONS:
+                section_refs = refs.get(section)
+                if not isinstance(section_refs, list) or not section_refs:
+                    F.add("USF-TEST-READINESS-079", subject, f"{section} refs are missing")
+                    continue
+                missing_refs = sorted(set(section_refs) - _enterprise_ids(state, section))
+                if missing_refs:
+                    F.add("USF-TEST-READINESS-079", subject, f"{section} refs are not in enterprise model: {missing_refs}")
+        non_claims = set(row.get("nonClaims", []))
+        missing_non_claims = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+        if missing_non_claims:
+            F.add("USF-TEST-READINESS-080", subject, f"missing non-claims: {missing_non_claims}")
+        if row.get("testReadinessClaimAllowed") is not False:
+            F.add("USF-TEST-READINESS-080", subject, "expanded category must not allow final test-readiness claim")
+        if row.get("inMemoryServiceSubstituteAllowedForServiceBackedClaims") is not False:
+            F.add("USF-TEST-READINESS-080", subject, "expanded category must forbid in-memory service-backed substitutes")
 
 
 def check_obligation_claims(F: Findings, state: dict[str, Any]) -> None:
@@ -1501,6 +1679,7 @@ def check_obligation_manifest(F: Findings, state: dict[str, Any]) -> None:
     check_obligation_semantic_coverage(F, state)
     check_obligation_service_classes(F, state)
     check_obligation_classes_and_guardrail(F, state)
+    check_expanded_category_obligations(F, state)
     check_obligation_claims(F, state)
 
 
