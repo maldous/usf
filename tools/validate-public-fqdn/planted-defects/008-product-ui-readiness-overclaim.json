@@ -1,0 +1,6 @@
+{
+  "id": "008-product-ui-readiness-overclaim",
+  "description": "Remove the product UI readiness non-claim.",
+  "removeNonClaim": "product-ui-readiness",
+  "expectedRule": "USF-PUBLIC-FQDN-008"
+}

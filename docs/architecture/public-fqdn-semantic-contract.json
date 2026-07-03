@@ -1,0 +1,217 @@
+{
+  "id": "public-fqdn-semantic-contract",
+  "title": "Public FQDN Semantic Contract",
+  "issueId": "USF-262",
+  "parentIssueId": "USF-261",
+  "lifecycleState": "active-public-fqdn-semantic-contract",
+  "authorityLevel": "semantic-definition",
+  "purpose": "Define the gateway-neutral public HTTP and HTTPS edge semantics required before v2-proof tag authorisation can be considered. This contract defines future staging and production FQDN requirements without proving delivery and without making the Test environment depend on public internet.",
+  "semanticAuthority": {
+    "primary": "docs/architecture/public-fqdn-semantic-contract.json",
+    "humanReadable": "docs/architecture/public-fqdn-semantic-contract.md",
+    "generatedComposeAuthority": false,
+    "generatedGatewayConfigAuthority": false,
+    "historicalReactAuthority": false,
+    "linearAuthority": false
+  },
+  "dependsOn": {
+    "devReadinessIssueId": "USF-226",
+    "testReadinessIssueId": "USF-234",
+    "testReadinessRepairPr": "https://github.com/maldous/usf/pull/234",
+    "testReadinessRepairMergeSha": "c481f867ce2c458cf3800b6d1baccf0d87e5072e"
+  },
+  "environments": [
+    {
+      "id": "public-fqdn-staging",
+      "environment": "staging",
+      "domain": "1e100.network",
+      "minimumMandatoryScope": "root-fqdn",
+      "requiredHostnames": [
+        {
+          "id": "staging-root",
+          "fqdn": "1e100.network",
+          "hostnameType": "root",
+          "purpose": "Future staging public edge root FQDN proof boundary.",
+          "protocols": [
+            "dns",
+            "https"
+          ],
+          "proofCommandId": "proof:public-fqdn:staging",
+          "owner": "platform",
+          "riskOwner": "platform",
+          "controlOwner": "platform",
+          "routeBindingId": "public-edge-proof-route",
+          "telemetryBootstrapId": "public-edge-telemetry-bootstrap",
+          "claimBoundary": "Defines the future staging public FQDN contract only. It does not claim staging readiness."
+        }
+      ],
+      "additionalHostnames": [],
+      "additionalHostnamePolicy": "Additional hostnames such as www, app, api, auth, telemetry, or health are not required until explicitly declared with environment, purpose, protocol, proof command, owner, risk owner, and control owner."
+    },
+    {
+      "id": "public-fqdn-production",
+      "environment": "production",
+      "domain": "aldous.info",
+      "minimumMandatoryScope": "root-fqdn",
+      "requiredHostnames": [
+        {
+          "id": "production-root",
+          "fqdn": "aldous.info",
+          "hostnameType": "root",
+          "purpose": "Future production public edge root FQDN proof boundary.",
+          "protocols": [
+            "dns",
+            "https"
+          ],
+          "proofCommandId": "proof:public-fqdn:production",
+          "owner": "platform",
+          "riskOwner": "platform",
+          "controlOwner": "platform",
+          "routeBindingId": "public-edge-proof-route",
+          "telemetryBootstrapId": "public-edge-telemetry-bootstrap",
+          "claimBoundary": "Defines the future production public FQDN contract only. It does not claim production readiness."
+        }
+      ],
+      "additionalHostnames": [],
+      "additionalHostnamePolicy": "Additional hostnames such as www, app, api, auth, telemetry, or health are not required until explicitly declared with environment, purpose, protocol, proof command, owner, risk owner, and control owner."
+    }
+  ],
+  "dnsResolutionSemantics": {
+    "required": true,
+    "publicResolutionRequired": true,
+    "privateOnlyResolutionAllowed": false,
+    "acceptedRecordTypes": [
+      "A",
+      "AAAA",
+      "CNAME"
+    ],
+    "nxdomainAllowed": false,
+    "proofIssueId": "USF-263",
+    "proofBoundary": "DNS proof is required later by USF-263; this contract defines the expected semantics only."
+  },
+  "tlsHttpsSemantics": {
+    "httpsRequired": true,
+    "httpOnlyAllowed": false,
+    "validCertificateRequired": true,
+    "certificateHostCoverageRequired": true,
+    "mixedContentAllowed": false,
+    "proofIssueId": "USF-263",
+    "proofBoundary": "TLS and HTTPS proof is required later by USF-263; this contract defines the expected semantics only."
+  },
+  "publicHttpEdgeCapability": {
+    "required": true,
+    "gatewayNeutral": true,
+    "requiredGateway": "none",
+    "allowedImplementationEvidenceSources": [
+      "cloudflare-observed-configuration",
+      "external-gateway-observed-configuration",
+      "historical-react-lineage"
+    ],
+    "prohibitedRequiredGateways": [
+      "caddy"
+    ],
+    "caddyNonRequirement": true,
+    "generatedComposeAuthority": false,
+    "generatedGatewayConfigAuthority": false,
+    "semanticRequirement": "Public HTTP and HTTPS edge capability for declared FQDNs. No gateway product is semantically required."
+  },
+  "cloudflareBoundary": {
+    "declaredProvider": "cloudflare",
+    "boundaryType": "dns-and-edge-hosting-provider-boundary",
+    "apiSecretRequiredForSemanticContract": false,
+    "apiSecretRequiredForBasicProof": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "supplierBoundary": "Cloudflare is the declared DNS and edge hosting provider boundary according to the human operator. This is provider-boundary evidence organization, not live-provider readiness."
+  },
+  "publicRouteBinding": {
+    "id": "public-edge-proof-route",
+    "required": true,
+    "route": "/.well-known/usf-public-edge.json",
+    "alternateRoute": "/__proof/public-fqdn",
+    "routeClass": "non-product-proof-endpoint",
+    "productUiReadinessClaimAllowed": false,
+    "browserE2eReadinessClaimAllowed": false,
+    "expectedMarker": "usf-public-edge",
+    "expectedContentType": "application/json",
+    "proofIssueId": "USF-263"
+  },
+  "publicTelemetryBootstrap": {
+    "id": "public-edge-telemetry-bootstrap",
+    "requiredForPublicRouteProof": true,
+    "telemetrySystems": [
+      "faro",
+      "sentry"
+    ],
+    "observableEvidence": [
+      "bootstrap-script-presence",
+      "safe-config-marker",
+      "bounded-network-observation"
+    ],
+    "rawTelemetryPayloadRetentionAllowed": false,
+    "productUiReadinessClaimAllowed": false,
+    "browserE2eReadinessClaimAllowed": false,
+    "proofIssueId": "USF-264",
+    "proofBoundary": "USF-264 must prove only public route delivery and telemetry bootstrap. It must not prove product UI readiness or browser E2E readiness."
+  },
+  "testEnvironmentBoundary": {
+    "testEnvironmentPublicInternetDependencyAllowed": false,
+    "testEnvironmentPublicDnsDependencyAllowed": false,
+    "testEnvironmentPublicTlsDependencyAllowed": false,
+    "testEnvironmentRemainsLocalComposedSynthetic": true,
+    "rationale": "The Test environment remains local, composed, and synthetic. Public FQDN semantics are post-Test and pre-Staging proof gates."
+  },
+  "validator": {
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+    "packageScript": "public-fqdn:validate",
+    "makeTarget": "public-fqdn-validate",
+    "selftestCommand": "python3 tools/validate-public-fqdn/validate-public-fqdn.py selftest --json",
+    "plantedDefectDirectory": "tools/validate-public-fqdn/planted-defects",
+    "rules": [
+      "USF-PUBLIC-FQDN-001",
+      "USF-PUBLIC-FQDN-002",
+      "USF-PUBLIC-FQDN-003",
+      "USF-PUBLIC-FQDN-004",
+      "USF-PUBLIC-FQDN-005",
+      "USF-PUBLIC-FQDN-006",
+      "USF-PUBLIC-FQDN-007",
+      "USF-PUBLIC-FQDN-008"
+    ]
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway"
+  ],
+  "allowedClaims": [
+    "public-fqdn-semantic-contract-defined",
+    "gateway-neutral-public-edge-semantics-defined",
+    "test-environment-public-internet-non-dependency-defined"
+  ],
+  "downstreamIssues": [
+    "USF-263",
+    "USF-264",
+    "USF-265"
+  ],
+  "remainingProofBoundaries": [
+    {
+      "issueId": "USF-263",
+      "boundary": "External DNS TLS HTTPS and proof endpoint delivery are not proven by this semantic contract."
+    },
+    {
+      "issueId": "USF-264",
+      "boundary": "Playwright public-route delivery and Faro or Sentry telemetry bootstrap are not proven by this semantic contract."
+    },
+    {
+      "issueId": "USF-265",
+      "boundary": "v2-proof tag authorisation is blocked until USF-262, USF-263, and USF-264 are Done or explicitly bounded with approved rationale."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "id": "006-cloudflare-live-provider-overclaim",
+  "description": "Allow Cloudflare boundary evidence to claim live-provider readiness.",
+  "setCloudflareLiveProviderClaim": true,
+  "expectedRule": "USF-PUBLIC-FQDN-006"
+}

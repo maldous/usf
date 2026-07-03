@@ -1,0 +1,6 @@
+{
+  "id": "005-generated-compose-authority",
+  "description": "Treat generated Compose or generated gateway configuration as semantic authority.",
+  "setGeneratedArtifactAuthority": true,
+  "expectedRule": "USF-PUBLIC-FQDN-005"
+}

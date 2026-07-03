@@ -1,0 +1,6 @@
+{
+  "id": "004-telemetry-bootstrap-missing",
+  "description": "Remove public telemetry bootstrap semantics.",
+  "removeTelemetryBootstrap": true,
+  "expectedRule": "USF-PUBLIC-FQDN-004"
+}

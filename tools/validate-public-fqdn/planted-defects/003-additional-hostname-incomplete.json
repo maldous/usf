@@ -1,0 +1,6 @@
+{
+  "id": "003-additional-hostname-incomplete",
+  "description": "Add an undeclared additional hostname without owner protocol and proof metadata.",
+  "addIncompleteAdditionalHostname": true,
+  "expectedRule": "USF-PUBLIC-FQDN-003"
+}
