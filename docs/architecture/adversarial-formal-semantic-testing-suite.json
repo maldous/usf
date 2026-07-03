@@ -1,0 +1,233 @@
+{
+  "id": "adversarial-formal-semantic-testing-suite",
+  "title": "Adversarial Formal Semantic Testing Suite",
+  "issueId": "USF-257",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": ["USF-259", "USF-252"],
+  "lifecycleState": "issue-scoped-draft",
+  "authorityBoundary": "This issue-scoped suite records adversarial formal-style semantic test coverage only. It does not modify shared validators, manifests, schemas, Compose, package commands, Make targets, enterprise evidence rows, or implementation/runtime code. It is not formal verification and does not claim mathematical proof.",
+  "sourceAuthorities": {
+    "authorityModel": "docs/architecture/authority-model.md",
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "futureAiGuardrailEmbedded": "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+    "designContractComposeDriftSuite": "docs/architecture/design-contract-compose-drift-test-suite.json",
+    "composedServiceIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "testReadinessCommandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+    "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "serviceCatalogue": "spec/instances/compose-service/service-catalogue.json",
+    "semanticContracts": "spec/instances/semantic-contract/",
+    "adversarialCaseCorpus": "tests/contract/adversarial/adversarial-semantic-cases.json"
+  },
+  "inputGaps": [
+    {
+      "path": "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
+      "status": "missing-on-origin-main",
+      "fallbackAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+      "blocker": false,
+      "rationale": "The required future-AI guardrail flags are present in the obligation manifest. This suite records the missing standalone input and avoids editing the manifest or validator."
+    }
+  ],
+  "ownedPaths": [
+    "tests/contract/adversarial/adversarial-semantic-cases.json",
+    "tests/packages/adversarial-formal-semantic-testing-suite.test.ts",
+    "docs/architecture/adversarial-formal-semantic-testing-suite.json",
+    "docs/architecture/adversarial-formal-semantic-testing-suite.md"
+  ],
+  "issueOwnership": {
+    "obligationClassId": "adversarial-semantic-testing",
+    "ownerIssueId": "USF-257",
+    "blockingIssues": ["USF-247", "USF-260", "USF-234"],
+    "linearAuthorityBoundary": "Linear tracks work only. Repository artefacts and validators define USF truth."
+  },
+  "scope": {
+    "testMode": "copy-source-authority-data-in-test-memory-only",
+    "deterministicLocalOnly": true,
+    "serviceBackedExecution": false,
+    "sourceFilesEditedAtRuntime": false,
+    "sharedValidatorIntegrationRequired": false,
+    "manifestMutationRequired": false,
+    "enterpriseEvidenceMutationRequired": false,
+    "testReadinessClaimAllowed": false,
+    "formalVerificationClaimAllowed": false,
+    "mathematicalProofClaimAllowed": false,
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+    "requiredAdversarialClasses": [
+      "contradiction",
+      "ambiguity",
+      "incompleteness",
+      "unsafe-equivalence",
+      "authority-inversion",
+      "generated-authority-inversion",
+      "stale-evidence-pass",
+      "in-memory-substitute-overclaim",
+      "future-ai-drift"
+    ]
+  },
+  "gateSemantics": {
+    "baselineMustPassBeforeAdversarialMutation": true,
+    "adversarialMutationMustProduceExpectedFailure": true,
+    "missingExpectedFailureEvidenceFailsGate": true,
+    "unexpectedMutationPassFailsGate": true,
+    "missingSourceAuthorityFailsGate": true,
+    "missingNonClaimFailsGate": true,
+    "generatedComposeNeverDefinesAuthority": true,
+    "staleEvidenceNeverSatisfiesPass": true,
+    "hermeticOrInMemoryEvidenceNeverSatisfiesLiveProviderClaim": true,
+    "futureAiChangesRequireSemanticTestEvidenceAndNonClaimReview": true
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/adversarial-formal-semantic-testing-suite.test.ts",
+    "corepack pnpm typecheck",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "git diff --check",
+    "corepack pnpm verify"
+  ],
+  "adversarialCases": [
+    {
+      "id": "semantic-facet-contradiction",
+      "adversarialClass": "contradiction",
+      "inputSurface": "semantic-contract",
+      "mutation": "Make a copied semantic contract claim that lifecycle is complete while readiness is explicitly impossible.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-CONTRADICTION"
+    },
+    {
+      "id": "complete-facet-without-authority-link",
+      "adversarialClass": "incompleteness",
+      "inputSurface": "semantic-contract",
+      "mutation": "Remove source references from a copied complete facet.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-MISSING-AUTHORITY"
+    },
+    {
+      "id": "duplicate-service-id-conflicting-owner",
+      "adversarialClass": "ambiguity",
+      "inputSurface": "service-obligation",
+      "mutation": "Duplicate a service id with a different Compose service and owner.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-AMBIGUOUS-SERVICE"
+    },
+    {
+      "id": "same-name-changed-behaviour",
+      "adversarialClass": "unsafe-equivalence",
+      "inputSurface": "semantic-contract",
+      "mutation": "Keep a contract id stable while changing its behavioural fingerprint.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-UNSAFE-EQUIVALENCE"
+    },
+    {
+      "id": "same-behaviour-different-name",
+      "adversarialClass": "ambiguity",
+      "inputSurface": "semantic-contract",
+      "mutation": "Add a second contract name with the same behavioural fingerprint but no canonical equivalence mapping.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-AMBIGUOUS-EQUIVALENCE"
+    },
+    {
+      "id": "generated-compose-treated-as-authority",
+      "adversarialClass": "generated-authority-inversion",
+      "inputSurface": "generated-compose",
+      "mutation": "Promote generated Compose from derivative output to semantic authority.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-GENERATED-AUTHORITY-INVERSION"
+    },
+    {
+      "id": "stale-evidence-pass-accepted",
+      "adversarialClass": "stale-evidence-pass",
+      "inputSurface": "evidence",
+      "mutation": "Accept stale evidence as a passing readiness signal.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-STALE-EVIDENCE-PASS"
+    },
+    {
+      "id": "in-memory-service-substitute-overclaim",
+      "adversarialClass": "in-memory-substitute-overclaim",
+      "inputSurface": "service-obligation",
+      "mutation": "Allow an in-memory substitute for a service-backed claim.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-IN-MEMORY-SUBSTITUTE"
+    },
+    {
+      "id": "future-ai-code-without-semantic-update",
+      "adversarialClass": "future-ai-drift",
+      "inputSurface": "future-ai-change",
+      "mutation": "Simulate an implementation change without semantic, evidence, coverage, and non-claim updates.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-FUTURE-AI-DRIFT"
+    },
+    {
+      "id": "future-ai-semantic-without-test-evidence",
+      "adversarialClass": "future-ai-drift",
+      "inputSurface": "future-ai-change",
+      "mutation": "Simulate a semantic row without matching test obligation and evidence updates.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-FUTURE-AI-DRIFT"
+    },
+    {
+      "id": "deferred-work-marked-complete-without-proof",
+      "adversarialClass": "authority-inversion",
+      "inputSurface": "future-ai-change",
+      "mutation": "Mark deferred work complete without proof evidence and validator backing.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-FUTURE-AI-DRIFT"
+    },
+    {
+      "id": "non-claim-removed",
+      "adversarialClass": "authority-inversion",
+      "inputSurface": "non-claim-boundary",
+      "mutation": "Remove a required readiness non-claim.",
+      "expectedFailureId": "USF-257-ADVERSARIAL-NON-CLAIM-REMOVED"
+    }
+  ],
+  "coverageByAdversarialClass": [
+    {
+      "adversarialClass": "contradiction",
+      "caseIds": ["semantic-facet-contradiction"]
+    },
+    {
+      "adversarialClass": "ambiguity",
+      "caseIds": ["duplicate-service-id-conflicting-owner", "same-behaviour-different-name"]
+    },
+    {
+      "adversarialClass": "incompleteness",
+      "caseIds": ["complete-facet-without-authority-link"]
+    },
+    {
+      "adversarialClass": "unsafe-equivalence",
+      "caseIds": ["same-name-changed-behaviour"]
+    },
+    {
+      "adversarialClass": "authority-inversion",
+      "caseIds": ["deferred-work-marked-complete-without-proof", "non-claim-removed"]
+    },
+    {
+      "adversarialClass": "generated-authority-inversion",
+      "caseIds": ["generated-compose-treated-as-authority"]
+    },
+    {
+      "adversarialClass": "stale-evidence-pass",
+      "caseIds": ["stale-evidence-pass-accepted"]
+    },
+    {
+      "adversarialClass": "in-memory-substitute-overclaim",
+      "caseIds": ["in-memory-service-substitute-overclaim"]
+    },
+    {
+      "adversarialClass": "future-ai-drift",
+      "caseIds": [
+        "future-ai-code-without-semantic-update",
+        "future-ai-semantic-without-test-evidence",
+        "deferred-work-marked-complete-without-proof"
+      ]
+    }
+  ],
+  "allowedClaims": ["issue-owned-adversarial-suite-defined"],
+  "nonClaims": [
+    "formal-verification",
+    "mathematical-proof",
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "final-usf-234-acceptance"
+  ]
+}
