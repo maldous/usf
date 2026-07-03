@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 const SUITE_PATH = "docs/architecture/adversarial-formal-semantic-testing-suite.json";
 const HUMAN_DOC_PATH = "docs/architecture/adversarial-formal-semantic-testing-suite.md";
-const CASE_CORPUS_PATH = "tests/contract/adversarial/adversarial-semantic-cases.json";
+const CASE_CORPUS_PATH = "tests/packages/adversarial/adversarial-semantic-cases.json";
 const REQUIRED_TEST_COMMAND =
   "corepack pnpm test -- tests/packages/adversarial-formal-semantic-testing-suite.test.ts";
 const REQUIRED_FACETS = [

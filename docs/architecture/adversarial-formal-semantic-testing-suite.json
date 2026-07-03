@@ -16,7 +16,7 @@
     "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
     "serviceCatalogue": "spec/instances/compose-service/service-catalogue.json",
     "semanticContracts": "spec/instances/semantic-contract/",
-    "adversarialCaseCorpus": "tests/contract/adversarial/adversarial-semantic-cases.json"
+    "adversarialCaseCorpus": "tests/packages/adversarial/adversarial-semantic-cases.json"
   },
   "inputGaps": [
     {
@@ -28,7 +28,7 @@
     }
   ],
   "ownedPaths": [
-    "tests/contract/adversarial/adversarial-semantic-cases.json",
+    "tests/packages/adversarial/adversarial-semantic-cases.json",
     "tests/packages/adversarial-formal-semantic-testing-suite.test.ts",
     "docs/architecture/adversarial-formal-semantic-testing-suite.json",
     "docs/architecture/adversarial-formal-semantic-testing-suite.md"
