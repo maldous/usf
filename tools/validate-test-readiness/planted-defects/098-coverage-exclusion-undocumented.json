@@ -1,0 +1,13 @@
+{
+  "id": "098-coverage-exclusion-undocumented",
+  "description": "Remove issue-linked follow-up metadata from bounded coverage exclusions.",
+  "coverageSourceClassificationPatch": [
+    {
+      "classification": "bounded-deferred",
+      "drop": [
+        "followUpIssueIds"
+      ]
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-098"
+}

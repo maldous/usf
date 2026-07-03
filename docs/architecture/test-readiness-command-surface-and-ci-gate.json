@@ -29,9 +29,22 @@
         "test-readiness:semantic",
         "test-readiness:fixtures",
         "test-readiness:integration",
+        "test-readiness:coverage",
         "test-readiness:assurance"
       ],
       "claimBoundary": "Runs the bounded local test-readiness command gate, including the composed service integration matrix. USF-234 still owns final acceptance and final test-readiness claim."
+    },
+    {
+      "id": "test-readiness-coverage",
+      "command": "corepack pnpm test-readiness:coverage",
+      "makeTarget": "test-readiness-coverage",
+      "classification": "canonical-current-lcov-sonar-coverage-gate",
+      "requiresComposedServices": false,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "test:coverage"
+      ],
+      "claimBoundary": "Generates bounded LCOV and enforces 100 percent coverage for declared in-scope implementation files only. It does not claim repository-wide coverage or final USF-234 acceptance."
     },
     {
       "id": "test-readiness-composed",
@@ -111,7 +124,15 @@
   "packageScripts": [
     {
       "id": "test-readiness",
-      "script": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:assurance"
+      "script": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:coverage && pnpm test-readiness:assurance"
+    },
+    {
+      "id": "test:coverage",
+      "script": "vitest run --coverage"
+    },
+    {
+      "id": "test-readiness:coverage",
+      "script": "pnpm test:coverage"
     },
     {
       "id": "test-readiness:composed",
@@ -178,6 +199,16 @@
       "target": "test-readiness-integration",
       "routesTo": "corepack pnpm test-readiness:integration",
       "classification": "explicit-composed-service-integration-matrix-proof-alias"
+    },
+    {
+      "target": "test-coverage",
+      "routesTo": "corepack pnpm test-readiness:coverage",
+      "classification": "explicit-lcov-coverage-gate-alias"
+    },
+    {
+      "target": "test-readiness-coverage",
+      "routesTo": "corepack pnpm test-readiness:coverage",
+      "classification": "explicit-test-readiness-coverage-proof-alias"
     }
   ],
   "composedExecution": {
@@ -229,6 +260,10 @@
     "corepack pnpm test-readiness:fixtures",
     "corepack pnpm test-readiness:integration",
     "make test-readiness-integration",
+    "corepack pnpm test:coverage",
+    "corepack pnpm test-readiness:coverage",
+    "make test-coverage",
+    "make test-readiness-coverage",
     "corepack pnpm test-readiness:assurance",
     "make test-ready",
     "make test",

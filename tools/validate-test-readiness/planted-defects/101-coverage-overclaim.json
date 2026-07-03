@@ -1,0 +1,6 @@
+{
+  "id": "101-coverage-overclaim",
+  "description": "Allow a prohibited final test-readiness claim from the bounded coverage gate.",
+  "coverageAppendAllowedClaim": "test-readiness",
+  "expectedRule": "USF-TEST-READINESS-101"
+}

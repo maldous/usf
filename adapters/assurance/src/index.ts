@@ -1,4 +1,5 @@
 import { scan } from "@sonar/scan";
+import { existsSync, readFileSync } from "node:fs";
 import { opaqueHash, type TenantContext } from "@foundation/core";
 
 export const SONARQUBE_SERVICE_CATALOGUE_ID = "sonarqube" as const;
@@ -41,6 +42,10 @@ export interface SonarQubeComposedQualityGateEvidence {
   readonly operatorConsoleAccessChecked: boolean;
   readonly operatorConsoleUiClickthroughClaim: false;
   readonly supportedScanScope: "local-synthetic-typescript-project";
+  readonly lcovReportConfigured: boolean;
+  readonly lcovReportConsumedChecked: boolean;
+  readonly lcovReportFreshnessChecked: boolean;
+  readonly lcovReportLineCoverageBucket: "100-percent" | "below-100-percent" | "not-checked";
   readonly scannerExecutionChecked: boolean;
   readonly qualityGateResultChecked: boolean;
   readonly qualityGateStatus: "OK" | "ERROR" | "UNKNOWN" | "not-checked";
@@ -105,6 +110,7 @@ interface ScanInput {
   readonly projectBaseDir: string;
   readonly sonarUserHome: string;
   readonly sonarWorkingDirectory: string;
+  readonly lcovReportPath: string;
 }
 
 interface TokenRef {
@@ -176,6 +182,7 @@ export class SonarQubeComposedQualityGateAdapter {
       token = await this.#generateToken();
       const scanToken = token.value;
       await this.#assertOperatorAccess(scanToken);
+      const lcov = validateLcovReport(input.lcovReportPath);
       const suppressed = await suppressScannerOutput(async () => {
         await scan({
           serverUrl: this.#endpoint,
@@ -188,6 +195,7 @@ export class SonarQubeComposedQualityGateAdapter {
             "sonar.qualitygate.wait": "true",
             "sonar.qualitygate.timeout": "120",
             "sonar.scanner.skipJreProvisioning": "true",
+            "sonar.javascript.lcov.reportPaths": "coverage/lcov.info",
             "sonar.userHome": input.sonarUserHome,
             "sonar.working.directory": input.sonarWorkingDirectory,
             "sonar.scm.disabled": "true",
@@ -214,6 +222,10 @@ export class SonarQubeComposedQualityGateAdapter {
         retentionCleanupChecked: cleanupSucceeded,
         credentialRevocationChecked: tokenRevoked,
         providerUnavailableChecked: false,
+        lcovReportConfigured: true,
+        lcovReportConsumedChecked: lcov.consumedChecked,
+        lcovReportFreshnessChecked: lcov.freshnessChecked,
+        lcovReportLineCoverageBucket: lcov.lineCoverageBucket,
       });
       this.lastEvidence = evidence;
       return evidence;
@@ -235,6 +247,10 @@ export class SonarQubeComposedQualityGateAdapter {
         retentionCleanupChecked: cleanupSucceeded,
         credentialRevocationChecked: tokenRevoked,
         providerUnavailableChecked: true,
+        lcovReportConfigured: true,
+        lcovReportConsumedChecked: false,
+        lcovReportFreshnessChecked: false,
+        lcovReportLineCoverageBucket: "not-checked",
       });
       this.lastEvidence = evidence;
       throw new SonarQubeProofError(evidence.safeErrorCode ?? "sonarqube-proof-failed", evidence);
@@ -261,6 +277,10 @@ export class SonarQubeComposedQualityGateAdapter {
         retentionCleanupChecked: false,
         credentialRevocationChecked: false,
         providerUnavailableChecked: true,
+        lcovReportConfigured: false,
+        lcovReportConsumedChecked: false,
+        lcovReportFreshnessChecked: false,
+        lcovReportLineCoverageBucket: "not-checked",
       });
       this.lastEvidence = evidence;
       return evidence;
@@ -390,6 +410,10 @@ export class SonarQubeComposedQualityGateAdapter {
     readonly retentionCleanupChecked: boolean;
     readonly credentialRevocationChecked: boolean;
     readonly providerUnavailableChecked: boolean;
+    readonly lcovReportConfigured: boolean;
+    readonly lcovReportConsumedChecked: boolean;
+    readonly lcovReportFreshnessChecked: boolean;
+    readonly lcovReportLineCoverageBucket: SonarQubeComposedQualityGateEvidence["lcovReportLineCoverageBucket"];
   }): SonarQubeComposedQualityGateEvidence {
     return Object.freeze({
       providerRef: SONARQUBE_PROVIDER_REGISTRY_ID,
@@ -421,6 +445,10 @@ export class SonarQubeComposedQualityGateAdapter {
       operatorConsoleAccessChecked: input.operationOutcome === "succeeded",
       operatorConsoleUiClickthroughClaim: false,
       supportedScanScope: "local-synthetic-typescript-project",
+      lcovReportConfigured: input.lcovReportConfigured,
+      lcovReportConsumedChecked: input.lcovReportConsumedChecked,
+      lcovReportFreshnessChecked: input.lcovReportFreshnessChecked,
+      lcovReportLineCoverageBucket: input.lcovReportLineCoverageBucket,
       scannerExecutionChecked: input.operationOutcome === "succeeded",
       qualityGateResultChecked: input.qualityGateStatus !== "not-checked",
       qualityGateStatus: input.qualityGateStatus,
@@ -572,6 +600,29 @@ function durationBucket(
 function countBucket(value: number | null): "zero" | "non-zero" | "not-checked" {
   if (value === null) return "not-checked";
   return value === 0 ? "zero" : "non-zero";
+}
+
+function validateLcovReport(lcovReportPath: string): {
+  readonly consumedChecked: boolean;
+  readonly freshnessChecked: boolean;
+  readonly lineCoverageBucket: "100-percent" | "below-100-percent";
+} {
+  if (!existsSync(lcovReportPath)) {
+    throw new Error("sonarqube-lcov-report-missing");
+  }
+  const text = readFileSync(lcovReportPath, "utf8");
+  if (!text.includes("TN:usf-sonarqube-synthetic-lcov")) {
+    throw new Error("sonarqube-lcov-report-stale");
+  }
+  const lineHits = Array.from(text.matchAll(/^DA:\d+,(\d+)$/gm), (match) => Number(match[1]));
+  if (lineHits.length === 0) {
+    throw new Error("sonarqube-lcov-report-empty");
+  }
+  return Object.freeze({
+    consumedChecked: true,
+    freshnessChecked: true,
+    lineCoverageBucket: lineHits.every((hits) => hits > 0) ? "100-percent" : "below-100-percent",
+  });
 }
 
 function safeSonarQubeErrorCode(error: unknown): string {

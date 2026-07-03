@@ -1,0 +1,8 @@
+{
+  "id": "096-coverage-command-missing",
+  "description": "Drop the package coverage command that generates LCOV.",
+  "packageScriptDrop": [
+    "test:coverage"
+  ],
+  "expectedRule": "USF-TEST-READINESS-096"
+}

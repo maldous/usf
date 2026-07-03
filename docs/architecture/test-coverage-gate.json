@@ -1,0 +1,199 @@
+{
+  "id": "test-coverage-gate",
+  "title": "Test Coverage Gate",
+  "issueId": "USF-240",
+  "parentIssueId": "USF-234",
+  "authorityLevel": "evidence",
+  "lifecycleState": "active",
+  "purpose": "Define the bounded LCOV and Sonar coverage gate for the current test-readiness track without claiming final test readiness.",
+  "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+  "commandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+  "coverageProvider": {
+    "package": "@vitest/coverage-v8",
+    "version": "4.1.9",
+    "pinned": true,
+    "reason": "Official Vitest V8 coverage provider for the repository's Vitest 4 test runner."
+  },
+  "commands": {
+    "packageScript": "test:coverage",
+    "packageCommand": "corepack pnpm test:coverage",
+    "testReadinessPackageScript": "test-readiness:coverage",
+    "testReadinessCommand": "corepack pnpm test-readiness:coverage",
+    "makeTargets": [
+      "test-coverage",
+      "test-readiness-coverage"
+    ],
+    "coverageReportDirectory": "coverage/test-readiness",
+    "lcovReportPath": "coverage/test-readiness/lcov.info",
+    "jsonSummaryPath": "coverage/test-readiness/coverage-summary.json"
+  },
+  "thresholds": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "inScopeFiles": [
+    "capabilities/audit/src/recorder.ts",
+    "capabilities/audit/src/safe-view.ts",
+    "capabilities/auth/src/index.ts",
+    "capabilities/files/src/index.ts",
+    "capabilities/jobs/src/index.ts",
+    "capabilities/tenant/src/authorization-policy.ts",
+    "capabilities/tenant/src/pdp.ts",
+    "packages/contracts/src/index.ts",
+    "packages/ports/src/index.ts",
+    "packages/source/src/index.ts"
+  ],
+  "coverageScopeBoundary": {
+    "status": "bounded-in-scope-implementation-files-only",
+    "finalRepositoryWideCoverageClaimAllowed": false,
+    "scopeExpansionRequiresIssue": true,
+    "scopeExpansionOwnerIssueIds": [
+      "USF-247",
+      "USF-260",
+      "USF-234"
+    ],
+    "nonEquivalenceBoundary": "This gate proves 100 percent line, statement, function, and branch coverage only for the declared in-scope implementation files. It does not prove repository-wide coverage, service-backed composed test readiness, final USF-234 acceptance, or environment promotion readiness."
+  },
+  "sourceClassifications": [
+    {
+      "classification": "in-scope",
+      "paths": [
+        "capabilities/audit/src/recorder.ts",
+        "capabilities/audit/src/safe-view.ts",
+        "capabilities/auth/src/index.ts",
+        "capabilities/files/src/index.ts",
+        "capabilities/jobs/src/index.ts",
+        "capabilities/tenant/src/authorization-policy.ts",
+        "capabilities/tenant/src/pdp.ts",
+        "packages/contracts/src/index.ts",
+        "packages/ports/src/index.ts",
+        "packages/source/src/index.ts"
+      ],
+      "rationale": "These implementation files already have deterministic unit coverage and can fail closed at a 100 percent coverage threshold without relying on composed services or hidden local state."
+    },
+    {
+      "classification": "bounded-deferred",
+      "paths": [
+        "apps/**",
+        "adapters/**",
+        "packages/proof/src/**",
+        "tests/**"
+      ],
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness"
+      ],
+      "followUpIssueIds": [
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "rationale": "These paths either require composed service execution, runtime proof orchestration, generated/client proof, or test harness ownership. They are not counted by the bounded LCOV threshold until a later issue expands scope with matching tests and evidence."
+    },
+    {
+      "classification": "generated-or-type-only-excluded",
+      "paths": [
+        "**/*.d.ts",
+        "adapters/db/src/generated-types.ts"
+      ],
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "reviewDate": "2026-09-30",
+      "promotionImpact": [
+        "none-for-current-bounded-coverage-gate"
+      ],
+      "followUpIssueIds": [
+        "USF-260"
+      ],
+      "rationale": "Type declarations and generated DB types are excluded from executable coverage. Drift and generated-artifact checks remain owned by the design/contract and final acceptance gates."
+    }
+  ],
+  "sonarLcovImport": {
+    "sonarProjectProperties": "sonar-project.properties",
+    "lcovReportPath": "coverage/test-readiness/lcov.info",
+    "proofCommand": "corepack pnpm proof:assurance:sonarqube",
+    "localSyntheticProofLcovPath": "coverage/lcov.info",
+    "requiredEvidenceFields": [
+      "lcovReportConfigured",
+      "lcovReportConsumedChecked",
+      "lcovReportFreshnessChecked",
+      "lcovReportLineCoverageBucket"
+    ]
+  },
+  "validatorCoverage": {
+    "validator": "tools/validate-test-readiness/validate-test-readiness.py",
+    "ruleIds": [
+      "USF-TEST-READINESS-095",
+      "USF-TEST-READINESS-096",
+      "USF-TEST-READINESS-097",
+      "USF-TEST-READINESS-098",
+      "USF-TEST-READINESS-099",
+      "USF-TEST-READINESS-100",
+      "USF-TEST-READINESS-101"
+    ],
+    "plantedDefectDirectory": "tools/validate-test-readiness/planted-defects"
+  },
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": [
+      "soa-usf-240-lcov-sonar-coverage-gate"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-240-lcov-sonar-coverage-gate"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-240-coverage-overclaim"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-240-coverage-gate"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-240-coverage-gate"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-240-coverage-gate"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-240-coverage-gate"
+    ]
+  },
+  "validationCommands": [
+    "corepack pnpm test:coverage",
+    "corepack pnpm test-readiness:coverage",
+    "corepack pnpm proof:assurance:sonarqube",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "git diff --check",
+    "git diff --check origin/main...HEAD"
+  ],
+  "allowedClaims": [
+    "bounded-100-percent-lcov-for-declared-in-scope-files",
+    "sonarqube-supported-local-synthetic-lcov-import-evidence"
+  ],
+  "nonClaims": [
+    "full-dev-readiness",
+    "test-readiness",
+    "final-test-readiness",
+    "repository-wide-coverage-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "usf-234-closure"
+  ]
+}
