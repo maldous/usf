@@ -10,6 +10,7 @@
     "authorityModel": "docs/architecture/authority-model.md",
     "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
     "futureAiGuardrailEmbedded": "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
+    "futureAiGuardrail": "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
     "designContractComposeDriftSuite": "docs/architecture/design-contract-compose-drift-test-suite.json",
     "composedServiceIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
     "testReadinessCommandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
@@ -18,15 +19,7 @@
     "semanticContracts": "spec/instances/semantic-contract/",
     "adversarialCaseCorpus": "tests/packages/adversarial/adversarial-semantic-cases.json"
   },
-  "inputGaps": [
-    {
-      "path": "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
-      "status": "missing-on-origin-main",
-      "fallbackAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
-      "blocker": false,
-      "rationale": "The required future-AI guardrail flags are present in the obligation manifest. This suite records the missing standalone input and avoids editing the manifest or validator."
-    }
-  ],
+  "inputGaps": [],
   "ownedPaths": [
     "tests/packages/adversarial/adversarial-semantic-cases.json",
     "tests/packages/adversarial-formal-semantic-testing-suite.test.ts",

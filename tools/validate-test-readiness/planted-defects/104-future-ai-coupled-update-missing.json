@@ -1,0 +1,13 @@
+{
+  "id": "104-future-ai-coupled-update-missing",
+  "description": "Remove the required test-obligation update from a future AI change impact row.",
+  "futureAiChangeClassPatch": [
+    {
+      "changedFileClass": "api-route",
+      "dropRequiredUpdates": [
+        "test-obligation"
+      ]
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-104"
+}

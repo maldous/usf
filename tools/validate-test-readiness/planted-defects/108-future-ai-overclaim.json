@@ -1,0 +1,6 @@
+{
+  "id": "108-future-ai-overclaim",
+  "description": "Allow a prohibited test-readiness claim from the future AI guardrail.",
+  "futureAiAppendAllowedClaim": "test-readiness",
+  "expectedRule": "USF-TEST-READINESS-108"
+}

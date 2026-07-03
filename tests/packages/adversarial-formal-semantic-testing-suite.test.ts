@@ -626,23 +626,10 @@ describe("adversarial formal semantic testing suite", () => {
     for (const reference of Object.values(suite.sourceAuthorities)) {
       expect(existsSync(sourcePath(reference)), reference).toBe(true);
     }
-    expect(suite.inputGaps).toEqual([
-      {
-        path: "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
-        status: "missing-on-origin-main",
-        fallbackAuthority:
-          "docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail",
-        blocker: false,
-        rationale:
-          "The required future-AI guardrail flags are present in the obligation manifest. This suite records the missing standalone input and avoids editing the manifest or validator.",
-      },
-    ]);
-    const [inputGap] = suite.inputGaps;
-    if (inputGap === undefined) {
-      throw new Error("expected one recorded input gap");
-    }
-    expect(existsSync(inputGap.path)).toBe(false);
-    expect(existsSync(sourcePath(inputGap.fallbackAuthority))).toBe(true);
+    expect(suite.sourceAuthorities.futureAiGuardrail).toBe(
+      "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
+    );
+    expect(suite.inputGaps).toEqual([]);
   });
 
   it("aligns with the USF-257 manifest row without mutating shared authorities", () => {
