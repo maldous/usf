@@ -1,0 +1,336 @@
+{
+  "id": "environment-tooling-governance-test-gate",
+  "title": "Environment Tooling Governance Test Gate",
+  "issueId": "USF-258",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": ["USF-239", "USF-248", "USF-243", "USF-259"],
+  "sourceAuthorities": {
+    "linearIssue": "USF-258",
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "commandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+    "devReadinessHandover": "docs/architecture/dev-readiness-validation-and-handover.json",
+    "gitPracticesStandard": "docs/architecture/git-practices-standard.md",
+    "packageJson": "package.json",
+    "pnpmLockfile": "pnpm-lock.yaml",
+    "pnpmWorkspace": "pnpm-workspace.yaml"
+  },
+  "testCommand": {
+    "id": "test-readiness-environment-tooling-governance",
+    "command": "corepack pnpm test -- tests/packages/environment-tooling-governance-test-gate.test.ts",
+    "testFile": "tests/packages/environment-tooling-governance-test-gate.test.ts",
+    "requiresPackageScriptChange": false,
+    "requiresMakefileChange": false,
+    "requiresCiWorkflowChange": false,
+    "claimBoundary": "Issue-scoped Vitest gate only. It does not move Linear Done, alter shared validators, or claim final USF-234 acceptance."
+  },
+  "scope": {
+    "toolchainPinning": true,
+    "lockfileWorkspaceConsistency": true,
+    "branchTagGovernance": true,
+    "hiddenLocalStatePrevention": true,
+    "environmentBoundaryCoverage": true,
+    "generatedArtifactDerivation": true,
+    "localCiAlignment": true,
+    "sharedCommandOrValidatorEditRequired": false,
+    "packageMakefileCiEditRequired": false,
+    "finalTestReadinessClaimAllowed": false
+  },
+  "toolchainPinning": {
+    "nodeEngine": ">=24.16.0",
+    "pnpmPackageManager": "pnpm@11.9.0",
+    "corepackRequired": true,
+    "engineStrictRequired": true,
+    "exactDependencyVersionsRequired": true,
+    "workspaceLockfileRequired": true,
+    "devTools": [
+      {
+        "name": "typescript",
+        "packageJsonField": "devDependencies.typescript",
+        "requiredVersion": "6.0.3",
+        "lockfileSpecifierRequired": true
+      },
+      {
+        "name": "vitest",
+        "packageJsonField": "devDependencies.vitest",
+        "requiredVersion": "4.1.9",
+        "lockfileSpecifierRequired": true
+      },
+      {
+        "name": "eslint",
+        "packageJsonField": "devDependencies.eslint",
+        "requiredVersion": "10.6.0",
+        "lockfileSpecifierRequired": true
+      },
+      {
+        "name": "prettier",
+        "packageJsonField": "devDependencies.prettier",
+        "requiredVersion": "3.9.1",
+        "lockfileSpecifierRequired": true
+      },
+      {
+        "name": "typescript-eslint",
+        "packageJsonField": "devDependencies.typescript-eslint",
+        "requiredVersion": "8.62.0",
+        "lockfileSpecifierRequired": true
+      }
+    ]
+  },
+  "workspaceLockfileConsistency": {
+    "workspaceGlobs": ["apps/*", "capabilities/*", "adapters/*", "packages/*"],
+    "requiredRootImporter": ".",
+    "expectedImporterCount": 33,
+    "sharedWorkspaceLockfileRequired": true,
+    "frozenInstallCommand": "corepack pnpm install --frozen-lockfile",
+    "lockfileVersion": "9.0",
+    "requiredOverridePins": [
+      {
+        "package": "protobufjs",
+        "version": "7.6.4"
+      }
+    ]
+  },
+  "commandParity": {
+    "existingCommandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+    "localCanonicalCommand": "corepack pnpm test-readiness",
+    "ciEquivalentCommand": "corepack pnpm test-readiness",
+    "makeTarget": "test-ready",
+    "packageScript": "test-readiness",
+    "issueScopedCommandRequiresSharedScript": false,
+    "commandsThatMustRemainAligned": [
+      "test-readiness",
+      "test-readiness:validate",
+      "test-readiness:semantic",
+      "test-readiness:fixtures",
+      "test-readiness:integration",
+      "test-readiness:assurance"
+    ]
+  },
+  "environmentBoundaries": {
+    "profileSelectionExplicit": true,
+    "allowedEnvironmentClasses": ["local", "hermetic", "integration"],
+    "disallowedClaimEnvironmentClasses": ["staging", "production-shaped", "production-live"],
+    "optionalEnvironmentVariables": [
+      "USF_DEV_RUNTIME_MODE",
+      "USF_WORKER_RUN_ONCE",
+      "USF_BROWSER_EXECUTABLE",
+      "HOST",
+      "PORT"
+    ],
+    "realSecretsRequired": false,
+    "realTenantDataRequired": false,
+    "liveProviderRequired": false,
+    "stagingAccessRequired": false,
+    "productionAccessRequired": false,
+    "offlineNoNetworkDefault": true,
+    "deterministicSeedsRequired": true,
+    "deterministicClockBoundaryRequired": true,
+    "timezoneLocaleSensitivityCovered": true,
+    "pathCaseSensitivityCovered": true,
+    "tempDirectoryCleanupRequired": true,
+    "hiddenLocalStateRequired": false,
+    "rawEndpointTokenRetentionAllowed": false
+  },
+  "generatedArtifactChecks": [
+    {
+      "id": "compose-test-target",
+      "artifactPath": "compose/compose.test.generated.yaml",
+      "authorityPath": "spec/instances/compose-service/service-catalogue.json",
+      "validationCommand": "corepack pnpm compose:check-generated",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "openapi-contract-check",
+      "artifactPath": "packages/openapi/src/check.ts",
+      "authorityPath": "docs/architecture/api-and-contract-surface-standard.md",
+      "validationCommand": "corepack pnpm openapi:check",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "db-generated-types",
+      "artifactPath": "adapters/db/src/generated-types.ts",
+      "authorityPath": "adapters/db/migrations/manifest.json",
+      "validationCommand": "corepack pnpm db:types:check",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "schema-registry",
+      "artifactPath": "spec/registries/schema-registry.json",
+      "authorityPath": "docs/architecture/schema-authoring-standard.md",
+      "validationCommand": "python3 tools/validate-spec/validate-spec.py all --json",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "fixture-corpus",
+      "artifactPath": "tests/packages/fixtures/service-fixture-corpus.json",
+      "authorityPath": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "validationCommand": "corepack pnpm test-readiness:fixtures",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "obligation-manifest",
+      "artifactPath": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "authorityPath": "spec/schemas/test-obligation-manifest.schema.json",
+      "validationCommand": "corepack pnpm test-readiness:validate",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "command-surface",
+      "artifactPath": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+      "authorityPath": "package.json",
+      "validationCommand": "corepack pnpm test-readiness:validate",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "enterprise-evidence",
+      "artifactPath": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "authorityPath": "docs/architecture/enterprise-control-evidence-test-suite.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    },
+    {
+      "id": "test-readiness-planted-defects",
+      "artifactPath": "tools/validate-test-readiness/planted-defects",
+      "authorityPath": "tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:validate",
+      "derivedFromAuthority": true,
+      "stalenessStatus": "current",
+      "directEditAllowed": false
+    }
+  ],
+  "versionControl": {
+    "branchPolicy": {
+      "recommendedIssueBranch": "test/environment-tooling-governance-gate",
+      "linearSuggestedBranchNotUsedBecauseContainsRedundantLocalUsf": true,
+      "forbiddenTokens": ["v2", "legacy", "old", "new", "temp", "transitional", "usf"],
+      "branchNameMustBeSemanticPurpose": true,
+      "draftPrRequiredUntilValidationPasses": true
+    },
+    "tagPolicy": {
+      "createsTag": false,
+      "tagClaimBoundary": "No tag is created by USF-258. Tags do not certify correctness or readiness."
+    },
+    "hiddenLocalState": {
+      "trackedPrivateStateAllowed": false,
+      "privateStatePrefixes": [".codex/", ".claude/", ".env", ".env."],
+      "gitignoreMustCoverPrivateState": true,
+      "realSecretsRequired": false,
+      "realTenantDataRequired": false,
+      "simulatedTrackedFiles": []
+    },
+    "cleanCheckout": {
+      "freshCloneRequiredBeforeFinalAcceptance": false,
+      "freshCloneOwnerIssue": "USF-234",
+      "dirtyGitStatusAllowed": false,
+      "gitDiffCheckRequired": true,
+      "gitStatusReviewRequired": true
+    },
+    "secretScanning": {
+      "secretLikeValuesAllowed": false,
+      "rawEndpointValuesAllowed": false,
+      "prohibitedValuePatterns": [
+        "aws-access-key-id",
+        "github-token",
+        "openai-style-secret-key",
+        "private-key-pem",
+        "credentialed-url",
+        "database-connection-string"
+      ],
+      "secretProbeValues": []
+    },
+    "largeTransientArtifacts": {
+      "committedLargeTransientArtifactsAllowed": false,
+      "maxOwnedEvidenceFileBytes": 200000,
+      "blockedPathFragments": ["node_modules/", "dist/", "coverage/", ".pnpm-store/"]
+    }
+  },
+  "complianceBoundary": {
+    "complianceAdjacentEvidenceOnly": true,
+    "regulatoryComplianceClaimAllowed": false,
+    "socReadinessClaimAllowed": false,
+    "isoCertificationClaimAllowed": false,
+    "stagingReadinessClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "deploymentReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "enterpriseProductionReadinessClaimAllowed": false,
+    "productUiReadinessClaimAllowed": false,
+    "browserE2EReadinessClaimAllowed": false,
+    "fullReactProductParityClaimAllowed": false,
+    "finalUsf234AcceptanceClaimAllowed": false
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/environment-tooling-governance-test-gate.test.ts",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "git diff --check",
+    "corepack pnpm verify"
+  ],
+  "plantedDefectCases": [
+    {
+      "id": "tool-version-drift",
+      "expectedFinding": "USF-258-TOOL-VERSION-DRIFT"
+    },
+    {
+      "id": "command-mismatch",
+      "expectedFinding": "USF-258-COMMAND-MISMATCH"
+    },
+    {
+      "id": "stale-generated-artifact",
+      "expectedFinding": "USF-258-GENERATED-ARTIFACT-DRIFT"
+    },
+    {
+      "id": "dirty-git-state",
+      "expectedFinding": "USF-258-DIRTY-GIT-STATE"
+    },
+    {
+      "id": "committed-private-artifact",
+      "expectedFinding": "USF-258-PRIVATE-STATE-LEAKAGE"
+    },
+    {
+      "id": "secret-like-value",
+      "expectedFinding": "USF-258-SECRET-LIKE-LEAKAGE"
+    },
+    {
+      "id": "missing-environment-boundary",
+      "expectedFinding": "USF-258-ENVIRONMENT-BOUNDARY-MISSING"
+    },
+    {
+      "id": "unsupported-compliance-overclaim",
+      "expectedFinding": "USF-258-UNSUPPORTED-OVERCLAIM"
+    }
+  ],
+  "allowedClaims": ["bounded-environment-tooling-governance-test-gate-defined"],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "final-usf-234-acceptance",
+    "regulatory-compliance"
+  ]
+}
