@@ -1,0 +1,5 @@
+{
+  "id": "088-operational-suite-missing",
+  "expectedRule": "USF-TEST-READINESS-088",
+  "removeOperationalResilienceSuite": true
+}

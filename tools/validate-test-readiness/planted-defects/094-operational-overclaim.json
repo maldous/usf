@@ -1,0 +1,5 @@
+{
+  "id": "094-operational-overclaim",
+  "expectedRule": "USF-TEST-READINESS-094",
+  "operationalAppendAllowedClaim": "production-readiness"
+}

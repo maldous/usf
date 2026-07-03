@@ -1,0 +1,7 @@
+{
+  "id": "093-operational-enterprise-ref-missing",
+  "expectedRule": "USF-TEST-READINESS-093",
+  "operationalEnterpriseRefDrop": [
+    "incidentVulnerabilityManagementEvidence"
+  ]
+}

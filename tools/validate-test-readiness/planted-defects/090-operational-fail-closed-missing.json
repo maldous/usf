@@ -1,0 +1,13 @@
+{
+  "id": "090-operational-fail-closed-missing",
+  "expectedRule": "USF-TEST-READINESS-090",
+  "operationalServicePatch": [
+    {
+      "serviceId": "keycloak",
+      "set": {
+        "failClosedRequired": false,
+        "auditEvidenceRequired": false
+      }
+    }
+  ]
+}
