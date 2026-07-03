@@ -9144,8 +9144,8 @@
       "adapterProviderId": "sonarqube-composed-quality-gate-provider",
       "validationCommand": "corepack pnpm test:coverage; corepack pnpm test-readiness:coverage; corepack pnpm proof:assurance:sonarqube; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "commandPin": "vitest.config.ts#coverage; sonar-project.properties; adapters/assurance/src/index.ts#lcovReportConfigured; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-095-through-101",
-      "commitPin": "347b548356e430b668c3370354cf38c958d8f2f8",
-      "prOrMergeSha": "347b548356e430b668c3370354cf38c958d8f2f8",
+      "commitPin": "d31adf68a012bb9a9abb44c908c01dc2858931ce",
+      "prOrMergeSha": "d31adf68a012bb9a9abb44c908c01dc2858931ce",
       "issueLinks": [
         "USF-240",
         "USF-234",
