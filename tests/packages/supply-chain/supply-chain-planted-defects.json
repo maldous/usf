@@ -1,0 +1,91 @@
+{
+  "defects": [
+    {
+      "id": "floating-direct-dependency",
+      "expectedFinding": "floating-dependency-specifier",
+      "packageJsonPatch": {
+        "dependencies": {
+          "fastify": "latest"
+        }
+      }
+    },
+    {
+      "id": "missing-lockfile-posture",
+      "expectedFinding": "missing-lockfile-evidence",
+      "evidencePatch": {
+        "lockfilePosture": null
+      }
+    },
+    {
+      "id": "missing-licence-posture",
+      "expectedFinding": "missing-licence-posture",
+      "evidencePatch": {
+        "licencePosture": null
+      }
+    },
+    {
+      "id": "missing-advisory-posture",
+      "expectedFinding": "missing-advisory-posture",
+      "evidencePatch": {
+        "advisoryPosture": null
+      }
+    },
+    {
+      "id": "missing-sbom-or-deferred-evidence",
+      "expectedFinding": "missing-sbom-or-deferred-evidence",
+      "evidencePatch": {
+        "sbomPosture": {
+          "freshSbomGenerated": false,
+          "boundedDeferred": false,
+          "blockerId": ""
+        }
+      }
+    },
+    {
+      "id": "missing-package-manager-toolchain-posture",
+      "expectedFinding": "missing-package-manager-toolchain-posture",
+      "evidencePatch": {
+        "packageManagerPosture": {
+          "packageManagerPinned": false,
+          "engineStrict": false,
+          "sharedWorkspaceLockfile": false,
+          "workspaceMinimumReleaseAgeExcludeRequired": []
+        }
+      }
+    },
+    {
+      "id": "unsupported-readiness-overclaim",
+      "expectedFinding": "unsupported-supply-chain-readiness-overclaim",
+      "evidencePatch": {
+        "claimBoundaries": {
+          "testReadinessClaimAllowed": true,
+          "socReadinessClaimAllowed": true,
+          "finalUsf234AcceptanceClaimAllowed": true,
+          "productionSupplyChainMaturityClaimAllowed": true
+        }
+      }
+    },
+    {
+      "id": "floating-compose-image-without-blocker",
+      "expectedFinding": "floating-compose-image-without-blocker",
+      "imagePolicyRow": {
+        "serviceId": "clamav",
+        "image": "clamav/clamav:stable",
+        "owner": "platform-files-foundation",
+        "pinningStatus": "version-tagged",
+        "provenanceStatus": "digest-deferred"
+      }
+    },
+    {
+      "id": "missing-compose-image-owner",
+      "expectedFinding": "missing-owner",
+      "imagePolicyRow": {
+        "serviceId": "ownerless-image",
+        "image": "registry.example.invalid/service:1.0.0",
+        "owner": "",
+        "pinningStatus": "version-tagged",
+        "provenanceStatus": "digest-deferred"
+      }
+    }
+  ]
+}
