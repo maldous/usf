@@ -33,12 +33,473 @@
   "packageScript": "test-readiness:selftest",
   "packageCommand": "corepack pnpm test-readiness:selftest",
   "makeTarget": "test-readiness-selftest",
-  "plantedDefectCount": 114,
+  "plantedDefectCount": 122,
   "coverageModel": {
     "perDefectExpectedRuleField": "expectedRule",
-    "deterministicFailureProof": "The selftest command loads every planted defect JSON file, applies it to the current repository evidence state, and fails unless the expected rule id appears in the validator findings.",
-    "ruleCatalogue": "USF-TEST-READINESS-001 through USF-TEST-READINESS-111 plus USF-TEST-READINESS-SELFTEST",
-    "failureOutputBoundary": "The validator reports severity, rule id, subject, and safe failure message. It does not expose secrets, real tenant data, raw provider payloads, tokens, stack traces, or live endpoints."
+    "deterministicFailureProof": "The selftest command loads every planted defect JSON file, validates distinct expected-rule coverage for every required validator rule, applies each defect to the current repository evidence state, and fails unless the expected rule id appears in validator findings.",
+    "ruleCatalogue": "USF-TEST-READINESS-001 through USF-TEST-READINESS-111 plus USF-TEST-READINESS-SELFTEST; every required validator rule except the selftest rule requires at least one distinct planted-defect fixture.",
+    "failureOutputBoundary": "The validator reports severity, rule id, subject, and safe failure message. It does not expose secrets, real tenant data, raw provider payloads, tokens, stack traces, or live endpoints.",
+    "perRequiredRuleDistinctFixtureRequired": true,
+    "duplicateFixtureMaySatisfyMissingRule": false,
+    "requiredRuleIds": [
+      "USF-TEST-READINESS-001",
+      "USF-TEST-READINESS-002",
+      "USF-TEST-READINESS-003",
+      "USF-TEST-READINESS-004",
+      "USF-TEST-READINESS-005",
+      "USF-TEST-READINESS-006",
+      "USF-TEST-READINESS-007",
+      "USF-TEST-READINESS-008",
+      "USF-TEST-READINESS-009",
+      "USF-TEST-READINESS-010",
+      "USF-TEST-READINESS-011",
+      "USF-TEST-READINESS-012",
+      "USF-TEST-READINESS-013",
+      "USF-TEST-READINESS-014",
+      "USF-TEST-READINESS-015",
+      "USF-TEST-READINESS-016",
+      "USF-TEST-READINESS-017",
+      "USF-TEST-READINESS-018",
+      "USF-TEST-READINESS-019",
+      "USF-TEST-READINESS-020",
+      "USF-TEST-READINESS-021",
+      "USF-TEST-READINESS-022",
+      "USF-TEST-READINESS-023",
+      "USF-TEST-READINESS-024",
+      "USF-TEST-READINESS-025",
+      "USF-TEST-READINESS-026",
+      "USF-TEST-READINESS-027",
+      "USF-TEST-READINESS-028",
+      "USF-TEST-READINESS-029",
+      "USF-TEST-READINESS-030",
+      "USF-TEST-READINESS-031",
+      "USF-TEST-READINESS-032",
+      "USF-TEST-READINESS-033",
+      "USF-TEST-READINESS-034",
+      "USF-TEST-READINESS-035",
+      "USF-TEST-READINESS-036",
+      "USF-TEST-READINESS-037",
+      "USF-TEST-READINESS-038",
+      "USF-TEST-READINESS-039",
+      "USF-TEST-READINESS-040",
+      "USF-TEST-READINESS-041",
+      "USF-TEST-READINESS-042",
+      "USF-TEST-READINESS-043",
+      "USF-TEST-READINESS-044",
+      "USF-TEST-READINESS-045",
+      "USF-TEST-READINESS-046",
+      "USF-TEST-READINESS-047",
+      "USF-TEST-READINESS-048",
+      "USF-TEST-READINESS-049",
+      "USF-TEST-READINESS-050",
+      "USF-TEST-READINESS-051",
+      "USF-TEST-READINESS-052",
+      "USF-TEST-READINESS-053",
+      "USF-TEST-READINESS-054",
+      "USF-TEST-READINESS-055",
+      "USF-TEST-READINESS-056",
+      "USF-TEST-READINESS-057",
+      "USF-TEST-READINESS-058",
+      "USF-TEST-READINESS-059",
+      "USF-TEST-READINESS-060",
+      "USF-TEST-READINESS-061",
+      "USF-TEST-READINESS-062",
+      "USF-TEST-READINESS-063",
+      "USF-TEST-READINESS-064",
+      "USF-TEST-READINESS-065",
+      "USF-TEST-READINESS-066",
+      "USF-TEST-READINESS-067",
+      "USF-TEST-READINESS-068",
+      "USF-TEST-READINESS-069",
+      "USF-TEST-READINESS-070",
+      "USF-TEST-READINESS-071",
+      "USF-TEST-READINESS-072",
+      "USF-TEST-READINESS-073",
+      "USF-TEST-READINESS-074",
+      "USF-TEST-READINESS-075",
+      "USF-TEST-READINESS-076",
+      "USF-TEST-READINESS-077",
+      "USF-TEST-READINESS-078",
+      "USF-TEST-READINESS-079",
+      "USF-TEST-READINESS-080",
+      "USF-TEST-READINESS-081",
+      "USF-TEST-READINESS-082",
+      "USF-TEST-READINESS-083",
+      "USF-TEST-READINESS-084",
+      "USF-TEST-READINESS-085",
+      "USF-TEST-READINESS-086",
+      "USF-TEST-READINESS-087",
+      "USF-TEST-READINESS-088",
+      "USF-TEST-READINESS-089",
+      "USF-TEST-READINESS-090",
+      "USF-TEST-READINESS-091",
+      "USF-TEST-READINESS-092",
+      "USF-TEST-READINESS-093",
+      "USF-TEST-READINESS-094",
+      "USF-TEST-READINESS-095",
+      "USF-TEST-READINESS-096",
+      "USF-TEST-READINESS-097",
+      "USF-TEST-READINESS-098",
+      "USF-TEST-READINESS-099",
+      "USF-TEST-READINESS-100",
+      "USF-TEST-READINESS-101",
+      "USF-TEST-READINESS-102",
+      "USF-TEST-READINESS-103",
+      "USF-TEST-READINESS-104",
+      "USF-TEST-READINESS-105",
+      "USF-TEST-READINESS-106",
+      "USF-TEST-READINESS-107",
+      "USF-TEST-READINESS-108",
+      "USF-TEST-READINESS-109",
+      "USF-TEST-READINESS-110",
+      "USF-TEST-READINESS-111"
+    ],
+    "expectedRuleCoverage": {
+      "USF-TEST-READINESS-001": [
+        "tools/validate-test-readiness/planted-defects/001-missing-contract.json"
+      ],
+      "USF-TEST-READINESS-002": [
+        "tools/validate-test-readiness/planted-defects/002-missing-service-row.json"
+      ],
+      "USF-TEST-READINESS-003": [
+        "tools/validate-test-readiness/planted-defects/003-compose-target-missing.json"
+      ],
+      "USF-TEST-READINESS-004": [
+        "tools/validate-test-readiness/planted-defects/004-in-memory-substitute-allowed.json"
+      ],
+      "USF-TEST-READINESS-005": [
+        "tools/validate-test-readiness/planted-defects/005-reset-cleanup-missing.json"
+      ],
+      "USF-TEST-READINESS-006": [
+        "tools/validate-test-readiness/planted-defects/006-proof-command-missing.json"
+      ],
+      "USF-TEST-READINESS-007": [
+        "tools/validate-test-readiness/planted-defects/007-readiness-overclaim.json"
+      ],
+      "USF-TEST-READINESS-008": [
+        "tools/validate-test-readiness/planted-defects/008-final-claim-allowed.json"
+      ],
+      "USF-TEST-READINESS-009": [
+        "tools/validate-test-readiness/planted-defects/009-enterprise-ref-missing.json"
+      ],
+      "USF-TEST-READINESS-010": [
+        "tools/validate-test-readiness/planted-defects/010-package-wiring-missing.json"
+      ],
+      "USF-TEST-READINESS-011": [
+        "tools/validate-test-readiness/planted-defects/011-harness-missing.json"
+      ],
+      "USF-TEST-READINESS-012": [
+        "tools/validate-test-readiness/planted-defects/012-harness-dev-target.json"
+      ],
+      "USF-TEST-READINESS-013": [
+        "tools/validate-test-readiness/planted-defects/013-harness-in-memory-substitute.json"
+      ],
+      "USF-TEST-READINESS-014": [
+        "tools/validate-test-readiness/planted-defects/014-harness-command-missing.json"
+      ],
+      "USF-TEST-READINESS-015": [
+        "tools/validate-test-readiness/planted-defects/015-harness-provider-evidence-missing.json"
+      ],
+      "USF-TEST-READINESS-016": [
+        "tools/validate-test-readiness/planted-defects/016-harness-overclaim.json"
+      ],
+      "USF-TEST-READINESS-017": [
+        "tools/validate-test-readiness/planted-defects/017-lifecycle-missing.json"
+      ],
+      "USF-TEST-READINESS-018": [
+        "tools/validate-test-readiness/planted-defects/018-lifecycle-command-missing.json"
+      ],
+      "USF-TEST-READINESS-019": [
+        "tools/validate-test-readiness/planted-defects/019-lifecycle-repeatability-missing.json"
+      ],
+      "USF-TEST-READINESS-020": [
+        "tools/validate-test-readiness/planted-defects/020-lifecycle-cleanup-missing.json"
+      ],
+      "USF-TEST-READINESS-021": [
+        "tools/validate-test-readiness/planted-defects/021-lifecycle-overclaim.json"
+      ],
+      "USF-TEST-READINESS-022": [
+        "tools/validate-test-readiness/planted-defects/022-command-surface-missing.json"
+      ],
+      "USF-TEST-READINESS-023": [
+        "tools/validate-test-readiness/planted-defects/023-package-command-surface-missing.json"
+      ],
+      "USF-TEST-READINESS-024": [
+        "tools/validate-test-readiness/planted-defects/024-make-command-surface-missing.json"
+      ],
+      "USF-TEST-READINESS-025": [
+        "tools/validate-test-readiness/planted-defects/025-ci-local-alignment-missing.json"
+      ],
+      "USF-TEST-READINESS-026": [
+        "tools/validate-test-readiness/planted-defects/026-sonar-gate-preservation-missing.json"
+      ],
+      "USF-TEST-READINESS-027": [
+        "tools/validate-test-readiness/planted-defects/027-command-surface-overclaim.json"
+      ],
+      "USF-TEST-READINESS-028": [
+        "tools/validate-test-readiness/planted-defects/028-command-surface-enterprise-ref-missing.json"
+      ],
+      "USF-TEST-READINESS-029": [
+        "tools/validate-test-readiness/planted-defects/029-obligation-manifest-missing.json"
+      ],
+      "USF-TEST-READINESS-030": [
+        "tools/validate-test-readiness/planted-defects/030-obligation-service-row-missing.json"
+      ],
+      "USF-TEST-READINESS-031": [
+        "tools/validate-test-readiness/planted-defects/031-obligation-semantic-contract-missing.json"
+      ],
+      "USF-TEST-READINESS-032": [
+        "tools/validate-test-readiness/planted-defects/032-obligation-compose-profile-missing.json"
+      ],
+      "USF-TEST-READINESS-033": [
+        "tools/validate-test-readiness/planted-defects/033-obligation-in-memory-substitute.json"
+      ],
+      "USF-TEST-READINESS-034": [
+        "tools/validate-test-readiness/planted-defects/034-obligation-evidence-mapping-missing.json"
+      ],
+      "USF-TEST-READINESS-035": [
+        "tools/validate-test-readiness/planted-defects/035-obligation-future-ai-guardrail-missing.json"
+      ],
+      "USF-TEST-READINESS-036": [
+        "tools/validate-test-readiness/planted-defects/036-obligation-auth-coverage-missing.json"
+      ],
+      "USF-TEST-READINESS-037": [
+        "tools/validate-test-readiness/planted-defects/037-obligation-data-lifecycle-coverage-missing.json"
+      ],
+      "USF-TEST-READINESS-038": [
+        "tools/validate-test-readiness/planted-defects/038-obligation-operational-coverage-missing.json"
+      ],
+      "USF-TEST-READINESS-039": [
+        "tools/validate-test-readiness/planted-defects/039-obligation-overclaim.json"
+      ],
+      "USF-TEST-READINESS-040": [
+        "tools/validate-test-readiness/planted-defects/040-fixture-corpus-missing.json"
+      ],
+      "USF-TEST-READINESS-041": [
+        "tools/validate-test-readiness/planted-defects/041-fixture-service-row-missing.json"
+      ],
+      "USF-TEST-READINESS-042": [
+        "tools/validate-test-readiness/planted-defects/042-fixture-semantic-row-missing.json"
+      ],
+      "USF-TEST-READINESS-043": [
+        "tools/validate-test-readiness/planted-defects/043-fixture-lifecycle-api-missing.json"
+      ],
+      "USF-TEST-READINESS-044": [
+        "tools/validate-test-readiness/planted-defects/044-fixture-repeatability-missing.json"
+      ],
+      "USF-TEST-READINESS-045": [
+        "tools/validate-test-readiness/planted-defects/045-fixture-test-layer-wiring-missing.json"
+      ],
+      "USF-TEST-READINESS-046": [
+        "tools/validate-test-readiness/planted-defects/046-fixture-overclaim.json"
+      ],
+      "USF-TEST-READINESS-047": [
+        "tools/validate-test-readiness/planted-defects/047-integration-matrix-missing.json"
+      ],
+      "USF-TEST-READINESS-048": [
+        "tools/validate-test-readiness/planted-defects/048-integration-service-row-missing.json"
+      ],
+      "USF-TEST-READINESS-049": [
+        "tools/validate-test-readiness/planted-defects/049-integration-profile-row-missing.json"
+      ],
+      "USF-TEST-READINESS-050": [
+        "tools/validate-test-readiness/planted-defects/050-integration-catalogue-disposition-missing.json"
+      ],
+      "USF-TEST-READINESS-051": [
+        "tools/validate-test-readiness/planted-defects/051-integration-command-stale.json"
+      ],
+      "USF-TEST-READINESS-052": [
+        "tools/validate-test-readiness/planted-defects/052-integration-in-memory-substitute.json"
+      ],
+      "USF-TEST-READINESS-053": [
+        "tools/validate-test-readiness/planted-defects/053-integration-profile-gated-disposition.json"
+      ],
+      "USF-TEST-READINESS-054": [
+        "tools/validate-test-readiness/planted-defects/054-integration-overclaim.json"
+      ],
+      "USF-TEST-READINESS-055": [
+        "tools/validate-test-readiness/planted-defects/055-unit-suite-missing.json"
+      ],
+      "USF-TEST-READINESS-056": [
+        "tools/validate-test-readiness/planted-defects/056-unit-obligation-mapping-missing.json"
+      ],
+      "USF-TEST-READINESS-057": [
+        "tools/validate-test-readiness/planted-defects/057-unit-test-file-stale.json"
+      ],
+      "USF-TEST-READINESS-058": [
+        "tools/validate-test-readiness/planted-defects/058-unit-suite-service-backed-overclaim.json"
+      ],
+      "USF-TEST-READINESS-059": [
+        "tools/validate-test-readiness/planted-defects/059-unit-coverage-boundary-missing.json"
+      ],
+      "USF-TEST-READINESS-060": [
+        "tools/validate-test-readiness/planted-defects/060-unit-suite-overclaim.json"
+      ],
+      "USF-TEST-READINESS-061": [
+        "tools/validate-test-readiness/planted-defects/061-functional-regression-suite-missing.json"
+      ],
+      "USF-TEST-READINESS-062": [
+        "tools/validate-test-readiness/planted-defects/062-functional-regression-semantic-mapping-missing.json"
+      ],
+      "USF-TEST-READINESS-063": [
+        "tools/validate-test-readiness/planted-defects/063-functional-regression-service-mapping-missing.json"
+      ],
+      "USF-TEST-READINESS-064": [
+        "tools/validate-test-readiness/planted-defects/064-functional-regression-behaviour-case-missing.json"
+      ],
+      "USF-TEST-READINESS-065": [
+        "tools/validate-test-readiness/planted-defects/065-functional-regression-service-backed-overclaim.json"
+      ],
+      "USF-TEST-READINESS-066": [
+        "tools/validate-test-readiness/planted-defects/066-functional-regression-overclaim.json"
+      ],
+      "USF-TEST-READINESS-067": [
+        "tools/validate-test-readiness/planted-defects/067-enterprise-control-suite-missing.json"
+      ],
+      "USF-TEST-READINESS-068": [
+        "tools/validate-test-readiness/planted-defects/068-enterprise-control-soa-missing.json"
+      ],
+      "USF-TEST-READINESS-069": [
+        "tools/validate-test-readiness/planted-defects/069-enterprise-control-evidence-register-missing.json"
+      ],
+      "USF-TEST-READINESS-070": [
+        "tools/validate-test-readiness/planted-defects/070-enterprise-control-threat-missing.json"
+      ],
+      "USF-TEST-READINESS-071": [
+        "tools/validate-test-readiness/planted-defects/071-enterprise-control-access-missing.json"
+      ],
+      "USF-TEST-READINESS-072": [
+        "tools/validate-test-readiness/planted-defects/072-enterprise-control-resilience-missing.json"
+      ],
+      "USF-TEST-READINESS-073": [
+        "tools/validate-test-readiness/planted-defects/073-enterprise-control-incident-missing.json"
+      ],
+      "USF-TEST-READINESS-074": [
+        "tools/validate-test-readiness/planted-defects/074-enterprise-control-privacy-missing.json"
+      ],
+      "USF-TEST-READINESS-075": [
+        "tools/validate-test-readiness/planted-defects/075-enterprise-control-overclaim.json"
+      ],
+      "USF-TEST-READINESS-076": [
+        "tools/validate-test-readiness/planted-defects/076-expanded-category-missing.json"
+      ],
+      "USF-TEST-READINESS-077": [
+        "tools/validate-test-readiness/planted-defects/077-expanded-category-dependency-missing.json"
+      ],
+      "USF-TEST-READINESS-078": [
+        "tools/validate-test-readiness/planted-defects/078-expanded-category-command-missing.json"
+      ],
+      "USF-TEST-READINESS-079": [
+        "tools/validate-test-readiness/planted-defects/079-expanded-category-enterprise-evidence-missing.json"
+      ],
+      "USF-TEST-READINESS-080": [
+        "tools/validate-test-readiness/planted-defects/080-expanded-category-overclaim.json"
+      ],
+      "USF-TEST-READINESS-081": [
+        "tools/validate-test-readiness/planted-defects/081-performance-suite-validator-linkage-missing.json"
+      ],
+      "USF-TEST-READINESS-082": [
+        "tools/validate-test-readiness/planted-defects/082-performance-service-disposition-missing.json"
+      ],
+      "USF-TEST-READINESS-083": [
+        "tools/validate-test-readiness/planted-defects/083-performance-baseline-missing.json",
+        "tools/validate-test-readiness/planted-defects/083-performance-budget-missing.json"
+      ],
+      "USF-TEST-READINESS-084": [
+        "tools/validate-test-readiness/planted-defects/084-performance-concurrency-disabled.json",
+        "tools/validate-test-readiness/planted-defects/084-performance-unbounded-load.json"
+      ],
+      "USF-TEST-READINESS-085": [
+        "tools/validate-test-readiness/planted-defects/085-performance-cleanup-under-pressure-missing.json"
+      ],
+      "USF-TEST-READINESS-086": [
+        "tools/validate-test-readiness/planted-defects/086-performance-overclaim.json"
+      ],
+      "USF-TEST-READINESS-087": [
+        "tools/validate-test-readiness/planted-defects/087-performance-enterprise-ref-missing.json"
+      ],
+      "USF-TEST-READINESS-088": [
+        "tools/validate-test-readiness/planted-defects/088-operational-suite-missing.json"
+      ],
+      "USF-TEST-READINESS-089": [
+        "tools/validate-test-readiness/planted-defects/089-operational-service-mapping-missing.json"
+      ],
+      "USF-TEST-READINESS-090": [
+        "tools/validate-test-readiness/planted-defects/090-operational-fail-closed-missing.json"
+      ],
+      "USF-TEST-READINESS-091": [
+        "tools/validate-test-readiness/planted-defects/091-operational-cleanup-missing.json"
+      ],
+      "USF-TEST-READINESS-092": [
+        "tools/validate-test-readiness/planted-defects/092-operational-profile-missing.json"
+      ],
+      "USF-TEST-READINESS-093": [
+        "tools/validate-test-readiness/planted-defects/093-operational-enterprise-ref-missing.json"
+      ],
+      "USF-TEST-READINESS-094": [
+        "tools/validate-test-readiness/planted-defects/094-operational-overclaim.json"
+      ],
+      "USF-TEST-READINESS-095": [
+        "tools/validate-test-readiness/planted-defects/095-coverage-gate-missing.json"
+      ],
+      "USF-TEST-READINESS-096": [
+        "tools/validate-test-readiness/planted-defects/096-coverage-command-missing.json"
+      ],
+      "USF-TEST-READINESS-097": [
+        "tools/validate-test-readiness/planted-defects/097-coverage-threshold-downgraded.json"
+      ],
+      "USF-TEST-READINESS-098": [
+        "tools/validate-test-readiness/planted-defects/098-coverage-exclusion-undocumented.json"
+      ],
+      "USF-TEST-READINESS-099": [
+        "tools/validate-test-readiness/planted-defects/099-sonar-lcov-import-drift.json"
+      ],
+      "USF-TEST-READINESS-100": [
+        "tools/validate-test-readiness/planted-defects/100-command-surface-integration-script-missing-usf242.json",
+        "tools/validate-test-readiness/planted-defects/100-command-surface-row-stale.json"
+      ],
+      "USF-TEST-READINESS-101": [
+        "tools/validate-test-readiness/planted-defects/101-coverage-overclaim.json"
+      ],
+      "USF-TEST-READINESS-102": [
+        "tools/validate-test-readiness/planted-defects/102-future-ai-guardrail-missing.json"
+      ],
+      "USF-TEST-READINESS-103": [
+        "tools/validate-test-readiness/planted-defects/103-future-ai-change-class-missing.json"
+      ],
+      "USF-TEST-READINESS-104": [
+        "tools/validate-test-readiness/planted-defects/104-future-ai-coupled-update-missing.json"
+      ],
+      "USF-TEST-READINESS-105": [
+        "tools/validate-test-readiness/planted-defects/105-future-ai-weakening-detector-missing.json"
+      ],
+      "USF-TEST-READINESS-106": [
+        "tools/validate-test-readiness/planted-defects/106-future-ai-generated-compose-boundary-unsafe.json"
+      ],
+      "USF-TEST-READINESS-107": [
+        "tools/validate-test-readiness/planted-defects/107-future-ai-diagnostics-missing.json"
+      ],
+      "USF-TEST-READINESS-108": [
+        "tools/validate-test-readiness/planted-defects/108-future-ai-overclaim.json"
+      ],
+      "USF-TEST-READINESS-109": [
+        "tools/validate-test-readiness/planted-defects/109-missing-evidence-regression-gate-missing.json",
+        "tools/validate-test-readiness/planted-defects/109-planted-defect-duplicate-rule-coverage.json"
+      ],
+      "USF-TEST-READINESS-110": [
+        "tools/validate-test-readiness/planted-defects/110-test-environment-completion-gate-missing.json"
+      ],
+      "USF-TEST-READINESS-111": [
+        "tools/validate-test-readiness/planted-defects/111-final-validation-command-outside-suite.json",
+        "tools/validate-test-readiness/planted-defects/111-final-validation-duplicate-command-id.json",
+        "tools/validate-test-readiness/planted-defects/111-final-validation-empty-checked-commit.json",
+        "tools/validate-test-readiness/planted-defects/111-final-validation-malformed-checked-commit.json",
+        "tools/validate-test-readiness/planted-defects/111-final-validation-masked-required-command.json",
+        "tools/validate-test-readiness/planted-defects/111-final-validation-no-op-command.json",
+        "tools/validate-test-readiness/planted-defects/111-final-validation-stale-checked-commit.json",
+        "tools/validate-test-readiness/planted-defects/111-test-readiness-final-acceptance-gate-missing.json"
+      ]
+    }
   },
   "regressionCategories": [
     {
