@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-083",
+  "performanceServiceBudgetPatch": [
+    {
+      "serviceId": "postgres",
+      "set": {
+        "budgetProfileId": "missing-performance-profile"
+      }
+    }
+  ]
+}

@@ -32,6 +32,7 @@ INTEGRATION_MATRIX_PATH = Path("docs/architecture/composed-service-integration-t
 SEMANTIC_UNIT_SUITE_PATH = Path("docs/architecture/semantic-unit-test-suite.json")
 FUNCTIONAL_REGRESSION_SUITE_PATH = Path("docs/architecture/functional-service-regression-suite.json")
 ENTERPRISE_CONTROL_SUITE_PATH = Path("docs/architecture/enterprise-control-evidence-test-suite.json")
+PERFORMANCE_RESOURCE_SUITE_PATH = Path("docs/architecture/performance-concurrency-resource-regression-suite.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -123,6 +124,13 @@ RULES = {
     "USF-TEST-READINESS-078": ("blocking", "expanded test-readiness command or surface mapping is incomplete"),
     "USF-TEST-READINESS-079": ("blocking", "expanded test-readiness enterprise evidence linkage is incomplete"),
     "USF-TEST-READINESS-080": ("blocking", "expanded test-readiness obligation overclaims readiness or compliance"),
+    "USF-TEST-READINESS-081": ("blocking", "performance concurrency resource suite evidence is missing invalid or stale"),
+    "USF-TEST-READINESS-082": ("blocking", "performance service or profile budget disposition is missing or stale"),
+    "USF-TEST-READINESS-083": ("blocking", "performance baseline or budget reference is missing or stale"),
+    "USF-TEST-READINESS-084": ("blocking", "performance concurrency load or resource budget guardrail is unsafe or missing"),
+    "USF-TEST-READINESS-085": ("blocking", "performance cleanup under pressure evidence is missing"),
+    "USF-TEST-READINESS-086": ("blocking", "performance evidence boundary preserves insufficient non-claims or overclaims readiness"),
+    "USF-TEST-READINESS-087": ("blocking", "performance enterprise evidence linkage is missing or stale"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -146,6 +154,8 @@ FUNCTIONAL_REGRESSION_COMMAND = "corepack pnpm test -- tests/packages/semantic-f
 FUNCTIONAL_REGRESSION_TEST_PATH = "tests/packages/semantic-functional-regression-suite.test.ts"
 ENTERPRISE_CONTROL_COMMAND = "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts"
 ENTERPRISE_CONTROL_TEST_PATH = "tests/packages/enterprise-control-evidence-suite.test.ts"
+PERFORMANCE_RESOURCE_COMMAND = "corepack pnpm test -- tests/packages/performance-concurrency-resource-regression-suite.test.ts"
+PERFORMANCE_RESOURCE_TEST_PATH = "tests/packages/performance-concurrency-resource-regression-suite.test.ts"
 REQUIRED_FUNCTIONAL_REGRESSION_CASES = {
     "positive",
     "negative",
@@ -263,6 +273,25 @@ EXPANDED_OBLIGATION_CATEGORIES = {
 EXPANDED_OBLIGATION_CLASS_IDS = set(EXPANDED_OBLIGATION_CATEGORIES.values())
 EXPANDED_OBLIGATION_ISSUES = set(EXPANDED_OBLIGATION_CATEGORIES)
 EXPANDED_GATE_ISSUES = {"USF-259", "USF-260"}
+REQUIRED_PERFORMANCE_AXES = {
+    "latency-budget",
+    "throughput-budget",
+    "bounded-concurrency",
+    "queue-saturation",
+    "retry-budget",
+    "timeout-budget",
+    "resource-limit",
+    "cleanup-under-pressure",
+}
+PERFORMANCE_VALIDATOR_RULE_IDS = {
+    "USF-TEST-READINESS-081",
+    "USF-TEST-READINESS-082",
+    "USF-TEST-READINESS-083",
+    "USF-TEST-READINESS-084",
+    "USF-TEST-READINESS-085",
+    "USF-TEST-READINESS-086",
+    "USF-TEST-READINESS-087",
+}
 REQUIRED_OBLIGATION_ISSUES = {
     "USF-239",
     "USF-240",
@@ -880,6 +909,72 @@ def apply_enterprise_control_suite_defect(suite: dict[str, Any] | None, defect: 
     return out
 
 
+def apply_performance_resource_suite_defect(suite: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removePerformanceResourceSuite"):
+        return None
+    if suite is None:
+        return None
+    out = copy.deepcopy(suite)
+    for key, value in defect.get("performanceResourceSuiteSet", {}).items():
+        out[key] = value
+    for key in defect.get("performanceResourceSuiteDrop", []):
+        out.pop(key, None)
+    for key, value in defect.get("performanceResourceScopeSet", {}).items():
+        out.setdefault("scope", {})[key] = value
+    for key in defect.get("performanceResourceScopeDrop", []):
+        out.setdefault("scope", {}).pop(key, None)
+    for patch in defect.get("performanceBudgetProfilePatch", []):
+        for row in out.get("budgetProfiles", []):
+            if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for profile_id in defect.get("performanceDropBudgetProfileIds", []):
+        out["budgetProfiles"] = [
+            row for row in out.get("budgetProfiles", []) if row.get("id") != profile_id
+        ]
+    for service_id in defect.get("performanceDropServiceBudgetIds", []):
+        out["serviceBudgetRows"] = [
+            row for row in out.get("serviceBudgetRows", []) if row.get("serviceId") != service_id
+        ]
+    for patch in defect.get("performanceServiceBudgetPatch", []):
+        for row in out.get("serviceBudgetRows", []):
+            if row.get("serviceId") != patch.get("serviceId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for profile in defect.get("performanceDropProfileStartupIds", []):
+        out["profileStartupBudgets"] = [
+            row for row in out.get("profileStartupBudgets", []) if row.get("profile") != profile
+        ]
+    for patch in defect.get("performanceProfileStartupPatch", []):
+        for row in out.get("profileStartupBudgets", []):
+            if row.get("profile") != patch.get("profile"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for key, value in defect.get("performanceEvidenceBoundarySet", {}).items():
+        out.setdefault("evidenceBoundary", {})[key] = value
+    for key in defect.get("performanceEvidenceBoundaryDrop", []):
+        out.setdefault("evidenceBoundary", {}).pop(key, None)
+    for section in defect.get("performanceEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("performanceDropNonClaims"):
+        dropped = set(defect.get("performanceDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("performanceAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["performanceAppendAllowedClaim"])
+    for key in defect.get("performanceValidatorCoverageDrop", []):
+        out.setdefault("validatorCoverage", {}).pop(key, None)
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -976,6 +1071,15 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         enterprise_control_suite,
         defect,
     )
+    performance_resource_suite = (
+        read_json(PERFORMANCE_RESOURCE_SUITE_PATH)
+        if (ROOT / PERFORMANCE_RESOURCE_SUITE_PATH).exists()
+        else None
+    )
+    performance_resource_suite = apply_performance_resource_suite_defect(
+        performance_resource_suite,
+        defect,
+    )
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -989,6 +1093,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "semanticUnitSuite": semantic_unit_suite,
         "functionalRegressionSuite": functional_regression_suite,
         "enterpriseControlSuite": enterprise_control_suite,
+        "performanceResourceSuite": performance_resource_suite,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -2681,6 +2786,308 @@ def check_enterprise_control_suite(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-075", str(ENTERPRISE_CONTROL_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
 
 
+def check_performance_resource_suite(F: Findings, state: dict[str, Any]) -> None:
+    suite = state["performanceResourceSuite"]
+    manifest = state["obligationManifest"]
+    if not isinstance(suite, dict):
+        F.add("USF-TEST-READINESS-081", str(PERFORMANCE_RESOURCE_SUITE_PATH), "performance suite is missing")
+        return
+    if not isinstance(manifest, dict):
+        return
+    required = {
+        "id",
+        "issueId",
+        "parentIssueId",
+        "sourceAuthorities",
+        "ownedTestFile",
+        "scope",
+        "requiredCoverageAxes",
+        "surfaceCoverage",
+        "guardrailPolicy",
+        "budgetProfiles",
+        "serviceBudgetRows",
+        "profileStartupBudgets",
+        "evidenceBoundary",
+        "validationCommands",
+        "validatorCoverage",
+        "plantedDefects",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    }
+    for key in sorted(required):
+        if key not in suite:
+            F.add("USF-TEST-READINESS-081", str(PERFORMANCE_RESOURCE_SUITE_PATH), f"missing top-level field {key}")
+    if suite.get("requiredNonOwnedEditsForLiteralLinearAcceptance"):
+        F.add("USF-TEST-READINESS-081", str(PERFORMANCE_RESOURCE_SUITE_PATH), "suite still records unresolved non-owned validator work")
+    if suite.get("issueId") != "USF-254" or suite.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-081", str(PERFORMANCE_RESOURCE_SUITE_PATH), "issue linkage must be USF-254 under USF-234")
+    if suite.get("ownedTestFile") != PERFORMANCE_RESOURCE_TEST_PATH:
+        F.add("USF-TEST-READINESS-081", str(PERFORMANCE_RESOURCE_SUITE_PATH), "owned test file is stale")
+    authorities = suite.get("sourceAuthorities", {})
+    expected_authorities = {
+        "obligationManifest": str(OBLIGATION_MANIFEST_PATH),
+        "fixtureCorpus": str(FIXTURE_CORPUS_PATH),
+        "fixtureApi": "tests/packages/fixtures/synthetic-fixture-corpus.ts",
+        "commandSurfaceGate": str(COMMAND_SURFACE_PATH),
+    }
+    if not isinstance(authorities, dict):
+        F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#sourceAuthorities", "source authorities are missing")
+    else:
+        for key, expected in expected_authorities.items():
+            if authorities.get(key) != expected:
+                F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#sourceAuthorities.{key}", "source authority is stale")
+
+    service_obligations = manifest.get("serviceObligations", [])
+    profile_obligations = manifest.get("profileObligations", [])
+    semantic_fixtures = state["fixtureCorpus"].get("semanticContractFixtures", []) if isinstance(state["fixtureCorpus"], dict) else []
+    if not isinstance(service_obligations, list):
+        service_obligations = []
+    if not isinstance(profile_obligations, list):
+        profile_obligations = []
+    if not isinstance(semantic_fixtures, list):
+        semantic_fixtures = []
+
+    scope = suite.get("scope", {})
+    if not isinstance(scope, dict):
+        F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#scope", "scope is missing")
+    else:
+        if scope.get("serviceBudgetDispositionCount") != len(service_obligations):
+            F.add("USF-TEST-READINESS-082", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#scope", "service budget disposition count is stale")
+        if scope.get("composeProfileStartupBudgetCount") != len(profile_obligations):
+            F.add("USF-TEST-READINESS-082", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#scope", "profile startup budget count is stale")
+        if scope.get("semanticContractFixtureCount") != len(semantic_fixtures):
+            F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#scope", "semantic contract fixture count is stale")
+        expected_flags = {
+            "usesRealTimers": False,
+            "usesServiceBackedLoad": False,
+            "usesDeterministicSyntheticLoopsOnly": True,
+            "serviceBackedClaimRequiresComposedEvidence": True,
+            "inMemoryServiceSubstituteAllowedForServiceBackedClaims": False,
+            "finalTestReadinessClaim": False,
+        }
+        for key, expected in expected_flags.items():
+            if scope.get(key) is not expected:
+                rule = "USF-TEST-READINESS-086" if expected is False else "USF-TEST-READINESS-081"
+                F.add(rule, f"{PERFORMANCE_RESOURCE_SUITE_PATH}#scope.{key}", "scope flag is unsafe or stale")
+
+    if set(suite.get("requiredCoverageAxes", [])) != REQUIRED_PERFORMANCE_AXES:
+        F.add("USF-TEST-READINESS-084", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#requiredCoverageAxes", "required performance coverage axes are incomplete")
+
+    policy = suite.get("guardrailPolicy", {})
+    required_policy_fields = {
+        "maxLatencyBudgetTicks",
+        "maxTimeoutBudgetTicks",
+        "maxConcurrentActors",
+        "maxOperationCount",
+        "maxQueueDepthLimit",
+        "minThroughputPerTickFloor",
+        "maxRetryAttemptsPerOperation",
+        "maxTotalRetryAttempts",
+        "maxMemoryUnitBudget",
+        "maxHandleBudget",
+        "maxContainerBudget",
+        "maxVolumeBudget",
+    }
+    if not isinstance(policy, dict):
+        F.add("USF-TEST-READINESS-084", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#guardrailPolicy", "guardrail policy is missing")
+        policy = {}
+    for field in required_policy_fields:
+        value = policy.get(field)
+        if not isinstance(value, int) or value < 0:
+            F.add("USF-TEST-READINESS-084", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#guardrailPolicy.{field}", "guardrail budget must be a non-negative integer")
+    if policy.get("budgetWeakeningRequiresNewAuthority") is not True:
+        F.add("USF-TEST-READINESS-084", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#guardrailPolicy", "budget weakening must require new authority")
+
+    budget_profiles = _list_by_id(suite.get("budgetProfiles"), "id")
+    if not budget_profiles:
+        F.add("USF-TEST-READINESS-083", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#budgetProfiles", "budget profiles are missing")
+    concurrency_covered = False
+    for profile_id, profile in budget_profiles.items():
+        subject = f"{PERFORMANCE_RESOURCE_SUITE_PATH}#budgetProfiles.{profile_id}"
+        if profile.get("baselineId") != f"baseline.performance-concurrency-resource.{profile_id}":
+            F.add("USF-TEST-READINESS-083", subject, "baseline id is missing or stale")
+        for field in (
+            "operationCount",
+            "concurrentActors",
+            "concurrencyLimit",
+            "queueDepthLimit",
+            "retryBudgetAttemptsPerOperation",
+            "totalRetryBudget",
+            "latencyBudgetTicks",
+            "timeoutBudgetTicks",
+            "minThroughputPerTick",
+            "memoryUnitBudget",
+            "memoryUnitsPerConcurrentActor",
+            "handleBudget",
+            "containerBudget",
+            "volumeBudget",
+        ):
+            if not isinstance(profile.get(field), int):
+                F.add("USF-TEST-READINESS-084", subject, f"{field} budget is missing")
+        if profile.get("operationCount", 0) <= 0 or profile.get("operationCount", 0) > policy.get("maxOperationCount", -1):
+            F.add("USF-TEST-READINESS-084", subject, "operation count is unbounded or invalid")
+        if profile.get("concurrentActors", 0) > policy.get("maxConcurrentActors", -1) or profile.get("concurrencyLimit", 0) > policy.get("maxConcurrentActors", -1):
+            F.add("USF-TEST-READINESS-084", subject, "concurrency budget exceeds guardrail")
+        if profile.get("queueDepthLimit", 0) > policy.get("maxQueueDepthLimit", -1):
+            F.add("USF-TEST-READINESS-084", subject, "queue depth exceeds guardrail")
+        if profile.get("latencyBudgetTicks", 0) > policy.get("maxLatencyBudgetTicks", -1):
+            F.add("USF-TEST-READINESS-084", subject, "latency budget exceeds guardrail")
+        if profile.get("timeoutBudgetTicks", 0) > policy.get("maxTimeoutBudgetTicks", -1):
+            F.add("USF-TEST-READINESS-084", subject, "timeout budget exceeds guardrail")
+        if profile.get("minThroughputPerTick", 0) < policy.get("minThroughputPerTickFloor", 0):
+            F.add("USF-TEST-READINESS-084", subject, "throughput floor is below guardrail")
+        if profile.get("retryBudgetAttemptsPerOperation", 0) > policy.get("maxRetryAttemptsPerOperation", -1) or profile.get("totalRetryBudget", 0) > policy.get("maxTotalRetryAttempts", -1):
+            F.add("USF-TEST-READINESS-084", subject, "retry budget exceeds guardrail")
+        if profile.get("memoryUnitBudget", 0) > policy.get("maxMemoryUnitBudget", -1) or profile.get("handleBudget", 0) > policy.get("maxHandleBudget", -1):
+            F.add("USF-TEST-READINESS-084", subject, "memory or handle budget exceeds guardrail")
+        if profile.get("containerBudget", 0) > policy.get("maxContainerBudget", -1) or profile.get("volumeBudget", 0) > policy.get("maxVolumeBudget", -1):
+            F.add("USF-TEST-READINESS-084", subject, "container or volume budget exceeds guardrail")
+        if profile.get("cleanupRequired") is not True:
+            F.add("USF-TEST-READINESS-085", subject, "cleanup under pressure is required")
+        if profile.get("concurrentActors", 0) > 1 and profile.get("concurrencyLimit", 0) > 1:
+            concurrency_covered = True
+    if not concurrency_covered:
+        F.add("USF-TEST-READINESS-084", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#budgetProfiles", "bounded concurrency coverage is disabled")
+
+    service_rows = _list_by_id(suite.get("serviceBudgetRows"), "serviceId")
+    if len(service_rows) != len(service_obligations):
+        F.add("USF-TEST-READINESS-082", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#serviceBudgetRows", "service budget row count must match obligation manifest")
+    fixture_rows = _list_by_id(state["fixtureCorpus"].get("serviceFixtures", []) if isinstance(state["fixtureCorpus"], dict) else [], "serviceId")
+    for obligation in service_obligations:
+        service_id = str(obligation.get("serviceId"))
+        row = service_rows.get(service_id)
+        if not row:
+            F.add("USF-TEST-READINESS-082", service_id, "service obligation lacks performance budget disposition")
+            continue
+        subject = f"{PERFORMANCE_RESOURCE_SUITE_PATH}#serviceBudgetRows.{service_id}"
+        if row.get("fixtureSeedId") != obligation.get("fixtureSeedId"):
+            F.add("USF-TEST-READINESS-082", subject, "fixture seed id is stale")
+        fixture = fixture_rows.get(service_id)
+        if fixture and row.get("fixtureSeedId") != fixture.get("fixtureSeedId"):
+            F.add("USF-TEST-READINESS-082", subject, "fixture corpus seed id is stale")
+        disposition = row.get("budgetDisposition")
+        if obligation.get("requiredInTest") is True and obligation.get("generatedInTestCompose") is True:
+            if disposition != "deterministic-budgeted":
+                F.add("USF-TEST-READINESS-082", subject, "service-backed generated row requires deterministic budget disposition")
+            profile_id = row.get("budgetProfileId")
+            profile = budget_profiles.get(str(profile_id))
+            if not profile:
+                F.add("USF-TEST-READINESS-083", subject, "service budget profile is missing or stale")
+            elif row.get("baselineRef") != profile.get("baselineId"):
+                F.add("USF-TEST-READINESS-083", subject, "service baseline ref does not match budget profile")
+        else:
+            if disposition not in {"catalogue-only-budget-disposition", "out-of-scope-budget-disposition"}:
+                F.add("USF-TEST-READINESS-082", subject, "non-generated row requires bounded budget disposition")
+            if row.get("budgetProfileId") is not None:
+                F.add("USF-TEST-READINESS-083", subject, "bounded non-generated row must not claim a runtime budget profile")
+            if not row.get("baselineRef") or not row.get("unsupportedReason"):
+                F.add("USF-TEST-READINESS-082", subject, "bounded budget disposition requires baseline ref and reason")
+    for service_id in sorted(set(service_rows) - {str(row.get("serviceId")) for row in service_obligations if isinstance(row, dict)}):
+        F.add("USF-TEST-READINESS-082", service_id, "service budget row is not present in obligation manifest")
+
+    profile_rows = _list_by_id(suite.get("profileStartupBudgets"), "profile")
+    if len(profile_rows) != len(profile_obligations):
+        F.add("USF-TEST-READINESS-082", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#profileStartupBudgets", "profile startup row count must match obligation manifest")
+    for obligation in profile_obligations:
+        profile_id = str(obligation.get("profile"))
+        row = profile_rows.get(profile_id)
+        if not row:
+            F.add("USF-TEST-READINESS-082", profile_id, "profile obligation lacks startup budget disposition")
+            continue
+        subject = f"{PERFORMANCE_RESOURCE_SUITE_PATH}#profileStartupBudgets.{profile_id}"
+        if row.get("startupBudgetTicks", 0) <= 0 or row.get("startupBudgetTicks", 0) > policy.get("maxTimeoutBudgetTicks", -1) + 8:
+            F.add("USF-TEST-READINESS-084", subject, "profile startup budget is missing or unbounded")
+        if row.get("maxContainers", 0) > policy.get("maxContainerBudget", -1) or row.get("maxVolumeUnits", 0) > policy.get("maxVolumeBudget", -1):
+            F.add("USF-TEST-READINESS-084", subject, "profile resource budget exceeds guardrail")
+        if row.get("cleanupRequired") is not True:
+            F.add("USF-TEST-READINESS-085", subject, "profile cleanup under pressure is required")
+        for key in ("mustBeStarted", "mustBeSeeded", "mustBeExercised", "mustBeReset", "mustBeEvidenced"):
+            if obligation.get(key) is not True:
+                F.add("USF-TEST-READINESS-082", subject, f"profile obligation {key} must be true")
+        if obligation.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-086", subject, "profile obligation allows in-memory substitute")
+    for profile_id in sorted(set(profile_rows) - {str(row.get("profile")) for row in profile_obligations if isinstance(row, dict)}):
+        F.add("USF-TEST-READINESS-082", profile_id, "profile startup budget row is not present in obligation manifest")
+
+    evidence = suite.get("evidenceBoundary", {})
+    if not isinstance(evidence, dict):
+        F.add("USF-TEST-READINESS-086", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#evidenceBoundary", "evidence boundary is missing")
+    else:
+        expected_evidence_flags = {
+            "syntheticOnly": True,
+            "valueFree": True,
+            "productionDerived": False,
+            "realTenantDataAllowed": False,
+            "realSecretsAllowed": False,
+            "liveProviderPayloadAllowed": False,
+            "privateLocalStateAllowed": False,
+            "productionCapacityClaimAllowed": False,
+            "loadTestCertificationClaimAllowed": False,
+            "serviceBackedRuntimeClaimAllowed": False,
+        }
+        for key, expected in expected_evidence_flags.items():
+            if evidence.get(key) is not expected:
+                F.add("USF-TEST-READINESS-086", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#evidenceBoundary.{key}", "evidence boundary flag is unsafe or stale")
+
+    commands = set(suite.get("validationCommands", []))
+    for expected in (
+        PERFORMANCE_RESOURCE_COMMAND,
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#validationCommands", f"missing validation command {expected}")
+
+    coverage = suite.get("validatorCoverage", {})
+    if not isinstance(coverage, dict):
+        F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#validatorCoverage", "validator coverage metadata is missing")
+    else:
+        if set(coverage.get("ruleIds", [])) != PERFORMANCE_VALIDATOR_RULE_IDS:
+            F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#validatorCoverage", "validator rule id inventory is stale")
+        if coverage.get("selftestCommand") != "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json":
+            F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#validatorCoverage", "selftest command is stale")
+        if coverage.get("plantedDefectCount") != len(suite.get("plantedDefects", [])):
+            F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#validatorCoverage", "planted defect count is stale")
+
+    planted = suite.get("plantedDefects", [])
+    if not isinstance(planted, list) or len(planted) < len(PERFORMANCE_VALIDATOR_RULE_IDS):
+        F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#plantedDefects", "planted defect inventory is incomplete")
+    else:
+        expected_rules = {row.get("expectedRule") for row in planted if isinstance(row, dict)}
+        missing_rules = sorted(PERFORMANCE_VALIDATOR_RULE_IDS - expected_rules)
+        if missing_rules:
+            F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#plantedDefects", f"missing planted defect rule coverage: {missing_rules}")
+        for row in planted:
+            if not isinstance(row, dict):
+                continue
+            path = str(row.get("path", ""))
+            if not path or not (ROOT / path).exists():
+                F.add("USF-TEST-READINESS-081", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#plantedDefects", f"planted defect path is missing: {path}")
+
+    refs = suite.get("enterpriseEvidenceRefs")
+    if not isinstance(refs, dict):
+        F.add("USF-TEST-READINESS-087", str(PERFORMANCE_RESOURCE_SUITE_PATH), "enterprise evidence refs are missing")
+    else:
+        for section in ENTERPRISE_REF_SECTIONS:
+            values = refs.get(section)
+            if not isinstance(values, list) or not values:
+                F.add("USF-TEST-READINESS-087", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#{section}", "enterprise evidence ref is missing")
+                continue
+            missing = sorted(set(values) - _enterprise_ids(state, section))
+            if missing:
+                F.add("USF-TEST-READINESS-087", f"{PERFORMANCE_RESOURCE_SUITE_PATH}#{section}", f"enterprise evidence refs are stale: {missing}")
+
+    non_claims = set(suite.get("nonClaims", []))
+    required = REQUIRED_HARNESS_NON_CLAIMS | {"production-scale", "load-test-certification", "final-usf-234-acceptance"}
+    missing = sorted(required - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-086", str(PERFORMANCE_RESOURCE_SUITE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(suite.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-086", str(PERFORMANCE_RESOURCE_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -3046,6 +3453,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_semantic_unit_suite(F, state)
     check_functional_regression_suite(F, state)
     check_enterprise_control_suite(F, state)
+    check_performance_resource_suite(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])
