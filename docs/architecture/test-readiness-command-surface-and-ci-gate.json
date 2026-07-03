@@ -119,6 +119,18 @@
         "tools/validate-test-readiness/validate-test-readiness.py"
       ],
       "claimBoundary": "Validates command, service, harness, fixture, Sonar, enterprise evidence, and non-claim metadata. It does not execute Compose by itself."
+    },
+    {
+      "id": "test-readiness-selftest",
+      "command": "corepack pnpm test-readiness:selftest",
+      "makeTarget": "test-readiness-selftest",
+      "classification": "canonical-current-planted-defect-regression-gate",
+      "requiresComposedServices": false,
+      "inMemoryServiceSubstituteAllowed": false,
+      "runs": [
+        "tools/validate-test-readiness/validate-test-readiness.py selftest"
+      ],
+      "claimBoundary": "Runs every test-readiness planted defect against its expected validator rule. Passing this command does not claim final USF-234 acceptance."
     }
   ],
   "packageScripts": [
@@ -157,6 +169,10 @@
     {
       "id": "test-readiness:validate",
       "script": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+    },
+    {
+      "id": "test-readiness:selftest",
+      "script": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json"
     }
   ],
   "makeTargets": [
@@ -209,6 +225,11 @@
       "target": "test-readiness-coverage",
       "routesTo": "corepack pnpm test-readiness:coverage",
       "classification": "explicit-test-readiness-coverage-proof-alias"
+    },
+    {
+      "target": "test-readiness-selftest",
+      "routesTo": "corepack pnpm test-readiness:selftest",
+      "classification": "explicit-planted-defect-regression-gate-alias"
     }
   ],
   "composedExecution": {
@@ -265,11 +286,14 @@
     "make test-coverage",
     "make test-readiness-coverage",
     "corepack pnpm test-readiness:assurance",
+    "corepack pnpm test-readiness:selftest",
     "make test-ready",
     "make test",
     "make test-composed",
     "make test-assurance",
+    "make test-readiness-selftest",
     "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
     "corepack pnpm verify",
     "corepack pnpm parity",
     "python3 tools/validate-spec/validate-spec.py all --json",

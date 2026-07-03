@@ -36,6 +36,7 @@ PERFORMANCE_RESOURCE_SUITE_PATH = Path("docs/architecture/performance-concurrenc
 COVERAGE_GATE_PATH = Path("docs/architecture/test-coverage-gate.json")
 OPERATIONAL_RESILIENCE_SUITE_PATH = Path("docs/architecture/operational-resilience-failure-mode-suite.json")
 FUTURE_AI_GUARDRAIL_PATH = Path("docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json")
+MISSING_EVIDENCE_REGRESSION_GATE_PATH = Path("docs/architecture/missing-evidence-planted-defects-regression-gate.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -157,6 +158,7 @@ RULES = {
     "USF-TEST-READINESS-106": ("blocking", "future AI generated Compose authority boundary is unsafe"),
     "USF-TEST-READINESS-107": ("blocking", "future AI failure diagnostics or workflow guidance is incomplete"),
     "USF-TEST-READINESS-108": ("blocking", "future AI guardrail overclaims readiness or lacks enterprise evidence linkage"),
+    "USF-TEST-READINESS-109": ("blocking", "missing-evidence planted-defect regression gate evidence is missing invalid or stale"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -177,6 +179,9 @@ TEST_READINESS_ASSURANCE_COMMAND = "corepack pnpm test-readiness:assurance"
 TEST_READINESS_ASSURANCE_SCRIPT = "pnpm proof:assurance:sonarqube"
 SONAR_COMMAND = "corepack pnpm proof:assurance:sonarqube"
 OBLIGATION_MANIFEST_COMMAND = "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+SELFTEST_COMMAND = "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json"
+TEST_READINESS_SELFTEST_COMMAND = "corepack pnpm test-readiness:selftest"
+TEST_READINESS_SELFTEST_SCRIPT = SELFTEST_COMMAND
 FIXTURE_CORPUS_COMMAND = "corepack pnpm test-readiness:fixtures"
 INTEGRATION_MATRIX_COMMAND = "corepack pnpm test-readiness:integration"
 INTEGRATION_MATRIX_SCRIPT = "tsx packages/proof/src/composed-service-integration-matrix-proof.ts"
@@ -371,6 +376,58 @@ FUTURE_AI_VALIDATOR_RULE_IDS = {
     "USF-TEST-READINESS-106",
     "USF-TEST-READINESS-107",
     "USF-TEST-READINESS-108",
+}
+
+FINAL_REGRESSION_DEPENDENCY_ISSUE_IDS = {
+    "USF-239",
+    "USF-240",
+    "USF-241",
+    "USF-242",
+    "USF-243",
+    "USF-244",
+    "USF-245",
+    "USF-246",
+    "USF-248",
+    "USF-249",
+    "USF-250",
+    "USF-251",
+    "USF-252",
+    "USF-253",
+    "USF-254",
+    "USF-255",
+    "USF-256",
+    "USF-257",
+    "USF-258",
+    "USF-259",
+}
+
+FINAL_REGRESSION_CATEGORY_IDS = {
+    "root-obligation-manifest-and-validator",
+    "command-coverage-sonar-and-lcov",
+    "fixture-seed-reset-cleanup",
+    "composed-service-and-profile-exercise",
+    "semantic-unit-and-functional-regression",
+    "enterprise-control-and-iso-supporting-evidence",
+    "performance-and-operational-resilience",
+    "future-ai-semantic-guardrail",
+    "final-planted-defect-regression-evidence",
+}
+
+FINAL_REGRESSION_FAILURE_CLASSES = {
+    "missing-service-exercise",
+    "missing-seeder",
+    "missing-resetter",
+    "missing-cleanup-evidence",
+    "missing-auth-tenant-role-permission-coverage",
+    "missing-keycloak-postgres-rls-auth-evidence",
+    "missing-bulk-import-export-evidence",
+    "missing-backup-restore-evidence",
+    "missing-privacy-retention-evidence",
+    "missing-profile-orchestration",
+    "missing-ai-change-semantic-test-evidence-update",
+    "missing-enterprise-evidence",
+    "missing-non-claim-preservation",
+    "readiness-or-certification-overclaim",
 }
 REQUIRED_FUTURE_AI_CHANGE_CLASSES = {
     "semantic-contract",
@@ -1313,6 +1370,31 @@ def apply_future_ai_guardrail_defect(guardrail: dict[str, Any] | None, defect: d
     return out
 
 
+def apply_missing_evidence_regression_gate_defect(gate: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeMissingEvidenceRegressionGate"):
+        return None
+    if gate is None:
+        return None
+    out = copy.deepcopy(gate)
+    for key, value in defect.get("missingEvidenceRegressionGateSet", {}).items():
+        out[key] = value
+    for key in defect.get("missingEvidenceRegressionGateDrop", []):
+        out.pop(key, None)
+    for category_id in defect.get("missingEvidenceRegressionGateDropCategories", []):
+        out["regressionCategories"] = [
+            row
+            for row in out.get("regressionCategories", [])
+            if row.get("id") != category_id
+        ]
+    for failure_class in defect.get("missingEvidenceRegressionGateDropFailureClasses", []):
+        out["requiredFailureClasses"] = [
+            row
+            for row in out.get("requiredFailureClasses", [])
+            if row != failure_class
+        ]
+    return out
+
+
 def apply_text_defect(text: str, defect: dict[str, Any], prefix: str) -> str:
     out = text
     for patch in defect.get(f"{prefix}TextReplace", []):
@@ -1427,6 +1509,15 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         else None
     )
     future_ai_guardrail = apply_future_ai_guardrail_defect(future_ai_guardrail, defect)
+    missing_evidence_regression_gate = (
+        read_json(MISSING_EVIDENCE_REGRESSION_GATE_PATH)
+        if (ROOT / MISSING_EVIDENCE_REGRESSION_GATE_PATH).exists()
+        else None
+    )
+    missing_evidence_regression_gate = apply_missing_evidence_regression_gate_defect(
+        missing_evidence_regression_gate,
+        defect,
+    )
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     vitest_config = (
@@ -1456,6 +1547,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "operationalResilienceSuite": operational_resilience_suite,
         "coverageGate": coverage_gate,
         "futureAiGuardrail": future_ai_guardrail,
+        "missingEvidenceRegressionGate": missing_evidence_regression_gate,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -4158,6 +4250,119 @@ def check_future_ai_guardrail(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-108", str(FUTURE_AI_GUARDRAIL_PATH), f"prohibited claim appears in allowedClaims: {bad}")
 
 
+def check_missing_evidence_regression_gate(F: Findings, state: dict[str, Any]) -> None:
+    gate = state["missingEvidenceRegressionGate"]
+    if not isinstance(gate, dict):
+        F.add("USF-TEST-READINESS-109", str(MISSING_EVIDENCE_REGRESSION_GATE_PATH), "USF-247 regression gate evidence is missing")
+        return
+
+    for key in (
+        "id",
+        "issueId",
+        "parentIssueId",
+        "dependsOnIssueIds",
+        "validatorPath",
+        "plantedDefectDirectory",
+        "selftestCommand",
+        "packageScript",
+        "packageCommand",
+        "makeTarget",
+        "plantedDefectCount",
+        "coverageModel",
+        "regressionCategories",
+        "requiredFailureClasses",
+        "validationCommands",
+        "evidenceSources",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in gate:
+            F.add("USF-TEST-READINESS-109", str(MISSING_EVIDENCE_REGRESSION_GATE_PATH), f"missing top-level field {key}")
+
+    if gate.get("issueId") != "USF-247" or gate.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-109", str(MISSING_EVIDENCE_REGRESSION_GATE_PATH), "issue linkage must be USF-247 under USF-234")
+    missing_deps = sorted(FINAL_REGRESSION_DEPENDENCY_ISSUE_IDS - set(gate.get("dependsOnIssueIds", [])))
+    if missing_deps:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#dependsOnIssueIds", f"missing dependency issue ids: {missing_deps}")
+    if gate.get("testReadinessClaimAllowed") is not False:
+        F.add("USF-TEST-READINESS-109", str(MISSING_EVIDENCE_REGRESSION_GATE_PATH), "USF-247 must not allow final test-readiness claim")
+    if gate.get("validatorPath") != str(Path("tools/validate-test-readiness/validate-test-readiness.py")):
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#validatorPath", "validator path is stale")
+    if gate.get("plantedDefectDirectory") != str(PLANTED_DEFECT_DIR):
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#plantedDefectDirectory", "planted defect directory is stale")
+    if gate.get("selftestCommand") != SELFTEST_COMMAND:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#selftestCommand", "selftest command is stale")
+    if gate.get("packageScript") != "test-readiness:selftest" or gate.get("packageCommand") != TEST_READINESS_SELFTEST_COMMAND:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#packageScript", "package selftest command is stale")
+    if gate.get("makeTarget") != "test-readiness-selftest":
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#makeTarget", "Make selftest target is stale")
+
+    defect_paths = sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json"))
+    if gate.get("plantedDefectCount") != len(defect_paths):
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#plantedDefectCount", "planted defect count is stale")
+    for path in defect_paths:
+        try:
+            defect = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            F.add("USF-TEST-READINESS-109", str(path.relative_to(ROOT)), f"planted defect JSON is invalid: {exc}")
+            continue
+        expected_rule = defect.get("expectedRule")
+        if not isinstance(expected_rule, str) or expected_rule not in RULES:
+            F.add("USF-TEST-READINESS-109", str(path.relative_to(ROOT)), "planted defect expectedRule is missing or unknown")
+
+    coverage = gate.get("coverageModel")
+    if not isinstance(coverage, dict):
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel", "coverage model is missing")
+    else:
+        if coverage.get("perDefectExpectedRuleField") != "expectedRule":
+            F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel", "per-defect expected rule field is stale")
+        if "loads every planted defect" not in str(coverage.get("deterministicFailureProof", "")):
+            F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel", "deterministic failure proof is incomplete")
+
+    categories = gate.get("regressionCategories", [])
+    category_ids = {row.get("id") for row in categories if isinstance(row, dict)}
+    missing_categories = sorted(FINAL_REGRESSION_CATEGORY_IDS - category_ids)
+    if missing_categories:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#regressionCategories", f"missing regression categories: {missing_categories}")
+    failure_classes = set(gate.get("requiredFailureClasses", []))
+    missing_failure_classes = sorted(FINAL_REGRESSION_FAILURE_CLASSES - failure_classes)
+    if missing_failure_classes:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#requiredFailureClasses", f"missing failure classes: {missing_failure_classes}")
+
+    validation_commands = set(gate.get("validationCommands", []))
+    for expected in (
+        TEST_READINESS_SELFTEST_COMMAND,
+        "make test-readiness-selftest",
+        SELFTEST_COMMAND,
+        OBLIGATION_MANIFEST_COMMAND,
+        TEST_READINESS_COMMAND,
+    ):
+        if expected not in validation_commands:
+            F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#validationCommands", f"missing validation command {expected}")
+
+    refs = gate.get("enterpriseEvidenceRefs")
+    if not isinstance(refs, dict):
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#enterpriseEvidenceRefs", "enterprise evidence refs are missing")
+    else:
+        for section in ENTERPRISE_REF_SECTIONS:
+            values = refs.get(section)
+            if not isinstance(values, list) or not values:
+                F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#{section}", "enterprise evidence ref is missing")
+                continue
+            missing_refs = sorted(set(values) - _enterprise_ids(state, section))
+            if missing_refs:
+                F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#{section}", f"enterprise evidence refs are stale: {missing_refs}")
+
+    non_claims = set(gate.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-109", str(MISSING_EVIDENCE_REGRESSION_GATE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(gate.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-109", str(MISSING_EVIDENCE_REGRESSION_GATE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -4395,6 +4600,7 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         "test-readiness-fixtures": LIFECYCLE_COMMAND,
         "test-readiness-integration": INTEGRATION_MATRIX_COMMAND,
         "test-readiness-validator": "corepack pnpm test-readiness:validate",
+        "test-readiness-selftest": TEST_READINESS_SELFTEST_COMMAND,
     }
     for command_id, expected in expected_commands.items():
         row = command_rows.get(command_id)
@@ -4414,6 +4620,7 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         "test-readiness:fixtures": LIFECYCLE_SCRIPT,
         "test-readiness:integration": INTEGRATION_MATRIX_SCRIPT,
         "test-readiness:validate": OBLIGATION_MANIFEST_COMMAND,
+        "test-readiness:selftest": TEST_READINESS_SELFTEST_SCRIPT,
         "test:coverage": TEST_COVERAGE_SCRIPT,
         "test-readiness:coverage": TEST_READINESS_COVERAGE_SCRIPT,
     }
@@ -4434,6 +4641,7 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         "test-readiness-integration": "corepack pnpm test-readiness:integration",
         "test-coverage": "corepack pnpm test-readiness:coverage",
         "test-readiness-coverage": "corepack pnpm test-readiness:coverage",
+        "test-readiness-selftest": TEST_READINESS_SELFTEST_COMMAND,
     }
     for target, expected in expected_make_rows.items():
         row = make_rows.get(target)
@@ -4467,6 +4675,9 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         "make test-coverage",
         "make test-readiness-coverage",
         "make test-assurance",
+        TEST_READINESS_SELFTEST_COMMAND,
+        "make test-readiness-selftest",
+        SELFTEST_COMMAND,
         "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
     ):
         if expected not in validation_commands:
@@ -4516,6 +4727,7 @@ def check_makefile_wiring(F: Findings, makefile: str) -> None:
         "test-readiness-integration": "corepack pnpm test-readiness:integration",
         "test-coverage": "corepack pnpm test-readiness:coverage",
         "test-readiness-coverage": "corepack pnpm test-readiness:coverage",
+        "test-readiness-selftest": TEST_READINESS_SELFTEST_COMMAND,
     }
     for target, command in expected_targets.items():
         pattern = rf"^{re.escape(target)}:\n\t{re.escape(command)}$"
@@ -4523,7 +4735,7 @@ def check_makefile_wiring(F: Findings, makefile: str) -> None:
             F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#{target}", "Make target is missing or stale")
     if not re.search(r"^test:\s+test-ready$", makefile, re.MULTILINE):
         F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#test", "make test must alias test-ready")
-    for help_text in ("make test-ready", "make test-composed", "make test-assurance", "make test-coverage"):
+    for help_text in ("make test-ready", "make test-composed", "make test-assurance", "make test-coverage", "make test-readiness-selftest"):
         if help_text not in makefile:
             F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#help", f"help output missing {help_text}")
 
@@ -4546,6 +4758,8 @@ def check_package_wiring(F: Findings, package: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-096", "package.json#scripts", "test:coverage script is missing or stale")
     if scripts.get("test-readiness:coverage") != TEST_READINESS_COVERAGE_SCRIPT:
         F.add("USF-TEST-READINESS-096", "package.json#scripts", "test-readiness:coverage script is missing or stale")
+    if scripts.get("test-readiness:selftest") != TEST_READINESS_SELFTEST_SCRIPT:
+        F.add("USF-TEST-READINESS-109", "package.json#scripts", "test-readiness:selftest script is missing or stale")
     expected_scripts = {
         "test-readiness": TEST_READINESS_SCRIPT,
         "test-readiness:composed": TEST_READINESS_COMPOSED_SCRIPT,
@@ -4574,6 +4788,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_operational_resilience_suite(F, state)
     check_coverage_gate(F, state)
     check_future_ai_guardrail(F, state)
+    check_missing_evidence_regression_gate(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])
