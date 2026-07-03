@@ -1,0 +1,6 @@
+{
+  "id": "008-staging-readiness-overclaim",
+  "description": "Allow a staging readiness claim from the public FQDN semantic contract.",
+  "appendAllowedClaim": "staging-readiness",
+  "expectedRule": "USF-PUBLIC-FQDN-008"
+}

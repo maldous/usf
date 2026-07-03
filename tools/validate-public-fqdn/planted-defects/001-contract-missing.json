@@ -1,0 +1,6 @@
+{
+  "id": "001-contract-missing",
+  "description": "Remove the public FQDN semantic contract so the validator must fail closed.",
+  "dropContract": true,
+  "expectedRule": "USF-PUBLIC-FQDN-001"
+}

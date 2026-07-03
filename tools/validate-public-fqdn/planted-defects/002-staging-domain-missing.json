@@ -1,0 +1,8 @@
+{
+  "id": "002-staging-domain-missing",
+  "description": "Remove the staging public FQDN row so the validator must fail closed.",
+  "dropEnvironmentIds": [
+    "public-fqdn-staging"
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-002"
+}

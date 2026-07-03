@@ -1,0 +1,6 @@
+{
+  "id": "007-test-public-internet-dependency",
+  "description": "Make the Test environment depend on public internet.",
+  "setTestEnvironmentPublicInternetDependency": true,
+  "expectedRule": "USF-PUBLIC-FQDN-007"
+}

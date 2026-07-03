@@ -1,0 +1,6 @@
+{
+  "id": "005-caddy-required-gateway",
+  "description": "Make Caddy a required semantic gateway.",
+  "setRequiredGateway": "caddy",
+  "expectedRule": "USF-PUBLIC-FQDN-005"
+}
