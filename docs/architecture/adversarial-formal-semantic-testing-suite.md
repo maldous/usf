@@ -15,8 +15,9 @@ This suite is not formal verification and does not claim mathematical proof. It 
 - `spec/instances/compose-service/service-catalogue.json`
 - `spec/instances/semantic-contract/`
 - `tests/packages/adversarial/adversarial-semantic-cases.json`
+- `docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json`
 
-The requested standalone input `docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json` is not present on current `origin/main`. The active future-AI guardrail flags are read from `docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail`.
+USF-252 supplies the standalone future-AI guardrail input. The active future-AI guardrail flags remain cross-checked against `docs/architecture/semantic-service-test-obligation-manifest.json#futureAiChangeGuardrail`.
 
 ## Adversarial Cases
 

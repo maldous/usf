@@ -1,0 +1,429 @@
+{
+  "id": "future-ai-delivered-work-semantic-test-guardrail",
+  "title": "Future AI Delivered Work Semantic Test Guardrail",
+  "issueId": "USF-252",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": ["USF-239", "USF-247", "USF-259"],
+  "lifecycleState": "active-test-readiness-guardrail",
+  "purpose": "Fail closed when future AI or developer work changes services, capabilities, generated Compose, tests, fixtures, validators, commands, coverage, or evidence without the matching semantic, test-obligation, fixture, evidence, and non-claim updates.",
+  "sourceAuthorities": {
+    "authorityModel": "docs/architecture/authority-model.md",
+    "agentDirective": "AGENTS.md",
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "fixtureCorpus": "tests/packages/fixtures/service-fixture-corpus.json",
+    "integrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "commandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+    "coverageGate": "docs/architecture/test-coverage-gate.json",
+    "serviceCatalogue": "spec/instances/compose-service/service-catalogue.json",
+    "generatedTestCompose": "compose/compose.test.generated.yaml",
+    "validator": "tools/validate-test-readiness/validate-test-readiness.py"
+  },
+  "scope": {
+    "futureAiGeneratedWorkCovered": true,
+    "changedFileImpactDetectionRequired": true,
+    "semanticTestEvidenceCouplingRequired": true,
+    "failureDiagnosticsRequired": true,
+    "testReadinessClaimAllowed": false,
+    "stagingReadinessClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "socReadinessClaimAllowed": false,
+    "isoCertificationClaimAllowed": false,
+    "finalUsf234AcceptanceClaimAllowed": false,
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false
+  },
+  "changeImpactDetector": [
+    {
+      "changedFileClass": "semantic-contract",
+      "pathPatterns": ["spec/instances/semantic-contract/*.json"],
+      "obligationFacets": [
+        "semantic-definition",
+        "unit",
+        "functional-regression",
+        "enterprise-evidence",
+        "future-ai-guardrail"
+      ],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Changed semantic contract must update obligation manifest, relevant tests, evidence refs, and non-claims."
+    },
+    {
+      "changedFileClass": "service-catalogue",
+      "pathPatterns": ["spec/instances/compose-service/service-catalogue.json"],
+      "obligationFacets": [
+        "service-catalogue",
+        "composed-integration",
+        "fixture",
+        "operational-resilience",
+        "future-ai-guardrail"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "fixture",
+        "evidence",
+        "non-claim-review"
+      ],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Changed service catalogue row must update service obligations, fixture corpus, integration matrix, evidence refs, and non-claims."
+    },
+    {
+      "changedFileClass": "generated-compose",
+      "pathPatterns": ["compose/compose.test.generated.yaml", "compose/*.generated.yaml"],
+      "obligationFacets": [
+        "generated-compose",
+        "service-catalogue-authority",
+        "composed-integration",
+        "compose-profile-exercise"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "fixture",
+        "evidence",
+        "non-claim-review"
+      ],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Generated Compose change must trace to service catalogue authority and update generated-service/profile evidence."
+    },
+    {
+      "changedFileClass": "adapter",
+      "pathPatterns": ["adapters/**"],
+      "obligationFacets": [
+        "adapter-boundary",
+        "provider-mode",
+        "service-backed-proof",
+        "sdk-governance"
+      ],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Adapter change must update provider boundary evidence, relevant service tests, and non-claims."
+    },
+    {
+      "changedFileClass": "capability",
+      "pathPatterns": ["capabilities/**"],
+      "obligationFacets": [
+        "capability-contract",
+        "unit",
+        "functional-regression",
+        "authorization",
+        "audit"
+      ],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Capability change must update semantic contract mapping, tests, evidence, and non-claims."
+    },
+    {
+      "changedFileClass": "api-route",
+      "pathPatterns": ["apps/api/**"],
+      "obligationFacets": [
+        "api-contract",
+        "authorization",
+        "tenant-boundary",
+        "audit",
+        "functional-regression"
+      ],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "API change must update contract, auth/tenant tests, audit evidence, and non-claims."
+    },
+    {
+      "changedFileClass": "worker-job",
+      "pathPatterns": ["apps/work/**"],
+      "obligationFacets": [
+        "worker-contract",
+        "jobs",
+        "tenant-boundary",
+        "audit",
+        "operational-resilience"
+      ],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Worker change must update job obligations, tenant and audit tests, resilience evidence, and non-claims."
+    },
+    {
+      "changedFileClass": "provider-binding",
+      "pathPatterns": [
+        "packages/core/**",
+        "packages/proof/src/*provider*",
+        "docs/architecture/*provider*"
+      ],
+      "obligationFacets": [
+        "provider-registry",
+        "sdk-boundary",
+        "composed-service-proof",
+        "supplier-boundary"
+      ],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Provider binding change must update registry/evidence, service-backed proof, and non-claims."
+    },
+    {
+      "changedFileClass": "validator",
+      "pathPatterns": ["tools/validate-*/**"],
+      "obligationFacets": ["validator-rule", "planted-defect", "selftest", "diagnostic-output"],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Validator change must update rule metadata, planted defects, tests, evidence, and non-claims."
+    },
+    {
+      "changedFileClass": "command-surface",
+      "pathPatterns": [
+        "package.json",
+        "Makefile",
+        "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
+      ],
+      "obligationFacets": ["command", "ci-local-alignment", "coverage", "assurance"],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Command surface change must update command evidence, validators, docs, and non-claims."
+    },
+    {
+      "changedFileClass": "seeder-fixture",
+      "pathPatterns": ["tests/packages/fixtures/**"],
+      "obligationFacets": ["fixture", "seed", "reset", "cleanup", "determinism"],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "fixture",
+        "evidence",
+        "non-claim-review"
+      ],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Fixture change must update fixture corpus evidence, lifecycle proof, related tests, and non-claims."
+    },
+    {
+      "changedFileClass": "enterprise-evidence",
+      "pathPatterns": ["spec/instances/enterprise-evidence/**", "docs/architecture/*enterprise*"],
+      "obligationFacets": ["soa", "evidence-register", "risk", "privacy", "incident"],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Enterprise evidence change must update SoA/evidence/threat/access/resilience/incident/privacy rows and tests."
+    },
+    {
+      "changedFileClass": "test-suite",
+      "pathPatterns": ["tests/packages/*.test.ts", "tests/packages/**/*.test.ts"],
+      "obligationFacets": ["unit", "integration", "regression", "assurance", "negative-case"],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Test-suite change must keep obligation mapping, negative cases, evidence, and non-claims aligned."
+    },
+    {
+      "changedFileClass": "planted-defect",
+      "pathPatterns": ["tools/validate-test-readiness/planted-defects/**"],
+      "obligationFacets": ["planted-defect", "selftest", "validator-rule"],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Planted-defect change must preserve selftest coverage and rule mapping."
+    },
+    {
+      "changedFileClass": "coverage-gate",
+      "pathPatterns": [
+        "vitest.config.ts",
+        "sonar-project.properties",
+        "docs/architecture/test-coverage-gate.json"
+      ],
+      "obligationFacets": ["coverage", "lcov", "sonar", "exclusion-rationale"],
+      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "serviceBackedClaimMayUseInMemorySubstitute": false,
+      "diagnosticTemplate": "Coverage gate change must preserve threshold, LCOV/Sonar evidence, exclusions, and non-claims."
+    }
+  ],
+  "coupledUpdatePolicy": {
+    "semanticDefinitionUpdateRequired": true,
+    "testObligationUpdateRequired": true,
+    "fixtureUpdateRequiredWhenServiceOrDataChanges": true,
+    "validatorOrPlantedDefectUpdateRequiredWhenRuleChanges": true,
+    "coverageUpdateRequiredWhenExecutableCodeChanges": true,
+    "enterpriseEvidenceUpdateRequiredWhenRiskOrControlChanges": true,
+    "nonClaimReviewRequiredForEveryReadinessAdjacentChange": true,
+    "samePrRequired": true,
+    "failureOutputMustIdentifyMissingFacet": true
+  },
+  "weakeningDetectors": [
+    {
+      "weakeningClass": "removed-test",
+      "expectedRuleId": "USF-TEST-READINESS-103",
+      "requiredDiagnostic": "changed test path is missing matching obligation and evidence update",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "reduced-assertion",
+      "expectedRuleId": "USF-TEST-READINESS-105",
+      "requiredDiagnostic": "assertion weakening requires obligation and evidence review",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "in-memory-service-backed-substitute",
+      "expectedRuleId": "USF-TEST-READINESS-104",
+      "requiredDiagnostic": "service-backed claim cannot be satisfied by in-memory substitute",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "lowered-coverage-threshold",
+      "expectedRuleId": "USF-TEST-READINESS-105",
+      "requiredDiagnostic": "coverage threshold reduction requires issue-linked exception and evidence update",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "unapproved-lcov-exclusion",
+      "expectedRuleId": "USF-TEST-READINESS-105",
+      "requiredDiagnostic": "LCOV exclusion requires owner, rationale, and non-expansion boundary",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "removed-planted-defect",
+      "expectedRuleId": "USF-TEST-READINESS-105",
+      "requiredDiagnostic": "removed planted defect must be replaced or explicitly transferred",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "missing-audit-evidence",
+      "expectedRuleId": "USF-TEST-READINESS-105",
+      "requiredDiagnostic": "security-relevant change requires value-free audit evidence",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "missing-reset-cleanup",
+      "expectedRuleId": "USF-TEST-READINESS-105",
+      "requiredDiagnostic": "service-backed test change requires reset, cleanup, and teardown evidence",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "missing-non-claim",
+      "expectedRuleId": "USF-TEST-READINESS-108",
+      "requiredDiagnostic": "readiness-adjacent change requires explicit non-claim review",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "generated-compose-authority-inversion",
+      "expectedRuleId": "USF-TEST-READINESS-106",
+      "requiredDiagnostic": "generated Compose cannot be treated as source authority",
+      "failsClosed": true
+    },
+    {
+      "weakeningClass": "stale-evidence-pass",
+      "expectedRuleId": "USF-TEST-READINESS-105",
+      "requiredDiagnostic": "stale evidence cannot satisfy a changed obligation",
+      "failsClosed": true
+    }
+  ],
+  "generatedComposeAuthorityBoundary": {
+    "generatedComposeIsAuthority": false,
+    "serviceCatalogueUpdateRequired": true,
+    "semanticObligationUpdateRequired": true,
+    "integrationMatrixUpdateRequired": true,
+    "fixtureUpdateRequired": true,
+    "directGeneratedEditAllowed": false,
+    "generatedOnlyChangeMaySatisfyTestReadiness": false
+  },
+  "failureDiagnostics": {
+    "changedPath": true,
+    "changedFileClass": true,
+    "missingFacet": true,
+    "requiredFix": true,
+    "serviceOrCapability": true,
+    "ownerIssueId": true,
+    "exampleMessages": [
+      "Changed apps/api route requires semantic contract, test obligation, auth/tenant test, audit evidence, and non-claim review.",
+      "Changed compose generated target requires service catalogue authority and integration matrix update.",
+      "Changed test removed planted defect coverage; restore or transfer the expected rule with evidence."
+    ]
+  },
+  "developerWorkflow": {
+    "documentsSemanticTestEvidencePattern": true,
+    "documentsAiAgentChangePattern": true,
+    "requiresPrBodyIssueEvidenceValidationNonClaims": true,
+    "requiresLinearAfterMergeReconciliation": true,
+    "requiredPatternSummary": "A governed change updates semantic authority, generated test obligations, tests or proofs, fixture/evidence rows, validators or planted defects when relevant, and explicit non-claims in the same PR."
+  },
+  "validatorCoverage": {
+    "ruleIds": [
+      "USF-TEST-READINESS-102",
+      "USF-TEST-READINESS-103",
+      "USF-TEST-READINESS-104",
+      "USF-TEST-READINESS-105",
+      "USF-TEST-READINESS-106",
+      "USF-TEST-READINESS-107",
+      "USF-TEST-READINESS-108"
+    ],
+    "selftestCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+    "plantedDefectCount": 7
+  },
+  "plantedDefects": [
+    {
+      "id": "102-future-ai-guardrail-missing",
+      "path": "tools/validate-test-readiness/planted-defects/102-future-ai-guardrail-missing.json",
+      "expectedRule": "USF-TEST-READINESS-102"
+    },
+    {
+      "id": "103-future-ai-change-class-missing",
+      "path": "tools/validate-test-readiness/planted-defects/103-future-ai-change-class-missing.json",
+      "expectedRule": "USF-TEST-READINESS-103"
+    },
+    {
+      "id": "104-future-ai-coupled-update-missing",
+      "path": "tools/validate-test-readiness/planted-defects/104-future-ai-coupled-update-missing.json",
+      "expectedRule": "USF-TEST-READINESS-104"
+    },
+    {
+      "id": "105-future-ai-weakening-detector-missing",
+      "path": "tools/validate-test-readiness/planted-defects/105-future-ai-weakening-detector-missing.json",
+      "expectedRule": "USF-TEST-READINESS-105"
+    },
+    {
+      "id": "106-future-ai-generated-compose-boundary-unsafe",
+      "path": "tools/validate-test-readiness/planted-defects/106-future-ai-generated-compose-boundary-unsafe.json",
+      "expectedRule": "USF-TEST-READINESS-106"
+    },
+    {
+      "id": "107-future-ai-diagnostics-missing",
+      "path": "tools/validate-test-readiness/planted-defects/107-future-ai-diagnostics-missing.json",
+      "expectedRule": "USF-TEST-READINESS-107"
+    },
+    {
+      "id": "108-future-ai-overclaim",
+      "path": "tools/validate-test-readiness/planted-defects/108-future-ai-overclaim.json",
+      "expectedRule": "USF-TEST-READINESS-108"
+    }
+  ],
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": ["soa-usf-239-semantic-service-test-obligation-manifest"],
+    "evidenceRegister": ["evidence-usf-239-semantic-service-test-obligation-manifest"],
+    "threatModelAbuseCaseRegister": ["threat-usf-239-semantic-service-test-obligation-manifest"],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-239-semantic-service-test-obligation-manifest"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-239-semantic-service-test-obligation-manifest"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-239-semantic-service-test-obligation-manifest"
+    ],
+    "privacyDataMinimisationPosture": ["privacy-usf-239-semantic-service-test-obligation-manifest"]
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/future-ai-delivered-work-semantic-test-guardrail.test.ts",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+    "git diff --check"
+  ],
+  "allowedClaims": [],
+  "nonClaims": [
+    "test-readiness",
+    "final-test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "final-usf-234-acceptance"
+  ]
+}

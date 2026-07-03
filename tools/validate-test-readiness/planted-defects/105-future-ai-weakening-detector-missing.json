@@ -1,0 +1,8 @@
+{
+  "id": "105-future-ai-weakening-detector-missing",
+  "description": "Drop a required weakening detector from the future AI guardrail.",
+  "futureAiDropWeakeningClasses": [
+    "removed-planted-defect"
+  ],
+  "expectedRule": "USF-TEST-READINESS-105"
+}

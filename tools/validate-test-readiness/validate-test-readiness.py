@@ -35,6 +35,7 @@ ENTERPRISE_CONTROL_SUITE_PATH = Path("docs/architecture/enterprise-control-evide
 PERFORMANCE_RESOURCE_SUITE_PATH = Path("docs/architecture/performance-concurrency-resource-regression-suite.json")
 COVERAGE_GATE_PATH = Path("docs/architecture/test-coverage-gate.json")
 OPERATIONAL_RESILIENCE_SUITE_PATH = Path("docs/architecture/operational-resilience-failure-mode-suite.json")
+FUTURE_AI_GUARDRAIL_PATH = Path("docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -149,6 +150,13 @@ RULES = {
     "USF-TEST-READINESS-099": ("blocking", "Sonar LCOV import configuration or proof evidence is missing or stale"),
     "USF-TEST-READINESS-100": ("blocking", "machine-readable command surface package script or Make target row is stale"),
     "USF-TEST-READINESS-101": ("blocking", "coverage gate overclaims readiness or lacks enterprise evidence linkage"),
+    "USF-TEST-READINESS-102": ("blocking", "future AI semantic guardrail evidence is missing invalid or stale"),
+    "USF-TEST-READINESS-103": ("blocking", "future AI change impact detector lacks path-to-obligation coverage"),
+    "USF-TEST-READINESS-104": ("blocking", "future AI coupled semantic test evidence update policy is incomplete"),
+    "USF-TEST-READINESS-105": ("blocking", "future AI weakening detector coverage is incomplete"),
+    "USF-TEST-READINESS-106": ("blocking", "future AI generated Compose authority boundary is unsafe"),
+    "USF-TEST-READINESS-107": ("blocking", "future AI failure diagnostics or workflow guidance is incomplete"),
+    "USF-TEST-READINESS-108": ("blocking", "future AI guardrail overclaims readiness or lacks enterprise evidence linkage"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -354,6 +362,45 @@ OPERATIONAL_VALIDATOR_RULE_IDS = {
     "USF-TEST-READINESS-092",
     "USF-TEST-READINESS-093",
     "USF-TEST-READINESS-094",
+}
+FUTURE_AI_VALIDATOR_RULE_IDS = {
+    "USF-TEST-READINESS-102",
+    "USF-TEST-READINESS-103",
+    "USF-TEST-READINESS-104",
+    "USF-TEST-READINESS-105",
+    "USF-TEST-READINESS-106",
+    "USF-TEST-READINESS-107",
+    "USF-TEST-READINESS-108",
+}
+REQUIRED_FUTURE_AI_CHANGE_CLASSES = {
+    "semantic-contract",
+    "service-catalogue",
+    "generated-compose",
+    "adapter",
+    "capability",
+    "api-route",
+    "worker-job",
+    "provider-binding",
+    "validator",
+    "command-surface",
+    "seeder-fixture",
+    "enterprise-evidence",
+    "test-suite",
+    "planted-defect",
+    "coverage-gate",
+}
+REQUIRED_FUTURE_AI_WEAKENING_CLASSES = {
+    "removed-test",
+    "reduced-assertion",
+    "in-memory-service-backed-substitute",
+    "lowered-coverage-threshold",
+    "unapproved-lcov-exclusion",
+    "removed-planted-defect",
+    "missing-audit-evidence",
+    "missing-reset-cleanup",
+    "missing-non-claim",
+    "generated-compose-authority-inversion",
+    "stale-evidence-pass",
 }
 REQUIRED_OBLIGATION_ISSUES = {
     "USF-239",
@@ -1206,6 +1253,66 @@ def apply_enterprise_model_defect(model: dict[str, Any], defect: dict[str, Any])
     return out
 
 
+def apply_future_ai_guardrail_defect(guardrail: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeFutureAiGuardrail"):
+        return None
+    if guardrail is None:
+        return None
+    out = copy.deepcopy(guardrail)
+    for key, value in defect.get("futureAiWorkGuardrailSet", {}).items():
+        out[key] = value
+    for key in defect.get("futureAiWorkGuardrailDrop", []):
+        out.pop(key, None)
+    for class_id in defect.get("futureAiDropChangeClasses", []):
+        out["changeImpactDetector"] = [
+            row for row in out.get("changeImpactDetector", []) if row.get("changedFileClass") != class_id
+        ]
+    for patch in defect.get("futureAiChangeClassPatch", []):
+        for row in out.get("changeImpactDetector", []):
+            if row.get("changedFileClass") != patch.get("changedFileClass"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+            for required_update in patch.get("dropRequiredUpdates", []):
+                row["requiredUpdates"] = [
+                    value for value in row.get("requiredUpdates", []) if value != required_update
+                ]
+    for class_id in defect.get("futureAiDropWeakeningClasses", []):
+        out["weakeningDetectors"] = [
+            row for row in out.get("weakeningDetectors", []) if row.get("weakeningClass") != class_id
+        ]
+    for patch in defect.get("futureAiWeakeningPatch", []):
+        for row in out.get("weakeningDetectors", []):
+            if row.get("weakeningClass") != patch.get("weakeningClass"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for key, value in defect.get("futureAiGeneratedComposeSet", {}).items():
+        out.setdefault("generatedComposeAuthorityBoundary", {})[key] = value
+    for key in defect.get("futureAiGeneratedComposeDrop", []):
+        out.setdefault("generatedComposeAuthorityBoundary", {}).pop(key, None)
+    for key, value in defect.get("futureAiDiagnosticsSet", {}).items():
+        out.setdefault("failureDiagnostics", {})[key] = value
+    for key in defect.get("futureAiDiagnosticsDrop", []):
+        out.setdefault("failureDiagnostics", {}).pop(key, None)
+    for key, value in defect.get("futureAiWorkflowSet", {}).items():
+        out.setdefault("developerWorkflow", {})[key] = value
+    for key in defect.get("futureAiWorkflowDrop", []):
+        out.setdefault("developerWorkflow", {}).pop(key, None)
+    for section in defect.get("futureAiEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("futureAiDropNonClaims"):
+        dropped = set(defect.get("futureAiDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("futureAiAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["futureAiAppendAllowedClaim"])
+    return out
+
+
 def apply_text_defect(text: str, defect: dict[str, Any], prefix: str) -> str:
     out = text
     for patch in defect.get(f"{prefix}TextReplace", []):
@@ -1314,6 +1421,12 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         read_json(COVERAGE_GATE_PATH) if (ROOT / COVERAGE_GATE_PATH).exists() else None
     )
     coverage_gate = apply_coverage_gate_defect(coverage_gate, defect)
+    future_ai_guardrail = (
+        read_json(FUTURE_AI_GUARDRAIL_PATH)
+        if (ROOT / FUTURE_AI_GUARDRAIL_PATH).exists()
+        else None
+    )
+    future_ai_guardrail = apply_future_ai_guardrail_defect(future_ai_guardrail, defect)
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     vitest_config = (
@@ -1342,6 +1455,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "performanceResourceSuite": performance_resource_suite,
         "operationalResilienceSuite": operational_resilience_suite,
         "coverageGate": coverage_gate,
+        "futureAiGuardrail": future_ai_guardrail,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -3815,6 +3929,235 @@ def check_coverage_gate(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-101", str(COVERAGE_GATE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
 
 
+def check_future_ai_guardrail(F: Findings, state: dict[str, Any]) -> None:
+    guardrail = state["futureAiGuardrail"]
+    if not isinstance(guardrail, dict):
+        F.add("USF-TEST-READINESS-102", str(FUTURE_AI_GUARDRAIL_PATH), "future AI guardrail file is missing")
+        return
+    required = {
+        "id",
+        "issueId",
+        "parentIssueId",
+        "dependsOnIssueIds",
+        "sourceAuthorities",
+        "scope",
+        "changeImpactDetector",
+        "coupledUpdatePolicy",
+        "weakeningDetectors",
+        "generatedComposeAuthorityBoundary",
+        "failureDiagnostics",
+        "developerWorkflow",
+        "validatorCoverage",
+        "enterpriseEvidenceRefs",
+        "validationCommands",
+        "allowedClaims",
+        "nonClaims",
+    }
+    for key in sorted(required):
+        if key not in guardrail:
+            F.add("USF-TEST-READINESS-102", str(FUTURE_AI_GUARDRAIL_PATH), f"missing top-level field {key}")
+    if guardrail.get("issueId") != "USF-252" or guardrail.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-102", str(FUTURE_AI_GUARDRAIL_PATH), "issue linkage must be USF-252 under USF-234")
+    if not {"USF-239", "USF-247", "USF-259"}.issubset(set(guardrail.get("dependsOnIssueIds", []))):
+        F.add("USF-TEST-READINESS-102", str(FUTURE_AI_GUARDRAIL_PATH), "guardrail must depend on the obligation manifest, final regression gate, and expanded obligation reconciliation")
+
+    authorities = guardrail.get("sourceAuthorities")
+    if not isinstance(authorities, dict):
+        F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#sourceAuthorities", "source authorities are missing")
+        authorities = {}
+    expected_authorities = {
+        "authorityModel": "docs/architecture/authority-model.md",
+        "agentDirective": "AGENTS.md",
+        "obligationManifest": str(OBLIGATION_MANIFEST_PATH),
+        "fixtureCorpus": str(FIXTURE_CORPUS_PATH),
+        "integrationMatrix": str(INTEGRATION_MATRIX_PATH),
+        "commandSurface": str(COMMAND_SURFACE_PATH),
+        "coverageGate": str(COVERAGE_GATE_PATH),
+        "serviceCatalogue": str(SERVICE_CATALOGUE_PATH),
+        "generatedTestCompose": str(COMPOSE_TEST_PATH),
+        "validator": "tools/validate-test-readiness/validate-test-readiness.py",
+    }
+    for key, expected in expected_authorities.items():
+        if authorities.get(key) != expected:
+            F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#sourceAuthorities.{key}", f"source authority must link {expected}")
+
+    scope = guardrail.get("scope")
+    if not isinstance(scope, dict):
+        F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#scope", "scope is missing")
+        scope = {}
+    expected_false = {
+        "testReadinessClaimAllowed",
+        "stagingReadinessClaimAllowed",
+        "productionReadinessClaimAllowed",
+        "liveProviderReadinessClaimAllowed",
+        "socReadinessClaimAllowed",
+        "isoCertificationClaimAllowed",
+        "finalUsf234AcceptanceClaimAllowed",
+        "inMemoryServiceSubstituteAllowedForServiceBackedClaims",
+    }
+    for key in expected_false:
+        if scope.get(key) is not False:
+            F.add("USF-TEST-READINESS-108", f"{FUTURE_AI_GUARDRAIL_PATH}#scope.{key}", "scope must preserve non-claim or no-substitute boundary")
+    for key in (
+        "futureAiGeneratedWorkCovered",
+        "changedFileImpactDetectionRequired",
+        "semanticTestEvidenceCouplingRequired",
+        "failureDiagnosticsRequired",
+    ):
+        if scope.get(key) is not True:
+            F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#scope.{key}", "guardrail scope flag must be true")
+
+    detector_rows = guardrail.get("changeImpactDetector", [])
+    if not isinstance(detector_rows, list):
+        F.add("USF-TEST-READINESS-103", f"{FUTURE_AI_GUARDRAIL_PATH}#changeImpactDetector", "change impact detector must be a list")
+        detector_rows = []
+    detector_by_class = _row_by_id(detector_rows, "changedFileClass")
+    missing_classes = sorted(REQUIRED_FUTURE_AI_CHANGE_CLASSES - set(detector_by_class))
+    if missing_classes:
+        F.add("USF-TEST-READINESS-103", f"{FUTURE_AI_GUARDRAIL_PATH}#changeImpactDetector", f"missing changed file classes: {missing_classes}")
+    for class_id, row in detector_by_class.items():
+        subject = f"{FUTURE_AI_GUARDRAIL_PATH}#changeImpactDetector.{class_id}"
+        if not isinstance(row.get("pathPatterns"), list) or not row.get("pathPatterns"):
+            F.add("USF-TEST-READINESS-103", subject, "path patterns are missing")
+        if not isinstance(row.get("obligationFacets"), list) or not row.get("obligationFacets"):
+            F.add("USF-TEST-READINESS-103", subject, "obligation facets are missing")
+        required_updates = set(row.get("requiredUpdates", []))
+        if {"semantic-authority", "test-obligation", "evidence", "non-claim-review"} - required_updates:
+            F.add("USF-TEST-READINESS-104", subject, "required semantic, test obligation, evidence, and non-claim updates are missing")
+        if row.get("serviceBackedClaimMayUseInMemorySubstitute") is not False:
+            F.add("USF-TEST-READINESS-104", subject, "service-backed claims must not allow in-memory substitute")
+        if not row.get("diagnosticTemplate"):
+            F.add("USF-TEST-READINESS-107", subject, "diagnostic template is missing")
+
+    policy = guardrail.get("coupledUpdatePolicy")
+    if not isinstance(policy, dict):
+        F.add("USF-TEST-READINESS-104", f"{FUTURE_AI_GUARDRAIL_PATH}#coupledUpdatePolicy", "coupled update policy is missing")
+        policy = {}
+    for key in (
+        "semanticDefinitionUpdateRequired",
+        "testObligationUpdateRequired",
+        "fixtureUpdateRequiredWhenServiceOrDataChanges",
+        "validatorOrPlantedDefectUpdateRequiredWhenRuleChanges",
+        "coverageUpdateRequiredWhenExecutableCodeChanges",
+        "enterpriseEvidenceUpdateRequiredWhenRiskOrControlChanges",
+        "nonClaimReviewRequiredForEveryReadinessAdjacentChange",
+        "samePrRequired",
+        "failureOutputMustIdentifyMissingFacet",
+    ):
+        if policy.get(key) is not True:
+            F.add("USF-TEST-READINESS-104", f"{FUTURE_AI_GUARDRAIL_PATH}#coupledUpdatePolicy.{key}", "coupled update policy flag must be true")
+
+    weakening_rows = guardrail.get("weakeningDetectors", [])
+    if not isinstance(weakening_rows, list):
+        F.add("USF-TEST-READINESS-105", f"{FUTURE_AI_GUARDRAIL_PATH}#weakeningDetectors", "weakening detectors must be a list")
+        weakening_rows = []
+    weakening_by_class = _row_by_id(weakening_rows, "weakeningClass")
+    missing_weakening = sorted(REQUIRED_FUTURE_AI_WEAKENING_CLASSES - set(weakening_by_class))
+    if missing_weakening:
+        F.add("USF-TEST-READINESS-105", f"{FUTURE_AI_GUARDRAIL_PATH}#weakeningDetectors", f"missing weakening classes: {missing_weakening}")
+    for class_id, row in weakening_by_class.items():
+        subject = f"{FUTURE_AI_GUARDRAIL_PATH}#weakeningDetectors.{class_id}"
+        if not row.get("expectedRuleId") or not row.get("requiredDiagnostic"):
+            F.add("USF-TEST-READINESS-105", subject, "expected rule and diagnostic are required")
+        if row.get("failsClosed") is not True:
+            F.add("USF-TEST-READINESS-105", subject, "weakening detector must fail closed")
+
+    generated = guardrail.get("generatedComposeAuthorityBoundary")
+    if not isinstance(generated, dict):
+        F.add("USF-TEST-READINESS-106", f"{FUTURE_AI_GUARDRAIL_PATH}#generatedComposeAuthorityBoundary", "generated Compose authority boundary is missing")
+        generated = {}
+    expected_generated = {
+        "generatedComposeIsAuthority": False,
+        "serviceCatalogueUpdateRequired": True,
+        "semanticObligationUpdateRequired": True,
+        "integrationMatrixUpdateRequired": True,
+        "fixtureUpdateRequired": True,
+        "directGeneratedEditAllowed": False,
+        "generatedOnlyChangeMaySatisfyTestReadiness": False,
+    }
+    for key, expected in expected_generated.items():
+        if generated.get(key) is not expected:
+            F.add("USF-TEST-READINESS-106", f"{FUTURE_AI_GUARDRAIL_PATH}#generatedComposeAuthorityBoundary.{key}", "generated Compose authority boundary is unsafe or stale")
+
+    diagnostics = guardrail.get("failureDiagnostics")
+    if not isinstance(diagnostics, dict):
+        F.add("USF-TEST-READINESS-107", f"{FUTURE_AI_GUARDRAIL_PATH}#failureDiagnostics", "failure diagnostics are missing")
+        diagnostics = {}
+    for key in ("changedPath", "changedFileClass", "missingFacet", "requiredFix", "serviceOrCapability", "ownerIssueId"):
+        if diagnostics.get(key) is not True:
+            F.add("USF-TEST-READINESS-107", f"{FUTURE_AI_GUARDRAIL_PATH}#failureDiagnostics.{key}", "failure output must expose changed path, missing facet, and required fix")
+    if not diagnostics.get("exampleMessages"):
+        F.add("USF-TEST-READINESS-107", f"{FUTURE_AI_GUARDRAIL_PATH}#failureDiagnostics.exampleMessages", "diagnostic examples are missing")
+
+    workflow = guardrail.get("developerWorkflow")
+    if not isinstance(workflow, dict):
+        F.add("USF-TEST-READINESS-107", f"{FUTURE_AI_GUARDRAIL_PATH}#developerWorkflow", "developer workflow guidance is missing")
+        workflow = {}
+    for key in (
+        "documentsSemanticTestEvidencePattern",
+        "documentsAiAgentChangePattern",
+        "requiresPrBodyIssueEvidenceValidationNonClaims",
+        "requiresLinearAfterMergeReconciliation",
+    ):
+        if workflow.get(key) is not True:
+            F.add("USF-TEST-READINESS-107", f"{FUTURE_AI_GUARDRAIL_PATH}#developerWorkflow.{key}", "workflow guidance flag must be true")
+
+    validation_commands = set(guardrail.get("validationCommands", []))
+    for expected in (
+        "corepack pnpm test -- tests/packages/future-ai-delivered-work-semantic-test-guardrail.test.ts",
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+    ):
+        if expected not in validation_commands:
+            F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#validationCommands", f"missing validation command {expected}")
+
+    validator = guardrail.get("validatorCoverage")
+    if not isinstance(validator, dict):
+        F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#validatorCoverage", "validator coverage metadata is missing")
+    else:
+        if set(validator.get("ruleIds", [])) != FUTURE_AI_VALIDATOR_RULE_IDS:
+            F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#validatorCoverage.ruleIds", "future AI validator rule id inventory is stale")
+        if validator.get("selftestCommand") != "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json":
+            F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#validatorCoverage.selftestCommand", "selftest command is stale")
+        if validator.get("plantedDefectCount") != len(guardrail.get("plantedDefects", [])):
+            F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#validatorCoverage.plantedDefectCount", "planted defect count is stale")
+
+    planted = guardrail.get("plantedDefects", [])
+    if not isinstance(planted, list) or len(planted) < len(FUTURE_AI_VALIDATOR_RULE_IDS):
+        F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#plantedDefects", "planted defect inventory is incomplete")
+    else:
+        expected_rules = {row.get("expectedRule") for row in planted if isinstance(row, dict)}
+        missing_rules = sorted(FUTURE_AI_VALIDATOR_RULE_IDS - expected_rules)
+        if missing_rules:
+            F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#plantedDefects", f"missing planted defect rule coverage: {missing_rules}")
+        for row in planted:
+            path = str(row.get("path", ""))
+            if not path or not (ROOT / path).exists():
+                F.add("USF-TEST-READINESS-102", f"{FUTURE_AI_GUARDRAIL_PATH}#plantedDefects", f"planted defect path is missing: {path}")
+
+    refs = guardrail.get("enterpriseEvidenceRefs")
+    if not isinstance(refs, dict):
+        F.add("USF-TEST-READINESS-108", f"{FUTURE_AI_GUARDRAIL_PATH}#enterpriseEvidenceRefs", "enterprise evidence refs are missing")
+    else:
+        for section in ENTERPRISE_REF_SECTIONS:
+            values = refs.get(section)
+            if not isinstance(values, list) or not values:
+                F.add("USF-TEST-READINESS-108", f"{FUTURE_AI_GUARDRAIL_PATH}#{section}", "enterprise evidence ref is missing")
+                continue
+            missing = sorted(set(values) - _enterprise_ids(state, section))
+            if missing:
+                F.add("USF-TEST-READINESS-108", f"{FUTURE_AI_GUARDRAIL_PATH}#{section}", f"enterprise evidence refs are stale: {missing}")
+
+    non_claims = set(guardrail.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-108", str(FUTURE_AI_GUARDRAIL_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(guardrail.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-108", str(FUTURE_AI_GUARDRAIL_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -4230,6 +4573,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_performance_resource_suite(F, state)
     check_operational_resilience_suite(F, state)
     check_coverage_gate(F, state)
+    check_future_ai_guardrail(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

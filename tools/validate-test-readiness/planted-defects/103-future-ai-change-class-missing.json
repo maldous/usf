@@ -1,0 +1,8 @@
+{
+  "id": "103-future-ai-change-class-missing",
+  "description": "Drop a required future AI changed-file class from the impact detector.",
+  "futureAiDropChangeClasses": [
+    "api-route"
+  ],
+  "expectedRule": "USF-TEST-READINESS-103"
+}

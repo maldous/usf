@@ -1,0 +1,8 @@
+{
+  "id": "107-future-ai-diagnostics-missing",
+  "description": "Remove required fix diagnostics from future AI guardrail failures.",
+  "futureAiDiagnosticsDrop": [
+    "requiredFix"
+  ],
+  "expectedRule": "USF-TEST-READINESS-107"
+}

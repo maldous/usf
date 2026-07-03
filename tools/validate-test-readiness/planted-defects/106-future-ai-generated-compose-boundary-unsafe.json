@@ -1,0 +1,8 @@
+{
+  "id": "106-future-ai-generated-compose-boundary-unsafe",
+  "description": "Treat generated Compose as if it were authority for test-readiness evidence.",
+  "futureAiGeneratedComposeSet": {
+    "generatedComposeIsAuthority": true
+  },
+  "expectedRule": "USF-TEST-READINESS-106"
+}

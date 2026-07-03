@@ -1,0 +1,6 @@
+{
+  "id": "102-future-ai-guardrail-missing",
+  "description": "Remove the future AI semantic guardrail evidence artefact.",
+  "removeFutureAiGuardrail": true,
+  "expectedRule": "USF-TEST-READINESS-102"
+}
