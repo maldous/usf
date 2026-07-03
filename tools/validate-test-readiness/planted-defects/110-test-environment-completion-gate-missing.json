@@ -1,0 +1,6 @@
+{
+  "id": "110-test-environment-completion-gate-missing",
+  "description": "Remove the USF-260 Test-environment completion and staging-entry evidence gate. The test-readiness validator must fail closed instead of allowing final gating to be inferred from child issue completion.",
+  "expectedRule": "USF-TEST-READINESS-110",
+  "removeTestEnvironmentCompletionGate": true
+}

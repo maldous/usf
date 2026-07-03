@@ -1,0 +1,530 @@
+{
+  "id": "test-environment-completion-and-staging-entry-gate",
+  "title": "Test Environment Completion and Staging Entry Gate",
+  "issueId": "USF-260",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": [
+    "USF-235",
+    "USF-236",
+    "USF-237",
+    "USF-238",
+    "USF-239",
+    "USF-240",
+    "USF-241",
+    "USF-242",
+    "USF-243",
+    "USF-244",
+    "USF-245",
+    "USF-246",
+    "USF-247",
+    "USF-248",
+    "USF-249",
+    "USF-250",
+    "USF-251",
+    "USF-252",
+    "USF-253",
+    "USF-254",
+    "USF-255",
+    "USF-256",
+    "USF-257",
+    "USF-258",
+    "USF-259"
+  ],
+  "lifecycleState": "active-test-environment-completion-staging-entry-gate",
+  "testReadinessClaimAllowed": false,
+  "finalTestReadinessClaimAllowed": false,
+  "stagingEntryConsiderationAllowed": true,
+  "stagingReadinessClaimAllowed": false,
+  "stagingImplementationStarted": false,
+  "validatorPath": "tools/validate-test-readiness/validate-test-readiness.py",
+  "completionEvidenceMap": [
+    {
+      "issueId": "USF-235",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/test-environment-service-contract.json",
+      "validationCommand": "corepack pnpm test-readiness:validate",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-236",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/composed-semantic-test-harness.json",
+      "validationCommand": "corepack pnpm test-readiness:semantic",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-237",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/deterministic-test-fixture-lifecycle.json",
+      "validationCommand": "corepack pnpm test-readiness:fixtures",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-238",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+      "validationCommand": "corepack pnpm test-readiness",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-239",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-240",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/test-coverage-gate.json",
+      "validationCommand": "corepack pnpm test-readiness:coverage",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-241",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/semantic-unit-test-suite.json",
+      "validationCommand": "corepack pnpm test",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-242",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/composed-service-integration-test-matrix.json",
+      "validationCommand": "corepack pnpm test-readiness:integration",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-243",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/enterprise-control-evidence-test-suite.json",
+      "validationCommand": "corepack pnpm test-readiness:assurance",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-244",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/functional-service-regression-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/semantic-functional-regression-suite.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-245",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/operational-resilience-failure-mode-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-246",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/design-contract-compose-drift-test-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/contract/design-contract-compose-drift.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-247",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/missing-evidence-planted-defects-regression-gate.json",
+      "validationCommand": "corepack pnpm test-readiness:selftest",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-248",
+      "status": "Done",
+      "evidenceArtifact": "tests/packages/fixtures/service-fixture-corpus.json",
+      "validationCommand": "corepack pnpm test-readiness:fixtures",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-249",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/authn-authz-tenant-role-permission-suite.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-250",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/data-lifecycle-backup-bulk-migration-test-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/data-lifecycle-backup-bulk-migration-suite.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-251",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/compose-profile-orchestration.json",
+      "validationCommand": "corepack pnpm test-readiness:integration",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-252",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-253",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/security-abuse-fuzzing-regression-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/security-abuse-fuzzing-regression-suite.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-254",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/performance-concurrency-resource-regression-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/performance-concurrency-resource-regression-suite.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-255",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/supply-chain-sbom-licence-test-gate.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/supply-chain-sbom-licence-test-gate.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-256",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/mutation-fault-injection-adequacy-gate.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-257",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/adversarial-formal-semantic-testing-suite.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/adversarial-formal-semantic-testing-suite.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-258",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/environment-tooling-governance-test-gate.json",
+      "validationCommand": "corepack pnpm test -- tests/packages/environment-tooling-governance-test-gate.test.ts",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    },
+    {
+      "issueId": "USF-259",
+      "status": "Done",
+      "evidenceArtifact": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "acceptanceCriteriaMappedToMergedEvidence": true,
+      "postMergeValidationRecorded": true,
+      "nonClaimBoundaryPreserved": true
+    }
+  ],
+  "evidenceCoverage": [
+    {
+      "categoryId": "lcov-sonar-coverage",
+      "issueId": "USF-240",
+      "evidenceArtifact": "docs/architecture/test-coverage-gate.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "semantic-unit",
+      "issueId": "USF-241",
+      "evidenceArtifact": "docs/architecture/semantic-unit-test-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "composed-integration",
+      "issueId": "USF-242",
+      "evidenceArtifact": "docs/architecture/composed-service-integration-test-matrix.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "enterprise-control-evidence",
+      "issueId": "USF-243",
+      "evidenceArtifact": "docs/architecture/enterprise-control-evidence-test-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "functional-regression",
+      "issueId": "USF-244",
+      "evidenceArtifact": "docs/architecture/functional-service-regression-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "operational-resilience",
+      "issueId": "USF-245",
+      "evidenceArtifact": "docs/architecture/operational-resilience-failure-mode-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "design-contract-compose-drift",
+      "issueId": "USF-246",
+      "evidenceArtifact": "docs/architecture/design-contract-compose-drift-test-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "missing-evidence-planted-defect-regression",
+      "issueId": "USF-247",
+      "evidenceArtifact": "docs/architecture/missing-evidence-planted-defects-regression-gate.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "deterministic-fixtures",
+      "issueId": "USF-248",
+      "evidenceArtifact": "tests/packages/fixtures/service-fixture-corpus.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "auth-tenant-role-permission",
+      "issueId": "USF-249",
+      "evidenceArtifact": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "data-lifecycle-backup-bulk-migration",
+      "issueId": "USF-250",
+      "evidenceArtifact": "docs/architecture/data-lifecycle-backup-bulk-migration-test-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "every-service-compose-orchestration",
+      "issueId": "USF-251",
+      "evidenceArtifact": "docs/architecture/compose-profile-orchestration.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "future-ai-semantic-guardrail",
+      "issueId": "USF-252",
+      "evidenceArtifact": "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "security-abuse-fuzzing",
+      "issueId": "USF-253",
+      "evidenceArtifact": "docs/architecture/security-abuse-fuzzing-regression-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "performance-concurrency-resource",
+      "issueId": "USF-254",
+      "evidenceArtifact": "docs/architecture/performance-concurrency-resource-regression-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "supply-chain-sbom-licence",
+      "issueId": "USF-255",
+      "evidenceArtifact": "docs/architecture/supply-chain-sbom-licence-test-gate.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "mutation-fault-injection",
+      "issueId": "USF-256",
+      "evidenceArtifact": "docs/architecture/mutation-fault-injection-adequacy-gate.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "adversarial-formal-semantic-testing",
+      "issueId": "USF-257",
+      "evidenceArtifact": "docs/architecture/adversarial-formal-semantic-testing-suite.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "environment-tooling-governance",
+      "issueId": "USF-258",
+      "evidenceArtifact": "docs/architecture/environment-tooling-governance-test-gate.json",
+      "status": "present"
+    },
+    {
+      "categoryId": "expanded-obligation-validator-reconciliation",
+      "issueId": "USF-259",
+      "evidenceArtifact": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "status": "present"
+    }
+  ],
+  "serviceBackedClaimBoundary": {
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+    "processLocalSubstituteAllowedForServiceBackedClaims": false,
+    "hermeticMockSubstituteAllowedForServiceBackedClaims": false,
+    "generatedComposeIsAuthority": false,
+    "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",
+    "semanticDefinitionAuthority": "spec/instances/semantic-contract",
+    "composeTarget": "compose/compose.test.generated.yaml",
+    "evidenceSource": "docs/architecture/composed-service-integration-test-matrix.json; docs/architecture/compose-profile-orchestration.json"
+  },
+  "composeProfileCompletion": {
+    "source": "docs/architecture/compose-profile-orchestration.json",
+    "requiredEvidence": [
+      "start",
+      "seed",
+      "exercise",
+      "observe",
+      "reset",
+      "cleanup",
+      "teardown",
+      "residue-check"
+    ],
+    "allGeneratedTestComposeServicesRequireEvidenceOrBoundedDisposition": true,
+    "allGeneratedTestProfilesRequireEvidenceOrBoundedDisposition": true,
+    "validationCommand": "corepack pnpm test-readiness:integration"
+  },
+  "commandSuite": [
+    {
+      "id": "canonical-test-readiness-full",
+      "command": "corepack pnpm test-readiness",
+      "expectedScope": "full bounded test-readiness command surface before USF-234 final acceptance"
+    },
+    {
+      "id": "canonical-test-readiness-composed",
+      "command": "corepack pnpm test-readiness:composed",
+      "expectedScope": "composed semantic harness, deterministic fixtures, and composed service integration"
+    },
+    {
+      "id": "canonical-test-readiness-integration",
+      "command": "corepack pnpm test-readiness:integration",
+      "expectedScope": "composed service integration and profile exercise matrix"
+    },
+    {
+      "id": "canonical-test-readiness-coverage",
+      "command": "corepack pnpm test-readiness:coverage",
+      "expectedScope": "bounded LCOV and Sonar import evidence"
+    },
+    {
+      "id": "canonical-test-readiness-assurance",
+      "command": "corepack pnpm test-readiness:assurance",
+      "expectedScope": "bounded enterprise assurance and Sonar zero-open-issue scope"
+    },
+    {
+      "id": "canonical-test-readiness-selftest",
+      "command": "corepack pnpm test-readiness:selftest",
+      "expectedScope": "all test-readiness planted defects fail for expected rules"
+    },
+    {
+      "id": "validator-all",
+      "command": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "expectedScope": "complete test-readiness repository evidence validator"
+    },
+    {
+      "id": "validator-selftest",
+      "command": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+      "expectedScope": "planted-defect selftest validator"
+    },
+    {
+      "id": "foundation-verify",
+      "command": "corepack pnpm verify",
+      "expectedScope": "current repository verification gate"
+    },
+    {
+      "id": "foundation-parity-coverage",
+      "command": "corepack pnpm parity",
+      "expectedScope": "current foundation coverage compatibility gate"
+    }
+  ],
+  "closureSearchRequirements": {
+    "openGitHubPrSearchRequired": true,
+    "openGitHubPrSearchExpectedResult": "empty",
+    "openLinearReadinessSearchRequired": true,
+    "openLinearReadinessSearchAllowedBeforeUSF260Closure": [
+      "USF-234",
+      "USF-260"
+    ],
+    "gitStatusRequired": "clean",
+    "generatedArtifactCheckRequired": true,
+    "commandSurfaceCheckRequired": true,
+    "postMergeValidationOnMainRequired": true
+  },
+  "stagingEntryDecision": {
+    "recommendation": "pass-for-staging-entry-consideration-after-merge-and-post-merge-validation",
+    "stagingWorkMayStartBeforeUSF260Done": false,
+    "stagingReadinessClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "decisionBoundary": "USF-260 may record that the Test environment is ready for staging-entry consideration after merged evidence and post-merge validation. It does not start staging work and does not claim staging readiness."
+  },
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": [
+      "soa-usf-260-test-environment-completion-staging-entry-gate"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-260-test-environment-completion-staging-entry-gate"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-260-test-environment-completion-staging-entry-gate"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-260-test-environment-completion-staging-entry-gate"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-260-test-environment-completion-staging-entry-gate"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-260-test-environment-completion-staging-entry-gate"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-260-test-environment-completion-staging-entry-gate"
+    ]
+  },
+  "allowedClaims": [
+    "test-environment-completion-gate-defined",
+    "staging-entry-consideration-gate-defined",
+    "test-environment-ready-for-staging-entry-consideration-after-merge-and-post-merge-validation"
+  ],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ]
+}
