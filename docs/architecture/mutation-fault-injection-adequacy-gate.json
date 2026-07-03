@@ -1,0 +1,499 @@
+{
+  "id": "mutation-fault-injection-adequacy-gate",
+  "title": "Mutation and Fault-Injection Adequacy Gate",
+  "issueId": "USF-256",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": ["USF-239", "USF-243", "USF-248", "USF-259"],
+  "lifecycleState": "issue-scoped-draft",
+  "authorityBoundary": "This issue-scoped gate records representative mutation and fault-injection adequacy evidence only. It does not modify shared validator, package, command, CI, Compose, fixture, enterprise, schema, or manifest authorities.",
+  "sourceAuthorities": {
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "expandedCategoryPointer": "docs/architecture/semantic-service-test-obligation-manifest.json#expandedCategoryObligations.USF-256",
+    "commandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+    "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "enterpriseControlSuite": "docs/architecture/enterprise-control-evidence-test-suite.json",
+    "functionalRegressionSuite": "docs/architecture/functional-service-regression-suite.json",
+    "semanticUnitSuite": "docs/architecture/semantic-unit-test-suite.json",
+    "deterministicFixtureLifecycle": "docs/architecture/deterministic-test-fixture-lifecycle.json",
+    "fixtureCorpus": "tests/packages/fixtures/service-fixture-corpus.json",
+    "composedIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "expandedCategoryOverclaimPlantedDefect": "tools/validate-test-readiness/planted-defects/080-expanded-category-overclaim.json"
+  },
+  "ownedPaths": [
+    "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+    "docs/architecture/mutation-fault-injection-adequacy-gate.json",
+    "docs/architecture/mutation-fault-injection-adequacy-gate.md"
+  ],
+  "issueOwnership": {
+    "obligationClassId": "mutation-fault-injection",
+    "ownerIssueId": "USF-256",
+    "blockingIssues": ["USF-247", "USF-260", "USF-234"],
+    "implementationMode": "issue-owned-test-and-docs-only",
+    "linearAuthorityBoundary": "Linear tracks work only. Repository artefacts and validators define USF truth."
+  },
+  "scope": {
+    "safeMutationMode": "copy-source-authority-data-in-test-memory-only",
+    "sourceFilesEditedAtRuntime": false,
+    "mutationToolingDependencyAdded": false,
+    "sharedValidatorIntegrationRequired": false,
+    "testReadinessClaimAllowed": false,
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+    "requiredWeakeningDomains": [
+      "semantic",
+      "auth",
+      "data",
+      "compose",
+      "fixture",
+      "enterprise",
+      "coverage",
+      "operational",
+      "command",
+      "non-claim"
+    ],
+    "requiredLinearMutationInputsCovered": [
+      "removed tenant filter",
+      "weakened role check",
+      "accepted malformed token",
+      "skipped audit event",
+      "fake ready state",
+      "missing cleanup",
+      "stale seed",
+      "disabled redaction",
+      "in-memory service-backed substitute",
+      "lowered LCOV threshold",
+      "removed planted defect",
+      "stale command",
+      "missing non-claim"
+    ]
+  },
+  "gateSemantics": {
+    "baselineMustPassBeforeMutation": true,
+    "mutationMustProduceExpectedFailure": true,
+    "expectedFailureEvidenceRequired": true,
+    "unexpectedMutationPassFailsGate": true,
+    "missingExpectedFailureEvidenceFailsGate": true,
+    "missingSourceAuthorityFailsGate": true,
+    "noSourceFileRuntimeEdits": true,
+    "deterministicLocalOnly": true
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "git diff --check",
+    "corepack pnpm verify"
+  ],
+  "mutationClasses": [
+    {
+      "id": "semantic-weakening",
+      "description": "Representative semantic contract backing, facet, and obligation weakening.",
+      "weakeningDomain": "semantic"
+    },
+    {
+      "id": "auth-boundary-weakening",
+      "description": "Tenant, permission, role, and malformed token fail-closed weakening.",
+      "weakeningDomain": "auth"
+    },
+    {
+      "id": "operational-evidence-weakening",
+      "description": "Audit, readiness, redaction, and fail-closed evidence weakening.",
+      "weakeningDomain": "operational"
+    },
+    {
+      "id": "fixture-and-data-weakening",
+      "description": "Seed, reset, cleanup, provenance, and data fixture weakening.",
+      "weakeningDomain": "fixture"
+    },
+    {
+      "id": "compose-command-coverage-weakening",
+      "description": "Compose target, command routing, coverage threshold, and command staleness weakening.",
+      "weakeningDomain": "command"
+    },
+    {
+      "id": "enterprise-and-non-claim-weakening",
+      "description": "Enterprise evidence row, planted defect, service-backed substitute, and non-claim weakening.",
+      "weakeningDomain": "enterprise"
+    }
+  ],
+  "mutationCases": [
+    {
+      "id": "semantic-facet-backing-removed",
+      "mutationClassId": "semantic-weakening",
+      "weakeningDomain": "semantic",
+      "linearInput": "semantic weakening",
+      "sourceAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "sourceIssueLinks": ["USF-239", "USF-256"],
+      "simulatedMutation": "Remove one required semantic facet key from a copied semantic obligation row.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-SEMANTIC-FACET-REMOVED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects semantic obligations that no longer carry every required facet."
+      }
+    },
+    {
+      "id": "tenant-filter-removed",
+      "mutationClassId": "auth-boundary-weakening",
+      "weakeningDomain": "auth",
+      "linearInput": "removed tenant filter",
+      "sourceAuthority": "docs/architecture/semantic-unit-test-suite.json",
+      "sourceIssueLinks": ["USF-241", "USF-249", "USF-256"],
+      "simulatedMutation": "Disable the copied tenant filter requirement for a tenant-scoped authorization check.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-TENANT-FILTER-REMOVED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects tenant-boundary checks that no longer require tenant filters."
+      }
+    },
+    {
+      "id": "permission-check-weakened",
+      "mutationClassId": "auth-boundary-weakening",
+      "weakeningDomain": "auth",
+      "linearInput": "permission checks",
+      "sourceAuthority": "docs/architecture/semantic-unit-test-suite.json",
+      "sourceIssueLinks": ["USF-241", "USF-249", "USF-256"],
+      "simulatedMutation": "Downgrade the copied permission check from explicit action/resource permission to role-only.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-PERMISSION-CHECK-WEAKENED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects role-only checks where explicit permission checks are required."
+      }
+    },
+    {
+      "id": "role-mapping-weakened",
+      "mutationClassId": "auth-boundary-weakening",
+      "weakeningDomain": "auth",
+      "linearInput": "weakened role check",
+      "sourceAuthority": "docs/architecture/semantic-unit-test-suite.json",
+      "sourceIssueLinks": ["USF-241", "USF-249", "USF-256"],
+      "simulatedMutation": "Allow unknown roles to pass instead of failing closed in a copied role mapping.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-ROLE-MAPPING-WEAKENED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects role mappings that do not fail closed on unknown roles."
+      }
+    },
+    {
+      "id": "malformed-token-accepted",
+      "mutationClassId": "auth-boundary-weakening",
+      "weakeningDomain": "auth",
+      "linearInput": "accepted malformed token",
+      "sourceAuthority": "docs/architecture/auth-and-identity-standard.md",
+      "sourceIssueLinks": ["USF-249", "USF-256"],
+      "simulatedMutation": "Accept malformed token input in a copied token validation expectation.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-MALFORMED-TOKEN-ACCEPTED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects token checks that accept malformed token input."
+      }
+    },
+    {
+      "id": "audit-event-skipped",
+      "mutationClassId": "operational-evidence-weakening",
+      "weakeningDomain": "operational",
+      "linearInput": "skipped audit event",
+      "sourceAuthority": "docs/architecture/enterprise-control-evidence-test-suite.json",
+      "sourceIssueLinks": ["USF-243", "USF-256"],
+      "simulatedMutation": "Mark audit emission optional for a copied privileged-operation evidence expectation.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-AUDIT-EVENT-SKIPPED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects skipped audit evidence for privileged or mutating operations."
+      }
+    },
+    {
+      "id": "fake-ready-state-accepted",
+      "mutationClassId": "operational-evidence-weakening",
+      "weakeningDomain": "operational",
+      "linearInput": "fake ready state",
+      "sourceAuthority": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+      "sourceIssueLinks": ["USF-238", "USF-256"],
+      "simulatedMutation": "Accept a ready state without copied provider, command, and evidence backing.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-FAKE-READY-STATE-ACCEPTED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects readiness that is not backed by required local evidence."
+      }
+    },
+    {
+      "id": "cleanup-mapping-removed",
+      "mutationClassId": "fixture-and-data-weakening",
+      "weakeningDomain": "fixture",
+      "linearInput": "missing cleanup",
+      "sourceAuthority": "tests/packages/fixtures/service-fixture-corpus.json",
+      "sourceIssueLinks": ["USF-248", "USF-256"],
+      "simulatedMutation": "Remove cleanup coverage from a copied service fixture row.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-CLEANUP-MAPPING-REMOVED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects fixture rows that no longer map cleanup coverage."
+      }
+    },
+    {
+      "id": "stale-seed-accepted",
+      "mutationClassId": "fixture-and-data-weakening",
+      "weakeningDomain": "data",
+      "linearInput": "stale seed",
+      "sourceAuthority": "tests/packages/fixtures/service-fixture-corpus.json",
+      "sourceIssueLinks": ["USF-248", "USF-250", "USF-256"],
+      "simulatedMutation": "Replace the deterministic seed marker in a copied fixture row with a stale marker.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-STALE-SEED-ACCEPTED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects stale deterministic seed evidence."
+      }
+    },
+    {
+      "id": "fixture-provenance-removed",
+      "mutationClassId": "fixture-and-data-weakening",
+      "weakeningDomain": "fixture",
+      "linearInput": "fixture provenance",
+      "sourceAuthority": "tests/packages/fixtures/service-fixture-corpus.json",
+      "sourceIssueLinks": ["USF-248", "USF-256"],
+      "simulatedMutation": "Remove synthetic-only provenance from a copied service fixture row.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-FIXTURE-PROVENANCE-REMOVED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects fixture rows without safe synthetic provenance."
+      }
+    },
+    {
+      "id": "redaction-disabled",
+      "mutationClassId": "operational-evidence-weakening",
+      "weakeningDomain": "operational",
+      "linearInput": "disabled redaction",
+      "sourceAuthority": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "sourceIssueLinks": ["USF-243", "USF-256"],
+      "simulatedMutation": "Disable copied redaction requirements for prohibited fields.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-REDACTION-DISABLED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects evidence expectations that stop redacting prohibited fields."
+      }
+    },
+    {
+      "id": "service-backed-substitute-allowed",
+      "mutationClassId": "enterprise-and-non-claim-weakening",
+      "weakeningDomain": "enterprise",
+      "linearInput": "in-memory service-backed substitute",
+      "sourceAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#expandedCategoryObligations.USF-256",
+      "sourceIssueLinks": ["USF-242", "USF-256"],
+      "simulatedMutation": "Allow in-memory substitutes for service-backed claims in copied expanded-category and fixture rows.",
+      "expectedFailure": {
+        "kind": "validator-rule",
+        "id": "USF-TEST-READINESS-080",
+        "testFile": "tools/validate-test-readiness/validate-test-readiness.py",
+        "description": "The shared validator rejects expanded categories that permit in-memory service-backed substitutes."
+      }
+    },
+    {
+      "id": "lcov-threshold-lowered",
+      "mutationClassId": "compose-command-coverage-weakening",
+      "weakeningDomain": "coverage",
+      "linearInput": "lowered LCOV threshold",
+      "sourceAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#coveragePolicy",
+      "sourceIssueLinks": ["USF-240", "USF-256"],
+      "simulatedMutation": "Lower the copied coverage policy threshold below 100 percent.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-LCOV-THRESHOLD-LOWERED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects coverage threshold weakening before final USF-234 acceptance."
+      }
+    },
+    {
+      "id": "command-evidence-mapping-removed",
+      "mutationClassId": "compose-command-coverage-weakening",
+      "weakeningDomain": "command",
+      "linearInput": "command/evidence mapping removal",
+      "sourceAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#expandedCategoryObligations.USF-256",
+      "sourceIssueLinks": ["USF-238", "USF-256"],
+      "simulatedMutation": "Remove copied required command IDs and validation commands from the expanded category row.",
+      "expectedFailure": {
+        "kind": "validator-rule",
+        "id": "USF-TEST-READINESS-078",
+        "testFile": "tools/validate-test-readiness/validate-test-readiness.py",
+        "description": "The shared validator rejects expanded category rows without command mapping."
+      }
+    },
+    {
+      "id": "stale-command-accepted",
+      "mutationClassId": "compose-command-coverage-weakening",
+      "weakeningDomain": "command",
+      "linearInput": "stale command",
+      "sourceAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#expandedCategoryObligations.USF-256",
+      "sourceIssueLinks": ["USF-238", "USF-256"],
+      "simulatedMutation": "Replace the copied issue command with a stale non-existent test command.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-STALE-COMMAND-ACCEPTED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects stale command strings for the issue-owned suite."
+      }
+    },
+    {
+      "id": "compose-target-linkage-removed",
+      "mutationClassId": "compose-command-coverage-weakening",
+      "weakeningDomain": "compose",
+      "linearInput": "Compose target linkage",
+      "sourceAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#expandedCategoryObligations.USF-256",
+      "sourceIssueLinks": ["USF-238", "USF-242", "USF-256"],
+      "simulatedMutation": "Remove the copied compose/compose.test.generated.yaml linkage from generated artefact and fixture rows.",
+      "expectedFailure": {
+        "kind": "validator-rule",
+        "id": "USF-TEST-READINESS-078",
+        "testFile": "tools/validate-test-readiness/validate-test-readiness.py",
+        "description": "The shared validator rejects expanded category rows without generated artefact scope."
+      }
+    },
+    {
+      "id": "enterprise-evidence-row-removed",
+      "mutationClassId": "enterprise-and-non-claim-weakening",
+      "weakeningDomain": "enterprise",
+      "linearInput": "evidence row removal",
+      "sourceAuthority": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+      "sourceIssueLinks": ["USF-243", "USF-256"],
+      "simulatedMutation": "Remove the copied USF-256 enterprise evidence register row.",
+      "expectedFailure": {
+        "kind": "validator-rule",
+        "id": "USF-TEST-READINESS-079",
+        "testFile": "tools/validate-test-readiness/validate-test-readiness.py",
+        "description": "The shared validator rejects expanded category rows whose enterprise evidence refs do not resolve."
+      }
+    },
+    {
+      "id": "planted-defect-rule-removed",
+      "mutationClassId": "enterprise-and-non-claim-weakening",
+      "weakeningDomain": "enterprise",
+      "linearInput": "removed planted defect",
+      "sourceAuthority": "tools/validate-test-readiness/planted-defects/080-expanded-category-overclaim.json",
+      "sourceIssueLinks": ["USF-247", "USF-256"],
+      "simulatedMutation": "Remove the copied planted-defect evidence that proves expanded category overclaim is caught.",
+      "expectedFailure": {
+        "kind": "planted-defect-rule",
+        "id": "USF-256-MUTATION-PLANTED-DEFECT-REMOVED",
+        "existingRuleId": "USF-TEST-READINESS-080",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects missing planted-defect evidence for the non-claim overclaim rule."
+      }
+    },
+    {
+      "id": "non-claim-removed",
+      "mutationClassId": "enterprise-and-non-claim-weakening",
+      "weakeningDomain": "non-claim",
+      "linearInput": "missing non-claim",
+      "sourceAuthority": "docs/architecture/semantic-service-test-obligation-manifest.json#expandedCategoryObligations.USF-256",
+      "sourceIssueLinks": ["USF-234", "USF-256"],
+      "simulatedMutation": "Remove final-test-readiness from the copied expanded-category non-claims.",
+      "expectedFailure": {
+        "kind": "validator-rule",
+        "id": "USF-TEST-READINESS-080",
+        "testFile": "tools/validate-test-readiness/validate-test-readiness.py",
+        "description": "The shared validator rejects expanded category rows missing required non-claims."
+      }
+    },
+    {
+      "id": "fail-closed-expectation-weakened",
+      "mutationClassId": "operational-evidence-weakening",
+      "weakeningDomain": "operational",
+      "linearInput": "fail-closed expectation weakening",
+      "sourceAuthority": "docs/architecture/mutation-fault-injection-adequacy-gate.json#gateSemantics",
+      "sourceIssueLinks": ["USF-256"],
+      "simulatedMutation": "Allow a mutation to pass without expected failure evidence in the copied gate semantics.",
+      "expectedFailure": {
+        "kind": "test",
+        "id": "USF-256-MUTATION-FAIL-CLOSED-EXPECTATION-WEAKENED",
+        "testFile": "tests/packages/mutation-fault-injection-adequacy-gate.test.ts",
+        "description": "The adequacy gate rejects any weakening that would allow an uncaught mutation or missing evidence to pass."
+      }
+    }
+  ],
+  "coverageByWeakeningDomain": [
+    {
+      "domain": "semantic",
+      "caseIds": ["semantic-facet-backing-removed"]
+    },
+    {
+      "domain": "auth",
+      "caseIds": [
+        "tenant-filter-removed",
+        "permission-check-weakened",
+        "role-mapping-weakened",
+        "malformed-token-accepted"
+      ]
+    },
+    {
+      "domain": "data",
+      "caseIds": ["stale-seed-accepted"]
+    },
+    {
+      "domain": "compose",
+      "caseIds": ["compose-target-linkage-removed"]
+    },
+    {
+      "domain": "fixture",
+      "caseIds": ["cleanup-mapping-removed", "fixture-provenance-removed"]
+    },
+    {
+      "domain": "enterprise",
+      "caseIds": [
+        "service-backed-substitute-allowed",
+        "enterprise-evidence-row-removed",
+        "planted-defect-rule-removed"
+      ]
+    },
+    {
+      "domain": "coverage",
+      "caseIds": ["lcov-threshold-lowered"]
+    },
+    {
+      "domain": "operational",
+      "caseIds": [
+        "audit-event-skipped",
+        "fake-ready-state-accepted",
+        "redaction-disabled",
+        "fail-closed-expectation-weakened"
+      ]
+    },
+    {
+      "domain": "command",
+      "caseIds": ["command-evidence-mapping-removed", "stale-command-accepted"]
+    },
+    {
+      "domain": "non-claim",
+      "caseIds": ["non-claim-removed"]
+    }
+  ],
+  "allowedClaims": [
+    "mutation-fault-injection-adequacy-matrix-defined",
+    "representative-mutations-caught-by-local-adequacy-suite"
+  ],
+  "nonClaims": [
+    "formal-verification",
+    "exhaustive-proof",
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "final-usf-234-acceptance"
+  ]
+}
