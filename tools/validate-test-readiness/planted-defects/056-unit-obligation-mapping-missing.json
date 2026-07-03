@@ -1,0 +1,6 @@
+{
+  "expectedRule": "USF-TEST-READINESS-056",
+  "semanticUnitSuiteDropContractIds": [
+    "semantic-contract.abac-policy-decision-point"
+  ]
+}

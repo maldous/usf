@@ -5689,6 +5689,37 @@
         "usf-234-closure",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-241-semantic-unit-test-suite",
+      "mappedType": "semantic-unit-test-suite",
+      "controlPurpose": "Organise USF-241 semantic unit test evidence for pure-local implementation boundaries mapped from the USF-239 obligation manifest.",
+      "riskTreated": "Semantic unit obligations could remain unmapped, service-backed requirements could be incorrectly satisfied by process-local unit tests, or unit coverage could be mistaken for final test readiness.",
+      "assetServiceAffected": "docs/architecture/semantic-unit-test-suite.json; tests/packages; tests/capabilities; tests/adapters; docs/architecture/semantic-service-test-obligation-manifest.json",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-241; parentIssue=USF-234; treatment=map every USF-241 semantic unit obligation to executable pure-local unit tests; reviewDate=2026-09-30; followUpIssue=USF-240 for final LCOV and Sonar gate and USF-234 for final acceptance",
+      "evidenceSource": "docs/architecture/semantic-unit-test-suite.json; docs/architecture/semantic-unit-test-suite.md; tests/packages/semantic-unit-obligation-manifest.test.ts; tests/packages/core-semantic-boundaries.test.ts; tests/capabilities/authorization-policy-boundaries.test.ts; tests/adapters/local-adapter-boundaries.test.ts; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-241 proves pure-local unit mapping only. USF-240 owns final 100-percent LCOV and Sonar coverage gate. Service-backed execution remains owned by composed integration and final USF-234 acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-240,USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8571,6 +8602,28 @@
         "USF-251"
       ],
       "retentionPosture": "Retain committed matrix, value-free proof output, validator findings, planted defects, and PR validation output. Do not retain provider payloads, raw endpoints, credentials, tokens, connection strings, stack traces, real tenant data, production data, or live provider data."
+    },
+    {
+      "id": "evidence-usf-241-semantic-unit-test-suite",
+      "proofResult": "semantic-unit-obligations-mapped-to-pure-local-unit-tests",
+      "whatWasProven": "USF-241 records and tests a machine-readable mapping from every USF-241 semantic contract obligation in the USF-239 manifest to executable pure-local unit test files and test names, with service-backed claims excluded and validator enforcement for missing mappings.",
+      "whatWasNotProven": "USF-241 does not prove composed-service integration, final LCOV/Sonar gate acceptance, final USF-234 test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "runtimeMode": "pure-local-unit-test-only",
+      "providerMode": "not-applicable-no-service-backed-provider-claim",
+      "serviceCatalogueRow": "docs/architecture/semantic-service-test-obligation-manifest.json#semanticContractObligations",
+      "adapterProviderId": "process-local-unit-boundaries-only",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
+      "commandPin": "tests/packages/semantic-unit-obligation-manifest.test.ts; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-055-through-060",
+      "commitPin": "3da64f473e9fd13d2d268b552eb0a030c3f7cc94",
+      "prOrMergeSha": "3da64f473e9fd13d2d268b552eb0a030c3f7cc94",
+      "issueLinks": [
+        "USF-241",
+        "USF-234",
+        "USF-239",
+        "USF-240",
+        "USF-247"
+      ],
+      "retentionPosture": "Retain committed value-free inventory, unit tests, validator findings, planted defects, and PR validation output. Do not retain real tenant data, real secrets, provider payloads, raw endpoints, connection strings, tokens, stack traces, or production data."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -11060,6 +11113,32 @@
       "failClosedBehaviour": "The test-readiness validator fails on missing matrix, missing service or profile coverage, missing catalogue disposition, in-memory substitute allowance, stale command linkage, missing enterprise refs, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free validator findings, proof summary, PR validation output, and planted-defect selftest output only.",
       "residualRisk": "USF-251 must still execute the every-service orchestration gate before final USF-234 acceptance; this row preserves that boundary."
+    },
+    {
+      "id": "threat-usf-241-unit-test-overclaim",
+      "targetType": "semantic-unit-test-suite",
+      "target": "USF-241 semantic unit test suite",
+      "trustBoundary": "Local repository semantic obligation manifest, pure-local unit tests, and test-readiness validator only. No composed service, live provider, final test readiness, staging, production, SOC, or ISO certification boundary is proven.",
+      "tenantBoundary": "Synthetic tenant identifiers are used only in pure unit tests. Service-backed tenant isolation remains owned by composed integration, auth, data lifecycle, and final acceptance issues.",
+      "credentialBoundary": "Unit tests and evidence must not expose secrets, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, or production data.",
+      "dataClassification": "internal synthetic unit-test metadata",
+      "abuseCases": [
+        "A semantic unit obligation is omitted from the mapping",
+        "A broad domain mapping is treated as per-contract coverage",
+        "A process-local adapter unit test is treated as a composed service proof",
+        "USF-241 unit tests are mistaken for final USF-234 acceptance or external readiness"
+      ],
+      "failureModes": [
+        "missing semantic unit inventory",
+        "missing per-contract mapping",
+        "missing mapped test file",
+        "unsafe service-backed claim",
+        "missing LCOV contribution boundary",
+        "readiness overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails on missing USF-241 inventory, missing per-contract mappings, missing mapped test files or test names, service-backed substitute allowance, missing LCOV contribution boundary, missing enterprise refs, and prohibited claims.",
+      "monitoringAuditEvidence": "Value-free unit test output, validator findings, PR validation output, and planted-defect selftest output only. Validation command: python3 tools/validate-test-readiness/validate-test-readiness.py all --json.",
+      "residualRisk": "riskStatement=USF-241 does not prove final coverage or service-backed test readiness; impact=final readiness could be overclaimed if USF-240 or composed child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final LCOV to USF-240; reviewDate=2026-09-30; followUpIssue=USF-240,USF-234."
     }
   ],
   "sdkDependencyGovernance": [
@@ -14578,6 +14657,45 @@
         "usf-234-closure",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-241-unit-test-boundary",
+      "targetType": "semantic-unit-test-suite",
+      "target": "USF-241 pure unit access boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-241",
+        "accessModel=local-repository-unit-test-only",
+        "authnAuthzBoundary=authorization-policy-unit-tests-cover-pure-policy-helpers-USF-249-owns-exhaustive-auth-suite",
+        "leastPrivilegePosture=synthetic-local-test-context-only",
+        "breakGlassRelevance=pure-scope-matching-only-no-operational-break-glass-proof",
+        "auditEvidence=value-free-unit-test-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=not-proven-by-USF-241",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/semantic-unit-test-suite.json; tests/capabilities/authorization-policy-boundaries.test.ts",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-249 owns exhaustive auth tenant role permission proof and USF-234 owns final acceptance; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -17438,6 +17556,47 @@
       "evidenceSource": "docs/architecture/composed-service-integration-test-matrix.json; tools/validate-test-readiness/validate-test-readiness.py",
       "validationCommand": "corepack pnpm test-readiness:integration; corepack pnpm test-readiness:validate",
       "deferredReason": "USF-251 owns executable every-service orchestration and USF-250 owns backup restore bulk migration execution tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-241-unit-test-boundary",
+      "targetType": "semantic-unit-test-suite",
+      "target": "USF-241 pure unit resilience boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-241",
+        "readinessChecks=unit-test-command-and-validator-only",
+        "retryTimeoutBehaviour=pure-helper-tests-only-no-runtime-provider-readiness-proof",
+        "failClosedMode=validator-and-unit-tests-fail-on-missing-mapping-or-overclaim",
+        "safeTeardown=no-compose-resources-used",
+        "structuredLogging=value-free-test-output-only",
+        "tracingCorrelation=not-applicable-no-live-tracing-claim",
+        "metrics=unit-test-count-and-validator-result-only",
+        "auditEvents=semantic-audit-helper-unit-tests-only",
+        "redaction=unit-tests-check-value-free-safe-views-and-redaction-helpers",
+        "backupRestorePosture=not-proven-by-USF-241",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=USF-250-and-USF-234-own-executable-data-lifecycle-and-final-acceptance"
+      ],
+      "evidenceSource": "docs/architecture/semantic-unit-test-suite.json; tests/packages/core-semantic-boundaries.test.ts; tests/adapters/local-adapter-boundaries.test.ts",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-250 owns backup restore bulk migration tests and USF-245 owns operational resilience tests; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -20967,6 +21126,42 @@
       ],
       "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects; docs/architecture/composed-service-integration-test-matrix.json",
       "validationCommand": "corepack pnpm test-readiness:validate; corepack pnpm test-readiness:integration",
+      "deferredReason": "USF-245 owns operational failure-mode execution and incident evidence tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-241-unit-test-boundary",
+      "targetType": "semantic-unit-test-suite",
+      "target": "USF-241 unit test incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-241",
+        "incidentDetectionHook=unit-test-failure-validator-finding-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-241",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-runtime-dependency-added-by-USF-241",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-241",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-unit-suite-mapping-and-overclaim-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-241"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects; docs/architecture/semantic-unit-test-suite.json",
+      "validationCommand": "corepack pnpm test-readiness:validate; corepack pnpm test",
       "deferredReason": "USF-245 owns operational failure-mode execution and incident evidence tests; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
@@ -25075,6 +25270,44 @@
       ],
       "evidenceSource": "docs/architecture/composed-service-integration-test-matrix.json; docs/architecture/composed-service-integration-test-matrix.md",
       "validationCommand": "corepack pnpm test-readiness:integration; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-250 owns executable privacy lifecycle and deletion tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-241-unit-test-boundary",
+      "targetType": "semantic-unit-test-suite",
+      "target": "USF-241 synthetic unit data boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-241",
+        "dataOrigin=synthetic-local-unit-test-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-unit-test-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-inventory-and-unit-tests-retained-no-provider-data-written",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/semantic-unit-test-suite.json; docs/architecture/semantic-unit-test-suite.md; tests/packages; tests/capabilities; tests/adapters",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
       "deferredReason": "USF-250 owns executable privacy lifecycle and deletion tests; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",

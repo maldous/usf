@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-057",
+  "semanticUnitSuiteMappingPatch": [
+    {
+      "contractId": "semantic-contract.abac-policy-decision-point",
+      "set": {
+        "testFile": "tests/unit/semantic/missing-semantic-unit.test.ts"
+      }
+    }
+  ]
+}

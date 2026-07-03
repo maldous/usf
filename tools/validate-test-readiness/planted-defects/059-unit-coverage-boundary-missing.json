@@ -1,0 +1,8 @@
+{
+  "expectedRule": "USF-TEST-READINESS-059",
+  "semanticUnitSuiteCoveragePatch": {
+    "drop": [
+      "finalLcovGateOwnerIssueId"
+    ]
+  }
+}
