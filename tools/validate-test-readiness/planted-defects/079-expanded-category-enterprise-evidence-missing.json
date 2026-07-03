@@ -1,0 +1,11 @@
+{
+  "expectedRule": "USF-TEST-READINESS-079",
+  "obligationExpandedCategoryPatch": [
+    {
+      "issueId": "USF-255",
+      "enterpriseRefDrop": [
+        "soaSupportMappings"
+      ]
+    }
+  ]
+}

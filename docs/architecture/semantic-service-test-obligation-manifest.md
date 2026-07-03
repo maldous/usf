@@ -4,6 +4,8 @@ Issue: USF-239. Parent: USF-234.
 
 This document describes the machine-readable test obligation manifest in docs/architecture/semantic-service-test-obligation-manifest.json. The manifest is derived from semantic contracts, the Compose service catalogue, the generated test Compose target, and the USF-235 through USF-238 test-readiness gates.
 
+USF-259 expands this manifest so USF-253 through USF-258 are repository-enforced prerequisites before USF-247, USF-260, or final USF-234 acceptance can close. USF-259 does not implement those suites. It records owner, risk owner, control owner, review date, promotion impact, command mapping, enterprise evidence refs, deferred boundary, and non-claims for each expanded category.
+
 The manifest is a gate, not a final readiness claim. It does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or USF-234 closure.
 
 ## Coverage Summary
@@ -30,6 +32,12 @@ The manifest is a gate, not a final readiness claim. It does not claim final tes
 - future-ai-guardrail: Future AI work semantic test update guardrail Owner issue: USF-252.
 - bounded-non-test-disposition: Required catalogue-only or deferred service must have explicit bounded disposition Owner issue: USF-234.
 - out-of-scope-disposition: Historical or out-of-scope service retained only as non-test disposition Owner issue: USF-234.
+- security-abuse-fuzzing: Security abuse and fuzzing regression obligations Owner issue: USF-253.
+- performance-concurrency-resource: Performance, concurrency, bounded load, and resource regression obligations Owner issue: USF-254.
+- supply-chain-sbom-licence: Supply-chain, dependency, SBOM, licence, advisory, and image pinning obligations Owner issue: USF-255.
+- mutation-fault-injection: Mutation and fault-injection adequacy obligations Owner issue: USF-256.
+- adversarial-semantic-testing: Adversarial formal-style semantic and cross-model consistency obligations Owner issue: USF-257.
+- environment-tooling-governance: Environment, tooling, version-control, generated-artifact, and local/CI parity obligations Owner issue: USF-258.
 
 ## Service-Backed Rule
 
@@ -42,6 +50,9 @@ Every service-backed test-readiness claim must use the canonical generated test 
 - USF-242 and USF-251 own composed service and profile exercise implementation.
 - USF-240 owns LCOV and Sonar coverage enforcement.
 - USF-247 owns the final planted-defect regression gate after all expanded children merge.
+- USF-259 owns expanded obligation manifest and validator reconciliation only.
+- USF-253 through USF-258 own category implementation and proof. Their manifest presence is not completion evidence.
+- USF-260 owns the final Test completion and staging-entry readiness gate after all child issues are complete or explicitly bounded.
 - USF-234 owns final acceptance and may not start until all child issues are reconciled.
 
 ## Non-Claims
