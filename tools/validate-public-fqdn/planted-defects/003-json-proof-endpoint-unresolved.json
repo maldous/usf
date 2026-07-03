@@ -1,0 +1,6 @@
+{
+  "id": "003-json-proof-endpoint-unresolved",
+  "description": "Point hostname rows at an undeclared JSON proof endpoint id.",
+  "setHostnameJsonProofEndpointId": "missing-public-edge-json-proof",
+  "expectedRule": "USF-PUBLIC-FQDN-003"
+}

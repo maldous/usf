@@ -1,0 +1,6 @@
+{
+  "id": "003-cross-domain-additional-hostname",
+  "description": "Add a fully declared staging hostname under the production domain so the validator must reject cross-domain additional hostnames.",
+  "addCrossDomainAdditionalHostname": true,
+  "expectedRule": "USF-PUBLIC-FQDN-003"
+}

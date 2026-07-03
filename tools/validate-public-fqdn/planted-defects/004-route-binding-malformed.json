@@ -1,0 +1,6 @@
+{
+  "id": "004-route-binding-malformed",
+  "description": "Make the public browser route binding a scalar value so the validator must report a rule finding instead of raising a traceback.",
+  "malformPublicRouteBinding": true,
+  "expectedRule": "USF-PUBLIC-FQDN-004"
+}
