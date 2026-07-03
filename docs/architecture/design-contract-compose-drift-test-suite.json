@@ -1,0 +1,138 @@
+{
+  "id": "design-contract-compose-drift-test-suite",
+  "title": "Design Contract and Compose Drift Test Suite",
+  "issueId": "USF-246",
+  "parentIssueId": "USF-234",
+  "lifecycleState": "active-test-readiness-evidence",
+  "purpose": "Machine-checkable design, contract, command, and generated Compose drift tests for the bounded test-readiness track.",
+  "authorityBoundary": "Semantic contracts, service catalogue, validator rules, and proof evidence remain authoritative. Generated Compose is derivative and is tested only for deterministic agreement with current authority.",
+  "testSuitePath": "tests/packages/design-contract-compose-drift.test.ts",
+  "sourceAuthorities": {
+    "semanticServiceTestObligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "composedServiceIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "testReadinessCommandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+    "generatedTestCompose": "compose/compose.test.generated.yaml",
+    "packageScripts": "package.json",
+    "makeTargets": "Makefile",
+    "semanticContracts": "spec/instances/semantic-contract/"
+  },
+  "expectedSemanticContractCount": 67,
+  "expectedServiceObligationCount": 38,
+  "expectedGeneratedServiceCount": 33,
+  "expectedProfileCount": 11,
+  "designContractObligationClassId": "design-contract-drift",
+  "forbiddenObligationClassIds": ["contract-design-drift"],
+  "requiredApiEventProviderContractIds": [
+    "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+    "semantic-contract.api-keys-personal-access-tokens",
+    "semantic-contract.openapi-drift-hard-gate",
+    "semantic-contract.rate-limiting-api",
+    "semantic-contract.event-bus-durable-queues-dlq-redrive",
+    "semantic-contract.notification-delivery-and-preferences-and-channels",
+    "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+    "semantic-contract.usage-metering-and-meter-event-ingestion",
+    "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+    "semantic-contract.composed-provider-readiness-spine",
+    "semantic-contract.mock-providers-dev-test",
+    "semantic-contract.provider-configuration-plane",
+    "semantic-contract.provider-environment-classification",
+    "semantic-contract.service-catalog-and-provider-integration-model"
+  ],
+  "requiredCommandIds": [
+    "test-readiness-full",
+    "test-readiness-composed",
+    "test-readiness-assurance",
+    "test-readiness-semantic",
+    "test-readiness-fixtures",
+    "test-readiness-integration",
+    "test-readiness-validator"
+  ],
+  "driftChecks": [
+    {
+      "id": "generated-compose-derivation",
+      "description": "Generated test Compose must retain the generator banner, service-catalogue source reference, expected generated service count, expected profile count, and service IDs referenced by the integration matrix.",
+      "findingCode": "stale-generated-output"
+    },
+    {
+      "id": "semantic-contract-mapping",
+      "description": "Each USF-246 semantic contract row must use the canonical design-contract-drift obligation class and match the contract instance path, id, capability, domain, and facet inventory.",
+      "findingCode": "missing-contract-mapping"
+    },
+    {
+      "id": "api-event-provider-binding-mapping",
+      "description": "API, event, and provider-binding semantic contract rows must remain represented in the USF-246 semantic obligation set.",
+      "findingCode": "api-event-provider-binding-drift"
+    },
+    {
+      "id": "command-surface-wiring",
+      "description": "Every canonical test-readiness command must remain present in the command surface, package scripts, and Makefile targets.",
+      "findingCode": "missing-command"
+    },
+    {
+      "id": "readiness-non-claim-boundary",
+      "description": "Design, command, integration, and generated Compose evidence must not allow final test readiness, staging, production, deployment, live-provider, SOC, ISO, enterprise production, product UI, browser E2E, or full React product parity claims.",
+      "findingCode": "readiness-overclaim"
+    }
+  ],
+  "plantedDefectCases": [
+    {
+      "id": "missing-compose-target",
+      "expectedFindingCode": "missing-compose-target"
+    },
+    {
+      "id": "missing-command",
+      "expectedFindingCode": "missing-command"
+    },
+    {
+      "id": "missing-contract-mapping",
+      "expectedFindingCode": "missing-contract-mapping"
+    },
+    {
+      "id": "stale-generated-output",
+      "expectedFindingCode": "stale-generated-output"
+    },
+    {
+      "id": "readiness-overclaim",
+      "expectedFindingCode": "readiness-overclaim"
+    }
+  ],
+  "generatedComposeAuthorityBoundary": "Generated Compose is checked as derivative output and never as semantic authority.",
+  "serviceBackedClaimRequiresComposedService": true,
+  "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+  "testReadinessClaimAllowed": false,
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/design-contract-compose-drift.test.ts",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "python3 tools/validate-spec/validate-spec.py all --json",
+    "git diff --check"
+  ],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ],
+  "requiredNonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ]
+}

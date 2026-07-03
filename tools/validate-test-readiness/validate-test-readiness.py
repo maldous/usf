@@ -1458,7 +1458,7 @@ def check_obligation_semantic_coverage(F: Findings, state: dict[str, Any]) -> No
             if not row.get(key):
                 F.add("USF-TEST-READINESS-034", subject, f"{key} is required")
         class_ids = set(row.get("obligationClassIds", []))
-        for required_class in ("unit", "functional-regression", "contract-design-drift", "enterprise-evidence", "coverage", "future-ai-guardrail", "missing-evidence-regression"):
+        for required_class in ("unit", "functional-regression", "design-contract-drift", "enterprise-evidence", "coverage", "future-ai-guardrail", "missing-evidence-regression"):
             if required_class not in class_ids:
                 F.add("USF-TEST-READINESS-031", subject, f"missing obligation class {required_class}")
         owner_ids = set(row.get("ownerIssueIds", []))
