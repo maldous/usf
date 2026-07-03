@@ -6062,6 +6062,37 @@
         "full-react-parity-readiness",
         "usf-234-closure"
       ]
+    },
+    {
+      "id": "soa-usf-260-test-environment-completion-staging-entry-gate",
+      "mappedType": "test-environment-completion-staging-entry-gate",
+      "controlPurpose": "Organise USF-260 evidence that every USF-234 child issue is complete or explicitly bounded, every required test-readiness evidence category is present, and staging-entry consideration remains bounded before USF-234 final acceptance.",
+      "riskTreated": "A future change could infer staging-entry or final test-readiness from child issue completion without validating evidence freshness, command coverage, no-substitute boundaries, open PR state, Linear readiness state, and preserved non-claims.",
+      "assetServiceAffected": "docs/architecture/test-environment-completion-and-staging-entry-gate.json; docs/architecture/test-readiness-command-surface-and-ci-gate.json; tools/validate-test-readiness/validate-test-readiness.py; USF-234 child issue evidence artefacts",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-260; parentIssue=USF-234; treatment=final Test-environment completion and staging-entry consideration gate; reviewDate=2026-09-30; followUpIssue=USF-234",
+      "evidenceSource": "docs/architecture/test-environment-completion-and-staging-entry-gate.json; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-110",
+      "validationCommand": "corepack pnpm test-readiness; corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-260 records staging-entry consideration only. Final USF-234 acceptance remains a separate gate; staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, and full React product parity are not claimed.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -9204,6 +9235,25 @@
         "USF-260"
       ],
       "retentionPosture": "Retain committed value-free planted defect files, aggregate evidence, validator rule catalogue, selftest command output, PR validation output, and post-merge Linear reconciliation. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, raw provider payloads, or production data. The PR and post-merge Linear reconciliation record the final merge SHA for this issue."
+    },
+    {
+      "id": "evidence-usf-260-test-environment-completion-staging-entry-gate",
+      "proofResult": "test-environment-completion-staging-entry-gate",
+      "whatWasProven": "USF-260 defines a repository-enforced final Test-environment completion and staging-entry consideration evidence gate that maps every USF-234 child issue through USF-259 to merged evidence, command evidence, non-claims, closure search requirements, and no-substitute boundaries.",
+      "whatWasNotProven": "USF-260 does not prove final USF-234 acceptance by itself and does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "local-validator-and-test-readiness-command-gate",
+      "providerMode": "local-composed-real-service-required-where-service-backed-claims-apply",
+      "serviceCatalogueRow": "docs/architecture/test-environment-completion-and-staging-entry-gate.json#serviceBackedClaimBoundary",
+      "adapterProviderId": "not-applicable-final-test-environment-gate",
+      "validationCommand": "corepack pnpm test-readiness; corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "package.json#scripts.test-readiness; package.json#scripts.test-readiness:selftest; tools/validate-test-readiness/validate-test-readiness.py#check_test_environment_completion_gate",
+      "commitPin": "7298624b3440edeec1a52650265f565d59ec0ba9",
+      "prOrMergeSha": "7298624b3440edeec1a52650265f565d59ec0ba9",
+      "issueLinks": [
+        "USF-260",
+        "USF-234"
+      ],
+      "retentionPosture": "Retain committed value-free completion gate, validator rule, planted defect, PR validation output, and post-merge Linear reconciliation. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, raw provider payloads, or production data. This row is pinned to the USF-260 base evidence commit; the USF-260 PR and Linear reconciliation record the final merge SHA after merge."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -12000,6 +12050,32 @@
       "failClosedBehaviour": "The test-readiness validator fails when the USF-247 evidence artefact is missing, stale, under-counted, missing dependency or failure-class coverage, missing the selftest command, or overclaiming readiness.",
       "monitoringAuditEvidence": "Value-free validator findings, selftest command output, planted defect inventory, PR validation output, and Linear post-merge reconciliation.",
       "residualRisk": "riskStatement=USF-247 does not run final USF-234 acceptance; impact=final readiness could still be incomplete if later gates are skipped; likelihood=medium until USF-260 and USF-234 complete; owner=platform-test-readiness-foundation; treatment=mitigate with final gates; reviewDate=2026-09-30; followUpIssue=USF-260,USF-234"
+    },
+    {
+      "id": "threat-usf-260-test-environment-completion-staging-entry-gate",
+      "targetType": "test-environment-completion-staging-entry-gate",
+      "target": "USF-260 final Test-environment completion and staging-entry consideration gate",
+      "trustBoundary": "Local repository validator and current-state test-readiness command boundary only; no staging environment, live provider, production environment, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity boundary is claimed.",
+      "tenantBoundary": "Tenant-specific execution is inherited from completed child issue evidence. USF-260 validates the evidence map and no-substitute boundary and does not write real tenant data.",
+      "credentialBoundary": "No live provider credentials, raw endpoints, connection strings, tokens, stack traces, or provider payloads are recorded by this gate.",
+      "dataClassification": "internal synthetic test-readiness governance metadata",
+      "abuseCases": [
+        "A staging-entry decision is inferred while child issue evidence is missing or stale",
+        "A service-backed test claim is satisfied with an in-memory, process-local, hermetic, or mock substitute",
+        "A required evidence category is omitted from final Test-environment completion",
+        "USF-260 is mistaken for final USF-234 acceptance or staging readiness"
+      ],
+      "failureModes": [
+        "missing completion gate artefact",
+        "missing child issue evidence row",
+        "missing evidence category",
+        "missing command suite row",
+        "missing closure search requirement",
+        "readiness or certification overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails when the USF-260 evidence artefact is missing, missing dependencies, missing evidence rows, missing evidence categories, missing command rows, missing enterprise refs, allowing substitutes, starting staging, or overclaiming readiness.",
+      "monitoringAuditEvidence": "Value-free validator findings, PR validation output, post-merge validation output, open PR search, Linear readiness issue search, and final git status check.",
+      "residualRisk": "riskStatement=USF-260 does not close USF-234 by itself; impact=final test readiness could be overclaimed if USF-234 final acceptance is skipped; likelihood=medium until USF-234 closes; owner=platform-test-readiness-foundation; treatment=mitigate with USF-234 final acceptance gate; reviewDate=2026-09-30; followUpIssue=USF-234"
     }
   ],
   "sdkDependencyGovernance": [
@@ -15984,6 +16060,42 @@
         "full-react-parity-readiness",
         "usf-234-closure"
       ]
+    },
+    {
+      "id": "access-usf-260-test-environment-completion-staging-entry-gate",
+      "targetType": "test-environment-completion-staging-entry-gate",
+      "target": "USF-260 command and closure gate access posture",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-260",
+        "accessModel=local-repository-command-only",
+        "authnAuthzBoundary=developer-or-agent-local-repository-access-not-provider-admin-access",
+        "leastPrivilegePosture=no-live-provider-credential-or-admin-surface-required",
+        "breakGlassRelevance=not-applicable-to-local-validator-completion-gate",
+        "auditEvidence=value-free-command-output-PR-validation-and-Linear-reconciliation",
+        "reviewCadence=before-USF-234-final-acceptance",
+        "deprovisioningPosture=no-persistent-access-created"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-completion-and-staging-entry-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "No privileged provider access is proven or required. Staging/operator access remains outside USF-260 and is not claimed; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -19331,6 +19443,41 @@
       "evidenceSource": "tools/validate-test-readiness/planted-defects; docs/architecture/missing-evidence-planted-defects-regression-gate.json",
       "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
       "deferredReason": "Runtime backup/restore resilience remains owned by service-specific tests and final USF-260/USF-234 gates; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-260-test-environment-completion-staging-entry-gate",
+      "targetType": "test-environment-completion-staging-entry-gate",
+      "target": "USF-260 completion gate resilience posture",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-260",
+        "backupRequirement=not-applicable-to-committed-validator-metadata-beyond-git-history",
+        "restoreProofRequirement=git-checkout-and-validator-rerun-only",
+        "rpoRtoTarget=not-claimed-for-staging-or-production",
+        "corruptionFailureScenario=completion-gate-evidence-row-or-validator-rule-removed-or-stale",
+        "cleanupTeardownProof=inherited-from-completed-compose-and-fixture-child-evidence-no-runtime-service-started-by-USF-260-itself",
+        "drBoundary=repository-history-only-no-production-DR-claim"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-completion-and-staging-entry-gate.json; docs/architecture/compose-profile-orchestration.json; docs/architecture/deterministic-test-fixture-lifecycle.json",
+      "validationCommand": "corepack pnpm test-readiness; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Production DR and staging backup/restore readiness remain non-claims. USF-260 only reconciles Test-environment evidence and staging-entry consideration; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -23294,6 +23441,42 @@
       "evidenceSource": "docs/architecture/missing-evidence-planted-defects-regression-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
       "validationCommand": "corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "deferredReason": "Production incident response, vulnerability clearance, and final acceptance remain non-claims owned by later gates; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
+    },
+    {
+      "id": "incident-usf-260-test-environment-completion-staging-entry-gate",
+      "targetType": "test-environment-completion-staging-entry-gate",
+      "target": "USF-260 completion gate incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-260",
+        "incidentDetectionHook=validator-failure-test-readiness-command-failure-or-PR-validation-failure-only",
+        "alertingPosture=not-proven-by-USF-260",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=inherited-from-USF-255-supply-chain-test-gate-no-live-clearance-claim",
+        "dependencyUpdatePosture=no-new-dependencies-introduced",
+        "correctiveActionEvidence=validator-rule-and-planted-defect-for-final-completion-gate",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-260"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-completion-and-staging-entry-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Production incident response, staging alerting, and live vulnerability clearance remain non-claims; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -27859,6 +28042,44 @@
       "evidenceSource": "docs/architecture/missing-evidence-planted-defects-regression-gate.json; tools/validate-test-readiness/planted-defects",
       "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
       "deferredReason": "Live-provider privacy, production data residency, legal hold, and provider-managed retention are not proven by USF-247; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
+    },
+    {
+      "id": "privacy-usf-260-test-environment-completion-staging-entry-gate",
+      "targetType": "test-environment-completion-staging-entry-gate",
+      "target": "USF-260 completion gate privacy boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-260",
+        "dataOrigin=synthetic-validator-metadata-and-merged-evidence-references-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-governance-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-completion-gate-and-validator-evidence-retained-generated-command-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/test-environment-completion-and-staging-entry-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Live-provider privacy, production data residency, legal hold, and provider-managed retention are not proven by USF-260; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
