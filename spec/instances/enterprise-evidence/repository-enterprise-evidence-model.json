@@ -9196,8 +9196,8 @@
       "adapterProviderId": "not-applicable-validator-regression-gate",
       "validationCommand": "corepack pnpm test-readiness:selftest; make test-readiness-selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "commandPin": "package.json#scripts.test-readiness:selftest; Makefile#test-readiness-selftest; tools/validate-test-readiness/validate-test-readiness.py#run_selftest",
-      "commitPin": "bc2ee18737c13a21a45abf6224b3833539e6479a",
-      "prOrMergeSha": "bc2ee18737c13a21a45abf6224b3833539e6479a",
+      "commitPin": "b97813e5ea54d1f9d6552244f9f62976c1d36750",
+      "prOrMergeSha": "b97813e5ea54d1f9d6552244f9f62976c1d36750",
       "issueLinks": [
         "USF-247",
         "USF-234",
