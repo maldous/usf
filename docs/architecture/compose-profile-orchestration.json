@@ -1,0 +1,671 @@
+{
+  "id": "compose-profile-orchestration",
+  "title": "Compose Profile Orchestration and Every-Service Exercise Gate",
+  "issueId": "USF-251",
+  "parentIssueId": "USF-234",
+  "lifecycleState": "bounded-test-readiness-evidence",
+  "authorityBoundary": "Generated Compose is derivative. The service catalogue, obligation manifest, fixture corpus, and composed service integration matrix remain the higher-authority inputs for this bounded orchestration evidence.",
+  "composeTarget": "compose/compose.test.generated.yaml",
+  "testSuitePath": "tests/packages/compose-profile-orchestration.test.ts",
+  "proofCommand": "corepack pnpm test -- tests/packages/compose-profile-orchestration.test.ts",
+  "sourceAuthorities": {
+    "serviceCatalogue": "spec/instances/compose-service/service-catalogue.json",
+    "generatedTestCompose": "compose/compose.test.generated.yaml",
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "integrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "testEnvironmentServiceContract": "docs/architecture/test-environment-service-contract.json",
+    "fixtureLifecycle": "docs/architecture/deterministic-test-fixture-lifecycle.json",
+    "fixtureCorpus": "tests/packages/fixtures/service-fixture-corpus.json",
+    "testReadinessValidator": "tools/validate-test-readiness/validate-test-readiness.py"
+  },
+  "scope": {
+    "generatedServiceCount": 33,
+    "profileCount": 11,
+    "safeProfileCombinationCount": 1,
+    "requiresServiceCatalogueDisposition": true,
+    "requiresNonComposeEvidence": true,
+    "treatsGeneratedComposeAsProofByItself": false,
+    "finalTestReadinessClaimAllowed": false,
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false
+  },
+  "requiredExercisePhases": [
+    "config",
+    "port-policy",
+    "start",
+    "readiness",
+    "seed",
+    "exercise",
+    "observe",
+    "reset",
+    "cleanup",
+    "teardown",
+    "residue-check"
+  ],
+  "canonicalProfileCommands": [
+    {
+      "profile": "default",
+      "projectName": "usf-test-compose-default",
+      "serviceIds": [
+        "postgres",
+        "keycloak-db",
+        "keycloak",
+        "nats",
+        "temporal",
+        "minio",
+        "openbao",
+        "otel-collector",
+        "prometheus",
+        "grafana",
+        "loki",
+        "tempo",
+        "mailpit",
+        "webhook-sink"
+      ],
+      "profileFlags": [],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-default -f compose/compose.test.generated.yaml ps -q"
+      }
+    },
+    {
+      "profile": "runtime-providers",
+      "projectName": "usf-test-compose-runtime-providers",
+      "serviceIds": ["redis", "meilisearch", "clickhouse"],
+      "profileFlags": ["--profile runtime-providers"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-runtime-providers -f compose/compose.test.generated.yaml --profile runtime-providers ps -q"
+      }
+    },
+    {
+      "profile": "operator-tools",
+      "projectName": "usf-test-compose-operator-tools",
+      "serviceIds": ["pgadmin"],
+      "profileFlags": ["--profile operator-tools"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-operator-tools -f compose/compose.test.generated.yaml --profile operator-tools ps -q"
+      }
+    },
+    {
+      "profile": "assurance",
+      "projectName": "usf-test-compose-assurance",
+      "serviceIds": ["sonar-postgres", "sonarqube"],
+      "profileFlags": ["--profile assurance"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-assurance -f compose/compose.test.generated.yaml --profile assurance ps -q"
+      }
+    },
+    {
+      "profile": "provider-emulation",
+      "projectName": "usf-test-compose-provider-emulation",
+      "serviceIds": ["localstack"],
+      "profileFlags": ["--profile provider-emulation"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-provider-emulation -f compose/compose.test.generated.yaml --profile provider-emulation ps -q"
+      }
+    },
+    {
+      "profile": "provider-mocks",
+      "projectName": "usf-test-compose-provider-mocks",
+      "serviceIds": ["wiremock"],
+      "profileFlags": ["--profile provider-mocks"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-provider-mocks -f compose/compose.test.generated.yaml --profile provider-mocks ps -q"
+      }
+    },
+    {
+      "profile": "observability",
+      "projectName": "usf-test-compose-observability",
+      "serviceIds": ["alertmanager", "alloy"],
+      "profileFlags": ["--profile observability"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-observability -f compose/compose.test.generated.yaml --profile observability ps -q"
+      }
+    },
+    {
+      "profile": "workflow-provider",
+      "projectName": "usf-test-compose-workflow-provider",
+      "serviceIds": [
+        "windmill-postgres",
+        "windmill-redis",
+        "windmill",
+        "windmill-worker",
+        "temporal-postgres",
+        "temporal-ui"
+      ],
+      "profileFlags": ["--profile workflow-provider"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-workflow-provider -f compose/compose.test.generated.yaml --profile workflow-provider ps -q"
+      }
+    },
+    {
+      "profile": "backup-restore",
+      "projectName": "usf-test-compose-backup-restore",
+      "serviceIds": ["pgbackrest"],
+      "profileFlags": ["--profile backup-restore"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-backup-restore -f compose/compose.test.generated.yaml --profile backup-restore ps -q"
+      }
+    },
+    {
+      "profile": "scanning",
+      "projectName": "usf-test-compose-scanning",
+      "serviceIds": ["clamav"],
+      "profileFlags": ["--profile scanning"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-scanning -f compose/compose.test.generated.yaml --profile scanning ps -q"
+      }
+    },
+    {
+      "profile": "gateway",
+      "projectName": "usf-test-compose-gateway",
+      "serviceIds": ["external-caddy"],
+      "profileFlags": ["--profile gateway"],
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway up -d --wait --wait-timeout 240",
+        "readiness": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-gateway -f compose/compose.test.generated.yaml --profile gateway ps -q"
+      }
+    }
+  ],
+  "safeProfileCombinations": [
+    {
+      "combinationId": "all-generated-test-profiles",
+      "projectName": "usf-test-compose-all-profiles",
+      "profiles": [
+        "runtime-providers",
+        "operator-tools",
+        "assurance",
+        "provider-emulation",
+        "provider-mocks",
+        "observability",
+        "workflow-provider",
+        "backup-restore",
+        "scanning",
+        "gateway"
+      ],
+      "includesDefaultProfile": true,
+      "serviceCount": 33,
+      "commandSequence": {
+        "config": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway config --quiet",
+        "port-policy": "python3 tools/validate-compose/check-compose-ports.py test --json",
+        "start": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway up -d --wait --wait-timeout 300",
+        "readiness": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway ps --format json",
+        "seed": "corepack pnpm test-readiness:fixtures",
+        "exercise": "corepack pnpm test-readiness:integration",
+        "observe": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway logs --no-color --tail 200",
+        "reset": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway down --volumes --remove-orphans",
+        "cleanup": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway rm --force --stop --volumes",
+        "teardown": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway down --volumes --remove-orphans",
+        "residue-check": "docker compose -p usf-test-compose-all-profiles -f compose/compose.test.generated.yaml --profile runtime-providers --profile operator-tools --profile assurance --profile provider-emulation --profile provider-mocks --profile observability --profile workflow-provider --profile backup-restore --profile scanning --profile gateway ps -q"
+      }
+    }
+  ],
+  "serviceExerciseRows": [
+    {
+      "serviceId": "postgres",
+      "serviceCatalogueId": "postgres",
+      "profile": "default",
+      "fixtureSeedId": "fixture.postgres"
+    },
+    {
+      "serviceId": "keycloak-db",
+      "serviceCatalogueId": "keycloak-db",
+      "profile": "default",
+      "fixtureSeedId": "fixture.keycloak-db"
+    },
+    {
+      "serviceId": "keycloak",
+      "serviceCatalogueId": "keycloak",
+      "profile": "default",
+      "fixtureSeedId": "fixture.keycloak"
+    },
+    {
+      "serviceId": "nats",
+      "serviceCatalogueId": "nats",
+      "profile": "default",
+      "fixtureSeedId": "fixture.nats"
+    },
+    {
+      "serviceId": "temporal",
+      "serviceCatalogueId": "temporal",
+      "profile": "default",
+      "fixtureSeedId": "fixture.temporal"
+    },
+    {
+      "serviceId": "minio",
+      "serviceCatalogueId": "minio",
+      "profile": "default",
+      "fixtureSeedId": "fixture.minio"
+    },
+    {
+      "serviceId": "openbao",
+      "serviceCatalogueId": "openbao",
+      "profile": "default",
+      "fixtureSeedId": "fixture.openbao"
+    },
+    {
+      "serviceId": "otel-collector",
+      "serviceCatalogueId": "otel-collector",
+      "profile": "default",
+      "fixtureSeedId": "fixture.otel-collector"
+    },
+    {
+      "serviceId": "prometheus",
+      "serviceCatalogueId": "prometheus",
+      "profile": "default",
+      "fixtureSeedId": "fixture.prometheus"
+    },
+    {
+      "serviceId": "grafana",
+      "serviceCatalogueId": "grafana",
+      "profile": "default",
+      "fixtureSeedId": "fixture.grafana"
+    },
+    {
+      "serviceId": "loki",
+      "serviceCatalogueId": "loki",
+      "profile": "default",
+      "fixtureSeedId": "fixture.loki"
+    },
+    {
+      "serviceId": "tempo",
+      "serviceCatalogueId": "tempo",
+      "profile": "default",
+      "fixtureSeedId": "fixture.tempo"
+    },
+    {
+      "serviceId": "mailpit",
+      "serviceCatalogueId": "mailpit",
+      "profile": "default",
+      "fixtureSeedId": "fixture.mailpit"
+    },
+    {
+      "serviceId": "webhook-sink",
+      "serviceCatalogueId": "webhook-sink",
+      "profile": "default",
+      "fixtureSeedId": "fixture.webhook-sink"
+    },
+    {
+      "serviceId": "redis",
+      "serviceCatalogueId": "redis",
+      "profile": "runtime-providers",
+      "fixtureSeedId": "fixture.redis"
+    },
+    {
+      "serviceId": "meilisearch",
+      "serviceCatalogueId": "meilisearch",
+      "profile": "runtime-providers",
+      "fixtureSeedId": "fixture.meilisearch"
+    },
+    {
+      "serviceId": "clickhouse",
+      "serviceCatalogueId": "clickhouse",
+      "profile": "runtime-providers",
+      "fixtureSeedId": "fixture.clickhouse"
+    },
+    {
+      "serviceId": "pgadmin",
+      "serviceCatalogueId": "pgadmin",
+      "profile": "operator-tools",
+      "fixtureSeedId": "fixture.pgadmin"
+    },
+    {
+      "serviceId": "sonar-postgres",
+      "serviceCatalogueId": "sonar-postgres",
+      "profile": "assurance",
+      "fixtureSeedId": "fixture.sonar-postgres"
+    },
+    {
+      "serviceId": "sonarqube",
+      "serviceCatalogueId": "sonarqube",
+      "profile": "assurance",
+      "fixtureSeedId": "fixture.sonarqube"
+    },
+    {
+      "serviceId": "localstack",
+      "serviceCatalogueId": "localstack",
+      "profile": "provider-emulation",
+      "fixtureSeedId": "fixture.localstack"
+    },
+    {
+      "serviceId": "wiremock",
+      "serviceCatalogueId": "wiremock",
+      "profile": "provider-mocks",
+      "fixtureSeedId": "fixture.wiremock"
+    },
+    {
+      "serviceId": "alertmanager",
+      "serviceCatalogueId": "alertmanager",
+      "profile": "observability",
+      "fixtureSeedId": "fixture.alertmanager"
+    },
+    {
+      "serviceId": "alloy",
+      "serviceCatalogueId": "alloy",
+      "profile": "observability",
+      "fixtureSeedId": "fixture.alloy"
+    },
+    {
+      "serviceId": "windmill-postgres",
+      "serviceCatalogueId": "windmill-postgres",
+      "profile": "workflow-provider",
+      "fixtureSeedId": "fixture.windmill-postgres"
+    },
+    {
+      "serviceId": "windmill-redis",
+      "serviceCatalogueId": "windmill-redis",
+      "profile": "workflow-provider",
+      "fixtureSeedId": "fixture.windmill-redis"
+    },
+    {
+      "serviceId": "windmill",
+      "serviceCatalogueId": "windmill",
+      "profile": "workflow-provider",
+      "fixtureSeedId": "fixture.windmill"
+    },
+    {
+      "serviceId": "windmill-worker",
+      "serviceCatalogueId": "windmill-worker",
+      "profile": "workflow-provider",
+      "fixtureSeedId": "fixture.windmill-worker"
+    },
+    {
+      "serviceId": "temporal-postgres",
+      "serviceCatalogueId": "temporal-postgres",
+      "profile": "workflow-provider",
+      "fixtureSeedId": "fixture.temporal-postgres"
+    },
+    {
+      "serviceId": "temporal-ui",
+      "serviceCatalogueId": "temporal-ui",
+      "profile": "workflow-provider",
+      "fixtureSeedId": "fixture.temporal-ui"
+    },
+    {
+      "serviceId": "pgbackrest",
+      "serviceCatalogueId": "pgbackrest",
+      "profile": "backup-restore",
+      "fixtureSeedId": "fixture.pgbackrest"
+    },
+    {
+      "serviceId": "clamav",
+      "serviceCatalogueId": "clamav",
+      "profile": "scanning",
+      "fixtureSeedId": "fixture.clamav"
+    },
+    {
+      "serviceId": "external-caddy",
+      "serviceCatalogueId": "caddy",
+      "profile": "gateway",
+      "fixtureSeedId": "fixture.caddy"
+    }
+  ],
+  "serviceEvidencePolicy": {
+    "requiredIntegrationEvidenceTests": [
+      "startReadiness",
+      "seed",
+      "positiveOperation",
+      "negativeOperation",
+      "degradedUnavailable",
+      "cleanup",
+      "teardown",
+      "reset",
+      "auditObservability",
+      "composeTargetMetadata",
+      "serviceSpecificReadiness",
+      "hostBindingPosture",
+      "generatedComposeDerivation",
+      "redaction"
+    ],
+    "requiredFixtureLifecycleApiKeys": ["seederId", "resetterId", "cleanupId", "teardownId"],
+    "requiredFixtureLifecycleCoverage": [
+      "seed",
+      "reset",
+      "cleanup",
+      "teardown",
+      "repeatability",
+      "failureRecovery"
+    ],
+    "nonComposeEvidenceRefs": [
+      "docs/architecture/composed-service-integration-test-matrix.json#serviceIntegrationRows",
+      "tests/packages/fixtures/service-fixture-corpus.json#serviceFixtures",
+      "docs/architecture/semantic-service-test-obligation-manifest.json#serviceObligations"
+    ]
+  },
+  "profileEvidencePolicy": {
+    "requiredProfileFlags": [
+      "mustStart",
+      "mustReadinessCheck",
+      "mustSeed",
+      "mustExercise",
+      "mustTeardown",
+      "mustReset",
+      "mustEvidence"
+    ],
+    "requiresDefaultPromotionGuard": true,
+    "requiresProfileOmissionGuard": true,
+    "requiresDependencyDriftGuard": true,
+    "requiresLoopbackOnlyHostBindings": true,
+    "nonComposeEvidenceRefs": [
+      "docs/architecture/composed-service-integration-test-matrix.json#profileIntegrationRows",
+      "docs/architecture/semantic-service-test-obligation-manifest.json#profileObligations",
+      "docs/architecture/semantic-service-test-obligation-manifest.json#serviceObligations"
+    ]
+  },
+  "postRunResidueChecks": [
+    {
+      "checkId": "residue.containers",
+      "mustBeEmpty": true,
+      "diagnostic": "remaining Compose containers for the project"
+    },
+    {
+      "checkId": "residue.anonymous-volumes",
+      "mustBeEmpty": true,
+      "diagnostic": "remaining anonymous or project-labelled volumes"
+    },
+    {
+      "checkId": "residue.networks",
+      "mustBeEmpty": true,
+      "diagnostic": "remaining project-labelled networks"
+    },
+    {
+      "checkId": "residue.temp-files",
+      "mustBeEmpty": true,
+      "diagnostic": "proof-owned temp files outside bounded evidence artefacts"
+    },
+    {
+      "checkId": "residue.credentials",
+      "mustBeEmpty": true,
+      "diagnostic": "local placeholder credentials or tokens persisted outside Compose state"
+    },
+    {
+      "checkId": "residue.seeded-data",
+      "mustBeEmpty": true,
+      "diagnostic": "synthetic seeded data visible after reset or teardown"
+    }
+  ],
+  "failureDiagnostics": [
+    {
+      "diagnosticId": "diagnostic.profile-omission",
+      "findingCode": "compose-profile-service-omission",
+      "action": "Compare compose/compose.test.generated.yaml services with docs/architecture/composed-service-integration-test-matrix.json serviceIntegrationRows before rerunning proof."
+    },
+    {
+      "diagnosticId": "diagnostic.default-profile-promotion",
+      "findingCode": "profile-gated-service-promoted-to-default",
+      "action": "Inspect the generated service profile stanza and the service catalogue test environment policy; do not hand-edit generated Compose."
+    },
+    {
+      "diagnosticId": "diagnostic.port-drift",
+      "findingCode": "loopback-or-port-policy-drift",
+      "action": "Run the Compose port validator and reconcile the service catalogue port metadata before regenerating Compose."
+    },
+    {
+      "diagnosticId": "diagnostic.dependency-drift",
+      "findingCode": "dependency-healthcheck-ordering-drift",
+      "action": "Check depends_on conditions and healthcheck-bearing dependencies against the generated test Compose target and service catalogue."
+    },
+    {
+      "diagnosticId": "diagnostic.generated-compose-stale",
+      "findingCode": "generated-compose-not-derivative",
+      "action": "Run the generator in check mode only; do not edit compose/*.generated.yaml by hand."
+    },
+    {
+      "diagnosticId": "diagnostic.exercise-evidence-missing",
+      "findingCode": "service-exercise-evidence-missing",
+      "action": "Add or repair fixture corpus and integration matrix evidence before claiming the service was exercised."
+    },
+    {
+      "diagnosticId": "diagnostic.residue",
+      "findingCode": "post-run-residue-left-behind",
+      "action": "Capture the project name, remaining resource IDs, and failing residue check; rerun teardown before retrying."
+    }
+  ],
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/compose-profile-orchestration.test.ts",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "python3 tools/validate-compose/validate-compose.py all --json",
+    "git diff --check"
+  ],
+  "enterpriseEvidenceModelRowsDeferredByCoordinatorLock": [
+    {
+      "section": "evidenceRegister",
+      "id": "evidence-usf-251-compose-profile-orchestration",
+      "description": "Bounded evidence row for compose-profile orchestration commands, every generated test Compose service exercise coverage, profile omission/default-promotion guardrails, and residue diagnostics."
+    },
+    {
+      "section": "soaSupportMappings",
+      "id": "soa-usf-251-compose-profile-orchestration",
+      "description": "Maps USF-251 local test orchestration evidence to service orchestration and environment control support without claiming certification or production readiness."
+    },
+    {
+      "section": "backupRestoreResiliencePosture",
+      "id": "resilience-usf-251-compose-profile-orchestration",
+      "description": "Records reset, cleanup, teardown, and post-run residue checks as local test resilience evidence only."
+    }
+  ],
+  "allowedClaims": ["bounded-compose-profile-orchestration-evidence-defined-and-tested"],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "usf-234-closure"
+  ]
+}
