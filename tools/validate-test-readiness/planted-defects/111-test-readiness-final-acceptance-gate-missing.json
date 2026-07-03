@@ -1,0 +1,6 @@
+{
+  "id": "111-test-readiness-final-acceptance-gate-missing",
+  "description": "Removes the USF-234 final test-readiness acceptance gate so the validator must fail closed before final parent closure.",
+  "expectedRule": "USF-TEST-READINESS-111",
+  "removeTestReadinessFinalAcceptanceGate": true
+}

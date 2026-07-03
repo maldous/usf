@@ -38,6 +38,7 @@ OPERATIONAL_RESILIENCE_SUITE_PATH = Path("docs/architecture/operational-resilien
 FUTURE_AI_GUARDRAIL_PATH = Path("docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json")
 MISSING_EVIDENCE_REGRESSION_GATE_PATH = Path("docs/architecture/missing-evidence-planted-defects-regression-gate.json")
 TEST_ENVIRONMENT_COMPLETION_GATE_PATH = Path("docs/architecture/test-environment-completion-and-staging-entry-gate.json")
+TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH = Path("docs/architecture/test-readiness-final-acceptance-gate.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -161,6 +162,7 @@ RULES = {
     "USF-TEST-READINESS-108": ("blocking", "future AI guardrail overclaims readiness or lacks enterprise evidence linkage"),
     "USF-TEST-READINESS-109": ("blocking", "missing-evidence planted-defect regression gate evidence is missing invalid or stale"),
     "USF-TEST-READINESS-110": ("blocking", "test environment completion and staging-entry gate evidence is missing invalid or overclaimed"),
+    "USF-TEST-READINESS-111": ("blocking", "test-readiness final acceptance gate evidence is missing invalid or overclaimed"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -410,6 +412,9 @@ FINAL_TEST_COMPLETION_DEPENDENCY_ISSUE_IDS = FINAL_REGRESSION_DEPENDENCY_ISSUE_I
     "USF-238",
     "USF-247",
 }
+FINAL_TEST_ACCEPTANCE_DEPENDENCY_ISSUE_IDS = FINAL_TEST_COMPLETION_DEPENDENCY_ISSUE_IDS | {
+    "USF-260",
+}
 
 FINAL_REGRESSION_CATEGORY_IDS = {
     "root-obligation-manifest-and-validator",
@@ -421,6 +426,8 @@ FINAL_REGRESSION_CATEGORY_IDS = {
     "performance-and-operational-resilience",
     "future-ai-semantic-guardrail",
     "final-planted-defect-regression-evidence",
+    "test-environment-completion-staging-entry-gate",
+    "test-readiness-final-acceptance-gate",
 }
 
 FINAL_REGRESSION_FAILURE_CLASSES = {
@@ -438,6 +445,8 @@ FINAL_REGRESSION_FAILURE_CLASSES = {
     "missing-enterprise-evidence",
     "missing-non-claim-preservation",
     "readiness-or-certification-overclaim",
+    "missing-test-environment-completion-gate",
+    "missing-test-readiness-final-acceptance-gate",
 }
 
 FINAL_TEST_COMPLETION_CATEGORY_IDS = {
@@ -461,6 +470,9 @@ FINAL_TEST_COMPLETION_CATEGORY_IDS = {
     "adversarial-formal-semantic-testing",
     "environment-tooling-governance",
     "expanded-obligation-validator-reconciliation",
+}
+FINAL_TEST_ACCEPTANCE_CATEGORY_IDS = FINAL_TEST_COMPLETION_CATEGORY_IDS | {
+    "test-environment-completion-staging-entry",
 }
 REQUIRED_FUTURE_AI_CHANGE_CLASSES = {
     "semantic-contract",
@@ -686,6 +698,23 @@ def apply_command_surface_defect(command_surface: dict[str, Any] | None, defect:
         out["packageScripts"] = [
             row for row in out.get("packageScripts", []) if row.get("id") != script_id
         ]
+    for patch in defect.get("commandSurfacePackageScriptPatch", []):
+        if not isinstance(patch, dict):
+            continue
+        for row in out.get("packageScripts", []):
+            if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            drop_issue_ids = set(patch.get("dropDependsOnIssueIds", []))
+            if drop_issue_ids and isinstance(row.get("dependsOnIssueIds"), list):
+                row["dependsOnIssueIds"] = [
+                    issue_id
+                    for issue_id in row.get("dependsOnIssueIds", [])
+                    if issue_id not in drop_issue_ids
+                ]
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
     for target in defect.get("commandSurfaceDropMakeTargets", []):
         out["makeTargets"] = [
             row for row in out.get("makeTargets", []) if row.get("target") != target
@@ -1455,6 +1484,33 @@ def apply_test_environment_completion_gate_defect(gate: dict[str, Any] | None, d
     return out
 
 
+def apply_test_readiness_final_acceptance_gate_defect(gate: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeTestReadinessFinalAcceptanceGate"):
+        return None
+    if gate is None:
+        return None
+    out = copy.deepcopy(gate)
+    for key, value in defect.get("testReadinessFinalAcceptanceGateSet", {}).items():
+        out[key] = value
+    for key in defect.get("testReadinessFinalAcceptanceGateDrop", []):
+        out.pop(key, None)
+    for issue_id in defect.get("testReadinessFinalAcceptanceGateDropIssues", []):
+        out["childIssueEvidenceMap"] = [
+            row
+            for row in out.get("childIssueEvidenceMap", [])
+            if row.get("issueId") != issue_id
+        ]
+    for category_id in defect.get("testReadinessFinalAcceptanceGateDropCategories", []):
+        out["evidenceCoverage"] = [
+            row
+            for row in out.get("evidenceCoverage", [])
+            if row.get("categoryId") != category_id
+        ]
+    for section in defect.get("testReadinessFinalAcceptanceGateDropEnterpriseRefs", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    return out
+
+
 def apply_text_defect(text: str, defect: dict[str, Any], prefix: str) -> str:
     out = text
     for patch in defect.get(f"{prefix}TextReplace", []):
@@ -1587,6 +1643,15 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         test_environment_completion_gate,
         defect,
     )
+    test_readiness_final_acceptance_gate = (
+        read_json(TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH)
+        if (ROOT / TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH).exists()
+        else None
+    )
+    test_readiness_final_acceptance_gate = apply_test_readiness_final_acceptance_gate_defect(
+        test_readiness_final_acceptance_gate,
+        defect,
+    )
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     vitest_config = (
@@ -1618,6 +1683,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "futureAiGuardrail": future_ai_guardrail,
         "missingEvidenceRegressionGate": missing_evidence_regression_gate,
         "testEnvironmentCompletionGate": test_environment_completion_gate,
+        "testReadinessFinalAcceptanceGate": test_readiness_final_acceptance_gate,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -4612,6 +4678,186 @@ def check_test_environment_completion_gate(F: Findings, state: dict[str, Any]) -
         F.add("USF-TEST-READINESS-110", str(TEST_ENVIRONMENT_COMPLETION_GATE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
 
 
+def check_test_readiness_final_acceptance_gate(F: Findings, state: dict[str, Any]) -> None:
+    gate = state["testReadinessFinalAcceptanceGate"]
+    if not isinstance(gate, dict):
+        F.add("USF-TEST-READINESS-111", str(TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH), "USF-234 final acceptance gate evidence is missing")
+        return
+
+    for key in (
+        "id",
+        "issueId",
+        "dependsOnIssueIds",
+        "lifecycleState",
+        "validatorPath",
+        "boundedTestReadinessClaimAllowed",
+        "finalTestReadinessAccepted",
+        "childIssueEvidenceMap",
+        "evidenceCoverage",
+        "serviceBackedClaimBoundary",
+        "commandSuite",
+        "finalValidation",
+        "closureSearchRequirements",
+        "finalAcceptanceDecision",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in gate:
+            F.add("USF-TEST-READINESS-111", str(TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH), f"missing top-level field {key}")
+
+    if gate.get("issueId") != "USF-234":
+        F.add("USF-TEST-READINESS-111", str(TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH), "issue linkage must be USF-234")
+    missing_deps = sorted(FINAL_TEST_ACCEPTANCE_DEPENDENCY_ISSUE_IDS - set(gate.get("dependsOnIssueIds", [])))
+    if missing_deps:
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#dependsOnIssueIds", f"missing dependency issue ids: {missing_deps}")
+    if gate.get("validatorPath") != str(Path("tools/validate-test-readiness/validate-test-readiness.py")):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#validatorPath", "validator path is stale")
+    if gate.get("boundedTestReadinessClaimAllowed") is not True or gate.get("finalTestReadinessAccepted") is not True:
+        F.add("USF-TEST-READINESS-111", str(TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH), "bounded test-readiness acceptance must be explicit")
+    for claim_key in (
+        "stagingReadinessClaimAllowed",
+        "stagingImplementationStarted",
+        "productionReadinessClaimAllowed",
+        "deploymentReadinessClaimAllowed",
+        "liveProviderReadinessClaimAllowed",
+        "socReadinessClaimAllowed",
+        "isoCertificationClaimAllowed",
+        "enterpriseProductionReadinessClaimAllowed",
+        "productUiReadinessClaimAllowed",
+        "browserE2EReadinessClaimAllowed",
+        "fullReactProductParityClaimAllowed",
+    ):
+        if gate.get(claim_key) is not False:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#{claim_key}", "final acceptance gate must preserve higher-readiness non-claims")
+
+    issue_rows = _row_by_id(gate.get("childIssueEvidenceMap"), "issueId")
+    missing_issue_rows = sorted(FINAL_TEST_ACCEPTANCE_DEPENDENCY_ISSUE_IDS - set(issue_rows))
+    if missing_issue_rows:
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#childIssueEvidenceMap", f"missing child issue rows: {missing_issue_rows}")
+    for issue_id, row in issue_rows.items():
+        if issue_id not in FINAL_TEST_ACCEPTANCE_DEPENDENCY_ISSUE_IDS:
+            continue
+        if row.get("status") != "Done":
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#childIssueEvidenceMap.{issue_id}", "child issue must be Done before USF-234 final acceptance")
+        for key in ("evidenceArtifact", "validationCommand"):
+            if not isinstance(row.get(key), str) or not row.get(key):
+                F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#childIssueEvidenceMap.{issue_id}", f"{key} is required")
+        for key in ("acceptanceCriteriaMappedToMergedEvidence", "postMergeValidationRecorded", "nonClaimBoundaryPreserved"):
+            if row.get(key) is not True:
+                F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#childIssueEvidenceMap.{issue_id}.{key}", "final acceptance evidence marker must be true")
+
+    coverage_rows = _row_by_id(gate.get("evidenceCoverage"), "categoryId")
+    missing_categories = sorted(FINAL_TEST_ACCEPTANCE_CATEGORY_IDS - set(coverage_rows))
+    if missing_categories:
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#evidenceCoverage", f"missing evidence categories: {missing_categories}")
+    for category_id, row in coverage_rows.items():
+        if category_id in FINAL_TEST_ACCEPTANCE_CATEGORY_IDS and row.get("status") != "present":
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#evidenceCoverage.{category_id}", "evidence category must be present")
+
+    boundary = gate.get("serviceBackedClaimBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#serviceBackedClaimBoundary", "service-backed claim boundary is missing")
+    else:
+        for key in (
+            "inMemoryServiceSubstituteAllowedForServiceBackedClaims",
+            "processLocalSubstituteAllowedForServiceBackedClaims",
+            "hermeticMockSubstituteAllowedForServiceBackedClaims",
+            "generatedComposeIsAuthority",
+        ):
+            if boundary.get(key) is not False:
+                F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#serviceBackedClaimBoundary.{key}", "service-backed final claims must fail closed on substitutes and generated authority")
+        if boundary.get("serviceCatalogueAuthority") != str(SERVICE_CATALOGUE_PATH):
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#serviceBackedClaimBoundary.serviceCatalogueAuthority", "service catalogue authority is stale")
+        if boundary.get("composeTarget") != COMPOSE_TARGET:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#serviceBackedClaimBoundary.composeTarget", "compose target is stale")
+
+    command_rows = _row_by_id(gate.get("commandSuite"), "id")
+    required_commands = {
+        "canonical-test-readiness-full": TEST_READINESS_COMMAND,
+        "canonical-test-readiness-composed": TEST_READINESS_COMPOSED_COMMAND,
+        "canonical-test-readiness-integration": INTEGRATION_MATRIX_COMMAND,
+        "canonical-test-readiness-coverage": TEST_READINESS_COVERAGE_COMMAND,
+        "canonical-test-readiness-assurance": TEST_READINESS_ASSURANCE_COMMAND,
+        "canonical-test-readiness-selftest": TEST_READINESS_SELFTEST_COMMAND,
+        "validator-all": OBLIGATION_MANIFEST_COMMAND,
+        "validator-selftest": SELFTEST_COMMAND,
+        "foundation-verify": "corepack pnpm verify",
+        "foundation-parity-coverage": "corepack pnpm parity",
+    }
+    for command_id, expected in required_commands.items():
+        row = command_rows.get(command_id)
+        if not row or row.get("command") != expected:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#commandSuite.{command_id}", "final acceptance command is missing or stale")
+
+    validation_rows = gate.get("finalValidation", [])
+    validation_by_id = _row_by_id(validation_rows, "id")
+    for command_id in required_commands:
+        row = validation_by_id.get(command_id)
+        if not row or row.get("outcome") != "passed":
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}", "final validation row must be present and passed")
+        if row and not isinstance(row.get("checkedCommit"), str):
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}", "final validation row must include checked commit")
+
+    closure = gate.get("closureSearchRequirements")
+    if not isinstance(closure, dict):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#closureSearchRequirements", "closure search requirements are missing")
+    else:
+        for key in (
+            "openGitHubPrSearchRequired",
+            "openLinearReadinessSearchRequired",
+            "postMergeValidationOnMainRequired",
+            "finalGitStatusRequired",
+        ):
+            if closure.get(key) is not True:
+                F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#closureSearchRequirements.{key}", "final closure requirement must be true")
+        if set(closure.get("openLinearReadinessSearchAllowedBeforeUSF234Closure", [])) != {"USF-234"}:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#closureSearchRequirements.openLinearReadinessSearchAllowedBeforeUSF234Closure", "closure must allow only USF-234 before final closure")
+        if closure.get("openGitHubPrSearchExpectedResult") != "empty" or closure.get("gitStatusRequired") != "clean":
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#closureSearchRequirements", "open PR and git status expectations must fail closed")
+
+    decision = gate.get("finalAcceptanceDecision")
+    if not isinstance(decision, dict):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalAcceptanceDecision", "final acceptance decision is missing")
+    else:
+        if decision.get("recommendation") != "bounded-test-readiness-accepted-after-merge-and-post-merge-validation":
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalAcceptanceDecision.recommendation", "final acceptance recommendation is missing or stale")
+        if "bounded test readiness" not in str(decision.get("decisionBoundary", "")):
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalAcceptanceDecision.decisionBoundary", "decision boundary must preserve bounded test-readiness scope")
+        for key in (
+            "stagingWorkMayStartBeforeUSF234Done",
+            "stagingReadinessClaimAllowed",
+            "productionReadinessClaimAllowed",
+            "liveProviderReadinessClaimAllowed",
+            "socReadinessClaimAllowed",
+            "isoCertificationClaimAllowed",
+        ):
+            if decision.get(key) is not False:
+                F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalAcceptanceDecision.{key}", "final acceptance decision must preserve non-claims")
+
+    refs = gate.get("enterpriseEvidenceRefs")
+    if not isinstance(refs, dict):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#enterpriseEvidenceRefs", "enterprise evidence refs are missing")
+    else:
+        for section in ENTERPRISE_REF_SECTIONS:
+            values = refs.get(section)
+            if not isinstance(values, list) or not values:
+                F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#{section}", "enterprise evidence ref is missing")
+                continue
+            missing_refs = sorted(set(values) - _enterprise_ids(state, section))
+            if missing_refs:
+                F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#{section}", f"enterprise evidence refs are stale: {missing_refs}")
+
+    required_non_claims = (REQUIRED_NON_CLAIMS - {"test-readiness"}) | {"unbounded-test-readiness"}
+    non_claims = set(gate.get("nonClaims", []))
+    missing = sorted(required_non_claims - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-111", str(TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(gate.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-111", str(TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -4877,6 +5123,29 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         row = package_rows.get(script_id)
         if not row or row.get("script") != expected:
             F.add("USF-TEST-READINESS-100", f"{COMMAND_SURFACE_PATH}#packageScripts.{script_id}", "machine-readable package script row is missing or stale")
+    expected_package_dependencies = {
+        "test-readiness": {"USF-235", "USF-236", "USF-237", "USF-238", "USF-240", "USF-242", "USF-243"},
+        "test-readiness:coverage": {"USF-240"},
+        "test-readiness:composed": {"USF-236", "USF-237", "USF-242"},
+        "test-readiness:assurance": {"USF-233", "USF-243"},
+        "test-readiness:semantic": {"USF-236"},
+        "test-readiness:fixtures": {"USF-237"},
+        "test-readiness:integration": {"USF-242"},
+        "test-readiness:validate": {"USF-239", "USF-259"},
+        "test-readiness:selftest": {"USF-247"},
+    }
+    for script_id, required_issue_ids in expected_package_dependencies.items():
+        row = package_rows.get(script_id)
+        if not row:
+            continue
+        present_issue_ids = set(row.get("dependsOnIssueIds", []))
+        missing_issue_ids = sorted(required_issue_ids - present_issue_ids)
+        if missing_issue_ids:
+            F.add(
+                "USF-TEST-READINESS-100",
+                f"{COMMAND_SURFACE_PATH}#packageScripts.{script_id}.dependsOnIssueIds",
+                f"machine-readable package script row is missing dependency issue ids: {missing_issue_ids}",
+            )
 
     make_rows = _row_by_id(command_surface.get("makeTargets"), "target")
     expected_make_rows = {
@@ -5039,6 +5308,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_future_ai_guardrail(F, state)
     check_missing_evidence_regression_gate(F, state)
     check_test_environment_completion_gate(F, state)
+    check_test_readiness_final_acceptance_gate(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])
