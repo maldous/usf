@@ -1,0 +1,407 @@
+{
+  "id": "data-lifecycle-backup-bulk-migration-test-suite",
+  "title": "Data Lifecycle Backup Bulk Migration Test Suite",
+  "issueId": "USF-250",
+  "parentIssueId": "USF-234",
+  "lifecycleState": "implemented-owned-scope",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This issue-scoped suite records deterministic synthetic test coverage and composed-service evidence references for data lifecycle, backup restore, bulk import export, migration, retention, privacy, and adjacent data-bearing service flows. It does not claim final USF-234 acceptance, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React parity readiness.",
+  "sourceAuthorities": {
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "composedIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "deterministicFixtureLifecycle": "docs/architecture/deterministic-test-fixture-lifecycle.json",
+    "fixtureCorpus": "tests/packages/fixtures/service-fixture-corpus.json",
+    "fixtureApi": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+  },
+  "ownedTestFiles": [
+    "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+    "tests/packages/data-lifecycle/data-lifecycle-matrix.test.ts"
+  ],
+  "scope": {
+    "semanticContractCount": 10,
+    "serviceCoverageCount": 15,
+    "deterministicCaseCount": 10,
+    "usesSyntheticStaticDataOnly": true,
+    "usesComposedServiceEvidenceForServiceBackedClaims": true,
+    "usesInMemoryServiceSubstitutesForServiceBackedClaims": false,
+    "cleanupResetTeardownRequired": true,
+    "privacyMinimisationRequired": true,
+    "finalTestReadinessClaim": false
+  },
+  "requiredCoverageDomains": [
+    "bulk-import-export",
+    "backup-restore",
+    "object-file-lifecycle",
+    "database-lifecycle",
+    "search-analytics",
+    "secrets-config",
+    "event-job-notification",
+    "retention-erasure",
+    "migration-boundary",
+    "scanning-disposition"
+  ],
+  "semanticContractRows": [
+    {
+      "contractId": "semantic-contract.backup-and-restore",
+      "coverageDomains": ["backup-restore", "database-lifecycle"]
+    },
+    {
+      "contractId": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "coverageDomains": ["retention-erasure", "privacy-minimisation"]
+    },
+    {
+      "contractId": "semantic-contract.history-read-model-read-only-projection",
+      "coverageDomains": ["search-analytics", "retention-erasure"]
+    },
+    {
+      "contractId": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "coverageDomains": ["search-analytics", "privacy-minimisation"]
+    },
+    {
+      "contractId": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "coverageDomains": ["object-file-lifecycle", "scanning-disposition"]
+    },
+    {
+      "contractId": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "coverageDomains": ["backup-restore", "retention-erasure"]
+    },
+    {
+      "contractId": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "coverageDomains": ["database-lifecycle", "migration-boundary"]
+    },
+    {
+      "contractId": "semantic-contract.search-and-indexing-product-search",
+      "coverageDomains": ["search-analytics"]
+    },
+    {
+      "contractId": "semantic-contract.tenant-data-import-export",
+      "coverageDomains": ["bulk-import-export", "privacy-minimisation"]
+    },
+    {
+      "contractId": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "coverageDomains": ["retention-erasure", "bulk-import-export"]
+    }
+  ],
+  "serviceCoverageRows": [
+    {
+      "serviceId": "postgres",
+      "coverageDomains": [
+        "database-lifecycle",
+        "bulk-import-export",
+        "migration-boundary",
+        "backup-restore",
+        "retention-erasure"
+      ],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "keycloak-db",
+      "coverageDomains": ["database-lifecycle", "backup-restore", "retention-erasure"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "minio",
+      "coverageDomains": [
+        "object-file-lifecycle",
+        "bulk-import-export",
+        "backup-restore",
+        "scanning-disposition"
+      ],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "openbao",
+      "coverageDomains": ["secrets-config", "backup-restore", "privacy-minimisation"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "redis",
+      "coverageDomains": ["event-job-notification", "retention-erasure", "cleanup-reset"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "meilisearch",
+      "coverageDomains": ["search-analytics", "retention-erasure", "privacy-minimisation"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "clickhouse",
+      "coverageDomains": ["search-analytics", "retention-erasure", "privacy-minimisation"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "sonar-postgres",
+      "coverageDomains": ["database-lifecycle", "retention-erasure", "scanning-disposition"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "sonar-oidc-plugin",
+      "coverageDomains": ["bounded-non-test-disposition", "scanning-disposition"],
+      "requiresComposedServiceEvidence": false
+    },
+    {
+      "serviceId": "localstack",
+      "coverageDomains": ["object-file-lifecycle", "backup-restore", "bulk-import-export"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "windmill-postgres",
+      "coverageDomains": ["database-lifecycle", "event-job-notification", "retention-erasure"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "windmill-redis",
+      "coverageDomains": ["event-job-notification", "retention-erasure", "cleanup-reset"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "temporal-postgres",
+      "coverageDomains": ["database-lifecycle", "event-job-notification", "backup-restore"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "pgbackrest",
+      "coverageDomains": ["backup-restore", "database-lifecycle", "retention-erasure"],
+      "requiresComposedServiceEvidence": true
+    },
+    {
+      "serviceId": "clamav",
+      "coverageDomains": ["scanning-disposition", "object-file-lifecycle", "privacy-minimisation"],
+      "requiresComposedServiceEvidence": true
+    }
+  ],
+  "deterministicCases": [
+    {
+      "caseId": "bulk-import-export-tenant-audit",
+      "coverageDomain": "bulk-import-export",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "bulk import export handles malformed duplicate replay tenant isolation and audit evidence",
+      "serviceIds": ["postgres", "minio"],
+      "requiredOutcomes": [
+        "valid-import",
+        "malformed-import-denied",
+        "partial-failure-recorded",
+        "duplicate-detected",
+        "idempotent-replay",
+        "tenant-scoped-export",
+        "cross-tenant-export-denied",
+        "retry-resume",
+        "audit-trail"
+      ]
+    },
+    {
+      "caseId": "backup-restore-integrity-boundary",
+      "coverageDomain": "backup-restore",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "backup restore preserves integrity tenant boundary redaction and incident evidence",
+      "serviceIds": ["postgres", "pgbackrest", "minio", "openbao"],
+      "requiredOutcomes": [
+        "snapshot-created",
+        "restore-target-created",
+        "integrity-match",
+        "tenant-boundary-preserved",
+        "secret-excluded",
+        "restore-audit-evidence"
+      ]
+    },
+    {
+      "caseId": "object-lifecycle-scanning",
+      "coverageDomain": "object-file-lifecycle",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "object lifecycle covers multipart metadata tenant keys deletion retention and scanning disposition",
+      "serviceIds": ["minio", "clamav"],
+      "requiredOutcomes": [
+        "bucket-created",
+        "multipart-upload",
+        "metadata-tags",
+        "tenant-prefix-isolation",
+        "small-and-large-corpus",
+        "delete-marker",
+        "retention-reference",
+        "clean-scan-allowed",
+        "malicious-scan-blocked"
+      ]
+    },
+    {
+      "caseId": "database-migration-rls",
+      "coverageDomain": "database-lifecycle",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "database lifecycle covers seed reset rollback migration boundary and tenant isolation",
+      "serviceIds": [
+        "postgres",
+        "keycloak-db",
+        "sonar-postgres",
+        "windmill-postgres",
+        "temporal-postgres"
+      ],
+      "requiredOutcomes": [
+        "seeded",
+        "reset",
+        "transaction-rollback",
+        "rls-denial",
+        "migration-forward-only",
+        "checksum-immutable"
+      ]
+    },
+    {
+      "caseId": "search-analytics-retention",
+      "coverageDomain": "search-analytics",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "search analytics covers tenant scoped index query aggregation reset and retention",
+      "serviceIds": ["meilisearch", "clickhouse"],
+      "requiredOutcomes": [
+        "index-create",
+        "index-update",
+        "index-delete",
+        "tenant-scoped-search",
+        "event-ingestion",
+        "aggregation-correct",
+        "reset",
+        "retention-delete"
+      ]
+    },
+    {
+      "caseId": "secrets-config-boundary",
+      "coverageDomain": "secrets-config",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "secrets config covers rotation denial missing secret and raw value redaction",
+      "serviceIds": ["openbao"],
+      "requiredOutcomes": [
+        "kv-seed",
+        "rotation",
+        "missing-denied",
+        "unauthorised-denied",
+        "raw-secret-not-logged",
+        "placeholder-boundary"
+      ]
+    },
+    {
+      "caseId": "events-jobs-notifications",
+      "coverageDomain": "event-job-notification",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "event job notification lifecycle covers retry dead letter idempotency mail and webhook delivery",
+      "serviceIds": ["nats", "temporal", "windmill", "windmill-redis", "mailpit", "webhook-sink"],
+      "requiredOutcomes": [
+        "message-published",
+        "workflow-started",
+        "job-enqueued",
+        "notification-delivered",
+        "webhook-delivered",
+        "retry",
+        "dead-letter",
+        "idempotency"
+      ]
+    },
+    {
+      "caseId": "retention-erasure-privacy",
+      "coverageDomain": "retention-erasure",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "retention erasure proves synthetic provenance redaction expiry deletion and provider payload minimisation",
+      "serviceIds": ["postgres", "minio", "meilisearch", "clickhouse"],
+      "requiredOutcomes": [
+        "synthetic-provenance",
+        "no-real-tenant-data",
+        "redaction",
+        "retention-expiry",
+        "erasure",
+        "provider-payload-not-retained"
+      ]
+    },
+    {
+      "caseId": "cleanup-reset-teardown",
+      "coverageDomain": "cleanup-reset",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-suite.test.ts",
+      "testName": "cleanup reset teardown leaves deterministic synthetic stores without residue",
+      "serviceIds": [
+        "postgres",
+        "minio",
+        "meilisearch",
+        "clickhouse",
+        "openbao",
+        "nats",
+        "temporal",
+        "windmill",
+        "mailpit",
+        "webhook-sink",
+        "clamav"
+      ],
+      "requiredOutcomes": ["cleanup", "reset", "teardown", "stable-empty-fingerprint"]
+    },
+    {
+      "caseId": "matrix-drift-regression",
+      "coverageDomain": "matrix-regression",
+      "testFile": "tests/packages/data-lifecycle/data-lifecycle-matrix.test.ts",
+      "testName": "matrix maps every USF-250 semantic service and fixture obligation without overclaim",
+      "serviceIds": [
+        "postgres",
+        "keycloak-db",
+        "minio",
+        "openbao",
+        "redis",
+        "meilisearch",
+        "clickhouse",
+        "sonar-postgres",
+        "sonar-oidc-plugin",
+        "localstack",
+        "windmill-postgres",
+        "windmill-redis",
+        "temporal-postgres",
+        "pgbackrest",
+        "clamav"
+      ],
+      "requiredOutcomes": [
+        "manifest-current",
+        "fixture-current",
+        "composed-evidence-current",
+        "non-claims-preserved"
+      ]
+    }
+  ],
+  "evidenceBoundary": {
+    "syntheticOnly": true,
+    "staticFixtureOnly": true,
+    "productionDerived": false,
+    "realTenantDataAllowed": false,
+    "realSecretsAllowed": false,
+    "liveProviderPayloadAllowed": false,
+    "privateLocalStateAllowed": false,
+    "serviceBackedClaimRequiresComposedEvidence": true,
+    "inMemoryServiceSubstituteAllowed": false,
+    "cleanupResetTeardownRequired": true,
+    "rawSecretLoggingAllowed": false,
+    "providerPayloadRetentionAllowed": false
+  },
+  "driftDetection": {
+    "manifestOwnerIssueRequired": "USF-250",
+    "requiredObligationClasses": ["data-lifecycle", "backup-restore-bulk-migration"],
+    "serviceFixtureCoverageRequired": true,
+    "composedIntegrationEvidenceRequiredForServiceBackedClaims": true,
+    "testFileAndTestNamePresenceValidated": true,
+    "nonClaimBoundaryValidated": true
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/data-lifecycle",
+    "corepack pnpm typecheck",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "git diff --check"
+  ],
+  "allowedClaims": [
+    "issue-scoped-deterministic-synthetic-data-lifecycle-test-coverage",
+    "bounded-local-composed-service-evidence-reference"
+  ],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ]
+}
