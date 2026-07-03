@@ -1,0 +1,261 @@
+{
+  "id": "authn-authz-tenant-role-permission-test-suite",
+  "title": "Authentication Authorization Tenant Role Permission Test Suite",
+  "issueId": "USF-249",
+  "parentIssueId": "USF-234",
+  "lifecycleState": "draft-evidence",
+  "authorityBoundary": "This evidence records USF-249 test coverage and source-authority linkage only. It does not define new platform semantics, does not replace composed-service proof, and does not claim final USF-234 acceptance.",
+  "sourceAuthorities": {
+    "linearIssue": "USF-249",
+    "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "composedIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
+    "fixtureCorpus": "tests/packages/fixtures/service-fixture-corpus.json",
+    "syntheticFixtureApi": "tests/packages/fixtures/synthetic-fixture-corpus.ts",
+    "testEnvironmentServiceContract": "docs/architecture/test-environment-service-contract.json",
+    "testReadinessValidator": "tools/validate-test-readiness/validate-test-readiness.py",
+    "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+  },
+  "scope": {
+    "semanticContractCount": 24,
+    "serviceSurfaceCount": 15,
+    "serviceBackedClaimsRequireComposedEvidence": true,
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+    "testReadinessClaimAllowed": false,
+    "finalTestReadinessClaim": false,
+    "enterpriseEvidenceModelEdited": false
+  },
+  "domainInventory": [
+    {
+      "capabilityDomain": "authentication",
+      "semanticContractCount": 1
+    },
+    {
+      "capabilityDomain": "configuration",
+      "semanticContractCount": 2
+    },
+    {
+      "capabilityDomain": "data-platform",
+      "semanticContractCount": 1
+    },
+    {
+      "capabilityDomain": "identity-access",
+      "semanticContractCount": 13
+    },
+    {
+      "capabilityDomain": "observability-ops",
+      "semanticContractCount": 2
+    },
+    {
+      "capabilityDomain": "security-governance",
+      "semanticContractCount": 3
+    },
+    {
+      "capabilityDomain": "storage",
+      "semanticContractCount": 1
+    },
+    {
+      "capabilityDomain": "support-admin",
+      "semanticContractCount": 1
+    }
+  ],
+  "semanticContractIds": [
+    "semantic-contract.abac-policy-decision-point",
+    "semantic-contract.api-keys-personal-access-tokens",
+    "semantic-contract.audit-of-privileged-access",
+    "semantic-contract.authentication-platform",
+    "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+    "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+    "semantic-contract.delegated-administration-roles",
+    "semantic-contract.end-user-profile-and-preferences-self-service",
+    "semantic-contract.entitlement-engine",
+    "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+    "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+    "semantic-contract.rbac-roles-and-permissions",
+    "semantic-contract.sub-organisations",
+    "semantic-contract.support-mode-break-glass-access",
+    "semantic-contract.tenant-canonical-domain-set-unset",
+    "semantic-contract.tenant-data-import-export",
+    "semantic-contract.tenant-domain-activation-auth-client",
+    "semantic-contract.tenant-groups",
+    "semantic-contract.tenant-host-identity-resolution",
+    "semantic-contract.tenant-identity-record-and-fqdn",
+    "semantic-contract.tenant-isolation-proof",
+    "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+    "semantic-contract.tenant-service-clickthrough-policy",
+    "semantic-contract.user-identity-and-tenant-membership"
+  ],
+  "serviceSurfaceIds": [
+    "alertmanager",
+    "caddy",
+    "grafana",
+    "keycloak",
+    "keycloak-db",
+    "loki",
+    "openbao",
+    "pgadmin",
+    "postgres",
+    "prometheus",
+    "sentry",
+    "sonarqube",
+    "tempo",
+    "temporal-ui",
+    "windmill"
+  ],
+  "deterministicTestFiles": [
+    {
+      "path": "tests/packages/auth/authn-authz-tenant-role-permission-unit.test.ts",
+      "testLayer": "unit",
+      "surfaces": [
+        "token verifier posture",
+        "identity resolution",
+        "session lifecycle",
+        "tenant selection",
+        "pure PDP role permission decisions",
+        "service account least privilege"
+      ],
+      "serviceBackedCoverageClaim": false
+    },
+    {
+      "path": "tests/packages/auth/authn-authz-tenant-role-permission-integration.test.ts",
+      "testLayer": "integration-evidence-linkage",
+      "surfaces": [
+        "semantic obligation manifest",
+        "composed service integration matrix",
+        "synthetic fixture corpus",
+        "test environment service contract"
+      ],
+      "serviceBackedCoverageClaim": false
+    },
+    {
+      "path": "tests/packages/auth/authn-authz-tenant-role-permission-regression.test.ts",
+      "testLayer": "regression",
+      "surfaces": [
+        "permission weakening detection",
+        "tenant boundary weakening detection",
+        "membership status fail-closed detection",
+        "audit redaction detection",
+        "test-readiness planted defect selftest"
+      ],
+      "serviceBackedCoverageClaim": false
+    }
+  ],
+  "tokenPostureCases": [
+    "valid-keycloak-token",
+    "malformed-token",
+    "invalid-signature",
+    "expired-token",
+    "not-yet-valid-token",
+    "wrong-issuer",
+    "brokered-upstream-issuer-presented-directly",
+    "wrong-audience",
+    "unsupported-algorithm",
+    "unknown-key",
+    "disabled-user",
+    "unknown-identity",
+    "unverified-email-when-required"
+  ],
+  "tenantBoundaryCases": [
+    "tenant-a-allow",
+    "tenant-b-allow-with-explicit-active-membership",
+    "tenant-c-deny-without-membership",
+    "cross-tenant-resource-deny",
+    "route-query-body-tenant-conflict-local-representation",
+    "worker-job-tenant-mismatch-local-representation",
+    "object-path-tenant-escape-local-representation",
+    "event-subject-tenant-escape-local-representation",
+    "secret-path-tenant-escape-local-representation",
+    "search-index-tenant-escape-local-representation",
+    "analytics-query-tenant-escape-local-representation"
+  ],
+  "rolePermissionCases": [
+    "tenant-admin-allowed-explicit-permission",
+    "tenant-member-write-denied",
+    "auditor-read-only-denies-mutation",
+    "security-admin-sensitive-read-allowed",
+    "service-worker-job-run-allowed",
+    "service-worker-tenant-admin-action-denied",
+    "unknown-role-denied",
+    "privilege-escalation-role-claim-denied",
+    "cross-tenant-role-replay-denied",
+    "break-glass-placeholder-fails-closed-unless-active-in-scope-grant"
+  ],
+  "serviceBackedEvidenceBoundary": {
+    "keycloakComposedCoverageRequired": true,
+    "keycloakDbComposedCoverageRequired": true,
+    "postgresRlsComposedCoverageRequired": true,
+    "apiWorkerProviderOperatorSurfaceCoverageRequired": true,
+    "inMemorySubstituteMaySatisfyServiceBackedClaim": false,
+    "currentOwnedTestsDoNotStartCompose": true,
+    "composedProofCommands": [
+      "corepack pnpm test-readiness:semantic",
+      "corepack pnpm test-readiness:fixtures",
+      "corepack pnpm test-readiness:integration",
+      "corepack pnpm test-readiness:composed"
+    ]
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/auth",
+    "corepack pnpm typecheck",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "git diff --check"
+  ],
+  "deferredCoordinatorOwnedEnterpriseEvidenceRows": [
+    {
+      "section": "soaSupportMappings",
+      "proposedId": "soa-usf-249-authn-authz-tenant-role-permission-suite",
+      "evidencePath": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+      "ownerIssueId": "USF-249",
+      "nonClaimBoundary": "Tracks authn authz tenant role permission test evidence only; does not define SOC, ISO, production, live-provider, staging, deployment, product UI, browser E2E, full React parity, final test readiness, or USF-234 acceptance."
+    },
+    {
+      "section": "evidenceRegister",
+      "proposedId": "evidence-usf-249-authn-authz-tenant-role-permission-suite",
+      "evidencePath": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+      "ownerIssueId": "USF-249",
+      "nonClaimBoundary": "Repository evidence metadata only; generated reports and local tests do not upgrade provider mode or environment claims."
+    },
+    {
+      "section": "threatModelAbuseCaseRegister",
+      "proposedId": "threat-usf-249-authn-authz-tenant-role-permission-suite",
+      "evidencePath": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+      "ownerIssueId": "USF-249",
+      "nonClaimBoundary": "Covers local fail-closed token, tenant, role, permission, escalation, and boundary abuse cases without claiming live abuse-prevention readiness."
+    },
+    {
+      "section": "accessReviewPrivilegedOperationPosture",
+      "proposedId": "access-usf-249-authn-authz-tenant-role-permission-suite",
+      "evidencePath": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+      "ownerIssueId": "USF-249",
+      "nonClaimBoundary": "Covers privileged operation posture locally and in composed-evidence linkage only; does not mark any Linear issue Done."
+    },
+    {
+      "section": "privacyDataMinimisationPosture",
+      "proposedId": "privacy-usf-249-authn-authz-tenant-role-permission-suite",
+      "evidencePath": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+      "ownerIssueId": "USF-249",
+      "nonClaimBoundary": "Confirms audit evidence is value-free and does not retain raw tokens, secrets, credentials, provider payloads, or real tenant data."
+    }
+  ],
+  "allowedClaims": [
+    "authn-authz-tenant-role-permission-suite-defined",
+    "owned-auth-test-files-added",
+    "non-claim-boundary-preserved"
+  ],
+  "nonClaims": [
+    "test-readiness",
+    "final-test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "USF-234-acceptance"
+  ]
+}
