@@ -1,0 +1,55 @@
+{
+  "id": "adversarial-semantic-cases",
+  "issueId": "USF-257",
+  "sourceSuite": "docs/architecture/adversarial-formal-semantic-testing-suite.json",
+  "caseIds": [
+    "semantic-facet-contradiction",
+    "complete-facet-without-authority-link",
+    "duplicate-service-id-conflicting-owner",
+    "same-name-changed-behaviour",
+    "same-behaviour-different-name",
+    "generated-compose-treated-as-authority",
+    "stale-evidence-pass-accepted",
+    "in-memory-service-substitute-overclaim",
+    "future-ai-code-without-semantic-update",
+    "future-ai-semantic-without-test-evidence",
+    "deferred-work-marked-complete-without-proof",
+    "non-claim-removed"
+  ],
+  "expectedFailureIds": [
+    "USF-257-ADVERSARIAL-CONTRADICTION",
+    "USF-257-ADVERSARIAL-MISSING-AUTHORITY",
+    "USF-257-ADVERSARIAL-AMBIGUOUS-SERVICE",
+    "USF-257-ADVERSARIAL-UNSAFE-EQUIVALENCE",
+    "USF-257-ADVERSARIAL-AMBIGUOUS-EQUIVALENCE",
+    "USF-257-ADVERSARIAL-GENERATED-AUTHORITY-INVERSION",
+    "USF-257-ADVERSARIAL-STALE-EVIDENCE-PASS",
+    "USF-257-ADVERSARIAL-IN-MEMORY-SUBSTITUTE",
+    "USF-257-ADVERSARIAL-FUTURE-AI-DRIFT",
+    "USF-257-ADVERSARIAL-NON-CLAIM-REMOVED"
+  ],
+  "metamorphicChecks": [
+    "equivalent-input-order-produces-equivalent-obligations",
+    "changed-semantic-definition-changes-obligation-fingerprint",
+    "impossible-states-are-rejected",
+    "missing-non-claims-fail-closed"
+  ],
+  "nonClaims": [
+    "formal-verification",
+    "mathematical-proof",
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "final-usf-234-acceptance"
+  ]
+}
