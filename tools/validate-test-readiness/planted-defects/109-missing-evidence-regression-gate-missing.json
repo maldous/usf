@@ -1,0 +1,6 @@
+{
+  "id": "109-missing-evidence-regression-gate-missing",
+  "description": "Remove the final USF-247 missing-evidence planted-defect regression gate evidence artefact.",
+  "removeMissingEvidenceRegressionGate": true,
+  "expectedRule": "USF-TEST-READINESS-109"
+}

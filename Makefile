@@ -5,7 +5,7 @@ SHELL := /bin/bash
 .PHONY: \
 	help commands setup foundation dev-ready test-ready test test-composed test-coverage test-assurance \
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
-	test-readiness-coverage \
+	test-readiness-coverage test-readiness-selftest \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
 	verify install dev dev-smoke dev.work \
@@ -50,6 +50,7 @@ help:
 		'  make test-composed         Composed semantic harness, deterministic fixtures, and service integration matrix' \
 		'  make test-coverage         Generate bounded LCOV and enforce 100% in-scope coverage' \
 		'  make test-assurance        Bounded local SonarQube zero-open-issue proof' \
+		'  make test-readiness-selftest  Run planted-defect regression selftest' \
 		'  make sonar-zero-issue-proof  Bounded local SonarQube zero-open-issue proof' \
 		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
 		'' \
@@ -91,6 +92,9 @@ test-readiness-integration:
 
 test-readiness-coverage:
 	corepack pnpm test-readiness:coverage
+
+test-readiness-selftest:
+	corepack pnpm test-readiness:selftest
 
 validate-foundation: verify
 

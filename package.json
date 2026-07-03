@@ -25,6 +25,7 @@
     "test-readiness:composed": "pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration",
     "test-readiness:coverage": "pnpm test:coverage",
     "test-readiness:assurance": "pnpm proof:assurance:sonarqube",
+    "test-readiness:selftest": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
     "format:check": "prettier --check \"{apps,capabilities,adapters,packages,tests}/**/*.{ts,json,yaml,yml}\" package.json pnpm-workspace.yaml tsconfig.json tsconfig.base.json eslint.config.js vitest.config.ts .prettierrc.json docs/architecture/bootstrap-start.json",
     "format:write": "prettier --write \"{apps,capabilities,adapters,packages,tests}/**/*.{ts,json,yaml,yml}\" package.json pnpm-workspace.yaml tsconfig.json tsconfig.base.json eslint.config.js vitest.config.ts .prettierrc.json docs/architecture/bootstrap-start.json",
     "lint": "eslint .",

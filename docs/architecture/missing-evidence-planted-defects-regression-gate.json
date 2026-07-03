@@ -1,0 +1,163 @@
+{
+  "id": "missing-evidence-planted-defects-regression-gate",
+  "title": "Missing Evidence Planted Defects Regression Gate",
+  "issueId": "USF-247",
+  "parentIssueId": "USF-234",
+  "dependsOnIssueIds": [
+    "USF-239",
+    "USF-240",
+    "USF-241",
+    "USF-242",
+    "USF-243",
+    "USF-244",
+    "USF-245",
+    "USF-246",
+    "USF-248",
+    "USF-249",
+    "USF-250",
+    "USF-251",
+    "USF-252",
+    "USF-253",
+    "USF-254",
+    "USF-255",
+    "USF-256",
+    "USF-257",
+    "USF-258",
+    "USF-259"
+  ],
+  "lifecycleState": "active-test-readiness-planted-defect-regression-gate",
+  "testReadinessClaimAllowed": false,
+  "validatorPath": "tools/validate-test-readiness/validate-test-readiness.py",
+  "plantedDefectDirectory": "tools/validate-test-readiness/planted-defects",
+  "selftestCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+  "packageScript": "test-readiness:selftest",
+  "packageCommand": "corepack pnpm test-readiness:selftest",
+  "makeTarget": "test-readiness-selftest",
+  "plantedDefectCount": 111,
+  "coverageModel": {
+    "perDefectExpectedRuleField": "expectedRule",
+    "deterministicFailureProof": "The selftest command loads every planted defect JSON file, applies it to the current repository evidence state, and fails unless the expected rule id appears in the validator findings.",
+    "ruleCatalogue": "USF-TEST-READINESS-001 through USF-TEST-READINESS-109 plus USF-TEST-READINESS-SELFTEST",
+    "failureOutputBoundary": "The validator reports severity, rule id, subject, and safe failure message. It does not expose secrets, real tenant data, raw provider payloads, tokens, stack traces, or live endpoints."
+  },
+  "regressionCategories": [
+    {
+      "id": "root-obligation-manifest-and-validator",
+      "ruleRange": "USF-TEST-READINESS-029 through USF-TEST-READINESS-039 and USF-TEST-READINESS-076 through USF-TEST-READINESS-080",
+      "prevents": "Missing or stale semantic obligation manifest rows, dependency graph entries, generated Compose coverage, validator wiring, schema registry linkage, or expanded category obligations."
+    },
+    {
+      "id": "command-coverage-sonar-and-lcov",
+      "ruleRange": "USF-TEST-READINESS-022 through USF-TEST-READINESS-028 and USF-TEST-READINESS-095 through USF-TEST-READINESS-101",
+      "prevents": "Missing command surface, stale package or Make wiring, missing LCOV, stale Sonar import, downgraded coverage threshold, or unapproved exclusion."
+    },
+    {
+      "id": "fixture-seed-reset-cleanup",
+      "ruleRange": "USF-TEST-READINESS-040 through USF-TEST-READINESS-046",
+      "prevents": "Missing service fixtures, semantic fixtures, seeder resetter cleanup teardown APIs, provenance, repeatability evidence, or test-layer wiring."
+    },
+    {
+      "id": "composed-service-and-profile-exercise",
+      "ruleRange": "USF-TEST-READINESS-047 through USF-TEST-READINESS-054",
+      "prevents": "Missing generated test Compose service exercise, profile exercise, service catalogue disposition, profile-gated disposition, command linkage, or in-memory service substitute prohibition."
+    },
+    {
+      "id": "semantic-unit-and-functional-regression",
+      "ruleRange": "USF-TEST-READINESS-055 through USF-TEST-READINESS-066",
+      "prevents": "Missing semantic unit tests, stale mapped test names, unsafe service-backed claims from unit tests, missing functional regression semantic and service mappings, missing behaviour cases, or regression overclaim."
+    },
+    {
+      "id": "enterprise-control-and-iso-supporting-evidence",
+      "ruleRange": "USF-TEST-READINESS-067 through USF-TEST-READINESS-075",
+      "prevents": "Missing SoA support mapping, evidence register rows, threat model, access posture, resilience posture, incident and vulnerability posture, privacy posture, or certification/readiness overclaim."
+    },
+    {
+      "id": "performance-and-operational-resilience",
+      "ruleRange": "USF-TEST-READINESS-081 through USF-TEST-READINESS-094",
+      "prevents": "Missing performance budgets, concurrency/resource guardrails, cleanup under pressure, failure-mode coverage, fail-closed audit/observability evidence, reset cleanup teardown evidence, profile failure evidence, or operational overclaim."
+    },
+    {
+      "id": "future-ai-semantic-guardrail",
+      "ruleRange": "USF-TEST-READINESS-102 through USF-TEST-READINESS-108",
+      "prevents": "Future AI-delivered code, Compose, command, fixture, evidence, or test changes from bypassing semantic obligation, guardrail, diagnostic, generated Compose authority, and non-claim updates."
+    },
+    {
+      "id": "final-planted-defect-regression-evidence",
+      "ruleRange": "USF-TEST-READINESS-109 and USF-TEST-READINESS-SELFTEST",
+      "prevents": "Treating scattered planted defects as complete without the final aggregate evidence and command gate, or accepting planted defects that no longer fail for their expected rule."
+    }
+  ],
+  "requiredFailureClasses": [
+    "missing-service-exercise",
+    "missing-seeder",
+    "missing-resetter",
+    "missing-cleanup-evidence",
+    "missing-auth-tenant-role-permission-coverage",
+    "missing-keycloak-postgres-rls-auth-evidence",
+    "missing-bulk-import-export-evidence",
+    "missing-backup-restore-evidence",
+    "missing-privacy-retention-evidence",
+    "missing-profile-orchestration",
+    "missing-ai-change-semantic-test-evidence-update",
+    "missing-enterprise-evidence",
+    "missing-non-claim-preservation",
+    "readiness-or-certification-overclaim"
+  ],
+  "validationCommands": [
+    "corepack pnpm test-readiness:selftest",
+    "make test-readiness-selftest",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "corepack pnpm test-readiness"
+  ],
+  "evidenceSources": [
+    "tools/validate-test-readiness/planted-defects",
+    "tools/validate-test-readiness/validate-test-readiness.py",
+    "docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+    "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "docs/architecture/composed-service-integration-test-matrix.json",
+    "tests/packages/fixtures/service-fixture-corpus.json",
+    "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json"
+  ],
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": [
+      "soa-usf-247-missing-evidence-planted-defect-regression-gate"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-247-missing-evidence-planted-defect-regression-gate"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-247-missing-evidence-planted-defect-regression-gate"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-247-missing-evidence-planted-defect-regression-gate"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-247-missing-evidence-planted-defect-regression-gate"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-247-missing-evidence-planted-defect-regression-gate"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-247-missing-evidence-planted-defect-regression-gate"
+    ]
+  },
+  "allowedClaims": [
+    "planted-defect-regression-gate-defined",
+    "test-readiness-validator-selftest-command-defined"
+  ],
+  "nonClaims": [
+    "final-test-readiness",
+    "test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ]
+}

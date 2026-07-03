@@ -6031,6 +6031,37 @@
         "full-react-parity-readiness",
         "usf-234-closure"
       ]
+    },
+    {
+      "id": "soa-usf-247-missing-evidence-planted-defect-regression-gate",
+      "mappedType": "test-readiness-planted-defect-regression-gate",
+      "controlPurpose": "Organise USF-247 evidence that every expanded test-readiness validator class has planted-defect regression coverage and an explicit selftest command before final USF-234 acceptance.",
+      "riskTreated": "A future change could remove, weaken, stale, skip, or overclaim test-readiness evidence without a deterministic planted-defect failure.",
+      "assetServiceAffected": "tools/validate-test-readiness/planted-defects; tools/validate-test-readiness/validate-test-readiness.py; docs/architecture/missing-evidence-planted-defects-regression-gate.json; docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-247; parentIssue=USF-234; treatment=enforce planted-defect selftest over expanded test-readiness gate classes; reviewDate=2026-09-30; followUpIssue=USF-260,USF-234",
+      "evidenceSource": "docs/architecture/missing-evidence-planted-defects-regression-gate.json; tools/validate-test-readiness/planted-defects; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-109",
+      "validationCommand": "corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-247 proves the planted-defect regression gate only. Final test-readiness acceptance and staging-entry decision remain owned by USF-260 and USF-234; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -9153,6 +9184,26 @@
         "USF-260"
       ],
       "retentionPosture": "Retain committed value-free coverage configuration, LCOV command evidence, Sonar LCOV import evidence, validator findings, planted-defect selftests, and PR validation output. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw scanner logs, provider payloads, or production data."
+    },
+    {
+      "id": "evidence-usf-247-missing-evidence-planted-defect-regression-gate",
+      "proofResult": "missing-evidence-planted-defect-regression-gate",
+      "whatWasProven": "USF-247 defines and enforces a final planted-defect selftest command that runs every test-readiness planted defect against its expected validator rule and records the aggregate regression evidence surface.",
+      "whatWasNotProven": "USF-247 does not prove final USF-234 test-readiness acceptance, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "local-validator-selftest-only",
+      "providerMode": "not-applicable-no-runtime-provider",
+      "serviceCatalogueRow": "docs/architecture/missing-evidence-planted-defects-regression-gate.json#regressionCategories",
+      "adapterProviderId": "not-applicable-validator-regression-gate",
+      "validationCommand": "corepack pnpm test-readiness:selftest; make test-readiness-selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "package.json#scripts.test-readiness:selftest; Makefile#test-readiness-selftest; tools/validate-test-readiness/validate-test-readiness.py#run_selftest",
+      "commitPin": "bc2ee18737c13a21a45abf6224b3833539e6479a",
+      "prOrMergeSha": "bc2ee18737c13a21a45abf6224b3833539e6479a",
+      "issueLinks": [
+        "USF-247",
+        "USF-234",
+        "USF-260"
+      ],
+      "retentionPosture": "Retain committed value-free planted defect files, aggregate evidence, validator rule catalogue, selftest command output, PR validation output, and post-merge Linear reconciliation. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, raw provider payloads, or production data. The PR and post-merge Linear reconciliation record the final merge SHA for this issue."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -11923,6 +11974,32 @@
       "failClosedBehaviour": "The test-readiness validator fails on missing coverage gate evidence, missing package or Make command wiring, downgraded thresholds, undocumented exclusions, stale Sonar LCOV import, stale command-surface rows, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free coverage command output, validator findings, planted-defect selftest output, PR validation output, and bounded Sonar local synthetic proof output only.",
       "residualRisk": "riskStatement=USF-240 does not prove repository-wide coverage or final USF-234 acceptance; impact=final readiness could be overclaimed if bounded coverage is treated as complete; likelihood=medium until USF-247, USF-260, and USF-234 reconcile final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer broad acceptance; reviewDate=2026-09-30; followUpIssue=USF-247,USF-260,USF-234."
+    },
+    {
+      "id": "threat-usf-247-missing-evidence-planted-defect-regression-gate",
+      "targetType": "test-readiness-planted-defect-regression-gate",
+      "target": "USF-247 final missing-evidence planted-defect regression gate",
+      "trustBoundary": "Local repository validator selftest and committed value-free evidence only. No composed service runtime, live provider, staging, production, SOC, ISO certification, enterprise production, product UI, browser E2E, or final USF-234 acceptance boundary is proven by this gate.",
+      "tenantBoundary": "The gate uses metadata and synthetic planted defects only. It must not depend on real tenants, real actor data, production data, or live provider payloads.",
+      "credentialBoundary": "The gate must not expose secrets, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, raw scanner logs, or provider payloads.",
+      "dataClassification": "internal synthetic test-readiness governance metadata",
+      "abuseCases": [
+        "A required test-readiness evidence class is removed without a validator failure",
+        "A planted defect stops failing for its expected rule but the final gate still passes",
+        "A future AI-delivered change weakens tests, fixtures, commands, non-claims, or evidence without updating obligations",
+        "A planted-defect pass is mistaken for final USF-234 acceptance"
+      ],
+      "failureModes": [
+        "missing aggregate evidence artefact",
+        "stale planted defect count",
+        "missing expectedRule field",
+        "missing selftest command wiring",
+        "missing failure class coverage",
+        "readiness or certification overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails when the USF-247 evidence artefact is missing, stale, under-counted, missing dependency or failure-class coverage, missing the selftest command, or overclaiming readiness.",
+      "monitoringAuditEvidence": "Value-free validator findings, selftest command output, planted defect inventory, PR validation output, and Linear post-merge reconciliation.",
+      "residualRisk": "riskStatement=USF-247 does not run final USF-234 acceptance; impact=final readiness could still be incomplete if later gates are skipped; likelihood=medium until USF-260 and USF-234 complete; owner=platform-test-readiness-foundation; treatment=mitigate with final gates; reviewDate=2026-09-30; followUpIssue=USF-260,USF-234"
     }
   ],
   "sdkDependencyGovernance": [
@@ -15871,6 +15948,42 @@
         "full-react-parity-readiness",
         "usf-234-closure"
       ]
+    },
+    {
+      "id": "access-usf-247-missing-evidence-planted-defect-regression-gate",
+      "targetType": "test-readiness-planted-defect-regression-gate",
+      "target": "USF-247 validator selftest command surface",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-247",
+        "accessModel=local-repository-command-only",
+        "authnAuthzBoundary=developer-or-agent-local-repository-access-not-provider-admin-access",
+        "leastPrivilegePosture=no-live-provider-credential-or-admin-surface-required",
+        "breakGlassRelevance=not-applicable-to-local-validator-selftest",
+        "auditEvidence=value-free-command-output-and-Linear-reconciliation",
+        "reviewCadence=before-USF-260-and-USF-234-final-acceptance",
+        "deprovisioningPosture=no-persistent-access-created"
+      ],
+      "evidenceSource": "Makefile; package.json; docs/architecture/missing-evidence-planted-defects-regression-gate.json",
+      "validationCommand": "corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "No privileged provider access is proven or required. Final operator and staging access remain non-claims; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -19187,6 +19300,41 @@
         "test-readiness",
         "final-test-readiness",
         "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-247-missing-evidence-planted-defect-regression-gate",
+      "targetType": "test-readiness-planted-defect-regression-gate",
+      "target": "USF-247 regression gate resilience posture",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-247",
+        "backupRequirement=not-applicable-to-committed-validator-metadata-beyond-git-history",
+        "restoreProofRequirement=git-checkout-and-validator-selftest-rerun-only",
+        "rpoRtoTarget=not-claimed-for-production-or-staging",
+        "corruptionFailureScenario=planted-defect-file-or-evidence-row-removed-or-stale",
+        "cleanupTeardownProof=not-applicable-no-runtime-service-started",
+        "drBoundary=repository-history-only-no-production-DR-claim"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/planted-defects; docs/architecture/missing-evidence-planted-defects-regression-gate.json",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+      "deferredReason": "Runtime backup/restore resilience remains owned by service-specific tests and final USF-260/USF-234 gates; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
         "staging-readiness",
         "production-readiness",
         "deployment-readiness",
@@ -23114,6 +23262,42 @@
         "test-readiness",
         "final-test-readiness",
         "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
+    },
+    {
+      "id": "incident-usf-247-missing-evidence-planted-defect-regression-gate",
+      "targetType": "test-readiness-planted-defect-regression-gate",
+      "target": "USF-247 planted-defect regression incident boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-247",
+        "incidentDetectionHook=validator-selftest-failure-or-PR-validation-failure-only",
+        "alertingPosture=not-proven-by-USF-247",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=not-a-live-vulnerability-clearance-gate",
+        "dependencyUpdatePosture=no-new-dependencies-introduced",
+        "correctiveActionEvidence=validator-rules-and-planted-defect-regression-selftest",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-247"
+      ],
+      "evidenceSource": "docs/architecture/missing-evidence-planted-defects-regression-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Production incident response, vulnerability clearance, and final acceptance remain non-claims owned by later gates; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
         "staging-readiness",
         "production-readiness",
         "deployment-readiness",
@@ -27641,6 +27825,44 @@
         "test-readiness",
         "final-test-readiness",
         "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
+    },
+    {
+      "id": "privacy-usf-247-missing-evidence-planted-defect-regression-gate",
+      "targetType": "test-readiness-planted-defect-regression-gate",
+      "target": "USF-247 planted-defect regression evidence privacy boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-247",
+        "dataOrigin=synthetic-validator-metadata-and-planted-defect-files-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-governance-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-evidence-retained-generated-command-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/missing-evidence-planted-defects-regression-gate.json; tools/validate-test-readiness/planted-defects",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+      "deferredReason": "Live-provider privacy, production data residency, legal hold, and provider-managed retention are not proven by USF-247; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
         "staging-readiness",
         "production-readiness",
         "deployment-readiness",
