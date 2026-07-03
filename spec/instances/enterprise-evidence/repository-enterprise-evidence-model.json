@@ -5968,6 +5968,37 @@
         "full-dev-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-245-operational-resilience-failure-mode-suite",
+      "mappedType": "test-readiness-operational-resilience-suite",
+      "controlPurpose": "Map operational resilience, degraded readiness, fail-closed, incident, privacy, and cleanup test evidence to the USF-234 test-readiness control-support model.",
+      "riskTreated": "Operational failures, partial dependency outages, stale incident evidence, unsafe cleanup, or hidden service-backed substitutes could make test-readiness evidence misleading.",
+      "assetServiceAffected": "USF-245 operational resilience suite; semantic service obligations; generated test Compose services and profiles.",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-245; parentIssue=USF-234; treatment=bounded-local-synthetic-operational-test-gate; reviewDate=2026-09-30; followUpIssue=USF-245",
+      "evidenceSource": "docs/architecture/operational-resilience-failure-mode-suite.json; tests/packages/operational-resilience-failure-mode-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json; corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "deferredReason": "No staging, production, live-provider, destructive fault-injection, or final USF-234 acceptance claim is made.",
+      "nonClaims": [
+        "final-test-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-dev-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -9048,6 +9079,27 @@
         "USF-234"
       ],
       "retentionPosture": "Retain committed manifest, schema, validator, planted defects, and Linear reconciliation until USF-234 final acceptance supersedes the expanded-category gate."
+    },
+    {
+      "id": "evidence-usf-245-operational-resilience-failure-mode-suite",
+      "proofResult": "bounded-local-operational-resilience-suite-proven",
+      "whatWasProven": "USF-245 maps operational failure modes to semantic obligations, service obligations, profile exercise evidence, fixture reset evidence, incident/privacy posture, validator rules, and planted defects using deterministic synthetic local tests.",
+      "whatWasNotProven": "Final USF-234 test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, destructive chaos testing, and production incident readiness are not proven.",
+      "runtimeMode": "test-readiness-bounded-local-operational-suite",
+      "providerMode": "composed-service-evidence-required-for-service-backed-claims-no-live-provider-claim",
+      "serviceCatalogueRow": "docs/architecture/semantic-service-test-obligation-manifest.json#serviceObligations.ownerIssueIds.USF-245",
+      "adapterProviderId": "operational-resilience-failure-mode-suite",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json; corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "commandPin": "tools/validate-test-readiness/validate-test-readiness.py#operational-resilience-failure-mode-suite",
+      "commitPin": "a4361d8dd2531faea5a545d6c3bcd55c4addf880",
+      "prOrMergeSha": "a4361d8dd2531faea5a545d6c3bcd55c4addf880",
+      "issueLinks": [
+        "USF-245",
+        "USF-247",
+        "USF-260",
+        "USF-234"
+      ],
+      "retentionPosture": "Retain committed suite JSON, Markdown, tests, validator rules, planted defects, and Linear reconciliation until USF-234 final acceptance supersedes the child gate."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -11764,6 +11816,33 @@
       "failClosedBehaviour": "The test-readiness validator fails on missing, stale, unlinked, under-evidenced, or overclaiming expanded category rows.",
       "monitoringAuditEvidence": "Value-free validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
       "residualRisk": "USF-258 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30."
+    },
+    {
+      "id": "threat-usf-245-operational-resilience-failure-mode-suite",
+      "targetType": "test-readiness-operational-resilience-suite",
+      "target": "USF-245 operational resilience failure-mode suite",
+      "trustBoundary": "Local repository test-readiness evidence, deterministic synthetic failure descriptors, fixture lifecycle evidence, and composed-service obligation metadata. No staging, production, live-provider, SOC, ISO certification, or enterprise production boundary is proven.",
+      "tenantBoundary": "Tenant boundary is represented through synthetic fixture metadata and fail-closed evidence only; real tenant data is forbidden.",
+      "credentialBoundary": "No real credentials, raw tokens, raw endpoints, stack traces, raw SDK errors, provider payloads, real tenant data, or production data may appear in operational evidence.",
+      "dataClassification": "internal synthetic test-readiness operational evidence",
+      "abuseCases": [
+        "Operational failure evidence is omitted while final gates appear unblocked",
+        "A service-backed operational claim is satisfied by in-memory or process-local substitute",
+        "A profile-gated service lacks degraded readiness or cleanup evidence",
+        "Incident or privacy evidence is missing for failure cases",
+        "Readiness or certification is inferred from bounded local operational tests"
+      ],
+      "failureModes": [
+        "missing operational suite",
+        "missing service operational row",
+        "missing profile operational row",
+        "missing fail-closed audit evidence",
+        "missing reset cleanup teardown evidence",
+        "readiness or certification overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails when operational mappings, profile rows, fail-closed markers, cleanup evidence, incident/privacy evidence, or non-claims are missing or stale.",
+      "monitoringAuditEvidence": "Value-free Vitest output, validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
+      "residualRisk": "Destructive chaos testing, live-provider incident response, staging/prod recovery, and final USF-234 acceptance remain outside USF-245."
     }
   ],
   "sdkDependencyGovernance": [
@@ -15633,6 +15712,45 @@
         "full-dev-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-245-operational-resilience-failure-mode-suite",
+      "targetType": "test-readiness-operational-resilience-suite",
+      "target": "USF-245 operational access and privileged operation evidence boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-245",
+        "accessModel=synthetic-local-operational-test-context-only",
+        "authnAuthzBoundary=fail-closed-operational-evidence-required-for-service-backed-obligations",
+        "leastPrivilegePosture=no-real-privileged-operator-actions",
+        "breakGlassRelevance=no-operational-break-glass-proof",
+        "auditEvidence=value-free-fail-closed-and-denial-markers-required",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=not-proven-for-live-provider-or-production-access",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/operational-resilience-failure-mode-suite.json; tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json; corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "deferredReason": "No staging, production, live-provider, public exposure, or break-glass readiness claim is made.",
+      "nonClaims": [
+        "final-test-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-dev-readiness",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -18865,6 +18983,47 @@
       "nonClaims": [
         "test-readiness",
         "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-dev-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-245-operational-resilience-failure-mode-suite",
+      "targetType": "test-readiness-operational-resilience-suite",
+      "target": "USF-245 resilience evidence boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-245",
+        "readinessChecks=degraded-unavailable-and-resettable-state-evidence-required",
+        "retryTimeoutBehaviour=bounded-synthetic-retry-backoff-and-timeout-evidence-only",
+        "failClosedMode=validator-fails-on-missing-fail-closed-or-audit-evidence",
+        "safeTeardown=reset-cleanup-teardown-evidence-required",
+        "structuredLogging=value-free-test-and-validator-output-only",
+        "tracingCorrelation=metadata-required-no-live-tracing-backend-claim",
+        "metrics=value-free-local-test-evidence-only",
+        "auditEvents=value-free-fail-closed-operational-evidence-required",
+        "redaction=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-or-production-data",
+        "backupRestorePosture=bounded-test-readiness-backup-restore-integrity-evidence-required-where-data-bearing",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "promotionImpact=blocks-test-readiness,blocks-staging-entry,blocks-production-readiness,blocks-operational-assurance-evidence-completeness"
+      ],
+      "evidenceSource": "docs/architecture/operational-resilience-failure-mode-suite.json; tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json; corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "deferredReason": "No production DR, live-provider recovery, destructive chaos, or RPO/RTO readiness claim is made.",
+      "nonClaims": [
+        "final-test-readiness",
+        "test-readiness",
         "staging-readiness",
         "production-readiness",
         "deployment-readiness",
@@ -22719,6 +22878,42 @@
       "nonClaims": [
         "test-readiness",
         "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-dev-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-245-operational-resilience-failure-mode-suite",
+      "targetType": "test-readiness-operational-resilience-suite",
+      "target": "USF-245 incident evidence boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-245",
+        "incidentDetectionHook=test-readiness-validator-finding-Vitest-failure-PR-check-failure-only",
+        "alertingPosture=value-free-local-alert-dashboard-evidence-required-no-live-alerting-claim",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=failed-dependency-and-accepted-risk-fixture-evidence-required",
+        "dependencyUpdatePosture=category-specific-not-proven-by-USF-245",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-operational-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-245"
+      ],
+      "evidenceSource": "docs/architecture/operational-resilience-failure-mode-suite.json; tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json; corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "deferredReason": "No production incident readiness, SOC readiness, or live-provider operational readiness is claimed.",
+      "nonClaims": [
+        "final-test-readiness",
+        "test-readiness",
         "staging-readiness",
         "production-readiness",
         "deployment-readiness",
@@ -27169,6 +27364,44 @@
       "nonClaims": [
         "test-readiness",
         "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-dev-readiness",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-245-operational-resilience-failure-mode-suite",
+      "targetType": "test-readiness-operational-resilience-suite",
+      "target": "USF-245 synthetic data and privacy evidence boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-245",
+        "dataOrigin=synthetic-local-operational-test-readiness-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-operational-evidence",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-suite-evidence-retained-runtime-data-reset-and-cleanup-required",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/operational-resilience-failure-mode-suite.json; tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "validationCommand": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json; corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts",
+      "deferredReason": "No production privacy, data residency, legal hold, or live-provider data handling readiness is claimed.",
+      "nonClaims": [
+        "final-test-readiness",
+        "test-readiness",
         "staging-readiness",
         "production-readiness",
         "deployment-readiness",

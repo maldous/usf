@@ -33,6 +33,7 @@ SEMANTIC_UNIT_SUITE_PATH = Path("docs/architecture/semantic-unit-test-suite.json
 FUNCTIONAL_REGRESSION_SUITE_PATH = Path("docs/architecture/functional-service-regression-suite.json")
 ENTERPRISE_CONTROL_SUITE_PATH = Path("docs/architecture/enterprise-control-evidence-test-suite.json")
 PERFORMANCE_RESOURCE_SUITE_PATH = Path("docs/architecture/performance-concurrency-resource-regression-suite.json")
+OPERATIONAL_RESILIENCE_SUITE_PATH = Path("docs/architecture/operational-resilience-failure-mode-suite.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -131,6 +132,13 @@ RULES = {
     "USF-TEST-READINESS-085": ("blocking", "performance cleanup under pressure evidence is missing"),
     "USF-TEST-READINESS-086": ("blocking", "performance evidence boundary preserves insufficient non-claims or overclaims readiness"),
     "USF-TEST-READINESS-087": ("blocking", "performance enterprise evidence linkage is missing or stale"),
+    "USF-TEST-READINESS-088": ("blocking", "operational resilience failure-mode suite evidence is missing invalid or stale"),
+    "USF-TEST-READINESS-089": ("blocking", "operational resilience semantic or service mapping is missing or stale"),
+    "USF-TEST-READINESS-090": ("blocking", "operational resilience fail-closed audit or observability evidence is missing"),
+    "USF-TEST-READINESS-091": ("blocking", "operational resilience reset cleanup teardown evidence is missing"),
+    "USF-TEST-READINESS-092": ("blocking", "operational resilience profile failure-mode evidence is missing or stale"),
+    "USF-TEST-READINESS-093": ("blocking", "operational resilience enterprise incident or privacy evidence is missing or stale"),
+    "USF-TEST-READINESS-094": ("blocking", "operational resilience evidence boundary preserves insufficient non-claims or overclaims readiness"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -156,6 +164,8 @@ ENTERPRISE_CONTROL_COMMAND = "corepack pnpm test -- tests/packages/enterprise-co
 ENTERPRISE_CONTROL_TEST_PATH = "tests/packages/enterprise-control-evidence-suite.test.ts"
 PERFORMANCE_RESOURCE_COMMAND = "corepack pnpm test -- tests/packages/performance-concurrency-resource-regression-suite.test.ts"
 PERFORMANCE_RESOURCE_TEST_PATH = "tests/packages/performance-concurrency-resource-regression-suite.test.ts"
+OPERATIONAL_RESILIENCE_COMMAND = "corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts"
+OPERATIONAL_RESILIENCE_TEST_PATH = "tests/packages/operational-resilience-failure-mode-suite.test.ts"
 REQUIRED_FUNCTIONAL_REGRESSION_CASES = {
     "positive",
     "negative",
@@ -291,6 +301,42 @@ PERFORMANCE_VALIDATOR_RULE_IDS = {
     "USF-TEST-READINESS-085",
     "USF-TEST-READINESS-086",
     "USF-TEST-READINESS-087",
+}
+REQUIRED_OPERATIONAL_FAILURE_MODES = {
+    "service-outage",
+    "partial-dependency-failure",
+    "degraded-readiness",
+    "retry-backoff",
+    "idempotent-retry",
+    "queue-drain",
+    "worker-shutdown",
+    "restart-recovery",
+    "cleanup-after-failure",
+    "backup-restore-integrity",
+    "bulk-partial-failure",
+    "incident-evidence",
+    "privacy-redaction",
+}
+REQUIRED_OPERATIONAL_PROFILE_CATEGORIES = {
+    "runtime",
+    "observability",
+    "workflow",
+    "backup",
+    "scanning",
+    "gateway",
+    "assurance",
+    "provider-emulation",
+    "provider-mock",
+    "operator-tool",
+}
+OPERATIONAL_VALIDATOR_RULE_IDS = {
+    "USF-TEST-READINESS-088",
+    "USF-TEST-READINESS-089",
+    "USF-TEST-READINESS-090",
+    "USF-TEST-READINESS-091",
+    "USF-TEST-READINESS-092",
+    "USF-TEST-READINESS-093",
+    "USF-TEST-READINESS-094",
 }
 REQUIRED_OBLIGATION_ISSUES = {
     "USF-239",
@@ -975,6 +1021,66 @@ def apply_performance_resource_suite_defect(suite: dict[str, Any] | None, defect
     return out
 
 
+def apply_operational_resilience_suite_defect(suite: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeOperationalResilienceSuite"):
+        return None
+    if suite is None:
+        return None
+    out = copy.deepcopy(suite)
+    for key, value in defect.get("operationalResilienceSuiteSet", {}).items():
+        out[key] = value
+    for key in defect.get("operationalResilienceSuiteDrop", []):
+        out.pop(key, None)
+    for key, value in defect.get("operationalResilienceScopeSet", {}).items():
+        out.setdefault("scope", {})[key] = value
+    for key in defect.get("operationalResilienceScopeDrop", []):
+        out.setdefault("scope", {}).pop(key, None)
+    for contract_id in defect.get("operationalDropSemanticContractIds", []):
+        out["semanticOperationalRows"] = [
+            row for row in out.get("semanticOperationalRows", []) if row.get("contractId") != contract_id
+        ]
+    for service_id in defect.get("operationalDropServiceIds", []):
+        out["serviceOperationalRows"] = [
+            row for row in out.get("serviceOperationalRows", []) if row.get("serviceId") != service_id
+        ]
+    for patch in defect.get("operationalServicePatch", []):
+        for row in out.get("serviceOperationalRows", []):
+            if row.get("serviceId") != patch.get("serviceId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for profile in defect.get("operationalDropProfileIds", []):
+        out["profileOperationalRows"] = [
+            row for row in out.get("profileOperationalRows", []) if row.get("profile") != profile
+        ]
+    for patch in defect.get("operationalProfilePatch", []):
+        for row in out.get("profileOperationalRows", []):
+            if row.get("profile") != patch.get("profile"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for key in defect.get("operationalEvidenceRequirementsDrop", []):
+        out.setdefault("operationalEvidenceRequirements", {}).pop(key, None)
+    for key, value in defect.get("operationalEvidenceRequirementsSet", {}).items():
+        out.setdefault("operationalEvidenceRequirements", {})[key] = value
+    for key, value in defect.get("operationalFailurePolicySet", {}).items():
+        out.setdefault("failureSimulationPolicy", {})[key] = value
+    for section in defect.get("operationalEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("operationalDropNonClaims"):
+        dropped = set(defect.get("operationalDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("operationalAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["operationalAppendAllowedClaim"])
+    for key in defect.get("operationalValidatorCoverageDrop", []):
+        out.setdefault("validatorCoverage", {}).pop(key, None)
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -1080,6 +1186,15 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         performance_resource_suite,
         defect,
     )
+    operational_resilience_suite = (
+        read_json(OPERATIONAL_RESILIENCE_SUITE_PATH)
+        if (ROOT / OPERATIONAL_RESILIENCE_SUITE_PATH).exists()
+        else None
+    )
+    operational_resilience_suite = apply_operational_resilience_suite_defect(
+        operational_resilience_suite,
+        defect,
+    )
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -1094,6 +1209,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "functionalRegressionSuite": functional_regression_suite,
         "enterpriseControlSuite": enterprise_control_suite,
         "performanceResourceSuite": performance_resource_suite,
+        "operationalResilienceSuite": operational_resilience_suite,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -3088,6 +3204,291 @@ def check_performance_resource_suite(F: Findings, state: dict[str, Any]) -> None
         F.add("USF-TEST-READINESS-086", str(PERFORMANCE_RESOURCE_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
 
 
+def check_operational_resilience_suite(F: Findings, state: dict[str, Any]) -> None:
+    suite = state["operationalResilienceSuite"]
+    manifest = state["obligationManifest"]
+    integration = state["integrationMatrix"]
+    fixtures = state["fixtureCorpus"]
+    if not isinstance(suite, dict):
+        F.add("USF-TEST-READINESS-088", str(OPERATIONAL_RESILIENCE_SUITE_PATH), "operational resilience suite is missing")
+        return
+    if not isinstance(manifest, dict) or not isinstance(integration, dict) or not isinstance(fixtures, dict):
+        return
+
+    required = {
+        "id",
+        "issueId",
+        "parentIssueId",
+        "sourceAuthorities",
+        "ownedTestFile",
+        "scope",
+        "requiredFailureModes",
+        "requiredProfileCategories",
+        "semanticOperationalRows",
+        "serviceOperationalRows",
+        "profileOperationalRows",
+        "operationalEvidenceRequirements",
+        "failureSimulationPolicy",
+        "validationCommands",
+        "validatorCoverage",
+        "plantedDefects",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    }
+    for key in sorted(required):
+        if key not in suite:
+            F.add("USF-TEST-READINESS-088", str(OPERATIONAL_RESILIENCE_SUITE_PATH), f"missing top-level field {key}")
+    if suite.get("issueId") != "USF-245" or suite.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-088", str(OPERATIONAL_RESILIENCE_SUITE_PATH), "issue linkage must be USF-245 under USF-234")
+    if suite.get("ownedTestFile") != OPERATIONAL_RESILIENCE_TEST_PATH:
+        F.add("USF-TEST-READINESS-088", str(OPERATIONAL_RESILIENCE_SUITE_PATH), "owned test file is stale")
+
+    expected_authorities = {
+        "obligationManifest": str(OBLIGATION_MANIFEST_PATH),
+        "composedIntegrationMatrix": str(INTEGRATION_MATRIX_PATH),
+        "fixtureCorpus": str(FIXTURE_CORPUS_PATH),
+        "fixtureLifecycle": str(LIFECYCLE_PATH),
+        "testEnvironmentContract": str(CONTRACT_PATH),
+        "enterpriseEvidenceModel": str(ENTERPRISE_MODEL_PATH),
+        "commandSurfaceGate": str(COMMAND_SURFACE_PATH),
+    }
+    authorities = suite.get("sourceAuthorities", {})
+    if not isinstance(authorities, dict):
+        F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#sourceAuthorities", "source authorities are missing")
+    else:
+        for key, expected in expected_authorities.items():
+            if authorities.get(key) != expected:
+                F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#sourceAuthorities.{key}", "source authority is stale")
+
+    semantic_obligations = [
+        row
+        for row in manifest.get("semanticContractObligations", [])
+        if isinstance(row, dict) and "USF-245" in row.get("ownerIssueIds", [])
+    ]
+    service_obligations = [
+        row
+        for row in manifest.get("serviceObligations", [])
+        if isinstance(row, dict) and "USF-245" in row.get("ownerIssueIds", [])
+    ]
+    profile_obligations = integration.get("profileIntegrationRows", [])
+    if not isinstance(profile_obligations, list):
+        profile_obligations = []
+
+    scope = suite.get("scope", {})
+    if not isinstance(scope, dict):
+        F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#scope", "scope is missing")
+    else:
+        if scope.get("semanticOperationalObligationCount") != len(semantic_obligations):
+            F.add("USF-TEST-READINESS-089", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#scope", "semantic operational obligation count is stale")
+        if scope.get("serviceOperationalObligationCount") != len(service_obligations):
+            F.add("USF-TEST-READINESS-089", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#scope", "service operational obligation count is stale")
+        if scope.get("profileOperationalFailureCount") != len(profile_obligations):
+            F.add("USF-TEST-READINESS-092", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#scope", "profile operational count is stale")
+        if scope.get("profileGatedCategoryCount") != len(REQUIRED_OPERATIONAL_PROFILE_CATEGORIES):
+            F.add("USF-TEST-READINESS-092", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#scope", "profile category count is stale")
+        expected_flags = {
+            "serviceBackedClaimsRequireComposedEvidence": True,
+            "inMemoryServiceSubstituteAllowedForServiceBackedClaims": False,
+            "destructiveOperationsAllowed": False,
+            "usesDeterministicSyntheticFailureCasesOnly": True,
+            "finalTestReadinessClaim": False,
+        }
+        for key, expected in expected_flags.items():
+            if scope.get(key) is not expected:
+                rule = "USF-TEST-READINESS-094" if expected is False else "USF-TEST-READINESS-088"
+                F.add(rule, f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#scope.{key}", "scope flag is unsafe or stale")
+
+    if set(suite.get("requiredFailureModes", [])) != REQUIRED_OPERATIONAL_FAILURE_MODES:
+        F.add("USF-TEST-READINESS-090", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#requiredFailureModes", "operational failure-mode coverage is incomplete")
+    if set(suite.get("requiredProfileCategories", [])) != REQUIRED_OPERATIONAL_PROFILE_CATEGORIES:
+        F.add("USF-TEST-READINESS-092", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#requiredProfileCategories", "profile category coverage is incomplete")
+
+    semantic_rows = _list_by_id(suite.get("semanticOperationalRows"), "contractId")
+    if len(semantic_rows) != len(semantic_obligations):
+        F.add("USF-TEST-READINESS-089", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#semanticOperationalRows", "semantic operational row count must match obligation manifest")
+    for obligation in semantic_obligations:
+        contract_id = str(obligation.get("contractId"))
+        row = semantic_rows.get(contract_id)
+        if not row:
+            F.add("USF-TEST-READINESS-089", contract_id, "semantic obligation lacks operational mapping")
+            continue
+        subject = f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#semanticOperationalRows.{contract_id}"
+        if row.get("semanticContractPath") != obligation.get("path") or row.get("sourceObligationEvidenceId") != obligation.get("evidenceId"):
+            F.add("USF-TEST-READINESS-089", subject, "semantic operational mapping is stale")
+        if row.get("requiredObligationClass") != "operational-resilience":
+            F.add("USF-TEST-READINESS-089", subject, "required obligation class is stale")
+        if row.get("testFile") != OPERATIONAL_RESILIENCE_TEST_PATH:
+            F.add("USF-TEST-READINESS-088", subject, "test file is stale")
+        if row.get("serviceBackedClaimsRequireComposedEvidence") is not True or row.get("inMemoryServiceSubstituteAllowedForServiceBackedClaims") is not False:
+            F.add("USF-TEST-READINESS-094", subject, "semantic row allows unsafe service-backed substitute")
+
+    service_rows = _list_by_id(suite.get("serviceOperationalRows"), "serviceId")
+    fixture_rows = _list_by_id(fixtures.get("serviceFixtures"), "serviceId")
+    integration_rows = _list_by_id(integration.get("serviceIntegrationRows"), "serviceId")
+    if len(service_rows) != len(service_obligations):
+        F.add("USF-TEST-READINESS-089", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#serviceOperationalRows", "service operational row count must match obligation manifest")
+    for obligation in service_obligations:
+        service_id = str(obligation.get("serviceId"))
+        row = service_rows.get(service_id)
+        if not row:
+            F.add("USF-TEST-READINESS-089", service_id, "service obligation lacks operational mapping")
+            continue
+        subject = f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#serviceOperationalRows.{service_id}"
+        fixture = fixture_rows.get(service_id)
+        integration_row = integration_rows.get(service_id)
+        if row.get("composeServiceId") != obligation.get("composeServiceId") or row.get("fixtureSeedId") != obligation.get("fixtureSeedId"):
+            F.add("USF-TEST-READINESS-089", subject, "service operational mapping is stale")
+        if fixture and row.get("fixtureLifecycleSeedId") != fixture.get("fixtureSeedId"):
+            F.add("USF-TEST-READINESS-091", subject, "fixture lifecycle seed is stale")
+        if integration_row and row.get("integrationDisposition") != integration_row.get("integrationDisposition"):
+            F.add("USF-TEST-READINESS-092", subject, "integration disposition is stale")
+        if not set(row.get("failureModes", [])) >= {"service-outage", "partial-dependency-failure", "degraded-readiness", "cleanup-after-failure", "incident-evidence", "privacy-redaction"}:
+            F.add("USF-TEST-READINESS-090", subject, "service row lacks required operational failure modes")
+        for key in ("failClosedRequired", "auditEvidenceRequired", "observabilityEvidenceRequired"):
+            if row.get(key) is not True:
+                F.add("USF-TEST-READINESS-090", subject, f"{key} must be true")
+        if row.get("resetCleanupRequired") is not True or not row.get("seedResetEvidenceSource") or not row.get("profileExerciseEvidenceSource"):
+            F.add("USF-TEST-READINESS-091", subject, "reset cleanup or profile exercise evidence is missing")
+        if row.get("serviceBackedClaimRequiresComposedEvidence") is not True or row.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-094", subject, "service row allows unsafe substitute or missing composed evidence boundary")
+        if row.get("destructiveOperationAllowed") is not False or row.get("testReadinessClaimAllowed") is not False:
+            F.add("USF-TEST-READINESS-094", subject, "service row allows unsafe destructive operation or readiness claim")
+    for service_id in sorted(set(service_rows) - {str(row.get("serviceId")) for row in service_obligations}):
+        F.add("USF-TEST-READINESS-089", service_id, "service operational row is not present in obligation manifest")
+
+    profile_rows = _list_by_id(suite.get("profileOperationalRows"), "profile")
+    expected_profiles = {str(row.get("profile")) for row in profile_obligations if isinstance(row, dict)}
+    if len(profile_rows) != len(expected_profiles):
+        F.add("USF-TEST-READINESS-092", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#profileOperationalRows", "profile operational row count must match integration matrix")
+    for obligation in profile_obligations:
+        if not isinstance(obligation, dict):
+            continue
+        profile = str(obligation.get("profile"))
+        row = profile_rows.get(profile)
+        if not row:
+            F.add("USF-TEST-READINESS-092", profile, "profile lacks operational failure-mode row")
+            continue
+        subject = f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#profileOperationalRows.{profile}"
+        if set(row.get("serviceIds", [])) != set(obligation.get("serviceIds", [])):
+            F.add("USF-TEST-READINESS-092", subject, "profile service ids are stale")
+        if row.get("proofCommand") != obligation.get("proofCommand"):
+            F.add("USF-TEST-READINESS-092", subject, "profile proof command is stale")
+        for key in REQUIRED_INTEGRATION_PROFILE_FLAGS:
+            expected_key = {
+                "mustStart": "mustStart",
+                "mustReadinessCheck": "mustReadinessCheck",
+                "mustSeed": "mustSeed",
+                "mustExercise": "mustExercise",
+                "mustTeardown": "mustTeardown",
+                "mustReset": "mustReset",
+                "mustEvidence": "mustEvidence",
+            }[key]
+            if row.get(expected_key) is not True:
+                F.add("USF-TEST-READINESS-092", subject, f"{expected_key} must be true")
+        if row.get("inMemoryServiceSubstituteAllowed") is not False or row.get("destructiveOperationAllowed") is not False or row.get("testReadinessClaimAllowed") is not False:
+            F.add("USF-TEST-READINESS-094", subject, "profile row allows unsafe substitute destructive operation or readiness claim")
+    for profile in sorted(set(profile_rows) - expected_profiles):
+        F.add("USF-TEST-READINESS-092", profile, "profile operational row is not present in integration matrix")
+
+    requirements = suite.get("operationalEvidenceRequirements", {})
+    if not isinstance(requirements, dict):
+        F.add("USF-TEST-READINESS-090", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#operationalEvidenceRequirements", "operational evidence requirements are missing")
+        requirements = {}
+    for key in (
+        "failClosedBehaviour",
+        "auditEvidence",
+        "structuredLogs",
+        "metrics",
+        "traces",
+        "alertsDashboards",
+        "incidentEvidence",
+        "privacyRedaction",
+        "seedResetCleanupTeardown",
+        "valueFreeEvidence",
+    ):
+        if requirements.get(key) is not True:
+            rule = "USF-TEST-READINESS-091" if key == "seedResetCleanupTeardown" else "USF-TEST-READINESS-090"
+            F.add(rule, f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#operationalEvidenceRequirements.{key}", "operational evidence requirement must be true")
+    for key in ("rawSecretsForbidden", "rawEndpointsForbidden", "providerPayloadRetentionForbidden"):
+        if requirements.get(key) is not True:
+            F.add("USF-TEST-READINESS-093", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#operationalEvidenceRequirements.{key}", "privacy or redaction guardrail is missing")
+
+    policy = suite.get("failureSimulationPolicy", {})
+    if not isinstance(policy, dict):
+        F.add("USF-TEST-READINESS-094", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#failureSimulationPolicy", "failure simulation policy is missing")
+        policy = {}
+    expected_policy = {
+        "realProviderKillAllowed": False,
+        "destructiveContainerOperationAllowed": False,
+        "syntheticFailureDescriptorsOnly": True,
+        "boundedLocalExecutionOnly": True,
+        "repeatableAfterFailureRequired": True,
+        "cleanupInFinallyRequired": True,
+        "serviceBackedRuntimeClaimAllowed": False,
+    }
+    for key, expected in expected_policy.items():
+        if policy.get(key) is not expected:
+            rule = "USF-TEST-READINESS-094" if expected is False else "USF-TEST-READINESS-091"
+            F.add(rule, f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#failureSimulationPolicy.{key}", "failure simulation policy is unsafe or stale")
+
+    commands = set(suite.get("validationCommands", []))
+    for expected in (
+        OPERATIONAL_RESILIENCE_COMMAND,
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#validationCommands", f"missing validation command {expected}")
+
+    coverage = suite.get("validatorCoverage", {})
+    if not isinstance(coverage, dict):
+        F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#validatorCoverage", "validator coverage metadata is missing")
+    else:
+        if set(coverage.get("ruleIds", [])) != OPERATIONAL_VALIDATOR_RULE_IDS:
+            F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#validatorCoverage", "validator rule id inventory is stale")
+        if coverage.get("selftestCommand") != "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json":
+            F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#validatorCoverage", "selftest command is stale")
+        if coverage.get("plantedDefectCount") != len(suite.get("plantedDefects", [])):
+            F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#validatorCoverage", "planted defect count is stale")
+
+    planted = suite.get("plantedDefects", [])
+    if not isinstance(planted, list) or len(planted) < len(OPERATIONAL_VALIDATOR_RULE_IDS):
+        F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#plantedDefects", "planted defect inventory is incomplete")
+    else:
+        expected_rules = {row.get("expectedRule") for row in planted if isinstance(row, dict)}
+        missing_rules = sorted(OPERATIONAL_VALIDATOR_RULE_IDS - expected_rules)
+        if missing_rules:
+            F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#plantedDefects", f"missing planted defect rule coverage: {missing_rules}")
+        for row in planted:
+            if not isinstance(row, dict):
+                continue
+            path = str(row.get("path", ""))
+            if not path or not (ROOT / path).exists():
+                F.add("USF-TEST-READINESS-088", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#plantedDefects", f"planted defect path is missing: {path}")
+
+    refs = suite.get("enterpriseEvidenceRefs")
+    if not isinstance(refs, dict):
+        F.add("USF-TEST-READINESS-093", str(OPERATIONAL_RESILIENCE_SUITE_PATH), "enterprise evidence refs are missing")
+    else:
+        for section in ENTERPRISE_REF_SECTIONS:
+            values = refs.get(section)
+            if not isinstance(values, list) or not values:
+                F.add("USF-TEST-READINESS-093", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#{section}", "enterprise evidence ref is missing")
+                continue
+            missing = sorted(set(values) - _enterprise_ids(state, section))
+            if missing:
+                F.add("USF-TEST-READINESS-093", f"{OPERATIONAL_RESILIENCE_SUITE_PATH}#{section}", f"enterprise evidence refs are stale: {missing}")
+
+    non_claims = set(suite.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-094", str(OPERATIONAL_RESILIENCE_SUITE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(suite.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-094", str(OPERATIONAL_RESILIENCE_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -3454,6 +3855,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_functional_regression_suite(F, state)
     check_enterprise_control_suite(F, state)
     check_performance_resource_suite(F, state)
+    check_operational_resilience_suite(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

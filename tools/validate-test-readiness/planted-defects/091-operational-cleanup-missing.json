@@ -1,0 +1,12 @@
+{
+  "id": "091-operational-cleanup-missing",
+  "expectedRule": "USF-TEST-READINESS-091",
+  "operationalServicePatch": [
+    {
+      "serviceId": "nats",
+      "set": {
+        "resetCleanupRequired": false
+      }
+    }
+  ]
+}
