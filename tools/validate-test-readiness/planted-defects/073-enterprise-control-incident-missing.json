@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-TEST-READINESS-073",
+  "enterpriseModelDropIds": [
+    {
+      "section": "incidentVulnerabilityManagementEvidence",
+      "id": "incident-usf-243-enterprise-control-evidence-test-suite"
+    }
+  ]
+}

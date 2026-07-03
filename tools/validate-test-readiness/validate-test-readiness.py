@@ -31,6 +31,7 @@ FIXTURE_CORPUS_PATH = Path("tests/packages/fixtures/service-fixture-corpus.json"
 INTEGRATION_MATRIX_PATH = Path("docs/architecture/composed-service-integration-test-matrix.json")
 SEMANTIC_UNIT_SUITE_PATH = Path("docs/architecture/semantic-unit-test-suite.json")
 FUNCTIONAL_REGRESSION_SUITE_PATH = Path("docs/architecture/functional-service-regression-suite.json")
+ENTERPRISE_CONTROL_SUITE_PATH = Path("docs/architecture/enterprise-control-evidence-test-suite.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -108,6 +109,15 @@ RULES = {
     "USF-TEST-READINESS-064": ("blocking", "functional regression behaviour case coverage is incomplete"),
     "USF-TEST-READINESS-065": ("blocking", "functional regression suite allows service-backed substitute or readiness overclaim"),
     "USF-TEST-READINESS-066": ("blocking", "functional regression suite lacks enterprise evidence linkage or preserves insufficient non-claims"),
+    "USF-TEST-READINESS-067": ("blocking", "enterprise control evidence test suite is missing invalid or stale"),
+    "USF-TEST-READINESS-068": ("blocking", "enterprise control evidence suite lacks SoA support mapping coverage"),
+    "USF-TEST-READINESS-069": ("blocking", "enterprise control evidence suite lacks pinned evidence register coverage"),
+    "USF-TEST-READINESS-070": ("blocking", "enterprise control evidence suite lacks threat model coverage"),
+    "USF-TEST-READINESS-071": ("blocking", "enterprise control evidence suite lacks access posture coverage"),
+    "USF-TEST-READINESS-072": ("blocking", "enterprise control evidence suite lacks resilience posture coverage"),
+    "USF-TEST-READINESS-073": ("blocking", "enterprise control evidence suite lacks incident vulnerability posture coverage"),
+    "USF-TEST-READINESS-074": ("blocking", "enterprise control evidence suite lacks privacy data minimisation posture coverage"),
+    "USF-TEST-READINESS-075": ("blocking", "enterprise control evidence suite preserves insufficient non-claims or overclaims readiness"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -129,6 +139,8 @@ INTEGRATION_MATRIX_COMMAND = "corepack pnpm test-readiness:integration"
 INTEGRATION_MATRIX_SCRIPT = "tsx packages/proof/src/composed-service-integration-matrix-proof.ts"
 FUNCTIONAL_REGRESSION_COMMAND = "corepack pnpm test -- tests/packages/semantic-functional-regression-suite.test.ts"
 FUNCTIONAL_REGRESSION_TEST_PATH = "tests/packages/semantic-functional-regression-suite.test.ts"
+ENTERPRISE_CONTROL_COMMAND = "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts"
+ENTERPRISE_CONTROL_TEST_PATH = "tests/packages/enterprise-control-evidence-suite.test.ts"
 REQUIRED_FUNCTIONAL_REGRESSION_CASES = {
     "positive",
     "negative",
@@ -758,6 +770,44 @@ def apply_functional_regression_suite_defect(suite: dict[str, Any] | None, defec
     return out
 
 
+def apply_enterprise_control_suite_defect(suite: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeEnterpriseControlSuite"):
+        return None
+    if suite is None:
+        return None
+    out = copy.deepcopy(suite)
+    for key, value in defect.get("enterpriseControlSuiteSet", {}).items():
+        out[key] = value
+    for key in defect.get("enterpriseControlSuiteDrop", []):
+        out.pop(key, None)
+    for section_id in defect.get("enterpriseControlSuiteDropSectionIds", []):
+        out["requiredEnterpriseSections"] = [
+            row
+            for row in out.get("requiredEnterpriseSections", [])
+            if row.get("sectionId") != section_id
+        ]
+    for contract_id in defect.get("enterpriseControlSuiteDropContractIds", []):
+        mapping = out.setdefault("semanticServiceMapping", {})
+        mapping["semanticContractIds"] = [
+            value for value in mapping.get("semanticContractIds", []) if value != contract_id
+        ]
+    for service_id in defect.get("enterpriseControlSuiteDropServiceIds", []):
+        mapping = out.setdefault("serviceBackedTestMapping", {})
+        mapping["serviceIds"] = [
+            value for value in mapping.get("serviceIds", []) if value != service_id
+        ]
+    for section in defect.get("enterpriseControlSuiteEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("enterpriseControlSuiteDropNonClaims"):
+        dropped = set(defect.get("enterpriseControlSuiteDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("enterpriseControlSuiteAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["enterpriseControlSuiteAppendAllowedClaim"])
+    for key, value in defect.get("enterpriseControlSuiteScopeSet", {}).items():
+        out.setdefault("scope", {})[key] = value
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -784,6 +834,30 @@ def apply_schema_registry_defect(registry: dict[str, Any], defect: dict[str, Any
     for patch in defect.get("schemaRegistryPatch", []):
         for row in out.get("schemas", []):
             if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    return out
+
+
+def apply_enterprise_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(model)
+    for patch in defect.get("enterpriseModelDropIds", []):
+        section = patch.get("section")
+        row_id = patch.get("id")
+        rows = out.get(section)
+        if isinstance(rows, list):
+            out[section] = [row for row in rows if row.get("id") != row_id]
+    for patch in defect.get("enterpriseModelRowPatch", []):
+        section = patch.get("section")
+        row_id = patch.get("id")
+        rows = out.get(section)
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if row.get("id") != row_id:
                 continue
             for key in patch.get("drop", []):
                 row.pop(key, None)
@@ -821,6 +895,15 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         functional_regression_suite,
         defect,
     )
+    enterprise_control_suite = (
+        read_json(ENTERPRISE_CONTROL_SUITE_PATH)
+        if (ROOT / ENTERPRISE_CONTROL_SUITE_PATH).exists()
+        else None
+    )
+    enterprise_control_suite = apply_enterprise_control_suite_defect(
+        enterprise_control_suite,
+        defect,
+    )
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -833,12 +916,13 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "integrationMatrix": integration_matrix,
         "semanticUnitSuite": semantic_unit_suite,
         "functionalRegressionSuite": functional_regression_suite,
+        "enterpriseControlSuite": enterprise_control_suite,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
         "schemaRegistry": apply_schema_registry_defect(read_json(SCHEMA_REGISTRY_PATH), defect),
         "testObligationSchema": read_json(TEST_OBLIGATION_SCHEMA_PATH) if (ROOT / TEST_OBLIGATION_SCHEMA_PATH).exists() else None,
-        "enterpriseModel": read_json(ENTERPRISE_MODEL_PATH),
+        "enterpriseModel": apply_enterprise_model_defect(read_json(ENTERPRISE_MODEL_PATH), defect),
         "package": apply_package_defect(read_json(PACKAGE_PATH), defect),
         "makefile": makefile,
     }
@@ -1031,6 +1115,13 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         FUNCTIONAL_REGRESSION_SUITE_PATH,
         state["enterpriseModel"],
         "USF-TEST-READINESS-066",
+    )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["enterpriseControlSuite"],
+        ENTERPRISE_CONTROL_SUITE_PATH,
+        state["enterpriseModel"],
+        "USF-TEST-READINESS-075",
     )
 
 
@@ -2212,6 +2303,205 @@ def check_functional_regression_suite(F: Findings, state: dict[str, Any]) -> Non
         F.add("USF-TEST-READINESS-066", str(FUNCTIONAL_REGRESSION_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
 
 
+def _enterprise_rows(model: dict[str, Any], section_id: str) -> list[dict[str, Any]]:
+    rows = model.get(section_id)
+    if isinstance(rows, list):
+        return [row for row in rows if isinstance(row, dict)]
+    if isinstance(rows, dict):
+        return [rows]
+    return []
+
+
+def _enterprise_rule_for_section(section_id: str) -> str:
+    return {
+        "soaSupportMappings": "USF-TEST-READINESS-068",
+        "evidenceRegister": "USF-TEST-READINESS-069",
+        "threatModelAbuseCaseRegister": "USF-TEST-READINESS-070",
+        "accessReviewPrivilegedOperationPosture": "USF-TEST-READINESS-071",
+        "backupRestoreResiliencePosture": "USF-TEST-READINESS-072",
+        "incidentVulnerabilityManagementEvidence": "USF-TEST-READINESS-073",
+        "privacyDataMinimisationPosture": "USF-TEST-READINESS-074",
+    }.get(section_id, "USF-TEST-READINESS-067")
+
+
+def check_enterprise_control_suite(F: Findings, state: dict[str, Any]) -> None:
+    suite = state["enterpriseControlSuite"]
+    if not isinstance(suite, dict):
+        F.add("USF-TEST-READINESS-067", str(ENTERPRISE_CONTROL_SUITE_PATH), "enterprise control evidence suite is missing")
+        return
+    for key in (
+        "id",
+        "issueId",
+        "parentIssueId",
+        "sourceAuthorities",
+        "scope",
+        "requiredEnterpriseSections",
+        "semanticServiceMapping",
+        "serviceBackedTestMapping",
+        "ciaEvidenceTests",
+        "validationCommands",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in suite:
+            F.add("USF-TEST-READINESS-067", str(ENTERPRISE_CONTROL_SUITE_PATH), f"missing top-level field {key}")
+    if suite.get("issueId") != "USF-243" or suite.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-067", str(ENTERPRISE_CONTROL_SUITE_PATH), "issue linkage must be USF-243 under USF-234")
+    sources = suite.get("sourceAuthorities", {})
+    expected_sources = {
+        "enterpriseEvidenceModel": str(ENTERPRISE_MODEL_PATH),
+        "obligationManifest": str(OBLIGATION_MANIFEST_PATH),
+        "testEnvironmentContract": str(CONTRACT_PATH),
+        "composedIntegrationMatrix": str(INTEGRATION_MATRIX_PATH),
+        "fixtureCorpus": str(FIXTURE_CORPUS_PATH),
+    }
+    for key, expected in expected_sources.items():
+        if not isinstance(sources, dict) or sources.get(key) != expected:
+            F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#sourceAuthorities.{key}", "source authority is stale")
+
+    manifest = state["obligationManifest"]
+    if not isinstance(manifest, dict):
+        F.add("USF-TEST-READINESS-067", str(ENTERPRISE_CONTROL_SUITE_PATH), "obligation manifest is unavailable")
+        return
+    semantic_rows = [
+        row
+        for row in manifest.get("semanticContractObligations", [])
+        if isinstance(row, dict) and "USF-243" in row.get("ownerIssueIds", [])
+    ]
+    service_rows = [
+        row
+        for row in manifest.get("serviceObligations", [])
+        if isinstance(row, dict) and "USF-243" in row.get("ownerIssueIds", [])
+    ]
+    scope = suite.get("scope", {})
+    if not isinstance(scope, dict):
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#scope", "scope is missing")
+    else:
+        if scope.get("semanticContractEnterpriseObligationCount") != len(semantic_rows):
+            F.add("USF-TEST-READINESS-067", str(ENTERPRISE_CONTROL_SUITE_PATH), "semantic enterprise obligation count is stale")
+        if scope.get("serviceEnterpriseObligationCount") != len(service_rows):
+            F.add("USF-TEST-READINESS-067", str(ENTERPRISE_CONTROL_SUITE_PATH), "service enterprise obligation count is stale")
+        for key in (
+            "inMemoryServiceSubstituteAllowedForServiceBackedClaims",
+            "isoCertificationClaimAllowed",
+            "socReadinessClaimAllowed",
+            "productionReadinessClaimAllowed",
+            "liveProviderReadinessClaimAllowed",
+            "enterpriseProductionReadinessClaimAllowed",
+            "finalTestReadinessClaimAllowed",
+        ):
+            if scope.get(key) is not False:
+                F.add("USF-TEST-READINESS-075", f"{ENTERPRISE_CONTROL_SUITE_PATH}#scope.{key}", "enterprise control suite must not allow readiness or certification claims")
+
+    semantic_mapping = suite.get("semanticServiceMapping", {})
+    if not isinstance(semantic_mapping, dict):
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#semanticServiceMapping", "semantic mapping is missing")
+    else:
+        if semantic_mapping.get("ownerIssueId") != "USF-243" or semantic_mapping.get("requiredObligationClass") != "enterprise-evidence":
+            F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#semanticServiceMapping", "semantic mapping issue or obligation class is stale")
+        if semantic_mapping.get("semanticContractIds") != [row.get("contractId") for row in semantic_rows]:
+            F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#semanticServiceMapping", "semantic contract mapping is stale")
+    for row in semantic_rows:
+        if "enterprise-evidence" not in row.get("obligationClassIds", []):
+            F.add("USF-TEST-READINESS-067", f"{OBLIGATION_MANIFEST_PATH}#{row.get('contractId')}", "semantic row lacks enterprise-evidence obligation")
+
+    service_mapping = suite.get("serviceBackedTestMapping", {})
+    if not isinstance(service_mapping, dict):
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#serviceBackedTestMapping", "service mapping is missing")
+    else:
+        if service_mapping.get("ownerIssueId") != "USF-243" or service_mapping.get("requiredObligationClass") != "enterprise-evidence":
+            F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#serviceBackedTestMapping", "service mapping issue or obligation class is stale")
+        if service_mapping.get("serviceIds") != [row.get("serviceId") for row in service_rows]:
+            F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#serviceBackedTestMapping", "service mapping is stale")
+        if service_mapping.get("serviceBackedClaimsRequireComposedEvidence") is not True or service_mapping.get("inMemoryServiceSubstituteAllowed") is not False:
+            F.add("USF-TEST-READINESS-075", f"{ENTERPRISE_CONTROL_SUITE_PATH}#serviceBackedTestMapping", "service-backed claims must require composed evidence and forbid in-memory substitutes")
+    for row in service_rows:
+        if "enterprise-evidence" not in row.get("obligationClassIds", []):
+            F.add("USF-TEST-READINESS-067", f"{OBLIGATION_MANIFEST_PATH}#{row.get('serviceId')}", "service row lacks enterprise-evidence obligation")
+        if row.get("inMemoryServiceSubstituteAllowed") is True:
+            F.add("USF-TEST-READINESS-075", f"{OBLIGATION_MANIFEST_PATH}#{row.get('serviceId')}", "service row allows in-memory substitute")
+
+    required_sections = suite.get("requiredEnterpriseSections", [])
+    if not isinstance(required_sections, list) or len(required_sections) != scope.get("requiredEnterpriseSectionCount"):
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#requiredEnterpriseSections", "enterprise section inventory is incomplete")
+        required_sections = []
+    for section in required_sections:
+        if not isinstance(section, dict):
+            continue
+        section_id = str(section.get("sectionId"))
+        rule_id = _enterprise_rule_for_section(section_id)
+        rows = _enterprise_rows(state["enterpriseModel"], section_id)
+        if len(rows) != section.get("expectedRowCount"):
+            F.add(rule_id, f"{ENTERPRISE_CONTROL_SUITE_PATH}#{section_id}", "enterprise section row count is stale")
+        required_fields = section.get("requiredFields", [])
+        if not isinstance(required_fields, list) or not required_fields:
+            F.add(rule_id, f"{ENTERPRISE_CONTROL_SUITE_PATH}#{section_id}", "requiredFields is missing")
+            continue
+        for row in rows:
+            for field in required_fields:
+                if field not in row:
+                    F.add(rule_id, f"{ENTERPRISE_MODEL_PATH}#{section_id}.{row.get('id', section_id)}", f"missing required field {field}")
+
+    soa_rows = _enterprise_rows(state["enterpriseModel"], "soaSupportMappings")
+    for row in soa_rows:
+        if not all(row.get(field) for field in ("owner", "riskOwner", "controlOwner", "validationCommand")):
+            F.add("USF-TEST-READINESS-068", f"{ENTERPRISE_MODEL_PATH}#soaSupportMappings.{row.get('id')}", "SoA row lacks owner or command metadata")
+        if not isinstance(row.get("nonClaims"), list):
+            F.add("USF-TEST-READINESS-068", f"{ENTERPRISE_MODEL_PATH}#soaSupportMappings.{row.get('id')}", "SoA row lacks non-claims")
+
+    evidence_rows = _enterprise_rows(state["enterpriseModel"], "evidenceRegister")
+    for row in evidence_rows:
+        if not all(row.get(field) for field in ("validationCommand", "commandPin", "commitPin", "prOrMergeSha", "retentionPosture")):
+            F.add("USF-TEST-READINESS-069", f"{ENTERPRISE_MODEL_PATH}#evidenceRegister.{row.get('id')}", "evidence row lacks command commit PR or retention pin")
+        if not isinstance(row.get("issueLinks"), list) or not row.get("issueLinks"):
+            F.add("USF-TEST-READINESS-069", f"{ENTERPRISE_MODEL_PATH}#evidenceRegister.{row.get('id')}", "evidence row lacks issue links")
+
+    for section_id, rule_id in (
+        ("threatModelAbuseCaseRegister", "USF-TEST-READINESS-070"),
+        ("accessReviewPrivilegedOperationPosture", "USF-TEST-READINESS-071"),
+        ("backupRestoreResiliencePosture", "USF-TEST-READINESS-072"),
+        ("incidentVulnerabilityManagementEvidence", "USF-TEST-READINESS-073"),
+        ("privacyDataMinimisationPosture", "USF-TEST-READINESS-074"),
+    ):
+        for row in _enterprise_rows(state["enterpriseModel"], section_id):
+            if section_id == "threatModelAbuseCaseRegister":
+                if not isinstance(row.get("abuseCases"), list) or not isinstance(row.get("failureModes"), list):
+                    F.add(rule_id, f"{ENTERPRISE_MODEL_PATH}#{section_id}.{row.get('id')}", "threat row lacks abuse cases or failure modes")
+            elif not isinstance(row.get("nonClaims"), list):
+                F.add(rule_id, f"{ENTERPRISE_MODEL_PATH}#{section_id}.{row.get('id')}", "posture row lacks non-claims")
+
+    observability = state["enterpriseModel"].get("observabilityEvidenceStandard")
+    prohibited = set(observability.get("prohibitedFields", [])) if isinstance(observability, dict) else set()
+    if not {"secret", "token", "rawEndpoint", "connectionString", "stackTrace", "rawSdkError", "providerPayload"}.issubset(prohibited):
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_MODEL_PATH}#observabilityEvidenceStandard", "observability standard lacks prohibited sensitive fields")
+    done_state = state["enterpriseModel"].get("doneStateGovernance")
+    if not isinstance(done_state, dict) or done_state.get("validationPassingAloneIsNotDone") is not True or done_state.get("doneClaimed") is not False:
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_MODEL_PATH}#doneStateGovernance", "done-state governance markers are unsafe")
+
+    cia = suite.get("ciaEvidenceTests", {})
+    if not isinstance(cia, dict) or set(cia) != {"confidentiality", "integrity", "availability"}:
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#ciaEvidenceTests", "CIA evidence tests are incomplete")
+    elif any(not isinstance(values, list) or len(values) < 4 for values in cia.values()):
+        F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#ciaEvidenceTests", "CIA evidence test coverage is too weak")
+
+    commands = set(suite.get("validationCommands", []))
+    for expected in (
+        ENTERPRISE_CONTROL_COMMAND,
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-067", f"{ENTERPRISE_CONTROL_SUITE_PATH}#validationCommands", f"missing validation command {expected}")
+    non_claims = set(suite.get("nonClaims", []))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-075", str(ENTERPRISE_CONTROL_SUITE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(suite.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-075", str(ENTERPRISE_CONTROL_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -2576,6 +2866,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_integration_matrix(F, state)
     check_semantic_unit_suite(F, state)
     check_functional_regression_suite(F, state)
+    check_enterprise_control_suite(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

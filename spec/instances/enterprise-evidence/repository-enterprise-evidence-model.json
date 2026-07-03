@@ -5751,6 +5751,37 @@
         "usf-234-closure",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-243-enterprise-control-evidence-test-suite",
+      "mappedType": "enterprise-control-evidence-test-suite",
+      "controlPurpose": "Organise USF-243 enterprise and ISO-style control-support test evidence across SoA, evidence register, threat model, access, resilience, incident, privacy, and non-claim sections.",
+      "riskTreated": "Enterprise control-support evidence could drift from semantic and service-backed obligations, omit owner or evidence links, or be mistaken for ISO certification, SOC readiness, production readiness, live-provider readiness, final test readiness, or USF-234 closure.",
+      "assetServiceAffected": "docs/architecture/enterprise-control-evidence-test-suite.json; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json; docs/architecture/semantic-service-test-obligation-manifest.json; tests/packages/enterprise-control-evidence-suite.test.ts",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-243; parentIssue=USF-234; treatment=map semantic and service enterprise obligations to executable enterprise control-support tests; reviewDate=2026-09-30; followUpIssue=USF-247 for missing-evidence regression and USF-234 for final acceptance",
+      "evidenceSource": "docs/architecture/enterprise-control-evidence-test-suite.json; docs/architecture/enterprise-control-evidence-test-suite.md; tests/packages/enterprise-control-evidence-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects",
+      "validationCommand": "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-243 records ISO-style control-support evidence only; followUpIssue=USF-247 owns final missing-evidence planted-defect regression and USF-234 owns final acceptance; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8678,6 +8709,27 @@
         "USF-247"
       ],
       "retentionPosture": "Retain committed value-free functional regression matrix, tests, validator findings, planted defects, and PR validation output. Do not retain real tenant data, real secrets, provider payloads, raw endpoints, connection strings, tokens, stack traces, or production data."
+    },
+    {
+      "id": "evidence-usf-243-enterprise-control-evidence-test-suite",
+      "proofResult": "enterprise-control-evidence-obligations-mapped-to-executable-tests",
+      "whatWasProven": "USF-243 records and tests a machine-readable mapping from semantic and service-backed enterprise-evidence obligations to repository enterprise evidence model sections, ownership metadata, pinned evidence, threat, access, resilience, incident, privacy, and non-claim controls.",
+      "whatWasNotProven": "USF-243 does not prove final USF-234 test readiness, ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity readiness.",
+      "runtimeMode": "enterprise-evidence-test-only",
+      "providerMode": "not-applicable-no-live-or-service-backed-provider-claim",
+      "serviceCatalogueRow": "docs/architecture/semantic-service-test-obligation-manifest.json#semanticContractObligations-and-serviceObligations",
+      "adapterProviderId": "enterprise-control-evidence-suite",
+      "validationCommand": "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts; corepack pnpm test-readiness:validate",
+      "commandPin": "tests/packages/enterprise-control-evidence-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-067-through-075",
+      "commitPin": "172b3983b9893030dc6739f66e33d925b3dfc932",
+      "prOrMergeSha": "172b3983b9893030dc6739f66e33d925b3dfc932",
+      "issueLinks": [
+        "USF-243",
+        "USF-234",
+        "USF-239",
+        "USF-247"
+      ],
+      "retentionPosture": "Retain committed value-free suite, tests, validator rules, planted defects, and post-merge validation summary until USF-234 final acceptance supersedes the control-support evidence row."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -11219,6 +11271,31 @@
       "failClosedBehaviour": "The test-readiness validator fails on missing suite, stale semantic mapping, stale service mapping, missing behaviour cases, unsafe service-backed substitutes, missing enterprise refs, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free test output, validator findings, PR validation output, and planted-defect selftest output only. Validation command: python3 tools/validate-test-readiness/validate-test-readiness.py all --json.",
       "residualRisk": "riskStatement=USF-244 does not prove final acceptance or operational resilience; impact=final readiness could be overclaimed if downstream child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final closure to USF-247 and USF-234; reviewDate=2026-09-30; followUpIssue=USF-247,USF-234."
+    },
+    {
+      "id": "threat-usf-243-enterprise-control-evidence-test-suite",
+      "targetType": "enterprise-control-evidence-test-suite",
+      "target": "USF-243 enterprise control evidence test suite",
+      "trustBoundary": "Local repository enterprise evidence model, semantic obligation manifest, test-readiness validator, and package test runner only. No live provider, production, SOC, ISO certification, or final USF-234 acceptance boundary is proven.",
+      "tenantBoundary": "Tenant-related assertions are metadata and evidence-boundary checks only; service-backed tenant isolation execution remains owned by composed integration, auth, data lifecycle, and final acceptance issues.",
+      "credentialBoundary": "Evidence, logs, tests, and validator findings must not expose secrets, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, or production data.",
+      "dataClassification": "internal synthetic enterprise evidence metadata",
+      "abuseCases": [
+        "An enterprise evidence section is missing while readiness appears unblocked",
+        "A control-support row omits owner, risk owner, or control owner metadata",
+        "A stale or unpinned evidence row is treated as current proof",
+        "ISO certification, SOC readiness, production readiness, live-provider readiness, or final USF-234 acceptance is inferred from control-support evidence"
+      ],
+      "failureModes": [
+        "missing enterprise control evidence suite",
+        "missing SoA mapping",
+        "missing pinned evidence register row",
+        "missing threat access resilience incident or privacy posture",
+        "readiness or certification overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails on missing USF-243 suite evidence, missing enterprise model rows, stale row counts, unsafe service-backed substitute claims, or prohibited readiness and certification claims.",
+      "monitoringAuditEvidence": "Value-free Vitest results, validator findings, planted-defect selftest results, PR checks, and Linear reconciliation comments.",
+      "residualRisk": "USF-247 owns final missing-evidence regression coverage and USF-234 owns final test-readiness acceptance; reviewDate=2026-09-30."
     }
   ],
   "sdkDependencyGovernance": [
@@ -14815,6 +14892,45 @@
         "usf-234-closure",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-243-enterprise-control-evidence-test-suite",
+      "targetType": "enterprise-control-evidence-test-suite",
+      "target": "USF-243 enterprise evidence access boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-243",
+        "accessModel=local-repository-test-and-validator-only",
+        "authnAuthzBoundary=metadata-and-test-evidence-only-USF-249-owns-exhaustive-auth-suite",
+        "leastPrivilegePosture=synthetic-local-test-context-only",
+        "breakGlassRelevance=no-operational-break-glass-proof",
+        "auditEvidence=value-free-test-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=not-proven-by-USF-243",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/enterprise-control-evidence-test-suite.json; docs/architecture/enterprise-control-evidence-test-suite.md; tests/packages/enterprise-control-evidence-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects",
+      "validationCommand": "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-249 owns exhaustive auth tenant role permission proof and USF-234 owns final acceptance; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -17773,6 +17889,47 @@
         "full-react-product-parity",
         "usf-234-closure",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-243-enterprise-control-evidence-test-suite",
+      "targetType": "enterprise-control-evidence-test-suite",
+      "target": "USF-243 enterprise evidence resilience boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-243",
+        "readinessChecks=enterprise-evidence-test-command-and-validator-only",
+        "retryTimeoutBehaviour=not-proven-by-USF-243",
+        "failClosedMode=validator-and-tests-fail-on-missing-enterprise-evidence-or-overclaim",
+        "safeTeardown=no-new-compose-resources-owned-by-USF-243",
+        "structuredLogging=value-free-test-output-only",
+        "tracingCorrelation=not-applicable-no-live-tracing-claim",
+        "metrics=test-count-and-validator-result-only",
+        "auditEvents=enterprise-evidence-metadata-checks-only",
+        "redaction=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-or-production-data",
+        "backupRestorePosture=not-proven-by-USF-243",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=USF-250-and-USF-245-own-executable-data-lifecycle-and-operational-resilience"
+      ],
+      "evidenceSource": "docs/architecture/enterprise-control-evidence-test-suite.json; docs/architecture/enterprise-control-evidence-test-suite.md; tests/packages/enterprise-control-evidence-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects",
+      "validationCommand": "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-245 owns operational resilience tests and USF-250 owns backup restore bulk migration tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
       ]
     }
   ],
@@ -21375,6 +21532,42 @@
         "full-react-product-parity",
         "usf-234-closure",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-243-enterprise-control-evidence-test-suite",
+      "targetType": "enterprise-control-evidence-test-suite",
+      "target": "USF-243 enterprise evidence incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-243",
+        "incidentDetectionHook=enterprise-evidence-test-failure-validator-finding-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-243",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-runtime-dependency-added-by-USF-243",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-243",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-enterprise-evidence-section-and-overclaim-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-243"
+      ],
+      "evidenceSource": "docs/architecture/enterprise-control-evidence-test-suite.json; docs/architecture/enterprise-control-evidence-test-suite.md; tests/packages/enterprise-control-evidence-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects",
+      "validationCommand": "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-245 owns operational failure-mode execution and incident evidence tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
       ]
     }
   ],
@@ -25559,6 +25752,44 @@
         "full-react-product-parity",
         "usf-234-closure",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-243-enterprise-control-evidence-test-suite",
+      "targetType": "enterprise-control-evidence-test-suite",
+      "target": "USF-243 synthetic enterprise evidence data boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-243",
+        "dataOrigin=synthetic-local-enterprise-evidence-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-enterprise-evidence-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-suite-and-tests-retained-no-provider-data-written-by-USF-243",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/enterprise-control-evidence-test-suite.json; docs/architecture/enterprise-control-evidence-test-suite.md; tests/packages/enterprise-control-evidence-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects",
+      "validationCommand": "corepack pnpm test -- tests/packages/enterprise-control-evidence-suite.test.ts; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-250 owns executable privacy lifecycle and deletion tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
       ]
     }
   ],
