@@ -15,13 +15,14 @@ Machine-readable evidence lives in
 | `corepack pnpm test-readiness` | `make test-ready` and `make test` | Runs the bounded local test-readiness command gate. |
 | `corepack pnpm test-readiness:composed` | `make test-composed` | Runs the composed semantic harness, deterministic fixture lifecycle proof, and composed service integration matrix. |
 | `corepack pnpm test-readiness:integration` | `make test-readiness-integration` | Runs the composed service integration matrix proof for generated services, profiles, and service catalogue dispositions. |
+| `corepack pnpm test-readiness:coverage` | `make test-readiness-coverage` and `make test-coverage` | Generates bounded LCOV and enforces 100 percent coverage for declared in-scope implementation files. |
 | `corepack pnpm test-readiness:assurance` | `make test-assurance` | Runs the bounded local SonarQube zero-open-issue proof from USF-233. |
 | `corepack pnpm test-readiness:validate` | `make test-readiness-validate` | Runs the test-readiness validator and planted-defect selftests. |
 
 The full package command runs the validator, the composed semantic harness, the
 deterministic fixture lifecycle proof, the composed service integration matrix,
-and the Sonar assurance proof. It uses the existing proof commands instead of
-changing runtime or provider behaviour.
+the bounded LCOV coverage gate, and the Sonar assurance proof. It uses the
+existing proof commands instead of changing runtime or provider behaviour.
 
 ## CI and Local Alignment
 

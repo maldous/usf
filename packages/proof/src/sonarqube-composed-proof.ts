@@ -162,12 +162,15 @@ async function writeSyntheticProject(dir: string): Promise<{
   readonly projectDir: string;
   readonly sonarHome: string;
   readonly sonarWork: string;
+  readonly lcovReportPath: string;
 }> {
   const projectDir = join(dir, "project");
   const srcDir = join(projectDir, "src");
+  const coverageDir = join(projectDir, "coverage");
   const sonarHome = join(dir, "sonar-home");
   const sonarWork = join(dir, "sonar-work");
   await mkdir(srcDir, { recursive: true });
+  await mkdir(coverageDir, { recursive: true });
   await mkdir(sonarHome, { recursive: true });
   await writeFile(
     join(projectDir, "package.json"),
@@ -185,7 +188,24 @@ async function writeSyntheticProject(dir: string): Promise<{
     ].join("\n"),
     "utf8",
   );
-  return { projectDir, sonarHome, sonarWork };
+  const lcovReportPath = join(coverageDir, "lcov.info");
+  await writeFile(
+    lcovReportPath,
+    [
+      "TN:usf-sonarqube-synthetic-lcov",
+      "SF:src/proof.ts",
+      "DA:1,1",
+      "DA:2,1",
+      "DA:3,1",
+      "DA:4,1",
+      "LF:4",
+      "LH:4",
+      "end_of_record",
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+  return { projectDir, sonarHome, sonarWork, lcovReportPath };
 }
 
 function composeArgs(projectName: string, overridePath: string): string[] {
@@ -297,6 +317,7 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
       projectBaseDir: syntheticProject.projectDir,
       sonarUserHome: syntheticProject.sonarHome,
       sonarWorkingDirectory: syntheticProject.sonarWork,
+      lcovReportPath: syntheticProject.lcovReportPath,
     });
     unavailableEvidence = await proveUnavailable(await closedLoopbackPort());
   } finally {
@@ -311,6 +332,13 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
   assertSafeEvidence(unavailableEvidence, "sonarqube-unavailable-proof");
   assert(evidence.readinessChecked, "SonarQube readiness missing");
   assert(evidence.scannerExecutionChecked, "SonarQube scanner execution missing");
+  assert(evidence.lcovReportConfigured, "SonarQube LCOV report configuration missing");
+  assert(evidence.lcovReportConsumedChecked, "SonarQube LCOV report consumption missing");
+  assert(evidence.lcovReportFreshnessChecked, "SonarQube LCOV freshness check missing");
+  assert(
+    evidence.lcovReportLineCoverageBucket === "100-percent",
+    "SonarQube LCOV report did not prove 100 percent line coverage for supported scan scope",
+  );
   assert(evidence.qualityGateResultChecked, "SonarQube quality-gate evidence missing");
   assert(
     evidence.qualityGateStatus === "OK",
@@ -384,6 +412,7 @@ export async function runSonarQubeComposedProof(): Promise<SonarQubeComposedProo
       "SonarQube host exposure used a preselected Fetch-safe ephemeral loopback port",
       "SonarQube readiness used bounded Web API retry inside the adapter boundary",
       "official SonarSource npm scanner submitted a synthetic TypeScript project",
+      "synthetic LCOV report was configured, freshness-checked, and imported for the supported scan scope",
       "quality-gate result was read back from the local SonarQube service",
       "zero-open-issue gate required quality-gate OK plus zero unresolved issues and zero security hotspots for the supported synthetic scan scope",
       "unresolved issue and security hotspot query paths were exercised without claiming vulnerability clearance",

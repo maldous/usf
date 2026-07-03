@@ -45,10 +45,11 @@
   "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
   "coveragePolicy": {
     "issueId": "USF-240",
+    "coverageGate": "docs/architecture/test-coverage-gate.json",
     "lcovRequired": true,
     "sonarImportRequired": true,
     "minimumLineCoveragePercent": 100,
-    "unsupportedCoverageBoundary": "USF-240 must define exact in-scope files and any justified exclusions before coverage can satisfy final USF-234 acceptance."
+    "unsupportedCoverageBoundary": "USF-240 defines exact in-scope files and justified exclusions in docs/architecture/test-coverage-gate.json. The bounded gate does not satisfy repository-wide coverage, final USF-234 acceptance, or environment promotion readiness."
   },
   "obligationClasses": [
     {

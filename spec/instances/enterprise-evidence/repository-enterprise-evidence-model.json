@@ -5999,6 +5999,38 @@
         "full-dev-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-240-lcov-sonar-coverage-gate",
+      "mappedType": "test-readiness-coverage-gate",
+      "controlPurpose": "Organise USF-240 bounded LCOV and Sonar coverage evidence, exact coverage thresholds, machine-checkable exclusions, command wiring, and non-claim boundaries before final test-readiness acceptance.",
+      "riskTreated": "Coverage or Sonar evidence could be stale, threshold-downgraded, expanded through undocumented exclusions, or mistaken for repository-wide test readiness.",
+      "assetServiceAffected": "docs/architecture/test-coverage-gate.json; vitest.config.ts; sonar-project.properties; docs/architecture/test-readiness-command-surface-and-ci-gate.json",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-240; parentIssue=USF-234; treatment=enforce bounded 100-percent LCOV for declared in-scope files and Sonar LCOV import evidence; reviewDate=2026-09-30; followUpIssue=USF-247,USF-260,USF-234",
+      "evidenceSource": "docs/architecture/test-coverage-gate.json; sonar-project.properties; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-095-through-101",
+      "validationCommand": "corepack pnpm test:coverage; corepack pnpm test-readiness:coverage; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-240 proves bounded in-scope implementation coverage only. Repository-wide expansion, final missing-evidence aggregation, and final acceptance remain owned by USF-247, USF-260, and USF-234; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -9100,6 +9132,27 @@
         "USF-234"
       ],
       "retentionPosture": "Retain committed suite JSON, Markdown, tests, validator rules, planted defects, and Linear reconciliation until USF-234 final acceptance supersedes the child gate."
+    },
+    {
+      "id": "evidence-usf-240-lcov-sonar-coverage-gate",
+      "proofResult": "bounded-lcov-sonar-coverage-gate",
+      "whatWasProven": "USF-240 defines and enforces a bounded 100-percent LCOV gate for declared in-scope implementation files, records machine-checkable coverage exclusions, wires canonical coverage commands, and extends the local composed SonarQube proof to check LCOV report configuration, freshness, and import evidence.",
+      "whatWasNotProven": "USF-240 does not prove repository-wide coverage, final USF-234 test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity readiness.",
+      "runtimeMode": "local-test-coverage-and-local-compose-sonarqube-proof",
+      "providerMode": "composed-test-for-sonarqube-lcov-import-only",
+      "serviceCatalogueRow": "docs/architecture/test-coverage-gate.json#sourceClassifications",
+      "adapterProviderId": "sonarqube-composed-quality-gate-provider",
+      "validationCommand": "corepack pnpm test:coverage; corepack pnpm test-readiness:coverage; corepack pnpm proof:assurance:sonarqube; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "vitest.config.ts#coverage; sonar-project.properties; adapters/assurance/src/index.ts#lcovReportConfigured; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-095-through-101",
+      "commitPin": "d31adf68a012bb9a9abb44c908c01dc2858931ce",
+      "prOrMergeSha": "d31adf68a012bb9a9abb44c908c01dc2858931ce",
+      "issueLinks": [
+        "USF-240",
+        "USF-234",
+        "USF-247",
+        "USF-260"
+      ],
+      "retentionPosture": "Retain committed value-free coverage configuration, LCOV command evidence, Sonar LCOV import evidence, validator findings, planted-defect selftests, and PR validation output. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw scanner logs, provider payloads, or production data."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -11843,6 +11896,33 @@
       "failClosedBehaviour": "The test-readiness validator fails when operational mappings, profile rows, fail-closed markers, cleanup evidence, incident/privacy evidence, or non-claims are missing or stale.",
       "monitoringAuditEvidence": "Value-free Vitest output, validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
       "residualRisk": "Destructive chaos testing, live-provider incident response, staging/prod recovery, and final USF-234 acceptance remain outside USF-245."
+    },
+    {
+      "id": "threat-usf-240-coverage-overclaim",
+      "targetType": "test-readiness-coverage-gate",
+      "target": "USF-240 bounded LCOV and Sonar coverage gate",
+      "trustBoundary": "Local repository coverage configuration, LCOV output, Sonar local synthetic proof, command-surface evidence, and test-readiness validator only. No final test, staging, production, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity boundary is proven.",
+      "tenantBoundary": "Coverage evidence is value-free repository metadata. Service-backed tenant isolation remains owned by composed integration, auth, data lifecycle, and final acceptance issues.",
+      "credentialBoundary": "Coverage and Sonar evidence must not expose secrets, tokens, raw endpoints, connection strings, stack traces, raw scanner logs, raw SDK errors, provider payloads, real tenant data, or production data.",
+      "dataClassification": "internal synthetic coverage and test-readiness governance metadata",
+      "abuseCases": [
+        "A downgraded coverage threshold is accepted as 100 percent",
+        "A broad source tree exclusion hides implementation code without issue-linked rationale",
+        "A stale LCOV report is imported into Sonar evidence",
+        "Bounded in-scope coverage is mistaken for repository-wide test readiness"
+      ],
+      "failureModes": [
+        "missing coverage gate artefact",
+        "missing LCOV command or report path",
+        "coverage threshold below 100 percent",
+        "unapproved source exclusion",
+        "Sonar LCOV import drift",
+        "command-surface row drift",
+        "readiness overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails on missing coverage gate evidence, missing package or Make command wiring, downgraded thresholds, undocumented exclusions, stale Sonar LCOV import, stale command-surface rows, and prohibited claims.",
+      "monitoringAuditEvidence": "Value-free coverage command output, validator findings, planted-defect selftest output, PR validation output, and bounded Sonar local synthetic proof output only.",
+      "residualRisk": "riskStatement=USF-240 does not prove repository-wide coverage or final USF-234 acceptance; impact=final readiness could be overclaimed if bounded coverage is treated as complete; likelihood=medium until USF-247, USF-260, and USF-234 reconcile final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer broad acceptance; reviewDate=2026-09-30; followUpIssue=USF-247,USF-260,USF-234."
     }
   ],
   "sdkDependencyGovernance": [
@@ -15751,6 +15831,46 @@
         "full-dev-readiness",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-240-coverage-gate",
+      "targetType": "test-readiness-coverage-gate",
+      "target": "USF-240 coverage command and Sonar LCOV proof boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-240",
+        "accessModel=local-repository-command-and-local-compose-sonarqube-proof-only",
+        "authnAuthzBoundary=Sonar proof uses temporary local token generated and revoked inside adapter boundary",
+        "leastPrivilegePosture=synthetic-local-test-context-only",
+        "breakGlassRelevance=no-operational-break-glass-proof",
+        "auditEvidence=value-free-coverage-validator-and-Sonar-proof-output-only",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=temporary-Sonar-token-revoked-by-proof",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/test-coverage-gate.json; sonar-project.properties; packages/proof/src/sonarqube-composed-proof.ts",
+      "validationCommand": "corepack pnpm test:coverage; corepack pnpm proof:assurance:sonarqube; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Repository-wide coverage expansion and final acceptance remain owned by USF-247, USF-260, and USF-234; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -19037,6 +19157,48 @@
         "usf-234-closure",
         "full-dev-readiness",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-240-coverage-gate",
+      "targetType": "test-readiness-coverage-gate",
+      "target": "USF-240 LCOV threshold and Sonar LCOV import resilience boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-240",
+        "readinessChecks=coverage-command-and-test-readiness-validator-checks",
+        "retryTimeoutBehaviour=Sonar-composed-proof-retains-existing-bounded-readiness-retry",
+        "failClosedMode=coverage-threshold-and-validator-fail-on-missing-LCOV-stale-LCOV-threshold-downgrade-or-unapproved-exclusion",
+        "safeTeardown=Sonar-composed-proof-removes-temporary-project-token-and-compose-resources",
+        "structuredLogging=value-free-coverage-and-validator-output-only",
+        "tracingCorrelation=not-applicable-to-local-coverage-command",
+        "metrics=coverage-summary-and-LCOV-line-hit-evidence-only",
+        "auditEvents=value-free-validator-and-proof-output-only",
+        "redaction=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-or-production-data",
+        "backupRestorePosture=not-applicable-to-coverage-gate",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "promotionImpact=blocks-final-test-readiness-until-USF-234-reconciles-all-child-evidence"
+      ],
+      "evidenceSource": "docs/architecture/test-coverage-gate.json; vitest.config.ts; sonar-project.properties; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test:coverage; corepack pnpm proof:assurance:sonarqube; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Final repository-wide coverage and final acceptance remain owned by USF-247, USF-260, and USF-234; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
       ]
     }
   ],
@@ -22927,6 +23089,43 @@
         "usf-234-closure",
         "full-dev-readiness",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-240-coverage-gate",
+      "targetType": "test-readiness-coverage-gate",
+      "target": "USF-240 coverage and Sonar LCOV incident vulnerability evidence boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-240",
+        "incidentDetectionHook=coverage-threshold-failure-validator-finding-or-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-240",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=Sonar local synthetic scan does not claim vulnerability clearance",
+        "dependencyUpdatePosture=coverage-provider-version-exact-pinned-and-reviewed-before-change",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-LCOV-threshold-Sonar-import-command-surface-and-overclaim-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-240"
+      ],
+      "evidenceSource": "docs/architecture/test-coverage-gate.json; sonar-project.properties; tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects",
+      "validationCommand": "corepack pnpm test:coverage; corepack pnpm proof:assurance:sonarqube; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Production incident response, vulnerability clearance, and final acceptance remain non-claims owned by later gates; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
       ]
     }
   ],
@@ -27415,6 +27614,45 @@
         "usf-234-closure",
         "full-dev-readiness",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-240-coverage-gate",
+      "targetType": "test-readiness-coverage-gate",
+      "target": "USF-240 synthetic coverage evidence privacy boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-240",
+        "dataOrigin=synthetic-local-coverage-and-repository-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-coverage-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-coverage-gate-and-validator-evidence-retained-generated-coverage-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/test-coverage-gate.json; coverage/test-readiness local generated output not committed; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test:coverage; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Live-provider privacy, production data residency, legal hold, and provider-managed retention are not proven by USF-240; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness",
+        "usf-234-closure"
       ]
     }
   ],

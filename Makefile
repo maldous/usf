@@ -3,8 +3,9 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := verify
 
 .PHONY: \
-	help commands setup foundation dev-ready test-ready test test-composed test-assurance \
+	help commands setup foundation dev-ready test-ready test test-composed test-coverage test-assurance \
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
+	test-readiness-coverage \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
 	verify install dev dev-smoke dev.work \
@@ -47,6 +48,7 @@ help:
 		'  make providers-proof       Provider adapter proof' \
 		'  make test-compose          Generated Compose validation and smoke' \
 		'  make test-composed         Composed semantic harness, deterministic fixtures, and service integration matrix' \
+		'  make test-coverage         Generate bounded LCOV and enforce 100% in-scope coverage' \
 		'  make test-assurance        Bounded local SonarQube zero-open-issue proof' \
 		'  make sonar-zero-issue-proof  Bounded local SonarQube zero-open-issue proof' \
 		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
@@ -69,6 +71,9 @@ test: test-ready
 test-composed:
 	corepack pnpm test-readiness:composed
 
+test-coverage:
+	corepack pnpm test-readiness:coverage
+
 test-assurance:
 	corepack pnpm test-readiness:assurance
 
@@ -83,6 +88,9 @@ test-readiness-fixtures:
 
 test-readiness-integration:
 	corepack pnpm test-readiness:integration
+
+test-readiness-coverage:
+	corepack pnpm test-readiness:coverage
 
 validate-foundation: verify
 

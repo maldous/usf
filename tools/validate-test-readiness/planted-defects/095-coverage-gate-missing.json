@@ -1,0 +1,6 @@
+{
+  "id": "095-coverage-gate-missing",
+  "description": "Remove the USF-240 coverage gate evidence artefact.",
+  "removeCoverageGate": true,
+  "expectedRule": "USF-TEST-READINESS-095"
+}

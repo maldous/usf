@@ -33,6 +33,7 @@ SEMANTIC_UNIT_SUITE_PATH = Path("docs/architecture/semantic-unit-test-suite.json
 FUNCTIONAL_REGRESSION_SUITE_PATH = Path("docs/architecture/functional-service-regression-suite.json")
 ENTERPRISE_CONTROL_SUITE_PATH = Path("docs/architecture/enterprise-control-evidence-test-suite.json")
 PERFORMANCE_RESOURCE_SUITE_PATH = Path("docs/architecture/performance-concurrency-resource-regression-suite.json")
+COVERAGE_GATE_PATH = Path("docs/architecture/test-coverage-gate.json")
 OPERATIONAL_RESILIENCE_SUITE_PATH = Path("docs/architecture/operational-resilience-failure-mode-suite.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
@@ -41,6 +42,8 @@ SEMANTIC_CONTRACT_DIR = Path("spec/instances/semantic-contract")
 ENTERPRISE_MODEL_PATH = Path("spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
+VITEST_CONFIG_PATH = Path("vitest.config.ts")
+SONAR_PROJECT_PATH = Path("sonar-project.properties")
 COMPOSE_TEST_PATH = Path("compose/compose.test.generated.yaml")
 PLANTED_DEFECT_DIR = Path("tools/validate-test-readiness/planted-defects")
 
@@ -139,6 +142,13 @@ RULES = {
     "USF-TEST-READINESS-092": ("blocking", "operational resilience profile failure-mode evidence is missing or stale"),
     "USF-TEST-READINESS-093": ("blocking", "operational resilience enterprise incident or privacy evidence is missing or stale"),
     "USF-TEST-READINESS-094": ("blocking", "operational resilience evidence boundary preserves insufficient non-claims or overclaims readiness"),
+    "USF-TEST-READINESS-095": ("blocking", "LCOV and Sonar coverage gate evidence is missing invalid or stale"),
+    "USF-TEST-READINESS-096": ("blocking", "coverage package command LCOV report wiring is missing or stale"),
+    "USF-TEST-READINESS-097": ("blocking", "coverage threshold is downgraded below the declared 100 percent gate"),
+    "USF-TEST-READINESS-098": ("blocking", "coverage exclusion is missing machine-checkable rationale owner issue or non-expansion boundary"),
+    "USF-TEST-READINESS-099": ("blocking", "Sonar LCOV import configuration or proof evidence is missing or stale"),
+    "USF-TEST-READINESS-100": ("blocking", "machine-readable command surface package script or Make target row is stale"),
+    "USF-TEST-READINESS-101": ("blocking", "coverage gate overclaims readiness or lacks enterprise evidence linkage"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -148,9 +158,13 @@ HARNESS_SCRIPT = "tsx packages/proof/src/composed-semantic-test-harness-proof.ts
 LIFECYCLE_COMMAND = "corepack pnpm test-readiness:fixtures"
 LIFECYCLE_SCRIPT = "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
 TEST_READINESS_COMMAND = "corepack pnpm test-readiness"
-TEST_READINESS_SCRIPT = "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:assurance"
+TEST_READINESS_SCRIPT = "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:coverage && pnpm test-readiness:assurance"
 TEST_READINESS_COMPOSED_COMMAND = "corepack pnpm test-readiness:composed"
 TEST_READINESS_COMPOSED_SCRIPT = "pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration"
+TEST_COVERAGE_COMMAND = "corepack pnpm test:coverage"
+TEST_COVERAGE_SCRIPT = "vitest run --coverage"
+TEST_READINESS_COVERAGE_COMMAND = "corepack pnpm test-readiness:coverage"
+TEST_READINESS_COVERAGE_SCRIPT = "pnpm test:coverage"
 TEST_READINESS_ASSURANCE_COMMAND = "corepack pnpm test-readiness:assurance"
 TEST_READINESS_ASSURANCE_SCRIPT = "pnpm proof:assurance:sonarqube"
 SONAR_COMMAND = "corepack pnpm proof:assurance:sonarqube"
@@ -166,6 +180,9 @@ PERFORMANCE_RESOURCE_COMMAND = "corepack pnpm test -- tests/packages/performance
 PERFORMANCE_RESOURCE_TEST_PATH = "tests/packages/performance-concurrency-resource-regression-suite.test.ts"
 OPERATIONAL_RESILIENCE_COMMAND = "corepack pnpm test -- tests/packages/operational-resilience-failure-mode-suite.test.ts"
 OPERATIONAL_RESILIENCE_TEST_PATH = "tests/packages/operational-resilience-failure-mode-suite.test.ts"
+LCOV_REPORT_PATH = "coverage/test-readiness/lcov.info"
+JSON_SUMMARY_PATH = "coverage/test-readiness/coverage-summary.json"
+LOCAL_SYNTHETIC_SONAR_LCOV_PATH = "coverage/lcov.info"
 REQUIRED_FUNCTIONAL_REGRESSION_CASES = {
     "positive",
     "negative",
@@ -1081,6 +1098,56 @@ def apply_operational_resilience_suite_defect(suite: dict[str, Any] | None, defe
     return out
 
 
+def apply_coverage_gate_defect(gate: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeCoverageGate"):
+        return None
+    if gate is None:
+        return None
+    out = copy.deepcopy(gate)
+    for key, value in defect.get("coverageGateSet", {}).items():
+        out[key] = value
+    for key in defect.get("coverageGateDrop", []):
+        out.pop(key, None)
+    for key, value in defect.get("coverageCommandSet", {}).items():
+        out.setdefault("commands", {})[key] = value
+    for key in defect.get("coverageCommandDrop", []):
+        out.setdefault("commands", {}).pop(key, None)
+    for key, value in defect.get("coverageThresholdSet", {}).items():
+        out.setdefault("thresholds", {})[key] = value
+    for key in defect.get("coverageThresholdDrop", []):
+        out.setdefault("thresholds", {}).pop(key, None)
+    for path in defect.get("coverageDropInScopeFiles", []):
+        out["inScopeFiles"] = [
+            value for value in out.get("inScopeFiles", []) if value != path
+        ]
+    for classification in defect.get("coverageDropSourceClassifications", []):
+        out["sourceClassifications"] = [
+            row
+            for row in out.get("sourceClassifications", [])
+            if row.get("classification") != classification
+        ]
+    for patch in defect.get("coverageSourceClassificationPatch", []):
+        for row in out.get("sourceClassifications", []):
+            if row.get("classification") != patch.get("classification"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for key, value in defect.get("coverageSonarSet", {}).items():
+        out.setdefault("sonarLcovImport", {})[key] = value
+    for key in defect.get("coverageSonarDrop", []):
+        out.setdefault("sonarLcovImport", {}).pop(key, None)
+    for section in defect.get("coverageEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("coverageDropNonClaims"):
+        dropped = set(defect.get("coverageDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+    if defect.get("coverageAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["coverageAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -1097,6 +1164,54 @@ def apply_makefile_defect(makefile: str, defect: dict[str, Any]) -> str:
         out = out.replace(patch.get("old", ""), patch.get("new", ""))
     for text in defect.get("makefileTextDrop", []):
         out = out.replace(text, "")
+    return out
+
+
+def apply_schema_registry_defect(registry: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(registry)
+    for schema_id in defect.get("schemaRegistryDropIds", []):
+        out["schemas"] = [row for row in out.get("schemas", []) if row.get("id") != schema_id]
+    for patch in defect.get("schemaRegistryPatch", []):
+        for row in out.get("schemas", []):
+            if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    return out
+
+
+def apply_enterprise_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
+    out = copy.deepcopy(model)
+    for patch in defect.get("enterpriseModelDropIds", []):
+        section = patch.get("section")
+        row_id = patch.get("id")
+        rows = out.get(section)
+        if isinstance(rows, list):
+            out[section] = [row for row in rows if row.get("id") != row_id]
+    for patch in defect.get("enterpriseModelRowPatch", []):
+        section = patch.get("section")
+        row_id = patch.get("id")
+        rows = out.get(section)
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if row.get("id") != row_id:
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    return out
+
+
+def apply_text_defect(text: str, defect: dict[str, Any], prefix: str) -> str:
+    out = text
+    for patch in defect.get(f"{prefix}TextReplace", []):
+        out = out.replace(patch.get("old", ""), patch.get("new", ""))
+    for value in defect.get(f"{prefix}TextDrop", []):
+        out = out.replace(value, "")
     return out
 
 
@@ -1195,8 +1310,24 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         operational_resilience_suite,
         defect,
     )
+    coverage_gate = (
+        read_json(COVERAGE_GATE_PATH) if (ROOT / COVERAGE_GATE_PATH).exists() else None
+    )
+    coverage_gate = apply_coverage_gate_defect(coverage_gate, defect)
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
+    vitest_config = (
+        (ROOT / VITEST_CONFIG_PATH).read_text(encoding="utf-8")
+        if (ROOT / VITEST_CONFIG_PATH).exists()
+        else ""
+    )
+    vitest_config = apply_text_defect(vitest_config, defect, "vitest")
+    sonar_project = (
+        (ROOT / SONAR_PROJECT_PATH).read_text(encoding="utf-8")
+        if (ROOT / SONAR_PROJECT_PATH).exists()
+        else ""
+    )
+    sonar_project = apply_text_defect(sonar_project, defect, "sonarProject")
     return {
         "contract": contract,
         "harness": harness,
@@ -1210,6 +1341,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "enterpriseControlSuite": enterprise_control_suite,
         "performanceResourceSuite": performance_resource_suite,
         "operationalResilienceSuite": operational_resilience_suite,
+        "coverageGate": coverage_gate,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -1218,6 +1350,8 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "enterpriseModel": apply_enterprise_model_defect(read_json(ENTERPRISE_MODEL_PATH), defect),
         "package": apply_package_defect(read_json(PACKAGE_PATH), defect),
         "makefile": makefile,
+        "vitestConfig": vitest_config,
+        "sonarProject": sonar_project,
     }
 
 
@@ -3489,6 +3623,198 @@ def check_operational_resilience_suite(F: Findings, state: dict[str, Any]) -> No
         F.add("USF-TEST-READINESS-094", str(OPERATIONAL_RESILIENCE_SUITE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
 
 
+def check_coverage_gate(F: Findings, state: dict[str, Any]) -> None:
+    gate = state["coverageGate"]
+    if not isinstance(gate, dict):
+        F.add("USF-TEST-READINESS-095", str(COVERAGE_GATE_PATH), "coverage gate is missing")
+        return
+    required = {
+        "id",
+        "issueId",
+        "parentIssueId",
+        "obligationManifest",
+        "commandSurface",
+        "coverageProvider",
+        "commands",
+        "thresholds",
+        "inScopeFiles",
+        "coverageScopeBoundary",
+        "sourceClassifications",
+        "sonarLcovImport",
+        "validatorCoverage",
+        "enterpriseEvidenceRefs",
+        "validationCommands",
+        "allowedClaims",
+        "nonClaims",
+    }
+    for key in sorted(required):
+        if key not in gate:
+            F.add("USF-TEST-READINESS-095", str(COVERAGE_GATE_PATH), f"missing top-level field {key}")
+    if gate.get("issueId") != "USF-240" or gate.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-095", str(COVERAGE_GATE_PATH), "issue linkage must be USF-240 under USF-234")
+    if gate.get("obligationManifest") != str(OBLIGATION_MANIFEST_PATH):
+        F.add("USF-TEST-READINESS-095", str(COVERAGE_GATE_PATH), "obligation manifest linkage is stale")
+    if gate.get("commandSurface") != str(COMMAND_SURFACE_PATH):
+        F.add("USF-TEST-READINESS-095", str(COVERAGE_GATE_PATH), "command surface linkage is stale")
+
+    provider = gate.get("coverageProvider", {})
+    if not isinstance(provider, dict):
+        F.add("USF-TEST-READINESS-095", f"{COVERAGE_GATE_PATH}#coverageProvider", "coverage provider metadata is missing")
+    else:
+        if provider.get("package") != "@vitest/coverage-v8" or provider.get("pinned") is not True:
+            F.add("USF-TEST-READINESS-095", f"{COVERAGE_GATE_PATH}#coverageProvider", "coverage provider package must be exact-pinned")
+        package_version = (
+            state["package"].get("devDependencies", {}).get("@vitest/coverage-v8")
+            if isinstance(state["package"], dict)
+            else None
+        )
+        if provider.get("version") != package_version or not isinstance(package_version, str) or package_version.startswith(("^", "~")):
+            F.add("USF-TEST-READINESS-095", f"{COVERAGE_GATE_PATH}#coverageProvider.version", "coverage provider version is missing unpinned or stale")
+
+    commands = gate.get("commands", {})
+    if not isinstance(commands, dict):
+        F.add("USF-TEST-READINESS-096", f"{COVERAGE_GATE_PATH}#commands", "coverage commands are missing")
+    else:
+        expected_commands = {
+            "packageScript": "test:coverage",
+            "packageCommand": TEST_COVERAGE_COMMAND,
+            "testReadinessPackageScript": "test-readiness:coverage",
+            "testReadinessCommand": TEST_READINESS_COVERAGE_COMMAND,
+            "lcovReportPath": LCOV_REPORT_PATH,
+            "jsonSummaryPath": JSON_SUMMARY_PATH,
+        }
+        for key, expected in expected_commands.items():
+            if commands.get(key) != expected:
+                F.add("USF-TEST-READINESS-096", f"{COVERAGE_GATE_PATH}#commands.{key}", "coverage command metadata is stale")
+        if set(commands.get("makeTargets", [])) != {"test-coverage", "test-readiness-coverage"}:
+            F.add("USF-TEST-READINESS-096", f"{COVERAGE_GATE_PATH}#commands.makeTargets", "coverage make targets are missing")
+
+    thresholds = gate.get("thresholds", {})
+    if not isinstance(thresholds, dict):
+        F.add("USF-TEST-READINESS-097", f"{COVERAGE_GATE_PATH}#thresholds", "coverage thresholds are missing")
+    else:
+        for key in ("lines", "statements", "functions", "branches"):
+            if thresholds.get(key) != 100:
+                F.add("USF-TEST-READINESS-097", f"{COVERAGE_GATE_PATH}#thresholds.{key}", "coverage threshold must be exactly 100")
+
+    vitest_config = state.get("vitestConfig", "")
+    for text in (
+        "provider: \"v8\"",
+        "reportsDirectory: \"coverage/test-readiness\"",
+        "reporter: [\"text\", \"json-summary\", \"lcov\"]",
+        "lines: 100",
+        "statements: 100",
+        "functions: 100",
+        "branches: 100",
+    ):
+        if text not in vitest_config:
+            F.add("USF-TEST-READINESS-097", f"{VITEST_CONFIG_PATH}#coverage", f"vitest coverage config missing {text}")
+    in_scope = gate.get("inScopeFiles", [])
+    if not isinstance(in_scope, list) or not in_scope:
+        F.add("USF-TEST-READINESS-095", f"{COVERAGE_GATE_PATH}#inScopeFiles", "in-scope coverage files are missing")
+    else:
+        for path in in_scope:
+            if f"\"{path}\"" not in vitest_config:
+                F.add("USF-TEST-READINESS-096", f"{VITEST_CONFIG_PATH}#coverage.include", f"in-scope file missing from vitest coverage include: {path}")
+
+    source_rows = gate.get("sourceClassifications", [])
+    if not isinstance(source_rows, list):
+        F.add("USF-TEST-READINESS-098", f"{COVERAGE_GATE_PATH}#sourceClassifications", "source classifications must be a list")
+        source_rows = []
+    classifications = _row_by_id(source_rows, "classification")
+    if "in-scope" not in classifications or "bounded-deferred" not in classifications or "generated-or-type-only-excluded" not in classifications:
+        F.add("USF-TEST-READINESS-098", f"{COVERAGE_GATE_PATH}#sourceClassifications", "required source classifications are missing")
+    for classification, row in classifications.items():
+        if not isinstance(row.get("paths"), list) or not row.get("paths"):
+            F.add("USF-TEST-READINESS-098", f"{COVERAGE_GATE_PATH}#sourceClassifications.{classification}", "classification paths are missing")
+        if classification != "in-scope":
+            for key in ("owner", "riskOwner", "controlOwner", "reviewDate", "promotionImpact", "followUpIssueIds", "rationale"):
+                if not row.get(key):
+                    F.add("USF-TEST-READINESS-098", f"{COVERAGE_GATE_PATH}#sourceClassifications.{classification}", f"{key} is required for coverage exclusion")
+    boundary = gate.get("coverageScopeBoundary", {})
+    if not isinstance(boundary, dict) or boundary.get("finalRepositoryWideCoverageClaimAllowed") is not False or boundary.get("scopeExpansionRequiresIssue") is not True:
+        F.add("USF-TEST-READINESS-098", f"{COVERAGE_GATE_PATH}#coverageScopeBoundary", "coverage scope boundary must forbid repository-wide claim and require issue-linked expansion")
+
+    sonar = gate.get("sonarLcovImport", {})
+    if not isinstance(sonar, dict):
+        F.add("USF-TEST-READINESS-099", f"{COVERAGE_GATE_PATH}#sonarLcovImport", "Sonar LCOV import metadata is missing")
+    else:
+        if sonar.get("sonarProjectProperties") != str(SONAR_PROJECT_PATH):
+            F.add("USF-TEST-READINESS-099", f"{COVERAGE_GATE_PATH}#sonarLcovImport", "Sonar project properties path is stale")
+        if sonar.get("lcovReportPath") != LCOV_REPORT_PATH or sonar.get("localSyntheticProofLcovPath") != LOCAL_SYNTHETIC_SONAR_LCOV_PATH:
+            F.add("USF-TEST-READINESS-099", f"{COVERAGE_GATE_PATH}#sonarLcovImport", "LCOV report path metadata is stale")
+        if sonar.get("proofCommand") != SONAR_COMMAND:
+            F.add("USF-TEST-READINESS-099", f"{COVERAGE_GATE_PATH}#sonarLcovImport", "Sonar proof command is stale")
+        fields = set(sonar.get("requiredEvidenceFields", []))
+        for field in ("lcovReportConfigured", "lcovReportConsumedChecked", "lcovReportFreshnessChecked", "lcovReportLineCoverageBucket"):
+            if field not in fields:
+                F.add("USF-TEST-READINESS-099", f"{COVERAGE_GATE_PATH}#sonarLcovImport.requiredEvidenceFields", f"missing Sonar LCOV evidence field {field}")
+    sonar_project = state.get("sonarProject", "")
+    for text in (
+        f"sonar.javascript.lcov.reportPaths={LCOV_REPORT_PATH}",
+        "sonar.projectKey=usf-test-readiness-local",
+    ):
+        if text not in sonar_project:
+            F.add("USF-TEST-READINESS-099", f"{SONAR_PROJECT_PATH}", f"Sonar properties missing {text}")
+
+    validation_commands = set(gate.get("validationCommands", []))
+    for expected in (TEST_COVERAGE_COMMAND, TEST_READINESS_COVERAGE_COMMAND, SONAR_COMMAND, OBLIGATION_MANIFEST_COMMAND):
+        if expected not in validation_commands:
+            F.add("USF-TEST-READINESS-095", f"{COVERAGE_GATE_PATH}#validationCommands", f"missing validation command {expected}")
+
+    refs = gate.get("enterpriseEvidenceRefs")
+    if not isinstance(refs, dict):
+        F.add("USF-TEST-READINESS-101", f"{COVERAGE_GATE_PATH}#enterpriseEvidenceRefs", "enterprise evidence refs are missing")
+    else:
+        for section in ENTERPRISE_REF_SECTIONS:
+            values = refs.get(section)
+            if not isinstance(values, list) or not values:
+                F.add("USF-TEST-READINESS-101", f"{COVERAGE_GATE_PATH}#{section}", "enterprise evidence ref is missing")
+                continue
+            missing = sorted(set(values) - _enterprise_ids(state, section))
+            if missing:
+                F.add("USF-TEST-READINESS-101", f"{COVERAGE_GATE_PATH}#{section}", f"enterprise refs are stale: {missing}")
+
+    validator = gate.get("validatorCoverage", {})
+    if not isinstance(validator, dict):
+        F.add("USF-TEST-READINESS-095", f"{COVERAGE_GATE_PATH}#validatorCoverage", "validator coverage metadata is missing")
+    else:
+        expected_rules = {
+            "USF-TEST-READINESS-095",
+            "USF-TEST-READINESS-096",
+            "USF-TEST-READINESS-097",
+            "USF-TEST-READINESS-098",
+            "USF-TEST-READINESS-099",
+            "USF-TEST-READINESS-100",
+            "USF-TEST-READINESS-101",
+        }
+        if set(validator.get("ruleIds", [])) != expected_rules:
+            F.add("USF-TEST-READINESS-095", f"{COVERAGE_GATE_PATH}#validatorCoverage.ruleIds", "coverage validator rule inventory is stale")
+
+    non_claims = set(gate.get("nonClaims", []))
+    required_non_claims = {
+        "final-test-readiness",
+        "repository-wide-coverage-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+    }
+    missing = sorted(required_non_claims - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-101", str(COVERAGE_GATE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(gate.get("allowedClaims", [])))
+    if bad:
+        F.add("USF-TEST-READINESS-101", str(COVERAGE_GATE_PATH), f"prohibited claim appears in allowedClaims: {bad}")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -3705,8 +4031,8 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
     if command_surface.get("issueId") != "USF-238" or command_surface.get("parentIssueId") != "USF-234":
         F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), "issue linkage must be USF-238 under USF-234")
     depends = set(command_surface.get("dependsOnIssueIds", []))
-    if not {"USF-235", "USF-236", "USF-237"}.issubset(depends):
-        F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), "command surface must depend on USF-235, USF-236, and USF-237")
+    if not {"USF-235", "USF-236", "USF-237", "USF-242"}.issubset(depends):
+        F.add("USF-TEST-READINESS-022", str(COMMAND_SURFACE_PATH), "command surface must depend on USF-235, USF-236, USF-237, and USF-242")
     expected_links = {
         "testEnvironmentContract": str(CONTRACT_PATH),
         "composedSemanticHarness": str(HARNESS_PATH),
@@ -3721,6 +4047,7 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         "test-readiness-full": TEST_READINESS_COMMAND,
         "test-readiness-composed": TEST_READINESS_COMPOSED_COMMAND,
         "test-readiness-assurance": TEST_READINESS_ASSURANCE_COMMAND,
+        "test-readiness-coverage": TEST_READINESS_COVERAGE_COMMAND,
         "test-readiness-semantic": HARNESS_COMMAND,
         "test-readiness-fixtures": LIFECYCLE_COMMAND,
         "test-readiness-integration": INTEGRATION_MATRIX_COMMAND,
@@ -3734,6 +4061,41 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
             F.add("USF-TEST-READINESS-022", f"{COMMAND_SURFACE_PATH}#canonicalCommands.{command_id}", "composed command must require composed services")
         elif row.get("inMemoryServiceSubstituteAllowed") is not False:
             F.add("USF-TEST-READINESS-027", f"{COMMAND_SURFACE_PATH}#canonicalCommands.{command_id}", "canonical command must forbid in-memory service substitutes")
+
+    package_rows = _row_by_id(command_surface.get("packageScripts"), "id")
+    expected_package_rows = {
+        "test-readiness": TEST_READINESS_SCRIPT,
+        "test-readiness:composed": TEST_READINESS_COMPOSED_SCRIPT,
+        "test-readiness:assurance": TEST_READINESS_ASSURANCE_SCRIPT,
+        "test-readiness:semantic": HARNESS_SCRIPT,
+        "test-readiness:fixtures": LIFECYCLE_SCRIPT,
+        "test-readiness:integration": INTEGRATION_MATRIX_SCRIPT,
+        "test-readiness:validate": OBLIGATION_MANIFEST_COMMAND,
+        "test:coverage": TEST_COVERAGE_SCRIPT,
+        "test-readiness:coverage": TEST_READINESS_COVERAGE_SCRIPT,
+    }
+    for script_id, expected in expected_package_rows.items():
+        row = package_rows.get(script_id)
+        if not row or row.get("script") != expected:
+            F.add("USF-TEST-READINESS-100", f"{COMMAND_SURFACE_PATH}#packageScripts.{script_id}", "machine-readable package script row is missing or stale")
+
+    make_rows = _row_by_id(command_surface.get("makeTargets"), "target")
+    expected_make_rows = {
+        "test-ready": "corepack pnpm test-readiness",
+        "test": "test-ready",
+        "test-composed": "corepack pnpm test-readiness:composed",
+        "test-assurance": "corepack pnpm test-readiness:assurance",
+        "test-readiness-validate": "corepack pnpm test-readiness:validate",
+        "test-readiness-semantic": "corepack pnpm test-readiness:semantic",
+        "test-readiness-fixtures": "corepack pnpm test-readiness:fixtures",
+        "test-readiness-integration": "corepack pnpm test-readiness:integration",
+        "test-coverage": "corepack pnpm test-readiness:coverage",
+        "test-readiness-coverage": "corepack pnpm test-readiness:coverage",
+    }
+    for target, expected in expected_make_rows.items():
+        row = make_rows.get(target)
+        if not row or row.get("routesTo") != expected:
+            F.add("USF-TEST-READINESS-100", f"{COMMAND_SURFACE_PATH}#makeTargets.{target}", "machine-readable Make target row is missing or stale")
 
     composed = command_surface.get("composedExecution")
     if not isinstance(composed, dict):
@@ -3754,9 +4116,13 @@ def check_command_surface(F: Findings, state: dict[str, Any]) -> None:
         TEST_READINESS_COMPOSED_COMMAND,
         TEST_READINESS_ASSURANCE_COMMAND,
         INTEGRATION_MATRIX_COMMAND,
+        TEST_COVERAGE_COMMAND,
+        TEST_READINESS_COVERAGE_COMMAND,
         "make test-ready",
         "make test-composed",
         "make test-readiness-integration",
+        "make test-coverage",
+        "make test-readiness-coverage",
         "make test-assurance",
         "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
     ):
@@ -3805,6 +4171,8 @@ def check_makefile_wiring(F: Findings, makefile: str) -> None:
         "test-readiness-semantic": "corepack pnpm test-readiness:semantic",
         "test-readiness-fixtures": "corepack pnpm test-readiness:fixtures",
         "test-readiness-integration": "corepack pnpm test-readiness:integration",
+        "test-coverage": "corepack pnpm test-readiness:coverage",
+        "test-readiness-coverage": "corepack pnpm test-readiness:coverage",
     }
     for target, command in expected_targets.items():
         pattern = rf"^{re.escape(target)}:\n\t{re.escape(command)}$"
@@ -3812,7 +4180,7 @@ def check_makefile_wiring(F: Findings, makefile: str) -> None:
             F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#{target}", "Make target is missing or stale")
     if not re.search(r"^test:\s+test-ready$", makefile, re.MULTILINE):
         F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#test", "make test must alias test-ready")
-    for help_text in ("make test-ready", "make test-composed", "make test-assurance"):
+    for help_text in ("make test-ready", "make test-composed", "make test-assurance", "make test-coverage"):
         if help_text not in makefile:
             F.add("USF-TEST-READINESS-024", f"{MAKEFILE_PATH}#help", f"help output missing {help_text}")
 
@@ -3831,10 +4199,15 @@ def check_package_wiring(F: Findings, package: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-018", "package.json#scripts", "test-readiness:fixtures script is missing or stale")
     if scripts.get("test-readiness:integration") != INTEGRATION_MATRIX_SCRIPT:
         F.add("USF-TEST-READINESS-051", "package.json#scripts", "test-readiness:integration script is missing or stale")
+    if scripts.get("test:coverage") != TEST_COVERAGE_SCRIPT:
+        F.add("USF-TEST-READINESS-096", "package.json#scripts", "test:coverage script is missing or stale")
+    if scripts.get("test-readiness:coverage") != TEST_READINESS_COVERAGE_SCRIPT:
+        F.add("USF-TEST-READINESS-096", "package.json#scripts", "test-readiness:coverage script is missing or stale")
     expected_scripts = {
         "test-readiness": TEST_READINESS_SCRIPT,
         "test-readiness:composed": TEST_READINESS_COMPOSED_SCRIPT,
         "test-readiness:assurance": TEST_READINESS_ASSURANCE_SCRIPT,
+        "test-readiness:coverage": TEST_READINESS_COVERAGE_SCRIPT,
     }
     for key, expected in expected_scripts.items():
         if scripts.get(key) != expected:
@@ -3856,6 +4229,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_enterprise_control_suite(F, state)
     check_performance_resource_suite(F, state)
     check_operational_resilience_suite(F, state)
+    check_coverage_gate(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])

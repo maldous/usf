@@ -1,0 +1,8 @@
+{
+  "id": "097-coverage-threshold-downgraded",
+  "description": "Downgrade the declared line coverage threshold below 100 percent.",
+  "coverageThresholdSet": {
+    "lines": 99
+  },
+  "expectedRule": "USF-TEST-READINESS-097"
+}

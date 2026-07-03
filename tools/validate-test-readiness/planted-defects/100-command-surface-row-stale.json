@@ -1,0 +1,8 @@
+{
+  "id": "100-command-surface-row-stale",
+  "description": "Drop the machine-readable command-surface package-script row while leaving live package wiring intact.",
+  "commandSurfaceDropPackageScriptIds": [
+    "test-readiness:coverage"
+  ],
+  "expectedRule": "USF-TEST-READINESS-100"
+}

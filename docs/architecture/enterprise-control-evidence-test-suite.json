@@ -25,7 +25,7 @@
   "requiredEnterpriseSections": [
     {
       "sectionId": "soaSupportMappings",
-      "expectedRowCount": 223,
+      "expectedRowCount": 224,
       "requiredFields": [
         "id",
         "controlPurpose",
@@ -44,7 +44,7 @@
     },
     {
       "sectionId": "evidenceRegister",
-      "expectedRowCount": 133,
+      "expectedRowCount": 134,
       "requiredFields": [
         "id",
         "proofResult",
@@ -61,7 +61,7 @@
     },
     {
       "sectionId": "threatModelAbuseCaseRegister",
-      "expectedRowCount": 107,
+      "expectedRowCount": 108,
       "requiredFields": [
         "id",
         "trustBoundary",
@@ -108,7 +108,7 @@
     },
     {
       "sectionId": "accessReviewPrivilegedOperationPosture",
-      "expectedRowCount": 90,
+      "expectedRowCount": 91,
       "requiredFields": [
         "id",
         "targetType",
@@ -123,7 +123,7 @@
     },
     {
       "sectionId": "backupRestoreResiliencePosture",
-      "expectedRowCount": 94,
+      "expectedRowCount": 95,
       "requiredFields": [
         "id",
         "targetType",
@@ -138,7 +138,7 @@
     },
     {
       "sectionId": "incidentVulnerabilityManagementEvidence",
-      "expectedRowCount": 114,
+      "expectedRowCount": 115,
       "requiredFields": [
         "id",
         "targetType",
@@ -153,7 +153,7 @@
     },
     {
       "sectionId": "privacyDataMinimisationPosture",
-      "expectedRowCount": 131,
+      "expectedRowCount": 132,
       "requiredFields": [
         "id",
         "targetType",

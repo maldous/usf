@@ -1,0 +1,8 @@
+{
+  "id": "099-sonar-lcov-import-drift",
+  "description": "Remove the Sonar LCOV report path from Sonar project configuration.",
+  "sonarProjectTextDrop": [
+    "sonar.javascript.lcov.reportPaths=coverage/test-readiness/lcov.info"
+  ],
+  "expectedRule": "USF-TEST-READINESS-099"
+}
