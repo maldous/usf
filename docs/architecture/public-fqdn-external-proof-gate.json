@@ -1,0 +1,119 @@
+{
+  "id": "public-fqdn-external-proof-gate",
+  "title": "External DNS TLS HTTPS Public FQDN Proof Gate",
+  "issueId": "USF-263",
+  "parentIssueId": "USF-261",
+  "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "status": "blocked",
+  "statusRationale": "The proof harness exists and public DNS plus Cloudflare HTTPS edge responses are observable, but the declared public JSON proof endpoint currently returns Cloudflare 521, so bounded proof endpoint content delivery is not proven.",
+  "blocksV2Proof": true,
+  "v2ProofAuthorizationAllowed": false,
+  "humanAuthorizationRequiredToBypass": true,
+  "blockerIssueIds": [
+    "USF-263"
+  ],
+  "proofCommands": {
+    "all": {
+      "id": "proof:public-fqdn",
+      "command": "tsx packages/proof/src/public-fqdn-proof.ts all",
+      "packageScript": "proof:public-fqdn",
+      "makeTarget": "public-fqdn-proof",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    },
+    "staging": {
+      "id": "proof:public-fqdn:staging",
+      "command": "tsx packages/proof/src/public-fqdn-proof.ts staging",
+      "packageScript": "proof:public-fqdn:staging",
+      "makeTarget": "public-fqdn-proof-staging",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    },
+    "production": {
+      "id": "proof:public-fqdn:production",
+      "command": "tsx packages/proof/src/public-fqdn-proof.ts production",
+      "packageScript": "proof:public-fqdn:production",
+      "makeTarget": "public-fqdn-proof-production",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    }
+  },
+  "requiredFqdns": [
+    {
+      "environment": "staging",
+      "fqdn": "1e100.network",
+      "proofCommandId": "proof:public-fqdn:staging",
+      "dns": {
+        "publicResolutionObserved": true,
+        "privateOnlyResolutionObserved": false,
+        "nxdomainObserved": false
+      },
+      "tls": {
+        "httpsAttempted": true,
+        "validCertificateObserved": true,
+        "certificateHostCoverageObserved": true
+      },
+      "httpRoute": {
+        "preferredRoute": "/.well-known/usf-public-edge.json",
+        "lastObservedStatus": 521,
+        "proofEndpointContentDelivered": false,
+        "expectedMarkerObserved": false,
+        "cloudflareEdgeObserved": true
+      },
+      "currentBlocker": "Cloudflare edge returns 521 for the JSON proof endpoint, so origin/proof endpoint delivery is not proven."
+    },
+    {
+      "environment": "production",
+      "fqdn": "aldous.info",
+      "proofCommandId": "proof:public-fqdn:production",
+      "dns": {
+        "publicResolutionObserved": true,
+        "privateOnlyResolutionObserved": false,
+        "nxdomainObserved": false
+      },
+      "tls": {
+        "httpsAttempted": true,
+        "validCertificateObserved": true,
+        "certificateHostCoverageObserved": true
+      },
+      "httpRoute": {
+        "preferredRoute": "/.well-known/usf-public-edge.json",
+        "lastObservedStatus": 521,
+        "proofEndpointContentDelivered": false,
+        "expectedMarkerObserved": false,
+        "cloudflareEdgeObserved": true
+      },
+      "currentBlocker": "Cloudflare edge returns 521 for the JSON proof endpoint, so origin/proof endpoint delivery is not proven."
+    }
+  ],
+  "negativeEvidence": {
+    "localhostAccepted": false,
+    "privateInternalHostAccepted": false,
+    "privateIpAccepted": false,
+    "cloudflareApiSecretRequired": false,
+    "caddyRequiredGatewayClaim": false,
+    "generatedComposeAuthority": false,
+    "generatedGatewayConfigAuthority": false
+  },
+  "validator": {
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+    "rules": [
+      "USF-PUBLIC-FQDN-009",
+      "USF-PUBLIC-FQDN-010",
+      "USF-PUBLIC-FQDN-011",
+      "USF-PUBLIC-FQDN-012"
+    ],
+    "plantedDefectDirectory": "tools/validate-public-fqdn/planted-defects"
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

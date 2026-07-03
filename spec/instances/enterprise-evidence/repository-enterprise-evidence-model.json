@@ -6123,6 +6123,93 @@
         "full-react-product-parity",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-proof-proof-public-fqdn",
+      "mappedType": "public-fqdn-external-proof-gate",
+      "controlPurpose": "Organise USF-263 external DNS TLS HTTPS proof evidence for all required public root FQDNs without treating gateway provider configuration as semantic authority.",
+      "riskTreated": "Public FQDN evidence could be missing, no-op, private-only, TLS-invalid, route-undelivered, Caddy-specific, or mistaken for staging production live-provider or v2-proof readiness.",
+      "assetServiceAffected": "docs/architecture/public-fqdn-external-proof-gate.json; docs/architecture/public-fqdn-semantic-contract.json; packages/proof/src/public-fqdn-proof.ts",
+      "owner": "platform-public-edge-foundation",
+      "riskOwner": "platform-public-edge-risk-owner",
+      "controlOwner": "platform-public-edge-control-owner",
+      "implementationStatus": "effectivenessState=deferred-with-owner; sourceIssue=USF-263; parentIssue=USF-261; treatment=fail-closed public FQDN proof gate blocked by proof endpoint route delivery; reviewDate=2026-09-30; followUpIssue=USF-263",
+      "evidenceSource": "docs/architecture/public-fqdn-external-proof-gate.json; packages/proof/src/public-fqdn-proof.ts; tools/validate-public-fqdn/validate-public-fqdn.py",
+      "validationCommand": "corepack pnpm proof:public-fqdn; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "deferredReason": "Current public DNS and TLS evidence is observable, but both allowed proof routes return Cloudflare 521, so proof endpoint content delivery remains blocked and v2-proof authorization remains blocked.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "v2-proof-tag-authorization"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-public-fqdn-staging",
+      "mappedType": "public-fqdn-external-proof-gate",
+      "controlPurpose": "Organise USF-263 external DNS TLS HTTPS proof evidence for staging root FQDN 1e100.network without treating gateway provider configuration as semantic authority.",
+      "riskTreated": "Public FQDN evidence could be missing, no-op, private-only, TLS-invalid, route-undelivered, Caddy-specific, or mistaken for staging production live-provider or v2-proof readiness.",
+      "assetServiceAffected": "docs/architecture/public-fqdn-external-proof-gate.json; docs/architecture/public-fqdn-semantic-contract.json; packages/proof/src/public-fqdn-proof.ts",
+      "owner": "platform-public-edge-foundation",
+      "riskOwner": "platform-public-edge-risk-owner",
+      "controlOwner": "platform-public-edge-control-owner",
+      "implementationStatus": "effectivenessState=deferred-with-owner; sourceIssue=USF-263; parentIssue=USF-261; treatment=fail-closed public FQDN proof gate blocked by proof endpoint route delivery; reviewDate=2026-09-30; followUpIssue=USF-263",
+      "evidenceSource": "docs/architecture/public-fqdn-external-proof-gate.json; packages/proof/src/public-fqdn-proof.ts; tools/validate-public-fqdn/validate-public-fqdn.py",
+      "validationCommand": "corepack pnpm proof:public-fqdn:staging; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "deferredReason": "Current public DNS and TLS evidence is observable, but both allowed proof routes return Cloudflare 521, so proof endpoint content delivery remains blocked and v2-proof authorization remains blocked.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "v2-proof-tag-authorization"
+      ]
+    },
+    {
+      "id": "soa-proof-proof-public-fqdn-production",
+      "mappedType": "public-fqdn-external-proof-gate",
+      "controlPurpose": "Organise USF-263 external DNS TLS HTTPS proof evidence for production root FQDN aldous.info without treating gateway provider configuration as semantic authority.",
+      "riskTreated": "Public FQDN evidence could be missing, no-op, private-only, TLS-invalid, route-undelivered, Caddy-specific, or mistaken for staging production live-provider or v2-proof readiness.",
+      "assetServiceAffected": "docs/architecture/public-fqdn-external-proof-gate.json; docs/architecture/public-fqdn-semantic-contract.json; packages/proof/src/public-fqdn-proof.ts",
+      "owner": "platform-public-edge-foundation",
+      "riskOwner": "platform-public-edge-risk-owner",
+      "controlOwner": "platform-public-edge-control-owner",
+      "implementationStatus": "effectivenessState=deferred-with-owner; sourceIssue=USF-263; parentIssue=USF-261; treatment=fail-closed public FQDN proof gate blocked by proof endpoint route delivery; reviewDate=2026-09-30; followUpIssue=USF-263",
+      "evidenceSource": "docs/architecture/public-fqdn-external-proof-gate.json; packages/proof/src/public-fqdn-proof.ts; tools/validate-public-fqdn/validate-public-fqdn.py",
+      "validationCommand": "corepack pnpm proof:public-fqdn:production; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "deferredReason": "Current public DNS and TLS evidence is observable, but both allowed proof routes return Cloudflare 521, so proof endpoint content delivery remains blocked and v2-proof authorization remains blocked.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-react-parity-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "v2-proof-tag-authorization"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -9302,6 +9389,69 @@
         "USF-234"
       ],
       "retentionPosture": "Retain committed value-free final acceptance gate, validator rule, planted defect, PR validation output, and Linear reconciliation. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, raw provider payloads, or production data. This row is pinned to the pre-USF-234 base evidence commit; the USF-234 PR and Linear reconciliation record the final merge SHA after merge."
+    },
+    {
+      "id": "evidence-proof-proof-public-fqdn",
+      "proofResult": "blocked-public-fqdn-route-delivery-proof-gate",
+      "whatWasProven": "USF-263 adds a strict public FQDN proof command for all required public root FQDNs; DNS and TLS evidence are represented and the validator fails closed on missing or unsafe evidence.",
+      "whatWasNotProven": "Proof endpoint content delivery is not proven while both allowed public proof routes return Cloudflare 521. This does not prove v2-proof tag authorization, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "external-public-fqdn-proof-command",
+      "providerMode": "public-internet-observation-no-live-provider-readiness-claim",
+      "serviceCatalogueRow": "docs/architecture/public-fqdn-semantic-contract.json#environments",
+      "adapterProviderId": "public-fqdn-proof-all",
+      "validationCommand": "corepack pnpm proof:public-fqdn; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "commandPin": "tsx packages/proof/src/public-fqdn-proof.ts all",
+      "commitPin": "a5ed857d14290b36f59ef2d4d627a127fa877f75",
+      "prOrMergeSha": "a5ed857d14290b36f59ef2d4d627a127fa877f75",
+      "issueLinks": [
+        "USF-263",
+        "USF-261",
+        "USF-262",
+        "USF-265"
+      ],
+      "retentionPosture": "Retain committed value-free proof-gate evidence, validator rules, planted defects, and command output summaries. Do not retain raw endpoints beyond declared FQDNs, raw TLS certificates, tokens, Cloudflare API material, real tenant data, or production data."
+    },
+    {
+      "id": "evidence-proof-proof-public-fqdn-staging",
+      "proofResult": "blocked-public-fqdn-route-delivery-proof-gate",
+      "whatWasProven": "USF-263 adds a strict public FQDN proof command for staging root FQDN 1e100.network; DNS and TLS evidence are represented and the validator fails closed on missing or unsafe evidence.",
+      "whatWasNotProven": "Proof endpoint content delivery is not proven while both allowed public proof routes return Cloudflare 521. This does not prove v2-proof tag authorization, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "external-public-fqdn-proof-command",
+      "providerMode": "public-internet-observation-no-live-provider-readiness-claim",
+      "serviceCatalogueRow": "docs/architecture/public-fqdn-semantic-contract.json#environments",
+      "adapterProviderId": "public-fqdn-proof-staging",
+      "validationCommand": "corepack pnpm proof:public-fqdn:staging; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "commandPin": "tsx packages/proof/src/public-fqdn-proof.ts staging",
+      "commitPin": "a5ed857d14290b36f59ef2d4d627a127fa877f75",
+      "prOrMergeSha": "a5ed857d14290b36f59ef2d4d627a127fa877f75",
+      "issueLinks": [
+        "USF-263",
+        "USF-261",
+        "USF-262",
+        "USF-265"
+      ],
+      "retentionPosture": "Retain committed value-free proof-gate evidence, validator rules, planted defects, and command output summaries. Do not retain raw endpoints beyond declared FQDNs, raw TLS certificates, tokens, Cloudflare API material, real tenant data, or production data."
+    },
+    {
+      "id": "evidence-proof-proof-public-fqdn-production",
+      "proofResult": "blocked-public-fqdn-route-delivery-proof-gate",
+      "whatWasProven": "USF-263 adds a strict public FQDN proof command for production root FQDN aldous.info; DNS and TLS evidence are represented and the validator fails closed on missing or unsafe evidence.",
+      "whatWasNotProven": "Proof endpoint content delivery is not proven while both allowed public proof routes return Cloudflare 521. This does not prove v2-proof tag authorization, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "external-public-fqdn-proof-command",
+      "providerMode": "public-internet-observation-no-live-provider-readiness-claim",
+      "serviceCatalogueRow": "docs/architecture/public-fqdn-semantic-contract.json#environments",
+      "adapterProviderId": "public-fqdn-proof-production",
+      "validationCommand": "corepack pnpm proof:public-fqdn:production; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "commandPin": "tsx packages/proof/src/public-fqdn-proof.ts production",
+      "commitPin": "a5ed857d14290b36f59ef2d4d627a127fa877f75",
+      "prOrMergeSha": "a5ed857d14290b36f59ef2d4d627a127fa877f75",
+      "issueLinks": [
+        "USF-263",
+        "USF-261",
+        "USF-262",
+        "USF-265"
+      ],
+      "retentionPosture": "Retain committed value-free proof-gate evidence, validator rules, planted defects, and command output summaries. Do not retain raw endpoints beyond declared FQDNs, raw TLS certificates, tokens, Cloudflare API material, real tenant data, or production data."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -28310,6 +28460,105 @@
         "browser-e2e-readiness",
         "full-react-product-parity",
         "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-public-fqdn",
+      "targetType": "public-fqdn-external-proof-gate",
+      "target": "USF-263 proof:public-fqdn privacy and redaction boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "sourceIssue=USF-263",
+        "dataOrigin=public-dns-tls-https-observation-and-synthetic-proof-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-public-edge-proof-metadata",
+        "redactionPolicy=hash-IP-certificate-subject-issuer-and-suppress-raw-response-payloads-tokens-stack-traces-connection-strings-and-provider-secrets",
+        "retentionPurgePosture=committed-value-free-proof-gate-and-validator-evidence-retained-generated-command-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=public-FQDN-observation-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=public-FQDN-observation-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/public-fqdn-external-proof-gate.json; packages/proof/src/public-fqdn-proof.ts",
+      "validationCommand": "corepack pnpm proof:public-fqdn; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "deferredReason": "Proof endpoint route delivery is blocked by Cloudflare 521. No live-provider privacy, staging, production, SOC, ISO, product UI, browser E2E, or v2-proof authorization claim is made.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-public-fqdn-staging",
+      "targetType": "public-fqdn-external-proof-gate",
+      "target": "USF-263 proof:public-fqdn:staging privacy and redaction boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "sourceIssue=USF-263",
+        "dataOrigin=public-dns-tls-https-observation-and-synthetic-proof-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-public-edge-proof-metadata",
+        "redactionPolicy=hash-IP-certificate-subject-issuer-and-suppress-raw-response-payloads-tokens-stack-traces-connection-strings-and-provider-secrets",
+        "retentionPurgePosture=committed-value-free-proof-gate-and-validator-evidence-retained-generated-command-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=public-FQDN-observation-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=public-FQDN-observation-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/public-fqdn-external-proof-gate.json; packages/proof/src/public-fqdn-proof.ts",
+      "validationCommand": "corepack pnpm proof:public-fqdn:staging; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "deferredReason": "Proof endpoint route delivery is blocked by Cloudflare 521. No live-provider privacy, staging, production, SOC, ISO, product UI, browser E2E, or v2-proof authorization claim is made.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-public-fqdn-production",
+      "targetType": "public-fqdn-external-proof-gate",
+      "target": "USF-263 proof:public-fqdn:production privacy and redaction boundary",
+      "posture": [
+        "effectivenessState=deferred-with-owner",
+        "sourceIssue=USF-263",
+        "dataOrigin=public-dns-tls-https-observation-and-synthetic-proof-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-public-edge-proof-metadata",
+        "redactionPolicy=hash-IP-certificate-subject-issuer-and-suppress-raw-response-payloads-tokens-stack-traces-connection-strings-and-provider-secrets",
+        "retentionPurgePosture=committed-value-free-proof-gate-and-validator-evidence-retained-generated-command-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=public-FQDN-observation-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=public-FQDN-observation-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/public-fqdn-external-proof-gate.json; packages/proof/src/public-fqdn-proof.ts",
+      "validationCommand": "corepack pnpm proof:public-fqdn:production; python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+      "deferredReason": "Proof endpoint route delivery is blocked by Cloudflare 521. No live-provider privacy, staging, production, SOC, ISO, product UI, browser E2E, or v2-proof authorization claim is made.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
       ]
     }
   ],

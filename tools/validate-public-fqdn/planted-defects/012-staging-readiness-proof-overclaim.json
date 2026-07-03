@@ -1,0 +1,6 @@
+{
+  "id": "012-staging-readiness-proof-overclaim",
+  "description": "Remove the staging readiness non-claim from external proof evidence.",
+  "removeExternalNonClaim": "staging-readiness",
+  "expectedRule": "USF-PUBLIC-FQDN-012"
+}

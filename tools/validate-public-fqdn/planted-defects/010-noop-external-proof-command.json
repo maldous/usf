@@ -1,0 +1,13 @@
+{
+  "id": "010-noop-external-proof-command",
+  "description": "Replace the all-scope public FQDN proof command with a no-op.",
+  "setPackageScript": {
+    "name": "proof:public-fqdn",
+    "command": "true"
+  },
+  "setExternalProofCommand": {
+    "id": "proof:public-fqdn",
+    "command": "true"
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-010"
+}

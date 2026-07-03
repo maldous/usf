@@ -1,0 +1,8 @@
+{
+  "id": "009-external-required-fqdn-missing",
+  "description": "Remove the staging required FQDN proof row so the validator must fail closed.",
+  "dropExternalFqdnEnvironments": [
+    "staging"
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-009"
+}
