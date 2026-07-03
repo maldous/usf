@@ -1,0 +1,13 @@
+{
+  "expectedRule": "USF-TEST-READINESS-058",
+  "semanticUnitSuiteSet": {
+    "scope": {
+      "testLayer": "unit",
+      "boundary": "pure-local-only",
+      "serviceBackedCoverageClaim": true,
+      "composedServiceCoverageClaim": false,
+      "finalTestReadinessClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": true
+    }
+  }
+}

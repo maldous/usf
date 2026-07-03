@@ -1,0 +1,1670 @@
+{
+  "id": "semantic-unit-test-suite",
+  "title": "Semantic Unit Test Suite",
+  "issueId": "USF-241",
+  "parentIssueId": "USF-234",
+  "sourceManifest": {
+    "issueId": "USF-239",
+    "path": "docs/architecture/semantic-service-test-obligation-manifest.json",
+    "selector": "semanticContractObligations where ownerIssueIds includes USF-241",
+    "expectedSemanticContractCount": 67,
+    "expectedServiceRowCount": 38,
+    "expectedUsf241ServiceRowCount": 0
+  },
+  "scope": {
+    "testLayer": "unit",
+    "boundary": "pure-local-only",
+    "serviceBackedCoverageClaim": false,
+    "composedServiceCoverageClaim": false,
+    "finalTestReadinessClaim": false,
+    "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false
+  },
+  "facetKeysRequired": [
+    "auditModel",
+    "contracts",
+    "errorModel",
+    "lifecycle",
+    "permissions",
+    "proof",
+    "readinessModel",
+    "stateModel",
+    "uiSemanticDefinition",
+    "validation"
+  ],
+  "mappedTestFiles": [
+    {
+      "path": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testNames": [
+        "maps every USF-241 semantic contract obligation from the USF-239 manifest",
+        "unit obligation mapping remains current",
+        "keeps service-backed obligations outside USF-241 unit coverage claims",
+        "preserves manifest non-claims and allowed claim boundaries"
+      ],
+      "mappedDomains": [
+        "all"
+      ]
+    },
+    {
+      "path": "tests/packages/core-semantic-boundaries.test.ts",
+      "testNames": [
+        "fails closed on empty tenant and audit fields",
+        "redacts and bounds sensitive audit metadata",
+        "detects audit hash-chain tampering and reorder gaps",
+        "validates config precedence, override policy, and redaction locally",
+        "keeps safe provider and session views value-free",
+        "validates file metadata and least-disclosure file views",
+        "validates bounded retry and safe failure output",
+        "redacts telemetry attributes and rejects unsafe metric labels"
+      ],
+      "mappedDomains": [
+        "authentication",
+        "compute-runtime",
+        "configuration",
+        "data-platform",
+        "developer-platform",
+        "entitlements-billing",
+        "events-workflow",
+        "foundation",
+        "identity-access",
+        "observability-ops",
+        "search",
+        "security-governance",
+        "storage",
+        "support-admin"
+      ]
+    },
+    {
+      "path": "tests/capabilities/authorization-policy-boundaries.test.ts",
+      "testNames": [
+        "keeps identity claims subordinate to explicit PDP authorization",
+        "deduplicates role permissions and ignores unknown roles",
+        "fails closed for unknown actions and requires stronger sensitive reads",
+        "bounds break-glass scope matching without broad accidental prefixes"
+      ],
+      "mappedDomains": [
+        "authentication",
+        "identity-access",
+        "security-governance",
+        "support-admin"
+      ]
+    },
+    {
+      "path": "tests/adapters/local-adapter-boundaries.test.ts",
+      "testNames": [
+        "keeps local event bus data tenant-scoped and drain-idempotent",
+        "keeps local object storage tenant-scoped and delete-idempotent",
+        "keeps local secret references scoped and fail-closed by lifecycle state"
+      ],
+      "mappedDomains": [
+        "compute-runtime",
+        "configuration",
+        "data-platform",
+        "developer-platform",
+        "events-workflow",
+        "foundation",
+        "observability-ops",
+        "search",
+        "storage"
+      ]
+    }
+  ],
+  "domainInventory": [
+    {
+      "capabilityDomain": "authentication",
+      "semanticContractCount": 1
+    },
+    {
+      "capabilityDomain": "compute-runtime",
+      "semanticContractCount": 3
+    },
+    {
+      "capabilityDomain": "configuration",
+      "semanticContractCount": 6
+    },
+    {
+      "capabilityDomain": "data-platform",
+      "semanticContractCount": 6
+    },
+    {
+      "capabilityDomain": "developer-platform",
+      "semanticContractCount": 5
+    },
+    {
+      "capabilityDomain": "entitlements-billing",
+      "semanticContractCount": 4
+    },
+    {
+      "capabilityDomain": "events-workflow",
+      "semanticContractCount": 4
+    },
+    {
+      "capabilityDomain": "foundation",
+      "semanticContractCount": 11
+    },
+    {
+      "capabilityDomain": "identity-access",
+      "semanticContractCount": 13
+    },
+    {
+      "capabilityDomain": "observability-ops",
+      "semanticContractCount": 7
+    },
+    {
+      "capabilityDomain": "search",
+      "semanticContractCount": 1
+    },
+    {
+      "capabilityDomain": "security-governance",
+      "semanticContractCount": 3
+    },
+    {
+      "capabilityDomain": "storage",
+      "semanticContractCount": 1
+    },
+    {
+      "capabilityDomain": "support-admin",
+      "semanticContractCount": 2
+    }
+  ],
+  "serviceBackedRowsExcludedFromUsf241Claims": {
+    "reason": "USF-241 owns pure/local unit coverage only. Service-backed rows remain owned by composed integration, profile exercise, fixture, evidence, resilience, and final acceptance issues.",
+    "serviceRowCount": 38,
+    "composedIntegrationRowCount": 33,
+    "boundedOrOutOfScopeServiceIds": [
+      "mock-oidc",
+      "platform-api",
+      "react-app",
+      "sentry",
+      "sonar-oidc-plugin"
+    ]
+  },
+  "nonClaimsPreserved": [
+    "test-readiness",
+    "final-test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness"
+  ],
+  "testReadinessClaimAllowed": false,
+  "unitObligationMappings": [
+    {
+      "contractId": "semantic-contract.abac-policy-decision-point",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.abac-policy-decision-point",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.accessibility-a11y-gate",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.accessibility-a11y-gate",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "capabilityDomain": "observability-ops",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.alerting-incident-management-on-call-status-page",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "capabilityDomain": "developer-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.api-keys-personal-access-tokens",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.api-keys-personal-access-tokens",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.audit-of-privileged-access",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.audit-of-privileged-access",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.authentication-platform",
+      "capabilityDomain": "authentication",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.authentication-platform",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.background-workers-job-runner",
+      "capabilityDomain": "compute-runtime",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.background-workers-job-runner",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.backup-and-restore",
+      "capabilityDomain": "data-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.backup-and-restore",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.branding-and-theming",
+      "capabilityDomain": "configuration",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.branding-and-theming",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capabilityDomain": "observability-ops",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.build-versus-compose-decision-framework",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.build-versus-compose-decision-framework",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "capabilityDomain": "security-governance",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "capabilityDomain": "security-governance",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.composed-provider-readiness-spine",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.composed-provider-readiness-spine",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.configuration-registry-and-history",
+      "capabilityDomain": "configuration",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.configuration-registry-and-history",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "capabilityDomain": "configuration",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capabilityDomain": "data-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.delegated-administration-roles",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.delegated-administration-roles",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.e2e-confidence-ladder-stage-aware",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.end-user-profile-and-preferences-self-service",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.entitlement-engine",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.entitlement-engine",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.environment-registry-and-bootstrap",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.environment-registry-and-bootstrap",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.environment-specific-vs-shared-service-model",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.environment-specific-vs-shared-service-model",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "capabilityDomain": "events-workflow",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.history-read-model-read-only-projection",
+      "capabilityDomain": "data-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.history-read-model-read-only-projection",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.i18n-runtime-and-validation",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.i18n-runtime-and-validation",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.internal-service-catalog-and-readiness",
+      "capabilityDomain": "observability-ops",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.internal-service-catalog-and-readiness",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "capabilityDomain": "observability-ops",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.metrics-and-traces",
+      "capabilityDomain": "observability-ops",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.metrics-and-traces",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.mock-providers-dev-test",
+      "capabilityDomain": "developer-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.mock-providers-dev-test",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "capabilityDomain": "events-workflow",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.notification-delivery-and-preferences-and-channels",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "capabilityDomain": "storage",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "capabilityDomain": "observability-ops",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.observability-built-in-alerting-and-incidents",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.openapi-drift-hard-gate",
+      "capabilityDomain": "developer-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.openapi-drift-hard-gate",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "capabilityDomain": "data-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.pitr-retention-legal-hold-data-residency",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.product-catalog-plans-prices",
+      "capabilityDomain": "entitlements-billing",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.product-catalog-plans-prices",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.provider-configuration-plane",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.provider-configuration-plane",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.provider-environment-classification",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.provider-environment-classification",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.quota-enforcement",
+      "capabilityDomain": "entitlements-billing",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.quota-enforcement",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.rate-limiting-api",
+      "capabilityDomain": "developer-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.rate-limiting-api",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.rbac-roles-and-permissions",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.rbac-roles-and-permissions",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "capabilityDomain": "data-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.relational-storage-and-migrations-and-rls",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.runtime-secrets-management",
+      "capabilityDomain": "compute-runtime",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.runtime-secrets-management",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "capabilityDomain": "events-workflow",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.search-and-indexing-product-search",
+      "capabilityDomain": "search",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.search-and-indexing-product-search",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.serverless-function-runtime",
+      "capabilityDomain": "compute-runtime",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.serverless-function-runtime",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.service-catalog-and-provider-integration-model",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.service-catalog-and-provider-integration-model",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.sub-organisations",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.sub-organisations",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "capabilityDomain": "entitlements-billing",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.support-mode-break-glass-access",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.support-mode-break-glass-access",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.support-tickets-customer-health-announcements",
+      "capabilityDomain": "support-admin",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.support-tickets-customer-health-announcements",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-canonical-domain-set-unset",
+      "capabilityDomain": "configuration",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-canonical-domain-set-unset",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-data-import-export",
+      "capabilityDomain": "data-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-data-import-export",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-domain-activation-auth-client",
+      "capabilityDomain": "configuration",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-domain-activation-auth-client",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-groups",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-groups",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-host-identity-resolution",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-host-identity-resolution",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-identity-record-and-fqdn",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-identity-record-and-fqdn",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-isolation-proof",
+      "capabilityDomain": "security-governance",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-isolation-proof",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "capabilityDomain": "support-admin",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.tenant-service-clickthrough-policy",
+      "capabilityDomain": "observability-ops",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.tenant-service-clickthrough-policy",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "capabilityDomain": "foundation",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.universal-service-foundation-scope-and-principles",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "capabilityDomain": "entitlements-billing",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.usage-metering-and-meter-event-ingestion",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.user-identity-and-tenant-membership",
+      "capabilityDomain": "identity-access",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.user-identity-and-tenant-membership",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/capabilities/authorization-policy-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.webhooks-developer-facing",
+      "capabilityDomain": "developer-platform",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.webhooks-developer-facing",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/packages/core-semantic-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "capabilityDomain": "events-workflow",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    },
+    {
+      "contractId": "semantic-contract.write-only-secret-settings",
+      "capabilityDomain": "configuration",
+      "testFile": "tests/packages/semantic-unit-obligation-manifest.test.ts",
+      "testName": "unit obligation mapping remains current: semantic-contract.write-only-secret-settings",
+      "facetKeysCovered": [
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation"
+      ],
+      "serviceBackedCoverageClaim": false,
+      "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
+      "supportingTestFile": "tests/adapters/local-adapter-boundaries.test.ts"
+    }
+  ],
+  "coverageContribution": {
+    "unitScopeLineCoverageTarget": "100-percent",
+    "coverageContributionStatus": "unit-obligations-mapped-to-executable-tests",
+    "unitScopeImplementationCode": [
+      "packages/core/src/index.ts",
+      "capabilities/tenant/src/authorization-policy.ts",
+      "adapters/bus/src/index.ts#InMemoryEventBus",
+      "adapters/store/src/index.ts#InMemoryObjectStore",
+      "adapters/secrets/src/index.ts#InMemorySecretStore"
+    ],
+    "evidenceCommand": "corepack pnpm test -- tests/packages/semantic-unit-obligation-manifest.test.ts tests/packages/core-semantic-boundaries.test.ts tests/capabilities/authorization-policy-boundaries.test.ts tests/adapters/local-adapter-boundaries.test.ts",
+    "finalLcovGateOwnerIssueId": "USF-240",
+    "finalLcovGateClaimAllowed": false,
+    "nonEquivalenceBoundary": "USF-241 contributes mapped unit tests for pure-local implementation scope. USF-240 owns final 100-percent LCOV and Sonar coverage gate before test-readiness acceptance."
+  },
+  "validationCommands": [
+    "corepack pnpm test -- tests/packages/semantic-unit-obligation-manifest.test.ts tests/packages/core-semantic-boundaries.test.ts tests/capabilities/authorization-policy-boundaries.test.ts tests/adapters/local-adapter-boundaries.test.ts",
+    "corepack pnpm test-readiness:validate",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "corepack pnpm test"
+  ],
+  "enterpriseEvidenceRefs": {
+    "soaSupportMappings": [
+      "soa-usf-241-semantic-unit-test-suite"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-241-semantic-unit-test-suite"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-241-unit-test-overclaim"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-241-unit-test-boundary"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-241-unit-test-boundary"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-241-unit-test-boundary"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-241-unit-test-boundary"
+    ]
+  },
+  "allowedClaims": [
+    "semantic-unit-obligation-inventory-defined",
+    "pure-local-unit-tests-added"
+  ],
+  "nonClaims": [
+    "test-readiness",
+    "final-test-readiness",
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "full-react-parity-readiness",
+    "usf-234-closure"
+  ]
+}

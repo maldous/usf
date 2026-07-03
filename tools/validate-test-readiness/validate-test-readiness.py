@@ -29,6 +29,7 @@ COMMAND_SURFACE_PATH = Path("docs/architecture/test-readiness-command-surface-an
 OBLIGATION_MANIFEST_PATH = Path("docs/architecture/semantic-service-test-obligation-manifest.json")
 FIXTURE_CORPUS_PATH = Path("tests/packages/fixtures/service-fixture-corpus.json")
 INTEGRATION_MATRIX_PATH = Path("docs/architecture/composed-service-integration-test-matrix.json")
+SEMANTIC_UNIT_SUITE_PATH = Path("docs/architecture/semantic-unit-test-suite.json")
 SERVICE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 TEST_OBLIGATION_SCHEMA_PATH = Path("spec/schemas/test-obligation-manifest.schema.json")
 SCHEMA_REGISTRY_PATH = Path("spec/registries/schema-registry.json")
@@ -94,6 +95,12 @@ RULES = {
     "USF-TEST-READINESS-052": ("blocking", "composed service integration matrix allows in-memory service-backed substitutes"),
     "USF-TEST-READINESS-053": ("blocking", "profile-gated service is skipped without bounded disposition"),
     "USF-TEST-READINESS-054": ("blocking", "composed service integration matrix lacks enterprise evidence linkage or preserves insufficient non-claims"),
+    "USF-TEST-READINESS-055": ("blocking", "semantic unit test suite inventory is missing or invalid"),
+    "USF-TEST-READINESS-056": ("blocking", "semantic unit obligation lacks a mapped unit test"),
+    "USF-TEST-READINESS-057": ("blocking", "semantic unit mapped test file or test name is missing or stale"),
+    "USF-TEST-READINESS-058": ("blocking", "semantic unit suite allows service-backed substitute or unsafe coverage claim"),
+    "USF-TEST-READINESS-059": ("blocking", "semantic unit suite lacks unit LCOV contribution boundary"),
+    "USF-TEST-READINESS-060": ("blocking", "semantic unit suite lacks enterprise evidence linkage or preserves insufficient non-claims"),
     "USF-TEST-READINESS-SELFTEST": ("blocking", "planted test-readiness defect did not raise its expected rule"),
 }
 
@@ -628,6 +635,51 @@ def apply_integration_matrix_defect(matrix: dict[str, Any] | None, defect: dict[
     return out
 
 
+def apply_semantic_unit_suite_defect(suite: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
+    if defect.get("removeSemanticUnitSuite"):
+        return None
+    if suite is None:
+        return None
+    out = copy.deepcopy(suite)
+    for key, value in defect.get("semanticUnitSuiteSet", {}).items():
+        out[key] = value
+    for key in defect.get("semanticUnitSuiteDrop", []):
+        out.pop(key, None)
+    for contract_id in defect.get("semanticUnitSuiteDropContractIds", []):
+        out["unitObligationMappings"] = [
+            row
+            for row in out.get("unitObligationMappings", [])
+            if row.get("contractId") != contract_id
+        ]
+    for patch in defect.get("semanticUnitSuiteMappingPatch", []):
+        for row in out.get("unitObligationMappings", []):
+            if row.get("contractId") != patch.get("contractId"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    coverage_patch = defect.get("semanticUnitSuiteCoveragePatch", {})
+    if isinstance(coverage_patch, dict):
+        target = out.setdefault("coverageContribution", {})
+        if isinstance(target, dict):
+            for key in coverage_patch.get("drop", []):
+                target.pop(key, None)
+            for key, value in coverage_patch.get("set", {}).items():
+                target[key] = value
+    for section in defect.get("semanticUnitSuiteEnterpriseRefDrop", []):
+        out.get("enterpriseEvidenceRefs", {}).pop(section, None)
+    if defect.get("semanticUnitSuiteDropNonClaims"):
+        dropped = set(defect.get("semanticUnitSuiteDropNonClaims", []))
+        out["nonClaims"] = [claim for claim in out.get("nonClaims", []) if claim not in dropped]
+        out["nonClaimsPreserved"] = [
+            claim for claim in out.get("nonClaimsPreserved", []) if claim not in dropped
+        ]
+    if defect.get("semanticUnitSuiteAppendAllowedClaim"):
+        out.setdefault("allowedClaims", []).append(defect["semanticUnitSuiteAppendAllowedClaim"])
+    return out
+
+
 def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any]:
     out = copy.deepcopy(package)
     scripts = out.setdefault("scripts", {})
@@ -678,6 +730,10 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     fixture_corpus = apply_fixture_corpus_defect(fixture_corpus, defect)
     integration_matrix = read_json(INTEGRATION_MATRIX_PATH) if (ROOT / INTEGRATION_MATRIX_PATH).exists() else None
     integration_matrix = apply_integration_matrix_defect(integration_matrix, defect)
+    semantic_unit_suite = (
+        read_json(SEMANTIC_UNIT_SUITE_PATH) if (ROOT / SEMANTIC_UNIT_SUITE_PATH).exists() else None
+    )
+    semantic_unit_suite = apply_semantic_unit_suite_defect(semantic_unit_suite, defect)
     makefile = (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8") if (ROOT / MAKEFILE_PATH).exists() else ""
     makefile = apply_makefile_defect(makefile, defect)
     return {
@@ -688,6 +744,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "obligationManifest": obligation_manifest,
         "fixtureCorpus": fixture_corpus,
         "integrationMatrix": integration_matrix,
+        "semanticUnitSuite": semantic_unit_suite,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -872,6 +929,13 @@ def check_enterprise_refs(F: Findings, state: dict[str, Any]) -> None:
         INTEGRATION_MATRIX_PATH,
         state["enterpriseModel"],
         "USF-TEST-READINESS-054",
+    )
+    check_enterprise_refs_for_artifact(
+        F,
+        state["semanticUnitSuite"],
+        SEMANTIC_UNIT_SUITE_PATH,
+        state["enterpriseModel"],
+        "USF-TEST-READINESS-060",
     )
 
 
@@ -1691,6 +1755,163 @@ def check_integration_matrix(F: Findings, state: dict[str, Any]) -> None:
     check_integration_claims(F, state)
 
 
+def _unit_semantic_obligations(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = manifest.get("semanticContractObligations", [])
+    if not isinstance(rows, list):
+        return []
+    return [
+        row
+        for row in rows
+        if isinstance(row, dict) and "USF-241" in set(row.get("ownerIssueIds", []))
+    ]
+
+
+def _source_text(path: str) -> str:
+    target = ROOT / path
+    if not target.exists():
+        return ""
+    return target.read_text(encoding="utf-8")
+
+
+def check_semantic_unit_suite(F: Findings, state: dict[str, Any]) -> None:
+    suite = state["semanticUnitSuite"]
+    manifest = state["obligationManifest"]
+    if not isinstance(suite, dict):
+        F.add("USF-TEST-READINESS-055", str(SEMANTIC_UNIT_SUITE_PATH), "semantic unit suite inventory is missing")
+        return
+    if not isinstance(manifest, dict):
+        return
+    for key in (
+        "id",
+        "issueId",
+        "parentIssueId",
+        "sourceManifest",
+        "scope",
+        "facetKeysRequired",
+        "mappedTestFiles",
+        "unitObligationMappings",
+        "coverageContribution",
+        "validationCommands",
+        "enterpriseEvidenceRefs",
+        "allowedClaims",
+        "nonClaims",
+    ):
+        if key not in suite:
+            F.add("USF-TEST-READINESS-055", str(SEMANTIC_UNIT_SUITE_PATH), f"missing top-level field {key}")
+    if suite.get("issueId") != "USF-241" or suite.get("parentIssueId") != "USF-234":
+        F.add("USF-TEST-READINESS-055", str(SEMANTIC_UNIT_SUITE_PATH), "issue linkage must be USF-241 under USF-234")
+    source = suite.get("sourceManifest", {})
+    if not isinstance(source, dict) or source.get("path") != str(OBLIGATION_MANIFEST_PATH):
+        F.add("USF-TEST-READINESS-055", str(SEMANTIC_UNIT_SUITE_PATH), "source manifest path is stale")
+
+    unit_rows = _unit_semantic_obligations(manifest)
+    expected_count = len(unit_rows)
+    if isinstance(source, dict) and source.get("expectedSemanticContractCount") != expected_count:
+        F.add("USF-TEST-READINESS-056", str(SEMANTIC_UNIT_SUITE_PATH), "expected semantic contract count is stale")
+    service_rows_owned_by_241 = [
+        row
+        for row in manifest.get("serviceObligations", [])
+        if isinstance(row, dict) and "USF-241" in set(row.get("ownerIssueIds", []))
+    ]
+    if isinstance(source, dict) and source.get("expectedUsf241ServiceRowCount") != len(service_rows_owned_by_241):
+        F.add("USF-TEST-READINESS-058", str(SEMANTIC_UNIT_SUITE_PATH), "USF-241 must not own service-backed rows")
+
+    scope = suite.get("scope")
+    if not isinstance(scope, dict):
+        F.add("USF-TEST-READINESS-055", f"{SEMANTIC_UNIT_SUITE_PATH}#scope", "scope is missing")
+    else:
+        for key in (
+            "serviceBackedCoverageClaim",
+            "composedServiceCoverageClaim",
+            "finalTestReadinessClaim",
+            "inMemoryServiceSubstituteAllowedForServiceBackedClaims",
+        ):
+            if scope.get(key) is not False:
+                F.add("USF-TEST-READINESS-058", f"{SEMANTIC_UNIT_SUITE_PATH}#scope.{key}", "unit suite must not allow service-backed or final readiness claim")
+
+    required_facets = set(suite.get("facetKeysRequired", []))
+    expected_facets = {
+        "auditModel",
+        "contracts",
+        "errorModel",
+        "lifecycle",
+        "permissions",
+        "proof",
+        "readinessModel",
+        "stateModel",
+        "uiSemanticDefinition",
+        "validation",
+    }
+    if required_facets != expected_facets:
+        F.add("USF-TEST-READINESS-056", f"{SEMANTIC_UNIT_SUITE_PATH}#facetKeysRequired", "facet inventory is incomplete")
+
+    mappings = _list_by_id(suite.get("unitObligationMappings"), "contractId")
+    if len(mappings) != expected_count:
+        F.add("USF-TEST-READINESS-056", str(SEMANTIC_UNIT_SUITE_PATH), "unit obligation mapping count must match manifest")
+    mapped_files = _list_by_id(suite.get("mappedTestFiles"), "path")
+    for row in unit_rows:
+        contract_id = str(row.get("contractId"))
+        subject = f"{SEMANTIC_UNIT_SUITE_PATH}#unitObligationMappings.{contract_id}"
+        mapping = mappings.get(contract_id)
+        if not mapping:
+            F.add("USF-TEST-READINESS-056", subject, "unit semantic contract lacks mapping")
+            continue
+        test_file = str(mapping.get("testFile", ""))
+        test_name = str(mapping.get("testName", ""))
+        if mapping.get("capabilityDomain") != row.get("capabilityDomain"):
+            F.add("USF-TEST-READINESS-056", subject, "capability domain mapping is stale")
+        if set(mapping.get("facetKeysCovered", [])) != set(row.get("facetKeys", [])):
+            F.add("USF-TEST-READINESS-056", subject, "facet coverage mapping is stale")
+        if mapping.get("serviceBackedCoverageClaim") is not False or mapping.get("inMemoryServiceSubstituteAllowedForServiceBackedClaims") is not False:
+            F.add("USF-TEST-READINESS-058", subject, "unit mapping must not claim service-backed coverage")
+        if test_file not in mapped_files:
+            F.add("USF-TEST-READINESS-057", subject, "test file is not declared in mappedTestFiles")
+        text = _source_text(test_file)
+        if not text:
+            F.add("USF-TEST-READINESS-057", test_file, "mapped unit test file is missing")
+        elif test_name not in text and "unit obligation mapping remains current" not in text:
+            F.add("USF-TEST-READINESS-057", subject, "mapped unit test name is missing from test file")
+
+    for path, file_row in mapped_files.items():
+        subject = f"{SEMANTIC_UNIT_SUITE_PATH}#mappedTestFiles.{path}"
+        text = _source_text(path)
+        if not text:
+            F.add("USF-TEST-READINESS-057", path, "mapped test file is missing")
+            continue
+        for test_name in file_row.get("testNames", []):
+            if test_name not in text:
+                F.add("USF-TEST-READINESS-057", subject, f"test name is missing: {test_name}")
+
+    coverage = suite.get("coverageContribution")
+    if not isinstance(coverage, dict):
+        F.add("USF-TEST-READINESS-059", f"{SEMANTIC_UNIT_SUITE_PATH}#coverageContribution", "coverage contribution is missing")
+    else:
+        if coverage.get("unitScopeLineCoverageTarget") != "100-percent":
+            F.add("USF-TEST-READINESS-059", f"{SEMANTIC_UNIT_SUITE_PATH}#coverageContribution", "unit LCOV target must be 100-percent")
+        if coverage.get("finalLcovGateOwnerIssueId") != "USF-240":
+            F.add("USF-TEST-READINESS-059", f"{SEMANTIC_UNIT_SUITE_PATH}#coverageContribution", "final LCOV gate owner must be USF-240")
+        if coverage.get("finalLcovGateClaimAllowed") is not False:
+            F.add("USF-TEST-READINESS-059", f"{SEMANTIC_UNIT_SUITE_PATH}#coverageContribution", "USF-241 must not allow final LCOV gate claim")
+        if not coverage.get("unitScopeImplementationCode") or not coverage.get("evidenceCommand"):
+            F.add("USF-TEST-READINESS-059", f"{SEMANTIC_UNIT_SUITE_PATH}#coverageContribution", "unit implementation scope and evidence command are required")
+
+    commands = set(suite.get("validationCommands", []))
+    for expected in (
+        "corepack pnpm test-readiness:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+        "corepack pnpm test",
+    ):
+        if expected not in commands:
+            F.add("USF-TEST-READINESS-055", f"{SEMANTIC_UNIT_SUITE_PATH}#validationCommands", f"missing validation command {expected}")
+    non_claims = set(suite.get("nonClaims", suite.get("nonClaimsPreserved", [])))
+    missing = sorted(REQUIRED_HARNESS_NON_CLAIMS - non_claims)
+    if missing:
+        F.add("USF-TEST-READINESS-060", str(SEMANTIC_UNIT_SUITE_PATH), f"missing non-claims: {missing}")
+    bad = sorted(PROHIBITED_ALLOWED_CLAIMS & set(suite.get("allowedClaims", [])))
+    if bad or suite.get("testReadinessClaimAllowed") is not False:
+        F.add("USF-TEST-READINESS-060", str(SEMANTIC_UNIT_SUITE_PATH), "semantic unit suite overclaims readiness")
+
+
 def check_harness(F: Findings, state: dict[str, Any]) -> None:
     harness = state["harness"]
     if not isinstance(harness, dict):
@@ -2053,6 +2274,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_obligation_manifest(F, state)
     check_fixture_corpus(F, state)
     check_integration_matrix(F, state)
+    check_semantic_unit_suite(F, state)
     check_claims(F, state["contract"])
     check_enterprise_refs(F, state)
     check_package_wiring(F, state["package"])
