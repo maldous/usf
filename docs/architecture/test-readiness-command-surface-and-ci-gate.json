@@ -136,7 +136,16 @@
   "packageScripts": [
     {
       "id": "test-readiness",
-      "script": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:coverage && pnpm test-readiness:assurance"
+      "script": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:coverage && pnpm test-readiness:assurance",
+      "dependsOnIssueIds": [
+        "USF-235",
+        "USF-236",
+        "USF-237",
+        "USF-238",
+        "USF-240",
+        "USF-242",
+        "USF-243"
+      ]
     },
     {
       "id": "test:coverage",
@@ -144,35 +153,63 @@
     },
     {
       "id": "test-readiness:coverage",
-      "script": "pnpm test:coverage"
+      "script": "pnpm test:coverage",
+      "dependsOnIssueIds": [
+        "USF-240"
+      ]
     },
     {
       "id": "test-readiness:composed",
-      "script": "pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration"
+      "script": "pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration",
+      "dependsOnIssueIds": [
+        "USF-236",
+        "USF-237",
+        "USF-242"
+      ]
     },
     {
       "id": "test-readiness:assurance",
-      "script": "pnpm proof:assurance:sonarqube"
+      "script": "pnpm proof:assurance:sonarqube",
+      "dependsOnIssueIds": [
+        "USF-233",
+        "USF-243"
+      ]
     },
     {
       "id": "test-readiness:semantic",
-      "script": "tsx packages/proof/src/composed-semantic-test-harness-proof.ts"
+      "script": "tsx packages/proof/src/composed-semantic-test-harness-proof.ts",
+      "dependsOnIssueIds": [
+        "USF-236"
+      ]
     },
     {
       "id": "test-readiness:fixtures",
-      "script": "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
+      "script": "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts",
+      "dependsOnIssueIds": [
+        "USF-237"
+      ]
     },
     {
       "id": "test-readiness:integration",
-      "script": "tsx packages/proof/src/composed-service-integration-matrix-proof.ts"
+      "script": "tsx packages/proof/src/composed-service-integration-matrix-proof.ts",
+      "dependsOnIssueIds": [
+        "USF-242"
+      ]
     },
     {
       "id": "test-readiness:validate",
-      "script": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+      "script": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "dependsOnIssueIds": [
+        "USF-239",
+        "USF-259"
+      ]
     },
     {
       "id": "test-readiness:selftest",
-      "script": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json"
+      "script": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+      "dependsOnIssueIds": [
+        "USF-247"
+      ]
     }
   ],
   "makeTargets": [

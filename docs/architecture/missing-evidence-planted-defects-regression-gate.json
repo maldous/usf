@@ -33,11 +33,11 @@
   "packageScript": "test-readiness:selftest",
   "packageCommand": "corepack pnpm test-readiness:selftest",
   "makeTarget": "test-readiness-selftest",
-  "plantedDefectCount": 112,
+  "plantedDefectCount": 114,
   "coverageModel": {
     "perDefectExpectedRuleField": "expectedRule",
     "deterministicFailureProof": "The selftest command loads every planted defect JSON file, applies it to the current repository evidence state, and fails unless the expected rule id appears in the validator findings.",
-    "ruleCatalogue": "USF-TEST-READINESS-001 through USF-TEST-READINESS-110 plus USF-TEST-READINESS-SELFTEST",
+    "ruleCatalogue": "USF-TEST-READINESS-001 through USF-TEST-READINESS-111 plus USF-TEST-READINESS-SELFTEST",
     "failureOutputBoundary": "The validator reports severity, rule id, subject, and safe failure message. It does not expose secrets, real tenant data, raw provider payloads, tokens, stack traces, or live endpoints."
   },
   "regressionCategories": [
@@ -90,6 +90,11 @@
       "id": "test-environment-completion-staging-entry-gate",
       "ruleRange": "USF-TEST-READINESS-110",
       "prevents": "Treating completed child issues as sufficient without a final Test-environment completion evidence map, no-substitute boundary, closure search requirements, staging-entry decision boundary, and enterprise evidence refs."
+    },
+    {
+      "id": "test-readiness-final-acceptance-gate",
+      "ruleRange": "USF-TEST-READINESS-111",
+      "prevents": "Treating USF-260 staging-entry consideration as final USF-234 test-readiness acceptance without a parent acceptance evidence map, final validation rows, closure search requirements, and non-claim boundaries."
     }
   ],
   "requiredFailureClasses": [
@@ -107,7 +112,8 @@
     "missing-enterprise-evidence",
     "missing-non-claim-preservation",
     "readiness-or-certification-overclaim",
-    "missing-test-environment-completion-gate"
+    "missing-test-environment-completion-gate",
+    "missing-test-readiness-final-acceptance-gate"
   ],
   "validationCommands": [
     "corepack pnpm test-readiness:selftest",

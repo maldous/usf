@@ -1,0 +1,13 @@
+{
+  "id": "100-command-surface-integration-script-missing-usf242",
+  "description": "Remove the USF-242 dependency from the machine-readable test-readiness integration package-script row while leaving the command itself intact.",
+  "commandSurfacePackageScriptPatch": [
+    {
+      "id": "test-readiness:integration",
+      "dropDependsOnIssueIds": [
+        "USF-242"
+      ]
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-100"
+}

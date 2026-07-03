@@ -6093,6 +6093,36 @@
         "full-react-parity-readiness",
         "usf-234-closure"
       ]
+    },
+    {
+      "id": "soa-usf-234-test-readiness-final-acceptance-gate",
+      "mappedType": "test-readiness-final-acceptance-gate",
+      "controlPurpose": "Organise USF-234 evidence that the supported local/composed Test-environment command surface, child issue evidence, no-substitute boundaries, validators, planted defects, and closure searches support bounded test-readiness acceptance.",
+      "riskTreated": "A future change could infer final test readiness from scattered child issue completion without validating final command evidence, service-backed boundaries, open PR state, Linear readiness state, enterprise evidence refs, and non-claims.",
+      "assetServiceAffected": "docs/architecture/test-readiness-final-acceptance-gate.json; tools/validate-test-readiness/validate-test-readiness.py; USF-234 child evidence artefacts",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=operating-evidence-present; sourceIssue=USF-234; treatment=bounded Test-environment final acceptance gate; reviewDate=2026-09-30; followUpIssue=staging-track-not-started-here",
+      "evidenceSource": "docs/architecture/test-readiness-final-acceptance-gate.json; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-111",
+      "validationCommand": "corepack pnpm verify; corepack pnpm test-readiness; corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "Staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, and full React product parity remain outside USF-234 final acceptance.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "unbounded-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -9254,6 +9284,24 @@
         "USF-234"
       ],
       "retentionPosture": "Retain committed value-free completion gate, validator rule, planted defect, PR validation output, and post-merge Linear reconciliation. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, raw provider payloads, or production data. This row is pinned to the USF-260 base evidence commit; the USF-260 PR and Linear reconciliation record the final merge SHA after merge."
+    },
+    {
+      "id": "evidence-usf-234-test-readiness-final-acceptance-gate",
+      "proofResult": "bounded-test-readiness-final-acceptance-gate",
+      "whatWasProven": "USF-234 defines a repository-enforced bounded test-readiness final acceptance gate that maps all child issues through USF-260 to merged evidence, post-merge validation, command evidence, service-backed no-substitute boundaries, closure search requirements, and preserved non-claims.",
+      "whatWasNotProven": "USF-234 does not prove staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.",
+      "runtimeMode": "local-validator-and-test-readiness-command-gate",
+      "providerMode": "local-composed-real-service-required-where-service-backed-claims-apply",
+      "serviceCatalogueRow": "docs/architecture/test-readiness-final-acceptance-gate.json#serviceBackedClaimBoundary",
+      "adapterProviderId": "not-applicable-final-parent-test-readiness-gate",
+      "validationCommand": "corepack pnpm verify; corepack pnpm test-readiness; corepack pnpm test-readiness:selftest; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "commandPin": "package.json#scripts.test-readiness; tools/validate-test-readiness/validate-test-readiness.py#check_test_readiness_final_acceptance_gate",
+      "commitPin": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "prOrMergeSha": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "issueLinks": [
+        "USF-234"
+      ],
+      "retentionPosture": "Retain committed value-free final acceptance gate, validator rule, planted defect, PR validation output, and Linear reconciliation. Do not retain real tenant data, real secrets, raw endpoints, connection strings, tokens, stack traces, raw SDK errors, raw provider payloads, or production data. This row is pinned to the pre-USF-234 base evidence commit; the USF-234 PR and Linear reconciliation record the final merge SHA after merge."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -12076,6 +12124,31 @@
       "failClosedBehaviour": "The test-readiness validator fails when the USF-260 evidence artefact is missing, missing dependencies, missing evidence rows, missing evidence categories, missing command rows, missing enterprise refs, allowing substitutes, starting staging, or overclaiming readiness.",
       "monitoringAuditEvidence": "Value-free validator findings, PR validation output, post-merge validation output, open PR search, Linear readiness issue search, and final git status check.",
       "residualRisk": "riskStatement=USF-260 does not close USF-234 by itself; impact=final test readiness could be overclaimed if USF-234 final acceptance is skipped; likelihood=medium until USF-234 closes; owner=platform-test-readiness-foundation; treatment=mitigate with USF-234 final acceptance gate; reviewDate=2026-09-30; followUpIssue=USF-234"
+    },
+    {
+      "id": "threat-usf-234-test-readiness-final-acceptance-overclaim",
+      "targetType": "test-readiness-final-acceptance-gate",
+      "target": "USF-234 bounded test-readiness final acceptance gate",
+      "trustBoundary": "Local repository validator and supported current-state Test-environment command boundary only; no staging environment, live provider, production environment, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity boundary is claimed.",
+      "tenantBoundary": "Tenant-specific execution is inherited from completed child issue evidence. USF-234 validates the evidence map and no-substitute boundary and does not write real tenant data.",
+      "credentialBoundary": "No live provider credentials, raw endpoints, connection strings, tokens, stack traces, or provider payloads are recorded by this gate.",
+      "dataClassification": "internal synthetic test-readiness governance metadata",
+      "abuseCases": [
+        "Final test readiness is inferred while a child issue remains incomplete",
+        "A service-backed claim is satisfied by an in-memory or mock substitute",
+        "A staging readiness claim is inferred from bounded test readiness",
+        "A generated report is treated as semantic authority"
+      ],
+      "failureModes": [
+        "missing final acceptance gate artefact",
+        "missing child issue evidence row",
+        "missing final validation row",
+        "missing closure search requirement",
+        "readiness or certification overclaim"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails when the USF-234 final acceptance artefact is missing, missing dependencies, missing child evidence rows, missing final validation rows, missing enterprise refs, allowing substitutes, starting staging, or overclaiming readiness.",
+      "monitoringAuditEvidence": "Value-free validator findings, PR validation output, post-merge validation output, open PR search, Linear readiness issue search, and final git status check.",
+      "residualRisk": "riskStatement=USF-234 does not authorize staging readiness or production readiness; impact=environment promotion could be overclaimed if a later gate skips staging authority; likelihood=medium; owner=platform-test-readiness-foundation; treatment=mitigate with separate staging gate; reviewDate=2026-09-30; followUpIssue=staging-track-not-started-here"
     }
   ],
   "sdkDependencyGovernance": [
@@ -16096,6 +16169,41 @@
         "full-react-parity-readiness",
         "usf-234-closure"
       ]
+    },
+    {
+      "id": "access-usf-234-test-readiness-final-acceptance-gate",
+      "targetType": "test-readiness-final-acceptance-gate",
+      "target": "USF-234 final command and closure gate access posture",
+      "posture": [
+        "effectivenessState=operating-evidence-present",
+        "sourceIssue=USF-234",
+        "accessModel=local-repository-command-only",
+        "authnAuthzBoundary=developer-or-agent-local-repository-access-not-provider-admin-access",
+        "leastPrivilegePosture=no-live-provider-credential-or-admin-surface-required",
+        "breakGlassRelevance=not-applicable-to-local-validator-final-acceptance-gate",
+        "auditEvidence=value-free-command-output-PR-validation-and-Linear-reconciliation",
+        "reviewCadence=before-staging-track-start",
+        "deprovisioningPosture=no-persistent-access-created"
+      ],
+      "evidenceSource": "docs/architecture/test-readiness-final-acceptance-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm verify; corepack pnpm test-readiness",
+      "deferredReason": "No privileged provider access is proven or required. Staging/operator access remains outside USF-234 final acceptance and is not claimed; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "unbounded-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -19494,6 +19602,40 @@
         "full-react-product-parity",
         "full-react-parity-readiness",
         "usf-234-closure"
+      ]
+    },
+    {
+      "id": "resilience-usf-234-test-readiness-final-acceptance-gate",
+      "targetType": "test-readiness-final-acceptance-gate",
+      "target": "USF-234 final acceptance resilience posture",
+      "posture": [
+        "effectivenessState=operating-evidence-present",
+        "sourceIssue=USF-234",
+        "backupRequirement=not-applicable-to-committed-validator-metadata-beyond-git-history",
+        "restoreProofRequirement=git-checkout-and-validator-rerun-only",
+        "rpoRtoTarget=not-claimed-for-staging-or-production",
+        "corruptionFailureScenario=final-acceptance-evidence-row-or-validator-rule-removed-or-stale",
+        "cleanupTeardownProof=inherited-from-completed-compose-and-fixture-child-evidence-no-runtime-service-started-by-USF-234-itself",
+        "drBoundary=repository-history-only-no-production-DR-claim"
+      ],
+      "evidenceSource": "docs/architecture/test-readiness-final-acceptance-gate.json; docs/architecture/compose-profile-orchestration.json; docs/architecture/deterministic-test-fixture-lifecycle.json",
+      "validationCommand": "corepack pnpm verify; corepack pnpm test-readiness",
+      "deferredReason": "Production DR and staging backup/restore readiness remain non-claims. USF-234 only accepts bounded Test-environment evidence; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "unbounded-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -23493,6 +23635,41 @@
         "full-react-product-parity",
         "full-react-parity-readiness",
         "usf-234-closure"
+      ]
+    },
+    {
+      "id": "incident-usf-234-test-readiness-final-acceptance-gate",
+      "targetType": "test-readiness-final-acceptance-gate",
+      "target": "USF-234 final acceptance incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=operating-evidence-present",
+        "sourceIssue=USF-234",
+        "incidentDetectionHook=validator-failure-test-readiness-command-failure-or-PR-validation-failure-only",
+        "alertingPosture=not-proven-by-USF-234",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=inherited-from-USF-255-supply-chain-test-gate-no-live-clearance-claim",
+        "dependencyUpdatePosture=no-new-dependencies-introduced",
+        "correctiveActionEvidence=validator-rule-and-planted-defect-for-final-acceptance-gate",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-234"
+      ],
+      "evidenceSource": "docs/architecture/test-readiness-final-acceptance-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm verify; corepack pnpm test-readiness",
+      "deferredReason": "Production incident response, staging alerting, and live vulnerability clearance remain non-claims; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "unbounded-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
       ]
     }
   ],
@@ -28096,6 +28273,43 @@
         "full-react-product-parity",
         "full-react-parity-readiness",
         "usf-234-closure"
+      ]
+    },
+    {
+      "id": "privacy-usf-234-test-readiness-final-acceptance-gate",
+      "targetType": "test-readiness-final-acceptance-gate",
+      "target": "USF-234 final acceptance privacy boundary",
+      "posture": [
+        "effectivenessState=operating-evidence-present",
+        "sourceIssue=USF-234",
+        "dataOrigin=synthetic-validator-metadata-and-merged-evidence-references-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-test-readiness-governance-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-final-acceptance-gate-and-validator-evidence-retained-generated-command-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/test-readiness-final-acceptance-gate.json; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm verify; corepack pnpm test-readiness",
+      "deferredReason": "Live-provider privacy, production data residency, legal hold, and provider-managed retention are not proven by USF-234; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "unbounded-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "full-react-parity-readiness"
       ]
     }
   ],
