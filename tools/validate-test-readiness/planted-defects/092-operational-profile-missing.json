@@ -1,0 +1,7 @@
+{
+  "id": "092-operational-profile-missing",
+  "expectedRule": "USF-TEST-READINESS-092",
+  "operationalDropProfileIds": [
+    "default"
+  ]
+}
