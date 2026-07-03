@@ -1,0 +1,13 @@
+{
+  "id": "111-final-validation-malformed-checked-commit",
+  "description": "Set a final validation checkedCommit field to a malformed short value.",
+  "testReadinessFinalValidationPatch": [
+    {
+      "id": "canonical-test-readiness-full",
+      "set": {
+        "checkedCommit": "deadbeef"
+      }
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-111"
+}

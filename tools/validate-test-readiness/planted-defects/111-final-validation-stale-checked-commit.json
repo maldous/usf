@@ -1,0 +1,13 @@
+{
+  "id": "111-final-validation-stale-checked-commit",
+  "description": "Set a final validation checkedCommit field to a well-formed SHA that does not match the declared final validation boundary.",
+  "testReadinessFinalValidationPatch": [
+    {
+      "id": "canonical-test-readiness-full",
+      "set": {
+        "checkedCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-111"
+}

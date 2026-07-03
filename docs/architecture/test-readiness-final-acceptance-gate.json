@@ -484,70 +484,70 @@
       "id": "canonical-test-readiness-full",
       "command": "corepack pnpm test-readiness",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "canonical-test-readiness-composed",
       "command": "corepack pnpm test-readiness:composed",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "canonical-test-readiness-integration",
       "command": "corepack pnpm test-readiness:integration",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "canonical-test-readiness-coverage",
       "command": "corepack pnpm test-readiness:coverage",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "canonical-test-readiness-assurance",
       "command": "corepack pnpm test-readiness:assurance",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "canonical-test-readiness-selftest",
       "command": "corepack pnpm test-readiness:selftest",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "validator-all",
       "command": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "validator-selftest",
       "command": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "foundation-verify",
       "command": "corepack pnpm verify",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     },
     {
       "id": "foundation-parity-coverage",
       "command": "corepack pnpm parity",
       "outcome": "passed",
-      "checkedCommit": "c9e948c4b8a9922cfd0815fb3a3051f962cecaa8",
+      "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
       "evidenceBoundary": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
     }
   ],
@@ -613,5 +613,14 @@
     "product-ui-readiness",
     "browser-e2e-readiness",
     "full-react-product-parity"
-  ]
+  ],
+  "finalValidationBoundary": {
+    "id": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance",
+    "checkedCommit": "5d00dc4354f650527b335b97521a708b2043a300",
+    "postMergeValidationRequired": true,
+    "allowedCommandSource": "commandSuite",
+    "evidenceBoundaryRequired": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance",
+    "duplicateFinalValidationRowsAllowed": false,
+    "noOpCommandsAllowed": false
+  }
 }

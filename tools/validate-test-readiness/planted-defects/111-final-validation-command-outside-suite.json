@@ -1,0 +1,13 @@
+{
+  "id": "111-final-validation-command-outside-suite",
+  "description": "Replace one final validation command with a non-canonical command that is not present in the declared final command suite.",
+  "testReadinessFinalValidationPatch": [
+    {
+      "id": "canonical-test-readiness-full",
+      "set": {
+        "command": "corepack pnpm test"
+      }
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-111"
+}

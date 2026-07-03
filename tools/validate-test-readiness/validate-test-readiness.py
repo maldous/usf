@@ -15,6 +15,7 @@ import copy
 import json
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -415,6 +416,11 @@ FINAL_TEST_COMPLETION_DEPENDENCY_ISSUE_IDS = FINAL_REGRESSION_DEPENDENCY_ISSUE_I
 FINAL_TEST_ACCEPTANCE_DEPENDENCY_ISSUE_IDS = FINAL_TEST_COMPLETION_DEPENDENCY_ISSUE_IDS | {
     "USF-260",
 }
+REQUIRED_PLANTED_DEFECT_RULE_IDS = set(RULES) - {"USF-TEST-READINESS-SELFTEST"}
+FULL_GIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+FINAL_VALIDATION_BOUNDARY_ID = "post-USF-260-merge-main-validation-before-USF-234-final-acceptance"
+NO_OP_COMMAND_PREFIXES = ("echo", "printf", "#")
+NO_OP_COMMANDS = {"", "true", "false", ":", "exit 0"}
 
 FINAL_REGRESSION_CATEGORY_IDS = {
     "root-obligation-manifest-and-validator",
@@ -579,6 +585,53 @@ def read_semantic_contracts() -> dict[str, dict[str, Any]]:
         data["_path"] = str(path.relative_to(ROOT))
         contracts[str(data.get("id"))] = data
     return contracts
+
+
+def read_planted_defect_inventory() -> list[dict[str, Any]]:
+    inventory: list[dict[str, Any]] = []
+    for path in sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json")):
+        row: dict[str, Any] = {
+            "path": str(path.relative_to(ROOT)),
+            "exists": True,
+        }
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            row["jsonError"] = str(exc)
+            inventory.append(row)
+            continue
+        row["id"] = data.get("id") or path.stem
+        row["expectedRule"] = data.get("expectedRule")
+        inventory.append(row)
+    return inventory
+
+
+def apply_planted_defect_inventory_defect(
+    inventory: list[dict[str, Any]],
+    defect: dict[str, Any],
+) -> list[dict[str, Any]]:
+    out = copy.deepcopy(inventory)
+    drop_paths = set(defect.get("plantedDefectInventoryDropPaths", []))
+    if drop_paths:
+        out = [row for row in out if row.get("path") not in drop_paths]
+    replacement = defect.get("plantedDefectInventoryReplaceExpectedRule")
+    if isinstance(replacement, dict):
+        from_rule = replacement.get("fromRule")
+        to_rule = replacement.get("toRule")
+        for row in out:
+            if row.get("expectedRule") == from_rule:
+                row["expectedRule"] = to_rule
+    for patch in defect.get("plantedDefectInventoryPatch", []):
+        if not isinstance(patch, dict):
+            continue
+        for row in out:
+            if row.get("path") != patch.get("path"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    return out
 
 
 def apply_contract_defect(contract: dict[str, Any] | None, defect: dict[str, Any]) -> dict[str, Any] | None:
@@ -1506,6 +1559,32 @@ def apply_test_readiness_final_acceptance_gate_defect(gate: dict[str, Any] | Non
             for row in out.get("evidenceCoverage", [])
             if row.get("categoryId") != category_id
         ]
+    for row_id in defect.get("testReadinessFinalValidationDropIds", []):
+        out["finalValidation"] = [
+            row
+            for row in out.get("finalValidation", [])
+            if row.get("id") != row_id
+        ]
+    for patch in defect.get("testReadinessFinalValidationPatch", []):
+        if not isinstance(patch, dict):
+            continue
+        for row in out.get("finalValidation", []):
+            if row.get("id") != patch.get("id"):
+                continue
+            for key in patch.get("drop", []):
+                row.pop(key, None)
+            for key, value in patch.get("set", {}).items():
+                row[key] = value
+    for patch in defect.get("testReadinessFinalValidationDuplicateRows", []):
+        if not isinstance(patch, dict):
+            continue
+        source_id = patch.get("sourceId")
+        for row in out.get("finalValidation", []):
+            if row.get("id") == source_id:
+                duplicate = copy.deepcopy(row)
+                duplicate.update(patch.get("set", {}))
+                out.setdefault("finalValidation", []).append(duplicate)
+                break
     for section in defect.get("testReadinessFinalAcceptanceGateDropEnterpriseRefs", []):
         out.get("enterpriseEvidenceRefs", {}).pop(section, None)
     return out
@@ -1561,6 +1640,10 @@ def apply_enterprise_model_defect(model: dict[str, Any], defect: dict[str, Any])
 
 def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     defect = defect or {}
+    planted_defects = apply_planted_defect_inventory_defect(
+        read_planted_defect_inventory(),
+        defect,
+    )
     contract = read_json(CONTRACT_PATH) if (ROOT / CONTRACT_PATH).exists() else None
     contract = apply_contract_defect(contract, defect)
     harness = read_json(HARNESS_PATH) if (ROOT / HARNESS_PATH).exists() else None
@@ -1684,6 +1767,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "missingEvidenceRegressionGate": missing_evidence_regression_gate,
         "testEnvironmentCompletionGate": test_environment_completion_gate,
         "testReadinessFinalAcceptanceGate": test_readiness_final_acceptance_gate,
+        "plantedDefects": planted_defects,
         "serviceCatalogue": read_json(SERVICE_CATALOGUE_PATH),
         "semanticContracts": read_semantic_contracts(),
         "composeTest": read_json_like_yaml(COMPOSE_TEST_PATH),
@@ -4434,18 +4518,46 @@ def check_missing_evidence_regression_gate(F: Findings, state: dict[str, Any]) -
     if gate.get("makeTarget") != "test-readiness-selftest":
         F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#makeTarget", "Make selftest target is stale")
 
-    defect_paths = sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json"))
-    if gate.get("plantedDefectCount") != len(defect_paths):
+    defect_rows = state.get("plantedDefects", [])
+    if not isinstance(defect_rows, list):
+        F.add("USF-TEST-READINESS-109", str(MISSING_EVIDENCE_REGRESSION_GATE_PATH), "planted defect inventory is missing")
+        defect_rows = []
+    if gate.get("plantedDefectCount") != len(defect_rows):
         F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#plantedDefectCount", "planted defect count is stale")
-    for path in defect_paths:
-        try:
-            defect = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            F.add("USF-TEST-READINESS-109", str(path.relative_to(ROOT)), f"planted defect JSON is invalid: {exc}")
+    expected_rule_paths: dict[str, list[str]] = {}
+    defect_ids: list[str] = []
+    defect_paths: list[str] = []
+    for row in defect_rows:
+        if not isinstance(row, dict):
+            F.add("USF-TEST-READINESS-109", str(PLANTED_DEFECT_DIR), "planted defect inventory row is invalid")
             continue
-        expected_rule = defect.get("expectedRule")
-        if not isinstance(expected_rule, str) or expected_rule not in RULES:
-            F.add("USF-TEST-READINESS-109", str(path.relative_to(ROOT)), "planted defect expectedRule is missing or unknown")
+        path = str(row.get("path", ""))
+        if path:
+            defect_paths.append(path)
+        if row.get("exists") is not True:
+            F.add("USF-TEST-READINESS-109", path or str(PLANTED_DEFECT_DIR), "planted defect path is missing")
+        if row.get("jsonError"):
+            F.add("USF-TEST-READINESS-109", path or str(PLANTED_DEFECT_DIR), f"planted defect JSON is invalid: {row.get('jsonError')}")
+        defect_id = row.get("id")
+        if isinstance(defect_id, str):
+            defect_ids.append(defect_id)
+        else:
+            F.add("USF-TEST-READINESS-109", path or str(PLANTED_DEFECT_DIR), "planted defect id is missing")
+        expected_rule = row.get("expectedRule")
+        if not isinstance(expected_rule, str) or expected_rule not in REQUIRED_PLANTED_DEFECT_RULE_IDS:
+            F.add("USF-TEST-READINESS-109", path or str(PLANTED_DEFECT_DIR), "planted defect expectedRule is missing unknown or not a required validator rule")
+            continue
+        expected_rule_paths.setdefault(expected_rule, []).append(path)
+
+    duplicate_paths = sorted(path for path, count in Counter(defect_paths).items() if count > 1)
+    if duplicate_paths:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#plantedDefects", f"duplicate planted defect paths: {duplicate_paths}")
+    duplicate_ids = sorted(defect_id for defect_id, count in Counter(defect_ids).items() if count > 1)
+    if duplicate_ids:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#plantedDefects", f"duplicate planted defect ids: {duplicate_ids}")
+    missing_rule_coverage = sorted(REQUIRED_PLANTED_DEFECT_RULE_IDS - set(expected_rule_paths))
+    if missing_rule_coverage:
+        F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#plantedDefects", f"missing per-rule planted defect coverage: {missing_rule_coverage}")
 
     coverage = gate.get("coverageModel")
     if not isinstance(coverage, dict):
@@ -4455,6 +4567,31 @@ def check_missing_evidence_regression_gate(F: Findings, state: dict[str, Any]) -
             F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel", "per-defect expected rule field is stale")
         if "loads every planted defect" not in str(coverage.get("deterministicFailureProof", "")):
             F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel", "deterministic failure proof is incomplete")
+        if coverage.get("perRequiredRuleDistinctFixtureRequired") is not True:
+            F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel", "per-rule distinct fixture coverage is not required")
+        declared_required_rules = set(coverage.get("requiredRuleIds", []))
+        if declared_required_rules != REQUIRED_PLANTED_DEFECT_RULE_IDS:
+            missing = sorted(REQUIRED_PLANTED_DEFECT_RULE_IDS - declared_required_rules)
+            extra = sorted(declared_required_rules - REQUIRED_PLANTED_DEFECT_RULE_IDS)
+            F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel.requiredRuleIds", f"required rule inventory is stale; missing={missing} extra={extra}")
+        coverage_map = coverage.get("expectedRuleCoverage")
+        if not isinstance(coverage_map, dict):
+            F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel.expectedRuleCoverage", "per-rule coverage map is missing")
+        else:
+            declared_rules = set(coverage_map)
+            missing = sorted(REQUIRED_PLANTED_DEFECT_RULE_IDS - declared_rules)
+            extra = sorted(declared_rules - REQUIRED_PLANTED_DEFECT_RULE_IDS)
+            if missing or extra:
+                F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel.expectedRuleCoverage", f"coverage map rule inventory is stale; missing={missing} extra={extra}")
+            for rule_id in sorted(REQUIRED_PLANTED_DEFECT_RULE_IDS):
+                declared_paths = coverage_map.get(rule_id)
+                if not isinstance(declared_paths, list) or not declared_paths:
+                    F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel.expectedRuleCoverage.{rule_id}", "coverage map must list at least one fixture path")
+                    continue
+                actual_paths = set(expected_rule_paths.get(rule_id, []))
+                missing_paths = sorted(set(declared_paths) - actual_paths)
+                if missing_paths:
+                    F.add("USF-TEST-READINESS-109", f"{MISSING_EVIDENCE_REGRESSION_GATE_PATH}#coverageModel.expectedRuleCoverage.{rule_id}", f"coverage map claims fixtures that do not uniquely expect this rule: {missing_paths}")
 
     categories = gate.get("regressionCategories", [])
     category_ids = {row.get("id") for row in categories if isinstance(row, dict)}
@@ -4696,6 +4833,7 @@ def check_test_readiness_final_acceptance_gate(F: Findings, state: dict[str, Any
         "evidenceCoverage",
         "serviceBackedClaimBoundary",
         "commandSuite",
+        "finalValidationBoundary",
         "finalValidation",
         "closureSearchRequirements",
         "finalAcceptanceDecision",
@@ -4772,7 +4910,11 @@ def check_test_readiness_final_acceptance_gate(F: Findings, state: dict[str, Any
         if boundary.get("composeTarget") != COMPOSE_TARGET:
             F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#serviceBackedClaimBoundary.composeTarget", "compose target is stale")
 
-    command_rows = _row_by_id(gate.get("commandSuite"), "id")
+    command_suite_rows = gate.get("commandSuite", [])
+    duplicate_command_rows = _duplicate_row_values(command_suite_rows, "id")
+    if duplicate_command_rows:
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#commandSuite", f"duplicate final command ids: {duplicate_command_rows}")
+    command_rows = _row_by_id(command_suite_rows, "id")
     required_commands = {
         "canonical-test-readiness-full": TEST_READINESS_COMMAND,
         "canonical-test-readiness-composed": TEST_READINESS_COMPOSED_COMMAND,
@@ -4790,14 +4932,64 @@ def check_test_readiness_final_acceptance_gate(F: Findings, state: dict[str, Any
         if not row or row.get("command") != expected:
             F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#commandSuite.{command_id}", "final acceptance command is missing or stale")
 
+    validation_boundary = gate.get("finalValidationBoundary")
+    expected_checked_commit: str | None = None
+    expected_evidence_boundary = FINAL_VALIDATION_BOUNDARY_ID
+    if not isinstance(validation_boundary, dict):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidationBoundary", "final validation boundary is missing")
+    else:
+        if validation_boundary.get("id") != FINAL_VALIDATION_BOUNDARY_ID:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidationBoundary.id", "final validation boundary id is stale")
+        if validation_boundary.get("postMergeValidationRequired") is not True:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidationBoundary.postMergeValidationRequired", "final validation boundary must require post-merge validation")
+        if validation_boundary.get("allowedCommandSource") != "commandSuite":
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidationBoundary.allowedCommandSource", "final validation commands must be sourced from commandSuite")
+        boundary_commit = validation_boundary.get("checkedCommit")
+        if not _is_full_git_sha(boundary_commit):
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidationBoundary.checkedCommit", "final validation boundary must include a full checked commit SHA")
+        else:
+            expected_checked_commit = boundary_commit
+
     validation_rows = gate.get("finalValidation", [])
+    if not isinstance(validation_rows, list):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation", "final validation rows must be a list")
+        validation_rows = []
+    validation_ids = [
+        str(row.get("id"))
+        for row in validation_rows
+        if isinstance(row, dict) and row.get("id") is not None
+    ]
+    duplicate_validation_rows = _duplicate_row_values(validation_rows, "id")
+    if duplicate_validation_rows:
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation", f"duplicate final validation ids: {duplicate_validation_rows}")
+    missing_validation_ids = sorted(set(required_commands) - set(validation_ids))
+    extra_validation_ids = sorted(set(validation_ids) - set(required_commands))
+    if missing_validation_ids:
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation", f"missing final validation command ids: {missing_validation_ids}")
+    if extra_validation_ids:
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation", f"unexpected final validation command ids: {extra_validation_ids}")
+    if len(validation_rows) != len(required_commands):
+        F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation", "final validation rows must contain each required command id exactly once")
     validation_by_id = _row_by_id(validation_rows, "id")
-    for command_id in required_commands:
+    for command_id, expected_command in required_commands.items():
         row = validation_by_id.get(command_id)
         if not row or row.get("outcome") != "passed":
             F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}", "final validation row must be present and passed")
-        if row and not isinstance(row.get("checkedCommit"), str):
-            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}", "final validation row must include checked commit")
+        if not row:
+            continue
+        command = row.get("command")
+        declared_command = command_rows.get(command_id, {}).get("command")
+        if _is_noop_command(command):
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}.command", "final validation command must not be a no-op")
+        if command != expected_command or command != declared_command:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}.command", "final validation command must exactly match the declared command suite")
+        checked_commit = row.get("checkedCommit")
+        if not _is_full_git_sha(checked_commit):
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}.checkedCommit", "final validation row must include a full checked commit SHA")
+        elif expected_checked_commit and checked_commit != expected_checked_commit:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}.checkedCommit", "final validation checked commit must match the final validation boundary")
+        if row.get("evidenceBoundary") != expected_evidence_boundary:
+            F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#finalValidation.{command_id}.evidenceBoundary", "final validation row must reference the expected post-merge validation boundary")
 
     closure = gate.get("closureSearchRequirements")
     if not isinstance(closure, dict):
@@ -5043,6 +5235,30 @@ def _row_by_id(rows: Any, key: str) -> dict[str, dict[str, Any]]:
         for row in rows
         if isinstance(row, dict) and row.get(key) is not None
     }
+
+
+def _duplicate_row_values(rows: Any, key: str) -> list[str]:
+    if not isinstance(rows, list):
+        return []
+    values = [
+        str(row.get(key))
+        for row in rows
+        if isinstance(row, dict) and row.get(key) is not None
+    ]
+    return sorted(value for value, count in Counter(values).items() if count > 1)
+
+
+def _is_full_git_sha(value: Any) -> bool:
+    return isinstance(value, str) and bool(FULL_GIT_SHA_RE.fullmatch(value))
+
+
+def _is_noop_command(value: Any) -> bool:
+    if not isinstance(value, str):
+        return True
+    command = value.strip()
+    if command in NO_OP_COMMANDS:
+        return True
+    return any(command == prefix or command.startswith(f"{prefix} ") for prefix in NO_OP_COMMAND_PREFIXES)
 
 
 def check_command_surface(F: Findings, state: dict[str, Any]) -> None:

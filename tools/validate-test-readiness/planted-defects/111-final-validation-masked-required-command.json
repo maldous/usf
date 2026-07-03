@@ -1,0 +1,16 @@
+{
+  "id": "111-final-validation-masked-required-command",
+  "description": "Drop the validator-selftest final validation row and replace it with a copied validator-all row using the validator-selftest id. The id exists, but the command does not match the declared command suite.",
+  "testReadinessFinalValidationDropIds": [
+    "validator-selftest"
+  ],
+  "testReadinessFinalValidationDuplicateRows": [
+    {
+      "sourceId": "validator-all",
+      "set": {
+        "id": "validator-selftest"
+      }
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-111"
+}

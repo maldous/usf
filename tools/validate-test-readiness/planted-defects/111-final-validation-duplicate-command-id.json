@@ -1,0 +1,10 @@
+{
+  "id": "111-final-validation-duplicate-command-id",
+  "description": "Duplicate one final validation command id so the final acceptance gate cannot be satisfied unless every required command id appears exactly once.",
+  "testReadinessFinalValidationDuplicateRows": [
+    {
+      "sourceId": "validator-all"
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-111"
+}

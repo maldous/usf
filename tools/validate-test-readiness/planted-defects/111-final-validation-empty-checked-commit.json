@@ -1,0 +1,13 @@
+{
+  "id": "111-final-validation-empty-checked-commit",
+  "description": "Set a final validation checkedCommit field to an empty string.",
+  "testReadinessFinalValidationPatch": [
+    {
+      "id": "canonical-test-readiness-full",
+      "set": {
+        "checkedCommit": ""
+      }
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-111"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "111-final-validation-no-op-command",
+  "description": "Replace one final validation command with a no-op shell command.",
+  "testReadinessFinalValidationPatch": [
+    {
+      "id": "canonical-test-readiness-full",
+      "set": {
+        "command": "true"
+      }
+    }
+  ],
+  "expectedRule": "USF-TEST-READINESS-111"
+}

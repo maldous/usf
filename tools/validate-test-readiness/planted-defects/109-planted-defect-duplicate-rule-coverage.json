@@ -1,0 +1,9 @@
+{
+  "id": "109-planted-defect-duplicate-rule-coverage",
+  "description": "Replace every USF-TEST-READINESS-111 planted-defect expected rule with USF-TEST-READINESS-110 while keeping the planted-defect count stable. The regression gate must fail because distinct per-rule coverage for USF-TEST-READINESS-111 is missing.",
+  "plantedDefectInventoryReplaceExpectedRule": {
+    "fromRule": "USF-TEST-READINESS-111",
+    "toRule": "USF-TEST-READINESS-110"
+  },
+  "expectedRule": "USF-TEST-READINESS-109"
+}
