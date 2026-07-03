@@ -5720,6 +5720,37 @@
         "usf-234-closure",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "soa-usf-244-functional-regression-suite",
+      "mappedType": "functional-regression-test-suite",
+      "controlPurpose": "Organise USF-244 functional regression evidence for semantic service behaviour mapped from USF-239 obligations and bounded by composed service evidence where required.",
+      "riskTreated": "Functional behaviour could drift from semantic contracts, service-backed behaviour could be mistaken for process-local proof, or regression evidence could be treated as final USF-234 acceptance.",
+      "assetServiceAffected": "docs/architecture/functional-service-regression-suite.json; tests/regression/semantic/functional-regression-suite.test.ts; docs/architecture/semantic-service-test-obligation-manifest.json; docs/architecture/composed-service-integration-test-matrix.json; tests/packages/fixtures/service-fixture-corpus.json",
+      "owner": "platform-test-readiness-foundation",
+      "riskOwner": "platform-test-readiness-risk-owner",
+      "controlOwner": "platform-test-readiness-control-owner",
+      "implementationStatus": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-244; parentIssue=USF-234; treatment=map every USF-244 semantic and service obligation to executable functional regression drift checks; reviewDate=2026-09-30; followUpIssue=USF-247 for final missing-evidence regression gate and USF-234 for final acceptance",
+      "evidenceSource": "docs/architecture/functional-service-regression-suite.json; docs/architecture/functional-service-regression-suite.md; tests/regression/semantic/functional-regression-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate; python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+      "deferredReason": "USF-244 proves functional regression mapping and drift detection only. USF-245 owns operational failure execution, USF-247 owns final planted-defect regression coverage, and USF-234 owns final acceptance; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-245,USF-247,USF-234.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -8624,6 +8655,29 @@
         "USF-247"
       ],
       "retentionPosture": "Retain committed value-free inventory, unit tests, validator findings, planted defects, and PR validation output. Do not retain real tenant data, real secrets, provider payloads, raw endpoints, connection strings, tokens, stack traces, or production data."
+    },
+    {
+      "id": "evidence-usf-244-functional-regression-suite",
+      "proofResult": "functional-regression-obligations-mapped-to-executable-tests",
+      "whatWasProven": "USF-244 records and tests a machine-readable mapping from every USF-244 semantic contract obligation and service obligation in the USF-239 manifest to executable functional regression test rows, behaviour case coverage, composed integration references, fixture references, and non-claim boundaries.",
+      "whatWasNotProven": "USF-244 does not prove final USF-234 test readiness, repository-wide LCOV/Sonar coverage, operational resilience execution, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "runtimeMode": "functional-regression-local-test-with-composed-evidence-references",
+      "providerMode": "local-composed-real-service-required-for-service-backed-claims-via-USF-242-boundary",
+      "serviceCatalogueRow": "docs/architecture/semantic-service-test-obligation-manifest.json#semanticContractObligations-and-serviceObligations",
+      "adapterProviderId": "semantic-functional-regression-suite",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
+      "commandPin": "tests/regression/semantic/functional-regression-suite.test.ts; tools/validate-test-readiness/validate-test-readiness.py#USF-TEST-READINESS-061-through-066",
+      "commitPin": "773c9121517c98883aacf970331f462ba4ee3679",
+      "prOrMergeSha": "773c9121517c98883aacf970331f462ba4ee3679",
+      "issueLinks": [
+        "USF-244",
+        "USF-234",
+        "USF-239",
+        "USF-241",
+        "USF-242",
+        "USF-247"
+      ],
+      "retentionPosture": "Retain committed value-free functional regression matrix, tests, validator findings, planted defects, and PR validation output. Do not retain real tenant data, real secrets, provider payloads, raw endpoints, connection strings, tokens, stack traces, or production data."
     }
   ],
   "threatModelAbuseCaseRegister": [
@@ -11139,6 +11193,32 @@
       "failClosedBehaviour": "The test-readiness validator fails on missing USF-241 inventory, missing per-contract mappings, missing mapped test files or test names, service-backed substitute allowance, missing LCOV contribution boundary, missing enterprise refs, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free unit test output, validator findings, PR validation output, and planted-defect selftest output only. Validation command: python3 tools/validate-test-readiness/validate-test-readiness.py all --json.",
       "residualRisk": "riskStatement=USF-241 does not prove final coverage or service-backed test readiness; impact=final readiness could be overclaimed if USF-240 or composed child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final LCOV to USF-240; reviewDate=2026-09-30; followUpIssue=USF-240,USF-234."
+    },
+    {
+      "id": "threat-usf-244-functional-regression-suite",
+      "targetType": "functional-regression-test-suite",
+      "target": "USF-244 functional semantic regression suite",
+      "trustBoundary": "Local repository semantic obligation manifest, semantic contract files, fixture corpus, composed integration matrix, and functional regression tests. Final USF-234 acceptance and live-provider boundaries remain outside USF-244.",
+      "tenantBoundary": "Synthetic tenant concepts are regression metadata only unless covered by composed service evidence in USF-242 or later auth/data issues. Service-backed tenant isolation must not be proven by in-memory substitutes.",
+      "credentialBoundary": "Regression tests and evidence must not expose secrets, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, or production data.",
+      "dataClassification": "internal synthetic functional regression metadata",
+      "abuseCases": [
+        "A semantic contract changes without the functional regression matrix changing",
+        "A service obligation changes without a matching behaviour row",
+        "A service-backed claim is satisfied by process-local or in-memory proof",
+        "Functional regression evidence is mistaken for final USF-234 acceptance"
+      ],
+      "failureModes": [
+        "missing functional regression suite",
+        "missing semantic regression mapping",
+        "missing service regression mapping",
+        "missing behaviour case class",
+        "unsafe service-backed or final readiness claim",
+        "missing enterprise evidence refs"
+      ],
+      "failClosedBehaviour": "The test-readiness validator fails on missing suite, stale semantic mapping, stale service mapping, missing behaviour cases, unsafe service-backed substitutes, missing enterprise refs, and prohibited claims.",
+      "monitoringAuditEvidence": "Value-free test output, validator findings, PR validation output, and planted-defect selftest output only. Validation command: python3 tools/validate-test-readiness/validate-test-readiness.py all --json.",
+      "residualRisk": "riskStatement=USF-244 does not prove final acceptance or operational resilience; impact=final readiness could be overclaimed if downstream child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final closure to USF-247 and USF-234; reviewDate=2026-09-30; followUpIssue=USF-247,USF-234."
     }
   ],
   "sdkDependencyGovernance": [
@@ -14696,6 +14776,45 @@
         "usf-234-closure",
         "full-react-parity-readiness"
       ]
+    },
+    {
+      "id": "access-usf-244-functional-regression-suite",
+      "targetType": "functional-regression-test-suite",
+      "target": "USF-244 functional regression access boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-244",
+        "accessModel=local-repository-functional-regression-test-only",
+        "authnAuthzBoundary=authorization-and-tenant-cases-mapped-as-functional-regression-USF-249-owns-exhaustive-auth-suite",
+        "leastPrivilegePosture=synthetic-local-test-context-only",
+        "breakGlassRelevance=no-operational-break-glass-proof",
+        "auditEvidence=value-free-functional-regression-and-validator-evidence-only",
+        "reviewCadence=2026-09-30-before-final-USF-234-acceptance",
+        "deprovisioningPosture=not-proven-by-USF-244",
+        "noPublicExposureClaim=true",
+        "inMemoryServiceSubstituteAllowed=false",
+        "testReadinessClaimAllowed=false"
+      ],
+      "evidenceSource": "docs/architecture/functional-service-regression-suite.json; tests/regression/semantic/functional-regression-suite.test.ts",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-249 owns exhaustive auth tenant role permission proof and USF-234 owns final acceptance; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -17597,6 +17716,47 @@
       "evidenceSource": "docs/architecture/semantic-unit-test-suite.json; tests/packages/core-semantic-boundaries.test.ts; tests/adapters/local-adapter-boundaries.test.ts",
       "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
       "deferredReason": "USF-250 owns backup restore bulk migration tests and USF-245 owns operational resilience tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "resilience-usf-244-functional-regression-suite",
+      "targetType": "functional-regression-test-suite",
+      "target": "USF-244 functional regression resilience boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-244",
+        "readinessChecks=functional-readiness-case-mapping-only",
+        "retryTimeoutBehaviour=not-proven-by-USF-244",
+        "failClosedMode=validator-and-tests-fail-on-missing-mapping-or-overclaim",
+        "safeTeardown=no-new-compose-resources-owned-by-USF-244",
+        "structuredLogging=value-free-test-output-only",
+        "tracingCorrelation=not-applicable-no-live-tracing-claim",
+        "metrics=test-count-and-validator-result-only",
+        "auditEvents=functional-audit-case-mapping-only",
+        "redaction=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-or-production-data",
+        "backupRestorePosture=not-proven-by-USF-244",
+        "rpoRtoTarget=no-RPO-RTO-claim",
+        "deferredDrBoundary=USF-250-and-USF-245-own-executable-data-lifecycle-and-operational-resilience"
+      ],
+      "evidenceSource": "docs/architecture/functional-service-regression-suite.json; tests/regression/semantic/functional-regression-suite.test.ts",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-245 owns operational resilience tests and USF-250 owns backup restore bulk migration tests; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
         "test-readiness",
@@ -21162,6 +21322,42 @@
       ],
       "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects; docs/architecture/semantic-unit-test-suite.json",
       "validationCommand": "corepack pnpm test-readiness:validate; corepack pnpm test",
+      "deferredReason": "USF-245 owns operational failure-mode execution and incident evidence tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "incident-usf-244-functional-regression-suite",
+      "targetType": "functional-regression-test-suite",
+      "target": "USF-244 incident and vulnerability boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-244",
+        "incidentDetectionHook=functional-regression-test-failure-validator-finding-PR-check-failure-only",
+        "alertingPosture=not-proven-by-USF-244",
+        "escalationOwner=platform-test-readiness-foundation",
+        "vulnerabilityAdvisoryReview=no-new-runtime-dependency-added-by-USF-244",
+        "dependencyUpdatePosture=no-new-provider-SDK-added-by-USF-244",
+        "correctiveActionEvidence=validator-rules-and-planted-defects-for-functional-regression-mapping-and-overclaim-gaps",
+        "postIncidentEvidenceBoundary=production-post-incident-evidence-not-proven-by-USF-244"
+      ],
+      "evidenceSource": "tools/validate-test-readiness/validate-test-readiness.py; tools/validate-test-readiness/planted-defects; docs/architecture/functional-service-regression-suite.json",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
       "deferredReason": "USF-245 owns operational failure-mode execution and incident evidence tests; reviewDate=2026-09-30.",
       "nonClaims": [
         "full-dev-readiness",
@@ -25307,6 +25503,44 @@
         "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
       ],
       "evidenceSource": "docs/architecture/semantic-unit-test-suite.json; docs/architecture/semantic-unit-test-suite.md; tests/packages; tests/capabilities; tests/adapters",
+      "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
+      "deferredReason": "USF-250 owns executable privacy lifecycle and deletion tests; reviewDate=2026-09-30.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "final-test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+        "usf-234-closure",
+        "full-react-parity-readiness"
+      ]
+    },
+    {
+      "id": "privacy-usf-244-functional-regression-suite",
+      "targetType": "functional-regression-test-suite",
+      "target": "USF-244 synthetic functional regression data boundary",
+      "posture": [
+        "effectivenessState=implemented-after-command-pass",
+        "sourceIssue=USF-244",
+        "dataOrigin=synthetic-local-functional-regression-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-synthetic-functional-regression-metadata",
+        "redactionPolicy=no-raw-secret-token-endpoint-connection-string-stack-trace-provider-payload-real-tenant-data-real-user-data-or-production-data",
+        "retentionPurgePosture=committed-value-free-matrix-and-tests-retained-no-provider-data-written-by-USF-244",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=local-repository-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=local-repository-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "docs/architecture/functional-service-regression-suite.json; docs/architecture/functional-service-regression-suite.md; tests/regression/semantic",
       "validationCommand": "corepack pnpm test; corepack pnpm test-readiness:validate",
       "deferredReason": "USF-250 owns executable privacy lifecycle and deletion tests; reviewDate=2026-09-30.",
       "nonClaims": [
